@@ -22,6 +22,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Update version
         id: versioning
@@ -42,6 +43,14 @@ jobs:
           git add package.json projects/components/package.json
           git commit -m "chore: bump version to ${{ env.NEW_VERSION }} [skip ci]"
           git push
+
+      - name: Build components
+        run: npm run build:components:prod
+
+      - name: Publish to NPM
+        run: npm publish ./dist/components --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3

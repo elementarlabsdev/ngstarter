@@ -6,9 +6,9 @@
     "type": "git",
     "url": "https://github.com/elementarlabsdev/ngstarter.git"
   },
-  "license": "",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/elementarlabs/ngstarter/issues"
+    "url": "https://github.com/elementarlabsdev/ngstarter/issues"
   },
   "homepage": "https://ngstarter.com",
   "keywords": [
@@ -50,6 +50,9 @@
     "jsdom": "^26.1.0"
   },
   "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     "./styles/themes/": "./styles/themes/"
   }
