@@ -58,6 +58,10 @@ jobs:
       - name: Build components
         run: npm run build:components:prod
 
+      - name: Configure npm auth
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+
       - name: Publish to NPM
         run: |
           cd dist/components
