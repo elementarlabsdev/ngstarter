@@ -15,13 +15,16 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    env:
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      id-token: write # Required for generating npm provenance statements
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
+          # Using GITHUB_TOKEN to push changes back to the repo
+          # Note: If your branch is protected, you might need a Personal Access Token (PAT)
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -36,22 +39,37 @@ jobs:
       - name: Update version
         id: versioning
         run: |
-          # Increment version in root package.json
+          # 1. Bump version in root package.json (e.g., 1.0.0 -> 1.0.1)
           npm version patch --no-git-tag-version
           NEW_VERSION=$(node -p "require('./package.json').version")
+
+          # 2. Export version to environment and outputs for subsequent steps
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
-          # Sync version to projects/components/package.json
-          node -e "const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('projects/components/package.json', 'utf8')); pkg.version = '$NEW_VERSION'; fs.writeFileSync('projects/components/package.json', JSON.stringify(pkg, null, 2) + '\n');"
+          # 3. Sync the new version to the nested components package.json
+          node -e "
+            const fs = require('fs');
+            const path = 'projects/components/package.json';
+            if (fs.existsSync(path)) {
+              const pkg = JSON.parse(fs.readFileSync(path, 'utf8'));
+              pkg.version = '$NEW_VERSION';
+              fs.writeFileSync(path, JSON.stringify(pkg, null, 2) + '\n');
+              console.log('Successfully synced version ' + '$NEW_VERSION' + ' to ' + path);
+            } else {
+              console.error('Error: file not found ' + path);
+              process.exit(1);
+            }
+          "
 
       - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add package.json projects/components/package.json
-          git commit -m "chore: bump version to ${{ env.NEW_VERSION }} [skip ci]"
-          git push
+          # Only commit and push if there are actual changes to avoid errors
+          # [skip ci] is used to prevent the action from triggering itself in a loop
+          git diff-index --quiet HEAD || (git commit -m "chore: bump version to ${{ env.NEW_VERSION }} [skip ci]" && git push)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -60,9 +78,12 @@ jobs:
 
       - name: Publish to NPM
         run: |
+          # Navigate to the distribution folder containing the built package
           cd dist/components
-          npm publish --access public --registry https://registry.npmjs.org/
+          # Use --provenance to link the package to this specific CI run for security
+          npm publish --access public --provenance
         env:
+          # Ensure NPM_TOKEN is set in your GitHub Repository Secrets
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Set up QEMU
