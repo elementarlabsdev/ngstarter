@@ -56,7 +56,9 @@ jobs:
         run: npm run build:components:prod
 
       - name: Publish to NPM
-        run: npm publish ./dist/components --access public
+        run: |
+          rm -f .npmrc
+          npm publish ./dist/components --access public
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
