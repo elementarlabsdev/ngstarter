@@ -5,9 +5,10 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'package.json'
-      - 'projects/components/package.json'
-      - '.github/workflows/**'
+      - 'README.md'
+      - 'LICENSE'
+      - '.gitignore'
+      - '.dockerignore'
 
 jobs:
   build-and-deploy:
