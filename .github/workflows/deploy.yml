@@ -28,7 +28,6 @@ jobs:
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org/'
-          scope: '@ngstarter-ui'
           always-auth: true
 
       - name: Install dependencies
@@ -53,12 +52,18 @@ jobs:
           git add package.json projects/components/package.json
           git commit -m "chore: bump version to ${{ env.NEW_VERSION }} [skip ci]"
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build components
         run: npm run build:components:prod
 
       - name: Publish to NPM
-        run: npm publish ./dist/components --access public
+        run: |
+          cd dist/components
+          npm publish --access public --registry https://registry.npmjs.org/
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
