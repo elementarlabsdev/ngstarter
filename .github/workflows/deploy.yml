@@ -27,6 +27,9 @@ jobs:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Update version
         id: versioning
         run: |
