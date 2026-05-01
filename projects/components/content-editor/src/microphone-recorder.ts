@@ -7,10 +7,10 @@
  * and includes an optional inactivity stop timeout.
  */
 
-// --- Базовые типы для MediaRecorder ---
+// --- Base types for MediaRecorder ---
 
 /**
- * Базовые опции для MediaRecorder.
+ * Base options for MediaRecorder.
  */
 interface BaseRecorderOptions {
   mimeType?: string;
@@ -18,26 +18,26 @@ interface BaseRecorderOptions {
 }
 
 /**
- * Тип для обработчика события получения данных записи.
+ * Handler type for recording data available event.
  */
 export type DataAvailableHandler = (blob: Blob) => void;
 
 /**
- * Тип для обработчика события остановки записи.
+ * Handler type for recording stop event.
  */
 export type StopHandler = (blob: Blob, url: string) => void;
 
 /**
- * Тип для обработчика ошибки MediaRecorder или getUserMedia.
- * Гарантированно передает объект с свойством .message.
+ * Handler type for MediaRecorder or getUserMedia error.
+ * Guaranteed to pass an object with a .message property.
  */
 export type BaseErrorHandler = (error: Error | DOMException) => void;
 
 
-// --- Типы для Speech Recognition ---
+// --- Types for Speech Recognition ---
 
 /**
- * Результат распознавания речи.
+ * Speech recognition result.
  */
 export interface RecognitionResult {
   transcript: string;
@@ -47,25 +47,25 @@ export interface RecognitionResult {
 }
 
 /**
- * Тип для обработчика события получения результата распознавания.
+ * Handler type for recognition result event.
  */
 export type RecognitionResultHandler = (result: RecognitionResult) => void;
 
 /**
- * Тип для обработчика ошибок распознавания речи.
+ * Handler type for speech recognition error event.
  */
 export type RecognitionErrorHandler = (error: SpeechRecognitionErrorEvent | Error) => void;
 
 /**
- * Тип для обработчика начала/окончания распознавания.
+ * Handler type for recognition start/end events.
  */
 export type RecognitionLifeCycleHandler = () => void;
 
 
-// --- Расширенные опции ---
+// --- Extended options ---
 
 /**
- * Расширенные опции для конструктора MicrophoneRecorder.
+ * Extended options for the MicrophoneRecorder constructor.
  */
 export interface MicrophoneRecorderOptions extends BaseRecorderOptions {
   enableRecognition?: boolean;
@@ -73,13 +73,13 @@ export interface MicrophoneRecorderOptions extends BaseRecorderOptions {
   recognitionContinuous?: boolean;
   recognitionInterimResults?: boolean;
   recognitionMaxAlternatives?: number;
-  /** Автоматически останавливать запись и распознавание через указанное время (мс) после последнего обнаружения речи.
-   * Установите в 0 или отрицательное значение для отключения. По умолчанию 10000 (10 секунд).
+  /** Automatically stop recording and recognition after a specified time (ms) after the last speech detection.
+   * Set to 0 or a negative value to disable. Default is 10000 (10 seconds).
    */
   stopTimeout?: number;
 }
 
-// --- Объявления типов Web Speech API ---
+// --- Web Speech API type declarations ---
 
 interface SpeechRecognition extends EventTarget {
   grammars: SpeechGrammarList;
@@ -146,10 +146,10 @@ interface SpeechGrammarList {
 
 
 /**
- * Основной класс библиотеки.
+ * Main library class.
  */
 export class MicrophoneRecorder {
-  // === Свойства Записи ===
+  // === Recording properties ===
   private stream: MediaStream | null = null;
   private mediaRecorder: MediaRecorder | null = null;
   private audioChunks: Blob[] = [];
@@ -157,7 +157,7 @@ export class MicrophoneRecorder {
   private recordedUrl: string | null = null;
   private state: 'inactive' | 'recording' | 'paused' = 'inactive';
 
-  // === Свойства Распознавания ===
+  // === Recognition properties ===
   private recognition: SpeechRecognition | null = null;
   private recognitionState: 'idle' | 'listening' | 'error' = 'idle';
   private SpeechRecognitionAPI: SpeechRecognitionStatic | null = null;
@@ -166,7 +166,7 @@ export class MicrophoneRecorder {
   private currentRecognitionLang: string;
   private noSpeechTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
-  // === Опции и Обработчики ===
+  // === Options and Handlers ===
   private options: MicrophoneRecorderOptions;
 
   private onDataAvailableHandler: DataAvailableHandler | null = null;
@@ -180,7 +180,7 @@ export class MicrophoneRecorder {
   private onRecognitionEndHandler: RecognitionLifeCycleHandler | null = null;
 
   /**
-   * Создает экземпляр MicrophoneRecorder.
+   * Creates an instance of MicrophoneRecorder.
    */
   constructor(options: MicrophoneRecorderOptions = {}) {
     this.options = {

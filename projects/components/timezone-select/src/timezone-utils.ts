@@ -152,13 +152,12 @@ export class TimezoneUtils {
     if (regionCode && typeof Intl.DisplayNames === 'function') {
       try {
         const displayNameService = new Intl.DisplayNames(locale, { type: 'region' });
-        return displayNameService.of(regionCode) || ianaGroupName; // Фоллбэк, если .of() вернет undefined/пусто
+        return displayNameService.of(regionCode) || ianaGroupName; // Fallback if .of() returns undefined/empty
       } catch (e) {
-        // Ошибка (например, старая среда без поддержки этого кода для региона)
-        // console.warn(`Could not get display name for region code ${regionCode} in locale ${locale}:`, e);
-        return ianaGroupName; // Фоллбэк
+        // Error (e.g., old environment without support for this region code)
+        return ianaGroupName; // Fallback
       }
     }
-    return ianaGroupName; // Фоллбэк, если нет сопоставления или Intl.DisplayNames не поддерживается
+    return ianaGroupName; // Fallback if no mapping or Intl.DisplayNames not supported
   }
 }

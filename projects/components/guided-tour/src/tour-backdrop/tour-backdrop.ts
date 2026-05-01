@@ -40,10 +40,10 @@ export class TourBackdrop {
     const rectWidth = width + 2 * p;
     const rectHeight = height + 2 * p;
 
-    // Внешний прямоугольник (весь экран)
+    // Outer rectangle (entire screen)
     const screenPath = `M0,0 H${w} V${h} H0 Z`;
 
-    // Отверстие (внутренний контур)
+    // Hole (inner contour)
     const holePath = `
       M${rectLeft + radius},${rectTop}
       L${rectLeft + rectWidth - radius},${rectTop}

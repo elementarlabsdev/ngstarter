@@ -944,8 +944,8 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
     const rawDataLength = isClientSide ? this.data().length : (dataSource.data?.length ?? 0);
     const currentlyEmpty = rawDataLength === 0;
 
-    // В процессе клиентской фильтрации сразу показываем empty state, если отфильтрованные данные пусты,
-    // чтобы избежать кратковременного отображения пустой таблицы до срабатывания debounce.
+    // During client-side filtering, immediately show empty state if filtered data is empty,
+    // to avoid a short flash of an empty table before debounce takes effect.
     if (isClientSide && (this._isFiltering() || this.hasFilterValue)) {
       const filteredEmpty = (dataSource.filteredData?.length ?? 0) === 0;
       if (filteredEmpty) {
@@ -988,7 +988,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
 
     if (this.rowModelType() === 'serverSide') {
       const loadingTransition = this._isLoading() && this._hasDataOnServer() === true;
-      // Если у нас 0 данных, но идет загрузка (и мы еще не знаем будут ли данные), мы показываем скелетоны, поэтому isNoResults должен быть false
+      // If we have 0 data, but loading is in progress (and we don't know if there will be data), we show skeletons, so isNoResults should be false
       if (this._isLoading() && this._hasDataOnServer() === undefined) {
         return false;
       }
@@ -1063,8 +1063,8 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
       this._isDestroyed = true;
     });
 
-    // Реактивно привязываем scroll‑sync и ResizeObserver к текущему ScrollbarArea,
-    // чтобы корректно работать при условном рендеринге (пустое состояние / таблица)
+    // Reactively bind scroll-sync and ResizeObserver to the current ScrollbarArea,
+    // to work correctly with conditional rendering (empty state / table)
     effect((onCleanup) => {
       const scrollbarArea = this._scrollbarArea();
       const isBrowser = this.isBrowser();
@@ -1074,12 +1074,12 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
 
       const centerEl = scrollbarArea.scrollableContentRef().nativeElement as HTMLElement;
 
-      // Установим начальные размеры viewport, чтобы избежать 0 ширины после возврата из пустого состояния
+      // Set initial viewport dimensions to avoid 0 width after returning from empty state
       const rect = centerEl.getBoundingClientRect();
       this._viewportHeight.set(rect.height);
       this._viewportWidth.set(rect.width);
 
-      // Навесим scroll‑sync
+      // Attach scroll-sync
       const scrollHandler = () => {
         if (this._isDestroyed) return;
         this._syncScrolls(centerEl);
@@ -1089,7 +1089,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
         centerEl.addEventListener('scroll', scrollHandler, { passive: true });
       });
 
-      // Привязываем ResizeObserver с безопасной раскладкой
+      // Bind ResizeObserver with safe layout
       const observer = new ResizeObserver((entries) => {
         this._ngZone.runOutsideAngular(() => {
           requestAnimationFrame(() => {
@@ -1098,7 +1098,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
               try {
                 for (const entry of entries) {
                   const { height, width } = entry.contentRect;
-                  // Используем порог в 1px для предотвращения бесконечных циклов из-за субпикселей
+                  // Use 1px threshold to prevent infinite loops due to subpixels
                   if (Math.abs(this._viewportHeight() - height) > 1) {
                     this._viewportHeight.set(height);
                   }
@@ -1107,7 +1107,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
                   }
                 }
               } catch {
-                // игнорируем, размеры будут доставлены на следующем тике
+                // ignore, dimensions will be delivered on the next tick
               }
             });
           });
@@ -1115,7 +1115,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
       });
       observer.observe(centerEl);
 
-      // Синхронизируем трансформы сразу после перепривязки
+      // Synchronize transforms immediately after rebinding
       this._lastScrollTop = centerEl.scrollTop;
       this._lastScrollLeft = centerEl.scrollLeft;
       this._syncTransforms();

@@ -1,0 +1,35 @@
+# Dependencies
+node_modules
+npm-debug.log
+
+# Build outputs
+dist
+.angular
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+
+# Development files
+*.md
+LICENSE
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Scripts
+create-build.sh
+
+# Tests
+vitest.config.ts
+**/*.spec.ts
+**/*.test.ts
+
+# Editor config
+.editorconfig

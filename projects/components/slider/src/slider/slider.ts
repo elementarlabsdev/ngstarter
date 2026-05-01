@@ -197,17 +197,17 @@ export class Slider {
         minDistance = distance;
         closestThumb = thumbs[i];
       } else if (distance === minDistance) {
-        // Если расстояния одинаковы (например, ползунки в одной точке)
+        // If distances are equal (e.g., thumbs are at the same point)
         if (percentage > thumbs[i].percentage) {
-          // Если клик правее точки совпадения, выбираем "правый" ползунок
-          // (в массиве thumbs[1] обычно end thumb)
+          // If click is to the right of the overlap point, select the "right" thumb
+          // (in the array thumbs[1] is usually the end thumb)
           closestThumb = thumbs[i];
         } else if (percentage < thumbs[i].percentage) {
-          // Если клик левее
+          // If click is to the left
           closestThumb = thumbs[i-1];
         } else {
-          // Если клик ровно в точке совпадения ползунков
-          // отдаем приоритет уже активному
+          // If click is exactly at the overlap point
+          // give priority to the already active one
           if (thumbs[i] === this._activeThumb()) {
             closestThumb = thumbs[i];
           }

@@ -91,7 +91,7 @@ export class TourService implements OnDestroy {
         await currentStep.onHide();
       }
       this.stepHide$.next(currentStep);
-      // Запускаем скрытие шага и бэкдропа параллельно
+      // Start hiding step and backdrop in parallel
       const hideStepPromise = this._hideStep(currentStep);
       const hideBackdropPromise = this.hideBackdrop(true);
 
@@ -150,9 +150,9 @@ export class TourService implements OnDestroy {
       const currentUrl = this.router.url;
       const targetUrl = nextStep.route;
 
-      // Сравниваем только путь без параметров и фрагмента, если нужно,
-      // но обычно Router.url возвращает полный путь.
-      // Если URL отличается, выполняем переход.
+      // Compare only path without params and fragment if needed,
+      // but usually Router.url returns full path.
+      // If URL differs, perform transition.
       if (currentUrl !== targetUrl) {
         await this.router.navigateByUrl(targetUrl);
       }

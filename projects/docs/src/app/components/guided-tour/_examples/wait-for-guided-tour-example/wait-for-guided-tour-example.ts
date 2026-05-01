@@ -31,7 +31,7 @@ export class WaitForGuidedTourExample {
       }
     ]);
 
-    // Симулируем появление элемента через 2 секунды
+    // Simulate element appearance after 2 seconds
     setTimeout(() => {
       this.showDynamicElement.set(true);
     }, 2000);

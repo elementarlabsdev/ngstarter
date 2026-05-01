@@ -46,11 +46,11 @@ export class TextHighlightService {
   }
 
   /**
-   * Оборачивает текущее выделение указанным тегом, применяя стили, классы и атрибуты.
-   * Если выделение уже ТОЧНО СОВПАДАЕТ С ГРАНИЦАМИ существующего тега того же типа,
-   * то стили, классы и атрибуты ДОПОЛНЯЮТСЯ/ПЕРЕЗАПИСЫВАЮТСЯ на этом существующем теге.
-   * В противном случае всегда создается новая обертка.
-   * НЕ пытается "разрезать" элементы.
+   * Wraps current selection with specified tag, applying styles, classes, and attributes.
+   * If the selection EXACTLY MATCHES THE BOUNDARIES of an existing tag of the same type,
+   * then styles, classes, and attributes are ADDED/OVERWRITTEN on that existing tag.
+   * Otherwise, a new wrapper is always created.
+   * DOES NOT attempt to "cut" elements.
    */
   public wrapSelection(
     tagName: string,
@@ -82,10 +82,10 @@ export class TextHighlightService {
   }
 
   /**
-   * "Умное" оборачивание:
-   * - Если выделение точно покрывает существующий элемент того же типа -> модифицирует его.
-   * - Если выделение частично внутри inline-элемента того же типа -> разделяет его и оборачивает выделенную часть.
-   * - В остальных случаях -> создает новую обертку.
+   * "Smart" wrapping:
+   * - If the selection exactly covers an existing element of the same type -> modifies it.
+   * - If the selection is partially inside an inline element of the same type -> splits it and wraps the selected part.
+   * - In other cases -> creates a new wrapper.
    */
   public wrapOrSplitInlineSelection(
     tagName: string,

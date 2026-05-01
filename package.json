@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/elementarlabs/ngstarter/issues"
+    "url": "https://github.com/elementarlabsdev/ngstarter/issues"
   },
   "homepage": "https://ngstarter.com",
   "keywords": [
@@ -28,7 +28,7 @@
     "build:components:prod": "ng build components --configuration production",
     "build:prod": "ng build --configuration production",
     "build:docs:prod": "ng build docs --configuration production --base-href /docs/",
-    "build:admin:prod": "ng admin docs --configuration production --base-href /admin/",
+    "build:admin:prod": "ng build admin --configuration production --base-href /",
     "clean": "rm -rf .angular/cache",
     "serve:ssr": "node dist/docs/ngstarter/server.mjs",
     "serve:ssr:docs": "node dist/docs/server/server.mjs",

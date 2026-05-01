@@ -75,7 +75,7 @@ export class TourAnchorDirective implements OnInit, OnDestroy {
 
     const timeout = 0;
 
-    // Даем время для завершения скролла перед расчетом координат для бэкдропа
+    // Give time for scroll to finish before calculating coordinates for the backdrop
     setTimeout(() => {
       if (this.tourService.state() === 0) { // TourState.OFF
         return;

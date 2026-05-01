@@ -191,26 +191,26 @@ export class Tiles {
     let shouldRearrange = false;
 
     if (isFullWidth && !isMovingForward) {
-      // Специальная логика для полноширинных плиток при движении вверх:
-      // если верхняя граница перетаскиваемой плитки зашла за нижнюю треть целевой плитки
+      // Special logic for full-width tiles when moving up:
+      // if the top edge of the dragged tile has passed the bottom third of the target tile
       if (floatingRect.top < targetRect.bottom - targetRect.height * 0.3) {
         shouldRearrange = true;
       }
     } else if (isFullWidth && isMovingForward) {
-      // Специальная логика для полноширинных плиток при движении вниз:
-      // если нижняя граница перетаскиваемой плитки зашла за верхнюю треть целевой плитки
+      // Special logic for full-width tiles when moving down:
+      // if the bottom edge of the dragged tile has passed the top third of the target tile
       if (floatingRect.bottom > targetRect.top + targetRect.height * 0.3) {
         shouldRearrange = true;
       }
     } else if (deltaX > deltaY) {
-      // В основном горизонтальное движение
+      // Primarily horizontal movement
       const edgeX = isMovingForward ? floatingRect.right : floatingRect.left;
       const threshold = areSameSize ? (isMovingForward ? targetRect.left + targetRect.width * 0.2 : targetRect.right - targetRect.width * 0.2) : midX;
       if (isMovingForward ? edgeX >= threshold : edgeX <= threshold) {
         shouldRearrange = true;
       }
     } else {
-      // В основном вертикальное движение
+      // Primarily vertical movement
       const edgeY = isMovingForward ? floatingRect.bottom : floatingRect.top;
       const threshold = areSameSize ? (isMovingForward ? targetRect.top + targetRect.height * 0.2 : targetRect.bottom - targetRect.height * 0.2) : midY;
       if (isMovingForward ? edgeY >= threshold : edgeY <= threshold) {

@@ -240,7 +240,7 @@ export class DateRangeInput<D> implements OnDestroy, OnInit, FormFieldControl<Da
   }
 
   _handleBlur() {
-    // Используем setTimeout, чтобы проверить, перешел ли фокус на другой input внутри этого же компонента
+    // Use setTimeout to check if focus moved to another input within the same component
     setTimeout(() => {
       if (!this._elementRef.nativeElement.contains(document.activeElement)) {
         this._focused.set(false);

@@ -315,7 +315,7 @@ export class TabGroup implements AfterViewInit, OnDestroy {
       return '';
     }
 
-    // Если мы идем вправо (prev < current), новый таб должен выезжать СПРАВА (right)
+    // If moving right (prev < current), the new tab should slide in from the RIGHT
     return `ngs-tab-group-enter-${direction}`;
   }
 
@@ -337,7 +337,7 @@ export class TabGroup implements AfterViewInit, OnDestroy {
       return '';
     }
 
-    // Если мы идем вправо (prev < current), старый таб должен уезжать ВЛЕВО (left)
+    // If moving right (prev < current), the old tab should slide out to the LEFT
     const leaveDirection = direction === 'right' ? 'left' : 'right';
     return `ngs-tab-group-leave-${leaveDirection}`;
   }
