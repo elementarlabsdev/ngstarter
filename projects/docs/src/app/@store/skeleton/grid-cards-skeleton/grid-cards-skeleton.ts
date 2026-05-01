@@ -1,7 +1,7 @@
 import { Component, input, numberAttribute } from '@angular/core';
 import {
   Skeleton,
-} from '@ngstarter/components/skeleton';
+} from '@ngstarter-ui/components/skeleton';
 
 @Component({
   selector: 'ngs-grid-cards-skeleton',

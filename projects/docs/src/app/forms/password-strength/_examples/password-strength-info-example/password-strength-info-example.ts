@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FormField, Hint, Label } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
-import { PasswordStrength, PasswordStrengthInfo } from '@ngstarter/components/password-strength';
+import { FormField, Hint, Label } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
+import { PasswordStrength, PasswordStrengthInfo } from '@ngstarter-ui/components/password-strength';
 
 @Component({
   selector: 'app-password-strength-info-example',

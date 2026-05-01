@@ -1,7 +1,7 @@
 import { Component, inject, input, OnInit } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { GRID, Grid } from '@ngstarter/components/grid';
-import { Ripple } from '@ngstarter/components/core';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { GRID, Grid } from '@ngstarter-ui/components/grid';
+import { Ripple } from '@ngstarter-ui/components/core';
 
 export interface ExploreWidget {
   title: string;

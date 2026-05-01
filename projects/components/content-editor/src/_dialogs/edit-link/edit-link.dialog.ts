@@ -1,16 +1,16 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 import {
   DIALOG_DATA,
   DialogActions, DialogClose,
   DialogContent,
   DialogRef,
   DialogTitle
-} from '@ngstarter/components/dialog';
-import { Input } from '@ngstarter/components/input';
-import { SlideToggle } from '@ngstarter/components/slide-toggle';
-import { FormField, Hint, Label } from '@ngstarter/components/form-field';
+} from '@ngstarter-ui/components/dialog';
+import { Input } from '@ngstarter-ui/components/input';
+import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
+import { FormField, Hint, Label } from '@ngstarter-ui/components/form-field';
 
 @Component({
   selector: 'ngs-edit-link',

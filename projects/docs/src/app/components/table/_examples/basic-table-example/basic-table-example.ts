@@ -9,7 +9,7 @@ import {
   HeaderRowDef, Row,
   RowDef,
   Table
-} from '@ngstarter/components/table';
+} from '@ngstarter-ui/components/table';
 
 export interface PeriodicElement {
   name: string;

@@ -16,9 +16,9 @@ import {
   FilesGrid,
   GridFile,
   GridFileControlDirective
-} from '@ngstarter/components/upload';
-import { Icon } from '@ngstarter/components/icon';
-import { Button } from '@ngstarter/components/button';
+} from '@ngstarter-ui/components/upload';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-file-grid-example',

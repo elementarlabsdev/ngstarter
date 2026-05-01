@@ -8,11 +8,11 @@ import {
   input, output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Icon } from '@ngstarter/components/icon';
-import { Tooltip, TooltipPosition } from '@ngstarter/components/tooltip';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Tooltip, TooltipPosition } from '@ngstarter-ui/components/tooltip';
 import { SidePanelTabConfig, PanelPosition } from '../side-panel.types';
 import { SidePanelTab } from '../side-panel-tab/side-panel-tab';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-side-panel',

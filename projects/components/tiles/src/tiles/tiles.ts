@@ -8,7 +8,7 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { injectElement, arrayShallowEquals } from '@ngstarter/components/core';
+import { injectElement, arrayShallowEquals } from '@ngstarter-ui/components/core';
 import { TILES_REORDER } from '../tiles.tokens';
 import { Tile } from '../tile/tile';
 

@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { DIALOG_DATA, DialogRef, DialogTitle, DialogContent, DialogActions } from '@ngstarter/components/dialog';
-import { Checkbox } from '@ngstarter/components/checkbox';
-import { Button } from '@ngstarter/components/button';
-import { Icon } from '@ngstarter/components/icon';
-import { Menu, MenuTrigger, MenuContent, MenuItem } from '@ngstarter/components/menu';
+import { DIALOG_DATA, DialogRef, DialogTitle, DialogContent, DialogActions } from '@ngstarter-ui/components/dialog';
+import { Checkbox } from '@ngstarter-ui/components/checkbox';
+import { Button } from '@ngstarter-ui/components/button';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Menu, MenuTrigger, MenuContent, MenuItem } from '@ngstarter-ui/components/menu';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { DataViewColumnDef, DataViewPinAlign } from '../../types';
 

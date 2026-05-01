@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Avatar } from '@ngstarter/components/avatar';
+import { Avatar } from '@ngstarter-ui/components/avatar';
 
 @Component({
   selector: 'app-basic-avatar-example',

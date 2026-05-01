@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Split, SplitPane } from '@ngstarter/components/split';
+import { Split, SplitPane } from '@ngstarter-ui/components/split';
 
 @Component({
   selector: 'app-basic-split-example',

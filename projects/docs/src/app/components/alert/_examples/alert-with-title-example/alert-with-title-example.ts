@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Alert, AlertTitleDirective } from '@ngstarter/components/alert';
+import { Alert, AlertTitleDirective } from '@ngstarter-ui/components/alert';
 
 @Component({
   selector: 'app-alert-with-title-example',

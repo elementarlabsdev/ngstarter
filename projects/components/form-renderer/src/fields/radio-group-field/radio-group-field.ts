@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ComponentConfig } from '../../models/form-config.model';
-import { RadioButton, RadioGroup } from '@ngstarter/components/radio';
-import { Error, Hint } from '@ngstarter/components/form-field';
+import { RadioButton, RadioGroup } from '@ngstarter-ui/components/radio';
+import { Error, Hint } from '@ngstarter-ui/components/form-field';
 
 @Component({
   selector: 'ngs-radio-group-field',

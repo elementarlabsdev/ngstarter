@@ -25,7 +25,7 @@ import {
   line, area,
   curveStep
 } from 'd3';
-import { OverlayPosition } from '@ngstarter/components/overlay';
+import { OverlayPosition } from '@ngstarter-ui/components/overlay';
 import { fromEvent } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MchartLineCurveType } from '../types';

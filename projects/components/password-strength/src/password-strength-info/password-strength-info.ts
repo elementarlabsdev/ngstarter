@@ -1,6 +1,6 @@
 import { booleanAttribute, Component, input } from '@angular/core';
 import { PasswordStrength } from '../password-strength/password-strength';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'ngs-password-strength-info',

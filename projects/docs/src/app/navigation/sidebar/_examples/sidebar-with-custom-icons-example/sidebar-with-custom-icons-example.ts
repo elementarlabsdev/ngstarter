@@ -12,8 +12,8 @@ import {
   SidebarNavGroupToggleIconDirective,
   SidebarNavHeading, SidebarNavItem,
   SidebarNavItemIconDirective
-} from '@ngstarter/components/sidebar';
-import { Icon } from '@ngstarter/components/icon';
+} from '@ngstarter-ui/components/sidebar';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'app-sidebar-with-custom-icons-example',

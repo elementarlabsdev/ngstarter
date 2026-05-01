@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { FormField, IconButtonSuffix, Label } from '@ngstarter/components/form-field';
+import { FormField, IconButtonSuffix, Label } from '@ngstarter-ui/components/form-field';
 import {
   DateRangeInput,
   DateRangePicker,
@@ -9,7 +9,7 @@ import {
   DateRange,
   StartDate,
   EndDate
-} from '@ngstarter/components/datepicker';
+} from '@ngstarter-ui/components/datepicker';
 
 @Component({
   selector: 'app-datepicker-presets-example',

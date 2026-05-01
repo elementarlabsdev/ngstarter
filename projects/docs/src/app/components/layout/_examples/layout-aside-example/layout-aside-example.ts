@@ -4,7 +4,7 @@ import {
   LayoutContent,
   Layout,
   LayoutSidebar
-} from '@ngstarter/components/layout';
+} from '@ngstarter-ui/components/layout';
 
 @Component({
   selector: 'app-layout-aside-example',

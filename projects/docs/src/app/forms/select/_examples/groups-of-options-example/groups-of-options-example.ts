@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Option, Select, Optgroup } from '@ngstarter/components/select';
-import { Label } from '@ngstarter/components/form-field';
-import { FormField } from '@ngstarter/components/form-field';
+import { Option, Select, Optgroup } from '@ngstarter-ui/components/select';
+import { Label } from '@ngstarter-ui/components/form-field';
+import { FormField } from '@ngstarter-ui/components/form-field';
 
 interface Pokemon {
   value: string;

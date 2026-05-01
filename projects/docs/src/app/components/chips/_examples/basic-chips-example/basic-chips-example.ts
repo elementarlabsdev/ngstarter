@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ChipListbox, ChipOption } from '@ngstarter/components/chips';
+import { ChipListbox, ChipOption } from '@ngstarter-ui/components/chips';
 
 @Component({
   selector: 'app-basic-chips-example',

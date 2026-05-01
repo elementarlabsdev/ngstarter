@@ -14,8 +14,8 @@ import {
   inject, PLATFORM_ID
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Icon } from '@ngstarter/components/icon';
-import { FabButton } from '@ngstarter/components/button';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { FabButton } from '@ngstarter-ui/components/button';
 
 import MicrophoneRecorder, {
   MicrophoneRecorderOptions,

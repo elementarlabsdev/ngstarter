@@ -13,7 +13,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, UntypedFormControl, ValidatorF
 import { Criteria } from '../enum';
 import { PasswordStrengthValidator } from '../validator';
 import { RegExpValidator } from '../validator/regexp.class';
-import { ProgressBar } from '@ngstarter/components/progress-bar';
+import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 
 @Component({
   selector: 'ngs-password-strength',

@@ -9,7 +9,7 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Timepicker } from '../timepicker/timepicker';
 import { Subject } from 'rxjs';
 import { TimepickerToggleIcon } from '../timepicker-toggle-icon';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-timepicker-toggle',

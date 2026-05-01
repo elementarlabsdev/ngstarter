@@ -3,17 +3,17 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { IMAGE_DESIGNER } from '../tokens';
 import { ImageDesignerService } from '../image-designer.service';
 import { LayerConfig } from '../types';
-import { ColorSwitcher } from '@ngstarter/components/color-switcher';
-import { Slider } from '@ngstarter/components/slider';
-import { SliderThumb } from '@ngstarter/components/slider';
-import { Toolbar, ToolbarItem, ToolbarSpacer } from '@ngstarter/components/toolbar';
-import { Popover, PopoverContent, PopoverTriggerForDirective } from '@ngstarter/components/popover';
-import { Button } from '@ngstarter/components/button';
-import { Icon } from '@ngstarter/components/icon';
-import { Divider } from '@ngstarter/components/divider';
-import { Menu, MenuItem, MenuTrigger } from '@ngstarter/components/menu';
-import { ButtonToggle, ButtonToggleGroup } from '@ngstarter/components/button-toggle';
-import { Ripple } from '@ngstarter/components/core';
+import { ColorSwitcher } from '@ngstarter-ui/components/color-switcher';
+import { Slider } from '@ngstarter-ui/components/slider';
+import { SliderThumb } from '@ngstarter-ui/components/slider';
+import { Toolbar, ToolbarItem, ToolbarSpacer } from '@ngstarter-ui/components/toolbar';
+import { Popover, PopoverContent, PopoverTriggerForDirective } from '@ngstarter-ui/components/popover';
+import { Button } from '@ngstarter-ui/components/button';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Divider } from '@ngstarter-ui/components/divider';
+import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
+import { ButtonToggle, ButtonToggleGroup } from '@ngstarter-ui/components/button-toggle';
+import { Ripple } from '@ngstarter-ui/components/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({

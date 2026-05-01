@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { FormField, Label, Prefix } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
-import { CreditCardNumberMaskDirective } from '@ngstarter/components/input-mask';
-import { Icon } from '@ngstarter/components/icon';
+import { FormField, Label, Prefix } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
+import { CreditCardNumberMaskDirective } from '@ngstarter-ui/components/input-mask';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'app-credit-card-input-mask-example',

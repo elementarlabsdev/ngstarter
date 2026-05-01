@@ -3,8 +3,8 @@ import {
   Avatar,
   AvatarGroup,
   AvatarMore,
-} from '@ngstarter/components/avatar';
-import { GRID, Grid } from '@ngstarter/components/grid';
+} from '@ngstarter-ui/components/avatar';
+import { GRID, Grid } from '@ngstarter-ui/components/grid';
 
 @Component({
   selector: 'ngs-events-content',

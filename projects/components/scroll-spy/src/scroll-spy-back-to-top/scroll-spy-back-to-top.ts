@@ -1,8 +1,8 @@
 import { Component, DOCUMENT, inject, PLATFORM_ID } from '@angular/core';
-import { PANEL_CONTENT } from '@ngstarter/components/panel';
-import { LAYOUT_CONTENT } from '@ngstarter/components/layout';
+import { PANEL_CONTENT } from '@ngstarter-ui/components/panel';
+import { LAYOUT_CONTENT } from '@ngstarter-ui/components/layout';
 import { isPlatformServer } from '@angular/common';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'ngs-scroll-spy-back-to-top,[ngs-scroll-spy-back-to-top]',

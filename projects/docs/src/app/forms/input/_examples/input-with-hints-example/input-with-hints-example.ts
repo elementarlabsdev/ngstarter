@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Input } from '@ngstarter/components/input';
-import { Label, FormField, Hint } from '@ngstarter/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
+import { Label, FormField, Hint } from '@ngstarter-ui/components/form-field';
 
 @Component({
   selector: 'app-input-with-hints-example',

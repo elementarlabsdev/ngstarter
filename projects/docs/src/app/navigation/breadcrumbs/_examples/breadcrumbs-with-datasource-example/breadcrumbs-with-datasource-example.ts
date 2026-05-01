@@ -5,7 +5,7 @@ import {
   BreadcrumbItem,
   BreadcrumbItemDefDirective, Breadcrumbs,
   BreadcrumbSeparator, BreadcrumbSeparatorDefDirective
-} from '@ngstarter/components/breadcrumbs';
+} from '@ngstarter-ui/components/breadcrumbs';
 
 @Component({
   selector: 'app-breadcrumbs-with-datasource-example',

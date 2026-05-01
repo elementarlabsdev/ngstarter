@@ -6,8 +6,8 @@ import {
   signal, viewChild, OnInit,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { FormFieldControl } from '@ngstarter/components/form-field';
-import { Select, Option, SelectChange } from '@ngstarter/components/select';
+import { FormFieldControl } from '@ngstarter-ui/components/form-field';
+import { Select, Option, SelectChange } from '@ngstarter-ui/components/select';
 import { Subject, takeUntil } from 'rxjs';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { outputToObservable } from '@angular/core/rxjs-interop';

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Navigation, NavigationItem } from '@ngstarter/components/navigation';
+import { Navigation, NavigationItem } from '@ngstarter-ui/components/navigation';
 
 @Component({
   selector: 'app-basic-navigation-example',

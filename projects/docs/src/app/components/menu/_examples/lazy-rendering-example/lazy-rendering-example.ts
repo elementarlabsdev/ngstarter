@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Menu, MenuContent, MenuItem, MenuTrigger } from '@ngstarter/components/menu';
-import { Icon } from '@ngstarter/components/icon';
-import { Button } from '@ngstarter/components/button';
+import { Menu, MenuContent, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-lazy-rendering-example',

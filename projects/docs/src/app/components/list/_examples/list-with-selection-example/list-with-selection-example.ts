@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Divider } from '@ngstarter/components/divider';
-import { ListOption, SelectionList } from '@ngstarter/components/list';
+import { Divider } from '@ngstarter-ui/components/divider';
+import { ListOption, SelectionList } from '@ngstarter-ui/components/list';
 
 @Component({
   selector: 'app-list-with-selection-example',

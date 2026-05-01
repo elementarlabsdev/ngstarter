@@ -4,7 +4,7 @@ import {
   Layout,
   LayoutHeader,
   LayoutSidebar
-} from '@ngstarter/components/layout';
+} from '@ngstarter-ui/components/layout';
 
 @Component({
   selector: 'app-layout-header-with-sidebar-example',

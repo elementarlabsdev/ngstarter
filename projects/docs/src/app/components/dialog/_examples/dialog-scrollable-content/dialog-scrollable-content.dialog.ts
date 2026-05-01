@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { DialogActions, DialogClose, DialogContent, DialogTitle } from '@ngstarter/components/dialog';
-import { Button } from '@ngstarter/components/button';
+import { DialogActions, DialogClose, DialogContent, DialogTitle } from '@ngstarter-ui/components/dialog';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-dialog-scrollable-content',

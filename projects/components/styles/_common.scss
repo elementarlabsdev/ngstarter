@@ -2,7 +2,7 @@
 @use 'tailwindcss';
 
 @source not '../styles';
-@source "../node_modules/@ngstarter/components/**/*.mjs";
+@source "../node_modules/@ngstarter-ui/components/**/*.mjs";
 @plugin '@tailwindcss/typography';
 @custom-variant dark (&:where(.dark, .dark *));
 

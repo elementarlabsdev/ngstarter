@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Button } from '@ngstarter/components/button';
-import { Menu, MenuFooter, MenuHeader, MenuItem, MenuTrigger } from '@ngstarter/components/menu';
+import { Button } from '@ngstarter-ui/components/button';
+import { Menu, MenuFooter, MenuHeader, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
 
 @Component({
   selector: 'app-menu-header-footer-example',

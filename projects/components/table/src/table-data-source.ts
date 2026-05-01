@@ -11,8 +11,8 @@ import {
 } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { outputToObservable } from '@angular/core/rxjs-interop';
-import { SortDirective, Sort } from '@ngstarter/components/sort';
-import { Paginator } from '@ngstarter/components/paginator';
+import { SortDirective, Sort } from '@ngstarter-ui/components/sort';
+import { Paginator } from '@ngstarter-ui/components/paginator';
 
 export class TableDataSource<T> extends _DataSource<T> {
   /** Stream that emits when a new data array is set on the data source. */

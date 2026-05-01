@@ -18,9 +18,9 @@ import { fromEvent, Subscription, merge, Subject } from 'rxjs';
 import { switchMap, takeUntil, map, filter, tap } from 'rxjs/operators';
 import { Point } from '../lazy-point';
 import { LazyBrush, LazyBrushOptions } from '../lazy-brush';
-import { ColorSwitcher } from '@ngstarter/components/color-switcher';
-import { Icon } from '@ngstarter/components/icon';
-import { Button } from '@ngstarter/components/button';
+import { ColorSwitcher } from '@ngstarter-ui/components/color-switcher';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-signature-pad',

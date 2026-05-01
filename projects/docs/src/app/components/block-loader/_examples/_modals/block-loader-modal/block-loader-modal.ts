@@ -6,11 +6,11 @@ import {
   DialogContent,
   DialogRef,
   DialogTitle
-} from '@ngstarter/components/dialog';
-import { Input } from '@ngstarter/components/input';
-import { FormField, Label } from '@ngstarter/components/form-field';
-import { BlockLoader } from '@ngstarter/components/block-loader';
-import { Button } from '@ngstarter/components/button';
+} from '@ngstarter-ui/components/dialog';
+import { Input } from '@ngstarter-ui/components/input';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
+import { BlockLoader } from '@ngstarter-ui/components/block-loader';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-block-loader-modal',

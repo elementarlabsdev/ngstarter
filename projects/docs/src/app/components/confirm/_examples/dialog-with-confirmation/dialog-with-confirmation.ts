@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { ConfirmManager } from '@ngstarter/components/confirm';
-import { SnackBar } from '@ngstarter/components/snack-bar';
-import { Button } from '@ngstarter/components/button';
-import { DialogActions, DialogContent, DialogRef, DialogTitle } from '@ngstarter/components/dialog';
+import { ConfirmManager } from '@ngstarter-ui/components/confirm';
+import { SnackBar } from '@ngstarter-ui/components/snack-bar';
+import { Button } from '@ngstarter-ui/components/button';
+import { DialogActions, DialogContent, DialogRef, DialogTitle } from '@ngstarter-ui/components/dialog';
 
 @Component({
   selector: 'app-dialog-with-confirmation',

@@ -1,6 +1,6 @@
 import { Component, inject, viewChild, TemplateRef } from '@angular/core';
-import { TourService, TourAnchorDirective } from '@ngstarter/components/guided-tour';
-import { Button } from '@ngstarter/components/button';
+import { TourService, TourAnchorDirective } from '@ngstarter-ui/components/guided-tour';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-template-guided-tour-example',

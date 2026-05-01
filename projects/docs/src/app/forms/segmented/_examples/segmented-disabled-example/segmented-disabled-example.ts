@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SegmentedButton, Segmented } from '@ngstarter/components/segmented';
+import { SegmentedButton, Segmented } from '@ngstarter-ui/components/segmented';
 
 @Component({
   selector: 'app-segmented-disabled-example',

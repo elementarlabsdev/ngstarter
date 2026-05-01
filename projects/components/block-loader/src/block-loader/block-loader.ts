@@ -1,5 +1,5 @@
 import { booleanAttribute, ChangeDetectionStrategy, Component, input, numberAttribute } from '@angular/core';
-import { ProgressSpinner } from '@ngstarter/components/spinner';
+import { ProgressSpinner } from '@ngstarter-ui/components/spinner';
 
 @Component({
   selector: 'ngs-block-loader',

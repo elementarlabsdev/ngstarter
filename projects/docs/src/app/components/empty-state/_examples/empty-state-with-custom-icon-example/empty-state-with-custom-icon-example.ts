@@ -3,8 +3,8 @@ import {
   EmptyState,
   EmptyStateContent,
   EmptyStateIcon
-} from '@ngstarter/components/empty-state';
-import { Icon } from '@ngstarter/components/icon';
+} from '@ngstarter-ui/components/empty-state';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'app-empty-state-with-custom-icon-example',

@@ -1,8 +1,8 @@
 import { Component, inject, input, OnInit } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { Tooltip } from '@ngstarter/components/tooltip';
-import { Grid, GRID } from '@ngstarter/components/grid';
-import { Ripple } from '@ngstarter/components/core';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Tooltip } from '@ngstarter-ui/components/tooltip';
+import { Grid, GRID } from '@ngstarter-ui/components/grid';
+import { Ripple } from '@ngstarter-ui/components/core';
 
 @Component({
   selector: 'ngs-total-subscribers-content',

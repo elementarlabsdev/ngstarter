@@ -9,7 +9,7 @@ import {
 import {
   ExpandCustomButtonLabelsExample
 } from '../_examples/expand-custom-button-labels-example/expand-custom-button-labels-example';
-import { Tab, TabGroup } from '@ngstarter/components/tabs';
+import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({

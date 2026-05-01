@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Step, StepLabel, Stepper, StepperNext, StepperPrevious } from '@ngstarter/components/stepper';
-import { FormField, Label } from '@ngstarter/components/form-field';
-import { Button } from '@ngstarter/components/button';
-import { Input } from '@ngstarter/components/input';
+import { Step, StepLabel, Stepper, StepperNext, StepperPrevious } from '@ngstarter-ui/components/stepper';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
+import { Button } from '@ngstarter-ui/components/button';
+import { Input } from '@ngstarter-ui/components/input';
 
 @Component({
   selector: 'app-stepper-label-bottom-position-example',

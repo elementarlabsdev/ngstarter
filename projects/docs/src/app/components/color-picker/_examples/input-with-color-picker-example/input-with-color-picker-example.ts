@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { FormField, Label, Suffix } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
+import { FormField, Label, Suffix } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
 import { FormsModule } from '@angular/forms';
 import {
   ColorPicker,
   ColorPickerThumbnail,
   ColorPickerTriggerForDirective
-} from '@ngstarter/components/color-picker';
+} from '@ngstarter-ui/components/color-picker';
 
 @Component({
   selector: 'app-input-with-color-picker-example',

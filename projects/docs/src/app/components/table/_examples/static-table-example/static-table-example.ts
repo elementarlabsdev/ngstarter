@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NativeTable } from '@ngstarter/components/table';
+import { NativeTable } from '@ngstarter-ui/components/table';
 
 @Component({
   selector: 'app-static-table-example',

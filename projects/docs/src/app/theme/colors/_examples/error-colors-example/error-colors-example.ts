@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Divider } from '@ngstarter/components/divider';
+import { Divider } from '@ngstarter-ui/components/divider';
 
 @Component({
   selector: 'app-error-colors-example',

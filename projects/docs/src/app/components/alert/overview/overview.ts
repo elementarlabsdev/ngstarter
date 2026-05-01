@@ -9,9 +9,9 @@ import {
 import { AlertActionsExample } from '../_examples/alert-actions-example/alert-actions-example';
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
-import { Tab, TabGroup } from '@ngstarter/components/tabs';
+import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
-import { Divider } from '@ngstarter/components/divider';
+import { Divider } from '@ngstarter-ui/components/divider';
 import {
   Table,
   ColumnDef,
@@ -23,7 +23,7 @@ import {
   HeaderRowDef,
   Row,
   RowDef
-} from '@ngstarter/components/table';
+} from '@ngstarter-ui/components/table';
 
 @Component({
   imports: [

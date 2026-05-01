@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ResizableContainer } from '@ngstarter/components/resizable-container';
+import { ResizableContainer } from '@ngstarter-ui/components/resizable-container';
 
 @Component({
   selector: 'app-basic-resizable-container-example',

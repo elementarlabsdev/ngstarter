@@ -1,6 +1,6 @@
 import { Directive, inject } from '@angular/core';
 import { COMMENT_EDITOR, CommentEditorInterface } from '../types';
-import { UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter/components/upload';
+import { UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter-ui/components/upload';
 
 @Directive({
   selector: '[ngsCommentEditorCommandImage]',

@@ -1,6 +1,6 @@
 import { Component, inject, input, OnInit } from '@angular/core';
-import { ActionRequired } from '@ngstarter/components/action-required';
-import { GRID, Grid } from '@ngstarter/components/grid';
+import { ActionRequired } from '@ngstarter-ui/components/action-required';
+import { GRID, Grid } from '@ngstarter-ui/components/grid';
 
 export interface ActionRequiredWidget {
   iconName?: string;

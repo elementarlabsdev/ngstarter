@@ -3,7 +3,7 @@ import {
   cellRenderer,
   DataViewColumnDef,
   DataView, DataViewCellRendererDef
-} from '@ngstarter/components/data-view';
+} from '@ngstarter-ui/components/data-view';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 

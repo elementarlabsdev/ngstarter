@@ -18,11 +18,11 @@ import {
   CommentEditorCommandEditLinkDirective,
   CommentEditorCommandLinkDirective,
   CommentEditorCommandUnsetLinkDirective, CommentEditorCommandToggleToolbarDirective, CommentEditorFooterBar
-} from '@ngstarter/components/comment-editor';
-import { Icon } from '@ngstarter/components/icon';
-import { SafeHtmlPipe } from '@ngstarter/components/core';
-import { Button } from '@ngstarter/components/button';
-import { Tooltip } from '@ngstarter/components/tooltip';
+} from '@ngstarter-ui/components/comment-editor';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { SafeHtmlPipe } from '@ngstarter-ui/components/core';
+import { Button } from '@ngstarter-ui/components/button';
+import { Tooltip } from '@ngstarter-ui/components/tooltip';
 
 @Component({
   selector: 'app-comment-editor-with-full-view-mode-example',

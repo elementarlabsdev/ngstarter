@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { Button } from '@ngstarter/components/button';
-import { IncidentsStore } from '@ngstarter/components/incidents';
+import { Button } from '@ngstarter-ui/components/button';
+import { IncidentsStore } from '@ngstarter-ui/components/incidents';
 
 @Component({
   selector: 'app-incidents-show-hide-dynamicly-example',

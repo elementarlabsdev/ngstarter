@@ -2,7 +2,7 @@ import { Component, inject, input } from '@angular/core';
 import { TabPanelApiService } from '../tab-panel-api.service';
 import { TabPanelNav } from '../tab-panel-nav/tab-panel-nav';
 import { TAB_PANEL_NAV } from '../types';
-import { Ripple } from '@ngstarter/components/core';
+import { Ripple } from '@ngstarter-ui/components/core';
 
 @Component({
   selector: 'ngs-tab-panel-item',

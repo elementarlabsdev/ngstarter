@@ -3,16 +3,16 @@ import {
   DataViewColumnDef,
   DataView,
   DataViewEmptyFilterResultsDirective
-} from '@ngstarter/components/data-view';
+} from '@ngstarter-ui/components/data-view';
 import {
   EmptyState,
   EmptyStateContent,
   EmptyStateIcon
-} from '@ngstarter/components/empty-state';
-import { Icon } from '@ngstarter/components/icon';
-import { FormField } from '@ngstarter/components/form-field';
+} from '@ngstarter-ui/components/empty-state';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { FormField } from '@ngstarter-ui/components/form-field';
 import { FormsModule } from '@angular/forms';
-import { Input } from '@ngstarter/components/input';
+import { Input } from '@ngstarter-ui/components/input';
 
 export interface PeriodicElement {
   name: string;

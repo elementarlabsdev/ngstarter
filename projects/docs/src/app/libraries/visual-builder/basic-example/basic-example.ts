@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {VisualBuilder} from "@ngstarter/components/visual-builder";
+import {VisualBuilder} from "@ngstarter-ui/components/visual-builder";
 
 @Component({
   selector: 'app-basic-example',

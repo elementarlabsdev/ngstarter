@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
-import { Button } from '@ngstarter/components/button';
-import { AnnouncementStore } from '@ngstarter/components/announcement';
+import { Button } from '@ngstarter-ui/components/button';
+import { AnnouncementStore } from '@ngstarter-ui/components/announcement';
 
 @Component({
   selector: 'app-show-hide-announcement-dynamically',

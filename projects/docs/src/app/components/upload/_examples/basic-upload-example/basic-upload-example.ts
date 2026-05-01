@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter/components/upload';
+import { UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter-ui/components/upload';
 import { JsonPipe } from '@angular/common';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-basic-upload-example',

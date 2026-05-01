@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Tooltip } from '@ngstarter/components/tooltip';
-import { Checkbox } from '@ngstarter/components/checkbox';
-import { Button } from '@ngstarter/components/button';
+import { Tooltip } from '@ngstarter-ui/components/tooltip';
+import { Checkbox } from '@ngstarter-ui/components/checkbox';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-tooltip-position-at-origin-example',

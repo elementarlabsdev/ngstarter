@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-button-loading-example',

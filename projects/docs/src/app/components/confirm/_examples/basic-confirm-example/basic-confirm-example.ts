@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { ConfirmManager } from '@ngstarter/components/confirm';
-import { SnackBar } from '@ngstarter/components/snack-bar';
-import { Button } from '@ngstarter/components/button';
+import { ConfirmManager } from '@ngstarter-ui/components/confirm';
+import { SnackBar } from '@ngstarter-ui/components/snack-bar';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-basic-confirm-example',

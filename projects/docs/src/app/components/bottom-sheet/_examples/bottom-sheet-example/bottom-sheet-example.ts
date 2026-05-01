@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { List, ListItem, ListItemLine, ListItemTitle } from '@ngstarter/components/list';
-import { BottomSheetRef } from '@ngstarter/components/bottom-sheet';
+import { List, ListItem, ListItemLine, ListItemTitle } from '@ngstarter-ui/components/list';
+import { BottomSheetRef } from '@ngstarter-ui/components/bottom-sheet';
 
 @Component({
   selector: 'app-bottom-sheet-example',

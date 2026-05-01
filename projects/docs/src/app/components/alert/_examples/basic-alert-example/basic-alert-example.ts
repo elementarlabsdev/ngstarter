@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Alert } from '@ngstarter/components/alert';
+import { Alert } from '@ngstarter-ui/components/alert';
 
 @Component({
   selector: 'app-basic-alert-example',

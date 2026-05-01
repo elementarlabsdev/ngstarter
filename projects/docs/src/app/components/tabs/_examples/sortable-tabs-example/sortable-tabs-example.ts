@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Tab, TabGroup, TabLabel } from '@ngstarter/components/tabs';
+import { Tab, TabGroup, TabLabel } from '@ngstarter-ui/components/tabs';
 
 @Component({
     selector: 'app-sortable-tabs-example',

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Avatar } from '@ngstarter/components/avatar';
+import { Avatar } from '@ngstarter-ui/components/avatar';
 import {
   Card,
   CardActions, CardAvatar,
@@ -8,8 +8,8 @@ import {
   CardImage,
   CardSubtitle,
   CardTitle
-} from '@ngstarter/components/card';
-import { Button } from '@ngstarter/components/button';
+} from '@ngstarter-ui/components/card';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-card-multiple-sections-example',

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ProgressBar } from '@ngstarter/components/progress-bar';
+import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 
 @Component({
   selector: 'app-buffer-progress-bar-example',

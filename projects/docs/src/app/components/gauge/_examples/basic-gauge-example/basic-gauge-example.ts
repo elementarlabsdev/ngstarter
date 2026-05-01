@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Gauge } from '@ngstarter/components/gauge';
+import { Gauge } from '@ngstarter-ui/components/gauge';
 
 @Component({
   selector: 'app-basic-gauge-example',

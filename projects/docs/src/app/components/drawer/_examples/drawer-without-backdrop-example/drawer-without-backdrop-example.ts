@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { Drawer } from '@ngstarter/components/drawer';
-import { Button } from '@ngstarter/components/button';
+import { Drawer } from '@ngstarter-ui/components/drawer';
+import { Button } from '@ngstarter-ui/components/button';
 import {
   PanelContent,
   Panel,
   PanelFooter,
   PanelHeader
-} from '@ngstarter/components/panel';
+} from '@ngstarter-ui/components/panel';
 
 @Component({
   selector: 'app-drawer-without-backdrop-example',

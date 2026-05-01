@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import {
   TabPanelAside,
   TabPanelAsideContentDirective, TabPanelContent, TabPanel,
   TabPanelItem,
   TabPanelItemIconDirective,
   TabPanelItemText, TabPanelNav
-} from '@ngstarter/components/tab-panel';
+} from '@ngstarter-ui/components/tab-panel';
 
 @Component({
   selector: 'app-basic-tab-panel-example',

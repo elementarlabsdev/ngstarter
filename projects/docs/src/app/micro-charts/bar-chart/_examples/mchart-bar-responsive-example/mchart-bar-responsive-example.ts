@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ShuffleArrayPipe } from '@meta/shuffle-array.pipe';
-import { ResizableContainer } from '@ngstarter/components/resizable-container';
-import { MchartBar } from '@ngstarter/components/micro-chart';
+import { ResizableContainer } from '@ngstarter-ui/components/resizable-container';
+import { MchartBar } from '@ngstarter-ui/components/micro-chart';
 
 @Component({
   selector: 'app-mchart-bar-responsive-example',

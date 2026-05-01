@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Checkbox, CheckboxGroup } from '@ngstarter/components/checkbox';
+import { Checkbox, CheckboxGroup } from '@ngstarter-ui/components/checkbox';
 
 @Component({
   selector: 'app-checkbox-group-example',

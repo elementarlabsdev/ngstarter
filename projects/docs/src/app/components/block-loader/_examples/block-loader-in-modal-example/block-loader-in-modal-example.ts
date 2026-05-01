@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { Button } from '@ngstarter/components/button';
-import { Dialog } from '@ngstarter/components/dialog';
+import { Button } from '@ngstarter-ui/components/button';
+import { Dialog } from '@ngstarter-ui/components/dialog';
 import { BlockLoaderModal } from '../_modals/block-loader-modal/block-loader-modal';
 
 @Component({

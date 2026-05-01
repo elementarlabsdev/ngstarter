@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { CodeHighlighter } from '@ngstarter/components/code-highlighter';
+import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 
 @Component({
   selector: 'app-installation',
@@ -12,5 +12,5 @@ import { CodeHighlighter } from '@ngstarter/components/code-highlighter';
 })
 export class Installation {
   installProjectCommand = signal('ng new project-name --style=scss');
-  addProjectSchematics = signal('ng add @ngstarter/components');
+  addProjectSchematics = signal('ng add @ngstarter-ui/components');
 }

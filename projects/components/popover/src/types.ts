@@ -1,4 +1,4 @@
-import { OverlayPosition } from '@ngstarter/components/overlay';
+import { OverlayPosition } from '@ngstarter-ui/components/overlay';
 import { InjectionToken } from '@angular/core';
 
 export type PopoverTrigger = 'click' | 'hover';

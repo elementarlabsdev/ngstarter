@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { IncidentsStore } from '../incidents.store';
 import { Incidents } from '../incidents/incidents';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { IncidentsTitle } from '../incidents-title/incidents-title';
 import { IncidentDetails } from '../incident-details/incident-details';
 import { IncidentsBar } from '../incidents-bar/incidents-bar';

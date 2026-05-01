@@ -7,9 +7,9 @@ import {
   output,
   Renderer2
 } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { AnnouncementLinkTo, AnnouncementVariant } from '../types';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-announcement',

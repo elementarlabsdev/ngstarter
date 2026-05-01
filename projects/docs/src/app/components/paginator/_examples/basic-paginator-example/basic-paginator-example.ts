@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Paginator } from '@ngstarter/components/paginator';
+import { Paginator } from '@ngstarter-ui/components/paginator';
 
 @Component({
     selector: 'app-basic-paginator-example',

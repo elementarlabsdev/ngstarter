@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import {
   Avatar,
   AvatarGroup,
   AvatarMore,
-} from '@ngstarter/components/avatar';
+} from '@ngstarter-ui/components/avatar';
 
 @Component({
   selector: 'app-avatar-automatic-color-example',

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { Menu, MenuItem, ContextMenuTrigger } from '@ngstarter/components/menu';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Menu, MenuItem, ContextMenuTrigger } from '@ngstarter-ui/components/menu';
 
 @Component({
   selector: 'app-context-menu-example',

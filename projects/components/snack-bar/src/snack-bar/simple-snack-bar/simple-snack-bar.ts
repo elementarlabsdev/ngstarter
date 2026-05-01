@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { SNACK_BAR_DATA } from '../snack-bar-config';
 import { SnackBarRef } from '../snack-bar-ref';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-simple-snack-bar',

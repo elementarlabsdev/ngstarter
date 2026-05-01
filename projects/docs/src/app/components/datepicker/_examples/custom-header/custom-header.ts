@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { Subject } from 'rxjs';
-import { Button } from '@ngstarter/components/button';
-import { Calendar, DateAdapter } from '@ngstarter/components/datepicker';
+import { Button } from '@ngstarter-ui/components/button';
+import { Calendar, DateAdapter } from '@ngstarter-ui/components/datepicker';
 
 @Component({
   selector: 'app-custom-header',

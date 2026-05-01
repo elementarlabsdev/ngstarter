@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Announcement } from '@ngstarter/components/announcement';
+import { Announcement } from '@ngstarter-ui/components/announcement';
 
 @Component({
   selector: 'app-basic-announcement-example',

@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
-import { FormField, Label } from '@ngstarter/components/form-field';
-import { Option, Select, SelectBody, SelectHeader } from '@ngstarter/components/select';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
+import { Option, Select, SelectBody, SelectHeader } from '@ngstarter-ui/components/select';
 
 interface Food {
   value: string;

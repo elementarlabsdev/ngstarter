@@ -1,5 +1,5 @@
 import { Component, inject, input, OnInit } from '@angular/core';
-import { GRID, Grid } from '@ngstarter/components/grid';
+import { GRID, Grid } from '@ngstarter-ui/components/grid';
 
 @Component({
   selector: 'app-analytics-total-users-content',

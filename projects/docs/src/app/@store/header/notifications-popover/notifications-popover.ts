@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { InviteToEditFilesInFolderNotification, MentionedInCommentNotification } from '@store/notifications';
 import { RouterLink } from '@angular/router';
-import { Icon } from '@ngstarter/components/icon';
-import { Popover } from '@ngstarter/components/popover';
-import { NotificationDefDirective, NotificationList, NotificationInterface } from '@ngstarter/components/notifications';
-import { Button } from '@ngstarter/components/button';
-import { Ripple } from '@ngstarter/components/core';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Popover } from '@ngstarter-ui/components/popover';
+import { NotificationDefDirective, NotificationList, NotificationInterface } from '@ngstarter-ui/components/notifications';
+import { Button } from '@ngstarter-ui/components/button';
+import { Ripple } from '@ngstarter-ui/components/core';
 
 @Component({
   selector: 'ngs-notifications-popover',

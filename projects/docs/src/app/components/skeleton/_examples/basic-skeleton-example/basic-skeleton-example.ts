@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {
   Skeleton,
-} from '@ngstarter/components/skeleton';
+} from '@ngstarter-ui/components/skeleton';
 
 @Component({
   selector: 'app-basic-skeleton-example',

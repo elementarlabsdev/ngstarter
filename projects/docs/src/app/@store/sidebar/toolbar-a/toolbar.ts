@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { Dicebear } from '@ngstarter/components/avatar';
-import { Button } from '@ngstarter/components/button';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Dicebear } from '@ngstarter-ui/components/avatar';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-sidebar-toolbar-a',

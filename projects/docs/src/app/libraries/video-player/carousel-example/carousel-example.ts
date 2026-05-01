@@ -1,14 +1,14 @@
 import { Component, signal } from '@angular/core';
-import { VideoPlayer } from "@ngstarter/components/video-player";
+import { VideoPlayer } from "@ngstarter-ui/components/video-player";
 import {
   Carousel,
   CarouselCard,
   CarouselNextDirective,
   CarouselPreviousDirective,
   CarouselControlsDirective
-} from "@ngstarter/components/carousel";
-import { Icon } from "@ngstarter/components/icon";
-import { Button } from "@ngstarter/components/button";
+} from "@ngstarter-ui/components/carousel";
+import { Icon } from "@ngstarter-ui/components/icon";
+import { Button } from "@ngstarter-ui/components/button";
 import {
   DataViewColumnSettingsExample
 } from "../../data-view/_examples/data-view-column-settings-example/data-view-column-settings-example";

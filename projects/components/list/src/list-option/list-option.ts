@@ -17,8 +17,8 @@ import { ListItemIcon } from '../list-item-icon';
 import { ListItemTitle } from '../list-item-title';
 import { ListItemLine } from '../list-item-line';
 import { ListItemMeta } from '../list-item-meta';
-import { Checkbox } from '@ngstarter/components/checkbox';
-import { RadioButton } from '@ngstarter/components/radio';
+import { Checkbox } from '@ngstarter-ui/components/checkbox';
+import { RadioButton } from '@ngstarter-ui/components/radio';
 
 @Component({
   selector: 'ngs-list-option',

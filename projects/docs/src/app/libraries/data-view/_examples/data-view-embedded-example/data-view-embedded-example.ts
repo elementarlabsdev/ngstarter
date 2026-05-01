@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { DataViewColumnDef, DataView } from '@ngstarter/components/data-view';
-import { Card, CardHeader, CardTitle } from '@ngstarter/components/card';
+import { DataViewColumnDef, DataView } from '@ngstarter-ui/components/data-view';
+import { Card, CardHeader, CardTitle } from '@ngstarter-ui/components/card';
 
 export interface PeriodicElement {
   name: string;

@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { Datepicker, DatepickerInput, provideNativeDateAdapter } from '@ngstarter/components/datepicker';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Datepicker, DatepickerInput, provideNativeDateAdapter } from '@ngstarter-ui/components/datepicker';
 import {
   Accordion, ActionRow,
   ExpansionPanel,
   ExpansionPanelHeader,
   ExpansionPanelDescription,
   ExpansionPanelTitle
-} from '@ngstarter/components/expansion';
-import { Button } from '@ngstarter/components/button';
-import { FormField, Label } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
+} from '@ngstarter-ui/components/expansion';
+import { Button } from '@ngstarter-ui/components/button';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
 
 @Component({
   selector: 'app-expansion-panel-as-accordion-example',

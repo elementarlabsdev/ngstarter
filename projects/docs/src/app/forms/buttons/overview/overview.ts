@@ -16,7 +16,7 @@ import {
   ScrollSpyNav,
   ScrollSpyOn,
   ScrollSpyTitle
-} from '@ngstarter/components/scroll-spy';
+} from '@ngstarter-ui/components/scroll-spy';
 import { TonalButtonsExample } from '../_examples/tonal-buttons-example/tonal-buttons-example';
 import { HideTextOnMobileExample } from '../_examples/hide-text-on-mobile-example/hide-text-on-mobile-example';
 

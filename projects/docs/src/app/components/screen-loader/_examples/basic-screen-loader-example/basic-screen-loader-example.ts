@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { ScreenLoaderService } from '@ngstarter/components/screen-loader';
-import { Button } from '@ngstarter/components/button';
+import { ScreenLoaderService } from '@ngstarter-ui/components/screen-loader';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-basic-screen-loader-example',

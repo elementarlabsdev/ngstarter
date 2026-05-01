@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import {
   IncidentCloseDirective, Incident, IncidentDetails,
   IncidentIconDirective, IncidentsBar, Incidents,
   IncidentsDescription, IncidentsList,
   IncidentsTitle,
   IncidentsToggleIconDirective, IncidentTitle
-} from '@ngstarter/components/incidents';
+} from '@ngstarter-ui/components/incidents';
 
 @Component({
   selector: 'app-basic-incidents-example',

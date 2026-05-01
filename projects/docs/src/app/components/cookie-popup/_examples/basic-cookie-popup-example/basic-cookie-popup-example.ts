@@ -5,8 +5,8 @@ import {
   CookiePopupAcceptType,
   CookiePopup,
   CookiePopupTitleDirective
-} from '@ngstarter/components/cookie-popup';
-import { Button } from '@ngstarter/components/button';
+} from '@ngstarter-ui/components/cookie-popup';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-basic-cookie-popup-example',

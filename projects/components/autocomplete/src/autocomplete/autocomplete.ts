@@ -15,7 +15,7 @@ import {
   forwardRef,
   contentChildren
 } from '@angular/core';
-import { Option, OPTION_PARENT, _OptionParent } from '@ngstarter/components/option';
+import { Option, OPTION_PARENT, _OptionParent } from '@ngstarter-ui/components/option';
 import { NgClass } from '@angular/common';
 
 let nextId = 0;

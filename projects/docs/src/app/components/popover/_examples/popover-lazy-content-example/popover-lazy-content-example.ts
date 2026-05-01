@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Popover, PopoverTriggerForDirective, PopoverContent } from '@ngstarter/components/popover';
-import { Button } from '@ngstarter/components/button';
+import { Popover, PopoverTriggerForDirective, PopoverContent } from '@ngstarter-ui/components/popover';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-popover-lazy-content-example',

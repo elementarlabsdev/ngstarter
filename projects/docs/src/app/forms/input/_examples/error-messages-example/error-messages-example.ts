@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Input } from '@ngstarter/components/input';
-import { Error, FormField, Label } from '@ngstarter/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
+import { Error, FormField, Label } from '@ngstarter-ui/components/form-field';
 
 @Component({
   selector: 'app-error-messages-example',

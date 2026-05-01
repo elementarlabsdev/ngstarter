@@ -12,7 +12,7 @@ import {
   ImageViewerWithTitleExample
 } from '../_examples/image-viewer-with-title-example/image-viewer-with-title-example';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
-import { Divider } from '@ngstarter/components/divider';
+import { Divider } from '@ngstarter-ui/components/divider';
 
 @Component({
   imports: [

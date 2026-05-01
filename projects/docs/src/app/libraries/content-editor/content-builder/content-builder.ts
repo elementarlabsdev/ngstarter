@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ContentBuilderComponent } from '@ngstarter/components/content-editor';
+import { ContentBuilderComponent } from '@ngstarter-ui/components/content-editor';
 
 @Component({
   selector: 'app-content-builder',

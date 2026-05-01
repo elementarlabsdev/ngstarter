@@ -1,7 +1,7 @@
 import { Component, inject, input, OnInit } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { Avatar } from '@ngstarter/components/avatar';
-import { GRID, Grid } from '@ngstarter/components/grid';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Avatar } from '@ngstarter-ui/components/avatar';
+import { GRID, Grid } from '@ngstarter-ui/components/grid';
 
 @Component({
   selector: 'ngs-team-content',

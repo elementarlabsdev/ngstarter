@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 import {
   Card,
   CardActions, CardAside,
@@ -8,10 +8,10 @@ import {
   CardHeader,
   CardSubtitle,
   CardTitle
-} from '@ngstarter/components/card';
-import { Divider } from '@ngstarter/components/divider';
-import { ProgressBar } from '@ngstarter/components/progress-bar';
-import { Icon } from '@ngstarter/components/icon';
+} from '@ngstarter-ui/components/card';
+import { Divider } from '@ngstarter-ui/components/divider';
+import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'app-card-footer-loading-example',

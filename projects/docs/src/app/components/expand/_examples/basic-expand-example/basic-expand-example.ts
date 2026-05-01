@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Expand } from '@ngstarter/components/expand';
+import { Expand } from '@ngstarter-ui/components/expand';
 
 @Component({
   selector: 'app-basic-expand-example',

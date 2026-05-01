@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
-import { FormField, Label } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
-import { TextareaAutoSize } from '@ngstarter/components/core';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
+import { TextareaAutoSize } from '@ngstarter-ui/components/core';
 
 @Component({
   selector: 'app-textarea-autosize-example',

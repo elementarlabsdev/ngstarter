@@ -17,24 +17,24 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { debounceTime, isObservable, Observable } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Panel, PanelContent, PanelHeader, PanelSidebar } from '@ngstarter/components/panel';
-import { Toolbar, ToolbarSpacer, ToolbarTitle } from '@ngstarter/components/toolbar';
-import { Button } from '@ngstarter/components/button';
-import { Divider } from '@ngstarter/components/divider';
-import { Icon } from '@ngstarter/components/icon';
+import { Panel, PanelContent, PanelHeader, PanelSidebar } from '@ngstarter-ui/components/panel';
+import { Toolbar, ToolbarSpacer, ToolbarTitle } from '@ngstarter-ui/components/toolbar';
+import { Button } from '@ngstarter-ui/components/button';
+import { Divider } from '@ngstarter-ui/components/divider';
+import { Icon } from '@ngstarter-ui/components/icon';
 import {
   TabPanel,
   TabPanelAside,
   TabPanelAsideContentDirective,
   TabPanelContent,
   TabPanelItem, TabPanelItemIconDirective, TabPanelItemText, TabPanelNav
-} from '@ngstarter/components/tab-panel';
+} from '@ngstarter-ui/components/tab-panel';
 import {
   UploadFileSelectedEvent,
   UploadTriggerDirective
-} from '@ngstarter/components/upload';
-import { List, ListItem, ListItemLine } from '@ngstarter/components/list';
-import { ProgressSpinner } from '@ngstarter/components/spinner';
+} from '@ngstarter-ui/components/upload';
+import { List, ListItem, ListItemLine } from '@ngstarter-ui/components/list';
+import { ProgressSpinner } from '@ngstarter-ui/components/spinner';
 import { ImageDesignerService } from '../image-designer.service';
 import {
   ElementConfig,
@@ -49,18 +49,18 @@ import {
 } from '../types';
 import { createDefaultPhotosDataSource } from '../default-photos-data-source';
 import { FormsModule } from '@angular/forms';
-import { Tab, TabGroup } from '@ngstarter/components/tabs';
-import { ColorSwitcher } from '@ngstarter/components/color-switcher';
+import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
+import { ColorSwitcher } from '@ngstarter-ui/components/color-switcher';
 import {
   Accordion,
   ExpansionPanel,
   ExpansionPanelHeader,
   ExpansionPanelTitle
-} from '@ngstarter/components/expansion';
-import { FormField, Label } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
-import { Option, Select } from '@ngstarter/components/select';
-import { ScrollbarArea } from '@ngstarter/components/scrollbar-area';
+} from '@ngstarter-ui/components/expansion';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
+import { Option, Select } from '@ngstarter-ui/components/select';
+import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import { SVG_PATTERNS } from '../patterns';
 import { SVG_ELEMENTS } from '../elements';
 import { PRESET_CATEGORIES } from '../presets';

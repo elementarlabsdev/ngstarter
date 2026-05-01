@@ -14,11 +14,11 @@ import {
   untracked
 } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
-import { Tooltip } from '@ngstarter/components/tooltip';
-import { Icon } from '@ngstarter/components/icon';
-import { Option, Select } from '@ngstarter/components/select';
-import { FormField } from '@ngstarter/components/form-field';
-import { Button } from '@ngstarter/components/button';
+import { Tooltip } from '@ngstarter-ui/components/tooltip';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Option, Select } from '@ngstarter-ui/components/select';
+import { FormField } from '@ngstarter-ui/components/form-field';
+import { Button } from '@ngstarter-ui/components/button';
 import { PaginatorIntl } from '../paginator-intl';
 import {
   DEFAULT_PAGE_SIZE,

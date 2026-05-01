@@ -1,6 +1,6 @@
 import { Component, inject, input, OnInit } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { Grid, GRID } from '@ngstarter/components/grid';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Grid, GRID } from '@ngstarter-ui/components/grid';
 
 @Component({
   selector: 'ngs-total-revenue-content',

@@ -9,7 +9,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { TourService } from '../tour.service';
 import { ConnectedPosition } from '@angular/cdk/overlay';
 import { TourStepConfig, TOUR_CONFIG } from '../tour.types';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-tour-step',

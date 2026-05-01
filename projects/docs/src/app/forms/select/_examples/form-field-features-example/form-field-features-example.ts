@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Option, Select } from '@ngstarter/components/select';
-import { Error, Hint, Label } from '@ngstarter/components/form-field';
-import { FormField } from '@ngstarter/components/form-field';
+import { Option, Select } from '@ngstarter-ui/components/select';
+import { Error, Hint, Label } from '@ngstarter-ui/components/form-field';
+import { FormField } from '@ngstarter-ui/components/form-field';
 
 interface Animal {
   name: string;

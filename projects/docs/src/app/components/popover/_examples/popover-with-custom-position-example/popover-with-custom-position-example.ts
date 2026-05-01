@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Popover, PopoverPosition, PopoverTriggerForDirective } from '@ngstarter/components/popover';
+import { Popover, PopoverPosition, PopoverTriggerForDirective } from '@ngstarter-ui/components/popover';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { FormField, Label } from '@ngstarter/components/form-field';
-import { Option, Select } from '@ngstarter/components/select';
-import { Button } from '@ngstarter/components/button';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
+import { Option, Select } from '@ngstarter-ui/components/select';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-popover-with-custom-position-example',

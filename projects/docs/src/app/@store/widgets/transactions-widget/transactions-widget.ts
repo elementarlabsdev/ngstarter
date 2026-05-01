@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { RouterLink } from '@angular/router';
 
 export interface Transaction {

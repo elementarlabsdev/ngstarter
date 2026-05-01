@@ -8,7 +8,7 @@ import { AVATAR_ACCESSOR, AvatarPresenceIndicator } from '../types';
 import { createAvatar } from '@dicebear/core';
 import { identicon, initials } from '@dicebear/collection';
 import { v7 as uuid } from 'uuid';
-import { SafeHtmlPipe } from '@ngstarter/components/core';
+import { SafeHtmlPipe } from '@ngstarter-ui/components/core';
 
 export interface Preset {
   style: any,

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 import {
   Datepicker,
   DatepickerActions,
@@ -8,9 +8,9 @@ import {
   DatepickerInput,
   DatepickerToggle,
   provideNativeDateAdapter
-} from '@ngstarter/components/datepicker';
-import { FormField, Hint, IconButtonSuffix, Label } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
+} from '@ngstarter-ui/components/datepicker';
+import { FormField, Hint, IconButtonSuffix, Label } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
 
 @Component({
   selector: 'app-datepicker-actions-button-example',

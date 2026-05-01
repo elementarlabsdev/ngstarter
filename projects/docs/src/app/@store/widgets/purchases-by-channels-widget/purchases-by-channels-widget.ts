@@ -10,8 +10,8 @@ import {
 } from 'echarts/components';
 import { LabelLayout, UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
-import { ThemeManagerService } from '@ngstarter/components/core';
-import { Grid, GRID } from '@ngstarter/components/grid';
+import { ThemeManagerService } from '@ngstarter-ui/components/core';
+import { Grid, GRID } from '@ngstarter-ui/components/grid';
 
 @Component({
   selector: 'ngs-purchases-by-channels-content',

@@ -16,7 +16,7 @@ import {
   schemeTableau10,
   select
 } from 'd3';
-import { OverlayPosition } from '@ngstarter/components/overlay';
+import { OverlayPosition } from '@ngstarter-ui/components/overlay';
 import { BaseChartTooltip } from '../base-chart.tooltip';
 
 @Component({

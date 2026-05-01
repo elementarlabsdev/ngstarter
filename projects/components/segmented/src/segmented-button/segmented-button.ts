@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { SEGMENTED } from '../types';
 import { Segmented } from '../segmented/segmented';
-import { Ripple } from '@ngstarter/components/core';
+import { Ripple } from '@ngstarter-ui/components/core';
 
 @Component({
   selector: 'ngs-segmented-button,[ngs-segmented-button]',

@@ -28,10 +28,10 @@ import { SelectBody } from '../select-body/select-body';
 import { NgTemplateOutlet } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 
-import { Optgroup, _Option, OPTION, OPTION_PARENT, _OptionParent } from '@ngstarter/components/option';
-import { FormFieldControl, FORM_FIELD } from '@ngstarter/components/form-field';
+import { Optgroup, _Option, OPTION, OPTION_PARENT, _OptionParent } from '@ngstarter-ui/components/option';
+import { FormFieldControl, FORM_FIELD } from '@ngstarter-ui/components/form-field';
 import { _Select, SELECT } from './select-token';
-import { AUTOFOCUSABLE } from '@ngstarter/components/core';
+import { AUTOFOCUSABLE } from '@ngstarter-ui/components/core';
 
 export class SelectChange {
   constructor(public source: Select, public value: any) { }

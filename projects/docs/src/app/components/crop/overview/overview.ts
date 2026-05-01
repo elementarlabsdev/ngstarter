@@ -2,10 +2,10 @@ import { Component, model, signal } from '@angular/core';
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
-import { Crop, CropSelection } from '@ngstarter/components/crop';
+import { Crop, CropSelection } from '@ngstarter-ui/components/crop';
 import { FormsModule } from '@angular/forms';
-import { FormField } from '@ngstarter/components/form-field';
-import { Option, Select } from '@ngstarter/components/select';
+import { FormField } from '@ngstarter-ui/components/form-field';
+import { Option, Select } from '@ngstarter-ui/components/select';
 import { JsonPipe } from '@angular/common';
 
 @Component({

@@ -12,9 +12,9 @@ import {
   SidebarNavItem,
   SidebarNavItemIconDirective,
   SidebarNavGroupToggleIconDirective
-} from '@ngstarter/components/sidebar';
+} from '@ngstarter-ui/components/sidebar';
 import { v7 as uuid } from 'uuid';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'app-basic-sidebar-example',

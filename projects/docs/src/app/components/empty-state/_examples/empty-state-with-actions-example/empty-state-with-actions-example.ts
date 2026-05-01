@@ -4,8 +4,8 @@ import {
   EmptyState,
   EmptyStateContent,
   EmptyStateTitle
-} from '@ngstarter/components/empty-state';
-import { Button } from '@ngstarter/components/button';
+} from '@ngstarter-ui/components/empty-state';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-empty-state-with-actions-example',

@@ -4,11 +4,11 @@ import {
   DataViewActionBarDirective,
   DataViewColumnDef,
   DataView
-} from '@ngstarter/components/data-view';
-import { Icon } from '@ngstarter/components/icon';
-import { Menu, MenuItem, MenuTrigger } from '@ngstarter/components/menu';
+} from '@ngstarter-ui/components/data-view';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
 import { FormsModule } from '@angular/forms';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 
 export interface PeriodicElement {
   name: string;

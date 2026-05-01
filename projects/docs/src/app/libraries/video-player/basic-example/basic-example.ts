@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { VideoPlayer } from "@ngstarter/components/video-player";
+import { VideoPlayer } from "@ngstarter-ui/components/video-player";
 
 @Component({
   imports: [

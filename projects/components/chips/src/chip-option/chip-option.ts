@@ -8,7 +8,7 @@ import {
   output,
   effect
 } from '@angular/core';
-import { AutoFocusDirective } from '@ngstarter/components/core';
+import { AutoFocusDirective } from '@ngstarter-ui/components/core';
 import { Chip } from '../chip/chip';
 
 @Component({

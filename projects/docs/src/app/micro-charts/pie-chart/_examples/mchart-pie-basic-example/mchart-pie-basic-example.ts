@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { MchartPie } from '@ngstarter/components/micro-chart';
+import { MchartPie } from '@ngstarter-ui/components/micro-chart';
 import { ShuffleArrayPipe } from '@meta/shuffle-array.pipe';
-import { Button } from '@ngstarter/components/button';
-import { SlideToggle } from '@ngstarter/components/slide-toggle';
+import { Button } from '@ngstarter-ui/components/button';
+import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
 import { FormsModule } from '@angular/forms';
 
 @Component({

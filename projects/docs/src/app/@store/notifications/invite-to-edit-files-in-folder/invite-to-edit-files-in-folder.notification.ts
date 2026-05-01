@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { Dicebear } from '@ngstarter/components/avatar';
-import { NotificationInterface } from '@ngstarter/components/notifications';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Dicebear } from '@ngstarter-ui/components/avatar';
+import { NotificationInterface } from '@ngstarter-ui/components/notifications';
 
 @Component({
   selector: 'ngs-invite-to-edit-files-in-folder',

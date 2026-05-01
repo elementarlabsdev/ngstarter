@@ -1,15 +1,15 @@
 import { Component, DestroyRef, inject, input, signal } from '@angular/core';
 import { ContentBuilderStore } from '../../content-builder.store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Icon } from '@ngstarter/components/icon';
-import { Popover, PopoverTriggerForDirective } from '@ngstarter/components/popover';
-import { Tab, TabGroup } from '@ngstarter/components/tabs';
-import { Button } from '@ngstarter/components/button';
-import { Input } from '@ngstarter/components/input';
-import { FormField, Suffix } from '@ngstarter/components/form-field';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Popover, PopoverTriggerForDirective } from '@ngstarter-ui/components/popover';
+import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
+import { Button } from '@ngstarter-ui/components/button';
+import { Input } from '@ngstarter-ui/components/input';
+import { FormField, Suffix } from '@ngstarter-ui/components/form-field';
 import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { EmbedService } from './embed-service';
-import { SafeResourceUrlPipe } from '@ngstarter/components/core';
+import { SafeResourceUrlPipe } from '@ngstarter-ui/components/core';
 import {
   CONTENT_BUILDER,
   ContentEditorEmbedBlockSettings,

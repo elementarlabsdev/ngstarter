@@ -5,7 +5,7 @@ import { Playground } from '@meta/playground/playground';
 import {
   BasicImageResizerExample
 } from '../_examples/basic-image-resizer-example/basic-image-resizer-example';
-import { Tab, TabGroup } from '@ngstarter/components/tabs';
+import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({

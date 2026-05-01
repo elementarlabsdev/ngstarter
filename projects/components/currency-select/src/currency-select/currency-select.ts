@@ -17,15 +17,15 @@ import {
   NgControl,
   FormsModule,
 } from '@angular/forms';
-import { FormFieldControl, FORM_FIELD } from '@ngstarter/components/form-field';
-import { Select, Option, SelectTrigger, SelectChange, SelectHeader } from '@ngstarter/components/select';
+import { FormFieldControl, FORM_FIELD } from '@ngstarter-ui/components/form-field';
+import { Select, Option, SelectTrigger, SelectChange, SelectHeader } from '@ngstarter-ui/components/select';
 import { Subject } from 'rxjs';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { Currency } from '../currency.interface';
 import { currencies } from '../currencies';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-currency-select',

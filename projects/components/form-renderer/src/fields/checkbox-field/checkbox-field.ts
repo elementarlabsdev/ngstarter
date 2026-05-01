@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ComponentConfig } from '../../models/form-config.model';
-import { Checkbox } from '@ngstarter/components/checkbox';
+import { Checkbox } from '@ngstarter-ui/components/checkbox';
 
 @Component({
   selector: 'ngs-checkbox-field',

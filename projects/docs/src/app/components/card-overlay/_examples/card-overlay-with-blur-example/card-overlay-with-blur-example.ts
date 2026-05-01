@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Avatar } from '@ngstarter/components/avatar';
-import { CardOverlay, CardOverlayContainerDirective } from '@ngstarter/components/card-overlay';
-import { Button } from '@ngstarter/components/button';
+import { Avatar } from '@ngstarter-ui/components/avatar';
+import { CardOverlay, CardOverlayContainerDirective } from '@ngstarter-ui/components/card-overlay';
+import { Button } from '@ngstarter-ui/components/button';
 import {
   Card,
   CardActions,
@@ -9,7 +9,7 @@ import {
   CardContent,
   CardHeader,
   CardImage, CardSubtitle, CardTitle
-} from '@ngstarter/components/card';
+} from '@ngstarter-ui/components/card';
 
 @Component({
   selector: 'app-card-overlay-with-blur-example',

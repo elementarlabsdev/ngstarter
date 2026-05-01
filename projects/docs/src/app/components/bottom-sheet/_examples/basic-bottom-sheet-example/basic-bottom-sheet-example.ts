@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { BottomSheetExample } from '../bottom-sheet-example/bottom-sheet-example';
-import { BottomSheet } from '@ngstarter/components/bottom-sheet';
-import { Button } from '@ngstarter/components/button';
+import { BottomSheet } from '@ngstarter-ui/components/bottom-sheet';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-basic-bottom-sheet-example',

@@ -5,7 +5,7 @@ import {
   ExpansionPanelHeader,
   ExpansionPanelDescription,
   ExpansionPanelTitle
-} from '@ngstarter/components/expansion';
+} from '@ngstarter-ui/components/expansion';
 
 @Component({
   selector: 'app-basic-expansion-panel-example',

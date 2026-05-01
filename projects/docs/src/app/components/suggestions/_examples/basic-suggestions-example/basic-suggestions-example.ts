@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import {
   SuggestionBlock,
   Suggestion,
   SuggestionIconDirective, Suggestions, SuggestionThumbDirective
-} from '@ngstarter/components/suggestions';
-import { Avatar } from '@ngstarter/components/avatar';
-import { Button } from '@ngstarter/components/button';
+} from '@ngstarter-ui/components/suggestions';
+import { Avatar } from '@ngstarter-ui/components/avatar';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-basic-suggestions-example',

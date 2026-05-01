@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ContentFade, ContentFadePosition } from '@ngstarter/components/content-fade';
-import { RadioButton, RadioGroup } from '@ngstarter/components/radio';
+import { ContentFade, ContentFadePosition } from '@ngstarter-ui/components/content-fade';
+import { RadioButton, RadioGroup } from '@ngstarter-ui/components/radio';
 import { FormsModule } from '@angular/forms';
 
 @Component({

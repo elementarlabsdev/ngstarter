@@ -1,11 +1,11 @@
 import { Component, Injectable, signal } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { CollectionViewer, DataSource, SelectionChange } from '@angular/cdk/collections';
 import { BehaviorSubject, map, merge, Observable } from 'rxjs';
-import { Tree, TreeNode, TreeNodeDef, TreeNodePadding, TreeNodeToggle } from '@ngstarter/components/tree';
-import { Button } from '@ngstarter/components/button';
-import { ProgressBar } from '@ngstarter/components/progress-bar';
+import { Tree, TreeNode, TreeNodeDef, TreeNodePadding, TreeNodeToggle } from '@ngstarter-ui/components/tree';
+import { Button } from '@ngstarter-ui/components/button';
+import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 
 /** Flat node with expandable and level information */
 class DynamicFlatNode {

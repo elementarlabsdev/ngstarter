@@ -19,8 +19,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EditorView, keymap, ViewUpdate } from '@codemirror/view';
 import { basicSetup } from 'codemirror';
 import { Compartment } from '@codemirror/state';
-import { Menu, MenuItem, MenuTrigger } from '@ngstarter/components/menu';
-import { Button } from '@ngstarter/components/button';
+import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
+import { Button } from '@ngstarter-ui/components/button';
 import { githubLight } from '@uiw/codemirror-theme-github';
 import { indentWithTab } from "@codemirror/commands"
 import { ContentBuilderComponent } from '../../content-builder/content-builder.component';

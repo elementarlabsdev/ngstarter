@@ -1,6 +1,6 @@
 import { Component, input, model, output } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { Tooltip } from '@ngstarter/components/tooltip';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Tooltip } from '@ngstarter-ui/components/tooltip';
 
 export interface TextColor {
   name: string;

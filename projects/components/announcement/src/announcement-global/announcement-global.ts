@@ -2,7 +2,7 @@ import { Component, computed, inject, output } from '@angular/core';
 import { AnnouncementStore } from '../announcement.store';
 import { AnnouncementData as AnnouncementInterface } from '../types';
 import { Announcement } from '../announcement/announcement';
-import { SafeHtmlPipe } from '@ngstarter/components/core';
+import { SafeHtmlPipe } from '@ngstarter-ui/components/core';
 
 @Component({
   selector: 'ngs-announcement-global',

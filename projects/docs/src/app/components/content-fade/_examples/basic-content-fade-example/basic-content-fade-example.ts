@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ContentFade } from '@ngstarter/components/content-fade';
+import { ContentFade } from '@ngstarter-ui/components/content-fade';
 
 @Component({
   selector: 'app-basic-content-fade-example',

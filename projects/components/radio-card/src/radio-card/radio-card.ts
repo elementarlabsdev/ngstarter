@@ -2,7 +2,7 @@ import { Component, computed, inject, input } from '@angular/core';
 import {
   RadioCardGroup
 } from '../radio-card-group/radio-card-group';
-import { RadioButton } from '@ngstarter/components/radio';
+import { RadioButton } from '@ngstarter-ui/components/radio';
 
 @Component({
   selector: 'ngs-radio-card',

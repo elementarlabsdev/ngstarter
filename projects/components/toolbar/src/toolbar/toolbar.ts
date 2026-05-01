@@ -18,9 +18,9 @@ import { ToolbarNav } from '../toolbar-nav/toolbar-nav';
 import { ToolbarSpacer } from '../toolbar-spacer/toolbar-spacer';
 import { ToolbarRow } from '../toolbar-row/toolbar-row';
 import { ToolbarBaseItem } from '../toolbar-base-item';
-import { Dialog, DialogRef } from '@ngstarter/components/dialog';
-import { Icon } from '@ngstarter/components/icon';
-import { Button } from '@ngstarter/components/button';
+import { Dialog, DialogRef } from '@ngstarter-ui/components/dialog';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-toolbar',

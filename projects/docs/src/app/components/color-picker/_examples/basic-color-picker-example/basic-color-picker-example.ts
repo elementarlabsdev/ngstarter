@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ColorPicker, ColorPickerThumbnail } from '@ngstarter/components/color-picker';
+import { ColorPicker, ColorPickerThumbnail } from '@ngstarter-ui/components/color-picker';
 
 @Component({
   selector: 'app-basic-color-picker-example',

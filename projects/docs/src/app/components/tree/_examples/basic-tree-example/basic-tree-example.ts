@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { Button } from '@ngstarter/components/button';
-import { Tree, TreeNode, TreeNodeDef, TreeNodePadding, TreeNodeToggle } from '@ngstarter/components/tree';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Button } from '@ngstarter-ui/components/button';
+import { Tree, TreeNode, TreeNodeDef, TreeNodePadding, TreeNodeToggle } from '@ngstarter-ui/components/tree';
 
 interface FoodNode {
   name: string;

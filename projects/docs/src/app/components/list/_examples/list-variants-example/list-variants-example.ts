@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { List, ListItem, ListItemTitle } from '@ngstarter/components/list';
+import { List, ListItem, ListItemTitle } from '@ngstarter-ui/components/list';
 
 @Component({
   selector: 'app-list-variants-example',

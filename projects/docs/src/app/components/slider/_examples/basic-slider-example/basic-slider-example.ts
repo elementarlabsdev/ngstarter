@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Slider, SliderThumb } from '@ngstarter/components/slider';
+import { Slider, SliderThumb } from '@ngstarter-ui/components/slider';
 
 @Component({
   selector: 'app-basic-slider-example',

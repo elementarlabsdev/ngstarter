@@ -1,6 +1,6 @@
 import { Component, viewChild } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import {
   Cell,
   CellDef,
@@ -10,7 +10,7 @@ import {
   HeaderRow, HeaderRowDef,
   Row, RowDef,
   Table
-} from '@ngstarter/components/table';
+} from '@ngstarter-ui/components/table';
 
 export interface PeriodicElement {
   name: string;

@@ -27,7 +27,7 @@ import {
 import { formatDate } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 import { Timepicker } from '../timepicker/timepicker';
-import { FormField } from '@ngstarter/components/form-field';
+import { FormField } from '@ngstarter-ui/components/form-field';
 
 @Directive({
   selector: 'input[ngsTimepicker]',

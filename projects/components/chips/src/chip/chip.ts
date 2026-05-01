@@ -10,7 +10,7 @@ import {
   output,
   computed
 } from '@angular/core';
-import { AutoFocusDirective } from '@ngstarter/components/core';
+import { AutoFocusDirective } from '@ngstarter-ui/components/core';
 
 @Component({
   selector: 'ngs-chip',

@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { AssetsDataSource, ImageDesigner, ImageDesignerPhoto, ImageDesignerUploadFn, ImageDesignerSnapshot } from '@ngstarter/image-designer';
+import { AssetsDataSource, ImageDesigner, ImageDesignerPhoto, ImageDesignerUploadFn, ImageDesignerSnapshot } from '@ngstarter-ui/image-designer';
 
 @Component({
   imports: [

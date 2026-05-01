@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RadioButton, RadioGroup } from '@ngstarter/components/radio';
+import { RadioButton, RadioGroup } from '@ngstarter-ui/components/radio';
 
 @Component({
     selector: 'app-basic-radio-example',

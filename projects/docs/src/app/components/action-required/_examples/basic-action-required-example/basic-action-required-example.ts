@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActionRequired } from '@ngstarter/components/action-required';
+import { ActionRequired } from '@ngstarter-ui/components/action-required';
 
 @Component({
   selector: 'app-basic-action-required-example',

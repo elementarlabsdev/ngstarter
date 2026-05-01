@@ -1,7 +1,7 @@
 import { Component, inject, input } from '@angular/core';
 import { v7 as uuid } from 'uuid';
 import { RAIL_NAV, RailNavComponent } from '../types';
-import { Ripple } from '@ngstarter/components/core';
+import { Ripple } from '@ngstarter-ui/components/core';
 
 @Component({
   selector: 'ngs-rail-nav-item,[ngs-rail-nav-item]',

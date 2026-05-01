@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { FormField, Label } from '@ngstarter/components/form-field';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NumberInput } from '@ngstarter/components/number-input';
+import { NumberInput } from '@ngstarter-ui/components/number-input';
 
 @Component({
   selector: 'app-number-input-min-max-example',

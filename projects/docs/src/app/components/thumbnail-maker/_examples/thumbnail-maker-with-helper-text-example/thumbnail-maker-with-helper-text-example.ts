@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ThumbnailMaker } from '@ngstarter/components/thumbnail-maker';
+import { ThumbnailMaker } from '@ngstarter-ui/components/thumbnail-maker';
 
 @Component({
   selector: 'app-thumbnail-maker-with-helper-text-example',

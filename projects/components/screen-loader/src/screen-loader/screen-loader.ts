@@ -1,5 +1,5 @@
 import { booleanAttribute, Component, input, TemplateRef } from '@angular/core';
-import { ProgressBar } from '@ngstarter/components/progress-bar';
+import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 import { NgTemplateOutlet } from '@angular/common';
 
 @Component({

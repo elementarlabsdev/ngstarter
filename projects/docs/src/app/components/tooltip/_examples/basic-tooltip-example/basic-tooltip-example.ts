@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Button } from '@ngstarter/components/button';
-import { Tooltip } from '@ngstarter/components/tooltip';
+import { Button } from '@ngstarter-ui/components/button';
+import { Tooltip } from '@ngstarter-ui/components/tooltip';
 
 @Component({
   selector: 'app-basic-tooltip-example',

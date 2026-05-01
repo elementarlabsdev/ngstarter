@@ -6,10 +6,10 @@ import {
   CardContent,
   CardHeader,
   CardImage, CardSubtitle, CardTitle
-} from '@ngstarter/components/card';
-import { CardOverlay, CardOverlayContainerDirective } from '@ngstarter/components/card-overlay';
-import { Avatar } from '@ngstarter/components/avatar';
-import { Button } from '@ngstarter/components/button';
+} from '@ngstarter-ui/components/card';
+import { CardOverlay, CardOverlayContainerDirective } from '@ngstarter-ui/components/card-overlay';
+import { Avatar } from '@ngstarter-ui/components/avatar';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-basic-card-overlay-example',

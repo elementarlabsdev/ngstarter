@@ -21,7 +21,7 @@ import {
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
-import { provideNativeDateAdapter } from '@ngstarter/components/datepicker';
+import { provideNativeDateAdapter } from '@ngstarter-ui/components/datepicker';
 
 @Component({
   selector: 'app-overview',

@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Directive, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { typedFromEvent, getActualTarget, isElement } from '@ngstarter/components/core';
+import { typedFromEvent, getActualTarget, isElement } from '@ngstarter-ui/components/core';
 import { filter, merge } from 'rxjs';
 import { Tile } from './tile/tile';
 

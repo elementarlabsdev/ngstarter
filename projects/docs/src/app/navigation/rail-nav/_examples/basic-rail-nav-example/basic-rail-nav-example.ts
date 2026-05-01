@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { RailNav, RailNavItem } from '@ngstarter/components/rail-nav';
-import { Icon } from '@ngstarter/components/icon';
+import { RailNav, RailNavItem } from '@ngstarter-ui/components/rail-nav';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'app-basic-rail-nav-example',

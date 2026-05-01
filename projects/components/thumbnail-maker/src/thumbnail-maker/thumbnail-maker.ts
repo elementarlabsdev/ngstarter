@@ -1,10 +1,10 @@
 import { Component, ElementRef, input, viewChild } from '@angular/core';
-import { Slider, SliderThumb } from '@ngstarter/components/slider';
+import { Slider, SliderThumb } from '@ngstarter-ui/components/slider';
 import { FormsModule } from '@angular/forms';
 import { DragImageDirective } from '../drag-image.directive';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { ThumbnailMakerApi } from '../types';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-thumbnail-maker',

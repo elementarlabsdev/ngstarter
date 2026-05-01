@@ -17,7 +17,7 @@ import { Breadcrumbs } from '../breadcrumbs/breadcrumbs';
 import { BreadcrumbsStore } from '../breadcrumbs.store';
 import { BreadcrumbItemIconDefDirective } from '../breadcrumb-item-icon-def.directive';
 import { BreadcrumbItemIconDirective } from '../breadcrumb-item-icon.directive';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { NgTemplateOutlet } from '@angular/common';
 import {
   BreadcrumbItemNameDefDirective

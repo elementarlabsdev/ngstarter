@@ -5,7 +5,7 @@ import {
   ImageViewerPictureDescriptionDirective,
   ImageViewerPictureDirective,
   ImageViewerPictureTitleDirective
-} from '@ngstarter/components/image-viewer';
+} from '@ngstarter-ui/components/image-viewer';
 
 @Component({
   selector: 'app-image-viewer-with-title-example',

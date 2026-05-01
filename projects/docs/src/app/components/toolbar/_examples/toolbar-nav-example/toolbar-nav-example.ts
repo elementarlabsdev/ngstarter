@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Toolbar, ToolbarTitle, ToolbarSpacer, ToolbarNav, ToolbarNavLink } from '@ngstarter/components/toolbar';
+import { Toolbar, ToolbarTitle, ToolbarSpacer, ToolbarNav, ToolbarNavLink } from '@ngstarter-ui/components/toolbar';
 
 @Component({
   selector: 'toolbar-nav-example',

@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, inject, PLATFORM_ID, viewChild } from '@angular/core';
 
-import { SortDirective, SortModule, Sort } from '@ngstarter/components/sort';
+import { SortDirective, SortModule, Sort } from '@ngstarter-ui/components/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { isPlatformBrowser } from '@angular/common';
 import {
@@ -13,7 +13,7 @@ import {
   Row, RowDef,
   Table,
   TableDataSource
-} from '@ngstarter/components/table';
+} from '@ngstarter-ui/components/table';
 
 export interface PeriodicElement {
   name: string;

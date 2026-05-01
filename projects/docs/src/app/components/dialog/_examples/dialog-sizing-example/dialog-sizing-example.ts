@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Button } from '@ngstarter/components/button';
-import { Dialog } from '@ngstarter/components/dialog';
+import { Button } from '@ngstarter-ui/components/button';
+import { Dialog } from '@ngstarter-ui/components/dialog';
 import { BasicDialog } from '../basic/basic.dialog';
 
 @Component({

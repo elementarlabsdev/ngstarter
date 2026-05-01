@@ -18,14 +18,14 @@ import {
   FilterBuilderGroup,
   FilterBuilderItemType
 } from '../types';
-import { Icon } from '@ngstarter/components/icon';
-import { MenuTrigger, Menu, MenuItem, MenuContent, MenuOptionGroupDirective } from '@ngstarter/components/menu';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { MenuTrigger, Menu, MenuItem, MenuContent, MenuOptionGroupDirective } from '@ngstarter-ui/components/menu';
 import { FormsModule } from '@angular/forms';
-import { Select, Option } from '@ngstarter/components/select';
+import { Select, Option } from '@ngstarter-ui/components/select';
 import { FilterBuilderOperationNameDirective } from '../filter-builder-operation-name.directive';
-import { AutoFocusDirective, FocusElementDirective } from '@ngstarter/components/core';
-import { Input } from '@ngstarter/components/input';
-import { FormField } from '@ngstarter/components/form-field';
+import { AutoFocusDirective, FocusElementDirective } from '@ngstarter-ui/components/core';
+import { Input } from '@ngstarter-ui/components/input';
+import { FormField } from '@ngstarter-ui/components/form-field';
 
 @Component({
   selector: 'ngs-filter-builder',

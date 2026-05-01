@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CodeHighlighter } from '@ngstarter/components/code-highlighter';
+import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 
 @Component({
   selector: 'app-code-highlighter-with-title-example',

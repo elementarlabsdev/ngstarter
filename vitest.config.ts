@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => ({
   ],
   resolve: {
     alias: {
-      '@ngstarter/components': path.resolve(__dirname, './projects/components'),
+      '@ngstarter-ui/components': path.resolve(__dirname, './projects/components'),
     },
   },
   test: {

@@ -1,7 +1,7 @@
 import { Component, computed, DestroyRef, ElementRef, inject, Renderer2, DOCUMENT } from '@angular/core';
 import { IMAGE_VIEWER_PICTURE_DATA, IMAGE_VIEWER_PICTURE_REF } from '../types';
-import { Icon } from '@ngstarter/components/icon';
-import { ProgressSpinner } from '@ngstarter/components/spinner';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { ProgressSpinner } from '@ngstarter-ui/components/spinner';
 import { NgTemplateOutlet } from '@angular/common';
 import { fromEvent } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

@@ -1,5 +1,5 @@
 import { Component, inject, input } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
   CdkDrag,
@@ -9,8 +9,8 @@ import {
   CdkDropList,
   moveItemInArray
 } from '@angular/cdk/drag-drop';
-import { GRID, Grid, GridItemAware } from '@ngstarter/components/grid';
-import { Button } from '@ngstarter/components/button';
+import { GRID, Grid, GridItemAware } from '@ngstarter-ui/components/grid';
+import { Button } from '@ngstarter-ui/components/button';
 import {
   Cell,
   CellDef,
@@ -20,8 +20,8 @@ import {
   HeaderRowDef, Row, RowDef,
   Table,
   TableDataSource
-} from '@ngstarter/components/table';
-import { Checkbox } from '@ngstarter/components/checkbox';
+} from '@ngstarter-ui/components/table';
+import { Checkbox } from '@ngstarter-ui/components/checkbox';
 
 export interface TodoTask {
   name: string;

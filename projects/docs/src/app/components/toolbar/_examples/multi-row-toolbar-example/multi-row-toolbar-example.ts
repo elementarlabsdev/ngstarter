@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Toolbar, ToolbarRow, ToolbarTitle, ToolbarSpacer, ToolbarItem } from '@ngstarter/components/toolbar';
+import { Toolbar, ToolbarRow, ToolbarTitle, ToolbarSpacer, ToolbarItem } from '@ngstarter-ui/components/toolbar';
 
 @Component({
   selector: 'multi-row-toolbar-example',

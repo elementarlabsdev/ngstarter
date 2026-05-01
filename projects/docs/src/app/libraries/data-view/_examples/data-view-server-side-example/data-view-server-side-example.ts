@@ -4,10 +4,10 @@ import {
   DataView,
   DataViewDatasource,
   DataViewGetRowsParams
-} from '@ngstarter/components/data-view';
+} from '@ngstarter-ui/components/data-view';
 import { FormsModule } from '@angular/forms';
-import { FormField } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
+import { FormField } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
 
 export interface PeriodicElement {
   name: string;

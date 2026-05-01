@@ -4,10 +4,10 @@ import {
   DataView,
   DataViewDatasource,
   DataViewGetRowsParams
-} from '@ngstarter/components/data-view';
-import { Button } from '@ngstarter/components/button';
-import { Icon } from '@ngstarter/components/icon';
-import { SnackBar } from '@ngstarter/components/snack-bar';
+} from '@ngstarter-ui/components/data-view';
+import { Button } from '@ngstarter-ui/components/button';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { SnackBar } from '@ngstarter-ui/components/snack-bar';
 
 export interface PeriodicElement {
   name: string;

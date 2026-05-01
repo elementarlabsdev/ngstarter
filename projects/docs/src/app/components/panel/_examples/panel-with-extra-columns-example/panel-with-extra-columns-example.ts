@@ -1,12 +1,12 @@
 import { Component, signal } from '@angular/core';
-import { ScrollbarArea } from '@ngstarter/components/scrollbar-area';
+import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import {
   PanelAside,
   PanelContent,
   Panel,
   PanelFooter,
   PanelHeader, PanelSidebar
-} from '@ngstarter/components/panel';
+} from '@ngstarter-ui/components/panel';
 
 @Component({
   selector: 'app-panel-with-extra-columns-example',

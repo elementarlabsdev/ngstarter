@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DataViewColumnDef, DataView } from '@ngstarter/components/data-view';
+import { DataViewColumnDef, DataView } from '@ngstarter-ui/components/data-view';
 
 @Component({
   selector: 'app-data-view-height-test',

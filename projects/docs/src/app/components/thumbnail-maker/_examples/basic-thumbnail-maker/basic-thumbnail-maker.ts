@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ThumbnailMaker } from '@ngstarter/components/thumbnail-maker';
-import { Button } from '@ngstarter/components/button';
+import { ThumbnailMaker } from '@ngstarter-ui/components/thumbnail-maker';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-basic-thumbnail-maker',

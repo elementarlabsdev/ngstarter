@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'app-phosphor-icons-example',

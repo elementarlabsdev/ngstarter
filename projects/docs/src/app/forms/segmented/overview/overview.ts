@@ -19,7 +19,7 @@ import {
 import {
   SegmentedNgModelExample
 } from '../_examples/segmented-ng-model-example/segmented-ng-model-example';
-import { Tab, TabGroup } from '@ngstarter/components/tabs';
+import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({

@@ -1,8 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { VIDEO_VIEWER_DATA, VIDEO_VIEWER_REF } from '../types';
-import { Icon } from '@ngstarter/components/icon';
-import { VideoPlayer } from '@ngstarter/components/video-player';
-import { ProgressSpinner } from '@ngstarter/components/spinner';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { VideoPlayer } from '@ngstarter-ui/components/video-player';
+import { ProgressSpinner } from '@ngstarter-ui/components/spinner';
 import { NgTemplateOutlet } from '@angular/common';
 
 @Component({

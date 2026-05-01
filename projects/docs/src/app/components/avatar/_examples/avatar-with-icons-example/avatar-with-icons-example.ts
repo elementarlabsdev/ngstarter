@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { Avatar } from '@ngstarter/components/avatar';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Avatar } from '@ngstarter-ui/components/avatar';
 
 @Component({
   selector: 'app-avatar-with-icons-example',

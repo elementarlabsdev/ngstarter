@@ -9,17 +9,17 @@ import {
   signal, untracked, viewChild, output
 } from '@angular/core';
 import { TimezoneGroup, TimezoneUtils } from '../timezone-utils';
-import { Select, Option, SelectHeader, SelectBody, Optgroup } from '@ngstarter/components/select';
+import { Select, Option, SelectHeader, SelectBody, Optgroup } from '@ngstarter-ui/components/select';
 import {
   ControlValueAccessor, FormsModule,
   NgControl
 } from '@angular/forms';
-import { FormFieldControl, FORM_FIELD } from '@ngstarter/components/form-field';
+import { FormFieldControl, FORM_FIELD } from '@ngstarter-ui/components/form-field';
 import { Subject } from 'rxjs';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { FilterTimezonesPipe } from '../filter-timezones.pipe';
-import { Icon } from '@ngstarter/components/icon';
-import { Button } from '@ngstarter/components/button';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Button } from '@ngstarter-ui/components/button';
 
 let nextId = 0;
 

@@ -1,8 +1,8 @@
 import { Component, inject, input, ViewEncapsulation, viewChild, booleanAttribute } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { MarkdownComponent, provideMarkdown } from 'ngx-markdown';
-import { SnackBar } from '@ngstarter/components/snack-bar';
-import { Button } from '@ngstarter/components/button';
+import { SnackBar } from '@ngstarter-ui/components/snack-bar';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-playground',

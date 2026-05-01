@@ -1,6 +1,6 @@
 import { Component, inject, input } from '@angular/core';
 import { IncidentsStore } from '../incidents.store';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 
 let incidentId = 0;
 

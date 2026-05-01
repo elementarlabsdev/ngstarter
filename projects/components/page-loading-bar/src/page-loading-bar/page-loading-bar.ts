@@ -3,7 +3,7 @@ import { Subscription, timer } from 'rxjs';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { map, take } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ProgressBar } from '@ngstarter/components/progress-bar';
+import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 
 @Component({
   selector: 'ngs-page-loading-bar',

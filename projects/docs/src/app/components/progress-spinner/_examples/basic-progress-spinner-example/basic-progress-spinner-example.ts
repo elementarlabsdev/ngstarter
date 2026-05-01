@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ProgressSpinner } from '@ngstarter/components/spinner';
+import { ProgressSpinner } from '@ngstarter-ui/components/spinner';
 
 @Component({
   selector: 'app-basic-progress-spinner-example',

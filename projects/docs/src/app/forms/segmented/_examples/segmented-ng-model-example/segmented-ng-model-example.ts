@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Segmented, SegmentedButton } from '@ngstarter/components/segmented';
-import { Button } from '@ngstarter/components/button';
+import { Segmented, SegmentedButton } from '@ngstarter-ui/components/segmented';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-segmented-ng-model-example',

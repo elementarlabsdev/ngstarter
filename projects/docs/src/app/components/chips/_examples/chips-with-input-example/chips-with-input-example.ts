@@ -1,11 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { ChipEdit, ChipEditedEvent, ChipGrid, ChipInput, ChipInputEvent, ChipRemove, ChipRow } from '@ngstarter/components/chips';
-import { Label } from '@ngstarter/components/form-field';
-import { FormField } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
+import { ChipEdit, ChipEditedEvent, ChipGrid, ChipInput, ChipInputEvent, ChipRemove, ChipRow } from '@ngstarter-ui/components/chips';
+import { Label } from '@ngstarter-ui/components/form-field';
+import { FormField } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
 
 export interface Fruit {
   name: string;

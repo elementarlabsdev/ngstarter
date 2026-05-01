@@ -1,10 +1,10 @@
 import { Component, model } from '@angular/core';
-import { DataViewColumnDef, DataView, DataViewRowSelectionEvent } from '@ngstarter/components/data-view';
+import { DataViewColumnDef, DataView, DataViewRowSelectionEvent } from '@ngstarter-ui/components/data-view';
 import { JsonPipe } from '@angular/common';
-import { RadioButton, RadioGroup } from '@ngstarter/components/radio';
+import { RadioButton, RadioGroup } from '@ngstarter-ui/components/radio';
 import { FormsModule } from '@angular/forms';
-import { Button } from '@ngstarter/components/button';
-import { Segmented, SegmentedButton } from '@ngstarter/components/segmented';
+import { Button } from '@ngstarter-ui/components/button';
+import { Segmented, SegmentedButton } from '@ngstarter-ui/components/segmented';
 
 export interface PeriodicElement {
   name: string;

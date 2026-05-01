@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { FormField, Label, TextPrefix, IconPrefix, IconButtonPrefix, IconSuffix, IconButtonSuffix } from '@ngstarter/components/form-field';
-import { Button } from '@ngstarter/components/button';
-import { Input } from '@ngstarter/components/input';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { FormField, Label, TextPrefix, IconPrefix, IconButtonPrefix, IconSuffix, IconButtonSuffix } from '@ngstarter-ui/components/form-field';
+import { Button } from '@ngstarter-ui/components/button';
+import { Input } from '@ngstarter-ui/components/input';
 
 @Component({
   selector: 'app-prefixes-and-suffixes-example',

@@ -4,8 +4,8 @@ import {
   Layout, LayoutFooter,
   LayoutHeader,
   LayoutSidebar, LayoutTopbar
-} from '@ngstarter/components/layout';
-import { Announcement } from '@ngstarter/components/announcement';
+} from '@ngstarter-ui/components/layout';
+import { Announcement } from '@ngstarter-ui/components/announcement';
 
 @Component({
   selector: 'app-layout-with-nested-layouts-example',

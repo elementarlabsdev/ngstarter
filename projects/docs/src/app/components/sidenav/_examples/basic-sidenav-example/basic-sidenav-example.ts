@@ -1,8 +1,8 @@
 import { Component, viewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Sidenav, SidenavContainer, SidenavContent } from '@ngstarter/components/sidenav';
-import { Button } from '@ngstarter/components/button';
-import { RadioButton, RadioGroup } from '@ngstarter/components/radio';
+import { Sidenav, SidenavContainer, SidenavContent } from '@ngstarter-ui/components/sidenav';
+import { Button } from '@ngstarter-ui/components/button';
+import { RadioButton, RadioGroup } from '@ngstarter-ui/components/radio';
 
 @Component({
   selector: 'app-basic-sidenav-example',

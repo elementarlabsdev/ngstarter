@@ -15,7 +15,7 @@ import {
 import { toObservable } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { ChipRow } from '../chip-row/chip-row';
-import { FormFieldControl } from '@ngstarter/components/form-field';
+import { FormFieldControl } from '@ngstarter-ui/components/form-field';
 
 let nextId = 0;
 

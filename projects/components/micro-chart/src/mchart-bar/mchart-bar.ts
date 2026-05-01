@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { pointer, scaleBand, scaleLinear, select } from 'd3';
-import { OverlayPosition } from '@ngstarter/components/overlay';
+import { OverlayPosition } from '@ngstarter-ui/components/overlay';
 import { fromEvent } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BaseChartTooltip } from '../base-chart.tooltip';

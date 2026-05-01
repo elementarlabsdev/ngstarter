@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ProgressBar } from '@ngstarter/components/progress-bar';
+import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 
 @Component({
   selector: 'app-basic-progress-bar-example',

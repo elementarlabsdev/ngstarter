@@ -8,7 +8,7 @@ import {
   px,
   ResizeObserverService,
   MutationObserverService
-} from '@ngstarter/components/core';
+} from '@ngstarter-ui/components/core';
 import {
   BehaviorSubject,
   combineLatest,

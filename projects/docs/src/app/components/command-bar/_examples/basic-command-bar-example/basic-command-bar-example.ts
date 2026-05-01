@@ -1,15 +1,15 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { Checkbox } from '@ngstarter/components/checkbox';
+import { Checkbox } from '@ngstarter-ui/components/checkbox';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FormField, Label } from '@ngstarter/components/form-field';
-import { Option, Select } from '@ngstarter/components/select';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
+import { Option, Select } from '@ngstarter-ui/components/select';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   CommandBarCommand,
   CommandBar,
   CommandBarDivider,
   CommandBarPosition
-} from '@ngstarter/components/command-bar';
+} from '@ngstarter-ui/components/command-bar';
 
 @Component({
   selector: 'app-basic-command-bar-example',

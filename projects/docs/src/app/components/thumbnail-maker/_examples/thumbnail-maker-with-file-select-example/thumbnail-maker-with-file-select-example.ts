@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Button } from '@ngstarter/components/button';
-import { ThumbnailMaker } from '@ngstarter/components/thumbnail-maker';
-import { UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter/components/upload';
+import { Button } from '@ngstarter-ui/components/button';
+import { ThumbnailMaker } from '@ngstarter-ui/components/thumbnail-maker';
+import { UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter-ui/components/upload';
 
 @Component({
   selector: 'app-thumbnail-maker-with-file-select-example',

@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
-import { Tooltip } from '@ngstarter/components/tooltip';
+import { Tooltip } from '@ngstarter-ui/components/tooltip';
 import {
   TabPanelAside,
   TabPanelAsideContentDirective, TabPanelContent, TabPanel,
   TabPanelCustomItem, TabPanelFooter, TabPanelHeader,
   TabPanelItem,
   TabPanelItemIconDirective, TabPanelNav
-} from '@ngstarter/components/tab-panel';
-import { Icon } from '@ngstarter/components/icon';
-import { Divider } from '@ngstarter/components/divider';
-import { Avatar } from '@ngstarter/components/avatar';
+} from '@ngstarter-ui/components/tab-panel';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Divider } from '@ngstarter-ui/components/divider';
+import { Avatar } from '@ngstarter-ui/components/avatar';
 
 @Component({
   selector: 'app-tab-panel-compact-example',

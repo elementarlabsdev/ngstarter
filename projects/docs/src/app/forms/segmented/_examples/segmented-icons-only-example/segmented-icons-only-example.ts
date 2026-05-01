@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { SegmentedButton, Segmented } from '@ngstarter/components/segmented';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { SegmentedButton, Segmented } from '@ngstarter-ui/components/segmented';
 
 @Component({
   selector: 'app-segmented-icons-only-example',

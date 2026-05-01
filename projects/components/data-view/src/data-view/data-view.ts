@@ -15,13 +15,13 @@ import {
 } from '@angular/core';
 import {
   Table, TableDataSource
-} from '@ngstarter/components/table';
+} from '@ngstarter-ui/components/table';
 import {
   EmptyState,
   EmptyStateContent,
   EmptyStateIcon
-} from '@ngstarter/components/empty-state';
-import { Icon } from '@ngstarter/components/icon';
+} from '@ngstarter-ui/components/empty-state';
+import { Icon } from '@ngstarter-ui/components/icon';
 import {
   DataViewInterface,
   DataViewAPI,
@@ -33,20 +33,20 @@ import {
   DataViewRowSelectionEvent, DATA_VIEW, DataViewState, DataViewPinAlign,
 } from '../types';
 import { SelectionModel } from '@angular/cdk/collections';
-import { PageEvent, Paginator } from '@ngstarter/components/paginator';
-import { SortDirective, SortHeader, Sort } from '@ngstarter/components/sort';
-import { SortDirection } from '@ngstarter/components/sort';
+import { PageEvent, Paginator } from '@ngstarter-ui/components/paginator';
+import { SortDirective, SortHeader, Sort } from '@ngstarter-ui/components/sort';
+import { SortDirection } from '@ngstarter-ui/components/sort';
 import { isPlatformBrowser, NgComponentOutlet, NgStyle, NgTemplateOutlet, DOCUMENT } from '@angular/common';
 import { DataViewEmptyDataDirective } from '../data-view-empty-data.directive';
 import { DataViewEmptyFilterResultsDirective } from '../data-view-empty-filter-results.directive';
 import { DataViewActionBarDirective } from '../data-view-action-bar.directive';
 import { DataViewActionBar } from '../data-view-action-bar/data-view-action-bar';
-import { Checkbox, CheckboxChange } from '@ngstarter/components/checkbox';
-import { ScrollbarArea } from '@ngstarter/components/scrollbar-area';
-import { BlockLoader, BlockLoaderContainerDirective } from '@ngstarter/components/block-loader';
-import { Button } from '@ngstarter/components/button';
-import { Menu, MenuItem, MenuTrigger, MenuDivider, MenuContent } from '@ngstarter/components/menu';
-import { Dialog } from '@ngstarter/components/dialog';
+import { Checkbox, CheckboxChange } from '@ngstarter-ui/components/checkbox';
+import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
+import { BlockLoader, BlockLoaderContainerDirective } from '@ngstarter-ui/components/block-loader';
+import { Button } from '@ngstarter-ui/components/button';
+import { Menu, MenuItem, MenuTrigger, MenuDivider, MenuContent } from '@ngstarter-ui/components/menu';
+import { Dialog } from '@ngstarter-ui/components/dialog';
 import { DataViewColumnSettingsDialog, ColumnSettingsDialogResult } from './column-settings-dialog/column-settings-dialog';
 import { DATA_VIEW_CONFIG } from '../config';
 import { fromEvent, takeUntil, finalize, take, timer, Subject, merge } from 'rxjs';

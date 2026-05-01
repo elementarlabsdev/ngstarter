@@ -12,7 +12,7 @@ import {
   CardOverlayWithBlurExample
 } from '../_examples/card-overlay-with-blur-example/card-overlay-with-blur-example';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
-import { Divider } from '@ngstarter/components/divider';
+import { Divider } from '@ngstarter-ui/components/divider';
 
 @Component({
     selector: 'app-overview',

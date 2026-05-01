@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { map, Observable, startWith } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { FormField, Label } from '@ngstarter/components/form-field';
-import { Autocomplete, AutocompleteTrigger, Option } from '@ngstarter/components/autocomplete';
-import { Optgroup } from '@ngstarter/components/select';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
+import { Autocomplete, AutocompleteTrigger, Option } from '@ngstarter-ui/components/autocomplete';
+import { Optgroup } from '@ngstarter-ui/components/select';
 import { AsyncPipe } from '@angular/common';
-import { Input } from '@ngstarter/components/input';
+import { Input } from '@ngstarter-ui/components/input';
 
 export interface StateGroup {
   letter: string;

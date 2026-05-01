@@ -21,7 +21,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { Tab } from '../tab/tab';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { PortalModule } from '@angular/cdk/portal';
-import { Ripple } from '@ngstarter/components/core';
+import { Ripple } from '@ngstarter-ui/components/core';
 import { Subscription, fromEvent, debounceTime } from 'rxjs';
 
 export interface TabChangeEvent {

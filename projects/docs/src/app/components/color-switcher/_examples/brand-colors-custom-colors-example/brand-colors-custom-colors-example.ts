@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ColorSwitcher } from '@ngstarter/components/color-switcher';
+import { ColorSwitcher } from '@ngstarter-ui/components/color-switcher';
 
 @Component({
   selector: 'app-brand-colors-custom-colors-example',

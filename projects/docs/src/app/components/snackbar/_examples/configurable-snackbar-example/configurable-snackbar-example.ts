@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { Select, Option } from '@ngstarter/components/select';
-import { SnackBar, SnackBarHorizontalPosition, SnackBarVerticalPosition } from '@ngstarter/components/snack-bar';
-import { Button } from '@ngstarter/components/button';
-import { FormField, Label } from '@ngstarter/components/form-field';
+import { Select, Option } from '@ngstarter-ui/components/select';
+import { SnackBar, SnackBarHorizontalPosition, SnackBarVerticalPosition } from '@ngstarter-ui/components/snack-bar';
+import { Button } from '@ngstarter-ui/components/button';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { FormsModule } from '@angular/forms';
 
 @Component({

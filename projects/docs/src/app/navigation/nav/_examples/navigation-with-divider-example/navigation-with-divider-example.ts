@@ -3,7 +3,7 @@ import {
   Navigation,
   NavigationDivider,
   NavigationItem
-} from '@ngstarter/components/navigation';
+} from '@ngstarter-ui/components/navigation';
 
 @Component({
   selector: 'app-navigation-with-divider-example',

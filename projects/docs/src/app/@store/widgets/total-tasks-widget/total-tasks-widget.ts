@@ -4,8 +4,8 @@ import {
   MchartTooltipBody,
   MchartTooltip,
   MchartTooltipTitle
-} from '@ngstarter/components/micro-chart';
-import { Grid, GRID } from '@ngstarter/components/grid';
+} from '@ngstarter-ui/components/micro-chart';
+import { Grid, GRID } from '@ngstarter-ui/components/grid';
 
 @Component({
   selector: 'ngs-total-tasks-content',

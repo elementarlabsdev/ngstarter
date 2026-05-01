@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Tooltip } from '@ngstarter/components/tooltip';
-import { Button } from '@ngstarter/components/button';
+import { Tooltip } from '@ngstarter-ui/components/tooltip';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-buttons-with-interactive-disabled-example',

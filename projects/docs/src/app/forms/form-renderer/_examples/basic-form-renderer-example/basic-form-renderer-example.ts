@@ -1,8 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
-import { FormConfig, FormRenderer, ValidatorRegistryService } from '@ngstarter/components/form-renderer';
+import { FormConfig, FormRenderer, ValidatorRegistryService } from '@ngstarter-ui/components/form-renderer';
 import { JsonPipe } from '@angular/common';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-basic-form-renderer-example',

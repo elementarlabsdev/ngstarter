@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormField, Label } from '@ngstarter/components/form-field';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import {
   Cell,
   CellDef,
@@ -10,8 +10,8 @@ import {
   Row, RowDef,
   Table,
   TableDataSource
-} from '@ngstarter/components/table';
-import { Input } from '@ngstarter/components/input';
+} from '@ngstarter-ui/components/table';
+import { Input } from '@ngstarter-ui/components/input';
 
 export interface PeriodicElement {
   name: string;

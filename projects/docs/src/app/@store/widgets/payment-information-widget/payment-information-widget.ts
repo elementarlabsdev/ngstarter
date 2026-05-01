@@ -1,7 +1,7 @@
 import { Component, inject, input, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { GRID } from '@ngstarter/components/grid';
-import { Button } from '@ngstarter/components/button';
+import { GRID } from '@ngstarter-ui/components/grid';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-payment-information-content',

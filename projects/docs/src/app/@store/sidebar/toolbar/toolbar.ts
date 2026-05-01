@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { Tooltip } from '@ngstarter/components/tooltip';
-import { Divider } from '@ngstarter/components/divider';
-import { Dicebear } from '@ngstarter/components/avatar';
-import { Button } from '@ngstarter/components/button';
-import { Badge } from '@ngstarter/components/badge';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Tooltip } from '@ngstarter-ui/components/tooltip';
+import { Divider } from '@ngstarter-ui/components/divider';
+import { Dicebear } from '@ngstarter-ui/components/avatar';
+import { Button } from '@ngstarter-ui/components/button';
+import { Badge } from '@ngstarter-ui/components/badge';
 
 @Component({
   selector: 'ngs-sidebar-toolbar',

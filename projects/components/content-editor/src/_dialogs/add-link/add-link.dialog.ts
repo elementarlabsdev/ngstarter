@@ -5,12 +5,12 @@ import {
   DialogContent,
   DialogRef,
   DialogTitle
-} from '@ngstarter/components/dialog';
-import { Input } from '@ngstarter/components/input';
-import { Button } from '@ngstarter/components/button';
-import { FormField, Label } from '@ngstarter/components/form-field';
+} from '@ngstarter-ui/components/dialog';
+import { Input } from '@ngstarter-ui/components/input';
+import { Button } from '@ngstarter-ui/components/button';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SlideToggle } from '@ngstarter/components/slide-toggle';
+import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
 
 @Component({
   selector: 'ngs-add-link',

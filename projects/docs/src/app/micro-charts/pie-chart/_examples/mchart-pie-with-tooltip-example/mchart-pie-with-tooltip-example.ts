@@ -4,7 +4,7 @@ import {
   MchartTooltipBody,
   MchartTooltip,
   MchartTooltipTitle
-} from '@ngstarter/components/micro-chart';
+} from '@ngstarter-ui/components/micro-chart';
 import { ShuffleArrayPipe } from '@meta/shuffle-array.pipe';
 
 @Component({

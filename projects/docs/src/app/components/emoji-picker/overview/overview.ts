@@ -5,7 +5,7 @@ import {
 } from '../_examples/basic-emoji-picker-example/basic-emoji-picker-example';
 import { Playground } from '@meta/playground/playground';
 import { Page } from '@meta/page/page';
-import { Tab, TabGroup } from '@ngstarter/components/tabs';
+import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({

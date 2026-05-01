@@ -5,7 +5,7 @@ import {
 } from '../_examples/basic-phone-input-example/basic-phone-input-example';
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
-import { Tab, TabGroup } from '@ngstarter/components/tabs';
+import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import {
   PhoneInputOnlyCountriesExample
 } from '../_examples/phone-input-only-countries-example/phone-input-only-countries-example';

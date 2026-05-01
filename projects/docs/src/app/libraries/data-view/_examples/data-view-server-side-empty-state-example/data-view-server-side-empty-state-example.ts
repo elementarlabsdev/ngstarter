@@ -4,7 +4,7 @@ import {
   DataView,
   DataViewDatasource,
   DataViewGetRowsParams
-} from '@ngstarter/components/data-view';
+} from '@ngstarter-ui/components/data-view';
 
 @Component({
   selector: 'app-data-view-server-side-empty-state-example',

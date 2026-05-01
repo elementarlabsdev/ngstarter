@@ -7,7 +7,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { Ripple } from '@ngstarter/components/core';
+import { Ripple } from '@ngstarter-ui/components/core';
 
 export type ButtonVariant = 'filled' | 'outlined' | 'text' | 'tonal' | '';
 

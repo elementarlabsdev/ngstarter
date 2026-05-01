@@ -13,13 +13,13 @@
       "@app/*": [
         "./projects/docs/src/app/@app/*"
       ],
-      "@ngstarter/components/*": [
+      "@ngstarter-ui/components/*": [
         "./projects/components/*"
       ],
-      "@ngstarter/components": [
+      "@ngstarter-ui/components": [
         "./projects/components"
       ],
-      "@ngstarter/image-designer": [
+      "@ngstarter-ui/image-designer": [
         "./projects/components/image-designer"
       ],
     },

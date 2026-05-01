@@ -9,7 +9,7 @@ import {
 import { PopoverLazyContentExample } from '../_examples/popover-lazy-content-example/popover-lazy-content-example';
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
-import { Tab, TabGroup } from '@ngstarter/components/tabs';
+import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({

@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { Avatar } from '@ngstarter/components/avatar';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Avatar } from '@ngstarter-ui/components/avatar';
 import {
   Timeline, TimelineDescription,
   TimelineHeader,
   TimelineItem,
   TimelineItemIndicatorDirective,
   TimelineTimestamp, TimelineTitle
-} from '@ngstarter/components/timeline';
+} from '@ngstarter-ui/components/timeline';
 
 @Component({
   selector: 'app-timeline-with-cutsom-indicator-example',

@@ -14,7 +14,7 @@ import { PageContentDirective } from '@meta/page/page-content.directive';
 import {
   ShowHideAnnouncementDynamically
 } from '../_examples/show-hide-announcement-dynamically/show-hide-announcement-dynamically';
-import { Tab, TabGroup } from '@ngstarter/components/tabs';
+import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
 import {
   Cell,
@@ -27,7 +27,7 @@ import {
   Row,
   RowDef,
   Table
-} from '@ngstarter/components/table';
+} from '@ngstarter-ui/components/table';
 
 @Component({
   imports: [

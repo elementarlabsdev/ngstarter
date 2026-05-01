@@ -1,8 +1,8 @@
 import { Component, input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ComponentConfig } from '../../models/form-config.model';
-import { TimezoneSelect } from '@ngstarter/components/timezone-select';
-import { Error, FormField, Hint, Label } from '@ngstarter/components/form-field';
+import { TimezoneSelect } from '@ngstarter-ui/components/timezone-select';
+import { Error, FormField, Hint, Label } from '@ngstarter-ui/components/form-field';
 
 @Component({
   selector: 'ngs-timezone-field',

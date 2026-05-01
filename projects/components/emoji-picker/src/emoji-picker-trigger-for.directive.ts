@@ -9,7 +9,7 @@ import {
   TemplateRef,
   ViewContainerRef
 } from '@angular/core';
-import { PopoverPosition } from '@ngstarter/components/popover';
+import { PopoverPosition } from '@ngstarter-ui/components/popover';
 import {
   ConnectedPosition,
   FlexibleConnectedPositionStrategy,
@@ -21,7 +21,7 @@ import { Directionality } from '@angular/cdk/bidi';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { _getEventTarget } from '@angular/cdk/platform';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { PositionManager } from '@ngstarter/components/overlay';
+import { PositionManager } from '@ngstarter-ui/components/overlay';
 import { EMOJI_PICKER_TRIGGER_FOR } from './types';
 
 @Directive({

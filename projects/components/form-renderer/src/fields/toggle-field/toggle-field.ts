@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { SlideToggle } from '@ngstarter/components/slide-toggle';
+import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ComponentConfig } from '../../models/form-config.model';
 

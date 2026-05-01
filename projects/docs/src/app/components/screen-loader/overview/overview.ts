@@ -17,7 +17,7 @@ import {
   HeaderRow,
   RowDef,
   Row
-} from '@ngstarter/components/table';
+} from '@ngstarter-ui/components/table';
 
 @Component({
   imports: [

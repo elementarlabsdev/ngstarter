@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { TourService, TourAnchorDirective, provideTourConfig } from '@ngstarter/components/guided-tour';
-import { Button } from '@ngstarter/components/button';
+import { TourService, TourAnchorDirective, provideTourConfig } from '@ngstarter-ui/components/guided-tour';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-global-config-guided-tour-example',

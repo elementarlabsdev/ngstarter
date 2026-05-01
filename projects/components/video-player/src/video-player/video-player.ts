@@ -14,10 +14,10 @@ import {
 } from '@angular/core';
 import videojs from 'video.js';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Icon } from '@ngstarter/components/icon';
-import { Button } from '@ngstarter/components/button';
-import { Slider, SliderThumb } from '@ngstarter/components/slider';
-import { ProgressSpinner } from '@ngstarter/components/spinner';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Button } from '@ngstarter-ui/components/button';
+import { Slider, SliderThumb } from '@ngstarter-ui/components/slider';
+import { ProgressSpinner } from '@ngstarter-ui/components/spinner';
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

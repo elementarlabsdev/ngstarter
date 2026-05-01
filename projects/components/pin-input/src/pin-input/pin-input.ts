@@ -18,8 +18,8 @@ import {
 } from '@angular/forms';
 import { PinInputDirective } from '../pin-input.directive';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { FormField } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
+import { FormField } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
 
 @Component({
   selector: 'ngs-pin-input',

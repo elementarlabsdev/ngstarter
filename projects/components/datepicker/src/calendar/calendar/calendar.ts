@@ -15,8 +15,8 @@ import { MonthView } from '../month-view/month-view';
 import { DateRange } from '../../core/datetime/date-range';
 import { YearView } from '../year-view/year-view';
 import { MultiYearView } from '../multi-year-view/multi-year-view';
-import { Button } from '@ngstarter/components/button';
-import { Icon } from '@ngstarter/components/icon';
+import { Button } from '@ngstarter-ui/components/button';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { NgComponentOutlet } from '@angular/common';
 
 @Component({

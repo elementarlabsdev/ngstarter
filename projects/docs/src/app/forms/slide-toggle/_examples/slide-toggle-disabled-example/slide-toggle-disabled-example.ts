@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SlideToggle } from '@ngstarter/components/slide-toggle';
+import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
 
 @Component({
   selector: 'app-slide-toggle-disabled-example',

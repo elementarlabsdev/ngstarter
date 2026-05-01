@@ -1,7 +1,7 @@
 import { Component, model } from '@angular/core';
-import { CurrencySelect } from '@ngstarter/components/currency-select';
+import { CurrencySelect } from '@ngstarter-ui/components/currency-select';
 import { FormsModule } from '@angular/forms';
-import { FormField, Label } from '@ngstarter/components/form-field';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
 
 @Component({
   selector: 'app-basic-currency-select-example',

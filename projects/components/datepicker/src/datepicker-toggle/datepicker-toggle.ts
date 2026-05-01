@@ -10,8 +10,8 @@ import { DatepickerIntl } from '../datepicker-intl';
 import { DatepickerToggleIcon } from './datepicker-toggle-icon';
 import type { Datepicker } from '../datepicker/datepicker';
 import type { DateRangePicker } from '../date-range-picker/date-range-picker';
-import { Button } from '@ngstarter/components/button';
-import { FORM_FIELD, FormField } from '@ngstarter/components/form-field';
+import { Button } from '@ngstarter-ui/components/button';
+import { FORM_FIELD, FormField } from '@ngstarter-ui/components/form-field';
 
 @Component({
   selector: 'ngs-datepicker-toggle',

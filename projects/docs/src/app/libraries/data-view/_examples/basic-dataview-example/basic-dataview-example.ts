@@ -1,5 +1,5 @@
 import { Component, model } from '@angular/core';
-import { DataViewColumnDef, DataView } from '@ngstarter/components/data-view';
+import { DataViewColumnDef, DataView } from '@ngstarter-ui/components/data-view';
 import { FormsModule } from '@angular/forms';
 
 export interface PeriodicElement {

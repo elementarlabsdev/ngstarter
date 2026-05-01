@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SlideToggle } from '@ngstarter/components/slide-toggle';
-import { Button } from '@ngstarter/components/button';
+import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-slide-toggle-with-forms-example',

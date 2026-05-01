@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { DatePipe } from '@angular/common';
-import { List, ListItem, ListItemIcon, ListItemLine, ListItemTitle, Subheader } from '@ngstarter/components/list';
-import { Divider } from '@ngstarter/components/divider';
+import { List, ListItem, ListItemIcon, ListItemLine, ListItemTitle, Subheader } from '@ngstarter-ui/components/list';
+import { Divider } from '@ngstarter-ui/components/divider';
 
 export interface Section {
   name: string;

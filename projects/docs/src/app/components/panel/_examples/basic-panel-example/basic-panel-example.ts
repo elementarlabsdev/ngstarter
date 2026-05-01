@@ -4,8 +4,8 @@ import {
   Panel,
   PanelFooter,
   PanelHeader,
-} from '@ngstarter/components/panel';
-import { ScrollbarArea } from '@ngstarter/components/scrollbar-area';
+} from '@ngstarter-ui/components/panel';
+import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 
 @Component({
   selector: 'app-basic-panel-example',

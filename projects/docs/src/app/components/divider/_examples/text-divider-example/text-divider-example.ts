@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TextDivider } from '@ngstarter/components/divider';
+import { TextDivider } from '@ngstarter-ui/components/divider';
 
 @Component({
   selector: 'app-text-divider-example',

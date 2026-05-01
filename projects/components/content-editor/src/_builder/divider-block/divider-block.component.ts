@@ -1,5 +1,5 @@
 import { Component, input, signal } from '@angular/core';
-import { Divider } from '@ngstarter/components/divider';
+import { Divider } from '@ngstarter-ui/components/divider';
 import { ContentEditorDataBlock } from '../../types';
 import { ContentEditorCodeBlockSettings } from '../code-block/code-block.component';
 

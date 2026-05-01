@@ -14,7 +14,7 @@ import {
   inject
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { fromEvent, merge, takeUntil } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 

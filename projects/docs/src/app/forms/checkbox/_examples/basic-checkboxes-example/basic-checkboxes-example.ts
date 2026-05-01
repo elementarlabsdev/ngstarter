@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Checkbox } from '@ngstarter/components/checkbox';
+import { Checkbox } from '@ngstarter-ui/components/checkbox';
 
 export interface Task {
   name: string;

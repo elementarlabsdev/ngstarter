@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import {
   Cell,
   CellDef,
@@ -10,8 +10,8 @@ import {
   HeaderRow, HeaderRowDef,
   Row, RowDef,
   Table
-} from '@ngstarter/components/table';
-import { Button } from '@ngstarter/components/button';
+} from '@ngstarter-ui/components/table';
+import { Button } from '@ngstarter-ui/components/button';
 
 export interface PeriodicElement {
   name: string;

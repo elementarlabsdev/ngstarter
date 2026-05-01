@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { PopoverTriggerForDirective } from '@ngstarter/components/popover';
-import { Button } from '@ngstarter/components/button';
+import { PopoverTriggerForDirective } from '@ngstarter-ui/components/popover';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-popover-template-ref-example',

@@ -11,8 +11,8 @@ import {
   Row, RowDef,
   Table,
   TableDataSource
-} from '@ngstarter/components/table';
-import { Checkbox } from '@ngstarter/components/checkbox';
+} from '@ngstarter-ui/components/table';
+import { Checkbox } from '@ngstarter-ui/components/checkbox';
 
 export interface PeriodicElement {
   name: string;

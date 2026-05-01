@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { Avatar } from '@ngstarter/components/avatar';
+import { Avatar } from '@ngstarter-ui/components/avatar';
 import {
   TimelineAttributes, Timeline,
   TimelineDescription, TimelineHeader, TimelineItem,
   TimelineTimestamp,
   TimelineTitle
-} from '@ngstarter/components/timeline';
+} from '@ngstarter-ui/components/timeline';
 
 @Component({
   selector: 'app-timeline-timestamp-example',

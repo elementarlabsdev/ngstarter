@@ -8,7 +8,7 @@ import {
   HeaderRowDef, Row,
   RowDef,
   Table
-} from '@ngstarter/components/table';
+} from '@ngstarter-ui/components/table';
 
 @Component({
   selector: 'app-api',

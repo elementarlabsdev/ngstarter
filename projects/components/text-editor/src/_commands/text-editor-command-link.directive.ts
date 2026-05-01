@@ -1,5 +1,5 @@
 import { DestroyRef, Directive, inject } from '@angular/core';
-import { Dialog } from '@ngstarter/components/dialog';
+import { Dialog } from '@ngstarter-ui/components/dialog';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TEXT_EDITOR, TextEditorInterface } from '../types';
 import { LinkDialog } from '../link/link.dialog';

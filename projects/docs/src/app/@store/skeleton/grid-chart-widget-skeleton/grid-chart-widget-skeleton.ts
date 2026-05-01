@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Skeleton } from '@ngstarter/components/skeleton';
+import { Skeleton } from '@ngstarter-ui/components/skeleton';
 
 @Component({
   selector: 'ngs-grid-chart-content-skeleton',

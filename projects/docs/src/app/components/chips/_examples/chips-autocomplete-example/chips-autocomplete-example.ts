@@ -4,17 +4,17 @@ import {
   AutocompleteTrigger,
   Option,
   AutocompleteSelectedEvent
-} from '@ngstarter/components/autocomplete';
+} from '@ngstarter-ui/components/autocomplete';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Icon } from '@ngstarter/components/icon';
-import { FormField } from '@ngstarter/components/form-field';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { FormField } from '@ngstarter-ui/components/form-field';
 import { map, Observable, startWith } from 'rxjs';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { AsyncPipe } from '@angular/common';
-import { ChipGrid, ChipInput, ChipRemove, ChipRow, ChipInputEvent } from '@ngstarter/components/chips';
-import { Label } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
+import { ChipGrid, ChipInput, ChipRemove, ChipRow, ChipInputEvent } from '@ngstarter-ui/components/chips';
+import { Label } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
 
 @Component({
   selector: 'app-chips-autocomplete-example',

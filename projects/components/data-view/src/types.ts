@@ -1,4 +1,4 @@
-import { CheckboxChange } from '@ngstarter/components/checkbox';
+import { CheckboxChange } from '@ngstarter-ui/components/checkbox';
 import { InjectionToken } from '@angular/core';
 
 export interface DataViewInterface {

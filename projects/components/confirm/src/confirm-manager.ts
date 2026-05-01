@@ -3,7 +3,7 @@ import { ConfirmOptions } from './types';
 import { ConfirmRef } from './confirm-ref';
 import { Confirm } from './confirm/confirm';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Dialog } from '@ngstarter/components/dialog';
+import { Dialog } from '@ngstarter-ui/components/dialog';
 
 @Injectable({
   providedIn: 'root'

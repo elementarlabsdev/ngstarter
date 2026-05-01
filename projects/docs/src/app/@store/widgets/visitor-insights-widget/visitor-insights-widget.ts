@@ -11,8 +11,8 @@ import {
 import { LabelLayout, UniversalTransition } from 'echarts/features';
 import { LineChart } from 'echarts/charts';
 import { CanvasRenderer } from 'echarts/renderers';
-import { Grid, GRID } from '@ngstarter/components/grid';
-import { ThemeManagerService } from '@ngstarter/components/core';
+import { Grid, GRID } from '@ngstarter-ui/components/grid';
+import { ThemeManagerService } from '@ngstarter-ui/components/core';
 
 @Component({
   selector: 'ngs-visitor-insights-content',

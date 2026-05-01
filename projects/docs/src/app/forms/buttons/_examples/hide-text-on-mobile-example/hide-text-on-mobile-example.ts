@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Button } from '@ngstarter/components/button';
-import { Icon } from '@ngstarter/components/icon';
+import { Button } from '@ngstarter-ui/components/button';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'app-hide-text-on-mobile-example',

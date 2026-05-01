@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FormField, Label, Suffix } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
-import { PassToggleVisibility, PasswordStrength } from '@ngstarter/components/password-strength';
+import { FormField, Label, Suffix } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
+import { PassToggleVisibility, PasswordStrength } from '@ngstarter-ui/components/password-strength';
 
 @Component({
   selector: 'app-password-toggle-visibility-example',

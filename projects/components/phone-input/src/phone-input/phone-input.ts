@@ -14,9 +14,9 @@ import {
   viewChild, input, effect, output, DestroyRef, computed, signal, AfterViewInit
 } from '@angular/core';
 import { FormGroupDirective, NG_VALIDATORS, NgControl, NgForm, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ErrorStateMatcher, Ripple } from '@ngstarter/components/core';
-import { FormFieldControl } from '@ngstarter/components/form-field';
-import { Menu, MenuTrigger, MenuItem } from '@ngstarter/components/menu';
+import { ErrorStateMatcher, Ripple } from '@ngstarter-ui/components/core';
+import { FormFieldControl } from '@ngstarter-ui/components/form-field';
+import { Menu, MenuTrigger, MenuItem } from '@ngstarter-ui/components/menu';
 import {
   AsYouType,
   CountryCode as CC,
@@ -29,11 +29,11 @@ import { CountryCode } from '../data/country-code';
 import { Country } from '../model/country.model';
 import { PhoneNumberFormat } from '../model/phone-number-format.model';
 import { phoneValidator } from '../phone.validator';
-import { Icon } from '@ngstarter/components/icon';
-import { Input } from '@ngstarter/components/input';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Input } from '@ngstarter-ui/components/input';
 import { SearchPipe } from '../search.pipe';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Divider } from '@ngstarter/components/divider';
+import { Divider } from '@ngstarter-ui/components/divider';
 
 @Component({
   selector: 'ngs-phone-input',

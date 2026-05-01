@@ -1,37 +1,37 @@
 import { afterNextRender, Component, inject, model, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
-import { PageLoadingBar } from '@ngstarter/components/page-loading-bar';
+import { PageLoadingBar } from '@ngstarter-ui/components/page-loading-bar';
 import {
   AnalyticsService, EnvironmentService, OrderByPipe,
   SeoService, SoundEffectDirective,
-} from '@ngstarter/components/core';
-import { AnnouncementGlobal } from '@ngstarter/components/announcement';
-import { IncidentsContainer } from '@ngstarter/components/incidents';
+} from '@ngstarter-ui/components/core';
+import { AnnouncementGlobal } from '@ngstarter-ui/components/announcement';
+import { IncidentsContainer } from '@ngstarter-ui/components/incidents';
 import {
   LayoutContent,
   Layout, LayoutHeader,
   LayoutTopbar
-} from '@ngstarter/components/layout';
-import { Icon } from '@ngstarter/components/icon';
-import { Tooltip } from '@ngstarter/components/tooltip';
-import { Logo, LogoDescription, LogoShape, LogoText } from '@ngstarter/components/logo';
-import { SplashScreen } from '@ngstarter/components/splash-screen';
+} from '@ngstarter-ui/components/layout';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Tooltip } from '@ngstarter-ui/components/tooltip';
+import { Logo, LogoDescription, LogoShape, LogoText } from '@ngstarter-ui/components/logo';
+import { SplashScreen } from '@ngstarter-ui/components/splash-screen';
 import {
   ColorScheme,
   ColorSchemeDarkDirective,
   ColorSchemeLightDirective,
   ColorSchemeSwitcher,
-} from '@ngstarter/components/color-scheme';
-import { Button } from '@ngstarter/components/button';
+} from '@ngstarter-ui/components/color-scheme';
+import { Button } from '@ngstarter-ui/components/button';
 import {
   Sidenav,
   SidenavCollapsed,
   SidenavContainer,
   SidenavContent,
   SidenavExpanded
-} from '@ngstarter/components/sidenav';
-import { PanelContent, Panel, PanelHeader } from '@ngstarter/components/panel';
+} from '@ngstarter-ui/components/sidenav';
+import { PanelContent, Panel, PanelHeader } from '@ngstarter-ui/components/panel';
 import { v7 as uuid } from 'uuid';
 import {
   SidebarBody,
@@ -41,12 +41,12 @@ import {
   SidebarNavGroupToggleIconDirective, SidebarNavHeading, SidebarNavItemBadgeDirective, SidebarNavItem,
   SidebarNavItemDefDirective,
   SidebarNavItemIconDirective
-} from '@ngstarter/components/sidebar';
+} from '@ngstarter-ui/components/sidebar';
 import { Location } from '@angular/common';
-import { SlideToggle } from '@ngstarter/components/slide-toggle';
+import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
 import { FormsModule } from '@angular/forms';
-import { ScrollbarArea } from '@ngstarter/components/scrollbar-area';
-import { Toolbar, ToolbarItem, ToolbarSpacer, ToolbarNav, ToolbarNavLink } from '@ngstarter/components/toolbar';
+import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
+import { Toolbar, ToolbarItem, ToolbarSpacer, ToolbarNav, ToolbarNavLink } from '@ngstarter-ui/components/toolbar';
 
 @Component({
   selector: 'app-root',

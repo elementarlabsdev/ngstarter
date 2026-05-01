@@ -4,7 +4,7 @@ import {
   Layout,
   LayoutFooter,
   LayoutHeader
-} from '@ngstarter/components/layout';
+} from '@ngstarter-ui/components/layout';
 
 @Component({
   selector: 'app-layout-header-with-footer-example',

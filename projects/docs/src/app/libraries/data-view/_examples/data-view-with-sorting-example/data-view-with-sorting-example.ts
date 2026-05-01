@@ -1,6 +1,6 @@
 import { Component, model } from '@angular/core';
-import { DataViewColumnDef, DataView } from '@ngstarter/components/data-view';
-import { Sort } from '@ngstarter/components/sort';
+import { DataViewColumnDef, DataView } from '@ngstarter-ui/components/data-view';
+import { Sort } from '@ngstarter-ui/components/sort';
 import { FormsModule } from '@angular/forms';
 
 export interface PeriodicElement {

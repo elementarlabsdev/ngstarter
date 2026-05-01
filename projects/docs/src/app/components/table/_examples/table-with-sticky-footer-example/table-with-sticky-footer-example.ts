@@ -9,7 +9,7 @@ import {
   HeaderCell,
   HeaderCellDef, HeaderRow, HeaderRowDef, Row, RowDef,
   Table
-} from '@ngstarter/components/table';
+} from '@ngstarter-ui/components/table';
 
 export interface Transaction {
   item: string;

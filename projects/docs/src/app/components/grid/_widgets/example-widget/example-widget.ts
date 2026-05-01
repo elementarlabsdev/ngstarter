@@ -1,5 +1,5 @@
 import { Component, input, OnInit } from '@angular/core';
-import { GridItemAware } from '@ngstarter/components/grid';
+import { GridItemAware } from '@ngstarter-ui/components/grid';
 
 @Component({
   selector: 'app-example-content',

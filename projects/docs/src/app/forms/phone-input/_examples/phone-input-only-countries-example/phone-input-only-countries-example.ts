@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Error, FormField, Label } from '@ngstarter/components/form-field';
-import { PhoneInput, phoneValidator } from '@ngstarter/components/phone-input';
+import { Error, FormField, Label } from '@ngstarter-ui/components/form-field';
+import { PhoneInput, phoneValidator } from '@ngstarter-ui/components/phone-input';
 
 @Component({
   selector: 'app-phone-input-only-countries-example',

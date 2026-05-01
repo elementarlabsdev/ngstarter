@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Menu, MenuItem, MenuTrigger } from '@ngstarter/components/menu';
+import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
 import {
   NotificationAvatarDirective,
   NotificationActor,
@@ -10,9 +10,9 @@ import {
   NotificationMessage,
   NotificationTime,
   NotificationContent
-} from '@ngstarter/components/notifications';
-import { Icon } from '@ngstarter/components/icon';
-import { Dicebear } from '@ngstarter/components/avatar';
+} from '@ngstarter-ui/components/notifications';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Dicebear } from '@ngstarter-ui/components/avatar';
 import { RouterLink } from '@angular/router';
 
 @Component({

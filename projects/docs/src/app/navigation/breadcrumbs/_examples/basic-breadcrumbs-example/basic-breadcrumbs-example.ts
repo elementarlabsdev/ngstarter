@@ -3,7 +3,7 @@ import {
   BreadcrumbItem,
   Breadcrumbs,
   BreadcrumbSeparator
-} from '@ngstarter/components/breadcrumbs';
+} from '@ngstarter-ui/components/breadcrumbs';
 
 @Component({
   selector: 'app-basic-breadcrumbs-example',

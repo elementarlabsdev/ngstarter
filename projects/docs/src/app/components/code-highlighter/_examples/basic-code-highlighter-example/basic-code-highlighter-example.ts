@@ -1,7 +1,7 @@
 import { Component, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CodeHighlighter } from '@ngstarter/components/code-highlighter';
-import { Segmented, SegmentedButton } from '@ngstarter/components/segmented';
+import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
+import { Segmented, SegmentedButton } from '@ngstarter-ui/components/segmented';
 
 @Component({
   selector: 'app-basic-code-highlighter-example',

@@ -9,7 +9,7 @@ import { PageContentDirective } from '@meta/page/page-content.directive';
 import {
   CarouselFadeEffectExample
 } from '../_examples/carousel-fade-effect-example/carousel-fade-effect-example';
-import { Tab, TabGroup } from '@ngstarter/components/tabs';
+import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({

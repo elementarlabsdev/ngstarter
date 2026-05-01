@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
-import { DataViewCellRenderer } from '@ngstarter/components/data-view';
-import { ContentFade } from '@ngstarter/components/content-fade';
+import { DataViewCellRenderer } from '@ngstarter-ui/components/data-view';
+import { ContentFade } from '@ngstarter-ui/components/content-fade';
 
 @Component({
   selector: 'app-link-cell',

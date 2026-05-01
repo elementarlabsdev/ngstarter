@@ -18,7 +18,7 @@ import {
 import { formatDate } from '@angular/common';
 import { OverlayModule, Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { Option } from '@ngstarter/components/option';
+import { Option } from '@ngstarter-ui/components/option';
 import { TIMEPICKER_CONFIG } from '../timepicker-config';
 
 @Component({

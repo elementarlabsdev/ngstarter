@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { Button } from '@ngstarter/components/button';
-import { Menu, MenuItem, MenuTrigger } from '@ngstarter/components/menu';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Button } from '@ngstarter-ui/components/button';
+import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
 
 @Component({
   selector: 'app-menu-with-icons-example',

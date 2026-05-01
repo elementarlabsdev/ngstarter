@@ -3,7 +3,7 @@ import { TourStepConfig, TourState, TOUR_STEP_COMPONENT, TOUR_CONFIG, TourStepPo
 import { Subject } from 'rxjs';
 import { Overlay, OverlayRef, ConnectedPosition, PositionStrategy, FlexibleConnectedPositionStrategy, ConnectedOverlayPositionChange } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { PositionManager, OverlayPosition } from '@ngstarter/components/overlay';
+import { PositionManager, OverlayPosition } from '@ngstarter-ui/components/overlay';
 import { TourBackdrop } from './tour-backdrop/tour-backdrop';
 import { TourStep } from './tour-step/tour-step';
 import { DOCUMENT } from '@angular/common';

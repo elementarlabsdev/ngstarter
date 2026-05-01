@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ComponentConfig } from '../../models/form-config.model';
-import { Error, FormField, Hint, Label } from '@ngstarter/components/form-field';
-import { Option, Select } from '@ngstarter/components/select';
+import { Error, FormField, Hint, Label } from '@ngstarter-ui/components/form-field';
+import { Option, Select } from '@ngstarter-ui/components/select';
 
 @Component({
   selector: 'ngs-select-field',

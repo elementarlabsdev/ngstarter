@@ -3,7 +3,7 @@ import {
   ColorPicker,
   ColorPickerThumbnail,
   ColorPickerTriggerForDirective
-} from '@ngstarter/components/color-picker';
+} from '@ngstarter-ui/components/color-picker';
 import { FormsModule } from '@angular/forms';
 
 @Component({

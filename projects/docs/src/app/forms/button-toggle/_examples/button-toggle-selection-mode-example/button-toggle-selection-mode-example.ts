@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ButtonToggle, ButtonToggleGroup } from '@ngstarter/components/button-toggle';
+import { ButtonToggle, ButtonToggleGroup } from '@ngstarter-ui/components/button-toggle';
 
 @Component({
   selector: 'app-button-toggle-selection-mode-example',

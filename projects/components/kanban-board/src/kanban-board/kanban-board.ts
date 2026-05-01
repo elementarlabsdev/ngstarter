@@ -17,17 +17,17 @@ import {
   moveItemInArray,
   transferArrayItem
 } from '@angular/cdk/drag-drop';
-import { Icon } from '@ngstarter/components/icon';
-import { Ripple } from '@ngstarter/components/core';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Ripple } from '@ngstarter-ui/components/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Menu, MenuItem, MenuTrigger } from '@ngstarter/components/menu';
-import { PanelContent, Panel, PanelHeader } from '@ngstarter/components/panel';
+import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
+import { PanelContent, Panel, PanelHeader } from '@ngstarter-ui/components/panel';
 import { KanbanColumn, KanbanItem, KanbanItemSortedEvent, KanbanItemTransferredEvent } from '../types';
 import { KanbanItemDefDirective } from '../kanban-item-def.directive';
 import { fromEvent } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-kanban-board',

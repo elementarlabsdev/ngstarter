@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Kbd, KbdGroup } from '@ngstarter/components/kbd';
+import { Kbd, KbdGroup } from '@ngstarter-ui/components/kbd';
 
 @Component({
   selector: 'app-kbd-group-example',

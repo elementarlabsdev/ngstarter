@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Card, CardContent, CardFooter } from '@ngstarter/components/card';
-import { OrderByPipe } from '@ngstarter/components/core';
+import { Card, CardContent, CardFooter } from '@ngstarter-ui/components/card';
+import { OrderByPipe } from '@ngstarter-ui/components/core';
 
 @Component({
   imports: [

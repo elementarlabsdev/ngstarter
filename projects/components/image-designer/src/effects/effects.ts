@@ -2,20 +2,20 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ImageDesignerService } from '../image-designer.service';
 import { LayerConfig } from '../types';
-import { Panel, PanelContent, PanelHeader } from '@ngstarter/components/panel';
-import { Button } from '@ngstarter/components/button';
-import { Icon } from '@ngstarter/components/icon';
+import { Panel, PanelContent, PanelHeader } from '@ngstarter-ui/components/panel';
+import { Button } from '@ngstarter-ui/components/button';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { IMAGE_DESIGNER } from '../tokens';
-import { SlideToggle } from '@ngstarter/components/slide-toggle';
-import { Slider } from '@ngstarter/components/slider';
-import { SliderThumb } from '@ngstarter/components/slider';
-import { Input } from '@ngstarter/components/input';
+import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
+import { Slider } from '@ngstarter-ui/components/slider';
+import { SliderThumb } from '@ngstarter-ui/components/slider';
+import { Input } from '@ngstarter-ui/components/input';
 import { FormsModule } from '@angular/forms';
-import { Toolbar, ToolbarSpacer } from '@ngstarter/components/toolbar';
+import { Toolbar, ToolbarSpacer } from '@ngstarter-ui/components/toolbar';
 
-import { ColorPicker } from '@ngstarter/components/color-picker';
-import { ColorPickerThumbnail } from '@ngstarter/components/color-picker';
-import { ColorPickerTriggerForDirective } from '@ngstarter/components/color-picker';
+import { ColorPicker } from '@ngstarter-ui/components/color-picker';
+import { ColorPickerThumbnail } from '@ngstarter-ui/components/color-picker';
+import { ColorPickerTriggerForDirective } from '@ngstarter-ui/components/color-picker';
 
 @Component({
   selector: 'ngs-effects',

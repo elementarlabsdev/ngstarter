@@ -3,7 +3,7 @@ import {
   EmptyState,
   EmptyStateContent,
   EmptyStateImage,
-} from '@ngstarter/components/empty-state';
+} from '@ngstarter-ui/components/empty-state';
 
 @Component({
   selector: 'app-empty-state-with-image-example',

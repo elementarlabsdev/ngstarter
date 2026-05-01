@@ -4,8 +4,8 @@ import {
   MchartLine,
   MchartTooltipBody,
   MchartTooltip, MchartTooltipTitle
-} from '@ngstarter/components/micro-chart';
-import { ResizableContainer } from '@ngstarter/components/resizable-container';
+} from '@ngstarter-ui/components/micro-chart';
+import { ResizableContainer } from '@ngstarter-ui/components/resizable-container';
 
 @Component({
   selector: 'app-mchart-line-responsive-example',

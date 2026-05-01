@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Tab, TabGroup } from '@ngstarter/components/tabs';
+import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 
 @Component({
     selector: 'app-paginated-tabs-example',

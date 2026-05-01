@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { SignaturePad } from '@ngstarter/components/signature-pad';
+import { SignaturePad } from '@ngstarter-ui/components/signature-pad';
 
 @Component({
   selector: 'app-basic-signature-pad-example',

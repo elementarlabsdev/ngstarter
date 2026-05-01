@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { JsonPipe } from '@angular/common';
-import { SlideToggle } from '@ngstarter/components/slide-toggle';
-import { PageEvent, Paginator } from '@ngstarter/components/paginator';
-import { FormField, Label } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
+import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
+import { PageEvent, Paginator } from '@ngstarter-ui/components/paginator';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
 
 @Component({
   selector: 'app-configurable-paginator-example',

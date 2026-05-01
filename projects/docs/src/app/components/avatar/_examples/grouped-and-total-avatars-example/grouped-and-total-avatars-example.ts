@@ -4,7 +4,7 @@ import {
   AvatarGroup,
   AvatarMore,
   Dicebear
-} from '@ngstarter/components/avatar';
+} from '@ngstarter-ui/components/avatar';
 
 @Component({
   selector: 'app-grouped-and-total-avatars-example',

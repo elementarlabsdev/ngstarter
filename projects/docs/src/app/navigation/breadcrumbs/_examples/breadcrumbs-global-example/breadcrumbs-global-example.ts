@@ -3,9 +3,9 @@ import {
   BreadcrumbItemIconDefDirective,
   BreadcrumbsGlobal,
   BreadcrumbsStore,
-} from '@ngstarter/components/breadcrumbs';
-import { Button } from '@ngstarter/components/button';
-import { Icon } from '@ngstarter/components/icon';
+} from '@ngstarter-ui/components/breadcrumbs';
+import { Button } from '@ngstarter-ui/components/button';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'app-breadcrumbs-global-example',

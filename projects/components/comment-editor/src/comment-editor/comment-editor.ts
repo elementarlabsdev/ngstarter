@@ -30,7 +30,7 @@ import History from '@tiptap/extension-history';
 import Dropcursor from '@tiptap/extension-dropcursor';
 import Image from '@tiptap/extension-image';
 import { isPlatformServer } from '@angular/common';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 import { COMMENT_EDITOR, CommentEditorAPI } from '../types';
 import ImageUploadingPlaceholderExtension from '../extensions/image-uploading-placeholder';
 

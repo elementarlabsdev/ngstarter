@@ -7,12 +7,12 @@ import { Component, signal } from '@angular/core';
   styleUrl: './customize.scss'
 })
 export class Customize {
-  defaultTheme = signal(`@use '@ngstarter/components/styles/themes/default';`);
-  roseRedTheme = signal(`@use '@ngstarter/components/styles/themes/magenta-violet';`);
+  defaultTheme = signal(`@use '@ngstarter-ui/components/styles/themes/default';`);
+  roseRedTheme = signal(`@use '@ngstarter-ui/components/styles/themes/magenta-violet';`);
   generateAngularTheme = signal(`ng generate @angular/platform-browser:theme-color my-theme`);
   addTheme = signal(`@use './my-theme' as themeColors;
 @use '@angular/platform-browser' as mat;
-@use "@ngstarter/components/styles/common" with (
+@use "@ngstarter-ui/components/styles/common" with (
   $m3-light-theme: mat.define-theme((
     color: (
       theme-type: light,

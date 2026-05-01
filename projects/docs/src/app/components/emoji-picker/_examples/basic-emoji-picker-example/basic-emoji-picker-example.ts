@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
-import { Button } from '@ngstarter/components/button';
-import { EmojiPicker, EmojiPickerTriggerForDirective } from '@ngstarter/components/emoji-picker';
+import { Button } from '@ngstarter-ui/components/button';
+import { EmojiPicker, EmojiPickerTriggerForDirective } from '@ngstarter-ui/components/emoji-picker';
 
 @Component({
   selector: 'app-basic-emoji-picker-example',

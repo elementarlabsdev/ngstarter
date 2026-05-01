@@ -13,10 +13,10 @@ import { Saturation } from '../saturation/saturation';
 import { Hue } from '../hue/hue';
 import { Alpha } from '../alpha/alpha';
 import { TinyColor } from '@ctrl/tinycolor';
-import { Icon } from '@ngstarter/components/icon';
-import { Button } from '@ngstarter/components/button';
-import { FormField, IconButtonSuffix, Label } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Button } from '@ngstarter-ui/components/button';
+import { FormField, IconButtonSuffix, Label } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
 
 @Component({
   selector: 'ngs-color-picker',

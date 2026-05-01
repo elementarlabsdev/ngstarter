@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Ripple } from '@ngstarter/components/core';
+import { Ripple } from '@ngstarter-ui/components/core';
 
 @Component({
   selector: 'ngs-sidebar-go-to-premium',

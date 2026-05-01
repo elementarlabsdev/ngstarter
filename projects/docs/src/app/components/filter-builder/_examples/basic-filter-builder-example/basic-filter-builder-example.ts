@@ -4,7 +4,7 @@ import {
   FilterBuilder,
   FilterBuilderFieldDef,
   FilterBuilderGroup
-} from '@ngstarter/components/filter-builder';
+} from '@ngstarter-ui/components/filter-builder';
 
 @Component({
   selector: 'app-basic-filter-builder-example',

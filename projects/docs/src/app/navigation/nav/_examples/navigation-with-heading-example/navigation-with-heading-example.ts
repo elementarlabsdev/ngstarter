@@ -3,7 +3,7 @@ import {
   Navigation,
   NavigationHeading,
   NavigationItem
-} from '@ngstarter/components/navigation';
+} from '@ngstarter-ui/components/navigation';
 
 @Component({
   selector: 'app-navigation-with-heading-example',

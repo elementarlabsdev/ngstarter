@@ -5,10 +5,10 @@ import {
   DatepickerToggle,
   DatepickerToggleIcon,
   provideNativeDateAdapter
-} from '@ngstarter/components/datepicker';
-import { FormField, Hint, IconButtonSuffix, Label } from '@ngstarter/components/form-field';
-import { Icon } from '@ngstarter/components/icon';
-import { Input } from '@ngstarter/components/input';
+} from '@ngstarter-ui/components/datepicker';
+import { FormField, Hint, IconButtonSuffix, Label } from '@ngstarter-ui/components/form-field';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Input } from '@ngstarter-ui/components/input';
 
 @Component({
   selector: 'app-datepicker-custom-icon-example',

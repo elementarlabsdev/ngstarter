@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import {
   TextEditorBubbleMenu,
   TextEditorCommandBlockquoteDirective,
@@ -20,9 +20,9 @@ import {
   TextEditorCommandYoutubeDirective,
   TextEditor, TextEditorDivider,
   TextEditorFloatingMenu
-} from '@ngstarter/components/text-editor';
-import { Tooltip } from '@ngstarter/components/tooltip';
-import { Button } from '@ngstarter/components/button';
+} from '@ngstarter-ui/components/text-editor';
+import { Tooltip } from '@ngstarter-ui/components/tooltip';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-text-editor-floating-menu-example',

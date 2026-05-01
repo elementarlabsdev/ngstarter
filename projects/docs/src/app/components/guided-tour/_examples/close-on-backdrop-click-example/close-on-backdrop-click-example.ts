@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { TourService } from '@ngstarter/components/guided-tour';
-import { Button } from '@ngstarter/components/button';
+import { TourService } from '@ngstarter-ui/components/guided-tour';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-close-on-backdrop-click-example',

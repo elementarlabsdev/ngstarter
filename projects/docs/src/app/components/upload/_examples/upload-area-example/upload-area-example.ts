@@ -10,9 +10,9 @@ import {
   UploadFileSelectedEvent,
   UploadMaxFileSize,
   UploadTriggerDirective
-} from '@ngstarter/components/upload';
+} from '@ngstarter-ui/components/upload';
 import { JsonPipe } from '@angular/common';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'app-upload-area-example',

@@ -1,5 +1,5 @@
 import { Component, input, Input } from '@angular/core';
-import { Ripple } from '@ngstarter/components/core';
+import { Ripple } from '@ngstarter-ui/components/core';
 
 @Component({
   selector: 'ngs-command-bar-command,[ngs-command-bar-command]',

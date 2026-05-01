@@ -7,7 +7,7 @@ import {
   numberAttribute,
   contentChildren
 } from '@angular/core';
-import { Ripple } from '@ngstarter/components/core';
+import { Ripple } from '@ngstarter-ui/components/core';
 import { List } from '../list/list';
 import { ListItemAvatar } from '../list-item-avatar';
 import { ListItemIcon } from '../list-item-icon';

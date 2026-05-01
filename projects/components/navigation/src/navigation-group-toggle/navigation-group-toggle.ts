@@ -9,7 +9,7 @@ import {
   booleanAttribute
 } from '@angular/core';
 import { NavigationGroupToggleIconDirective } from '../navigation-group-toggle-icon.directive';
-import { Ripple } from '@ngstarter/components/core';
+import { Ripple } from '@ngstarter-ui/components/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { NAVIGATION_GROUP } from '../types';
 import { NavigationGroup } from '../navigation-group/navigation-group';

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularNodeView } from '../angular-node-view';
-import { ProgressSpinner } from '@ngstarter/components/spinner';
+import { ProgressSpinner } from '@ngstarter-ui/components/spinner';
 
 @Component({
   selector: 'ngs-image-uploading-placeholder',

@@ -1,6 +1,6 @@
 import { Component, inject, input, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { GRID, Grid } from '@ngstarter/components/grid';
+import { GRID, Grid } from '@ngstarter-ui/components/grid';
 
 export interface HeadingWidget {
   title: string;

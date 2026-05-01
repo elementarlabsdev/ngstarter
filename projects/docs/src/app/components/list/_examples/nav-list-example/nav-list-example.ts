@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { NavList, ListItem, ListItemIcon } from '@ngstarter/components/list';
-import { Icon } from '@ngstarter/components/icon';
+import { NavList, ListItem, ListItemIcon } from '@ngstarter-ui/components/list';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'app-nav-list-example',

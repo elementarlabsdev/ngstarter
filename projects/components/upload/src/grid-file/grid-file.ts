@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, numberAttribute } from '@angular/core';
 import { UploadFileState } from '../types';
-import { Gauge, GaugeValue } from '@ngstarter/components/gauge';
+import { Gauge, GaugeValue } from '@ngstarter-ui/components/gauge';
 
 @Component({
   selector: 'ngs-grid-file',

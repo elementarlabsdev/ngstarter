@@ -18,10 +18,10 @@ import {
   TextEditor,
   TextEditorDivider,
   TextEditorToolbar
-} from '@ngstarter/components/text-editor';
-import { Icon } from '@ngstarter/components/icon';
-import { Button } from '@ngstarter/components/button';
-import { Tooltip } from '@ngstarter/components/tooltip';
+} from '@ngstarter-ui/components/text-editor';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Button } from '@ngstarter-ui/components/button';
+import { Tooltip } from '@ngstarter-ui/components/tooltip';
 
 @Component({
   selector: 'app-basic-text-editor-example',

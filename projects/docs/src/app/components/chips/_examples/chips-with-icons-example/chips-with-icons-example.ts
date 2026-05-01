@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Chip, ChipSet } from '@ngstarter/components/chips';
+import { Chip, ChipSet } from '@ngstarter-ui/components/chips';
 
 @Component({
   selector: 'app-chips-with-icons-example',

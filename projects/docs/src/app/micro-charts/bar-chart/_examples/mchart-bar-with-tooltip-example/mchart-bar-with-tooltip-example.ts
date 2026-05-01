@@ -4,7 +4,7 @@ import {
   MchartBar,
   MchartTooltipBody,
   MchartTooltip, MchartTooltipTitle
-} from '@ngstarter/components/micro-chart';
+} from '@ngstarter-ui/components/micro-chart';
 
 @Component({
   selector: 'app-mchart-bar-with-tooltip-example',

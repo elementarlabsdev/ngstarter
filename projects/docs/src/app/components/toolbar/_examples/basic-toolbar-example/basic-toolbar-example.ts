@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Toolbar, ToolbarTitle, ToolbarSpacer } from '@ngstarter/components/toolbar';
+import { Toolbar, ToolbarTitle, ToolbarSpacer } from '@ngstarter-ui/components/toolbar';
 
 @Component({
   selector: 'basic-toolbar-example',

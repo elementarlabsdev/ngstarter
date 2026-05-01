@@ -1,16 +1,16 @@
 import { Component, viewChild } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
-import { Input } from '@ngstarter/components/input';
-import { Datepicker, DatepickerInput, provideNativeDateAdapter } from '@ngstarter/components/datepicker';
-import { Button } from '@ngstarter/components/button';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Input } from '@ngstarter-ui/components/input';
+import { Datepicker, DatepickerInput, provideNativeDateAdapter } from '@ngstarter-ui/components/datepicker';
+import { Button } from '@ngstarter-ui/components/button';
 import {
   Accordion,
   ExpansionPanel,
   ExpansionPanelHeader,
   ExpansionPanelDescription,
   ExpansionPanelTitle
-} from '@ngstarter/components/expansion';
-import { FormField, Label } from '@ngstarter/components/form-field';
+} from '@ngstarter-ui/components/expansion';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
 
 @Component({
   selector: 'app-expansion-panel-expand-collapse-toggles-example',

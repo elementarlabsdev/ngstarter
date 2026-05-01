@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 
-import { Tiles, Tile, TileHandleDirective } from '@ngstarter/components/tiles';
+import { Tiles, Tile, TileHandleDirective } from '@ngstarter-ui/components/tiles';
 
 @Component({
   selector: 'app-basic-tiles-example',

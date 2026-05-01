@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Checkbox } from '@ngstarter/components/checkbox';
+import { Checkbox } from '@ngstarter-ui/components/checkbox';
 
 @Component({
   selector: 'app-checkbox-description-example',

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Autocomplete, AutocompleteTrigger, Option } from '@ngstarter/components/autocomplete';
-import { FormField, Label } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
+import { Autocomplete, AutocompleteTrigger, Option } from '@ngstarter-ui/components/autocomplete';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
 import { AsyncPipe } from '@angular/common';
 import { map, Observable, startWith } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';

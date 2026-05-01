@@ -2,13 +2,13 @@ import {
   Component, computed,
   inject, Input, OnDestroy, OnInit, Renderer2, signal,
 } from '@angular/core';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 import { TextAlignment, TextHighlightService } from '../text-highlight.service';
-import { Icon } from '@ngstarter/components/icon';
-import { Menu, MenuItem, MenuTrigger } from '@ngstarter/components/menu';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
 import { ContentEditorItemProperty } from '../types';
 import { AddLinkDialog } from '../_dialogs/add-link/add-link.dialog';
-import { Dialog } from '@ngstarter/components/dialog';
+import { Dialog } from '@ngstarter-ui/components/dialog';
 import { EditLinkDialog } from '../_dialogs/edit-link/edit-link.dialog';
 import { DOCUMENT } from '@angular/common';
 import { TextColorComponent } from '../text-color/text-color.component';

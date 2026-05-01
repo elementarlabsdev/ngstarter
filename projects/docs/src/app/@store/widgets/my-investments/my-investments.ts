@@ -1,5 +1,5 @@
 import { Component, inject, input, OnInit } from '@angular/core';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { RouterLink } from '@angular/router';
 import {
   List,
@@ -7,8 +7,8 @@ import {
   ListItemAvatar,
   ListItemMeta,
   ListItemTitle
-} from '@ngstarter/components/list';
-import { GRID } from '@ngstarter/components/grid';
+} from '@ngstarter-ui/components/list';
+import { GRID } from '@ngstarter-ui/components/grid';
 
 @Component({
   selector: 'ngs-my-investments',

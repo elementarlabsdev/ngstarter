@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { INCIDENTS } from '../properties';
 import { Incidents } from '../incidents/incidents';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-incidents-bar',

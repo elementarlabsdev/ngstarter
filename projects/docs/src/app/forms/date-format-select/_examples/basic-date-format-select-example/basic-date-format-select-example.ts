@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { DateFormatSelect } from '@ngstarter/components/date-format-select';
-import { Error, FormField, Label } from '@ngstarter/components/form-field';
+import { DateFormatSelect } from '@ngstarter-ui/components/date-format-select';
+import { Error, FormField, Label } from '@ngstarter-ui/components/form-field';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({

@@ -3,7 +3,7 @@ import {
   ComparisonSliderAfterImageDirective,
   ComparisonSliderBeforeImageDirective,
   ComparisonSlider
-} from '@ngstarter/components/comparison-slider';
+} from '@ngstarter-ui/components/comparison-slider';
 
 @Component({
   selector: 'app-basic-comparison-slider-example',

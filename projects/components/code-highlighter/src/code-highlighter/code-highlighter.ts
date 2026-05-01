@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy, input, OnChanges, SimpleChanges, signal, computed, inject, booleanAttribute } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { codeToHtml, ShikiTransformer } from 'shiki';
-import { Button } from '@ngstarter/components/button';
-import { Icon } from '@ngstarter/components/icon';
+import { Button } from '@ngstarter-ui/components/button';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 const removeDiffPrefix = (node: any) => {
   if (!node.children || node.children.length === 0) return;

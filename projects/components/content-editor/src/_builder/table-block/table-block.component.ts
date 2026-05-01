@@ -17,7 +17,7 @@ import {
 } from '../../types';
 import { ContentEditorContentEditableDirective } from '../../content-editor-content-editable.directive';
 import SelectionArea from '@viselect/vanilla';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { TableColumnsManagerDirective } from '../../table-columns-manager.directive';
 import { TableRowsManagerDirective } from '../../table-rows-manager.directive';
 import { CdkMonitorFocus } from '@angular/cdk/a11y';

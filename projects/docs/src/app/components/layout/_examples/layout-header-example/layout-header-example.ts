@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LayoutContent, Layout, LayoutHeader } from '@ngstarter/components/layout';
+import { LayoutContent, Layout, LayoutHeader } from '@ngstarter-ui/components/layout';
 
 @Component({
   selector: 'app-layout-header-example',

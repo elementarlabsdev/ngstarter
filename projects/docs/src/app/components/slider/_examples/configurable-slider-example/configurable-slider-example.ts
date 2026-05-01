@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Slider, SliderThumb } from '@ngstarter/components/slider';
-import { Checkbox } from '@ngstarter/components/checkbox';
-import { FormField, Label } from '@ngstarter/components/form-field';
-import { Divider } from '@ngstarter/components/divider';
-import { Input } from '@ngstarter/components/input';
+import { Slider, SliderThumb } from '@ngstarter-ui/components/slider';
+import { Checkbox } from '@ngstarter-ui/components/checkbox';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
+import { Divider } from '@ngstarter-ui/components/divider';
+import { Input } from '@ngstarter-ui/components/input';
 
 @Component({
   selector: 'app-configurable-slider-example',

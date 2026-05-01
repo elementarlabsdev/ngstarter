@@ -1,20 +1,20 @@
 import { ChangeDetectionStrategy, Component, forwardRef, inject, input, model, OnInit, signal, viewChild, ElementRef } from '@angular/core';
-import { UploadArea, UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter/components/upload';
-import { ProgressBar } from '@ngstarter/components/progress-bar';
-import { Button } from '@ngstarter/components/button';
-import { Icon } from '@ngstarter/components/icon';
+import { UploadArea, UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter-ui/components/upload';
+import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
+import { Button } from '@ngstarter-ui/components/button';
+import { Icon } from '@ngstarter-ui/components/icon';
 import {
   CONTENT_BUILDER,
   CONTENT_EDITOR_BLOCK, ContentEditorDataBlock,
   ContentEditorVideoBlockSettings,
   ContentEditorVideoContent
 } from '../../types';
-import { FormField, Label } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
 import { FormsModule } from '@angular/forms';
 import { ContentBuilderStore } from '../../content-builder.store';
 import { ContentBuilderComponent } from '../../content-builder/content-builder.component';
-import { ResizableContainer } from '@ngstarter/components/resizable-container';
+import { ResizableContainer } from '@ngstarter-ui/components/resizable-container';
 
 @Component({
   selector: 'ngs-video-block',

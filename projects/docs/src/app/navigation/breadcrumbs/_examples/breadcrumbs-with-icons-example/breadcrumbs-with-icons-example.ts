@@ -3,8 +3,8 @@ import {
   BreadcrumbItem,
   BreadcrumbItemIconDirective, Breadcrumbs,
   BreadcrumbSeparator
-} from '@ngstarter/components/breadcrumbs';
-import { Icon } from '@ngstarter/components/icon';
+} from '@ngstarter-ui/components/breadcrumbs';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'app-breadcrumbs-with-icons-example',

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ImageZoomViewer, ImageZoomViewerImage } from '@ngstarter/components/image-zoom-viewer';
+import { ImageZoomViewer, ImageZoomViewerImage } from '@ngstarter-ui/components/image-zoom-viewer';
 
 @Component({
   selector: 'app-basic-image-zoom-viewer-example',

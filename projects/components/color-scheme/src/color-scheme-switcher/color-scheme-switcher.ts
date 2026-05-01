@@ -11,7 +11,7 @@ import { CdkPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { ColorSchemeLightDirective } from '../color-scheme-light.directive';
 import { ColorSchemeDarkDirective } from '../color-scheme-dark.directive';
 import { ColorScheme } from '../color-scheme.model';
-import { Button } from '@ngstarter/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-color-scheme-switcher',

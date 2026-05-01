@@ -13,7 +13,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { defer, merge, Observable, Subject, switchMap, EMPTY, map, startWith } from 'rxjs';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { outputToObservable } from '@angular/core/rxjs-interop';
-import { Option, SELECT } from '@ngstarter/components/select';
+import { Option, SELECT } from '@ngstarter-ui/components/select';
 import { OptionParentComponent, OPTION_PARENT_COMPONENT } from './option-parent';
 import { Menu } from './menu/menu';
 

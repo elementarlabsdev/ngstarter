@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { VideoPlayer } from '@ngstarter/components/video-player';
+import { VideoPlayer } from '@ngstarter-ui/components/video-player';
 import {
   VideoViewerDirective, VideoViewerVideoDirective
-} from '@ngstarter/components/video-viewer';
+} from '@ngstarter-ui/components/video-viewer';
 
 @Component({
   selector: 'app-basic-video-viewer-example',

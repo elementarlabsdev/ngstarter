@@ -1,5 +1,5 @@
 import { booleanAttribute, Component, ElementRef, inject, input } from '@angular/core';
-import { Ripple } from '@ngstarter/components/core';
+import { Ripple } from '@ngstarter-ui/components/core';
 import { SIDEBAR_NAVIGATION } from '../types';
 import { SidebarNav } from '../sidebar-nav/sidebar-nav';
 import { SidebarNavStore } from '../sidebar.store';

@@ -14,9 +14,9 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { Autocomplete } from './autocomplete/autocomplete';
 import { fromEvent, Subscription, merge } from 'rxjs';
 import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
-import { Option } from '@ngstarter/components/option';
-import { FormField } from '@ngstarter/components/form-field';
-import { ChipInput } from '@ngstarter/components/chips';
+import { Option } from '@ngstarter-ui/components/option';
+import { FormField } from '@ngstarter-ui/components/form-field';
+import { ChipInput } from '@ngstarter-ui/components/chips';
 
 @Directive({
   selector: '[ngsAutocomplete]',

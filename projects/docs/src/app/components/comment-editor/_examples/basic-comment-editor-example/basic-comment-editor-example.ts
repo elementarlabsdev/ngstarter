@@ -19,11 +19,11 @@ import {
   CommentEditorCommandUnsetLinkDirective,
   CommentEditorCommandEditLinkDirective,
   CommentEditorCommandToggleToolbarDirective, CommentEditorFooterBar
-} from '@ngstarter/components/comment-editor';
-import { SafeHtmlPipe } from '@ngstarter/components/core';
-import { Icon } from '@ngstarter/components/icon';
-import { Button } from '@ngstarter/components/button';
-import { Tooltip } from '@ngstarter/components/tooltip';
+} from '@ngstarter-ui/components/comment-editor';
+import { SafeHtmlPipe } from '@ngstarter-ui/components/core';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Button } from '@ngstarter-ui/components/button';
+import { Tooltip } from '@ngstarter-ui/components/tooltip';
 
 @Component({
   selector: 'app-basic-comment-editor-example',

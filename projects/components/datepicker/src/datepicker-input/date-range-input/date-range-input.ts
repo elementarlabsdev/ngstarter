@@ -20,8 +20,8 @@ import { DateAdapter } from '../../core/datetime/date-adapter';
 import { Subject } from 'rxjs';
 import type { DateRangePicker } from '../../date-range-picker/date-range-picker';
 import { DateRange } from '../../core/datetime/date-range';
-import { FormField } from '@ngstarter/components/form-field';
-import { FormFieldControl } from '@ngstarter/components/form-field';
+import { FormField } from '@ngstarter-ui/components/form-field';
+import { FormFieldControl } from '@ngstarter-ui/components/form-field';
 
 @Directive({
   selector: 'input[ngsStartDate]',

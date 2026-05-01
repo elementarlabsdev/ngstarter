@@ -11,7 +11,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { injectElement } from '@ngstarter/components/core';
+import { injectElement } from '@ngstarter-ui/components/core';
 
 import { TileService } from '../tile.service';
 import { Tiles } from '../tiles/tiles';

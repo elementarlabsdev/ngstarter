@@ -11,15 +11,15 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideStore } from '@ngrx/store';
-import { FORM_FIELD_DEFAULT_OPTIONS } from '@ngstarter/components/form-field';
-import { provideNativeDateAdapter } from '@ngstarter/components/datepicker';
-import { ENVIRONMENT, EnvironmentService, GlobalStore, PageTitleStrategyService } from '@ngstarter/components/core';
-import { LayoutSidebarStore } from '@ngstarter/components/layout';
-import { COLOR_SCHEME_LOCAL_KEY, ColorScheme, ColorSchemeStore } from '@ngstarter/components/color-scheme';
+import { FORM_FIELD_DEFAULT_OPTIONS } from '@ngstarter-ui/components/form-field';
+import { provideNativeDateAdapter } from '@ngstarter-ui/components/datepicker';
+import { ENVIRONMENT, EnvironmentService, GlobalStore, PageTitleStrategyService } from '@ngstarter-ui/components/core';
+import { LayoutSidebarStore } from '@ngstarter-ui/components/layout';
+import { COLOR_SCHEME_LOCAL_KEY, ColorScheme, ColorSchemeStore } from '@ngstarter-ui/components/color-scheme';
 import { isPlatformBrowser } from '@angular/common';
 import {
   FORM_RENDERER_FIELD_REGISTRY,
-} from '@ngstarter/components/form-renderer';
+} from '@ngstarter-ui/components/form-renderer';
 
 export const appConfig: ApplicationConfig = {
   providers: [

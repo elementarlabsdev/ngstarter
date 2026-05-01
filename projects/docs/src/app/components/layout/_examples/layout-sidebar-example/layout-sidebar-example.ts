@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LayoutContent, Layout, LayoutSidebar } from '@ngstarter/components/layout';
+import { LayoutContent, Layout, LayoutSidebar } from '@ngstarter-ui/components/layout';
 
 @Component({
   selector: 'app-layout-sidebar-example',

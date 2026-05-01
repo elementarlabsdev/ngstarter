@@ -5,7 +5,7 @@ import {
   contentChild, TemplateRef, input, ChangeDetectionStrategy, computed
 } from '@angular/core';
 import { NavigationItemIconDirective } from '../navigation-item-icon.directive';
-import { Ripple } from '@ngstarter/components/core';
+import { Ripple } from '@ngstarter-ui/components/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { NAVIGATION, NAVIGATION_GROUP } from '../types';
 import { Navigation } from '../navigation/navigation';

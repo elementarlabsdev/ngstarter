@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, inject, PLATFORM_ID, viewChild } from '@angular/core';
 
-import { Paginator } from '@ngstarter/components/paginator';
+import { Paginator } from '@ngstarter-ui/components/paginator';
 import { isPlatformBrowser } from '@angular/common';
 import {
   Cell, CellDef,
@@ -13,7 +13,7 @@ import {
   RowDef,
   Table,
   TableDataSource
-} from '@ngstarter/components/table';
+} from '@ngstarter-ui/components/table';
 
 export interface PeriodicElement {
   name: string;

@@ -10,8 +10,8 @@ import {
   AfterViewInit, OnDestroy, ChangeDetectorRef
 } from '@angular/core';
 import { OPTION, OPTION_PARENT, _Option, _OptionParent } from './option-tokens';
-import { Checkbox } from '@ngstarter/components/checkbox';
-import { Icon } from '@ngstarter/components/icon';
+import { Checkbox } from '@ngstarter-ui/components/checkbox';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { Highlightable } from '@angular/cdk/a11y';
 
 @Component({

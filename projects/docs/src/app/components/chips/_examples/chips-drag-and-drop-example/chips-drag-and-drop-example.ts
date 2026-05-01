@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Chip, ChipSet } from '@ngstarter/components/chips';
+import { Chip, ChipSet } from '@ngstarter-ui/components/chips';
 
 export interface Vegetable {
   name: string;

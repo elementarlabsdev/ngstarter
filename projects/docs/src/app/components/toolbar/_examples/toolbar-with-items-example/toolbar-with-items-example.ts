@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Toolbar, ToolbarTitle, ToolbarSpacer, ToolbarItem } from '@ngstarter/components/toolbar';
-import { Button } from '@ngstarter/components/button';
-import { Icon } from '@ngstarter/components/icon';
+import { Toolbar, ToolbarTitle, ToolbarSpacer, ToolbarItem } from '@ngstarter-ui/components/toolbar';
+import { Button } from '@ngstarter-ui/components/button';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'toolbar-with-items-example',

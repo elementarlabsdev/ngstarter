@@ -1,6 +1,6 @@
 import { Component, model } from '@angular/core';
-import { TimezoneSelect } from '@ngstarter/components/timezone-select';
-import { FormField, Label } from '@ngstarter/components/form-field';
+import { TimezoneSelect } from '@ngstarter-ui/components/timezone-select';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { FormsModule } from '@angular/forms';
 
 @Component({

@@ -14,8 +14,8 @@ import { debounceTime, fromEvent } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SCROLL_SPY_NAV } from '../types';
 import { ScrollSpyOn } from '../scroll-spy-on/scroll-spy-on';
-import { LAYOUT_CONTENT } from '@ngstarter/components/layout';
-import { PANEL_CONTENT } from '@ngstarter/components/panel';
+import { LAYOUT_CONTENT } from '@ngstarter-ui/components/layout';
+import { PANEL_CONTENT } from '@ngstarter-ui/components/panel';
 
 @Component({
   selector: 'ngs-scroll-spy-nav,[ngs-scroll-spy-nav]',

@@ -1,10 +1,10 @@
 import { Component, effect, input, output, signal } from '@angular/core';
-import { Menu, MenuTrigger } from '@ngstarter/components/menu';
-import { Icon } from '@ngstarter/components/icon';
-import { Dicebear } from '@ngstarter/components/avatar';
-import { Divider } from '@ngstarter/components/divider';
-import { Button } from '@ngstarter/components/button';
-import { Ripple } from '@ngstarter/components/core';
+import { Menu, MenuTrigger } from '@ngstarter-ui/components/menu';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Dicebear } from '@ngstarter-ui/components/avatar';
+import { Divider } from '@ngstarter-ui/components/divider';
+import { Button } from '@ngstarter-ui/components/button';
+import { Ripple } from '@ngstarter-ui/components/core';
 
 @Component({
   selector: 'app-workspaces-select',

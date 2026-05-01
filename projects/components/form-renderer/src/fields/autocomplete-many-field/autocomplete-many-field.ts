@@ -4,15 +4,15 @@ import {
   Autocomplete,
   AutocompleteSelectedEvent,
   AutocompleteTrigger
-} from '@ngstarter/components/autocomplete';
-import { Option } from '@ngstarter/components/option';
-import { ChipGrid, ChipInput, ChipInputEvent, ChipRemove, ChipRow } from '@ngstarter/components/chips';
+} from '@ngstarter-ui/components/autocomplete';
+import { Option } from '@ngstarter-ui/components/option';
+import { ChipGrid, ChipInput, ChipInputEvent, ChipRemove, ChipRow } from '@ngstarter-ui/components/chips';
 import { ComponentConfig } from '../../models/form-config.model';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Error, FormField, Hint, Label } from '@ngstarter/components/form-field';
-import { Icon } from '@ngstarter/components/icon';
+import { Error, FormField, Hint, Label } from '@ngstarter-ui/components/form-field';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { catchError, debounceTime, distinctUntilChanged, Observable, of, startWith, switchMap, tap } from 'rxjs';
-import { ProgressSpinner } from '@ngstarter/components/spinner';
+import { ProgressSpinner } from '@ngstarter-ui/components/spinner';
 import { AsyncPipe } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
 

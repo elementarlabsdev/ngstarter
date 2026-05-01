@@ -5,8 +5,8 @@ import {
   Notification,
   NotificationMessage,
   NotificationTime, NotificationContent
-} from '@ngstarter/components/notifications';
-import { Dicebear } from '@ngstarter/components/avatar';
+} from '@ngstarter-ui/components/notifications';
+import { Dicebear } from '@ngstarter-ui/components/avatar';
 import { RouterLink } from '@angular/router';
 
 @Component({

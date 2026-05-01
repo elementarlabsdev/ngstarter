@@ -24,7 +24,7 @@ import {
   Validator,
 } from '@angular/forms';
 import { _IdGenerator } from '@angular/cdk/a11y';
-import { Ripple } from '@ngstarter/components/core';
+import { Ripple } from '@ngstarter-ui/components/core';
 
 /**
  * Represents the different states that require custom transitions between them.

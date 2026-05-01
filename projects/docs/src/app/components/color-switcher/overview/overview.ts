@@ -14,7 +14,7 @@ import {
 import {
   BrandColorsDisabledExample
 } from '../_examples/brand-colors-disabled-example/brand-colors-disabled-example';
-import { Tab, TabGroup } from '@ngstarter/components/tabs';
+import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({

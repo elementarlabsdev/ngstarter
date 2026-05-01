@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Slider, SliderThumb } from '@ngstarter/components/slider';
-import { ProgressSpinner } from '@ngstarter/components/spinner';
-import { RadioButton, RadioGroup } from '@ngstarter/components/radio';
-import { Divider } from '@ngstarter/components/divider';
+import { Slider, SliderThumb } from '@ngstarter-ui/components/slider';
+import { ProgressSpinner } from '@ngstarter-ui/components/spinner';
+import { RadioButton, RadioGroup } from '@ngstarter-ui/components/radio';
+import { Divider } from '@ngstarter-ui/components/divider';
 
 @Component({
   selector: 'app-configurable-spinner-example',

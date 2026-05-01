@@ -1,5 +1,5 @@
 import { Component, inject, input, OnInit } from '@angular/core';
-import { GRID } from '@ngstarter/components/grid';
+import { GRID } from '@ngstarter-ui/components/grid';
 
 @Component({
   selector: 'ngs-recent-activity-content',

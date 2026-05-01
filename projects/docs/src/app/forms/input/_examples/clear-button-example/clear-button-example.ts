@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Icon } from '@ngstarter/components/icon';
-import { Button } from '@ngstarter/components/button';
-import { FormField, IconSuffix } from '@ngstarter/components/form-field';
-import { Label } from '@ngstarter/components/form-field';
-import { Input } from '@ngstarter/components/input';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { Button } from '@ngstarter-ui/components/button';
+import { FormField, IconSuffix } from '@ngstarter-ui/components/form-field';
+import { Label } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
 
 @Component({
   selector: 'app-clear-button-example',

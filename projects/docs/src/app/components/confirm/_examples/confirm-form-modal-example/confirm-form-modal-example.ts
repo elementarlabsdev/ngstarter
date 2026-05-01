@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { DialogWithConfirmation } from '../dialog-with-confirmation/dialog-with-confirmation';
-import { Button } from '@ngstarter/components/button';
-import { Dialog } from '@ngstarter/components/dialog';
+import { Button } from '@ngstarter-ui/components/button';
+import { Dialog } from '@ngstarter-ui/components/dialog';
 
 @Component({
   selector: 'app-confirm-form-modal-example',

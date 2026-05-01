@@ -3,7 +3,7 @@ import {
   ImageResizedEvent,
   ImageResizer,
   ImageResizerImageDirective
-} from '@ngstarter/components/image-resizer';
+} from '@ngstarter-ui/components/image-resizer';
 import { JsonPipe } from '@angular/common';
 
 @Component({

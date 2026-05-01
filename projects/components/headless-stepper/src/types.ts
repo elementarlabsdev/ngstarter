@@ -1,4 +1,4 @@
-import { StepComponent } from '@ngstarter/components/stepper/step';
+import { StepComponent } from '@ngstarter-ui/components/stepper/step';
 
 export interface StepperSelectionEvent {
   previouslySelectedIndex: number;

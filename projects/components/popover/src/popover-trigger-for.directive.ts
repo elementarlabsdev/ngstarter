@@ -19,7 +19,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { _getEventTarget } from '@angular/cdk/platform';
 import { PopoverTrigger, PopoverPosition, POPOVER_TRIGGER, PopoverTriggerFor } from './types';
 import { Popover } from './popover/popover';
-import { PositionManager } from '@ngstarter/components/overlay';
+import { PositionManager } from '@ngstarter-ui/components/overlay';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Directive({

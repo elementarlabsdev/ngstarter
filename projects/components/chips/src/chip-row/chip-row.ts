@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { Chip } from '../chip/chip';
 import { isPlatformBrowser } from '@angular/common';
-import { AutoFocusDirective } from '@ngstarter/components/core';
+import { AutoFocusDirective } from '@ngstarter-ui/components/core';
 
 export interface ChipEditedEvent {
   /** The chip row that was edited. */

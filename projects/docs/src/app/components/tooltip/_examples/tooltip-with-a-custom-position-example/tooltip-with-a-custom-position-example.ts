@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Tooltip, TooltipPosition } from '@ngstarter/components/tooltip';
-import { Option, Select } from '@ngstarter/components/select';
-import { Label } from '@ngstarter/components/form-field';
-import { FormField } from '@ngstarter/components/form-field';
-import { Button } from '@ngstarter/components/button';
+import { Tooltip, TooltipPosition } from '@ngstarter-ui/components/tooltip';
+import { Option, Select } from '@ngstarter-ui/components/select';
+import { Label } from '@ngstarter-ui/components/form-field';
+import { FormField } from '@ngstarter-ui/components/form-field';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-tooltip-with-a-custom-position-example',

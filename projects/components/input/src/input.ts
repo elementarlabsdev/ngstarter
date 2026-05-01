@@ -13,9 +13,9 @@ import {
   DestroyRef,
 } from '@angular/core';
 import { NgControl, NgForm, FormGroupDirective } from '@angular/forms';
-import { FormFieldControl } from '@ngstarter/components/form-field';
+import { FormFieldControl } from '@ngstarter-ui/components/form-field';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AUTOFOCUSABLE, ErrorStateMatcher } from '@ngstarter/components/core';
+import { AUTOFOCUSABLE, ErrorStateMatcher } from '@ngstarter-ui/components/core';
 
 @Directive({
   selector: 'input[ngsInput], textarea[ngsInput]',

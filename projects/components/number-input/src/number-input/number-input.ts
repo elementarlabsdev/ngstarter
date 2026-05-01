@@ -19,9 +19,9 @@ import { ControlValueAccessor, FormGroupDirective, NgControl, NgForm } from '@an
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { DecreaseControlDirective } from '../decrease-control.directive';
 import { IncreaseControlDirective } from '../increase-control.directive';
-import { FormFieldControl } from '@ngstarter/components/form-field';
+import { FormFieldControl } from '@ngstarter-ui/components/form-field';
 import { Subject } from 'rxjs';
-import { Ripple } from '@ngstarter/components/core';
+import { Ripple } from '@ngstarter-ui/components/core';
 import { NgTemplateOutlet } from '@angular/common';
 
 @Component({

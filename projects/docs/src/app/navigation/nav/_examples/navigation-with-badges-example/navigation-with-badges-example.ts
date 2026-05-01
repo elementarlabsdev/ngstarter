@@ -6,8 +6,8 @@ import {
   NavigationGroupToggle,
   NavigationItemBadgeDirective,
   NavigationItem
-} from '@ngstarter/components/navigation';
-import { Icon } from '@ngstarter/components/icon';
+} from '@ngstarter-ui/components/navigation';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'app-navigation-with-badges-example',

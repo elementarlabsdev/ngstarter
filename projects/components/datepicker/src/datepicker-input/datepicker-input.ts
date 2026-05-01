@@ -13,7 +13,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DateAdapter } from '../core/datetime/date-adapter';
 import { Subject } from 'rxjs';
 import type { Datepicker } from '../datepicker/datepicker';
-import { FormField } from '@ngstarter/components/form-field';
+import { FormField } from '@ngstarter-ui/components/form-field';
 
 @Directive({
   selector: 'input[ngsDatepicker]',

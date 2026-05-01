@@ -18,7 +18,7 @@ import {
   ContentEditorItemProperty,
   ContentEditorOptions,
 } from '../types';
-import { Icon } from '@ngstarter/components/icon';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { AsyncPipe, isPlatformServer, NgComponentOutlet } from '@angular/common';
 import { v7 as uuid } from 'uuid';
 import { ContentBuilderStore } from '../content-builder.store';
@@ -31,18 +31,18 @@ import {
   CdkDropList,
   moveItemInArray
 } from '@angular/cdk/drag-drop';
-import { Menu, MenuItem, MenuTrigger, MenuCloseReason, MenuHeading } from '@ngstarter/components/menu';
-import { ConfirmManager } from '@ngstarter/components/confirm';
+import { Menu, MenuItem, MenuTrigger, MenuCloseReason, MenuHeading } from '@ngstarter-ui/components/menu';
+import { ConfirmManager } from '@ngstarter-ui/components/confirm';
 import { CdkMonitorFocus } from '@angular/cdk/a11y';
 import { ContentEditorQuoteBlock } from '../_builder/quote-block/quote-block.component';
 import { TextSelectionPopupDirective } from '../text-selection-popup.directive';
 import { CommandBarComponent } from '../command-bar/command-bar.component';
 import { BlockSelectionDirective } from '../directives/block-selection.directive';
-import { Popover, PopoverTriggerForDirective } from '@ngstarter/components/popover';
+import { Popover, PopoverTriggerForDirective } from '@ngstarter-ui/components/popover';
 import { fromEvent, Observable, Subject, Subscription } from 'rxjs';
 import { auditTime, distinctUntilChanged, map, startWith, shareReplay } from 'rxjs/operators';
 import { SelectionModel } from '@angular/cdk/collections';
-import { List, ListItem, ListItemIcon, ListItemTitle } from '@ngstarter/components/list';
+import { List, ListItem, ListItemIcon, ListItemTitle } from '@ngstarter-ui/components/list';
 
 @Component({
   selector: 'ngs-content-builder',

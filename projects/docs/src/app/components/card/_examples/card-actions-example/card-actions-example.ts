@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Button } from '@ngstarter/components/button';
-import { Card, CardActions, CardHeader, CardSubtitle, CardTitle } from '@ngstarter/components/card';
+import { Button } from '@ngstarter-ui/components/button';
+import { Card, CardActions, CardHeader, CardSubtitle, CardTitle } from '@ngstarter-ui/components/card';
 
 @Component({
     selector: 'app-card-actions-example',

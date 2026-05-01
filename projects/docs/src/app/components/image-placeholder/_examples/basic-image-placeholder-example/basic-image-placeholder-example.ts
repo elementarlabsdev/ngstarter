@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ImagePlaceholder } from '@ngstarter/components/image-placeholder';
+import { ImagePlaceholder } from '@ngstarter-ui/components/image-placeholder';
 
 @Component({
   selector: 'app-basic-image-placeholder-example',
