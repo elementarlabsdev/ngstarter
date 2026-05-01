@@ -1,0 +1,21 @@
+<ng-content select="[ngsListItemAvatar],[ngsListItemIcon]" />
+
+<span class="ngs-list-item-content">
+  <div class="ngs-list-item-title">
+    <ng-content select="[ngsListItemTitle]" />
+  </div>
+  <div class="ngs-list-item-line">
+    <ng-content select="[ngsListItemLine],[ngsLine]" />
+  </div>
+  <span class="ngs-list-item-unscoped-content">
+    <ng-content />
+  </span>
+</span>
+
+<ng-content select="[ngsListItemMeta]" />
+
+@if (_selectionList.multiple()) {
+  <ngs-checkbox [checked]="selected()" [disabled]="disabled()" />
+} @else {
+  <ngs-radio-button [checked]="selected()" [disabled]="disabled()" />
+}

@@ -1,0 +1,91 @@
+@reference 'tailwindcss';
+
+html {
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  * {
+    &::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--color-neutral-200);
+      border-radius: 10px;
+      background-clip: content-box;
+
+      &:hover {
+        background: var(--color-neutral-300);
+      }
+    }
+  }
+}
+
+.input {
+  border: 1px solid var(--input-border-color);
+  border-radius: var(--input-radius);
+  background: var(--ngs-form-field-bg);
+  padding: 0 var(--input-padding-x);
+  color: var(--input-text);
+  font-size: var(--input-font-size);
+  line-height: var(--input-line-height);
+
+  &:focus {
+    transition: border-color 0.2s, box-shadow 0.2s;
+    border-color: var(--input-outlined-border-focus);
+    box-shadow: 0 0 0 1px var(--input-outlined-border-focus);
+  }
+}
+
+.ngs-ripple {
+  position: relative;
+  overflow: hidden;
+
+  &.ngs-ripple-unbounded {
+    overflow: visible;
+  }
+}
+
+.ngs-ripple-element {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: opacity, transform cubic-bezier(0, 0, 0.2, 1);
+  transform: scale3d(0, 0, 0);
+  background: currentColor;
+  opacity: 0.12;
+  z-index: 0;
+}
+
+.cdk-visually-hidden {
+  display: none;
+}
+
+.cdk-overlay-backdrop {
+  background: var(--overlay-backdrop-bg);
+  opacity: 0;
+  transition: opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  &.cdk-overlay-backdrop-showing {
+    opacity: 1;
+  }
+}
+
+.cdk-overlay-transparent-backdrop {
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.ngs-tour-step-overlay {
+  z-index: 1200 !important;
+}
+
+body:has(ngs-tour-backdrop) {
+  overflow: hidden;
+}

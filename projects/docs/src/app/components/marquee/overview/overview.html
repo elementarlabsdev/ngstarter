@@ -1,0 +1,80 @@
+<app-page>
+  <h1 appPageTitle>Marquee</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The <code class="code">&#64;ngs-marquee</code> is an Angular marquee library that delivers a versatile
+        marquee component with various configuration options, including
+        animation speed, reverse scrolling, gap size, and the ability to pause on hover.
+      </p>
+      <div class="my-7">
+        <div>Key features:</div>
+        <ul class="list-disc mt-3 flex flex-col gap-3 ps-4">
+          <li>
+            ✅ Includes options to control animation speed and reverse scrolling.
+          </li>
+          <li>
+            ✅ Allows the marquee to pause when hovered.
+          </li>
+          <li>
+            ✅ Lightweight and simple to integrate as a standalone component.
+          </li>
+        </ul>
+      </div>
+    </main>
+
+    <h3>Basic marquee</h3>
+    <ngs-playground exampleUrl="_docs/components/marquee/_examples" exampleName="basic-marquee-example">
+      <app-basic-marquee-example/>
+    </ngs-playground>
+
+    <h3>Marquee reverse</h3>
+    <ngs-playground exampleUrl="_docs/components/marquee/_examples" exampleName="marquee-reverse-example">
+      <app-marquee-reverse-example/>
+    </ngs-playground>
+
+    <h3>Marquee with pause on hover</h3>
+    <ngs-playground exampleUrl="_docs/components/marquee/_examples" exampleName="marquee-pause-on-hover-example">
+      <app-marquee-pause-on-hover-example/>
+    </ngs-playground>
+
+    <h2>API Reference</h2>
+    <p>
+      <code class="code">ngs-marquee</code> -
+      the root component of the marquee component. This component contains a text of the marquee.
+    </p>
+    <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+      <table class="ngs-table ">
+        <thead>
+        <tr class="bg-neutral-200 dark:bg-neutral-700">
+          <th>Prop</th>
+          <th>Type</th>
+          <th>Default</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>
+            <div>reverse</div>
+            <div class="text-xs text-neutral-600 mt-0.5">
+              Flip the running line text to the other side.
+            </div>
+          </td>
+          <td>boolean</td>
+          <td>false</td>
+        </tr>
+        <tr>
+          <td>
+            <div>pauseOnHover</div>
+            <div class="text-xs text-neutral-600 mt-0.5">
+              The running line stops when you hover over it.
+            </div>
+          </td>
+          <td>boolean</td>
+          <td>false</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-page>

@@ -1,0 +1,17 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  font-size: var(--ngs-dialog-title-font-size, 1.25rem);
+  font-weight: var(--ngs-dialog-title-font-weight, 600);
+  padding: var(--ngs-dialog-headline-padding, 6px 24px 13px);
+  flex: none;
+
+  &::before {
+    display: inline-block;
+    width: 0;
+    height: 40px;
+    content: '';
+    vertical-align: 0;
+  }
+}

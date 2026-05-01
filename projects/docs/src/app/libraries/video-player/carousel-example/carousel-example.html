@@ -1,0 +1,30 @@
+<app-page>
+  <h1 appPageTitle>Video Player in Carousel</h1>
+  <div appPageContent>
+    <div class="w-full max-w-[800px] mx-auto bg-neutral-100 dark:bg-neutral-900 rounded-xl p-8">
+      <h2 class="text-2xl font-bold mb-6 not-prose">Video Player in Carousel</h2>
+
+      <ngs-carousel [stopPropagation]="true">
+        @for (video of videos(); track video.title) {
+          <ngs-carousel-card>
+            <div class="w-[600px] aspect-video rounded-lg overflow-hidden border border-muted bg-black">
+              <ngs-video-player
+                [src]="video.src"
+                [thumbnailUrl]="video.thumbnail"
+              />
+            </div>
+          </ngs-carousel-card>
+        }
+
+        <ng-container ngsCarouselControls>
+          <button ngsIconButton ngsCarouselPrevious>
+            <ngs-icon name="fluent:arrow-left-24-regular"/>
+          </button>
+          <button ngsIconButton ngsCarouselNext>
+            <ngs-icon name="fluent:arrow-right-24-regular"/>
+          </button>
+        </ng-container>
+      </ngs-carousel>
+    </div>
+  </div>
+</app-page>

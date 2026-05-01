@@ -1,0 +1,34 @@
+<ngs-files-grid>
+  @for (file of fileList; track file) {
+    <ngs-grid-file [size]="file.size"
+                   [state]="file.state"
+                   [errorMessage]="file.errorMessage"
+                   [remainingTime]="file.remainingTime"
+                   [name]="file.name"
+                   [progress]="file.progress">
+      <ng-container ngsFileIcon>
+        @switch (file.type) {
+          @case ('pdf') {
+            <img src="assets/file-types/pdf.svg" alt="file">
+          }
+          @case ('doc') {
+            <img src="assets/file-types/doc.svg" alt="file">
+          }
+          @case ('xls') {
+            <img src="assets/file-types/xls.svg" alt="file">
+          }
+        }
+      </ng-container>
+
+      @if (file.state === 'error') {
+        <button ngsIconButton ngsGridFileControl>
+          <ngs-icon name="fluent:arrow-clockwise-24-regular" ngsGridFileControl/>
+        </button>
+      }
+
+      <button ngsIconButton ngsGridFileControl>
+        <ngs-icon name="fluent:dismiss-24-regular" (click)="delete($index)"/>
+      </button>
+    </ngs-grid-file>
+  }
+</ngs-files-grid>

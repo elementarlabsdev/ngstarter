@@ -1,0 +1,50 @@
+@if (recentlyUsed().length > 0) {
+  <div class="mb-5">
+    <div class="text-xs text-neutral-700 text-semibold">Recently colors</div>
+    <div class="flex gap-2 flex-wrap mt-3">
+      @for (recentlyColor of recentlyUsed(); track recentlyColor) {
+        @if (recentlyColor.type === 'text') {
+          <button class="rounded-sm border border-border size-7 flex-none flex items-center justify-center cursor-pointer"
+                  [style.color]="recentlyColor.color" [ngsTooltip]="recentlyColor.name"
+                  (click)="selectRecentlyColor(recentlyColor)">
+            <ngs-icon name="fluent:text-field-24-regular"/>
+          </button>
+        } @else if (recentlyColor.type === 'background') {
+          <button class="rounded-sm border border-border size-7 flex-none flex items-center justify-center cursor-pointer"
+                  [style.background-color]="recentlyColor.color" [ngsTooltip]="recentlyColor.name"
+                  (click)="selectRecentlyColor(recentlyColor)">
+          </button>
+        }
+      }
+    </div>
+  </div>
+}
+
+<div class="mb-5">
+  <div class="text-xs text-neutral-700 text-semibold">Text color</div>
+  <div class="flex gap-2 flex-wrap mt-3">
+    @for (textColor of textColors(); track $index) {
+      <button class="rounded-sm border border-border size-7 flex-none flex items-center justify-center cursor-pointer
+                  [&.is-selected]:outline [&.is-selected]:outline-primary"
+              [style.color]="textColor.color" [ngsTooltip]="textColor.name"
+              [class.is-selected]="selectedTextColor()?.color === textColor.color"
+              (click)="selectTextColor(textColor)">
+        <ngs-icon name="fluent:text-field-24-regular"/>
+      </button>
+    }
+  </div>
+</div>
+
+<div>
+  <div class="text-xs text-neutral-700 text-semibold">Background color</div>
+  <div class="flex gap-2 flex-wrap mt-3">
+    @for (backgroundColor of backgroundColors(); track $index) {
+      <button class="rounded-sm border border-border size-7 flex-none flex items-center justify-center cursor-pointer
+                  [&.is-selected]:outline [&.is-selected]:outline-primary"
+              [style.background-color]="backgroundColor.color" [ngsTooltip]="backgroundColor.name"
+              [class.is-selected]="selectedBackgroundColor()?.color === backgroundColor.color"
+              (click)="selectBackgroundColor(backgroundColor)">
+      </button>
+    }
+  </div>
+</div>

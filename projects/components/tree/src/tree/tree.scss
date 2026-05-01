@@ -1,0 +1,29 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  background: var(--ngs-tree-container-background-color, transparent);
+
+  ::ng-deep {
+    .ngs-tree-node,
+    .ngs-nested-tree-node {
+      color: var(--ngs-tree-node-text-color, inherit);
+      font-family: var(--ngs-tree-node-text-font, inherit);
+      font-size: var(--ngs-tree-node-text-size, inherit);
+      font-weight: var(--ngs-tree-node-text-weight, inherit);
+    }
+
+    .ngs-tree-node {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      word-wrap: break-word;
+      min-height: var(--ngs-tree-node-min-height, 48px);
+      box-sizing: border-box;
+    }
+
+    .ngs-nested-tree-node {
+      border-bottom-width: 0;
+    }
+  }
+}

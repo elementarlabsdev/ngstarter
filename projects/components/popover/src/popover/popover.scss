@@ -1,0 +1,53 @@
+@reference 'tailwindcss';
+
+.ngs-popover-panel {
+  --ngs-popover-border: var(--dropdown-border);
+  --ngs-popover-shadow: var(--dropdown-shadow);
+  --ngs-popover-border-radius: var(--dropdown-radius);
+  --ngs-popover-bg: var(--dropdown-bg);
+  --ngs-popover-margin: 0.625rem;
+
+  display: block;
+  position: relative;
+  border-radius: var(--ngs-popover-border-radius);
+  background: var(--ngs-popover-bg);
+  border: var(--ngs-popover-border);
+  box-shadow: var(--ngs-popover-shadow);
+  animation: .15s ngs-popover-animation;
+
+  &.ngs-overlay-above {
+    margin-bottom: var(--ngs-popover-margin);
+    transform-origin: bottom;
+  }
+
+  &.ngs-overlay-below {
+    margin-top: var(--ngs-popover-margin);
+    transform-origin: top;
+  }
+
+  &.ngs-overlay-before {
+    margin-inline-end: var(--ngs-popover-margin);
+    transform-origin: right;
+  }
+
+  &.ngs-overlay-after {
+    margin-inline-start: var(--ngs-popover-margin);
+    transform-origin: left;
+  }
+
+  @keyframes ngs-popover-animation {
+    0% {
+      transform: scale(.9);
+      opacity: 0;
+    }
+
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+}
+
+:host {
+  display: contents;
+}

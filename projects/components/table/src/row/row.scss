@@ -1,0 +1,23 @@
+@reference 'tailwindcss';
+
+:host {
+  position: relative;
+  display: table-row;
+  border: none;
+  border-top: 1px solid var(--color-border);
+  height: auto;
+  border-radius: 0;
+  margin-top: 0;
+  background: var(--ngs-data-view-row-bg, var(--color-background));
+  min-height: var(--ngs-table-row-height);
+
+  &:last-child {
+    ::ng-deep .ngs-footer-cell, ::ng-deep td {
+      border-bottom: none;
+    }
+  }
+
+  :host-context(.highlight-header, .sticky-header, .ngs-table-sticky-header) &:first-of-type {
+    border-top: none !important;
+  }
+}

@@ -1,0 +1,10 @@
+:host {
+  min-height: var(--ngs-table-row-height);
+  display: table-row;
+
+  &:last-child {
+    ::ng-deep .ngs-footer-cell, ::ng-deep td {
+      border-bottom: none;
+    }
+  }
+}

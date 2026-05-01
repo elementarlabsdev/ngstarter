@@ -1,0 +1,19 @@
+<div class="flex flex-col gap-4">
+  <ngs-segmented [formControl]="segmentedControl">
+    <ngs-segmented-button value="daily">Daily</ngs-segmented-button>
+    <ngs-segmented-button value="weekly">Weekly</ngs-segmented-button>
+    <ngs-segmented-button value="monthly">Monthly</ngs-segmented-button>
+    <ngs-segmented-button value="yearly">Yearly</ngs-segmented-button>
+  </ngs-segmented>
+
+  <div class="text-sm text-neutral-600">
+    Selected value: <strong>{{ segmentedControl.value }}</strong>
+  </div>
+
+  <button
+    ngsButton="filled"
+    (click)="segmentedControl.setValue('monthly')"
+  >
+    Set Monthly
+  </button>
+</div>

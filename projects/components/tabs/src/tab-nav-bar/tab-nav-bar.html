@@ -1,0 +1,29 @@
+<div class="ngs-tab-group-header-container" [class.ngs-tab-group-header-pagination-controls-enabled]="_showPaginationControls()">
+  @if (_showPaginationControls()) {
+    <button class="ngs-tab-group-pagination-control ngs-tab-group-pagination-control-before"
+            [class.ngs-tab-group-pagination-control-disabled]="_disableScrollBefore()"
+            (click)="_scrollBefore()"
+            type="button"
+            aria-hidden="true">
+      <div class="ngs-tab-group-pagination-control-icon"></div>
+    </button>
+  }
+
+  <div class="ngs-tab-group-header"
+       #tabListContainer
+       (scroll)="_handleScroll()">
+    <div class="ngs-tab-group-header-list" #tabList>
+      <ng-content select="a[ngs-tab-link]"/>
+    </div>
+  </div>
+
+  @if (_showPaginationControls()) {
+    <button class="ngs-tab-group-pagination-control ngs-tab-group-pagination-control-after"
+            [class.ngs-tab-group-pagination-control-disabled]="_disableScrollAfter()"
+            (click)="_scrollAfter()"
+            type="button"
+            aria-hidden="true">
+      <div class="ngs-tab-group-pagination-control-icon"></div>
+    </button>
+  }
+</div>

@@ -1,0 +1,37 @@
+@if (isEmpty()) {
+  <div class="bg-surface-container-low cursor-pointer hover:bg-surface-container p-4 rounded-2xl flex items-center gap-3"
+       #trigger="ngsPopoverTriggerFor"
+       [ngsPopoverTriggerFor]="addPopover" position="below-center" trigger="click" hasBackdrop>
+    <ngs-icon name="fluent:globe-24-regular"/>
+    <div class="text-sm">Embed anything (PDFs, Google Docs, Google Maps, Spotify…)</div>
+  </div>
+  <ngs-popover #addPopover>
+    <div class="w-[400px] overflow-hidden">
+      <ngs-tab-group>
+        <ngs-tab label="Embed">
+          <div class="p-4">
+            <ngs-form-field class="w-full">
+              <input ngsInput [formControl]="form.controls.url" placeholder="Paste in https://...">
+              <div ngsSuffix class="pe-2">
+                <button ngsButton="filled" type="button" [disabled]="form.invalid" (click)="embed(trigger)">Embed</button>
+              </div>
+            </ngs-form-field>
+            <p class="text-xs text-center">Works with links of PDFs, Google Drive, Google Maps, CodePen…</p>
+          </div>
+        </ngs-tab>
+        <ngs-tab label="Upload">
+          <div class="p-4">
+            <div>
+              <button ngsButton="filled" class="w-full">Upload</button>
+            </div>
+            <p class="text-xs text-center mt-4">Upload a file from your computer.</p>
+          </div>
+        </ngs-tab>
+      </ngs-tab-group>
+    </div>
+  </ngs-popover>
+} @else {
+  <div class="w-full bg-surface-container-low w-[700px] h-[400px]">
+    <iframe width="100%" height="100%" [src]="_content().url | safeResourceUrl" frameborder="0" allowfullscreen></iframe>
+  </div>
+}

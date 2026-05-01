@@ -1,0 +1,43 @@
+@reference 'tailwindcss';
+
+:host {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+
+  .content {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    margin-inline-end: --spacing(4);
+  }
+
+  .handler {
+    position: absolute;
+    user-select: none;
+    top: 0;
+    bottom: 0;
+    inset-inline-end: 0;
+    cursor: ew-resize;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: --spacing(5);
+
+    .handler-indicator {
+      display: flex;
+      height: --spacing(8);
+      width: --spacing(1.5);
+      border-radius: calc(infinity * 1px);
+      background: var(--color-surface-container-highest);
+    }
+
+    &:hover,
+    &:active {
+      .handler-indicator {
+        background: var(--color-secondary);
+      }
+    }
+  }
+}

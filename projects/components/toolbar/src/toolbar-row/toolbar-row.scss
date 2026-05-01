@@ -1,0 +1,9 @@
+@reference 'tailwindcss';
+
+:host {
+  display: flex;
+  align-items: center;
+  gap: --spacing(2);
+  width: 100%;
+  flex: none;
+}

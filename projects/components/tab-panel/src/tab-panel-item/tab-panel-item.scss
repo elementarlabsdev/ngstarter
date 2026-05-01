@@ -1,0 +1,59 @@
+@reference 'tailwindcss';
+@reference '../../../styles/_common.scss';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  user-select: none;
+  width: var(--ngs-tab-panel-item-width);
+  height: var(--ngs-tab-panel-item-height);
+  padding: var(--ngs-tab-panel-item-padding);
+  border-radius: var(--ngs-tab-panel-item-border-radius);
+  color: var(--ngs-tab-panel-item-color);
+  gap: var(--ngs-tab-panel-item-gap);
+
+  &:not(.is-active):hover {
+    background: var(--ngs-tab-panel-item-hover-bg);
+    color: var(--ngs-tab-panel-item-hover-color);
+  }
+
+  &.is-active {
+    background: var(--ngs-tab-panel-item-active-bg);
+    color: var(--ngs-tab-panel-item-active-color);
+  }
+
+  .icon {
+    line-height: 0;
+    display: inline-block;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .text {
+    top: -1px;
+    white-space: nowrap;
+    position: relative;
+    line-height: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: var(--ngs-tab-panel-item-width);
+    padding: 0 --spacing(1);
+    text-align: center;
+  }
+}
+
+:host-context(.ngs-tab-panel.is-compact) {
+  width: var(--ngs-tab-panel-compact-item-width);
+  height: var(--ngs-tab-panel-compact-item-height);
+
+  .text {
+    display: none;
+    width: var(--ngs-tab-panel-compact-item-width);
+  }
+}

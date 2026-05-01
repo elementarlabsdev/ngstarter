@@ -1,0 +1,8 @@
+<h3 ngs-dialog-title>{{ title() }}</h3>
+<ngs-dialog-content>
+  {{ description() }}
+</ngs-dialog-content>
+<ngs-dialog-actions align="end">
+  <button ngsButton [ngs-dialog-close]="false">Cancel</button>
+  <button ngsButton="filled" [ngs-dialog-close]="true">Confirm</button>
+</ngs-dialog-actions>

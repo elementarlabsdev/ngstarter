@@ -1,0 +1,27 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-skeleton-item-border-radius: theme(--radius-2xl);
+  --ngs-skeleton-from-bg: var(--color-neutral-200); // theme('colors.neutral.200/80');
+  --ngs-skeleton-to-bg: var(--color-neutral-300); // theme('colors.neutral.300/70');
+
+  display: block;
+  background: linear-gradient(90deg, var(--ngs-skeleton-from-bg), var(--ngs-skeleton-to-bg));
+  flex: none;
+  animation: ngs-skeleton-loading 1s linear infinite alternate;
+
+  @keyframes ngs-skeleton-loading {
+    0% {
+      background: var(--ngs-skeleton-from-bg);
+    }
+
+    100% {
+      background: var(--ngs-skeleton-to-bg);
+    }
+  }
+}
+
+:host-context(html.dark) {
+  --ngs-skeleton-from-bg: var(--color-neutral-500); // theme('colors.neutral.500/80');
+  --ngs-skeleton-to-bg: var(--color-neutral-600); // theme('colors.neutral.600/70');
+}

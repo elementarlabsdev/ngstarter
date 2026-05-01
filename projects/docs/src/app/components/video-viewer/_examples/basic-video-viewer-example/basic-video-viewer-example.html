@@ -1,0 +1,22 @@
+<div ngsVideoViewer class="flex items-start gap-7 flex-wrap">
+  @for (video of videos; track $index) {
+    <div ngsVideoViewerVideo
+         [sourceUrl]="video.src"
+         [title]="video.title"
+         [muted]="true"
+         [autoPlay]="true"
+         [showPlayButton]="false"
+         [showFullscreen]="false"
+         [orientation]="video.orientation"
+         class="flex items-center justify-center border border-muted rounded p-2 cursor-pointer">
+      <ngs-video-player [src]="video.src"
+                        [muted]="true"
+                        [showFullscreen]="false"
+                        [showPlayButton]="false"
+                        [showDurationSlider]="false"
+                        [orientation]="video.orientation"
+                        [disableClickToPlay]="true"
+                        class="h-[200px]"/>
+    </div>
+  }
+</div>

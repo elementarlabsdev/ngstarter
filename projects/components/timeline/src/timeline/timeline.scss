@@ -1,0 +1,41 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-timeline-header-font-size: theme(--text-sm);
+  --ngs-timeline-header-padding: 0 0 --spacing(4) 0;
+  --ngs-timeline-header-height: --spacing(8);
+  --ngs-timeline-header-bg: transparent;
+  --ngs-timeline-header-color: var(--color-neutral-500);
+  --ngs-timeline-header-text-transform: uppercase;
+  --ngs-timeline-header-font-weight: 500;
+  --ngs-timeline-item-gap: --spacing(2.5);
+  --ngs-timeline-item-no-timestamp-offset-start: -0.5rem;
+  --ngs-timeline-timestamp-font-size: theme(--text-xs);
+  --ngs-timeline-timestamp-width: --spacing(12);
+  --ngs-timeline-timestamp-color: var(--color-neutral-500);
+  --ngs-timeline-timestamp-padding: 1px 0 0 0;
+  --ngs-timeline-item-content-padding: 0 0 --spacing(6) 0;
+  --ngs-timeline-title-font-size: theme(--text-sm);
+  --ngs-timeline-title-color: var(--color-neutral-800);
+  --ngs-timeline-title-font-weight: 500;
+  --ngs-timeline-item-attributes-padding: --spacing(1) 0 0 0;
+  --ngs-timeline-item-description-font-size: theme(--text-sm);
+  --ngs-timeline-item-description-color: var(--color-neutral-500);
+  --ngs-timeline-item-subtitle-font-size: theme(--text-sm);
+  --ngs-timeline-item-subtitle-color: var(--color-neutral-500);
+  --ngs-timeline-item-line-bg: var(--color-muted);
+  --ngs-timeline-item-content-gap: --spacing(1);
+  --ngs-timeline-indicator-shape-size: --spacing(3);
+  --ngs-timeline-indicator-bg: transparent;
+  --ngs-timeline-indicator-border: 2px solid var(--color-muted);
+  --ngs-timeline-indicator-offset: 6px;
+  --ngs-timeline-indicator-line-offset: 16px;
+
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 16px;
+
+  &:has(.ngs-timeline-timestamp) {
+    grid-template-columns: auto auto 1fr;
+  }
+}

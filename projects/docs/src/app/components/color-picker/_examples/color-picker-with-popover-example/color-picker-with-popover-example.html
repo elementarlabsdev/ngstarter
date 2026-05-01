@@ -1,0 +1,12 @@
+<div class="mb-6">
+  <button ngs-color-picker-thumbnail
+          [color]="color"
+          [ngsColorPickerTriggerFor]="colorPicker"
+          class="cursor-pointer"></button>
+  <ng-template #colorPicker>
+    <ngs-color-picker [(ngModel)]="color"/>
+  </ng-template>
+</div>
+<p>
+  Selected color: <strong>{{ color }}</strong>
+</p>

@@ -1,0 +1,34 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-card-bg: var(--color-surface-container);
+  --ngs-card-color: var(--color-on-surface);
+  --ngs-card-border-radius: theme(--radius-2xl);
+  --ngs-card-border-color: var(--color-subtle);
+  --ngs-card-shadow: none;
+  --ngs-card-padding: --spacing(4);
+
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  position: relative;
+  border-radius: var(--ngs-card-border-radius);
+  background: var(--ngs-card-bg);
+  color: var(--ngs-card-color);
+  box-shadow: var(--ngs-card-shadow);
+  border-width: 0;
+  border-style: solid;
+  border-color: var(--ngs-card-border-color);
+}
+
+:host(.ngs-card-outlined) {
+  --ngs-card-shadow: none;
+  --ngs-card-bg: transparent;
+  border-width: 1px;
+}
+
+:host(.ngs-card-raised) {
+  --ngs-card-shadow: theme(--shadow-sm);
+  --ngs-card-bg: var(--color-surface-container);
+}
+

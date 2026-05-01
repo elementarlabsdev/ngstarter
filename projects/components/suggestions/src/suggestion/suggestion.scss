@@ -1,0 +1,42 @@
+@reference 'tailwindcss';
+
+:host {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: --spacing(2.5);
+  height: var(--ngs-suggestion-height);
+  padding: var(--ngs-suggestion-padding);
+  border-radius: var(--ngs-suggestion-border-radius);
+
+  &:hover {
+    background: var(--ngs-suggestion-hover-bg);
+    cursor: pointer;
+  }
+
+  .figure {
+    line-height: 0;
+  }
+
+  .icon,
+  .thumb {
+    line-height: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    --ngs-avatar-size: --spacing(8);
+    border-radius: calc(infinity * 1px);
+  }
+
+  .icon:empty,
+  .thumb:empty {
+    display: none;
+  }
+
+  .content {
+    display: flex;
+    align-items: center;
+    gap: --spacing(2.5);
+    font-size: theme(--text-sm);
+  }
+}

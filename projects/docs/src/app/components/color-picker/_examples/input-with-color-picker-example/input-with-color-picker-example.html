@@ -1,0 +1,14 @@
+<ngs-form-field class="w-1/2">
+  <ngs-label>Color</ngs-label>
+  <input type="text" [ngModel]="color" readonly ngsInput placeholder="Select color">
+  <button ngs-color-picker-thumbnail [color]="color"
+          [ngsColorPickerTriggerFor]="colorPicker"
+          ngsSuffix
+          class="cursor-pointer"></button>
+  <ng-template #colorPicker>
+    <ngs-color-picker [(ngModel)]="color" resultFormat="hex" [showOpacity]="false"/>
+  </ng-template>
+</ngs-form-field>
+<p>
+  Selected color: <strong>{{ color }}</strong>
+</p>

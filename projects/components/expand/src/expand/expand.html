@@ -1,0 +1,17 @@
+<div class="content">
+  <ng-content/>
+</div>
+
+@if (showButtonIfExpanded()) {
+  <button class="button" (click)="api.toggle()">
+    @if (!_expanded) {
+      {{ expandLabel() }}
+    } @else {
+      {{ collapseLabel() }}
+    }
+  </button>
+} @else if (!showButtonIfExpanded() && !_expanded) {
+  <button class="button" (click)="api.toggle()">
+    {{ expandLabel() }}
+  </button>
+}

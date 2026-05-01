@@ -1,0 +1,7 @@
+<div class="mb-5">
+  <button ngsButton="outlined" ngsUploadTrigger
+          (fileSelected)="onFileSelected($event)">Select a local file</button>
+</div>
+<p>
+  Selected files: {{ files | json }}
+</p>

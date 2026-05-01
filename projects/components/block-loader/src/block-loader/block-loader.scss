@@ -1,0 +1,39 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-block-loader-bg: rgba(255, 255, 255, 0.5);
+
+  position: absolute;
+  inset: 0;
+  background: var(--ngs-block-loader-bg);
+  visibility: hidden;
+  z-index: -99;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  flex-direction: column;
+  gap: --spacing(4);
+  user-select: none;
+
+  &.is-loading {
+    visibility: visible;
+    z-index: 99;
+    pointer-events: auto;
+  }
+
+  .message {
+    &:empty {
+      display: none;
+    }
+
+    font-size: theme(--text-sm);
+    text-align: center;
+    max-width: 800px;
+  }
+}
+
+:host-context(html.dark) {
+  --ngs-block-loader-bg: rgba(0, 0, 0, 0.7);
+}

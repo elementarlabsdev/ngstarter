@@ -1,0 +1,14 @@
+@reference 'tailwindcss';
+
+:host {
+  &.ngs-list-option-selected {
+    background: var(--ngs-list-item-active-bg);
+  }
+
+  ngs-checkbox,
+  ngs-radio-button {
+    pointer-events: none;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+}

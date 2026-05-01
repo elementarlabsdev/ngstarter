@@ -1,0 +1,33 @@
+<div class="flex items-center gap-10">
+  <ngs-mchart-pie [data]="data1 | shuffleArray"
+                  [labels]="labels"
+                  [tooltip]="tooltipRef"
+                  class="size-[25px]" />
+  <ngs-mchart-pie [data]="data2 | shuffleArray"
+                  [labels]="labels"
+                  [tooltip]="tooltipRef"
+                  showValueOnSlices
+                  valueFontSize="10"
+                  class="size-[50px]" />
+  <ngs-mchart-pie [data]="data3 | shuffleArray"
+                  [labels]="labels"
+                  [tooltip]="tooltipRef"
+                  class="size-[100px]" />
+  <ngs-mchart-pie [data]="data4 | shuffleArray"
+                  [labels]="labels | shuffleArray"
+                  [tooltip]="tooltipRef"
+                  showValueOnSlices
+                  class="size-[200px]" />
+</div>
+<ng-template #tooltipRef let-data>
+  <ngs-mchart-tooltip>
+    <ngs-mchart-tooltip-title>
+      <div class="flex items-center gap-2">
+        <div class="size-2 rounded-full" [style.background]="data.color"></div>{{ data.label }}
+      </div>
+    </ngs-mchart-tooltip-title>
+    <ngs-mchart-tooltip-body>
+      Value: {{ data.value }}
+    </ngs-mchart-tooltip-body>
+  </ngs-mchart-tooltip>
+</ng-template>

@@ -1,0 +1,23 @@
+<div class="content">
+  @if (iconName()) {
+    <div class="icon">
+      <ngs-icon [name]="iconName()"/>
+    </div>
+  }
+  @if (title()) {
+    <div class="title">{{ title() }}</div>
+  }
+  <div class="message"><ng-content/></div>
+  @if (linkTo()) {
+    <a class="link underline underline-offset-3" href="{{ linkTo()!.url }}" [target]="linkTo()!.target || 'blank'">
+      {{ linkTo()!.text || linkTo()!.url }}
+    </a>
+  }
+</div>
+@if (closable()) {
+  <div class="close">
+    <button ngsIconButton (click)="close()">
+      <ngs-icon name="fluent:dismiss-24-regular"/>
+    </button>
+  </div>
+}

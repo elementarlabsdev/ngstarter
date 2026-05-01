@@ -1,0 +1,10 @@
+<div
+  class="snack-bar-container"
+  [class.visible]="animationState() === 'visible'"
+  [class.hidden-top]="animationState() === 'hidden-top'"
+  [class.hidden-bottom]="animationState() === 'hidden-bottom'"
+  [class.leaving]="leaving()"
+  (transitionend)="onTransitionEnd($event)"
+>
+  <ng-template cdkPortalOutlet/>
+</div>

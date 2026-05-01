@@ -1,0 +1,25 @@
+<label class="ngs-slide-toggle-label" [attr.for]="id() + '-input'">
+  <div class="ngs-slide-toggle-bar">
+    <input
+      type="checkbox"
+      role="switch"
+      class="ngs-slide-toggle-input"
+      [id]="id() + '-input'"
+      [name]="name()"
+      [tabIndex]="tabIndex()"
+      [checked]="checked()"
+      [disabled]="disabled()"
+      [required]="required()"
+      [attr.aria-label]="ariaLabel()"
+      [attr.aria-labelledby]="ariaLabelledby()"
+      [attr.aria-describedby]="ariaDescribedby()"
+      (change)="_onInputClick($event)"
+      (blur)="_onInputBlur()">
+    <div class="ngs-slide-toggle-thumb-container">
+      <div class="ngs-slide-toggle-thumb"></div>
+    </div>
+  </div>
+  <span class="ngs-slide-toggle-content" [id]="id() + '-content'">
+    <ng-content/>
+  </span>
+</label>

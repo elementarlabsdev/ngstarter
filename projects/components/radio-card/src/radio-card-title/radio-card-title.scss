@@ -1,0 +1,9 @@
+@reference 'tailwindcss';
+
+:host {
+  display: flex;
+  align-items: center;
+  gap: var(--ngs-radio-card-title-gap);
+  font-size: var(--ngs-radio-card-title-font-size);
+  font-weight: 600;
+}

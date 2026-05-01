@@ -1,0 +1,70 @@
+<div class="flex gap-10">
+  <ngs-tab-panel activeItemId="home" class="h-[500px]">
+    <ngs-tab-panel-content>
+      <ngs-tab-panel-nav>
+        <ngs-tab-panel-item for="home">
+          <ngs-icon name="fluent:home-24-regular" ngsTabPanelItemIcon/>
+          <ngs-tab-panel-item-text>Home</ngs-tab-panel-item-text>
+        </ngs-tab-panel-item>
+        <ngs-tab-panel-item for="code">
+          <ngs-icon name="fluent:code-24-regular" ngsTabPanelItemIcon/>
+          <ngs-tab-panel-item-text>Code</ngs-tab-panel-item-text>
+        </ngs-tab-panel-item>
+      </ngs-tab-panel-nav>
+    </ngs-tab-panel-content>
+    <ngs-tab-panel-aside class="bg-surface-container-low rounded-xl">
+      <ng-template ngsTabPanelAsideContent="home">
+        <ngs-panel>
+          <ngs-panel-header class="border-b border-b-subtle flex items-center px-4">Home Header</ngs-panel-header>
+          <ngs-panel-content class="p-4">
+            <div class="h-[1000px]">Home Content</div>
+          </ngs-panel-content>
+          <ngs-panel-footer class="border-t border-t-subtle flex items-center px-4">Footer</ngs-panel-footer>
+        </ngs-panel>
+      </ng-template>
+      <ng-template ngsTabPanelAsideContent="code">
+        <ngs-panel>
+          <ngs-panel-header class="border-b border-b-subtle flex items-center px-4">Code Header</ngs-panel-header>
+          <ngs-panel-content class="p-4">
+            <div class="h-[1000px]">Code Content</div>
+          </ngs-panel-content>
+          <ngs-panel-footer class="border-t border-t-subtle flex items-center px-4">Footer</ngs-panel-footer>
+        </ngs-panel>
+      </ng-template>
+    </ngs-tab-panel-aside>
+  </ngs-tab-panel>
+  <ngs-tab-panel activeItemId="home" class="h-[500px] bg-surface-container-low rounded-xl">
+    <ngs-tab-panel-content class="py-2.5">
+      <ngs-tab-panel-nav>
+        <ngs-tab-panel-item for="home">
+          <ngs-icon name="fluent:home-24-regular" ngsTabPanelItemIcon/>
+          <ngs-tab-panel-item-text>Home</ngs-tab-panel-item-text>
+        </ngs-tab-panel-item>
+        <ngs-tab-panel-item for="code">
+          <ngs-icon name="fluent:code-24-regular" ngsTabPanelItemIcon/>
+          <ngs-tab-panel-item-text>Code</ngs-tab-panel-item-text>
+        </ngs-tab-panel-item>
+      </ngs-tab-panel-nav>
+    </ngs-tab-panel-content>
+    <ngs-tab-panel-aside class="border-l border-l-subtle">
+      <ng-template ngsTabPanelAsideContent="home">
+        <ngs-panel>
+          <ngs-panel-header class="border-b border-b-subtle flex items-center px-4">Home Header</ngs-panel-header>
+          <ngs-panel-content class="p-4">
+            <div class="h-[1000px]">Home Content</div>
+          </ngs-panel-content>
+          <ngs-panel-footer class="border-t border-t-subtle flex items-center px-4">Footer</ngs-panel-footer>
+        </ngs-panel>
+      </ng-template>
+      <ng-template ngsTabPanelAsideContent="code">
+        <ngs-panel>
+          <ngs-panel-header class="border-b border-b-subtle flex items-center px-4">Code Header</ngs-panel-header>
+          <ngs-panel-content class="p-4">
+            <div class="h-[1000px]">Code Content</div>
+          </ngs-panel-content>
+          <ngs-panel-footer class="border-t border-t-subtle flex items-center px-4">Footer</ngs-panel-footer>
+        </ngs-panel>
+      </ng-template>
+    </ngs-tab-panel-aside>
+  </ngs-tab-panel>
+</div>

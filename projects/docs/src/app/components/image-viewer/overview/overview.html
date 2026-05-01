@@ -1,0 +1,126 @@
+<app-page>
+  <h1 appPageTitle>Image viewer</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Say hello to a sleek and user-friendly <strong>Image Viewer</strong> built with <strong></strong>! 🎉
+      </p>
+      <p>
+        With this component, you can easily add **interactive image viewing** to your web app.
+        It’s designed to look great and work smoothly across all devices.
+      </p>
+      <div class="my-6">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Zoom</strong>: Let users explore images in detail.
+          </li>
+          <li>
+            ✅ <strong>Integration</strong>: Fits seamlessly into your -based projects.
+          </li>
+          <li>
+            ✅ <strong>Responsive Design</strong>: Perfect for any screen size.
+          </li>
+          <li>
+            ✅ <strong>Lightweight and Fast</strong>: No unnecessary bloat—just what you need!
+          </li>
+        </ul>
+      </div>
+      <p>Whether you’re building a gallery, product showcase, or a creative portfolio, this Image
+        Viewer will take your UI to the next level.</p>
+      <p>
+        👉 <span class="font-bold">Boost your app’s visuals with ease—try it today!</span>
+      </p>
+    </main>
+
+    <h3>Basic image viewer</h3>
+    <ngs-playground exampleUrl="_docs/components/image-viewer/_examples" exampleName="basic-image-viewer-example">
+      <app-basic-image-viewer-example/>
+    </ngs-playground>
+
+    <h3>Image viewer with caption and description</h3>
+    <ngs-playground exampleUrl="_docs/components/image-viewer/_examples" exampleName="image-viewer-with-caption-and-description-example">
+      <app-image-viewer-with-caption-and-description-example/>
+    </ngs-playground>
+
+    <h3>Image viewer with title</h3>
+    <ngs-playground exampleUrl="_docs/components/image-viewer/_examples" exampleName="image-viewer-with-title-example">
+      <app-image-viewer-with-title-example/>
+    </ngs-playground>
+
+    <h2>API Reference</h2>
+
+    <p>
+      <code class="code">ngsImageViewer</code> directive - tracks clicks on images inside and opens a modal window for viewing.
+    </p>
+    <p>
+      <code class="code">ngsImageViewerPicture</code> directive - adds an image and customizes the source
+      image that will be displayed in the modal window.
+    </p>
+    <p>
+      <code class="code">ngsImageViewerPictureTitle</code> directive - adds a title to an image modal.
+    </p>
+    <p>
+      <code class="code">ngsImageViewerPictureCaption</code> directive - adds a caption to an image modal.
+    </p>
+    <p>
+      <code class="code">ngsImageViewerPictureDescription</code> directive - adds a description to an image modal.
+    </p>
+
+    <div class="mt-10">
+      <ngs-divider/>
+    </div>
+
+    <div class="mt-10">
+      <p>
+        Properties for the <code class="code">ngsImageViewerPicture</code> directive.
+      </p>
+
+      <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+        <table class="ngs-table ">
+          <thead>
+          <tr class="bg-neutral-200 dark:bg-neutral-700">
+            <th class="w-1/2">Prop</th>
+            <th>Type</th>
+            <th>Default</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>
+              <div>sourceUrl<sup>*</sup></div>
+              <div class="text-xs text-neutral-600 mt-0.5">Url to source image</div>
+            </td>
+            <td>string</td>
+            <td>&ndash;</td>
+          </tr>
+          <tr>
+            <td>
+              <div>title</div>
+              <div class="text-xs text-neutral-600 mt-0.5">Title for an image, it shows on top of an image</div>
+            </td>
+            <td>string</td>
+            <td>&ndash;</td>
+          </tr>
+          <tr>
+            <td>
+              <div>caption</div>
+              <div class="text-xs text-neutral-600 mt-0.5">Caption for an image, it shows in a modal sidebar in a header</div>
+            </td>
+            <td>string</td>
+            <td>&ndash;</td>
+          </tr>
+          <tr>
+            <td>
+              <div>description</div>
+              <div class="text-xs text-neutral-600 mt-0.5">Description for an image, it shows in a modal sidebar below caption</div>
+            </td>
+            <td>string</td>
+            <td>&ndash;</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</app-page>

@@ -1,0 +1,20 @@
+<ngs-breadcrumbs-global class="mb-6">
+  <!-- Setup custom icons -->
+  <ng-template ngsBreadcrumbItemIconDef let-breadcrumb>
+    @if (breadcrumb.icon) {
+      <ngs-icon [name]="breadcrumb.icon" class="size-5 me-0.5"/>
+    }
+  </ng-template>
+
+<!--  if you want to translate or customize the breadcrumbs, you can use the following templates:-->
+<!--  <ng-template ngsBreadcrumbItemNameDef let-breadcrumb>-->
+<!--    {{ breadcrumb.name }}-->
+<!--  </ng-template>-->
+<!--  <ng-template ngsBreadcrumbItemTitleDef let-breadcrumb>-->
+<!--    {{ breadcrumb.title }}-->
+<!--  </ng-template>-->
+</ngs-breadcrumbs-global>
+
+<p>
+  <button ngsButton="filled" (click)="setBreadcrumbs()">Set breadcrumbs</button>
+</p>

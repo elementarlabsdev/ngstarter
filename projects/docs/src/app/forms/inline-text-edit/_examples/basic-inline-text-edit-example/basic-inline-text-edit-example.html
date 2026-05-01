@@ -1,0 +1,25 @@
+<ngs-alert variant="informative">
+  Hover and edit, then press <strong>Enter</strong> or click outside to save. Press <strong>Esc</strong> to cancel.
+</ngs-alert>
+
+<div class="w-1/2 mt-10">
+  <ngs-inline-text-edit
+    placeholder="Project Name"
+    (contentChanged)="onSaveName($event)" class="text-2xl font-bold leading-[2]">
+    {{ projectName() }}
+  </ngs-inline-text-edit>
+  <ngs-inline-text-edit (contentChanged)="onSaveDescription($event)" class="mt-1">
+    {{ projectDescription() }}
+  </ngs-inline-text-edit>
+</div>
+
+<div class="mt-10">
+  <ngs-divider/>
+</div>
+
+<div class="mt-5 text-sm">
+  Project Name: {{ projectName() }}
+</div>
+<div class="mt-3 text-sm">
+  Project Description: {{ projectDescription() }}
+</div>

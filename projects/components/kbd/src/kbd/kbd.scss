@@ -1,0 +1,37 @@
+@reference 'tailwindcss';
+@reference '../../../styles/_common.scss';
+
+:host {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  .content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: theme(--text-xs);
+    padding: --spacing(1.5);
+    height: --spacing(6);
+    border-radius: theme(--radius-lg);
+    background: var(--color-surface-container);
+    min-width: --spacing(6);
+    line-height: 0;
+    flex: none;
+    gap: --spacing(0.5);
+  }
+
+  .plus {
+    display: none;
+    font-size: theme(--text-xs);
+  }
+}
+
+:host-context(.ngs-kdb-group) {
+  &:not(:last-child) {
+    .plus {
+      display: inline-flex;
+      margin: 0 --spacing(1);
+    }
+  }
+}

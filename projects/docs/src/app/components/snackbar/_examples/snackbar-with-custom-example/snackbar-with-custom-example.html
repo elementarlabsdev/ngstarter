@@ -1,0 +1,10 @@
+<div class="flex items-center gap-5">
+  <ngs-form-field subscriptHiddenIfEmpty>
+    <ngs-label>Snack bar duration (seconds)</ngs-label>
+    <input type="number" [(ngModel)]="durationInSeconds" ngsInput>
+  </ngs-form-field>
+
+  <button ngsButton="outlined" (click)="openSnackBar()" aria-label="Show an example snack-bar">
+    Pizza party
+  </button>
+</div>

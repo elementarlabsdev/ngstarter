@@ -1,0 +1,34 @@
+<div class="content">
+  <div class="flex items-center min-w-0">
+    <div class="overflow-hidden overflow-ellipsis whitespace-nowrap grow name">{{ name() }}</div>
+    <div class="controls">
+      <ng-content select="ngs-file-control,[ngs-file-control]"/>
+    </div>
+  </div>
+  @if (size() || (state() === 'uploading' && progress())) {
+    <div class="info">
+      @if (size()) {
+        <span class="uppercase">{{ size() }}</span>
+      }
+      @if (size() && progress()) {
+        ,
+      }
+      @if (progress()) {
+        {{ progress() }}%
+      }
+      @if (remainingTime()) {
+        {{ remainingTime() }}
+      }
+    </div>
+  }
+  @if (progress()) {
+    <div class="progress">
+      <div class="progress-bar" [style.width.%]="progress()"></div>
+    </div>
+  }
+  @if (state() === 'error' && errorMessage()) {
+    <div class="error">
+      {{ errorMessage() }}
+    </div>
+  }
+</div>

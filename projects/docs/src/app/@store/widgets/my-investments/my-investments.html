@@ -1,0 +1,51 @@
+<div class="relative overflow-hidden">
+  <div class="p-6">
+    <div class="flex justify-between">
+      <div class="font-semibold text-sm">My Investments</div>
+      <a routerLink="/my-investments"
+         class="flex items-center text-sm gap-1 no-underline relative -end-3 hover:text-blue-500 dark:hover:text-blue-400">
+        <span>See All</span>
+        <ngs-icon name="fluent:arrow-right-24-regular" class="font-icon text-base"/>
+      </a>
+    </div>
+  </div>
+  <div class="-mt-4 pb-1">
+    <ngs-list class="flex flex-col gap-1.5">
+      <a ngs-list-item routerLink="/my-investments" class="cursor-pointer">
+        <div ngsListItemAvatar class="bg-zinc-100 dark:bg-neutral-200 flex items-center justify-center w-9 h-9 flex-none rounded-lg">
+          <img src="assets/banking/apple-logo.svg" alt="" class="w-5 h-5">
+        </div>
+        <span ngsListItemTitle>Apple Inc.</span>
+        <div ngsListItemMeta class="text-green-600 dark:text-green-400">+0.36%</div>
+      </a>
+      <a ngs-list-item routerLink="/my-investments" class="cursor-pointer">
+        <div ngsListItemAvatar class="bg-zinc-100 dark:bg-neutral-200 flex items-center justify-center w-9 h-9 flex-none rounded-lg">
+          <img src="assets/banking/netflix-logo.svg" alt="" class="w-5 h-5">
+        </div>
+        <span ngsListItemTitle>Netflix</span>
+        <div ngsListItemMeta class="text-green-600 dark:text-green-400">+10.01%</div>
+      </a>
+      <a ngs-list-item routerLink="/my-investments" class="cursor-pointer">
+        <div ngsListItemAvatar class="bg-zinc-100 dark:bg-neutral-200 flex items-center justify-center w-9 h-9 flex-none rounded-lg">
+          <img src="assets/banking/macdonalds-logo.svg" alt="" class="w-5 h-5">
+        </div>
+        <span ngsListItemTitle>McDonald’s</span>
+        <div ngsListItemMeta class="text-red-600 dark:text-red-400">-2.17%</div>
+      </a>
+      <a ngs-list-item routerLink="/my-investments" class="cursor-pointer">
+        <div ngsListItemAvatar class="bg-zinc-100 dark:bg-neutral-200 flex items-center justify-center w-9 h-9 flex-none rounded-lg">
+          <img src="assets/banking/airbnb-logo.svg" alt="" class="w-5 h-5">
+        </div>
+        <span ngsListItemTitle>Airbnb</span>
+        <div ngsListItemMeta class="text-green-600 dark:text-green-400">+6.09%</div>
+      </a>
+      <a ngs-list-item routerLink="/my-investments" class="cursor-pointer">
+        <div ngsListItemAvatar class="bg-zinc-100 dark:bg-neutral-200 flex items-center justify-center w-9 h-9 flex-none rounded-lg">
+          <img src="assets/banking/amazon-logo.svg" alt="" class="w-5 h-5">
+        </div>
+        <span ngsListItemTitle>Amazon</span>
+        <div ngsListItemMeta class="text-red-600 dark:text-red-400">-9.54%</div>
+      </a>
+    </ngs-list>
+  </div>
+</div>

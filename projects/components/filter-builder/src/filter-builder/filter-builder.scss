@@ -1,0 +1,230 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-filter-builder-group-operations-gap: --spacing(2);
+  --ngs-filter-builder-group-operation-font-size: var(--text-tiny);
+  --ngs-filter-builder-group-operation-color: var(--color-on-surface);
+  --ngs-filter-builder-group-operation-bg: var(--color-surface-container);
+  --ngs-filter-builder-group-operation-font-weight: 400;
+  --ngs-filter-builder-group-operation-border-radius: theme(--radius-lg);
+  --ngs-filter-builder-group-operation-bpadding: 0 --spacing(2);
+  --ngs-filter-builder-group-operation-height: --spacing(7);
+  --ngs-filter-builder-group-operation-hover-color: var(--color-on-surface);
+  --ngs-filter-builder-group-operation-hover-bg: var(--color-surface-container-high);
+  --ngs-filter-builder-group-operation-active-color: var(--color-on-surface);
+  --ngs-filter-builder-group-operation-active-bg: var(--color-surface-container-highest);
+  --ngs-filter-builder-group-operation-border: 1px solid var(--color-outline-variant);
+  --ngs-filter-builder-group-add-color: var(--color-primary);
+  --ngs-filter-builder-group-add-hover-color: var(--color-primary);
+  --ngs-filter-builder-group-margin: 0;
+  --ngs-filter-builder-group-padding: 0;
+  --ngs-filter-builder-group-gap: --spacing(4);
+  --ngs-filter-builder-condition-gap: --spacing(2);
+  --ngs-filter-builder-condition-field-height: --spacing(7);
+  --ngs-filter-builder-condition-field-font-size: var(--text-tiny);
+  --ngs-filter-builder-condition-field-color: var(--color-on-primary-container);
+  --ngs-filter-builder-condition-field-bg: var(--color-primary-container);
+  --ngs-filter-builder-condition-field-font-weight: 400;
+  --ngs-filter-builder-condition-field-border-radius: theme(--radius-lg);
+  --ngs-filter-builder-condition-field-bpadding: --spacing(0.5) --spacing(2);
+  --ngs-filter-builder-condition-field-hover-color: var(--color-on-primary-container);
+  --ngs-filter-builder-condition-field-hover-bg: var(--color-primary-400);
+  --ngs-filter-builder-condition-field-active-color: var(--color-on-primary);
+  --ngs-filter-builder-condition-field-active-bg: var(--color-primary);
+  --ngs-filter-builder-condition-operation-height: --spacing(7);
+  --ngs-filter-builder-condition-operation-font-size: var(--text-tiny);
+  --ngs-filter-builder-condition-operation-color: var(--color-on-secondary-container);
+  --ngs-filter-builder-condition-operation-bg: var(--color-secondary-container);
+  --ngs-filter-builder-condition-operation-font-weight: 400;
+  --ngs-filter-builder-condition-operation-border-radius: theme(--radius-lg);
+  --ngs-filter-builder-condition-operation-bpadding: --spacing(0.5) --spacing(2);
+  --ngs-filter-builder-condition-operation-hover-color: var(--color-on-secondary-container);
+  --ngs-filter-builder-condition-operation-hover-bg: var(--color-secondary-400);
+  --ngs-filter-builder-condition-operation-active-color: var(--color-on-secondary);
+  --ngs-filter-builder-condition-operation-active-bg: var(--color-secondary);
+  --ngs-filter-builder-condition-value-height: --spacing(7);
+  --ngs-filter-builder-condition-value-font-size: var(--text-tiny);
+  --ngs-filter-builder-condition-value-color: var(--color-on-surface);
+  --ngs-filter-builder-condition-value-bg: var(--color-surface-container-high);
+  --ngs-filter-builder-condition-value-font-weight: 400;
+  --ngs-filter-builder-condition-value-border-radius: theme(--radius-lg);
+  --ngs-filter-builder-condition-value-bpadding: --spacing(0.5) --spacing(2);
+  --ngs-filter-builder-condition-value-hover-color: var(--color-on-surface);
+  --ngs-filter-builder-condition-value-hover-bg: var(--color-surface-container-highest);
+  --ngs-filter-builder-condition-remove-color: var(--color-error);
+  --ngs-filter-builder-condition-remove-hover-color: var(--color-error);
+
+  display: block;
+
+  ::ng-deep {
+    .ngs-form-field-infix {
+      --ngs-form-field-container-height: 46px !important;
+      --ngs-form-field-container-vertical-padding: 12px !important;
+    }
+
+    .subscript-wrapper {
+      display: none;
+    }
+  }
+
+  .form-field {
+    width: 200px;
+  }
+
+  .form-field-number {
+    width: 140px;
+  }
+
+  .group-operations {
+    gap: var(--ngs-filter-builder-group-operations-gap);
+  }
+
+  .group {
+    margin: var(--ngs-filter-builder-group-margin);
+    padding: var(--ngs-filter-builder-group-padding);
+    display: flex;
+    flex-direction: column;
+    gap: var(--ngs-filter-builder-group-gap);
+  }
+
+  .group .group {
+    margin-left: --spacing(4);
+  }
+
+  .icon:empty {
+    display: none;
+  }
+
+  .group-operation {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    user-select: none;
+    cursor: pointer;
+    height: var(--ngs-filter-builder-group-operation-height);
+    font-size: var(--ngs-filter-builder-group-operation-font-size);
+    font-weight: var(--ngs-filter-builder-group-operation-font-weight);
+    color: var(--ngs-filter-builder-group-operation-color);
+    background: var(--ngs-filter-builder-group-operation-bg);
+    border: var(--ngs-filter-builder-group-operation-border);
+    border-radius: var(--ngs-filter-builder-group-operation-border-radius);
+    padding: var(--ngs-filter-builder-group-operation-bpadding);
+  }
+
+  .group-operation:hover {
+    color: var(--ngs-filter-builder-group-operation-hover-color);
+    background: var(--ngs-filter-builder-group-operation-hover-bg);
+  }
+
+  .group-operation:active,
+  .group-operation.active {
+    color: var(--ngs-filter-builder-group-operation-active-color);
+    background: var(--ngs-filter-builder-group-operation-active-bg);
+  }
+
+  .condition {
+    display: flex;
+    align-items: center;
+    gap: var(--ngs-filter-builder-condition-gap);
+  }
+
+  .condition-field {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    user-select: none;
+    cursor: pointer;
+    height: var(--ngs-filter-builder-condition-field-height);
+    font-size: var(--ngs-filter-builder-condition-field-font-size);
+    font-weight: var(--ngs-filter-builder-condition-field-font-weight);
+    color: var(--ngs-filter-builder-condition-field-color);
+    background: var(--ngs-filter-builder-condition-field-bg);
+    border-radius: var(--ngs-filter-builder-condition-field-border-radius);
+    padding: var(--ngs-filter-builder-condition-field-bpadding);
+  }
+
+  .condition-field:hover {
+    color: var(--ngs-filter-builder-condition-field-hover-color);
+    background: var(--ngs-filter-builder-condition-field-hover-bg);
+  }
+
+  .add {
+    line-height: 0;
+    color: var(--ngs-filter-builder-group-add-color);
+    cursor: pointer;
+  }
+
+  .add:hover {
+    color: var(--ngs-filter-builder-group-add-hover-color);
+  }
+
+  .remove {
+    line-height: 0;
+    color: var(--ngs-filter-builder-condition-remove-color);
+    cursor: pointer;
+  }
+
+  .remove:hover {
+    color: var(--ngs-filter-builder-condition-remove-hover-color);
+  }
+
+  .condition-field:active,
+  .condition-field.active {
+    color: var(--ngs-filter-builder-condition-field-active-color);
+    background: var(--ngs-filter-builder-condition-field-active-bg);
+  }
+
+  .condition-operation {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    user-select: none;
+    cursor: pointer;
+    height: var(--ngs-filter-builder-condition-operation-height);
+    font-size: var(--ngs-filter-builder-condition-operation-font-size);
+    font-weight: var(--ngs-filter-builder-condition-operation-font-weight);
+    color: var(--ngs-filter-builder-condition-operation-color);
+    background: var(--ngs-filter-builder-condition-operation-bg);
+    border-radius: var(--ngs-filter-builder-condition-operation-border-radius);
+    padding: var(--ngs-filter-builder-condition-operation-bpadding);
+  }
+
+  .condition-operation:hover {
+    color: var(--ngs-filter-builder-condition-operation-hover-color);
+    background: var(--ngs-filter-builder-condition-operation-hover-bg);
+  }
+
+  .condition-operation:active,
+  .condition-operation.active {
+    color: var(--ngs-filter-builder-condition-operation-active-color);
+    background: var(--ngs-filter-builder-condition-operation-active-bg);
+  }
+
+  .condition-value {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    user-select: none;
+    cursor: pointer;
+    height: var(--ngs-filter-builder-condition-value-height);
+    font-size: var(--ngs-filter-builder-condition-value-font-size);
+    font-weight: var(--ngs-filter-builder-condition-value-font-weight);
+    color: var(--ngs-filter-builder-condition-value-color);
+    background: var(--ngs-filter-builder-condition-value-bg);
+    border-radius: var(--ngs-filter-builder-condition-value-border-radius);
+    padding: var(--ngs-filter-builder-condition-value-bpadding);
+  }
+
+  .condition-value:hover {
+    color: var(--ngs-filter-builder-condition-value-hover-color);
+    background: var(--ngs-filter-builder-condition-value-hover-bg);
+  }
+}
+
+:host-context(html.dark) {
+  --ngs-filter-builder-group-operation-color: var(--color-neutral-200);
+  --ngs-filter-builder-group-operation-hover-bg: var(--color-neutral-600);
+  --ngs-filter-builder-group-operation-active-bg: var(--color-neutral-650);
+  --ngs-filter-builder-group-operation-hover-color: var(--color-neutral-100);
+  --ngs-filter-builder-group-operation-active-color: var(--color-neutral-50);
+}

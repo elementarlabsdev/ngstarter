@@ -1,0 +1,15 @@
+<div class="icon">
+  <ng-content select="[ngsUploadAreaIcon]"/>
+</div>
+<div class="content">
+  <ng-content/>
+  <div class="state" [class.is-active]="!isDropActive() && !isDropInvalid()">
+    <ng-content select="[ngsUploadAreaMainState]"/>
+  </div>
+  <div class="state" [class.is-active]="isDropActive() && !isDropInvalid()">
+    <ng-content select="[ngsUploadAreaDropState]"/>
+  </div>
+  <div class="state" [class.is-active]="isDropInvalid()">
+    <ng-content select="[ngsUploadAreaInvalidState]"/>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="icon"><ng-content select="[ngsNavigationItemIcon]"/></div>
+<span class="text grow"><ng-content/></span>
+<div class="flex items-center gap-0.5">
+  <div class="badge">
+    <ng-content select="[ngsNavigationItemBadge]"/>
+  </div>
+  <div class="arrow">
+    <ng-content select="[ngsNavigationGroupToggleIcon]"/>
+    @if (iconRef()) {
+      <ng-container [ngTemplateOutlet]="iconRefTemplate"/>
+    }
+  </div>
+</div>

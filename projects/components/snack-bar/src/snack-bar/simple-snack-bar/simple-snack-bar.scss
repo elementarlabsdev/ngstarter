@@ -1,0 +1,29 @@
+@reference 'tailwindcss';
+
+:host {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: theme(--text-sm);
+  color: var(--color-neutral-100);
+  border-radius: theme(--radius-xl);
+  padding: 0 --spacing(2.5);
+  background: var(--color-neutral-950);
+
+  .simple-snack-bar-message {
+    padding: 14px 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    flex: 1 1 auto;
+  }
+
+  .simple-snack-bar-action {
+    flex: 0 0 auto;
+    margin-left: 8px;
+  }
+
+  &:has(.simple-snack-bar-action) {
+    padding-inline-end: --spacing(1.5);
+  }
+}

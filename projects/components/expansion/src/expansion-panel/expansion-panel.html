@@ -1,0 +1,13 @@
+<ng-content select="ngs-expansion-panel-header"/>
+<div class="ngs-expansion-panel-content"
+     role="region"
+     [class.ngs-expanded]="expanded()"
+     [attr.id]="id"
+     [attr.aria-labelledby]="headerId"
+     [attr.aria-hidden]="!expanded()"
+     (click)="$event.stopPropagation()">
+  <div class="ngs-expansion-panel-body">
+    <ng-content/>
+  </div>
+  <ng-content select="ngs-action-row"/>
+</div>

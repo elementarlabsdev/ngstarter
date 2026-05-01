@@ -1,0 +1,6 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  padding: var(--ngs-menu-footer-padding, --spacing(2) --spacing(3) 0 --spacing(3));
+}

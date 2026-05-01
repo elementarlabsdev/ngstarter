@@ -1,0 +1,14 @@
+<ngs-form-field class="w-1/2">
+  <ngs-label>Number</ngs-label>
+  <input type="text"
+         placeholder="Pick one"
+         aria-label="Number"
+         ngsInput
+         [formControl]="myControl"
+         [ngsAutocomplete]="auto">
+  <ngs-autocomplete [autoActiveFirstOption]="true" #auto="ngsAutocomplete">
+    @for (option of filteredOptions | async; track option) {
+      <ngs-option [value]="option">{{ option }}</ngs-option>
+    }
+  </ngs-autocomplete>
+</ngs-form-field>

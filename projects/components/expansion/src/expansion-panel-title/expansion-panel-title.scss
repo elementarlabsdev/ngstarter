@@ -1,0 +1,8 @@
+@reference 'tailwindcss';
+
+:host {
+  display: flex;
+  margin-right: 16px;
+  flex-basis: 0;
+  flex-grow: 1;
+}

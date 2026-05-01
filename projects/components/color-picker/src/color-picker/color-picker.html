@@ -1,0 +1,25 @@
+<ngs-saturation [colorFromHue]="_colorFromHue()"
+                [tinyColor]="_color()"
+                (colorChange)="onSaturationColorChange($event)"/>
+<ngs-hue [tinyColor]="_color()"
+         (colorChange)="onHueColorChange($event)"/>
+@if (showOpacity()) {
+  <ngs-alpha [colorFromHue]="_colorFromHue()"
+             [tinyColor]="_color()"
+             (alphaChange)="onAlphaChange($event)"/>
+}
+<ngs-form-field subscriptHiddenIfEmpty>
+  <ngs-label>HEX</ngs-label>
+  <input #hexInput
+         type="text"
+         ngsInput
+         maxlength="7"
+         [(ngModel)]="hexColor"
+         (ngModelChange)="onHexColorChange($event)"
+         (blur)="onHexColorBlur()">
+  <button ngsIconButton
+          ngsIconButtonSuffix
+          (mousedown)="copyToClipboard($event, hexInput)">
+    <ngs-icon name="fluent:copy-24-regular"/>
+  </button>
+</ngs-form-field>

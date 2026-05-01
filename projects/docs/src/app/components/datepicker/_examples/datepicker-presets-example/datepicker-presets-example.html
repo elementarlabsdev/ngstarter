@@ -1,0 +1,19 @@
+<ngs-form-field>
+  <ngs-label>Enter a date range with presets</ngs-label>
+  <ngs-date-range-input [formGroup]="range" [rangePicker]="picker">
+    <input ngsStartDate formControlName="start" placeholder="Start date">
+    <input ngsEndDate formControlName="end" placeholder="End date">
+  </ngs-date-range-input>
+  <ngs-datepicker-toggle ngsIconButtonSuffix [for]="picker" />
+  <ngs-date-range-picker #picker [showQuickPresets]="true" />
+</ngs-form-field>
+
+<ngs-form-field>
+  <ngs-label>Date range with custom presets</ngs-label>
+  <ngs-date-range-input [formGroup]="rangeCustom" [rangePicker]="customPicker">
+    <input ngsStartDate formControlName="start" placeholder="Start date">
+    <input ngsEndDate formControlName="end" placeholder="End date">
+  </ngs-date-range-input>
+  <ngs-datepicker-toggle ngsIconButtonSuffix [for]="customPicker" />
+  <ngs-date-range-picker #customPicker [showQuickPresets]="true" [quickPresets]="customPresets" />
+</ngs-form-field>

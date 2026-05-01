@@ -1,0 +1,175 @@
+@reference 'tailwindcss';
+
+:host {
+  &.ngs-primary {
+    --ngs-badge-background: var(--color-primary);
+    --ngs-badge-text-color: var(--color-on-primary);
+  }
+
+  &.ngs-accent {
+    --ngs-badge-background: var(--color-secondary);
+    --ngs-badge-text-color: var(--color-on-secondary);
+  }
+
+  &.ngs-warn {
+    --ngs-badge-background: var(--color-error);
+    --ngs-badge-text-color: var(--color-on-error);
+  }
+
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  border-radius: 16px;
+  font-family: var(--font-sans), serif;
+  font-size: var(--ngs-badge-font-size, 10px);
+  font-weight: 600 !important;
+  white-space: nowrap;
+  padding: 0 4px;
+  text-overflow: ellipsis;
+  background: var(--ngs-badge-background-color, var(--color-primary));
+  color: var(--ngs-badge-text-color, var(--color-on-primary));
+  --_ngs-badge-current-size: var(--ngs-badge-size, 16px);
+  min-width: var(--_ngs-badge-current-size);
+  height: var(--_ngs-badge-current-size);
+  line-height: var(--_ngs-badge-current-size);
+  transition: transform 200ms ease-in-out;
+  pointer-events: none;
+  z-index: 1;
+
+  :host-context(.ngs-badge-small) & {
+    --_ngs-badge-current-size: var(--ngs-badge-small-size, 6px);
+    min-width: var(--_ngs-badge-current-size);
+    height: var(--_ngs-badge-current-size);
+    line-height: var(--_ngs-badge-current-size);
+    font-size: 0;
+    color: transparent;
+    padding: 0;
+
+    &::after {
+      content: none;
+    }
+
+    * {
+      display: none;
+    }
+  }
+
+  :host-context(.ngs-badge-large) & {
+    --_ngs-badge-current-size: var(--ngs-badge-large-size, 18px);
+    min-width: var(--_ngs-badge-current-size);
+    height: var(--_ngs-badge-current-size);
+    line-height: var(--_ngs-badge-current-size);
+    font-size: 12px;
+  }
+
+  :host-context(.ngs-badge-hidden) & {
+    display: none;
+  }
+
+  :host-context(.ngs-badge-disabled) & {
+    background: var(--color-surface-container-high);
+    color: var(--color-on-surface-variant);
+  }
+
+  /* Positions */
+  :host-context(.ngs-badge-above) & {
+    top: 6px;
+  }
+
+  :host-context(.ngs-badge-below) & {
+    bottom: 6px;
+  }
+
+  :host-context(.ngs-badge-before) & {
+    left: 2px;
+  }
+
+  :host-context(.ngs-badge-after) & {
+    right: 2px;
+  }
+
+  :host-context(.ngs-badge:not(.ngs-badge-overlap)) & {
+    &.ngs-badge-above {
+      top: 0;
+    }
+    &.ngs-badge-below {
+      bottom: 0;
+    }
+    &.ngs-badge-before {
+      left: 0;
+    }
+    &.ngs-badge-after {
+      right: 0;
+    }
+  }
+
+  /* Overlap (Default) */
+  :host-context(.ngs-badge-overlap.ngs-badge-above:not(.ngs-badge-before):not(.ngs-badge-after)) & {
+    transform: translateY(-50%);
+  }
+
+  :host-context(.ngs-badge-overlap.ngs-badge-below:not(.ngs-badge-before):not(.ngs-badge-after)) & {
+    transform: translateY(50%);
+  }
+
+  :host-context(.ngs-badge-overlap.ngs-badge-before:not(.ngs-badge-above):not(.ngs-badge-below)) & {
+    transform: translateX(-50%);
+  }
+
+  :host-context(.ngs-badge-overlap.ngs-badge-after:not(.ngs-badge-above):not(.ngs-badge-below)) & {
+    transform: translateX(50%);
+  }
+
+  :host-context(.ngs-badge-overlap.ngs-badge-above.ngs-badge-before) & {
+    transform: translate(-50%, -50%);
+  }
+
+  :host-context(.ngs-badge-overlap.ngs-badge-above.ngs-badge-after) & {
+    transform: translate(50%, -50%);
+  }
+
+  :host-context(.ngs-badge-overlap.ngs-badge-below.ngs-badge-before) & {
+    transform: translate(-50%, 50%);
+  }
+
+  :host-context(.ngs-badge-overlap.ngs-badge-below.ngs-badge-after) & {
+    transform: translate(50%, 50%);
+  }
+
+  /* Non-Overlap (Shifted out) */
+  :host-context(.ngs-badge:not(.ngs-badge-overlap).ngs-badge-above:not(.ngs-badge-before):not(.ngs-badge-after)) & {
+    transform: translateY(-100%);
+  }
+
+  :host-context(.ngs-badge:not(.ngs-badge-overlap).ngs-badge-below:not(.ngs-badge-before):not(.ngs-badge-after)) & {
+    transform: translateY(100%);
+  }
+
+  :host-context(.ngs-badge:not(.ngs-badge-overlap).ngs-badge-before:not(.ngs-badge-above):not(.ngs-badge-below)) & {
+    transform: translateX(-100%);
+  }
+
+  :host-context(.ngs-badge:not(.ngs-badge-overlap).ngs-badge-after:not(.ngs-badge-above):not(.ngs-badge-below)) & {
+    transform: translateX(100%);
+  }
+
+  :host-context(.ngs-badge:not(.ngs-badge-overlap).ngs-badge-above.ngs-badge-before) & {
+    transform: translate(-100%, -100%);
+  }
+
+  :host-context(.ngs-badge:not(.ngs-badge-overlap).ngs-badge-above.ngs-badge-after) & {
+    transform: translate(100%, -100%);
+  }
+
+  :host-context(.ngs-badge:not(.ngs-badge-overlap).ngs-badge-below.ngs-badge-before) & {
+    transform: translate(-100%, 100%);
+  }
+
+  :host-context(.ngs-badge:not(.ngs-badge-overlap).ngs-badge-below.ngs-badge-after) & {
+    transform: translate(100%, 100%);
+  }
+}
+
+

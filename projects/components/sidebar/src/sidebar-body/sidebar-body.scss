@@ -1,0 +1,23 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  width: 100%;
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+
+  .scroll-content {
+    padding: 0;
+  }
+}
+
+:host-context(.ngs-sidebar.compact) {
+  overflow-y: hidden;
+  padding: 0;
+}
+
+:host-context(.ngs-sidebar.compact:hover) {
+  overflow-y: auto;
+}

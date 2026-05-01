@@ -1,0 +1,54 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-mchart-bar-bar-bg: var(--color-primary);
+  --ngs-mchart-bar-bar-gradient-start-color: var(--color-primary-500);
+  --ngs-mchart-bar-bar-gradient-end-color: var(--color-primary);
+  --ngs-mchart-bar-highlight-bg: var(--color-neutral-200);
+
+  display: block;
+  overflow: hidden;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  ::ng-deep {
+    .highlight {
+      fill: var(--ngs-mchart-bar-highlight-bg);
+    }
+  }
+
+  &:not(.fill-gradient) {
+    ::ng-deep {
+      .bar {
+        fill: var(--ngs-mchart-bar-bar-bg);
+      }
+    }
+  }
+
+  &.fill-gradient {
+    .lg-start-color {
+      stop-color: var(--ngs-mchart-bar-bar-gradient-start-color);
+    }
+
+    .lg-end-color {
+      stop-color: var(--ngs-mchart-bar-bar-gradient-end-color);
+    }
+  }
+
+  &.with-tooltip {
+    ::ng-deep {
+      .bar {
+        &:hover {
+          opacity: .85;
+        }
+      }
+    }
+  }
+}
+
+:host-context(html.dark) {
+  --ngs-mchart-bar-highlight-bg: var(--color-neutral-700);
+}

@@ -1,0 +1,22 @@
+<ngs-rail-nav #railNav activeKey="fonts">
+  <button key="fonts" ngs-rail-nav-item>
+    <ngs-icon name="fluent:text-font-size-24-regular" ngsRailNavItemIcon
+              [class.filled]="railNav.api.isActive('fonts')"/>
+    Fonts
+  </button>
+  <button key="noto" ngs-rail-nav-item>
+    <ngs-icon name="fluent:globe-24-regular" ngsRailNavItemIcon
+              [class.filled]="railNav.api.isActive('noto')"/>
+    Noto
+  </button>
+  <button key="icons" ngs-rail-nav-item>
+    <ngs-icon name="fluent:star-24-regular" ngsRailNavItemIcon
+              [class.filled]="railNav.api.isActive('icons')"/>
+    Icons
+  </button>
+  <button key="knowlenge" ngs-rail-nav-item>
+    <ngs-icon name="fluent:hat-graduation-24-regular" ngsRailNavItemIcon
+              [class.filled]="railNav.api.isActive('knowlenge')"/>
+    Knowlenge
+  </button>
+</ngs-rail-nav>

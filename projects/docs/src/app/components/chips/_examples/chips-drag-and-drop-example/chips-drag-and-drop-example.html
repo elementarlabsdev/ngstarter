@@ -1,0 +1,8 @@
+<ngs-chip-set
+  cdkDropList
+  cdkDropListOrientation="horizontal"
+  (cdkDropListDropped)="drop($event)">
+  @for (vegetable of vegetables; track vegetable) {
+    <ngs-chip class="example-box" cdkDrag>{{ vegetable.name }}</ngs-chip>
+  }
+</ngs-chip-set>

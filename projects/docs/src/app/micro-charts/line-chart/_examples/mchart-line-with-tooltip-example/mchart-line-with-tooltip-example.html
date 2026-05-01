@@ -1,0 +1,61 @@
+<div class="flex flex-col gap-10">
+  <ngs-mchart-line  [data]="[2, 1, 3, 6, 2, 4, 3, 5, 1]"
+                    [labels]="['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Sep', 'Aug']"
+                    [tooltip]="tooltipRef1"
+                    compact
+                    showArea
+                    showMarkers
+                    curve="curveBumpX"
+                    class="w-[200px] h-[120px]">
+    <ng-template #tooltipRef1 let-data>
+      <ngs-mchart-tooltip>
+        <ngs-mchart-tooltip-title>{{ data.label }}</ngs-mchart-tooltip-title>
+        <ngs-mchart-tooltip-body>
+          Value: {{ data.value }}
+        </ngs-mchart-tooltip-body>
+      </ngs-mchart-tooltip>
+    </ng-template>
+  </ngs-mchart-line>
+
+  <ngs-mchart-line  [data]="[2, 1, 3, 6, 2, 4, 3, 5, 1]"
+                    [labels]="['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Sep', 'Aug']"
+                    [tooltip]="tooltipRef2"
+                    showArea
+                    curve="curveBumpX"
+                    class="w-[140px] h-[70px]">
+    <ng-template #tooltipRef2 let-data>
+      <ngs-mchart-tooltip>
+        <ngs-mchart-tooltip-title>{{ data.label }}</ngs-mchart-tooltip-title>
+        <ngs-mchart-tooltip-body>
+          Value: {{ data.value }}
+        </ngs-mchart-tooltip-body>
+      </ngs-mchart-tooltip>
+    </ng-template>
+  </ngs-mchart-line>
+
+  <ngs-mchart-line  [data]="[2, 1, 3, 6, 2, 4, 3, 5, 1]"
+                    [labels]="['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Sep', 'Aug']"
+                    [tooltip]="tooltipRef3"
+                    class="w-[100px] h-[60px]">
+    <ng-template #tooltipRef3 let-data>
+      <ngs-mchart-tooltip>
+        <ngs-mchart-tooltip-title>{{ data.label }}</ngs-mchart-tooltip-title>
+        <ngs-mchart-tooltip-body>
+          Value: {{ data.value }}
+        </ngs-mchart-tooltip-body>
+      </ngs-mchart-tooltip>
+    </ng-template>
+  </ngs-mchart-line>
+
+  <ngs-mchart-line  [data]="[2, 1, 3, 6, 2, 4, 3, 5, 1]"
+                    [tooltip]="tooltipRef4"
+                    class="w-[100px] h-[60px]">
+    <ng-template #tooltipRef4 let-data>
+      <ngs-mchart-tooltip>
+        <ngs-mchart-tooltip-body>
+          Value: {{ data.value }}
+        </ngs-mchart-tooltip-body>
+      </ngs-mchart-tooltip>
+    </ng-template>
+  </ngs-mchart-line>
+</div>

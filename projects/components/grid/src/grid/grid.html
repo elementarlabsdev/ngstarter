@@ -1,0 +1,36 @@
+<div class="ngs-grid-container">
+  <ng-container *ngTemplateOutlet="itemsTpl; context: { $implicit: items() }"/>
+</div>
+
+<ng-template #itemsTpl let-items>
+  @for (item of items; track $index) {
+    <div class="ngs-grid-item"
+         [style.--ngs-grid-item-colspan]="item.columns || 12">
+      @if (item.children?.length > 0) {
+        <div class="ngs-grid-container">
+          <ng-container *ngTemplateOutlet="itemsTpl; context: { $implicit: item.children }"/>
+        </div>
+      } @else {
+        <div class="ngs-grid-item-content"
+             [style.--ngs-grid-item-height]="item.height"
+             [class.plain]="getItemConfig(item.type).plain || plain()"
+             [class.hidden]="!_allLoaded()">
+          <ng-container [ngComponentOutlet]="getItemComponent(item.type) | async"
+                        [ngComponentOutletInputs]="getItemInputs(item)"/>
+        </div>
+
+        @if (!_allLoaded()) {
+          <div class="ngs-grid-item-content skeleton"
+               [style.--ngs-grid-item-skeleton-min-height]="item.skeletonHeight || item.height">
+            @let skeletonComponent = getSkeletonComponent(item.type);
+
+            @if (skeletonComponent) {
+              <ng-container [ngComponentOutlet]="skeletonComponent"/>
+            } @else {
+            }
+          </div>
+        }
+      }
+    </div>
+  }
+</ng-template>

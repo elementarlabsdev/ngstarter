@@ -1,0 +1,34 @@
+<svg
+  fill="none"
+  shape-rendering="crispEdges"
+  height="100%"
+  width="100%"
+  viewBox="0 0 120 120"
+  stroke-width="0"
+  class="transform -rotate-90">
+  <circle
+    class="bg"
+    [attr.stroke-width]="strokeWidth()"
+    stroke="currentColor"
+    fill="transparent"
+    shape-rendering="geometricPrecision"
+    [attr.r]="radius()"
+    cx="60"
+    cy="60"/>
+  @if (value() > 0) {
+    <circle
+      class="fill"
+      [attr.stroke-width]="strokeWidth()"
+      shape-rendering="geometricPrecision"
+      stroke-linecap="round"
+      stroke="currentColor"
+      fill="transparent"
+      [attr.r]="radius()"
+      cx="60"
+      cy="60"
+      [attr.stroke-dasharray]="strokeDasharray"
+      [attr.stroke-dashoffset]="strokeDashoffset"
+      [style.stroke-dashoffset]="strokeDashoffset"/>
+  }
+</svg>
+<ng-content select="ngs-gauge-value" />

@@ -1,0 +1,18 @@
+<div [formGroup]="settingsForm">
+  <ngs-form-field class="w-92">
+    <ngs-label>Date Format</ngs-label>
+    <ngs-date-format-select formControlName="dateFormat" required placeholder="Select a date format"/>
+
+    @if (dateFormatControl?.hasError('required') && dateFormatControl?.touched) {
+      <ngs-error>Please select the date format.</ngs-error>
+    }
+  </ngs-form-field>
+</div>
+
+<div class="text-sm mt-2">
+  @if (dateFormatControl?.value) {
+    <p>Selected date format: {{ dateFormatControl?.value }}</p>
+  } @else {
+    <p>No date format selected.</p>
+  }
+</div>

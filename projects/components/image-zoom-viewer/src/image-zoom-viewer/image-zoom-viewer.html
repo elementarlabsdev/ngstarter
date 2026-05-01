@@ -1,0 +1,20 @@
+<ngs-image-zoom-viewer-style/>
+<div class="ngs-image-zoom-container" [class.is-zoomed]="isZoomed()" (click)="toggleZoom()">
+  <ng-content/>
+</div>
+
+<ng-template #zoomedTemplate>
+  <div class="ngs-image-zoom-wrapper" (click)="closeZoom()">
+    <img
+      #zoomedImage
+      class="ngs-image-zoom-cloned"
+      [src]="imageSrc()"
+      [alt]="imageAlt()"
+      [style.transform]="zoomedTransform()"
+      [style.width.px]="imageRect()?.width"
+      [style.height.px]="imageRect()?.height"
+      [style.top.px]="imageRect()?.top"
+      [style.left.px]="imageRect()?.left"
+    />
+  </div>
+</ng-template>

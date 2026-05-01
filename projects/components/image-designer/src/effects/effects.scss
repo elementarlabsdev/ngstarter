@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  height: 100%;
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    &::-webkit-scrollbar {
+      display: none; /* Chrome, Safari and Opera */
+    }
+  }
+
+  /* Slider adjustments to match the design */
+  ngs-slider {
+    --ngs-slider-track-height: 4px;
+    --ngs-slider-thumb-size: 16px;
+  }
+
+  /* Number input styling */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.ngs-color-picker-thumbnail {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  background: var(--ngs-color-picker-thumbnail-bg, #000);
+}

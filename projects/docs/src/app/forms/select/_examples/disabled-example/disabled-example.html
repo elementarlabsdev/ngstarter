@@ -1,0 +1,12 @@
+<p>
+  <ngs-checkbox [formControl]="disableSelect">Disable select</ngs-checkbox>
+</p>
+
+<ngs-form-field class="w-1/2">
+  <ngs-label>Choose an option</ngs-label>
+  <ngs-select [disabled]="disableSelect.value">
+    <ngs-option value="option1">Option 1</ngs-option>
+    <ngs-option value="option2" disabled>Option 2 (disabled)</ngs-option>
+    <ngs-option value="option3">Option 3</ngs-option>
+  </ngs-select>
+</ngs-form-field>

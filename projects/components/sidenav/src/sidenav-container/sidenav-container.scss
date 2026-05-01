@@ -1,0 +1,45 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-sidenav-backdrop-color: var(--overlay-backdrop-bg);
+  --ngs-sidenav-transition-duration: 400ms;
+  --ngs-sidenav-transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+  --ngs-sidenav-width: 280px;
+  --ngs-sidenav-collapsed-width: 74px;
+
+  &.is-settled {
+    .ngs-sidenav-backdrop {
+      transition: opacity var(--ngs-sidenav-transition-duration) var(--ngs-sidenav-transition-timing-function),
+                  visibility var(--ngs-sidenav-transition-duration) var(--ngs-sidenav-transition-timing-function);
+    }
+  }
+
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.ngs-sidenav-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+  z-index: 3;
+  visibility: hidden;
+  background: var(--ngs-sidenav-backdrop-color);
+  opacity: 0;
+  pointer-events: none;
+
+  &.ngs-sidenav-shown {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}

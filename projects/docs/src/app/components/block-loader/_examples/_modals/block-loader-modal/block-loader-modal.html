@@ -1,0 +1,19 @@
+<ngs-block-loader [loading]="!loaded()">
+  @if (saving()) {
+    Saving...
+  }
+</ngs-block-loader>
+<div class="w-[500px]">
+  <h3 ngs-dialog-title>Basic dialog</h3>
+  <ngs-dialog-content>
+    <p class="mb-3">What's your favorite animal?</p>
+    <ngs-form-field class="w-full">
+      <ngs-label>Favorite Animal</ngs-label>
+      <input ngsInput>
+    </ngs-form-field>
+  </ngs-dialog-content>
+  <div ngs-dialog-actions align="end">
+    <button ngsButton (click)="onNoClick()">Cancel</button>
+    <button ngsButton="filled" (click)="save()">Save</button>
+  </div>
+</div>

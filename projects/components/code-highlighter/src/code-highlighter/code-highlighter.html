@@ -1,0 +1,37 @@
+<figure>
+  @if (title()) {
+    <figcaption>
+      @if (title()) {
+        <span class="title">{{ title() }}</span>
+      }
+    </figcaption>
+  }
+
+  <div class="content relative">
+    @if (showLanguage()) {
+      <div class="languageName">{{ displayedLanguage() }}</div>
+    }
+
+    @if (showCopyButton()) {
+      <span class="absolute top-2 right-2">
+        <button
+          ngsIconButton
+          (click)="copyCode()"
+        >
+          <ngs-icon
+            [name]="copied() ? 'fluent:checkmark-24-regular' : 'fluent:copy-24-regular'"
+            [class.text-green-500]="copied()"
+          />
+        </button>
+      </span>
+    }
+
+    <div>
+      @if (content()) {
+        <div [innerHTML]="content()"></div>
+      } @else {
+        <div class="loading">Loading…</div>
+      }
+    </div>
+  </div>
+</figure>

@@ -1,0 +1,97 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-avatar-font-weight: 500;
+  --ngs-avatar-size: --spacing(10);
+  --ngs-avatar-border-radius: calc(infinity * 1px);
+  --ngs-avatar-bg: var(--color-surface-container-high);
+  --ngs-avatar-color: var(--color-on-surface);
+  --ngs-avatar-presence-indicator-size: 20%;
+  --ngs-avatar-presence-indicator-position-top: 5%;
+  --ngs-avatar-presence-indicator-position-end: 5%;
+  --ngs-avatar-presence-indicator-online-bg: var(--color-positive);
+  --ngs-avatar-presence-indicator-offline-bg: var(--color-on-surface-variant);
+  --ngs-avatar-presence-indicator-away-bg: var(--color-notice);
+  --ngs-avatar-presence-indicator-outline: var(--color-surface) solid 2px;
+  --ngs-avatar-inner-border: inset 0 0 2px var(--color-outline-variant);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  flex: none;
+  text-transform: uppercase;
+  position: relative;
+  font-weight: var(--ngs-avatar-font-weight);
+
+  &:not([class*="shadow-"]) {
+    box-shadow: var(--ngs-avatar-inner-border);
+  }
+
+  .svg {
+    overflow: hidden;
+    border-radius: inherit;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  &:not([class*="rounded"]),
+  &:not([class*="rounded"]) .svg {
+    border-radius: var(--ngs-avatar-border-radius);
+  }
+
+  &:not([class*="w-"]):not([class*="size-"]) {
+    width: var(--ngs-avatar-size);
+  }
+
+  &:not([class*="h-"]):not([class*="size-"]) {
+    height: var(--ngs-avatar-size);
+  }
+
+  &.is-clickable {
+    cursor: pointer;
+  }
+
+  &.is-hidden {
+    display: none;
+  }
+
+  &.is-clickable:active {
+    scale: .97;
+  }
+
+  .image {
+    display: inline;
+    object-fit: cover;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    z-index: 1;
+  }
+
+  .presence-indicator {
+    position: absolute;
+    z-index: 1;
+    outline: var(--ngs-avatar-presence-indicator-outline);
+    border-radius: 6.1875rem;
+    width: var(--ngs-avatar-presence-indicator-size);
+    height: var(--ngs-avatar-presence-indicator-size);
+    top: var(--ngs-avatar-presence-indicator-position-top);
+    inset-inline-end: var(--ngs-avatar-presence-indicator-position-end);
+
+    &.is-online {
+      background: var(--ngs-avatar-presence-indicator-online-bg);
+    }
+
+    &.is-offline {
+      background: var(--ngs-avatar-presence-indicator-offline-bg);
+    }
+
+    &.is-away {
+      background: var(--ngs-avatar-presence-indicator-away-bg);
+    }
+  }
+}
+

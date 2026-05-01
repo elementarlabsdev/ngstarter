@@ -1,0 +1,39 @@
+<ngs-notification-list [notifications]="notifications" [static]="false">
+  <ng-template ngsNotificationDef="mentionedInComment" let-notification>
+    <ngs-notification [isUnread]="notification.isUnread">
+      <ngs-dicebear [key]="notification.actor.id"
+                    [image]="notification.actor.avatarUrl"
+                    ngsNotificationAvatar/>
+      <ngs-notification-message>
+        <a routerLink="/" ngs-notification-actor>{{ notification.actor.name }}</a>
+        {{ notification.message }}
+      </ngs-notification-message>
+      <ngs-notification-content class="border border-muted rounded-lg p-2.5 text-sm">
+       This is a comment.
+      </ngs-notification-content>
+      <ngs-notification-time>{{ notification.createdAt }}</ngs-notification-time>
+    </ngs-notification>
+  </ng-template>
+  <ng-template ngsNotificationDef="inviteToEditFilesInFolder" let-notification>
+    <ngs-notification>
+      <ngs-notification-content>
+        invites
+      </ngs-notification-content>
+    </ngs-notification>
+  </ng-template>
+  <ng-template ngsNotificationControlsDef let-notification>
+    <button ngsIconButton [ngsMenuTriggerFor]="settings">
+      <ngs-icon name="fluent:more-vertical-24-regular"/>
+    </button>
+    <ngs-menu #settings="ngsMenu">
+      <button ngs-menu-item>
+        <ngs-icon name="fluent:alert-off-24-regular"/>
+        <span>Disable this type of notification</span>
+      </button>
+      <button ngs-menu-item>
+        <ngs-icon name="fluent:delete-24-regular"/>
+        <span>Delete notification</span>
+      </button>
+    </ngs-menu>
+  </ng-template>
+</ngs-notification-list>

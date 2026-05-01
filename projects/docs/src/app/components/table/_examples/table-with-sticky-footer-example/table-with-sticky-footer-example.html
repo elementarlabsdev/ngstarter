@@ -1,0 +1,21 @@
+<div class="border border-muted  rounded-xl max-h-[200px] overflow-auto max-w-full" tabindex="0">
+  <table ngs-table [dataSource]="transactions" class="">
+    <!-- Item Column -->
+    <ng-container ngsColumnDef="item">
+      <th ngs-header-cell *ngsHeaderCellDef class="text-neutral-500 dark:text-neutral-400"> Item </th>
+      <td ngs-cell *ngsCellDef="let transaction"> {{ transaction.item }} </td>
+      <td ngs-footer-cell *ngsFooterCellDef class="font-semibold"> Total </td>
+    </ng-container>
+
+    <!-- Cost Column -->
+    <ng-container ngsColumnDef="cost">
+      <th ngs-header-cell *ngsHeaderCellDef class="text-neutral-500 dark:text-neutral-400"> Cost </th>
+      <td ngs-cell *ngsCellDef="let transaction"> {{ transaction.cost | currency }} </td>
+      <td ngs-footer-cell *ngsFooterCellDef class="font-semibold"> {{ getTotalCost() | currency }} </td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: displayedColumns;"></tr>
+    <tr ngs-footer-row *ngsFooterRowDef="displayedColumns; sticky: true"></tr>
+  </table>
+</div>

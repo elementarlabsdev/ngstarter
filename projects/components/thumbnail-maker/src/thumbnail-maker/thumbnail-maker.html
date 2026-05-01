@@ -1,0 +1,25 @@
+@if (helperText() && !alreadyDragged) {
+  <div class="helper-text">
+    <ngs-icon name="fluent:hand-draw-24-regular" class="-ms-0.5"/>
+    {{ helperText() }}
+  </div>
+}
+
+<div #content class="content" (dragstart)="onDragStart($event)">
+  <img [src]="src()" alt="" class="image"
+       (load)="onLoad($event)" [style.scale]="scale"
+       ngsDragImage [scale]="scale" [content]="content">
+</div>
+<div class="controls mx-auto w-max flex items-center gap-3">
+  <button ngsIconButton (click)="decrease()" [disabled]="isEqualsToMinScale">
+    <ngs-icon name="fluent:subtract-24-regular"/>
+  </button>
+  <div class="w-[300px] range-slider -ms-3">
+    <ngs-slider class="!w-full" [min]="min" [max]="max">
+      <input ngsSliderThumb [ngModel]="scale * 100" (ngModelChange)="onScaleChange($event)">
+    </ngs-slider>
+  </div>
+  <button ngsIconButton (click)="increase()" [disabled]="isEqualsToMaxScale">
+    <ngs-icon name="fluent:add-24-regular"/>
+  </button>
+</div>

@@ -1,0 +1,42 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-color-picker-thumbnail-bg: transparent;
+  --ngs-color-picker-thumbnail-size: --spacing(8);
+  --ngs-color-picker-thumbnail-border-radius: calc(infinity * 1px);
+
+  display: inline-block;
+  position: relative;
+  border-radius: var(--ngs-color-picker-thumbnail-border-radius);
+  width: var(--ngs-color-picker-thumbnail-size);
+  height: var(--ngs-color-picker-thumbnail-size);
+  flex: none;
+
+  &::before {
+    display: block;
+    content: '';
+    border-radius: inherit;
+    z-index: 0;
+    inset: 0;
+    position: absolute;
+    background-position: 0 0, 4px 4px;
+    background-size: 8px 8px;
+    background-image: repeating-linear-gradient(45deg,#dbdbdb 25%,transparent 25%,transparent 75%,#dbdbdb 75%,#dbdbdb),repeating-linear-gradient(45deg,#dbdbdb 25%,#fff 25%,#fff 75%,#dbdbdb 75%,#dbdbdb);
+  }
+
+  &::after {
+    display: block;
+    content: '';
+    border-radius: inherit;
+    z-index: 1;
+    inset: 0;
+    position: absolute;
+    background: var(--ngs-color-picker-thumbnail-bg);
+  }
+
+  &:active {
+    transition: var(--ngs-transition-transform);
+    transform: scale(.97);
+  }
+}
+

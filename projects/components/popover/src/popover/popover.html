@@ -1,0 +1,9 @@
+<ng-template>
+  <div class="ngs-popover-panel" [ngClass]="_positionClasses()">
+    @if (content()) {
+      <ng-container [ngTemplateOutlet]="content()!.templateRef" [ngTemplateOutletContext]="_context()"/>
+    } @else {
+      <ng-content/>
+    }
+  </div>
+</ng-template>

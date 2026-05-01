@@ -1,0 +1,34 @@
+<table class="ngs-calendar-table">
+  <thead class="ngs-calendar-table-header">
+    <tr>
+      @for (day of weekdays(); track $index) {
+        <th scope="col">{{ day }}</th>
+      }
+    </tr>
+  </thead>
+  <tbody class="ngs-calendar-table-body">
+    @for (week of weeks(); track $index) {
+      @if (week[0].date || week[6].date) {
+        <tr>
+          @for (day of week; track $index) {
+            <td
+              class="ngs-calendar-cell"
+              [class.ngs-calendar-cell-selected]="day.selected"
+              [class.ngs-calendar-cell-today]="day.current"
+              [class.ngs-calendar-cell-empty]="!day.date"
+              [class.ngs-calendar-cell-in-range]="day.inRange"
+              [class.ngs-calendar-cell-range-start]="day.rangeStart"
+              [class.ngs-calendar-cell-range-end]="day.rangeEnd"
+              (click)="selectDate(day.date)"
+              (mouseenter)="handleHover(day.date)"
+            >
+              <div class="ngs-calendar-cell-content">
+                {{ day.label }}
+              </div>
+            </td>
+          }
+        </tr>
+      }
+    }
+  </tbody>
+</table>

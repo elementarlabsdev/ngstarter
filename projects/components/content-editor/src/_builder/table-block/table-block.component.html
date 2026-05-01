@@ -1,0 +1,52 @@
+<div class="table-overflow">
+  <div class="table-container">
+    <ngs-draggable-table [disabled]="_resizeManging() || _columnManaging() || _rowManaging()"
+                         (columnMoved)="onColumnMoved($event)"
+                         (rowMoved)="onRowMoved($event)"
+                         (moveStart)="onMoveStart()"
+                         (moveEnd)="onMoveEnd()">
+      <table #table class="table"
+             ngsResizableTable
+             cdkMonitorSubtreeFocus
+             (cdkFocusChange)="onTableFocusChange($event)"
+             (columnWidthChangeStart)="onColumnWidthChangeStart()"
+             (columnWidthChangeEnd)="onColumnWidthChangeEnd()"
+             (columnWidthChange)="onColumnWidthChange($event)">
+        <colgroup>
+          @for (cell of _content()[0]; track $index) {
+            <col [style.width.px]="cell.options.width || null">
+          }
+        </colgroup>
+        <tbody>
+          @for (row of _content(); track $index) {
+            <tr>
+              @for (cell of row; track $index) {
+                <td #cell
+                    [ngsContentEditorContentEditable]="cell.content"
+                    [props]="cell.props"
+                    (contentChanged)="cell.content = $event"
+                    (blur)="clearCellsSelection()"
+                    [rowSpan]="cell.options.rowspan"
+                    [colSpan]="cell.options.colspan"></td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+      <div class="resize-end" ngsTableColumnsManager
+           (columnManagingStart)="onColumnManagingStart()"
+           (columnManagingEnd)="onColumnManagingEnd()"
+           (columnAdded)="onColAdded()"
+           (columnDeleted)="onColDeleted()">
+        <ngs-icon name="fluent:add-24-regular" class="resize-icon" />
+      </div>
+      <div class="resize-bottom" ngsTableRowsManager
+           (rowManagingStart)="onRowManagingStart()"
+           (rowManagingEnd)="onRowManagingEnd()"
+           (rowAdded)="onRowAdded()"
+           (rowDeleted)="onRowDeleted()">
+        <ngs-icon name="fluent:add-24-regular" class="resize-icon" />
+      </div>
+    </ngs-draggable-table>
+  </div>
+</div>

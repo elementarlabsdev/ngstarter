@@ -1,0 +1,48 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  height: 100%;
+
+  .ngs-calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  .ngs-calendar-cell {
+    width: var(--ngs-calendar-cell-size);
+    height: var(--ngs-calendar-cell-size);
+    text-align: center;
+    cursor: pointer;
+    border-radius: var(--ngs-calendar-cell-radius);
+    position: relative;
+    box-sizing: border-box;
+
+    &.ngs-calendar-cell-selected {
+      background: var(--ngs-calendar-cell-selected-bg);
+      color: var(--ngs-calendar-cell-selected-color);
+      z-index: 1;
+    }
+
+    &:not(.ngs-calendar-cell-empty):not(.ngs-calendar-cell-selected):hover {
+      background: var(--ngs-calendar-cell-hover-bg);
+    }
+  }
+
+  .ngs-calendar-cell-today {
+    z-index: 1;
+
+    .ngs-calendar-cell-content {
+      outline: var(--ngs-calendar-cell-today-border);
+      border-radius: inherit;
+    }
+  }
+
+  .ngs-calendar-cell-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+}

@@ -1,0 +1,64 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-mchart-line-line-bg: var(--color-primary);
+  --ngs-mchart-line-area-bg: var(--color-primary-200);
+  --ngs-mchart-line-marker-line-bg: var(--color-neutral);
+  --ngs-mchart-line-marker-dot-bg: var(--color-primary);
+  --ngs-mchart-line-area-gradient-start-color: var(--color-primary);
+  --ngs-mchart-line-area-gradient-end-color: var(--color-background);
+
+  display: block;
+  overflow: hidden;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  ::ng-deep {
+    .line {
+      stroke: var(--ngs-mchart-line-line-bg);
+      fill: none;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+
+    .area {
+      stroke-width: 0;
+    }
+
+    .marker-line {
+      stroke: var(--ngs-mchart-line-marker-line-bg);
+      stroke-width: 1;
+      stroke-dasharray: 3;
+    }
+
+    .marker-dot {
+      fill: var(--ngs-mchart-line-marker-dot-bg);
+    }
+  }
+
+  &:not(.fill-area-gradient) {
+    ::ng-deep {
+      .area {
+        fill: var(--ngs-mchart-line-area-bg);
+      }
+    }
+  }
+
+  &.fill-area-gradient {
+    .lg-start-color {
+      stop-color: var(--ngs-mchart-line-area-gradient-start-color);
+    }
+
+    .lg-end-color {
+      stop-color: var(--ngs-mchart-line-area-gradient-end-color);
+    }
+  }
+}
+
+:host-context(html.dark) {
+  --ngs-mchart-line-area-bg: var(--color-neutral-700);
+  --ngs-mchart-line-area-gradient-start-color: var(--color-neutral-700);
+}

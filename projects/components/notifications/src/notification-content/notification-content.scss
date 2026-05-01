@@ -1,0 +1,6 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  margin: --spacing(1) 0 --spacing(1) 0;
+}

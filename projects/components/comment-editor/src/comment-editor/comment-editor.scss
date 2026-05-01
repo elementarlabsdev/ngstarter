@@ -1,0 +1,183 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-comment-editor-bg: transparent;
+  --ngs-comment-editor-content-max-height: 9999px;
+
+  display: block;
+  position: relative;
+  overflow: hidden;
+  background: var(--ngs-comment-editor-bg);
+
+  .floating-menu {
+    box-shadow: theme(--shadow-sm);
+    background: var(--dropdown-bg);
+    padding-top: --spacing(1.5);
+    padding-bottom: --spacing(1.5);
+    padding-inline-start: --spacing(2);
+    padding-inline-end: --spacing(2);
+    border: 1px solid var(--color-border);
+    border-radius: calc(infinity * 1px);
+
+    .button {
+      &:hover {
+        color: var(--color-primary);
+        border-radius: calc(infinity * 1px);
+      }
+
+      ngs-icon {
+        width: --spacing(6);
+        height: --spacing(6);
+        font-size: theme(--text-xl);
+        line-height: 1.25;
+      }
+
+      &:disabled {
+        pointer-events: none;
+        opacity: 70%;
+      }
+    }
+  }
+
+  .content {
+    position: absolute;
+    inset: 0;
+    height: --spacing(14);
+
+    ::ng-deep {
+      .tiptap {
+        padding: --spacing(4);
+        min-height: --spacing(10);
+
+        &:focus {
+          outline: none;
+        }
+
+        div[data-youtube-video] {
+          cursor: move;
+          background: var(--color-neutral-100);
+          padding: --spacing(6);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          iframe {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: none;
+            display: block;
+            min-height: 200px;
+            min-width: 200px;
+            outline: none;
+          }
+
+          &.ProseMirror-selectednode {
+            iframe {
+              outline: var(--sys-tertiary) solid 4px;
+              transition-property: all;
+              transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+              transition-duration: 150ms;
+            }
+          }
+        }
+
+        img {
+          display: block;
+          height: auto;
+          margin: --spacing(6) 0;
+          max-width: 100%;
+
+          &.ProseMirror-selectednode {
+            outline: var(--sys-tertiary) solid 4px;
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+          }
+        }
+
+        p.is-editor-empty:first-child {
+          &::before {
+            content: attr(data-placeholder);
+            color: var(--color-neutral-500);
+            float: left;
+            height: 0;
+            pointer-events: none;
+            font-size: 14px;
+          }
+        }
+
+        &.ProseMirror-focused {
+          p.is-editor-empty:first-child {
+            &::before {
+              content: none;
+            }
+          }
+        }
+
+        p.is-empty::before {
+          content: attr(data-placeholder);
+          color: var(--color-neutral-500);
+          float: left;
+          height: 0;
+          pointer-events: none;
+          font-size: 14px;
+        }
+      }
+
+      p,
+      pre {
+        &:first-child {
+          margin-top: 0;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  &.full-view {
+    .content {
+      position: static;
+      height: auto;
+      min-height: --spacing(12);
+      max-height: var(--ngs-comment-editor-content-max-height);
+      overflow-y: auto;
+    }
+  }
+
+  .footer {
+    height: --spacing(14);
+    padding: 0 --spacing(2.5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .toolbar {
+    border-bottom: 1px solid var(--color-border);
+    height: --spacing(14);
+    padding: 0 --spacing(3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .button,
+  ::ng-deep .button {
+    &.active {
+      background: var(--color-neutral-200);
+    }
+  }
+}
+
+:host-context(html.dark) {
+  .button,
+  ::ng-deep .button {
+    &.active {
+      background: var(--color-neutral-650);
+      color: var(--color-neutral-200);
+    }
+  }
+}

@@ -1,0 +1,32 @@
+<ul class="list"
+    ngsContentObserver
+    detectAddedNode="list-item"
+    (nodeAdded)="_onNodeAdded($event)">
+  <ng-container [ngTemplateOutlet]="listTpl"
+                [ngTemplateOutletContext]="{ $implicit: _content(), level: 0, parentItem: null, parentList: [] }"/>
+</ul>
+
+<ng-template #listTpl let-list let-level="level" let-parentItem="parentItem" let-parentList="parentList">
+  @for (item of list; track $index; let index = $index) {
+    <li #listItem class="list-item" [attr.id]="getId(level, index)">
+      <div [ngsContentEditorContentEditable]="item.content"
+           [props]="item.props"
+           (propsChanged)="onPropsChanged($event, item)"
+           #contentEditable="ngsContentEditorContentEditable"
+           class="list-item-content"
+           (contentChanged)="onContentChanged($event, list, index)"
+           (pressedEnter)="onPressedEnter($event, contentEditable, list, index, level, parentItem, parentList)"
+           (keydown)="_onKeyDown($event, contentEditable, list, index, level, parentItem, parentList, listItem)"
+           [attr.data-empty-placeholder]="_placeholder()"></div>
+      @if (item.children.length > 0) {
+        <ol class="list"
+            ngsContentObserver
+            detectAddedNode="list-item"
+            (nodeAdded)="_onNodeAdded($event)">
+          <ng-container [ngTemplateOutlet]="listTpl"
+                        [ngTemplateOutletContext]="{ $implicit: item.children, level: level + 1, parentItem: item, parentList: list }"/>
+        </ol>
+      }
+    </li>
+  }
+</ng-template>

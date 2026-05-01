@@ -1,0 +1,35 @@
+@if (uploading()) {
+  <div class="upload-container">
+    <div class="upload-overlay">
+      <ngs-progress-bar mode="indeterminate" class="progress-bar"/>
+      <div class="remove-button">
+        <button ngsButton (click)="cancelUploading()">
+          <ngs-icon name="fluent:delete-24-regular"/>
+        </button>
+      </div>
+      <div class="upload-overlay-text">Loading...</div>
+    </div>
+    <img [src]="selectedImage()" [alt]="_alt()">
+  </div>
+} @else if (_src()) {
+  <div class="uploaded-image">
+    <ngs-image-resizer (imageResized)="_onImageResized($event)" [imageMaxWidth]="704">
+      <img [src]="_src()" [alt]="_alt()" ngsImageResizerImage [style.width.px]="_settings().width || null">
+    </ngs-image-resizer>
+  </div>
+  <ngs-form-field class="w-full mt-5">
+    <ngs-label>Alt text</ngs-label>
+    <input ngsInput [(ngModel)]="_alt" (ngModelChange)="_onAltChange()">
+  </ngs-form-field>
+} @else {
+  <ngs-upload-area #uploadArea="ngsUploadArea"
+                   ngsUploadTrigger accept="image/*"
+                   (fileSelected)="onFileSelected($event)"
+                   multiple="false" class="upload-area">
+    @if (!uploadArea.api.isDropActive) {
+      Drag & drop image here or click to upload
+    } @else {
+      <div class="font-medium">Drop image here</div>
+    }
+  </ngs-upload-area>
+}

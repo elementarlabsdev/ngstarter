@@ -1,0 +1,7 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  grid-area: topbar;
+  flex: none;
+}

@@ -1,0 +1,5 @@
+<ngs-breadcrumbs [dataSource]="dataSource">
+  <a *ngsBreadcrumbItemDef="let item" ngs-breadcrumb-item [routerLink]="item.link">{{ item.name }}</a>
+  <ngs-breadcrumb-separator *ngsBreadcrumbSeparatorDef>/</ngs-breadcrumb-separator>
+  <ngs-breadcrumb-item *ngsBreadcrumbActiveItemDef="let item">{{ item.name }}</ngs-breadcrumb-item>
+</ngs-breadcrumbs>

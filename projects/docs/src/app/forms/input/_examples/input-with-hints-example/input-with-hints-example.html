@@ -1,0 +1,8 @@
+<form class="w-1/2">
+  <ngs-form-field class="w-full">
+    <ngs-label>Message</ngs-label>
+    <input ngsInput #message maxlength="256" placeholder="Ex. I need help with...">
+    <ngs-hint align="start"><strong>Don't disclose personal info</strong> </ngs-hint>
+    <ngs-hint align="end">{{ message.value.length }} / 256</ngs-hint>
+  </ngs-form-field>
+</form>

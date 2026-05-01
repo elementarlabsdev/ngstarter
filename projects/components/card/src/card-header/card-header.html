@@ -1,0 +1,13 @@
+<div class="flex items-center gap-3">
+  <ng-content select="ngs-card-avatar, [ngs-card-avatar], [ngsCardAvatar]"/>
+  <div class="ngs-card-header-text">
+    <div>
+      <ng-content select="ngs-card-title, [ngs-card-title], [ngsCardTitle]"/>
+      <ng-content select="ngs-card-subtitle, [ngs-card-subtitle], [ngsCardSubtitle]"/>
+    </div>
+    <ng-content/>
+  </div>
+</div>
+<div class="aside">
+  <ng-content select="ngs-card-aside, [ngs-card-aside], [ngsCardAside]"/>
+</div>

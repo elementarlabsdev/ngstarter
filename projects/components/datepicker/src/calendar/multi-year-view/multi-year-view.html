@@ -1,0 +1,20 @@
+<table class="ngs-calendar-table">
+  <tbody class="ngs-calendar-table-body">
+    @for (row of years(); track row) {
+      <tr>
+        @for (year of row; track year.label) {
+          <td
+            class="ngs-calendar-cell"
+            [class.ngs-calendar-cell-selected]="year.selected"
+            [class.ngs-calendar-cell-today]="year.current"
+            (click)="selectYear(year.value)"
+          >
+            <div class="ngs-calendar-cell-content">
+              {{ year.label }}
+            </div>
+          </td>
+        }
+      </tr>
+    }
+  </tbody>
+</table>

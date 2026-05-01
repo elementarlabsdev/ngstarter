@@ -1,0 +1,165 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-checkbox-size: 19px;
+  --ngs-checkbox-checked-color: var(--color-primary);
+  --ngs-checkbox-unchecked-color: var(--input-border-color);
+  --ngs-checkbox-disabled-color: var(--color-on-surface-variant);
+  --ngs-checkbox-checkmark-color: var(--color-on-primary);
+  --ngs-checkbox-description-font-size: theme(--text-sm);
+  --ngs-checkbox-description-color: var(--color-neutral-500);
+  --ngs-checkbox-gap: --spacing(2.5);
+  --ngs-checkbox-label-font-size: theme(--text-base);
+
+  display: inline-block;
+  position: relative;
+
+  .description {
+    font-size: var(--ngs-checkbox-description-font-size);
+    color: var(--ngs-checkbox-description-color);
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .content {
+    font-size: var(--ngs-checkbox-label-font-size);
+  }
+
+  .ngs-checkbox-layout {
+    display: flex;
+    align-items: center;
+    gap: var(--ngs-checkbox-gap);
+    cursor: pointer;
+
+    &.ngs-checkbox-label-before {
+      flex-direction: row-reverse;
+    }
+  }
+
+  &:has(.description:not(:empty)) {
+    .ngs-checkbox-layout {
+      align-items: start;
+    }
+
+    .ngs-checkbox-frame {
+      position: relative;
+      top: --spacing(1.1);
+    }
+  }
+
+  .ngs-checkbox-frame {
+    width: var(--ngs-checkbox-size);
+    height: var(--ngs-checkbox-size);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+
+  .ngs-checkbox-native-control {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    cursor: inherit;
+    z-index: 1;
+  }
+
+  .ngs-checkbox-background {
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--ngs-checkbox-unchecked-color);
+    border-radius: 3px;
+    background: transparent;
+    transition: background-color 90ms cubic-bezier(0, 0, 0.2, 1), border-color 90ms cubic-bezier(0, 0, 0.2, 1);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+  }
+
+  .ngs-checkbox-checkmark {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ngs-checkbox-checkmark-path {
+    stroke: var(--ngs-checkbox-checkmark-color);
+    stroke-width: 3.12px;
+    stroke-dasharray: 29.7833385;
+    stroke-dashoffset: 0;
+  }
+
+  .ngs-checkbox-mixedmark {
+    width: 12px;
+    height: 2px;
+    background: var(--ngs-checkbox-checkmark-color);
+  }
+
+  // States
+  &.ngs-checkbox-checked,
+  &.ngs-checkbox-indeterminate {
+    .ngs-checkbox-background {
+      background: var(--ngs-checkbox-checked-color);
+      border-color: var(--ngs-checkbox-checked-color);
+    }
+  }
+
+  &.ngs-checkbox-disabled {
+    cursor: default;
+    color: color-mix(in srgb, var(--color-on-surface), transparent 62%);
+
+    .ngs-checkbox-layout {
+      cursor: default;
+    }
+    .ngs-checkbox-background {
+      border-color: color-mix(in srgb, var(--color-on-surface), transparent 62%);
+      background: transparent;
+    }
+
+    &.ngs-checkbox-checked, &.ngs-checkbox-indeterminate {
+      .ngs-checkbox-background {
+        background: color-mix(in srgb, var(--color-on-surface), transparent 62%);
+        border-color: transparent;
+      }
+    }
+  }
+
+  .ngs-checkbox-ripple {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .ngs-checkbox-label {
+    cursor: inherit;
+
+    &:has(.description:empty):has(.content:empty) {
+      display: none;
+    }
+  }
+
+  &.ngs-accent {
+    --ngs-checkbox-checked-color: var(--color-secondary);
+    --ngs-checkbox-checkmark-color: var(--color-on-secondary);
+  }
+
+  &.ngs-warn {
+    --ngs-checkbox-checked-color: var(--color-error);
+    --ngs-checkbox-checkmark-color: var(--color-on-error);
+  }
+}

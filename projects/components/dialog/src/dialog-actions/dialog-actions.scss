@@ -1,0 +1,20 @@
+@reference 'tailwindcss';
+
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 52px;
+  align-items: center;
+  box-sizing: content-box;
+  gap: --spacing(2);
+  padding: var(--ngs-dialog-actions-padding, 16px 24px);
+  flex: none;
+
+  &.ngs-dialog-actions-align-center {
+    justify-content: center;
+  }
+
+  &.ngs-dialog-actions-align-end {
+    justify-content: flex-end;
+  }
+}

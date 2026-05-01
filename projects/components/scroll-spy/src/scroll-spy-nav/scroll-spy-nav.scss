@@ -1,0 +1,8 @@
+@reference 'tailwindcss';
+
+:host {
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: --spacing(3);
+}

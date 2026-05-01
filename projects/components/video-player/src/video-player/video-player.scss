@@ -1,0 +1,108 @@
+@import 'video.js/dist/video-js.css';
+
+:host {
+  display: block;
+  position: relative;
+  overflow: hidden;
+
+  ::ng-deep .video-js {
+    width: 100% !important;
+    height: 100% !important;
+    background: transparent;
+
+    .vjs-tech {
+      object-fit: contain;
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+    }
+
+    // Hide default video.js elements as we use our own custom UI
+    .vjs-control-bar,
+    .vjs-big-play-button,
+    .vjs-error-display,
+    .vjs-text-track-display,
+    .vjs-loading-spinner,
+    .vjs-poster,
+    .vjs-modal-dialog {
+      display: none !important;
+    }
+
+    // Hide accessibility text that might appear if styles are not fully loaded or ignored
+    .vjs-control-text,
+    .vjs-hidden {
+      display: none !important;
+      visibility: hidden !important;
+    }
+  }
+
+  &.aspect-portrait {
+    aspect-ratio: 9 / 16;
+  }
+
+  &.aspect-video {
+    aspect-ratio: 16 / 9;
+  }
+
+  &.aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+
+  .thumbnail-preview {
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .loader-container {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .video-container {
+    &.is-fullscreen {
+      .bottom-controls {
+        z-index: 2147483647;
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .controls-overlay {
+        z-index: 2147483646;
+        visibility: visible;
+        opacity: 1;
+
+        &.has-started:not(.is-paused) {
+          visibility: hidden;
+          opacity: 0;
+        }
+      }
+    }
+
+    &:-webkit-full-screen,
+    &:-ms-fullscreen,
+    &:fullscreen {
+      .bottom-controls {
+        z-index: 2147483647;
+        visibility: visible !important;
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+        pointer-events: auto !important;
+      }
+    }
+
+    video::-webkit-media-controls {
+      display: none !important;
+    }
+
+    video::-webkit-media-controls-enclosure {
+      display: none !important;
+    }
+  }
+}

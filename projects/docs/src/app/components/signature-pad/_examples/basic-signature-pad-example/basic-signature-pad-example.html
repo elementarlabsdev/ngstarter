@@ -1,0 +1,9 @@
+<ngs-signature-pad class="border border-muted rounded-2xl overflow-hidden"
+                   (signatureSaved)="onSignatureSaved($event)"
+                   (signatureCleared)="onSignatureCleared()"/>
+
+@if (signature()) {
+  <p class="mt-10">
+    <img [src]="signature()" alt="">
+  </p>
+}

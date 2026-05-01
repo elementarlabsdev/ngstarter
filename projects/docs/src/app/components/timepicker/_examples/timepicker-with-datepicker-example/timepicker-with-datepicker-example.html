@@ -1,0 +1,23 @@
+<div class="grid grid-cols-2 gap-6 w-2/3">
+  <div class="col-span-1">
+    <ngs-form-field class="w-full">
+      <ngs-label>Meeting date</ngs-label>
+      <input ngsInput [ngsDatepicker]="datepicker" [(ngModel)]="value">
+      <ngs-datepicker #datepicker/>
+      <ngs-datepicker-toggle [for]="datepicker" ngsIconButtonSuffix/>
+    </ngs-form-field>
+  </div>
+  <div class="col-span-1">
+    <ngs-form-field class="w-full">
+      <ngs-label>Meeting time</ngs-label>
+      <input ngsInput
+             [ngsTimepicker]="timepicker"
+             [(ngModel)]="value"
+             [ngModelOptions]="{updateOn: 'blur'}">
+      <ngs-timepicker #timepicker/>
+      <ngs-timepicker-toggle [for]="timepicker" ngsIconButtonSuffix/>
+    </ngs-form-field>
+  </div>
+</div>
+
+<p>Value: {{value}}</p>

@@ -1,0 +1,12 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  flex: none;
+  width: var(--ngs-tab-panel-aside-width);
+  position: relative;
+}
+
+:host-context(.ngs-tab-panel.is-hide-content-if-tab-not-selected):empty {
+  display: none;
+}

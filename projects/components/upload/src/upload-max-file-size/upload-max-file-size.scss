@@ -1,0 +1,6 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  font-size: theme(--text-xs);
+}

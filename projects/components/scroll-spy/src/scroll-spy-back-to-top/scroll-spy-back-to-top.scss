@@ -1,0 +1,15 @@
+@reference 'tailwindcss';
+
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: --spacing(1);
+  font-size: theme(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  --icon-size: --spacing(4.5);
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}

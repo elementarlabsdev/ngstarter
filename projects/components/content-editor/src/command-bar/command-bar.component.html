@@ -1,0 +1,86 @@
+<div class="flex items-center gap-1">
+  <button ngsIconButton (click)="toggleBold()"
+          [class.is-active]="isActive('strong')">
+    <ngs-icon name="fluent:text-bold-24-regular"/>
+  </button>
+  <button ngsIconButton (click)="toggleItalic()"
+          [class.is-active]="isActive('em')">
+    <ngs-icon name="fluent:text-italic-24-regular"/>
+  </button>
+  <button ngsIconButton (click)="toggleStrike()"
+          [class.is-active]="isActive('s')">
+    <ngs-icon name="fluent:text-strikethrough-24-regular"/>
+  </button>
+  <button ngsIconButton (click)="toggleUnderline()"
+          [class.is-active]="isActive('u')">
+    <ngs-icon name="fluent:text-underline-24-regular"/>
+  </button>
+  <button ngsIconButton (click)="toggleSuperscript()"
+          [class.is-active]="isActive('sup')">
+    <ngs-icon name="fluent:text-superscript-24-regular"/>
+  </button>
+  <button ngsIconButton (click)="toggleSubscript()"
+          [class.is-active]="isActive('sub')">
+    <ngs-icon name="fluent:text-subscript-24-regular"/>
+  </button>
+  <button ngsIconButton (click)="toggleCode()"
+          [class.is-active]="isActive('code')">
+    <ngs-icon name="fluent:code-24-regular"/>
+  </button>
+
+  @if (isLinkActive()) {
+    <button ngsIconButton (click)="editLink()">
+      <ngs-icon name="fluent:link-24-regular"/>
+    </button>
+  } @else {
+    <button ngsIconButton (click)="addLink()">
+      <ngs-icon name="fluent:link-add-24-regular"/>
+    </button>
+  }
+  <button ngsIconButton [ngsMenuTriggerFor]="alignMenu">
+    @switch (alignment()) {
+      @case ('left') {
+        <ngs-icon name="fluent:text-align-left-24-regular"/>
+      }
+      @case ('center') {
+        <ngs-icon name="fluent:text-align-center-24-regular"/>
+      }
+      @case ('right') {
+        <ngs-icon name="fluent:text-align-right-24-regular"/>
+      }
+    }
+  </button>
+  <button ngsIconButton [ngsMenuTriggerFor]="formatColorText" (menuOpened)="onMenuOpen()">
+    <ngs-icon name="fluent:text-color-24-regular"/>
+  </button>
+</div>
+
+<ngs-menu #alignMenu="ngsMenu">
+  <button class="[&.is-active]:!bg-secondary-container"
+          [class.is-active]="isTextAlignment('left')"
+          ngs-menu-item
+          (click)="setTextAlignment('left')">
+    <ngs-icon name="fluent:text-align-left-24-regular"/>
+    Align Left
+  </button>
+  <button class="[&.is-active]:!bg-secondary-container"
+          [class.is-active]="isTextAlignment('center')"
+          ngs-menu-item
+          (click)="setTextAlignment('center')">
+    <ngs-icon name="fluent:text-align-center-24-regular"/>
+    Align Center
+  </button>
+  <button class="[&.is-active]:!bg-secondary-container"
+          [class.is-active]="isTextAlignment('right')"
+          ngs-menu-item (click)="setTextAlignment('right')">
+    <ngs-icon name="fluent:text-align-right-24-regular"/>
+    Align Right
+  </button>
+</ngs-menu>
+
+<ngs-menu #formatColorText="ngsMenu" (closed)="onMenuClose()">
+  <div class="px-4 py-3" (mousedown)="preventMenuClose($event)">
+    <ngs-text-color (textColorChanged)="onTextColorChanged($event)"
+                    (backgroundColorChanged)="onBackgroundColorChanged($event)"/>
+  </div>
+</ngs-menu>

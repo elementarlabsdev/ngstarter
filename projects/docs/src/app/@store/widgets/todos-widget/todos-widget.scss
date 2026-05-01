@@ -1,0 +1,14 @@
+:host {
+  display: block;
+  height: 480px;
+
+  .table {
+    --ngs-table-background-color: transparent;
+  }
+
+  .row {
+    &.is-selected {
+      text-decoration: line-through;
+    }
+  }
+}

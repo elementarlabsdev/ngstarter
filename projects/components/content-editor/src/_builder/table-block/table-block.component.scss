@@ -1,0 +1,141 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  &.is-column-managing {
+    cursor: col-resize;
+    user-select: none;
+  }
+
+  &.is-row-managing {
+    cursor: row-resize;
+    user-select: none;
+  }
+
+  .table-overflow {
+    position: relative;
+    padding-bottom: 26px;
+    overflow-y: hidden;
+    overflow-x: auto;
+    width: var(--ngs-content-builder-content-width);
+  }
+
+  .table-container {
+    position: relative;
+    width: max-content;
+  }
+
+  table {
+    width: auto !important;
+    word-break: break-word;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border: 1px solid var(--color-border);
+    outline: none;
+
+    tr:not(:last-child) {
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    td {
+      min-width: 120px;
+      height: 40px;
+      padding: --spacing(2) --spacing(3);
+      outline: none;
+
+      &:not(:last-child) {
+        border-right: 1px solid var(--color-border);
+      }
+
+      &.selected {
+        background: var(--color-neutral-200);
+      }
+    }
+  }
+
+  .resize-end {
+    position: absolute;
+    width: --spacing(4);
+    right: calc(--spacing(5) * -1);
+    top: 0;
+    bottom: 0;
+    border-radius: --spacing(1);
+    background: var(--color-surface-container);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      cursor: col-resize;
+      background: var(--color-surface-container-high);
+    }
+  }
+
+  .resize-bottom {
+    position: absolute;
+    height: --spacing(4);
+    bottom: calc(--spacing(5) * -1);
+    left: 0;
+    right: 0;
+    border-radius: --spacing(1);
+    background: var(--color-surface-container);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      cursor: row-resize;
+      background: var(--color-surface-container-high);
+    }
+  }
+
+  .resize-icon {
+    font-size: 14px !important;
+    height: 14px !important;
+    width: 14px !important;
+  }
+
+  &.is-resizing {
+    user-select: none;
+  }
+
+  /* Показываем ручку, когда на родительской ячейке есть класс */
+  table[ngsResizableTable] th.resizable-hover-handle::after,
+  table[ngsResizableTable] td.resizable-hover-handle::after {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .table-resizing {
+    cursor: col-resize !important;
+    user-select: none;
+  }
+
+  .table-resizing + .resizable-table-handle {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .resizable-table-wrapper {
+    position: relative;
+  }
+
+  .resizable-table-handle {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background-color: var(--color-primary-400);
+    cursor: col-resize;
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    left: -9999px;
+    transition: opacity 0.05s ease-in-out, visibility 0.05s ease-in-out;
+  }
+
+  .resizable-table-handle.resize-handle--active {
+    opacity: 1;
+    visibility: visible;
+  }
+}

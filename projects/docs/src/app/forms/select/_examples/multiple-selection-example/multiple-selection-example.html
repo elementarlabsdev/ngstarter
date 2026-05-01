@@ -1,0 +1,8 @@
+<ngs-form-field class="w-1/2">
+  <ngs-label>Toppings</ngs-label>
+  <ngs-select [formControl]="toppings" multiple>
+    @for (topping of toppingList; track topping) {
+      <ngs-option [value]="topping">{{topping}}</ngs-option>
+    }
+  </ngs-select>
+</ngs-form-field>

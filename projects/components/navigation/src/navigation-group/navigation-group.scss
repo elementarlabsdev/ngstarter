@@ -1,0 +1,10 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  border-radius: var(--ngs-navigation-group-border-radius);
+}
+
+:host:has(.ngs-navigation-group-toggle.is-active) {
+  background: var(--ngs-navigation-group-active-bg);
+}

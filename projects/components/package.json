@@ -1,0 +1,56 @@
+{
+  "name": "@ngstarter/components",
+  "description": "NgStarter UI Components",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/elementarlabs/ngstarter.git"
+  },
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/elementarlabs/ngstarter/issues"
+  },
+  "homepage": "https://ngstarter.com",
+  "keywords": [
+    "ngstarter admin",
+    "angular admin",
+    "admin panel",
+    "angular dashboard",
+    "angular admin panel",
+    "angular ui components",
+    "angular admin template",
+    "angular ui"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.schematics.json",
+    "postbuild": "copyfiles schematics/*/schema.json schematics/*/files/** schematics/collection.json ../../dist/components/"
+  },
+  "ng-add": {
+    "save": "devDependencies"
+  },
+  "schematics": "./schematics/collection.json",
+  "devDependencies": {
+    "tailwindcss": "^4.1.14",
+    "postcss": "^8.5.2",
+    "autoprefixer": "^10.4.17",
+    "@types/jsdom": "^21.1.7"
+  },
+  "peerDependencies": {
+    "@angular/cdk": "^21.1.5",
+    "@angular/common": "^21.1.4",
+    "@angular/compiler": "^21.1.4",
+    "@angular/core": "^21.1.4",
+    "@angular/forms": "^21.1.4",
+    "@angular/localize": "^21.1.4",
+    "@angular/router": "^21.1.4",
+    "@angular/ssr": "^21.1.4"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "jsdom": "^26.1.0"
+  },
+  "sideEffects": false,
+  "exports": {
+    "./styles/themes/": "./styles/themes/"
+  }
+}

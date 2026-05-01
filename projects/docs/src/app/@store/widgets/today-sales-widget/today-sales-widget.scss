@@ -1,0 +1,8 @@
+:host {
+  display: block;
+
+  .export {
+    --ngs-button-outlined-outline-color: var(--color-border);
+    --ngs-button-outlined-container-height: --spacing(8);
+  }
+}

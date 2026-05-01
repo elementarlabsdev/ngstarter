@@ -1,0 +1,39 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-tiles-columns: 12;
+  --ngs-tiles-row-height: 20px;
+  --ngs-tiles-gap: --spacing(5);
+
+  position: relative;
+  user-select: none;
+  z-index: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--ngs-tiles-columns, 12), 1fr);
+  grid-auto-flow: dense;
+  justify-items: stretch;
+  gap: var(--ngs-tiles-gap);
+  grid-auto-rows: minmax(var(--ngs-tiles-row-height), auto);
+
+  @media (max-width: 639px) {
+    --ngs-tiles-columns: 1 !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  &._dragged ngs-tile {
+    pointer-events: auto;
+
+    &._dragged {
+      pointer-events: none;
+    }
+
+    & > .t-wrapper {
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    & > * {
+      pointer-events: none;
+    }
+  }
+}

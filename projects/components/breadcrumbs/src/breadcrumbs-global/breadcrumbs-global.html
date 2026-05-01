@@ -1,0 +1,76 @@
+<ngs-breadcrumbs [lastItemAsLink]="lastItemAsLink()">
+  @for (breadcrumb of breadcrumbs(); track $index; let last = $last) {
+    @switch (breadcrumb.type) {
+      @case ('link') {
+        <a ngs-breadcrumb-item [routerLink]="breadcrumb.route">
+          <ng-container ngsBreadcrumbItemIcon>
+            @if (iconTemplateRef) {
+              <ng-container [ngTemplateOutlet]="iconTemplateRef"
+                            [ngTemplateOutletContext]="{ $implicit: breadcrumb }"/>
+            } @else {
+              @if (breadcrumb.icon) {
+                <ngs-icon name="{{ breadcrumb.icon }}"/>
+              }
+            }
+          </ng-container>
+
+          @if (titleTemplateRef) {
+            <ngs-breadcrumb-title>
+              <ng-container [ngTemplateOutlet]="titleTemplateRef"
+                            [ngTemplateOutletContext]="{ $implicit: breadcrumb }"/>
+            </ngs-breadcrumb-title>
+          } @else {
+            @if (breadcrumb.title) {
+              <ngs-breadcrumb-title>{{ breadcrumb.title }}</ngs-breadcrumb-title>
+            }
+          }
+
+          @if (nameTemplateRef) {
+            <ng-container [ngTemplateOutlet]="nameTemplateRef"
+                          [ngTemplateOutletContext]="{ $implicit: breadcrumb }"/>
+          } @else {
+            @if (breadcrumb.name) {
+              {{ breadcrumb.name }}
+            }
+          }
+        </a>
+      }
+      @default {
+        <ngs-breadcrumb-item>
+          <ng-container ngsBreadcrumbItemIcon>
+            @if (iconTemplateRef) {
+              <ng-container [ngTemplateOutlet]="iconTemplateRef"
+                            [ngTemplateOutletContext]="{ $implicit: breadcrumb }"/>
+            } @else if (breadcrumb.icon) {
+              <ngs-icon name="{{ breadcrumb.icon }}"/>
+            }
+          </ng-container>
+
+          @if (titleTemplateRef) {
+            <ngs-breadcrumb-title>
+              <ng-container [ngTemplateOutlet]="titleTemplateRef"
+                            [ngTemplateOutletContext]="{ $implicit: breadcrumb }"/>
+            </ngs-breadcrumb-title>
+          } @else {
+            @if (breadcrumb.title) {
+              <ngs-breadcrumb-title>{{ breadcrumb.title }}</ngs-breadcrumb-title>
+            }
+          }
+
+          @if (nameTemplateRef) {
+            <ng-container [ngTemplateOutlet]="nameTemplateRef"
+                          [ngTemplateOutletContext]="{ $implicit: breadcrumb }"/>
+          } @else {
+            @if (breadcrumb.name) {
+              {{ breadcrumb.name }}
+            }
+          }
+        </ngs-breadcrumb-item>
+      }
+    }
+
+    @if (!last) {
+      <ngs-breadcrumb-separator>{{ separator() }}</ngs-breadcrumb-separator>
+    }
+  }
+</ngs-breadcrumbs>

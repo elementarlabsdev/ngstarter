@@ -1,0 +1,13 @@
+<div class="icon">
+  <ng-content select="[ngsIncidentIcon]"/>
+</div>
+<div class="content">
+  <div class="data">
+    <ng-content select="ngs-incident-title"/>
+    <ng-content select="ngs-incident-details"/>
+  </div>
+  <ng-content select="[ngsIncidentButton]"/>
+</div>
+<button ngsIconButton class="close -ms-2" (click)="close()">
+  <ng-content select="[ngsIncidentClose]"/>
+</button>

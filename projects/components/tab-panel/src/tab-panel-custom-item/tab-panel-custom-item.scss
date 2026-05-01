@@ -1,0 +1,19 @@
+@reference 'tailwindcss';
+@reference '../../../styles/_common.scss';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  user-select: none;
+  width: var(--ngs-tab-panel-item-width);
+  height: var(--ngs-tab-panel-item-height);
+}
+
+:host-context(.ngs-tab-panel.is-compact) {
+  width: var(--ngs-tab-panel-compact-item-width);
+  height: var(--ngs-tab-panel-compact-item-height);
+}

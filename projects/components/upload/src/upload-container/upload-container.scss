@@ -1,0 +1,11 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .hints {
+    &:empty {
+      display: none;
+    }
+  }
+}

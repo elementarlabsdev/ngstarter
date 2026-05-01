@@ -1,0 +1,61 @@
+<ngs-icon name="fluent:search-24-regular" class="font-icon search-icon"/>
+<input type="text" [(ngModel)]="searchText" placeholder="Recommend to search: My orders"
+       (focus)="focus($event, suggestionDropdown)">
+@if (searchText) {
+  <div class="absolute end-1 w-max">
+    <button ngsIconButton (click)="clearText()">
+      <ngs-icon name="fluent:dismiss-24-regular"/>
+    </button>
+  </div>
+}
+
+<ng-template #suggestionDropdown>
+  <ngs-suggestions class="rounded-b-3xl border-t border-t-muted w-[600px] p-4 flex flex-col gap-4 dropdown">
+    <ngs-suggestion-block heading="Recently Viewed">
+      <ngs-suggestion (click)="close()">
+        <ngs-icon name="fluent:options-24-regular" ngsSuggestionIcon/>
+        <span>Settings</span> &ndash; <span class="text-neutral-500 dark:text-neutral-400">My Profile</span>
+      </ngs-suggestion>
+      <ngs-suggestion>
+        <ngs-icon name="fluent:data-usage-24-regular" ngsSuggestionIcon/>
+        <span>Application statistics</span> &ndash; <span class="text-neutral-500 dark:text-neutral-400">Admin Panel</span>
+      </ngs-suggestion>
+    </ngs-suggestion-block>
+    <ngs-suggestion-block heading="Users">
+      <ngs-suggestion>
+        <ngs-avatar label="PS" ngsSuggestionThumb class="size-8"/>
+        Pavel Salauyou
+      </ngs-suggestion>
+      <ngs-suggestion>
+        <ngs-avatar image="assets/avatars/5.svg" label="JJ" ngsSuggestionThumb class="size-8"/>
+        Jessica Jones
+      </ngs-suggestion>
+    </ngs-suggestion-block>
+    <ngs-suggestion-block heading="Files">
+      <ngs-suggestion>
+        <div class="size-8 bg-neutral-200 dark:bg-neutral-500 text-neutral-800 rounded-full shadow-sm
+                    flex items-center justify-center dark:text-neutral-200" ngsSuggestionThumb>
+          <ngs-icon name="fluent:image-24-regular"/>
+        </div>
+        <span>Application flow.png</span> &ndash; <span class="text-neutral-500 dark:text-neutral-400">30KB</span>
+      </ngs-suggestion>
+      <ngs-suggestion>
+        <div class="size-8 bg-neutral-200 dark:bg-neutral-500 text-neutral-800 rounded-full shadow-sm
+                    flex items-center justify-center dark:text-neutral-200" ngsSuggestionThumb>
+          <ngs-icon name="fluent:document-text-24-regular"/>
+        </div>
+        <span>Monthly Report.pdf</span> &ndash; <span class="text-neutral-500 dark:text-neutral-400">502KB</span>
+      </ngs-suggestion>
+    </ngs-suggestion-block>
+    <ngs-suggestion-block heading="Create Team" showDivider>
+      <div class="gap-3 flex px-2">
+        <button ngsButton="outlined">
+          <ngs-icon name="fluent:add-24-regular"/>Create new team
+        </button>
+        <button ngsButton="outlined">
+          <ngs-icon name="fluent:add-24-regular"/>Add new member
+        </button>
+      </div>
+    </ngs-suggestion-block>
+  </ngs-suggestions>
+</ng-template>

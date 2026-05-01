@@ -1,0 +1,34 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-grid-gap: --spacing(6);
+
+  display: block;
+
+  .ngs-grid-container {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--ngs-grid-gap);
+  }
+
+  .ngs-grid-item {
+    --ngs-grid-item-colspan: 12;
+    grid-column: span var(--ngs-grid-item-colspan) / span var(--ngs-grid-item-colspan);
+  }
+
+  .ngs-grid-item-content {
+    --ngs-grid-item-height: 100%;
+    height: var(--ngs-grid-item-height);
+  }
+
+  .ngs-grid-item-content:not(.plain) {
+    border: 1px solid var(--color-border);
+    border-radius: theme(--radius-2xl);
+  }
+
+  .skeleton {
+    --ngs-grid-item-skeleton-min-height: 100px;
+    padding: --spacing(5);
+    min-height: var(--ngs-grid-item-skeleton-min-height);
+  }
+}

@@ -1,0 +1,8 @@
+<ngs-radio-group [(ngModel)]="position" aria-label="Choose a position">
+  <ngs-radio-button value="both">Both</ngs-radio-button>
+  <ngs-radio-button value="start">Start</ngs-radio-button>
+  <ngs-radio-button value="end">End</ngs-radio-button>
+</ngs-radio-group>
+<div class="w-max border border-muted rounded-xl overflow-hidden mt-6 p-5">
+  <ngs-content-fade [position]="position">Lorem ipsum dolor sit amet, consec tetur adip isc ing elit,</ngs-content-fade>
+</div>

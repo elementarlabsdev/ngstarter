@@ -1,0 +1,25 @@
+<ngs-accordion>
+  <ngs-expansion-panel hideToggle>
+    <ngs-expansion-panel-header>
+      <ngs-expansion-panel-title>
+        This is the expansion title
+      </ngs-expansion-panel-title>
+      <ngs-expansion-panel-description>
+        This is a summary of the content
+      </ngs-expansion-panel-description>
+    </ngs-expansion-panel-header>
+    <p>This is the primary content of the panel.</p>
+  </ngs-expansion-panel>
+  <ngs-expansion-panel (opened)="panelOpenState = true"
+                       (closed)="panelOpenState = false">
+    <ngs-expansion-panel-header>
+      <ngs-expansion-panel-title>
+        Self aware panel
+      </ngs-expansion-panel-title>
+      <ngs-expansion-panel-description>
+        Currently I am {{ panelOpenState ? 'open' : 'closed' }}
+      </ngs-expansion-panel-description>
+    </ngs-expansion-panel-header>
+    <p>I'm visible because I am open</p>
+  </ngs-expansion-panel>
+</ngs-accordion>

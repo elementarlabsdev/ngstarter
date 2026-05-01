@@ -1,0 +1,70 @@
+<div class="flex gap-10">
+  <ngs-rail-nav #railNav1 activeKey="fonts" class="style-vibrant">
+    <button key="fonts" ngs-rail-nav-item>
+      <ngs-icon name="fluent:text-font-size-24-regular" ngsRailNavItemIcon
+                [class.filled]="railNav1.api.isActive('fonts')"/>
+      Fonts
+    </button>
+    <button key="noto" ngs-rail-nav-item>
+      <ngs-icon name="fluent:globe-24-regular" ngsRailNavItemIcon
+                [class.filled]="railNav1.api.isActive('noto')"/>
+      Noto
+    </button>
+    <button key="icons" ngs-rail-nav-item>
+      <ngs-icon name="fluent:star-24-regular" ngsRailNavItemIcon
+                [class.filled]="railNav1.api.isActive('icons')"/>
+      Icons
+    </button>
+    <button key="knowlenge" ngs-rail-nav-item>
+      <ngs-icon name="fluent:hat-graduation-24-regular" ngsRailNavItemIcon
+                [class.filled]="railNav1.api.isActive('knowlenge')"/>
+      Knowlenge
+    </button>
+  </ngs-rail-nav>
+
+  <ngs-rail-nav #railNav2 activeKey="noto" class="style-ocean">
+    <button key="fonts" ngs-rail-nav-item>
+      <ngs-icon name="fluent:text-font-size-24-regular" ngsRailNavItemIcon
+                [class.filled]="railNav2.api.isActive('fonts')"/>
+      Fonts
+    </button>
+    <button key="noto" ngs-rail-nav-item>
+      <ngs-icon name="fluent:globe-24-regular" ngsRailNavItemIcon
+                [class.filled]="railNav2.api.isActive('noto')"/>
+      Noto
+    </button>
+    <button key="icons" ngs-rail-nav-item>
+      <ngs-icon name="fluent:star-24-regular" ngsRailNavItemIcon
+                [class.filled]="railNav2.api.isActive('icons')"/>
+      Icons
+    </button>
+    <button key="knowlenge" ngs-rail-nav-item>
+      <ngs-icon name="fluent:hat-graduation-24-regular" ngsRailNavItemIcon
+                [class.filled]="railNav2.api.isActive('knowlenge')"/>
+      Knowlenge
+    </button>
+  </ngs-rail-nav>
+
+  <ngs-rail-nav #railNav3 activeKey="icons" class="style-dark">
+    <button key="fonts" ngs-rail-nav-item>
+      <ngs-icon name="fluent:text-font-size-24-regular" ngsRailNavItemIcon
+                [class.filled]="railNav3.api.isActive('fonts')"/>
+      Fonts
+    </button>
+    <button key="noto" ngs-rail-nav-item>
+      <ngs-icon name="fluent:globe-24-regular" ngsRailNavItemIcon
+                [class.filled]="railNav3.api.isActive('noto')"/>
+      Noto
+    </button>
+    <button key="icons" ngs-rail-nav-item>
+      <ngs-icon name="fluent:star-24-regular" ngsRailNavItemIcon
+                [class.filled]="railNav3.api.isActive('icons')"/>
+      Icons
+    </button>
+    <button key="knowlenge" ngs-rail-nav-item>
+      <ngs-icon name="fluent:hat-graduation-24-regular" ngsRailNavItemIcon
+                [class.filled]="railNav3.api.isActive('knowlenge')"/>
+      Knowlenge
+    </button>
+  </ngs-rail-nav>
+</div>

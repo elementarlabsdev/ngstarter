@@ -1,0 +1,106 @@
+<app-page>
+  <h1 appPageTitle>Pin Input</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      Introducing the <strong>Pin Input Component for </strong> – a sleek, customizable,
+      and highly accessible way to handle PIN codes, OTPs, and verification flows in your Angular apps.
+      Built with <strong>3 aesthetics</strong> and <strong>Tailwind flexibility</strong>, this
+      component seamlessly blends into any modern UI.
+
+      <div class="my-7">
+        <div>Key features:</div>
+        <ul class="ps-4 list-disc flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Fully Customizable</strong> – Adjust length, styling, spacing, and more!
+          </li>
+          <li>
+            ✅ <strong>3 & Tailwind Ready</strong> – Looks stunning out of the box.
+          </li>
+          <li>
+            ✅ <strong>Keyboard & Paste Support</strong> – Smooth user experience on all devices.
+          </li>
+          <li>
+            ✅ <strong>Reactive Forms Compatible</strong> – Effortlessly integrates with Angular forms.
+          </li>
+          <li>
+            ✅ <strong>Secure & User-Friendly</strong> – Prevents accidental input mishaps.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Perfect for <strong>authentication flows, payment verifications, and secure access</strong> &ndash;
+        because great UX starts with the right components. 🚀
+      </p>
+    </main>
+
+    <h3>Basic Pin Input</h3>
+    <ngs-playground exampleUrl="_docs/forms/pin-input/_examples" exampleName="basic-pin-input-example">
+      <app-basic-pin-input-example/>
+    </ngs-playground>
+
+    <h3>Placeholder</h3>
+    <ngs-playground exampleUrl="_docs/forms/pin-input/_examples" exampleName="pin-input-with-placeholder-example">
+      <app-pin-input-with-placeholder-example/>
+    </ngs-playground>
+
+    <h3>Custom Length</h3>
+    <ngs-playground exampleUrl="_docs/forms/pin-input/_examples" exampleName="pin-input-length-example">
+      <app-pin-input-length-example/>
+    </ngs-playground>
+
+    <h3>Custom Symbols</h3>
+    <ngs-playground exampleUrl="_docs/forms/pin-input/_examples" exampleName="pin-input-accept-custom-symbols-example">
+      <app-pin-input-accept-custom-symbols-example/>
+    </ngs-playground>
+
+    <h2>API Reference</h2>
+    <p>
+      Properties for the <code class="code">ngs-pin-input</code> component.
+    </p>
+    <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+      <table class="ngs-table ">
+        <thead>
+        <tr class="bg-neutral-200 dark:bg-neutral-700">
+          <th class="w-1/2">Prop</th>
+          <th>Type</th>
+          <th>Default</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>
+            <div>length</div>
+            <div class="text-xs text-neutral-600 mt-0.5">Number of inputs</div>
+          </td>
+          <td>number</td>
+          <td>4</td>
+        </tr>
+        <tr>
+          <td>
+            <div>placeholder</div>
+            <div class="text-xs text-neutral-600 mt-0.5">Custom placeholder for an input inside the field</div>
+          </td>
+          <td>string</td>
+          <td>&ndash;</td>
+        </tr>
+        <tr>
+          <td>
+            <div>acceptOnly</div>
+            <div class="text-xs text-neutral-600 mt-0.5">regexp which restricts input to input</div>
+          </td>
+          <td>Regexp (default only digits)</td>
+          <td>/^[0-9]+$/</td>
+        </tr>
+        <tr>
+          <td>
+            <div>disabled</div>
+            <div class="text-xs text-neutral-600 mt-0.5">Disable control</div>
+          </td>
+          <td>boolean</td>
+          <td>false</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-page>

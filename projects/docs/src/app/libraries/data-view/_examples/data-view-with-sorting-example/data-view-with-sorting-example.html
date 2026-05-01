@@ -1,0 +1,9 @@
+<ngs-data-view [columnDefs]="columnDefs"
+               [data]="data"
+               withPagination
+               [pageSizeOptions]="[5, 10, 20]"
+               showFirstLastButtons
+               paginatorAriaLabel="Select page of periodic elements"
+               withSelection
+               class="h-[300px]"
+               (sortChange)="onSortChange($event)" />

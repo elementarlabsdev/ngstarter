@@ -1,0 +1,13 @@
+<div class="flex gap-10 px-10 py-14">
+  <div class="grow">
+    <div class="lg:container lg:w-[876px] lg:mx-auto prose dark:prose-invert max-w-full">
+      <div class="mb-14">
+        <ng-content select="[appPageTitle]"/>
+      </div>
+      <ng-content select="[appPageContent]"/>
+    </div>
+  </div>
+  <nav class="sticky hidden lg:block top-32 w-72">
+    <ng-content select="[appPageAside]"/>
+  </nav>
+</div>

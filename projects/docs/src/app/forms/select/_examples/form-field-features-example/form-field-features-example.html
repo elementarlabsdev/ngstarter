@@ -1,0 +1,13 @@
+<ngs-form-field class="w-1/2">
+  <ngs-label>Favorite animal</ngs-label>
+  <ngs-select [formControl]="animalControl" required>
+    <ngs-option>--</ngs-option>
+    @for (animal of animals; track animal) {
+      <ngs-option [value]="animal">{{animal.name}}</ngs-option>
+    }
+  </ngs-select>
+  @if (animalControl.hasError('required')) {
+    <ngs-error>Please choose an animal</ngs-error>
+  }
+  <ngs-hint>{{ animalControl.value?.sound }}</ngs-hint>
+</ngs-form-field>

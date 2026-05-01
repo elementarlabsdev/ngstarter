@@ -1,0 +1,11 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .grid-layout {
+    display: grid;
+    width: 100%;
+    gap: --spacing(4) --spacing(7);
+  }
+}

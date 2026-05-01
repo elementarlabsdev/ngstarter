@@ -1,0 +1,13 @@
+<ngs-form-field class="w-1/2">
+  <ngs-label>Favorite food</ngs-label>
+  <ngs-select>
+    <ngs-select-header>
+      asasfasf
+    </ngs-select-header>
+    <ngs-select-body>
+      @for (food of foods(); track food) {
+        <ngs-option [value]="food.value">{{food.viewValue}}</ngs-option>
+      }
+    </ngs-select-body>
+  </ngs-select>
+</ngs-form-field>

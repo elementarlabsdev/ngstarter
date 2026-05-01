@@ -1,0 +1,94 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-paginator-container-background: transparent;
+  --ngs-paginator-container-text-color: var(--color-on-surface);
+  --ngs-paginator-container-text-font: var(--font-sans);
+  --ngs-paginator-container-text-line-height: inherit;
+  --ngs-paginator-container-text-size: theme(--text-sm);
+  --ngs-paginator-container-text-tracking: normal;
+  --ngs-paginator-container-text-weight: 400;
+  --ngs-paginator-page-size-margin-right: 8px;
+  --ngs-paginator-items-per-page-label-margin: 0 4px;
+  --ngs-paginator-range-label-margin: 0 32px 0 24px;
+
+  display: block;
+
+  .ngs-paginator-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 8px;
+    flex-wrap: wrap-reverse;
+    min-height: 40px;
+    background: var(--ngs-paginator-container-background-color);
+    color: var(--ngs-paginator-container-text-color);
+    font-family: var(--ngs-paginator-container-text-font);
+    line-height: var(--ngs-paginator-container-text-line-height);
+    font-size: var(--ngs-paginator-container-text-size);
+    letter-spacing: var(--ngs-paginator-container-text-tracking);
+    font-weight: var(--ngs-paginator-container-text-weight);
+  }
+
+  .ngs-paginator-page-size {
+    display: flex;
+    align-items: center;
+    margin-right: var(--ngs-paginator-page-size-margin-right);
+  }
+
+  .ngs-paginator-page-size-label {
+    margin: var(--ngs-paginator-items-per-page-label-margin);
+  }
+
+  .ngs-paginator-page-size-select {
+    margin: 0 4px;
+    width: 78px;
+    // --ngs-form-field-container-min-height: --spacing(10) !important;
+    --ngs-form-field-infix-padding-top: 0 !important;
+    --ngs-form-field-infix-padding-bottom: 0 !important;
+    // --ngs-form-field-infix-min-height: --spacing(10) !important;
+
+    // We need to override the material form field styles to make it more compact
+    ::ng-deep {
+      .ngs-form-field-container {
+        padding: 0 6px 0 12px !important;
+        height: --spacing(10) !important;
+        min-height: --spacing(10) !important;
+        box-sizing: border-box !important;
+      }
+
+      .ngs-form-field-infix {
+        padding: 0 !important;
+        height: --spacing(10) !important;
+        min-height: --spacing(10) !important;
+        box-sizing: border-box !important;
+      }
+
+      .ngs-select {
+        height: --spacing(10) !important;
+        min-height: --spacing(10) !important;
+        min-width: 0 !important;
+        --ngs-select-min-width: 0 !important;
+      }
+
+      .ngs-select-arrow-wrapper {
+        height: --spacing(10) !important;
+        padding-inline-end: 2px;
+      }
+    }
+  }
+
+  .ngs-paginator-range-actions {
+    display: flex;
+    align-items: center;
+  }
+
+  .ngs-paginator-range-label {
+    margin: var(--ngs-paginator-range-label-margin);
+  }
+
+  .ngs-paginator-navigation {
+    display: flex;
+    align-items: center;
+  }
+}

@@ -1,0 +1,15 @@
+<span class="ngs-expansion-panel-header-content">
+  <ng-content select="ngs-panel-title" />
+  <ng-content select="ngs-panel-description" />
+  <ng-content />
+</span>
+
+@if (!hideToggle() && !panel._getHideToggle()) {
+  <span class="ngs-expansion-indicator">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true" focusable="false">
+      <path d="M480-345 240-585l36-36 204 204 204-204 36 36-240 240Z"></path>
+    </svg>
+  </span>
+} @else {
+  <span class="ngs-expansion-indicator-placeholder"></span>
+}

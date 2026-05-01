@@ -1,0 +1,47 @@
+<div>
+  <p class="mt-0">Progress spinner configuration</p>
+
+  <section>
+    <label>Color:</label>
+    <ngs-radio-group [(ngModel)]="color">
+      <ngs-radio-button class="example-margin" value="primary">
+        Primary
+      </ngs-radio-button>
+      <ngs-radio-button class="example-margin" value="accent">
+        Accent
+      </ngs-radio-button>
+      <ngs-radio-button class="example-margin" value="warn">
+        Warn
+      </ngs-radio-button>
+    </ngs-radio-group>
+  </section>
+
+  <section class="example-section">
+    <label class="example-margin">Mode:</label>
+    <ngs-radio-group [(ngModel)]="mode">
+      <ngs-radio-button class="example-margin" value="determinate">
+        Determinate
+      </ngs-radio-button>
+      <ngs-radio-button class="example-margin" value="indeterminate">
+        Indeterminate
+      </ngs-radio-button>
+    </ngs-radio-group>
+  </section>
+
+  @if (mode === 'determinate') {
+    <section>
+      <label>Progress:</label>
+      <ngs-slider>
+        <input ngsSliderThumb type="range" [(ngModel)]="value">
+      </ngs-slider>
+    </section>
+  }
+</div>
+
+<ngs-divider class="my-6"/>
+
+<p>Result:</p>
+
+<ngs-progress-spinner [color]="color"
+  [mode]="mode"
+  [value]="value" />

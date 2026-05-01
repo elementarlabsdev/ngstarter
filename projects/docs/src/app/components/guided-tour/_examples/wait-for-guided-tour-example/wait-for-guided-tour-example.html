@@ -1,0 +1,19 @@
+<div class="flex flex-col gap-8 p-4 bg-background border rounded-xl min-h-[300px]">
+  <div>
+    <button ngsButton="filled" (click)="startTour()" class="w-fit">Start Wait For Tour</button>
+  </div>
+
+  <div ngsTourAnchor="static-element" class="p-6 border-2 border-primary border-dashed rounded-lg bg-primary/5 text-primary text-center">
+    Static Element (Step 1)
+  </div>
+
+  @if (showDynamicElement()) {
+    <div ngsTourAnchor="dynamic-element" class="p-6 border-2 border-secondary border-dashed rounded-lg bg-secondary/5 text-secondary text-center">
+      Dynamic Element (Step 2) - Appeared after 2s
+    </div>
+  } @else {
+    <div class="p-6 border-2 border-dashed rounded-lg bg-muted/5 text-muted-foreground text-center">
+      Waiting for dynamic element...
+    </div>
+  }
+</div>

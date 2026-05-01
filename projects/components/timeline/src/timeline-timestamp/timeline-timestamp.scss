@@ -1,0 +1,12 @@
+@reference 'tailwindcss';
+
+:host {
+  font-size: var(--ngs-timeline-timestamp-font-size);
+  color: var(--ngs-timeline-timestamp-color);
+  padding: var(--ngs-timeline-timestamp-padding);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  white-space: nowrap;
+  vertical-align: top;
+}

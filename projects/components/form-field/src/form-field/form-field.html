@@ -1,0 +1,74 @@
+<div class="ngs-form-field-wrapper" #wrapper>
+  <div class="ngs-form-field-container" #container>
+    @if (prefixChildren().length > 0) {
+      <div class="ngs-form-field-prefix">
+        <ng-content select="[ngsPrefix]"/>
+      </div>
+    }
+
+    @if (iconPrefixChildren().length > 0) {
+      <div class="ngs-form-field-icon-prefix">
+        <ng-content select="[ngsIconPrefix]"/>
+      </div>
+    }
+
+    @if (iconButtonPrefixChildren().length > 0) {
+      <div class="ngs-form-field-icon-button-prefix">
+        <ng-content select="[ngsIconButtonPrefix]"/>
+      </div>
+    }
+
+    @if (textPrefixChildren().length > 0) {
+      <div class="ngs-form-field-text-prefix">
+        <ng-content select="[ngsTextPrefix]"/>
+      </div>
+    }
+
+    <div class="ngs-form-field-infix">
+      @if (labelChild()) {
+        <label class="ngs-form-field-label" [attr.for]="control()?.id">
+          <ng-content select="ngs-label"/>
+
+          @if (isRequired()) {
+            <span class="ngs-form-field-required-marker">*</span>
+          }
+        </label>
+      }
+      <ng-content/>
+    </div>
+
+    @if (textSuffixChildren().length > 0) {
+      <div class="ngs-form-field-text-suffix">
+        <ng-content select="[ngsTextSuffix]"/>
+      </div>
+    }
+
+    @if (iconButtonSuffixChildren().length > 0) {
+      <div class="ngs-form-field-icon-button-suffix">
+        <ng-content select="[ngsIconButtonSuffix]"/>
+      </div>
+    }
+
+    @if (iconSuffixChildren().length > 0) {
+      <div class="ngs-form-field-icon-suffix">
+        <ng-content select="[ngsIconSuffix]"/>
+      </div>
+    }
+
+    @if (suffixChildren().length > 0) {
+      <div class="ngs-form-field-suffix">
+        <ng-content select="[ngsSuffix]"/>
+      </div>
+    }
+  </div>
+</div>
+
+<div class="subscript-wrapper">
+  @if (control()?.errorState && errorChildren().length > 0) {
+    <ng-content select="ngs-error"/>
+  } @else if (hintChildren().length > 0) {
+    <div class="ngs-form-field-hint-wrapper">
+      <ng-content select="ngs-hint"/>
+    </div>
+  }
+</div>

@@ -1,0 +1,48 @@
+@reference 'tailwindcss';
+
+.snack-bar-container {
+  border-radius: 4px;
+  box-sizing: border-box;
+  display: block;
+  margin: --spacing(5);
+  max-width: 33vw;
+  min-width: 344px;
+  min-height: 54px;
+  transform-origin: center;
+  padding: 0;
+  opacity: 0;
+  transition-property: transform, opacity;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+
+  /* Enter/leave duration tweak for leave */
+  &.leaving {
+    transition-duration: 75ms;
+    transition-timing-function: cubic-bezier(0.4, 0.0, 1, 1);
+  }
+
+  /* Hidden states depending on vertical position */
+  &.hidden-top {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  &.hidden-bottom {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  /* Visible state explicitly (optional, for clarity) */
+  &.visible {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+
+  @media (max-width: 599px) {
+    .snack-bar-container {
+      min-width: 100%;
+      margin: 0;
+      border-radius: 0;
+    }
+  }
+}

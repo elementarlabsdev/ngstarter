@@ -1,0 +1,46 @@
+<button ngsButton [ngsMenuTriggerFor]="animals">Animal index</button>
+<ngs-menu #animals="ngsMenu">
+  <button ngs-menu-item [ngsMenuTriggerFor]="vertebrates">Vertebrates</button>
+  <button ngs-menu-item [ngsMenuTriggerFor]="invertebrates">Invertebrates</button>
+</ngs-menu>
+
+<ngs-menu #vertebrates="ngsMenu">
+  <button ngs-menu-item [ngsMenuTriggerFor]="fish">Fishes</button>
+  <button ngs-menu-item [ngsMenuTriggerFor]="amphibians">Amphibians</button>
+  <button ngs-menu-item [ngsMenuTriggerFor]="reptiles">Reptiles</button>
+  <button ngs-menu-item>Birds</button>
+  <button ngs-menu-item>Mammals</button>
+</ngs-menu>
+
+<ngs-menu #invertebrates="ngsMenu">
+  <button ngs-menu-item>Insects</button>
+  <button ngs-menu-item>Molluscs</button>
+  <button ngs-menu-item>Crustaceans</button>
+  <button ngs-menu-item>Corals</button>
+  <button ngs-menu-item>Arachnids</button>
+  <button ngs-menu-item>Velvet worms</button>
+  <button ngs-menu-item>Horseshoe crabs</button>
+</ngs-menu>
+
+<ngs-menu #fish="ngsMenu">
+  <button ngs-menu-item>Baikal oilfish</button>
+  <button ngs-menu-item>Bala shark</button>
+  <button ngs-menu-item>Ballan wrasse</button>
+  <button ngs-menu-item>Bamboo shark</button>
+  <button ngs-menu-item>Banded killifish</button>
+</ngs-menu>
+
+<ngs-menu #amphibians="ngsMenu">
+  <button ngs-menu-item>Sonoran desert toad</button>
+  <button ngs-menu-item>Western toad</button>
+  <button ngs-menu-item>Arroyo toad</button>
+  <button ngs-menu-item>Yosemite toad</button>
+</ngs-menu>
+
+<ngs-menu #reptiles="ngsMenu">
+  <button ngs-menu-item>Banded Day Gecko</button>
+  <button ngs-menu-item>Banded Gila Monster</button>
+  <button ngs-menu-item>Black Tree Monitor</button>
+  <button ngs-menu-item>Blue Spiny Lizard</button>
+  <button ngs-menu-item disabled>Velociraptor</button>
+</ngs-menu>

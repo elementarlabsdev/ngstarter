@@ -1,0 +1,51 @@
+<ngs-select #select="ngsSelect"
+            [(value)]="_value"
+            [aria-describedby]="_userAriaDescribedBy()"
+            [disabled]="disabled"
+            [placeholder]="_placeholder()"
+            (opened)="onSelectOpened()"
+            (closed)="onSelectClosed()">
+  <ngs-select-header>
+    <div class="px-3 py-3 rounded-t sticky top-0 z-1">
+      <input #searchInput
+             type="text"
+             placeholder="Search..."
+             autocomplete="off"
+             [(ngModel)]="searchTerm"
+             class="w-full bg-surface-container-low text-sm focus:outline-none rounded-[var(--input-radius)]
+                  focus:bg-surface-container-lowest focus:shadow-sm h-12 px-3">
+      @if (searchTerm().trim()) {
+        <div class="absolute end-4 top-1/2 -translate-y-1/2">
+          <button
+            ngsIconButton
+            (click)="clearSearch($event)"
+            class="clear-button"
+            type="button"
+            aria-label="Clear search">
+            <ngs-icon name="fluent:dismiss-24-regular"/>
+          </button>
+        </div>
+      }
+    </div>
+  </ngs-select-header>
+  <ngs-select-body>
+    @for (timezoneGroup of timezoneGroups() | filterTimezones:searchTerm(); track timezoneGroup.name) {
+      <ngs-optgroup [label]="timezoneGroup.name">
+        @for (timezone of timezoneGroup.timezones; track timezone) {
+          <ngs-option [value]="timezone.id">
+            {{ timezone.id }}
+          </ngs-option>
+        }
+      </ngs-optgroup>
+    } @empty {
+      @if (searchTerm()) {
+        <div class="text-sm px-4 pt-1 pb-4">
+          <span i18n>Timezone not found</span>.
+        </div>
+      }
+    }
+    @if (_value()) {
+      <ngs-option [value]="_value()" class="hidden" style="display: none">{{ _value() }}</ngs-option>
+    }
+  </ngs-select-body>
+</ngs-select>

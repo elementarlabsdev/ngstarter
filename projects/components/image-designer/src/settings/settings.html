@@ -1,0 +1,253 @@
+@let layer = selectedLayer();
+
+@if (layer) {
+  <ngs-toolbar
+    class="h-14 z-10 bg-surface-container-lowest border-b border-border px-5 absolute top-0 left-0 right-0">
+    <!-- Color -->
+    @if (showColorPicker()) {
+      <ngs-toolbar-item>
+        <button [ngsPopoverTriggerFor]="colorPopover"
+                position="below-center"
+                class="size-7 cursor-pointer hover:ring-2 hover:ring-primary rounded-full border border-border"
+                ngsRipple
+                [style.backgroundColor]="layer['fill'] || '#000000'">
+        </button>
+        <ngs-popover #colorPopover>
+          <ng-template ngsPopoverContent>
+            <div class="p-4 w-72">
+              <div class="text-xs font-medium uppercase text-muted-foreground mb-4">
+                {{ layer.type === 'text' ? 'Text Color' : 'Fill Color' }}
+              </div>
+              <ngs-color-switcher [colors]="presetColors()"
+                                  [selectedColor]="layer['fill'] || '#000000'"
+                                  (colorChange)="updateColor($event)"/>
+            </div>
+          </ng-template>
+        </ngs-popover>
+      </ngs-toolbar-item>
+      <ngs-divider vertical/>
+    }
+
+    <!-- Opacity -->
+    <ngs-toolbar-item>
+      <button ngsIconButton
+              [ngsPopoverTriggerFor]="opacityPopover"
+              position="below-center">
+        <ngs-icon name="fluent:blur-24-regular"/>
+      </button>
+      <ngs-popover #opacityPopover>
+        <ng-template ngsPopoverContent>
+          <div class="p-4 w-60 space-y-3">
+            <div class="flex justify-between items-center">
+              <label class="text-xs font-medium uppercase text-muted-foreground">Opacity</label>
+              <span class="text-xs text-muted-foreground">{{ (layer['opacity'] ?? 1) * 100 | number:'1.0-0' }}%</span>
+            </div>
+            <ngs-slider [min]="0" [max]="1" [step]="0.01">
+              <input ngsSliderThumb
+                     [value]="layer['opacity'] ?? 1"
+                     (valueChange)="updateOpacity($event)"/>
+            </ngs-slider>
+          </div>
+        </ng-template>
+      </ngs-popover>
+    </ngs-toolbar-item>
+
+    <!-- Font Selection for text layers -->
+    @if (layer.type === 'text') {
+      <ngs-toolbar-item>
+        <button ngsButton reverse [ngsMenuTriggerFor]="fontMenu">
+          <span class="truncate max-w-[100px]">{{ layer['fontFamily'] }}</span>
+          <ngs-icon name="fluent:chevron-down-20-regular" class="size-5"/>
+        </button>
+
+        <ngs-menu #fontMenu="ngsMenu">
+          <div class="min-w-[200px]">
+            @for (font of fonts(); track font) {
+              <button ngs-menu-item
+                      [selected]="layer['fontFamily'] === font"
+                      (click)="updateFont(font)">
+                {{ font }}
+              </button>
+            }
+          </div>
+        </ngs-menu>
+      </ngs-toolbar-item>
+
+      <!-- Text Styles -->
+      <ngs-toolbar-item>
+        <button ngsIconButton
+                [ngsPopoverTriggerFor]="boldPopover"
+                position="below-center"
+                [class.text-primary]="layer['fontWeight'] && layer['fontWeight'] !== 'normal' && layer['fontWeight'] !== 400"
+                title="Bold">
+          <ngs-icon name="fluent:text-bold-24-regular"/>
+        </button>
+        <ngs-popover #boldPopover>
+          <ng-template ngsPopoverContent>
+            <div class="p-4 w-60 space-y-3">
+              <div class="flex justify-between items-center">
+                <label class="text-xs font-medium uppercase text-muted-foreground">Font Weight</label>
+                <span class="text-xs text-muted-foreground">{{ getFontWeightName(layer['fontWeight']) }}</span>
+              </div>
+              <ngs-slider [min]="300" [max]="900" [step]="100">
+                <input ngsSliderThumb
+                       [value]="layer['fontWeight'] === 'bold' ? 700 : (layer['fontWeight'] === 'normal' ? 400 : (layer['fontWeight'] || 400))"
+                       (valueChange)="updateFontWeight($event)"/>
+              </ngs-slider>
+            </div>
+          </ng-template>
+        </ngs-popover>
+      </ngs-toolbar-item>
+
+      <!-- Uppercase -->
+      <ngs-toolbar-item>
+        <button ngsIconButton
+                (click)="toggleUppercase()"
+                [class.text-primary]="layer['textCase'] === 'upper'"
+                title="Uppercase">
+          <ngs-icon name="fluent:text-case-uppercase-24-regular"/>
+        </button>
+      </ngs-toolbar-item>
+
+      <ngs-toolbar-item>
+        <ngs-button-toggle-group multiple
+                                 hideSelectionIndicator
+                                 [value]="getTextStyle()"
+                                 (valueChange)="updateTextStyle($event)">
+          <ngs-button-toggle value="italic" title="Italic">
+            <ngs-icon name="fluent:text-italic-24-regular"/>
+          </ngs-button-toggle>
+          <ngs-button-toggle value="underline" title="Underline">
+            <ngs-icon name="fluent:text-underline-24-regular"/>
+          </ngs-button-toggle>
+          <ngs-button-toggle value="line-through" title="Strikethrough">
+            <ngs-icon name="fluent:text-strikethrough-24-regular"/>
+          </ngs-button-toggle>
+        </ngs-button-toggle-group>
+      </ngs-toolbar-item>
+
+      <!-- Text Alignment -->
+      <ngs-toolbar-item>
+        <button ngsIconButton
+                [ngsPopoverTriggerFor]="alignPopover"
+                position="below-center"
+                title="Alignment">
+          <ngs-icon [name]="'fluent:text-align-' + (layer['align'] || 'left') + '-24-regular'"/>
+        </button>
+        <ngs-popover #alignPopover>
+          <ng-template ngsPopoverContent>
+            <div class="p-2 flex gap-1">
+              <button ngsIconButton (click)="updateTextAlign('left')" [class.text-primary]="layer['align'] === 'left'">
+                <ngs-icon name="fluent:text-align-left-24-regular"/>
+              </button>
+              <button ngsIconButton (click)="updateTextAlign('center')" [class.text-primary]="layer['align'] === 'center'">
+                <ngs-icon name="fluent:text-align-center-24-regular"/>
+              </button>
+              <button ngsIconButton (click)="updateTextAlign('right')" [class.text-primary]="layer['align'] === 'right'">
+                <ngs-icon name="fluent:text-align-right-24-regular"/>
+              </button>
+              <button ngsIconButton (click)="updateTextAlign('justify')" [class.text-primary]="layer['align'] === 'justify'">
+                <ngs-icon name="fluent:text-align-justify-24-regular"/>
+              </button>
+            </div>
+          </ng-template>
+        </ngs-popover>
+      </ngs-toolbar-item>
+
+      <!-- Spacing (Line Height & Letter Spacing) -->
+      <ngs-toolbar-item>
+        <button ngsIconButton
+                [ngsPopoverTriggerFor]="spacingPopover"
+                position="below-center"
+                title="Spacing">
+          <ngs-icon name="fluent:text-line-spacing-24-regular"/>
+        </button>
+        <ngs-popover #spacingPopover>
+          <ng-template ngsPopoverContent>
+            <div class="p-4 w-60 space-y-6">
+              <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                  <label class="text-xs font-medium uppercase text-muted-foreground">Line Height</label>
+                  <span class="text-xs text-muted-foreground">{{ layer['lineHeight'] || 1.2 | number:'1.1-1' }}</span>
+                </div>
+                <ngs-slider [min]="0.5" [max]="3" [step]="0.1">
+                  <input ngsSliderThumb
+                         [value]="layer['lineHeight'] || 1.2"
+                         (valueChange)="updateLineHeight($event)"/>
+                </ngs-slider>
+              </div>
+              <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                  <label class="text-xs font-medium uppercase text-muted-foreground">Letter Spacing</label>
+                  <span class="text-xs text-muted-foreground">{{ layer['letterSpacing'] || 0 }}</span>
+                </div>
+                <ngs-slider [min]="-5" [max]="50" [step]="1">
+                  <input ngsSliderThumb
+                         [value]="layer['letterSpacing'] || 0"
+                         (valueChange)="updateLetterSpacing($event)"/>
+                </ngs-slider>
+              </div>
+            </div>
+          </ng-template>
+        </ngs-popover>
+      </ngs-toolbar-item>
+    }
+
+    @if (layer.type === 'image') {
+      <ngs-toolbar-item>
+        <button ngsButton reverse [ngsMenuTriggerFor]="flipMenu">
+          <span>Flip</span>
+          <ngs-icon name="fluent:chevron-down-20-regular" class="size-5"/>
+        </button>
+
+        <ngs-menu #flipMenu="ngsMenu">
+          <div class="min-w-[150px]">
+            <button ngs-menu-item (click)="flipHorizontal()">
+              <ngs-icon name="fluent:flip-horizontal-24-regular" class="mr-2"/>
+              <span>Flip horizontally</span>
+            </button>
+            <button ngs-menu-item (click)="flipVertical()">
+              <ngs-icon name="fluent:flip-vertical-24-regular" class="mr-2"/>
+              <span>Flip vertically</span>
+            </button>
+          </div>
+        </ngs-menu>
+      </ngs-toolbar-item>
+
+      <ngs-toolbar-item>
+        <button ngsButton reverse [ngsMenuTriggerFor]="fitMenu">
+          <span>Fit to</span>
+          <ngs-icon name="fluent:chevron-down-20-regular" class="size-5"/>
+        </button>
+
+        <ngs-menu #fitMenu="ngsMenu">
+          <div class="min-w-[150px]">
+            <button ngs-menu-item (click)="fitToPage()">
+              <span>Fit to page</span>
+            </button>
+            <button ngs-menu-item (click)="fillPage()">
+              <span>Fill page</span>
+            </button>
+          </div>
+        </ngs-menu>
+      </ngs-toolbar-item>
+    }
+
+    <ngs-toolbar-item>
+      <button ngsButton reverse (click)="openEffects()">
+        <span>Effects</span>
+      </button>
+    </ngs-toolbar-item>
+
+    <ngs-toolbar-spacer/>
+
+    <!--  <ngs-divider vertical/>-->
+
+    <ngs-toolbar-item>
+      <button ngsIconButton (click)="toggleLock()">
+        <ngs-icon [name]="layer['locked'] ? 'fluent:lock-closed-24-regular' : 'fluent:lock-open-24-regular'"/>
+      </button>
+    </ngs-toolbar-item>
+
+  </ngs-toolbar>
+}

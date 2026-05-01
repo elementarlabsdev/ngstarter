@@ -1,0 +1,10 @@
+<thead [class.ngs-table-sticky-header]="hasStickyHeader()" [class.hidden]="hideHeader()">
+  <ng-container headerRowOutlet />
+</thead>
+<tbody [class.hidden]="hideBody()">
+  <ng-container rowOutlet />
+  <ng-container noDataRowOutlet />
+</tbody>
+<tfoot [class.hidden]="hideFooter()">
+  <ng-container footerRowOutlet />
+</tfoot>

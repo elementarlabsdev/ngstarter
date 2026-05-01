@@ -1,0 +1,19 @@
+<div class="flex flex-col gap-4">
+  <div>
+    <h4 class="mb-2 font-medium">Single range highlight [5, 8]</h4>
+    <ngs-code-highlighter
+      [code]="code"
+      language="typescript"
+      [highlightLines]="[5, 8]"
+    />
+  </div>
+
+  <div>
+    <h4 class="mb-2 font-medium">Multiple ranges highlight [[4, 6], [10, 12]]</h4>
+    <ngs-code-highlighter
+      [code]="code"
+      language="typescript"
+      [highlightLines]="highlightedLines"
+    />
+  </div>
+</div>

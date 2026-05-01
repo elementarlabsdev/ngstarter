@@ -1,0 +1,35 @@
+@reference 'tailwindcss';
+
+:host {
+  border: 1px solid var(--color-border);
+  border-radius: var(--ngs-radio-card-border-radius);
+  padding: var(--ngs-radio-card-padding);
+  cursor: pointer;
+  transition: var(--ngs-radio-card-transition);
+  outline: none;
+  width: 100%;
+  flex: 1 1 200px;
+  display: flex;
+  flex-direction: column;
+  gap: --spacing(1);
+
+  .header {
+    display: flex;
+    align-items: center;
+  }
+
+  &:not(.disabled):hover {
+    border-color: var(--ngs-radio-card-color-border-hover);
+  }
+
+  &.is-selected {
+    border-color: var(--ngs-radio-card-color-selected-border);
+    background: var(--ngs-radio-card-color-selected-bg);
+  }
+
+  &.is-disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    pointer-events: none;
+  }
+}

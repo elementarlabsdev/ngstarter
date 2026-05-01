@@ -1,0 +1,123 @@
+<ngs-page-loading-bar fixed/>
+<ngs-splash-screen>
+  <ngs-logo>
+    <ngs-logo-text size="large">NGSTARTER UI</ngs-logo-text>
+<!--    <ngs-logo-description>Angular UI Kit &amp; Admin Panel</ngs-logo-description>-->
+  </ngs-logo>
+</ngs-splash-screen>
+<ngs-layout root>
+  <ngs-layout-topbar>
+    <ngs-announcement-global/>
+    <ngs-incidents-global/>
+  </ngs-layout-topbar>
+  <ngs-layout-content>
+    <ngs-sidenav-container autosize autoFocus hasBackdrop="false">
+      <ngs-sidenav #sidenav
+                   [(opened)]="opened"
+                   [mode]="sidebarExpanded() ? 'side' : 'over'"
+                   [collapsed]="!sidebarExpanded()"
+                   (openedChange)="onSidebarOpenedChange($event)"
+                   class="border-e border-e-subtle">
+        <ngs-sidebar>
+          <ngs-sidebar-header class="h-18 border-b border-b-subtle">
+            <div class="h-full flex items-center justify-center" *ngsSidenavCollapsed>
+              <a routerLink="/" ngs-logo>
+                <ngs-logo-shape/>
+              </a>
+            </div>
+            <div class="ps-5 pe-4 h-full flex items-center justify-between" *ngsSidenavExpanded>
+              <a routerLink="/" ngs-logo>
+                <ngs-logo-text>NGSTARTER</ngs-logo-text>
+                <ngs-logo-description>Angular UI Kit <span class="text-2xs text-red-500 uppercase">Alpha</span></ngs-logo-description>
+              </a>
+              @if (!sidenav.isMobile()) {
+                <ngs-slide-toggle [(ngModel)]="sidebarExpanded" id="collapse-sidebar"/>
+              }
+            </div>
+          </ngs-sidebar-header>
+          <ngs-sidebar-body>
+            <ngs-scrollbar-area>
+              <ngs-sidebar-nav [activeKey]="activeKey" [dataSource]="navItems" autoScrollToActiveItem class="px-3 py-6">
+                <ng-container *ngsSidebarNavItemDef="'link'; let navItem">
+                  <a ngs-sidebar-nav-item [routerLink]="navItem.link" [key]="navItem.key">
+                    @if (navItem.icon) {
+                      <ngs-icon [name]="navItem.icon" ngsSidebarNavItemIcon/>
+                    }
+
+                    @if (navItem.badge) {
+                      <ng-container ngsSidebarNavItemBadge>{{ navItem.badge }}</ng-container>
+                    }
+                    {{ navItem.name }}
+                  </a>
+                </ng-container>
+
+                <ng-container *ngsSidebarNavItemDef="'heading'; let navItem">
+                  <ngs-sidebar-nav-heading>{{ navItem.name }}</ngs-sidebar-nav-heading>
+                </ng-container>
+
+                <ng-container *ngsSidebarNavItemDef="'group'; let navItem">
+                  <ngs-sidebar-nav-group>
+                    <ngs-sidebar-nav-group-toggle>
+                      @if (navItem.icon) {
+                        <ngs-icon [name]="navItem.icon" ngsSidebarNavItemIcon/>
+                      }
+                      @if (navItem.badge) {
+                        <ng-container ngsSidebarNavItemBadge>{{ navItem.badge }}</ng-container>
+                      }
+                      {{ navItem.name }}
+                      <ngs-icon name="fluent:chevron-down-24-regular" class="size-4.5" ngsSidebarNavGroupToggleIcon/>
+                    </ngs-sidebar-nav-group-toggle>
+                    <ngs-sidebar-nav-group-menu [dataSource]="navItem.children | orderBy:'name'">
+                      <ng-container *ngsSidebarNavItemDef="let child">
+                        <a ngs-sidebar-nav-item
+                           [routerLink]="child.link"
+                           [key]="child.key">{{ child.name }}</a>
+                      </ng-container>
+                    </ngs-sidebar-nav-group-menu>
+                  </ngs-sidebar-nav-group>
+                </ng-container>
+                <ng-container *ngsSidebarNavItemDef="let navItem">
+                  <ngs-sidebar-nav-item>{{ navItem.name }}</ngs-sidebar-nav-item>
+                </ng-container>
+              </ngs-sidebar-nav>
+            </ngs-scrollbar-area>
+          </ngs-sidebar-body>
+        </ngs-sidebar>
+      </ngs-sidenav>
+      <ngs-sidenav-content>
+        <ngs-panel>
+          <ngs-panel-header class="h-18 border-b border-b-subtle">
+            <ngs-toolbar class="h-full ps-4 pe-4 md:pe-6">
+              <button ngsIconButton (click)="sidenav.toggle()">
+                <ngs-icon name="fluent:navigation-24-regular"/>
+              </button>
+<!--              <ngs-toolbar-nav>-->
+<!--                <a ngs-toolbar-nav-link href="https://ngstarter.com">Home</a>-->
+<!--                <a ngs-toolbar-nav-link href="https://demo.ngstarter.com" target="_blank">Live Preview</a>-->
+<!--                <a ngs-toolbar-nav-link href="https://ngstarter.com/documentation">Documentation</a>-->
+<!--              </ngs-toolbar-nav>-->
+              <ngs-toolbar-spacer/>
+              <ngs-toolbar-item class="flex items-center gap-4">
+                <ngs-color-scheme-switcher ngsTooltip="Color Theme"
+                                           ngsSoundEffect
+                                           (colorSchemeChanged)="onColorSchemeChanged($event)">
+                  <ngs-icon name="fluent:weather-sunny-24-regular" *ngsColorSchemeLight/>
+                  <ngs-icon name="fluent:weather-moon-24-regular" *ngsColorSchemeDark/>
+                </ngs-color-scheme-switcher>
+                <a href="https://x.com/ngstarter-ui" target="_blank">
+                  <img src="assets/x.svg" alt="" class="size-5.5">
+                </a>
+                <a ngsButton="filled" target="_blank">
+                  GET NGSTARTER
+                </a>
+              </ngs-toolbar-item>
+            </ngs-toolbar>
+          </ngs-panel-header>
+          <ngs-panel-content>
+            <router-outlet/>
+          </ngs-panel-content>
+        </ngs-panel>
+      </ngs-sidenav-content>
+    </ngs-sidenav-container>
+  </ngs-layout-content>
+</ngs-layout>

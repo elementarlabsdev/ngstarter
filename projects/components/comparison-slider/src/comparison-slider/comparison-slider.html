@@ -1,0 +1,26 @@
+<div
+  #sliderContainer
+  class="comparison-slider-container">
+  <div class="image-wrapper before-image-slot">
+    <ng-content select="[ngsComparisonSliderBeforeImage]"/>
+  </div>
+  <div class="image-wrapper after-image-slot" [style.clipPath]="afterImageClipStyle()">
+    <ng-content select="[ngsComparisonSliderAfterImage]"/>
+  </div>
+  <div
+    #handle
+    class="slider-handle"
+    [style.left]="handleLeftStyle()"
+    role="slider"
+    aria-orientation="horizontal"
+    [attr.aria-valuenow]="sliderPosition()"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    [attr.aria-label]="'Image comparison slider control'">
+    <div class="handle-line"></div>
+    <div class="handle-grip">
+      <ngs-icon name="fluent:chevron-left-24-regular"/>
+      <ngs-icon name="fluent:chevron-right-24-regular"/>
+    </div>
+  </div>
+</div>

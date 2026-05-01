@@ -1,0 +1,13 @@
+<ngs-form-field class="w-1/2">
+  <ngs-label>Pokemon</ngs-label>
+  <ngs-select [formControl]="pokemonControl">
+    <ngs-option>-- None --</ngs-option>
+    @for (group of pokemonGroups; track group) {
+      <ngs-optgroup [label]="group.name" [disabled]="group.disabled">
+        @for (pokemon of group.pokemon; track pokemon) {
+          <ngs-option [value]="pokemon.value">{{ pokemon.viewValue }}</ngs-option>
+        }
+      </ngs-optgroup>
+    }
+  </ngs-select>
+</ngs-form-field>

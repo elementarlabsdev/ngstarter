@@ -1,0 +1,22 @@
+<ng-template>
+  <div
+    class="ngs-menu-panel"
+    [class]="classList()"
+    [class.ngs-menu-before]="_panelClasses().includes('ngs-menu-before')"
+    [class.ngs-menu-after]="_panelClasses().includes('ngs-menu-after')"
+    [class.ngs-menu-above]="_panelClasses().includes('ngs-menu-above')"
+    [class.ngs-menu-below]="_panelClasses().includes('ngs-menu-below')"
+    tabindex="-1"
+    role="menu"
+  >
+    <ng-content select="[ngs-menu-header]"/>
+    <div class="ngs-menu-content">
+      @if (content()) {
+        <ng-container [ngTemplateOutlet]="content()!.templateRef" [ngTemplateOutletContext]="_context()" />
+      } @else {
+        <ng-content />
+      }
+    </div>
+    <ng-content select="[ngs-menu-footer]"/>
+  </div>
+</ng-template>

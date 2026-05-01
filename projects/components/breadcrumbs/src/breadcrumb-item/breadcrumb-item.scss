@@ -1,0 +1,73 @@
+@reference 'tailwindcss';
+
+:host {
+  font-size: var(--ngs-breadcrumbs-item-font-size);
+  font-weight: var(--ngs-breadcrumbs-item-font-weight);
+  color: var(--ngs-breadcrumbs-item-color);
+  display: flex;
+  gap: --spacing(1.5);
+  cursor: pointer;
+  text-decoration: none;
+  align-items: center;
+
+  .icon {
+    line-height: 11px;
+
+    ::ng-deep {
+      .ngs-breadcrumb-item-icon {
+        font-size: 22px;
+        width: 22px;
+        height: 22px;
+        flex: none;
+      }
+    }
+  }
+
+  .icon {
+    &:empty {
+      display: none;
+    }
+  }
+
+  .content {
+    &:has(.name:empty) {
+      display: none;
+    }
+  }
+
+  &:not(:last-child):hover {
+    .icon {
+      color: var(--ngs-breadcrumbs-item-hover-color);
+    }
+
+    .name {
+      color: var(--ngs-breadcrumbs-item-hover-color);
+      text-decoration: underline;
+      text-underline-offset: var(--underline-offset-1);
+    }
+  }
+
+  &:last-child {
+    cursor: auto;
+    color: var(--ngs-breadcrumbs-active-item-color);
+  }
+}
+
+:host-context(.ngs-breadcrumbs.last-item-as-link) {
+  &:last-child {
+    color: var(--ngs-breadcrumbs-item-color);
+    cursor: pointer;
+
+    &:hover {
+      .icon {
+        color: var(--ngs-breadcrumbs-item-hover-color);
+      }
+
+      .name {
+        color: var(--ngs-breadcrumbs-item-hover-color);
+        text-decoration: underline;
+        text-underline-offset: var(--underline-offset-1);
+      }
+    }
+  }
+}

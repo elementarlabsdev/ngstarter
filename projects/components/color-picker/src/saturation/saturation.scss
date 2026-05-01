@@ -1,0 +1,43 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  flex: none;
+  position: relative;
+  width: var(--ngs-color-picker-saturation-width);
+  height: var(--ngs-color-picker-saturation-height);
+  border-radius: var(--ngs-color-picker-border-radius);
+
+  &:before {
+    content: '';
+    background: linear-gradient(to right,#fff,rgba(255,255,255,0));
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+  }
+
+  &:after {
+    content: '';
+    background: linear-gradient(to top,#000,rgba(0,0,0,0));
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+  }
+
+  .pointer {
+    z-index: 2;
+    flex: none;
+    position: absolute;
+    cursor: pointer;
+    border: var(--ngs-color-picker-saturation-pointer-border);
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    width: var(--ngs-color-picker-saturation-pointer-size);
+    height: var(--ngs-color-picker-saturation-pointer-size);
+    transform: translate(-50%, -50%);
+    box-shadow: var(--ngs-color-picker-saturation-pointer-shadow);
+  }
+}

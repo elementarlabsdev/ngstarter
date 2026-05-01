@@ -1,0 +1,19 @@
+@reference 'tailwindcss';
+
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: --spacing(8);
+  width: --spacing(40);
+  height: --spacing(40);
+  background: var(--color-surface-container);
+  border-radius: calc(infinity * 1px);
+  margin-bottom: --spacing(6);
+
+  ::ng-deep {
+    ngs-icon {
+      --icon-size: --spacing(28);
+    }
+  }
+}

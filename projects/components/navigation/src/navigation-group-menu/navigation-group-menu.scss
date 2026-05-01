@@ -1,0 +1,25 @@
+@reference 'tailwindcss';
+
+:host {
+  position: relative;
+  padding-inline-start: var(--ngs-navigation-group-menu-padding-start);
+  transition: grid-template-rows 200ms ease;
+  grid-template-rows: 0fr;
+  display: grid;
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ngs-navigation-items-gap);
+    overflow: hidden;
+  }
+}
+
+:host(.is-active) {
+  grid-template-rows: 1fr;
+  margin-top: var(--ngs-navigation-item-space-y);
+
+  .inner {
+    padding: calc(var(--ngs-navigation-items-gap) * 2) 0 var(--ngs-navigation-items-gap) 0;
+  }
+}

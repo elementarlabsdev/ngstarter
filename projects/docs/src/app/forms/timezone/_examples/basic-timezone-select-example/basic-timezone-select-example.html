@@ -1,0 +1,8 @@
+<ngs-form-field class="w-1/2">
+  <ngs-label>Timezones</ngs-label>
+  <ngs-timezone-select [(ngModel)]="selectedTimezone" placeholder="Select a timezone"/>
+</ngs-form-field>
+
+<p>
+  Selected timezone: {{ selectedTimezone() }}
+</p>

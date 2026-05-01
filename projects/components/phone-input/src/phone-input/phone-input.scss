@@ -1,0 +1,74 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-phone-input-color: var(--color-neutral-600);
+  --ngs-phone-input-opacity: 0;
+
+  @media print {
+    --ngs-phone-input-flag-display: none;
+  }
+
+  .flag-icon {
+    margin-inline-end: --spacing(2);
+  }
+
+  &.is-floating {
+    .country-selector {
+      opacity: 1;
+    }
+  }
+
+  .phone-input-container {
+    display: flex;
+    align-items: center;
+    height: var(--ngs-phone-input-height, 24px);
+  }
+
+  input {
+    border: none;
+    background: none;
+    outline: none;
+    font: inherit;
+    width: max-content;
+    box-sizing: border-box;
+    padding-right: 6px;
+    padding-left: 4px;
+    position: relative;
+    z-index: 0;
+  }
+
+  .icon-wrapper {
+    padding-right: 24px;
+  }
+
+  .mdc-button__label {
+    margin-right: auto;
+  }
+
+  .country-selector {
+    display: flex;
+    align-items: center;
+    border-radius: 0;
+    color: var(--ngs-phone-input-color);
+    flex-shrink: 0;
+    height: initial;
+    line-height: unset;
+    padding: 1px;
+    opacity: var(--ngs-phone-input-opacity, 0);
+    transition: opacity 200ms;
+    border: unset;
+
+    &:disabled {
+      opacity: .8;
+    }
+  }
+
+  .country-selector-code {
+    color: var(--ngs-phone-input-color);
+    padding-right: 0;
+  }
+}
+
+:host-context(html.dark) {
+  --ngs-phone-input-color: var(--color-neutral-500);
+}

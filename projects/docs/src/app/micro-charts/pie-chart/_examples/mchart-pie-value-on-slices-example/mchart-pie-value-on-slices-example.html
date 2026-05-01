@@ -1,0 +1,21 @@
+<div class="flex items-center gap-10">
+  <ngs-mchart-pie [data]="data1 | shuffleArray"
+                  showDataAnimation
+                  showValueOnSlices
+                  valueFontSize="7"
+                  class="size-[25px]" />
+  <ngs-mchart-pie [data]="data2 | shuffleArray"
+                  showDataAnimation
+                  showValueOnSlices
+                  valueFontSize="10"
+                  class="size-[50px]" />
+  <ngs-mchart-pie [data]="data3 | shuffleArray"
+                  showDataAnimation
+                  showValueOnSlices
+                  valueFontSize="11"
+                  class="size-[100px]" />
+  <ngs-mchart-pie [data]="data4 | shuffleArray"
+                  showDataAnimation
+                  showValueOnSlices
+                  class="size-[200px]" />
+</div>

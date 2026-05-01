@@ -1,0 +1,53 @@
+<app-page>
+  <h1 appPageTitle>Typography</h1>
+  <div appPageContent>
+    <div>
+      <h2>Customizing Typography</h2>
+      <p>
+        Note: The information on this page is specific to Version 3, for Version 2 information on typography go to the Version 2 guide.
+      </p>
+
+      <h3>
+        What is typography?
+      </h3>
+      <p>
+        Typography is a way of arranging type to make text legible, readable, and appealing when displayed.
+        The theming system supports customizing the typography settings for the library's components.
+        Additionally, Ngs provides APIs for applying typography styles to elements in your own application.
+      </p>
+
+      <h4>
+        Including font assets
+      </h4>
+      <p>
+        Typography APIs lets you specify any font-face. The default font-face value is configured
+        to Google's Roboto font with the 300, 400, and 500 font-weight styles. To use Roboto, your application must
+        load the font. The easiest way to load Roboto, or any other
+        custom font, is by using Google Fonts. The following snippet can be placed in your application's
+        to load Roboto from Google Fonts.
+      </p>
+
+      <h4>Inline text elements</h4>
+      <div class="border border-muted p-7 rounded-xl">
+        <div class="bd-example">
+          <p>You can use the mark tag to
+            <mark>highlight</mark> text.
+          </p>
+          <p>
+            <del>This line of text is meant to be treated as deleted text.</del>
+          </p>
+          <p>
+            <s>This line of text is meant to be treated as no longer accurate.</s>
+          </p>
+          <p><ins>This line of text is meant to be treated as an addition to the document.</ins></p>
+          <p>
+            <u>This line of text will render as underlined</u>
+          </p>
+          <p><small>This line of text is meant to be treated as fine print.</small></p>
+          <p><strong>This line rendered as bold text.</strong></p>
+          <p><em>This line rendered as italicized text.</em></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-page>

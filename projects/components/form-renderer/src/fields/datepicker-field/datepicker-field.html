@@ -1,0 +1,12 @@
+@if(control() && config()) {
+  <ngs-form-field>
+    <ngs-label>{{ config().label }}</ngs-label>
+    <input ngsInput [ngsDatepicker]="picker" [formControl]="control()" readonly>
+    <ngs-datepicker-toggle ngsSuffix [for]="picker" />
+    <ngs-datepicker #picker />
+    <ngs-hint>{{ config().hint }}</ngs-hint>
+    @if (control().invalid && control().touched) {
+      <ngs-error>{{ getErrorMessage() }}</ngs-error>
+    }
+  </ngs-form-field>
+}

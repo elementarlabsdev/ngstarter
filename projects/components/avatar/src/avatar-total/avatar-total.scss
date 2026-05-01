@@ -1,0 +1,42 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-avatar-font-weight: 500;
+  --ngs-avatar-size: --spacing(10);
+  --ngs-avatar-border-radius: calc(infinity * 1px);
+  --ngs-avatar-bg: theme(--color-emerald-500);
+  --ngs-avatar-color: white;
+  --ngs-avatar-inner-border: inset 0 0 2px var(--color-border);
+  --ngs-avatar-total-font-size: theme(--text-xs);
+  --ngs-avatar-total-font-weight: 500;
+  --ngs-avatar-total-color: white;
+  --ngs-avatar-total-bg: var(--color-neutral-700);
+  --ngs-avatar-total-hover-bg: var(--color-neutral-600);
+
+  background: var(--ngs-avatar-total-bg);
+  font-size: var(--ngs-avatar-total-font-size);
+  font-weight: var(--ngs-avatar-total-font-weight);
+  color: var(--ngs-avatar-total-color);
+  border-radius: var(--ngs-avatar-border-radius);
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: var(--ngs-avatar-total-hover-bg);
+  }
+}
+
+:host:not([class*="w-"]):not([class*="size-"]) {
+  width: var(--ngs-avatar-size);
+}
+
+:host:not([class*="h-"]):not([class*="size-"]) {
+  height: var(--ngs-avatar-size);
+}
+
+:host-context(html.dark) {
+  --ngs-avatar-group-item-border: 0.125rem solid var(--color-neutral-950);
+  --ngs-avatar-presence-indicator-outline: var(--color-neutral-950) solid 2px;
+}

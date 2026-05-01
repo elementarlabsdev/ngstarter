@@ -1,0 +1,61 @@
+<h3 class="ngs-title-large">Single line lists</h3>
+<ngs-list>
+  <ngs-list-item>
+    <span ngsListItemTitle>This is the title</span>
+  </ngs-list-item>
+  <ngs-list-item>Also the title</ngs-list-item>
+</ngs-list>
+
+<h3 class="ngs-title-large">Two line lists</h3>
+<ngs-list>
+  <ngs-list-item>
+    <span ngsListItemTitle>Title</span>
+    <span ngsListItemLine>Second line</span>
+  </ngs-list-item>
+  <ngs-list-item>
+    <span ngsListItemTitle>Title</span>
+    <span>Second line</span>
+  </ngs-list-item>
+  <ngs-list-item>
+    <span ngsListItemTitle>Title</span>
+    Second line
+  </ngs-list-item>
+</ngs-list>
+
+<h3 class="ngs-title-large">Three line lists</h3>
+<ngs-list>
+  <ngs-list-item>
+    <span ngsListItemTitle>Title</span>
+    <span ngsListItemLine>Second line</span>
+    <span ngsListItemLine>Third line</span>
+  </ngs-list-item>
+  <ngs-list-item>
+    <span ngsListItemTitle>Title</span>
+    <span ngsListItemLine>Second line. This line will truncate.</span>
+    <span>Third line</span>
+  </ngs-list-item>
+  <ngs-list-item>
+    <span ngsListItemTitle>Title</span>
+    <span ngsListItemLine>Second line. This line will truncate.</span>
+    Third line
+  </ngs-list-item>
+</ngs-list>
+
+<h3 class="ngs-title-large">Three line list with secondary text wrapping</h3>
+<ngs-list>
+  <ngs-list-item lines="3">
+    <span ngsListItemTitle>Title</span>
+    <span>
+      Secondary line that will wrap because the list lines is explicitly set to 3 lines. Text
+      inside of a `ngsListItemTitle` or `ngsListItemLine` will never wrap.
+    </span>
+  </ngs-list-item>
+  <ngs-list-item lines="3">
+    <span ngsListItemTitle>Title</span>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+    non proident, sunt in culpa qui officia deserunt mollit anim id est
+  </ngs-list-item>
+</ngs-list>

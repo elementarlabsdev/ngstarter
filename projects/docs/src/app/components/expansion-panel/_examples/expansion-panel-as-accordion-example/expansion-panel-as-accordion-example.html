@@ -1,0 +1,63 @@
+<ngs-accordion class="example-headers-align">
+  <ngs-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+    <ngs-expansion-panel-header>
+      <ngs-expansion-panel-title>
+        Personal data
+      </ngs-expansion-panel-title>
+      <ngs-expansion-panel-description>
+        Type your name and age
+        <ngs-icon name="fluent:person-circle-24-regular"/>
+      </ngs-expansion-panel-description>
+    </ngs-expansion-panel-header>
+    <ngs-form-field>
+      <ngs-label>First name</ngs-label>
+      <input ngsInput>
+    </ngs-form-field>
+    <ngs-form-field>
+      <ngs-label>Age</ngs-label>
+      <input ngsInput type="number" min="1">
+    </ngs-form-field>
+    <ngs-action-row>
+      <button ngsButton (click)="nextStep()">Next</button>
+    </ngs-action-row>
+  </ngs-expansion-panel>
+  <ngs-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+    <ngs-expansion-panel-header>
+      <ngs-expansion-panel-title>
+        Destination
+      </ngs-expansion-panel-title>
+      <ngs-expansion-panel-description>
+        Type the country name
+        <ngs-icon name="fluent:map-24-regular"/>
+      </ngs-expansion-panel-description>
+    </ngs-expansion-panel-header>
+    <ngs-form-field>
+      <ngs-label>Country</ngs-label>
+      <input ngsInput>
+    </ngs-form-field>
+    <ngs-action-row>
+      <button ngsButton (click)="prevStep()">Previous</button>
+      <button ngsButton (click)="nextStep()">Next</button>
+    </ngs-action-row>
+  </ngs-expansion-panel>
+  <ngs-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+    <ngs-expansion-panel-header>
+      <ngs-expansion-panel-title>
+        Day of the trip
+      </ngs-expansion-panel-title>
+      <ngs-expansion-panel-description>
+        Inform the date you wish to travel
+        <ngs-icon name="fluent:calendar-day-24-regular"/>
+      </ngs-expansion-panel-description>
+    </ngs-expansion-panel-header>
+    <ngs-form-field>
+      <ngs-label>Date</ngs-label>
+      <input ngsInput [ngsDatepicker]="picker" (focus)="picker.open()" readonly>
+    </ngs-form-field>
+    <ngs-datepicker #picker />
+    <ngs-action-row>
+      <button ngsButton (click)="prevStep()">Previous</button>
+      <button ngsButton (click)="nextStep()">End</button>
+    </ngs-action-row>
+  </ngs-expansion-panel>
+</ngs-accordion>

@@ -1,0 +1,61 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-brand-colors-color-size: --spacing(7);
+  --ngs-brand-colors-gap: --spacing(3);
+
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--ngs-brand-colors-gap);
+  line-height: 0;
+
+  .color {
+    --color: transparent;
+    width: var(--ngs-brand-colors-color-size);
+    height: var(--ngs-brand-colors-color-size);
+    border-radius: calc(infinity * 1px);
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+    position: relative;
+    background: var(--color);
+    line-height: 0;
+    flex: none;
+    cursor: pointer;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    box-shadow: rgba(50, 50, 93, 0.15) 0 2px 8px 0 inset;
+
+    &:hover {
+      scale: 1.05;
+    }
+
+    &:active {
+      scale: 0.95;
+    }
+
+    &.is-selected {
+      &:before {
+        content: '';
+        position: absolute;
+        border-radius: calc(infinity * 1px);
+        background: #fff;
+        width: --spacing(3);
+        height: --spacing(3);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+        box-shadow: theme(--shadow-sm);
+      }
+    }
+  }
+
+  &.is-disabled {
+    pointer-events: none;
+    opacity: 60%;
+  }
+}

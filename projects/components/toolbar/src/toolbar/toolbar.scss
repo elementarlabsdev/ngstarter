@@ -1,0 +1,45 @@
+@reference 'tailwindcss';
+
+:host {
+  display: flex;
+  align-items: center;
+  gap: --spacing(4);
+  overflow: hidden;
+  flex-wrap: nowrap;
+  width: 100%;
+
+  &:has(> ngs-toolbar-row) {
+    flex-direction: column;
+  }
+
+  & > ngs-toolbar-item {
+    flex-shrink: 0;
+  }
+}
+
+.ngs-toolbar-overflow-dialog {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.ngs-toolbar-overflow-dialog-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: --spacing(2);
+}
+
+.ngs-toolbar-overflow-dialog-content {
+  display: flex;
+  flex-direction: column;
+  padding: --spacing(4);
+  gap: --spacing(2);
+  flex: 1;
+  overflow-y: auto;
+}
+
+.ngs-toolbar-overflow-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}

@@ -1,0 +1,110 @@
+@reference 'tailwindcss';
+@reference '../../../styles/_common.scss';
+
+:host {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  white-space: nowrap;
+  position: relative;
+  flex: none;
+  cursor: pointer;
+  user-select: none;
+  background: var(--ngs-navigation-group-toggle-bg);
+  min-height: var(--ngs-navigation-item-height);
+  padding: var(--ngs-navigation-item-padding);
+  font-size: var(--ngs-navigation-item-font-size);
+  border-radius: var(--ngs-navigation-item-border-radius);
+  font-weight: var(--ngs-navigation-item-font-weight);
+  color: var(--ngs-navigation-item-color);
+  gap: var(--ngs-navigation-item-gap);
+  width: var(--ngs-navigation-item-width);
+
+  .text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .badge {
+    &:empty {
+      display: none;
+    }
+
+    display: inline-flex;
+    flex: none;
+    border-radius: calc(infinity * 1px);
+    height: --spacing(5);
+    min-width: --spacing(5);
+    align-items: center;
+    justify-content: center;
+    font-size: theme(--text-xs);
+    padding: 0 --spacing(1.5);
+    font-weight: bold;
+  }
+
+  &:not(.is-badge-text-only) {
+    .badge {
+      font-weight: 600;
+      font-size: theme(--text-2xs);
+      background: var(--color-primary);
+      color: var(--color-on-primary);
+    }
+  }
+
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--ngs-navigation-item-icon-width);
+    color: var(--ngs-navigation-item-icon-color);
+    flex: none;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 200ms ease;
+    flex: none;
+    width: --spacing(7);
+    height: --spacing(7);
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  &:hover {
+    background: var(--ngs-navigation-item-hover-bg);
+    color: var(--ngs-navigation-item-hover-color);
+    transition: background-color .2s;
+  }
+
+  &.is-active,
+  &.is-active:hover {
+    background: var(--ngs-navigation-group-toggle-active-bg);
+    color: var(--ngs-navigation-group-toggle-active-color);
+  }
+
+  &:not(.is-active):hover .icon {
+    color: var(--ngs-navigation-item-hover-icon-color);
+  }
+
+  &.is-active {
+    .icon {
+      color: var(--ngs-navigation-group-toggle-active-color);
+    }
+
+    .arrow {
+      transform: rotate(-180deg);
+    }
+  }
+
+  &:has(.arrow:not(:empty)) {
+    padding-inline-end: var(--ngs-navigation-group-toggle-has-icon-padding-end);
+  }
+}

@@ -1,0 +1,18 @@
+@reference 'tailwindcss';
+
+:host {
+  flex: none;
+  cursor: pointer;
+  display: inline-flex;
+  color: var(--ngs-file-control-color);
+
+  &:hover {
+    color: var(--ngs-file-control-hover-color);
+  }
+
+  ::ng-deep {
+    ngs-icon {
+      --icon-size: --spacing(6);
+    }
+  }
+}

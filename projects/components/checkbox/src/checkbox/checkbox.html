@@ -1,0 +1,54 @@
+<div class="ngs-checkbox-layout" [class.ngs-checkbox-label-before]="labelPosition() === 'before'"
+     (click)="_preventBubblingFromLabel($event)">
+  <div #checkbox class="ngs-checkbox-frame">
+    <div class="ngs-checkbox-touch-target" (click)="_onTouchTargetClick()"></div>
+    <input #input
+           type="checkbox"
+           class="ngs-checkbox-native-control"
+           [class.ngs-checkbox--selected]="checked()"
+           [attr.aria-label]="ariaLabel() || null"
+           [attr.aria-labelledby]="ariaLabelledby()"
+           [attr.aria-describedby]="ariaDescribedby()"
+           [attr.aria-checked]="indeterminate() ? 'mixed' : null"
+           [attr.aria-controls]="ariaControls()"
+           [attr.aria-disabled]="disabled() && disabledInteractive() ? true : null"
+           [attr.aria-expanded]="ariaExpanded()"
+           [attr.aria-owns]="ariaOwns()"
+           [attr.name]="name()"
+           [attr.value]="value()"
+           [checked]="checked()"
+           [indeterminate]="indeterminate()"
+           [disabled]="disabled() && !disabledInteractive()"
+           [id]="inputId"
+           [required]="required()"
+           [tabIndex]="disabled() && !disabledInteractive() ? -1 : tabIndex()"
+           (blur)="_onBlur()"
+           (click)="_onInputClick()"
+           (change)="_onInteractionEvent($event)"/>
+    <div class="ngs-checkbox-ripple-container"></div>
+    <div class="ngs-checkbox-background">
+      @if (indeterminate()) {
+        <div class="ngs-checkbox-mixedmark"></div>
+      } @else if (checked()) {
+        <svg class="ngs-checkbox-checkmark"
+             focusable="false"
+             viewBox="0 0 24 24"
+             aria-hidden="true">
+          <path class="ngs-checkbox-checkmark-path"
+                fill="none"
+                d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+        </svg>
+      }
+    </div>
+    <div class="ngs-checkbox-ripple" ngsRipple
+         [ngsRippleTrigger]="checkbox"
+         [ngsRippleDisabled]="disableRipple() || disabled()"
+         [ngsRippleCentered]="true"></div>
+  </div>
+  <label class="ngs-checkbox-label" #label [for]="inputId">
+    <span class="content"><ng-content /></span>
+    <span class="description">
+      <ng-content select="[ngsCheckboxDecription]" />
+    </span>
+  </label>
+</div>

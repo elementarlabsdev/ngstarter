@@ -1,0 +1,8 @@
+@for (color of colors(); track color) {
+  <button class="color"
+       [style.--color]="color"
+       [class.is-selected]="_selectedColor === color"
+       (click)="selectColor(color)">
+  </button>
+}
+

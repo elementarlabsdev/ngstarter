@@ -1,0 +1,29 @@
+@reference 'tailwindcss';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  &.is-root {
+    width: 100dvw;
+    height: 100dvh;
+  }
+
+  .body {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .content {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+}

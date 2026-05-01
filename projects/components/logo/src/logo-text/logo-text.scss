@@ -1,0 +1,21 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  color: var(--ngs-logo-text-color);
+  font-size: var(--ngs-logo-text-font-size);
+  font-weight: var(--ngs-logo-text-font-weight);
+  line-height: 1;
+
+  &[data-size='small'] {
+    --ngs-logo-text-font-size: theme(--text-sm);
+  }
+
+  &[data-size='default'] {
+    --ngs-logo-text-font-size: theme(--text-xl);
+  }
+
+  &[data-size='large'] {
+    --ngs-logo-text-font-size: theme(--text-3xl);
+  }
+}

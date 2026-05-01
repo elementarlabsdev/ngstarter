@@ -1,0 +1,264 @@
+@if (_isServer) {
+  <ng-content/>
+}
+
+<ng-template #itemsTpl let-items>
+  <div class="group">
+    @for (item of items; track item; let index = $index) {
+      @if (_isGroup(item)) {
+        <div class="flex items-center group-operations">
+          <div class="remove" (click)="removeCondition(index, items)">
+            <ngs-icon name="fluent:dismiss-24-regular" class="font-icon"/>
+          </div>
+          <button [ngsMenuTriggerFor]="nestedGroupOperationsMenu" class="group-operation">
+            {{ getSelectedGroupOperationName(item) }}
+          </button>
+          <div [ngsMenuTriggerFor]="addGroupMenu" class="add">
+            <ngs-icon name="fluent:add-24-regular" class="font-icon"/>
+          </div>
+          <ngs-menu #nestedGroupOperationsMenu="ngsMenu">
+            <div ngsMenuOptionGroup [(ngModel)]="item['logicalOperator']">
+              @for (groupOperation of groupOperations(); track groupOperation.id) {
+                <ngs-option [value]="groupOperation.id">{{ groupOperation.name }}</ngs-option>
+              }
+            </div>
+          </ngs-menu>
+          <ngs-menu #addGroupMenu="ngsMenu">
+            <button ngs-menu-item (click)="addCondition(item)">Add Condition</button>
+            <button ngs-menu-item (click)="addGroup(item)">Add Group</button>
+          </ngs-menu>
+        </div>
+        @if (item['value'].length > 0) {
+          <ng-container [ngTemplateOutlet]="itemsTpl" [ngTemplateOutletContext]="{ $implicit: item['value'] }" />
+        }
+      } @else if (_isCondition(item)) {
+        <div class="condition">
+          <div class="remove" (click)="removeCondition(index, items)">
+            <ngs-icon name="fluent:dismiss-24-regular" class="font-icon"/>
+          </div>
+          <button class="condition-field"
+                  [ngsMenuTriggerFor]="fieldsMenu">{{ getConditionField(item['value'][0])?.name }}</button>
+          <button class="condition-operation"
+                  [ngsMenuTriggerFor]="operationsMenu">
+            <ng-template [ngTemplateOutlet]="getConditionOperation(item['value'][1])?.name" />
+          </button>
+          <div class="relative">
+            @if (editItem && editItem === item) {
+              <div class="absolute start-0 top-0 -translate-y-1/2">
+                @switch (getFieldType(editItem)) {
+                  @case ('array') {
+                    @switch (editItem['value'][1]) {
+                      @case ('equals') {
+                        <ngs-form-field class="form-field">
+                          <ngs-select placeholder="Select..."
+                                      ngsAutoFocus
+                                      (blur)="selectBlur($event)"
+                                      [(ngModel)]="item['value'][2]"
+                                      (ngModelChange)="_emitChangeEvent()">
+                            @for (option of getOptions(editItem); track option.id) {
+                              <ngs-option [value]="option.id">{{ option.name }}</ngs-option>
+                            }
+                          </ngs-select>
+                        </ngs-form-field>
+                      }
+
+                      @case ('isAnyOf') {
+                        <ngs-form-field class="form-field">
+                          <ngs-select placeholder="Select..." multiple
+                                      ngsAutoFocus
+                                      (blur)="selectBlur($event)"
+                                      [(ngModel)]="item['value'][2]"
+                                      (closed)="selectClosed()">
+                            @for (option of getOptions(editItem); track option.id) {
+                              <ngs-option [value]="option.id">{{ option.name }}</ngs-option>
+                            }
+                          </ngs-select>
+                        </ngs-form-field>
+                      }
+                    }
+                  }
+
+                  @case ('number') {
+                    @switch (editItem['value'][1]) {
+                      @case ('isBetween') {
+                        <div class="flex gap-2 items-center"
+                             ngsFocusElement (elementBlurred)="cancelEdit()">
+                          <ngs-form-field class="form-field-number">
+                            <input type="number" ngsInput ngsAutoFocus
+                                   [(ngModel)]="item['value'][2][0]"
+                                   (ngModelChange)="_emitChangeEvent()">
+                          </ngs-form-field>
+                          <div class="text-neutral-500">&ndash;</div>
+                          <ngs-form-field class="form-field-number">
+                            <input type="number" ngsInput
+                                   [(ngModel)]="item['value'][2][1]"
+                                   (ngModelChange)="_emitChangeEvent()">
+                          </ngs-form-field>
+                        </div>
+                      }
+                      @default {
+                        <ngs-form-field class="form-field-number">
+                          <input type="number" ngsInput ngsAutoFocus
+                                 (blur)="cancelEdit()"
+                                 [(ngModel)]="item['value'][2]"
+                                 (ngModelChange)="_emitChangeEvent()">
+                        </ngs-form-field>
+                      }
+                    }
+                  }
+
+                  @default {
+                    <ngs-form-field class="form-field">
+                      <input type="text" ngsInput ngsAutoFocus
+                             (blur)="cancelEdit()"
+                             [(ngModel)]="item['value'][2]"
+                             (ngModelChange)="_emitChangeEvent()">
+                    </ngs-form-field>
+                  }
+                }
+              </div>
+            } @else {
+              @if (item['value'][1] !== 'isBlank' && item['value'][1] !== 'isNotBlank') {
+                @if (isValueNotEmpty(item)) {
+                  @if (getFieldType(item) === 'array') {
+                    @if (item['value'][1] === 'equals') {
+                      <button class="condition-value" (click)="modifyValue(item)">
+                        {{ getDataSourceItemNameById(item, item['value'][2]) }}
+                      </button>
+                    } @else {
+                    <button class="condition-value flex items-center gap-2" (click)="modifyValue(item)">
+                      @for (dataSourceItemId of item['value'][2]; track dataSourceItemId; let last = $last) {
+                        <span>{{ getDataSourceItemNameById(item, dataSourceItemId) }}</span>
+                        @if (!last) {
+                          <span class="text-neutral-500">|</span>
+                        }
+                      }
+                    </button>
+                    }
+                  } @else {
+                    @if (item['value'][1] === 'isBetween') {
+                      <button class="condition-value flex items-center gap-2" (click)="modifyValue(item)">
+                        <span>{{ item['value'][2][0] }}</span>
+                        <span class="text-neutral-500">&ndash;</span>
+                        <span>{{ item['value'][2][1] }}</span>
+                      </button>
+                    } @else {
+                      <button class="condition-value" (click)="modifyValue(item)">
+                        <span>{{ item['value'][2] }}</span>
+                      </button>
+                    }
+                  }
+                } @else {
+                  <button class="condition-value" (click)="modifyValue(item)">
+                    <span i18n>&lt;enter a value&gt;</span>
+                  </button>
+                }
+              }
+            }
+          </div>
+        </div>
+        <ngs-menu #fieldsMenu="ngsMenu">
+          <ng-template ngsMenuContent>
+            <div ngsMenuOptionGroup [(ngModel)]="item['value'][0]">
+              @for (fieldDef of fieldDefs(); track fieldDef) {
+                <ngs-option [value]="fieldDef.dataField"
+                            (click)="selectConditionField(item, fieldDef)">{{ fieldDef.name }}</ngs-option>
+              }
+            </div>
+          </ng-template>
+        </ngs-menu>
+        <ngs-menu #operationsMenu="ngsMenu">
+          <ng-template ngsMenuContent>
+            <div ngsMenuOptionGroup [ngModel]="item['value'][1]">
+              @for (operation of _operationDefs; track operation.id()) {
+                <div [hidden]="!isOperationAllowedForCondition(item['value'][0], operation.id())">
+                  <ngs-option [value]="operation.id()" (click)="operationChanged(item, operation.id())">
+                    <div class="flex items-center gap-3">
+                      @if (operation.operationIcon()) {
+                        <ng-template [ngTemplateOutlet]="operationIconTemplateRef(operation)" />
+                      }
+                      <div>
+                        <ng-template [ngTemplateOutlet]="operationNameTemplateRef(operation)" />
+                      </div>
+                    </div>
+                  </ngs-option>
+                </div>
+              }
+            </div>
+          </ng-template>
+        </ngs-menu>
+      }
+    }
+  </div>
+</ng-template>
+
+<div class="group">
+  <div class="flex items-center group-operations">
+    <button [ngsMenuTriggerFor]="groupOperationsMenu" class="group-operation">
+      {{ getSelectedGroupOperationName() }}
+    </button>
+    <div [ngsMenuTriggerFor]="addMenu" class="add">
+      <ngs-icon name="fluent:add-24-regular" class="font-icon"/>
+    </div>
+  </div>
+  <ng-container [ngTemplateOutlet]="itemsTpl" [ngTemplateOutletContext]="{ $implicit: _value }" />
+</div>
+
+<ngs-menu #groupOperationsMenu="ngsMenu">
+  <ng-template ngsMenuContent>
+    <div ngsMenuOptionGroup [(ngModel)]="_logicalOperator" (ngModelChange)="_emitChangeEvent()">
+      @for (operation of groupOperations(); track operation.id) {
+        <ngs-option [value]="operation.id">{{ operation.name }}</ngs-option>
+      }
+    </div>
+  </ng-template>
+</ngs-menu>
+<ngs-menu #addMenu="ngsMenu">
+  <ng-template ngsMenuContent>
+    <button ngs-menu-item (click)="addCondition()">Add Condition</button>
+    <button ngs-menu-item (click)="addGroup()">Add Group</button>
+  </ng-template>
+</ngs-menu>
+
+<ng-container ngsFilterBuilderOperationDef="contains" [allowedDataTypes]="['string']">
+  <ng-template ngsFilterBuilderOperationName>Contains</ng-template>
+</ng-container>
+<ng-container ngsFilterBuilderOperationDef="doesNotContain" [allowedDataTypes]="['string']">
+  <ng-template ngsFilterBuilderOperationName>Does not contain</ng-template>
+</ng-container>
+<ng-container ngsFilterBuilderOperationDef="startsWith" [allowedDataTypes]="['string']">
+  <ng-template ngsFilterBuilderOperationName>Starts with</ng-template>
+</ng-container>
+<ng-container ngsFilterBuilderOperationDef="endsWith" [allowedDataTypes]="['string']">
+  <ng-template ngsFilterBuilderOperationName>Ends with</ng-template>
+</ng-container>
+<ng-container ngsFilterBuilderOperationDef="equals" [allowedDataTypes]="['string', 'number', 'array', 'boolean']">
+  <ng-template ngsFilterBuilderOperationName>Equals</ng-template>
+</ng-container>
+<ng-container ngsFilterBuilderOperationDef="notEquals" [allowedDataTypes]="['string', 'number', 'boolean']">
+  <ng-template ngsFilterBuilderOperationName>Not equals</ng-template>
+</ng-container>
+<ng-container ngsFilterBuilderOperationDef="isLessThen" [allowedDataTypes]="['number']">
+  <ng-template ngsFilterBuilderOperationName>Is less then</ng-template>
+</ng-container>
+<ng-container ngsFilterBuilderOperationDef="isLessThenOrEqual" [allowedDataTypes]="['number']">
+  <ng-template ngsFilterBuilderOperationName>Is less then or equal to</ng-template>
+</ng-container>
+<ng-container ngsFilterBuilderOperationDef="isGreaterThen" [allowedDataTypes]="['number']">
+  <ng-template ngsFilterBuilderOperationName>Is greater then</ng-template>
+</ng-container>
+<ng-container ngsFilterBuilderOperationDef="isGreaterThenOrEqual" [allowedDataTypes]="['number']">
+  <ng-template ngsFilterBuilderOperationName>Is greater then or equal to</ng-template>
+</ng-container>
+<ng-container ngsFilterBuilderOperationDef="isBlank" [allowedDataTypes]="['string']">
+  <ng-template ngsFilterBuilderOperationName>Is blank</ng-template>
+</ng-container>
+<ng-container ngsFilterBuilderOperationDef="isNotBlank" [allowedDataTypes]="['string']">
+  <ng-template ngsFilterBuilderOperationName>Is not blank</ng-template>
+</ng-container>
+<ng-container ngsFilterBuilderOperationDef="isBetween" [allowedDataTypes]="['number']">
+  <ng-template ngsFilterBuilderOperationName>Is between</ng-template>
+</ng-container>
+<ng-container ngsFilterBuilderOperationDef="isAnyOf" [allowedDataTypes]="['array']">
+  <ng-template ngsFilterBuilderOperationName>Is any of</ng-template>
+</ng-container>

@@ -1,0 +1,51 @@
+<h3 ngsDialogTitle>Choose Columns</h3>
+<div ngsDialogContent>
+  <div class="columns flex flex-col gap-2 min-w-[300px]" cdkDropList (cdkDropListDropped)="drop($event)">
+    @for (col of columns(); track col.field; let i = $index) {
+      <div class="flex items-center gap-1 px-1 py-2 bg-surface-container rounded-lg cursor-default"
+           cdkDrag
+           cdkDragLockAxis="y"
+           cdkDragBoundary="columns">
+        <div class="cursor-move text-[var(--ngs-text-secondary)] flex items-center" cdkDragHandle>
+          <ngs-icon name="fluent:re-order-dots-vertical-24-regular"/>
+        </div>
+        <ngs-checkbox [checked]="col.visible !== false"
+                      (change)="toggleVisibility(i, $event.checked)">
+          {{ col.name }}
+        </ngs-checkbox>
+        <div class="grow"></div>
+        <button ngsIconButton
+                class="shrink-0"
+                [ngsMenuTriggerFor]="pinMenu"
+                [ngsMenuTriggerData]="{ col: col, index: i }">
+          <ngs-icon [name]="col.pinned ? (col.pinAlign === 'end' ? 'fluent:pin-off-24-filled' : 'fluent:pin-24-filled') : 'fluent:pin-24-regular'"
+                    size="20"/>
+        </button>
+      </div>
+    }
+  </div>
+</div>
+
+<ngs-menu #pinMenu="ngsMenu">
+  <ng-template ngsMenuContent let-col="col">
+    <button ngs-menu-item
+            [selected]="!col.pinned"
+            (click)="pinColumn(col, null)">
+      No Pin
+    </button>
+    <button ngs-menu-item
+            [selected]="col.pinned && col.pinAlign === 'start'"
+            (click)="pinColumn(col, 'start')">
+      Pin Left
+    </button>
+    <button ngs-menu-item
+            [selected]="col.pinned && col.pinAlign === 'end'"
+            (click)="pinColumn(col, 'end')">
+      Pin Right
+    </button>
+  </ng-template>
+</ngs-menu>
+<div ngsDialogActions align="end">
+  <button ngsButton (click)="cancel()">Cancel</button>
+  <button ngsButton="filled" (click)="apply()">Apply</button>
+</div>

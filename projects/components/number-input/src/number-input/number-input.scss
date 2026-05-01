@@ -1,0 +1,93 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-number-input-gap: --spacing(2);
+  --ngs-number-input-control-bg: none;
+  --ngs-number-input-control-color: var(--color-neutral-500);
+  --ngs-number-input-control-hover-color: var(--color-neutral-600);
+  --ngs-number-input-control-active-color: var(--color-neutral-700);
+  --ngs-number-input-control-hover-bg: var(--color-surface-container);
+  --ngs-number-input-control-active-bg: var(--color-surface-container-high);
+  --ngs-number-input-control-font-size: theme(--text-2xl);
+  --ngs-number-input-control-border-radius: theme(--radius-md);
+  --ngs-number-input-suffix-gap: --spacing(3);
+  --ngs-number-input-control-size: --spacing(7);
+  --ngs-number-input-control-border: none;
+
+  display: flex !important;
+  gap: var(--ngs-number-input-gap);
+
+
+  .input {
+    width: auto;
+    max-width: none;
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  .input {
+    background: none;
+    outline: none;
+    color: currentColor;
+    font: inherit;
+    border: none;
+  }
+
+  .input::-webkit-outer-spin-button,
+  .input::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  .controls {
+    display: flex;
+    height: 100%;
+    gap: 0.375rem;
+    user-select: none;
+  }
+
+  .control {
+    cursor: pointer;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--ngs-number-input-control-size);
+    height: var(--ngs-number-input-control-size);
+    background: var(--ngs-number-input-control-bg);
+    color: var(--ngs-number-input-control-color);
+    font-size: var(--ngs-number-input-control-font-size);
+    line-height: var(--ngs-number-input-control-font-size);
+    border-radius: var(--ngs-number-input-control-border-radius);
+    position: relative;
+    border: var(--ngs-number-input-control-border);
+    top: 1px;
+
+    span {
+      position: relative;
+      top: -1px;
+    }
+
+    ::ng-deep {
+      .mat-icon {
+        line-height: 24px;
+      }
+    }
+
+    &:hover {
+      background: var(--ngs-number-input-control-hover-bg);
+      color: var(--ngs-number-input-control-hover-color);
+    }
+
+    &[disabled] {
+      pointer-events: none;
+      opacity: 0.65;
+    }
+  }
+}
+
+:host-context(html.dark) {
+  --ngs-number-input-control-color: var(--color-neutral-300);
+  --ngs-number-input-control-hover-color: var(--color-neutral-200);
+  --ngs-number-input-control-hover-bg: var(--color-neutral-500);
+}

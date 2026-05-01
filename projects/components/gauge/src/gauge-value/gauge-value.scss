@@ -1,0 +1,6 @@
+@reference 'tailwindcss';
+
+:host {
+  position: absolute;
+  color: var(--ngs-gauge-value-color);
+}

@@ -1,0 +1,22 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  margin: 0;
+  padding: var(--ngs-dialog-with-content-padding, 20px 24px 24px);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  flex-grow: 1;
+
+  @media (min-height: 640px) {
+    max-height: 65vh;
+  }
+}
+
+:host-context(ngs-dialog-container:has(.ngs-dialog-title)) {
+  padding-top: 2px;
+}
+
+:host-context(ngs-dialog-container:has(.ngs-dialog-actions)) {
+  padding-bottom: 2px; // border width outline
+}

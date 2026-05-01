@@ -1,0 +1,30 @@
+<form [formGroup]="form">
+  <ngs-radio-card-group formControlName="privacy">
+    <ngs-radio-card value="open">
+      <ngs-radio-card-title>
+        <ngs-icon name="fluent:globe-24-regular"/>
+        Open
+      </ngs-radio-card-title>
+      <ngs-radio-card-content>
+        Posts and community members are public and visible to search engines.
+      </ngs-radio-card-content>
+    </ngs-radio-card>
+    <ngs-radio-card value="closed">
+      <ngs-radio-card-title>
+        <ngs-icon name="fluent:lock-closed-24-regular"/>
+        Closed
+      </ngs-radio-card-title>
+      <ngs-radio-card-content>
+        Only members can view community members and posts. Content is not visible to search engines.
+      </ngs-radio-card-content>
+    </ngs-radio-card>
+  </ngs-radio-card-group>
+</form>
+<div class="mt-10">
+  <p>
+    <button ngsButton="filled" (click)="toggleDisabled()">
+      {{ form.get('privacy')?.disabled ? 'Enable' : 'Disable' }} Control
+    </button>
+  </p>
+  <p>Control value: {{ form.get('privacy')?.value }}</p>
+</div>

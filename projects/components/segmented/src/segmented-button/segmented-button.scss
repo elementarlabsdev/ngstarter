@@ -1,0 +1,62 @@
+@reference 'tailwindcss';
+
+:host {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  justify-content: center;
+  color: var(--ngs-segmented-button-color);
+  font-size: var(--ngs-segmented-button-font-size);
+  min-width: var(--ngs-segmented-button-min-width);
+  border-radius: var(--ngs-segmented-button-radius);
+  gap: var(--ngs-segmented-button-gap);
+  flex: none;
+  padding: var(--ngs-segmented-button-padding);
+  height: var(--ngs-segmented-button-height);
+  position: relative;
+  z-index: 1;
+
+  &.icon-only {
+    --ngs-segmented-button-min-width: 0;
+    --ngs-segmented-button-icon-offset-margin: 0;
+
+    width: var(--ngs-segmented-button-height);
+    gap: 0;
+    padding: 0;
+
+    .content {
+      display: none;
+    }
+  }
+
+  .icon {
+    line-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-inline-start: var(--ngs-segmented-button-icon-offset-margin);
+  }
+
+  .icon {
+    &:empty {
+      display: none;
+    }
+  }
+
+  &:hover {
+    background: var(--ngs-segmented-button-hover-bg);
+    color: var(--ngs-segmented-button-hover-color);
+    text-decoration-line: none;
+  }
+
+  &.is-selected {
+    pointer-events: none;
+    color: var(--ngs-segmented-button-selected-color);
+  }
+
+  &:disabled,
+  &.is-disabled {
+    pointer-events: none;
+    opacity: 65%;
+  }
+}

@@ -1,0 +1,20 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-radio-card-group-gap: --spacing(5);
+  --ngs-radio-card-border-radius: theme(--radius-2xl);
+  --ngs-radio-card-padding: --spacing(5);
+  --ngs-radio-card-transition: all 0.2s ease-in-out;
+  --ngs-radio-card-color-border-hover: var(--color-primary);
+  --ngs-radio-card-color-selected-border: var(--color-primary);
+  --ngs-radio-card-color-selected-bg: var(--color-primary-100);
+  --ngs-radio-card-content-font-size: theme(--text-sm);
+  --ngs-radio-card-content-color: var(--color-neutral-600);
+
+  --ngs-radio-card-title-font-size: theme(--text-sm);
+  --ngs-radio-card-title-gap: --spacing(1.5);
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ngs-radio-card-group-gap);
+}

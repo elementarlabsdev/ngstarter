@@ -1,0 +1,56 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-mchart-pie-stroke-color: var(--color-background);
+  --ngs-mchart-pie-legend-item-color: var(--color-neutral-900);
+  --ngs-mchart-pie-legend-item-hover-color: var(--color-primary);
+  --ngs-mchart-pie-value-color: var(--color-neutral-950);
+
+  display: block;
+  overflow: hidden;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  &:has(.data-item.active) {
+    ::ng-deep {
+      .data-item:not(.active) {
+        opacity: 0.7;
+        scale: 0.93;
+        transition: scale 0.2s;
+      }
+    }
+  }
+
+  ::ng-deep {
+    .data-item {
+      stroke: var(--ngs-mchart-pie-stroke-color);
+    }
+
+    .value {
+      text-anchor: middle;
+      alignment-baseline: middle;
+      fill: var(--ngs-mchart-pie-value-color);
+    }
+
+    .legend-item {
+      cursor: pointer;
+
+      &:hover {
+        .legend-item-text {
+          fill: var(--ngs-mchart-pie-legend-item-hover-color);
+        }
+      }
+    }
+
+    .legend-item-text {
+      fill: var(--ngs-mchart-pie-legend-item-color);
+    }
+  }
+}
+
+:host-context(html.dark) {
+  --ngs-mchart-pie-legend-item-color: var(--color-neutral-200);
+}

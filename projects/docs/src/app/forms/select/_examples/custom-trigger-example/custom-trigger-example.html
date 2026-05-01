@@ -1,0 +1,16 @@
+<ngs-form-field class="w-1/2">
+  <ngs-label>Toppings</ngs-label>
+  <ngs-select [formControl]="toppings" multiple>
+    <ngs-select-trigger>
+      {{ toppings.value?.[0] || '' }}
+      @if ((toppings.value?.length || 0) > 1) {
+        <span class="opacity-75 text-sm">
+          (+{{ (toppings.value?.length || 0) - 1 }} {{ toppings.value?.length === 2 ? 'other' : 'others' }})
+        </span>
+      }
+    </ngs-select-trigger>
+    @for (topping of toppingList; track topping) {
+      <ngs-option [value]="topping">{{topping}}</ngs-option>
+    }
+  </ngs-select>
+</ngs-form-field>

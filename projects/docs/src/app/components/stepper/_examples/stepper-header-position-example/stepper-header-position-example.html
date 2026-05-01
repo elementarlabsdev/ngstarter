@@ -1,0 +1,33 @@
+<ngs-stepper headerPosition="bottom" #stepper>
+  <ngs-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template ngsStepLabel>Fill out your name</ng-template>
+      <ngs-form-field class="w-1/2">
+        <input ngsInput placeholder="Last name, First name" formControlName="firstCtrl" required>
+      </ngs-form-field>
+      <div>
+        <button ngsButton="filled" ngsStepperNext>Next</button>
+      </div>
+    </form>
+  </ngs-step>
+  <ngs-step [stepControl]="secondFormGroup" optional>
+    <form [formGroup]="secondFormGroup">
+      <ng-template ngsStepLabel>Fill out your address</ng-template>
+      <ngs-form-field class="w-1/2">
+        <input ngsInput placeholder="Address" formControlName="secondCtrl" required>
+      </ngs-form-field>
+      <div class="flex gap-3">
+        <button ngsButton="outlined" ngsStepperPrevious>Back</button>
+        <button ngsButton="filled" ngsStepperNext>Next</button>
+      </div>
+    </form>
+  </ngs-step>
+  <ngs-step>
+    <ng-template ngsStepLabel>Done</ng-template>
+    You are now done.
+    <div class="flex gap-3">
+      <button ngsButton="outlined" ngsStepperPrevious>Back</button>
+      <button ngsButton="filled" (click)="stepper.reset()">Reset</button>
+    </div>
+  </ngs-step>
+</ngs-stepper>

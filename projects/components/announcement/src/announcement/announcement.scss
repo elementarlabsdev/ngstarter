@@ -1,0 +1,90 @@
+@reference 'tailwindcss';
+
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: --spacing(1) --spacing(4);
+  font-size: theme(--text-sm);
+  min-height: --spacing(10);
+
+  .title {
+    font-weight: bold;
+    margin-inline-end: --spacing(3);
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  &[data-variant="neutral"] {
+    background: var(--color-secondary-container);
+    color: var(--color-on-secondary-container);
+  }
+
+  &[data-variant="informative"] {
+    background: var(--color-informative-container);
+    color: var(--color-on-informative-container);
+  }
+
+  &[data-variant="positive"] {
+    background: var(--color-positive-container);
+    color: var(--color-on-positive-container);
+  }
+
+  &[data-variant="warning"] {
+    background: var(--color-notice-container);
+    color: var(--color-on-notice-container);
+  }
+
+  &[data-variant="negative"] {
+    background: var(--color-error-container);
+    color: var(--color-on-error-container);
+  }
+
+  .content {
+    display: flex;
+    align-items: center;
+    flex: 1 1 0;
+  }
+
+  .message {
+    margin-inline-end: --spacing(3);
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-inline-end: --spacing(2);
+  }
+
+  &:has(.icon) {
+    padding-left: --spacing(3);
+  }
+
+  &:has(.close) {
+    padding-right: --spacing(2.5);
+  }
+
+  .close {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    [ngsIconButton] {
+      width: 2rem;
+      height: 2rem;
+      min-width: 2rem;
+      min-height: 2rem;
+      --btn-tonal-bg: transparent;
+      --btn-filled-bg: transparent;
+
+      ngs-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+    }
+  }
+}

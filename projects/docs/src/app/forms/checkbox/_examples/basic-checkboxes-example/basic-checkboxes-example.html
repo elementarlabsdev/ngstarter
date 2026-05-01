@@ -1,0 +1,27 @@
+<section>
+  <ngs-checkbox class="me-3">Check me!</ngs-checkbox>
+  <ngs-checkbox [disabled]="true">Disabled</ngs-checkbox>
+</section>
+
+<section class="mt-8">
+  <div>
+    <ngs-checkbox
+                  [checked]="allComplete"
+                  [color]="task.color"
+                  [indeterminate]="someComplete()"
+                  (change)="setAll($event.checked)">
+      {{ task.name }}
+    </ngs-checkbox>
+  </div>
+  <ul class="m-0">
+    @for (subtask of task.subtasks; track subtask) {
+      <li>
+        <ngs-checkbox [(ngModel)]="subtask.completed"
+                      [color]="subtask.color"
+                      (ngModelChange)="updateAllComplete()">
+          {{subtask.name}}
+        </ngs-checkbox>
+      </li>
+    }
+  </ul>
+</section>

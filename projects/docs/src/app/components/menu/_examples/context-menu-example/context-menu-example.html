@@ -1,0 +1,23 @@
+<div class="w-[300px] h-[300px] p-10 rounded-2xl text-center border border-muted flex items-center justify-center"
+     [ngsContextMenuTriggerFor]="contextMenu">
+  Right click here to trigger a context menu
+</div>
+
+<ngs-menu #contextMenu>
+  <button ngs-menu-item>
+    <ngs-icon name="fluent:cut-24-regular"/>
+    Cut
+  </button>
+  <button ngs-menu-item>
+    <ngs-icon name="fluent:copy-24-regular"/>
+    Copy
+  </button>
+  <button ngs-menu-item>
+    <ngs-icon name="fluent:clipboard-text-24-regular"/>
+    Paste
+  </button>
+  <button ngs-menu-item>
+    <ngs-icon name="fluent:print-24-regular"/>
+    Print
+  </button>
+</ngs-menu>

@@ -1,0 +1,27 @@
+<div>
+  <span> Click the following buttons to... </span>
+  <button ngsButton
+          (click)="tooltip.show()"
+          aria-label="Show tooltip on the button at the end of this section"
+          class="example-action-button">
+    show
+  </button>
+  <button ngsButton
+          (click)="tooltip.hide()"
+          aria-label="Hide tooltip on the button at the end of this section"
+          class="example-action-button">
+    hide
+  </button>
+  <button ngsButton
+          (click)="tooltip.toggle()"
+          aria-label="Show/Hide tooltip on the button at the end of this section"
+          class="example-action-button">
+    toggle show/hide
+  </button>
+</div>
+
+<button ngsButton="filled" #tooltip="ngsTooltip"
+        ngsTooltip="Info about the action"
+        ngsTooltipPosition="right">
+  Action
+</button>

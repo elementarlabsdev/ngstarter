@@ -1,0 +1,21 @@
+<ngs-upload-container class="mb-5">
+  <ngs-upload-area ngsUploadTrigger
+                   accept="image/*"
+                   (fileSelected)="onFileSelected($event)">
+    <ngs-icon name="fluent:attach-24-regular" ngsUploadAreaIcon/>
+    <ng-container ngsUploadAreaMainState>
+      Drag & drop <button class="text-primary cursor-pointer">or choose file(s)</button> to upload
+    </ng-container>
+    <ng-container ngsUploadAreaDropState>
+      Drop files here
+    </ng-container>
+    <ng-container ngsUploadAreaInvalidState>
+      Invalid files to drop, image/* accepts only.
+    </ng-container>
+  </ngs-upload-area>
+  <ngs-upload-allowed-types>All file type are allowed to upload</ngs-upload-allowed-types>
+  <ngs-upload-max-file-size>Max size per file: 2MB</ngs-upload-max-file-size>
+</ngs-upload-container>
+<p>
+  Selected files: {{ files | json }}
+</p>

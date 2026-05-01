@@ -1,0 +1,7 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  font-size: var(--ngs-timeline-title-font-size);
+  font-weight: var(--ngs-timeline-title-font-weight);
+}

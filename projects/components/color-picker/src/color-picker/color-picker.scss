@@ -1,0 +1,87 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-color-picker-bg: var(--dropdown-bg);
+  --ngs-color-picker-border-radius: var(--dropdown-radius);
+  --ngs-color-picker-margin-offset: --spacing(2);
+  --ngs-color-picker-border: var(--dropdown-border);
+  --ngs-color-picker-padding: --spacing(3);
+  --ngs-color-picker-gap: --spacing(2.5);
+  --ngs-color-picker-as-dropdown-shadow: var(--dropdown-shadow);
+
+  --ngs-color-picker-saturation-width: 260px;
+  --ngs-color-picker-saturation-height: 110px;
+  --ngs-color-picker-saturation-pointer-size: --spacing(5);
+  --ngs-color-picker-saturation-pointer-shadow: theme(--shadow-md);
+  --ngs-color-picker-saturation-pointer-border: 2px solid white;
+
+  --ngs-color-picker-hue-width: var(--ngs-color-picker-saturation-width);
+  --ngs-color-picker-hue-height: --spacing(3);
+  --ngs-color-picker-hue-pointer-size: --spacing(5);
+  --ngs-color-picker-hue-pointer-shadow: theme(--shadow-md);
+  --ngs-color-picker-hue-pointer-border: 2px solid white;
+
+  --ngs-color-picker-alpha-width: var(--ngs-color-picker-saturation-width);
+  --ngs-color-picker-alpha-height: --spacing(3);
+  --ngs-color-picker-alpha-pointer-size: --spacing(5);
+  --ngs-color-picker-alpha-pointer-shadow: theme(--shadow-md);
+  --ngs-color-picker-alpha-pointer-border: 2px solid white;
+
+  display: inline-grid;
+  user-select: none;
+  position: relative;
+  flex: none;
+  gap: var(--ngs-color-picker-gap);
+  background: var(--ngs-color-picker-bg);
+  border-radius: var(--ngs-color-picker-border-radius);
+  border: var(--ngs-color-picker-border);
+  padding: var(--ngs-color-picker-padding);
+
+  &.is-disabled {
+    pointer-events: none;
+  }
+
+  &.as-dropdown {
+    box-shadow: var(--ngs-color-picker-as-dropdown-shadow);
+  }
+
+  @keyframes ngs-color-picker-animation {
+    0% {
+      transform: scale(.9);
+      opacity: 0;
+    }
+
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+}
+
+:host-context(.ngs-color-picker-overlay-panel) {
+  animation: .15s ngs-color-picker-animation;
+}
+
+:host-context(.ngs-color-picker-above) {
+  margin-bottom: var(--ngs-color-picker-margin-offset);
+  transform-origin: bottom;
+}
+
+:host-context(.ngs-color-picker-below) {
+  margin-top: var(--ngs-color-picker-margin-offset);
+  transform-origin: top;
+}
+
+:host-context(.ngs-color-picker-before) {
+  margin-inline-end: var(--ngs-color-picker-margin-offset);
+  transform-origin: right;
+}
+
+:host-context(.ngs-color-picker-after) {
+  margin-inline-start: var(--ngs-color-picker-margin-offset);
+  transform-origin: left;
+}
+
+:host-context(html.dark) {
+
+}

@@ -1,0 +1,40 @@
+<div class="flex flex-col gap-10">
+  <!-- Client Side Refresh -->
+  <div>
+    <h3 class="mb-4">Client Side Refresh</h3>
+    <div class="mb-4 flex items-center gap-2">
+      <button ngsButton="filled" (click)="refreshClient(clientDV.api)">
+        <ngs-icon name="fluent:arrow-sync-24-regular"></ngs-icon>
+        Refresh Client Data
+      </button>
+      <span>Refreshed: {{ clientRefreshCount() }} times</span>
+    </div>
+    <ngs-data-view
+      #clientDV
+      [data]="clientData"
+      [columnDefs]="columnDefs"
+      rowModelType="clientSide"
+      (loadEnd)="onLoadEnd()"
+      (refreshEnd)="onRefreshEnd()">
+    </ngs-data-view>
+  </div>
+
+  <!-- Server Side Refresh -->
+  <div>
+    <h3 class="mb-4">Server Side Refresh</h3>
+    <div class="mb-4">
+      <button ngsButton="filled" (click)="refreshServer(serverDV.api)">
+        <ngs-icon name="fluent:arrow-sync-24-regular"></ngs-icon>
+        Refresh Server Data
+      </button>
+    </div>
+    <ngs-data-view
+      #serverDV
+      [datasource]="datasource"
+      [columnDefs]="columnDefs"
+      rowModelType="serverSide"
+      (loadEnd)="onLoadEnd()"
+      (refreshEnd)="onRefreshEnd()">
+    </ngs-data-view>
+  </div>
+</div>

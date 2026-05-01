@@ -1,0 +1,14 @@
+<button ngsButton="outlined"
+        [ngsPopoverTriggerFor]="lazyPopover"
+        [ngsPopoverContext]="{ name: 'Angular Developer' }">
+  Open Lazy Popover
+</button>
+
+<ngs-popover #lazyPopover="ngsPopover">
+  <ng-template ngsPopoverContent let-name="name">
+    <div class="text-sm p-4">
+      Hello, <strong>{{ name }}</strong>!<br>
+      This content was loaded lazily.
+    </div>
+  </ng-template>
+</ngs-popover>

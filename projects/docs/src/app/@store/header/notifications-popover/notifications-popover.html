@@ -1,0 +1,29 @@
+<ngs-popover>
+  <div class="w-[360px] text-base list-none bg-surface-container rounded-xl overflow-hidden shadow-lg dark:divide-inverse">
+    <div class="flex items-center justify-between bg-surface-container-highest text-sm h-12 px-4">
+      <div class="text-on-surface font-semibold">Notifications</div>
+      <button ngsIconButton class="-me-1">
+        <ngs-icon name="fluent:settings-24-regular"/>
+      </button>
+    </div>
+    <div class="h-[300px] overflow-y-auto">
+      @if (notifications.length > 0) {
+        <ngs-notification-list [notifications]="notifications" class="p-3 gap-3">
+          <ng-template ngsNotificationDef="mentionedInComment" let-notification>
+            <ngs-mentioned-in-comment [notification]="notification" ngsRipple
+                                      class="bg-surface-bright cursor-pointer hover:bg-surface-container-lowest rounded-xl shadow-sm p-4"/>
+          </ng-template>
+          <ng-template ngsNotificationDef="inviteToEditFilesInFolder" let-notification>
+            <ngs-invite-to-edit-files-in-folder [notification]="notification" ngsRipple
+                                                class="bg-surface-bright cursor-pointer hover:bg-surface-container-lowest rounded-xl shadow-sm p-4"/>
+          </ng-template>
+        </ngs-notification-list>
+        <div class="px-4 mb-3">
+          <a routerLink="/pages/account/notifications" ngsButton class="w-full">View all</a>
+        </div>
+      } @else {
+        There are no notifications.
+      }
+    </div>
+  </div>
+</ngs-popover>

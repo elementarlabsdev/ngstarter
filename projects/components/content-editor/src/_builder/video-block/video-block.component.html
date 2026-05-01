@@ -1,0 +1,48 @@
+@if (uploading()) {
+  <div class="relative flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
+      <div class="absolute top-0 start-0 end-0 z-20">
+        <ngs-progress-bar mode="indeterminate"/>
+      </div>
+      <div class="absolute end-2 top-4 w-max z-30">
+        <button ngsButton (click)="cancelUploading()">
+          <ngs-icon name="fluent:delete-24-regular"/>
+        </button>
+      </div>
+      <div class="bg-white px-3 text-sm py-1.5 rounded-lg border border-border">Loading...</div>
+    </div>
+    <div [style.width.px]="_settings().width || null"
+         [style.height.px]="_settings().height || null"
+         [class.max-w-full]="!_settings().width">
+      <video [src]="selectedVideo()" muted class="w-full h-auto block"></video>
+    </div>
+  </div>
+} @else if (_src()) {
+  <div class="flex items-center justify-center overflow-hidden">
+    <ngs-resizable-container (resized)="_onVideoResized($event)"
+                             [style.width.px]="_settings().width || null"
+                             [style.height.px]="_settings().height || null"
+                             [class.max-w-full]="!_settings().width">
+      <video #videoPlayer
+             [src]="_src()"
+             class="w-full h-auto block"
+             (loadedmetadata)="_onVideoLoaded($event)"
+             controls></video>
+    </ngs-resizable-container>
+  </div>
+  <ngs-form-field class="w-full mt-5">
+    <ngs-label>Caption</ngs-label>
+    <input ngsInput [(ngModel)]="_caption" (ngModelChange)="_onCaptionChange()">
+  </ngs-form-field>
+} @else {
+  <ngs-upload-area #uploadArea="ngsUploadArea"
+                   ngsUploadTrigger accept="video/*"
+                   (fileSelected)="onFileSelected($event)" multiple="false"
+                   class="cursor-pointer hover:outline-2 hover:outline-[var(--color-primary)]">
+    @if (!uploadArea.api.isDropActive) {
+      Drag & drop video here or click to upload
+    } @else {
+      <div class="font-medium">Drop video here</div>
+    }
+  </ngs-upload-area>
+}

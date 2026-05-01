@@ -1,0 +1,60 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-marquee-animation-duration: 20s;
+  --ngs-marquee-gap: --spacing(6);
+  --ngs-marquee-reverse: ;
+  --ngs-marquee-pause: running;
+
+  display: block;
+  width: 100%;
+
+  .content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    gap: var(--ngs-marquee-gap);
+    overflow: hidden;
+    padding: 0.5rem;
+    flex-direction: row;
+
+    .item {
+      flex-direction: row;
+      animation: ngs-marquee-animation var(--ngs-marquee-animation-duration) infinite linear var(--ngs-marquee-reverse);
+    }
+
+    .item {
+      display: flex;
+      gap: var(--ngs-marquee-gap);
+      flex-shrink: 0;
+    }
+  }
+
+  .content:hover {
+    & > .item {
+      animation-play-state: var(--ngs-marquee-pause);
+    }
+  }
+
+  .content.out-of-view {
+    & > .item {
+      animation-play-state: paused;
+    }
+  }
+
+  .invisible {
+    width: 0;
+    height: 0;
+    display: none;
+    pointer-events: none;
+  }
+
+  @keyframes ngs-marquee-animation {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-100% - var(--ngs-marquee-gap)));
+    }
+  }
+}

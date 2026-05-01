@@ -1,0 +1,36 @@
+@if (!step().hideArrow) {
+  <div class="tour-step-arrow" [ngClass]="getArrowClasses(position())"></div>
+}
+<div class="relative z-[1] transform-gpu">
+  @if (step().title) {
+    <h3 class="mt-0 mb-2 font-semibold text-base leading-none tracking-tight">{{ step().title }}</h3>
+  }
+
+  <div class="text-sm text-on-surface-variant">
+    @if (step().template) {
+      <ng-container *ngTemplateOutlet="step().template!; context: step().templateContext"/>
+    } @else if (htmlContent()) {
+      <div [innerHTML]="htmlContent()"></div>
+    } @else {
+      {{ step().content }}
+    }
+  </div>
+
+  <div class="flex justify-between gap-4 mt-4">
+    <button ngsButton (click)="tourService.end()" class="button">
+      {{ step().skipBtnText || config?.skipBtnText || 'Close' }}
+    </button>
+    <div class="flex gap-2">
+      <button ngsButton="tonal" (click)="tourService.prev()" [disabled]="isFirst()" class="button">
+        {{ step().prevBtnText || config?.prevBtnText || 'Prev' }}
+      </button>
+      <button ngsButton="filled" (click)="tourService.next()" class="button">
+        @if (isLast()) {
+          {{ step().finishBtnText || config?.finishBtnText || 'Finish' }}
+        } @else {
+          {{ step().nextBtnText || config?.nextBtnText || 'Next' }}
+        }
+      </button>
+    </div>
+  </div>
+</div>

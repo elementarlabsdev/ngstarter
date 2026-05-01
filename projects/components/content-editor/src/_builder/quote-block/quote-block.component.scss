@@ -1,0 +1,31 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  margin: --spacing(2) 0;
+
+  .content {
+    outline: none;
+    border-inline-start: --spacing(1) solid var(--color-border);
+    padding: --spacing(2) --spacing(3);
+    margin-bottom: --spacing(2);
+  }
+
+  .caption {
+    outline: none;
+    font-size: theme(--text-sm);
+    color: var(--color-neutral-600);
+  }
+}
+
+:host-context {
+  .content,
+  .caption {
+    &:empty {
+      &:before {
+        content: attr(data-empty-placeholder);
+        color: var(--color-neutral-500);
+      }
+    }
+  }
+}

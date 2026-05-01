@@ -1,0 +1,53 @@
+@reference 'tailwindcss';
+
+:host {
+  @apply block;
+
+  ngs-upload-area {
+    --ngs-upload-area-padding: --spacing(6) --spacing(10);
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  .upload-container {
+    @apply relative;
+  }
+
+  .upload-overlay {
+    @apply absolute z-1 inset-0 flex items-center justify-center;
+    background: rgba(#fff, 0.8);
+  }
+
+  .progress-bar {
+    @apply absolute top-0 start-0 end-0;
+  }
+
+  .uploaded-image {
+    @apply w-[704px] flex items-center justify-center;
+  }
+
+  .upload-overlay-text {
+    background: #fff;
+    @apply px-3 text-sm py-1.5 rounded-lg;
+  }
+
+  .remove-button {
+    @apply absolute end-2 top-4 w-max z-1;
+  }
+
+  .upload-area {
+    @apply cursor-pointer;
+
+    &:hover {
+      @apply outline-2 outline-[var(--color-primary)];
+    }
+  }
+}
+
+//:host-context(.block.is-focused) {
+//  .uploaded-image {
+//    @apply outline-4 outline-[var(--color-primary)];
+//  }
+//}

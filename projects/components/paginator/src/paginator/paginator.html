@@ -1,0 +1,73 @@
+<div class="ngs-paginator-container">
+  @if (!hidePageSize()) {
+    <div class="ngs-paginator-page-size">
+      <div class="ngs-paginator-page-size-label">
+        {{_intl.itemsPerPageLabel || 'Items per page:'}}
+      </div>
+
+      <ngs-form-field
+        subscriptHiddenIfEmpty
+        class="ngs-paginator-page-size-select">
+        <ngs-select
+          hideCheckIcon
+          [value]="pageSize"
+          [disabled]="disabled()"
+          (selectionChange)="_changePageSize($event.value)">
+          @for (pageSizeOption of _displayedPageSizeOptions; track pageSizeOption) {
+            <ngs-option [value]="pageSizeOption">
+              {{pageSizeOption}}
+            </ngs-option>
+          }
+        </ngs-select>
+      </ngs-form-field>
+    </div>
+  }
+
+  <div class="ngs-paginator-range-actions">
+    <div class="ngs-paginator-range-label" aria-live="polite">
+      {{_intl.getRangeLabel(pageIndex, pageSize, length)}}
+    </div>
+
+    <div class="ngs-paginator-navigation">
+      @if (showFirstLastButtons()) {
+        <button ngsIconButton
+                type="button"
+                class="ngs-paginator-navigation-first"
+                (click)="firstPage()"
+                [ngsTooltip]="_intl.firstPageLabel || 'First page'"
+                [disabled]="_previousButtonsDisabled()">
+          <ngs-icon name="fluent:arrow-previous-24-regular" />
+        </button>
+      }
+
+      <button ngsIconButton
+              type="button"
+              class="ngs-paginator-navigation-previous"
+              (click)="previousPage()"
+              [ngsTooltip]="_intl.previousPageLabel || 'Previous page'"
+              [disabled]="_previousButtonsDisabled()">
+        <ngs-icon name="fluent:chevron-left-24-regular" />
+      </button>
+
+      <button ngsIconButton
+              type="button"
+              class="ngs-paginator-navigation-next"
+              (click)="nextPage()"
+              [ngsTooltip]="_intl.nextPageLabel || 'Next page'"
+              [disabled]="_nextButtonsDisabled()">
+        <ngs-icon name="fluent:chevron-right-24-regular" />
+      </button>
+
+      @if (showFirstLastButtons()) {
+        <button ngsIconButton
+                type="button"
+                class="ngs-paginator-navigation-last"
+                (click)="lastPage()"
+                [ngsTooltip]="_intl.lastPageLabel || 'Last page'"
+                [disabled]="_nextButtonsDisabled()">
+          <ngs-icon name="fluent:arrow-next-24-regular" />
+        </button>
+      }
+    </div>
+  </div>
+</div>

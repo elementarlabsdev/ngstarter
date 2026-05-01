@@ -1,0 +1,10 @@
+@if (announcement()) {
+  <ngs-announcement closable
+                    [title]="announcement().title || ''"
+                    [iconName]="announcement().iconName || ''"
+                    [variant]="announcement().variant || ''"
+                    [linkTo]="announcement().linkTo"
+                    (closed)="onClose()">
+    <div [innerHTML]="announcement().message | safeHtml"></div>
+  </ngs-announcement>
+}

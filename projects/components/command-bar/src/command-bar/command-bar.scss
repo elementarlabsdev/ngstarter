@@ -1,0 +1,113 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-command-bar-height: --spacing(12);
+  --ngs-command-bar-padding: 0 --spacing(1);
+  --ngs-command-bar-margin: --spacing(8) 0;
+  --ngs-command-bar-zindex: 50;
+  --ngs-command-bar-bg: var(--color-neutral-950);
+  --ngs-command-bar-color: var(--color-neutral-200);
+  --ngs-command-bar-border: 1px solid var(--color-neutral-700);
+  --ngs-command-bar-shadow: theme(--shadow-lg);
+  --ngs-command-bar-border-radius: calc(infinity * 1px);
+  --ngs-command-bar-command-height: --spacing(10);
+  --ngs-command-bar-command-padding: 0 --spacing(3.5);
+  --ngs-command-bar-command-font-size: theme(--text-sm);
+  --ngs-command-bar-command-color: var(--color-neutral-200);
+  --ngs-command-bar-command-hover-color: var(--color-neutral-100);
+  --ngs-command-bar-command-hover-bg: var(--color-neutral-800);
+  --ngs-command-bar-value-color: var(--color-neutral-200);
+  --ngs-command-bar-command-gap: --spacing(3);
+  --ngs-command-bar-content-padding: 0 --spacing(4);
+  --ngs-command-bar-font-size: theme(--text-sm);
+  --ngs-command-bar-divider-width: 1px;
+  --ngs-command-bar-divider-height: --spacing(6);
+  --ngs-command-bar-divider-bg: var(--color-neutral-600);
+  --ngs-command-bar-command-shortcut-bg: var(--color-neutral-700);
+  --ngs-command-bar-command-shortcut-border-radius: theme(--radius-lg);
+  --ngs-command-bar-command-shortcut-font-size: theme(--text-xs);
+  --ngs-command-bar-command-shortcut-color: var(--color-neutral-300);
+  --ngs-command-bar-command-shortcut-padding: 0 5px;
+  --ngs-command-bar-command-shortcut-border: 1px solid var(--color-neutral-600);
+  --ngs-command-bar-command-shortcut-size: --spacing(5);
+
+  left: 50%;
+  translate: -50% 0;
+  height: var(--ngs-command-bar-height);
+  border: var(--ngs-command-bar-border);
+  box-shadow: var(--ngs-command-bar-shadow);
+  border-radius: var(--ngs-command-bar-border-radius);
+  z-index: -1;
+  font-size: var(--ngs-command-bar-font-size);
+  color: var(--ngs-command-bar-color);
+  padding: var(--ngs-command-bar-padding);
+  overflow: hidden;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  width: min-content;
+  position: fixed;
+  background: var(--ngs-command-bar-bg);
+  margin: var(--ngs-command-bar-margin);
+  gap: --spacing(1);
+
+  .content {
+    &:empty {
+      display: none;
+    }
+
+    white-space: nowrap;
+    padding: var(--ngs-command-bar-content-padding);
+  }
+
+  &.is-open {
+    opacity: 1;
+    z-index: var(--ngs-command-bar-zindex);
+  }
+
+  &[ngs-command-bar-position="top"] {
+    top: 0;
+  }
+
+  &[ngs-command-bar-position="top"].is-open {
+    animation: 0.3s ngs-command-bar-animation-from-top;
+  }
+
+  &[ngs-command-bar-position="bottom"] {
+    bottom: 0;
+  }
+
+  &[ngs-command-bar-position="bottom"].is-open {
+    animation: 0.3s ngs-command-bar-animation-from-bottom;
+  }
+
+  @keyframes ngs-command-bar-animation-from-top {
+    0% {
+      transform: translateY(-150%) scale(.9);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes ngs-command-bar-animation-from-bottom {
+    0% {
+      transform: translateY(150%) scale(.9);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+}
+
+:host-context(html.dark) {
+  --ngs-command-bar-bg: var(--color-primary-200);
+  --ngs-command-bar-color: var(--color-neutral-950);
+  --ngs-command-bar-command-color: var(--color-neutral-950);
+}

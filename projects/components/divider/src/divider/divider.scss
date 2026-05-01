@@ -1,0 +1,44 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-divider-vertical-fixed-height: --spacing(5);
+
+  display: block;
+  border-top-style: solid;
+  border-top-color: var(--color-border);
+  flex: none;
+
+  &.ngs-divider-horizontal {
+    border-top-width: 1px;
+
+    &.ngs-divider-inset {
+      margin-left: 80px;
+
+      [dir='rtl'] & {
+        margin-left: 0;
+        margin-right: 80px;
+      }
+    }
+  }
+
+  &.ngs-divider-vertical {
+    display: inline-block;
+    border-top-width: 0;
+    border-right-style: solid;
+    border-right-color: var(--color-border);
+    border-right-width: 1px;
+    vertical-align: middle;
+    height: 100%;
+
+    &.ngs-divider-inset {
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+  }
+
+  &.ngs-divider-vertical.is-fixed-height {
+    &:not([class*="h-"]) {
+      height: var(--ngs-divider-vertical-fixed-height);
+    }
+  }
+}

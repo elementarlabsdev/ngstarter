@@ -1,0 +1,39 @@
+<ngs-stepper #stepper>
+  <ngs-step [stepControl]="firstFormGroup" errorMessage="Name is required.">
+    <form [formGroup]="firstFormGroup">
+      <ng-template ngsStepLabel>Fill out your name</ng-template>
+      <ngs-form-field class="w-1/2 mt-2">
+        <ngs-label>Name</ngs-label>
+        <input ngsInput placeholder="Last name, First name" formControlName="firstCtrl" required>
+      </ngs-form-field>
+      <div>
+        <p>Go to a different step to see the error state</p>
+        <button ngsButton="filled" ngsStepperNext>Next</button>
+      </div>
+    </form>
+  </ngs-step>
+  <ngs-step [stepControl]="secondFormGroup" errorMessage="Address is required.">
+    <form [formGroup]="secondFormGroup">
+      <ng-template ngsStepLabel>Fill out your address</ng-template>
+      <ngs-form-field class="w-1/2 mt-2">
+        <ngs-label>Address</ngs-label>
+        <input ngsInput placeholder="Ex. 1 Main St, New York, NY" formControlName="secondCtrl" required>
+      </ngs-form-field>
+      <div>
+        <p>Go to a different step to see the error state</p>
+        <div class="flex gap-3">
+          <button ngsButton="outlined" ngsStepperPrevious>Back</button>
+          <button ngsButton="filled" ngsStepperNext>Next</button>
+        </div>
+      </div>
+    </form>
+  </ngs-step>
+  <ngs-step>
+    <ng-template ngsStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div class="flex gap-3">
+      <button ngsButton="outlined" ngsStepperPrevious>Back</button>
+      <button ngsButton="filled" (click)="stepper.reset()">Reset</button>
+    </div>
+  </ngs-step>
+</ngs-stepper>

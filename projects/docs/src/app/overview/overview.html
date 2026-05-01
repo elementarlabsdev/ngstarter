@@ -1,0 +1,19 @@
+<div class="px-20 py-10 prose dark:prose-invert max-w-full">
+  <h1 class="mat-headline-1">Overview</h1>
+  <div class="flex flex-wrap gap-8 mt-14">
+    @for (item of items() | orderBy:'name'; track item) {
+      <ngs-card class="overflow-hidden hover:outline-2 hover:outline-primary cursor-pointer"
+                [routerLink]="item.routerLink"
+                appearance="outlined">
+        <ngs-card-content class="bg-surface-container">
+          <a [routerLink]="item.routerLink">
+            <img [src]="item.imageUrl" alt="" class="w-[240px]">
+          </a>
+        </ngs-card-content>
+        <ngs-card-footer class="bg-surface-container-lowest font-bold p-4">
+          {{ item.name }}
+        </ngs-card-footer>
+      </ngs-card>
+    }
+  </div>
+</div>

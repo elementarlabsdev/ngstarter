@@ -1,0 +1,9 @@
+<ng-template #portal>
+  <div
+    class="ngs-drawer-container"
+    [class.open]="_isOpen()">
+    <div class="ngs-drawer-content">
+      <ng-content/>
+    </div>
+  </div>
+</ng-template>

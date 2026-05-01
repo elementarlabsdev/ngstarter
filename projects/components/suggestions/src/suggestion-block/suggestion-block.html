@@ -1,0 +1,13 @@
+@if (showDivider()) {
+  <div class="my-4 px-2">
+    <ngs-divider/>
+  </div>
+}
+
+@if (heading()) {
+  <div class="heading">{{ heading() }}</div>
+}
+
+<div class="content" [class.is-inline]="inline()">
+  <ng-content/>
+</div>

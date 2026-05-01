@@ -1,0 +1,10 @@
+<ng-content select="ngs-layout-topbar"/>
+<ng-content select="ngs-layout-header"/>
+<div class="body">
+  <ng-content select="ngs-layout-sidebar"/>
+  <div class="content">
+    <ng-content/>
+  </div>
+  <ng-content select="ngs-layout-aside"/>
+</div>
+<ng-content select="ngs-layout-footer"/>

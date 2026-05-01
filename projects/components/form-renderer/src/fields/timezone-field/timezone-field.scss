@@ -1,0 +1,9 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  ngs-form-field {
+    width: 100%;
+  }
+}

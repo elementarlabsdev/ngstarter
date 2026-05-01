@@ -1,0 +1,9 @@
+<div class="action-text">
+  <ngs-icon [name]="getIconName(iconName() || 'error')"/>
+  {{ actionText() || 'Action Required' }}
+</div>
+<div class="description">{{ description() }}</div>
+<button ngsButton="filled" class="button" (click)="buttonClicked.emit()">
+  {{ buttonText() }}
+<!--  <ngs-icon name="fluent:arrow-right-24-regular"/>-->
+</button>

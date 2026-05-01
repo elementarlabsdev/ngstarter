@@ -1,0 +1,19 @@
+<form [formGroup]="stateForm">
+  <ngs-form-field class="w-1/2">
+    <ngs-label>States Group</ngs-label>
+    <input type="text"
+           ngsInput
+           formControlName="stateGroup"
+           required
+           [ngsAutocomplete]="autoGroup">
+    <ngs-autocomplete #autoGroup="ngsAutocomplete">
+      @for (group of stateGroupOptions | async; track group) {
+        <ngs-optgroup [label]="group.letter">
+          @for (name of group.names; track name) {
+            <ngs-option [value]="name">{{name}}</ngs-option>
+          }
+        </ngs-optgroup>
+      }
+    </ngs-autocomplete>
+  </ngs-form-field>
+</form>

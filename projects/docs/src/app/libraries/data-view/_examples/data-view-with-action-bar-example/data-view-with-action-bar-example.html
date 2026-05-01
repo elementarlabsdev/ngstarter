@@ -1,0 +1,24 @@
+<ngs-data-view [columnDefs]="columnDefs"
+               [data]="data"
+               hoverRows
+               class="h-[300px]">
+  <ngs-data-view-action-bar #dataViewActionBar="ngsDataViewActionBar"
+                            *ngsDataViewActionBar="let row; width: 160">
+    <button ngsButton="outlined" (click)="share(row)">Edit</button>
+    <button ngsIconButton [ngsMenuTriggerFor]="menu"
+            (menuOpened)="dataViewActionBar.api.setForceVisible(true)"
+            (menuClosed)="dataViewActionBar.api.setForceVisible(false)">
+      <ngs-icon name="fluent:more-horizontal-24-regular"/>
+    </button>
+  </ngs-data-view-action-bar>
+</ngs-data-view>
+<ngs-menu #menu="ngsMenu">
+  <a ngs-menu-item>
+    <ngs-icon name="fluent:share-24-regular"/>
+    <span>Share</span>
+  </a>
+  <a ngs-menu-item>
+    <ngs-icon name="fluent:delete-24-regular"/>
+    <span>Delete</span>
+  </a>
+</ngs-menu>

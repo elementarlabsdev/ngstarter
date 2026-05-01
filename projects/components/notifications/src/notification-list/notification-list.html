@@ -1,0 +1,14 @@
+@if (_initialized) {
+  @for (notification of notifications(); track notification) {
+    <div class="notification">
+      <ng-container [ngTemplateOutlet]="getNotificationTemplate(notification.type)"
+                    [ngTemplateOutletContext]="{ $implicit: notification }" />
+      @if (controlsDef()) {
+        <div class="controls">
+          <ng-container [ngTemplateOutlet]="controlsTpl"
+                        [ngTemplateOutletContext]="{ $implicit: notification }" />
+        </div>
+      }
+    </div>
+  }
+}

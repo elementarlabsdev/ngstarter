@@ -1,0 +1,8 @@
+<button (click)="_visible = !_visible" ngsIconButton
+        [attr.tabindex]="tabindex() ? tabindex() : null" type="button">
+  @if (_visible) {
+    <ngs-icon name="fluent:eye-24-regular"/>
+  } @else {
+    <ngs-icon name="fluent:visibility_off-24-regular"/>
+  }
+</button>

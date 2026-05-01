@@ -1,0 +1,192 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-content-builder-content-width: 704px;
+  outline: none;
+
+  ::ng-deep {
+    .link-selection,
+    .text-selection {
+      display: inline-block;
+      background: var(--color-secondary-fixed);
+    }
+  }
+
+  &.is-block-dragging {
+    cursor: grabbing;
+  }
+
+  .container {
+    display: flex;
+    width: 820px;
+    min-height: 200px;
+    height: 100%;
+    padding: --spacing(5) --spacing(5) --spacing(5) 0;
+    margin: 0 auto;
+    outline: none;
+  }
+
+  .content {
+    flex-grow: 1;
+    width: calc(var(--ngs-content-builder-content-width) + --spacing(10));
+  }
+
+  .block {
+    position: relative;
+    flex: none;
+    padding: --spacing(1) 0;
+    display: flex;
+    align-items: center;
+
+    &:not(:has(.block-content.is-selected)):hover {
+      .block-content {
+        background: var(--color-neutral-50);
+      }
+    }
+  }
+
+  &:not(.is-block-dragging) {
+    .block {
+      &:hover,
+      &.is-active {
+        .block-controls {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .block-content {
+    position: relative;
+    flex-grow: 1;
+    padding: --spacing(3);
+
+    &.is-selected {
+      background: var(--color-primary-100);
+    }
+  }
+
+  ::ng-deep {
+    .selection-area {
+      background: var(--color-primary-100);
+      opacity: 0.4;
+      border: 1px solid var(--color-primary);
+      border-radius: theme(--radius-sm);
+    }
+
+    .ngs-content-editor-content-editable {
+      user-select: text;
+    }
+  }
+
+  &.select-none,
+  &.is-selection-of-blocks-active {
+    ::ng-deep {
+      .ngs-content-editor-content-editable {
+        user-select: none !important;
+      }
+    }
+  }
+
+  .block-controls {
+    left: 0;
+    display: flex;
+    align-items: center;
+    color: var(--color-neutral-500);
+    width: --spacing(18);
+    padding: 0 --spacing(2);
+    opacity: 0;
+    flex: none;
+
+    &.is-settings-popover-open {
+      opacity: 1;
+
+      .block-control:not(.block-control-drag) {
+        opacity: 0;
+      }
+    }
+  }
+
+  .block-control {
+    cursor: pointer;
+    width: --spacing(7);
+    height: --spacing(7);
+    flex: none;
+    border-radius: theme(--radius-lg);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: var(--color-surface-container-low);
+      color: var(--color-on-surface);
+    }
+
+    &-drag {
+      button {
+        cursor: grab;
+      }
+    }
+  }
+
+  .drag-placeholder {
+    height: --spacing(8);
+    flex: none;
+    position: relative;
+
+    &:before {
+      position: absolute;
+      left: --spacing(18);
+      display: block;
+      right: 0;
+      content: '';
+      height: --spacing(2);
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--color-primary-300);
+      border-radius: --spacing(0.5);
+    }
+  }
+
+  ::ng-deep {
+    code {
+      color: var(--color-primary);
+    }
+  }
+}
+
+.cdk-drag.cdk-drag-preview {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  color: var(--color-neutral-500);
+  width: --spacing(18);
+  padding: 0 --spacing(2);
+
+  .block-control {
+    width: --spacing(7);
+    height: --spacing(7);
+    flex: none;
+    border-radius: theme(--radius-lg);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grabbing;
+
+    &:first-child {
+      opacity: 0;
+    }
+
+    &:last-child {
+      color: var(--color-on-surface);
+    }
+  }
+
+  .block-content {
+    opacity: 0;
+  }
+}
+
+.settings-popover {
+  --ngs-list-list-item-one-line-container-height: --spacing(10);
+}

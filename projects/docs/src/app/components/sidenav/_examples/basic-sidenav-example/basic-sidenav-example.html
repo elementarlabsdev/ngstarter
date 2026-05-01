@@ -1,0 +1,19 @@
+<ngs-sidenav-container class="h-[300px] border border-border" (backdropClick)="close('backdrop')">
+  <ngs-sidenav #sidenav [opened]="true" [mode]="mode.value || 'over'" (keydown.escape)="close('escape')" disableClose
+               class="p-5">
+    <p>
+      <button ngsButton="filled" (click)="close('toggle button')">Close</button>
+    </p>
+  </ngs-sidenav>
+  <ngs-sidenav-content class="p-5">
+    <p>
+      <button ngsButton="filled" (click)="sidenav.open()">Open</button>
+    </p>
+    <p>Closed due to: {{ reason }}</p>
+    <ngs-radio-group [formControl]="mode" class="mt-10">
+      <label>Mode:</label>
+      <ngs-radio-button value="over">Over</ngs-radio-button>
+      <ngs-radio-button value="push">Push</ngs-radio-button>
+    </ngs-radio-group>
+  </ngs-sidenav-content>
+</ngs-sidenav-container>

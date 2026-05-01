@@ -1,0 +1,80 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-file-padding: --spacing(4);
+  --ngs-file-border-radius: theme(--radius-2xl);
+  --ngs-file-bg: var(--color-surface-container);
+  --ngs-file-error-bg: var(--color-error-container-low);
+  --ngs-file-controls-gap: --spacing(1.5);
+  --ngs-file-progress-margin: --spacing(2) 0 0 0;
+  --ngs-file-progress-bg: var(--color-surface-container-highest);
+  --ngs-file-progress-height: --spacing(1);
+  --ngs-file-progress-border-radius: theme(--radius-lg);
+  --ngs-file-progress-bar-bg: var(--color-primary);
+  --ngs-file-control-color: var(--color-neutral-500);
+  --ngs-file-control-hover-color: var(--color-primary);
+  --ngs-file-control-font-size: theme(--text-xl);
+  --ngs-file-name-font-size: theme(--text-sm);
+  --ngs-file-info-font-size: theme(--text-xs);
+  --ngs-file-info-color: var(--color-neutral-600);
+  --ngs-file-error-font-size: theme(--text-xs);
+  --ngs-file-error-color: var(--color-error);
+
+  display: flex;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: var(--ngs-file-padding);
+  border-radius: var(--ngs-file-border-radius);
+  background: var(--ngs-file-bg);
+
+  .name {
+    font-size: var(--ngs-file-name-font-size);
+  }
+
+  .info {
+    font-size: var(--ngs-file-info-font-size);
+    color: var(--ngs-file-info-color);
+  }
+
+  .content {
+    min-width: 0;
+    flex-grow: 1;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: var(--ngs-file-controls-gap)
+  }
+
+  .progress {
+    background: var(--ngs-file-progress-bg);
+    height: var(--ngs-file-progress-height);
+    flex: none;
+    border-radius: var(--ngs-file-progress-border-radius);
+    margin: var(--ngs-file-progress-margin);
+  }
+
+  .progress-bar {
+    background: var(--ngs-file-progress-bar-bg);
+    border-radius: var(--ngs-file-progress-border-radius);
+    height: 100%;
+  }
+
+  .error {
+    font-size: var(--ngs-file-error-font-size);
+    color: var(--ngs-file-error-color);
+  }
+
+  &.has-error {
+    background: var(--ngs-file-error-bg);
+  }
+}
+
+:host-context(html.dark) {
+  --ngs-file-error-color: var(--color-error-container-high);
+  --ngs-file-progress-bg: var(--color-neutral-500);
+  --ngs-file-control-hover-color: var(--color-neutral-300);
+}

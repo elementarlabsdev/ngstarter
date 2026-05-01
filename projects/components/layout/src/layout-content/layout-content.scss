@@ -1,0 +1,12 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  flex-grow: 1;
+
+  &:has(:not(.ngs-layout-content)) {
+    overflow: auto;
+  }
+}

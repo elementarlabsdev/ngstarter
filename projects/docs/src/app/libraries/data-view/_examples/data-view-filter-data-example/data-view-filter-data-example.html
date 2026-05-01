@@ -1,0 +1,16 @@
+<ngs-form-field class="w-full">
+  <input ngsInput type="text" [(ngModel)]="search" placeholder="Search">
+</ngs-form-field>
+<ngs-data-view [columnDefs]="columnDefs"
+               [data]="data"
+               [search]="search"
+               class="h-[300px]">
+  <ng-template ngsDataViewEmptyFilterResults>
+    <ngs-empty-state>
+      <ngs-empty-state-icon>
+        <ngs-icon name="fluent:search-info-24-regular"/>
+      </ngs-empty-state-icon>
+      <ngs-empty-state-content>No data matching the filter "{{ search }}"</ngs-empty-state-content>
+    </ngs-empty-state>
+  </ng-template>
+</ngs-data-view>

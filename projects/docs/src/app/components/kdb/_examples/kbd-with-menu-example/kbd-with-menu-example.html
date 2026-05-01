@@ -1,0 +1,30 @@
+<button ngsButton [ngsMenuTriggerFor]="menu">
+  Actions
+</button>
+
+<ngs-menu #menu="ngsMenu">
+  <button ngs-menu-item>
+    <ngs-icon name="fluent:copy-24-regular"/>
+    Copy
+    <ngs-kbd-group>
+      <ngs-kbd>⌘</ngs-kbd>
+      <ngs-kbd>C</ngs-kbd>
+    </ngs-kbd-group>
+  </button>
+  <button ngs-menu-item>
+    <ngs-icon name="fluent:clipboard-paste-24-regular"/>
+    Paste
+    <ngs-kbd-group>
+      <ngs-kbd>⌘</ngs-kbd>
+      <ngs-kbd>V</ngs-kbd>
+    </ngs-kbd-group>
+  </button>
+  <button ngs-menu-item>
+    <ngs-icon name="fluent:cut-24-regular"/>
+    Cut
+    <ngs-kbd-group>
+      <ngs-kbd>⌘</ngs-kbd>
+      <ngs-kbd>X</ngs-kbd>
+    </ngs-kbd-group>
+  </button>
+</ngs-menu>

@@ -1,0 +1,10 @@
+@reference 'tailwindcss';
+
+:host {
+  display: none;
+  position: relative;
+
+  &.is-active {
+    display: block;
+  }
+}

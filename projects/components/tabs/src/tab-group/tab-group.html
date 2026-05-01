@@ -1,0 +1,83 @@
+<div class="ngs-tab-group-header-container" [class.ngs-tab-group-header-pagination-controls-enabled]="_showPaginationControls()">
+  @if (_showPaginationControls()) {
+    <button class="ngs-tab-group-pagination-control ngs-tab-group-pagination-control-before"
+            [class.ngs-tab-group-pagination-control-disabled]="_disableScrollBefore()"
+            (click)="_scrollBefore()"
+            type="button"
+            aria-hidden="true">
+      <div class="ngs-tab-group-pagination-control-icon"></div>
+    </button>
+  }
+
+  <div class="ngs-tab-group-header"
+       #tabListContainer
+       role="tablist"
+       (scroll)="_handleScroll()"
+       (keydown)="_onKeydown($event)">
+    <div class="ngs-tab-group-header-list" #tabList
+         [class.ngs-tab-group-header-list-align-start]="alignTabs() === 'start'"
+         [class.ngs-tab-group-header-list-align-center]="alignTabs() === 'center'"
+         [class.ngs-tab-group-header-list-align-end]="alignTabs() === 'end'">
+      @for (tab of _tabs(); track tab; let i = $index) {
+        <div
+          #tabLabel
+          class="ngs-tab-label"
+          role="tab"
+          ngsRipple
+          [ngsRippleDisabled]="tab.disabled() || disableRipple()"
+          [id]="'ngs-tab-label-' + i"
+          [attr.aria-controls]="'ngs-tab-panel-' + i"
+          [attr.aria-selected]="_selectedIndex === i"
+          [attr.aria-disabled]="tab.disabled()"
+          [attr.aria-label]="tab.ariaLabel()"
+          [attr.aria-labelledby]="tab.ariaLabelledby()"
+          [tabIndex]="_selectedIndex === i ? 0 : -1"
+          [class.ngs-tab-label-active]="_selectedIndex === i"
+          [class.ngs-tab-label-disabled]="tab.disabled()"
+          [class.ngs-tab-label-stretched]="stretchTabs()"
+          (click)="_onTabHeaderClick(i)"
+        >
+          @if (tab.templateLabel()) {
+            <ng-container [ngTemplateOutlet]="tab.templateLabel()!.template" />
+          } @else {
+            {{ tab.label() }}
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  @if (_showPaginationControls()) {
+    <button class="ngs-tab-group-pagination-control ngs-tab-group-pagination-control-after"
+            [class.ngs-tab-group-pagination-control-disabled]="_disableScrollAfter()"
+            (click)="_scrollAfter()"
+            type="button"
+            aria-hidden="true">
+      <div class="ngs-tab-group-pagination-control-icon"></div>
+    </button>
+  }
+</div>
+
+<div class="ngs-tab-group-content">
+  <div class="ngs-tab-panel-container">
+    @for (tab of _tabs(); track tab; let i = $index) {
+      @if (_selectedIndex === i || preserveContent() || _isActive[i]) {
+        <div
+          class="ngs-tab-panel"
+          [class.ngs-tab-panel-active]="_selectedIndex === i"
+          [class.ngs-tab-group-enter-left]="_getEnterAnimation(i) === 'ngs-tab-group-enter-left'"
+          [class.ngs-tab-group-enter-right]="_getEnterAnimation(i) === 'ngs-tab-group-enter-right'"
+          [class.ngs-tab-group-leave-left]="_getLeaveAnimation(i) === 'ngs-tab-group-leave-left'"
+          [class.ngs-tab-group-leave-right]="_getLeaveAnimation(i) === 'ngs-tab-group-leave-right'"
+          role="tabpanel"
+          [id]="'ngs-tab-panel-' + i"
+          [attr.aria-labelledby]="'ngs-tab-label-' + i"
+          [animate.enter]="_getEnterAnimation(i)"
+          [animate.leave]="_getLeaveAnimation(i)"
+        >
+          <ng-template [cdkPortalOutlet]="_getTabContent(tab)" />
+        </div>
+      }
+    }
+  </div>
+</div>

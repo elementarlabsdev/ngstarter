@@ -1,0 +1,11 @@
+<ngs-form-field class="w-1/2">
+  <ngs-label>What's your name?</ngs-label>
+  <input ngsInput [(ngModel)]="name">
+</ngs-form-field>
+<div>
+  <button ngsButton="outlined" (click)="openDialog()">Pick one</button>
+</div>
+
+@if (animal) {
+  <p>You chose: <em>{{ animal }}</em></p>
+}

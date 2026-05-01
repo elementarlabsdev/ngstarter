@@ -1,0 +1,9 @@
+@if (recordingState() === 'inactive') {
+  <button ngs-fab (click)="startRecording()">
+    <ngs-icon name="fluent:mic-24-regular"/>
+  </button>
+} @else {
+  <button ngs-fab (click)="stopRecording()">
+    <ngs-icon name="fluent:mic-24-regular_off"/>
+  </button>
+}

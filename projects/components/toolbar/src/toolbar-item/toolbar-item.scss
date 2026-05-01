@@ -1,0 +1,9 @@
+@reference 'tailwindcss';
+
+:host {
+  flex-shrink: 0;
+
+  &.ngs-toolbar-item-hidden {
+    display: none;
+  }
+}

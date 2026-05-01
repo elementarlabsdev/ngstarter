@@ -1,0 +1,32 @@
+@reference 'tailwindcss';
+
+:host {
+  display: grid;
+  align-items: center;
+  border-radius: var(--ngs-incident-border-radius);
+  background: var(--ngs-incident-bg);
+  grid-template-areas: "icon content close";
+  padding: var(--ngs-incident-padding);
+  gap: var(--ngs-incident-gap);
+  border-inline-start: var(--ngs-incident-border-start);
+  grid-template-columns: [icon] var(--ngs-incident-gap) [content] 1fr [action] var(--ngs-incident-gap);
+  color: var(--ngs-incident-color);
+
+  .content {
+    grid-area: content;
+    display: grid;
+    gap: var(--ngs-incident-gap);
+    grid-template-areas: "data button";
+    grid-template-columns: [data] 1fr [button] var(--ngs-incident-gap);
+  }
+
+  .data {
+    grid-area: data;
+  }
+
+  .icon {
+    line-height: 0;
+    display: inline-block;
+    max-width: max-content;
+  }
+}

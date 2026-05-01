@@ -1,0 +1,6 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  padding: var(--ngs-timeline-item-attributes-padding);
+}

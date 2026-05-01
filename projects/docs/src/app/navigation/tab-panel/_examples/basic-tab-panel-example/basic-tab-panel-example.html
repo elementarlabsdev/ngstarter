@@ -1,0 +1,47 @@
+<div class="flex gap-10">
+  <ngs-tab-panel activeItemId="home" class="h-[500px]">
+    <ngs-tab-panel-content>
+      <ngs-tab-panel-nav>
+        <ngs-tab-panel-item for="home">
+          <ngs-icon name="fluent:home-24-regular" ngsTabPanelItemIcon/>
+          <ngs-tab-panel-item-text>Home</ngs-tab-panel-item-text>
+        </ngs-tab-panel-item>
+        <ngs-tab-panel-item for="code">
+          <ngs-icon name="fluent:code-24-regular" ngsTabPanelItemIcon/>
+          <ngs-tab-panel-item-text>Code</ngs-tab-panel-item-text>
+        </ngs-tab-panel-item>
+      </ngs-tab-panel-nav>
+    </ngs-tab-panel-content>
+    <ngs-tab-panel-aside class="bg-surface-container-low rounded-xl">
+      <ng-template ngsTabPanelAsideContent="home">
+        <div class="p-5">Home content</div>
+      </ng-template>
+      <ng-template ngsTabPanelAsideContent="code">
+        <div class="p-5">Code content</div>
+      </ng-template>
+    </ngs-tab-panel-aside>
+  </ngs-tab-panel>
+
+  <ngs-tab-panel activeItemId="home" class="h-[500px] bg-surface-container-low rounded-xl">
+    <ngs-tab-panel-content class="py-2.5">
+      <ngs-tab-panel-nav>
+        <ngs-tab-panel-item for="home">
+          <ngs-icon name="fluent:home-24-regular" ngsTabPanelItemIcon/>
+          <ngs-tab-panel-item-text>Home</ngs-tab-panel-item-text>
+        </ngs-tab-panel-item>
+        <ngs-tab-panel-item for="code">
+          <ngs-icon name="fluent:code-24-regular" ngsTabPanelItemIcon/>
+          <ngs-tab-panel-item-text>Code</ngs-tab-panel-item-text>
+        </ngs-tab-panel-item>
+      </ngs-tab-panel-nav>
+    </ngs-tab-panel-content>
+    <ngs-tab-panel-aside class="border-l border-l-subtle">
+      <ng-template ngsTabPanelAsideContent="home">
+        <div class="p-5">Home content</div>
+      </ng-template>
+      <ng-template ngsTabPanelAsideContent="code">
+        <div class="p-5">Code content</div>
+      </ng-template>
+    </ngs-tab-panel-aside>
+  </ngs-tab-panel>
+</div>

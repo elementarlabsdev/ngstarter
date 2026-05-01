@@ -1,0 +1,18 @@
+<ng-template #contentRef>
+  <div class="ngs-cookie-popup">
+    <h4 class="title">
+      <ng-content select="[ngsCookiePopupTitle]"/>
+    </h4>
+    <div class="message">
+      <ng-content/>
+    </div>
+    <div class="controls">
+      <button ngsButton="outlined" class="control" (click)="acceptNecessaryCookiesOnly()">
+        <ng-content select="[ngsCookiePopupAcceptNecessaryOnlyButton]"/>
+      </button>
+      <button ngsButton="filled" class="control" (click)="acceptAllCookies()">
+        <ng-content select="[ngsCookiePopupAcceptAllButton]"/>
+      </button>
+    </div>
+  </div>
+</ng-template>

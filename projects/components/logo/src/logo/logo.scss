@@ -1,0 +1,26 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-logo-text-font-size: theme(--text-xl);
+  --ngs-logo-text-font-weight: 800;
+  --ngs-logo-text-color: var(--color-primary);
+  --ngs-logo-text-hover-color: var(--color-tertiary);
+
+  display: inline-flex;
+  align-items: center;
+  gap: --spacing(3);
+
+  &:hover {
+    filter: brightness(110%);
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(1);
+
+    &:empty {
+      display: none;
+    }
+  }
+}

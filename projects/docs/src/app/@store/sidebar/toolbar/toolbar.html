@@ -1,0 +1,27 @@
+<div class="flex items-center gap-2">
+  <div class="text-sm">{{ name }}</div>
+  <div class="border border-muted flex items-center border-neutral-900 dark:border-neutral-200 h-5 leading-3 px-2
+                    rounded-full font-bold text-4xs uppercase text-neutral-500 dark:text-neutral-200">{{ subscription }}</div>
+</div>
+<div class="text-xs text-gray-500 mt-0.5 dark:text-gray-400">{{ email }}</div>
+<div class="my-4">
+  <ngs-divider/>
+</div>
+<div class="ms-auto flex items-center gap-2.5">
+  <ngs-dicebear key="PS" image="assets/avatars/1.svg" class="size-12"/>
+  <div class="flex items-center rounded-full p-1 gap-[0.5] bg-surface-container-high
+              dark:bg-surface-container-highest hover:text-on-surface">
+    <button ngsIconButton ngsTooltip="Settings">
+      <ngs-icon name="fluent:settings-24-regular"/>
+    </button>
+    <button ngsIconButton ngsTooltip="Payments">
+      <ngs-icon name="fluent:payment-24-regular"/>
+    </button>
+    <button ngsIconButton ngsTooltip="Notifications">
+      <ngs-icon name="fluent:alert-24-regular" ngsBadge="3"/>
+    </button>
+    <button ngsIconButton ngsTooltip="Logout">
+      <ngs-icon name="fluent:sign-out-24-regular"/>
+    </button>
+  </div>
+</div>

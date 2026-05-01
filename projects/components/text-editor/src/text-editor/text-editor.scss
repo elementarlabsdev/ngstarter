@@ -1,0 +1,130 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-text-editor-bg: transparent;
+  --ngs-text-editor-content-max-height: 9999px;
+  --ngs-text-editor-content-padding: --spacing(6);
+
+  display: block;
+
+  &:not([class*="bg-"]) {
+    background: var(--ngs-text-editor-bg);
+  }
+
+  .floating-menu {
+    &:empty {
+      display: none;
+    }
+  }
+
+  ::ng-deep {
+    .tippy-box {
+      max-width: 800px !important;
+    }
+  }
+
+  .content {
+    ::ng-deep {
+      .tiptap {
+        padding: var(--ngs-text-editor-content-padding);
+        min-height: 100%;
+
+        &:focus {
+          outline: none;
+        }
+
+        div[data-youtube-video] {
+          cursor: move;
+          background: var(--color-neutral-100);
+          padding: --spacing(6);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          iframe {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: none;
+            display: block;
+            min-height: 200px;
+            min-width: 200px;
+            outline: none;
+          }
+
+          &.ProseMirror-selectednode iframe {
+            outline: var(--sys-tertiary) solid 4px;
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+          }
+        }
+
+        img {
+          display: block;
+          height: auto;
+          margin: --spacing(6) 0;
+          max-width: 100%;
+
+          &.ProseMirror-selectednode {
+            outline: var(--sys-tertiary) solid 4px;
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+          }
+        }
+
+        p.is-editor-empty:first-child::before {
+          content: attr(data-placeholder);
+          color: var(--color-neutral-500);
+          float: left;
+          height: 0;
+          pointer-events: none;
+          font-size: theme(--text-sm);
+        }
+
+        &.ProseMirror-focused {
+          p.is-editor-empty:first-child::before {
+            content: none;
+          }
+        }
+
+        p.is-empty::before {
+          content: attr(data-placeholder);
+          color: var(--color-neutral-500);
+          float: left;
+          height: 0;
+          pointer-events: none;
+          font-size: theme(--text-sm);
+        }
+      }
+
+      p,
+      pre {
+        &:first-child {
+          margin-top: 0;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .button,
+  ::ng-deep .button {
+    &.active {
+      background: var(--color-neutral-100);
+    }
+  }
+}
+
+:host-context(html.dark) {
+  .button,
+  ::ng-deep .button {
+    &.active {
+      background: var(--color-neutral-650);
+      color: var(--color-neutral-200);
+    }
+  }
+}

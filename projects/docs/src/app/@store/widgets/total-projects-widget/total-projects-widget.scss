@@ -1,0 +1,18 @@
+:host {
+  display: block;
+  height: 100%;
+
+  ngs-mchart-line {
+    --ngs-mchart-line-line-bg: var(--color-amber-500);
+    --ngs-mchart-line-area-bg: var(--color-amber-100);
+    --ngs-mchart-line-marker-dot-bg: var(--color-amber-500);
+    --ngs-mchart-line-area-gradient-start-color: var(--color-amber-200);
+  }
+}
+
+:host-context(html.dark) {
+  ngs-mchart-line {
+    --ngs-mchart-line-area-bg: #fef3c7;
+    --ngs-mchart-line-area-gradient-start-color: var(--color-neutral-700);
+  }
+}

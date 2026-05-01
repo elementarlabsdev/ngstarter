@@ -1,0 +1,17 @@
+<button ngsIconButton [ngsMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+  <ngs-icon name="fluent:more-vertical-24-regular"/>
+</button>
+<ngs-menu #menu="ngsMenu">
+  <button ngs-menu-item>
+    <ngs-icon name="fluent:grid-24-regular"/>
+    <span>Redial</span>
+  </button>
+  <button ngs-menu-item disabled>
+    <ngs-icon name="fluent:voicemail-24-regular"/>
+    <span>Check voice mail</span>
+  </button>
+  <button ngs-menu-item>
+    <ngs-icon name="fluent:alert-off-24-regular"/>
+    <span>Disable alerts</span>
+  </button>
+</ngs-menu>

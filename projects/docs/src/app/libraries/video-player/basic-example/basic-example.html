@@ -1,0 +1,11 @@
+<div class="p-12 space-y-12">
+  @for (video of videos(); track video.title) {
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">{{ video.title }}</h3>
+      <ngs-video-player
+        [src]="video.src"
+        [payload]="video.payload"
+        [class]="video.class" />
+    </div>
+  }
+</div>

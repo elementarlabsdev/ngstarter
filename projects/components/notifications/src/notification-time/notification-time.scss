@@ -1,0 +1,6 @@
+@reference 'tailwindcss';
+
+:host {
+  font-size: theme(--text-xs);
+  color: var(--color-on-surface-variant);
+}

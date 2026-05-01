@@ -1,0 +1,13 @@
+<form class="w-1/2">
+  <ngs-form-field class="w-full">
+    <ngs-label>Email</ngs-label>
+    <input type="email" ngsInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com">
+
+    @if (emailFormControl.hasError('email') && !emailFormControl.hasError('required')) {
+      <ngs-error>Please enter a valid email address</ngs-error>
+    }
+    @if (emailFormControl.hasError('required')) {
+      <ngs-error>Email is <strong>required</strong></ngs-error>
+    }
+  </ngs-form-field>
+</form>

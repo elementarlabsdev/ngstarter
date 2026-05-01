@@ -1,0 +1,49 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-tooltip-container-color: var(--color-neutral-950);
+  --ngs-tooltip-supporting-text-color: var(--color-neutral-100);
+  --ngs-tooltip-padding: 8px;
+  --ngs-tooltip-border-radius: theme(--radius-md);
+  --ngs-tooltip-font-size: theme(--text-xs);
+  --ngs-tooltip-line-height: 16px;
+  --ngs-tooltip-max-width: 200px;
+  --ngs-tooltip-handset-padding: 12px;
+  --ngs-tooltip-handset-font-size: 14px;
+
+  pointer-events: auto;
+  display: block;
+  padding: var(--ngs-tooltip-padding);
+  border-radius: var(--ngs-tooltip-border-radius);
+  font-size: var(--ngs-tooltip-font-size);
+  line-height: var(--ngs-tooltip-line-height);
+  max-width: var(--ngs-tooltip-max-width);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: var(--ngs-tooltip-container-color);
+  color: var(--ngs-tooltip-supporting-text-color);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 150ms cubic-bezier(0, 0, 0.2, 1), transform 150ms cubic-bezier(0, 0, 0.2, 1);
+
+  &.ngs-tooltip-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  &.ngs-tooltip-hidden {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 75ms cubic-bezier(0.4, 0, 1, 1), transform 75ms cubic-bezier(0.4, 0, 1, 1);
+  }
+
+  &.ngs-tooltip-handset {
+    padding: var(--ngs-tooltip-handset-padding);
+    font-size: var(--ngs-tooltip-handset-font-size);
+  }
+}
+
+:host-context(html.dark) {
+  --ngs-tooltip-container-color: var(--color-neutral-100);
+  --ngs-tooltip-supporting-text-color: var(--color-neutral-950);
+}

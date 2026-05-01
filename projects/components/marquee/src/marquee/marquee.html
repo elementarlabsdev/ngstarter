@@ -1,0 +1,18 @@
+<ng-template>
+  <ng-content/>
+</ng-template>
+
+<div class="content" [class.out-of-view]="!isInView">
+  <div class="item">
+    <ng-template [ngTemplateOutlet]="template()" />
+  </div>
+  <div class="item">
+    <ng-template [ngTemplateOutlet]="template()" />
+  </div>
+  <div class="item">
+    <ng-template [ngTemplateOutlet]="template()" />
+  </div>
+  <div class="item">
+    <ng-template [ngTemplateOutlet]="template()" />
+  </div>
+</div>

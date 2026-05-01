@@ -1,0 +1,12 @@
+<form [formGroup]="form">
+  <ngs-form-field class="w-1/2">
+    <ngs-label>Phone</ngs-label>
+    <ngs-phone-input formControlName="phone"/>
+    @if (form.get('phone')?.hasError('invalidPhone')) {
+      <ngs-error>Invalid phone</ngs-error>
+    }
+  </ngs-form-field>
+</form>
+<p>
+  Value: {{ form.value['phone'] }}
+</p>

@@ -1,0 +1,7 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  font-size: var(--ngs-timeline-item-description-font-size);
+  color: var(--ngs-timeline-item-description-color);
+}

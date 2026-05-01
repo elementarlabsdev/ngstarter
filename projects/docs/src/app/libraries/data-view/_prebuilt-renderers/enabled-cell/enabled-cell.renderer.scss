@@ -1,0 +1,7 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  white-space: nowrap;
+  line-height: 0;
+}

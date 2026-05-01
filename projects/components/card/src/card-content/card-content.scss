@@ -1,0 +1,19 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  padding: 0 var(--ngs-card-padding, 16px) var(--ngs-card-padding, 16px) var(--ngs-card-padding, 16px);
+  font-size: var(--ngs-card-content-font-size, 14px);
+  line-height: var(--ngs-card-content-line-height, 20px);
+  letter-spacing: var(--ngs-card-content-letter-spacing, 0.0178571429em);
+  flex-grow: 1;
+
+  &:first-child {
+    padding-top: var(--ngs-card-padding, 16px);
+  }
+
+  &.without-padding,
+  &.without-padding:first-child {
+    padding: 0;
+  }
+}

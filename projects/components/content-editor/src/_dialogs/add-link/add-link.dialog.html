@@ -1,0 +1,14 @@
+<h1 ngs-dialog-title>Add link</h1>
+<ngs-dialog-content [formGroup]="form" class="!overflow-hidden">
+  <ngs-form-field class="w-full">
+    <ngs-label>Href (Url, Tel or other)</ngs-label>
+    <input ngsInput type="text" formControlName="href">
+  </ngs-form-field>
+  <ngs-slide-toggle formControlName="openInNewTab">Open link in a new tab</ngs-slide-toggle>
+</ngs-dialog-content>
+<ngs-dialog-actions>
+  <button ngsButton (click)="cancel()">Cancel</button>
+  <button ngsButton="filled"
+          [ngs-dialog-close]="true"
+          [disabled]="form.invalid" (click)="add()">Add</button>
+</ngs-dialog-actions>

@@ -1,0 +1,12 @@
+<h3 ngs-dialog-title>Hi {{ data.name }}</h3>
+<ngs-dialog-content>
+  <p class="mb-3">What's your favorite animal?</p>
+  <ngs-form-field subscriptHiddenIfEmpty>
+    <ngs-label>Favorite Animal</ngs-label>
+    <input ngsInput [(ngModel)]="data.animal">
+  </ngs-form-field>
+</ngs-dialog-content>
+<ngs-dialog-actions align="end">
+  <button ngsButton (click)="onNoClick()">No Thanks</button>
+  <button ngsButton="filled" [ngs-dialog-close]="data.animal">Ok</button>
+</ngs-dialog-actions>

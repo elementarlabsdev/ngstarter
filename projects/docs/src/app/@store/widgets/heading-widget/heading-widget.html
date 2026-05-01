@@ -1,0 +1,12 @@
+<h2 class="font-bold text-lg">{{ content().title }}</h2>
+<div>
+  @if (content().viewMore) {
+    @if (external) {
+      <a [href]="content().viewMore?.link"
+         class="text-primary hover:underline" target="_blank">{{ content().viewMore?.name }}</a>
+    } @else {
+      <a [routerLink]="content().viewMore?.link"
+         class="text-primary hover:underline">{{ content().viewMore?.name }}</a>
+    }
+  }
+</div>

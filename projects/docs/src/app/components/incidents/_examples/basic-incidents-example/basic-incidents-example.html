@@ -1,0 +1,19 @@
+<div class="h-[400px] overflow-hidden">
+  <ngs-incidents>
+    <ngs-incidents-bar>
+      <ngs-incidents-title>Maintenance work on the DNS</ngs-incidents-title>
+      <ngs-incidents-description>Description</ngs-incidents-description>
+      <ngs-icon name="fluent:chevron-down-24-regular" ngsIncidentsToggleIcon/>
+    </ngs-incidents-bar>
+    <ngs-incidents-list>
+      @for (incident of incidents; track incident) {
+        <ngs-incident>
+          <ngs-icon name="fluent:info-24-regular" ngsIncidentIcon/>
+          <ngs-icon name="fluent:dismiss-24-regular" ngsIncidentClose/>
+          <ngs-incident-title>{{ incident.title }}</ngs-incident-title>
+          <ngs-incident-details>{{ incident.details }}</ngs-incident-details>
+        </ngs-incident>
+      }
+    </ngs-incidents-list>
+  </ngs-incidents>
+</div>

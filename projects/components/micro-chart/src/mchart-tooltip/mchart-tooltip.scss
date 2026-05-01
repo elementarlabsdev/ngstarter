@@ -1,0 +1,28 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  width: max-content;
+  box-shadow: theme(--shadow-sm);
+  border-radius: theme(--radius-lg);
+  background: white;
+  font-size: theme(--text-xs);
+  overflow: hidden;
+
+  .title {
+    &:empty {
+      display: none;
+    }
+  }
+
+  .body {
+    &:empty {
+      display: none;
+    }
+  }
+}
+
+:host-context(html.dark) {
+  background: var(--color-tertiary-200);
+  color: var(--color-neutral-800);
+}

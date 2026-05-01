@@ -1,0 +1,7 @@
+<ngs-filter-builder [fieldDefs]="fieldDefs"
+                    [value]="value"
+                    (valueChanged)="value = $event"/>
+<div class="mt-7">
+  <div class="mb-4 text-sm font-bold">Value:</div>
+  <pre class="text-sm">{{ value | json }}</pre>
+</div>

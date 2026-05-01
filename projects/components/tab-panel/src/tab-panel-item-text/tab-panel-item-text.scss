@@ -1,0 +1,6 @@
+@reference 'tailwindcss';
+@reference '../../../styles/_common.scss';
+
+:host {
+  font-size: var(--ngs-tab-panel-item-text-font-size);
+}

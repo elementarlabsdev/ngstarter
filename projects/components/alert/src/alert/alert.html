@@ -1,0 +1,15 @@
+<div class="thumbnail">
+  <ng-content select="[ngsAlertIcon]"/>
+  @if (iconRef()) {
+    <ng-container [ngTemplateOutlet]="iconRefTemplate"/>
+  }
+</div>
+<div class="content">
+  <div class="title">
+    <ng-content select="ngs-alert-title,[ngsAlertTitle]"/>
+  </div>
+  <ng-content/>
+</div>
+<div class="actions">
+  <ng-content select="[ngsAlertAction]"/>
+</div>

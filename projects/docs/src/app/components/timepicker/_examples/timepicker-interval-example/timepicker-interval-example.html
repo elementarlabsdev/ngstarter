@@ -1,0 +1,13 @@
+<ngs-form-field>
+  <ngs-label>Interval 60 min</ngs-label>
+  <input ngsInput [ngsTimepicker]="picker60">
+  <ngs-timepicker-toggle ngsIconButtonSuffix [for]="picker60"/>
+  <ngs-timepicker #picker60 [interval]="60"/>
+</ngs-form-field>
+
+<ngs-form-field class="mt-6">
+  <ngs-label>Interval 15 min</ngs-label>
+  <input ngsInput [ngsTimepicker]="picker15">
+  <ngs-timepicker-toggle ngsIconButtonSuffix [for]="picker15"/>
+  <ngs-timepicker #picker15 [interval]="15"/>
+</ngs-form-field>

@@ -1,0 +1,351 @@
+<div class="flex flex-col h-full overflow-hidden relative"
+     ngsBlockLoaderContainer>
+  <ngs-block-loader [loading]="_isLoading()"/>
+  @if (loaded()) {
+    @if (!noFilteredResults) {
+      <div class="grid-root flex flex-col grow overflow-hidden relative">
+        @if (isResizing()) {
+          <div class="ngs-data-view-resize-line" [style.left.px]="resizeLineLeft()"></div>
+        }
+
+        <!-- GRID HEADER -->
+        <div class="grid-header pinned top-0 z-20 flex overflow-hidden shrink-0 font-medium"
+             ngsSort
+             [style.height.px]="headerHeight()"
+             [ngsSortDisabled]="!isSortingEnabled() || _isLoading() || _isFiltering()"
+             (ngsSortChange)="onSortChange($event)">
+          @if (pinnedLeftColumns().length > 0 || withSelection()) {
+            <div class="grid-header-left shrink-0 flex z-30"
+                 [ngStyle]="leftPinnedWidthStyles()">
+              <div class="header-inner flex" [style.width.px]="leftPinnedWidth()">
+                @if (withSelection()) {
+                  <div class="header-cell cell-selection flex items-center justify-center shrink-0">
+                    @if (rowSelection() === 'multiple') {
+                      <ngs-checkbox (change)="$event ? toggleAllRows() : null"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()" />
+                    }
+                  </div>
+                }
+                @for (col of pinnedLeftColumns(); track col.field) {
+                  <div class="header-cell flex items-center truncate relative"
+                       [class.shrink-0]="!col.flex"
+                       [style.flex]="col.flex"
+                       [style.width]="col.width"
+                       [style.min-width]="col.width"
+                       [style.max-width]="col.width">
+                    <div class="flex items-center grow truncate"
+                         [ngs-sort-header]="col.field"
+                         [disabled]="!col.sortable">
+                      <span class="truncate">{{ col.name }}</span>
+                    </div>
+                    @if (col.withColumnSettings !== false && withColumnSettings()) {
+                      <button ngsIconButton
+                              #menuTrigger="ngsMenuTrigger"
+                              [ngsMenuTriggerFor]="columnMenu"
+                              [ngsMenuTriggerData]="{ col: col }"
+                              class="ngs-data-view-column-settings-btn shrink-0"
+                              [class.is-menu-open]="menuTrigger.menuOpen()">
+                        <ngs-icon name="fluent:more-vertical-24-regular" size="20"/>
+                      </button>
+                    }
+                    @if (col.resizable) {
+                      <div class="col-resize-handle" (mousedown)="onColumnResizeStart($event, col)"></div>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          <div #headerCenter class="grid-header-center grow flex overflow-hidden">
+            <div #headerCenterInner class="flex header-inner" [style.width.px]="centerWidth()">
+              @for (col of centerColumns(); track col.field) {
+                <div class="header-cell flex items-center truncate relative"
+                     [class.shrink-0]="!col.flex"
+                     [style.flex]="col.flex"
+                     [style.width]="col.width"
+                     [style.min-width]="col.width"
+                     [style.max-width]="col.width">
+                    <div class="flex items-center grow truncate"
+                         [ngs-sort-header]="col.field"
+                         [disabled]="!col.sortable">
+                      <span class="truncate">{{ col.name }}</span>
+                    </div>
+                    @if (col.withColumnSettings !== false && withColumnSettings()) {
+                      <button ngsIconButton
+                              #menuTrigger="ngsMenuTrigger"
+                              [ngsMenuTriggerFor]="columnMenu"
+                              [ngsMenuTriggerData]="{ col: col }"
+                              class="ngs-data-view-column-settings-btn shrink-0"
+                              [class.is-menu-open]="menuTrigger.menuOpen()">
+                        <ngs-icon name="fluent:more-vertical-24-regular" size="20"/>
+                      </button>
+                    }
+                    @if (col.resizable) {
+                      <div class="col-resize-handle" (mousedown)="onColumnResizeStart($event, col)"></div>
+                    }
+                </div>
+              }
+            </div>
+          </div>
+
+          @if (pinnedRightColumns().length > 0 || actionBarTemplateRef) {
+            <div class="grid-header-right shrink-0 flex z-30"
+                 [ngStyle]="rightPinnedWidthStyles()">
+              <div class="header-inner flex" [style.width.px]="rightPinnedWidth()">
+                @for (col of pinnedRightColumns(); track col.field) {
+                  <div class="header-cell flex items-center truncate relative"
+                       [class.shrink-0]="!col.flex"
+                       [style.flex]="col.flex"
+                       [style.width]="col.width"
+                       [style.min-width]="col.width"
+                       [style.max-width]="col.width">
+                    <div class="flex items-center grow truncate"
+                         [ngs-sort-header]="col.field"
+                         [disabled]="!col.sortable">
+                      <span class="truncate">{{ col.name }}</span>
+                    </div>
+                    @if (col.withColumnSettings !== false && withColumnSettings()) {
+                      <button ngsIconButton
+                              #menuTrigger="ngsMenuTrigger"
+                              [ngsMenuTriggerFor]="columnMenu"
+                              [ngsMenuTriggerData]="{ col: col }"
+                              class="ngs-data-view-column-settings-btn shrink-0"
+                              [class.is-menu-open]="menuTrigger.menuOpen()">
+                        <ngs-icon name="fluent:more-vertical-24-regular" size="20"/>
+                      </button>
+                    }
+                    @if (col.resizable) {
+                      <div class="col-resize-handle" (mousedown)="onColumnResizeStart($event, col)"></div>
+                    }
+                  </div>
+                }
+                @if (actionBarTemplateRef) {
+                  <div class="header-cell flex items-center shrink-0"
+                       [style.width.px]="actionBarWidth()"
+                       [style.min-width.px]="actionBarWidth()"
+                       [style.max-width.px]="actionBarWidth()">
+                    &nbsp;
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="grid-body grow flex relative">
+          @if (pinnedLeftColumns().length > 0 || withSelection()) {
+            <div #bodyLeft class="grid-body-left pinned-viewport shrink-0 overflow-hidden z-10 pinned left-0"
+                 [ngStyle]="leftPinnedWidthStyles()">
+              <div #bodyLeftCanvas class="pinned-canvas">
+                <div #bodyLeftContent class="pinned-content relative" [style.height.px]="totalHeight()">
+                  @for (row of visibleRows(); track row.index) {
+                    <div class="grid-row flex absolute left-0 right-0 hover:bg-[var(--ngs-data-view-row-hover-bg)]"
+                         [style.top.px]="row.top"
+                         [style.height.px]="rowHeight()"
+                         [attr.data-row-index]="row.index"
+                         [class.is-selected]="selection.isSelected(row.item)"
+                         [class.is-hovered]="hoveredRowIndex() === row.index"
+                         [class.is-last]="row.isLast"
+                         (mouseenter)="hoveredRowIndex.set(row.index)"
+                         (mouseleave)="hoveredRowIndex.set(null)">
+                      @if (withSelection()) {
+                        <div class="cell cell-selection flex items-center justify-center shrink-0">
+                          <ngs-checkbox (click)="$event.stopPropagation()"
+                                        (change)="$event ? rowSelectionToggle($event, row.item) : null"
+                                        [checked]="selection.isSelected(row.item)" />
+                        </div>
+                      }
+                      @for (col of pinnedLeftColumns(); track col.field) {
+                        <div class="cell flex items-center truncate"
+                             [class.shrink-0]="!col.flex"
+                             [style.flex]="col.flex"
+                             [style.width]="col.width"
+                             [style.min-width]="col.width"
+                             [style.max-width]="col.width">
+                          <ng-container *ngTemplateOutlet="cellContent; context: { row: row.item, col: col }"></ng-container>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+
+          <div #bodyCenter class="grid-body-center grow overflow-hidden relative">
+            <ngs-scrollbar-area>
+              <div #bodyCenterContent class="rows-container">
+                @for (row of visibleRows(); track row.index) {
+                  <div class="grid-row flex absolute left-0 hover:bg-[var(--ngs-data-view-row-hover-bg)]"
+                       [style.top.px]="row.top"
+                       [style.height.px]="rowHeight()"
+                       [style.width.px]="centerWidth()"
+                       [attr.data-row-index]="row.index"
+                       [class.is-selected]="selection.isSelected(row.item)"
+                       [class.is-hovered]="hoveredRowIndex() === row.index"
+                       [class.is-last]="row.isLast"
+                       (mouseenter)="hoveredRowIndex.set(row.index)"
+                       (mouseleave)="hoveredRowIndex.set(null)">
+                    @for (col of centerColumns(); track col.field) {
+                      <div class="cell flex items-center truncate"
+                           [class.shrink-0]="!col.flex"
+                           [style.flex]="col.flex"
+                           [style.width]="col.width"
+                           [style.min-width]="col.width"
+                           [style.max-width]="col.width">
+                        <ng-container *ngTemplateOutlet="cellContent; context: { row: row.item, col: col }"/>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+              <div class="virtual-spacer relative" [style.height.px]="totalHeight()" [style.width.px]="centerWidth()"></div>
+            </ngs-scrollbar-area>
+          </div>
+
+          @if (pinnedRightColumns().length > 0 || actionBarTemplateRef) {
+            <div #bodyRight class="grid-body-right pinned-viewport shrink-0 overflow-hidden z-10 pinned right-0"
+                 [ngStyle]="rightPinnedWidthStyles()">
+              <div #bodyRightCanvas class="pinned-canvas">
+                <div #bodyRightContent class="pinned-content relative" [style.height.px]="totalHeight()">
+                  @for (row of visibleRows(); track row.index) {
+                    <div class="grid-row flex absolute left-0 right-0 hover:bg-[var(--ngs-data-view-row-hover-bg)]"
+                         [style.top.px]="row.top"
+                         [style.height.px]="rowHeight()"
+                         [attr.data-row-index]="row.index"
+                         [class.is-selected]="selection.isSelected(row.item)"
+                         [class.is-hovered]="hoveredRowIndex() === row.index"
+                         [class.is-last]="row.isLast"
+                         (mouseenter)="hoveredRowIndex.set(row.index)"
+                         (mouseleave)="hoveredRowIndex.set(null)">
+                      @for (col of pinnedRightColumns(); track col.field) {
+                        <div class="cell flex items-center truncate"
+                             [class.shrink-0]="!col.flex"
+                             [style.flex]="col.flex"
+                             [style.width]="col.width"
+                             [style.min-width]="col.width"
+                             [style.max-width]="col.width">
+                          <ng-container *ngTemplateOutlet="cellContent; context: { row: row.item, col: col }"></ng-container>
+                        </div>
+                      }
+                      @if (actionBarTemplateRef) {
+                        <div class="cell flex items-center shrink-0"
+                             [style.width.px]="actionBarWidth()"
+                             [style.min-width.px]="actionBarWidth()"
+                             [style.max-width.px]="actionBarWidth()">
+                          <ng-container [ngTemplateOutlet]="actionBarTemplateRef" [ngTemplateOutletContext]="{ $implicit: row.item }"/>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        @if (withPagination() && !paginator()) {
+          <ngs-paginator [pageSizeOptions]="pageSizeOptions()"
+                         [showFirstLastButtons]="showFirstLastButtons()"
+                         [pageSize]="pageSize()"
+                         [pageIndex]="pageIndex()"
+                         [length]="effectivePaginatorLength()"
+                         [disabled]="_isLoading() || _isFiltering()"
+                         (page)="onPageChange($event)"/>
+        }
+      </div>
+    } @else {
+      @if (isNoResults) {
+        @if (emptyFilterResultsTemplateRef) {
+          <ng-container [ngTemplateOutlet]="emptyFilterResultsTemplateRef"/>
+        } @else {
+          <ngs-empty-state>
+            <ngs-empty-state-icon>
+              <ngs-icon [name]="emptyFilterResultsIcon()"/>
+            </ngs-empty-state-icon>
+            <ngs-empty-state-content>{{ interpolatedEmptyFilterResultsText() }}</ngs-empty-state-content>
+          </ngs-empty-state>
+        }
+      } @else {
+        @if (emptyTemplateRef) {
+          <ng-container [ngTemplateOutlet]="emptyTemplateRef"/>
+        } @else {
+          <ngs-empty-state>
+            <ngs-empty-state-icon>
+              <ngs-icon [name]="emptyIcon()"/>
+            </ngs-empty-state-icon>
+            <ngs-empty-state-content>{{ emptyText() }}</ngs-empty-state-content>
+          </ngs-empty-state>
+        }
+      }
+    }
+  }
+</div>
+
+<ng-template #cellContent let-row="row" let-col="col">
+  <div class="overflow-hidden w-full">
+    @if (col.cellRenderer && hasCellRenderer(col.cellRenderer)) {
+      <ng-container [ngComponentOutlet]="getCellRenderer(col.cellRenderer)"
+                    [ngComponentOutletInputs]="{ element: row, columnDef: col, fieldData: getNestedValue(row, col.field) }"
+                    [ngComponentOutletInjector]="injector"/>
+    } @else {
+      {{ getNestedValue(row, col.field) }}
+    }
+  </div>
+</ng-template>
+
+<ngs-menu #columnMenu="ngsMenu">
+  <ng-template ngsMenuContent let-col="col">
+    @if (col.sortable) {
+      <button ngs-menu-item (click)="sortColumn(col, 'asc')">
+        <ngs-icon name="fluent:arrow-sort-up-24-regular" size="20"/>
+        Sort Ascending
+      </button>
+      <button ngs-menu-item (click)="sortColumn(col, 'desc')">
+        <ngs-icon name="fluent:arrow-sort-down-24-regular" size="20"/>
+        Sort Descending
+      </button>
+      <ngs-menu-divider/>
+    }
+    <button ngs-menu-item [ngsMenuTriggerFor]="pinMenu" [ngsMenuTriggerData]="{ col: col }">
+      <ngs-icon name="fluent:pin-24-regular" size="20"/>
+      Pin Column
+    </button>
+    <ngs-menu-divider/>
+    <button ngs-menu-item (click)="autosizeColumn(col)">
+      Autosize This Column
+    </button>
+    <button ngs-menu-item (click)="autosizeAllColumns()">
+      Autosize All Columns
+    </button>
+    <ngs-menu-divider/>
+    <button ngs-menu-item (click)="openColumnSettingsDialog()">
+      Choose Columns
+    </button>
+    <button ngs-menu-item (click)="resetColumns()">
+      Reset Columns
+    </button>
+  </ng-template>
+</ngs-menu>
+
+<ngs-menu #pinMenu="ngsMenu">
+  <ng-template ngsMenuContent let-col="col">
+    <button ngs-menu-item
+            [selected]="!col.pinned"
+            (click)="pinColumn(col, null)">
+      No Pin
+    </button>
+    <button ngs-menu-item
+            [selected]="col.pinned && col.pinAlign === 'start'"
+            (click)="pinColumn(col, 'start')">
+      Pin Left
+    </button>
+    <button ngs-menu-item
+            [selected]="col.pinned && col.pinAlign === 'end'"
+            (click)="pinColumn(col, 'end')">
+      Pin Right
+    </button>
+  </ng-template>
+</ngs-menu>

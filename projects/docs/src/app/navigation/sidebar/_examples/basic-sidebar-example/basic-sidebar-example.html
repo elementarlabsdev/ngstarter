@@ -1,0 +1,56 @@
+<div class="h-[600px] relative">
+  <ngs-sidebar class="border border-muted rounded-2xl">
+    <ngs-sidebar-header class="h-20 font-bold text-primary border-b border-b-muted">
+      NGSTARTER
+    </ngs-sidebar-header>
+    <ngs-sidebar-body>
+      <ngs-sidebar-nav activeKey="home">
+        @for (navItem of navItems; track navItem) {
+          @switch (navItem.type) {
+            @case ('group') {
+              <ngs-sidebar-nav-group>
+                <ngs-sidebar-nav-group-toggle>
+                  <ng-container ngsSidebarNavItemIcon>
+                    @if (navItem.icon) {
+                      <ngs-icon name="fluent:{{ navItem.icon }}"/>
+                    }
+                  </ng-container>
+                  {{ navItem.label }}
+                  <ngs-icon name="fluent:chevron-down-24-regular" ngsSidebarNavGroupToggleIcon/>
+                </ngs-sidebar-nav-group-toggle>
+                <ngs-sidebar-nav-group-menu>
+                  @for (childNavItem of navItem.children; track childNavItem) {
+                    <ngs-sidebar-nav-item [key]="childNavItem.key">
+                      <ng-container ngsSidebarNavItemIcon>
+                        @if (childNavItem.icon) {
+                          <ngs-icon name="fluent:{{ navItem.icon }}"/>
+                        }
+                      </ng-container>
+                      {{ navItem.label }}
+                    </ngs-sidebar-nav-item>
+                  }
+                </ngs-sidebar-nav-group-menu>
+              </ngs-sidebar-nav-group>
+            }
+            @case ('heading') {
+              <ngs-sidebar-nav-heading>{{ navItem.label }}</ngs-sidebar-nav-heading>
+            }
+            @default {
+              <ngs-sidebar-nav-item [key]="navItem.key">
+                <ng-container ngsSidebarNavItemIcon>
+                  @if (navItem.icon) {
+                    <ngs-icon name="fluent:{{ navItem.icon }}"/>
+                  }
+                </ng-container>
+                {{ navItem.label }}
+              </ngs-sidebar-nav-item>
+            }
+          }
+        }
+      </ngs-sidebar-nav>
+    </ngs-sidebar-body>
+    <ngs-sidebar-footer class="h-20 px-7 text-sm border-t border-t-muted">
+      Copyright &copy; 2024
+    </ngs-sidebar-footer>
+  </ngs-sidebar>
+</div>

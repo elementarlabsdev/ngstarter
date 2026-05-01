@@ -1,0 +1,23 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-carousel-gap: --spacing(8);
+
+  display: block;
+  position: relative;
+
+  .content {
+    display: flex;
+    overflow: hidden;
+    gap: var(--ngs-carousel-gap);
+  }
+
+  .controls {
+    margin-top: --spacing(4);
+    gap: --spacing(3);
+
+    &:empty {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,9 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  ngs-upload-area {
+    --ngs-upload-area-padding: --spacing(6) --spacing(10);
+  }
+}

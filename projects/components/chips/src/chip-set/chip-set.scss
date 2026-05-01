@@ -1,0 +1,16 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-chip-set-gap: var(--ngs-chip-set-spacing, --spacing(2));
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ngs-chip-set-gap);
+
+  ::ng-deep {
+    .ngs-chip-input {
+      outline: none;
+      width: 100%;
+    }
+  }
+}

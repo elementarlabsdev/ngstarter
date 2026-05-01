@@ -1,0 +1,58 @@
+@if (hasTitle()) {
+  <div class="title-container">
+    <div class="title">
+      @if (data.titleTplRef) {
+        <ng-container [ngTemplateOutlet]="data.titleTplRef" />
+      } @else {
+        {{ data.title }}
+      }
+    </div>
+  </div>
+}
+<div class="controls" (click)="onPreventClick($event)">
+  <div class="w-max">
+    <button (click)="videoViewerRef.close()" class="close">
+      <ngs-icon name="fluent:dismiss-24-regular"/>
+    </button>
+  </div>
+</div>
+<div class="content" (click)="onBackdropClick()">
+  <div class="video-container" [class.is-loaded]="loaded()">
+    @if (!loaded()) {
+      <div class="absolute top-1/2 start-1/2 -transform-1/2 z-[1]">
+        <ngs-progress-spinner/>
+      </div>
+    }
+    <ngs-video-player [src]="data.sourceUrl"
+                      [payload]="data.payload"
+                      [orientation]="data.orientation"
+                      [autoPlay]="data.autoPlay ?? true"
+                      [showPlayButton]="data.showPlayButton ?? true"
+                      [showSpeaker]="data.showSpeaker ?? true"
+                      [showFullscreen]="data.showFullscreen ?? true"
+                      [showDurationSlider]="data.showDurationSlider ?? true"
+                      [muted]="data.muted ?? false"
+                      (loaded)="onVideoLoaded()"
+                      (click)="onPreventClick($event)"/>
+  </div>
+  @if (hasAside()) {
+    <aside class="aside" (click)="onPreventClick($event)">
+      <div class="aside-header">
+        @if (data.captionTplRef) {
+          <ng-container [ngTemplateOutlet]="data.captionTplRef" />
+        } @else if (data.caption) {
+          {{ data.caption }}
+        }
+      </div>
+      <div class="aside-body">
+        <div class="aside-body-scroll">
+          @if (data.descriptionTplRef) {
+            <ng-container [ngTemplateOutlet]="data.descriptionTplRef" />
+          } @else if (data.description) {
+            {{ data.description }}
+          }
+        </div>
+      </div>
+    </aside>
+  }
+</div>

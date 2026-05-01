@@ -1,0 +1,34 @@
+<div class="ngs-slider-wrapper">
+  <div class="ngs-slider-track">
+    <div class="ngs-slider-track-background"></div>
+    <div class="ngs-slider-track-active"
+         [style.left.%]="(_trackLeft() / 100) * 100"
+         [style.right.%]="(_trackRight() / 100) * 100"></div>
+    @if (showTickMarks()) {
+      <div class="ngs-slider-tick-marks">
+        @for (tick of _tickMarks(); track $index) {
+          <div class="ngs-slider-tick-mark" [class.ngs-slider-tick-mark-active]="tick === 0"></div>
+        }
+      </div>
+    }
+  </div>
+
+  <ng-content />
+
+  <div class="ngs-slider-visual-thumbs">
+    @for (thumb of _allThumbs(); track thumb) {
+      <div class="ngs-slider-visual-thumb"
+           [style.left.%]="thumb.percentage * 100"
+           [class.ngs-slider-visual-thumb-active]="thumb === _activeThumb()">
+        <div class="ngs-slider-thumb-knob"></div>
+        @if (discrete()) {
+          <div class="ngs-slider-value-indicator-container">
+            <div class="ngs-slider-value-indicator">
+              <span class="ngs-slider-value-indicator-text">{{ displayWith()(thumb.value) }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

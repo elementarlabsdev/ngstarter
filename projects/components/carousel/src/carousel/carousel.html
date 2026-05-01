@@ -1,0 +1,15 @@
+<div #content class="content"
+     ngsDraggableCarousel
+     [stopPropagation]="stopPropagation()"
+     [snapToCenter]="snapToCenter()"
+     [snapDebounceTime]="snapDebounceTime()"
+     [snapDuration]="snapDuration()"
+     [resistanceFactor]="resistanceFactor()"
+     [velocityThreshold]="velocityThreshold()"
+     [visibilityDebounceTime]="visibilityDebounceTime()"
+     (indexChange)="onIndexChanged($event)">
+  <ng-content select="ngs-carousel-card,[ngs-carousel-card]" />
+</div>
+<div class="controls">
+  <ng-content select="[ngsCarouselControls]" />
+</div>

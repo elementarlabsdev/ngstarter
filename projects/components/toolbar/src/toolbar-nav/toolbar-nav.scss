@@ -1,0 +1,25 @@
+@reference 'tailwindcss';
+
+:host {
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  .ngs-toolbar-nav-container {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    gap: --spacing(1);
+  }
+}
+
+:host-context(.ngs-toolbar-overflow-dialog-content) {
+  width: 100%;
+
+  .ngs-toolbar-nav-container {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: --spacing(2);
+  }
+}

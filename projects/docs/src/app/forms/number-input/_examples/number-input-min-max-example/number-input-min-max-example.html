@@ -1,0 +1,7 @@
+<form [formGroup]="form">
+  <ngs-form-field class="w-1/2">
+    <ngs-label>Min 2, Max 5</ngs-label>
+    <ngs-number-input formControlName="control" min="2" max="5"/>
+  </ngs-form-field>
+</form>
+<p>Value: {{ form.value.control }}</p>

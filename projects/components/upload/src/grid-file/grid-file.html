@@ -1,0 +1,28 @@
+<div class="flex items-center gap-2.5">
+  <div class="icon">
+    <ng-content select="[ngsFileIcon]"/>
+  </div>
+  <div>
+    <div class="text-sm overflow-hidden text-ellipsis whitespace-nowrap max-w-[220px]">{{ name() }}</div>
+    @if (size()) {
+      <div class="text-xs text-neutral-500 overflow-hidden text-ellipsis whitespace-nowrap max-w-[220px]">{{ size() }}</div>
+    }
+  </div>
+</div>
+<div class="flex items-center gap-1">
+  @if (state() === 'uploading') {
+    <ngs-gauge class="size-10" [value]="progress()">
+      <ngs-gauge-value class="text-2xs">{{ progress() }}%</ngs-gauge-value>
+    </ngs-gauge>
+  }
+
+  <div class="controls">
+    <ng-content select="[ngsGridFileControl]"/>
+  </div>
+</div>
+
+@if (state() === 'error' && errorMessage()) {
+  <div class="error">
+    {{ errorMessage() }}
+  </div>
+}

@@ -1,0 +1,23 @@
+<div class="flex items-center gap-5">
+  <ngs-form-field subscriptHiddenIfEmpty>
+    <ngs-label>Horizontal position</ngs-label>
+    <ngs-select [(ngModel)]="horizontalPosition">
+      <ngs-option value="start">Start</ngs-option>
+      <ngs-option value="center">Center</ngs-option>
+      <ngs-option value="end">End</ngs-option>
+      <ngs-option value="left">Left</ngs-option>
+      <ngs-option value="right">Right</ngs-option>
+    </ngs-select>
+  </ngs-form-field>
+  <ngs-form-field subscriptHiddenIfEmpty>
+    <ngs-label>Vertical position</ngs-label>
+    <ngs-select [(ngModel)]="verticalPosition">
+      <ngs-option value="top">Top</ngs-option>
+      <ngs-option value="bottom">Bottom</ngs-option>
+    </ngs-select>
+  </ngs-form-field>
+
+  <button ngsButton="outlined" (click)="openSnackBar()" aria-label="Show an example snack-bar">
+    Pool party!
+  </button>
+</div>

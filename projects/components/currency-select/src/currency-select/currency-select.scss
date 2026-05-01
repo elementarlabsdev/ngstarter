@@ -1,0 +1,9 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .currency-code {
+    text-transform: uppercase;
+  }
+}

@@ -1,0 +1,58 @@
+@reference 'tailwindcss';
+
+:host {
+  touch-action: none;
+  display: block;
+  width: var(--ngs-color-picker-alpha-width);
+  height: var(--ngs-color-picker-alpha-height);
+  position: relative;
+  border-radius: var(--ngs-color-picker-border-radius);
+  background-position: 0 0, 6px 6px;
+  background-size: 12px 12px;
+  background-image: repeating-linear-gradient(45deg,#dbdbdb 25%,transparent 25%,transparent 75%,#dbdbdb 75%,#dbdbdb),repeating-linear-gradient(45deg,#dbdbdb 25%,#fff 25%,#fff 75%,#dbdbdb 75%,#dbdbdb);
+
+  .gradient {
+    display: block;
+    content: '';
+    border-radius: inherit;
+    z-index: 0;
+    inset: 0;
+    position: absolute;
+  }
+
+  &[vertical] {
+    width: var(--ngs-color-picker-alpha-height);
+    height: var(--ngs-color-picker-alpha-width);
+  }
+
+  .pointer {
+    z-index: 1;
+    flex: none;
+    position: absolute;
+    cursor: pointer;
+    left: 0;
+    border-radius: 50%;
+    width: var(--ngs-color-picker-alpha-pointer-size);
+    height: var(--ngs-color-picker-alpha-pointer-size);
+    box-shadow: var(--ngs-color-picker-alpha-pointer-shadow);
+    border: var(--ngs-color-picker-alpha-pointer-border);
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    &:before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background-position: 0 0, 6px 6px;
+      background-size: 12px 12px;
+      background-image: repeating-linear-gradient(45deg,#dbdbdb 25%,transparent 25%,transparent 75%,#dbdbdb 75%,#dbdbdb),repeating-linear-gradient(45deg,#dbdbdb 25%,#fff 25%,#fff 75%,#dbdbdb 75%,#dbdbdb);
+    }
+  }
+
+  .pointer-bg {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+}

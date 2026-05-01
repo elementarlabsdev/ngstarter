@@ -1,0 +1,70 @@
+<ngs-select
+  #ngsSelect
+  [value]="value"
+  (selectionChange)="onSelectionChange($event)"
+  (opened)="onSelectOpened()"
+  (closed)="onSelectClosed()"
+  [placeholder]="placeholder"
+  [required]="isRequiredSignal()"
+  [disabled]="isDisabledSignal()">
+  <ngs-select-trigger class="select-trigger">
+    @let selectedCountry = selectedCountryDisplay();
+    @if (selectedCountry) {
+      <div class="flex items-center gap-2">
+        <span class="text-xl leading-[0]">{{ selectedCountry.flag }}</span>
+        {{ selectedCountry.name }}
+        @if (showCountryCode()) {
+          <span class="code">({{ selectedCountry.code }})</span>
+        }
+      </div>
+    }
+
+    @if (!selectedCountryDisplay() && placeholder) {
+      <div class="placeholder-text">
+        {{ placeholder }}
+      </div>
+    }
+  </ngs-select-trigger>
+
+  <ngs-select-header>
+    <div class="px-3 py-3 rounded-t sticky top-0 z-1">
+      <input #searchInput
+             type="text"
+             placeholder="Search..."
+             autocomplete="off"
+             [(ngModel)]="searchTerm"
+             class="w-full bg-surface-container-low text-sm focus:outline-none rounded-[var(--input-radius)]
+                  focus:bg-surface-container-lowest focus:shadow-sm h-12 px-3">
+      @if (searchTerm().trim()) {
+        <div class="absolute end-4 top-1/2 -translate-y-1/2">
+          <button
+            ngsIconButton
+            (click)="clearSearch($event)"
+            class="clear-button"
+            type="button"
+            aria-label="Clear search">
+            <ngs-icon name="fluent:dismiss-24-regular"/>
+          </button>
+        </div>
+      }
+    </div>
+  </ngs-select-header>
+
+  @for (country of filteredCountries(); track country.code) {
+    <ngs-option [value]="country.code">
+      <div class="flex items-center gap-2 h-full">
+        <span class="text-xl leading-[0]">{{ country.flag }}</span>
+        {{ country.name }}
+        @if (showCountryCode()) {
+          <span class="code">({{ country.code }})</span>
+        }
+      </div>
+    </ngs-option>
+  } @empty {
+    @if (searchTerm()) {
+      <div class="text-sm px-4 py-3">
+        <span i18n>Country not found</span>.
+      </div>
+    }
+  }
+</ngs-select>

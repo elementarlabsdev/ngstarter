@@ -1,0 +1,19 @@
+<ngs-file-list>
+  @for (uploadFile of fileList; track uploadFile) {
+    <ngs-file [size]="uploadFile.size"
+              [state]="uploadFile.state"
+              [errorMessage]="uploadFile.errorMessage"
+              [remainingTime]="uploadFile.remainingTime"
+              [name]="uploadFile.name"
+              [progress]="uploadFile.progress">
+      @if (uploadFile.state === 'error') {
+        <button type="button" ngs-file-control>
+          <ngs-icon name="fluent:arrow-clockwise-24-regular"/>
+        </button>
+      }
+      <button type="button" ngs-file-control>
+        <ngs-icon name="fluent:dismiss-24-regular"/>
+      </button>
+    </ngs-file>
+  }
+</ngs-file-list>

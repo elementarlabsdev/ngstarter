@@ -1,0 +1,9 @@
+<p>Basic mat-select</p>
+<ngs-form-field class="w-1/2">
+  <ngs-label>Favorite food</ngs-label>
+  <ngs-select>
+    @for (food of foods; track food) {
+      <ngs-option [value]="food.value">{{food.viewValue}}</ngs-option>
+    }
+  </ngs-select>
+</ngs-form-field>

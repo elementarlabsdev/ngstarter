@@ -1,0 +1,9 @@
+<ngs-selection-list multiple #shoes>
+  @for (shoe of typesOfShoes; track shoe) {
+    <ngs-list-option>{{ shoe }}</ngs-list-option>
+  }
+</ngs-selection-list>
+<ngs-divider/>
+<p>
+  Options selected: {{ shoes.selectedOptions.selected.length }}
+</p>

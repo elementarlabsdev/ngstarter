@@ -1,0 +1,36 @@
+<div class="h-[700px] border border-muted rounded-2xl overflow-hidden">
+  <ngs-layout>
+    <ngs-layout-header>
+      <div class="h-14 px-5 flex items-center border-b border-b-muted">Header</div>
+    </ngs-layout-header>
+    <ngs-layout-content>
+      <div class="absolute inset-y-5 start-5 end-0 p-5 border border-muted rounded-2xl"
+           [class.end-5]="sidePanel.isOpen()">
+        Body content
+      </div>
+    </ngs-layout-content>
+    <ngs-layout-aside>
+      <ngs-side-panel #sidePanel class="overridable-side-panel">
+        <ngs-side-panel-tab tabId="info" label="Info" icon="fluent:info-24-regular">
+          <div class="p-5 border border-muted rounded-2xl">
+            <p>This is the contents of the first tab.</p>
+          </div>
+        </ngs-side-panel-tab>
+        <ngs-side-panel-tab tabId="list" label="List" icon="fluent:text-bullet-list-ltr-24-regular">
+          <div class="p-5">
+            <p>This is the contents of the second tab.</p>
+          </div>
+        </ngs-side-panel-tab>
+        <ngs-side-panel-tab tabId="svg" label="Custom" [icon]="customIconTpl">
+          <div class="p-5">
+            <p>Tab with custom SVG icon.</p>
+          </div>
+        </ngs-side-panel-tab>
+      </ngs-side-panel>
+    </ngs-layout-aside>
+  </ngs-layout>
+</div>
+
+<ng-template #customIconTpl>
+  OP
+</ng-template>

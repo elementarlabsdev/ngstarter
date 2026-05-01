@@ -1,0 +1,78 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-expand-fade-color: var(--color-background);
+  --ngs-expand-button-bg: var(--color-surface-container);
+  --ngs-expand-button-hover-bg: var(--color-surface-container-high);
+  --ngs-expand-button-color: var(--color-on-surface);
+  --ngs-expand-button-font-size: var(--text-tiny);
+  --ngs-expand-button-box-shadow: theme(--shadow-md);
+  --ngs-expand-button-border-radius: calc(infinity * 1px);
+  --ngs-expand-button-padding: --spacing(2) --spacing(4);
+  --ngs-expand-button-hover-opacity: 90%;
+  --ngs-expand-expanded-height: 300px;
+
+  display: block;
+  position: relative;
+  max-height: var(--ngs-expand-expanded-height);
+  overflow: hidden;
+
+  .button {
+    position: absolute;
+    inset-inline-start: 50%;
+    bottom: --spacing(12);
+    padding: var(--ngs-expand-button-padding);
+    border-radius: var(--ngs-expand-button-border-radius);
+    background: var(--ngs-expand-button-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transform: translate(-50%, 50%);
+    color: var(--ngs-expand-button-color);
+    font-size: var(--ngs-expand-button-font-size);
+    box-shadow: var(--ngs-expand-button-box-shadow);
+  }
+
+  .button {
+    &:hover {
+      cursor: pointer;
+      opacity: var(--ngs-expand-button-hover-opacity);
+      background: var(--ngs-expand-button-hover-bg);
+    }
+
+    &:active {
+      scale: .98;
+    }
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(transparent, var(--ngs-expand-fade-color));
+    z-index: 1;
+  }
+
+  &.is-expanded {
+    max-height: max-content;
+    overflow: auto;
+
+    &:after {
+      display: none;
+    }
+
+    .button {
+      visibility: hidden;
+    }
+
+    &:hover {
+      .button {
+        visibility: visible;
+      }
+    }
+  }
+}

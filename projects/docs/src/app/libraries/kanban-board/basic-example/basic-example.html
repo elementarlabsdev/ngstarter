@@ -1,0 +1,9 @@
+<ngs-kanban-board [columns]="columns">
+  <ng-template ngsKanbanItemDef let-item let-column>
+    <div class="font-medium text-sm">{{ item.name }}</div>
+    <div class="flex items-center justify-between mt-3.5">
+      <ngs-dicebear [key]="item.assignee.id" class="size-7"/>
+      <ngs-icon name="fluent:flag-24-regular" [style.color]="item.color"/>
+    </div>
+  </ng-template>
+</ngs-kanban-board>

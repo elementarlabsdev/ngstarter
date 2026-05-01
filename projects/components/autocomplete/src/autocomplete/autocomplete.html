@@ -1,0 +1,11 @@
+<ng-template>
+  <div class="ngs-autocomplete-panel"
+       role="listbox"
+       [id]="id"
+       [attr.aria-label]="ariaLabel()"
+       [attr.aria-labelledby]="ariaLabelledby()"
+       [ngClass]="classList()"
+       #panel>
+    <ng-content />
+  </div>
+</ng-template>

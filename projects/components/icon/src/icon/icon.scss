@@ -1,0 +1,25 @@
+@reference 'tailwindcss';
+
+:host {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+
+  svg {
+    flex: none;
+  }
+
+  &:not([class*="text-"]) {
+    color: var(--icon-color);
+  }
+
+  &:not([class*="w-"]):not([class*="size-"]) {
+    width: var(--icon-size);
+  }
+
+  &:not([class*="h-"]):not([class*="size-"]) {
+    height: var(--icon-size);
+  }
+}

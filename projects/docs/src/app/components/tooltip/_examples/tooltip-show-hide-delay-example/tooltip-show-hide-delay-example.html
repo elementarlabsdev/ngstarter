@@ -1,0 +1,20 @@
+<ngs-form-field class="example-user-input">
+  <ngs-label>Show delay</ngs-label>
+  <input ngsInput type="number" [formControl]="showDelay"
+         aria-label="Adds a delay between hovering over the button and displaying the tooltip">
+  <ngs-hint>milliseconds</ngs-hint>
+</ngs-form-field>
+
+<ngs-form-field class="example-user-input">
+  <ngs-label>Hide delay</ngs-label>
+  <input ngsInput type="number" [formControl]="hideDelay"
+         aria-label="Adds a delay between hovering away from the button and hiding the tooltip">
+  <ngs-hint>milliseconds</ngs-hint>
+</ngs-form-field>
+
+<button ngsButton="filled" ngsTooltip="Info about the action"
+        [ngsTooltipShowDelay]="showDelay.value"
+        [ngsTooltipHideDelay]="hideDelay.value"
+        aria-label="Button that displays a tooltip with a customized delay in showing and hiding">
+  Action
+</button>

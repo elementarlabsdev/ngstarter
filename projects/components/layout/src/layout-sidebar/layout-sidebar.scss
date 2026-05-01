@@ -1,0 +1,14 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  z-index: 101;
+
+  &:has(.ngs-sidebar.compact) {
+    z-index: 102;
+  }
+
+  &.is-hidden {
+    display: none;
+  }
+}

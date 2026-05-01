@@ -1,0 +1,11 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  padding: 0 var(--ngs-card-padding) var(--ngs-card-padding) var(--ngs-card-padding);
+  flex: none;
+
+  &:has(ngs-progress-bar) {
+    padding: 0;
+  }
+}

@@ -1,0 +1,29 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-button-toggle-group-border-color: var(--color-surface-container-highest);
+  --ngs-button-toggle-group-bg: var(--color-surface-container);
+
+  display: inline-flex;
+  flex-direction: row;
+  white-space: nowrap;
+  overflow: hidden;
+  border-radius: var(--ngs-button-toggle-group-border-radius, var(--btn-radius));
+  background: var(--ngs-button-toggle-group-bg);
+  height: var(--btn-height);
+
+  &.ngs-button-toggle-group-vertical {
+    flex-direction: column;
+
+    ::ng-deep .ngs-button-toggle + .ngs-button-toggle {
+      border-top: 1px solid var(--ngs-button-toggle-group-border-color);
+      border-left: none;
+    }
+  }
+}
+
+::ng-deep {
+  .ngs-button-toggle + .ngs-button-toggle {
+    border-left: 1px solid var(--ngs-button-toggle-group-border-color);
+  }
+}

@@ -1,0 +1,12 @@
+<ngs-form-field class="w-full mb-4">
+  <input ngsInput type="text" [(ngModel)]="search" placeholder="Search">
+</ngs-form-field>
+
+<ngs-data-view [columnDefs]="columnDefs"
+               [datasource]="datasource"
+               [rowModelType]="'serverSide'"
+               [withPagination]="true"
+               [search]="search"
+               withSelection
+               class="h-[400px]">
+</ngs-data-view>

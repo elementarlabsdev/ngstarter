@@ -1,0 +1,64 @@
+@reference 'tailwindcss';
+
+:host {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+  gap: --spacing(0.5);
+  color: var(--ngs-rail-nav-bg-item-color);
+
+  .icon {
+    padding: --spacing(1.5) --spacing(4);
+    border-radius: calc(infinity * 1px);
+    color: var(--ngs-rail-nav-bg-item-icon-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  &:hover {
+    .icon {
+      background: var(--ngs-rail-nav-bg-item-icon-hover-bg);
+
+      ::ng-deep * {
+        scale: 1.025;
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 250ms;
+      }
+    }
+  }
+
+  &:active {
+    .icon {
+      background: var(--ngs-rail-nav-bg-item-icon-active-bg);
+    }
+  }
+
+  &.is-active {
+    --icon-color: var(--ngs-rail-nav-bg-item-icon-is-active-color);
+
+    .icon {
+      background: var(--ngs-rail-nav-bg-item-icon-is-active-bg);
+    }
+
+    color: var(--ngs-rail-nav-bg-item-active-color);
+  }
+
+  &.is-active:active {
+    .icon {
+      background: var(--ngs-rail-nav-bg-item-icon-is-active-active-bg);
+    }
+  }
+
+  .label {
+    font-size: var(--text-tiny);
+  }
+}

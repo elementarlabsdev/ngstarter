@@ -1,0 +1,67 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "paths": {
+      "@store/*": [
+        "./projects/docs/src/app/@store/*"
+      ],
+      "@meta/*": [
+        "./projects/docs/src/app/@meta/*"
+      ],
+      "@app/*": [
+        "./projects/docs/src/app/@app/*"
+      ],
+      "@ngstarter/components/*": [
+        "./projects/components/*"
+      ],
+      "@ngstarter/components": [
+        "./projects/components"
+      ],
+      "@ngstarter/image-designer": [
+        "./projects/components/image-designer"
+      ],
+    },
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "preserve"
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "typeCheckHostBindings": true,
+    "strictTemplates": true
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/docs/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/docs/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/admin/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/admin/tsconfig.spec.json"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+@if (content()) {
+  <ngs-action-required [actionText]="content()?.actionText"
+                       [description]="content()!.description"
+                       [iconName]="content()?.iconName"
+                       [buttonText]="content()!.buttonText"/>
+}

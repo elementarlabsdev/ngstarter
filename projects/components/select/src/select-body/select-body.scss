@@ -1,0 +1,10 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  position: relative;
+  flex: 1;
+  overflow: auto;
+  min-height: 0;
+  max-height: var(--ngs-select-panel-max-height, var(--dropdown-max-height, 256px));
+}

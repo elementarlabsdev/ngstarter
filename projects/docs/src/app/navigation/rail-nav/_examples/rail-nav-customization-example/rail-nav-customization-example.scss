@@ -1,0 +1,57 @@
+@reference 'tailwindcss';
+
+:host {
+  ngs-rail-nav {
+    /* Variant 1: Vibrant Purple/Pink */
+    &.style-vibrant {
+      --ngs-rail-nav-bg: var(--color-surface-container-low);
+      --ngs-rail-nav-padding: --spacing(4) 0;
+
+      --ngs-rail-nav-bg-item-color: #71717a;
+      --ngs-rail-nav-bg-item-icon-color: #71717a;
+
+      --ngs-rail-nav-bg-item-icon-hover-bg: #f5d0fe; /* fuchsia-100 */
+      --ngs-rail-nav-bg-item-icon-active-bg: #f0abfc; /* fuchsia-200 */
+
+      --ngs-rail-nav-bg-item-icon-is-active-bg: #d946ef; /* fuchsia-500 */
+      --ngs-rail-nav-bg-item-icon-is-active-color: #ffffff;
+      --ngs-rail-nav-bg-item-icon-is-active-active-bg: #c026d3; /* fuchsia-600 */
+      --ngs-rail-nav-bg-item-active-color: #c026d3; /* fuchsia-600 */
+    }
+
+    /* Variant 2: Ocean Blue */
+    &.style-ocean {
+      --ngs-rail-nav-width: 80px; /* Custom width */
+      --ngs-rail-nav-gap: 8px;    /* Tighter gap */
+
+      --ngs-rail-nav-bg-item-color: #64748b;
+      --ngs-rail-nav-bg-item-icon-color: #64748b;
+
+      --ngs-rail-nav-bg-item-icon-hover-bg: #e0f2fe; /* sky-100 */
+      --ngs-rail-nav-bg-item-icon-active-bg: #bae6fd; /* sky-200 */
+
+      --ngs-rail-nav-bg-item-icon-is-active-bg: #0ea5e9; /* sky-500 */
+      --ngs-rail-nav-bg-item-icon-is-active-color: #ffffff;
+      --ngs-rail-nav-bg-item-icon-is-active-active-bg: #0284c7; /* sky-600 */
+      --ngs-rail-nav-bg-item-active-color: #0284c7; /* sky-600 */
+    }
+
+    /* Variant 3: Dark High-Contrast (simulated) */
+    &.style-dark {
+      background-color: #18181b; /* zinc-950 */
+      border-radius: 16px;
+      padding: 12px 0;
+
+      --ngs-rail-nav-bg-item-color: #a1a1aa;
+      --ngs-rail-nav-bg-item-icon-color: #a1a1aa;
+
+      --ngs-rail-nav-bg-item-icon-hover-bg: #27272a; /* zinc-800 */
+      --ngs-rail-nav-bg-item-icon-active-bg: #3f3f46; /* zinc-700 */
+
+      --ngs-rail-nav-bg-item-icon-is-active-bg: #fbbf24; /* amber-400 */
+      --ngs-rail-nav-bg-item-icon-is-active-color: #000000;
+      --ngs-rail-nav-bg-item-icon-is-active-active-bg: #f59e0b; /* amber-500 */
+      --ngs-rail-nav-bg-item-active-color: #fbbf24; /* amber-400 */
+    }
+  }
+}

@@ -1,0 +1,32 @@
+<div class="button-strip flex flex-col items-center gap-1 z-10">
+  @for (tab of internalTabs(); track tab.tabId) {
+    <button
+      ngsIconButton
+      [attr.aria-label]="tab.label"
+      [ngsTooltip]="tab.label"
+      [ngsTooltipPosition]="tooltipPosition()"
+      ngsTooltipShowDelay="500"
+      [class.is-active]="activeTabId() === tab.tabId"
+      (click)="toggleTab(tab.tabId)"
+      class="button"
+    >
+      @if (isTemplateRef(tab.icon)) {
+        <ng-container [ngTemplateOutlet]="tab.icon"/>
+      } @else if (typeof tab.icon === 'string' && tab.icon) {
+        <ngs-icon [name]="tab.icon"/>
+      } @else {
+        <span class="text-sm">{{ tab.label.substring(0, 2) }}</span>
+      }
+    </button>
+  }
+</div>
+
+<div class="wrapper" [class.open]="isOpen()">
+  @if (isOpen() && activeTabId()) {
+    @if (selectedTabContent(); as content) {
+      <ng-container [ngTemplateOutlet]="content"/>
+    } @else if (activeTabId() && !selectedTabContent()) {
+      <p class="text-neutral-500">No content was found for this tab.</p>
+    }
+  }
+</div>

@@ -1,0 +1,21 @@
+<ngs-tree [dataSource]="dataSource" [treeControl]="treeControl">
+  <ngs-tree-node *ngsTreeNodeDef="let node" ngsTreeNodePadding>
+    <button ngsIconButton disabled></button>
+    {{node.item}}
+  </ngs-tree-node>
+  <ngs-tree-node *ngsTreeNodeDef="let node; when: hasChild" ngsTreeNodePadding ngsTreeNodeToggle
+                 [cdkTreeNodeTypeaheadLabel]="node.item">
+    <button ngsIconButton
+            [attr.aria-label]="'Toggle ' + node.item" ngsTreeNodeToggle>
+      @if (treeControl.isExpanded(node)) {
+        <ngs-icon name="fluent:chevron-down-24-regular" class="size-4"/>
+      } @else {
+        <ngs-icon name="fluent:chevron-right-24-regular" class="size-4"/>
+      }
+    </button>
+    {{node.item}}
+    @if (node.isLoading()) {
+      <ngs-progress-bar mode="indeterminate" class="ms-3"/>
+    }
+  </ngs-tree-node>
+</ngs-tree>

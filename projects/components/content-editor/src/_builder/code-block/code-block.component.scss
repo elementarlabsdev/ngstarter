@@ -1,0 +1,56 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  margin: --spacing(3) 0;
+
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 0 --spacing(4);
+  }
+
+  .language-trigger {
+    font-size: var(--text-sm);
+    cursor: pointer;
+  }
+
+  .content {
+    outline: none;
+    font-size: var(--text-sm);
+    padding: --spacing(2);
+    min-width: 0;
+
+    .content-code {
+      min-width: 0;
+
+      ::ng-deep {
+        .cm-editor {
+          border-radius: theme(--radius-lg);
+        }
+
+        .cm-scroller {
+          border-radius: theme(--radius-lg);
+          overflow-x: auto;
+        }
+
+        .cm-content,
+        .cm-gutter {
+          min-height: 160px;
+        }
+      }
+    }
+  }
+}
+
+:host-context(.block.is-active),
+:host-context(.block.is-focused) {
+  .content {
+    &:empty {
+      &:before {
+        content: attr(data-empty-placeholder);
+        color: var(--color-neutral-500);
+      }
+    }
+  }
+}

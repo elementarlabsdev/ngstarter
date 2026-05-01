@@ -1,0 +1,22 @@
+<ngs-tiles
+  class="bg-neutral-100 p-4 rounded-lg"
+  [items]="items()"
+  (orderChange)="onOrderChange($event)"
+  (orderChanged)="onOrderChanged($event)"
+  (layoutChanged)="onLayoutChanged($event)">
+  @for (item of items(); track item.id) {
+    <ngs-tile [width.md]="item.wMd" [width.lg]="item.wLg" [width]="item.w" [height]="item.h">
+      <div class="border border-border rounded-lg bg-surface-container-lowest shadow-md overflow-hidden h-full">
+        <div class="flex flex-col h-full p-4 relative">
+          <button (click)="removeItem(item.id)" class="absolute top-2 left-2 p-1 bg-neutral-100 rounded-full hover:bg-red-100 text-red-500 leading-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+          <div class="absolute top-2 right-2 p-1 bg-neutral-100 rounded cursor-grab active:cursor-grabbing font-mono leading-none"
+               ngsTileHandle>:::</div>
+          <div class="font-bold text-xl mb-2">{{ item.content }}</div>
+          <div class="text-neutral-500 text-sm mt-auto">{{ item.w }}x{{ item.h }}</div>
+        </div>
+      </div>
+    </ngs-tile>
+  }
+</ngs-tiles>

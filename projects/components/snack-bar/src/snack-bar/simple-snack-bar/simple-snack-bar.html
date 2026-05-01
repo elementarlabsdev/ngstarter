@@ -1,0 +1,6 @@
+<span class="simple-snack-bar-message">{{ data.message }}</span>
+@if (data.action) {
+  <div class="simple-snack-bar-action">
+    <button ngsButton="filled" (click)="action()">{{ data.action }}</button>
+  </div>
+}

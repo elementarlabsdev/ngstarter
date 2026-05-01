@@ -1,0 +1,20 @@
+
+<label class="ngs-radio-button-label" [attr.for]="id() + '-input'">
+  <span class="ngs-radio-button-container">
+    <input
+      type="radio"
+      class="ngs-radio-button-input"
+      [id]="id() + '-input'"
+      [name]="name() || (radioGroup ? radioGroup.name() : null)"
+      [checked]="checked()"
+      [disabled]="disabled()"
+      [value]="value()"
+      (click)="_onInputClick($event)"
+    >
+    <span class="ngs-radio-button-outer-circle"></span>
+    <span class="ngs-radio-button-inner-circle"></span>
+  </span>
+  <span class="ngs-radio-button-label-content">
+    <ng-content />
+  </span>
+</label>

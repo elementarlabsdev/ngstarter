@@ -1,0 +1,151 @@
+@reference 'tailwindcss';
+@reference '../../../styles/_common.scss';
+
+:host {
+  --ngs-code-highlighter-bg: var(--color-background);
+  --ngs-code-highlighter-radius: theme(--radius-2xl);
+  --ngs-code-highlighter-padding: --spacing(5);
+  --ngs-code-highlighter-border: 1px solid var(--color-border);
+  --ngs-code-highlighter-title-padding: --spacing(2) --spacing(3) --spacing(1) --spacing(3);
+  --ngs-code-highlighter-title-color: var(--color-neutral-500);
+
+  display: block;
+  margin: --spacing(5) 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  figcaption {
+    font-size: theme(--text-xs);
+    font-weight: 500;
+    padding: var(--ngs-code-highlighter-title-padding);
+    background: var(--ngs-code-highlighter-bg);
+    color: var(--ngs-code-highlighter-title-color);
+    position: relative;
+    z-index: 1;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 1px;
+      background: var(--ngs-code-highlighter-bg);
+    }
+  }
+
+  .languageName {
+    font-size: theme(--text-sm);
+    font-weight: 600;
+    padding: 0 --spacing(6);
+    width: max-content;
+    margin-bottom: --spacing(4);
+    margin-top: calc(--spacing(1) * -1);
+    position: relative;
+  }
+
+  ::ng-deep {
+    pre {
+      line-height: 1.75;
+      font-size: theme(--text-sm);
+      position: relative;
+      padding: 0;
+
+      code {
+        display: grid;
+      }
+
+      .line {
+        padding-left: --spacing(6);
+        padding-right: var(--ngs-code-highlighter-padding);
+        min-height: 1.75em;
+
+        &.diff.remove {
+          background-color: color-mix(in srgb, theme(--color-red-500), transparent 85%);
+          display: inline-block;
+          width: 100%;
+
+          &::before {
+            content: '-';
+            color: theme(--color-red-500);
+            position: absolute;
+            left: --spacing(2);
+          }
+        }
+
+        &.diff.add {
+          background-color: color-mix(in srgb, theme(--color-green-500), transparent 85%);
+          display: inline-block;
+          width: 100%;
+
+          &::before {
+            content: '+';
+            color: theme(--color-green-500);
+            position: absolute;
+            left: --spacing(2);
+          }
+        }
+
+        &.highlighted {
+          background-color: color-mix(in srgb, var(--color-primary), transparent 92%);
+          display: inline-block;
+          width: 100%;
+        }
+      }
+    }
+
+    code {
+      white-space: pre;
+    }
+  }
+
+  .content {
+    overflow: auto;
+    background: var(--ngs-code-highlighter-bg);
+    padding: var(--ngs-code-highlighter-padding) 0;
+
+    button {
+      color: inherit;
+
+      ngs-icon.text-green-500 {
+        color: theme(--color-green-600) !important;
+      }
+    }
+  }
+
+  &.appearance-bordered {
+    figcaption {
+      border: var(--ngs-code-highlighter-border);
+      border-bottom: none;
+      border-top-left-radius: theme(--radius-xl);
+      border-top-right-radius: theme(--radius-xl);
+      width: max-content;
+    }
+
+    .content {
+      border: var(--ngs-code-highlighter-border);
+      border-radius: var(--ngs-code-highlighter-radius);
+      z-index: 0;
+    }
+
+    &:has(figcaption) {
+      .content {
+        border-top-left-radius: 0;
+      }
+    }
+  }
+
+  &.appearance-none {
+    .content {
+      border: none;
+      padding: 0;
+      background-color: transparent !important;
+      border-radius: 0;
+    }
+
+    ::ng-deep pre {
+      padding: 0;
+    }
+  }
+
+  &.loading { opacity: 0.6; }
+}

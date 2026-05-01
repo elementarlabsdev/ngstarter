@@ -1,0 +1,42 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-tab-panel-width: --spacing(20);
+  --ngs-tab-panel-item-width: --spacing(15);
+  --ngs-tab-panel-item-height: --spacing(15);
+  --ngs-tab-panel-item-padding: --spacing(2);
+  --ngs-tab-panel-item-gap: --spacing(1);
+  --ngs-tab-panel-item-color: var(--nav-item-color);
+  --ngs-tab-panel-item-hover-bg: var(--nav-item-hover-bg);
+  --ngs-tab-panel-item-hover-color: var(--nav-item-hover-color);
+  --ngs-tab-panel-item-active-bg: var(--nav-item-active-bg);
+  --ngs-tab-panel-item-active-color: var(--nav-item-active-color);
+  --ngs-tab-panel-item-border-radius: theme(--radius-xl);
+  --ngs-tab-panel-aside-width: --spacing(75);
+  --ngs-tab-panel-nav-padding: 0;
+  --ngs-tab-panel-nav-gap: --spacing(3);
+  --ngs-tab-panel-item-text-font-size: theme(--text-xs);
+  --ngs-tab-panel-item-icon-font-size: theme(--text-2xl);
+
+  // compact state
+  --ngs-tab-panel-compact-width: --spacing(14);
+  --ngs-tab-panel-compact-item-width: --spacing(10);
+  --ngs-tab-panel-compact-item-height: --spacing(10);
+
+  display: flex;
+  width: min-content;
+  align-items: stretch;
+
+  .panel {
+    display: flex;
+    flex-direction: column;
+    width: var(--ngs-tab-panel-width);
+    flex: none;
+  }
+
+  &.is-compact {
+    .panel {
+      width: var(--ngs-tab-panel-compact-width);
+    }
+  }
+}

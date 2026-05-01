@@ -1,0 +1,54 @@
+<div>
+  <p>Slider configuration</p>
+
+  <section class="flex gap-3">
+    <ngs-form-field class="w-44">
+      <ngs-label>Value</ngs-label>
+      <input ngsInput type="number" [(ngModel)]="value">
+    </ngs-form-field>
+    <ngs-form-field class="w-44">
+      <ngs-label>Min value</ngs-label>
+      <input ngsInput type="number" [(ngModel)]="min">
+    </ngs-form-field>
+    <ngs-form-field class="w-44">
+      <ngs-label>Max value</ngs-label>
+      <input ngsInput type="number" [(ngModel)]="max">
+    </ngs-form-field>
+    <ngs-form-field class="w-44">
+      <ngs-label>Step size</ngs-label>
+      <input ngsInput type="number" [(ngModel)]="step">
+    </ngs-form-field>
+  </section>
+
+  <div>
+    <section class="example-section">
+      <ngs-checkbox [(ngModel)]="showTicks">Show ticks</ngs-checkbox>
+    </section>
+    <section class="example-section">
+      <ngs-checkbox [(ngModel)]="thumbLabel">Show thumb label</ngs-checkbox>
+    </section>
+    <section class="example-section">
+      <ngs-checkbox [(ngModel)]="disabled">Disabled</ngs-checkbox>
+    </section>
+  </div>
+</div>
+<div class="my-6">
+  <ngs-divider/>
+</div>
+<div>
+  <p>Result</p>
+  <div>
+    <label id="example-name-label">Value: </label>
+    <label>{{ value }}</label>
+  </div>
+  <ngs-slider
+    class="!w-1/3"
+    [disabled]="disabled"
+    [max]="max"
+    [min]="min"
+    [step]="step"
+    [discrete]="thumbLabel"
+    [showTickMarks]="showTicks">
+    <input ngsSliderThumb [(ngModel)]="value" #slider>
+  </ngs-slider>
+</div>

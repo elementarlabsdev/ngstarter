@@ -1,0 +1,25 @@
+@if (image()) {
+  <img class="image" loading="lazy" [src]="image()" [alt]="alt()" (load)="onImageLoaded()">
+}
+
+@if (presenceIndicator()) {
+  <div class="presence-indicator"
+       [class.is-online]="presenceIndicator() === 'online'"
+       [class.is-offline]="presenceIndicator() === 'offline'"
+       [class.is-away]="presenceIndicator() === 'away'"></div>
+}
+
+@if (label() && showLabel) {
+  <svg viewBox="0 0 50 50" class="text">
+    <text
+      x="50%"
+      y="50%"
+      alignment-baseline="central"
+      text-anchor="middle"
+      font-weight="inherit"
+      font-size="20"
+      fill="currentColor">{{ label() }}</text>
+  </svg>
+}
+
+<ng-content select="mat-icon,ngs-icon"/>

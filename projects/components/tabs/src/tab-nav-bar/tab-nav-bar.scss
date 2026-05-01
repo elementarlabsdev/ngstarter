@@ -1,0 +1,6 @@
+@use '../tabs-common' as tabs;
+@reference 'tailwindcss';
+
+:host {
+  @include tabs.ngs-tabs-common-header;
+}

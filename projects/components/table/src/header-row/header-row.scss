@@ -1,0 +1,24 @@
+@reference 'tailwindcss';
+
+:host {
+  height: var(--ngs-table-header-row-height);
+  display: table-row;
+  background: var(--ngs-data-view-header-bg, var(--color-background));
+  width: 100%;
+
+  :host-context(.highlight-header) & {
+    position: relative;
+    margin: var(--ngs-data-view-hl-header-margin, 0);
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      background: var(--ngs-data-view-hl-header-row-bg, var(--color-surface-container));
+      height: --spacing(12);
+      border-radius: theme(--radius-lg);
+      z-index: 0;
+    }
+  }
+}

@@ -1,0 +1,26 @@
+<form class="w-1/2">
+  <ngs-form-field>
+    <textarea ngsInput placeholder="Ex. It makes me feel..."
+              ngsTextareaAutoSize></textarea>
+  </ngs-form-field>
+</form>
+
+<form class="w-1/2">
+  <ngs-form-field>
+    <ngs-label>Leave a comment</ngs-label>
+    <textarea ngsInput
+              placeholder="Ex. It makes me feel..."
+              ngsTextareaAutoSize
+              [minRows]="2"
+              [maxRows]="8"></textarea>
+  </ngs-form-field>
+</form>
+
+<form class="w-1/2">
+  <ngs-form-field>
+    <textarea ngsInput
+              [value]="value()"
+              placeholder="Ex. It makes me feel..."
+              ngsTextareaAutoSize></textarea>
+  </ngs-form-field>
+</form>

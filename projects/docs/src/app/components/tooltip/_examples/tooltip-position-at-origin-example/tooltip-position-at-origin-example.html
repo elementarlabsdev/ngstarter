@@ -1,0 +1,11 @@
+<button ngsButton="outlined"
+        class="demo-button"
+        ngsTooltip="Info about the action"
+        [ngsTooltipPositionAtOrigin]="enabled.value"
+        aria-label="Button that displays a tooltip when focused or hovered over">
+  Action
+</button>
+
+<ngs-checkbox [formControl]="enabled" class="example-enabled-checkbox">
+  Position at origin enabled
+</ngs-checkbox>

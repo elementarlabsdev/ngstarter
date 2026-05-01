@@ -1,0 +1,8 @@
+@reference 'tailwindcss';
+
+.ngs-chip-listbox {
+  display: flex;
+  flex-wrap: wrap;
+  outline: none;
+  gap: --spacing(2);
+}

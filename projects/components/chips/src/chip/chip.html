@@ -1,0 +1,18 @@
+<div class="ngs-chip-content">
+  <span class="avatar">
+    <ng-content select="ngs-chip-avatar, [ngsChipAvatar]"/>
+  </span>
+  <span
+    class="ngs-chip-label"
+    [attr.contenteditable]="_editing || null"
+    (blur)="_handleBlur()"
+    (keydown)="_handleKeydown($event)"
+    [ngsAutoFocus]="_editing"
+  >
+    <ng-content/>
+  </span>
+  <ng-content select="[ngsChipTrailingAction]"/>
+  <div class="controls">
+    <ng-content select="ngs-chip-remove, [ngsChipRemove], [ngsChipTrailingAction], [ngsChipEdit]"/>
+  </div>
+</div>

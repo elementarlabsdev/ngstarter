@@ -1,0 +1,9 @@
+<button ngsButton="outlined" [ngsPopoverTriggerFor]="tpl" [ngsPopoverContext]="{ $implicit: 'World' }">
+  Click me (TemplateRef)!
+</button>
+
+<ng-template #tpl let-name>
+  <div class="bg-primary text-white p-4 rounded shadow-lg">
+    Hello, {{ name }}! This is a raw template without ngs-popover-panel.
+  </div>
+</ng-template>

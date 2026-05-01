@@ -1,0 +1,9 @@
+@reference 'tailwindcss';
+
+:host {
+  position: relative;
+  color: var(--ngs-breadcrumbs-separator-color);
+  font-size: var(--ngs-breadcrumbs-separator-font-size);
+  top: var(--ngs-breadcrumbs-separator-position-top);
+  line-height: 0;
+}

@@ -1,0 +1,11 @@
+<ngs-data-view [columnDefs]="columnDefs"
+               [data]="data"
+               [loading]="true"
+               class="h-[300px]">
+  <ngs-data-view-action-bar *ngsDataViewActionBar="let row">
+    <button ngsButton="outlined">Edit</button>
+    <button ngsIconButton>
+      <ngs-icon name="fluent:more-horizontal-24-regular"/>
+    </button>
+  </ngs-data-view-action-bar>
+</ngs-data-view>

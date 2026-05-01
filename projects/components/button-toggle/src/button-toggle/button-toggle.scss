@@ -1,0 +1,85 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-button-toggle-text-color: var(--color-on-surface-variant);
+  --ngs-button-toggle-hover-bg-color: var(--color-surface-container-high);
+  --ngs-button-toggle-checked-bg-color: var(--color-surface-container-highest);
+  --ngs-button-toggle-checked-text-color: var(--color-on-surface);
+  --ngs-button-toggle-selection-indicator-color: var(--color-primary);
+
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+
+  .ngs-button-toggle-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    cursor: pointer;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    border: none;
+    background: none;
+    color: var(--ngs-button-toggle-text-color);
+    width: 100%;
+    height: 100%;
+    outline: none;
+
+    &:hover:not(:disabled) {
+      background: var(--ngs-button-toggle-hover-bg-color);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      color: color-mix(in srgb, var(--color-on-surface), transparent 62%);
+      background: transparent;
+
+      .ngs-button-toggle-selection-indicator {
+        color: color-mix(in srgb, var(--color-on-surface), transparent 62%);
+      }
+    }
+
+    .ngs-button-toggle-selection-indicator {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: var(--ngs-button-toggle-selection-indicator-color);
+      margin-right: 8px;
+      animation: ngs-button-toggle-indicator-fade-in 200ms cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+
+  &.ngs-button-toggle-checked {
+    .ngs-button-toggle-button {
+      background: var(--ngs-button-toggle-checked-bg-color);
+      color: var(--ngs-button-toggle-checked-text-color);
+
+      &:disabled {
+        background: color-mix(in srgb, var(--color-on-surface), transparent 88%);
+        color: color-mix(in srgb, var(--color-on-surface), transparent 62%);
+      }
+    }
+  }
+
+  .ngs-button-toggle-label-content {
+    line-height: 1;
+  }
+}
+
+@keyframes ngs-button-toggle-indicator-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

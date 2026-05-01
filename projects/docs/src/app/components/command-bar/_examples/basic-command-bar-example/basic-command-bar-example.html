@@ -1,0 +1,18 @@
+<ngs-checkbox [(ngModel)]="open">Show command bar</ngs-checkbox>
+<div>
+  <ngs-form-field class="w-1/2 mt-4">
+    <ngs-label>Tooltip position</ngs-label>
+    <ngs-select [formControl]="position">
+      @for (positionOption of positionOptions; track positionOption) {
+        <ngs-option [value]="positionOption">{{ positionOption }}</ngs-option>
+      }
+    </ngs-select>
+  </ngs-form-field>
+</div>
+<ngs-command-bar [open]="open" [position]="position.value!">
+  2 selected
+  <ngs-command-bar-divider/>
+  <ngs-command-bar-command shortcut="e">Edit</ngs-command-bar-command>
+  <ngs-command-bar-divider/>
+  <ngs-command-bar-command shortcut="d">Delete</ngs-command-bar-command>
+</ngs-command-bar>

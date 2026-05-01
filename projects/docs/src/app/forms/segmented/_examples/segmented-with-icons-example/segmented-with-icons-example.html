@@ -1,0 +1,26 @@
+<ngs-segmented #segmented value="monthly">
+  <button ngs-segmented-button value="daily">
+    @if (segmented.isSelected('daily')) {
+      <ngs-icon name="fluent:calendar-ltr-24-regular" ngsSegmentedIcon/>
+    } @else {
+      <ngs-icon name="fluent:calendar-ltr-24-regular" ngsSegmentedIcon/>
+    }
+    Daily
+  </button>
+  <button ngs-segmented-button value="weekly">
+    @if (segmented.isSelected('weekly')) {
+      <ngs-icon name="fluent:calendar-empty-24-regular" ngsSegmentedIcon/>
+    } @else {
+      <ngs-icon name="fluent:calendar-empty-24-regular" ngsSegmentedIcon/>
+    }
+    Weekly
+  </button>
+  <button ngs-segmented-button value="monthly">
+    @if (segmented.isSelected('monthly')) {
+      <ngs-icon name="fluent:calendar-ltr-24-regular" ngsSegmentedIcon/>
+    } @else {
+      <ngs-icon name="fluent:calendar-ltr-24-regular" ngsSegmentedIcon/>
+    }
+    Monthly
+  </button>
+</ngs-segmented>

@@ -1,0 +1,22 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-list-padding: --spacing(3) 0;
+  --ngs-list-item-padding: --spacing(1) --spacing(3);
+  --ngs-list-item-min-height: --spacing(12);
+  --ngs-list-item-hover-bg: var(--nav-item-hover-bg);
+  --ngs-list-item-active-bg: var(--nav-item-active-bg);
+  --ngs-list-item-disabled-opacity: 0.38;
+  --ngs-list-item-title-font-size: 1rem;
+  --ngs-list-item-font-size: var(--nav-item-font-size);
+  --ngs-list-item-gap: --spacing(2);
+  --ngs-list-item-radius: var(--nav-item-radius);
+
+  display: block;
+  padding: var(--ngs-list-padding);
+
+  &.ngs-list-disabled {
+    pointer-events: none;
+    opacity: var(--ngs-list-item-disabled-opacity);
+  }
+}

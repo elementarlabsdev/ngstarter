@@ -1,0 +1,16 @@
+@reference 'tailwindcss';
+
+:host {
+  position: relative;
+  z-index: 1;
+  display: block;
+  height: 100%;
+  overflow: auto;
+  --ngs-sidenav-transition-duration: 400ms;
+  --ngs-sidenav-transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  &.is-settled {
+    transition: margin-left var(--ngs-sidenav-transition-duration) var(--ngs-sidenav-transition-timing-function),
+                margin-right var(--ngs-sidenav-transition-duration) var(--ngs-sidenav-transition-timing-function);
+  }
+}

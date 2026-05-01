@@ -1,0 +1,11 @@
+<p #contentRef
+   class="content"
+   [ngsContentEditorContentEditable]="_content()"
+   [settings]="settings()"
+   [props]="props()"
+   (propsChanged)="onPropsChanged($event)"
+   [attr.data-empty-placeholder]="placeholder()"
+   (contentChanged)="onContentChanged($event)"
+   (pressedEnter)="onPressedEnter($event)"
+   (keydown)="_onKeyDown($event)"
+   (initialized)="onContentEditableInitialized()"></p>

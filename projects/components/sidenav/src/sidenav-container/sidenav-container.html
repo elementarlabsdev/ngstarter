@@ -1,0 +1,7 @@
+<div class="ngs-sidenav-backdrop"
+     [class.ngs-sidenav-shown]="_isShowingBackdrop()"
+     (click)="_onBackdropClicked()"></div>
+
+<ng-content select="ngs-sidenav"/>
+<ng-content select="ngs-sidenav-content"/>
+<ng-content />

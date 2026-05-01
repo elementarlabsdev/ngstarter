@@ -1,0 +1,15 @@
+@if (image()) {
+  <img class="image" loading="lazy" [src]="image()"
+       [alt]="alt() || ''" (load)="onImageLoaded()">
+}
+
+@if (presenceIndicator()) {
+  <div class="presence-indicator"
+       [class.is-online]="presenceIndicator() === 'online'"
+       [class.is-offline]="presenceIndicator() === 'offline'"
+       [class.is-away]="presenceIndicator() === 'away'"></div>
+}
+
+@if (!image() && svg) {
+  <div class="svg" [innerHTML]="svg | safeHtml"></div>
+}

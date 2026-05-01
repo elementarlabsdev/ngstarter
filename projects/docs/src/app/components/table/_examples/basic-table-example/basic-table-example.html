@@ -1,0 +1,30 @@
+<div class="border border-muted  rounded-xl overflow-hidden">
+  <table ngs-table [dataSource]="dataSource">
+    <!-- Position Column -->
+    <ng-container ngsColumnDef="position">
+      <th ngs-header-cell *ngsHeaderCellDef class="text-neutral-500 dark:text-neutral-400"> No. </th>
+      <td ngs-cell *ngsCellDef="let element"> {{element.position}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="text-neutral-500 dark:text-neutral-400"> Name </th>
+      <td ngs-cell *ngsCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container ngsColumnDef="weight">
+      <th ngs-header-cell *ngsHeaderCellDef class="text-neutral-500 dark:text-neutral-400"> Weight </th>
+      <td ngs-cell *ngsCellDef="let element"> {{element.weight}} </td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container ngsColumnDef="symbol">
+      <th ngs-header-cell *ngsHeaderCellDef class="text-neutral-500 dark:text-neutral-400"> Symbol </th>
+      <td ngs-cell *ngsCellDef="let element"> {{element.symbol}} </td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

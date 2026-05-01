@@ -1,0 +1,33 @@
+@reference 'tailwindcss';
+
+:host {
+  background: var(--ngs-dialog-background, var(--color-surface-container-lowest));
+  color: var(--ngs-dialog-color, var(--color-on-surface));
+  border-radius: var(--ngs-dialog-border-radius, theme(--radius-3xl));
+  box-shadow: var(--ngs-dialog-box-shadow, theme(--shadow-xl));
+  max-width: var(--ngs-dialog-container-max-width, 560px);
+  min-width: var(--ngs-dialog-container-min-width, 280px);
+  width: 100%;
+  height: 100%;
+  max-height: inherit;
+  min-height: inherit;
+  box-sizing: border-box;
+  outline: 0;
+  overflow: hidden;
+  margin: auto;
+  opacity: 0;
+  transform: scale(0.8);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  &.ngs-dialog-container-enter {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity linear 150ms, transform 200ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  &.ngs-dialog-container-exit {
+    opacity: 0;
+  }
+}

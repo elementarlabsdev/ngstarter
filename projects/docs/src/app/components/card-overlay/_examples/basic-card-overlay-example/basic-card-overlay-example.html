@@ -1,0 +1,30 @@
+<div class="flex flex-col gap-10">
+  <ngs-card class="w-1/2 h-80" ngsCardOverlayContainer>
+    <ngs-card-content>Hover on card to see overlay</ngs-card-content>
+    <ngs-card-overlay>
+      <button ngsButton="filled">View Product</button>
+    </ngs-card-overlay>
+  </ngs-card>
+  <ngs-card class="w-1/2">
+    <ngs-card-header class="h-20">
+      <ngs-avatar image="https://raw.githubusercontent.com/angular/components/main/src/material/card/_examples/img/assets/img/examples/shiba1.jpg" ngs-card-avatar />
+      <ngs-card-title>Dog Breed</ngs-card-title>
+      <ngs-card-subtitle>Shiba Inu</ngs-card-subtitle>
+    </ngs-card-header>
+    <div ngsCardOverlayContainer>
+      <img ngs-card-image src="https://raw.githubusercontent.com/angular/components/main/src/material/card/_examples/img/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu" class="my-0">
+      <ngs-card-overlay>
+        <button ngsButton="filled">View Image</button>
+      </ngs-card-overlay>
+    </div>
+    <ngs-card-content>
+      <div class="pt-5 text-sm">
+        Hover on image to see overlay
+      </div>
+    </ngs-card-content>
+    <ngs-card-actions>
+      <button ngsButton>LIKE</button>
+      <button ngsButton>SHARE</button>
+    </ngs-card-actions>
+  </ngs-card>
+</div>

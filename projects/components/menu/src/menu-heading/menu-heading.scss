@@ -1,0 +1,9 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  font-size: theme(--text-xs);
+  margin: --spacing(2) 0;
+  padding: 0 --spacing(3);
+  color: var(--color-neutral-500);
+}

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.2 (b8e25be8, 2022-02-05)"
+   sodipodi:docname="diamond.svg"
+   inkscape:export-filename="/Users/ksergi/Desktop/banner1.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.51758558"
+     inkscape:cx="395.10374"
+     inkscape:cy="561.25984"
+     inkscape:window-width="1246"
+     inkscape:window-height="733"
+     inkscape:window-x="194"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:#4d4d4d;stroke-width:0.441651"
+       d="m 107.85256,197.06405 c -5.7482,-6.52626 -28.468337,-32.24463 -54.48284,-61.67254 -6.952764,-7.86506 -12.641388,-14.44465 -12.641388,-14.62132 0,-0.28222 26.321024,-30.379459 28.911596,-33.059487 l 0.998525,-1.033005 42.570027,0.01811 c 23.41351,0.01002 42.98673,0.02764 43.49605,0.03931 0.61469,0.01402 2.38421,1.691506 5.26361,4.989744 2.38566,2.732718 5.5761,6.359779 7.08986,8.060137 9.47901,10.647531 18.29857,20.750281 18.29857,20.960891 0,0.13537 -6.40354,7.49846 -14.23011,16.36249 -44.24938,50.11499 -58.75572,66.47668 -59.03045,66.58044 -0.16859,0.0638 -2.97815,-2.91747 -6.24345,-6.62477 z"
+       id="path3439"
+       inkscape:export-filename="/Users/ksergi/Desktop/diamond.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+</svg>

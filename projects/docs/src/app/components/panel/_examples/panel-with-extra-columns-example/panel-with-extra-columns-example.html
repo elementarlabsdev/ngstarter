@@ -1,0 +1,19 @@
+<div class="h-[500px]">
+  <ngs-panel class="border border-muted">
+    <ngs-panel-header class="bg-surface-container flex items-center px-6">Header</ngs-panel-header>
+    <ngs-panel-sidebar class="border-r border-e-muted w-[200px]">
+      <ngs-scrollbar-area [absolute]="true">
+        <div class="p-6 h-[1000px]" [style.width.px]="width()" (click)="setSidebarLongWidth()">Sidebar</div>
+      </ngs-scrollbar-area>
+    </ngs-panel-sidebar>
+    <ngs-panel-content>
+      <ngs-scrollbar-area [absolute]="true">
+        <div class="p-6 h-[1000px] w-[1000px]">Body</div>
+      </ngs-scrollbar-area>
+    </ngs-panel-content>
+    <ngs-panel-aside class="border-s border-s-muted w-[120px]">
+      <div class="p-6">Aside</div>
+    </ngs-panel-aside>
+    <ngs-panel-footer class="bg-surface-container-low flex items-center px-6">Footer</ngs-panel-footer>
+  </ngs-panel>
+</div>

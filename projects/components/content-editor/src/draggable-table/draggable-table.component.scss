@@ -1,0 +1,63 @@
+:host {
+  display: block;
+
+  ::ng-deep {
+    .drag-handler {
+      position: fixed; /* Позиционирование относительно окна */
+      width: 18px;
+      height: 18px;
+      background-color: rgba(100, 150, 255, 0.7);
+      border: 1px solid var(--color-primary);
+      border-radius: 3px;
+      cursor: grab;
+      box-sizing: border-box;
+      transition: background-color 0.2s ease, visibility 0.1s linear;
+      z-index: 1000;
+      visibility: hidden;
+
+      &:hover {
+        background-color: var(--color-primary);
+      }
+
+      &.dragging-active-handler {
+        cursor: grabbing !important;
+        background-color: var(--color-primary) !important;
+        border-color: var(--color-primary) !important;
+        z-index: 1001 !important;
+      }
+    }
+
+    .drop-indicator {
+      position: absolute;
+      background-color: var(--color-primary);
+      z-index: 5;
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    tr.dragging-source,
+    td.dragging-source,
+    th.dragging-source {
+      background: var(--color-surface-container-low);
+    }
+
+    table.dragging-row td,
+    table.dragging-row th,
+    table.dragging-column td,
+    table.dragging-column th,
+    tr.dragging-source td,
+    tr.dragging-source th,
+    td.dragging-source,
+    th.dragging-source {
+      pointer-events: none;
+    }
+  }
+
+  &.disabled {
+    ::ng-deep {
+      .drag-handler {
+        visibility: hidden !important;
+      }
+    }
+  }
+}

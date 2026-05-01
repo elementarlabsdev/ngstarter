@@ -1,0 +1,15 @@
+<ngs-toolbar>
+  <ngs-toolbar-title>Nav Example</ngs-toolbar-title>
+
+  <ngs-toolbar-nav>
+    <ngs-toolbar-nav-link [active]="true">Home</ngs-toolbar-nav-link>
+    <ngs-toolbar-nav-link>About</ngs-toolbar-nav-link>
+    <ngs-toolbar-nav-link>Contact</ngs-toolbar-nav-link>
+  </ngs-toolbar-nav>
+
+  <ngs-toolbar-spacer />
+
+  <ngs-toolbar-nav>
+    <a ngs-toolbar-nav-link [routerLink]="['/dashboard']">Dashboard</a>
+  </ngs-toolbar-nav>
+</ngs-toolbar>

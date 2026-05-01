@@ -1,0 +1,8 @@
+<ngs-form-field class="w-1/2">
+  <ngs-label>Currency</ngs-label>
+  <ngs-currency-select [(ngModel)]="currency" showCountryName/>
+</ngs-form-field>
+
+<p class="mt-5">
+  Selected currency: {{ currency() }}
+</p>

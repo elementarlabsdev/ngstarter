@@ -1,0 +1,15 @@
+@reference 'tailwindcss';
+
+:host {
+  box-shadow: theme(--shadow-sm);
+  margin-left: --spacing(3);
+  margin-right: --spacing(3);
+  background: var(--sys-surface-container-lowest);
+  padding: --spacing(1.5) --spacing(2);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: --spacing(0.5);
+  border: 1px solid var(--color-border);
+  border-radius: theme(--radius-2xl);
+}

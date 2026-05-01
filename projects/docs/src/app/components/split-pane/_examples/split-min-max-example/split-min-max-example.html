@@ -1,0 +1,22 @@
+<div class="h-[300px] border border-border rounded-lg overflow-hidden">
+  <ngs-split direction="horizontal">
+    <ngs-split-pane [size]="30" [minSize]="20">
+      <div class="p-4 h-full flex flex-col items-center justify-center text-center bg-surface-container-low">
+        Left Column<br>
+        (min: 20%)
+      </div>
+    </ngs-split-pane>
+    <ngs-split-pane [size]="40">
+      <div class="p-4 h-full flex flex-col items-center justify-center text-center bg-surface-container-low">
+        Middle Column<br>
+        (flexible)
+      </div>
+    </ngs-split-pane>
+    <ngs-split-pane [size]="30" [minSize]="20">
+      <div class="p-4 h-full flex flex-col items-center justify-center text-center bg-surface-container-low">
+        Right Column<br>
+        (min: 20%)
+      </div>
+    </ngs-split-pane>
+  </ngs-split>
+</div>

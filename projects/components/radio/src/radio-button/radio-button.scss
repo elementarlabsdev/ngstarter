@@ -1,0 +1,98 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-radio-button-size: 19px;
+  --ngs-radio-button-inner-circle-size: 10px;
+  --ngs-radio-button-border-width: 1px;
+  --ngs-radio-button-unchecked-color: var(--input-border-color);
+  --ngs-radio-button-checked-color: var(--color-primary);
+  --ngs-radio-button-disabled-color: var(--color-on-surface-variant);
+  --ngs-radio-button-label-color: var(--color-on-surface);
+  --ngs-radio-button-disabled-label-color: var(--color-on-surface-variant);
+  --ngs-radio-button-gap: 8px;
+
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+
+  &.ngs-radio-button-disabled {
+    cursor: default;
+    pointer-events: none;
+    --ngs-radio-button-unchecked-color: color-mix(in srgb, var(--color-on-surface), transparent 62%);
+    --ngs-radio-button-checked-color: color-mix(in srgb, var(--color-on-surface), transparent 62%);
+    --ngs-radio-button-label-color: color-mix(in srgb, var(--color-on-surface), transparent 62%);
+  }
+
+  .ngs-radio-button-label {
+    display: flex;
+    align-items: center;
+    cursor: inherit;
+  }
+
+  .ngs-radio-button-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: var(--ngs-radio-button-size);
+    height: var(--ngs-radio-button-size);
+  }
+
+  .ngs-radio-button-input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    cursor: inherit;
+    z-index: 1;
+    margin: 0;
+  }
+
+  .ngs-radio-button-outer-circle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: 9999px;
+    border-style: solid;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+    border-width: var(--ngs-radio-button-border-width);
+    border-color: var(--ngs-radio-button-unchecked-color);
+  }
+
+  .ngs-radio-button-inner-circle {
+    border-radius: 9999px;
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+    transform: scale(0);
+    width: var(--ngs-radio-button-inner-circle-size);
+    height: var(--ngs-radio-button-inner-circle-size);
+    background: var(--ngs-radio-button-checked-color);
+  }
+
+  &.ngs-radio-button-checked {
+    .ngs-radio-button-outer-circle {
+      border-color: var(--ngs-radio-button-checked-color);
+    }
+
+    .ngs-radio-button-inner-circle {
+      transform: scale(1);
+    }
+  }
+
+  .ngs-radio-button-label-content {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+    padding-left: var(--ngs-radio-button-gap);
+    color: var(--ngs-radio-button-label-color);
+  }
+}

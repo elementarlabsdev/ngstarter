@@ -1,0 +1,57 @@
+<div class="title-container">
+  @if (hasTitle()) {
+    <div class="title">
+      @if (data.titleTplRef) {
+        <ng-container [ngTemplateOutlet]="data.titleTplRef" />
+      } @else if (data.caption) {
+        {{ data.title }}
+      }
+    </div>
+  }
+</div>
+<div class="controls" (click)="onPreventClick($event)">
+  <div class="w-max">
+    <button (click)="pictureRef.close()" class="close">
+      <ngs-icon name="fluent:dismiss-24-regular"/>
+    </button>
+  </div>
+  <div class="w-max">
+    <button class="zoom" (click)="toggleZoom()" [disabled]="scaleMax === 1 || null">
+      @if (scale === this.scaleMin) {
+        <ngs-icon name="fluent:zoom-in-24-regular"/>
+      } @else {
+        <ngs-icon name="fluent:zoom-out-24-regular"/>
+      }
+    </button>
+  </div>
+</div>
+<div class="content" (click)="onBackdropClick()">
+  <div class="image" (dragstart)="onDragStart($event)">
+    @if (loading) {
+      <div class="spinner">
+        <ngs-progress-spinner/>
+      </div>
+    }
+    <img [src]="data.sourceUrl" alt="" (load)="onLoad($event)" (click)="onPreventClick($event)" class="img">
+  </div>
+  @if (hasAside()) {
+    <aside class="aside" (click)="onPreventClick($event)">
+      <div class="aside-header">
+        @if (data.captionTplRef) {
+          <ng-container [ngTemplateOutlet]="data.captionTplRef" />
+        } @else if (data.caption) {
+          {{ data.caption }}
+        }
+      </div>
+      <div class="aside-body">
+        <div class="aside-body-scroll">
+          @if (data.descriptionTplRef) {
+            <ng-container [ngTemplateOutlet]="data.descriptionTplRef" />
+          } @else if (data.description) {
+            {{ data.description }}
+          }
+        </div>
+      </div>
+    </aside>
+  }
+</div>

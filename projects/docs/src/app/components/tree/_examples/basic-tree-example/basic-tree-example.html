@@ -1,0 +1,21 @@
+<ngs-tree #tree [dataSource]="dataSource" [childrenAccessor]="childrenAccessor">
+  <!-- This is the tree node template for leaf nodes -->
+  <ngs-tree-node *ngsTreeNodeDef="let node" ngsTreeNodePadding>
+    <!-- use a disabled button to provide padding for tree leaf -->
+    <button ngsIconButton disabled></button>
+    {{node.name}}
+  </ngs-tree-node>
+  <!-- This is the tree node template for expandable nodes -->
+  <ngs-tree-node *ngsTreeNodeDef="let node;when: hasChild"
+                 ngsTreeNodePadding ngsTreeNodeToggle
+                 [cdkTreeNodeTypeaheadLabel]="node.name">
+    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+      @if (tree.isExpanded(node)) {
+        <ngs-icon name="fluent:chevron-down-24-regular" class="size-4"/>
+      } @else {
+        <ngs-icon name="fluent:chevron-right-24-regular" class="size-4"/>
+      }
+    </button>
+    {{node.name}}
+  </ngs-tree-node>
+</ngs-tree>

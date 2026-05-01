@@ -1,0 +1,16 @@
+<div class="bg-surface-container rounded-xl">
+  <div class="border-b border-b-default h-12 header">
+    <button ngsButton [ngsMenuTriggerFor]="languageListMenu" class="-ms-2">{{ _language().name }}</button>
+  </div>
+  <div class="content">
+    <div class="content-code" #contentRef></div>
+  </div>
+</div>
+
+<ngs-menu #languageListMenu="ngsMenu">
+  @for (languageItem of _languageList(); track $index) {
+    <button ngs-menu-item (click)="selectLanguage(languageItem)"
+            class="[&.is-active]:!bg-secondary-fixed"
+            [class.is-active]="languageItem.language === _language().language">{{ languageItem.name }}</button>
+  }
+</ngs-menu>

@@ -1,0 +1,72 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  box-shadow: theme(--shadow-sm);
+  background: var(--color-neutral-950);
+  color: var(--color-neutral-200);
+  min-height: --spacing(12);
+  border-radius: theme(--radius-2xl);
+  top: 1px;
+  padding-inline-start: --spacing(2);
+  padding-inline-end: --spacing(2);
+
+  .button,
+  ::ng-deep .button {
+    width: --spacing(10);
+    height: --spacing(10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: calc(infinity * 1px);
+
+    --icon-size: theme(--text-xl);
+
+    &:hover {
+      color: var(--color-tertiary-300);
+      background: var(--color-neutral-700);
+      border-radius: calc(infinity * 1px);
+      padding: --spacing(1.5);
+    }
+
+    &.active {
+      color: var(--color-tertiary-300);
+      background: var(--color-neutral-700);
+    }
+
+    ngs-icon {
+      width: --spacing(6);
+      height: --spacing(6);
+      font-size: theme(--text-xl);
+      line-height: 1.25;
+    }
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 70%;
+    }
+  }
+
+  .link {
+    color: var(--color-tertiary-300);
+    position: relative;
+    top: 1px;
+
+    &:hover {
+      color: var(--color-tertiary-100);
+    }
+  }
+}
+
+:host-context(html.dark) {
+  background: var(--color-tertiary-200);
+  color: var(--color-neutral-900);
+
+  .link {
+    color: var(--color-tertiary-700);
+
+    &:hover {
+      color: var(--color-tertiary-800);
+    }
+  }
+}

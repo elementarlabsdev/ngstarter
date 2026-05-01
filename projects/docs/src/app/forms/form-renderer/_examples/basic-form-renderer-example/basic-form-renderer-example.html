@@ -1,0 +1,14 @@
+<ngs-form-renderer #formRenderer
+  [config]="formConfig()"
+  [initialValue]="initialValue()"
+  (valueChanges)="onValueChanges($event)"
+  (formSubmit)="onFormSubmit($event)" />
+
+<div class="mt-3">
+  <button ngsButton="filled" (click)="formRenderer.submit()">Submit</button>
+</div>
+
+@if(submittedData()) {
+  <div class="font-bold mb-3 mt-6">Submitted data:</div>
+  <pre>{{ submittedData() | json }}</pre>
+}

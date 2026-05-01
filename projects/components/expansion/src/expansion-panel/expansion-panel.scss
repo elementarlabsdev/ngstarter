@@ -1,0 +1,89 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-expansion-panel-background: var(--color-surface);
+  --ngs-expansion-panel-color: var(--color-on-surface);
+  --ngs-expansion-panel-divider-color: var(--color-subtle);
+  --ngs-expansion-panel-disabled-color: var(--color-neutral-300);
+  --ngs-expansion-panel-header-height: --spacing(14);
+  --ngs-expansion-panel-header-expanded-height: --spacing(16);
+  --ngs-expansion-panel-content-padding: 3px 24px 16px 24px;
+  --ngs-expansion-panel-radius: theme(--radius-xl);
+  --ngs-expansion-panel-description-color: var(--color-on-surface-variant);
+
+  margin-bottom: -1px;
+
+  &:first-of-type {
+    border-top-left-radius: var(--ngs-expansion-panel-radius);
+    border-top-right-radius: var(--ngs-expansion-panel-radius);
+  }
+
+  &:last-of-type {
+    border-bottom-left-radius: var(--ngs-expansion-panel-radius);
+    border-bottom-right-radius: var(--ngs-expansion-panel-radius);
+  }
+
+  &.ngs-expanded {
+    border-top: 1px solid var(--ngs-expansion-panel-divider-color, rgba(0, 0, 0, 0.12));
+    border-bottom: 1px solid var(--ngs-expansion-panel-divider-color, rgba(0, 0, 0, 0.12));
+    border-radius: var(--ngs-expansion-panel-radius);
+
+    & + ngs-expansion-panel {
+      border-top-left-radius: var(--ngs-expansion-panel-radius);
+      border-top-right-radius: var(--ngs-expansion-panel-radius);
+    }
+  }
+
+  display: block;
+  background: var(--ngs-expansion-panel-background);
+  color: var(--ngs-expansion-panel-color);
+  border: 1px solid var(--ngs-expansion-panel-divider-color);
+  overflow: hidden;
+
+  &.ngs-expanded {
+    margin: 16px 0;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  &.ngs-expansion-panel-disabled {
+    --ngs-expansion-panel-description-color: var(--ngs-expansion-panel-disabled-color);
+    color: var(--ngs-expansion-panel-disabled-color);
+    pointer-events: none;
+  }
+
+  .ngs-expansion-panel-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 225ms cubic-bezier(0.4, 0, 0.2, 1);
+    visibility: hidden;
+    overflow: hidden;
+    height: 0;
+
+    :host.ngs-expanded & {
+      grid-template-rows: 1fr;
+      visibility: visible;
+    }
+
+    &.ngs-expanded {
+      grid-template-rows: 1fr;
+      visibility: visible;
+      height: auto;
+    }
+
+    & > div {
+      overflow: hidden;
+      min-height: 0;
+    }
+  }
+
+  .ngs-expansion-panel-body {
+    padding: var(--ngs-expansion-panel-content-padding);
+  }
+}

@@ -1,0 +1,112 @@
+<ngs-panel class="h-full">
+  <ngs-panel-header class="border-b border-border flex items-center ps-4 pe-2">
+    <ngs-toolbar class="h-full">
+      <span class="font-medium">Effects</span>
+      <ngs-toolbar-spacer/>
+      <button ngsButton="tonal" (click)="resetAll()" class="me-2 h-8 text-xs px-3">
+        Reset
+      </button>
+      <button ngsIconButton (click)="close()">
+        <ngs-icon name="fluent:dismiss-24-regular"/>
+      </button>
+    </ngs-toolbar>
+  </ngs-panel-header>
+  <ngs-panel-content class="p-0 overflow-y-auto">
+    <div class="p-4">
+      <!-- Preset Effects -->
+      <div class="flex gap-4 pb-6 scrollbar-hide flex-wrap">
+        @for (effect of effects() || []; track effect.id) {
+          <button (click)="applyEffect(effect.id)"
+                  class="flex flex-col items-center gap-2 group min-w-[80px]">
+            <div class="w-20 h-20 rounded-xl overflow-hidden border-2 transition-all group-hover:border-primary"
+                 [class.border-primary]="(selectedLayer()?.['effect'] || 'none') === effect.id"
+                 [class.border-transparent]="(selectedLayer()?.['effect'] || 'none') !== effect.id">
+              <img [src]="effect.thumb" class="w-full h-full object-cover" [alt]="effect.name">
+            </div>
+            <span class="text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+              {{ effect.name }}
+            </span>
+          </button>
+        }
+      </div>
+
+      <!-- Adjustments -->
+      <div class="flex flex-col gap-6">
+        @for (adj of adjustments() || []; track adj.id) {
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-medium">{{ adj.name }}</span>
+              <ngs-slide-toggle [checked]="selectedLayer()?.[adj.id + 'Enabled']"
+                                (change)="toggleAdjustment(adj.id, $event.checked)"/>
+            </div>
+
+            @if (selectedLayer()?.[adj.id + 'Enabled']) {
+              <div class="flex flex-col gap-4">
+                @if (adj.isGroup) {
+                  @for (control of adj.controls || []; track control.id) {
+                    <div class="flex flex-col gap-2">
+                      <div class="flex items-center justify-between">
+                        <span class="text-xs text-muted-foreground">{{ control.name }}</span>
+                        @if (control.type === 'color') {
+                          <button ngs-color-picker-thumbnail
+                                  [color]="selectedLayer()?.[control.id] || control.default"
+                                  [ngsColorPickerTriggerFor]="colorPicker"
+                                  class="cursor-pointer border border-border rounded"></button>
+                          <ng-template #colorPicker>
+                            <ngs-color-picker [ngModel]="selectedLayer()?.[control.id] || control.default"
+                                              (ngModelChange)="updateAdjustment(control.id, $event)"/>
+                          </ng-template>
+                        } @else {
+                          <input ngsInput
+                                 type="number"
+                                 class="w-16 h-8 text-center text-sm border border-border rounded-md bg-surface-container"
+                                 [ngModel]="selectedLayer()?.[control.id] ?? control.default"
+                                 (ngModelChange)="updateAdjustment(control.id, $event)">
+                        }
+                      </div>
+                      @if (control.type !== 'color') {
+                        <ngs-slider [min]="control.min"
+                                    [max]="control.max"
+                                    [step]="control.step">
+                          <input ngsSliderThumb
+                                 [value]="selectedLayer()?.[control.id] ?? control.default"
+                                 (valueChange)="updateAdjustment(control.id, $event)">
+                        </ngs-slider>
+                      }
+                    </div>
+                  }
+                } @else {
+                  <div class="flex items-center gap-4">
+                    @if (adj.id === 'border') {
+                      <button ngs-color-picker-thumbnail
+                              [color]="selectedLayer()?.['borderColor'] || selectedLayer()?.['fill'] || '#000000'"
+                              [ngsColorPickerTriggerFor]="borderPicker"
+                              class="cursor-pointer border border-border rounded"></button>
+                      <ng-template #borderPicker>
+                        <ngs-color-picker [ngModel]="selectedLayer()?.['borderColor'] || selectedLayer()?.['fill'] || '#000000'"
+                                          (ngModelChange)="updateAdjustment('borderColor', $event)"/>
+                      </ng-template>
+                    }
+                    <ngs-slider class="flex-1"
+                                [min]="adj.min"
+                                [max]="adj.max"
+                                [step]="adj.step">
+                      <input ngsSliderThumb
+                             [value]="selectedLayer()?.[adj.id] ?? adj.default"
+                             (valueChange)="updateAdjustment(adj.id, $event)">
+                    </ngs-slider>
+                    <input ngsInput
+                           type="number"
+                           class="w-16 h-8 text-center text-sm border border-border rounded-md bg-surface-container"
+                           [ngModel]="selectedLayer()?.[adj.id] ?? adj.default"
+                           (ngModelChange)="updateAdjustment(adj.id, $event)">
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </ngs-panel-content>
+</ngs-panel>

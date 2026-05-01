@@ -1,0 +1,14 @@
+<ngs-menu #appMenu="ngsMenu">
+  <ng-template ngsMenuContent let-name="name">
+    <button ngs-menu-item>Settings</button>
+    <button ngs-menu-item>Log off {{name}}</button>
+  </ng-template>
+</ngs-menu>
+
+<button ngsIconButton [ngsMenuTriggerFor]="appMenu" [ngsMenuTriggerData]="{name: 'Sally'}">
+  <ngs-icon name="fluent:more-vertical-24-regular"/>
+</button>
+
+<button ngsIconButton [ngsMenuTriggerFor]="appMenu" [ngsMenuTriggerData]="{name: 'Bob'}">
+  <ngs-icon name="fluent:more-vertical-24-regular"/>
+</button>

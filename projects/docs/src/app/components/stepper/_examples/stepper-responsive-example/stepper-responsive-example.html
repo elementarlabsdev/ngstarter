@@ -1,0 +1,54 @@
+@switch (stepperOrientation | async) {
+  @case ('horizontal') {
+    <div>Make your screen smaller to see a vertical stepper</div>
+  }
+  @case ('vertical') {
+    <div>Make your screen larger to see a horizontal stepper</div>
+  }
+}
+
+<ngs-stepper
+  [orientation]="(stepperOrientation | async)!">
+  <ngs-step [stepControl]="firstFormGroup" label="Fill out your name">
+    <form [formGroup]="firstFormGroup">
+      <ngs-form-field class="w-1/2 mt-2">
+        <ngs-label>Name</ngs-label>
+        <input ngsInput placeholder="Last name, First name" formControlName="firstCtrl" required>
+      </ngs-form-field>
+      <div>
+        <button ngsButton="filled" ngsStepperNext>Next</button>
+      </div>
+    </form>
+  </ngs-step>
+  <ngs-step [stepControl]="secondFormGroup" label="Fill out your address">
+    <form [formGroup]="secondFormGroup">
+      <ngs-form-field class="w-1/2 mt-2">
+        <ngs-label>Address</ngs-label>
+        <input ngsInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
+      </ngs-form-field>
+      <div class="flex gap-3">
+        <button ngsButton="outlined" ngsStepperPrevious>Back</button>
+        <button ngsButton="filled" ngsStepperNext>Next</button>
+      </div>
+    </form>
+  </ngs-step>
+  <ngs-step [stepControl]="thirdFormGroup" label="Fill out your phone number">
+    <form [formGroup]="thirdFormGroup">
+      <ngs-form-field class="w-1/2 mt-2">
+        <ngs-label>Phone number</ngs-label>
+        <input ngsInput formControlName="thirdCtrl" placeholder="Ex. 12345678" required>
+      </ngs-form-field>
+      <div class="flex gap-3">
+        <button ngsButton ngsStepperPrevious>Back</button>
+        <button ngsButton="filled" ngsStepperNext>Next</button>
+      </div>
+    </form>
+  </ngs-step>
+  <ngs-step>
+    <ng-template ngsStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button ngsButton="outlined" ngsStepperPrevious>Back</button>
+    </div>
+  </ngs-step>
+</ngs-stepper>

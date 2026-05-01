@@ -1,0 +1,7 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  font-size: var(--ngs-radio-card-content-font-size);
+  color: var(--ngs-radio-card-content-color);
+}

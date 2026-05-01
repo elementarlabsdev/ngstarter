@@ -1,0 +1,36 @@
+@if (headerComponent()) {
+  <ng-container *ngComponentOutlet="headerComponent()" />
+} @else {
+  <div class="ngs-calendar-header">
+    <button type="button" (click)="toggleView()" class="ngs-calendar-period-button">
+      {{ periodButtonText() }}
+    </button>
+    <div class="ngs-calendar-header-actions">
+      <button type="button" ngsIconButton (click)="prevPage()" class="ngs-calendar-previous-button">
+        <ngs-icon name="fluent:chevron-left-24-regular" />
+      </button>
+      <button type="button" ngsIconButton (click)="nextPage()" class="ngs-calendar-next-button">
+        <ngs-icon name="fluent:chevron-right-24-regular" />
+      </button>
+    </div>
+  </div>
+}
+
+<div class="ngs-calendar-content">
+  @if (currentView() === 'month') {
+    <ngs-month-view [activeDate]="activeDate()"
+      [selected]="selected()"
+      (selectedChange)="selectedChange.emit($event)"
+     />
+  } @else if (currentView() === 'year') {
+    <ngs-year-view [activeDate]="activeDate()"
+      [selected]="_selectedDate()"
+      (monthSelected)="_monthSelectedInYearView($event)"
+     />
+  } @else if (currentView() === 'multi-year') {
+    <ngs-multi-year-view [activeDate]="activeDate()"
+      [selected]="_selectedDate()"
+      (yearSelected)="_yearSelectedInMultiYearView($event)"
+     />
+  }
+</div>

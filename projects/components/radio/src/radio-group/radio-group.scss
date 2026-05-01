@@ -1,0 +1,11 @@
+@reference 'tailwindcss';
+
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; // Tailwind's gap-4 is 1rem (16px)
+
+  &[aria-disabled="true"] {
+    pointer-events: none;
+  }
+}

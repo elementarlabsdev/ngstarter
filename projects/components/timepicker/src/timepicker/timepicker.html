@@ -1,0 +1,16 @@
+<ng-template #timepickerTemplate>
+  <div class="ngs-timepicker-panel" role="listbox" #panel>
+    <div class="h-full overflow-y-auto">
+      <div class="ngs-timepicker-content">
+        @for (option of _timeOptions(); track option.value) {
+          <ngs-option [value]="option.value"
+                      [selected]="_isSelected(option.value)"
+                      (mousedown)="$event.preventDefault()"
+                      (onSelectionChange)="_selectValue(option.value)">
+            {{ option.label }}
+          </ngs-option>
+        }
+      </div>
+    </div>
+  </div>
+</ng-template>

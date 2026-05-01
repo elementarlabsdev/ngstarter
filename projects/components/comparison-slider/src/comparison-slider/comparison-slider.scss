@@ -1,0 +1,95 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  user-select: none;
+
+  .comparison-slider-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    cursor: default;
+  }
+
+  .image-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    > ::slotted(*) {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .before-image-slot {
+    z-index: 1;
+  }
+
+  .after-image-slot {
+    z-index: 2;
+  }
+
+  .slider-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    transform: translateX(-50%);
+    cursor: ew-resize;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+
+    .handle-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      background: #fff;
+      pointer-events: none;
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 1px;
+        background: #000;
+      }
+
+      &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 1px;
+        background: #000;
+      }
+    }
+
+    .handle-grip {
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      pointer-events: none;
+      gap: --spacing(3);
+    }
+  }
+}

@@ -1,0 +1,65 @@
+@reference 'tailwindcss';
+
+:host {
+  display: contents;
+}
+
+.ngs-menu-panel {
+  background: var(--ngs-menu-background, var(--dropdown-bg));
+  box-shadow: var(--ngs-menu-shadow, var(--dropdown-shadow));
+  border-radius: var(--ngs-menu-border-radius, var(--dropdown-radius));
+  max-height: var(--ngs-menu-max-height, 90vh);
+
+  @media (min-height: 640px) {
+    max-height: var(--ngs-menu-max-height, 65vh);
+  }
+
+  min-width: var(--ngs-menu-min-width, 112px);
+  max-width: var(--ngs-menu-max-width, 280px);
+  outline: var(--ngs-menu-border, var(--dropdown-border));
+  overflow: auto;
+  animation-name: ngs-menu-panel-showing;
+  animation-duration: 150ms;
+  animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  padding-top: 8px;
+  padding-bottom: 8px;
+
+  &.ngs-menu-below {
+    transform-origin: top;
+
+    &.ngs-menu-before {
+      transform-origin: top right;
+    }
+
+    &.ngs-menu-after {
+      transform-origin: top left;
+    }
+  }
+
+  &.ngs-menu-above {
+    transform-origin: bottom;
+
+    &.ngs-menu-before {
+      transform-origin: bottom right;
+    }
+
+    &.ngs-menu-after {
+      transform-origin: bottom left;
+    }
+  }
+}
+
+@keyframes ngs-menu-panel-showing {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.ngs-menu-content {
+  padding: var(--ngs-menu-padding, 0);
+}

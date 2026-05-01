@@ -1,0 +1,19 @@
+<svg
+  class="absolute top-0 left-0 w-full h-full pointer-events-none"
+  [attr.viewBox]="viewBox()"
+  preserveAspectRatio="xMinYMin slice"
+>
+  <path
+    fill-rule="evenodd"
+    [attr.d]="backdropPath()"
+    (click)="backdropClick.emit()"
+  />
+  <rect
+    [attr.x]="rect().left - padding()"
+    [attr.y]="rect().top - padding()"
+    [attr.width]="rect().width + 2 * padding()"
+    [attr.height]="rect().height + 2 * padding()"
+    [attr.rx]="rx()"
+    [class.interactive]="!disableInteraction()"
+  ></rect>
+</svg>

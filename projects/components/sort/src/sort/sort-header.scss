@@ -1,0 +1,66 @@
+@reference 'tailwindcss';
+
+.ngs-sort-header-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  justify-content: flex-start;
+  user-select: text;
+}
+
+.ngs-sort-header-button {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-align: inherit;
+  justify-content: inherit;
+  user-select: text;
+}
+
+.ngs-sort-header-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: --spacing(0.5);
+  opacity: 0;
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.ngs-sort-header-arrow-asc {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &.ngs-sort-header-arrow-desc {
+    opacity: 1;
+    transform: translateY(0) rotate(180deg);
+  }
+
+  &.ngs-sort-header-arrow-hint {
+    opacity: 0;
+
+    .ngs-sort-header:hover:not(.ngs-sort-header-disabled) & {
+      opacity: 0.54;
+    }
+  }
+}
+
+.ngs-sort-header-arrow-svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.ngs-sort-header-disabled {
+  cursor: default;
+
+  .ngs-sort-header-button {
+    cursor: default;
+  }
+}

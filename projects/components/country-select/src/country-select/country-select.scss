@@ -1,0 +1,10 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .code {
+    text-transform: uppercase;
+    color: var(--color-neutral-500);
+  }
+}

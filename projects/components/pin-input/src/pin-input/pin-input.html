@@ -1,0 +1,16 @@
+<div [formGroup]="form">
+  <div formArrayName="value" class="inputs">
+    @for (control of controls; track control) {
+      <ngs-form-field subscriptHiddenIfEmpty>
+        <input type="text"
+               ngsInput
+               ngsPinInput
+               [formControl]="control"
+               [acceptOnly]="acceptOnly()"
+               [placeholder]="placeholder()"
+               [attr.disabled]="isDisabled() || null"
+               maxlength="1" >
+      </ngs-form-field>
+    }
+  </div>
+</div>

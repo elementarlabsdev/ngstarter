@@ -1,0 +1,23 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  scroll-padding-inline: 100px;
+  flex: none;
+}
+
+:host-context(.ngs-carousel.fade) {
+  animation: ngs-carousel-fade;
+  animation-fill-mode: both;
+  animation-timing-function: linear;
+  animation-timeline: view(inline);
+
+  @keyframes ngs-carousel-fade {
+    from, to {
+      opacity: .3;
+    }
+    50% {
+      opacity: 1
+    }
+  }
+}

@@ -1,0 +1,24 @@
+<div class="flex flex-col gap-4 p-4 border rounded-lg bg-surface">
+  <div class="flex gap-4">
+    <button ngsButton="filled" ngsTourAnchor="html-step" (click)="startTour()">
+      Start Template Tour
+    </button>
+    <div ngsTourAnchor="template-step" class="p-2 border rounded">
+      I am a Template Target
+    </div>
+  </div>
+
+  <p class="text-sm text-on-surface-variant">
+    Click the button to see HTML and TemplateRef support in action.
+  </p>
+</div>
+
+<ng-template #customStepTemplate let-name="name">
+  <div class="flex flex-col gap-2">
+    <p>Hello, <strong>{{ name }}</strong>!</p>
+    <p>This is a <em>TemplateRef</em> step.</p>
+    <button class="text-xs text-primary underline" (click)="tourService.end()">
+      Action inside template
+    </button>
+  </div>
+</ng-template>

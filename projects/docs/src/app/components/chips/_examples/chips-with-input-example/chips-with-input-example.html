@@ -1,0 +1,28 @@
+<ngs-form-field class="w-full">
+  <ngs-label>Favorite Fruits</ngs-label>
+  <ngs-chip-grid #chipGrid aria-label="Enter fruits">
+    @for (fruit of fruits(); track fruit) {
+      <ngs-chip-row
+        (removed)="remove(fruit)"
+        [editable]="true"
+        (edited)="edit(fruit, $event)"
+      >
+        <button ngsChipEdit>
+          <ngs-icon name="fluent:edit-24-regular"/>
+        </button>
+        {{ fruit.name }}
+        <button ngsChipRemove>
+          <ngs-icon name="fluent:dismiss-24-regular"/>
+        </button>
+      </ngs-chip-row>
+    }
+  </ngs-chip-grid>
+  <input
+    ngsInput
+    placeholder="New fruit..."
+    [ngsChipInputFor]="chipGrid"
+    [ngsChipInputSeparatorKeyCodes]="separatorKeysCodes"
+    [ngsChipInputAddOnBlur]="addOnBlur"
+    (chipInputTokenEnd)="add($event)"
+  />
+</ngs-form-field>

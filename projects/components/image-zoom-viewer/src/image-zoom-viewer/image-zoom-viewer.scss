@@ -1,0 +1,12 @@
+:host {
+  display: inline-block;
+  cursor: zoom-in;
+
+  .ngs-image-zoom-container {
+    display: block;
+
+    &.is-zoomed {
+      visibility: hidden;
+    }
+  }
+}

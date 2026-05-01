@@ -1,0 +1,54 @@
+@reference 'tailwindcss';
+
+.ngs-drawer-container {
+  --ngs-drawer-transition-duration: 150ms;
+  --ngs-drawer-transition: cubic-bezier(.4,0,.2,1);
+
+  position: fixed;
+  z-index: 1040;
+  top: 0;
+  right: 0;
+  max-width: 90vw;
+  bottom: 0;
+  transform: translateX(100%);
+  visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+
+
+  &.open {
+    transform: translateX(0%);
+    visibility: visible;
+    transition: transform 0.3s var(--ngs-drawer-transition), visibility 0s linear 0s;
+  }
+
+  &:not(.open) {
+    transition: transform 0.2s var(--ngs-drawer-transition), visibility 0s linear 0.2s;
+  }
+}
+
+.ngs-drawer-content {
+  background: var(--color-surface-container-lowest);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  outline: var(--dropdown-border);
+  margin: 1.75rem;
+  flex-grow: 1;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid transparent;
+}
+
+.drawer-backdrop {
+  background: var(--overlay-backdrop-bg);
+  opacity: 0;
+  transition: opacity 150ms cubic-bezier(.4, 0, .2, 1);
+
+  &.cdk-overlay-backdrop-showing {
+    opacity: 1;
+  }
+}
+
+.cdk-overlay-pane.pointer-events-none {
+  pointer-events: none !important;
+}

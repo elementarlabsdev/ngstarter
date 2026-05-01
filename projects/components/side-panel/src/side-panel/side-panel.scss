@@ -1,0 +1,88 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-side-panel-button-strip-width: --spacing(14);
+  --ngs-side-panel-content-width: 320px;
+  --ngs-side-panel-offset-y: 0;
+  --ngs-side-panel-content-bg: none;
+  --ngs-side-panel-transition-timing: 0.2s;
+  --ngs-side-panel-button-active-bg: var(--nav-item-active-bg);
+  --ngs-side-panel-button-active-color: var(--nav-item-active-color);
+
+  display: block;
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  width: var(--ngs-side-panel-button-strip-width);
+  transition: width var(--ngs-side-panel-transition-timing) ease-in-out;
+
+  &.panel-open {
+    flex: none;
+
+    .button {
+      &.is-active {
+        background: var(--ngs-side-panel-button-active-bg);
+        color: var(--ngs-side-panel-button-active-color);
+      }
+    }
+  }
+
+  &.panel-open {
+    width: calc(var(--ngs-side-panel-button-strip-width) + var(--ngs-side-panel-content-width));
+  }
+
+  .button-strip {
+    position: absolute;
+    top: var(--ngs-side-panel-offset-y);
+    left: 0;
+    bottom: var(--ngs-side-panel-offset-y);
+    width: var(--ngs-side-panel-button-strip-width);
+    z-index: 10;
+  }
+
+  .wrapper {
+    position: absolute;
+    top: var(--ngs-side-panel-offset-y);
+    bottom: var(--ngs-side-panel-offset-y);
+    width: var(--ngs-side-panel-content-width);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    left: var(--ngs-side-panel-button-strip-width);
+    transform: translateX(-100%);
+    transition: opacity var(--ngs-side-panel-transition-timing) ease-in-out, transform var(--ngs-side-panel-transition-timing) ease-in-out, visibility 0s linear var(--ngs-side-panel-transition-timing);
+    z-index: 5;
+    overflow: hidden;
+
+    &.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(0);
+      background: var(--ngs-side-panel-content-bg);
+      transition: opacity var(--ngs-side-panel-transition-timing) ease-in-out, transform var(--ngs-side-panel-transition-timing) ease-in-out, visibility 0s linear 0s;
+    }
+  }
+
+  &.position-right {
+    .button-strip {
+      left: auto;
+      right: 0;
+    }
+
+    .wrapper {
+      left: auto;
+      right: var(--ngs-side-panel-button-strip-width);
+      transform: translateX(100%);
+
+      &.open {
+        transform: translateX(0);
+      }
+    }
+  }
+
+  .inner-content {
+    width: 100%;
+    height: 100%;
+  }
+}

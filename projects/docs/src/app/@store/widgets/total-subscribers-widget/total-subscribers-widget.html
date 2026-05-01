@@ -1,0 +1,25 @@
+<div class="relative overflow-hidden group h-full">
+  <div class="flex gap-5 p-6">
+    <div class="rounded-lg bg-red-500 w-12 h-12 flex items-center justify-center text-white">
+      <ngs-icon name="fluent:people-24-regular"/>
+    </div>
+    <div>
+      <div class="truncate text-sm font-medium text-neutral-500">Total Subscribers</div>
+      <div class="flex items-center gap-2">
+        <div class="text-2xl font-semibold text-neutral-800 dark:text-neutral-100">72,128</div>
+        <div class="flex items-baseline text-sm gap-1 font-semibold text-green-600 dark:text-green-400">
+          <ngs-icon name="fluent:arrow-up-24-regular" class="!text-lg !w-4 !h-5"/>
+          <span class="sr-only">Increased by</span>122
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="absolute right-0 top-0 bottom-0">
+    <button ngsRipple ngsTooltip="View all subscribers"
+            class="cursor-pointer h-full hover:bg-surface-container-high
+                 w-10 bg-surface-container flex
+                 items-center justify-center invisible group-hover:visible">
+      <ngs-icon name="fluent:arrow-right-24-regular"/>
+    </button>
+  </div>
+</div>

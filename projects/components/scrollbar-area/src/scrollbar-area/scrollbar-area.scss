@@ -1,0 +1,97 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-scrollbar-area-thumb-bg: var(--color-neutral-200);
+  --ngs-scrollbar-area-thumb-hover-bg: var(--color-neutral-300);
+  --ngs-scrollbar-area-thumb-active-bg: var(--color-neutral-300);
+  --ngs-scrollbar-area-width: 10px;
+  --ngs-scrollbar-area-scroll-track-bg: transparent;
+
+  display: block;
+  overflow: hidden;
+  position: absolute;
+  inset: 0;
+
+  .scrollable-content {
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    width: 100%;
+    padding-right: 0;
+    box-sizing: border-box;
+
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      background: transparent;
+    }
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scroll-track {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: var(--ngs-scrollbar-area-width);
+    background: var(--ngs-scrollbar-area-scroll-track-bg);
+    border-radius: theme(--radius-sm);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .scroll-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--ngs-scrollbar-area-width);
+    background: var(--ngs-scrollbar-area-thumb-bg);
+    border-radius: theme(--radius-sm);
+    transition: background-color 0.2s ease-in-out;
+    pointer-events: auto;
+  }
+
+  .scroll-track-x {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--ngs-scrollbar-area-width);
+    background: var(--ngs-scrollbar-area-scroll-track-bg);
+    border-radius: theme(--radius-sm);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .scroll-thumb-x {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: var(--ngs-scrollbar-area-width);
+    background: var(--ngs-scrollbar-area-thumb-bg);
+    border-radius: theme(--radius-sm);
+    transition: background-color 0.2s ease-in-out;
+    pointer-events: auto;
+  }
+
+  .scroll-thumb:hover, .scroll-thumb-x:hover {
+    background: var(--ngs-scrollbar-area-thumb-hover-bg);
+  }
+
+  .scroll-thumb:active, .scroll-thumb-x:active {
+    background: var(--ngs-scrollbar-area-thumb-active-bg);
+  }
+
+  &.scrollbar-visible {
+    .scroll-track,
+    .scroll-track-x {
+      opacity: 1;
+    }
+  }
+}

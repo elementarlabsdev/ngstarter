@@ -1,0 +1,29 @@
+.custom-enter {
+  animation: custom-enter-animation 0.5s forwards;
+}
+
+.custom-leave {
+  animation: custom-leave-animation 0.5s forwards;
+}
+
+@keyframes custom-enter-animation {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes custom-leave-animation {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}

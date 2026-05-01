@@ -1,0 +1,14 @@
+<div class="flex items-center gap-5">
+  <ngs-form-field subscriptHiddenIfEmpty>
+    <ngs-label>Message</ngs-label>
+    <input ngsInput value="Disco party!" #message>
+  </ngs-form-field>
+
+  <ngs-form-field subscriptHiddenIfEmpty>
+    <ngs-label>Action</ngs-label>
+    <input ngsInput value="Dance" #action>
+  </ngs-form-field>
+
+  <button ngsButton="outlined"
+          (click)="openSnackBar(message.value, action.value)">Show snack-bar</button>
+</div>

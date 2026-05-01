@@ -1,0 +1,18 @@
+<div class="flex items-center gap-10">
+  <ngs-mchart-pie [data]="data1 | shuffleArray"
+                  [showDataAnimation]="showDataAnimation"
+                  class="size-[25px]" />
+  <ngs-mchart-pie [data]="data2 | shuffleArray"
+                  [showDataAnimation]="showDataAnimation"
+                  class="size-[50px]" />
+  <ngs-mchart-pie [data]="data3 | shuffleArray"
+                  [showDataAnimation]="showDataAnimation"
+                  class="size-[100px]" />
+  <ngs-mchart-pie [data]="data4 | shuffleArray"
+                  [showDataAnimation]="showDataAnimation"
+                  class="size-[200px]" />
+</div>
+<div class="mt-10 flex items-center gap-5">
+  <button ngsButton="filled" (click)="refreshData()">Refresh Data</button>
+  <ngs-slide-toggle [(ngModel)]="showDataAnimation">Show data animation</ngs-slide-toggle>
+</div>

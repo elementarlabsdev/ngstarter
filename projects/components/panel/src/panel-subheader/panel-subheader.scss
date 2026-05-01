@@ -1,0 +1,12 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-panel-subheader-height: --spacing(14);
+
+  flex: none;
+  grid-area: subheader;
+
+  &:not([class*="h-"]):not(.is-auto-height) {
+    height: var(--ngs-panel-subheader-height);
+  }
+}

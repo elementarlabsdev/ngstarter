@@ -1,0 +1,7 @@
+@reference 'tailwindcss';
+
+:host {
+  .overridable-side-panel {
+    --ngs-side-panel-offset-y: --spacing(5);
+  }
+}

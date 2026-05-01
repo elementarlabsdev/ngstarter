@@ -1,0 +1,7 @@
+@if (multiple) {
+  <ngs-checkbox [checked]="selected" [disabled]="disabled" class="pointer-events-none me-1"/>
+}
+<span class="ngs-option-text"><ng-content></ng-content></span>
+@if (!multiple && selected && !hideCheckIcon) {
+  <ngs-icon name="fluent:checkmark-24-regular" class="ms-3"/>
+}

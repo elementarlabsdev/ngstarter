@@ -1,0 +1,7 @@
+@if (dataSource(); as data) {
+  @for (item of data; track item) {
+    <ng-container *ngTemplateOutlet="getTemplate(item); context: { $implicit: item }" />
+  }
+} @else {
+  <ng-content/>
+}

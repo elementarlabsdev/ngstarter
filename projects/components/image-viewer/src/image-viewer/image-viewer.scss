@@ -1,0 +1,219 @@
+@reference 'tailwindcss';
+
+:host {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .title-container {
+    @apply absolute start-4 top-4 z-[3];
+  }
+
+  .controls {
+    @apply absolute end-4 top-4 flex flex-col gap-4 z-[3];
+  }
+
+  .header {
+    position: absolute;
+    top: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    height: --spacing(20);
+    flex: none;
+    padding-left: --spacing(4);
+    padding-right: --spacing(4);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .content {
+    box-shadow: theme(--shadow-sm);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: --spacing(8);
+    width: 100vw;
+    height: 100vh;
+  }
+
+  &.scaled {
+    img {
+      cursor: grab;
+    }
+  }
+
+  &.dragging {
+    img {
+      cursor: grabbing;
+    }
+  }
+
+  &:has(.aside) {
+    .content {
+      padding-inline-end: 420px;
+    }
+  }
+
+  .img {
+    user-select: none;
+    scale: var(--ngs-image-viewer-picture-scale, 1);
+    transition: scale .15s linear;
+  }
+
+  &:not(.dragging) {
+    img {
+      transition: transform .15s linear, scale .15s linear;
+    }
+  }
+
+  .title {
+    background: var(--color-neutral-700);
+    font-weight: 500;
+    height: --spacing(10);
+    border-radius: calc(infinity * 1px);
+    padding-left: --spacing(4);
+    padding-right: --spacing(4);
+    font-size: var(--text-tiny);
+    display: flex;
+    align-items: center;
+    background: var(--color-neutral-700);
+    color: var(--color-neutral-300);
+  }
+
+  .close,
+  .zoom {
+    width: --spacing(10);
+    height: --spacing(10);
+    border-radius: calc(infinity * 1px);
+    cursor: pointer;
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-neutral-700);
+    color: var(--color-neutral-300);
+
+    &:hover {
+      background: var(--color-neutral-800);
+      color: var(--color-neutral-200);
+    }
+
+    &:active {
+      background: var(--color-neutral-950);
+      color: var(--color-neutral-100);
+    }
+  }
+
+  .aside {
+    width: 420px;
+    position: absolute;
+    inset-inline-end: 0;
+    top: 0;
+    bottom: 0;
+    flex: none;
+    background: var(--color-neutral-50);
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(5);
+    height: 100%;
+    padding-inline-end: --spacing(10);
+
+    &-header {
+      font-weight: 700;
+      padding-left: --spacing(8);
+      padding-right: --spacing(8);
+      padding-top: --spacing(8);
+    }
+
+    &-body {
+      position: relative;
+      flex-grow: 1;
+      font-size: theme(--text-sm);
+      color: var(--color-neutral-600);
+      line-height: var(--leading-relaxed);
+
+      &-scroll {
+        position: absolute;
+        inset: 0;
+        overflow-y: auto;
+        padding-left: --spacing(8);
+        padding-right: --spacing(8);
+        padding-bottom: --spacing(8);
+      }
+    }
+  }
+
+  .image {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    max-width: 90%;
+    max-height: 90%;
+
+    img {
+      max-height: 100%;
+      max-width: 100%;
+    }
+  }
+
+  .spinner {
+    visibility: hidden;
+    width: max-content;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: -1;
+    --tw-translate-y: -50%;
+    --tw-translate-x: -50%;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  }
+
+  &.loading {
+    .spinner {
+      visibility: visible;
+      z-index: 1;
+    }
+
+    img {
+      visibility: hidden;
+      position: relative;
+      z-index: -50;
+    }
+  }
+}
+
+:host-context(html.dark) {
+  .title {
+    background: var(--color-neutral-100);
+    color: var(--color-neutral-600);
+  }
+
+  .close {
+    background: var(--color-neutral-100);
+    color: var(--color-neutral-600);
+
+    &:hover {
+      background: var(--color-neutral-200);
+      color: var(--color-neutral-700);
+    }
+
+    &:active {
+      background: var(--color-neutral-300);
+      color: var(--color-neutral-900);
+    }
+  }
+
+  .aside {
+    background: var(--color-neutral-900);
+
+    &-body {
+      color: var(--color-neutral-400);
+    }
+  }
+}

@@ -1,0 +1,33 @@
+@reference 'tailwindcss';
+
+.example-section {
+  margin-bottom: 24px;
+
+  h4 {
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+}
+
+.ngs-chip {
+  &[appearance="success"] {
+    background: theme(--color-green-100);
+    color: theme(--color-green-700);
+  }
+
+  &[appearance="warning"] {
+    background: theme(--color-amber-100);
+    color: theme(--color-amber-600);
+  }
+
+  &[appearance="danger"] {
+    background: theme(--color-red-100);
+    color: theme(--color-red-700);
+  }
+
+  &[appearance="gradient"] {
+    background: linear-gradient(45deg, #f06, #4a90e2);
+    color: white;
+    border: 1px solid transparent;
+  }
+}

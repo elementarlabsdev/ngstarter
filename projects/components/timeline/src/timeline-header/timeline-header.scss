@@ -1,0 +1,15 @@
+@reference 'tailwindcss';
+
+:host {
+  text-transform: var(--ngs-timeline-header-text-transform);
+  font-size: var(--ngs-timeline-header-font-size);
+  background: var(--ngs-timeline-header-bg);
+  color: var(--ngs-timeline-header-color);
+  padding: var(--ngs-timeline-header-padding);
+  font-weight: var(--ngs-timeline-header-font-weight);
+  align-items: center;
+  display: flex;
+  flex: none;
+  white-space: nowrap;
+  grid-column: 1 / -1;
+}

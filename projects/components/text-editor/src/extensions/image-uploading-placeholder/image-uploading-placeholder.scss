@@ -1,0 +1,9 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  &.selected {
+    outline: var(--sys-tertiary) solid 4px;
+  }
+}

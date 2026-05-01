@@ -1,0 +1,4 @@
+<ng-container ngsColumnDef>
+  <th ngs-header-cell *ngsHeaderCellDef> {{headerText}} </th>
+  <td ngs-cell *ngsCellDef="let data"> {{dataAccessor(data, name)}} </td>
+</ng-container>

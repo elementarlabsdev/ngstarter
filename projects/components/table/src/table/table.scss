@@ -1,0 +1,113 @@
+@reference 'tailwindcss';
+
+:host {
+  background: var(--ngs-table-background);
+  border-spacing: 0;
+  width: 100%;
+  display: table;
+  border-collapse: collapse;
+
+  &.ngs-table-fixed-layout {
+    table-layout: fixed;
+    min-width: 100%;
+    width: max-content;
+  }
+
+  ::ng-deep {
+    .ngs-header-cell {
+      font-size: var(--ngs-table-header-cell-font-size);
+      font-weight: var(--ngs-table-header-cell-font-weight);
+      color: var(--ngs-table-header-cell-color);
+      text-transform: uppercase;
+      overflow: hidden;
+      display: table-cell;
+      vertical-align: middle;
+      text-align: start;
+    }
+
+    .ngs-header-cell,
+    .ngs-cell,
+    .ngs-footer-cell {
+      display: table-cell;
+      vertical-align: middle;
+      text-align: start;
+      padding: var(--ngs-table-cell-padding);
+      font-size: var(--ngs-table-cell-font-size);
+      height: var(--ngs-table-row-height);
+      background: var(--ngs-table-background); // Ensure cells have background
+
+      &.ngs-table-sticky {
+        position: sticky !important;
+        background: inherit; // Inherit from row or set explicitly if needed
+        z-index: 10;
+        background-clip: padding-box;
+
+        // Sticky header cells need higher z-index to stay above sticky columns during vertical scroll
+        &.ngs-header-cell {
+           z-index: 100;
+           background: var(--ngs-table-header-cell-background, var(--ngs-table-background));
+        }
+
+        // Sticky footer cells
+        &.ngs-footer-cell {
+           z-index: 100;
+           background: var(--ngs-table-header-cell-background, var(--ngs-table-background));
+        }
+
+        &.ngs-table-sticky-border-elem-left {
+          &:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1px;
+            bottom: 0;
+            background: var(--ngs-table-border-color);
+          }
+        }
+
+        &.ngs-table-sticky-border-elem-right {
+          &:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1px;
+            bottom: 0;
+            background: var(--ngs-table-border-color);
+          }
+        }
+
+        &.ngs-table-sticky-border-elem-top {
+          &:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 1px;
+            bottom: 0;
+            background: var(--ngs-table-border-color);
+          }
+        }
+
+        &.ngs-table-sticky-border-elem-bottom {
+          &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 1px;
+            right: 0;
+            background: var(--ngs-table-border-color);
+          }
+        }
+      }
+    }
+
+    // Fix for the intersection of sticky column and sticky header
+    .ngs-header-cell.ngs-table-sticky.ngs-table-sticky-border-elem-left,
+    .ngs-header-cell.ngs-table-sticky.ngs-table-sticky-border-elem-right {
+      z-index: 110; // Highest priority
+    }
+  }
+}

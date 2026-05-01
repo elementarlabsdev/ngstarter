@@ -1,0 +1,9 @@
+<div class="ngs-date-range-input-container">
+  <div class="ngs-date-range-input-start-wrapper">
+    <ng-content select="input[ngsStartDate]"/>
+  </div>
+  <span class="ngs-date-range-input-separator">{{ separator() }}</span>
+  <div class="ngs-date-range-input-end-wrapper">
+    <ng-content select="input[ngsEndDate]"/>
+  </div>
+</div>

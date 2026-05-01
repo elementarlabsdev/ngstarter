@@ -1,0 +1,92 @@
+@reference 'tailwindcss';
+
+:host {
+  display: grid;
+  grid-template-areas:
+    "header header header"
+    "subheader subheader subheader"
+    "sidebar body aside"
+    "footer footer footer";
+  grid-template-rows: 0 0 1fr 0;
+  grid-template-columns: 0 1fr 0;
+
+  &.has-header {
+    grid-template-rows: auto 0 1fr 0;
+
+    &.has-subheader {
+      grid-template-rows: auto auto 1fr 0;
+
+      &.has-footer {
+        grid-template-rows: auto auto 1fr auto;
+      }
+    }
+
+    &.has-footer {
+      grid-template-rows: auto 0 1fr auto;
+    }
+  }
+
+  &.has-subheader:not(.has-header) {
+    grid-template-rows: 0 auto 1fr 0;
+
+    &.has-footer {
+      grid-template-rows: 0 auto 1fr auto;
+    }
+  }
+
+  &:not(.has-header):not(.has-subheader).has-footer {
+    grid-template-rows: 0 0 1fr auto;
+  }
+
+  &.has-sidebar {
+    grid-template-columns: auto 1fr 0;
+
+    &.has-aside {
+      grid-template-columns: auto 1fr auto;
+    }
+  }
+
+  &:not(.has-sidebar).has-aside {
+    grid-template-columns: 0 1fr auto;
+  }
+
+  &:not([class*="w-"]) {
+    width: 100%;
+  }
+
+  &:not([class*="h-"]) {
+    height: 100%
+  }
+
+  &.is-absolute {
+    position: absolute;
+    inset: 0;
+  }
+
+  ::ng-deep {
+    .ngs-panel-header {
+      grid-area: header;
+    }
+
+    .ngs-panel-subheader {
+      grid-area: subheader;
+    }
+
+    .ngs-panel-sidebar {
+      grid-area: sidebar;
+    }
+
+    .ngs-panel-content {
+      grid-area: body;
+      min-height: 0;
+    }
+
+    .ngs-panel-aside {
+      grid-area: aside;
+    }
+
+    .ngs-panel-footer {
+      grid-area: footer;
+    }
+  }
+}

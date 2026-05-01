@@ -1,0 +1,456 @@
+@use "@angular/cdk/overlay-prebuilt";
+@use 'tailwindcss';
+
+@source not '../styles';
+@source "../node_modules/@ngstarter/components/**/*.mjs";
+@plugin '@tailwindcss/typography';
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* --- SYSTEM COLORS (Основа) --- */
+  --color-primary: var(--color-primary);
+  --color-on-primary: var(--color-on-primary);
+  --color-primary-container: var(--color-primary-container);
+  --color-on-primary-container: var(--color-on-primary-container);
+
+  --color-secondary: var(--color-secondary);
+  --color-on-secondary: var(--color-on-secondary);
+  --color-secondary-container: var(--color-secondary-container);
+  --color-on-secondary-container: var(--color-on-secondary-container);
+
+  --color-tertiary: var(--color-tertiary);
+  --color-on-tertiary: var(--color-on-tertiary);
+  --color-tertiary-container: var(--color-tertiary-container);
+  --color-on-tertiary-container: var(--color-on-tertiary-container);
+
+  --color-error: var(--color-error);
+  --color-on-error: var(--color-on-error);
+  --color-error-container: var(--color-error-container);
+  --color-on-error-container: var(--color-on-error-container);
+  --color-error-container-lowest: var(--color-error-container-lowest);
+  --color-error-container-low: var(--color-error-container-low);
+  --color-error-container-high: var(--color-error-container-high);
+  --color-error-container-highest: var(--color-error-container-highest);
+
+  --color-informative: var(--color-informative);
+  --color-on-informative: var(--color-on-informative);
+  --color-informative-container: var(--color-informative-container);
+  --color-on-informative-container: var(--color-on-informative-container);
+
+  --color-negative: var(--color-negative);
+  --color-on-negative: var(--color-on-negative);
+  --color-negative-container: var(--color-negative-container);
+  --color-on-negative-container: var(--color-on-negative-container);
+
+  --color-positive: var(--color-positive);
+  --color-on-positive: var(--color-on-positive);
+  --color-positive-container: var(--color-positive-container);
+  --color-on-positive-container: var(--color-on-positive-container);
+
+  --color-notice: var(--color-notice);
+  --color-on-notice: var(--color-on-notice);
+  --color-notice-container: var(--color-notice-container);
+  --color-on-notice-container: var(--color-on-notice-container);
+
+  --color-background: var(--color-background);
+  --color-on-background: var(--color-on-background);
+
+  --color-surface: var(--color-surface);
+  --color-on-surface: var(--color-on-surface);
+  --color-on-surface-variant: var(--color-on-surface-variant);
+
+  --color-surface-container-lowest: var(--color-surface-container-lowest);
+  --color-surface-container-low: var(--color-surface-container-low);
+  --color-surface-container: var(--color-surface-container);
+  --color-surface-container-high: var(--color-surface-container-high);
+  --color-surface-container-highest: var(--color-surface-container-highest);
+
+  --color-outline: var(--color-outline);
+  --color-outline-variant: var(--color-outline-variant);
+
+  --color-faint: var(--color-faint);
+  --color-subtle: var(--color-subtle);
+  --color-muted: var(--color-muted);
+  --color-emphasis: var(--color-emphasis);
+  --color-strong: var(--color-strong);
+
+  /* --- PALETTE HELPERS (Legacy support & shortcuts) --- */
+  --color-primary-100: color-mix(in srgb, var(--color-primary), transparent 90%);
+  --color-primary-200: color-mix(in srgb, var(--color-primary), transparent 80%);
+  --color-primary-300: color-mix(in srgb, var(--color-primary), transparent 70%);
+  --color-primary-400: color-mix(in srgb, var(--color-primary), transparent 60%);
+  --color-primary-500: color-mix(in srgb, var(--color-primary), transparent 50%);
+  --color-primary-600: color-mix(in srgb, var(--color-primary), transparent 40%);
+
+  --color-secondary-100: color-mix(in srgb, var(--color-secondary), transparent 90%);
+  --color-secondary-200: color-mix(in srgb, var(--color-secondary), transparent 80%);
+  --color-secondary-300: color-mix(in srgb, var(--color-secondary), transparent 70%);
+  --color-secondary-400: color-mix(in srgb, var(--color-secondary), transparent 60%);
+  --color-secondary-500: color-mix(in srgb, var(--color-secondary), transparent 50%);
+  --color-secondary-600: color-mix(in srgb, var(--color-secondary), transparent 40%);
+
+  --color-tertiary-100: color-mix(in srgb, var(--color-tertiary), transparent 90%);
+  --color-tertiary-200: color-mix(in srgb, var(--color-tertiary), transparent 80%);
+  --color-tertiary-300: color-mix(in srgb, var(--color-tertiary), transparent 70%);
+  --color-tertiary-400: color-mix(in srgb, var(--color-tertiary), transparent 60%);
+  --color-tertiary-500: color-mix(in srgb, var(--color-tertiary), transparent 50%);
+  --color-tertiary-600: color-mix(in srgb, var(--color-tertiary), transparent 40%);
+
+  --color-neutral-50: var(--color-neutral-50);
+  --color-neutral-100: var(--color-neutral-100);
+  --color-neutral-200: var(--color-neutral-200);
+  --color-neutral-300: var(--color-neutral-300);
+  --color-neutral-400: var(--color-neutral-400);
+  --color-neutral-500: var(--color-neutral-500);
+  --color-neutral-600: var(--color-neutral-600);
+  --color-neutral-700: var(--color-neutral-700);
+  --color-neutral-800: var(--color-neutral-800);
+  --color-neutral-900: var(--color-neutral-900);
+  --color-neutral-950: var(--color-neutral-950);
+
+  --color-border: var(--color-border);
+
+  /* --- FONTS --- */
+  --font-sans: "Inter", "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --text-2xs: 0.625rem;
+  --text-3xs: 0.563rem;
+  --text-tiny: 0.75rem;
+  --text-md: 0.825rem;
+}
+
+/* --- LIGHT THEME --- */
+:root {
+  --color-primary: #036FE3;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #d6eaff;
+  --color-on-primary-container: #001a36;
+
+  --color-secondary: #475569;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #f1f5f9;
+  --color-on-secondary-container: #0f172a;
+
+  --color-tertiary: #0ea5e9;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #e0f2fe;
+  --color-on-tertiary-container: #0c4a6e;
+
+  --color-error: #ef4444;
+  --color-on-error: #ffffff;
+  --color-error-container: #fee2e2;
+  --color-on-error-container: #7f1d1d;
+
+  --color-error-container-lowest: color-mix(in srgb, var(--color-error), #ffffff 98%);
+  --color-error-container-low: color-mix(in srgb, var(--color-error), #ffffff 96%);
+  --color-error-container-high: color-mix(in srgb, var(--color-error), #ffffff 86%);
+  --color-error-container-highest: color-mix(in srgb, var(--color-error), #ffffff 78%);
+
+  --color-informative: #3b82f6;
+  --color-on-informative: #ffffff;
+  --color-informative-container: #dbeafe;
+  --color-on-informative-container: #1e3a8a;
+
+  --color-negative: #ef4444;
+  --color-on-negative: #ffffff;
+  --color-negative-container: #fee2e2;
+  --color-on-negative-container: #7f1d1d;
+
+  --color-positive: #22c55e;
+  --color-on-positive: #ffffff;
+  --color-positive-container: #dcfce7;
+  --color-on-positive-container: #14532d;
+
+  --color-notice: #f59e0b;
+  --color-on-notice: #ffffff;
+  --color-notice-container: #fef3c7;
+  --color-on-notice-container: #78350f;
+
+  --color-background: #ffffff;
+  --color-on-background: #0f172a;
+
+  --color-surface: #ffffff;
+  --color-on-surface: #0f172a;
+  --color-on-surface-variant: #64748b;
+
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+  --color-neutral-950: #020617;
+
+  /* Surfaces for Cards/Modals */
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f8fafc;
+  --color-surface-container: #f1f5f9;
+  --color-surface-container-high: #e2e8f0;
+  --color-surface-container-highest: #cbd5e1;
+
+  --color-outline: color-mix(in srgb, var(--color-primary), #000000 70%);
+  --color-outline-variant: color-mix(in srgb, var(--color-primary), #000000 84%);
+
+  --color-faint: var(--color-surface-container);
+  --color-subtle: var(--color-surface-container-high);
+  --color-muted: var(--color-surface-container-highest);
+  --color-emphasis: #94a3b8;
+  --color-strong: #64748b;
+
+  --color-black: #000;
+  --color-white: #fff;
+  --color-border: var(--color-surface-container-high);
+
+  /* Buttons */
+  --btn-height: --spacing(11);
+  --btn-radius: --spacing(3.5);
+  --btn-filled-bg: var(--color-primary);
+  --btn-filled-text: var(--color-on-primary);
+  --btn-tonal-bg: var(--color-secondary-container);
+  --btn-tonal-text: var(--color-on-secondary-container);
+  --btn-outlined-border: var(--color-outline);
+  --btn-outlined-text: var(--color-primary);
+  --btn-text-text: var(--color-primary);
+
+  /* Forms */
+  --input-color: var(--color-primary);
+  --input-text: var(--color-on-surface);
+  --input-caret: var(--color-primary);
+  --input-label-color: var(--color-on-surface-variant);
+  --input-label-float-font-size: 12px;
+  --input-label-focus: var(--color-primary);
+  --input-error: var(--color-error);
+  --input-radius: --spacing(3);
+  --input-border-color: var(--color-emphasis);
+  --input-font-size: 15px;
+  --input-border-width: 1px;
+  --input-line-height: 1.5;
+  --input-padding-x: 0;
+
+  /* Input Filled */
+  --input-filled-bg: var(--color-surface-container-highest);
+  --input-filled-indicator: var(--color-on-surface-variant);
+  --input-filled-indicator-focus: var(--color-primary);
+
+  /* Input Outlined */
+  --input-outlined-border: var(--color-outline);
+  --input-outlined-border-focus: var(--color-primary);
+
+  /* Navigation */
+  --nav-item-color: var(--color-on-surface-variant);
+  --nav-item-hover-color: var(--color-on-surface);
+  --nav-item-active-color: var(--color-primary);
+  --nav-item-hover-bg: linear-gradient(to bottom, var(--color-surface-container-high), var(--color-surface-container));
+  --nav-item-active-bg: linear-gradient(to bottom, var(--color-surface-container-high), var(--color-surface-container));
+  --nav-item-icon-color: var(--color-on-surface-variant);
+  --nav-item-hover-icon-color: var(--color-on-surface);
+  --nav-item-active-icon-color: var(--color-primary);
+  --nav-item-radius: --spacing(3);
+  --nav-item-font-size: theme(--text-sm);
+
+  /* --- Dropdown --- */
+  --dropdown-bg: var(--color-surface-container-lowest);
+  --dropdown-shadow: theme(--shadow-md);
+  --dropdown-radius: --spacing(3);
+  --dropdown-border: 1px solid var(--color-faint);
+  --dropdown-max-height: 256px;
+  --option-height: --spacing(11);
+
+  /* --- Table --- */
+  --ngs-table-border-color: var(--color-border);
+  --ngs-table-background: var(--color-surface);
+  --ngs-table-header-cell-color: var(--color-on-surface-variant);
+  --ngs-table-row-border-color: var(--ngs-table-border-color);
+  --ngs-table-header-cell-font-weight: 500;
+  --ngs-table-cell-font-size: 14px;
+  --ngs-table-cell-padding: --spacing(1) --spacing(4);
+  --ngs-table-header-cell-font-size: 12px;
+  --ngs-table-row-height: 52px;
+  --ngs-table-header-row-height: 56px;
+
+  /* --- Overlay --- */
+  --overlay-backdrop-bg: rgba(0, 0, 0, 0.25);
+  --overlay-backdrop-blur: 3px;
+
+  /* --- Icon --- */
+  --icon-size: --spacing(6);
+  --icon-color: inherit;
+
+  --font-size: 15px;
+}
+
+/* --- DARK THEME --- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* 2.3 SYSTEM COLORS (Dark Overrides) */
+    --color-primary: #46a1ff;
+    --color-on-primary: #ffffff;
+    --color-primary-container: #004791;
+    --color-on-primary-container: #d6eaff;
+
+    --color-secondary: #94a3b8;
+    --color-on-secondary: #0f172a;
+    --color-secondary-container: #1e293b;
+    --color-on-secondary-container: #f1f5f9;
+
+    --color-tertiary: #38bdf8;
+    --color-on-tertiary: #0c4a6e;
+    --color-tertiary-container: #075985;
+    --color-on-tertiary-container: #e0f2fe;
+
+    --color-error: #f87171;
+    --color-on-error: #450a0a;
+    --color-error-container: #7f1d1d;
+    --color-on-error-container: #fef2f2;
+    --color-error-container-lowest: color-mix(in srgb, var(--color-error), #000000 92%);
+    --color-error-container-low: color-mix(in srgb, var(--color-error), #000000 88%);
+    --color-error-container-high: color-mix(in srgb, var(--color-error), #000000 80%);
+    --color-error-container-highest: color-mix(in srgb, var(--color-error), #000000 76%);
+
+    --color-informative: #60a5fa;
+    --color-on-informative: #1e3a8a;
+    --color-informative-container: #1e3a8a;
+    --color-on-informative-container: #dbeafe;
+
+    --color-negative: #f87171;
+    --color-on-negative: #450a0a;
+    --color-negative-container: #7f1d1d;
+    --color-on-negative-container: #fef2f2;
+
+    --color-positive: #4ade80;
+    --color-on-positive: #064e3b;
+    --color-positive-container: #064e3b;
+    --color-on-positive-container: #dcfce7;
+
+    --color-notice: #fbbf24;
+    --color-on-notice: #78350f;
+    --color-notice-container: #78350f;
+    --color-on-notice-container: #fef3c7;
+
+    --color-background: #0f172a;
+    --color-on-background: #f8fafc;
+
+    --color-surface: #0f172a;
+    --color-on-surface: #f8fafc;
+    --color-on-surface-variant: #94a3b8;
+
+    --color-surface-container-lowest: #020617;
+    --color-surface-container-low: #0f172a;
+    --color-surface-container: #1e293b;
+    --color-surface-container-high: #334155;
+    --color-surface-container-highest: #475569;
+
+    --color-outline: color-mix(in srgb, var(--color-primary), #ffffff 70%);
+    --color-outline-variant: color-mix(in srgb, var(--color-primary), #ffffff 84%);
+
+    --color-faint: var(--color-surface-container-low);
+    --color-subtle: var(--color-surface-container);
+    --color-muted: var(--color-surface-container-high);
+    --color-emphasis: color-mix(in srgb, var(--color-primary), #ffffff 40%);
+    --color-strong: color-mix(in srgb, var(--color-primary), #ffffff 20%);
+
+    /* --- DROPDOWN --- */
+    --dropdown-bg: var(--color-surface-container-lowest);
+  }
+}
+
+/* Дублируем для ручного переключения класса .dark */
+.dark {
+  --color-primary: #46a1ff;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #004791;
+  --color-on-primary-container: #d6eaff;
+
+  --color-secondary: #94a3b8;
+  --color-on-secondary: #0f172a;
+  --color-secondary-container: #1e293b;
+  --color-on-secondary-container: #f1f5f9;
+
+  --color-tertiary: #38bdf8;
+  --color-on-tertiary: #0c4a6e;
+  --color-tertiary-container: #075985;
+  --color-on-tertiary-container: #e0f2fe;
+
+  --color-error: #f87171;
+  --color-on-error: #450a0a;
+  --color-error-container: #7f1d1d;
+  --color-on-error-container: #fef2f2;
+  --color-error-container-lowest: color-mix(in srgb, var(--color-error), #000000 92%);
+  --color-error-container-low: color-mix(in srgb, var(--color-error), #000000 88%);
+  --color-error-container-high: color-mix(in srgb, var(--color-error), #000000 80%);
+  --color-error-container-highest: color-mix(in srgb, var(--color-error), #000000 76%);
+
+  --color-informative: #60a5fa;
+  --color-on-informative: #1e3a8a;
+  --color-informative-container: #1e3a8a;
+  --color-on-informative-container: #dbeafe;
+
+  --color-negative: #f87171;
+  --color-on-negative: #450a0a;
+  --color-negative-container: #7f1d1d;
+  --color-on-negative-container: #fef2f2;
+
+  --color-positive: #4ade80;
+  --color-on-positive: #064e3b;
+  --color-positive-container: #064e3b;
+  --color-on-positive-container: #dcfce7;
+
+  --color-notice: #fbbf24;
+  --color-on-notice: #78350f;
+  --color-notice-container: #78350f;
+  --color-on-notice-container: #fef3c7;
+
+  --color-background: #0f172a;
+  --color-on-background: #f8fafc;
+
+  --color-surface: #0f172a;
+  --color-on-surface: #f8fafc;
+  --color-on-surface-variant: #94a3b8;
+
+  --color-surface-container-lowest: #020617;
+  --color-surface-container-low: #0f172a;
+  --color-surface-container: #1e293b;
+  --color-surface-container-high: #334155;
+  --color-surface-container-highest: #475569;
+
+  --color-outline: color-mix(in srgb, var(--color-primary), #ffffff 70%);
+  --color-outline-variant: color-mix(in srgb, var(--color-primary), #ffffff 84%);
+
+  --color-faint: var(--color-surface-container-low);
+  --color-subtle: var(--color-surface-container);
+  --color-muted: var(--color-surface-container-high);
+  --color-emphasis: color-mix(in srgb, var(--color-primary), #ffffff 40%);
+  --color-strong: color-mix(in srgb, var(--color-primary), #ffffff 20%);
+
+  /* --- DROPDOWN --- */
+  --dropdown-bg: var(--color-surface-container-lowest);
+}
+
+/* ========================================================================
+   3. BASE STYLES
+   ======================================================================== */
+@layer base {
+  body {
+    background: var(--color-background);
+    color: var(--color-on-background);
+    font-family: var(--font-sans), serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* ========================================================================
+   4. COMPONENTS
+   ======================================================================== */
+@keyframes ngs-dropdown-panel-showing {
+  from {
+    opacity: 0;
+    transform: scaleY(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}

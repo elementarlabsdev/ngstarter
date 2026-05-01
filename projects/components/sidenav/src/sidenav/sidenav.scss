@@ -1,0 +1,42 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-sidenav-background-color: var(--color-background);
+  --ngs-sidenav-divider-color: rgba(0, 0, 0, 0.12);
+  --ngs-sidenav-z-index: 5;
+  --ngs-sidenav-transition-duration: 400ms;
+  --ngs-sidenav-transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: var(--ngs-sidenav-z-index);
+  outline: 0;
+  box-sizing: border-box;
+  overflow-y: auto;
+  transform: translate3d(-100%, 0, 0);
+  width: var(--ngs-sidenav-width);
+  background: var(--ngs-sidenav-background-color);
+
+  &.is-settled {
+    transition: transform var(--ngs-sidenav-transition-duration) var(--ngs-sidenav-transition-timing-function);
+  }
+
+  &.ngs-sidenav-end {
+    right: 0;
+    transform: translate3d(100%, 0, 0);
+  }
+
+  &.ngs-sidenav-opened {
+    transform: translate3d(0, 0, 0);
+  }
+
+  &.is-collapsed {
+    width: var(--ngs-sidenav-collapsed-width);
+  }
+
+  &:hover {
+    width: var(--ngs-sidenav-width);
+  }
+}

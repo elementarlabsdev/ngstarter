@@ -1,0 +1,43 @@
+<div class="border border-muted rounded-xl overflow-hidden">
+  <ngs-table #table [dataSource]="dataSource"
+             cdkDropList (cdkDropListDropped)="drop($event)" cdkDropListData="dataSource"
+             ngSkipHydration>
+    <!-- Position Column -->
+    <ng-container ngsColumnDef="position">
+      <ngs-header-cell *ngsHeaderCellDef>No.</ngs-header-cell>
+      <ngs-cell *ngsCellDef="let element">
+        <div class="flex items-center gap-2">
+          <ngs-icon name="fluent:re-order-dots-vertical-24-regular" class="cursor-move -ms-1.5"/>
+          <span>{{element.position}}</span>
+        </div>
+      </ngs-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container ngsColumnDef="name">
+      <ngs-header-cell *ngsHeaderCellDef> Name </ngs-header-cell>
+      <ngs-cell *ngsCellDef="let element"> {{element.name}} </ngs-cell>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container ngsColumnDef="weight">
+      <ngs-header-cell *ngsHeaderCellDef> Weight </ngs-header-cell>
+      <ngs-cell *ngsCellDef="let element"> {{element.weight}} </ngs-cell>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container ngsColumnDef="symbol">
+      <ngs-header-cell *ngsHeaderCellDef> Symbol </ngs-header-cell>
+      <ngs-cell *ngsCellDef="let element"> {{element.symbol}} </ngs-cell>
+    </ng-container>
+
+    <!-- Quantity Column -->
+    <ng-container ngsColumnDef="quantity">
+      <ngs-header-cell *ngsHeaderCellDef> Quantity of Element </ngs-header-cell>
+      <ngs-cell *ngsCellDef="let element">{{element.quantity}}</ngs-cell>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: displayedColumns;" cdkDrag [cdkDragData]="row"></tr>
+  </ngs-table>
+</div>

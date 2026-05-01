@@ -1,0 +1,10 @@
+<ngs-select
+  [value]="value"
+  (selectionChange)="onSelectionChange($event)"
+  (focus)="onFocus()"
+  (blur)="onBlur()"
+  [placeholder]="placeholder">
+  @for (format of dateFormats(); track format.value) {
+    <ngs-option [value]="format.value">{{ format.name }}</ngs-option>
+  }
+</ngs-select>

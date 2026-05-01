@@ -1,0 +1,15 @@
+<div class="flex items-center justify-center">
+  <button ngsIconButton (click)="previousClicked('year')">
+    <ngs-icon name="fluent:arrow-left-24-regular"/>
+  </button>
+  <button ngsIconButton (click)="previousClicked('month')">
+    <ngs-icon name="fluent:chevron-left-24-regular"/>
+  </button>
+  <span class="py-5 px-3 text-center font-semibold">{{ periodLabel }}</span>
+  <button ngsIconButton (click)="nextClicked('month')">
+    <ngs-icon name="fluent:chevron-right-24-regular"/>
+  </button>
+  <button ngsIconButton (click)="nextClicked('year')">
+    <ngs-icon name="fluent:arrow-right-24-regular"/>
+  </button>
+</div>

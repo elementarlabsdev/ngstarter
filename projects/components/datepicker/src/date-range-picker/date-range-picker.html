@@ -1,0 +1,25 @@
+<ng-template #portal>
+  <div class="ngs-datepicker-content" [class.ngs-datepicker-above]="_isAbove()" [class.ngs-datepicker-below]="!_isAbove()">
+    <div class="ngs-datepicker-inner-container">
+      @if (showQuickPresets() && _effectivePresets().length > 0) {
+        <div class="ngs-datepicker-presets">
+          @for (preset of _effectivePresets(); track preset.label) {
+            <button type="button" class="ngs-datepicker-preset" (click)="_selectPreset(preset)">
+              {{ preset.label }}
+            </button>
+          }
+        </div>
+      }
+
+      <ngs-calendar [startAt]="startAt()"
+        [selected]="_selectedRange()"
+        [headerComponent]="calendarHeaderComponent()"
+        (selectedChange)="_select($event)"
+       />
+    </div>
+
+    @if (actions()) {
+      <ng-content select="ngs-datepicker-actions" />
+    }
+  </div>
+</ng-template>

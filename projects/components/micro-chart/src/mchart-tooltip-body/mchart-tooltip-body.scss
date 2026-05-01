@@ -1,0 +1,6 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  padding: --spacing(1.5) --spacing(2);
+}

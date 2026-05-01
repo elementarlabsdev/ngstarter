@@ -1,0 +1,9 @@
+<div #container class="w-[818px] min-h-[545px] flex items-center justify-center">
+  <ngs-image-resizer (imageResized)="onImageResized($event)" [imageMaxWidth]="818">
+    <img src="assets/image/image.jpg" alt="" ngsImageResizerImage width="525">
+  </ngs-image-resizer>
+</div>
+
+@if (imageDimensionsInfo()) {
+  <div class="mt-5">{{ imageDimensionsInfo() | json }}</div>
+}

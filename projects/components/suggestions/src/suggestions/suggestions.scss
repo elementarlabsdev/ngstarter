@@ -1,0 +1,22 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-suggestions-bg: var(--color-surface-container-lowest);
+  --ngs-suggestion-block-heading-color: var(--color-on-surface);
+  --ngs-suggestion-block-font-size: theme(--text-xs);
+  --ngs-suggestion-block-font-weight: 600;
+  --ngs-suggestion-block-content-padding: --spacing(2) 0;
+  --ngs-suggestion-height: --spacing(11);
+  --ngs-suggestion-padding: 0 --spacing(2);
+  --ngs-suggestion-hover-bg: var(--color-surface-container-low);
+  --ngs-suggestion-border-radius: calc(infinity * 1px);
+
+  display: block;
+  overflow-y: auto;
+  background: var(--ngs-suggestions-bg);
+}
+
+:host-context(html.dark) {
+  --ngs-suggestions-bg: var(--color-surface-container-high);
+  --ngs-suggestion-hover-bg: var(--color-surface-bright);
+}

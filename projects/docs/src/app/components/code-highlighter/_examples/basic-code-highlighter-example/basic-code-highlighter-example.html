@@ -1,0 +1,8 @@
+<div class="mb-5">
+  <ngs-segmented [(ngModel)]="appearance">
+    <ngs-segmented-button value="bordered">Bordered</ngs-segmented-button>
+    <ngs-segmented-button value="none">None</ngs-segmented-button>
+  </ngs-segmented>
+</div>
+
+<ngs-code-highlighter [code]="sampleTs" language="ts" [appearance]="appearance()" />

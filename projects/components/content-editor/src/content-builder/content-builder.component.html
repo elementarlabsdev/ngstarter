@@ -1,0 +1,116 @@
+<div class="container py-4">
+  <div class="content"
+       cdkDropList
+       ngsTextSelectionPopup
+       closestContentObserverClass="ngs-content-editor-content-editable"
+       [targetComponent]="commandBar"
+       (tagSelected)="onTagSelected($event)"
+       (cdkDropListDropped)="drop($event)">
+    @for (contentBlock of _content(); track contentBlock.id) {
+      <div class="block"
+           [attr.data-block-id]="contentBlock.id"
+           [class.is-focused]="isBlockFocused(contentBlock.id)"
+           [class.is-active]="isActiveBlock(contentBlock.id)"
+           cdkDrag
+           cdkDragLockAxis="y"
+           cdkMonitorSubtreeFocus
+           (cdkDragStarted)="onDragStarted($event, contentBlock)"
+           (cdkDragEnded)="onDragEnded($event, contentBlock)"
+           (cdkFocusChange)="onFocusChange($event, contentBlock)">
+        <div class="block-controls" [class.is-settings-popover-open]="settingsTrigger.api.isOpen()">
+          <button class="block-control">
+            <ngs-icon name="fluent:add-24-regular"
+                      (mousedown)="setActiveBlockId($event, contentBlock.id)"
+                      [ngsMenuTriggerFor]="suggestionsMenu"
+                      [ngsMenuTriggerRestoreFocus]="false"
+                      (menuOpened)="onSuggestionsMenuOpen()"
+                      (menuClosed)="onSuggestionsMenuClose($event)"/>
+          </button>
+          <div class="block-control block-control-drag"
+               (click)="selectBlock(contentBlock.id)"
+               [ngsPopoverTriggerFor]="settingsPopover"
+               (closed)="onSettingsPopoverClose()"
+               #settingsTrigger="ngsPopoverTriggerFor"
+               hasBackdrop
+               position="before-center">
+            <button cdkDragHandle
+                    trigger="hover"
+                    closeOnOriginClick
+                    closeOnOriginMouseLeave
+                    #dragTrigger="ngsPopoverTriggerFor"
+                    [ngsPopoverTriggerFor]="dragControlTooltip"
+                    position="below-center"
+                    (mousedown)="dragTrigger.api.close()"
+                    delay="1000" class="w-full h-full flex items-center justify-center">
+              <ngs-icon name="fluent:re-order-dots-vertical-24-regular"/>
+            </button>
+          </div>
+          <ng-template #dragControlTooltip>
+            <div class="bg-neutral-900 text-xs flex flex-col gap-0.5 rounded-lg items-center px-2 py-1.5 font-medium">
+              <div>
+                <div class="text-neutral-100">Drag <span class="text-neutral-400">to move</span></div>
+              </div>
+              <div>
+                <div class="text-neutral-100">Click <span class="text-neutral-400">to open menu</span></div>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+        <div class="block-content" [class.is-selected]="isBlockSelected(contentBlock.id)">
+          <div class="drag-placeholder" *cdkDragPlaceholder></div>
+          <ng-container [ngComponentOutlet]="blockDefsMap.get(contentBlock.type) | async"
+                        [ngComponentOutletInputs]="{
+                          id: contentBlock.id,
+                          content: contentBlock.content,
+                          settings: contentBlock.settings,
+                          index: $index
+                        }"/>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<ngs-popover #settingsPopover="ngsPopover">
+  <div class="px-2 py-0 w-72 settings-popover">
+    <ngs-list>
+      <ngs-list-item (click)="duplicateSelectedBlocks(settingsPopover)">
+        <ngs-icon name="fluent:copy-24-regular" ngsListItemIcon/>
+        <div ngsListItemTitle>Duplicate</div>
+      </ngs-list-item>
+      <ngs-list-item (click)="deleteSelectedBlocks(settingsPopover)">
+        <ngs-icon name="fluent:delete-24-regular" ngsListItemIcon/>
+        <div ngsListItemTitle>Delete</div>
+      </ngs-list-item>
+    </ngs-list>
+  </div>
+</ngs-popover>
+
+<ngs-menu #suggestionsMenu="ngsMenu">
+  <div (click)="preventMenuClose($event)">
+    @for (suggestionItem of suggestions(); track $index; let first = $first) {
+      @switch (suggestionItem.type) {
+        @case ('heading') {
+          <ngs-menu-heading>{{ suggestionItem.title }}</ngs-menu-heading>
+        }
+        @case ('item') {
+          <button ngs-menu-item (click)="addBlockFromSuggestionMenu(suggestionsMenu, suggestionItem.blockType, suggestionItem.blockOptions)">
+            <div class="h-full flex items-center gap-3 py-2">
+              <div class="size-9 flex items-center rounded-lg justify-center bg-surface-container">
+                <ngs-icon [name]="suggestionItem.iconName" class="!me-0"/>
+              </div>
+              <div class="grow min-w-[200px]">
+                <div>{{ suggestionItem.title }}</div>
+                <div class="text-2xs text-neutral-500">{{ suggestionItem.description }}</div>
+              </div>
+              @if (suggestionItem.hotKeys) {
+                <div class="ms-auto bg-surface-container-highest rounded-full h-5
+                  text-4xs px-2 flex items-center font-bold">{{ suggestionItem.hotKeys }}</div>
+              }
+            </div>
+          </button>
+        }
+      }
+    }
+  </div>
+</ngs-menu>

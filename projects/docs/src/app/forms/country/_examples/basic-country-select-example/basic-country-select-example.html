@@ -1,0 +1,8 @@
+<ngs-form-field class="w-1/2">
+  <ngs-label>Country</ngs-label>
+  <ngs-country-select [(ngModel)]="country" placeholder="Select a country"/>
+</ngs-form-field>
+
+<p>
+  Selected country: {{ country() }}
+</p>

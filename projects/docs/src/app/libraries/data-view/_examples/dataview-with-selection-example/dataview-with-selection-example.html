@@ -1,0 +1,29 @@
+<div class="mb-6 flex flex-col gap-4">
+  <div class="flex items-center gap-4">
+    <div class="text-sm font-medium">Selection Mode:</div>
+    <ngs-segmented [(ngModel)]="selectionMode">
+      <button ngs-segmented-button value="multiple">Multiple</button>
+      <button ngs-segmented-button value="single">Single</button>
+    </ngs-segmented>
+  </div>
+
+  <div class="flex gap-3">
+    <button ngsButton="outlined" (click)="dataView.api.selectAll()" [disabled]="selectionMode === 'single'">Select All</button>
+    <button ngsButton="outlined" (click)="dataView.api.unselectAll()">Unselect All</button>
+  </div>
+</div>
+
+<ngs-data-view #dataView="ngsDataView"
+               [columnDefs]="columnDefs"
+               [data]="data"
+               withSelection
+               [rowSelection]="selectionMode"
+               class="h-[300px]"
+               (rowSelectionChanged)="rowSelectionChanged($event)"
+               (selectionChanged)="selectionChanged($event)"
+               (allRowsSelectionChanged)="allRowsSelectionChanged($event)" />
+
+<div class="mt-8">
+  <div class="text-sm">Selected rows:</div>
+  <pre class="mt-2">{{ selectedRows | json }}</pre>
+</div>

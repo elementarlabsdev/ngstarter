@@ -1,0 +1,35 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .content {
+    outline: none;
+    font-weight: 700;
+
+    &:empty {
+      &:before {
+        content: attr(data-empty-placeholder);
+        color: var(--color-neutral-500);
+      }
+    }
+  }
+
+  &.level-1 {
+    .content {
+      font-size: theme(--text-5xl);
+    }
+  }
+
+  &.level-2 {
+    .content {
+      font-size: theme(--text-4xl);
+    }
+  }
+
+  &.level-3 {
+    .content {
+      font-size: theme(--text-3xl);
+    }
+  }
+}

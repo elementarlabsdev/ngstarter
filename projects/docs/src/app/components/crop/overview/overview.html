@@ -1,0 +1,52 @@
+<app-page>
+  <h1 appPageTitle>Crop Component</h1>
+  <div appPageContent>
+    <div class="mb-10">
+      <p class="lead">Fast, modern, and easy image cropping for Angular — fully compatible with and TailwindCSS.</p>
+      <p>
+        Add a polished, production-ready image cropping experience to your Angular app with minimal setup.
+        The component is touch-friendly, responsive, and integrates seamlessly with dialogs, forms, and theming.
+      </p>
+      <ul class="list-disc list-inside">
+        <li>
+          <strong>✂️ Interactive cropping</strong>
+          <div>Drag to crop, pinch to zoom, and adjust with mouse or touch.</div>
+        </li>
+        <li>
+          <strong>🧩 integration</strong>
+          <div>Works with MatDialog, reactive forms, themes and accessibility patterns.</div>
+        </li>
+        <li>
+          <strong>📱 Responsive & mobile-first</strong>
+          <div>Adapts to any screen size and input method.</div>
+        </li>
+      </ul>
+      <div class="mt-5"><strong>Perfect for:</strong></div>
+      <p>
+        👤 Avatar uploaders, 📰 content editors, 📦 admin dashboards, 🧠 AI tools — any app that needs a simple and powerful image cropping experience.
+      </p>
+      <p>
+        🚀 Image Crop Component — the modern open-source solution for effortless image cropping in Angular.
+      </p>
+    </div>
+
+    <h3>Basic image crop</h3>
+
+    <div class="mb-5 mt-5">
+      <ngs-form-field class="w-72">
+        <ngs-select [(ngModel)]="cropShape" placeholder="Shape">
+          <ngs-option value="rectangle">Rectangle</ngs-option>
+          <ngs-option value="circle">Circle</ngs-option>
+        </ngs-select>
+      </ngs-form-field>
+    </div>
+
+    @if (selection()) {
+      <div class="mb-5">{{ selection() | json }}</div>
+    }
+
+    <ngs-crop [shape]="cropShape()" (selectionApplied)="onSelectionApplied($event)">
+      <img src="https://images.pexels.com/photos/34492076/pexels-photo-34492076.jpeg" width="500" alt="">
+    </ngs-crop>
+  </div>
+</app-page>

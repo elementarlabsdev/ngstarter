@@ -1,0 +1,29 @@
+<ng-content select="ngs-timeline-timestamp"/>
+
+@if (indicatorRef()) {
+  <div class="line">
+    <div class="custom-indicator">
+      <ng-container [ngTemplateOutlet]="indicatorTemplateRef"/>
+    </div>
+  </div>
+} @else {
+  <div class="line">
+    <div class="indicator">
+      <div class="indicator-shape"></div>
+    </div>
+  </div>
+}
+
+<div class="content">
+  <div class="content-inner">
+    <div class="content-header">
+      <ng-content select="ngs-timeline-title"/>
+      <ng-content select="ngs-timeline-subtitle"/>
+      <ng-content select="ngs-timeline-description"/>
+    </div>
+    <div class="content-body">
+      <ng-content select="ngs-timeline-attributes"/>
+      <ng-content select="ngs-timeline-content"/>
+    </div>
+  </div>
+</div>

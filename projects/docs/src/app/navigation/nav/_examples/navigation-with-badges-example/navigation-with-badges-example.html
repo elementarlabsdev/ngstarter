@@ -1,0 +1,19 @@
+<ngs-navigation activeKey="profile" class="border border-muted p-4 rounded-2xl h-[500px] w-[340px]">
+  <ngs-navigation-item badgeTextOnly>
+    Dashboard <span ngsNavigationItemBadge>1</span>
+  </ngs-navigation-item>
+  <ngs-navigation-item>Projects</ngs-navigation-item>
+  <div ngs-navigation-item>Tasks</div>
+  <ngs-navigation-group>
+    <ngs-navigation-group-toggle>
+      Settings
+      <span ngsNavigationItemBadge>3</span>
+      <ngs-icon name="fluent:chevron-down-24-regular" class="size-4.5" ngsNavigationGroupToggleIcon/>
+    </ngs-navigation-group-toggle>
+    <ngs-navigation-group-menu>
+      <ngs-navigation-item key="profile">Profile</ngs-navigation-item>
+      <div ngs-navigation-item>Security</div>
+    </ngs-navigation-group-menu>
+  </ngs-navigation-group>
+  <ngs-navigation-item>Support</ngs-navigation-item>
+</ngs-navigation>

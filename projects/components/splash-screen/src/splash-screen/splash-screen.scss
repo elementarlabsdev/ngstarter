@@ -1,0 +1,23 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-splash-screen-bg: var(--color-background);
+
+  user-select: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  visibility: visible;
+  background: var(--ngs-splash-screen-bg);
+
+  --ngs-splash-screen-hide-animation-duration: 0.5s;
+
+  &.hide {
+    opacity: 0;
+    transition: opacity var(--ngs-splash-screen-hide-animation-duration) ease-in-out;
+  }
+}

@@ -1,0 +1,47 @@
+@reference 'tailwindcss';
+@reference '../../../styles/_common.scss';
+
+:host {
+  --ngs-sidebar-header-compact-padding: --spacing(4) 0;
+
+  flex: none;
+  width: 100%;
+
+  ::ng-deep {
+    .ngs-sidebar-compact-view-mode {
+      display: none;
+    }
+  }
+}
+
+:host-context(.ngs-sidebar.compact:not(:hover)) {
+  padding: var(--ngs-sidebar-header-compact-padding);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+
+  ::ng-deep {
+    .ngs-sidebar-full-view-mode {
+      display: none;
+    }
+
+    .ngs-sidebar-compact-view-mode {
+      display: block;
+    }
+  }
+}
+
+:host-context(.ngs-sidebar.compact:hover) {
+  ::ng-deep {
+    .ngs-sidebar-compact-view-mode {
+      display: none;
+    }
+
+    .ngs-sidebar-full-view-mode {
+      display: block;
+    }
+  }
+}

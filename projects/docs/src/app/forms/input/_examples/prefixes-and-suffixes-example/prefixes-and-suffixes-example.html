@@ -1,0 +1,22 @@
+<form class="w-1/2 space-y-4">
+  <!-- Icon prefix + text prefix + icon suffix -->
+  <ngs-form-field class="w-full">
+    <ngs-label>Phone (Icon + Text + Icon)</ngs-label>
+    <ngs-icon name="fluent:call-24-regular" ngsIconPrefix class="ms-1"/>
+    <span ngsTextPrefix>+1&nbsp;</span>
+    <input ngsInput type="tel" placeholder="555-555-1234" value="12345678">
+    <ngs-icon name="fluent:checkmark-circle-24-regular" ngsIconSuffix class="me-1"/>
+  </ngs-form-field>
+
+  <!-- Icon button prefix + icon button suffix -->
+  <ngs-form-field class="w-full">
+    <ngs-label>Phone (IconButton + IconButton)</ngs-label>
+    <button type="button" ngsIconButton ngsIconButtonPrefix class="ms-1" aria-label="Pick country">
+      <ngs-icon name="fluent:globe-24-regular"/>
+    </button>
+    <input ngsInput type="tel" placeholder="555-555-1234">
+    <button type="button" ngsIconButton ngsIconButtonSuffix class="me-1" aria-label="Edit">
+      <ngs-icon name="fluent:edit-24-regular"/>
+    </button>
+  </ngs-form-field>
+</form>

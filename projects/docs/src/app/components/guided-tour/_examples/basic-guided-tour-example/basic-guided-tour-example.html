@@ -1,0 +1,21 @@
+<div class="flex flex-col gap-4 p-4">
+  <button ngsButton="filled" (click)="startTour()" class="w-fit">Start Tour</button>
+
+  <div class="flex gap-4">
+    <div ngsTourAnchor="step1" class="p-4 border border-muted rounded-xl shadow-sm bg-surface text-on-surface">
+      Step 1 Anchor
+    </div>
+
+    <div ngsTourAnchor="step2" class="p-4 border border-muted rounded-xl shadow-sm bg-surface text-on-surface">
+      Step 2 Anchor
+    </div>
+
+    <div ngsTourAnchor="step3" class="p-4 border border-muted rounded-xl shadow-sm bg-surface text-on-surface">
+      Step 3 Anchor
+    </div>
+
+    <div class="dynamic-anchor p-4 border border-muted rounded-xl shadow-sm bg-surface text-on-surface">
+      Dynamic Anchor (No Directive)
+    </div>
+  </div>
+</div>

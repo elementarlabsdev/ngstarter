@@ -1,0 +1,37 @@
+<div>
+  <p>Slide Toggle using a simple NgModel.</p>
+  <ngs-slide-toggle [(ngModel)]="isChecked">Slide Toggle Checked: {{ isChecked }}</ngs-slide-toggle>
+</div>
+
+<div class="mt-10">
+  <p>Slide Toggle inside of a Template-driven form</p>
+  <form class="w-full">
+    <div class="flex flex-col gap-3">
+      <div>
+        <ngs-slide-toggle ngModel name="enableWifi">Enable Wifi</ngs-slide-toggle>
+      </div>
+      <div>
+        <ngs-slide-toggle ngModel name="acceptTerms" required>Accept Terms of Service</ngs-slide-toggle>
+      </div>
+    </div>
+    <div class="mt-5">
+      <button ngsButton="tonal" type="button" class="w-40">Save Settings</button>
+    </div>
+  </form>
+</div>
+
+<div class="mt-10">
+  <p>Slide Toggle inside of a Reactive form</p>
+  <form class="w-full flex flex-col gap-3" [formGroup]="formGroup">
+    <div class="flex flex-col gap-3">
+      <div>
+        <ngs-slide-toggle formControlName="enableWifi">Enable Wifi</ngs-slide-toggle>
+      </div>
+      <div>
+        <ngs-slide-toggle formControlName="acceptTerms">Accept Terms of Service</ngs-slide-toggle>
+      </div>
+    </div>
+    <p>Form Group Status: {{ formGroup.status }}</p>
+    <button ngsButton="tonal" type="button" class="w-40">Save Settings</button>
+  </form>
+</div>

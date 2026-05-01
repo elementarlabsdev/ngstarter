@@ -1,0 +1,9 @@
+@reference 'tailwindcss';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ngs-tab-panel-nav-gap);
+  padding: var(--ngs-tab-panel-nav-padding);
+}

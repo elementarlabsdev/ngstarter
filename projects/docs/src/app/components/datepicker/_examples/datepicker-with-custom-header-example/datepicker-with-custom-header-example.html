@@ -1,0 +1,7 @@
+<ngs-form-field class="w-1/2">
+  <ngs-label>Custom calendar header</ngs-label>
+  <input ngsInput [ngsDatepicker]="picker">
+  <ngs-hint>MM/DD/YYYY</ngs-hint>
+  <ngs-datepicker-toggle ngsIconButtonSuffix [for]="picker"/>
+  <ngs-datepicker #picker [calendarHeaderComponent]="exampleHeader"/>
+</ngs-form-field>

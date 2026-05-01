@@ -1,0 +1,127 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-select-arrow-color: rgba(0, 0, 0, 0.54);
+  --ngs-select-font-size: 14px;
+  --ngs-select-placeholder-color: rgba(0, 0, 0, 0.38);
+  --ngs-select-border-color: rgba(0, 0, 0, 0.12);
+  --ngs-select-min-width: 120px;
+
+  display: inline-block;
+  outline: none;
+  cursor: pointer;
+  font-size: var(--ngs-select-font-size);
+  min-width: var(--ngs-select-min-width);
+
+  &.ngs-select-disabled {
+    cursor: default;
+    pointer-events: none;
+    --ngs-select-border-color: color-mix(in srgb, var(--color-outline), transparent 80%);
+
+    .ngs-select-trigger {
+      opacity: 0.38;
+    }
+  }
+
+  .ngs-select-value {
+    display: flex;
+    max-width: 100%;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: var(--input-line-height);
+    font-size: var(--input-font-size);
+  }
+
+  .ngs-select-placeholder {
+    color: var(--ngs-select-placeholder-color);
+  }
+
+  .ngs-form-field & {
+    min-width: 0;
+  }
+
+  .ngs-select-arrow {
+    width: 18px;
+    height: 18px;
+    display: flex;
+    color: var(--ngs-select-arrow-color);
+  }
+
+  .ngs-select-arrow-wrapper {
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    display: inline-flex;
+    transition: transform 200ms ease;
+
+    .ngs-form-field:not(.ngs-form-field-has-label) &,
+    .ngs-paginator & {
+      top: 0;
+    }
+  }
+
+  .ngs-select-trigger {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    position: relative;
+    box-sizing: border-box;
+    line-height: var(--input-line-height);
+    font-size: var(--input-font-size);
+
+    .hidden {
+      display: none;
+    }
+  }
+}
+
+:host-context(.ngs-form-field) {
+  .ngs-select-arrow-wrapper {
+    position: relative;
+    top: -8px;
+  }
+}
+
+:host-context(.ngs-form-field-focused) {
+  .ngs-select-arrow-wrapper {
+    transform: rotate(180deg);
+  }
+}
+
+.ngs-select-panel {
+  background: var(--ngs-select-panel-bg, var(--dropdown-bg));
+  box-shadow: var(--ngs-select-panel-shadow, var(--dropdown-shadow));
+  border-radius: var(--ngs-select-panel-border-radius, var(--dropdown-radius));
+  width: 100%;
+  transform-origin: top;
+  animation: ngs-dropdown-panel-showing 150ms cubic-bezier(0, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  outline: var(--ngs-select-panel-border, var(--dropdown-border));
+
+  &.ngs-select-panel-above {
+    transform-origin: bottom;
+  }
+
+  &:not(:has(.ngs-select-body)) {
+    max-height: var(--ngs-select-panel-max-height, var(--dropdown-max-height, 256px));
+  }
+
+  .ngs-select-header,
+  .ngs-select-footer {
+    display: block;
+    flex: none;
+    z-index: 1;
+  }
+
+  .ngs-select-content {
+    position: relative;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    overflow: auto;
+    max-height: inherit;
+  }
+}

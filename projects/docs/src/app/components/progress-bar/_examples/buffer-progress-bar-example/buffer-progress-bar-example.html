@@ -1,0 +1,11 @@
+<div class="flex flex-col gap-4">
+  <ngs-progress-bar mode="buffer" [value]="value" [bufferValue]="bufferValue"/>
+  <div class="flex gap-2">
+    <span>Value: {{value}}</span>
+    <input type="range" [(ngModel)]="value" min="0" max="100">
+  </div>
+  <div class="flex gap-2">
+    <span>Buffer: {{bufferValue}}</span>
+    <input type="range" [(ngModel)]="ngModelBufferValue" min="0" max="100">
+  </div>
+</div>

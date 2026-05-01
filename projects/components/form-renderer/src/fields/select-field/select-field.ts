@@ -1,0 +1,38 @@
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ComponentConfig } from '../../models/form-config.model';
+import { Error, FormField, Hint, Label } from '@ngstarter/components/form-field';
+import { Option, Select } from '@ngstarter/components/select';
+
+@Component({
+  selector: 'ngs-select-field',
+  exportAs: 'ngsSelectField',
+  imports: [
+    Error,
+    Hint,
+    Option,
+    Select,
+    Label,
+    FormField,
+    ReactiveFormsModule
+  ],
+  templateUrl: './select-field.html',
+  styleUrl: './select-field.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class SelectField {
+  control = input.required<FormControl>();
+  config = input.required<ComponentConfig>();
+
+  getErrorMessage(): string {
+    const errors = this.control().errors;
+    if (!errors) return '';
+    const errorKey = Object.keys(errors)[0];
+    const validator = this.config().validators?.find((v: any) => v.type === errorKey);
+    return validator?.message || 'Invalid value';
+  }
+
+  get options() {
+    return this.config()?.payload?.['options'] || [];
+  }
+}

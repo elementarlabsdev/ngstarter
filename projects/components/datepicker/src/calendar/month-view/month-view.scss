@@ -1,0 +1,86 @@
+@reference 'tailwindcss';
+@reference '../../../../styles/_common.scss';
+
+:host {
+  display: block;
+  height: 100%;
+  min-height: calc(var(--ngs-calendar-cell-size) * 6 + --spacing(2));
+
+  .ngs-calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    th {
+      padding: 8px 0;
+      font-size: theme(--text-tiny);
+      color: var(--color-on-surface-variant);
+      text-align: center;
+    }
+  }
+
+  .ngs-calendar-cell {
+    width: var(--ngs-calendar-cell-size);
+    height: var(--ngs-calendar-cell-size);
+    border-radius: var(--ngs-calendar-cell-radius);
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    box-sizing: border-box;
+
+    &.ngs-calendar-cell-selected {
+      background: var(--ngs-calendar-cell-selected-bg);
+      color: var(--ngs-calendar-cell-selected-color);
+      z-index: 1;
+    }
+
+    &.ngs-calendar-cell-in-range {
+      background: var(--ngs-calendar-cell-in-range-bg);
+      border-radius: 0;
+    }
+
+    &.ngs-calendar-cell-range-start {
+      border-top-left-radius: var(--ngs-calendar-cell-radius);
+      border-bottom-left-radius: var(--ngs-calendar-cell-radius);
+      background: var(--ngs-calendar-cell-selected-bg);
+      color: var(--ngs-calendar-cell-selected-color);
+      z-index: 1;
+    }
+
+    &.ngs-calendar-cell-range-end {
+      border-top-right-radius: var(--ngs-calendar-cell-radius);
+      border-bottom-right-radius: var(--ngs-calendar-cell-radius);
+      background: var(--ngs-calendar-cell-selected-bg);
+      color: var(--ngs-calendar-cell-selected-color);
+      z-index: 1;
+    }
+
+    &.ngs-calendar-cell-range-start.ngs-calendar-cell-range-end {
+      border-radius: var(--ngs-calendar-cell-radius);
+    }
+
+    &:not(.ngs-calendar-cell-empty):not(.ngs-calendar-cell-selected):not(.ngs-calendar-cell-range-start):not(.ngs-calendar-cell-range-end):hover {
+      background: var(--ngs-calendar-cell-hover-bg);
+    }
+  }
+
+  .ngs-calendar-cell-empty {
+    cursor: default;
+  }
+
+  .ngs-calendar-cell-today {
+    z-index: 1;
+
+    .ngs-calendar-cell-content {
+      outline: var(--ngs-calendar-cell-today-border);
+      border-radius: inherit;
+    }
+  }
+
+  .ngs-calendar-cell-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+}

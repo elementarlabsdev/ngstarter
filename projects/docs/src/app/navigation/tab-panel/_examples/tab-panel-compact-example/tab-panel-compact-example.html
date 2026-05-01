@@ -1,0 +1,142 @@
+<div class="flex gap-10">
+  <ngs-tab-panel activeItemId="dashboard" compact class="h-[600px]">
+    <ngs-tab-panel-header>
+      <ngs-tab-panel-nav>
+        <ngs-tab-panel-item for="dashboard" ngsTooltip="Dashboard" ngsTooltipPosition="after">
+          <ngs-icon name="fluent:home-24-regular" ngsTabPanelItemIcon />
+        </ngs-tab-panel-item>
+        <ngs-tab-panel-item for="projects" ngsTooltip="Projects" ngsTooltipPosition="after">
+          <ngs-icon name="fluent:board-24-regular" ngsTabPanelItemIcon />
+        </ngs-tab-panel-item>
+        <ngs-tab-panel-item for="my-assets" ngsTooltip="My Assets" ngsTooltipPosition="after">
+          <ngs-icon name="fluent:folder-24-regular" ngsTabPanelItemIcon />
+        </ngs-tab-panel-item>
+      </ngs-tab-panel-nav>
+    </ngs-tab-panel-header>
+    <ngs-tab-panel-content>
+      <ngs-divider class="mx-2.5 my-3"/>
+      <div class="h-full flex flex-col justify-center items-center">
+        <ngs-tab-panel-nav>
+          <ngs-tab-panel-custom-item for="workspace1" ngsTooltip="Workspace 1" ngsTooltipPosition="after">
+            <ngs-avatar label="am" class="size-full rounded-xl" automaticColor="#bfdbfe" />
+          </ngs-tab-panel-custom-item>
+          <ngs-tab-panel-custom-item for="workspace2" ngsTooltip="Workspace 2" ngsTooltipPosition="after">
+            <ngs-avatar label="rv" class="size-full rounded-xl" automaticColor="#a7f3d0" />
+          </ngs-tab-panel-custom-item>
+          <ngs-tab-panel-custom-item ngsTooltip="Add Workspace" ngsTooltipPosition="after"
+                                     class="size-full rounded-xl border border-muted  border-dashed
+                                          hover:border-neutral-400 dark:hover:border-neutral-500 group">
+            <ngs-icon name="fluent:add-24-regular" class="group-hover:text-primary" />
+          </ngs-tab-panel-custom-item>
+        </ngs-tab-panel-nav>
+      </div>
+    </ngs-tab-panel-content>
+    <ngs-tab-panel-footer>
+      <ngs-divider class="mx-2.5 my-3"/>
+      <div class="flex flex-col items-center gap-3">
+        <ngs-tab-panel-nav>
+          <ngs-tab-panel-item for="account" ngsTooltip="Account" ngsTooltipPosition="after">
+            <ngs-icon name="fluent:person-24-regular" ngsTabPanelItemIcon />
+          </ngs-tab-panel-item>
+          <ngs-tab-panel-item for="settings" ngsTooltip="Settings" ngsTooltipPosition="after">
+            <ngs-icon name="fluent:settings-24-regular" ngsTabPanelItemIcon />
+          </ngs-tab-panel-item>
+        </ngs-tab-panel-nav>
+        <ngs-avatar label="PS" class="size-9"/>
+      </div>
+    </ngs-tab-panel-footer>
+    <ngs-tab-panel-aside class="bg-surface-container-low rounded-xl">
+      <ng-template ngsTabPanelAsideContent="dashboard">
+        <div class="p-5">Dashboard content</div>
+      </ng-template>
+      <ng-template ngsTabPanelAsideContent="projects">
+        <div class="p-5">Projects content</div>
+      </ng-template>
+      <ng-template ngsTabPanelAsideContent="my-assets">
+        <div class="p-5">My assets content</div>
+      </ng-template>
+      <ng-template ngsTabPanelAsideContent="account">
+        <div class="p-5">Account</div>
+      </ng-template>
+      <ng-template ngsTabPanelAsideContent="settings">
+        <div class="p-5">Settings</div>
+      </ng-template>
+      <ng-template ngsTabPanelAsideContent="workspace1">
+        <div class="p-5">Workspace 1</div>
+      </ng-template>
+      <ng-template ngsTabPanelAsideContent="workspace2">
+        <div class="p-5">Workspace 2</div>
+      </ng-template>
+    </ngs-tab-panel-aside>
+  </ngs-tab-panel>
+  <ngs-tab-panel activeItemId="dashboard" compact class="h-[600px] bg-surface-container-low rounded-xl">
+    <ngs-tab-panel-header class="pt-2.5">
+      <ngs-tab-panel-nav>
+        <ngs-tab-panel-item for="dashboard" ngsTooltip="Dashboard" ngsTooltipPosition="after">
+          <ngs-icon name="fluent:home-24-regular" ngsTabPanelItemIcon />
+        </ngs-tab-panel-item>
+        <ngs-tab-panel-item for="projects" ngsTooltip="Projects" ngsTooltipPosition="after">
+          <ngs-icon name="fluent:board-24-regular" ngsTabPanelItemIcon />
+        </ngs-tab-panel-item>
+        <ngs-tab-panel-item for="my-assets" ngsTooltip="My Assets" ngsTooltipPosition="after">
+          <ngs-icon name="fluent:folder-24-regular" ngsTabPanelItemIcon />
+        </ngs-tab-panel-item>
+      </ngs-tab-panel-nav>
+    </ngs-tab-panel-header>
+    <ngs-tab-panel-content>
+      <ngs-divider class="mx-2.5 my-3"/>
+      <div class="h-full flex flex-col justify-center items-center">
+        <ngs-tab-panel-nav>
+          <ngs-tab-panel-custom-item for="workspace1" ngsTooltip="Workspace 1" ngsTooltipPosition="after">
+            <ngs-avatar label="am" class="size-full rounded-xl" automaticColor="#bfdbfe" />
+          </ngs-tab-panel-custom-item>
+          <ngs-tab-panel-custom-item for="workspace2" ngsTooltip="Workspace 2" ngsTooltipPosition="after">
+            <ngs-avatar label="rv" class="size-full rounded-xl" automaticColor="#a7f3d0" />
+          </ngs-tab-panel-custom-item>
+          <ngs-tab-panel-custom-item ngsTooltip="Add Workspace" ngsTooltipPosition="after"
+                                     class="size-full rounded-xl border border-muted  border-dashed
+                                          hover:border-neutral-400 dark:hover:border-neutral-500 group">
+            <ngs-icon name="fluent:add-24-regular" class="group-hover:text-primary" />
+          </ngs-tab-panel-custom-item>
+        </ngs-tab-panel-nav>
+      </div>
+    </ngs-tab-panel-content>
+    <ngs-tab-panel-footer class="mb-2.5">
+      <ngs-divider class="mx-2.5 my-3"/>
+      <div class="flex flex-col items-center gap-3">
+        <ngs-tab-panel-nav>
+          <ngs-tab-panel-item for="account" ngsTooltip="Account" ngsTooltipPosition="after">
+            <ngs-icon name="fluent:person-24-regular" ngsTabPanelItemIcon />
+          </ngs-tab-panel-item>
+          <ngs-tab-panel-item for="settings" ngsTooltip="Settings" ngsTooltipPosition="after">
+            <ngs-icon name="fluent:settings-24-regular" ngsTabPanelItemIcon />
+          </ngs-tab-panel-item>
+        </ngs-tab-panel-nav>
+        <ngs-avatar label="PS" class="size-9"/>
+      </div>
+    </ngs-tab-panel-footer>
+    <ngs-tab-panel-aside class="border-l border-l-subtle">
+      <ng-template ngsTabPanelAsideContent="dashboard">
+        <div class="p-5">Dashboard content</div>
+      </ng-template>
+      <ng-template ngsTabPanelAsideContent="projects">
+        <div class="p-5">Projects content</div>
+      </ng-template>
+      <ng-template ngsTabPanelAsideContent="my-assets">
+        <div class="p-5">My assets content</div>
+      </ng-template>
+      <ng-template ngsTabPanelAsideContent="account">
+        <div class="p-5">Account</div>
+      </ng-template>
+      <ng-template ngsTabPanelAsideContent="settings">
+        <div class="p-5">Settings</div>
+      </ng-template>
+      <ng-template ngsTabPanelAsideContent="workspace1">
+        <div class="p-5">Workspace 1</div>
+      </ng-template>
+      <ng-template ngsTabPanelAsideContent="workspace2">
+        <div class="p-5">Workspace 2</div>
+      </ng-template>
+    </ngs-tab-panel-aside>
+  </ngs-tab-panel>
+</div>

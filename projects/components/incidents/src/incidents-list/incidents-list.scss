@@ -1,0 +1,47 @@
+@reference 'tailwindcss';
+
+:host {
+  background: var(--ngs-incidents-list-bg);
+  transition: transform .15s, opacity .15s;
+  display: grid;
+  height: 0;
+  opacity: 0;
+  grid-gap: 25px;
+  grid-template-columns: auto minmax(1px, max-content) auto;
+  grid-template-areas: ". content .";
+  transform-origin: top;
+  overflow: hidden;
+  transform: scaleY(0);
+
+  &:not(:empty) {
+    padding: var(--ngs-incidents-list-padding);
+  }
+
+  .container {
+    display: grid;
+    height: min-content;
+    grid-area: content;
+    grid-row-gap: var(--ngs-incidents-list-gap);
+    grid-auto-flow: row;
+  }
+}
+
+:host(.is-fixed) {
+  position: absolute;
+  z-index: 102;
+  left: 0;
+  right: 0;
+  top: calc(var(--ngs-incidents-bar-height));
+  bottom: 0;
+}
+
+:host-context(.ngs-incidents.is-visible) {
+  height: calc(100% - var(--ngs-incidents-bar-height));
+  transform: scaleY(1);
+  opacity: 1;
+  overflow-y: auto;
+
+  &.is-fixed {
+    height: calc(100vh - var(--ngs-incidents-bar-height));
+  }
+}

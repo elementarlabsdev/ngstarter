@@ -1,0 +1,34 @@
+@reference 'tailwindcss';
+
+:host {
+  .list {
+    @apply ps-4 flex flex-col gap-2 outline-none;
+
+    .list {
+      @apply mt-2 ps-4;
+    }
+  }
+
+  &.list-ordered {
+    .list {
+      list-style-type: decimal;
+    }
+  }
+
+  &.list-bullet {
+    .list {
+      list-style-type: disc;
+    }
+  }
+
+  .list-item-content {
+    @apply outline-none;
+
+    &:empty {
+      &:before {
+        content: attr(data-empty-placeholder);
+        color: var(--color-neutral-500);
+      }
+    }
+  }
+}

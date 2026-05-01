@@ -1,0 +1,16 @@
+<div class="ngs-sort-header-container"
+     [class.ngs-sort-header-sorted]="_isSorted()">
+  <div class="ngs-sort-header-button relative"
+          [attr.aria-label]="sortActionDescription()"
+          (click)="_handleClick()">
+    <ng-content />
+    <div class="ngs-sort-header-arrow"
+         [class.ngs-sort-header-arrow-asc]="_getArrowState() === 'asc' || (!_isDisabled() && _getArrowState() === 'void' && _getNextSortDirection() === 'asc')"
+         [class.ngs-sort-header-arrow-desc]="_getArrowState() === 'desc' || (!_isDisabled() && _getArrowState() === 'void' && _getNextSortDirection() === 'desc')"
+         [class.ngs-sort-header-arrow-hint]="_getArrowState() === 'void' && !_isDisabled()">
+      <svg viewBox="0 0 24 24" focusable="false" class="ngs-sort-header-arrow-svg">
+        <path d="M7 10l5 5 5-5z"/>
+      </svg>
+    </div>
+  </div>
+</div>

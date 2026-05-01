@@ -1,0 +1,31 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-screen-loader-bg: var(--color-background);
+
+  opacity: 0;
+  position: fixed;
+  inset: 0;
+  z-index: -9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: var(--ngs-screen-loader-bg);
+
+  &.is-opened {
+    z-index: 9999;
+    opacity: 1;
+  }
+
+  .message {
+    max-width: 600px;
+    line-height: var(--leading-snug);
+    text-align: center;
+  }
+
+  .progress-bar {
+    width: --spacing(64);
+    margin-top: --spacing(5);
+  }
+}

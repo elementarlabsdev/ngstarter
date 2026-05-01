@@ -1,0 +1,16 @@
+@if (mode() === 'buffer') {
+  <div class="ngs-progress-bar-track"></div>
+  <div class="ngs-progress-bar-buffer-bar" [style.transform]="bufferBarTransform()"></div>
+} @else {
+  <div class="ngs-progress-bar-track"></div>
+}
+
+<div class="ngs-progress-bar-primary-bar" [style.transform]="primaryBarTransform()">
+  <span class="ngs-progress-bar-inner"></span>
+</div>
+
+@if (isIndeterminate()) {
+  <div class="ngs-progress-bar-secondary-bar">
+    <span class="ngs-progress-bar-inner"></span>
+  </div>
+}

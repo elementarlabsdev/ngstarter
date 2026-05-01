@@ -1,0 +1,37 @@
+@reference 'tailwindcss';
+
+:host {
+  width: 100%;
+  height: var(--ngs-incidents-bar-height);
+  background: var(--ngs-incidents-bar-bg);
+  color: var(--ngs-incidents-bar-color);
+  box-shadow: var(--ngs-incidents-bar-box-shadow);
+  align-items: center;
+  justify-content: space-between;
+  flex: none;
+  cursor: pointer;
+  display: flex;
+  grid-gap: 25px;
+  user-select: none;
+  padding: var(--ngs-incidents-bar-padding);
+}
+
+:host(:hover) {
+  box-shadow: var(--ngs-incidents-bar-hover-box-shadow);
+}
+
+:host .container {
+  display: flex;
+  height: 100%;
+  grid-area: content;
+  align-items: center;
+}
+
+:host .toggle-icon {
+  line-height: 0;
+  transition: transform .2s ease;
+}
+
+:host-context(.ngs-incidents.is-visible) .toggle-icon {
+  transform: rotate(-180deg);
+}

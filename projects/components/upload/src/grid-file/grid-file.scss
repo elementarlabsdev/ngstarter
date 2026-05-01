@@ -1,0 +1,54 @@
+@reference 'tailwindcss';
+@reference '../../../styles/_common.scss';
+
+:host {
+  --ngs-file-padding: --spacing(3) --spacing(2) --spacing(3) --spacing(3);
+  --ngs-file-gap: --spacing(4);
+  --ngs-file-border-radius: theme(--radius-2xl);
+  --ngs-file-bg: var(--color-surface-container);
+  --ngs-file-error-bg: var(--color-error-container-low);
+  --ngs-file-controls-gap: --spacing(1);
+  --ngs-file-error-font-size: theme(--text-xs);
+  --ngs-file-error-color: var(--color-error);
+
+  display: flex;
+  min-width: 240px;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  padding: var(--ngs-file-padding);
+  gap: var(--ngs-file-gap);
+  border-radius: var(--ngs-file-border-radius);
+  background: var(--ngs-file-bg);
+
+  .icon {
+    &:empty {
+      display: none;
+    }
+
+    width: 32px;
+    max-height: 40px;
+  }
+
+  .controls {
+    display: flex;
+    gap: var(--ngs-file-controls-gap);
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .error {
+    font-size: var(--ngs-file-error-font-size);
+    color: var(--ngs-file-error-color);
+    position: absolute;
+    bottom: 0;
+    transform: translateY(100%);
+    left: --spacing(2);
+  }
+
+  &.has-error {
+    background: var(--ngs-file-error-bg);
+  }
+}

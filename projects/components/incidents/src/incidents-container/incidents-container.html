@@ -1,0 +1,23 @@
+@if (hasIncidents()) {
+  <ngs-incidents>
+    <ngs-incidents-bar>
+      <ngs-incidents-title>{{ title() }}</ngs-incidents-title>
+      @if (description()) {
+        <ngs-incidents-description>{{ description() }}</ngs-incidents-description>
+      }
+      <ngs-icon name="fluent:chevron-down-24-regular" ngsIncidentsToggleIcon/>
+    </ngs-incidents-bar>
+    <ngs-incidents-list fixed>
+      @for (incident of incidents(); track incident) {
+        <ngs-incident>
+          <ngs-icon name="fluent:info-24-regular" ngsIncidentIcon/>
+          <ngs-icon name="fluent:dismiss-24-regular" ngsIncidentClose/>
+          <ngs-incident-title>{{ incident.title }}</ngs-incident-title>
+          @if (incident.details) {
+            <ngs-incident-details>{{ incident.details }}</ngs-incident-details>
+          }
+        </ngs-incident>
+      }
+    </ngs-incidents-list>
+  </ngs-incidents>
+}

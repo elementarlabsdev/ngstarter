@@ -1,0 +1,6 @@
+@reference 'tailwindcss';
+
+:host {
+  overflow: auto;
+  position: relative;
+}

@@ -1,0 +1,108 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-emoji-picker-border: none;
+  --ngs-emoji-picker-shadow: var(--dropdown-shadow);
+  --ngs-emoji-picker-border-radius: var(--dropdown-radius);
+  --ngs-emoji-picker-bg: var(--dropdown-bg);
+  --ngs-emoji-picker-margin: --spacing(2.5);
+  --ngs-emoji-picker-list-width: 278px;
+  --ngs-emoji-picker-list-height: 260px;
+
+  display: block;
+  width: var(--ngs-emoji-picker-list-width);
+  background: var(--ngs-emoji-picker-bg);
+  border-radius: var(--ngs-emoji-picker-border-radius);
+  border: var(--ngs-emoji-picker-border);
+  box-shadow: var(--ngs-emoji-picker-shadow);
+  animation: .15s ngs-emoji-picker-animation;
+  margin: var(--ngs-emoji-picker-margin) 0;
+  outline: var(--ngs-menu-border, var(--dropdown-border));
+
+  ngs-skeleton {
+    --ngs-skeleton-from-bg: var(--color-surface-container-high);
+    --ngs-skeleton-to-bg: var(--color-surface-container-highest);
+  }
+
+  .list {
+    padding: --spacing(0) --spacing(2) --spacing(2) --spacing(2);
+    height: var(--ngs-emoji-picker-list-height);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .hovered-emoji {
+    height: --spacing(11);
+    display: flex;
+    padding: 0 --spacing(4);
+    align-items: center;
+    gap: --spacing(3);
+    border-top: 1px solid var(--color-subtle);
+  }
+
+  .emoji-preview {
+    font-size: theme(--text-xl);
+  }
+
+  .emoji-label,
+  .select-message {
+    font-size: theme(--text-xs);
+  }
+
+  .select-message {
+    color: var(--color-neutral-500);
+  }
+
+  dt {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: --spacing(10);
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: theme(--text-sm);
+    background: var(--ngs-emoji-picker-bg);
+  }
+
+  .skeleton-list,
+  .emoji-container {
+    @apply flex flex-wrap;
+  }
+
+  .skeleton-list {
+    @apply gap-2 items-center justify-center;
+  }
+
+  .button {
+    @apply size-9 flex-none rounded-lg cursor-pointer flex items-center justify-center text-2xl;
+
+    &:hover {
+      background: var(--color-surface-container-highest);
+    }
+  }
+
+  .skeleton-button {
+    flex: none;
+  }
+
+  @keyframes ngs-emoji-picker-animation {
+    0% {
+      transform: scale(.9);
+      opacity: 0;
+    }
+
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+}
+
+:host-context(html.dark) {
+  ngs-skeleton {
+    --ngs-skeleton-from-bg: var(--color-surface-container-low);
+    --ngs-skeleton-to-bg: var(--color-surface-container-lowest);
+  }
+}

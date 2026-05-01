@@ -1,0 +1,38 @@
+@if ((showToolbar || toolbarAlwaysVisible()) && (fullView || fullViewMode())) {
+  <div class="toolbar">
+    <ng-content select="ngs-comment-editor-toolbar" />
+  </div>
+}
+<div #content class="content prose dark:prose-invert max-w-full"></div>
+<div class="footer">
+  <div class="flex items-center gap-0.5">
+    <ng-content select="ngs-comment-editor-footer-bar"/>
+  </div>
+  <div class="flex items-center gap-2">
+    @if ((fullView && !fullViewMode()) || cancelButtonAlwaysVisible()) {
+      <button ngsButton (click)="cancel($event)">{{ buttonCancelLabel() }}</button>
+    }
+
+    <button ngsButton="filled" [disabled]="!_value || null" (click)="send($event)">{{ buttonSendLabel() }}</button>
+  </div>
+</div>
+<div #imageBubbleMenu class="ngs-comment-editor-bubble-menu">
+</div>
+<div #bubbleMenu>
+  <ng-content select="ngs-comment-editor-bubble-menu"/>
+</div>
+<!--<div #floatingMenu class="floating-menu">-->
+<!--  @if (editor) {-->
+<!--    <div class="flex items-center gap-1.5">-->
+<!--      <button class="button"-->
+<!--              [disabled]="isCommandDisabled('toggleCodeBlock')"-->
+<!--              [class.active]="editor && editor.isActive('codeBlock')"-->
+<!--              (click)="onButtonClick('toggleCodeBlock')">-->
+<!--        <ngs-icon name="fluent:code-24-regular"/>-->
+<!--      </button>-->
+<!--      <button class="button">-->
+<!--        <ngs-icon name="fluent:image-24-regular"/>-->
+<!--      </button>-->
+<!--    </div>-->
+<!--  }-->
+<!--</div>-->

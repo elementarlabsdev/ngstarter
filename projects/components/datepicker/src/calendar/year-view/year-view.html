@@ -1,0 +1,20 @@
+<table class="ngs-calendar-table">
+  <tbody class="ngs-calendar-table-body">
+    @for (row of months(); track row) {
+      <tr>
+        @for (month of row; track month.index) {
+          <td
+            class="ngs-calendar-cell"
+            [class.ngs-calendar-cell-selected]="month.selected"
+            [class.ngs-calendar-cell-today]="month.current"
+            (click)="selectMonth(month.index)"
+          >
+            <div class="ngs-calendar-cell-content">
+              {{ month.label }}
+            </div>
+          </td>
+        }
+      </tr>
+    }
+  </tbody>
+</table>

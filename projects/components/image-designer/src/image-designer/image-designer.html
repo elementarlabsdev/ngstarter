@@ -1,0 +1,423 @@
+<ngs-panel class="h-full">
+  <ngs-panel-sidebar class="border-r border-border h-full">
+    <ngs-tab-panel hideContentIfTabNotSelected [activeItemId]="activeItemId()" class="h-full">
+      <ngs-tab-panel-content>
+        <ngs-tab-panel-nav>
+          <ngs-tab-panel-item for="text" (click)="activeItemId.set('text')">
+            <ngs-icon name="fluent:text-field-24-regular" ngsTabPanelItemIcon/>
+            <ngs-tab-panel-item-text>Text</ngs-tab-panel-item-text>
+          </ngs-tab-panel-item>
+          <ngs-tab-panel-item for="photos" (click)="activeItemId.set('photos')">
+            <ngs-icon name="fluent:image-copy-24-regular" ngsTabPanelItemIcon/>
+            <ngs-tab-panel-item-text>Photos</ngs-tab-panel-item-text>
+          </ngs-tab-panel-item>
+          <ngs-tab-panel-item for="elements" (click)="activeItemId.set('elements')">
+            <ngs-icon name="fluent:shape-subtract-24-regular" ngsTabPanelItemIcon/>
+            <ngs-tab-panel-item-text>Elements</ngs-tab-panel-item-text>
+          </ngs-tab-panel-item>
+          <ngs-tab-panel-item for="upload" (click)="activeItemId.set('upload')">
+            <ngs-icon name="fluent:arrow-upload-24-regular" ngsTabPanelItemIcon/>
+            <ngs-tab-panel-item-text>Upload</ngs-tab-panel-item-text>
+          </ngs-tab-panel-item>
+          <ngs-tab-panel-item for="background" (click)="activeItemId.set('background')">
+            <ngs-icon name="fluent:grid-dots-24-regular" ngsTabPanelItemIcon/>
+            <ngs-tab-panel-item-text>Background</ngs-tab-panel-item-text>
+          </ngs-tab-panel-item>
+          <ngs-tab-panel-item for="layers" (click)="activeItemId.set('layers')">
+            <ngs-icon name="fluent:layer-24-regular" ngsTabPanelItemIcon/>
+            <ngs-tab-panel-item-text>Layers</ngs-tab-panel-item-text>
+          </ngs-tab-panel-item>
+          <ngs-tab-panel-item for="resize" (click)="activeItemId.set('resize')">
+            <ngs-icon name="fluent:resize-24-regular" ngsTabPanelItemIcon/>
+            <ngs-tab-panel-item-text>Resize</ngs-tab-panel-item-text>
+          </ngs-tab-panel-item>
+        </ngs-tab-panel-nav>
+      </ngs-tab-panel-content>
+      <ngs-tab-panel-aside class="border-s border-border">
+        <ng-template ngsTabPanelAsideContent="text">
+          <ngs-panel>
+            <ngs-panel-header class="border-b border-b-border flex items-center px-4">Text</ngs-panel-header>
+            <ngs-panel-content class="p-4 flex flex-col gap-4">
+              <div class="grid grid-cols-1 gap-4 mt-2">
+                <button (click)="addHeader()"
+                        draggable="true"
+                        (dragstart)="onTextDragStart($event, 'header')"
+                        class="w-full text-left p-4 border border-border rounded-lg hover:bg-surface-container transition-colors">
+                  <div class="text-3xl font-bold pointer-events-none">Add a heading</div>
+                </button>
+                <button (click)="addSubheader()"
+                        draggable="true"
+                        (dragstart)="onTextDragStart($event, 'subheader')"
+                        class="w-full text-left p-3 border border-border rounded-lg hover:bg-surface-container transition-colors">
+                  <div class="text-xl font-semibold pointer-events-none">Add a subheading</div>
+                </button>
+                <button (click)="addBodyText()"
+                        draggable="true"
+                        (dragstart)="onTextDragStart($event, 'body')"
+                        class="w-full text-left p-2 border border-border rounded-lg hover:bg-surface-container transition-colors">
+                  <div class="text-base pointer-events-none">Add body text</div>
+                </button>
+              </div>
+            </ngs-panel-content>
+          </ngs-panel>
+        </ng-template>
+        <ng-template ngsTabPanelAsideContent="photos">
+          <ngs-panel class="h-full flex flex-col">
+            <ngs-panel-header class="border-b border-b-border flex items-center px-4">
+<!--              <ngs-form-field class="w-full" subscriptHiddenIfEmpty>-->
+<!--                <ngs-icon name="fluent:search-24-regular" ngsIconPrefix/>-->
+<!--                <input type="text"-->
+<!--                       ngsInput-->
+<!--                       placeholder="Search photos"-->
+<!--                       [ngModel]="photosFilter()"-->
+<!--                       (ngModelChange)="photosFilter.set($event)"/>-->
+<!--              </ngs-form-field>-->
+              Photos
+            </ngs-panel-header>
+            <ngs-panel-content class="relative flex-1 p-0 overflow-hidden">
+              <ngs-scrollbar-area (scrolled)="onPhotosScroll($event)" class="h-full">
+                <div class="p-4">
+                    <div class="masonry-grid">
+                      @for (photo of photos(); track photo.id) {
+                        <button (click)="addImage(photo)"
+                                draggable="true"
+                                (dragstart)="onImageDragStart($event, photo)"
+                                [style.aspect-ratio]="photo.width + '/' + photo.height"
+                                class="border border-border rounded-lg overflow-hidden hover:ring-2 hover:ring-primary transition-all bg-surface-container">
+                          <img [src]="photo.thumbUrl || photo.url"
+                               [alt]="photo.name"
+                               class="w-full h-auto block pointer-events-none"/>
+                        </button>
+                      }
+                    </div>
+                  @if (isLoadingPhotos()) {
+                    <div class="flex justify-center p-4">
+                      <ngs-progress-spinner diameter="32"/>
+                    </div>
+                  }
+                  @if (photos().length === 0 && !isLoadingPhotos()) {
+                    <div class="text-center p-4 text-sm text-neutral-500">
+                      No photos found
+                    </div>
+                  }
+                </div>
+              </ngs-scrollbar-area>
+            </ngs-panel-content>
+          </ngs-panel>
+        </ng-template>
+        <ng-template ngsTabPanelAsideContent="elements">
+          <ngs-panel>
+            <ngs-panel-header class="border-b border-b-border flex items-center px-4">Elements</ngs-panel-header>
+            <ngs-panel-content class="p-4 overflow-y-auto">
+              <div class="grid grid-cols-3 gap-3">
+                @for (element of elements(); track element.name) {
+                  <button (click)="addShape(element)"
+                          draggable="true"
+                          (dragstart)="onImageDragStart($event, element)"
+                          class="aspect-square p-2 border border-border rounded-lg hover:bg-surface-container
+                                 transition-colors flex items-center justify-center">
+                    <img [src]="element.data" [alt]="element.name"
+                         class="max-w-full max-h-full object-contain pointer-events-none"/>
+                  </button>
+                }
+              </div>
+            </ngs-panel-content>
+          </ngs-panel>
+        </ng-template>
+        <ng-template ngsTabPanelAsideContent="upload">
+          <ngs-panel class="h-full flex flex-col">
+            <ngs-panel-header class="border-b border-b-border flex items-center px-4">
+              <ngs-toolbar>
+                <div>Upload</div>
+                <ngs-toolbar-spacer/>
+                <button ngsButton="filled"
+                        ngsUploadTrigger
+                        [accept]="'image/*'"
+                        (fileSelected)="onFileSelected($event)"
+                        [loading]="isUploading()">
+                  <ngs-icon name="fluent:arrow-upload-24-regular"/>
+                  Add Image
+                </button>
+              </ngs-toolbar>
+            </ngs-panel-header>
+            <ngs-panel-content>
+              @if (uploadedImages().length > 0 || assets().length > 0) {
+                <ngs-scrollbar-area (scrolled)="onAssetsScroll($event)">
+                  <div class="p-4 flex flex-col gap-4 min-h-full">
+                    @if (isUploading() || uploadPreview()) {
+                      <div class="relative aspect-video border border-border rounded-lg overflow-hidden bg-surface-container">
+                        @if (uploadPreview()) {
+                          <img [src]="uploadPreview()" class="w-full h-full object-contain" alt="Preview"/>
+                        }
+                        @if (isUploading()) {
+                          <div class="absolute inset-0 bg-black/20 flex items-center justify-center backdrop-blur-[2px]">
+                            <div class="flex flex-col items-center gap-2">
+                              <ngs-progress-spinner diameter="32" color="white"/>
+                              <span class="text-xs font-medium text-white">Uploading...</span>
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    }
+
+                    @if (uploadedImages().length > 0) {
+                      <div class="flex flex-col gap-2">
+                        <div class="text-sm font-semibold">Your Uploads</div>
+                        <div class="masonry-grid">
+                          @for (photo of uploadedImages(); track $index) {
+                            <button (click)="addUploadedImage(photo)"
+                                    draggable="true"
+                                    (dragstart)="onImageDragStart($event, photo)"
+                                    [style.aspect-ratio]="photo.width + '/' + photo.height"
+                                    class="border border-border rounded-lg overflow-hidden hover:ring-2
+                                hover:ring-primary transition-all bg-surface-container">
+                              <img [src]="photo.url" class="w-full h-auto block pointer-events-none" alt="Uploaded image"/>
+                            </button>
+                          }
+                        </div>
+                      </div>
+                    }
+
+                    @if (assets().length > 0) {
+                      <div class="flex flex-col gap-2">
+                        <div class="text-sm font-semibold">Assets</div>
+                        <div class="masonry-grid">
+                          @for (asset of assets(); track asset.id) {
+                            <button (click)="addImage(asset)"
+                                    draggable="true"
+                                    (dragstart)="onImageDragStart($event, asset)"
+                                    [style.aspect-ratio]="asset.width + '/' + asset.height"
+                                    class="border border-border rounded-lg overflow-hidden hover:ring-2
+                                hover:ring-primary transition-all bg-surface-container">
+                              <img [src]="asset.thumbUrl || asset.url"
+                                   [alt]="asset.name"
+                                   class="w-full h-auto block pointer-events-none"/>
+                            </button>
+                          }
+                        </div>
+                        @if (isLoadingAssets()) {
+                          <div class="flex justify-center p-4">
+                            <ngs-progress-spinner diameter="32"/>
+                          </div>
+                        }
+                      </div>
+                    }
+                  </div>
+                </ngs-scrollbar-area>
+              }
+
+              @if (uploadedImages().length === 0 && assets().length === 0 && !isLoadingAssets()) {
+                <div class="h-full flex items-center justify-center">
+                  <div class="text-sm text-neutral-500">No images uploaded yet.</div>
+                </div>
+              }
+            </ngs-panel-content>
+          </ngs-panel>
+        </ng-template>
+        <ng-template ngsTabPanelAsideContent="background">
+          <ngs-panel>
+            <ngs-panel-header class="border-b border-b-border flex items-center px-4">Background</ngs-panel-header>
+            <ngs-panel-content>
+              <ngs-tab-group animationDuration="0" class="h-full">
+                <ngs-tab label="Color">
+                  <div class="absolute inset-0">
+                    <ngs-scrollbar-area>
+                      <div class="p-4">
+                        <ngs-accordion [multi]="false">
+                          <ngs-expansion-panel [expanded]="true">
+                            <ngs-expansion-panel-header>
+                              <ngs-expansion-panel-title>Colors</ngs-expansion-panel-title>
+                            </ngs-expansion-panel-header>
+                            <div class="py-2">
+                              <ngs-color-switcher [colors]="presetColors()" (colorChange)="setColor($event)"/>
+                            </div>
+                          </ngs-expansion-panel>
+                          <ngs-expansion-panel>
+                            <ngs-expansion-panel-header>
+                              <ngs-expansion-panel-title>Gradients</ngs-expansion-panel-title>
+                            </ngs-expansion-panel-header>
+                            <div class="grid grid-cols-3 gap-3 py-2">
+                              @for (gradient of presetGradients(); track $index) {
+                                <button (click)="setGradient(gradient)"
+                                        [style.background]="gradient.css"
+                                        class="aspect-[16/6.75] w-full rounded-lg border border-border hover:ring-2 hover:ring-primary transition-all">
+                                </button>
+                              }
+                            </div>
+                          </ngs-expansion-panel>
+                        </ngs-accordion>
+                      </div>
+                    </ngs-scrollbar-area>
+                  </div>
+                </ngs-tab>
+                <ngs-tab label="Patterns">
+                  <div class="absolute inset-0">
+                    <ngs-scrollbar-area>
+                      <div class="p-4">
+                        <div class="grid grid-cols-3 gap-3">
+                          @for (pattern of presetPatterns(); track $index) {
+                            <button (click)="addPattern(pattern)"
+                                    class="aspect-square w-full rounded-lg border border-border hover:ring-2 hover:ring-primary transition-all overflow-hidden">
+                              <img [src]="pattern" class="w-full h-full object-cover" alt="pattern">
+                            </button>
+                          }
+                        </div>
+                      </div>
+                    </ngs-scrollbar-area>
+                  </div>
+                </ngs-tab>
+              </ngs-tab-group>
+            </ngs-panel-content>
+          </ngs-panel>
+        </ng-template>
+        <ng-template ngsTabPanelAsideContent="layers">
+          <ngs-panel>
+            <ngs-panel-header class="border-b border-b-border flex items-center px-4">Layers</ngs-panel-header>
+            <ngs-panel-content>
+              @if (layersFromService().length > 0) {
+                <ngs-list cdkDropList (cdkDropListDropped)="drop($event)">
+                  @for (layer of layersFromService(); track layer.id) {
+                    <ngs-list-item cdkDrag
+                                   cdkDragLockAxis="y"
+                                   [cdkDragStartDelay]="100"
+                                   (click)="selectLayer(layer.id!)"
+                                   [class.is-active]="selectedLayerId() === layer.id"
+                                   class="relative group bg-surface">
+                      <ngs-icon [name]="getLayerIcon(layer.type)" ngsListItemIcon/>
+                      <div ngsListItemLine>
+                        {{ layer.name || layer.type }}
+                        <!--                      {{ layer.text || '' }}-->
+                      </div>
+                      <div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center">
+                        <button ngsIconButton (click)="toggleLayerVisibility(layer.id!, $event)">
+                          <ngs-icon
+                            [name]="layer.visible === false ? 'fluent:eye-off-24-regular' : 'fluent:eye-24-regular'"/>
+                        </button>
+                        <button ngsIconButton (click)="toggleLayerLock(layer.id!, $event)">
+                          <ngs-icon
+                            [name]="layer.locked ? 'fluent:lock-closed-24-regular' : 'fluent:lock-open-24-regular'"
+                            class="size-5"/>
+                        </button>
+                        <button ngsIconButton (click)="deleteLayer(layer.id!, $event)" [disabled]="layer.locked">
+                          <ngs-icon name="fluent:delete-24-regular" class="size-5"/>
+                        </button>
+                      </div>
+
+                      <div *cdkDragPlaceholder
+                           class="min-h-[var(--ngs-list-item-min-height)] bg-surface-container"></div>
+                    </ngs-list-item>
+                  }
+                </ngs-list>
+              } @else {
+                <div class="text-sm p-4 h-full flex items-center justify-center">No layers available</div>
+              }
+            </ngs-panel-content>
+          </ngs-panel>
+        </ng-template>
+        <ng-template ngsTabPanelAsideContent="resize">
+          <ngs-panel>
+            <ngs-panel-header class="border-b border-b-border flex items-center px-4">Resize</ngs-panel-header>
+            <ngs-panel-content>
+              <ngs-scrollbar-area>
+                <div class="p-4 flex flex-col gap-4">
+                  <div class="flex flex-col gap-4">
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>Width (px)</ngs-label>
+                      <input ngsInput type="number" [(ngModel)]="resizeWidth">
+                    </ngs-form-field>
+
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>Height (px)</ngs-label>
+                      <input ngsInput type="number" [(ngModel)]="resizeHeight">
+                    </ngs-form-field>
+
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>Units</ngs-label>
+                      <ngs-select [(ngModel)]="resizeUnit">
+                        <ngs-option value="px">px</ngs-option>
+                      </ngs-select>
+                    </ngs-form-field>
+
+                    <button ngsButton="filled" fullWidth (click)="applyResize()">Resize</button>
+                  </div>
+
+                  <div class="flex flex-col gap-6 mt-2">
+                    @for (category of presetCategories(); track category.name) {
+                      <div class="flex flex-col gap-3">
+                        <div class="flex items-center gap-2 font-semibold text-sm">
+                          <ngs-icon [name]="category.icon" class="size-5"/>
+                          {{ category.name }}
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-3">
+                          @for (preset of category.presets; track preset.name) {
+                            <button (click)="selectPreset(preset)"
+                                    class="flex flex-col items-center gap-1 p-2 rounded-lg border border-border hover:bg-surface-container transition-colors text-center">
+                              <ngs-icon [name]="preset.icon" class="size-6 mb-1"/>
+                              <span class="text-xs font-medium truncate w-full">{{ preset.name }}</span>
+                              <span class="text-[10px] text-muted-foreground whitespace-nowrap">{{ preset.width }}×{{ preset.height }} px</span>
+                            </button>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </ngs-scrollbar-area>
+            </ngs-panel-content>
+          </ngs-panel>
+        </ng-template>
+
+        @if (effectsPortal()) {
+          <div class="absolute inset-0 z-20 bg-surface-container-lowest">
+            <ng-container [cdkPortalOutlet]="effectsPortal()"/>
+          </div>
+        }
+      </ngs-tab-panel-aside>
+    </ngs-tab-panel>
+  </ngs-panel-sidebar>
+  <ngs-panel-content class="h-full">
+    <ngs-panel class="h-full">
+      <ngs-panel-header>
+        <ngs-toolbar class="h-full px-3 border-b border-border">
+          <button ngsIconButton (click)="toggleAside()">
+            <ngs-icon name="fluent:navigation-24-regular"/>
+          </button>
+          <ngs-toolbar-title>{{ title() }}</ngs-toolbar-title>
+          <ngs-toolbar-spacer/>
+          <div class="flex items-center gap-2">
+            <button ngsIconButton (click)="zoomOut()">
+              <ngs-icon name="fluent:zoom-out-24-regular"/>
+            </button>
+            <span class="text-sm font-medium w-12 text-center">{{ zoomPercentage() }}%</span>
+            <button ngsIconButton (click)="zoomIn()">
+              <ngs-icon name="fluent:zoom-in-24-regular"/>
+            </button>
+          </div>
+          <ngs-toolbar-spacer/>
+          <div class="flex">
+            <button ngsIconButton (click)="undo()" [disabled]="!designerService.canUndo()">
+              <ngs-icon name="fluent:arrow-hook-up-left-24-regular"/>
+            </button>
+            <button ngsIconButton (click)="redo()" [disabled]="!designerService.canRedo()">
+              <ngs-icon name="fluent:arrow-hook-up-right-24-regular"/>
+            </button>
+          </div>
+          @if (showDownloadButton()) {
+            <ngs-divider vertical/>
+            <button ngsButton="filled" (click)="download()" class="mr-2">Download</button>
+          }
+        </ngs-toolbar>
+      </ngs-panel-header>
+      <ngs-panel-content class="bg-surface-container overflow-hidden h-full relative" (wheel)="onWheel($event)"
+                      (mousedown)="canvasContainer.focus()"
+                      (dragover)="onDragOver($event)"
+                      (drop)="onDrop($event)">
+        @if (settingsPortal()) {
+          <ng-container [cdkPortalOutlet]="settingsPortal()"/>
+        }
+        <div #canvasContainer class="w-full h-full outline-none" tabindex="0" (contextmenu)="$event.preventDefault()"></div>
+      </ngs-panel-content>
+    </ngs-panel>
+  </ngs-panel-content>
+</ngs-panel>

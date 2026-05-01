@@ -1,0 +1,37 @@
+<button ngsButton="tonal" (click)="isLinear = !isLinear" id="toggle-linear" class="mb-6">
+  {{ !isLinear ? 'Enable linear mode' : 'Disable linear mode' }}
+</button>
+<ngs-stepper [linear]="isLinear" #stepper>
+  <ngs-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template ngsStepLabel>Fill out your name</ng-template>
+      <ngs-form-field class="w-1/2 mt-2">
+        <ngs-label>Name</ngs-label>
+        <input ngsInput placeholder="Last name, First name" formControlName="firstCtrl" required>
+      </ngs-form-field>
+      <div>
+        <button ngsButton="filled" ngsStepperNext>Next</button>
+      </div>
+    </form>
+  </ngs-step>
+  <ngs-step [stepControl]="secondFormGroup" label="Fill out your address">
+    <form [formGroup]="secondFormGroup">
+      <ngs-form-field class="w-1/2 mt-2">
+        <ngs-label>Address</ngs-label>
+        <input ngsInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
+      </ngs-form-field>
+      <div class="flex gap-3">
+        <button ngsButton="outlined" ngsStepperPrevious>Back</button>
+        <button ngsButton="filled" ngsStepperNext>Next</button>
+      </div>
+    </form>
+  </ngs-step>
+  <ngs-step>
+    <ng-template ngsStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div class="flex gap-3">
+      <button ngsButton="outlined" ngsStepperPrevious>Back</button>
+      <button ngsButton="filled" (click)="stepper.reset()">Reset</button>
+    </div>
+  </ngs-step>
+</ngs-stepper>

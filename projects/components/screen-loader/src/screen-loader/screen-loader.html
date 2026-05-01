@@ -1,0 +1,14 @@
+<div class="message">
+  @if (message(); as msg) {
+    @if (isTemplateRef(msg)) {
+      <ng-container *ngTemplateOutlet="msg" />
+    } @else {
+      {{ msg }}
+    }
+  } @else {
+    <ng-content/>
+  }
+</div>
+<div class="progress-bar">
+  <ngs-progress-bar mode="indeterminate"/>
+</div>

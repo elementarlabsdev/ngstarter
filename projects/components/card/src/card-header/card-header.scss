@@ -1,0 +1,19 @@
+@reference 'tailwindcss';
+
+:host {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ngs-card-padding, --spacing(3));
+  gap: --spacing(3);
+  flex: none;
+
+  .aside {
+    &:empty {
+      display: none;
+    }
+
+    flex: none;
+  }
+}

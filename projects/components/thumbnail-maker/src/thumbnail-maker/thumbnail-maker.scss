@@ -1,0 +1,64 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-thumbnail-width: 720px;
+  --ngs-thumbnail-height: 460px;
+
+  display: block;
+  width: max-content;
+  overflow: hidden;
+  position: relative;
+
+  .content {
+    display: flex;
+    width: var(--ngs-thumbnail-width);
+    height: var(--ngs-thumbnail-height);
+    mask-image: radial-gradient(circle, black 150px, rgba(0, 0, 0, 0.5) 150px);
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    line-height: 1;
+    position: relative;
+    user-select: none;
+  }
+
+  .image {
+    object-fit: fill;
+    max-width: none;
+    max-height: none;
+    line-height: 1;
+    user-select: none;
+    cursor: move;
+  }
+
+  .helper-text {
+    position: absolute;
+    z-index: 1;
+    top: --spacing(5);
+    inset-inline-start: 50%;
+    background: var(--color-neutral-950);
+    color: white;
+    border-radius: theme(--radius-lg);
+    padding: --spacing(2) --spacing(3);
+    font-size: theme(--text-xs);
+    opacity: 90%;
+    width: max-content;
+    display: flex;
+    align-items: center;
+    gap: --spacing(2);
+    transform: translateX(-50%);
+  }
+
+  .controls {
+    margin-top: --spacing(3);
+    margin-bottom: --spacing(3);
+  }
+
+  &.loading {
+    .image {
+      visibility: hidden;
+      position: relative;
+      z-index: -1;
+    }
+  }
+}

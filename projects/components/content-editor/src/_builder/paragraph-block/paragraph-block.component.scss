@@ -1,0 +1,26 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  position: relative;
+
+  p {
+    line-height: var(--leading-normal);
+  }
+
+  .content {
+    outline: none;
+  }
+}
+
+:host-context(.block.is-active),
+:host-context(.block.cdk-focused) {
+  .content {
+    &:empty {
+      &:before {
+        content: attr(data-empty-placeholder);
+        color: var(--color-neutral-500);
+      }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+<div class="phone-input-container">
+  <button
+    type="button"
+    ngsRipple
+    [ngsMenuTriggerFor]="menu"
+    class="country-selector"
+    [disabled]="disabled"
+    (menuOpened)="menuSearchInput()?.nativeElement?.focus()">
+    @if (selectedCountry()) {
+      <ngs-icon [name]="'circle-flags:' + selectedCountry()?.shortCode" class="flag-icon" />
+
+      @if (selectedCountry()?.phoneCode) {
+        <span class="country-selector-code">{{ selectedCountry()?.phoneCode }}</span>
+      }
+    }
+    <ngs-icon name="fluent:chevron-down-24-regular" class="!text-lg text-neutral-500 relative -top-px"/>
+  </button>
+  <input
+    ngsInput
+    type="tel"
+    inputmode="tel"
+    [autocomplete]="autocomplete()"
+    (blur)="onTouched()"
+    (keypress)="onInputKeyPress($event)"
+    [(ngModel)]="phoneNumber"
+    (ngModelChange)="onPhoneNumberChange()"
+    [errorStateMatcher]="errorStateMatcher()"
+    [placeholder]="_placeholder()"
+    [disabled]="disabled"
+    class="grow"
+    #focusable>
+</div>
+<ngs-menu #menu="ngsMenu">
+  @for (country of preferredCountriesInDropDown; track country) {
+    <button type="button" ngs-menu-item (click)="onCountrySelect(country, focusable)">
+      <div class="flex items-center gap-2">
+        <ngs-icon [name]="'circle-flags:' + country.shortCode" class="flag-icon" />
+        <div class="label-wrapper">
+          {{ country.name }}
+          <span [class.whitespace-nowrap]="!searchCriteria" class="text-neutral-500">{{ country.phoneCode }}</span>
+        </div>
+      </div>
+    </button>
+  }
+
+  @if (preferredCountriesInDropDown.length) {
+    <ngs-divider/>
+  }
+
+  @for (country of allCountries | search : searchCriteria; track country) {
+    <button type="button" ngs-menu-item (click)="onCountrySelect(country, focusable)">
+      <div class="flex items-center gap-2">
+        <ngs-icon [name]="'circle-flags:' + country.shortCode" class="flag-icon" />
+        <div>
+          {{ country.name }}
+          <span [class.whitespace-nowrap]="!searchCriteria" class="text-neutral-500">{{ country.phoneCode }}</span>
+        </div>
+      </div>
+    </button>
+  }
+</ngs-menu>

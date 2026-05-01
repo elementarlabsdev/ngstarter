@@ -1,0 +1,170 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-progress-spinner-color: var(--color-primary);
+  --ngs-progress-spinner-animation-multiplier: 1;
+
+  &.ngs-primary {
+    --ngs-progress-spinner-color: var(--color-primary);
+  }
+
+  &.ngs-accent {
+    --ngs-progress-spinner-color: var(--color-secondary);
+  }
+
+  &.ngs-warn {
+    --ngs-progress-spinner-color: var(--color-error);
+  }
+
+  display: block;
+  overflow: hidden;
+  line-height: 0;
+  position: relative;
+  direction: ltr;
+  transition: opacity 250ms cubic-bezier(0.4, 0, 0.6, 1);
+
+  circle {
+    stroke-width: var(--ngs-progress-spinner-active-indicator-width, 4px);
+    fill: rgba(0, 0, 0, 0);
+    stroke: var(--ngs-progress-spinner-color);
+  }
+
+  &.ngs-progress-spinner-determinate {
+    .ngs-circular-progress__determinate-container {
+      opacity: 1;
+    }
+  }
+
+  &.ngs-progress-spinner-indeterminate {
+    .ngs-circular-progress__indeterminate-container {
+      opacity: 1;
+      animation: ngs-circular-progress-container-rotate calc(1568.2352941176ms * var(--ngs-progress-spinner-animation-multiplier)) linear infinite;
+    }
+  }
+
+  .ngs-circular-progress__determinate-container,
+  .ngs-circular-progress__indeterminate-circle-graphic,
+  .ngs-circular-progress__indeterminate-container,
+  .ngs-circular-progress__spinner-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ngs-circular-progress__determinate-container {
+    transform: rotate(-90deg);
+    opacity: 0;
+  }
+
+  .ngs-circular-progress__indeterminate-container {
+    font-size: 0;
+    letter-spacing: 0;
+    white-space: nowrap;
+    opacity: 0;
+  }
+
+  .ngs-circular-progress__determinate-circle {
+    transition: stroke-dashoffset 500ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .ngs-circular-progress__gap-patch {
+    position: absolute;
+    top: 0;
+    left: 47.5%;
+    box-sizing: border-box;
+    width: 5%;
+    height: 100%;
+    overflow: hidden;
+
+    .ngs-circular-progress__indeterminate-circle-graphic {
+      left: -900%;
+      width: 2000%;
+      transform: rotate(180deg);
+    }
+  }
+
+  .ngs-circular-progress__circle-clipper {
+    display: inline-flex;
+    position: relative;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+
+    .ngs-circular-progress__indeterminate-circle-graphic {
+      width: 200%;
+    }
+  }
+
+  .ngs-circular-progress__circle-right .ngs-circular-progress__indeterminate-circle-graphic {
+    left: -100%;
+  }
+
+  .ngs-circular-progress__spinner-layer {
+    animation: ngs-circular-progress-spinner-layer-rotate calc(5332ms * var(--ngs-progress-spinner-animation-multiplier)) cubic-bezier(0.4, 0, 0.2, 1) infinite both;
+  }
+
+  .ngs-circular-progress__circle-left .ngs-circular-progress__indeterminate-circle-graphic {
+    animation: ngs-circular-progress-left-spin calc(1333ms * var(--ngs-progress-spinner-animation-multiplier)) cubic-bezier(0.4, 0, 0.2, 1) infinite both;
+  }
+
+  .ngs-circular-progress__circle-right .ngs-circular-progress__indeterminate-circle-graphic {
+    animation: ngs-circular-progress-right-spin calc(1333ms * var(--ngs-progress-spinner-animation-multiplier)) cubic-bezier(0.4, 0, 0.2, 1) infinite both;
+  }
+}
+
+@keyframes ngs-circular-progress-container-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ngs-circular-progress-spinner-layer-rotate {
+  12.5% {
+    transform: rotate(135deg);
+  }
+  25% {
+    transform: rotate(270deg);
+  }
+  37.5% {
+    transform: rotate(405deg);
+  }
+  50% {
+    transform: rotate(540deg);
+  }
+  62.5% {
+    transform: rotate(675deg);
+  }
+  75% {
+    transform: rotate(810deg);
+  }
+  87.5% {
+    transform: rotate(945deg);
+  }
+  100% {
+    transform: rotate(1080deg);
+  }
+}
+
+@keyframes ngs-circular-progress-left-spin {
+  from {
+    transform: rotate(265deg);
+  }
+  50% {
+    transform: rotate(130deg);
+  }
+  to {
+    transform: rotate(265deg);
+  }
+}
+
+@keyframes ngs-circular-progress-right-spin {
+  from {
+    transform: rotate(-265deg);
+  }
+  50% {
+    transform: rotate(-130deg);
+  }
+  to {
+    transform: rotate(-265deg);
+  }
+}

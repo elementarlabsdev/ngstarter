@@ -1,0 +1,14 @@
+<button type="button"
+        class="ngs-button-toggle-button"
+        [attr.id]="id() + '-button'"
+        [disabled]="isDisabled"
+        [attr.name]="name()"
+        [attr.aria-pressed]="isChecked"
+        (click)="_onButtonClick()">
+  @if (_shouldShowSelectionIndicator) {
+    <ngs-icon name="fluent:checkmark-24-regular" class="ngs-button-toggle-selection-indicator size-5"/>
+  }
+  <span class="ngs-button-toggle-label-content">
+    <ng-content />
+  </span>
+</button>

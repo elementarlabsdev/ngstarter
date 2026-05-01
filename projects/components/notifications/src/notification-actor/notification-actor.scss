@@ -1,0 +1,15 @@
+@reference 'tailwindcss';
+
+:host {
+  display: inline-block;
+  font-weight: 600;
+  color: var(--color-on-surface);
+  font-size: theme(--text-sm);
+
+  &.as-link {
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
+}

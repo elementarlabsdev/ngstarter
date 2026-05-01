@@ -1,0 +1,11 @@
+<div ngsImageResizeHandler direction="right"
+     [maxWidth]="_maxWidth()"
+     [minWidth]="imageMinWidth()"
+     [targetElement]="imageRef().elementRef.nativeElement" class="handler handler-start"
+     (dimensionsChanged)="onDimensionsChanged()"></div>
+<ng-content select="[ngsImageResizerImage]"/>
+<div ngsImageResizeHandler direction="left"
+     [maxWidth]="_maxWidth()"
+     [minWidth]="imageMinWidth()"
+     [targetElement]="imageRef().elementRef.nativeElement" class="handler handler-end"
+     (dimensionsChanged)="onDimensionsChanged()"></div>

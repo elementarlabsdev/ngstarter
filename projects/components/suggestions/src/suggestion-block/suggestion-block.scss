@@ -1,0 +1,21 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .heading {
+    color: var(--ngs-suggestion-block-heading-color);
+    font-size: var(--ngs-suggestion-block-font-size);
+    font-weight: var(--ngs-suggestion-block-font-weight);
+    padding: var(--ngs-suggestion-padding);
+  }
+
+  .content {
+    padding: var(--ngs-suggestion-block-content-padding);
+
+    &.is-inline {
+      display: flex;
+      gap: --spacing(3);
+    }
+  }
+}

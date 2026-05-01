@@ -1,0 +1,36 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-action-required-bg: linear-gradient(135deg, var(--color-error-container), var(--color-error-container-highest));
+  --ngs-action-action-text-bg: var(--color-surface);
+  --ngs-action-text-color: var(--color-on-error-container);
+
+  display: flex;
+  width: 100%;
+  border-radius: theme(--radius-2xl);
+  padding: --spacing(6);
+  gap: --spacing(8);
+  align-items: center;
+  background: var(--ngs-action-required-bg);
+  color: var(--ngs-action-text-color);
+
+  .action-text {
+    display: flex;
+    border-radius: theme(--radius-xl);
+    background: var(--ngs-action-action-text-bg);
+    padding: --spacing(2.5) --spacing(3) --spacing(2.5) --spacing(2.5);
+    align-items: center;
+    flex: none;
+    font-size: var(--text-md);
+    gap: --spacing(1.5);
+  }
+
+  .description {
+    flex-grow: 1;
+  }
+
+  .button {
+    flex: none;
+  }
+}
+

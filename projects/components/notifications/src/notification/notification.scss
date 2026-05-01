@@ -1,0 +1,67 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-notification-padding: --spacing(5);
+  --ngs-notification-gap: --spacing(4);
+  --ngs-notification-bg: var(--color-surface-container-low);
+  --ngs-notification-hover-bg: var(--color-surface-container);
+  --ngs-notification-is-unread-bg: var(--color-primary-200);
+  --ngs-notification-is-unread-hover-bg: var(--color-primary-300);
+
+  display: flex;
+  width: 100%;
+  position: relative;
+  border-radius: theme(--radius-xl);
+  gap: var(--ngs-notification-gap);
+  padding: var(--ngs-notification-padding);
+
+  .avatar {
+    position: relative;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .actor {
+    &:empty {
+      display: none;
+    }
+  }
+
+  .message {
+    &:empty {
+      display: none;
+    }
+  }
+}
+
+:host-context(ngs-notification-list.is-static) {
+  cursor: auto;
+}
+
+:host-context(ngs-notification-list) {
+  background: var(--ngs-notification-bg);
+  cursor: pointer;
+
+  &.is-unread {
+    background: var(--ngs-notification-is-unread-bg);
+  }
+}
+
+:host-context(ngs-notification-list:not(.is-static)) {
+  &:hover {
+    background: var(--ngs-notification-hover-bg);
+  }
+
+  &.is-unread {
+    &:hover {
+      background: var(--ngs-notification-is-unread-hover-bg);
+    }
+  }
+}
+
+:host-context(html.dark) {
+  --ngs-notification-is-unread-bg: var(--color-neutral-950);
+  --ngs-notification-is-unread-hover-bg: var(--color-neutral-900);
+}

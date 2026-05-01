@@ -1,0 +1,20 @@
+<div class="p-12 space-y-12">
+  <div class="space-y-4">
+    <h2 class="text-2xl font-bold">Minimal Video Player Examples</h2>
+    <p class="text-neutral-600">In these examples, controls are hidden except for volume and fullscreen. Video starts and stops by clicking on it.</p>
+  </div>
+
+  @for (video of videos(); track video.title) {
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">{{ video.title }}</h3>
+      <ngs-video-player
+        [src]="video.src"
+        [orientation]="video.orientation"
+        [showDurationSlider]="false"
+        [showPlayButton]="false"
+        [showFullscreen]="false"
+        [muted]="true"
+        [class]="video.class" />
+    </div>
+  }
+</div>

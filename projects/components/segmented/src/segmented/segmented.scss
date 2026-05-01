@@ -1,0 +1,55 @@
+@reference 'tailwindcss';
+@reference '../../../styles/_common.scss';
+
+:host {
+  --ngs-segmented-button-height: --spacing(8);
+  --ngs-segmented-bg: var(--color-surface-container);
+  --ngs-segmented-button-hover-bg: var(--color-surface-container-highest);
+  --ngs-segmented-button-color: var(--color-on-surface-variant);
+  --ngs-segmented-button-hover-color: var(--color-on-surface);
+  --ngs-segmented-button-selected-color: var(--color-primary);
+  --ngs-segmented-button-selected-bg: var(--color-surface);
+  --ngs-segmented-button-selected-shadow: theme(--shadow-sm);
+  --ngs-segmented-padding: --spacing(1);
+  --ngs-segmented-radius: var(--btn-radius);
+  --ngs-segmented-button-radius: calc(var(--btn-radius) - --spacing(0.5));
+  --ngs-segmented-button-padding: 0 --spacing(3);
+  --ngs-segmented-button-min-width: --spacing(12);
+  --ngs-segmented-button-font-size: theme(--text-sm);
+  --ngs-segmented-gap: --spacing(1);
+  --ngs-segmented-button-gap: --spacing(1);
+  --ngs-segmented-button-icon-offset-margin: -6px;
+  --icon-size: --spacing(6);
+
+  &[ngs-segmented-size="sm"] {
+    --ngs-segmented-button-height: --spacing(6);
+    --ngs-segmented-button-font-size: theme(--text-xs);
+    --ngs-segmented-button-padding: 0 --spacing(2);
+    --ngs-segmented-button-gap: --spacing(0.5);
+    --icon-size: --spacing(5);
+  }
+
+  display: flex;
+  align-items: center;
+  user-select: none;
+  width: max-content;
+  background: var(--ngs-segmented-bg);
+  padding: var(--ngs-segmented-padding);
+  border-radius: var(--ngs-segmented-radius);
+  gap: var(--ngs-segmented-gap);
+  position: relative;
+
+  .ngs-segmented-thumb {
+    position: absolute;
+    top: var(--ngs-segmented-padding);
+    bottom: var(--ngs-segmented-padding);
+    left: 0;
+    background: var(--ngs-segmented-button-selected-bg);
+    border-radius: var(--ngs-segmented-button-radius);
+    box-shadow: var(--ngs-segmented-button-selected-shadow);
+    transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), width 200ms cubic-bezier(0.4, 0, 0.2, 1), opacity 200ms;
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+

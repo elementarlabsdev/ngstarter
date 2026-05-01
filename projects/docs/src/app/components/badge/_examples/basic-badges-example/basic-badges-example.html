@@ -1,0 +1,24 @@
+<div ngsBadge="4" ngsBadgeOverlap="true">Text with a badge (Overlap: true)</div>
+<div ngsBadge="4" ngsBadgeOverlap="false">Text with a badge (Overlap: false)</div>
+
+<div ngsBadge="1" ngsBadgeSize="small">Text with small badge</div>
+<div ngsBadge="1" ngsBadgeSize="large">Text with large badge</div>
+
+<div class="flex items-center gap-2">
+  Button with a badge on the left
+  <button ngsButton="tonal" ngsBadge="8" ngsBadgePosition="before">
+    Action
+  </button>
+</div>
+
+<div class="flex items-center gap-2">
+  Button toggles badge visibility
+  <button ngsButton="tonal" ngsBadge="7" [ngsBadgeHidden]="hidden" (click)="toggleBadgeVisibility()">
+    Hide
+  </button>
+</div>
+
+<div class="flex items-center gap-2">
+  Icon with a badge
+  <ngs-icon name="fluent:home-24-regular" ngsBadge="15"/>
+</div>

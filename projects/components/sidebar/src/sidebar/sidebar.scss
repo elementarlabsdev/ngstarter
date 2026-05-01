@@ -1,0 +1,16 @@
+@reference 'tailwindcss';
+@reference '../../../styles/_common.scss';
+
+:host {
+  --ngs-sidebar-bg: transparent;
+
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  height: 100%;
+  width: var(--ngs-sidebar-width);
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  background: var(--ngs-sidebar-bg);
+}

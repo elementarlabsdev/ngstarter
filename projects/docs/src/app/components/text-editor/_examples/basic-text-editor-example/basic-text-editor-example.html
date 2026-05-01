@@ -1,0 +1,79 @@
+<ngs-text-editor #editor [imageUploadFn]="uploadFn"
+                 class="rounded-2xl border border-muted bg-surface-container-lowest min-h-[300px]">
+  <ngs-text-editor-toolbar class="sticky top-0 bg-surface-container-lowest">
+    <button ngsIconButton ngsTooltip="Heading 2"
+            ngsTextEditorCommand ngsTextEditorCommandHeading level="2">
+      <ngs-icon name="fluent:text-header-2-24-regular"/>
+    </button>
+    <button ngsIconButton ngsTooltip="Heading 3"
+            ngsTextEditorCommand ngsTextEditorCommandHeading level="3">
+      <ngs-icon name="fluent:text-header-3-24-regular"/>
+    </button>
+    <ngs-text-editor-divider/>
+    <button ngsIconButton ngsTooltip="Bold"
+            ngsTextEditorCommand ngsTextEditorCommandBold>
+      <ngs-icon name="fluent:text-bold-24-regular"/>
+    </button>
+    <button ngsIconButton ngsTooltip="Italic"
+            ngsTextEditorCommand ngsTextEditorCommandItalic>
+      <ngs-icon name="fluent:text-italic-24-regular"/>
+    </button>
+    <button ngsIconButton ngsTooltip="Strike"
+            ngsTextEditorCommand ngsTextEditorCommandStrike>
+      <ngs-icon name="fluent:text-strikethrough-24-regular"/>
+    </button>
+    <ngs-text-editor-divider/>
+    <button ngsIconButton ngsTooltip="Bullet List"
+            ngsTextEditorCommand ngsTextEditorCommandBulletList>
+      <ngs-icon name="fluent:text-bullet-list-ltr-24-regular"/>
+    </button>
+    <button ngsIconButton ngsTooltip="Ordered List"
+            ngsTextEditorCommand ngsTextEditorCommandOrderedList>
+      <ngs-icon name="fluent:text-number-list-ltr-24-regular"/>
+    </button>
+    <button ngsIconButton ngsTooltip="Blockquote"
+            ngsTextEditorCommand ngsTextEditorCommandBlockquote>
+      <ngs-icon name="fluent:text-quote-24-regular"/>
+    </button>
+    <button ngsIconButton ngsTooltip="Code Block"
+            ngsTextEditorCommand ngsTextEditorCommandCodeBlock>
+      <ngs-icon name="fluent:code-block-24-regular"/>
+    </button>
+    <button ngsIconButton ngsTooltip="Horizontal Rule"
+            ngsTextEditorCommand ngsTextEditorCommandHorizontalRule>
+      <ngs-icon name="fluent:subtract-24-regular"/>
+    </button>
+    <ngs-text-editor-divider/>
+    <button ngsIconButton ngsTooltip="Upload Image"
+            ngsTextEditorCommand ngsTextEditorCommandImage>
+      <ngs-icon name="fluent:image-24-regular"/>
+    </button>
+    <button ngsIconButton ngsTooltip="Add Youtube"
+            ngsTextEditorCommand ngsTextEditorCommandYoutube>
+      <ngs-icon name="fluent:video-24-regular"/>
+    </button>
+  </ngs-text-editor-toolbar>
+  <ngs-text-editor-bubble-menu>
+    <button ngsTextEditorCommandEditLink>
+      <ngs-icon name="fluent:edit-24-regular"/>
+    </button>
+    <button ngsTextEditorCommandUnsetLink>
+      <ngs-icon name="fluent:link-dismiss-24-regular"/>
+    </button>
+    <button ngsTextEditorCommand ngsTextEditorCommandLink>
+      <ngs-icon name="fluent:link-24-regular"/>
+    </button>
+    <button ngsTextEditorCommand ngsTextEditorCommandBold>
+      <ngs-icon name="fluent:text-bold-24-regular"/>
+    </button>
+    <button ngsTextEditorCommand ngsTextEditorCommandItalic>
+      <ngs-icon name="fluent:text-italic-24-regular"/>
+    </button>
+    <button ngsTextEditorCommand ngsTextEditorCommandStrike>
+      <ngs-icon name="fluent:text-strikethrough-24-regular"/>
+    </button>
+    <button ngsTextEditorCommand ngsTextEditorCommandCode>
+      <ngs-icon name="fluent:code-24-regular"/>
+    </button>
+  </ngs-text-editor-bubble-menu>
+</ngs-text-editor>

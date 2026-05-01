@@ -1,0 +1,10 @@
+@reference 'tailwindcss';
+
+:host {
+  hr {
+    width: 100%;
+    border: none;
+    border-top: 1px solid var(--color-outline-variant);
+    margin: 1rem 0;
+  }
+}

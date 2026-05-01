@@ -1,0 +1,25 @@
+<ng-content/>
+
+@if (_overflowItems().length > 0) {
+  <button ngsIconButton (click)="_openOverflowDialog(overflowDialog)">
+    <ngs-icon name="fluent:more-vertical-24-regular" />
+  </button>
+
+  <ng-template #overflowDialog>
+    <div class="ngs-toolbar-overflow-dialog">
+      <div class="ngs-toolbar-overflow-dialog-header">
+        <button ngsIconButton (click)="_closeOverflowDialog()">
+          <ngs-icon name="fluent:dismiss-24-regular" />
+        </button>
+      </div>
+
+      <div class="ngs-toolbar-overflow-dialog-content flex flex-col gap-6">
+        @for (item of _overflowItems(); track $index) {
+          <div class="flex items-center gap-4">
+            <ng-template [ngTemplateOutlet]="item.template()" />
+          </div>
+        }
+      </div>
+    </div>
+  </ng-template>
+}

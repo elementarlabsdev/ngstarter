@@ -1,0 +1,26 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+:host(.ngs-card-sm-image) {
+  width: 80px;
+  height: 80px;
+}
+
+:host(.ngs-card-md-image) {
+  width: 110px;
+  height: 110px;
+}
+
+:host(.ngs-card-lg-image) {
+  width: 150px;
+  height: 150px;
+}
+
+:host(.ngs-card-xl-image) {
+  width: 240px;
+  height: 240px;
+}
