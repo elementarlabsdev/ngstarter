@@ -80,8 +80,7 @@ jobs:
         run: |
           # Navigate to the distribution folder containing the built package
           cd dist/components
-          # Use --provenance to link the package to this specific CI run for security
-          npm publish --access public --provenance
+          npm publish --access public
         env:
           # Ensure NPM_TOKEN is set in your GitHub Repository Secrets
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
