@@ -15,10 +15,12 @@ HUB_NAME="ngstarter"
 
 echo "======================================"
 # Check if builder exists and create if not
-if ! docker buildx inspect container-builder > /dev/null 2>&1; then
-  docker buildx create --name container-builder --driver docker-container --use
-else
-  docker buildx use container-builder
+if [ -z "$GITHUB_ACTIONS" ]; then
+  if ! docker buildx inspect container-builder > /dev/null 2>&1; then
+    docker buildx create --name container-builder --driver docker-container --use
+  else
+    docker buildx use container-builder
+  fi
 fi
 
 echo "Step 1: Building and pushing image..."

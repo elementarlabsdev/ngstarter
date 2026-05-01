@@ -1,0 +1,61 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'package.json'
+      - 'projects/components/package.json'
+      - '.github/workflows/**'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Update version
+        id: versioning
+        run: |
+          # Increment version in root package.json
+          npm version patch --no-git-tag-version
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+          # Sync version to projects/components/package.json
+          node -e "const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('projects/components/package.json', 'utf8')); pkg.version = '$NEW_VERSION'; fs.writeFileSync('projects/components/package.json', JSON.stringify(pkg, null, 2) + '\n');"
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add package.json projects/components/package.json
+          git commit -m "chore: bump version to ${{ env.NEW_VERSION }} [skip ci]"
+          git push
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Run deploy script
+        run: |
+          chmod +x ./deploy-dockerhub.sh
+          ./deploy-dockerhub.sh ${{ env.NEW_VERSION }}
