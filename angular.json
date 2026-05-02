@@ -30,7 +30,7 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              },
+              }
             ],
             "styles": [
               "src/styles.scss"
@@ -38,6 +38,9 @@
             "scripts": [
             ],
             "server": "src/main.server.ts",
+            "security": {
+              "allowedHosts": ["*"]
+            },
             "outputMode": "server",
             "ssr": {
               "entry": "src/server.ts"
@@ -168,7 +171,7 @@
             "server": "projects/docs/src/main.server.ts",
             "outputMode": "server",
             "security": {
-              "allowedHosts": []
+              "allowedHosts": ["*"]
             },
             "ssr": {
               "entry": "projects/docs/src/server.ts"
@@ -247,7 +250,7 @@
             "server": "projects/admin/src/main.server.ts",
             "outputMode": "server",
             "security": {
-              "allowedHosts": []
+              "allowedHosts": ["*"]
             },
             "ssr": {
               "entry": "projects/admin/src/server.ts"
