@@ -36,53 +36,59 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Update version
+      - name: Check for component changes
+        id: changed-components
+        run: |
+          if git diff --quiet HEAD^ HEAD -- 'projects/components'; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update versions
         id: versioning
         run: |
-          # 1. Bump version in root package.json (e.g., 1.0.0 -> 1.0.1)
+          # 1. Bump version in root package.json
           npm version patch --no-git-tag-version
-          NEW_VERSION=$(node -p "require('./package.json').version")
+          ROOT_VERSION=$(node -p "require('./package.json').version")
+          echo "ROOT_VERSION=$ROOT_VERSION" >> $GITHUB_ENV
+          echo "root_version=$ROOT_VERSION" >> $GITHUB_OUTPUT
 
-          # 2. Export version to environment and outputs for subsequent steps
-          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
-          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
-
-          # 3. Sync the new version to the nested components package.json
-          node -e "
-            const fs = require('fs');
-            const path = 'projects/components/package.json';
-            if (fs.existsSync(path)) {
-              const pkg = JSON.parse(fs.readFileSync(path, 'utf8'));
-              pkg.version = '$NEW_VERSION';
-              fs.writeFileSync(path, JSON.stringify(pkg, null, 2) + '\n');
-              console.log('Successfully synced version ' + '$NEW_VERSION' + ' to ' + path);
-            } else {
-              console.error('Error: file not found ' + path);
-              process.exit(1);
-            }
-          "
+          # 2. Bump version in components package.json only if changed
+          if [ "${{ steps.changed-components.outputs.changed }}" = "true" ]; then
+            cd projects/components
+            npm version patch --no-git-tag-version
+            COMP_VERSION=$(node -p "require('./package.json').version")
+            cd ../..
+            echo "COMP_VERSION=$COMP_VERSION" >> $GITHUB_ENV
+            echo "comp_version=$COMP_VERSION" >> $GITHUB_OUTPUT
+            echo "COMPONENTS_CHANGED=true" >> $GITHUB_ENV
+          else
+            COMP_VERSION=$(node -p "require('./projects/components/package.json').version")
+            echo "COMP_VERSION=$COMP_VERSION" >> $GITHUB_ENV
+            echo "comp_version=$COMP_VERSION" >> $GITHUB_OUTPUT
+            echo "COMPONENTS_CHANGED=false" >> $GITHUB_ENV
+          fi
 
       - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add package.json projects/components/package.json
-          # Only commit and push if there are actual changes to avoid errors
-          # [skip ci] is used to prevent the action from triggering itself in a loop
-          git diff-index --quiet HEAD || (git commit -m "chore: bump version to ${{ env.NEW_VERSION }} [skip ci]" && git push)
+          git diff-index --quiet HEAD || (git commit -m "chore: bump versions (root: ${{ env.ROOT_VERSION }}, components: ${{ env.COMP_VERSION }}) [skip ci]" && git push)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build components
+        if: env.COMPONENTS_CHANGED == 'true'
         run: npm run build:components:prod
 
       - name: Publish to NPM
+        if: env.COMPONENTS_CHANGED == 'true'
         run: |
-          # Navigate to the distribution folder containing the built package
           cd dist/components
           npm publish --access public
         env:
-          # Ensure NPM_TOKEN is set in your GitHub Repository Secrets
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Set up QEMU
@@ -100,4 +106,4 @@ jobs:
       - name: Run deploy script
         run: |
           chmod +x ./deploy-dockerhub.sh
-          ./deploy-dockerhub.sh ${{ env.NEW_VERSION }}
+          ./deploy-dockerhub.sh ${{ env.ROOT_VERSION }}

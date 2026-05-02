@@ -4,13 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - caddy_data:/data
-      - caddy_config:/config
+      - "4000:4000"
+      - "4001:4001"
+      - "4002:4002"
     restart: unless-stopped
-
-volumes:
-  caddy_data:
-  caddy_config:

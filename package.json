@@ -30,7 +30,7 @@
     "build:admin:prod": "ng build admin --configuration production --base-href /",
     "publish:components": "npm run build:components:prod && cd dist/components && npm publish --access public",
     "clean": "rm -rf .angular/cache",
-    "serve:ssr": "node dist/docs/ngstarter/server.mjs",
+    "serve:ssr": "node dist/ngstarter/server/server.mjs",
     "serve:ssr:docs": "node dist/docs/server/server.mjs",
     "serve:ssr:admin": "node dist/admin/server/server.mjs"
   },

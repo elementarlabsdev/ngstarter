@@ -13,12 +13,19 @@ RUN npm run build:prod
 RUN npm run build:docs:prod
 RUN npm run build:admin:prod
 
-# Stage 2: Serve
-FROM caddy:2-alpine
+# Final stage
+FROM node:20-alpine
 
-# Copy build results to the appropriate directories for Caddy
-COPY --from=build /app/dist/ngstarter/browser /srv/main
-COPY --from=build /app/dist/docs/browser /srv/docs
-COPY --from=build /app/dist/admin/browser /srv/admin
+WORKDIR /app
 
-COPY Caddyfile /etc/caddy/Caddyfile
+# Copy built artifacts
+COPY --from=build /app/dist /app/dist
+
+# Copy entrypoint script
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
+
+# Expose ports
+EXPOSE 4000 4001 4002
+
+CMD ["./entrypoint.sh"]
