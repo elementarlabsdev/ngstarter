@@ -26,7 +26,7 @@
     "build": "ng build",
     "build:components:prod": "ng build components --configuration production",
     "build:prod": "ng build --configuration production",
-    "build:docs:prod": "ng build docs --configuration production --base-href /docs/",
+    "build:docs:prod": "ng build docs --configuration production",
     "build:admin:prod": "ng build admin --configuration production",
     "publish:components": "npm run build:components:prod && cd dist/components && npm publish --access public",
     "clean": "rm -rf .angular/cache",
