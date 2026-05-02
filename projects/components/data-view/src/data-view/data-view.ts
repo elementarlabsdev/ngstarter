@@ -512,52 +512,19 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
       ).subscribe(e => {
         if (!this._isResizing()) return;
 
-        const scrollbarArea = this._scrollbarArea();
-        const scrollLeft = (!col.pinned && scrollbarArea) ? scrollbarArea.scrollableContentRef().nativeElement.scrollLeft : 0;
-        const viewportMouseX = e.clientX - hostRect.left - borderLeft;
-        const virtualMouseX = viewportMouseX + (col.pinned ? 0 : scrollLeft);
-
-        if (Math.abs(e.clientX - this._resizeStartX) > 2) moved = true;
+        const dx = e.clientX - this._resizeStartX;
+        if (Math.abs(dx) > 2) moved = true;
 
         const minWidthVal = col.minWidth !== undefined ? parseInt(col.minWidth, 10) : this.minColumnWidth();
         const maxWidthVal = col.maxWidth !== undefined ? parseInt(col.maxWidth, 10) : Infinity;
 
-        // 1. Initial width based on mouse position in virtual space
-        let newWidth = Math.round(virtualMouseX - colStartInHost);
+        // 1. Initial width based on mouse movement
+        let newWidth = Math.round(this._resizeStartWidth + dx);
 
         // 2. Constraints for the column itself
         newWidth = Math.max(minWidthVal, Math.min(maxWidthVal, newWidth));
 
-        // 3. Constraints for the resize line position (clamping within viewport/pinned areas)
-        const isCenterCol = !col.pinned;
-        const isLeftPinned = col.pinned && col.pinAlign !== 'end';
-        const isRightPinned = col.pinned && col.pinAlign === 'end';
-
-        const getLineLeft = (w: number) => colStartInHost + w - (col.pinned ? 0 : scrollLeft);
-        let lineLeft = getLineLeft(newWidth);
-
-        if (isCenterCol) {
-          if (lineLeft > maxLineLeft) {
-            newWidth = maxLineLeft - colStartInHost + scrollLeft;
-          } else if (lineLeft < minLineLeft) {
-            newWidth = minLineLeft - colStartInHost + scrollLeft;
-          }
-        } else if (isLeftPinned) {
-          if (lineLeft > maxLineLeft) {
-            newWidth = maxLineLeft - colStartInHost;
-          }
-        } else if (isRightPinned) {
-          if (lineLeft < minLineLeft) {
-            newWidth = minLineLeft - colStartInHost;
-          }
-
-          const hostWidth = hostRect.width - borderLeft;
-          if (getLineLeft(newWidth) > hostWidth) {
-            newWidth = hostWidth - colStartInHost;
-          }
-        }
-
-        // 4. Constraint by next column (if exists, e.g. in pinned sections)
+        // 3. Constraint by next column (if exists, e.g. in pinned sections)
         if (nextCol) {
           const nextMinWidth = nextCol.minWidth !== undefined ? parseInt(nextCol.minWidth, 10) : this.minColumnWidth();
           const maxPossibleWidth = (this._resizeStartWidth + nextColStartWidth) - nextMinWidth;
@@ -566,13 +533,29 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
           }
         }
 
-        // 5. Final check on newWidth (minWidth has priority over viewport constraints)
+        // 4. Final check on newWidth
         newWidth = Math.max(minWidthVal, newWidth);
+
+        const isCenterCol = !col.pinned;
+        const isLeftPinned = col.pinned && col.pinAlign !== 'end';
+        const isRightPinned = col.pinned && col.pinAlign === 'end';
 
         this._ngZone.run(() => {
           // Update line position with latest scroll
           const currentScrollLeft = (!col.pinned && scrollbarArea) ? scrollbarArea.scrollableContentRef().nativeElement.scrollLeft : 0;
-          this._resizeLineLeft.set(colStartInHost + newWidth - (col.pinned ? 0 : currentScrollLeft));
+          let lineLeft = colStartInHost + newWidth - (col.pinned ? 0 : currentScrollLeft);
+
+          const hostWidth = hostRect.width - borderLeft;
+          // Visual clamping: stop the line at viewport/pinned boundaries
+          if (isCenterCol) {
+            lineLeft = Math.max(minLineLeft, Math.min(maxLineLeft, lineLeft));
+          } else if (isLeftPinned) {
+            lineLeft = Math.max(0, Math.min(maxLineLeft, lineLeft));
+          } else if (isRightPinned) {
+            lineLeft = Math.max(minLineLeft, Math.min(hostWidth, lineLeft));
+          }
+
+          this._resizeLineLeft.set(lineLeft);
 
           if (this._resizeColField) {
             const map = { ...this._manualWidths() };
