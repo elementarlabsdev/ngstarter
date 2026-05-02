@@ -28,6 +28,8 @@
     z-index: 1000;
     pointer-events: none;
     margin-left: -1px;
+    transform: translateX(0);
+    will-change: transform;
   }
 
   &.embedded {

@@ -408,6 +408,8 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
     const hostRect = gridRoot.getBoundingClientRect();
     const handleRect = (target as HTMLElement).getBoundingClientRect();
     const borderLeft = gridRoot.clientLeft || 0;
+    const scrollbarArea = this._scrollbarArea();
+    const initialScrollLeft = (!col.pinned && scrollbarArea) ? scrollbarArea.scrollableContentRef().nativeElement.scrollLeft : 0;
 
     const initialManualWidths = { ...this._manualWidths() };
     this._resizeStartX = event.clientX;
@@ -422,7 +424,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
     const minLineLeft = leftPinnedWidth;
 
     let moved = false;
-    const colStartInHost = (handleRect.right - this._resizeStartWidth) - hostRect.left - borderLeft;
+    const colStartInHost = (handleRect.right - this._resizeStartWidth) - hostRect.left - borderLeft + initialScrollLeft;
 
     this._ngZone.runOutsideAngular(() => {
       const mouseMove$ = fromEvent<MouseEvent>(this._doc, 'mousemove', { capture: true });
@@ -509,49 +511,53 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
         takeUntil(stopResize$)
       ).subscribe(e => {
         if (!this._isResizing()) return;
-        const dx = e.clientX - this._resizeStartX;
-        if (Math.abs(dx) > 2) moved = true;
+
+        const scrollbarArea = this._scrollbarArea();
+        const scrollLeft = (!col.pinned && scrollbarArea) ? scrollbarArea.scrollableContentRef().nativeElement.scrollLeft : 0;
+        const viewportMouseX = e.clientX - hostRect.left - borderLeft;
+        const virtualMouseX = viewportMouseX + (col.pinned ? 0 : scrollLeft);
+
+        if (Math.abs(e.clientX - this._resizeStartX) > 2) moved = true;
+
         const minWidthVal = col.minWidth !== undefined ? parseInt(col.minWidth, 10) : this.minColumnWidth();
         const maxWidthVal = col.maxWidth !== undefined ? parseInt(col.maxWidth, 10) : Infinity;
 
-        let newWidth = Math.round(this._resizeStartWidth + dx);
+        // 1. Initial width based on mouse position in virtual space
+        let newWidth = Math.round(virtualMouseX - colStartInHost);
+
+        // 2. Constraints for the column itself
         newWidth = Math.max(minWidthVal, Math.min(maxWidthVal, newWidth));
 
-        const lineLeft = colStartInHost + newWidth;
+        // 3. Constraints for the resize line position (clamping within viewport/pinned areas)
         const isCenterCol = !col.pinned;
         const isLeftPinned = col.pinned && col.pinAlign !== 'end';
         const isRightPinned = col.pinned && col.pinAlign === 'end';
 
+        const getLineLeft = (w: number) => colStartInHost + w - (col.pinned ? 0 : scrollLeft);
+        let lineLeft = getLineLeft(newWidth);
+
         if (isCenterCol) {
           if (lineLeft > maxLineLeft) {
-            newWidth = maxLineLeft - colStartInHost;
+            newWidth = maxLineLeft - colStartInHost + scrollLeft;
           } else if (lineLeft < minLineLeft) {
-            newWidth = minLineLeft - colStartInHost;
+            newWidth = minLineLeft - colStartInHost + scrollLeft;
           }
         } else if (isLeftPinned) {
-          // Can't push beyond the start of right pinned columns (maxLineLeft)
-          // Also if we are pushing into the center columns, they will be pushed or next col in pinned will be squeezed.
           if (lineLeft > maxLineLeft) {
             newWidth = maxLineLeft - colStartInHost;
           }
         } else if (isRightPinned) {
-          // For right pinned, colStartInHost is relative to grid-root left.
-          // The line shouldn't go to the left of leftPinnedWidth.
           if (lineLeft < minLineLeft) {
             newWidth = minLineLeft - colStartInHost;
           }
 
-          // Also can't push beyond table right edge if there is an action bar
           const hostWidth = hostRect.width - borderLeft;
-          if (lineLeft > hostWidth) {
+          if (getLineLeft(newWidth) > hostWidth) {
             newWidth = hostWidth - colStartInHost;
           }
         }
 
-        // Final check on newWidth after all constraints
-        newWidth = Math.max(minWidthVal, newWidth);
-
-        // If we are resizing a column that has a next column, we must ensure next column doesn't shrink below its minWidth
+        // 4. Constraint by next column (if exists, e.g. in pinned sections)
         if (nextCol) {
           const nextMinWidth = nextCol.minWidth !== undefined ? parseInt(nextCol.minWidth, 10) : this.minColumnWidth();
           const maxPossibleWidth = (this._resizeStartWidth + nextColStartWidth) - nextMinWidth;
@@ -560,45 +566,28 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
           }
         }
 
-        // Ensure lineLeft doesn't go over bounds after nextCol check
-        const finalLineLeft = colStartInHost + newWidth;
-        if (isCenterCol || isLeftPinned) {
-          if (finalLineLeft > maxLineLeft) {
-            newWidth = maxLineLeft - colStartInHost;
-          }
-        }
-        if (isCenterCol || isRightPinned) {
-          if (finalLineLeft < minLineLeft) {
-            newWidth = minLineLeft - colStartInHost;
-          }
-        }
-        if (isRightPinned) {
-          const hostWidth = hostRect.width - borderLeft;
-          if (colStartInHost + newWidth > hostWidth) {
-            newWidth = hostWidth - colStartInHost;
-          }
-        }
+        // 5. Final check on newWidth (minWidth has priority over viewport constraints)
+        newWidth = Math.max(minWidthVal, newWidth);
 
         this._ngZone.run(() => {
-          this._resizeLineLeft.set(colStartInHost + newWidth);
+          // Update line position with latest scroll
+          const currentScrollLeft = (!col.pinned && scrollbarArea) ? scrollbarArea.scrollableContentRef().nativeElement.scrollLeft : 0;
+          this._resizeLineLeft.set(colStartInHost + newWidth - (col.pinned ? 0 : currentScrollLeft));
 
           if (this._resizeColField) {
             const map = { ...this._manualWidths() };
             map[this._resizeColField] = `${newWidth}px`;
 
-            // If we have a next column, it gets squeezed until its minimum, then it just shifts
+            // If we have a next column, it gets squeezed/expanded
             if (nextCol) {
               const currentNextWidth = Math.max(
-                0, // Already checked minWidth in newWidth calculation
+                0,
                 nextColStartWidth - (newWidth - this._resizeStartWidth)
               );
               map[nextCol.field] = `${currentNextWidth}px`;
             }
 
             this._manualWidths.set(map);
-
-            // Force recalculation of centerWidth if it's based on fixed columns
-            // by triggering signal update if needed
           }
         });
       });
