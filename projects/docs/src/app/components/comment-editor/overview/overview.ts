@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
 import { Playground } from '@meta/playground/playground';
 import {
   BasicCommentEditorExample
@@ -26,13 +24,10 @@ import {
 import {
   CommentEditorWithMaxContentHeightExample
 } from '../_examples/comment-editor-with-max-content-height-example/comment-editor-with-max-content-height-example';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   selector: 'app-overview',
   imports: [
-    Page,
-    PageContentDirective,
     Playground,
     BasicCommentEditorExample,
     CommentEditorWithToolbarExample,
@@ -41,8 +36,7 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     CommentEditorWithCustomIconsExample,
     CommentEditorCancelButtonAlwaysVisibleExample,
     CommentEditorCustomButtonLabelsExample,
-    CommentEditorWithMaxContentHeightExample,
-    PageTitleDirective
+    CommentEditorWithMaxContentHeightExample
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'

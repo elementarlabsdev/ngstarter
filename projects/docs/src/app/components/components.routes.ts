@@ -135,7 +135,7 @@ export const routes: Routes = [
   },
   {
     path: 'comment-editor',
-    loadChildren: () => import('./comment-editor/comment-editor.module').then(m => m.CommentEditorModule)
+    loadChildren: () => import('./comment-editor/routes').then(m => m.routes)
   },
   {
     path: 'table',

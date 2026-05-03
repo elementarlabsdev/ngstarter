@@ -1,0 +1,19 @@
+<app-page>
+  <h1 appPageTitle>Comment Editor</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Comment Editor component is a rich text editor based on Tiptap,
+        designed specifically for comments and discussions. It supports basic formatting,
+        lists, links, and media embedding.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/comment-editor" ngs-tab-link>Overview</a>
+      <a routerLink="/components/comment-editor/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
