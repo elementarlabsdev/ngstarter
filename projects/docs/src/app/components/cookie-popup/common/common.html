@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>Cookie Popup</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Cookie Popup component is a crucial tool for modern web applications to comply with privacy regulations.
+        It provides a non-intrusive way to inform users about cookie usage and collect their consent.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Privacy Compliance</strong>: Helps meet GDPR and other privacy requirements.
+          </li>
+          <li>
+            ✅ <strong>Customizable Actions</strong>: Allow users to accept all or only necessary cookies.
+          </li>
+          <li>
+            ✅ <strong>Flexible Integration</strong>: Easily link to your detailed cookie policy.
+          </li>
+          <li>
+            ✅ <strong>Responsive Overlay</strong>: Positioned unobtrusively at the bottom of the screen.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/cookie-popup" ngs-tab-link>Overview</a>
+      <a routerLink="/components/cookie-popup/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

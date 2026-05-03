@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: 'cookie-popup',
-    loadChildren: () => import('./cookie-popup/cookie-popup.module').then(m => m.CookiePopupModule)
+    loadChildren: () => import('./cookie-popup/routes').then(m => m.routes)
   },
   {
     path: 'action-required',
