@@ -9,9 +9,6 @@ import {
 import {
   InputWithColorPickerExample
 } from '../_examples/input-with-color-picker-example/input-with-color-picker-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   imports: [
@@ -19,9 +16,6 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     BasicColorPickerExample,
     ColorPickerWithPopoverExample,
     InputWithColorPickerExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'

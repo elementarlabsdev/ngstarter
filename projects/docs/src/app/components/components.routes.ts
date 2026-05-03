@@ -171,7 +171,7 @@ export const routes: Routes = [
   },
   {
     path: 'color-picker',
-    loadChildren: () => import('./color-picker/color-picker.module').then(m => m.ColorPickerModule)
+    loadChildren: () => import('./color-picker/routes').then(m => m.routes)
   },
   {
     path: 'color-switcher',

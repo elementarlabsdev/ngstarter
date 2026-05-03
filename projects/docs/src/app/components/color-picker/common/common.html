@@ -1,0 +1,36 @@
+<app-page>
+  <h1 appPageTitle>Color Picker</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Color Picker component allows users to select colors through a graphical interface.
+        It supports various formats like HEX, RGB, and HSL, and provides features like opacity control
+        and a preview of the selected color.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Multi-format Support</strong>: Work with HEX, RGB, and HSL color formats.
+          </li>
+          <li>
+            ✅ <strong>Opacity Control</strong>: Fine-tune color transparency with an easy-to-use slider.
+          </li>
+          <li>
+            ✅ <strong>Visual Preview</strong>: Instantly see the selected color in a dedicated thumbnail.
+          </li>
+          <li>
+            ✅ <strong>Flexible Integration</strong>: Use it as a standalone component or as a popover triggered by other elements.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/color-picker" ngs-tab-link>Overview</a>
+      <a routerLink="/components/color-picker/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
