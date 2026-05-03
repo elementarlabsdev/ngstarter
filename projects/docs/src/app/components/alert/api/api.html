@@ -3,7 +3,7 @@
     <ng-container ngsColumnDef="name">
       <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
       <td ngs-cell *ngsCellDef="let element">
-        <div>{{ element.name }}</div>
+        <div [innerHTML]="element.name"></div>
         <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
       </td>
     </ng-container>

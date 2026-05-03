@@ -1,0 +1,19 @@
+<app-page>
+  <h1 appPageTitle>Card</h1>
+  <div appPageContent>
+    <div class="flex flex-col gap-4">
+      <p class="text-lg text-muted-foreground">
+        A card is a flexible and extensible content container.
+      </p>
+
+      <nav ngs-tab-nav-bar>
+        <a ngs-tab-link routerLink="/components/card/overview" routerLinkActive="active">Overview</a>
+        <a ngs-tab-link routerLink="/components/card/api" routerLinkActive="active">API</a>
+      </nav>
+
+      <ngs-tab-nav-panel class="py-4">
+        <router-outlet/>
+      </ngs-tab-nav-panel>
+    </div>
+  </div>
+</app-page>

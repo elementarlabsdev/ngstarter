@@ -51,7 +51,7 @@ export class Api {
 
   directives = [
     {
-      name: 'ngsBlockLoaderContainer',
+      name: '<code>ngsBlockLoaderContainer</code>',
       description: 'Directive to mark a container for block loader positioning (sets relative position)'
     }
   ];

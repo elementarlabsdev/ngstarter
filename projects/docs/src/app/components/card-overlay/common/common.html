@@ -1,0 +1,19 @@
+<app-page>
+  <h1 appPageTitle>Card Overlay</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The card overlay component is used to display content over a card or any other container.
+      </p>
+    </main>
+
+    <nav ngs-tab-nav-bar>
+      <a routerLink="overview" ngs-tab-link>Overview</a>
+      <a routerLink="api" ngs-tab-link>API</a>
+    </nav>
+
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

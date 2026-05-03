@@ -9,12 +9,10 @@ import {
   CardFooterLoadingExample
 } from '../_examples/card-footer-loading-example/card-footer-loading-example';
 import { CardAppearanceExample } from '../_examples/card-appearance-example/card-appearance-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
-    selector: 'app-overview',
+  selector: 'app-overview',
+  standalone: true,
   imports: [
     Playground,
     BasicCardExample,
@@ -22,12 +20,9 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     CardMultipleSectionsExample,
     CardFooterLoadingExample,
     CardAppearanceExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
   ],
-    templateUrl: './overview.html',
-    styleUrl: './overview.scss'
+  templateUrl: './overview.html',
+  styleUrl: './overview.scss'
 })
 export class Overview {
 

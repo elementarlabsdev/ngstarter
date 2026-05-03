@@ -1,0 +1,77 @@
+<div class="flex flex-col gap-8">
+  <section>
+    <h2 class="text-2xl font-bold mb-4">Card API</h2>
+    <div class="border border-muted rounded-xl shadow-sm overflow-hidden">
+      <table ngs-table [dataSource]="cardProperties">
+        <ng-container ngsColumnDef="name">
+          <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
+          <td ngs-cell *ngsCellDef="let element">
+            <div [innerHTML]="element.name"></div>
+            <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+          </td>
+        </ng-container>
+
+        <ng-container ngsColumnDef="type">
+          <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+          <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
+        </ng-container>
+
+        <ng-container ngsColumnDef="default">
+          <th ngs-header-cell *ngsHeaderCellDef>Default</th>
+          <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
+        </ng-container>
+
+        <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
+        <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="text-2xl font-bold mb-4">Card Actions API</h2>
+    <div class="border border-muted rounded-xl shadow-sm overflow-hidden">
+      <table ngs-table [dataSource]="cardActionsProperties">
+        <ng-container ngsColumnDef="name">
+          <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
+          <td ngs-cell *ngsCellDef="let element">
+            <div [innerHTML]="element.name"></div>
+            <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+          </td>
+        </ng-container>
+
+        <ng-container ngsColumnDef="type">
+          <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+          <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
+        </ng-container>
+
+        <ng-container ngsColumnDef="default">
+          <th ngs-header-cell *ngsHeaderCellDef>Default</th>
+          <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
+        </ng-container>
+
+        <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
+        <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="text-2xl font-bold mb-4">Directives</h2>
+    <div class="border border-muted rounded-xl shadow-sm overflow-hidden">
+      <table ngs-table [dataSource]="directives">
+        <ng-container ngsColumnDef="selector">
+          <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Selector</th>
+          <td ngs-cell *ngsCellDef="let element">{{ element.selector }}</td>
+        </ng-container>
+
+        <ng-container ngsColumnDef="description">
+          <th ngs-header-cell *ngsHeaderCellDef>Description</th>
+          <td ngs-cell *ngsCellDef="let element">{{ element.description }}</td>
+        </ng-container>
+
+        <tr ngs-header-row *ngsHeaderRowDef="['selector', 'description']"></tr>
+        <tr ngs-row *ngsRowDef="let row; columns: ['selector', 'description'];"></tr>
+      </table>
+    </div>
+  </section>
+</div>

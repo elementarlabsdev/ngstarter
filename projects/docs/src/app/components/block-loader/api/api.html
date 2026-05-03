@@ -30,7 +30,7 @@
       <ng-container ngsColumnDef="name">
         <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Directive</th>
         <td ngs-cell *ngsCellDef="let element">
-          <code>{{ element.name }}</code>
+          <div [innerHTML]="element.name"></div>
         </td>
       </ng-container>
 
