@@ -108,6 +108,8 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64
+          build-args: |
+            BUILDKIT_MULTI_PLATFORM=1
           push: true
           tags: |
             elementarlabs/ngstarter:${{ env.ROOT_VERSION }}
