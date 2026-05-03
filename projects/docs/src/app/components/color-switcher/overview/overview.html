@@ -1,122 +1,21 @@
-<app-page>
-  <h1 appPageTitle>Color Switcher</h1>
-  <div appPageContent>
-    <main class="mb-10">
-      <p>
-        Introducing <strong>Brand Colors</strong>, a simple yet powerful inline color picker for !
-      </p>
-      <p>
-        Easily select and customize colors for your brand directly within your app.
-        Designed to fit seamlessly into projects, this component makes color
-        picking effortless and intuitive.
-      </p>
-      <div class="my-7">
-        <div>Key features:</div>
-        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
-          <li>
-            🎨 <strong>Customizable</strong>: Tailor the color picker to match your app's design.
-          </li>
-          <li>
-            ⚡ <strong>Lightweight & Fast</strong>: Minimal impact on performance, smooth user experience.
-          </li>
-          <li>
-            🛠️ <strong>Seamless Integration</strong>: Built specifically for —just plug and play!
-          </li>
-        </ul>
-      </div>
-      <p>
-        Perfect for building apps where color matters—whether it's dashboards, design tools, or content creators' platforms.
-        Save time and keep your branding on point with <strong>Brand Colors</strong>!
-      </p>
-      <p>
-        Get started today and add a splash of color to your projects!
-      </p>
-    </main>
+<div class="overview-container">
+  <h3>Basic color switcher</h3>
+  <ngs-playground exampleUrl="_docs/components/color-switcher/_examples" exampleName="basic-brand-colors-example">
+    <app-basic-brand-colors-example/>
+  </ngs-playground>
 
-    <h3>Basic brand colors</h3>
-    <ngs-playground exampleUrl="_docs/components/brand-colors/_examples" exampleName="basic-brand-colors-example">
-      <app-basic-brand-colors-example/>
-    </ngs-playground>
+  <h3>Color switcher with custom colors</h3>
+  <ngs-playground exampleUrl="_docs/components/color-switcher/_examples" exampleName="brand-colors-custom-colors-example">
+    <app-brand-colors-custom-colors-example/>
+  </ngs-playground>
 
-    <h3>Brand colors with custom colors</h3>
-    <ngs-playground exampleUrl="_docs/components/brand-colors/_examples" exampleName="brand-colors-custom-colors-example">
-      <app-brand-colors-custom-colors-example/>
-    </ngs-playground>
+  <h3>Color switcher with disabled state</h3>
+  <ngs-playground exampleUrl="_docs/components/color-switcher/_examples" exampleName="brand-colors-disabled-example">
+    <app-brand-colors-disabled-example/>
+  </ngs-playground>
 
-    <h3>Brand colors with disabled state</h3>
-    <ngs-playground exampleUrl="_docs/components/brand-colors/_examples" exampleName="brand-colors-disabled-example">
-      <app-brand-colors-disabled-example/>
-    </ngs-playground>
-
-    <h3>Brand colors as form control</h3>
-    <ngs-playground exampleUrl="_docs/components/brand-colors/_examples" exampleName="brand-colors-as-form-control-example">
-      <app-brand-colors-as-form-control-example/>
-    </ngs-playground>
-
-    <h2>API Reference</h2>
-    <p>
-      Properties for the <code class="code">ngs-brand-colors</code> component.
-    </p>
-
-    <ngs-tab-group class="my-6">
-      <ngs-tab label="Properties">
-        <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
-          <table class="ngs-table ">
-            <thead>
-            <tr class="bg-neutral-200 dark:bg-neutral-700">
-              <th class="w-1/2">Prop</th>
-              <th>Type</th>
-              <th>Default</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>
-                <div>colors</div>
-                <div class="text-xs text-neutral-600 mt-0.5">List of colors</div>
-              </td>
-              <td>string[]</td>
-              <td>List of default colors</td>
-            </tr>
-            <tr>
-              <td>
-                <div>selectedColor</div>
-                <div class="text-xs text-neutral-600 mt-0.5">Selected color</div>
-              </td>
-              <td>string</td>
-              <td>&ndash;</td>
-            </tr>
-            <tr>
-              <td>
-                <div>disabled</div>
-                <div class="text-xs text-neutral-600 mt-0.5">Disable control</div>
-              </td>
-              <td>boolean</td>
-              <td>false</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </ngs-tab>
-      <ngs-tab label="Events">
-        <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
-          <table class="ngs-table ">
-            <thead>
-            <tr class="bg-neutral-200 dark:bg-neutral-700">
-              <th class="w-1/3">Event</th>
-              <th>Description</th>
-              <th class="w-1/3">Output type</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>colorChange</td>
-              <td>Executed when a color changed by clicking on a color button</td>
-              <td>string</td>
-            </tr>
-          </table>
-        </div>
-      </ngs-tab>
-    </ngs-tab-group>
-  </div>
-</app-page>
+  <h3>Color switcher as form control</h3>
+  <ngs-playground exampleUrl="_docs/components/color-switcher/_examples" exampleName="brand-colors-as-form-control-example">
+    <app-brand-colors-as-form-control-example/>
+  </ngs-playground>
+</div>

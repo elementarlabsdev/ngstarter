@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
 import { Playground } from '@meta/playground/playground';
 import {
   BasicBrandColorsExample
@@ -14,21 +12,14 @@ import {
 import {
   BrandColorsDisabledExample
 } from '../_examples/brand-colors-disabled-example/brand-colors-disabled-example';
-import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   imports: [
-    Page,
-    PageContentDirective,
     Playground,
     BasicBrandColorsExample,
     BrandColorsCustomColorsExample,
     BrandColorsAsFormControlExample,
     BrandColorsDisabledExample,
-    Tab,
-    TabGroup,
-    PageTitleDirective,
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'

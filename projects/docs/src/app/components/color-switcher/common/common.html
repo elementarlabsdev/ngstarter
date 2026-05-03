@@ -1,0 +1,37 @@
+<app-page>
+  <h1 appPageTitle>Color Switcher</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Introducing <strong>Color Switcher</strong>, a simple yet powerful inline color picker!
+      </p>
+      <p>
+        Easily select and customize colors for your brand directly within your app.
+        Designed to fit seamlessly into projects, this component makes color
+        picking effortless and intuitive.
+      </p>
+      <div class="my-7">
+        <div>Key features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            🎨 <strong>Customizable</strong>: Tailor the color picker to match your app's design.
+          </li>
+          <li>
+            ⚡ <strong>Lightweight & Fast</strong>: Minimal impact on performance, smooth user experience.
+          </li>
+          <li>
+            🛠️ <strong>Seamless Integration</strong>: Built specifically for Angular —just plug and play!
+          </li>
+        </ul>
+      </div>
+    </main>
+
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/color-switcher" ngs-tab-link>Overview</a>
+      <a routerLink="/components/color-switcher/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
