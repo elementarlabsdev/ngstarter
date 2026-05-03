@@ -1,0 +1,38 @@
+<app-page>
+  <h1 appPageTitle>Code Highlighter</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The <code class="code">ngs-code-highlighter</code> component provides a powerful way to display source code with syntax highlighting using the Shiki library.
+        It supports multiple themes, line highlighting, diff view, and more.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Modern Highlighting</strong>: Powered by Shiki for accurate and beautiful syntax highlighting.
+          </li>
+          <li>
+            ✅ <strong>Customizable Themes</strong>: Support for various Shiki themes like github-light, nord, etc.
+          </li>
+          <li>
+            ✅ <strong>Line Highlighting</strong>: Easily highlight specific lines or ranges of code.
+          </li>
+          <li>
+            ✅ <strong>Diff Support</strong>: Built-in support for displaying code changes with diff highlighting.
+          </li>
+          <li>
+            ✅ <strong>Copy to Clipboard</strong>: Optional button to allow users to quickly copy code.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/code-highlighter" ngs-tab-link>Overview</a>
+      <a routerLink="/components/code-highlighter/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

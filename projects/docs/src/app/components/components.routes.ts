@@ -275,7 +275,7 @@ export const routes: Routes = [
   },
   {
     path: 'code-highlighter',
-    loadChildren: () => import('./code-highlighter/code-highlighter.module').then(m => m.CodeHighlighterModule)
+    loadChildren: () => import('./code-highlighter/routes').then(m => m.routes)
   },
   {
     path: 'tiles',
