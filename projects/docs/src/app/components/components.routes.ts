@@ -47,11 +47,7 @@ export const routes: Routes = [
   },
   {
     path: 'chips',
-    loadChildren: () => import('./chips/chips.module').then(m => m.ChipsModule)
-  },
-  {
-    path: 'chips',
-    loadChildren: () => import('./chips/chips.module').then(m => m.ChipsModule)
+    loadChildren: () => import('./chips/routes').then(m => m.routes)
   },
   {
     path: 'crop',
