@@ -167,7 +167,7 @@ export const routes: Routes = [
   },
   {
     path: 'alert',
-    loadChildren: () => import('./alert/alert.module').then(m => m.AlertModule)
+    loadChildren: () => import('./alert/routes').then(m => m.routes)
   },
   {
     path: 'popover',

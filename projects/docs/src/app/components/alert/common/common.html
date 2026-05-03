@@ -1,0 +1,36 @@
+<app-page>
+  <h1 appPageTitle>Alert</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Our Alert Component is designed to make your app notifications stand out. It’s fully customizable and supports:
+      </p>
+      <div class="mt-6">Key Features:</div>
+      <ul class="list-disc ps-4 mt-3 my-6 flex flex-col gap-3">
+        <li>
+          ✅ <strong>Icons</strong>: Add visual cues with ease.
+        </li>
+        <li>
+          ✅ <strong>Controls</strong>: Include buttons or actions to engage your users.
+        </li>
+        <li>
+          ✅ <strong>Closable Alerts</strong>: Let users dismiss messages when they’re done.
+        </li>
+      </ul>
+      <p>
+        It’s lightweight, easy to integrate, and works perfectly with .
+        Enhance your app’s user experience with modern, clean, and functional alerts.
+      </p>
+      <p>
+        Perfect for developers who want simplicity without sacrificing quality. Give it a try!
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/alert" ngs-tab-link>Overview</a>
+      <a routerLink="/components/alert/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
