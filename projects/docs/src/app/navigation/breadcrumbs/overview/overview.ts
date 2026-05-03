@@ -12,15 +12,12 @@ import {
 import {
   BreadcrumbsWithTitlesExample
 } from '../_examples/breadcrumbs-with-titles-example/breadcrumbs-with-titles-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
 import {
   BreadcrumbsWithLastItemAsLinkExample
 } from '../_examples/breadcrumbs-with-last-item-as-link-example/breadcrumbs-with-last-item-as-link-example';
 import {
   BreadcrumbsGlobalExample
 } from '../_examples/breadcrumbs-global-example/breadcrumbs-global-example';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   imports: [
@@ -29,11 +26,8 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     BreadcrumbsWithDatasourceExample,
     BreadcrumbsWithIconsExample,
     BreadcrumbsWithTitlesExample,
-    Page,
-    PageContentDirective,
     BreadcrumbsWithLastItemAsLinkExample,
     BreadcrumbsGlobalExample,
-    PageTitleDirective
   ],
     templateUrl: './overview.html',
     styleUrl: './overview.scss'
