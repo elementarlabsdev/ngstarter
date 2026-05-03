@@ -1,0 +1,18 @@
+<app-page>
+  <h1 appPageTitle>Bar Chart</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Bar Chart is a powerful and flexible component for visualizing data using rectangular bars.
+        It supports responsiveness, gradients, custom radius, and interactive tooltips.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/micro-charts/bar-chart" ngs-tab-link>Overview</a>
+      <a routerLink="/micro-charts/bar-chart/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

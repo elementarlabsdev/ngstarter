@@ -1,0 +1,59 @@
+<h3>API Reference for Bar Chart</h3>
+<p><code>import &#123; MchartBar &#125; from '&#64;ngstarter-ui/components/micro-chart';</code></p>
+
+<div class="overflow-x-auto mt-4">
+  <table class="w-full text-left border-collapse">
+    <thead>
+      <tr class="border-b">
+        <th class="py-2 px-4 font-semibold">Input</th>
+        <th class="py-2 px-4 font-semibold">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>data: number[]</code></td>
+        <td class="py-2 px-4">Array of numeric values to be displayed in the chart.</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>labels: string[]</code></td>
+        <td class="py-2 px-4">Array of strings to be used as labels for the data points.</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>gap: number</code></td>
+        <td class="py-2 px-4">The gap between bars (default: 0.2).</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>radius: number</code></td>
+        <td class="py-2 px-4">The corner radius of the bars (default: 0).</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>highlight: boolean</code></td>
+        <td class="py-2 px-4">Whether to highlight bars on hover (default: false).</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>responsive: boolean</code></td>
+        <td class="py-2 px-4">Whether the chart should resize automatically to fit its container (default: false).</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>fillGradient: boolean</code></td>
+        <td class="py-2 px-4">Whether to use a gradient fill for the bars (default: false).</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>xAccessor: (d: any, i: number) =&gt; any</code></td>
+        <td class="py-2 px-4">Function to access the x-value (index by default).</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>yAccessor: (d: any) =&gt; any</code></td>
+        <td class="py-2 px-4">Function to access the y-value (value by default).</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>tooltip: TemplateRef&lt;any&gt;</code></td>
+        <td class="py-2 px-4">Optional template for the tooltip.</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>tooltipPosition: OverlayPosition</code></td>
+        <td class="py-2 px-4">Position of the tooltip (default: 'after-center').</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
