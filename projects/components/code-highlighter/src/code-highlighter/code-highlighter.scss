@@ -5,12 +5,12 @@
   --ngs-code-highlighter-bg: var(--color-background);
   --ngs-code-highlighter-radius: theme(--radius-2xl);
   --ngs-code-highlighter-padding: --spacing(5);
+  --ngs-code-highlighter-margin: --spacing(5);
   --ngs-code-highlighter-border: 1px solid var(--color-border);
   --ngs-code-highlighter-title-padding: --spacing(2) --spacing(3) --spacing(1) --spacing(3);
   --ngs-code-highlighter-title-color: var(--color-neutral-500);
 
   display: block;
-  margin: --spacing(5) 0;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   figcaption {
@@ -45,10 +45,10 @@
 
   ::ng-deep {
     pre {
+      padding: var(--ngs-code-highlighter-padding) 0;
       line-height: 1.75;
       font-size: theme(--text-sm);
       position: relative;
-      padding: 0;
 
       code {
         display: grid;
@@ -101,7 +101,6 @@
   .content {
     overflow: auto;
     background: var(--ngs-code-highlighter-bg);
-    padding: var(--ngs-code-highlighter-padding) 0;
 
     button {
       color: inherit;
@@ -137,13 +136,15 @@
   &.appearance-none {
     .content {
       border: none;
-      padding: 0;
       background-color: transparent !important;
       border-radius: 0;
     }
 
-    ::ng-deep pre {
-      padding: 0;
+    ::ng-deep {
+      pre {
+        padding-left: 0;
+        padding-right: 0;
+      }
     }
   }
 

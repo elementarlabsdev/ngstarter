@@ -1,25 +1,22 @@
-import { Component, inject, input, ViewEncapsulation, viewChild, booleanAttribute } from '@angular/core';
+import { Component, input, ViewEncapsulation, booleanAttribute } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
-import { MarkdownComponent, provideMarkdown } from 'ngx-markdown';
-import { SnackBar } from '@ngstarter-ui/components/snack-bar';
+import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 import { Button } from '@ngstarter-ui/components/button';
+import {Expand} from "@ngstarter-ui/components/expand";
 
 @Component({
   selector: 'ngs-playground',
   imports: [
     Icon,
-    MarkdownComponent,
-    Button
-  ],
-  providers: [
-    provideMarkdown()
+    CodeHighlighter,
+    Button,
+    Expand
   ],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './playground.html',
   styleUrl: 'playground.scss'
 })
 export class Playground {
-  private _snackBar = inject(SnackBar);
 
   exampleUrl = input<string>();
   exampleName = input<string>();
@@ -32,8 +29,6 @@ export class Playground {
   cssSrc: string;
   alreadyLoaded = false;
 
-  readonly _markdownRef = viewChild<any>('markdownRef');
-
   showSource = false;
   currentTab = 'html';
   exampleLoading = false;
@@ -42,31 +37,36 @@ export class Playground {
     return !!this.htmlSrc || !!this.tsSrc || !!this.cssSrc;
   }
 
-  get src(): string | null {
+  get code(): string | null {
     if (this.isCurrentTab('html')) {
-      return "```html\n" +
-        "" + this.htmlSrc + "```";
+      return this.htmlSrc;
     }
 
     if (this.isCurrentTab('ts')) {
-      return "```typescript\n" +
-        "" + this.tsSrc + "```";
+      return this.tsSrc;
     }
 
     if (this.isCurrentTab('css')) {
-      return "```css\n" +
-        "" + this.cssSrc + "```";
+      return this.cssSrc;
     }
 
     return null;
   }
 
-  contentCopy(): void {
-    const text = this._markdownRef().element.nativeElement.querySelector('pre code').innerText;
-    navigator.clipboard.writeText(text);
-    this._snackBar.open('Source code has been copied to your clipboard', '', {
-      duration: 3000
-    });
+  get language(): string {
+    if (this.isCurrentTab('html')) {
+      return 'html';
+    }
+
+    if (this.isCurrentTab('ts')) {
+      return 'typescript';
+    }
+
+    if (this.isCurrentTab('css')) {
+      return 'css';
+    }
+
+    return 'none';
   }
 
   async toggleSource() {
