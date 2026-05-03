@@ -1,0 +1,39 @@
+<app-page>
+  <h1 appPageTitle>Announcement</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Introducing the <strong>Announcement Component</strong>, a simple and effective way to display
+        important messages at the top of your app. Whether it’s a critical update,
+        a promotion, or just a friendly reminder, this component ensures your users won’t miss it.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Highly Visible</strong>: Always grabs attention without disrupting the user experience.
+          </li>
+          <li>
+            ✅ <strong>User-Friendly</strong>: Intuitive behavior with dismissible options.
+          </li>
+          <li>
+            ✅ <strong>Customizable</strong>: Easily adapt the design to match your app's style.
+          </li>
+          <li>
+            ✅ <strong>Seamless Integration</strong>: Built with Angular, it fits perfectly into your app.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Keep your users informed with the <strong>Announcement Component</strong> — the perfect solution for delivering essential updates!
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/announcement" ngs-tab-link>Overview</a>
+      <a routerLink="/components/announcement/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

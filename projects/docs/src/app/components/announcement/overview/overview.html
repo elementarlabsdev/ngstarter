@@ -1,104 +1,21 @@
-<app-page>
-  <h1 appPageTitle>Announcement</h1>
-  <div appPageContent>
-    <main class="mb-10">
-      <p>
-        Introducing the <strong>Announcement Component</strong>, a simple and effective way to display
-        important messages at the top of your app. Whether it’s a critical update,
-        a promotion, or just a friendly reminder, this component ensures your users won’t miss it.
-      </p>
-      <section class="my-7">
-        <div>Key Features:</div>
-        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
-          <li>
-            ✅ <strong>Highly Visible</strong>: Always grabs attention without disrupting the user experience.
-          </li>
-          <li>
-            ✅ <strong>User-Friendly</strong>: Intuitive behavior with dismissible options
-          </li>
-          <li>
-            ✅ <strong>Customizable</strong>: Easily adapt the design to match your app's style.
-          </li>
-          <li>
-            ✅ <strong>Seamless Integration</strong>: Built with , it fits perfectly into your app.
-          </li>
-        </ul>
-      </section>
-      <p>
-        Keep your users informed with the <strong>Announcement Component</strong> — the perfect solution for delivering essential updates!
-      </p>
-    </main>
+<main>
+  <h3>Show/Hide announcement dynamically</h3>
+  <ngs-playground exampleUrl="_docs/components/announcement/_examples" exampleName="show-hide-announcement-dynamically">
+    <app-show-hide-announcement-dynamically/>
+  </ngs-playground>
 
-    <h3>Show/Hide announcement dynamically</h3>
-    <ngs-playground exampleUrl="_docs/components/announcement/_examples" exampleName="show-hide-announcement-dynamically">
-      <app-show-hide-announcement-dynamically/>
-    </ngs-playground>
+  <h3>Basic announcement</h3>
+  <ngs-playground exampleUrl="_docs/components/announcement/_examples" exampleName="basic-announcement-example">
+    <app-basic-announcement-example/>
+  </ngs-playground>
 
-    <h3>Basic announcement</h3>
-    <ngs-playground exampleUrl="_docs/components/announcement/_examples" exampleName="basic-announcement-example">
-      <app-basic-announcement-example/>
-    </ngs-playground>
+  <h3>Announcement with title</h3>
+  <ngs-playground exampleUrl="_docs/components/announcement/_examples" exampleName="announcement-with-title-example">
+    <app-announcement-with-title-example/>
+  </ngs-playground>
 
-    <h3>Announcement with title</h3>
-    <ngs-playground exampleUrl="_docs/components/announcement/_examples" exampleName="announcement-with-title-example">
-      <app-announcement-with-title-example/>
-    </ngs-playground>
-
-    <h3>Announcement with icons</h3>
-    <ngs-playground exampleUrl="_docs/components/announcement/_examples" exampleName="announcement-with-icons-example">
-      <app-announcement-with-icons-example/>
-    </ngs-playground>
-
-    <h2>API Reference</h2>
-    <p>
-      Properties of the <code class="code">ngs-announcement</code> component.
-    </p>
-
-    <ngs-tab-group class="my-6">
-      <ngs-tab label="Properties">
-        <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
-          <table ngs-table [dataSource]="properties">
-            <ng-container ngsColumnDef="name">
-              <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
-              <td ngs-cell *ngsCellDef="let element">
-                <div>{{ element.name }}</div>
-                <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
-              </td>
-            </ng-container>
-
-            <ng-container ngsColumnDef="type">
-              <th ngs-header-cell *ngsHeaderCellDef>Type</th>
-              <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
-            </ng-container>
-
-            <ng-container ngsColumnDef="default">
-              <th ngs-header-cell *ngsHeaderCellDef>Default</th>
-              <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
-            </ng-container>
-
-            <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
-            <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
-          </table>
-        </div>
-      </ngs-tab>
-      <ngs-tab label="Events">
-        <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
-          <table ngs-table [dataSource]="events">
-            <ng-container ngsColumnDef="name">
-              <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Event</th>
-              <td ngs-cell *ngsCellDef="let element">{{ element.name }}</td>
-            </ng-container>
-
-            <ng-container ngsColumnDef="description">
-              <th ngs-header-cell *ngsHeaderCellDef>Description</th>
-              <td ngs-cell *ngsCellDef="let element">{{ element.description }}</td>
-            </ng-container>
-
-            <tr ngs-header-row *ngsHeaderRowDef="['name', 'description']"></tr>
-            <tr ngs-row *ngsRowDef="let row; columns: ['name', 'description'];"></tr>
-          </table>
-        </div>
-      </ngs-tab>
-    </ngs-tab-group>
-  </div>
-</app-page>
+  <h3>Announcement with icons</h3>
+  <ngs-playground exampleUrl="_docs/components/announcement/_examples" exampleName="announcement-with-icons-example">
+    <app-announcement-with-icons-example/>
+  </ngs-playground>
+</main>

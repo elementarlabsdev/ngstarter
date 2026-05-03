@@ -144,24 +144,24 @@ export class App implements OnInit {
       name: 'Theme',
       icon: 'fluent:options-24-regular',
       children: [
-        {
-          key: uuid(),
-          type: 'link',
-          name: 'Colors',
-          link: '/theme/colors'
-        },
+        // {
+        //   key: uuid(),
+        //   type: 'link',
+        //   name: 'Colors',
+        //   link: '/theme/colors'
+        // },
         {
           key: uuid(),
           type: 'link',
           name: 'Typography',
           link: '/theme/typography'
         },
-        {
-          type: 'link',
-          name: 'Customize Theme',
-          key: 'customize',
-          link: '/theme/customize-theme'
-        },
+        // {
+        //   type: 'link',
+        //   name: 'Customize Theme',
+        //   key: 'customize',
+        //   link: '/theme/customize-theme'
+        // },
       ]
     },
     {
