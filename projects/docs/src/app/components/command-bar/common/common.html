@@ -1,0 +1,18 @@
+<app-page>
+  <h1 appPageTitle>Command Bar</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Angular Command Bar component is a user interface element that contains commands
+        for interacting with the content of the window, panel, or parent region it overlays.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/command-bar" ngs-tab-link>Overview</a>
+      <a routerLink="/components/command-bar/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

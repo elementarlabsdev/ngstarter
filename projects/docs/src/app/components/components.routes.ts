@@ -183,7 +183,7 @@ export const routes: Routes = [
   },
   {
     path: 'command-bar',
-    loadChildren: () => import('./command-bar/command-bar.module').then(m => m.CommandBarModule)
+    loadChildren: () => import('./command-bar/routes').then(m => m.routes)
   },
   {
     path: 'filter-builder',
