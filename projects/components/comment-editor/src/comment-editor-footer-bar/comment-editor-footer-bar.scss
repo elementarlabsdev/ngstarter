@@ -4,4 +4,10 @@
   display: flex;
   align-items: center;
   gap: --spacing(0.5);
+  justify-content: flex-end;
+  width: 100%;
+}
+
+:host-context(.ngs-comment-editor.full-view) {
+  justify-content: flex-start;
 }
