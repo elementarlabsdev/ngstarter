@@ -1,0 +1,36 @@
+<app-page>
+  <h1 appPageTitle>Line micro chart</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Line micro chart component is a lightweight and highly customizable tool for visualizing data trends.
+        Built with Angular and D3, it provides a clean and responsive way to integrate small-scale charts into your
+        applications.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Customizable Curves</strong>: Choose from various curve types like linear, catmull-rom, and bump.
+          </li>
+          <li>
+            ✅ <strong>Area Fill</strong>: Easily add a filled area under the line with support for gradients.
+          </li>
+          <li>
+            ✅ <strong>Interactive Markers</strong>: Display markers on data points and interactive tooltips.
+          </li>
+          <li>
+            ✅ <strong>Responsive Design</strong>: Automatically adjusts to fit the container size.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/micro-charts/line-chart" ngs-tab-link>Overview</a>
+      <a routerLink="/micro-charts/line-chart/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
