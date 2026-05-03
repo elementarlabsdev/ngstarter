@@ -11,7 +11,7 @@ RUN npm run build:prod
 
 # --- Build Docs ---
 FROM base AS build-docs
-RUN npm run build:docs:prod
+RUN npm run build:docs:prod -- --no-prerender
 
 # --- Build Admin ---
 FROM base AS build-admin
