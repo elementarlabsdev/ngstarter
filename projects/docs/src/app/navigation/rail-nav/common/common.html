@@ -1,0 +1,18 @@
+<app-page>
+  <h1 appPageTitle>Rail Navigation</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Rail navigation provides a compact way to navigate between primary destinations in an app.
+        It is typically used on the side of the screen and contains icons with optional labels.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/navigation/rail-nav" ngs-tab-link>Overview</a>
+      <a routerLink="/navigation/rail-nav/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
