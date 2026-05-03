@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>Avatar</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Avatar component is used to represent a user or entity with an image, initials, or icon.
+        It supports different variants, sizes, and can be grouped together.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Flexible Content</strong>: Display images, text labels, or icons.
+          </li>
+          <li>
+            ✅ <strong>Visual Variants</strong>: Support for solid, tonal, outlined, and plain styles.
+          </li>
+          <li>
+            ✅ <strong>Automatic Colors</strong>: Dynamically generate background and text colors.
+          </li>
+          <li>
+            ✅ <strong>Avatar Groups</strong>: Easily stack multiple avatars together.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/avatar" ngs-tab-link>Overview</a>
+      <a routerLink="/components/avatar/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

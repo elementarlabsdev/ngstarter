@@ -15,17 +15,14 @@ import {
 import {
   AvatarPresenceIndicatorExample
 } from '../_examples/avatar-presence-indicator-example/avatar-presence-indicator-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
 import {
   AvatarAutomaticColorExample
 } from '../_examples/avatar-automatic-color-example/avatar-automatic-color-example';
 import { AvatarDicebearExample } from '../_examples/avatar-dicebear-example/avatar-dicebear-example';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 import { AvatarVariantsExample } from '../_examples/avatar-variants-example/avatar-variants-example';
 
 @Component({
-    selector: 'app-overview',
+  selector: 'app-overview',
   imports: [
     Playground,
     BasicAvatarExample,
@@ -36,14 +33,11 @@ import { AvatarVariantsExample } from '../_examples/avatar-variants-example/avat
     GroupedAvatarsExample,
     GroupedAndTotalAvatarsExample,
     AvatarPresenceIndicatorExample,
-    Page,
-    PageContentDirective,
     AvatarAutomaticColorExample,
     AvatarDicebearExample,
-    PageTitleDirective
   ],
-    templateUrl: './overview.html',
-    styleUrl: './overview.scss'
+  templateUrl: './overview.html',
+  styleUrl: './overview.scss'
 })
 export class Overview {
 
