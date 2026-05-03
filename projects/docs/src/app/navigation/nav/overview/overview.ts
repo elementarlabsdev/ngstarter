@@ -15,12 +15,9 @@ import {
 import {
   NavigationWithNestedMenuExample
 } from '../_examples/navigation-with-nested-menu-example/navigation-with-nested-menu-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
 import {
   NavigationWithBadgesExample
 } from '../_examples/navigation-with-badges-example/navigation-with-badges-example';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   imports: [
@@ -30,10 +27,7 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     NavigationWithDividerExample,
     NavigationWithIconsExample,
     NavigationWithNestedMenuExample,
-    Page,
-    PageContentDirective,
     NavigationWithBadgesExample,
-    PageTitleDirective
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'
