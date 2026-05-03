@@ -43,7 +43,7 @@ export const routes: Routes = [
   },
   {
     path: 'carousel',
-    loadChildren: () => import('./carousel/carousel.module').then(m => m.CarouselModule)
+    loadChildren: () => import('./carousel/routes').then(m => m.routes)
   },
   {
     path: 'chips',

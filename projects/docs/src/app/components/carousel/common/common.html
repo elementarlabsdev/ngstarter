@@ -1,0 +1,39 @@
+<app-page>
+  <h1 appPageTitle>Carousel</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Looking for a smooth, modern carousel for your Angular projects? Meet <strong>Carousel</strong>,
+        a lightweight and flexible component designed to fit perfectly into apps.
+      </p>
+      <div class="my-7">
+        <div>Key features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Seamless Integration</strong>: Built with and Tailwind,
+            it blends right in with your app's design.
+          </li>
+          <li>
+            ✅ <strong>Easy to Use</strong>: Simple API for developers of any skill level.
+          </li>
+          <li>
+            ✅ <strong>Customizable</strong>: Tailor it to match your style with ease.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Whether you need to showcase images, cards, or any content, Carousel delivers a fast, polished experience.
+      </p>
+      <p>
+        Try it now and elevate your app’s UI! 🚀
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/carousel" ngs-tab-link>Overview</a>
+      <a routerLink="/components/carousel/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

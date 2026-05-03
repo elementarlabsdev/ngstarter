@@ -1,0 +1,125 @@
+<h2>API Reference</h2>
+<p>
+  Properties for the <code class="code">ngs-carousel</code> component.
+</p>
+
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="properties">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <div [innerHTML]="element.name"></div>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="default">
+      <th ngs-header-cell *ngsHeaderCellDef>Default</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
+  </table>
+</div>
+
+<h3>Events</h3>
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="events">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Event</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="description">
+      <th ngs-header-cell *ngsHeaderCellDef>Description</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.description }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Output type</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'description', 'type']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'description', 'type'];"></tr>
+  </table>
+</div>
+
+<p>
+  Properties for the <code class="code">ngsCarouselNext</code> component.
+</p>
+
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="carouselNextProperties">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <div [innerHTML]="element.name"></div>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="default">
+      <th ngs-header-cell *ngsHeaderCellDef>Default</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
+  </table>
+</div>
+
+<p>
+  Properties for the <code class="code">ngsCarouselPrevious</code> component.
+</p>
+
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="carouselPreviousProperties">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <div [innerHTML]="element.name"></div>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="default">
+      <th ngs-header-cell *ngsHeaderCellDef>Default</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
+  </table>
+</div>
+
+<div class="flex flex-col gap-3 mt-10">
+  <p>
+    <code class="code">ngs-carousel-card</code> component - adds an carousel item.
+  </p>
+  <p>
+    <code class="code">ngsCarouselControls</code> directive - adds a controls container.
+  </p>
+  <p>
+    <code class="code">ngsCarouselNext</code> directive - control that moves to the next item in the carousel.
+  </p>
+  <p>
+    <code class="code">ngsCarouselPrevious</code> directive - control that moves to the previous item in the carousel.
+  </p>
+</div>
