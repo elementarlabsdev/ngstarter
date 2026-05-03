@@ -215,7 +215,7 @@ export const routes: Routes = [
   },
   {
     path: 'confirm',
-    loadChildren: () => import('./confirm/confirm.module').then(m => m.ConfirmModule)
+    loadChildren: () => import('./confirm/routes').then(m => m.routes)
   },
   {
     path: 'image-viewer',
