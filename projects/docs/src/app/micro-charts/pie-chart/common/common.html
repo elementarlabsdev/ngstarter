@@ -1,0 +1,19 @@
+<app-page>
+  <h1 appPageTitle>Pie micro chart</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Pie micro chart is a compact and efficient way to visualize proportional data.
+        It is designed to be used in dashboards, reports, and other data-driven applications
+        where space is limited.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/micro-charts/pie-chart" ngs-tab-link>Overview</a>
+      <a routerLink="/micro-charts/pie-chart/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
