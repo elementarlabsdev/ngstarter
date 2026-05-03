@@ -1,0 +1,38 @@
+<app-page>
+  <h1 appPageTitle>Badge</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Badge component is a small, informative element typically used to display counts, status, or labels.
+        It can be easily attached to other components to provide additional context without taking up much space.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Contextual Information</strong>: Great for showing notifications, counts, or status updates.
+          </li>
+          <li>
+            ✅ <strong>Flexible Positioning</strong>: Supports multiple positions relative to the host element.
+          </li>
+          <li>
+            ✅ <strong>Customizable Appearance</strong>: Choose from different sizes and colors to match your design.
+          </li>
+          <li>
+            ✅ <strong>Dynamic Visibility</strong>: Easily hide or disable the badge based on your application's state.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Whether you need to show the number of unread messages or highlight a new feature, the Badge component is a versatile tool for your UI.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/badge" ngs-tab-link>Overview</a>
+      <a routerLink="/components/badge/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
