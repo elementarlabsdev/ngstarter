@@ -7,6 +7,4 @@ services:
       - "4000:4000"
       - "4001:4001"
       - "4002:4002"
-    environment:
-      NG_ALLOWED_HOSTS: "$DOMAIN,*.$DOMAIN,localhost"
     restart: unless-stopped

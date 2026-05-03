@@ -38,6 +38,9 @@
             "scripts": [
             ],
             "server": "src/main.server.ts",
+            "security": {
+              "allowedHosts": ["*"]
+            },
             "outputMode": "server",
             "ssr": {
               "entry": "src/server.ts"
@@ -166,6 +169,9 @@
               "@angular/localize/init"
             ],
             "server": "projects/docs/src/main.server.ts",
+            "security": {
+              "allowedHosts": ["*"]
+            },
             "outputMode": "server",
             "ssr": {
               "entry": "projects/docs/src/server.ts"
@@ -242,6 +248,9 @@
               "@angular/localize/init"
             ],
             "server": "projects/admin/src/main.server.ts",
+            "security": {
+              "allowedHosts": ["*"]
+            },
             "outputMode": "server",
             "ssr": {
               "entry": "projects/admin/src/server.ts"
