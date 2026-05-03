@@ -90,6 +90,7 @@ export class FilterBuilder implements OnInit, AfterViewInit {
   protected _value: FilterBuilderGroup[] = [];
   protected _operations: any[] = [];
   protected editItem: FilterBuilderCondition | undefined;
+  protected _tempMultipleValue: any[] = [];
 
   ngOnInit() {
     if (this.value().length) {
@@ -155,15 +156,15 @@ export class FilterBuilder implements OnInit, AfterViewInit {
   }
 
   selectConditionField(item: FilterBuilderCondition, field: FilterBuilderFieldDef): void {
-    this.editItem = undefined;
     let allowedTypes = this._operationAllowedTypesMap.get(field.dataType) as string[];
+    item['value'][0] = field.dataField;
     item['value'][1] = allowedTypes[0];
     this._resetValue(field, item);
+    this.editItem = undefined;
     this._emitChangeEvent();
   }
 
   operationChanged(item: FilterBuilderCondition, operation: string): void {
-    this.editItem = undefined;
     const oldOperation = item['value'][1];
 
     if (oldOperation === 'equals' && operation === 'isAnyOf') {
@@ -183,6 +184,7 @@ export class FilterBuilder implements OnInit, AfterViewInit {
     }
 
     item['value'][1] = operation;
+    this.editItem = undefined;
     this._emitChangeEvent();
   }
 
@@ -207,6 +209,9 @@ export class FilterBuilder implements OnInit, AfterViewInit {
 
   modifyValue(item: FilterBuilderCondition): void {
     this.editItem = item;
+    if (this.getFieldType(item) === 'array' && item['value'][1] === 'isAnyOf') {
+      this._tempMultipleValue = [...(item['value'][2] || [])];
+    }
   }
 
   getFieldType(item: FilterBuilderCondition): string {
@@ -251,6 +256,9 @@ export class FilterBuilder implements OnInit, AfterViewInit {
   }
 
   selectBlur(event: FocusEvent): void {
+    if (this.editItem && this.getFieldType(this.editItem) === 'array' && this.editItem['value'][1] === 'isAnyOf') {
+      return;
+    }
     event.preventDefault();
     event.stopPropagation();
     const select = event.target as HTMLElement;
@@ -265,8 +273,13 @@ export class FilterBuilder implements OnInit, AfterViewInit {
   }
 
   selectClosed(): void {
+    if (this.editItem && this.getFieldType(this.editItem) === 'array' && this.editItem['value'][1] === 'isAnyOf') {
+      this.editItem['value'][2] = [...this._tempMultipleValue];
+    }
     this.cancelEdit();
-    this._emitChangeEvent();
+    setTimeout(() => {
+      this._emitChangeEvent();
+    });
   }
 
   protected operationIconTemplateRef(operation: FilterBuilderOperationDefDirective): TemplateRef<any> {

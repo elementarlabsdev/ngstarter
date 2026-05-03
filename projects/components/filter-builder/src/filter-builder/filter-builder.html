@@ -21,7 +21,9 @@
           <ngs-menu #nestedGroupOperationsMenu="ngsMenu">
             <div ngsMenuOptionGroup [(ngModel)]="item['logicalOperator']">
               @for (groupOperation of groupOperations(); track groupOperation.id) {
-                <ngs-option [value]="groupOperation.id" (click)="nestedGroupOperationsMenuTrigger.closeMenu('click')">{{ groupOperation.name }}</ngs-option>
+                <ngs-option [value]="groupOperation.id"
+                            (click)="nestedGroupOperationsMenuTrigger.closeMenu('click')">{{ groupOperation.name }}
+                </ngs-option>
               }
             </div>
           </ngs-menu>
@@ -31,7 +33,7 @@
           </ngs-menu>
         </div>
         @if (item['value'].length > 0) {
-          <ng-container [ngTemplateOutlet]="itemsTpl" [ngTemplateOutletContext]="{ $implicit: item['value'] }" />
+          <ng-container [ngTemplateOutlet]="itemsTpl" [ngTemplateOutletContext]="{ $implicit: item['value'] }"/>
         }
       } @else if (_isCondition(item)) {
         <div class="condition">
@@ -40,11 +42,12 @@
           </div>
           <button class="condition-field"
                   #fieldsMenuTrigger="ngsMenuTrigger"
-                  [ngsMenuTriggerFor]="fieldsMenu">{{ getConditionField(item['value'][0])?.name }}</button>
+                  [ngsMenuTriggerFor]="fieldsMenu">{{ getConditionField(item['value'][0])?.name }}
+          </button>
           <button class="condition-operation"
                   #operationsMenuTrigger="ngsMenuTrigger"
                   [ngsMenuTriggerFor]="operationsMenu">
-            <ng-template [ngTemplateOutlet]="getConditionOperation(item['value'][1])?.name" />
+            <ng-template [ngTemplateOutlet]="getConditionOperation(item['value'][1])?.name"/>
           </button>
           <div class="relative">
             @if (editItem && editItem === item) {
@@ -65,13 +68,12 @@
                           </ngs-select>
                         </ngs-form-field>
                       }
-
                       @case ('isAnyOf') {
                         <ngs-form-field class="form-field">
                           <ngs-select placeholder="Select..." multiple
                                       ngsAutoFocus
                                       (blur)="selectBlur($event)"
-                                      [(ngModel)]="item['value'][2]"
+                                      [(ngModel)]="_tempMultipleValue"
                                       (closed)="selectClosed()">
                             @for (option of getOptions(editItem); track option.id) {
                               <ngs-option [value]="option.id">{{ option.name }}</ngs-option>
@@ -81,7 +83,6 @@
                       }
                     }
                   }
-
                   @case ('number') {
                     @switch (editItem['value'][1]) {
                       @case ('isBetween') {
@@ -110,7 +111,6 @@
                       }
                     }
                   }
-
                   @default {
                     <ngs-form-field class="form-field">
                       <input type="text" ngsInput ngsAutoFocus
@@ -130,14 +130,14 @@
                         {{ getDataSourceItemNameById(item, item['value'][2]) }}
                       </button>
                     } @else {
-                    <button class="condition-value flex items-center gap-2" (click)="modifyValue(item)">
-                      @for (dataSourceItemId of item['value'][2]; track dataSourceItemId; let last = $last) {
-                        <span>{{ getDataSourceItemNameById(item, dataSourceItemId) }}</span>
-                        @if (!last) {
-                          <span class="text-neutral-500">|</span>
+                      <button class="condition-value flex items-center gap-2" (click)="modifyValue(item)">
+                        @for (dataSourceItemId of item['value'][2]; track dataSourceItemId; let last = $last) {
+                          <span>{{ getDataSourceItemNameById(item, dataSourceItemId) }}</span>
+                          @if (!last) {
+                            <span class="text-neutral-500">|</span>
+                          }
                         }
-                      }
-                    </button>
+                      </button>
                     }
                   } @else {
                     @if (item['value'][1] === 'isBetween') {
@@ -163,10 +163,11 @@
         </div>
         <ngs-menu #fieldsMenu="ngsMenu">
           <ng-template ngsMenuContent>
-            <div ngsMenuOptionGroup [(ngModel)]="item['value'][0]">
+            <div ngsMenuOptionGroup [ngModel]="item['value'][0]">
               @for (fieldDef of fieldDefs(); track fieldDef) {
                 <ngs-option [value]="fieldDef.dataField"
-                            (click)="selectConditionField(item, fieldDef); fieldsMenuTrigger.closeMenu('click')">{{ fieldDef.name }}</ngs-option>
+                            (click)="selectConditionField(item, fieldDef); fieldsMenuTrigger.closeMenu('click')">{{ fieldDef.name }}
+                </ngs-option>
               }
             </div>
           </ng-template>
@@ -176,13 +177,14 @@
             <div ngsMenuOptionGroup [ngModel]="item['value'][1]">
               @for (operation of _operationDefs; track operation.id()) {
                 <div [hidden]="!isOperationAllowedForCondition(item['value'][0], operation.id())">
-                  <ngs-option [value]="operation.id()" (click)="operationChanged(item, operation.id()); operationsMenuTrigger.closeMenu('click')">
+                  <ngs-option [value]="operation.id()"
+                              (click)="operationChanged(item, operation.id()); operationsMenuTrigger.closeMenu('click')">
                     <div class="flex items-center gap-3">
                       @if (operation.operationIcon()) {
-                        <ng-template [ngTemplateOutlet]="operationIconTemplateRef(operation)" />
+                        <ng-template [ngTemplateOutlet]="operationIconTemplateRef(operation)"/>
                       }
                       <div>
-                        <ng-template [ngTemplateOutlet]="operationNameTemplateRef(operation)" />
+                        <ng-template [ngTemplateOutlet]="operationNameTemplateRef(operation)"/>
                       </div>
                     </div>
                   </ngs-option>
@@ -207,14 +209,16 @@
       <ngs-icon name="fluent:add-24-regular" class="font-icon"/>
     </div>
   </div>
-  <ng-container [ngTemplateOutlet]="itemsTpl" [ngTemplateOutletContext]="{ $implicit: _value }" />
+  <ng-container [ngTemplateOutlet]="itemsTpl" [ngTemplateOutletContext]="{ $implicit: _value }"/>
 </div>
 
 <ngs-menu #groupOperationsMenu="ngsMenu">
   <ng-template ngsMenuContent>
     <div ngsMenuOptionGroup [(ngModel)]="_logicalOperator" (ngModelChange)="_emitChangeEvent()">
       @for (operation of groupOperations(); track operation.id) {
-        <ngs-option [value]="operation.id" (click)="groupOperationsMenuTrigger.closeMenu('click')">{{ operation.name }}</ngs-option>
+        <ngs-option [value]="operation.id"
+                    (click)="groupOperationsMenuTrigger.closeMenu('click')">{{ operation.name }}
+        </ngs-option>
       }
     </div>
   </ng-template>
