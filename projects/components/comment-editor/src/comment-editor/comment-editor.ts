@@ -97,7 +97,32 @@ export class CommentEditor implements OnInit, OnDestroy {
       editor: () => this.editor,
       isToolbarActive: () => this.showToolbar,
       toggleToolbar: () => this.toggleToolbar(),
-      isEditorActivated: () => this.fullView || this.fullViewMode()
+      isEditorActivated: () => this.fullView || this.fullViewMode(),
+      insertText: (text: string) => this.insertText(text)
+    }
+  }
+
+  insertText(text: string): void {
+    if (!this.editor) {
+      return;
+    }
+
+    if (this.editor.isFocused) {
+      this.editor.chain().focus().insertContent(text).run();
+    } else {
+      const content = this.editor.getText();
+      let textToInsert = text;
+      if (content.length > 0) {
+        textToInsert = ` ${text} `;
+      }
+      const lastNode = this.editor.state.doc.lastChild;
+      if (lastNode && lastNode.type.name === 'paragraph') {
+        const pos = this.editor.state.doc.content.size - 1;
+        this.editor.chain().focus().insertContentAt(pos, textToInsert).run();
+      } else {
+        this.editor.chain().focus().insertContentAt(this.editor.state.doc.content.size, textToInsert).run();
+      }
+      this.activateFullView();
     }
   }
 

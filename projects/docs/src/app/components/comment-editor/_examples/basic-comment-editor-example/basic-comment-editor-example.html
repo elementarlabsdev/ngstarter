@@ -71,6 +71,15 @@
   </ngs-comment-editor-footer-bar>
 </ngs-comment-editor>
 
+<div class="mt-5 flex gap-2">
+  <button ngsButton (click)="editor.api.insertText('Hello World')">
+    Insert "Hello World"
+  </button>
+  <button ngsButton (click)="editor.api.insertText('🔥')">
+    Insert Emoji
+  </button>
+</div>
+
 @if (comments.length > 0) {
   <div class="mt-10 flex flex-col gap-7">
     @for (comment of comments; track comment) {
