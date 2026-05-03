@@ -1,0 +1,17 @@
+<app-page>
+  <h1 appPageTitle>Filter Builder</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Filter Builder is a powerful component that allows users to create complex data filtering conditions through an intuitive interface.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/filter-builder" ngs-tab-link>Overview</a>
+      <a routerLink="/components/filter-builder/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
