@@ -79,7 +79,7 @@ export const routes: Routes = [
   },
   {
     path: 'content-fade',
-    loadChildren: () => import('./content-fade/content-fade.module').then(m => m.ContentFadeModule)
+    loadChildren: () => import('./content-fade/routes').then(m => m.routes)
   },
   {
     path: 'expansion-panel',

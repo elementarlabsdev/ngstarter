@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>Content Fade</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Content Fade component is a sleek and effective way to indicate that content continues beyond the visible area.
+        It applies a smooth gradient overlay to the edges of a container, providing a visual cue to users that there is more to see.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Visual Continuity</strong>: Clearly indicates hidden content without abrupt cut-offs.
+          </li>
+          <li>
+            ✅ <strong>Flexible Positioning</strong>: Apply fade to the start, end, or both sides of the container.
+          </li>
+          <li>
+            ✅ <strong>Customizable Appearance</strong>: Easily adjust the color and width of the fade effect to match your design.
+          </li>
+          <li>
+            ✅ <strong>Lightweight & Efficient</strong>: Built for performance with minimal overhead.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/content-fade" ngs-tab-link>Overview</a>
+      <a routerLink="/components/content-fade/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

@@ -6,12 +6,9 @@ import {
 import {
   ContentFadeCustomWidthExample
 } from '../_examples/content-fade-custom-width-example/content-fade-custom-width-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
 import {
   ContentFadeCustomPositionExample
 } from '../_examples/content-fade-custom-position-example/content-fade-custom-position-example';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   selector: 'app-overview',
@@ -19,10 +16,7 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     Playground,
     BasicContentFadeExample,
     ContentFadeCustomWidthExample,
-    ContentFadeCustomPositionExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
+    ContentFadeCustomPositionExample
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'
