@@ -1,10 +1,10 @@
-<div class="h-[600px] relative">
+<div class="h-[600px] w-[300px] relative">
   <ngs-sidebar class="border border-muted rounded-2xl">
-    <ngs-sidebar-header class="h-20 font-bold text-primary border-b border-b-muted">
+    <ngs-sidebar-header class="flex h-14 items-center px-4 font-bold text-primary border-b border-b-muted">
       NGSTARTER
     </ngs-sidebar-header>
     <ngs-sidebar-body>
-      <ngs-sidebar-nav activeKey="home">
+      <ngs-sidebar-nav activeKey="home" class="p-4">
         @for (navItem of navItems; track navItem) {
           @switch (navItem.type) {
             @case ('group') {
@@ -49,7 +49,7 @@
         }
       </ngs-sidebar-nav>
     </ngs-sidebar-body>
-    <ngs-sidebar-footer class="h-20 px-7 text-sm border-t border-t-muted">
+    <ngs-sidebar-footer class="flex h-14 items-center px-4 text-sm border-t border-t-muted">
       Copyright &copy; 2024
     </ngs-sidebar-footer>
   </ngs-sidebar>

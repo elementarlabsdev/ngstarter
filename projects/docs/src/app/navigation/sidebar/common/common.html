@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>Sidebar</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Sidebar component provides a robust and flexible navigation interface for your application.
+        It supports hierarchical menus, grouping, and custom content, ensuring a seamless user experience.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Hierarchical Navigation</strong>: Support for multi-level menus and groups.
+          </li>
+          <li>
+            ✅ <strong>Customizable</strong>: Easily adapt icons, labels, and overall styling.
+          </li>
+          <li>
+            ✅ <strong>Responsive</strong>: Works across different screen sizes.
+          </li>
+          <li>
+            ✅ <strong>Integration</strong>: Built with Angular for high performance and reliability.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/navigation/sidebar" ngs-tab-link>Overview</a>
+      <a routerLink="/navigation/sidebar/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
