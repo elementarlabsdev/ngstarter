@@ -1,0 +1,48 @@
+<h3 class="mb-4">BottomSheet Service</h3>
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden mb-12">
+  <table ngs-table [dataSource]="serviceMethods">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Method</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <div class="font-mono text-sm">{{ element.name }}</div>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Returns</th>
+      <td ngs-cell *ngsCellDef="let element" class="font-mono text-sm">{{ element.type }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'type']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type'];"></tr>
+  </table>
+</div>
+
+<ngs-divider class="mb-10"/>
+
+<h3 class="mb-4">BottomSheetConfig</h3>
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden">
+  <table ngs-table [dataSource]="configProperties">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Property</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <div class="font-mono text-sm">{{ element.name }}</div>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let element" class="font-mono text-sm">{{ element.type }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="default">
+      <th ngs-header-cell *ngsHeaderCellDef>Default</th>
+      <td ngs-cell *ngsCellDef="let element" class="font-mono text-sm">{{ element.default }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
+  </table>
+</div>

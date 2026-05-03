@@ -1,0 +1,32 @@
+<app-page>
+  <h1 appPageTitle>Block Loader</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Block Loader component is used to indicate a loading state for specific sections or elements within an application.
+        It provides a visual cue to users that content is being fetched or processed, ensuring a smooth and informative user experience.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Section Loading</strong>: Easily overlay any container to show it's currently busy.
+          </li>
+          <li>
+            ✅ <strong>Customizable Spinner</strong>: Adjust diameter and stroke width to match your UI.
+          </li>
+          <li>
+            ✅ <strong>Container Integration</strong>: Works seamlessly with the <code>ngsBlockLoaderContainer</code> directive.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/block-loader" ngs-tab-link>Overview</a>
+      <a routerLink="/components/block-loader/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
