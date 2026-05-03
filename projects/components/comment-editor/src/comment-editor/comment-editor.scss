@@ -45,6 +45,10 @@
     height: --spacing(14);
 
     ::ng-deep {
+      .single-emoji {
+        font-size: theme(--text-3xl);
+      }
+
       .tiptap {
         padding: --spacing(4);
         min-height: --spacing(10);

@@ -33,6 +33,7 @@ import { isPlatformServer } from '@angular/common';
 import { Button } from '@ngstarter-ui/components/button';
 import { COMMENT_EDITOR, CommentEditorAPI } from '../types';
 import ImageUploadingPlaceholderExtension from '../extensions/image-uploading-placeholder';
+import { SingleEmoji } from '../extensions/single-emoji';
 
 @Component({
   selector: 'ngs-comment-editor',
@@ -110,18 +111,47 @@ export class CommentEditor implements OnInit, OnDestroy {
       return;
     }
 
+    const isOnlyEmoji = (str: string) => {
+      if (!str) {
+        return false;
+      }
+      const emojiRegex = /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/;
+      return emojiRegex.test(str.trim());
+    };
+
     if (this.editor.isFocused) {
-      this.editor.chain().focus().insertContent(text).run();
+      const { selection } = this.editor.state;
+      const isParentEmpty = selection.$from.parent.content.size === 0;
+
+      if (isOnlyEmoji(text) && isParentEmpty) {
+        this.editor.chain().focus().insertContent({
+          type: 'text',
+          text,
+          marks: [{ type: 'singleEmoji' }]
+        }).run();
+      } else {
+        this.editor.chain().focus().insertContent(text).run();
+      }
     } else {
       const content = this.editor.getText();
-      let textToInsert = text;
+      let textToInsert: any = text;
       if (content.length > 0) {
         textToInsert = ` ${text} `;
       }
       const lastNode = this.editor.state.doc.lastChild;
       if (lastNode && lastNode.type.name === 'paragraph') {
+        const isLastNodeEmpty = lastNode.content.size === 0;
         const pos = this.editor.state.doc.content.size - 1;
-        this.editor.chain().focus().insertContentAt(pos, textToInsert).run();
+
+        if (isOnlyEmoji(text) && isLastNodeEmpty) {
+          this.editor.chain().focus().insertContentAt(pos, {
+            type: 'text',
+            text,
+            marks: [{ type: 'singleEmoji' }]
+          }).run();
+        } else {
+          this.editor.chain().focus().insertContentAt(pos, textToInsert).run();
+        }
       } else {
         this.editor.chain().focus().insertContentAt(this.editor.state.doc.content.size, textToInsert).run();
       }
@@ -220,6 +250,7 @@ export class CommentEditor implements OnInit, OnDestroy {
           inline: true,
           allowBase64: true
         }),
+        SingleEmoji,
         Link.configure({
           openOnClick: false,
           defaultProtocol: 'https',
