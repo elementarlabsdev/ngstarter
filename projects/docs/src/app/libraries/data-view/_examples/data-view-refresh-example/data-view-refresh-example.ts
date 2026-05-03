@@ -61,7 +61,7 @@ export class DataViewRefreshExample {
   }
 
   onLoadEnd() {
-    console.log('Initial load finished');
+    // console.log('Initial load finished');
   }
 
   onRefreshEnd() {
@@ -72,7 +72,7 @@ export class DataViewRefreshExample {
   serverRefreshCount = 0;
   datasource: DataViewDatasource = {
     getItems: (params: DataViewGetRowsParams) => {
-      console.log('Fetching rows for server-side refresh:', params);
+      // console.log('Fetching rows for server-side refresh:', params);
 
       setTimeout(() => {
         this.serverRefreshCount++;

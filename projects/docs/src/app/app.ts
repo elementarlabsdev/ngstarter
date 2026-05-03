@@ -46,7 +46,7 @@ import { Location } from '@angular/common';
 import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
 import { FormsModule } from '@angular/forms';
 import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
-import { Toolbar, ToolbarItem, ToolbarSpacer, ToolbarNav, ToolbarNavLink } from '@ngstarter-ui/components/toolbar';
+import { Toolbar, ToolbarItem, ToolbarSpacer } from '@ngstarter-ui/components/toolbar';
 
 @Component({
   selector: 'app-root',
@@ -100,8 +100,6 @@ import { Toolbar, ToolbarItem, ToolbarSpacer, ToolbarNav, ToolbarNavLink } from 
     Toolbar,
     ToolbarSpacer,
     ToolbarItem,
-    ToolbarNav,
-    ToolbarNavLink,
     // SplashScreen,
   ],
   templateUrl: './app.html',

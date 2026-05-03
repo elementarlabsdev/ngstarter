@@ -354,13 +354,11 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
           return;
         }
 
-        setTimeout(() => {
-          this.selectedCountry.set(this.getCountry(countryCode));
-          this.countryChanged.emit(this.selectedCountry() as Country);
-          // Initial value is set
-          this._changeDetectorRef.detectChanges();
-          this.stateChanges.next();
-        }, 1);
+        const country = this.getCountry(countryCode);
+        this.selectedCountry.set(country);
+        this.countryChanged.emit(country);
+        this._changeDetectorRef.detectChanges();
+        this.stateChanges.next();
       } else {
         this.phoneNumber = value;
       }
@@ -411,7 +409,12 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
       return
     }
 
-    const asYouType: AsYouType = new AsYouType(this.selectedCountry()?.shortCode.toUpperCase() as CC);
+    const selectedCountry = this.selectedCountry();
+    if (!selectedCountry) {
+      return;
+    }
+
+    const asYouType: AsYouType = new AsYouType(selectedCountry.shortCode.toUpperCase() as CC);
 
     // To avoid caret positioning, we apply formatting only if the caret is at the end:
     if (!this.phoneNumber) {

@@ -22,8 +22,6 @@
     "angular ui"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.schematics.json",
-    "postbuild": "copyfiles schematics/*/schema.json schematics/*/files/** schematics/collection.json ../../dist/components/"
   },
   "ng-add": {
     "save": "devDependencies"

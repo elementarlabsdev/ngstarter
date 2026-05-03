@@ -9,7 +9,6 @@ import {
   RowDef,
   Table
 } from '@ngstarter-ui/components/table';
-import { Divider } from '@ngstarter-ui/components/divider';
 
 @Component({
   selector: 'app-api',
@@ -24,7 +23,6 @@ import { Divider } from '@ngstarter-ui/components/divider';
     RowDef,
     HeaderRow,
     Row,
-    Divider
   ],
   templateUrl: './api.html',
   styleUrl: './api.scss',

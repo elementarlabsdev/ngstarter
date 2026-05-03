@@ -1,7 +1,8 @@
 # Stage 1: Build
-FROM node:20-alpine AS build
+FROM node:20-bullseye AS build
 
 WORKDIR /app
+ENV NODE_OPTIONS="--max_old_space_size=4096"
 
 COPY package*.json ./
 RUN npm install
@@ -14,7 +15,7 @@ RUN npm run build:docs:prod
 RUN npm run build:admin:prod
 
 # Final stage
-FROM node:20-alpine
+FROM node:20-bullseye
 
 WORKDIR /app
 

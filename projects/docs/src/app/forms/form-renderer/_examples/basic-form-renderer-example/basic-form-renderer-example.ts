@@ -197,6 +197,6 @@ export class BasicFormRendererExample {
   }
 
   onValueChanges(data: any) {
-    console.log('onValueChanges', data);
+    // console.log('onValueChanges', data);
   }
 }

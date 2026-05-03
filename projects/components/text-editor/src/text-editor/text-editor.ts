@@ -7,8 +7,10 @@ import {
   Injector,
   input, output,
   viewChild,
-  DOCUMENT
+  DOCUMENT,
+  PLATFORM_ID
 } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
 import { TEXT_EDITOR, TextEditorAPI } from '../types';
 
 import { Editor } from '@tiptap/core';
@@ -55,6 +57,7 @@ import { HorizontalRule } from '@tiptap/extension-horizontal-rule';
   }
 })
 export class TextEditor {
+  private _platformId = inject(PLATFORM_ID);
   private _document = inject(DOCUMENT);
   private _cdr = inject(ChangeDetectorRef);
   private _injector = inject(Injector);
@@ -83,6 +86,9 @@ export class TextEditor {
   }
 
   ngOnInit() {
+    if (isPlatformServer(this._platformId)) {
+      return;
+    }
     this._init();
   }
 
