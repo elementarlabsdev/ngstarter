@@ -14,7 +14,7 @@ export class PageTitleStrategyService extends TitleStrategy {
     const title = this.buildTitle(routerState);
 
     if (title !== undefined) {
-      this._title.setTitle(`${title} | ${this._globalStore.pageTitle()}`);
+      this._title.setTitle(`${title} / ${this._globalStore.pageTitle()}`);
     } else {
       this._title.setTitle(this._globalStore.pageTitle());
     }

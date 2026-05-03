@@ -259,7 +259,7 @@ export const routes: Routes = [
   },
   {
     path: 'comparison-slider',
-    loadChildren: () => import('./comparison-slider/comparison-slider.module').then(m => m.ComparisonSliderModule)
+    loadChildren: () => import('./comparison-slider/routes').then(m => m.routes)
   },
   {
     path: 'signature-pad',

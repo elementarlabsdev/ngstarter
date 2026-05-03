@@ -47,7 +47,7 @@ export const appConfig: ApplicationConfig = {
         }
 
         layoutSidebarStore.showSidebarVisibility('root', true); // show or hide main sidebar on initial state
-        globalStore.setPageTitle(envService.getValue('pageTitle'));
+        globalStore.setPageTitle(envService.getValue('pageTitle') || 'NgStarter');
         resolve(true);
       });
     }),
