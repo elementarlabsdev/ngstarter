@@ -1,9 +1,12 @@
 @if ((showToolbar || toolbarAlwaysVisible()) && (fullView || fullViewMode())) {
   <div class="toolbar">
-    <ng-content select="ngs-comment-editor-toolbar" />
+    <ng-content select="ngs-comment-editor-toolbar"/>
   </div>
 }
 <div #content class="content prose dark:prose-invert max-w-full"></div>
+<div class="editor-content">
+  <ng-content/>
+</div>
 <div class="footer">
   <div class="flex items-center gap-0.5 grow pe-3">
     <ng-content select="ngs-comment-editor-footer-bar"/>
@@ -12,8 +15,10 @@
     @if ((fullView && !fullViewMode()) || cancelButtonAlwaysVisible()) {
       <button ngsButton (click)="cancel($event)">{{ buttonCancelLabel() }}</button>
     }
-
-    <button ngsButton="filled" [disabled]="!_value || null" (click)="send($event)">{{ buttonSendLabel() }}</button>
+    <button ngsButton="filled"
+            [disabled]="(!allowEmptyContent() && !_value) || null"
+            (click)="send($event)">{{ buttonSendLabel() }}
+    </button>
   </div>
 </div>
 <div #imageBubbleMenu class="ngs-comment-editor-bubble-menu">

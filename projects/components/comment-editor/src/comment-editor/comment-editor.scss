@@ -137,6 +137,14 @@
     }
   }
 
+  .editor-content {
+    padding: 0 --spacing(4);
+
+    &:empty {
+      display: none;
+    }
+  }
+
   &.full-view {
     .content {
       position: static;

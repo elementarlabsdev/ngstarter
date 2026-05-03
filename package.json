@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "ng": "ng",
-    "start": "ng cache clean && ng serve",
+    "start": "ng cache clean && ng serve --hrm",
     "start:docs": "ng cache clean && ng serve docs",
     "start:admin": "ng cache clean && ng serve admin",
     "watch": "ng build --watch --configuration development",
