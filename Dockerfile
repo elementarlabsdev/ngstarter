@@ -1,32 +1,33 @@
-# Stage 1: Build
-FROM node:20-bullseye AS build
-
+# --- Base Stage ---
+FROM node:20-bullseye AS base
 WORKDIR /app
-ENV NODE_OPTIONS="--max_old_space_size=4096"
-
 COPY package*.json ./
 RUN npm install
-
 COPY . .
 
-# Build all applications
+# --- Build App ---
+FROM base AS build-app
 RUN npm run build:prod
+
+# --- Build Docs ---
+FROM base AS build-docs
 RUN npm run build:docs:prod
+
+# --- Build Admin ---
+FROM base AS build-admin
 RUN npm run build:admin:prod
 
-# Final stage
-FROM node:20-bullseye
-
+# --- Final Stage ---
+FROM node:20-bullseye-slim
 WORKDIR /app
 
-# Copy built artifacts
-COPY --from=build /app/dist /app/dist
+# Only copy what you actually need
+COPY --from=build-app /app/dist/ngstarter ./dist/ngstarter
+COPY --from=build-docs /app/dist/docs ./dist/docs
+COPY --from=build-admin /app/dist/admin ./dist/admin
 
-# Copy entrypoint script
 COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh
 
-# Expose ports
 EXPOSE 4000 4001 4002
-
 CMD ["./entrypoint.sh"]

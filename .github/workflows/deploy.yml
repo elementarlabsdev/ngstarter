@@ -103,7 +103,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Run deploy script
-        run: |
-          chmod +x ./deploy-dockerhub.sh
-          ./deploy-dockerhub.sh ${{ env.ROOT_VERSION }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: components
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            elementarlabs/ngstarter:${{ env.ROOT_VERSION }}
+            elementarlabs/ngstarter:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
