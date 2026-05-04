@@ -11,11 +11,8 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
   selector: 'app-video-viewer-overview',
   standalone: true,
   imports: [
-    PageContentDirective,
     Playground,
     BasicVideoViewerExample,
-    PageTitleDirective,
-    Page
   ],
   templateUrl: './overview.html'
 })

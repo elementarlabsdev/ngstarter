@@ -1,0 +1,39 @@
+<app-page>
+  <h1 appPageTitle>Video Viewer</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Video Viewer component is designed for seamless video playback within your application.
+        It provides a rich set of features including customizable overlays, titles, and descriptions,
+        ensuring an engaging user experience across all devices.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Overlay Integration</strong>: Opens video in a full-screen or modal-like overlay for focused viewing.
+          </li>
+          <li>
+            ✅ <strong>Rich Content Support</strong>: Easily add titles, captions, and descriptions to your videos.
+          </li>
+          <li>
+            ✅ <strong>Responsive Playback</strong>: Optimized for various orientations (landscape, portrait, square).
+          </li>
+          <li>
+            ✅ <strong>Advanced Controls</strong>: Full control over autoplay, muting, and visibility of playback controls.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Perfect for galleries, educational platforms, or any application that requires a professional-grade video viewing experience.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/video-viewer" ngs-tab-link>Overview</a>
+      <a routerLink="/components/video-viewer/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
