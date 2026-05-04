@@ -1,0 +1,19 @@
+<app-page>
+  <h1 appPageTitle>Form Renderer</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Form Renderer component is a powerful tool for building dynamic forms based on a JSON configuration.
+        It supports various field types, validation, and layout customization, making it easy to create complex forms
+        with minimal code.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/form-renderer" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/form-renderer/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
