@@ -6,7 +6,6 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 
-# Сборка строго по очереди
 RUN npm run build:prod
 RUN npm run build:docs:prod -- --no-prerender
 RUN npm run build:admin:prod
@@ -14,7 +13,7 @@ RUN npm run build:admin:prod
 # --- Final Stage ---
 FROM node:20-bullseye-slim
 WORKDIR /app
-# Копируем всё из одного стейджа
+
 COPY --from=build /app/dist /app/dist
 COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh

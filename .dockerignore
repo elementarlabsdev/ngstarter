@@ -16,7 +16,6 @@ dist
 
 # Development files
 *.md
-LICENSE
 
 # Docker
 Dockerfile

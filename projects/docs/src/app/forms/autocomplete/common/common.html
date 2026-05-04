@@ -1,0 +1,17 @@
+<app-page>
+  <h1 appPageTitle>Autocomplete</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The autocomplete is a normal text input enhanced by a panel of suggested options.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/autocomplete" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/autocomplete/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
