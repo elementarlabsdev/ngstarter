@@ -1,13 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-const routes: Routes = [
-  {
-    path: '',
-    title: 'Button Toggle',
-    loadComponent: () => import('./overview/overview').then(c => c.Overview)
-  }
-];
+import { routes } from './routes';
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

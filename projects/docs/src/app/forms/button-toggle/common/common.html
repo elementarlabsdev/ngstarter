@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>Button Toggle</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Button Toggle component allows users to select one or more options from a set of related buttons.
+        It provides a clear and intuitive way to switch between different states or modes in your application.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Single or Multiple Selection</strong>: Configure the toggle group to allow only one or several selections.
+          </li>
+          <li>
+            ✅ <strong>Customizable Appearance</strong>: Choose between different styles to match your application's design.
+          </li>
+          <li>
+            ✅ <strong>Responsive and Accessible</strong>: Optimized for various devices and screen sizes, ensuring a seamless user experience.
+          </li>
+          <li>
+            ✅ <strong>Easy Integration</strong>: Simple to implement and use within Angular projects.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/button-toggle" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/button-toggle/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

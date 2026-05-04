@@ -28,7 +28,6 @@ import { HideTextOnMobileExample } from '../_examples/hide-text-on-mobile-exampl
     FlatButtonsExample,
     IconButtonsExample,
     ButtonLoadingExample,
-    Page,
     PageContentDirective,
     PageAsideDirective,
     ButtonsWithInteractiveDisabledExample,

@@ -9,9 +9,6 @@ import {
 import {
   CheckboxDescriptionExample
 } from '../_examples/checkbox-description-example/checkbox-description-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
     selector: 'app-overview',
@@ -19,10 +16,7 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     Playground,
     BasicCheckboxesExample,
     CheckboxGroupExample,
-    CheckboxDescriptionExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
+    CheckboxDescriptionExample
   ],
     templateUrl: './overview.html',
     styleUrl: './overview.scss'

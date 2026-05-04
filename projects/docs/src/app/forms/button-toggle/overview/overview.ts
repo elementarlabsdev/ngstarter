@@ -6,18 +6,12 @@ import {
 import {
   ButtonToggleSelectionModeExample
 } from '../_examples/button-toggle-selection-mode-example/button-toggle-selection-mode-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   imports: [
     Playground,
     BasicButtonToggleExample,
     ButtonToggleSelectionModeExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective,
   ],
     templateUrl: './overview.html',
     styleUrl: './overview.scss'

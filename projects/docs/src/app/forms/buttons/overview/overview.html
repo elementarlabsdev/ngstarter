@@ -1,81 +1,63 @@
-<app-page>
-  <h1 appPageTitle>Buttons</h1>
-  <div appPageContent class="prose max-w-full">
-<!--    <div>-->
-<!--      <ngs-breadcrumbs class="mb-1">-->
-<!--        <a ngs-breadcrumb-item routerLink="/pages/forms">Forms</a>-->
-<!--        <ngs-breadcrumb-separator>/</ngs-breadcrumb-separator>-->
-<!--        <ngs-breadcrumb-item>Button</ngs-breadcrumb-item>-->
-<!--      </ngs-breadcrumbs>-->
-<!--      <h1>Button</h1>-->
-<!--    </div>-->
+<div class="prose max-w-full">
+  <h3 id="basic-button">Basic Button</h3>
+  <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="basic-buttons-example">
+    <app-basic-buttons-example/>
+  </ngs-playground>
 
-    <main class="mb-10">
-      <p>
-        Buttons allow users to take actions, and make choices, with a single tap.
-      </p>
-    </main>
+  <h3 id="stroked-button">Outlined Button</h3>
+  <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="stroked-buttons-example">
+    <app-stroked-buttons-example/>
+  </ngs-playground>
 
-    <h3 id="basic-button">Basic Button</h3>
-    <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="basic-buttons-example">
-      <app-basic-buttons-example/>
-    </ngs-playground>
+  <h3 id="basic-button">Tonal Button</h3>
+  <ngs-playground exampleUrl="_docs/forms/buttons/_examples" compact exampleName="tonal-buttons-example">
+    <app-tonal-buttons-example/>
+  </ngs-playground>
 
-    <h3 id="stroked-button">Outlined Button</h3>
-    <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="stroked-buttons-example">
-      <app-stroked-buttons-example/>
-    </ngs-playground>
+  <h3 id="flat-button">Flat Button</h3>
+  <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="flat-buttons-example">
+    <app-flat-buttons-example/>
+  </ngs-playground>
 
-    <h3 id="basic-button">Tonal Button</h3>
-    <ngs-playground exampleUrl="_docs/forms/buttons/_examples" compact exampleName="tonal-buttons-example">
-      <app-tonal-buttons-example/>
-    </ngs-playground>
+  <h3 id="icon-button">Icon Button</h3>
+  <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="icon-buttons-example">
+    <app-icon-buttons-example/>
+  </ngs-playground>
 
-    <h3 id="flat-button">Flat Button</h3>
-    <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="flat-buttons-example">
-      <app-flat-buttons-example/>
-    </ngs-playground>
+  <h3 id="button-loading">Button Loading</h3>
+  <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="button-loading-example">
+    <app-button-loading-example/>
+  </ngs-playground>
 
-    <h3 id="icon-button">Icon Button</h3>
-    <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="icon-buttons-example">
-      <app-icon-buttons-example/>
-    </ngs-playground>
+  <h3 id="hide-text-on-mobile">Hide text on mobile</h3>
+  <p>
+    The <code class="code">hideTextOnMobile</code> attribute allows you to hide the text on mobile devices
+    making the button look like an icon button.
+  </p>
+  <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="hide-text-on-mobile-example">
+    <app-hide-text-on-mobile-example/>
+  </ngs-playground>
 
-    <h3 id="button-loading">Button Loading</h3>
-    <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="button-loading-example">
-      <app-button-loading-example/>
-    </ngs-playground>
-
-    <h3 id="hide-text-on-mobile">Hide text on mobile</h3>
-    <p>
-      The <code class="code">hideTextOnMobile</code> attribute allows you to hide the text on mobile devices
-      making the button look like an icon button.
-    </p>
-    <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="hide-text-on-mobile-example">
-      <app-hide-text-on-mobile-example/>
-    </ngs-playground>
-
-    <h3 id="interactive-disabled-buttons">Interactive disabled buttons</h3>
-    <p>
-      Very often it is necessary to add an explanation of the reason for blocking a button
-      for this purpose there is an option <code class="code">disabledInteractive</code> which allows you to add
-      a tooltip to a disabled button.
-    </p>
-    <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="buttons-with-interactive-disabled-example">
-      <app-buttons-with-interactive-disabled-example/>
-    </ngs-playground>
-  </div>
-  <div appPageAside class="sticky top-16">
-    <nav ngs-scroll-spy-nav>
-      <ngs-scroll-spy-title>On this page</ngs-scroll-spy-title>
-      <a ngs-scroll-spy-on targetId="basic-button">Basic Button</a>
-      <a ngs-scroll-spy-on targetId="stroked-button">Outlined Button</a>
-      <a ngs-scroll-spy-on targetId="flat-button">Flat Button</a>
-      <a ngs-scroll-spy-on targetId="icon-button">Icon Button</a>
-      <a ngs-scroll-spy-on targetId="button-loading">Button Loading</a>
-      <a ngs-scroll-spy-on targetId="hide-text-on-mobile">Hide text on mobile</a>
-      <a ngs-scroll-spy-on targetId="interactive-disabled-buttons">Interactive Disabled</a>
-      <button ngs-scroll-spy-back-to-top>Back to top</button>
-    </nav>
-  </div>
-</app-page>
+  <h3 id="interactive-disabled-buttons">Interactive disabled buttons</h3>
+  <p>
+    Very often it is necessary to add an explanation of the reason for blocking a button
+    for this purpose there is an option <code class="code">disabledInteractive</code> which allows you to add
+    a tooltip to a disabled button.
+  </p>
+  <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="buttons-with-interactive-disabled-example">
+    <app-buttons-with-interactive-disabled-example/>
+  </ngs-playground>
+</div>
+<div appPageAside class="sticky top-16">
+  <nav ngs-scroll-spy-nav>
+    <ngs-scroll-spy-title>On this page</ngs-scroll-spy-title>
+    <a ngs-scroll-spy-on targetId="basic-button">Basic Button</a>
+    <a ngs-scroll-spy-on targetId="stroked-button">Outlined Button</a>
+    <a ngs-scroll-spy-on targetId="flat-button">Flat Button</a>
+    <a ngs-scroll-spy-on targetId="icon-button">Icon Button</a>
+    <a ngs-scroll-spy-on targetId="button-loading">Button Loading</a>
+    <a ngs-scroll-spy-on targetId="hide-text-on-mobile">Hide text on mobile</a>
+    <a ngs-scroll-spy-on targetId="interactive-disabled-buttons">Interactive Disabled</a>
+    <button ngs-scroll-spy-back-to-top>Back to top</button>
+  </nav>
+</div>
