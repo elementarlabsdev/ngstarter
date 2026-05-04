@@ -1,0 +1,18 @@
+<app-page>
+  <h1 appPageTitle>Country Select</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Country Select component provides an easy-to-use interface for selecting countries from a list.
+        It supports searching, custom triggers, and displays country flags and codes.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/country" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/country/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

@@ -6,7 +6,6 @@ import { FlatButtonsExample } from '../_examples/flat-buttons-example/flat-butto
 import { IconButtonsExample } from '../_examples/icon-buttons-example/icon-buttons-example';
 import { ButtonLoadingExample } from '../_examples/button-loading-example/button-loading-example';
 import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
 import { PageAsideDirective } from '@meta/page/page-aside.directive';
 import {
   ButtonsWithInteractiveDisabledExample
@@ -28,7 +27,6 @@ import { HideTextOnMobileExample } from '../_examples/hide-text-on-mobile-exampl
     FlatButtonsExample,
     IconButtonsExample,
     ButtonLoadingExample,
-    PageContentDirective,
     PageAsideDirective,
     ButtonsWithInteractiveDisabledExample,
     ScrollSpyNav,

@@ -56,7 +56,7 @@ const routes: Routes = [
   },
   {
     path: 'country',
-    loadChildren: () => import('./country/country.module').then(m => m.CountryModule)
+    loadChildren: () => import('./country/routes').then(m => m.routes)
   },
   {
     path: 'timezone',
