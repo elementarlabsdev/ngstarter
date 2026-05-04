@@ -1,0 +1,17 @@
+<app-page>
+  <h1 appPageTitle>Radio</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Radios allow the user to select one option from a set.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/radio" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/radio/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
