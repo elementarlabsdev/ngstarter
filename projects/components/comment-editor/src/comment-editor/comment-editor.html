@@ -17,6 +17,7 @@
     }
     <button ngsButton="filled"
             [disabled]="(!allowEmptyContent() && !_value) || null"
+            [loading]="loading()"
             (click)="send($event)">{{ buttonSendLabel() }}
     </button>
   </div>

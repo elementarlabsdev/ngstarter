@@ -14,6 +14,7 @@ export interface CommentEditorAPI {
   toggleToolbar: () => void;
   isEditorActivated: () => boolean;
   insertText: (text: string) => void;
+  clear: () => void;
 }
 
 export const COMMENT_EDITOR = new InjectionToken('COMMENT_EDITOR');

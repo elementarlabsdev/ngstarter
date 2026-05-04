@@ -1,5 +1,6 @@
 import {
-  booleanAttribute, ChangeDetectorRef,
+  booleanAttribute,
+  ChangeDetectorRef,
   Component,
   ElementRef, forwardRef,
   inject, Injector,
@@ -7,7 +8,7 @@ import {
   OnDestroy, OnInit,
   output, PLATFORM_ID,
   viewChild,
-  DOCUMENT
+  DOCUMENT, signal
 } from '@angular/core';
 import { Editor } from '@tiptap/core';
 import Document from '@tiptap/extension-document';
@@ -52,7 +53,7 @@ import { SingleEmoji } from '../extensions/single-emoji';
   host: {
     'class': 'ngs-comment-editor',
     '[class.full-view]': 'fullView || fullViewMode()',
-    '(click)': 'activateFullView()'
+    '(click)': 'activateFullView($event)'
   }
 })
 export class CommentEditor implements OnInit, OnDestroy {
@@ -84,6 +85,10 @@ export class CommentEditor implements OnInit, OnDestroy {
   allowEmptyContent = input(false, {
     transform: booleanAttribute
   });
+  autoClear = input(true, {
+    transform: booleanAttribute
+  });
+  loading = signal(false);
   imageUploadFn = input<(file: Blob) => Promise<string>>();
 
   readonly sent = output<string>();
@@ -102,7 +107,8 @@ export class CommentEditor implements OnInit, OnDestroy {
       isToolbarActive: () => this.showToolbar,
       toggleToolbar: () => this.toggleToolbar(),
       isEditorActivated: () => this.fullView || this.fullViewMode(),
-      insertText: (text: string) => this.insertText(text)
+      insertText: (text: string) => this.insertText(text),
+      clear: () => this.clear()
     }
   }
 
@@ -182,11 +188,24 @@ export class CommentEditor implements OnInit, OnDestroy {
     this.sent.emit(this._value);
     this.showToolbar = false;
     this.fullView = false;
-    this._value = '';
-    this.editor.commands.clearContent(true);
+    if (this.autoClear()) {
+      this.clear();
+    }
   }
 
-  activateFullView(): void {
+  clear(): void {
+    this._value = '';
+    this.editor?.commands.clearContent(true);
+  }
+
+  activateFullView(event?: MouseEvent): void {
+    if (event) {
+      const target = event.target as HTMLElement;
+      if (target.closest('button')) {
+        return;
+      }
+    }
+
     if (this.fullView) {
       return;
     }
@@ -203,8 +222,7 @@ export class CommentEditor implements OnInit, OnDestroy {
     event.preventDefault();
     this.showToolbar = false;
     this.fullView = false;
-    this._value = '';
-    this.editor.commands.clearContent(true);
+    this.clear();
     this.canceled.emit();
   }
 
@@ -288,6 +306,7 @@ export class CommentEditor implements OnInit, OnDestroy {
       content: '',
       onUpdate: ({ editor }) => {
         this._value = !editor.isEmpty ? editor.getHTML() : '';
+        this._cdr.markForCheck();
       }
     });
     this._cdr.detectChanges();
