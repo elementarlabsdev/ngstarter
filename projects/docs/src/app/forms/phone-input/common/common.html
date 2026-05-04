@@ -1,0 +1,40 @@
+<app-page>
+  <h1 appPageTitle>Phone Input</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Say goodbye to clunky phone number inputs! 🚀 Our Phone Input for brings a sleek,
+        user-friendly, and highly customizable phone number field to your Angular applications.
+      </p>
+      <div class="my-7">
+        <div>Key features:</div>
+        <ul class="ps-4 list-disc pt-3 flex flex-col gap-3">
+          <li>
+            ✅ Effortless UX – Intuitive design with country flag selection and automatic formatting.
+          </li>
+          <li>
+            🌍 Global Support – Handles international phone numbers like a pro.
+          </li>
+          <li>
+            🎨 3 & Tailwind Ready – Seamlessly blends into your UI.
+          </li>
+          <li>
+            ⚡ Optimized for Performance – Lightweight, fast, and developer-friendly.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Perfect for authentication forms, contact pages, and any app that needs clean,
+        validated phone inputs. Upgrade your Angular forms today! 💡📱
+      </p>
+    </main>
+
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/phone-input" [routerLinkActiveOptions]="{exact: true}" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/phone-input/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
