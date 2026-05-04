@@ -7,8 +7,8 @@
       </p>
     </main>
     <nav ngs-tab-nav-bar class="mb-6">
-      <a routerLink="/forms/slide-toggle" ngs-tab-link routerLinkActive #overview="routerLinkActive" [active]="overview.isActive" [routerLinkActiveOptions]="{exact: true}">Overview</a>
-      <a routerLink="/forms/slide-toggle/api" ngs-tab-link routerLinkActive #api="routerLinkActive" [active]="api.isActive">Api</a>
+      <a routerLink="/forms/slide-toggle" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/slide-toggle/api" ngs-tab-link>Api</a>
     </nav>
     <ngs-tab-nav-panel>
       <router-outlet/>

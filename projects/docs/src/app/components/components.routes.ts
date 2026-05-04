@@ -155,7 +155,7 @@ export const routes: Routes = [
   },
   {
     path: 'tree',
-    loadChildren: () => import('./tree/tree.module').then(m => m.TreeModule)
+    loadChildren: () => import('./tree/routes').then(m => m.routes)
   },
   {
     path: 'skeleton',
@@ -179,7 +179,7 @@ export const routes: Routes = [
   },
   {
     path: 'upload',
-    loadChildren: () => import('./upload/upload.module').then(m => m.UploadModule)
+    loadChildren: () => import('./upload/routes').then(m => m.routes)
   },
   {
     path: 'command-bar',

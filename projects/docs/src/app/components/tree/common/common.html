@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>Tree</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The tree component allows you to display hierarchical data in a structured and navigable format.
+        It's highly customizable and supports various data loading strategies, including dynamic data loading.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Hierarchical Representation</strong>: Easily visualize nested data structures.
+          </li>
+          <li>
+            ✅ <strong>Dynamic Loading</strong>: Efficiently handle large datasets with on-demand loading.
+          </li>
+          <li>
+            ✅ <strong>Customizable Templates</strong>: Control the look and feel of tree nodes and their content.
+          </li>
+          <li>
+            ✅ <strong>Accessibility</strong>: Built with accessibility in mind, supporting keyboard navigation and ARIA attributes.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/tree" ngs-tab-link>Overview</a>
+      <a routerLink="/components/tree/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

@@ -1,0 +1,18 @@
+<app-page>
+  <h1 appPageTitle>Upload</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Upload component provides an interface for users to select and upload files. It supports various modes,
+        including single and multiple file uploads, drag-and-drop, and visual representation of the upload progress.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/upload" ngs-tab-link>Overview</a>
+      <a routerLink="/components/upload/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

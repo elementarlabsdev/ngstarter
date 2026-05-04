@@ -8,8 +8,8 @@
       </p>
     </main>
     <nav ngs-tab-nav-bar>
-      <a routerLink="/forms/select" routerLinkActive #overview="routerLinkActive" [active]="overview.isActive" ngs-tab-link>Overview</a>
-      <a routerLink="/forms/select/api" routerLinkActive #api="routerLinkActive" [active]="api.isActive" ngs-tab-link>Api</a>
+      <a routerLink="/forms/select" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/select/api" ngs-tab-link>Api</a>
     </nav>
     <ngs-tab-nav-panel>
       <router-outlet/>

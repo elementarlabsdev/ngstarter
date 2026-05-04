@@ -4,19 +4,13 @@ import { BasicTreeExample } from '../_examples/basic-tree-example/basic-tree-exa
 import {
   TreeWithDynamicDataExample
 } from '../_examples/tree-with-dynamic-data-example/tree-with-dynamic-data-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   selector: 'app-overview',
   imports: [
     Playground,
     BasicTreeExample,
-    TreeWithDynamicDataExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
+    TreeWithDynamicDataExample
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'
