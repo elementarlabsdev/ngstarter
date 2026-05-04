@@ -1,0 +1,18 @@
+<app-page>
+  <h1 appPageTitle>Timezone</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Timezone component is a user-friendly selection tool that allows users to pick their preferred time zone from a comprehensive list.
+        It supports internationalization, provides search functionality, and integrates seamlessly with Angular forms.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/timezone" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/timezone/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

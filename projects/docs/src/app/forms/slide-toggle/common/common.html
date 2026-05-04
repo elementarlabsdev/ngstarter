@@ -1,0 +1,17 @@
+<app-page>
+  <h1 appPageTitle>Slide Toggle</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The slide-toggle component is an on/off control that can be toggled via clicking or dragging.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar class="mb-6">
+      <a routerLink="/forms/slide-toggle" ngs-tab-link routerLinkActive #overview="routerLinkActive" [active]="overview.isActive" [routerLinkActiveOptions]="{exact: true}">Overview</a>
+      <a routerLink="/forms/slide-toggle/api" ngs-tab-link routerLinkActive #api="routerLinkActive" [active]="api.isActive">Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

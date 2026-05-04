@@ -9,9 +9,6 @@ import {
 import {
   SlideToggleWithFormsExample
 } from '../_examples/slide-toggle-with-forms-example/slide-toggle-with-forms-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   imports: [
@@ -19,9 +16,6 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     BasicSlideToggleExample,
     SlideToggleDisabledExample,
     SlideToggleWithFormsExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
   ],
     templateUrl: './overview.html',
     styleUrl: './overview.scss'

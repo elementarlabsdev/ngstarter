@@ -24,7 +24,7 @@ const routes: Routes = [
   },
   {
     path: 'slide-toggle',
-    loadChildren: () => import('./slide-toggle/slide-toggle.module').then(m => m.SlideToggleModule)
+    loadChildren: () => import('./slide-toggle/routes').then(m => m.routes)
   },
   {
     path: 'checkbox',
@@ -60,7 +60,7 @@ const routes: Routes = [
   },
   {
     path: 'timezone',
-    loadChildren: () => import('./timezone/timezone.module').then(m => m.TimezoneModule)
+    loadChildren: () => import('./timezone/routes').then(m => m.routes)
   },
   {
     path: 'form-renderer',
