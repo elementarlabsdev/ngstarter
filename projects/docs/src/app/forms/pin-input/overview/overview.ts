@@ -10,9 +10,6 @@ import {
 import {
   PinInputAcceptCustomSymbolsExample
 } from '../_examples/pin-input-accept-custom-symbols-example/pin-input-accept-custom-symbols-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   imports: [
@@ -20,10 +17,7 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     BasicPinInputExample,
     PinInputWithPlaceholderExample,
     PinInputLengthExample,
-    PinInputAcceptCustomSymbolsExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
+    PinInputAcceptCustomSymbolsExample
   ],
     templateUrl: './overview.html',
     styleUrl: './overview.scss'

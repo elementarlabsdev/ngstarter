@@ -1,0 +1,43 @@
+<app-page>
+  <h1 appPageTitle>Pin Input</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      Introducing the <strong>Pin Input Component for </strong> – a sleek, customizable,
+      and highly accessible way to handle PIN codes, OTPs, and verification flows in your Angular apps.
+      Built with <strong>3 aesthetics</strong> and <strong>Tailwind flexibility</strong>, this
+      component seamlessly blends into any modern UI.
+
+      <div class="my-7">
+        <div>Key features:</div>
+        <ul class="ps-4 list-disc flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Fully Customizable</strong> – Adjust length, styling, spacing, and more!
+          </li>
+          <li>
+            ✅ <strong>3 & Tailwind Ready</strong> – Looks stunning out of the box.
+          </li>
+          <li>
+            ✅ <strong>Keyboard & Paste Support</strong> – Smooth user experience on all devices.
+          </li>
+          <li>
+            ✅ <strong>Reactive Forms Compatible</strong> – Effortlessly integrates with Angular forms.
+          </li>
+          <li>
+            ✅ <strong>Secure & User-Friendly</strong> – Prevents accidental input mishaps.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Perfect for <strong>authentication flows, payment verifications, and secure access</strong> &ndash;
+        because great UX starts with the right components. 🚀
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/pin-input" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/pin-input/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
