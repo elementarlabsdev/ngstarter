@@ -1,161 +1,34 @@
-<app-page>
-  <h1 appPageTitle>Segmented Control</h1>
-  <div appPageContent>
-    <main class="mb-10">
-      <p>
-        Tired of clunky toggles and outdated selection components? Meet <strong>Segmented Control</strong> for
-        – a sleek, modern, and highly
-        customizable component that brings intuitive navigation to your Angular apps.
-      </p>
-      <div class="my-7">
-        <div>Key features:</div>
-        <ul class="ps-4 list-disc mt-3 flex flex-col gap-3">
-          <li>
-            ✅ 3 Inspired – Fully integrates with for a seamless design experience.
-          </li>
-          <li>
-            🎨 Customizable – Play with colors, sizes, and styles to match your brand.
-          </li>
-          <li>
-            ⚡ Lightning Fast & Lightweight – Built for performance without unnecessary bloat.
-          </li>
-          <li>
-            📱 Touch & Keyboard Friendly – Perfect for mobile and desktop interactions.
-          </li>
-          <li>
-            🛠️ Easy to Use – Drop it in, configure it, and watch your UI shine!
-          </li>
-        </ul>
-      </div>
-      <p>
-        Upgrade your Angular UI with Segmented Control and give your users the fluid,
-        elegant selection experience they deserve! 🚀
-      </p>
-    </main>
+<h3>Basic segmented control</h3>
+<ngs-playground exampleUrl="_docs/forms/segmented/_examples" exampleName="basic-segmented-example">
+  <app-basic-segmented-example/>
+</ngs-playground>
 
-    <h3>Basic segmented control</h3>
-    <ngs-playground exampleUrl="_docs/forms/segmented/_examples" exampleName="basic-segmented-example">
-      <app-basic-segmented-example/>
-    </ngs-playground>
+<h3>Segmented control sizes</h3>
+<ngs-playground exampleUrl="_docs/forms/segmented/_examples" exampleName="segmented-sizes-example">
+  <app-segmented-sizes-example/>
+</ngs-playground>
 
-    <h3>Segmented control sizes</h3>
-    <ngs-playground exampleUrl="_docs/forms/segmented/_examples" exampleName="segmented-sizes-example">
-      <app-segmented-sizes-example/>
-    </ngs-playground>
+<h3>Segmented control disabled</h3>
+<ngs-playground exampleUrl="_docs/forms/segmented/_examples" exampleName="segmented-disabled-example">
+  <app-segmented-disabled-example/>
+</ngs-playground>
 
-    <h3>Segmented control disabled</h3>
-    <ngs-playground exampleUrl="_docs/forms/segmented/_examples" exampleName="segmented-disabled-example">
-      <app-segmented-disabled-example/>
-    </ngs-playground>
+<h3>Segmented control with icons</h3>
+<ngs-playground exampleUrl="_docs/forms/segmented/_examples" exampleName="segmented-with-icons-example">
+  <app-segmented-with-icons-example/>
+</ngs-playground>
 
-    <h3>Segmented control with icons</h3>
-    <ngs-playground exampleUrl="_docs/forms/segmented/_examples" exampleName="segmented-with-icons-example">
-      <app-segmented-with-icons-example/>
-    </ngs-playground>
+<h3>Segmented control with icons only</h3>
+<ngs-playground exampleUrl="_docs/forms/segmented/_examples" exampleName="segmented-icons-only-example">
+  <app-segmented-icons-only-example/>
+</ngs-playground>
 
-    <h3>Segmented control with icons only</h3>
-    <ngs-playground exampleUrl="_docs/forms/segmented/_examples" exampleName="segmented-icons-only-example">
-      <app-segmented-icons-only-example/>
-    </ngs-playground>
+<h3>Segmented control with FormControl</h3>
+<ngs-playground exampleUrl="_docs/forms/segmented/_examples" exampleName="segmented-form-control-example">
+  <app-segmented-form-control-example/>
+</ngs-playground>
 
-    <h3>Segmented control with FormControl</h3>
-    <ngs-playground exampleUrl="_docs/forms/segmented/_examples" exampleName="segmented-form-control-example">
-      <app-segmented-form-control-example/>
-    </ngs-playground>
-
-    <h3>Segmented control with ngModel</h3>
-    <ngs-playground exampleUrl="_docs/forms/segmented/_examples" exampleName="segmented-ng-model-example">
-      <app-segmented-ng-model-example/>
-    </ngs-playground>
-
-    <h2>API Reference</h2>
-    <p>
-      Properties for the <code class="code">ngs-segmented</code> component.
-    </p>
-
-    <ngs-tab-group class="my-6">
-      <ngs-tab label="Properties">
-<!--        <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">-->
-<!--          <table ngs-table [dataSource]="segmentedProperties">-->
-<!--            <ng-container ngsColumnDef="name">-->
-<!--              <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Prop</th>-->
-<!--              <td ngs-cell *ngsCellDef="let element">-->
-<!--                <div>{{ element.name }}</div>-->
-<!--                <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>-->
-<!--              </td>-->
-<!--            </ng-container>-->
-
-<!--            <ng-container ngsColumnDef="type">-->
-<!--              <th ngs-header-cell *ngsHeaderCellDef>Type</th>-->
-<!--              <td ngs-cell *ngsCellDef="let element">-->
-<!--                @if (element.name === 'size') {-->
-<!--                  SegmentedTriggerSize: <span class="text-primary">'sm' | 'default' | 'lg' | string</span>-->
-<!--                } @else {-->
-<!--                  {{ element.type }}-->
-<!--                }-->
-<!--              </td>-->
-<!--            </ng-container>-->
-
-<!--            <ng-container ngsColumnDef="default">-->
-<!--              <th ngs-header-cell *ngsHeaderCellDef>Default</th>-->
-<!--              <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>-->
-<!--            </ng-container>-->
-
-<!--            <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>-->
-<!--            <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>-->
-<!--          </table>-->
-<!--        </div>-->
-      </ngs-tab>
-      <ngs-tab label="Events">
-<!--        <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">-->
-<!--          <table ngs-table [dataSource]="segmentedEvents">-->
-<!--            <ng-container ngsColumnDef="name">-->
-<!--              <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Event</th>-->
-<!--              <td ngs-cell *ngsCellDef="let element">{{ element.name }}</td>-->
-<!--            </ng-container>-->
-
-<!--            <ng-container ngsColumnDef="description">-->
-<!--              <th ngs-header-cell *ngsHeaderCellDef>Description</th>-->
-<!--              <td ngs-cell *ngsCellDef="let element">{{ element.description }}</td>-->
-<!--            </ng-container>-->
-
-<!--            <tr ngs-header-row *ngsHeaderRowDef="['name', 'description']"></tr>-->
-<!--            <tr ngs-row *ngsRowDef="let row; columns: ['name', 'description'];"></tr>-->
-<!--          </table>-->
-<!--        </div>-->
-      </ngs-tab>
-    </ngs-tab-group>
-
-<!--    <p>-->
-<!--      Properties for the <code class="code">ngs-segmented-button</code> component.-->
-<!--    </p>-->
-<!--    <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">-->
-<!--      <table ngs-table [dataSource]="segmentedButtonProperties">-->
-<!--        <ng-container ngsColumnDef="name">-->
-<!--          <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Prop</th>-->
-<!--          <td ngs-cell *ngsCellDef="let element">-->
-<!--            @if (element.name === 'value*') {-->
-<!--              <div>value<sup>*</sup></div>-->
-<!--            } @else {-->
-<!--              <div>{{ element.name }}</div>-->
-<!--            }-->
-<!--            <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>-->
-<!--          </td>-->
-<!--        </ng-container>-->
-
-<!--        <ng-container ngsColumnDef="type">-->
-<!--          <th ngs-header-cell *ngsHeaderCellDef>Type</th>-->
-<!--          <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>-->
-<!--        </ng-container>-->
-
-<!--        <ng-container ngsColumnDef="default">-->
-<!--          <th ngs-header-cell *ngsHeaderCellDef>Default</th>-->
-<!--          <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>-->
-<!--        </ng-container>-->
-
-<!--        <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>-->
-<!--        <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>-->
-<!--      </table>-->
-<!--    </div>-->
-  </div>
-</app-page>
+<h3>Segmented control with ngModel</h3>
+<ngs-playground exampleUrl="_docs/forms/segmented/_examples" exampleName="segmented-ng-model-example">
+  <app-segmented-ng-model-example/>
+</ngs-playground>

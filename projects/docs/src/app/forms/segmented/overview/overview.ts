@@ -23,71 +23,21 @@ import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
+  selector: 'app-overview',
   imports: [
     Playground,
     BasicSegmentedExample,
     SegmentedSizesExample,
     SegmentedDisabledExample,
     SegmentedWithIconsExample,
-    Page,
-    PageContentDirective,
     SegmentedIconsOnlyExample,
     SegmentedFormControlExample,
     SegmentedNgModelExample,
     Tab,
     TabGroup,
-    PageTitleDirective,
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'
 })
 export class Overview {
-  segmentedProperties = [
-    {
-      name: 'value',
-      description: 'Sets a value, manually',
-      type: 'any',
-      default: '–'
-    },
-    {
-      name: 'disabled',
-      description: 'Disable a control',
-      type: 'boolean',
-      default: 'false'
-    },
-    {
-      name: 'size',
-      description: 'Control size',
-      type: "SegmentedTriggerSize: 'sm' | 'default' | 'lg' | string",
-      default: 'default'
-    }
-  ];
-
-  segmentedEvents = [
-    {
-      name: 'valueChange',
-      description: 'Executed when a selected value changed'
-    }
-  ];
-
-  segmentedButtonProperties = [
-    {
-      name: 'value*',
-      description: 'Value of a button',
-      type: 'any',
-      default: '–'
-    },
-    {
-      name: 'disabled',
-      description: 'Disable a button',
-      type: 'boolean',
-      default: 'false'
-    },
-    {
-      name: 'iconOnly',
-      description: 'Hide text and show icon only',
-      type: 'boolean',
-      default: 'false'
-    }
-  ];
 }

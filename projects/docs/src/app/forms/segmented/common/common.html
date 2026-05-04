@@ -1,0 +1,43 @@
+<app-page>
+  <h1 appPageTitle>Segmented Control</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Tired of clunky toggles and outdated selection components? Meet <strong>Segmented Control</strong> for
+        – a sleek, modern, and highly
+        customizable component that brings intuitive navigation to your Angular apps.
+      </p>
+      <div class="my-7">
+        <div>Key features:</div>
+        <ul class="ps-4 list-disc mt-3 flex flex-col gap-3">
+          <li>
+            ✅ 3 Inspired – Fully integrates with for a seamless design experience.
+          </li>
+          <li>
+            🎨 Customizable – Play with colors, sizes, and styles to match your brand.
+          </li>
+          <li>
+            ⚡ Lightning Fast & Lightweight – Built for performance without unnecessary bloat.
+          </li>
+          <li>
+            📱 Touch & Keyboard Friendly – Perfect for mobile and desktop interactions.
+          </li>
+          <li>
+            🛠️ Easy to Use – Drop it in, configure it, and watch your UI shine!
+          </li>
+        </ul>
+      </div>
+      <p>
+        Upgrade your Angular UI with Segmented Control and give your users the fluid,
+        elegant selection experience they deserve! 🚀
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/segmented" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/segmented/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
