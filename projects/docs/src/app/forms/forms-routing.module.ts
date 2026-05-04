@@ -52,7 +52,7 @@ const routes: Routes = [
   },
   {
     path: 'number-input',
-    loadChildren: () => import('./number-input/number-input.module').then(m => m.NumberInputModule)
+    loadChildren: () => import('./number-input/routes').then(m => m.routes)
   },
   {
     path: 'country',

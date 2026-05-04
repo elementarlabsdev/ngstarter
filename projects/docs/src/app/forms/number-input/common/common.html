@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>Number Input</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Number Input component provides a user-friendly way to enter and adjust numeric values.
+        It supports minimum and maximum constraints, step intervals, and custom controls for increasing or decreasing the value.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Value Constraints</strong>: Set min and max limits for numeric input.
+          </li>
+          <li>
+            ✅ <strong>Step Intervals</strong>: Define the increment/decrement value for adjustments.
+          </li>
+          <li>
+            ✅ <strong>Custom Controls</strong>: Use default buttons or provide your own templates for increase/decrease actions.
+          </li>
+          <li>
+            ✅ <strong>Form Integration</strong>: Works seamlessly with Angular Template-driven and Reactive Forms.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/number-input" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/number-input/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
