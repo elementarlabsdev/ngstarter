@@ -16,7 +16,7 @@ const routes: Routes = [
   },
   {
     path: 'input',
-    loadChildren: () => import('./input/input.module').then(m => m.InputModule)
+    loadChildren: () => import('./input/routes').then(m => m.routes)
   },
   {
     path: 'phone-input',

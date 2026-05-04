@@ -1,0 +1,36 @@
+<app-page>
+  <h1 appPageTitle>Input</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The input component is a wrapper around the native HTML input and textarea elements.
+        It provides a consistent look and feel across different browsers and devices,
+        while also adding support for features like floating labels, error messages, and hints.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Standard HTML Integration</strong>: Works seamlessly with native input and textarea.
+          </li>
+          <li>
+            ✅ <strong>Floating Labels</strong>: Supports dynamic labels that respond to user interaction.
+          </li>
+          <li>
+            ✅ <strong>Form Field Support</strong>: Integrates perfectly with form fields for hints and errors.
+          </li>
+          <li>
+            ✅ <strong>Customizable</strong>: Easy to style and extend to fit any design system.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/input" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/input/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

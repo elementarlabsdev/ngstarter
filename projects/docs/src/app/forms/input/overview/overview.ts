@@ -13,9 +13,6 @@ import {
 import {
   PrefixesAndSuffixesExample
 } from '../_examples/prefixes-and-suffixes-example/prefixes-and-suffixes-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   imports: [
@@ -26,10 +23,7 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     DisabledExample,
     ErrorMessagesExample,
     InputWithHintsExample,
-    PrefixesAndSuffixesExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
+    PrefixesAndSuffixesExample
   ],
     templateUrl: './overview.html',
     styleUrl: './overview.scss'
