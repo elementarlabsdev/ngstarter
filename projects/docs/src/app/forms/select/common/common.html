@@ -1,0 +1,18 @@
+<app-page>
+  <h1 appPageTitle>Select</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Select component is a flexible and accessible input for choosing options from a list.
+        It supports single and multiple selection, searching, groups, and custom triggers.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/select" routerLinkActive #overview="routerLinkActive" [active]="overview.isActive" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/select/api" routerLinkActive #api="routerLinkActive" [active]="api.isActive" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

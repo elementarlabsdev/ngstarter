@@ -14,9 +14,6 @@ import {
   MultipleSelectionExample
 } from '../_examples/multiple-selection-example/multiple-selection-example';
 import { CustomTriggerExample } from '../_examples/custom-trigger-example/custom-trigger-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 import { SelectSearchExample } from '../_examples/select-search-example/select-search-example';
 
 @Component({
@@ -31,9 +28,6 @@ import { SelectSearchExample } from '../_examples/select-search-example/select-s
     GroupsOfOptionsExample,
     MultipleSelectionExample,
     CustomTriggerExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective,
     SelectSearchExample
   ],
     templateUrl: './overview.html',
