@@ -1,0 +1,36 @@
+<app-page>
+  <h1 appPageTitle>Currency Select</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Currency Select component is a powerful and flexible tool designed for web applications that require
+        internationalization and financial data entry. It provides an intuitive interface for users to search
+        and select currencies from a comprehensive list.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Comprehensive Currency List</strong>: Includes global currencies with their codes and names.
+          </li>
+          <li>
+            ✅ <strong>Search Functionality</strong>: Users can quickly find currencies by name or code.
+          </li>
+          <li>
+            ✅ <strong>Customizable Display</strong>: Option to show country names alongside currencies.
+          </li>
+          <li>
+            ✅ <strong>Integration-Ready</strong>: Works seamlessly with Angular Forms and FormField components.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/currency-select" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/currency-select/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

@@ -1,7 +1,6 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./common/common').then(c => c.Common),
@@ -10,19 +9,13 @@ const routes: Routes = [
         path: '',
         pathMatch: 'full',
         loadComponent: () => import('./overview/overview').then(c => c.Overview),
-        title: 'Currency Select / Overview'
+        title: 'Date Format Select / Overview'
       },
       {
         path: 'api',
         loadComponent: () => import('./api/api').then(c => c.Api),
-        title: 'Currency Select / Api'
+        title: 'Date Format Select / Api'
       }
     ]
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class CurrencySelectRoutingModule { }

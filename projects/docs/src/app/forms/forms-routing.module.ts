@@ -76,7 +76,7 @@ const routes: Routes = [
   },
   {
     path: 'date-format-select',
-    loadChildren: () => import('./date-format-select/date-format-select.module').then(m => m.DateFormatSelectModule)
+    loadChildren: () => import('./date-format-select/routes').then(m => m.routes)
   },
   {
     path: 'input-mask',
