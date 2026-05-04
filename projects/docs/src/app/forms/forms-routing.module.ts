@@ -68,7 +68,7 @@ const routes: Routes = [
   },
   {
     path: 'inline-text-edit',
-    loadChildren: () => import('./inline-text-edit/inline-text-edit.module').then(m => m.InlineTextEditModule)
+    loadChildren: () => import('./inline-text-edit/routes').then(m => m.routes)
   },
   {
     path: 'currency-select',

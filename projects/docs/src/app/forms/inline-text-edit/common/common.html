@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>Inline Text Edit</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Inline Text Edit component allows users to edit text directly in place, providing a smooth and efficient user experience.
+        It's perfect for titles, descriptions, and other editable content where a full form might be overkill.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>In-place Editing</strong>: Seamless transition between viewing and editing modes.
+          </li>
+          <li>
+            ✅ <strong>Customizable Placeholder</strong>: Clearly indicate when content is missing.
+          </li>
+          <li>
+            ✅ <strong>Debounced Updates</strong>: Control the frequency of change emissions with a configurable delay.
+          </li>
+          <li>
+            ✅ <strong>Keyboard Support</strong>: Use Enter to save and Escape to cancel edits.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/inline-text-edit" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/inline-text-edit/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
