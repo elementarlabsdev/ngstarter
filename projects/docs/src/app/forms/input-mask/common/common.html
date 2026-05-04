@@ -1,0 +1,32 @@
+<app-page>
+  <h1 appPageTitle>Input Mask</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Input Mask component is a powerful tool for enforcing specific formatting on user inputs.
+        It ensures that data is entered in a consistent and valid format, such as credit card numbers, expiry dates, or CVV codes.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Formatted Input</strong>: Automatically formats user input as they type.
+          </li>
+          <li>
+            ✅ <strong>Validation Support</strong>: Works seamlessly with Angular forms for validation.
+          </li>
+          <li>
+            ✅ <strong>Specialized Masks</strong>: Pre-configured masks for common credit card fields.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/input-mask" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/input-mask/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

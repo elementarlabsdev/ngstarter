@@ -80,7 +80,7 @@ const routes: Routes = [
   },
   {
     path: 'input-mask',
-    loadChildren: () => import('./input-mask/input-mask.module').then(m => m.InputMaskModule)
+    loadChildren: () => import('./input-mask/routes').then(m => m.routes)
   },
   {
     path: 'input-validator',
