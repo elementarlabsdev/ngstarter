@@ -9,9 +9,6 @@ import {
 import {
   PasswordToggleVisibilityExample
 } from '../_examples/password-toggle-visibility-example/password-toggle-visibility-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
     selector: 'app-overview',
@@ -19,10 +16,7 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     Playground,
     BasicPasswordStrengthExample,
     PasswordStrengthInfoExample,
-    PasswordToggleVisibilityExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
+    PasswordToggleVisibilityExample
   ],
     templateUrl: './overview.html',
     styleUrl: './overview.scss'

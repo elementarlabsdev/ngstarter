@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>Password Strength</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Password Strength component provides visual feedback on the strength of a user's password based on various criteria.
+        It helps users create more secure passwords by showing real-time strength indicators and optional detailed requirements.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Real-time Feedback</strong>: Instantly updates the strength bar as the user types.
+          </li>
+          <li>
+            ✅ <strong>Configurable Rules</strong>: Easily enable or disable rules for length, digits, special characters, etc.
+          </li>
+          <li>
+            ✅ <strong>Detailed Info</strong>: Use the <code>PasswordStrengthInfo</code> component to display specific requirement status.
+          </li>
+          <li>
+            ✅ <strong>Visibility Toggle</strong>: Includes a helper component for toggling password visibility.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/password-strength" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/password-strength/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
