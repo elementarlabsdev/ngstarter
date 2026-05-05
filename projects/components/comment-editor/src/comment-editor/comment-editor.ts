@@ -52,7 +52,7 @@ import { SingleEmoji } from '../extensions/single-emoji';
   ],
   host: {
     'class': 'ngs-comment-editor',
-    '[class.full-view]': 'fullView || fullViewMode()',
+    '[class.full-view]': 'isFullViewVisible || fullViewMode()',
     '(click)': 'activateFullView($event)'
   }
 })
@@ -66,8 +66,8 @@ export class CommentEditor implements OnInit, OnDestroy {
   private _imageBubbleMenu = viewChild.required<ElementRef>('imageBubbleMenu');
   protected _value = '';
   protected editor: Editor;
-  protected showToolbar = false;
-  protected fullView = false;
+  protected isToolbarVisible = false;
+  protected isFullViewVisible = false;
 
   contentMaxHeight = input<number>();
   buttonCancelLabel = input<string>('Cancel');
@@ -104,9 +104,13 @@ export class CommentEditor implements OnInit, OnDestroy {
       isActive: (command: string) => this.editor?.isActive(command),
       runCommand: (command: string) => this._runCommand(command),
       editor: () => this.editor,
-      isToolbarActive: () => this.showToolbar,
+      isToolbarActive: () => this.isToolbarVisible,
       toggleToolbar: () => this.toggleToolbar(),
-      isEditorActivated: () => this.fullView || this.fullViewMode(),
+      showToolbar: () => this.showToolbar(),
+      hideToolbar: () => this.hideToolbar(),
+      isEditorActivated: () => this.isFullViewVisible || this.fullViewMode(),
+      showFullView: () => this.showFullView(),
+      hideFullView: () => this.hideFullView(),
       insertText: (text: string) => this.insertText(text),
       clear: () => this.clear()
     }
@@ -186,9 +190,10 @@ export class CommentEditor implements OnInit, OnDestroy {
     event.stopPropagation();
     event.preventDefault();
     this.sent.emit(this._value);
-    this.showToolbar = false;
-    this.fullView = false;
+
     if (this.autoClear()) {
+      this.isToolbarVisible = false;
+      this.isFullViewVisible = false;
       this.clear();
     }
   }
@@ -206,22 +211,34 @@ export class CommentEditor implements OnInit, OnDestroy {
       }
     }
 
-    if (this.fullView) {
-      return;
-    }
+    this.showFullView();
+  }
 
-    this.fullView = true;
+  showFullView(): void {
+    this.isFullViewVisible = true;
+  }
+
+  hideFullView(): void {
+    this.isFullViewVisible = false;
   }
 
   toggleToolbar(): void {
-    this.showToolbar = !this.showToolbar;
+    this.isToolbarVisible = !this.isToolbarVisible;
+  }
+
+  showToolbar(): void {
+    this.isToolbarVisible = true;
+  }
+
+  hideToolbar(): void {
+    this.isToolbarVisible = false;
   }
 
   cancel(event: MouseEvent): void {
     event.stopPropagation();
     event.preventDefault();
-    this.showToolbar = false;
-    this.fullView = false;
+    this.isToolbarVisible = false;
+    this.isFullViewVisible = false;
     this.clear();
     this.canceled.emit();
   }

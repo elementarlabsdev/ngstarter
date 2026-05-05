@@ -1,4 +1,4 @@
-@if ((showToolbar || toolbarAlwaysVisible()) && (fullView || fullViewMode())) {
+@if ((isToolbarVisible || toolbarAlwaysVisible()) && (isFullViewVisible || fullViewMode())) {
   <div class="toolbar">
     <ng-content select="ngs-comment-editor-toolbar"/>
   </div>
@@ -12,7 +12,7 @@
     <ng-content select="ngs-comment-editor-footer-bar"/>
   </div>
   <div class="flex items-center gap-2">
-    @if ((fullView && !fullViewMode()) || cancelButtonAlwaysVisible()) {
+    @if ((isFullViewVisible && !fullViewMode()) || cancelButtonAlwaysVisible()) {
       <button ngsButton (click)="cancel($event)">{{ buttonCancelLabel() }}</button>
     }
     <button ngsButton="filled"

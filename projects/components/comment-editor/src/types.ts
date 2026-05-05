@@ -13,6 +13,10 @@ export interface CommentEditorAPI {
   isToolbarActive: () => boolean;
   toggleToolbar: () => void;
   isEditorActivated: () => boolean;
+  showToolbar: () => void;
+  hideToolbar: () => void;
+  showFullView: () => void;
+  hideFullView: () => void;
   insertText: (text: string) => void;
   clear: () => void;
 }
