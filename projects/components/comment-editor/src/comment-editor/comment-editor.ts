@@ -88,7 +88,7 @@ export class CommentEditor implements OnInit, OnDestroy {
   autoClear = input(true, {
     transform: booleanAttribute
   });
-  loading = signal(false);
+  loading = input(false);
   imageUploadFn = input<(file: Blob) => Promise<string>>();
 
   readonly sent = output<string>();
