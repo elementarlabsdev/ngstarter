@@ -25,8 +25,7 @@ import {
     HeaderRow,
     Row
   ],
-  templateUrl: './api.html',
-  styleUrl: './api.scss'
+  templateUrl: './api.html'
 })
 export class Api {
   readonly properties = [

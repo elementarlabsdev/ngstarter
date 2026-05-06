@@ -25,7 +25,6 @@ import {
     Row
   ],
   templateUrl: './api.html',
-  styleUrl: './api.scss',
 })
 export class Api {
   directives = [

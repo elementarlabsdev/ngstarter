@@ -1,16 +1,11 @@
 import { Component } from '@angular/core';
-import { ApiPage, ApiTable, ApiTd, ApiTh, ApiTr } from '@meta/api-table';
+import { Page } from '@meta/page/page';
 
 @Component({
   imports: [
-    ApiPage,
-    ApiTable,
-    ApiTh,
-    ApiTr,
-    ApiTd
+    Page
   ],
-  templateUrl: './api.html',
-  styleUrl: './api.scss'
+  templateUrl: './api.html'
 })
 export class Api {
 
