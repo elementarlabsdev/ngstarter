@@ -18,9 +18,6 @@ import {
 import {
   DatepickerPresetsExample
 } from '../_examples/datepicker-presets-example/datepicker-presets-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 import { provideNativeDateAdapter } from '@ngstarter-ui/components/datepicker';
 
 @Component({
@@ -33,9 +30,6 @@ import { provideNativeDateAdapter } from '@ngstarter-ui/components/datepicker';
     DatepickerActionsButtonExample,
     BasicDateRangePickerExample,
     DatepickerPresetsExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss',

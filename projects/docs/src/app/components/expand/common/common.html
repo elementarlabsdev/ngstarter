@@ -1,0 +1,42 @@
+<app-page>
+  <h1 appPageTitle>Expand</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Meet <strong>Expand</strong>, your new favorite component! 🚀
+      </p>
+      <p>
+        Tired of long content cluttering your pages? The <strong>Expand</strong> component solves this by automatically
+        showing or hiding content when it’s too lengthy. With a sleek,
+        Design-inspired toggle, users can expand to read more or collapse to keep things tidy.
+      </p>
+      <div class="my-6">
+        <div>Key features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Clean & User-Friendly</strong>: Keeps your design clean while letting users control what they want to see.
+          </li>
+          <li>
+            ✅ <strong>Responsive by Design</strong>: Works perfectly on any screen size.
+          </li>
+          <li>
+            ✅ <strong>Simple Integration</strong>: Plug and play—just add it to your project, no hassle!
+          </li>
+          <li>
+            ✅ <strong>Customizable</strong>: Easily tweak styles and behaviors to fit your app's needs.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Make your apps smarter and more user-focused with <strong>Expand</strong>! 👌
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/expand" ngs-tab-link>Overview</a>
+      <a routerLink="/components/expand/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

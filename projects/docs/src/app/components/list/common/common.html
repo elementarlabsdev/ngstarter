@@ -1,0 +1,17 @@
+<app-page>
+  <h1 appPageTitle>List</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Lists are continuous, vertical indexes of text or images.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/list" ngs-tab-link>Overview</a>
+      <a routerLink="/components/list/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

@@ -8,9 +8,6 @@ import { RangeSliderExample } from '../_examples/range-slider-example/range-slid
 import {
   ConfigurableSliderExample
 } from '../_examples/configurable-slider-example/configurable-slider-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   selector: 'app-overview',
@@ -20,9 +17,6 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     CustomThumbLabelFormattingExample,
     RangeSliderExample,
     ConfigurableSliderExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'

@@ -1,0 +1,108 @@
+<h3 class="mb-4">Guided Tour API</h3>
+
+<h4 class="mt-8 mb-4">TourAnchorDirective</h4>
+<p class="mb-4">Directive used to mark elements as tour anchors.</p>
+<div class="overflow-x-auto">
+  <table class="w-full text-left border-collapse">
+    <thead>
+      <tr class="border-b">
+        <th class="py-2 px-4">Input</th>
+        <th class="py-2 px-4">Type</th>
+        <th class="py-2 px-4">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>ngsTourAnchor</code></td>
+        <td class="py-2 px-4"><code>string</code></td>
+        <td class="py-2 px-4">Unique identifier for the tour step anchor.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h4 class="mt-10 mb-4">TourService</h4>
+<p class="mb-4">Service to control the guided tour.</p>
+<div class="overflow-x-auto">
+  <table class="w-full text-left border-collapse">
+    <thead>
+      <tr class="border-b">
+        <th class="py-2 px-4">Method</th>
+        <th class="py-2 px-4">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>start(steps: TourStepConfig[])</code></td>
+        <td class="py-2 px-4">Starts the tour with the provided step configurations.</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>end()</code></td>
+        <td class="py-2 px-4">Ends the current tour.</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>next()</code></td>
+        <td class="py-2 px-4">Goes to the next step.</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>prev()</code></td>
+        <td class="py-2 px-4">Goes to the previous step.</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4"><code>goToStep(index: number)</code></td>
+        <td class="py-2 px-4">Goes to a specific step by index.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h4 class="mt-10 mb-4">TourStepConfig</h4>
+<p class="mb-4">Configuration object for a tour step.</p>
+<div class="overflow-x-auto">
+  <table class="w-full text-left border-collapse border">
+    <thead>
+      <tr class="bg-surface-container-low border-b">
+        <th class="py-2 px-4 border-r">Property</th>
+        <th class="py-2 px-4 border-r">Type</th>
+        <th class="py-2 px-4">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-b">
+        <td class="py-2 px-4 border-r"><code>anchorId</code></td>
+        <td class="py-2 px-4 border-r"><code>string | (() => HTMLElement | string)</code></td>
+        <td class="py-2 px-4">Unique identifier for the anchor or a function returning the element.</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4 border-r"><code>title</code></td>
+        <td class="py-2 px-4 border-r"><code>string</code></td>
+        <td class="py-2 px-4">Title of the tour step.</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4 border-r"><code>content</code></td>
+        <td class="py-2 px-4 border-r"><code>string</code></td>
+        <td class="py-2 px-4">Text content of the tour step.</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4 border-r"><code>htmlContent</code></td>
+        <td class="py-2 px-4 border-r"><code>string</code></td>
+        <td class="py-2 px-4">HTML content for the tour step (sanitized).</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4 border-r"><code>withBackdrop</code></td>
+        <td class="py-2 px-4 border-r"><code>boolean</code></td>
+        <td class="py-2 px-4">Whether to show a backdrop and highlight the element.</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4 border-r"><code>route</code></td>
+        <td class="py-2 px-4 border-r"><code>string</code></td>
+        <td class="py-2 px-4">Route to navigate to before showing the step.</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-2 px-4 border-r"><code>position</code></td>
+        <td class="py-2 px-4 border-r"><code>TourStepPosition</code></td>
+        <td class="py-2 px-4">Explicit position for the tour step.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

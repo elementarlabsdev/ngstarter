@@ -7,22 +7,16 @@ import {
 import {
   ConfigurableSnackbarExample
 } from '../_examples/configurable-snackbar-example/configurable-snackbar-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   imports: [
     Playground,
     BasicSnackbarExample,
     SnackbarWithCustomExample,
-    ConfigurableSnackbarExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
+    ConfigurableSnackbarExample
   ],
-    templateUrl: './overview.html',
-    styleUrl: './overview.scss'
+  templateUrl: './overview.html',
+  styleUrl: './overview.scss'
 })
 export class Overview {
 

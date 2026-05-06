@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
 import { Playground } from '@meta/playground/playground';
 import {
   BasicImageViewerExample
@@ -11,19 +9,13 @@ import {
 import {
   ImageViewerWithTitleExample
 } from '../_examples/image-viewer-with-title-example/image-viewer-with-title-example';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
-import { Divider } from '@ngstarter-ui/components/divider';
 
 @Component({
   imports: [
-    Page,
-    PageContentDirective,
     Playground,
     BasicImageViewerExample,
     ImageViewerWithCaptionAndDescriptionExample,
     ImageViewerWithTitleExample,
-    PageTitleDirective,
-    Divider
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'

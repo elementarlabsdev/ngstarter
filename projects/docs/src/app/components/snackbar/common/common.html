@@ -1,0 +1,18 @@
+<app-page>
+  <h1 appPageTitle>Snackbar</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The snackbar provides brief messages about app processes at the bottom of the screen.
+        It is ideal for non-intrusive notifications or confirmations that do not require user interaction.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/snackbar" ngs-tab-link>Overview</a>
+      <a routerLink="/components/snackbar/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

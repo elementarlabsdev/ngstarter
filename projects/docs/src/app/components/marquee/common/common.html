@@ -1,0 +1,33 @@
+<app-page>
+  <h1 appPageTitle>Marquee</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The <code class="code">&#64;ngs-marquee</code> is an Angular marquee library that delivers a versatile
+        marquee component with various configuration options, including
+        animation speed, reverse scrolling, gap size, and the ability to pause on hover.
+      </p>
+      <div class="my-7">
+        <div>Key features:</div>
+        <ul class="list-disc mt-3 flex flex-col gap-3 ps-4">
+          <li>
+            ✅ Includes options to control animation speed and reverse scrolling.
+          </li>
+          <li>
+            ✅ Allows the marquee to pause when hovered.
+          </li>
+          <li>
+            ✅ Lightweight and simple to integrate as a standalone component.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/marquee" ngs-tab-link>Overview</a>
+      <a routerLink="/components/marquee/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

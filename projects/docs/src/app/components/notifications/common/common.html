@@ -1,0 +1,18 @@
+<app-page>
+  <h1 appPageTitle>Notifications</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Notifications component is used to display a list of alerts, updates, or messages to the user.
+        It provides a structured way to present information with various types and actions.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/notifications" ngs-tab-link>Overview</a>
+      <a routerLink="/components/notifications/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

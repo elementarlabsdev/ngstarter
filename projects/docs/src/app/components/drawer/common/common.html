@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>Drawer</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Drawer component is a panel that slides out from the edge of the screen.
+        It is commonly used for navigation, filters, or additional context without losing the current page state.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Flexible Positioning</strong>: Slides out from the right side of the screen.
+          </li>
+          <li>
+            ✅ <strong>Backdrop Support</strong>: Optional backdrop to focus user attention on the drawer content.
+          </li>
+          <li>
+            ✅ <strong>Overlay Integration</strong>: Built on top of Angular CDK Overlay for robust behavior.
+          </li>
+          <li>
+            ✅ <strong>Animations</strong>: Smooth transition animations for opening and closing.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/drawer" ngs-tab-link>Overview</a>
+      <a routerLink="/components/drawer/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

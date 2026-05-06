@@ -1,87 +1,19 @@
-<app-page>
-  <h1 appPageTitle>Gauge</h1>
-  <div appPageContent>
-    <main class="mb-10">
-      <p>
-        We’ve built a <strong>Gauge</strong> component for , designed to help you visualize
-        progress, metrics, and performance in a simple and beautiful way.
-      </p>
-      <div class="my-6">
-        <div>Key Features:</div>
-        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
-          <li>
-            ✅ <strong>Seamless Design</strong> – Fully compatible with for a smooth UI experience.
-          </li>
-          <li>
-            ✅ <strong>Customizable</strong> – Adjust colors, sizes, and thresholds to fit your needs.
-          </li>
-          <li>
-            ✅ <strong>Lightweight & Fast</strong> – Optimized for performance and responsiveness.
-          </li>
-          <li>
-            ✅ <strong>Easy to Use</strong> – Simple API for quick integration into any Angular project.
-          </li>
-        </ul>
-      </div>
-      <p>
-        Perfect for dashboards, reports, and real-time data visualization.
-      </p>
-      <p>
-        Try it now and enhance your Angular apps with a modern Gauge component! 🚀
-      </p>
-    </main>
+<h3>Basic Gauge</h3>
+<ngs-playground exampleUrl="_docs/components/gauge/_examples" exampleName="basic-gauge-example">
+  <app-basic-gauge-example/>
+</ngs-playground>
 
-    <h3>Basic Gauge</h3>
-    <ngs-playground exampleUrl="_docs/components/gauge/_examples" exampleName="basic-gauge-example">
-      <app-basic-gauge-example/>
-    </ngs-playground>
+<h3>Gauge With Value</h3>
+<ngs-playground exampleUrl="_docs/components/gauge/_examples" exampleName="gauge-with-value-example">
+  <app-gauge-with-value-example/>
+</ngs-playground>
 
-    <h3>Gauge With Value</h3>
-    <ngs-playground exampleUrl="_docs/components/gauge/_examples" exampleName="gauge-with-value-example">
-      <app-gauge-with-value-example/>
-    </ngs-playground>
+<h3>Gauge Custom Size</h3>
+<ngs-playground exampleUrl="_docs/components/gauge/_examples" exampleName="gauge-custom-size-example">
+  <app-gauge-custom-size-example/>
+</ngs-playground>
 
-    <h3>Gauge Custom Size</h3>
-    <ngs-playground exampleUrl="_docs/components/gauge/_examples" exampleName="gauge-custom-size-example">
-      <app-gauge-custom-size-example/>
-    </ngs-playground>
-
-    <h3>Gauge Custom Stroke Width</h3>
-    <ngs-playground exampleUrl="_docs/components/gauge/_examples" exampleName="gauge-custom-stroke-width-example">
-      <app-gauge-custom-stroke-width-example/>
-    </ngs-playground>
-
-    <h2>API Reference</h2>
-
-    <div class="mt-10">
-      <p>
-        Properties for the <code class="code">ngs-gauge</code> component.
-      </p>
-
-      <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
-        <table ngs-table [dataSource]="properties">
-          <ng-container ngsColumnDef="name">
-            <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
-            <td ngs-cell *ngsCellDef="let element">
-              <div>{{ element.name }}</div>
-              <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
-            </td>
-          </ng-container>
-
-          <ng-container ngsColumnDef="type">
-            <th ngs-header-cell *ngsHeaderCellDef>Type</th>
-            <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
-          </ng-container>
-
-          <ng-container ngsColumnDef="default">
-            <th ngs-header-cell *ngsHeaderCellDef>Default</th>
-            <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
-          </ng-container>
-
-          <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
-          <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
-        </table>
-      </div>
-    </div>
-  </div>
-</app-page>
+<h3>Gauge Custom Stroke Width</h3>
+<ngs-playground exampleUrl="_docs/components/gauge/_examples" exampleName="gauge-custom-stroke-width-example">
+  <app-gauge-custom-stroke-width-example/>
+</ngs-playground>

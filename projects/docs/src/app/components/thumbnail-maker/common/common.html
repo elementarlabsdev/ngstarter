@@ -1,0 +1,39 @@
+<app-page>
+  <h1 appPageTitle>Thumbnail Maker</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Thumbnail Maker component is a powerful and flexible tool designed to help users create and customize
+        thumbnails with ease. Whether you need to crop images, adjust scales, or provide interactive feedback,
+        this component provides a seamless experience for both developers and end-users.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Image Cropping & Scaling</strong>: Easily adjust the visible area of an image to create the perfect thumbnail.
+          </li>
+          <li>
+            ✅ <strong>Interactive Controls</strong>: Includes built-in zoom controls and drag-to-reposition functionality.
+          </li>
+          <li>
+            ✅ <strong>Flexible API</strong>: Provides methods to retrieve the resulting thumbnail as a Data URL, Blob, or Canvas.
+          </li>
+          <li>
+            ✅ <strong>Customizable UI</strong>: Add helper text and adapt the styling to match your application's design.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Perfect for profile picture uploads, content management systems, or any application requiring user-driven image processing.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/thumbnail-maker" ngs-tab-link>Overview</a>
+      <a routerLink="/components/thumbnail-maker/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

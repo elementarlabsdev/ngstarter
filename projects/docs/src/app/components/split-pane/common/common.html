@@ -1,0 +1,18 @@
+<app-page>
+  <h1 appPageTitle>Split Pane</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The <code>SplitPane</code> component provides a flexible way to divide a view into multiple resizable areas.
+        It supports both horizontal and vertical orientations, minimum and maximum sizes for panes, and custom drag handles.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/split-pane" ngs-tab-link>Overview</a>
+      <a routerLink="/components/split-pane/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

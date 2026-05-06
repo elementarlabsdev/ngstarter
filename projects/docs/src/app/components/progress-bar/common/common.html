@@ -1,0 +1,36 @@
+<app-page>
+  <h1 appPageTitle>Progress Bar</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Progress Bar component is a visual indicator used to show the completion status of a task or process.
+        It supports multiple modes, including determinate, indeterminate, buffer, and query,
+        making it versatile for various use cases in modern web applications.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Multiple Modes</strong>: Choose from determinate, indeterminate, buffer, or query modes.
+          </li>
+          <li>
+            ✅ <strong>Customizable</strong>: Easily adjust color and values to fit your requirements.
+          </li>
+          <li>
+            ✅ <strong>Animated</strong>: Smooth transitions and animations for better user experience.
+          </li>
+          <li>
+            ✅ <strong>Accessible</strong>: Built with accessibility in mind, following ARIA standards.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/progress-bar" ngs-tab-link>Overview</a>
+      <a routerLink="/components/progress-bar/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

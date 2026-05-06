@@ -1,0 +1,36 @@
+<app-page>
+  <h1 appPageTitle>Tiles</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Tiles component provides a flexible and responsive grid-based layout for displaying content in card-like
+        containers. It supports drag-and-drop reordering, customizable column spanning, and responsive dimensions,
+        making it ideal for dashboards, galleries, and interactive interfaces.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Drag-and-Drop</strong>: Interactive reordering of tiles with smooth animations.
+          </li>
+          <li>
+            ✅ <strong>Responsive Design</strong>: Configure tile width and height for different breakpoints (sm, md, lg, xl).
+          </li>
+          <li>
+            ✅ <strong>Flexible Layout</strong>: Customizable grid columns and gap spacing.
+          </li>
+          <li>
+            ✅ <strong>Developer-Friendly</strong>: Simple API for tracking order changes and layout updates.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/tiles" ngs-tab-link>Overview</a>
+      <a routerLink="/components/tiles/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

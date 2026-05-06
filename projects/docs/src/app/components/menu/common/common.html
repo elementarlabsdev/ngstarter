@@ -1,0 +1,36 @@
+<app-page>
+  <h1 appPageTitle>Menu</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Menu component provides a customizable and versatile dropdown or context menu system.
+        It supports multi-level nesting, icons, dividers, and various positioning strategies,
+        making it ideal for navigation and action menus in modern web applications.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Nesting</strong>: Supports unlimited levels of nested submenus.
+          </li>
+          <li>
+            ✅ <strong>Flexible Positioning</strong>: Automatic positioning relative to the trigger element.
+          </li>
+          <li>
+            ✅ <strong>Custom Content</strong>: Use with icons, dividers, and custom headers/footers.
+          </li>
+          <li>
+            ✅ <strong>Lazy Rendering</strong>: Content is only rendered when the menu is opened.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/menu" [routerLinkActiveOptions]="{exact: true}" ngs-tab-link>Overview</a>
+      <a routerLink="/components/menu/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

@@ -1,0 +1,91 @@
+<h3>Slider API</h3>
+<p>Selector: <code>ngs-slider</code></p>
+<p>Exported as: <code>ngsSlider</code></p>
+
+<h4>Inputs</h4>
+<table class="w-full border-collapse mb-8">
+  <thead>
+    <tr class="border-b text-left">
+      <th class="py-2">Name</th>
+      <th class="py-2">Type</th>
+      <th class="py-2">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="border-b">
+      <td class="py-2"><code>disabled</code></td>
+      <td class="py-2"><code>boolean</code></td>
+      <td class="py-2">Whether the slider is disabled.</td>
+    </tr>
+    <tr class="border-b">
+      <td class="py-2"><code>discrete</code></td>
+      <td class="py-2"><code>boolean</code></td>
+      <td class="py-2">Whether the slider is discrete (shows values on thumbs).</td>
+    </tr>
+    <tr class="border-b">
+      <td class="py-2"><code>showTickMarks</code></td>
+      <td class="py-2"><code>boolean</code></td>
+      <td class="py-2">Whether to show tick marks on the track.</td>
+    </tr>
+    <tr class="border-b">
+      <td class="py-2"><code>min</code></td>
+      <td class="py-2"><code>number</code></td>
+      <td class="py-2">The minimum value of the slider. Default is 0.</td>
+    </tr>
+    <tr class="border-b">
+      <td class="py-2"><code>max</code></td>
+      <td class="py-2"><code>number</code></td>
+      <td class="py-2">The maximum value of the slider. Default is 100.</td>
+    </tr>
+    <tr class="border-b">
+      <td class="py-2"><code>step</code></td>
+      <td class="py-2"><code>number</code></td>
+      <td class="py-2">The step increment of the slider. Default is 1.</td>
+    </tr>
+    <tr class="border-b">
+      <td class="py-2"><code>displayWith</code></td>
+      <td class="py-2"><code>(value: number) => string</code></td>
+      <td class="py-2">Function used to format the thumb label.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>SliderThumb API</h3>
+<p>Selector: <code>input[ngsSliderThumb]</code></p>
+<p>Exported as: <code>ngsSliderThumb</code></p>
+
+<h4>Inputs</h4>
+<table class="w-full border-collapse mb-8">
+  <thead>
+    <tr class="border-b text-left">
+      <th class="py-2">Name</th>
+      <th class="py-2">Type</th>
+      <th class="py-2">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="border-b">
+      <td class="py-2"><code>value</code></td>
+      <td class="py-2"><code>number</code></td>
+      <td class="py-2">The value of the thumb.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>Outputs</h4>
+<table class="w-full border-collapse mb-8">
+  <thead>
+    <tr class="border-b text-left">
+      <th class="py-2">Name</th>
+      <th class="py-2">Type</th>
+      <th class="py-2">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="border-b">
+      <td class="py-2"><code>valueChange</code></td>
+      <td class="py-2"><code>EventEmitter&lt;number&gt;</code></td>
+      <td class="py-2">Emits when the thumb value changes.</td>
+    </tr>
+  </tbody>
+</table>

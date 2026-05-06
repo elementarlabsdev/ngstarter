@@ -1,0 +1,18 @@
+<app-page>
+  <h1 appPageTitle>Table</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Table component is a powerful and flexible tool for displaying data in a structured tabular format.
+        It supports various features like sorting, pagination, filtering, selection, and more.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/table" ngs-tab-link>Overview</a>
+      <a routerLink="/components/table/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

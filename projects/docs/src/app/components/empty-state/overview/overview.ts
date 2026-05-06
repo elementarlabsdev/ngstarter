@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
 import { Playground } from '@meta/playground/playground';
 import {
   BasicEmptyStateExample
@@ -17,19 +15,15 @@ import {
 import {
   EmptyStateWithCustomIconExample
 } from '../_examples/empty-state-with-custom-icon-example/empty-state-with-custom-icon-example';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   imports: [
-    Page,
-    PageContentDirective,
     Playground,
     BasicEmptyStateExample,
     EmptyStateWithImageExample,
     EmptyStateWithIconExample,
     EmptyStateWithActionsExample,
-    EmptyStateWithCustomIconExample,
-    PageTitleDirective
+    EmptyStateWithCustomIconExample
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'

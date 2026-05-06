@@ -1,0 +1,41 @@
+<app-page>
+  <h1 appPageTitle>Crop</h1>
+  <div appPageContent>
+    <div class="mb-10">
+      <p class="lead">Fast, modern, and easy image cropping for Angular — fully compatible with and TailwindCSS.</p>
+      <p>
+        Add a polished, production-ready image cropping experience to your Angular app with minimal setup.
+        The component is touch-friendly, responsive, and integrates seamlessly with dialogs, forms, and theming.
+      </p>
+      <ul class="list-disc list-inside">
+        <li>
+          <strong>✂️ Interactive cropping</strong>
+          <div>Drag to crop, pinch to zoom, and adjust with mouse or touch.</div>
+        </li>
+        <li>
+          <strong>🧩 integration</strong>
+          <div>Works with MatDialog, reactive forms, themes and accessibility patterns.</div>
+        </li>
+        <li>
+          <strong>📱 Responsive & mobile-first</strong>
+          <div>Adapts to any screen size and input method.</div>
+        </li>
+      </ul>
+      <div class="mt-5"><strong>Perfect for:</strong></div>
+      <p>
+        👤 Avatar uploaders, 📰 content editors, 📦 admin dashboards, 🧠 AI tools — any app that needs a simple and powerful image cropping experience.
+      </p>
+      <p>
+        🚀 Image Crop Component — the modern open-source solution for effortless image cropping in Angular.
+      </p>
+    </div>
+
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/crop" ngs-tab-link>Overview</a>
+      <a routerLink="/components/crop/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

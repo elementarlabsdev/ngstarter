@@ -1,0 +1,18 @@
+<app-page>
+  <h1 appPageTitle>Datepicker</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The datepicker allows users to enter a date either through text input, or by choosing a date from the calendar.
+        It is made up of several components and directives that work together.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/datepicker" ngs-tab-link>Overview</a>
+      <a routerLink="/components/datepicker/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

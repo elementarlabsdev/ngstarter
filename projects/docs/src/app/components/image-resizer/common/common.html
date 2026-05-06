@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>Image Resizer</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Image Resizer component provides an intuitive interface for resizing images within your application.
+        It supports constraints like minimum and maximum width and emits events when dimensions change.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Flexible Resizing</strong>: Easily adjust image dimensions with interactive handles.
+          </li>
+          <li>
+            ✅ <strong>Constraints</strong>: Set minimum and maximum width to maintain layout integrity.
+          </li>
+          <li>
+            ✅ <strong>Event Emission</strong>: Get real-time updates on image dimensions and natural size.
+          </li>
+          <li>
+            ✅ <strong>Easy Integration</strong>: Works with standard HTML image elements via directives.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/image-resizer" ngs-tab-link>Overview</a>
+      <a routerLink="/components/image-resizer/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

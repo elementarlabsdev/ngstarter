@@ -1,0 +1,39 @@
+<app-page>
+  <h1 appPageTitle>Signature Pad</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Signature Pad component is a sleek and intuitive tool designed for capturing digital signatures with precision.
+        Whether you're building a document signing platform, a delivery confirmation app, or a simple consent form,
+        this component provides a smooth drawing experience with customizable features.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Smooth Drawing</strong>: Advanced stroke interpolation for a natural writing feel.
+          </li>
+          <li>
+            ✅ <strong>Customizable Appearance</strong>: Control pen color, line width, and background to match your UI.
+          </li>
+          <li>
+            ✅ <strong>Lazy Brush</strong>: Optional "lazy" brush effect for more controlled and steady signatures.
+          </li>
+          <li>
+            ✅ <strong>Easy Integration</strong>: Built as a standalone Angular component for rapid deployment.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Optimized for both desktop and mobile devices, the Signature Pad ensures a consistent user experience across all platforms.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/signature-pad" ngs-tab-link>Overview</a>
+      <a routerLink="/components/signature-pad/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

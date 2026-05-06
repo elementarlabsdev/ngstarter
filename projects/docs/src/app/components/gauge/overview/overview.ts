@@ -10,21 +10,6 @@ import {
 import {
   GaugeCustomStrokeWidthExample
 } from '../_examples/gauge-custom-stroke-width-example/gauge-custom-stroke-width-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
-import {
-  Table,
-  ColumnDef,
-  HeaderCell,
-  HeaderCellDef,
-  Cell,
-  CellDef,
-  HeaderRow,
-  HeaderRowDef,
-  Row,
-  RowDef
-} from '@ngstarter-ui/components/table';
 
 @Component({
   imports: [
@@ -33,42 +18,9 @@ import {
     GaugeWithValueExample,
     GaugeCustomSizeExample,
     GaugeCustomStrokeWidthExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective,
-    Table,
-    ColumnDef,
-    HeaderCell,
-    HeaderCellDef,
-    Cell,
-    CellDef,
-    HeaderRow,
-    HeaderRowDef,
-    Row,
-    RowDef
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'
 })
 export class Overview {
-  properties = [
-    {
-      name: 'value',
-      description: 'Shows the percentage progress',
-      type: 'number',
-      default: '0'
-    },
-    {
-      name: 'strokeWidth',
-      description: 'Stroke width',
-      type: 'number',
-      default: '10'
-    },
-    {
-      name: 'radius',
-      description: 'Radius',
-      type: 'number',
-      default: '50'
-    }
-  ];
 }

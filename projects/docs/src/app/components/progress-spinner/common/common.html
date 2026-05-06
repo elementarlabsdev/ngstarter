@@ -1,0 +1,18 @@
+<app-page>
+  <h1 appPageTitle>Progress Spinner</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Progress Spinner is a visual indicator of an ongoing process, such as data loading or a long-running task.
+        It provides feedback to the user that the application is still active and working.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/progress-spinner" ngs-tab-link>Overview</a>
+      <a routerLink="/components/progress-spinner/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

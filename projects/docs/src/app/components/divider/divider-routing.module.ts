@@ -1,16 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [
-  {
-    path: '',
-    title: 'Divider',
-    loadComponent: () => import('./overview/overview').then(c => c.Overview)
-  }
-];
+import { routes } from './routes';
+
+const routes_local: Routes = routes;
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routes_local)],
   exports: [RouterModule]
 })
 export class DividerRoutingModule { }

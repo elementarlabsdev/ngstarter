@@ -1,15 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [
-  {
-    path: '',
-    loadComponent: () => import('./overview/overview').then(c => c.Overview),
-  }
-];
+import { routes } from './routes';
+
+const marqueeRoutes = routes;
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(marqueeRoutes)],
   exports: [RouterModule]
 })
 export class MarqueeRoutingModule { }

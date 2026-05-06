@@ -1,0 +1,18 @@
+<app-page>
+  <h1 appPageTitle>Timepicker</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Timepicker component allows users to select a specific time from a dropdown or enter it manually.
+        It provides a user-friendly interface for time selection with support for intervals and integration with Datepicker.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/timepicker" ngs-tab-link>Overview</a>
+      <a routerLink="/components/timepicker/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

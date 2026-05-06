@@ -1,0 +1,45 @@
+<app-page>
+  <h1 appPageTitle>Panel</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Introducing <strong>Panel</strong>, the ultimate component designed to bring structure, style, and
+        flexibility to your applications. With a <strong>dedicated header, body, and footer</strong>,
+        it provides a seamless way to organize content while maintaining a sleek and modern aesthetic.
+      </p>
+      <div class="my-7">
+        <div>Key features:</div>
+        <ul class="list-disc ps-4 mt-3 flex flex-col gap-3">
+          <li>
+            ✅ <strong>Modular & Intuitive</strong> – Easily configure and customize each section to fit your design.
+          </li>
+          <li>
+            🎨 <strong>3 + Tailwind Ready</strong> – A perfect blend of Design
+            principles with Tailwind’s flexibility.
+          </li>
+          <li>
+            ⚡ <strong>Seamless Integration</strong> – Works effortlessly with
+            components for a consistent UI experience.
+          </li>
+          <li>
+            🛠 <strong>Highly Customizable</strong> – Add actions, icons, and interactive elements with ease.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Whether you're building dashboards, admin panels, or interactive UIs, <strong>Panel</strong> is your go-to
+        solution for structured and elegant content presentation.
+      </p>
+      <p>
+        👉 Try it now and give your Angular apps the <strong>polished, professional</strong> look they deserve! 🚀
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/panel" ngs-tab-link>Overview</a>
+      <a routerLink="/components/panel/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

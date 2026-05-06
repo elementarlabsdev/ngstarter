@@ -1,0 +1,17 @@
+<app-page>
+  <h1 appPageTitle>Grid</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        This is a simple static grid component to show widgets in 12 columns grid.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/grid" ngs-tab-link>Overview</a>
+      <a routerLink="/components/grid/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

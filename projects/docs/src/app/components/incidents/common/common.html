@@ -1,0 +1,40 @@
+<app-page>
+  <h1 appPageTitle>Incidents</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Incidents component is designed to manage and display system alerts, notifications, or critical events
+        within your application. It provides a structured way to present actionable information to users,
+        ensuring they stay informed about important changes or issues.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Centralized Alerting</strong>: Aggregate and display multiple incidents in a single, organized view.
+          </li>
+          <li>
+            ✅ <strong>Interactive Elements</strong>: Support for expandable details, actions, and quick dismissals.
+          </li>
+          <li>
+            ✅ <strong>Seamless Integration</strong>: Works with the IncidentsStore for state management and dynamic updates.
+          </li>
+          <li>
+            ✅ <strong>Responsive Layout</strong>: Adapts to different screen sizes, providing a clear overview on both desktop and mobile.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Whether you're building a monitoring dashboard, a support portal, or an enterprise management system,
+        the Incidents component helps you maintain transparency and improve user response times.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/incidents" ngs-tab-link>Overview</a>
+      <a routerLink="/components/incidents/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

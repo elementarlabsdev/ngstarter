@@ -19,21 +19,18 @@ import {
 } from '../_examples/tooltip-position-at-origin-example/tooltip-position-at-origin-example';
 
 @Component({
-    selector: 'app-overview',
+  selector: 'app-overview',
   imports: [
     Playground,
     BasicTooltipExample,
     TooltipWithACustomPositionExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective,
     TooltipShowHideDelayExample,
     TooltipManuallyShowHideExample,
     TooltipDisabledExample,
     TooltipPositionAtOriginExample
   ],
-    templateUrl: './overview.html',
-    styleUrl: './overview.scss'
+  templateUrl: './overview.html',
+  styleUrl: './overview.scss'
 })
 export class Overview {
 

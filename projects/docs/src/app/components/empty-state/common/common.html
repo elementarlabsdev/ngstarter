@@ -1,0 +1,32 @@
+<app-page>
+  <h1 appPageTitle>Empty state</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Got an empty page with no content to show? <strong>Empty state</strong> has you covered!
+        This handy component lets you add custom messages, visuals, or placeholders to make those
+        empty states look polished and purposeful.
+      </p>
+      <p>
+        No more boring "nothing here" vibes—give your users a better experience with just a few lines of code.
+      </p>
+      <div class="my-7">
+        <div>Key features:</div>
+        <ul class="list-disc ms-4 flex flex-col gap-3 mt-3">
+          <li>✅ Super easy to set up and customize.</li>
+          <li>✅ Works great with and Tailwind.</li>
+          <li>✅ Responsive and user-friendly right out of the box.</li>
+          <li>✅ Perfect for dashboards, lists and empty screens.</li>
+        </ul>
+      </div>
+    </main>
+
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/empty-state" ngs-tab-link>Overview</a>
+      <a routerLink="/components/empty-state/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

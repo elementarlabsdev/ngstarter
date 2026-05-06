@@ -20,11 +20,8 @@ import {
 import {
   TableWithStickyFooterExample
 } from '../_examples/table-with-sticky-footer-example/table-with-sticky-footer-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
 import { SortableTableExample } from '../_examples/sortable-table-example/sortable-table-example';
 import { StaticTableExample } from '../_examples/static-table-example/static-table-example';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
     selector: 'app-overview',
@@ -38,11 +35,8 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     TableWithFixedColumnsExample,
     TableWithStickyHeaderExample,
     TableWithStickyFooterExample,
-    Page,
-    PageContentDirective,
     SortableTableExample,
-    StaticTableExample,
-    PageTitleDirective
+    StaticTableExample
   ],
     templateUrl: './overview.html',
     styleUrl: './overview.scss'

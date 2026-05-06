@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 import { Playground } from '@meta/playground/playground';
 import { BasicToolbarExample } from '../_examples/basic-toolbar-example/basic-toolbar-example';
 import { MultiRowToolbarExample } from '../_examples/multi-row-toolbar-example/multi-row-toolbar-example';
@@ -12,9 +9,6 @@ import {ToolbarNavExample} from "../_examples/toolbar-nav-example/toolbar-nav-ex
 @Component({
   selector: 'app-overview',
   imports: [
-    Page,
-    PageContentDirective,
-    PageTitleDirective,
     Playground,
     BasicToolbarExample,
     MultiRowToolbarExample,

@@ -7,10 +7,6 @@ import {
   PopoverWithCustomPositionExample
 } from '../_examples/popover-with-custom-position-example/popover-with-custom-position-example';
 import { PopoverLazyContentExample } from '../_examples/popover-lazy-content-example/popover-lazy-content-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
     selector: 'app-overview',
@@ -21,11 +17,6 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     PopoverWithCustomPositionExample,
     PopoverLazyContentExample,
     PopoverTemplateRefExample,
-    Page,
-    PageContentDirective,
-    Tab,
-    TabGroup,
-    PageTitleDirective
   ],
     templateUrl: './overview.html',
     styleUrl: './overview.scss'

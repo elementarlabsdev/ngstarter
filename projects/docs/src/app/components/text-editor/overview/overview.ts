@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
 import { Playground } from '@meta/playground/playground';
 import {
   BasicTextEditorExample
@@ -8,17 +6,13 @@ import {
 import {
   TextEditorFloatingMenuExample
 } from '../_examples/text-editor-floating-menu-example/text-editor-floating-menu-example';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   selector: 'app-overview',
   imports: [
-    Page,
-    PageContentDirective,
     Playground,
     BasicTextEditorExample,
-    TextEditorFloatingMenuExample,
-    PageTitleDirective
+    TextEditorFloatingMenuExample
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'

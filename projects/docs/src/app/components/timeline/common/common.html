@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>Timeline</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Timeline component is used to display a series of events in chronological order.
+        It is ideal for showing activity logs, project milestones, or any history-based information.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Chronological Layout</strong>: Clearly presents events in a vertical flow.
+          </li>
+          <li>
+            ✅ <strong>Customizable Content</strong>: Each timeline item can include titles, descriptions, timestamps, and custom attributes.
+          </li>
+          <li>
+            ✅ <strong>Flexible Indicators</strong>: Use default dots or custom icons/components as event markers.
+          </li>
+          <li>
+            ✅ <strong>Sub-components</strong>: Highly modular structure with headers, items, titles, and more for full control.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/timeline" ngs-tab-link>Overview</a>
+      <a routerLink="/components/timeline/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

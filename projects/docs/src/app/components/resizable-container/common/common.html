@@ -1,0 +1,36 @@
+<app-page>
+  <h1 appPageTitle>Resizable Container</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Resizable Container component is a versatile UI element that allows users to adjust the width of a content
+        area dynamically. It provides a draggable handle for resizing, making it ideal for creating flexible layouts,
+        sidebars, or preview panels.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Interactive Resizing</strong>: Smooth, real-time width adjustment via a draggable handle.
+          </li>
+          <li>
+            ✅ <strong>Configurable Constraints</strong>: Define minimum width to maintain layout integrity.
+          </li>
+          <li>
+            ✅ <strong>Event Notification</strong>: Emits events on resize for synchronized UI updates.
+          </li>
+          <li>
+            ✅ <strong>Flexible Content</strong>: Can wrap any content, including charts, text, or complex components.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/resizable-container" ngs-tab-link>Overview</a>
+      <a routerLink="/components/resizable-container/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

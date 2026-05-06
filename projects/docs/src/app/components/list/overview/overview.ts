@@ -12,12 +12,9 @@ import {
 } from '../_examples/list-with-single-selection-example/list-with-single-selection-example';
 import { ListVariantsExample } from '../_examples/list-variants-example/list-variants-example';
 import { NavListExample } from '../_examples/nav-list-example/nav-list-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
-    selector: 'app-overview',
+  selector: 'app-overview',
   imports: [
     Playground,
     BasicListExample,
@@ -26,12 +23,9 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     ListWithSingleSelectionExample,
     ListVariantsExample,
     NavListExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
   ],
-    templateUrl: './overview.html',
-    styleUrl: './overview.scss'
+  templateUrl: './overview.html',
+  styleUrl: './overview.scss'
 })
 export class Overview {
 

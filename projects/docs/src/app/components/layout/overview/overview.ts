@@ -16,9 +16,6 @@ import {
   LayoutWithNestedLayoutsExample
 } from '../_examples/layout-with-nested-layouts-example/layout-with-nested-layouts-example';
 import { LayoutAsideExample } from '../_examples/layout-aside-example/layout-aside-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   imports: [
@@ -31,9 +28,6 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     LayoutHeaderWithFooterExample,
     LayoutWithNestedLayoutsExample,
     LayoutAsideExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'

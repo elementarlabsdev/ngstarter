@@ -12,9 +12,6 @@ import {
 import {
   QueryProgressBarExample
 } from '../_examples/query-progress-bar-example/query-progress-bar-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
     selector: 'app-overview',
@@ -24,9 +21,6 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     IntermediateProgressBarExample,
     BufferProgressBarExample,
     QueryProgressBarExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
   ],
     templateUrl: './overview.html',
     styleUrl: './overview.scss'

@@ -6,26 +6,18 @@ import {
 import {
   ExpansionPanelExpandCollapseTogglesExample
 } from '../_examples/expansion-panel-expand-collapse-toggles-example/expansion-panel-expand-collapse-toggles-example';
-import {
-  ExpansionPanelAsAccordionExample
-} from '../_examples/expansion-panel-as-accordion-example/expansion-panel-as-accordion-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
+import { ExpansionPanelAsAccordionExample } from '../_examples/expansion-panel-as-accordion-example/expansion-panel-as-accordion-example';
 
 @Component({
-    selector: 'app-overview',
+  selector: 'app-overview',
   imports: [
     Playground,
     BasicExpansionPanelExample,
     ExpansionPanelExpandCollapseTogglesExample,
-    ExpansionPanelAsAccordionExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
+    ExpansionPanelAsAccordionExample
   ],
-    templateUrl: './overview.html',
-    styleUrl: './overview.scss'
+  templateUrl: './overview.html',
+  styleUrl: './overview.scss'
 })
 export class Overview {
 

@@ -1,0 +1,43 @@
+<app-page>
+  <h1 appPageTitle>Image viewer</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Say hello to a sleek and user-friendly <strong>Image Viewer</strong> built with <strong>Angular</strong>! 🎉
+      </p>
+      <p>
+        With this component, you can easily add **interactive image viewing** to your web app.
+        It’s designed to look great and work smoothly across all devices.
+      </p>
+      <div class="my-6">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Zoom</strong>: Let users explore images in detail.
+          </li>
+          <li>
+            ✅ <strong>Integration</strong>: Fits seamlessly into your Angular-based projects.
+          </li>
+          <li>
+            ✅ <strong>Responsive Design</strong>: Perfect for any screen size.
+          </li>
+          <li>
+            ✅ <strong>Lightweight and Fast</strong>: No unnecessary bloat—just what you need!
+          </li>
+        </ul>
+      </div>
+      <p>Whether you’re building a gallery, product showcase, or a creative portfolio, this Image
+        Viewer will take your UI to the next level.</p>
+      <p>
+        👉 <span class="font-bold">Boost your app’s visuals with ease—try it today!</span>
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/image-viewer" ngs-tab-link>Overview</a>
+      <a routerLink="/components/image-viewer/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

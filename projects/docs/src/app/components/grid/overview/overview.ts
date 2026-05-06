@@ -1,13 +1,9 @@
 import { Component, signal } from '@angular/core';
 import { Grid, GridItemConfig, GridItem } from '@ngstarter-ui/components/grid';
-import { Page } from '@meta/page/page';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   imports: [
     Grid,
-    Page,
-    PageTitleDirective
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'

@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>Layout</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The layout component is a foundational structure for building consistent and responsive web applications.
+        It provides a set of sub-components that help define different regions of your application, such as headers, sidebars, content areas, and footers.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Semantic Regions</strong>: Clearly define headers, footers, sidebars, and main content.
+          </li>
+          <li>
+            ✅ <strong>Responsive Design</strong>: Easily create layouts that adapt to different screen sizes.
+          </li>
+          <li>
+            ✅ <strong>Flexible Composition</strong>: Nest layouts to create complex application structures.
+          </li>
+          <li>
+            ✅ <strong>Built-in Scrolling</strong>: Integrated scroll management for content areas.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/layout" ngs-tab-link>Overview</a>
+      <a routerLink="/components/layout/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

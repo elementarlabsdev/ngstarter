@@ -1,0 +1,115 @@
+<h3>Dialog Service</h3>
+<p>Сервис <code>Dialog</code> используется для открытия модальных окон.</p>
+
+<h4 class="mt-4">Methods</h4>
+<table class="w-full border-collapse border border-slate-400 my-4">
+  <thead>
+    <tr class="bg-slate-100">
+      <th class="border border-slate-300 p-2 text-left">Name</th>
+      <th class="border border-slate-300 p-2 text-left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>open(componentOrTemplateRef, config?)</code></td>
+      <td class="border border-slate-300 p-2">Открывает диалоговое окно с указанным компонентом или шаблоном.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>closeAll()</code></td>
+      <td class="border border-slate-300 p-2">Закрывает все открытые диалоговые окна.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="mt-8">Dialog Configuration</h3>
+<p>Объект <code>DialogConfig</code> используется для настройки поведения и внешнего вида диалога.</p>
+<table class="w-full border-collapse border border-slate-400 my-4">
+  <thead>
+    <tr class="bg-slate-100">
+      <th class="border border-slate-300 p-2 text-left">Property</th>
+      <th class="border border-slate-300 p-2 text-left">Type</th>
+      <th class="border border-slate-300 p-2 text-left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>data</code></td>
+      <td class="border border-slate-300 p-2"><code>any</code></td>
+      <td class="border border-slate-300 p-2">Данные, передаваемые в компонент диалога.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>width</code></td>
+      <td class="border border-slate-300 p-2"><code>string</code></td>
+      <td class="border border-slate-300 p-2">Ширина диалога.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>height</code></td>
+      <td class="border border-slate-300 p-2"><code>string</code></td>
+      <td class="border border-slate-300 p-2">Высота диалога.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>disableClose</code></td>
+      <td class="border border-slate-300 p-2"><code>boolean</code></td>
+      <td class="border border-slate-300 p-2">Запрещает закрытие диалога при клике на фон или нажатии Escape.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="mt-8">Directives & Components</h3>
+
+<h4 class="mt-4">DialogTitle</h4>
+<p>Заголовок диалога. Автоматически генерирует уникальный ID для ARIA.</p>
+<table class="w-full border-collapse border border-slate-400 my-4">
+  <thead>
+    <tr class="bg-slate-100">
+      <th class="border border-slate-300 p-2 text-left">Input</th>
+      <th class="border border-slate-300 p-2 text-left">Type</th>
+      <th class="border border-slate-300 p-2 text-left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>id</code></td>
+      <td class="border border-slate-300 p-2"><code>string</code></td>
+      <td class="border border-slate-300 p-2">Уникальный идентификатор заголовка.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 class="mt-8">DialogActions</h4>
+<p>Контейнер для кнопок действий в нижней части диалога.</p>
+<table class="w-full border-collapse border border-slate-400 my-4">
+  <thead>
+    <tr class="bg-slate-100">
+      <th class="border border-slate-300 p-2 text-left">Input</th>
+      <th class="border border-slate-300 p-2 text-left">Type</th>
+      <th class="border border-slate-300 p-2 text-left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>align</code></td>
+      <td class="border border-slate-300 p-2"><code>'start' | 'center' | 'end'</code></td>
+      <td class="border border-slate-300 p-2">Выравнивание кнопок действий. По умолчанию <code>'end'</code>.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 class="mt-8">DialogClose</h4>
+<p>Директива для кнопок, закрывающих диалог.</p>
+<table class="w-full border-collapse border border-slate-400 my-4">
+  <thead>
+    <tr class="bg-slate-100">
+      <th class="border border-slate-300 p-2 text-left">Input</th>
+      <th class="border border-slate-300 p-2 text-left">Type</th>
+      <th class="border border-slate-300 p-2 text-left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>ngsDialogClose</code></td>
+      <td class="border border-slate-300 p-2"><code>any</code></td>
+      <td class="border border-slate-300 p-2">Результат, с которым будет закрыт диалог.</td>
+    </tr>
+  </tbody>
+</table>

@@ -55,15 +55,15 @@ export const routes: Routes = [
   },
   {
     path: 'emoji-picker',
-    loadChildren: () => import('./emoji-picker/emoji-picker.module').then(m => m.EmojiPickerModule)
+    loadChildren: () => import('./emoji-picker/routes').then(m => m.routes)
   },
   {
     path: 'datepicker',
-    loadChildren: () => import('./datepicker/datepicker.module').then(m => m.DatepickerModule)
+    loadChildren: () => import('./datepicker/routes').then(m => m.routes)
   },
   {
     path: 'timepicker',
-    loadChildren: () => import('./timepicker/timepicker.module').then(m => m.TimepickerModule)
+    loadChildren: () => import('./timepicker/routes').then(m => m.routes)
   },
   {
     path: 'icon',
@@ -87,7 +87,7 @@ export const routes: Routes = [
   },
   {
     path: 'list',
-    loadChildren: () => import('./list/list.module').then(m => m.ListModule)
+    loadChildren: () => import('./list/routes').then(m => m.routes)
   },
   {
     path: 'menu',
@@ -95,15 +95,15 @@ export const routes: Routes = [
   },
   {
     path: 'paginator',
-    loadChildren: () => import('./paginator/paginator.module').then(m => m.PaginatorModule)
+    loadChildren: () => import('./paginator/routes').then(m => m.routes)
   },
   {
     path: 'progress-bar',
-    loadChildren: () => import('./progress-bar/progress-bar.module').then(m => m.ProgressBarModule)
+    loadChildren: () => import('./progress-bar/routes').then(m => m.routes)
   },
   {
     path: 'resizable-container',
-    loadChildren: () => import('./resizable-container/resizable-container.module').then(m => m.ResizableContainerModule)
+    loadChildren: () => import('./resizable-container/routes').then(m => m.routes)
   },
   {
     path: 'gauge',
@@ -131,7 +131,7 @@ export const routes: Routes = [
   },
   {
     path: 'snackbar',
-    loadChildren: () => import('./snackbar/snackbar.module').then(m => m.SnackbarModule)
+    loadChildren: () => import('./snackbar/routes').then(m => m.routes)
   },
   {
     path: 'comment-editor',
@@ -139,7 +139,7 @@ export const routes: Routes = [
   },
   {
     path: 'table',
-    loadChildren: () => import('./table/table.module').then(m => m.TableModule)
+    loadChildren: () => import('./table/routes').then(m => m.routes)
   },
   {
     path: 'stepper',
@@ -167,7 +167,7 @@ export const routes: Routes = [
   },
   {
     path: 'popover',
-    loadChildren: () => import('./popover/popover.module').then(m => m.PopoverModule)
+    loadChildren: () => import('./popover/routes').then(m => m.routes)
   },
   {
     path: 'color-picker',
@@ -211,7 +211,7 @@ export const routes: Routes = [
   },
   {
     path: 'empty-state',
-    loadChildren: () => import('./empty-state/empty-state.module').then(m => m.EmptyStateModule)
+    loadChildren: () => import('./empty-state/routes').then(m => m.routes)
   },
   {
     path: 'confirm',
@@ -231,7 +231,7 @@ export const routes: Routes = [
   },
   {
     path: 'image-resizer',
-    loadChildren: () => import('./image-resizer/image-resizer.module').then(m => m.ImageResizerModule)
+    loadChildren: () => import('./image-resizer/routes').then(m => m.routes)
   },
   {
     path: 'image-placeholder',
@@ -243,7 +243,7 @@ export const routes: Routes = [
   },
   {
     path: 'text-editor',
-    loadChildren: () => import('./text-editor/text-editor.module').then(m => m.TextEditorModule)
+    loadChildren: () => import('./text-editor/routes').then(m => m.routes)
   },
   {
     path: 'screen-loader',
@@ -255,7 +255,7 @@ export const routes: Routes = [
   },
   {
     path: 'drawer',
-    loadChildren: () => import('./drawer/drawer.module').then(m => m.DrawerModule)
+    loadChildren: () => import('./drawer/routes').then(m => m.routes)
   },
   {
     path: 'comparison-slider',
@@ -267,7 +267,7 @@ export const routes: Routes = [
   },
   {
     path: 'notifications',
-    loadChildren: () => import('./notifications/notifications.module').then(m => m.NotificationsModule)
+    loadChildren: () => import('./notifications/routes').then(m => m.routes)
   },
   {
     path: 'block-loader',

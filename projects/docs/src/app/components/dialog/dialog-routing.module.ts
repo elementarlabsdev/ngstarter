@@ -1,16 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [
-  {
-    path: '',
-    title: 'Dialog',
-    loadComponent: () => import('./overview/overview').then(c => c.Overview)
-  }
-];
+import { routes } from './routes';
+
+const routesConfig: Routes = routes;
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routesConfig)],
   exports: [RouterModule]
 })
 export class DialogRoutingModule { }

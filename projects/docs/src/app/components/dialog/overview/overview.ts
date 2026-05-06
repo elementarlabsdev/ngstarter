@@ -5,9 +5,6 @@ import { DialogSizingExample } from '../_examples/dialog-sizing-example/dialog-s
 import {
   DialogScrollableContentExample
 } from '../_examples/dialog-scrollable-content-example/dialog-scrollable-content-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   selector: 'app-overview',
@@ -15,10 +12,7 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     Playground,
     BasicDialogExample,
     DialogSizingExample,
-    DialogScrollableContentExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective
+    DialogScrollableContentExample
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'

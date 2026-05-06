@@ -1,0 +1,18 @@
+<app-page>
+  <h1 appPageTitle>Keyboard</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The keyboard component (<code>ngs-kbd</code>) is used to display keyboard shortcuts and commands in a consistent and visually appealing way.
+        It is often used in menus, documentation, and hints to help users learn shortcuts.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/kdb" ngs-tab-link>Overview</a>
+      <a routerLink="/components/kdb/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

@@ -1,0 +1,36 @@
+<app-page>
+  <h1 appPageTitle>Text Editor</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Text Editor component is a powerful, flexible, and feature-rich WYSIWYG editor based on Tiptap.
+        It provides a seamless experience for creating and editing rich text content, with support for various
+        formatting options, image uploads, and custom extensions.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Rich Formatting</strong>: Support for bold, italic, strike, code blocks, lists, and more.
+          </li>
+          <li>
+            ✅ <strong>Tiptap Integration</strong>: Built on top of the Tiptap editor for maximum extensibility.
+          </li>
+          <li>
+            ✅ <strong>Customizable Toolbar</strong>: Optional toolbar with configurable visibility.
+          </li>
+          <li>
+            ✅ <strong>Image Uploads</strong>: Built-in support for image uploads with custom upload functions.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/text-editor" ngs-tab-link>Overview</a>
+      <a routerLink="/components/text-editor/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

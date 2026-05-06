@@ -1,0 +1,17 @@
+<app-page>
+  <h1 appPageTitle>Toolbar</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Toolbar is a container for headers, titles, or actions.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/toolbar" ngs-tab-link>Overview</a>
+      <a routerLink="/components/toolbar/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

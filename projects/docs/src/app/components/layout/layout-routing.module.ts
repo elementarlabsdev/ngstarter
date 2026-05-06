@@ -4,8 +4,20 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    title: 'Layout',
-    loadComponent: () => import('./overview/overview').then(c => c.Overview)
+    loadComponent: () => import('./common/common').then(c => c.Common),
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        loadComponent: () => import('./overview/overview').then(c => c.Overview),
+        title: 'Layout / Overview'
+      },
+      {
+        path: 'api',
+        loadComponent: () => import('./api/api').then(c => c.Api),
+        title: 'Layout / Api'
+      }
+    ]
   }
 ];
 

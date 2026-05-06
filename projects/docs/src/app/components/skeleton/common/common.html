@@ -1,0 +1,33 @@
+<app-page>
+  <h1 appPageTitle>Skeleton</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Skeleton component is used to provide a visual indication that content is loading.
+        It creates a placeholder that mimics the layout of the actual content, helping to reduce
+        perceived loading time and improve user experience.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Visual Feedback</strong>: Provides immediate feedback that content is on its way.
+          </li>
+          <li>
+            ✅ <strong>Layout Stability</strong>: Maintains the layout of the page while content is loading.
+          </li>
+          <li>
+            ✅ <strong>Customizable</strong>: Can be styled to match any content type.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/skeleton" ngs-tab-link>Overview</a>
+      <a routerLink="/components/skeleton/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

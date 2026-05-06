@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>Suggestions</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Suggestions component is a versatile and user-friendly interface element designed to provide users with
+        relevant recommendations or shortcuts in a structured and visually appealing way.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Contextual Relevance</strong>: Offers suggestions based on user input or current context.
+          </li>
+          <li>
+            ✅ <strong>Flexible Layout</strong>: Supports icons, thumbnails, and categorized blocks of suggestions.
+          </li>
+          <li>
+            ✅ <strong>Interactive Design</strong>: Built-in ripple effects and smooth transitions for enhanced UX.
+          </li>
+          <li>
+            ✅ <strong>Categorized Blocks</strong>: Group suggestions with optional dividers and headings.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/suggestions" ngs-tab-link>Overview</a>
+      <a routerLink="/components/suggestions/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

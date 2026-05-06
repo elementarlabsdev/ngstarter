@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 import { Playground } from '@meta/playground/playground';
 import { BasicGuidedTourExample } from '../_examples/basic-guided-tour-example/basic-guided-tour-example';
 import { BackdropGuidedTourExample } from '../_examples/backdrop-guided-tour-example/backdrop-guided-tour-example';
@@ -17,9 +14,6 @@ import { RouteNavigationGuidedTourExample } from '../_examples/route-navigation-
 @Component({
   selector: 'app-overview',
   imports: [
-    Page,
-    PageContentDirective,
-    PageTitleDirective,
     Playground,
     BasicGuidedTourExample,
     BackdropGuidedTourExample,

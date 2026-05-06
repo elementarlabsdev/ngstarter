@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>Screen Loader</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Screen Loader component provides a full-screen loading overlay to indicate that an operation is in progress.
+        It can be triggered programmatically via a service and supports custom messages and templates.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Full-screen Overlay</strong>: Blocks user interaction while loading.
+          </li>
+          <li>
+            ✅ <strong>Service-driven</strong>: Easily controlled from any part of the application.
+          </li>
+          <li>
+            ✅ <strong>Custom Content</strong>: Supports text messages or custom TemplateRefs.
+          </li>
+          <li>
+            ✅ <strong>Consistent UI</strong>: Integrated with the project's design system and progress bar.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/screen-loader" ngs-tab-link>Overview</a>
+      <a routerLink="/components/screen-loader/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

@@ -11,10 +11,7 @@ import {
   TabsWithHeadersOnTheBottomExample
 } from '../_examples/tabs-with-headers-on-the-bottom-example/tabs-with-headers-on-the-bottom-example';
 import { PaginatedTabsExample } from '../_examples/paginated-tabs-example/paginated-tabs-example';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
 import { SortableTabsExample } from '../_examples/sortable-tabs-example/sortable-tabs-example';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 import {
   TabsAnimationsExample
 } from '../_examples/tabs-animations-example/tabs-animations-example';
@@ -27,10 +24,7 @@ import {
     TabsWithCustomLabelTemplateExample,
     TabsWithHeadersOnTheBottomExample,
     PaginatedTabsExample,
-    Page,
-    PageContentDirective,
     SortableTabsExample,
-    PageTitleDirective,
     TabsAnimationsExample
   ],
     templateUrl: './overview.html',

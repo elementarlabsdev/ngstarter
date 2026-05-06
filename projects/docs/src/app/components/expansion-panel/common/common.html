@@ -1,0 +1,17 @@
+<app-page>
+  <h1 appPageTitle>Expansion Panel</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        <code>&lt;ngs-expansion-panel&gt;</code> provides a collapsible detail-summary view.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/expansion-panel" ngs-tab-link>Overview</a>
+      <a routerLink="/components/expansion-panel/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

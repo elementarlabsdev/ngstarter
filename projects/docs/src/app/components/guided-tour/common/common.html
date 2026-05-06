@@ -1,0 +1,39 @@
+<app-page>
+  <h1 appPageTitle>Guided Tour</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Guided Tour component is a powerful tool for creating interactive walkthroughs and onboarding experiences
+        in your Angular applications. It helps users understand complex features and workflows by highlighting
+        specific elements and providing step-by-step instructions.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Interactive Steps</strong>: Guide users through various parts of your application.
+          </li>
+          <li>
+            ✅ <strong>Anchor-based Highlighting</strong>: Easily attach tour steps to specific UI elements.
+          </li>
+          <li>
+            ✅ <strong>Customizable Templates</strong>: Fully control the appearance and content of each step.
+          </li>
+          <li>
+            ✅ <strong>Backdrop Support</strong>: Focus user attention by dimming the rest of the screen.
+          </li>
+          <li>
+            ✅ <strong>Flexible Navigation</strong>: Support for keyboard, backdrop click, and programmatic control.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/guided-tour" ngs-tab-link>Overview</a>
+      <a routerLink="/components/guided-tour/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

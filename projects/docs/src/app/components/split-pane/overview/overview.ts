@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 import { Playground } from '@meta/playground/playground';
 import { BasicSplitExample } from '../_examples/basic-split-example/basic-split-example';
 import { SplitHandleExample } from '../_examples/split-handle-example/split-handle-example';
@@ -12,9 +9,6 @@ import { SplitRestrictMoveExample } from '../_examples/split-restrict-move-examp
 @Component({
   selector: 'app-overview',
   imports: [
-    Page,
-    PageContentDirective,
-    PageTitleDirective,
     Playground,
     BasicSplitExample,
     SplitHandleExample,

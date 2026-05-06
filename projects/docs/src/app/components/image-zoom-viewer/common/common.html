@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>Image Zoom viewer</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Image Zoom viewer component provides an interactive way to view images with a smooth zoom-in effect.
+        It is perfect for galleries, product pages, or any scenario where users need to see image details clearly.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            ✅ <strong>Smooth Animation</strong>: Uses CSS transitions for a fluid zoom experience.
+          </li>
+          <li>
+            ✅ <strong>Overlay Support</strong>: Displays the zoomed image in a centered overlay.
+          </li>
+          <li>
+            ✅ <strong>Responsive</strong>: Automatically recalculates zoom level on window resize.
+          </li>
+          <li>
+            ✅ <strong>Accessibility</strong>: Supports closing via the Escape key and backdrop clicks.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/image-zoom-viewer" ngs-tab-link>Overview</a>
+      <a routerLink="/components/image-zoom-viewer/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>
