@@ -1,11 +1,11 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-tooltip-container-color: var(--color-neutral-950);
-  --ngs-tooltip-supporting-text-color: var(--color-neutral-100);
+  --ngs-tooltip-container-color: var(--ngs-color-neutral-950);
+  --ngs-tooltip-supporting-text-color: var(--ngs-color-neutral-100);
   --ngs-tooltip-padding: 8px;
-  --ngs-tooltip-border-radius: theme(--radius-md);
-  --ngs-tooltip-font-size: theme(--text-xs);
+  --ngs-tooltip-border-radius: var(--ngs-radius-md);
+  --ngs-tooltip-font-size: var(--ngs-font-size-xs);
   --ngs-tooltip-line-height: 16px;
   --ngs-tooltip-max-width: 200px;
   --ngs-tooltip-handset-padding: 12px;
@@ -44,6 +44,6 @@
 }
 
 :host-context(html.dark) {
-  --ngs-tooltip-container-color: var(--color-neutral-100);
-  --ngs-tooltip-supporting-text-color: var(--color-neutral-950);
+  --ngs-tooltip-container-color: var(--ngs-color-neutral-100);
+  --ngs-tooltip-supporting-text-color: var(--ngs-color-neutral-950);
 }

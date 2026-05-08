@@ -1,19 +1,19 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-progress-spinner-color: var(--color-primary);
+  --ngs-progress-spinner-color: var(--ngs-color-primary);
   --ngs-progress-spinner-animation-multiplier: 1;
 
   &.ngs-primary {
-    --ngs-progress-spinner-color: var(--color-primary);
+    --ngs-progress-spinner-color: var(--ngs-color-primary);
   }
 
   &.ngs-accent {
-    --ngs-progress-spinner-color: var(--color-secondary);
+    --ngs-progress-spinner-color: var(--ngs-color-secondary);
   }
 
   &.ngs-warn {
-    --ngs-progress-spinner-color: var(--color-error);
+    --ngs-progress-spinner-color: var(--ngs-color-danger);
   }
 
   display: block;

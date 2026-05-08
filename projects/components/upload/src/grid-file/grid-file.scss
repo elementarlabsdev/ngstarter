@@ -4,12 +4,12 @@
 :host {
   --ngs-file-padding: --spacing(3) --spacing(2) --spacing(3) --spacing(3);
   --ngs-file-gap: --spacing(4);
-  --ngs-file-border-radius: theme(--radius-2xl);
-  --ngs-file-bg: var(--color-surface-container);
-  --ngs-file-error-bg: var(--color-error-container-low);
+  --ngs-file-border-radius: var(--ngs-radius-xl);
+  --ngs-file-bg: var(--ngs-color-surface-container);
+  --ngs-file-error-bg: var(--ngs-color-danger-container-low);
   --ngs-file-controls-gap: --spacing(1);
-  --ngs-file-error-font-size: theme(--text-xs);
-  --ngs-file-error-color: var(--color-error);
+  --ngs-file-error-font-size: var(--ngs-font-size-xs);
+  --ngs-file-error-color: var(--ngs-color-danger);
 
   display: flex;
   min-width: 240px;

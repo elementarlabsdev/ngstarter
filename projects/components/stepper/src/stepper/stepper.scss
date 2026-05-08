@@ -4,13 +4,13 @@
   --ngs-stepper-header-padding: 16px;
   --ngs-stepper-header-gap: 8px;
   --ngs-stepper-icon-size: 24px;
-  --ngs-stepper-icon-bg: var(--color-surface-container-high);
-  --ngs-stepper-icon-color: var(--color-on-surface);
-  --ngs-stepper-icon-active-bg: var(--color-primary);
-  --ngs-stepper-icon-completed-bg: var(--color-positive);
-  --ngs-stepper-label-color: var(--color-on-surface-variant);
-  --ngs-stepper-label-active-color: var(--color-on-surface);
-  --ngs-stepper-line-color: var(--color-outline-variant);
+  --ngs-stepper-icon-bg: var(--ngs-color-surface-container-high);
+  --ngs-stepper-icon-color: var(--ngs-color-on-surface);
+  --ngs-stepper-icon-active-bg: var(--ngs-color-primary);
+  --ngs-stepper-icon-completed-bg: var(--ngs-color-success);
+  --ngs-stepper-label-color: var(--ngs-color-on-surface-variant);
+  --ngs-stepper-label-active-color: var(--ngs-color-on-surface);
+  --ngs-stepper-line-color: var(--ngs-color-outline-variant);
   --ngs-stepper-content-padding: 24px;
 }
 
@@ -90,7 +90,7 @@
   min-width: 0;
 
   &:hover .ngs-stepper-icon:not(.ngs-stepper-header-active .ngs-stepper-icon) {
-    background: var(--color-surface-container-highest);
+    background: var(--ngs-color-surface-container-highest);
   }
 
   &.ngs-stepper-label-bottom {

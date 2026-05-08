@@ -1,0 +1,20 @@
+@use "../_common";
+
+:root {
+  color-scheme: light;
+}
+
+:root,
+[data-ngs-theme='enterprise'] {
+  --ngs-color-primary: #155eef;
+  --ngs-color-primary-container: #e0eaff;
+  --ngs-color-on-primary-container: #102a56;
+  --ngs-color-secondary: #475467;
+  --ngs-color-secondary-container: #f2f4f7;
+  --ngs-color-surface-container: #f8fafc;
+  --ngs-color-surface-container-high: #eef2f6;
+  --ngs-color-border: #e4e7ec;
+  --ngs-control-radius: var(--ngs-radius-sm);
+  --ngs-dialog-radius: var(--ngs-radius-md);
+  --ngs-nav-item-radius: var(--ngs-radius-sm);
+}

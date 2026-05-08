@@ -8,9 +8,9 @@
 
 .ngs-cookie-popup {
   width: 400px;
-  border-radius: theme(--radius-2xl);
-  box-shadow: theme(--shadow-lg);
-  background: var(--color-surface-container-lowest);
+  border-radius: var(--ngs-radius-xl);
+  box-shadow: var(--ngs-shadow-lg);
+  background: var(--ngs-color-surface-container-lowest);
   padding: --spacing(4);
 
   .title {
@@ -19,7 +19,7 @@
   }
 
   .message {
-    font-size: theme(--text-sm);
+    font-size: var(--ngs-font-size-sm);
     margin-bottom: --spacing(4);
   }
 

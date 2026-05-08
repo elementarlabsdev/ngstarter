@@ -10,25 +10,25 @@
   background: var(--ngs-comment-editor-bg);
 
   .floating-menu {
-    box-shadow: theme(--shadow-sm);
-    background: var(--dropdown-bg);
+    box-shadow: var(--ngs-shadow-sm);
+    background: var(--ngs-dropdown-bg);
     padding-top: --spacing(1.5);
     padding-bottom: --spacing(1.5);
     padding-inline-start: --spacing(2);
     padding-inline-end: --spacing(2);
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--ngs-color-border);
     border-radius: calc(infinity * 1px);
 
     .button {
       &:hover {
-        color: var(--color-primary);
+        color: var(--ngs-color-primary);
         border-radius: calc(infinity * 1px);
       }
 
       ngs-icon {
         width: --spacing(6);
         height: --spacing(6);
-        font-size: theme(--text-xl);
+        font-size: var(--ngs-font-size-xl);
         line-height: 1.25;
       }
 
@@ -46,7 +46,7 @@
 
     ::ng-deep {
       .single-emoji {
-        font-size: theme(--text-3xl);
+        font-size: 1.875rem;
       }
 
       .tiptap {
@@ -59,7 +59,7 @@
 
         div[data-youtube-video] {
           cursor: move;
-          background: var(--color-neutral-100);
+          background: var(--ngs-color-neutral-100);
           padding: --spacing(6);
           display: flex;
           align-items: center;
@@ -102,7 +102,7 @@
         p.is-editor-empty:first-child {
           &::before {
             content: attr(data-placeholder);
-            color: var(--color-neutral-500);
+            color: var(--ngs-color-neutral-500);
             float: left;
             height: 0;
             pointer-events: none;
@@ -120,7 +120,7 @@
 
         p.is-empty::before {
           content: attr(data-placeholder);
-          color: var(--color-neutral-500);
+          color: var(--ngs-color-neutral-500);
           float: left;
           height: 0;
           pointer-events: none;
@@ -168,7 +168,7 @@
   }
 
   .toolbar {
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--ngs-color-border);
     height: --spacing(14);
     padding: 0 --spacing(3);
     display: flex;
@@ -179,7 +179,7 @@
   .button,
   ::ng-deep .button {
     &.active {
-      background: var(--color-neutral-200);
+      background: var(--ngs-color-neutral-200);
     }
   }
 }
@@ -188,8 +188,8 @@
   .button,
   ::ng-deep .button {
     &.active {
-      background: var(--color-neutral-650);
-      color: var(--color-neutral-200);
+      background: var(--ngs-color-neutral-650);
+      color: var(--ngs-color-neutral-200);
     }
   }
 }

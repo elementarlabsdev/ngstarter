@@ -4,16 +4,16 @@
   --ngs-avatar-font-weight: 500;
   --ngs-avatar-size: --spacing(10);
   --ngs-avatar-border-radius: calc(infinity * 1px);
-  --ngs-avatar-bg: var(--color-surface-container-highest);
-  --ngs-avatar-color: var(--color-on-surface);
+  --ngs-avatar-bg: var(--ngs-color-surface-container-highest);
+  --ngs-avatar-color: var(--ngs-color-on-surface);
   --ngs-avatar-presence-indicator-size: 20%;
   --ngs-avatar-presence-indicator-position-top: 5%;
   --ngs-avatar-presence-indicator-position-end: 5%;
-  --ngs-avatar-presence-indicator-online-bg: var(--color-positive);
-  --ngs-avatar-presence-indicator-offline-bg: var(--color-on-surface-variant);
-  --ngs-avatar-presence-indicator-away-bg: var(--color-notice);
-  --ngs-avatar-presence-indicator-outline: var(--color-surface) solid 2px;
-  --ngs-avatar-inner-border: inset 0 0 1px var(--color-outline-variant);
+  --ngs-avatar-presence-indicator-online-bg: var(--ngs-color-success);
+  --ngs-avatar-presence-indicator-offline-bg: var(--ngs-color-on-surface-variant);
+  --ngs-avatar-presence-indicator-away-bg: var(--ngs-color-warning);
+  --ngs-avatar-presence-indicator-outline: var(--ngs-color-surface) solid 2px;
+  --ngs-avatar-inner-border: inset 0 0 1px var(--ngs-color-outline-variant);
   --ngs-avatar-border-color: transparent;
   --ngs-avatar-border-width: 1px;
 
@@ -47,24 +47,24 @@
   }
 
   &.is-solid {
-    --ngs-avatar-bg: var(--color-primary);
-    --ngs-avatar-color: var(--color-on-primary);
+    --ngs-avatar-bg: var(--ngs-color-primary);
+    --ngs-avatar-color: var(--ngs-color-on-primary);
   }
 
   &.is-tonal {
-    --ngs-avatar-bg: var(--color-surface-container-highest);
-    --ngs-avatar-color: var(--color-on-surface);
+    --ngs-avatar-bg: var(--ngs-color-surface-container-highest);
+    --ngs-avatar-color: var(--ngs-color-on-surface);
   }
 
   &.is-outlined {
     --ngs-avatar-bg: transparent;
-    --ngs-avatar-color: var(--color-on-surface);
+    --ngs-avatar-color: var(--ngs-color-on-surface);
     box-shadow: var(--ngs-avatar-inner-border);
   }
 
   &.is-plain {
     --ngs-avatar-bg: transparent;
-    --ngs-avatar-color: var(--color-on-surface);
+    --ngs-avatar-color: var(--ngs-color-on-surface);
   }
 
   .text {

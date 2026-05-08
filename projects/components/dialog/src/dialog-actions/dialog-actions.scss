@@ -3,11 +3,11 @@
 :host {
   display: flex;
   flex-wrap: wrap;
-  min-height: 52px;
+  min-height: var(--ngs-control-height-lg);
   align-items: center;
   box-sizing: content-box;
   gap: --spacing(2);
-  padding: var(--ngs-dialog-actions-padding, 16px 24px);
+  padding: var(--ngs-dialog-actions-padding, --spacing(4) --spacing(6));
   flex: none;
 
   &.ngs-dialog-actions-align-center {

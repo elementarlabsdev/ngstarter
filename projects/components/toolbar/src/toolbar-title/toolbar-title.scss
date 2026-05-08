@@ -1,7 +1,7 @@
 @reference 'tailwindcss';
 
 :host {
-  font-size: theme(--text-lg);
+  font-size: var(--ngs-font-size-lg);
   font-weight: 700;
   white-space: nowrap;
 }

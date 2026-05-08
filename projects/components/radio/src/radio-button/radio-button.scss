@@ -4,11 +4,11 @@
   --ngs-radio-button-size: 19px;
   --ngs-radio-button-inner-circle-size: 10px;
   --ngs-radio-button-border-width: 1px;
-  --ngs-radio-button-unchecked-color: var(--input-border-color);
-  --ngs-radio-button-checked-color: var(--color-primary);
-  --ngs-radio-button-disabled-color: var(--color-on-surface-variant);
-  --ngs-radio-button-label-color: var(--color-on-surface);
-  --ngs-radio-button-disabled-label-color: var(--color-on-surface-variant);
+  --ngs-radio-button-unchecked-color: var(--ngs-field-border-color);
+  --ngs-radio-button-checked-color: var(--ngs-color-primary);
+  --ngs-radio-button-disabled-color: var(--ngs-color-on-surface-variant);
+  --ngs-radio-button-label-color: var(--ngs-color-on-surface);
+  --ngs-radio-button-disabled-label-color: var(--ngs-color-on-surface-variant);
   --ngs-radio-button-gap: 8px;
 
   display: inline-flex;
@@ -19,9 +19,9 @@
   &.ngs-radio-button-disabled {
     cursor: default;
     pointer-events: none;
-    --ngs-radio-button-unchecked-color: color-mix(in srgb, var(--color-on-surface), transparent 62%);
-    --ngs-radio-button-checked-color: color-mix(in srgb, var(--color-on-surface), transparent 62%);
-    --ngs-radio-button-label-color: color-mix(in srgb, var(--color-on-surface), transparent 62%);
+    --ngs-radio-button-unchecked-color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%);
+    --ngs-radio-button-checked-color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%);
+    --ngs-radio-button-label-color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%);
   }
 
   .ngs-radio-button-label {

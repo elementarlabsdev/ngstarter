@@ -25,12 +25,12 @@
 
   ngs-hint {
     display: block;
-    font-size: var(--ngs-form-field-subscript-text-size, theme(--text-xs));
+    font-size: var(--ngs-form-field-subscript-text-size, var(--ngs-font-size-xs));
   }
 
   ngs-error {
     display: block;
-    font-size: var(--ngs-form-field-subscript-text-size, theme(--text-xs));
+    font-size: var(--ngs-form-field-subscript-text-size, var(--ngs-font-size-xs));
     letter-spacing: var(--ngs-form-field-subscript-text-tracking, normal);
     font-weight: var(--ngs-form-field-subscript-text-weight, 400);
   }

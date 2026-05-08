@@ -1,12 +1,12 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-expand-fade-color: var(--color-background);
-  --ngs-expand-button-bg: var(--color-surface-container);
-  --ngs-expand-button-hover-bg: var(--color-surface-container-high);
-  --ngs-expand-button-color: var(--color-on-surface);
+  --ngs-expand-fade-color: var(--ngs-color-background);
+  --ngs-expand-button-bg: var(--ngs-color-surface-container);
+  --ngs-expand-button-hover-bg: var(--ngs-color-surface-container-high);
+  --ngs-expand-button-color: var(--ngs-color-on-surface);
   --ngs-expand-button-font-size: var(--text-tiny);
-  --ngs-expand-button-box-shadow: theme(--shadow-md);
+  --ngs-expand-button-box-shadow: var(--ngs-shadow-md);
   --ngs-expand-button-border-radius: calc(infinity * 1px);
   --ngs-expand-button-padding: --spacing(2) --spacing(4);
   --ngs-expand-button-hover-opacity: 90%;

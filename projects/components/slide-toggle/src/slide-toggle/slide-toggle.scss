@@ -4,10 +4,10 @@
   --ngs-slide-toggle-width: 44px;
   --ngs-slide-toggle-height: 24px;
   --ngs-slide-toggle-thumb-size: 20px;
-  --ngs-slide-toggle-bar-color: var(--color-surface-container-highest);
-  --ngs-slide-toggle-bar-checked-color: var(--color-primary);
-  --ngs-slide-toggle-thumb-color: var(--color-surface);
-  --ngs-slide-toggle-thumb-checked-color: var(--color-on-primary);
+  --ngs-slide-toggle-bar-color: var(--ngs-color-surface-container-highest);
+  --ngs-slide-toggle-bar-checked-color: var(--ngs-color-primary);
+  --ngs-slide-toggle-thumb-color: var(--ngs-color-surface);
+  --ngs-slide-toggle-thumb-checked-color: var(--ngs-color-on-primary);
   --ngs-slide-toggle-transition-duration: 0.2s;
 
   display: inline-block;

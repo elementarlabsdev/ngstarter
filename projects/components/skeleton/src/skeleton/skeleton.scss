@@ -1,9 +1,9 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-skeleton-item-border-radius: theme(--radius-2xl);
-  --ngs-skeleton-from-bg: var(--color-neutral-200); // theme('colors.neutral.200/80');
-  --ngs-skeleton-to-bg: var(--color-neutral-300); // theme('colors.neutral.300/70');
+  --ngs-skeleton-item-border-radius: var(--ngs-radius-xl);
+  --ngs-skeleton-from-bg: var(--ngs-color-neutral-200);
+  --ngs-skeleton-to-bg: var(--ngs-color-neutral-300);
 
   display: block;
   background: linear-gradient(90deg, var(--ngs-skeleton-from-bg), var(--ngs-skeleton-to-bg));
@@ -22,6 +22,6 @@
 }
 
 :host-context(html.dark) {
-  --ngs-skeleton-from-bg: var(--color-neutral-500); // theme('colors.neutral.500/80');
-  --ngs-skeleton-to-bg: var(--color-neutral-600); // theme('colors.neutral.600/70');
+  --ngs-skeleton-from-bg: var(--ngs-color-neutral-500);
+  --ngs-skeleton-to-bg: var(--ngs-color-neutral-600);
 }

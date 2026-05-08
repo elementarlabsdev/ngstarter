@@ -1,5 +1,6 @@
 @use "@angular/cdk/overlay-prebuilt";
 @use 'tailwindcss';
+@use './tokens';
 
 @source not '../styles';
 @source "../node_modules/@ngstarter-ui/components/**/*.mjs";
@@ -7,7 +8,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* --- SYSTEM COLORS (Основа) --- */
+  /* --- SYSTEM COLORS --- */
   --color-primary: var(--color-primary);
   --color-on-primary: var(--color-on-primary);
   --color-primary-container: var(--color-primary-container);

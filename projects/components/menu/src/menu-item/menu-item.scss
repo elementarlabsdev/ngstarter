@@ -3,13 +3,13 @@
 :host {
   --ngs-menu-item-height: var(--option-height);
   --ngs-menu-item-padding: 0 --spacing(3);
-  --ngs-menu-item-font-size: theme(--text-sm);
-  --ngs-menu-item-color: var(--color-on-surface);
-  --ngs-menu-item-hover-background: var(--color-surface-container-high);
-  --ngs-menu-item-selected-background: var(--color-primary-container);
-  --ngs-menu-item-selected-color: var(--color-on-primary-container);
-  --ngs-menu-item-active-background: var(--color-surface-container-highest);
-  --ngs-menu-item-disabled-color: var(--color-on-surface-variant);
+  --ngs-menu-item-font-size: var(--ngs-font-size-sm);
+  --ngs-menu-item-color: var(--ngs-color-on-surface);
+  --ngs-menu-item-hover-background: var(--ngs-color-surface-container-high);
+  --ngs-menu-item-selected-background: var(--ngs-color-primary-container);
+  --ngs-menu-item-selected-color: var(--ngs-color-on-primary-container);
+  --ngs-menu-item-active-background: var(--ngs-color-surface-container-highest);
+  --ngs-menu-item-disabled-color: var(--ngs-color-on-surface-variant);
   --ngs-menu-item-gap: --spacing(2.5);
 
   display: flex;

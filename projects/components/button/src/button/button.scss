@@ -1,13 +1,12 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-button-height: --spacing(10);
-  --ngs-button-padding: 0 --spacing(4);
-  --ngs-button-border-radius: --spacing(3);
+  --ngs-button-padding: 0 var(--ngs-button-padding-x, --spacing(4));
+  --ngs-button-border-radius: var(--ngs-button-radius, var(--ngs-radius-lg));
   --ngs-button-bg: transparent;
-  --ngs-button-color: var(--color-on-surface);
+  --ngs-button-color: var(--ngs-color-on-surface);
   --ngs-button-hover-bg: color-mix(in srgb, var(--ngs-button-bg), var(--ngs-button-color) 8%);
-  --ngs-button-content-gap: --spacing(0.5);
+  --ngs-button-content-gap: var(--ngs-control-gap, --spacing(2));
 
   position: relative;
   flex: none;
@@ -24,8 +23,8 @@
   color: var(--ngs-button-color);
   text-decoration: none;
   outline: none;
-  font-size: theme(--text-sm);
-  font-weight: 500;
+  font-size: var(--ngs-button-font-size, var(--ngs-font-size-sm));
+  font-weight: var(--ngs-button-font-weight, 500);
   padding: var(--ngs-button-padding);
   height: var(--ngs-button-height);
   border-radius: var(--ngs-button-border-radius);
@@ -144,18 +143,18 @@
 
   // Variants
   &.ngs-button-primary {
-    --ngs-button-bg: var(--color-primary);
-    --ngs-button-color: var(--color-on-primary);
+    --ngs-button-bg: var(--ngs-button-filled-bg, var(--ngs-color-primary));
+    --ngs-button-color: var(--ngs-button-filled-color, var(--ngs-color-on-primary));
   }
 
   &.ngs-button-tonal {
-    --ngs-button-bg: var(--color-secondary-container);
-    --ngs-button-color: var(--color-on-secondary-container);
+    --ngs-button-bg: var(--ngs-button-tonal-bg, var(--ngs-color-secondary-container));
+    --ngs-button-color: var(--ngs-button-tonal-color, var(--ngs-color-on-secondary-container));
   }
 
   &.ngs-button-outlined {
-    border: 1px solid var(--color-emphasis);
-    --ngs-button-color: var(--color-primary);
+    border: 1px solid var(--ngs-button-outlined-border, var(--ngs-color-emphasis));
+    --ngs-button-color: var(--ngs-button-outlined-color, var(--ngs-color-primary));
   }
 
   &.ngs-icon-button {
@@ -173,61 +172,61 @@
 
   // Colors
   &.ngs-color-primary {
-    --ngs-button-color: var(--color-primary);
+    --ngs-button-color: var(--ngs-color-primary);
 
     &.ngs-button-primary {
-      --ngs-button-bg: var(--color-primary);
-      --ngs-button-color: var(--color-on-primary);
+      --ngs-button-bg: var(--ngs-color-primary);
+      --ngs-button-color: var(--ngs-color-on-primary);
     }
 
     &.ngs-button-tonal {
-      --ngs-button-bg: var(--color-primary-container);
-      --ngs-button-color: var(--color-on-primary-container);
+      --ngs-button-bg: var(--ngs-color-primary-container);
+      --ngs-button-color: var(--ngs-color-on-primary-container);
     }
   }
 
   &.ngs-color-accent {
-    --ngs-button-color: var(--color-secondary);
+    --ngs-button-color: var(--ngs-color-secondary);
 
     &.ngs-button-primary {
-      --ngs-button-bg: var(--color-secondary);
-      --ngs-button-color: var(--color-on-secondary);
+      --ngs-button-bg: var(--ngs-color-secondary);
+      --ngs-button-color: var(--ngs-color-on-secondary);
     }
 
     &.ngs-button-tonal {
-      --ngs-button-bg: var(--color-secondary-container);
-      --ngs-button-color: var(--color-on-secondary-container);
+      --ngs-button-bg: var(--ngs-color-secondary-container);
+      --ngs-button-color: var(--ngs-color-on-secondary-container);
     }
   }
 
   &.ngs-color-warn {
-    --ngs-button-color: var(--color-error);
+    --ngs-button-color: var(--ngs-color-danger);
 
     &.ngs-button-primary {
-      --ngs-button-bg: var(--color-error);
-      --ngs-button-color: var(--color-on-error);
+      --ngs-button-bg: var(--ngs-color-danger);
+      --ngs-button-color: var(--ngs-color-on-danger);
     }
 
     &.ngs-button-tonal {
-      --ngs-button-bg: var(--color-error-container);
-      --ngs-button-color: var(--color-on-error-container);
+      --ngs-button-bg: var(--ngs-color-danger-container);
+      --ngs-button-color: var(--ngs-color-on-danger-container);
     }
   }
 
   &.ngs-button-disabled {
     cursor: default;
-    --ngs-button-bg: color-mix(in srgb, var(--color-on-surface), transparent 88%) !important;
-    --ngs-button-color: color-mix(in srgb, var(--color-on-surface), transparent 62%) !important;
-    --ngs-button-hover-bg: color-mix(in srgb, var(--color-on-surface), transparent 88%) !important;
+    --ngs-button-bg: color-mix(in srgb, var(--ngs-color-on-surface), transparent 88%) !important;
+    --ngs-button-color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%) !important;
+    --ngs-button-hover-bg: color-mix(in srgb, var(--ngs-color-on-surface), transparent 88%) !important;
 
     &.ngs-button-text, &.ngs-button-outlined {
       --ngs-button-bg: transparent !important;
       --ngs-button-hover-bg: transparent !important;
-      --ngs-button-color: color-mix(in srgb, var(--color-on-surface), transparent 62%) !important;
+      --ngs-button-color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%) !important;
     }
 
     &.ngs-button-outlined {
-      border-color: color-mix(in srgb, var(--color-on-surface), transparent 88%) !important;
+      border-color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 88%) !important;
     }
 
     &:hover {

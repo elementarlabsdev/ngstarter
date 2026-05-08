@@ -1,7 +1,7 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-content-fade-color: var(--color-background);
+  --ngs-content-fade-color: var(--ngs-color-background);
   --ngs-content-fade-width: 20%;
 
   display: block;

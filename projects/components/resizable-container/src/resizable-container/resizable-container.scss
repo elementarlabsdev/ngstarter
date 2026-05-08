@@ -30,13 +30,13 @@
       height: --spacing(8);
       width: --spacing(1.5);
       border-radius: calc(infinity * 1px);
-      background: var(--color-surface-container-highest);
+      background: var(--ngs-color-surface-container-highest);
     }
 
     &:hover,
     &:active {
       .handler-indicator {
-        background: var(--color-secondary);
+        background: var(--ngs-color-secondary);
       }
     }
   }

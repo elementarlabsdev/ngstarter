@@ -1,10 +1,10 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-mchart-bar-bar-bg: var(--color-primary);
-  --ngs-mchart-bar-bar-gradient-start-color: var(--color-primary-500);
-  --ngs-mchart-bar-bar-gradient-end-color: var(--color-primary);
-  --ngs-mchart-bar-highlight-bg: var(--color-neutral-200);
+  --ngs-mchart-bar-bar-bg: var(--ngs-color-primary);
+  --ngs-mchart-bar-bar-gradient-start-color: var(--ngs-color-primary-500);
+  --ngs-mchart-bar-bar-gradient-end-color: var(--ngs-color-primary);
+  --ngs-mchart-bar-highlight-bg: var(--ngs-color-neutral-200);
 
   display: block;
   overflow: hidden;
@@ -50,5 +50,5 @@
 }
 
 :host-context(html.dark) {
-  --ngs-mchart-bar-highlight-bg: var(--color-neutral-700);
+  --ngs-mchart-bar-highlight-bg: var(--ngs-color-neutral-700);
 }

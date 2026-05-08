@@ -3,8 +3,8 @@
 :host {
   display: inline-block;
   font-weight: 600;
-  color: var(--color-on-surface);
-  font-size: theme(--text-sm);
+  color: var(--ngs-color-on-surface);
+  font-size: var(--ngs-font-size-sm);
 
   &.as-link {
     &:hover {

@@ -8,14 +8,14 @@
   line-height: 1;
 
   &[data-size='small'] {
-    --ngs-logo-text-font-size: theme(--text-sm);
+    --ngs-logo-text-font-size: var(--ngs-font-size-sm);
   }
 
   &[data-size='default'] {
-    --ngs-logo-text-font-size: theme(--text-xl);
+    --ngs-logo-text-font-size: var(--ngs-font-size-xl);
   }
 
   &[data-size='large'] {
-    --ngs-logo-text-font-size: theme(--text-3xl);
+    --ngs-logo-text-font-size: 1.875rem;
   }
 }

@@ -4,14 +4,14 @@
   --ngs-avatar-font-weight: 500;
   --ngs-avatar-size: --spacing(10);
   --ngs-avatar-border-radius: calc(infinity * 1px);
-  --ngs-avatar-bg: theme(--color-emerald-500);
+  --ngs-avatar-bg: var(--ngs-color-success);
   --ngs-avatar-color: white;
-  --ngs-avatar-inner-border: inset 0 0 2px var(--color-border);
-  --ngs-avatar-total-font-size: theme(--text-xs);
+  --ngs-avatar-inner-border: inset 0 0 2px var(--ngs-color-border);
+  --ngs-avatar-total-font-size: var(--ngs-font-size-xs);
   --ngs-avatar-total-font-weight: 500;
   --ngs-avatar-total-color: white;
-  --ngs-avatar-total-bg: var(--color-neutral-700);
-  --ngs-avatar-total-hover-bg: var(--color-neutral-600);
+  --ngs-avatar-total-bg: var(--ngs-color-neutral-700);
+  --ngs-avatar-total-hover-bg: var(--ngs-color-neutral-600);
 
   background: var(--ngs-avatar-total-bg);
   font-size: var(--ngs-avatar-total-font-size);
@@ -37,6 +37,6 @@
 }
 
 :host-context(html.dark) {
-  --ngs-avatar-group-item-border: 0.125rem solid var(--color-neutral-950);
-  --ngs-avatar-presence-indicator-outline: var(--color-neutral-950) solid 2px;
+  --ngs-avatar-group-item-border: 0.125rem solid var(--ngs-color-neutral-950);
+  --ngs-avatar-presence-indicator-outline: var(--ngs-color-neutral-950) solid 2px;
 }

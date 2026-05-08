@@ -7,24 +7,24 @@
   transition: border-color 0.15s cubic-bezier(0.25, 0.8, 0.25, 1);
   border: var(--ngs-form-field-outlined-outline-width, 1px) solid transparent;
   outline: none;
-  border-radius: var(--input-radius);
+  border-radius: var(--ngs-field-radius);
   cursor: text;
   margin-left: -10px;
   margin-right: -10px;
   word-wrap: break-word;
 
   &:hover {
-    border-color: var(--ngs-form-field-outlined-outline-color, var(--color-outline));
+    border-color: var(--ngs-form-field-outlined-outline-color, var(--ngs-color-outline));
   }
 
   &.editing {
-    color: var(--ngs-form-field-outlined-input-text-color, var(--color-on-surface));
-    caret-color: var(--ngs-form-field-outlined-caret-color, var(--color-primary));
+    color: var(--ngs-form-field-outlined-input-text-color, var(--ngs-color-on-surface));
+    caret-color: var(--ngs-form-field-outlined-caret-color, var(--ngs-color-primary));
   }
 
   &.focused {
-    border-color: var(--color-primary);
-    outline: 1px solid var(--color-primary);
+    border-color: var(--ngs-color-primary);
+    outline: 1px solid var(--ngs-color-primary);
   }
 
   &:empty {
@@ -33,7 +33,7 @@
       content: attr(data-placeholder);
       inset: 0;
       z-index: 0;
-      color: var(--color-neutral-500);
+      color: var(--ngs-color-neutral-500);
       font-size: inherit;
       padding: inherit;
       word-wrap: break-word;

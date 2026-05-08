@@ -1,7 +1,7 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-sidenav-background-color: var(--color-background);
+  --ngs-sidenav-background-color: var(--ngs-color-background);
   --ngs-sidenav-divider-color: rgba(0, 0, 0, 0.12);
   --ngs-sidenav-z-index: 5;
   --ngs-sidenav-transition-duration: 400ms;

@@ -1,7 +1,7 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-screen-loader-bg: var(--color-background);
+  --ngs-screen-loader-bg: var(--ngs-color-background);
 
   opacity: 0;
   position: fixed;

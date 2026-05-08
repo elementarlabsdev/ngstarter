@@ -1,10 +1,10 @@
 @reference 'tailwindcss';
 
 .ngs-popover-panel {
-  --ngs-popover-border: var(--dropdown-border);
-  --ngs-popover-shadow: var(--dropdown-shadow);
-  --ngs-popover-border-radius: var(--dropdown-radius);
-  --ngs-popover-bg: var(--dropdown-bg);
+  --ngs-popover-border: var(--ngs-dropdown-border);
+  --ngs-popover-shadow: var(--ngs-dropdown-shadow);
+  --ngs-popover-border-radius: var(--ngs-dropdown-radius);
+  --ngs-popover-bg: var(--ngs-dropdown-bg);
   --ngs-popover-margin: 0.625rem;
 
   display: block;

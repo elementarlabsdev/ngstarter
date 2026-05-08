@@ -19,7 +19,7 @@
     &:empty {
       &:before {
         content: attr(data-empty-placeholder);
-        color: var(--color-neutral-500);
+        color: var(--ngs-color-neutral-500);
       }
     }
   }

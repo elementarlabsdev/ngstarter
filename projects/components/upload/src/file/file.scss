@@ -2,23 +2,23 @@
 
 :host {
   --ngs-file-padding: --spacing(4);
-  --ngs-file-border-radius: theme(--radius-2xl);
-  --ngs-file-bg: var(--color-surface-container);
-  --ngs-file-error-bg: var(--color-error-container-low);
+  --ngs-file-border-radius: var(--ngs-radius-xl);
+  --ngs-file-bg: var(--ngs-color-surface-container);
+  --ngs-file-error-bg: var(--ngs-color-danger-container-low);
   --ngs-file-controls-gap: --spacing(1.5);
   --ngs-file-progress-margin: --spacing(2) 0 0 0;
-  --ngs-file-progress-bg: var(--color-surface-container-highest);
+  --ngs-file-progress-bg: var(--ngs-color-surface-container-highest);
   --ngs-file-progress-height: --spacing(1);
-  --ngs-file-progress-border-radius: theme(--radius-lg);
-  --ngs-file-progress-bar-bg: var(--color-primary);
-  --ngs-file-control-color: var(--color-neutral-500);
-  --ngs-file-control-hover-color: var(--color-primary);
-  --ngs-file-control-font-size: theme(--text-xl);
-  --ngs-file-name-font-size: theme(--text-sm);
-  --ngs-file-info-font-size: theme(--text-xs);
-  --ngs-file-info-color: var(--color-neutral-600);
-  --ngs-file-error-font-size: theme(--text-xs);
-  --ngs-file-error-color: var(--color-error);
+  --ngs-file-progress-border-radius: var(--ngs-radius-lg);
+  --ngs-file-progress-bar-bg: var(--ngs-color-primary);
+  --ngs-file-control-color: var(--ngs-color-neutral-500);
+  --ngs-file-control-hover-color: var(--ngs-color-primary);
+  --ngs-file-control-font-size: var(--ngs-font-size-xl);
+  --ngs-file-name-font-size: var(--ngs-font-size-sm);
+  --ngs-file-info-font-size: var(--ngs-font-size-xs);
+  --ngs-file-info-color: var(--ngs-color-neutral-600);
+  --ngs-file-error-font-size: var(--ngs-font-size-xs);
+  --ngs-file-error-color: var(--ngs-color-danger);
 
   display: flex;
   align-items: center;
@@ -74,7 +74,7 @@
 }
 
 :host-context(html.dark) {
-  --ngs-file-error-color: var(--color-error-container-high);
-  --ngs-file-progress-bg: var(--color-neutral-500);
-  --ngs-file-control-hover-color: var(--color-neutral-300);
+  --ngs-file-error-color: var(--ngs-color-danger-container-high);
+  --ngs-file-progress-bg: var(--ngs-color-neutral-500);
+  --ngs-file-control-hover-color: var(--ngs-color-neutral-300);
 }

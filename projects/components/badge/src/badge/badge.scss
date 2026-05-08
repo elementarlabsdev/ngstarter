@@ -2,18 +2,18 @@
 
 :host {
   &.ngs-primary {
-    --ngs-badge-background: var(--color-primary);
-    --ngs-badge-text-color: var(--color-on-primary);
+    --ngs-badge-background: var(--ngs-color-primary);
+    --ngs-badge-text-color: var(--ngs-color-on-primary);
   }
 
   &.ngs-accent {
-    --ngs-badge-background: var(--color-secondary);
-    --ngs-badge-text-color: var(--color-on-secondary);
+    --ngs-badge-background: var(--ngs-color-secondary);
+    --ngs-badge-text-color: var(--ngs-color-on-secondary);
   }
 
   &.ngs-warn {
-    --ngs-badge-background: var(--color-error);
-    --ngs-badge-text-color: var(--color-on-error);
+    --ngs-badge-background: var(--ngs-color-danger);
+    --ngs-badge-text-color: var(--ngs-color-on-danger);
   }
 
   position: absolute;
@@ -28,8 +28,8 @@
   white-space: nowrap;
   padding: 0 4px;
   text-overflow: ellipsis;
-  background: var(--ngs-badge-background-color, var(--color-primary));
-  color: var(--ngs-badge-text-color, var(--color-on-primary));
+  background: var(--ngs-badge-background-color, var(--ngs-color-primary));
+  color: var(--ngs-badge-text-color, var(--ngs-color-on-primary));
   --_ngs-badge-current-size: var(--ngs-badge-size, 16px);
   min-width: var(--_ngs-badge-current-size);
   height: var(--_ngs-badge-current-size);
@@ -69,8 +69,8 @@
   }
 
   :host-context(.ngs-badge-disabled) & {
-    background: var(--color-surface-container-high);
-    color: var(--color-on-surface-variant);
+    background: var(--ngs-color-surface-container-high);
+    color: var(--ngs-color-on-surface-variant);
   }
 
   /* Positions */

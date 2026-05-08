@@ -11,12 +11,12 @@
   --ngs-tab-panel-item-hover-color: var(--nav-item-hover-color);
   --ngs-tab-panel-item-active-bg: var(--nav-item-active-bg);
   --ngs-tab-panel-item-active-color: var(--nav-item-active-color);
-  --ngs-tab-panel-item-border-radius: theme(--radius-xl);
+  --ngs-tab-panel-item-border-radius: var(--ngs-radius-xl);
   --ngs-tab-panel-aside-width: --spacing(75);
   --ngs-tab-panel-nav-padding: 0;
   --ngs-tab-panel-nav-gap: --spacing(3);
-  --ngs-tab-panel-item-text-font-size: theme(--text-xs);
-  --ngs-tab-panel-item-icon-font-size: theme(--text-2xl);
+  --ngs-tab-panel-item-text-font-size: var(--ngs-font-size-xs);
+  --ngs-tab-panel-item-icon-font-size: 1.5rem;
 
   // compact state
   --ngs-tab-panel-compact-width: --spacing(14);

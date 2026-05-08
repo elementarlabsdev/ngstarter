@@ -10,11 +10,11 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: theme(--text-xs);
+    font-size: var(--ngs-font-size-xs);
     padding: --spacing(1.5);
     height: --spacing(6);
-    border-radius: theme(--radius-lg);
-    background: var(--color-surface-container);
+    border-radius: var(--ngs-radius-lg);
+    background: var(--ngs-color-surface-container);
     min-width: --spacing(6);
     line-height: 0;
     flex: none;
@@ -23,7 +23,7 @@
 
   .plus {
     display: none;
-    font-size: theme(--text-xs);
+    font-size: var(--ngs-font-size-xs);
   }
 }
 

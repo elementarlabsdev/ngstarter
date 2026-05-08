@@ -1,18 +1,18 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-form-field-color: var(--input-color);
-  --ngs-form-field-border-color: var(--input-border-color);
-  --ngs-form-field-border-width: 1px;
-  --ngs-form-field-border-radius: --spacing(3);
-  --ngs-form-field-padding-x: 0.75rem;
+  --ngs-form-field-color: var(--ngs-field-color);
+  --ngs-form-field-border-color: var(--ngs-field-border-color);
+  --ngs-form-field-border-width: var(--ngs-field-border-width);
+  --ngs-form-field-border-radius: var(--ngs-field-radius);
+  --ngs-form-field-padding-x: var(--ngs-field-padding-x);
   --ngs-form-field-padding-y: 1.75rem;
-  --ngs-form-field-bg: var(--color-surface);
-  --ngs-form-field-disabled-bg: var(--color-surface-container-low);
-  --ngs-form-field-label-color: var(--input-label-color);
-  --ngs-form-field-error-color: var(--input-error);
-  --ngs-form-field-container-min-height: 50px;
-  --ngs-form-field-infix-min-height: 50px;
+  --ngs-form-field-bg: var(--ngs-field-bg);
+  --ngs-form-field-disabled-bg: var(--ngs-field-disabled-bg);
+  --ngs-form-field-label-color: var(--ngs-field-label-color);
+  --ngs-form-field-error-color: var(--ngs-field-error-color);
+  --ngs-form-field-container-min-height: var(--ngs-field-container-height);
+  --ngs-form-field-infix-min-height: var(--ngs-field-infix-height);
   --ngs-form-field-infix-padding-top: 23px;
   --ngs-form-field-infix-padding-bottom: 8px;
 
@@ -23,25 +23,25 @@
     cursor: default;
 
     .ngs-form-field-container {
-      background: color-mix(in srgb, var(--color-on-surface), transparent 95%);
-      border-color: color-mix(in srgb, var(--color-on-surface), transparent 90%);
+      background: color-mix(in srgb, var(--ngs-color-on-surface), transparent 95%);
+      border-color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 90%);
     }
 
     .ngs-form-field-label {
-      color: color-mix(in srgb, var(--color-on-surface), transparent 62%);
+      color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%);
     }
 
     ::ng-deep {
       input {
-        color: color-mix(in srgb, var(--color-on-surface), transparent 62%);
+        color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%);
       }
     }
   }
 
   &.ngs-form-field-focused {
     .ngs-form-field-container {
-      border-color: var(--input-outlined-border-focus);
-      box-shadow: 0 0 0 1px var(--input-outlined-border-focus);
+      border-color: var(--ngs-field-border-focus-color);
+      box-shadow: 0 0 0 1px var(--ngs-field-border-focus-color);
     }
 
     .ngs-form-field-label {
@@ -128,7 +128,7 @@
     transform: translateY(-50%);
     top: calc(var(--ngs-form-field-container-min-height) / 2);
     transform-origin: left top;
-    font-size: var(--input-font-size);
+    font-size: var(--ngs-field-font-size);
     color: var(--ngs-form-field-label-color);
     transition: transform 0.2s ease, font-size 0.2s ease, color 0.2s ease, top 0.2s ease;
     white-space: nowrap;
@@ -150,14 +150,14 @@
   &.ngs-form-field-should-float {
     .ngs-form-field-label {
       top: 4px;
-      font-size: var(--input-label-float-font-size);
+      font-size: var(--ngs-field-label-float-font-size);
       transform: translateY(0);
     }
   }
 
   ::ng-deep {
     input {
-      line-height: var(--input-line-height);
+      line-height: var(--ngs-field-line-height);
       outline: none !important;
       text-align: var(--ngs-form-field-input-text-align, start);
 
@@ -169,7 +169,7 @@
 
     textarea {
       min-height: 22px;
-      line-height: var(--input-line-height);
+      line-height: var(--ngs-field-line-height);
       outline: none !important;
       text-align: var(--ngs-form-field-input-text-align, start);
 
@@ -221,8 +221,8 @@
       border: none !important;
       background: transparent !important;
       padding: 0 !important;
-      font-size: var(--input-font-size);
-      line-height: var(--input-line-height);
+      font-size: var(--ngs-field-font-size);
+      line-height: var(--ngs-field-line-height);
       color: inherit;
       outline: none !important;
       display: flex;
@@ -236,8 +236,8 @@
 
     input {
       resize: none;
-      font-size: var(--input-font-size);
-      line-height: var(--input-line-height);
+      font-size: var(--ngs-field-font-size);
+      line-height: var(--ngs-field-line-height);
     }
   }
 
@@ -292,8 +292,8 @@
   .ngs-form-field-text-suffix {
     color: var(--ngs-form-field-label-color);
     white-space: nowrap;
-    font-size: var(--input-font-size);
-    line-height: var(--input-line-height);
+    font-size: var(--ngs-field-font-size);
+    line-height: var(--ngs-field-line-height);
     padding-top: var(--ngs-form-field-infix-padding-top);
     padding-bottom: var(--ngs-form-field-infix-padding-bottom);
   }
@@ -302,7 +302,7 @@
     margin-top: 0.25rem;
     padding: 0 0.5rem;
     font-size: 0.75rem;
-    min-height: --spacing(5.5);
+    min-height: 1.375rem;
   }
 
   &.ngs-form-field-subscript-hidden-if-empty {

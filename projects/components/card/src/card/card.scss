@@ -1,10 +1,10 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-card-bg: var(--color-surface-container);
-  --ngs-card-color: var(--color-on-surface);
-  --ngs-card-border-radius: theme(--radius-2xl);
-  --ngs-card-border-color: var(--color-subtle);
+  --ngs-card-bg: var(--ngs-color-surface-container);
+  --ngs-card-color: var(--ngs-color-on-surface);
+  --ngs-card-border-radius: var(--ngs-radius-xl);
+  --ngs-card-border-color: var(--ngs-color-subtle);
   --ngs-card-shadow: none;
   --ngs-card-padding: --spacing(4);
 
@@ -28,7 +28,7 @@
 }
 
 :host(.ngs-card-raised) {
-  --ngs-card-shadow: theme(--shadow-sm);
-  --ngs-card-bg: var(--color-surface-container);
+  --ngs-card-shadow: var(--ngs-shadow-sm);
+  --ngs-card-bg: var(--ngs-color-surface-container);
 }
 

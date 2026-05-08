@@ -1,0 +1,17 @@
+@use "../_common";
+
+:root {
+  color-scheme: light;
+}
+
+:root,
+[data-ngs-theme='modern'] {
+  --ngs-color-primary: #7c3aed;
+  --ngs-color-primary-container: #ede9fe;
+  --ngs-color-on-primary-container: #2e1065;
+  --ngs-color-tertiary: #06b6d4;
+  --ngs-control-radius: var(--ngs-radius-xl);
+  --ngs-dialog-radius: 1.25rem;
+  --ngs-nav-item-radius: var(--ngs-radius-xl);
+  --ngs-shadow-md: 0 10px 32px rgba(30, 41, 59, 0.14);
+}

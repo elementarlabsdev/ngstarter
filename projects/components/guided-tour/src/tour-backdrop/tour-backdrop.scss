@@ -14,14 +14,14 @@
   visibility: visible;
 
   path {
-    fill: var(--overlay-backdrop-bg);
+    fill: var(--ngs-overlay-backdrop-bg);
     pointer-events: auto;
     cursor: default;
   }
 
   rect {
     fill: transparent;
-    stroke: var(--color-primary);
+    stroke: var(--ngs-color-primary);
     stroke-width: 2;
     pointer-events: auto;
 

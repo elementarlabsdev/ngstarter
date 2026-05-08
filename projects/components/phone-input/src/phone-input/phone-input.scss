@@ -1,7 +1,7 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-phone-input-color: var(--color-neutral-600);
+  --ngs-phone-input-color: var(--ngs-color-neutral-600);
   --ngs-phone-input-opacity: 0;
 
   @media print {
@@ -70,5 +70,5 @@
 }
 
 :host-context(html.dark) {
-  --ngs-phone-input-color: var(--color-neutral-500);
+  --ngs-phone-input-color: var(--ngs-color-neutral-500);
 }

@@ -57,11 +57,11 @@
 
 .kanban-item {
   &.cdk-drag-preview {
-    background: var(--color-surface-container-lowest);
+    background: var(--ngs-color-surface-container-lowest);
     padding: --spacing(3);
     cursor: pointer;
     flex: none;
-    box-shadow: theme(--shadow-sm);
-    border-radius: theme(--radius-2xl);
+    box-shadow: var(--ngs-shadow-sm);
+    border-radius: var(--ngs-radius-xl);
   }
 }

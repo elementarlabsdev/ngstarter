@@ -1,10 +1,10 @@
 @reference 'tailwindcss';
 
 .ngs-timepicker-panel {
-  background: var(--dropdown-bg);
-  box-shadow: var(--dropdown-shadow);
-  border-radius: var(--dropdown-radius);
-  outline: var(--dropdown-border);
+  background: var(--ngs-dropdown-bg);
+  box-shadow: var(--ngs-dropdown-shadow);
+  border-radius: var(--ngs-dropdown-radius);
+  outline: var(--ngs-dropdown-border);
   width: 100%;
   min-width: 120px;
   max-height: 256px;

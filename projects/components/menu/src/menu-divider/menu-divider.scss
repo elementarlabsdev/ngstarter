@@ -3,6 +3,6 @@
 :host {
   display: block;
   height: 1px;
-  background: var(--ngs-menu-divider-color, var(--color-subtle));
+  background: var(--ngs-menu-divider-color, var(--ngs-color-subtle));
   margin: var(--ngs-menu-divider-margin, --spacing(2) 0);
 }

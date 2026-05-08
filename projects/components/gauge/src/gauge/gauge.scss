@@ -1,9 +1,9 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-gauge-value-color: var(--color-neutral-700);
-  --ngs-gauge-bg: var(--color-neutral-300);
-  --ngs-gauge-fill: var(--color-primary);
+  --ngs-gauge-value-color: var(--ngs-color-neutral-700);
+  --ngs-gauge-bg: var(--ngs-color-neutral-300);
+  --ngs-gauge-fill: var(--ngs-color-primary);
   --ngs-gauge-size: --spacing(20);
 
   display: flex;
@@ -40,6 +40,6 @@
 }
 
 :host-context(html.dark) {
-  --ngs-gauge-value-color: var(--color-neutral-300);
-  --ngs-gauge-bg: var(--color-neutral-600);
+  --ngs-gauge-value-color: var(--ngs-color-neutral-300);
+  --ngs-gauge-bg: var(--ngs-color-neutral-600);
 }

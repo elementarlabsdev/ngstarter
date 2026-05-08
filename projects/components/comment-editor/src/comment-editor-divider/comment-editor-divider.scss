@@ -6,13 +6,13 @@
 
   .divider {
     height: --spacing(6);
-    background: var(--color-neutral-300);
+    background: var(--ngs-color-neutral-300);
     width: 1px;
   }
 }
 
 :host-context(html.dark) {
   .divider {
-    background: var(--color-neutral-500);
+    background: var(--ngs-color-neutral-500);
   }
 }

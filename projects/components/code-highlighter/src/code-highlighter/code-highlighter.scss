@@ -2,19 +2,19 @@
 @reference '../../../styles/_common.scss';
 
 :host {
-  --ngs-code-highlighter-bg: var(--color-background);
-  --ngs-code-highlighter-radius: theme(--radius-2xl);
+  --ngs-code-highlighter-bg: var(--ngs-color-background);
+  --ngs-code-highlighter-radius: var(--ngs-radius-xl);
   --ngs-code-highlighter-padding: --spacing(5);
   --ngs-code-highlighter-margin: --spacing(5);
-  --ngs-code-highlighter-border: 1px solid var(--color-border);
+  --ngs-code-highlighter-border: 1px solid var(--ngs-color-border);
   --ngs-code-highlighter-title-padding: --spacing(2) --spacing(3) --spacing(1) --spacing(3);
-  --ngs-code-highlighter-title-color: var(--color-neutral-500);
+  --ngs-code-highlighter-title-color: var(--ngs-color-neutral-500);
 
   display: block;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   figcaption {
-    font-size: theme(--text-xs);
+    font-size: var(--ngs-font-size-xs);
     font-weight: 500;
     padding: var(--ngs-code-highlighter-title-padding);
     background: var(--ngs-code-highlighter-bg);
@@ -34,7 +34,7 @@
   }
 
   .languageName {
-    font-size: theme(--text-sm);
+    font-size: var(--ngs-font-size-sm);
     font-weight: 600;
     padding: 0 --spacing(6);
     width: max-content;
@@ -47,7 +47,7 @@
     pre {
       padding: var(--ngs-code-highlighter-padding) 0;
       line-height: 1.75;
-      font-size: theme(--text-sm);
+      font-size: var(--ngs-font-size-sm);
       position: relative;
 
       code {
@@ -60,33 +60,33 @@
         min-height: 1.75em;
 
         &.diff.remove {
-          background-color: color-mix(in srgb, theme(--color-red-500), transparent 85%);
+          background-color: color-mix(in srgb, var(--ngs-color-danger), transparent 85%);
           display: inline-block;
           width: 100%;
 
           &::before {
             content: '-';
-            color: theme(--color-red-500);
+            color: var(--ngs-color-danger);
             position: absolute;
             left: --spacing(2);
           }
         }
 
         &.diff.add {
-          background-color: color-mix(in srgb, theme(--color-green-500), transparent 85%);
+          background-color: color-mix(in srgb, var(--ngs-color-success), transparent 85%);
           display: inline-block;
           width: 100%;
 
           &::before {
             content: '+';
-            color: theme(--color-green-500);
+            color: var(--ngs-color-success);
             position: absolute;
             left: --spacing(2);
           }
         }
 
         &.highlighted {
-          background-color: color-mix(in srgb, var(--color-primary), transparent 92%);
+          background-color: color-mix(in srgb, var(--ngs-color-primary), transparent 92%);
           display: inline-block;
           width: 100%;
         }
@@ -106,7 +106,7 @@
       color: inherit;
 
       ngs-icon.text-green-500 {
-        color: theme(--color-green-600) !important;
+        color: var(--ngs-color-success) !important;
       }
     }
   }
@@ -115,8 +115,8 @@
     figcaption {
       border: var(--ngs-code-highlighter-border);
       border-bottom: none;
-      border-top-left-radius: theme(--radius-xl);
-      border-top-right-radius: theme(--radius-xl);
+      border-top-left-radius: var(--ngs-radius-xl);
+      border-top-right-radius: var(--ngs-radius-xl);
       width: max-content;
     }
 

@@ -2,29 +2,29 @@
 
 :host {
   --ngs-incidents-bar-height: --spacing(24);
-  --ngs-incidents-bar-bg: var(--color-orange-container);
+  --ngs-incidents-bar-bg: var(--ngs-color-orange-container);
   --ngs-incidents-bar-padding: 0 --spacing(8);
-  --ngs-incidents-bar-color: var(--color-on-orange-container);
+  --ngs-incidents-bar-color: var(--ngs-color-on-orange-container);
   --ngs-incidents-bar-box-shadow: none;
-  --ngs-incidents-bar-hover-box-shadow: theme(--shadow-sm);
+  --ngs-incidents-bar-hover-box-shadow: var(--ngs-shadow-sm);
   --ngs-incidents-list-bg: rgba(0, 0, 0, .32);
   --ngs-incidents-list-gap: --spacing(5);
   --ngs-incidents-list-padding: --spacing(7) 0;
   --ngs-incident-bg: white;
-  --ngs-incident-color: var(--color-neutral-700);
-  --ngs-incident-border-radius: theme(--radius-md);
+  --ngs-incident-color: var(--ngs-color-neutral-700);
+  --ngs-incident-border-radius: var(--ngs-radius-md);
   --ngs-incident-padding: --spacing(4) --spacing(6);
   --ngs-incident-gap: --spacing(6);
-  --ngs-incident-border-start: --spacing(1) solid var(--color-neutral-900);
-  --ngs-incident-close-color: var(--color-neutral-500);
-  --ngs-incident-close-hover-color: var(--color-neutral-900);
-  --ngs-incident-title-font-size: theme(--text-sm);
+  --ngs-incident-border-start: --spacing(1) solid var(--ngs-color-neutral-900);
+  --ngs-incident-close-color: var(--ngs-color-neutral-500);
+  --ngs-incident-close-hover-color: var(--ngs-color-neutral-900);
+  --ngs-incident-title-font-size: var(--ngs-font-size-sm);
   --ngs-incident-title-font-weight: 500;
-  --ngs-incident-details-font-size: theme(--text-sm);
-  --ngs-incident-details-color: var(--color-neutral-500);
+  --ngs-incident-details-font-size: var(--ngs-font-size-sm);
+  --ngs-incident-details-color: var(--ngs-color-neutral-500);
   --ngs-incidents-title-font-size: var(--text-base);
   --ngs-incidents-title-font-weight: 500;
-  --ngs-incidents-description-font-size: theme(--text-sm);
+  --ngs-incidents-description-font-size: var(--ngs-font-size-sm);
   --ngs-incidents-description-opacity: 80%;
 
   display: contents;

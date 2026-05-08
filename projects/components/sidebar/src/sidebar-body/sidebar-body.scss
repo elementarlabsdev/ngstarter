@@ -13,11 +13,13 @@
   }
 }
 
-:host-context(.ngs-sidebar.compact) {
+:host-context(.ngs-sidebar.compact),
+:host-context(.ngs-sidenav.is-collapsed:not(:hover)) {
   overflow-y: hidden;
   padding: 0;
 }
 
-:host-context(.ngs-sidebar.compact:hover) {
+:host-context(.ngs-sidebar.compact:hover),
+:host-context(.ngs-sidenav.is-collapsed:hover) {
   overflow-y: auto;
 }

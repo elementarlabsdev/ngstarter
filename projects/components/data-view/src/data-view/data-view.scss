@@ -3,19 +3,19 @@
 :host {
   --ngs-data-view-header-height: 48px;
   --ngs-data-view-selection-column-width: 48px;
-  --ngs-data-view-header-bg: var(--color-surface-container-low, #f8fafc);
-  --ngs-data-view-body-bg: var(--color-background);
-  --ngs-data-view-row-bg: var(--color-background);
-  --ngs-data-view-row-hover-bg: var(--color-surface-container-low, #f8fafc);
-  --ngs-data-view-hl-header-row-bg: var(--color-surface-container);
-  --ngs-data-view-border-color: var(--color-border);
+  --ngs-data-view-header-bg: var(--ngs-color-surface-container-low, #f8fafc);
+  --ngs-data-view-body-bg: var(--ngs-color-background);
+  --ngs-data-view-row-bg: var(--ngs-color-background);
+  --ngs-data-view-row-hover-bg: var(--ngs-color-surface-container-low, #f8fafc);
+  --ngs-data-view-hl-header-row-bg: var(--ngs-color-surface-container);
+  --ngs-data-view-border-color: var(--ngs-color-border);
   --ngs-data-view-bg: transparent;
   --ngs-data-view-min-height: 300px;
   --ngs-table-row-item-outline-width: 0;
   --ngs-table-background: var(--ngs-data-view-bg);
   --ngs-content-fade-color: var(--ngs-data-view-row-bg);
   --ngs-table-header-cell-background: var(--ngs-data-view-header-bg);
-  --ngs-data-view-radius: theme(--radius-xl);
+  --ngs-data-view-radius: var(--ngs-radius-xl);
   --ngs-data-view-root-border: 1px solid var(--ngs-data-view-border-color);
   --ngs-data-view-cell-padding: 0 --spacing(4);
 
@@ -24,7 +24,7 @@
     top: 0;
     bottom: 0;
     width: 1px;
-    background-color: var(--color-primary);
+    background-color: var(--ngs-color-primary);
     z-index: 1000;
     pointer-events: none;
     margin-left: -1px;
@@ -98,7 +98,7 @@
 
         &:not(:hover) {
           ngs-icon {
-            color: var(--color-neutral-500);
+            color: var(--ngs-color-neutral-500);
           }
         }
       }
@@ -150,7 +150,7 @@
   .grid-header {
     user-select: text;
     background-color: var(--ngs-data-view-header-bg);
-    color: var(--color-on-background);
+    color: var(--ngs-color-on-background);
     font-size: 0.875rem;
     position: sticky;
     top: 0;
@@ -169,11 +169,11 @@
         height: 100%;
         cursor: col-resize;
         z-index: 10;
-        border-right: 1px solid var(--color-border);
+        border-right: 1px solid var(--ngs-color-border);
         transition: border-color 0.2s;
 
         &:hover {
-          border-right-color: var(--color-primary);
+          border-right-color: var(--ngs-color-primary);
         }
       }
     }
@@ -223,13 +223,13 @@
     .grid-body-left,
     .grid-body-center,
     .grid-body-right {
-      background-color: var(--ngs-data-view-body-bg, var(--color-background));
+      background-color: var(--ngs-data-view-body-bg, var(--ngs-color-background));
     }
 
     .grid-row {
       background-color: var(--ngs-data-view-row-bg);
       box-sizing: border-box;
-      color: var(--color-on-background);
+      color: var(--ngs-color-on-background);
       border-bottom: 1px solid var(--ngs-data-view-border-color);
 
       &.is-last {
@@ -237,10 +237,10 @@
       }
 
       &.is-selected {
-        background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+        background-color: color-mix(in srgb, var(--ngs-color-primary) 10%, transparent);
 
         &:hover, &.is-hovered {
-          background-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
+          background-color: color-mix(in srgb, var(--ngs-color-primary) 20%, transparent);
         }
       }
 

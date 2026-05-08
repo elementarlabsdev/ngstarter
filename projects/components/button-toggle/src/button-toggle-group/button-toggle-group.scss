@@ -1,16 +1,16 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-button-toggle-group-border-color: var(--color-surface-container-highest);
-  --ngs-button-toggle-group-bg: var(--color-surface-container);
+  --ngs-button-toggle-group-border-color: var(--ngs-color-surface-container-highest);
+  --ngs-button-toggle-group-bg: var(--ngs-color-surface-container);
 
   display: inline-flex;
   flex-direction: row;
   white-space: nowrap;
   overflow: hidden;
-  border-radius: var(--ngs-button-toggle-group-border-radius, var(--btn-radius));
+  border-radius: var(--ngs-button-toggle-group-border-radius, var(--ngs-button-radius));
   background: var(--ngs-button-toggle-group-bg);
-  height: var(--btn-height);
+  height: var(--ngs-button-height);
 
   &.ngs-button-toggle-group-vertical {
     flex-direction: column;

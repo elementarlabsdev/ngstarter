@@ -1,10 +1,10 @@
 @reference 'tailwindcss';
 
 :host {
-  background: var(--ngs-dialog-background, var(--color-surface-container-lowest));
-  color: var(--ngs-dialog-color, var(--color-on-surface));
-  border-radius: var(--ngs-dialog-border-radius, theme(--radius-3xl));
-  box-shadow: var(--ngs-dialog-box-shadow, theme(--shadow-xl));
+  background: var(--ngs-dialog-background, var(--ngs-dialog-bg));
+  color: var(--ngs-dialog-color, var(--ngs-color-on-surface));
+  border-radius: var(--ngs-dialog-border-radius, var(--ngs-dialog-radius));
+  box-shadow: var(--ngs-dialog-box-shadow, var(--ngs-dialog-shadow));
   max-width: var(--ngs-dialog-container-max-width, 560px);
   min-width: var(--ngs-dialog-container-min-width, 280px);
   width: 100%;

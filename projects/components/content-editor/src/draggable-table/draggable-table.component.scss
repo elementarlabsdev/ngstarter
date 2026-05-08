@@ -7,7 +7,7 @@
       width: 18px;
       height: 18px;
       background-color: rgba(100, 150, 255, 0.7);
-      border: 1px solid var(--color-primary);
+      border: 1px solid var(--ngs-color-primary);
       border-radius: 3px;
       cursor: grab;
       box-sizing: border-box;
@@ -16,20 +16,20 @@
       visibility: hidden;
 
       &:hover {
-        background-color: var(--color-primary);
+        background-color: var(--ngs-color-primary);
       }
 
       &.dragging-active-handler {
         cursor: grabbing !important;
-        background-color: var(--color-primary) !important;
-        border-color: var(--color-primary) !important;
+        background-color: var(--ngs-color-primary) !important;
+        border-color: var(--ngs-color-primary) !important;
         z-index: 1001 !important;
       }
     }
 
     .drop-indicator {
       position: absolute;
-      background-color: var(--color-primary);
+      background-color: var(--ngs-color-primary);
       z-index: 5;
       pointer-events: none;
       visibility: hidden;
@@ -38,7 +38,7 @@
     tr.dragging-source,
     td.dragging-source,
     th.dragging-source {
-      background: var(--color-surface-container-low);
+      background: var(--ngs-color-surface-container-low);
     }
 
     table.dragging-row td,

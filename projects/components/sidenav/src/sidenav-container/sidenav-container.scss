@@ -1,7 +1,7 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-sidenav-backdrop-color: var(--overlay-backdrop-bg);
+  --ngs-sidenav-backdrop-color: var(--ngs-overlay-backdrop-bg);
   --ngs-sidenav-transition-duration: 400ms;
   --ngs-sidenav-transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
   --ngs-sidenav-width: 280px;

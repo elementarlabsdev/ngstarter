@@ -3,15 +3,15 @@
 :host {
   --ngs-slider-track-height: 4px;
   --ngs-slider-track-active-height: 6px;
-  --ngs-slider-track-color: var(--color-surface-container-high);
-  --ngs-slider-track-active-color: var(--color-primary);
+  --ngs-slider-track-color: var(--ngs-color-surface-container-high);
+  --ngs-slider-track-active-color: var(--ngs-color-primary);
   --ngs-slider-thumb-size: 20px;
-  --ngs-slider-thumb-color: var(--color-primary);
-  --ngs-slider-thumb-ripple-color: var(--color-primary-100);
-  --ngs-slider-tick-mark-color: var(--color-on-surface-variant);
-  --ngs-slider-tick-mark-active-color: color-mix(in srgb, var(--color-on-primary), transparent 40%);
-  --ngs-slider-value-indicator-color: var(--color-on-surface);
-  --ngs-slider-value-indicator-text-color: var(--color-surface);
+  --ngs-slider-thumb-color: var(--ngs-color-primary);
+  --ngs-slider-thumb-ripple-color: var(--ngs-color-primary-100);
+  --ngs-slider-tick-mark-color: var(--ngs-color-on-surface-variant);
+  --ngs-slider-tick-mark-active-color: color-mix(in srgb, var(--ngs-color-on-primary), transparent 40%);
+  --ngs-slider-value-indicator-color: var(--ngs-color-on-surface);
+  --ngs-slider-value-indicator-text-color: var(--ngs-color-surface);
 
   display: block;
   position: relative;

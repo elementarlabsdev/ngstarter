@@ -3,16 +3,16 @@
 
 :host {
   --ngs-breadcrumbs-gap: --spacing(2.5);
-  --ngs-breadcrumbs-item-font-size: theme(--text-sm);
-  --ngs-breadcrumbs-item-color: var(--color-secondary);
-  --ngs-breadcrumbs-item-hover-color: var(--color-primary);
-  --ngs-breadcrumbs-active-item-color: var(--color-primary);
+  --ngs-breadcrumbs-item-font-size: var(--ngs-font-size-sm);
+  --ngs-breadcrumbs-item-color: var(--ngs-color-secondary);
+  --ngs-breadcrumbs-item-hover-color: var(--ngs-color-primary);
+  --ngs-breadcrumbs-active-item-color: var(--ngs-color-primary);
   --ngs-breadcrumbs-item-font-weight: 400;
-  --ngs-breadcrumbs-separator-color: var(--color-neutral-400);
-  --ngs-breadcrumbs-separator-font-size: theme(--text-md);
+  --ngs-breadcrumbs-separator-color: var(--ngs-color-neutral-400);
+  --ngs-breadcrumbs-separator-font-size: var(--ngs-font-size-md);
   --ngs-breadcrumbs-separator-position-top: 1px;
-  --ngs-breadcrumbs-title-color: var(--color-neutral-800);
-  --ngs-breadcrumbs-title-font-size: theme(--text-xs);
+  --ngs-breadcrumbs-title-color: var(--ngs-color-neutral-800);
+  --ngs-breadcrumbs-title-font-size: var(--ngs-font-size-xs);
 
   display: flex;
   align-items: center;

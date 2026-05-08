@@ -3,10 +3,10 @@
 :host {
   display: block;
   width: max-content;
-  box-shadow: theme(--shadow-sm);
-  border-radius: theme(--radius-lg);
+  box-shadow: var(--ngs-shadow-sm);
+  border-radius: var(--ngs-radius-lg);
   background: white;
-  font-size: theme(--text-xs);
+  font-size: var(--ngs-font-size-xs);
   overflow: hidden;
 
   .title {
@@ -23,6 +23,6 @@
 }
 
 :host-context(html.dark) {
-  background: var(--color-tertiary-200);
-  color: var(--color-neutral-800);
+  background: var(--ngs-color-tertiary-200);
+  color: var(--ngs-color-neutral-800);
 }

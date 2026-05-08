@@ -29,9 +29,9 @@
 }
 
 .ngs-drawer-content {
-  background: var(--color-surface-container-lowest);
+  background: var(--ngs-color-surface-container-lowest);
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  outline: var(--dropdown-border);
+  outline: var(--ngs-dropdown-border);
   margin: 1.75rem;
   flex-grow: 1;
   overflow: hidden;
@@ -40,7 +40,7 @@
 }
 
 .drawer-backdrop {
-  background: var(--overlay-backdrop-bg);
+  background: var(--ngs-overlay-backdrop-bg);
   opacity: 0;
   transition: opacity 150ms cubic-bezier(.4, 0, .2, 1);
 

@@ -1,10 +1,10 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-mchart-pie-stroke-color: var(--color-background);
-  --ngs-mchart-pie-legend-item-color: var(--color-neutral-900);
-  --ngs-mchart-pie-legend-item-hover-color: var(--color-primary);
-  --ngs-mchart-pie-value-color: var(--color-neutral-950);
+  --ngs-mchart-pie-stroke-color: var(--ngs-color-background);
+  --ngs-mchart-pie-legend-item-color: var(--ngs-color-neutral-900);
+  --ngs-mchart-pie-legend-item-hover-color: var(--ngs-color-primary);
+  --ngs-mchart-pie-value-color: var(--ngs-color-neutral-950);
 
   display: block;
   overflow: hidden;
@@ -52,5 +52,5 @@
 }
 
 :host-context(html.dark) {
-  --ngs-mchart-pie-legend-item-color: var(--color-neutral-200);
+  --ngs-mchart-pie-legend-item-color: var(--ngs-color-neutral-200);
 }

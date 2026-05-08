@@ -1,12 +1,12 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-mchart-line-line-bg: var(--color-primary);
-  --ngs-mchart-line-area-bg: var(--color-primary-200);
-  --ngs-mchart-line-marker-line-bg: var(--color-neutral);
-  --ngs-mchart-line-marker-dot-bg: var(--color-primary);
-  --ngs-mchart-line-area-gradient-start-color: var(--color-primary);
-  --ngs-mchart-line-area-gradient-end-color: var(--color-background);
+  --ngs-mchart-line-line-bg: var(--ngs-color-primary);
+  --ngs-mchart-line-area-bg: var(--ngs-color-primary-200);
+  --ngs-mchart-line-marker-line-bg: var(--ngs-color-neutral);
+  --ngs-mchart-line-marker-dot-bg: var(--ngs-color-primary);
+  --ngs-mchart-line-area-gradient-start-color: var(--ngs-color-primary);
+  --ngs-mchart-line-area-gradient-end-color: var(--ngs-color-background);
 
   display: block;
   overflow: hidden;
@@ -59,6 +59,6 @@
 }
 
 :host-context(html.dark) {
-  --ngs-mchart-line-area-bg: var(--color-neutral-700);
-  --ngs-mchart-line-area-gradient-start-color: var(--color-neutral-700);
+  --ngs-mchart-line-area-bg: var(--ngs-color-neutral-700);
+  --ngs-mchart-line-area-gradient-start-color: var(--ngs-color-neutral-700);
 }

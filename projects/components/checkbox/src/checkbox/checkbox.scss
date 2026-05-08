@@ -2,14 +2,14 @@
 
 :host {
   --ngs-checkbox-size: 19px;
-  --ngs-checkbox-checked-color: var(--color-primary);
-  --ngs-checkbox-unchecked-color: var(--input-border-color);
-  --ngs-checkbox-disabled-color: var(--color-on-surface-variant);
-  --ngs-checkbox-checkmark-color: var(--color-on-primary);
-  --ngs-checkbox-description-font-size: theme(--text-sm);
-  --ngs-checkbox-description-color: var(--color-neutral-500);
+  --ngs-checkbox-checked-color: var(--ngs-color-primary);
+  --ngs-checkbox-unchecked-color: var(--ngs-field-border-color);
+  --ngs-checkbox-disabled-color: var(--ngs-color-on-surface-variant);
+  --ngs-checkbox-checkmark-color: var(--ngs-color-on-primary);
+  --ngs-checkbox-description-font-size: var(--ngs-font-size-sm);
+  --ngs-checkbox-description-color: var(--ngs-color-neutral-500);
   --ngs-checkbox-gap: --spacing(2.5);
-  --ngs-checkbox-label-font-size: theme(--text-base);
+  --ngs-checkbox-label-font-size: var(--ngs-font-size-md);
 
   display: inline-block;
   position: relative;
@@ -115,19 +115,19 @@
 
   &.ngs-checkbox-disabled {
     cursor: default;
-    color: color-mix(in srgb, var(--color-on-surface), transparent 62%);
+    color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%);
 
     .ngs-checkbox-layout {
       cursor: default;
     }
     .ngs-checkbox-background {
-      border-color: color-mix(in srgb, var(--color-on-surface), transparent 62%);
+      border-color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%);
       background: transparent;
     }
 
     &.ngs-checkbox-checked, &.ngs-checkbox-indeterminate {
       .ngs-checkbox-background {
-        background: color-mix(in srgb, var(--color-on-surface), transparent 62%);
+        background: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%);
         border-color: transparent;
       }
     }
@@ -154,12 +154,12 @@
   }
 
   &.ngs-accent {
-    --ngs-checkbox-checked-color: var(--color-secondary);
-    --ngs-checkbox-checkmark-color: var(--color-on-secondary);
+    --ngs-checkbox-checked-color: var(--ngs-color-secondary);
+    --ngs-checkbox-checkmark-color: var(--ngs-color-on-secondary);
   }
 
   &.ngs-warn {
-    --ngs-checkbox-checked-color: var(--color-error);
-    --ngs-checkbox-checkmark-color: var(--color-on-error);
+    --ngs-checkbox-checked-color: var(--ngs-color-danger);
+    --ngs-checkbox-checkmark-color: var(--ngs-color-on-danger);
   }
 }

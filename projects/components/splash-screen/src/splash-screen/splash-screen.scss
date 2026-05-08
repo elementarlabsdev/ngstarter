@@ -1,7 +1,7 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-splash-screen-bg: var(--color-background);
+  --ngs-splash-screen-bg: var(--ngs-color-background);
 
   user-select: none;
   position: fixed;

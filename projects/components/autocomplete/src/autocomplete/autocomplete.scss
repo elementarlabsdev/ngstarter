@@ -1,15 +1,15 @@
 @reference 'tailwindcss';
 
 .ngs-autocomplete-panel {
-  background: var(--ngs-autocomplete-panel-bg, var(--dropdown-bg));
-  box-shadow: var(--ngs-autocomplete-panel-shadow, var(--dropdown-shadow));
-  border-radius: var(--ngs-autocomplete-panel-border-radius, var(--dropdown-radius));
-  max-height: var(--ngs-autocomplete-panel-max-height, var(--dropdown-max-height, 256px));
+  background: var(--ngs-autocomplete-panel-bg, var(--ngs-dropdown-bg));
+  box-shadow: var(--ngs-autocomplete-panel-shadow, var(--ngs-dropdown-shadow));
+  border-radius: var(--ngs-autocomplete-panel-border-radius, var(--ngs-dropdown-radius));
+  max-height: var(--ngs-autocomplete-panel-max-height, var(--ngs-dropdown-max-height, 256px));
   overflow: auto;
   min-width: 100%;
   transform-origin: top;
   animation: ngs-dropdown-panel-showing 150ms cubic-bezier(0, 0, 0.2, 1);
   padding-top: 8px;
   padding-bottom: 8px;
-  outline: var(--ngs-autocomplete-panel-border, var(--dropdown-border));
+  outline: var(--ngs-autocomplete-panel-border, var(--ngs-dropdown-border));
 }

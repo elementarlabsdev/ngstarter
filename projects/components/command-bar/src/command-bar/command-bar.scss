@@ -5,30 +5,30 @@
   --ngs-command-bar-padding: 0 --spacing(1);
   --ngs-command-bar-margin: --spacing(8) 0;
   --ngs-command-bar-zindex: 50;
-  --ngs-command-bar-bg: var(--color-neutral-950);
-  --ngs-command-bar-color: var(--color-neutral-200);
-  --ngs-command-bar-border: 1px solid var(--color-neutral-700);
-  --ngs-command-bar-shadow: theme(--shadow-lg);
+  --ngs-command-bar-bg: var(--ngs-color-neutral-950);
+  --ngs-command-bar-color: var(--ngs-color-neutral-200);
+  --ngs-command-bar-border: 1px solid var(--ngs-color-neutral-700);
+  --ngs-command-bar-shadow: var(--ngs-shadow-lg);
   --ngs-command-bar-border-radius: calc(infinity * 1px);
   --ngs-command-bar-command-height: --spacing(10);
   --ngs-command-bar-command-padding: 0 --spacing(3.5);
-  --ngs-command-bar-command-font-size: theme(--text-sm);
-  --ngs-command-bar-command-color: var(--color-neutral-200);
-  --ngs-command-bar-command-hover-color: var(--color-neutral-100);
-  --ngs-command-bar-command-hover-bg: var(--color-neutral-800);
-  --ngs-command-bar-value-color: var(--color-neutral-200);
+  --ngs-command-bar-command-font-size: var(--ngs-font-size-sm);
+  --ngs-command-bar-command-color: var(--ngs-color-neutral-200);
+  --ngs-command-bar-command-hover-color: var(--ngs-color-neutral-100);
+  --ngs-command-bar-command-hover-bg: var(--ngs-color-neutral-800);
+  --ngs-command-bar-value-color: var(--ngs-color-neutral-200);
   --ngs-command-bar-command-gap: --spacing(3);
   --ngs-command-bar-content-padding: 0 --spacing(4);
-  --ngs-command-bar-font-size: theme(--text-sm);
+  --ngs-command-bar-font-size: var(--ngs-font-size-sm);
   --ngs-command-bar-divider-width: 1px;
   --ngs-command-bar-divider-height: --spacing(6);
-  --ngs-command-bar-divider-bg: var(--color-neutral-600);
-  --ngs-command-bar-command-shortcut-bg: var(--color-neutral-700);
-  --ngs-command-bar-command-shortcut-border-radius: theme(--radius-lg);
-  --ngs-command-bar-command-shortcut-font-size: theme(--text-xs);
-  --ngs-command-bar-command-shortcut-color: var(--color-neutral-300);
+  --ngs-command-bar-divider-bg: var(--ngs-color-neutral-600);
+  --ngs-command-bar-command-shortcut-bg: var(--ngs-color-neutral-700);
+  --ngs-command-bar-command-shortcut-border-radius: var(--ngs-radius-lg);
+  --ngs-command-bar-command-shortcut-font-size: var(--ngs-font-size-xs);
+  --ngs-command-bar-command-shortcut-color: var(--ngs-color-neutral-300);
   --ngs-command-bar-command-shortcut-padding: 0 5px;
-  --ngs-command-bar-command-shortcut-border: 1px solid var(--color-neutral-600);
+  --ngs-command-bar-command-shortcut-border: 1px solid var(--ngs-color-neutral-600);
   --ngs-command-bar-command-shortcut-size: --spacing(5);
 
   left: 50%;
@@ -107,7 +107,7 @@
 }
 
 :host-context(html.dark) {
-  --ngs-command-bar-bg: var(--color-primary-200);
-  --ngs-command-bar-color: var(--color-neutral-950);
-  --ngs-command-bar-command-color: var(--color-neutral-950);
+  --ngs-command-bar-bg: var(--ngs-color-primary-200);
+  --ngs-command-bar-color: var(--ngs-color-neutral-950);
+  --ngs-command-bar-command-color: var(--ngs-color-neutral-950);
 }

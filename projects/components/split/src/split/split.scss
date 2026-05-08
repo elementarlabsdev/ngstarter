@@ -2,8 +2,8 @@
   --ngs-split-gutter-size: 5px;
   --ngs-split-handle-size: 10px;
   --ngs-split-handle-offset: calc((var(--ngs-split-handle-size) - var(--ngs-split-gutter-size)) * 0.5);
-  --ngs-split-gutter-bg: var(--color-surface-container-high);
-  --ngs-split-gutter-hover-bg: var(--color-primary);
+  --ngs-split-gutter-bg: var(--ngs-color-surface-container-high);
+  --ngs-split-gutter-hover-bg: var(--ngs-color-primary);
 
   display: flex;
   flex-wrap: nowrap;
@@ -49,7 +49,7 @@
         width: 2px;
         height: 2px;
         border-radius: 50%;
-        background-color: var(--color-on-surface);
+        background-color: var(--ngs-color-on-surface);
       }
     }
   }

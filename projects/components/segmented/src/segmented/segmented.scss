@@ -3,19 +3,19 @@
 
 :host {
   --ngs-segmented-button-height: --spacing(8);
-  --ngs-segmented-bg: var(--color-surface-container);
-  --ngs-segmented-button-hover-bg: var(--color-surface-container-highest);
-  --ngs-segmented-button-color: var(--color-on-surface-variant);
-  --ngs-segmented-button-hover-color: var(--color-on-surface);
-  --ngs-segmented-button-selected-color: var(--color-primary);
-  --ngs-segmented-button-selected-bg: var(--color-surface);
-  --ngs-segmented-button-selected-shadow: theme(--shadow-sm);
+  --ngs-segmented-bg: var(--ngs-color-surface-container);
+  --ngs-segmented-button-hover-bg: var(--ngs-color-surface-container-highest);
+  --ngs-segmented-button-color: var(--ngs-color-on-surface-variant);
+  --ngs-segmented-button-hover-color: var(--ngs-color-on-surface);
+  --ngs-segmented-button-selected-color: var(--ngs-color-primary);
+  --ngs-segmented-button-selected-bg: var(--ngs-color-surface);
+  --ngs-segmented-button-selected-shadow: var(--ngs-shadow-sm);
   --ngs-segmented-padding: --spacing(1);
-  --ngs-segmented-radius: var(--btn-radius);
-  --ngs-segmented-button-radius: calc(var(--btn-radius) - --spacing(0.5));
+  --ngs-segmented-radius: var(--ngs-button-radius);
+  --ngs-segmented-button-radius: calc(var(--ngs-button-radius) - --spacing(0.5));
   --ngs-segmented-button-padding: 0 --spacing(3);
   --ngs-segmented-button-min-width: --spacing(12);
-  --ngs-segmented-button-font-size: theme(--text-sm);
+  --ngs-segmented-button-font-size: var(--ngs-font-size-sm);
   --ngs-segmented-gap: --spacing(1);
   --ngs-segmented-button-gap: --spacing(1);
   --ngs-segmented-button-icon-offset-margin: -6px;
@@ -23,7 +23,7 @@
 
   &[ngs-segmented-size="sm"] {
     --ngs-segmented-button-height: --spacing(6);
-    --ngs-segmented-button-font-size: theme(--text-xs);
+    --ngs-segmented-button-font-size: var(--ngs-font-size-xs);
     --ngs-segmented-button-padding: 0 --spacing(2);
     --ngs-segmented-button-gap: --spacing(0.5);
     --icon-size: --spacing(5);

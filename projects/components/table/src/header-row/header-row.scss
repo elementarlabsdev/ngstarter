@@ -3,7 +3,7 @@
 :host {
   height: var(--ngs-table-header-row-height);
   display: table-row;
-  background: var(--ngs-data-view-header-bg, var(--color-background));
+  background: var(--ngs-data-view-header-bg, var(--ngs-table-header-bg));
   width: 100%;
 
   :host-context(.highlight-header) & {
@@ -15,9 +15,9 @@
       position: absolute;
       left: 0;
       right: 0;
-      background: var(--ngs-data-view-hl-header-row-bg, var(--color-surface-container));
+      background: var(--ngs-data-view-hl-header-row-bg, var(--ngs-color-surface-container));
       height: --spacing(12);
-      border-radius: theme(--radius-lg);
+      border-radius: var(--ngs-radius-lg);
       z-index: 0;
     }
   }

@@ -2,8 +2,8 @@
 
 :host {
   display: block;
-  font-size: theme(--text-xs);
+  font-size: var(--ngs-font-size-xs);
   margin: --spacing(2) 0;
   padding: 0 --spacing(3);
-  color: var(--color-neutral-500);
+  color: var(--ngs-color-neutral-500);
 }

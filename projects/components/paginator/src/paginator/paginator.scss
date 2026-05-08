@@ -2,10 +2,10 @@
 
 :host {
   --ngs-paginator-container-background: transparent;
-  --ngs-paginator-container-text-color: var(--color-on-surface);
+  --ngs-paginator-container-text-color: var(--ngs-color-on-surface);
   --ngs-paginator-container-text-font: var(--font-sans);
   --ngs-paginator-container-text-line-height: inherit;
-  --ngs-paginator-container-text-size: theme(--text-sm);
+  --ngs-paginator-container-text-size: var(--ngs-font-size-sm);
   --ngs-paginator-container-text-tracking: normal;
   --ngs-paginator-container-text-weight: 400;
   --ngs-paginator-page-size-margin-right: 8px;

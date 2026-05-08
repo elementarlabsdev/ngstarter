@@ -5,17 +5,17 @@
   --ngs-alert-color: inherit;
   --ngs-alert-icon-color: white;
   --ngs-alert-border-color: transparent;
-  --ngs-alert-border-radius: theme(--radius-xl);
+  --ngs-alert-border-radius: var(--ngs-radius-xl);
   --ngs-alert-padding: --spacing(2.5) --spacing(3);
   --ngs-alert-has-thumbnail-padding: --spacing(1.5);
   --ngs-alert-gap: --spacing(3.5);
   --ngs-alert-border-width: 1px;
-  --ngs-alert-font-size: theme(--text-sm);
+  --ngs-alert-font-size: var(--ngs-font-size-sm);
   --ngs-alert-thumbnail-bg: white;
-  --ngs-alert-thumbnail-border-radius: theme(--radius-xl);
+  --ngs-alert-thumbnail-border-radius: var(--ngs-radius-xl);
   --ngs-alert-thumbnail-size: --spacing(10);
   --ngs-alert-title-font-weight: 600;
-  --ngs-alert-title-font-size: theme(--text-xs);
+  --ngs-alert-title-font-size: var(--ngs-font-size-xs);
   --ngs-alert-actions-gap: --spacing(1);
   --ngs-alert-action-height: --spacing(10);
   --ngs-alert-action-padding: 0 --spacing(3.5);
@@ -88,35 +88,35 @@
 
   &[ngs-alert-variant="default"],
   &[ngs-alert-variant="neutral"] {
-    --ngs-alert-bg-color: var(--color-surface-container);
-    --ngs-alert-thumbnail-bg: var(--color-surface-container-highest);
+    --ngs-alert-bg-color: var(--ngs-color-surface-container);
+    --ngs-alert-thumbnail-bg: var(--ngs-color-surface-container-highest);
   }
 
   &[ngs-alert-variant="info"],
   &[ngs-alert-variant="informative"] {
-    --ngs-alert-bg-color: var(--color-informative-container);
-    --ngs-alert-thumbnail-bg: var(--color-informative);
-    --ngs-alert-color: var(--color-on-informative-container);
+    --ngs-alert-bg-color: var(--ngs-color-info-container);
+    --ngs-alert-thumbnail-bg: var(--ngs-color-info);
+    --ngs-alert-color: var(--ngs-color-on-info-container);
   }
 
   &[ngs-alert-variant="success"],
   &[ngs-alert-variant="positive"] {
-    --ngs-alert-bg-color: var(--color-positive-container);
-    --ngs-alert-thumbnail-bg: var(--color-positive);
-    --ngs-alert-color: var(--color-on-positive-container);
+    --ngs-alert-bg-color: var(--ngs-color-success-container);
+    --ngs-alert-thumbnail-bg: var(--ngs-color-success);
+    --ngs-alert-color: var(--ngs-color-on-success-container);
   }
 
   &[ngs-alert-variant="danger"],
   &[ngs-alert-variant="negative"] {
-    --ngs-alert-bg-color: var(--color-negative-container);
-    --ngs-alert-thumbnail-bg: var(--color-negative);
-    --ngs-alert-color: var(--color-on-negative-container);
+    --ngs-alert-bg-color: var(--ngs-color-danger-container);
+    --ngs-alert-thumbnail-bg: var(--ngs-color-danger);
+    --ngs-alert-color: var(--ngs-color-on-danger-container);
   }
 
   &[ngs-alert-variant="warning"],
   &[ngs-alert-variant="notice"] {
-    --ngs-alert-bg-color: var(--color-notice-container);
-    --ngs-alert-thumbnail-bg: var(--color-notice);
-    --ngs-alert-color: var(--color-on-notice-container);
+    --ngs-alert-bg-color: var(--ngs-color-warning-container);
+    --ngs-alert-thumbnail-bg: var(--ngs-color-warning);
+    --ngs-alert-color: var(--ngs-color-on-warning-container);
   }
 }

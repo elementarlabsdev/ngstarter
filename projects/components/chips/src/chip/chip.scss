@@ -2,11 +2,11 @@
 @reference '../../../styles/_common.scss';
 
 .ngs-chip {
-  --ngs-chip-bg: var(--color-surface-container-high);
-  --ngs-chip-color: var(--color-on-surface);
-  --ngs-chip-radius: theme(--radius-xl);
+  --ngs-chip-bg: var(--ngs-color-surface-container-high);
+  --ngs-chip-color: var(--ngs-color-on-surface);
+  --ngs-chip-radius: var(--ngs-radius-xl);
   --ngs-chip-padding: 0 --spacing(3);
-  --ngs-chip-font-size: theme(--text-tiny);
+  --ngs-chip-font-size: var(--ngs-font-size-xs);
   --ngs-chip-font-weight: 500;
   --ngs-chip-height: --spacing(8);
 
@@ -32,10 +32,10 @@
   &[appearance="outlined"] {
     background: transparent;
     color: var(--ngs-chip-color);
-    border: 1px solid var(--ngs-chip-outline-color, var(--color-outline-variant));
+    border: 1px solid var(--ngs-chip-outline-color, var(--ngs-color-outline-variant));
 
     &.ngs-chip-selected {
-      border-color: var(--ngs-chip-selected-bg, var(--color-primary));
+      border-color: var(--ngs-chip-selected-bg, var(--ngs-color-primary));
     }
   }
 
@@ -125,7 +125,7 @@
 
   .ngs-chip-remove {
     &:hover {
-      color: var(--color-error);
+      color: var(--ngs-color-danger);
     }
   }
 
@@ -138,7 +138,7 @@
   }
 
   &.ngs-chip-selected {
-    --ngs-chip-bg: var(--ngs-chip-selected-bg, var(--color-primary));
-    --ngs-chip-color: var(--ngs-chip-selected-color, var(--color-on-primary));
+    --ngs-chip-bg: var(--ngs-chip-selected-bg, var(--ngs-color-primary));
+    --ngs-chip-color: var(--ngs-chip-selected-color, var(--ngs-color-on-primary));
   }
 }

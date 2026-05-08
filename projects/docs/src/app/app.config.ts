@@ -11,9 +11,15 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideStore } from '@ngrx/store';
-import { FORM_FIELD_DEFAULT_OPTIONS } from '@ngstarter-ui/components/form-field';
 import { provideNativeDateAdapter } from '@ngstarter-ui/components/datepicker';
-import { ENVIRONMENT, EnvironmentService, GlobalStore, PageTitleStrategyService } from '@ngstarter-ui/components/core';
+import {
+  ENVIRONMENT,
+  EnvironmentService,
+  GlobalStore,
+  PageTitleStrategyService,
+  provideNgsTheme,
+  ThemeManagerService,
+} from '@ngstarter-ui/components/core';
 import { LayoutSidebarStore } from '@ngstarter-ui/components/layout';
 import { COLOR_SCHEME_LOCAL_KEY, ColorScheme, ColorSchemeStore } from '@ngstarter-ui/components/color-scheme';
 import { isPlatformBrowser } from '@angular/common';
@@ -31,12 +37,19 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideStore(),
     provideNativeDateAdapter(),
+    provideNgsTheme({
+      theme: 'default',
+      colorScheme: 'auto',
+      density: 'comfortable',
+      radius: 'medium',
+    }),
     provideAppInitializer(() => {
       const platformId = inject(PLATFORM_ID);
       const envService = inject(EnvironmentService);
       const globalStore = inject(GlobalStore);
       const layoutSidebarStore = inject(LayoutSidebarStore);
       const colorSchemeStore = inject(ColorSchemeStore);
+      inject(ThemeManagerService);
       return new Promise((resolve, reject) => {
         if (isPlatformBrowser(platformId)) {
           const localColorScheme = localStorage
@@ -67,10 +80,6 @@ export const appConfig: ApplicationConfig = {
     {
       provide: TitleStrategy,
       useClass: PageTitleStrategyService
-    },
-    {
-      provide: FORM_FIELD_DEFAULT_OPTIONS,
-      useValue: { appearance: 'outline' }
-    },
+    }
   ]
 };

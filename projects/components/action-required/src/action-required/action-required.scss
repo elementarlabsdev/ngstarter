@@ -1,13 +1,13 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-action-required-bg: linear-gradient(135deg, var(--color-error-container), var(--color-error-container-highest));
-  --ngs-action-action-text-bg: var(--color-surface);
-  --ngs-action-text-color: var(--color-on-error-container);
+  --ngs-action-required-bg: linear-gradient(135deg, var(--ngs-color-danger-container), var(--ngs-color-danger-container-highest));
+  --ngs-action-action-text-bg: var(--ngs-color-surface);
+  --ngs-action-text-color: var(--ngs-color-on-danger-container);
 
   display: flex;
   width: 100%;
-  border-radius: theme(--radius-2xl);
+  border-radius: var(--ngs-radius-xl);
   padding: --spacing(6);
   gap: --spacing(8);
   align-items: center;
@@ -16,7 +16,7 @@
 
   .action-text {
     display: flex;
-    border-radius: theme(--radius-xl);
+    border-radius: var(--ngs-radius-xl);
     background: var(--ngs-action-action-text-bg);
     padding: --spacing(2.5) --spacing(3) --spacing(2.5) --spacing(2.5);
     align-items: center;

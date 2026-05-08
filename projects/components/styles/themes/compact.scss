@@ -1,0 +1,8 @@
+@use "../_common";
+
+:root,
+[data-ngs-density='compact'] {
+  --ngs-density-scale: -6;
+  --ngs-control-padding-x: --spacing(3);
+  --ngs-table-cell-padding: --spacing(1) --spacing(3);
+}

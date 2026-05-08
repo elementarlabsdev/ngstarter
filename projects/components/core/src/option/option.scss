@@ -3,12 +3,12 @@
 :host {
   --ngs-option-padding: 0 16px;
   --ngs-option-font-size: 14px;
-  --ngs-option-color: var(--color-on-surface);
-  --ngs-option-hover-background: var(--color-surface-container-high);
-  --ngs-option-selected-background: var(--color-primary-container);
-  --ngs-option-selected-color: var(--color-on-primary-container);
-  --ngs-option-active-background: var(--color-surface-container-highest);
-  --ngs-option-disabled-color: var(--color-on-surface-variant);
+  --ngs-option-color: var(--ngs-color-on-surface);
+  --ngs-option-hover-background: var(--ngs-color-surface-container-high);
+  --ngs-option-selected-background: var(--ngs-color-primary-container);
+  --ngs-option-selected-color: var(--ngs-color-on-primary-container);
+  --ngs-option-active-background: var(--ngs-color-surface-container-highest);
+  --ngs-option-disabled-color: var(--ngs-color-on-surface-variant);
 
   display: flex;
   align-items: center;

@@ -5,7 +5,7 @@
   position: relative;
   width: max-content;
   height: max-content;
-  background: var(--color-surface-container-lowest);
+  background: var(--ngs-color-surface-container-lowest);
 
   canvas {
     width: 500px;
@@ -34,7 +34,7 @@
     position: absolute;
     height: 1px;
     z-index: 0;
-    background: var(--color-surface-container-highest);
+    background: var(--ngs-color-surface-container-highest);
     left: 40px;
     right: 40px;
     bottom: 50px;

@@ -36,11 +36,11 @@
     z-index: 1;
     top: --spacing(5);
     inset-inline-start: 50%;
-    background: var(--color-neutral-950);
+    background: var(--ngs-color-neutral-950);
     color: white;
-    border-radius: theme(--radius-lg);
+    border-radius: var(--ngs-radius-lg);
     padding: --spacing(2) --spacing(3);
-    font-size: theme(--text-xs);
+    font-size: var(--ngs-font-size-xs);
     opacity: 90%;
     width: max-content;
     display: flex;

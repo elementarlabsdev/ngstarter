@@ -3,16 +3,16 @@
 :host {
   --ngs-upload-area-bg: transparent;
   --ngs-upload-area-padding: --spacing(10);
-  --ngs-upload-area-border: 1px solid var(--color-subtle);
-  --ngs-upload-area-border-radius: theme(--radius-2xl);
-  --ngs-upload-area-font-size: theme(--text-sm);
-  --ngs-upload-area-color: var(--color-neutral-600);
-  --ngs-upload-area-drop-active-border: 1px dashed var(--color-primary);
-  --ngs-upload-area-drop-active-color: var(--color-primary);
-  --ngs-upload-area-drop-active-bg: var(--color-surface-container);
-  --ngs-upload-area-drop-invalid-border: 1px dashed var(--color-error);
-  --ngs-upload-area-drop-invalid-color: var(--color-error);
-  --ngs-upload-area-drop-invalid-bg: var(--color-error-container-low);
+  --ngs-upload-area-border: 1px solid var(--ngs-color-subtle);
+  --ngs-upload-area-border-radius: var(--ngs-radius-xl);
+  --ngs-upload-area-font-size: var(--ngs-font-size-sm);
+  --ngs-upload-area-color: var(--ngs-color-neutral-600);
+  --ngs-upload-area-drop-active-border: 1px dashed var(--ngs-color-primary);
+  --ngs-upload-area-drop-active-color: var(--ngs-color-primary);
+  --ngs-upload-area-drop-active-bg: var(--ngs-color-surface-container);
+  --ngs-upload-area-drop-invalid-border: 1px dashed var(--ngs-color-danger);
+  --ngs-upload-area-drop-invalid-color: var(--ngs-color-danger);
+  --ngs-upload-area-drop-invalid-bg: var(--ngs-color-danger-container-low);
 
   display: flex;
   flex-direction: column;

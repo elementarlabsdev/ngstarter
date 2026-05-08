@@ -2,9 +2,9 @@
 
 :host {
   --ngs-emoji-picker-border: none;
-  --ngs-emoji-picker-shadow: var(--dropdown-shadow);
-  --ngs-emoji-picker-border-radius: var(--dropdown-radius);
-  --ngs-emoji-picker-bg: var(--dropdown-bg);
+  --ngs-emoji-picker-shadow: var(--ngs-dropdown-shadow);
+  --ngs-emoji-picker-border-radius: var(--ngs-dropdown-radius);
+  --ngs-emoji-picker-bg: var(--ngs-dropdown-bg);
   --ngs-emoji-picker-margin: --spacing(2.5);
   --ngs-emoji-picker-list-width: 278px;
   --ngs-emoji-picker-list-height: 260px;
@@ -17,11 +17,11 @@
   box-shadow: var(--ngs-emoji-picker-shadow);
   animation: .15s ngs-emoji-picker-animation;
   margin: var(--ngs-emoji-picker-margin) 0;
-  outline: var(--ngs-menu-border, var(--dropdown-border));
+  outline: var(--ngs-menu-border, var(--ngs-dropdown-border));
 
   ngs-skeleton {
-    --ngs-skeleton-from-bg: var(--color-surface-container-high);
-    --ngs-skeleton-to-bg: var(--color-surface-container-highest);
+    --ngs-skeleton-from-bg: var(--ngs-color-surface-container-high);
+    --ngs-skeleton-to-bg: var(--ngs-color-surface-container-highest);
   }
 
   .list {
@@ -37,20 +37,20 @@
     padding: 0 --spacing(4);
     align-items: center;
     gap: --spacing(3);
-    border-top: 1px solid var(--color-subtle);
+    border-top: 1px solid var(--ngs-color-subtle);
   }
 
   .emoji-preview {
-    font-size: theme(--text-xl);
+    font-size: var(--ngs-font-size-xl);
   }
 
   .emoji-label,
   .select-message {
-    font-size: theme(--text-xs);
+    font-size: var(--ngs-font-size-xs);
   }
 
   .select-message {
-    color: var(--color-neutral-500);
+    color: var(--ngs-color-neutral-500);
   }
 
   dt {
@@ -62,7 +62,7 @@
     display: flex;
     align-items: center;
     font-weight: 600;
-    font-size: theme(--text-sm);
+    font-size: var(--ngs-font-size-sm);
     background: var(--ngs-emoji-picker-bg);
   }
 
@@ -79,7 +79,7 @@
     @apply size-9 flex-none rounded-lg cursor-pointer flex items-center justify-center text-2xl;
 
     &:hover {
-      background: var(--color-surface-container-highest);
+      background: var(--ngs-color-surface-container-highest);
     }
   }
 
@@ -102,7 +102,7 @@
 
 :host-context(html.dark) {
   ngs-skeleton {
-    --ngs-skeleton-from-bg: var(--color-surface-container-low);
-    --ngs-skeleton-to-bg: var(--color-surface-container-lowest);
+    --ngs-skeleton-from-bg: var(--ngs-color-surface-container-low);
+    --ngs-skeleton-to-bg: var(--ngs-color-surface-container-lowest);
   }
 }

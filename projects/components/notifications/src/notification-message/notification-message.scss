@@ -1,5 +1,5 @@
 @reference 'tailwindcss';
 
 :host {
-  font-size: theme(--text-sm);
+  font-size: var(--ngs-font-size-sm);
 }

@@ -30,7 +30,7 @@
   }
 
   .content {
-    box-shadow: theme(--shadow-sm);
+    box-shadow: var(--ngs-shadow-sm);
     z-index: 2;
     display: flex;
     align-items: center;
@@ -71,7 +71,7 @@
   }
 
   .title {
-    background: var(--color-neutral-700);
+    background: var(--ngs-color-neutral-700);
     font-weight: 500;
     height: --spacing(10);
     border-radius: calc(infinity * 1px);
@@ -80,8 +80,8 @@
     font-size: var(--text-tiny);
     display: flex;
     align-items: center;
-    background: var(--color-neutral-700);
-    color: var(--color-neutral-300);
+    background: var(--ngs-color-neutral-700);
+    color: var(--ngs-color-neutral-300);
   }
 
   .close,
@@ -94,17 +94,17 @@
     flex: none;
     align-items: center;
     justify-content: center;
-    background: var(--color-neutral-700);
-    color: var(--color-neutral-300);
+    background: var(--ngs-color-neutral-700);
+    color: var(--ngs-color-neutral-300);
 
     &:hover {
-      background: var(--color-neutral-800);
-      color: var(--color-neutral-200);
+      background: var(--ngs-color-neutral-800);
+      color: var(--ngs-color-neutral-200);
     }
 
     &:active {
-      background: var(--color-neutral-950);
-      color: var(--color-neutral-100);
+      background: var(--ngs-color-neutral-950);
+      color: var(--ngs-color-neutral-100);
     }
   }
 
@@ -115,7 +115,7 @@
     top: 0;
     bottom: 0;
     flex: none;
-    background: var(--color-neutral-50);
+    background: var(--ngs-color-neutral-50);
     display: flex;
     flex-direction: column;
     gap: --spacing(5);
@@ -132,8 +132,8 @@
     &-body {
       position: relative;
       flex-grow: 1;
-      font-size: theme(--text-sm);
-      color: var(--color-neutral-600);
+      font-size: var(--ngs-font-size-sm);
+      color: var(--ngs-color-neutral-600);
       line-height: var(--leading-relaxed);
 
       &-scroll {
@@ -190,30 +190,30 @@
 
 :host-context(html.dark) {
   .title {
-    background: var(--color-neutral-100);
-    color: var(--color-neutral-600);
+    background: var(--ngs-color-neutral-100);
+    color: var(--ngs-color-neutral-600);
   }
 
   .close {
-    background: var(--color-neutral-100);
-    color: var(--color-neutral-600);
+    background: var(--ngs-color-neutral-100);
+    color: var(--ngs-color-neutral-600);
 
     &:hover {
-      background: var(--color-neutral-200);
-      color: var(--color-neutral-700);
+      background: var(--ngs-color-neutral-200);
+      color: var(--ngs-color-neutral-700);
     }
 
     &:active {
-      background: var(--color-neutral-300);
-      color: var(--color-neutral-900);
+      background: var(--ngs-color-neutral-300);
+      color: var(--ngs-color-neutral-900);
     }
   }
 
   .aside {
-    background: var(--color-neutral-900);
+    background: var(--ngs-color-neutral-900);
 
     &-body {
-      color: var(--color-neutral-400);
+      color: var(--ngs-color-neutral-400);
     }
   }
 }

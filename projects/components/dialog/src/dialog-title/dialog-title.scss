@@ -2,9 +2,9 @@
 
 :host {
   display: block;
-  font-size: var(--ngs-dialog-title-font-size, 1.25rem);
-  font-weight: var(--ngs-dialog-title-font-weight, 600);
-  padding: var(--ngs-dialog-headline-padding, 6px 24px 13px);
+  font-size: var(--ngs-dialog-title-font-size);
+  font-weight: var(--ngs-dialog-title-font-weight);
+  padding: var(--ngs-dialog-headline-padding, var(--ngs-dialog-header-padding));
   flex: none;
 
   &::before {

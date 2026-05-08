@@ -5,7 +5,7 @@
 
   display: block;
   border-top-style: solid;
-  border-top-color: var(--color-border);
+  border-top-color: var(--ngs-color-border);
   flex: none;
 
   &.ngs-divider-horizontal {
@@ -25,7 +25,7 @@
     display: inline-block;
     border-top-width: 0;
     border-right-style: solid;
-    border-right-color: var(--color-border);
+    border-right-color: var(--ngs-color-border);
     border-right-width: 1px;
     vertical-align: middle;
     height: 100%;

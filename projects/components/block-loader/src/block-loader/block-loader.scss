@@ -28,7 +28,7 @@
       display: none;
     }
 
-    font-size: theme(--text-sm);
+    font-size: var(--ngs-font-size-sm);
     text-align: center;
     max-width: 800px;
   }

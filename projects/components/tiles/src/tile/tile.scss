@@ -32,9 +32,9 @@
     position: absolute;
     inset: 0;
     box-sizing: border-box;
-    border-radius: theme(--radius-xl);
-    border: 2px dashed var(--color-border);
-    background-color: var(--color-surface-container);
+    border-radius: var(--ngs-radius-xl);
+    border: 2px dashed var(--ngs-color-border);
+    background-color: var(--ngs-color-surface-container);
     z-index: 1;
     opacity: 0;
     transition: opacity 150ms ease-in-out;

@@ -4,15 +4,15 @@
   display: block;
   width: max-content;
   padding: --spacing(2) --spacing(5);
-  font-size: theme(--text-sm);
-  border-left: 1px solid var(--color-subtle);
+  font-size: var(--ngs-font-size-sm);
+  border-left: 1px solid var(--ngs-color-subtle);
 
   &:hover {
-    color: var(--color-primary);
+    color: var(--ngs-color-primary);
   }
 
   &.is-active {
-    color: var(--color-primary);
+    color: var(--ngs-color-primary);
     border-left-color: var(--sys-outline);
   }
 }

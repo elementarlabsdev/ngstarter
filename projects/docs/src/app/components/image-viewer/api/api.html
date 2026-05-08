@@ -27,7 +27,12 @@
     <ng-container ngsColumnDef="name">
       <th ngs-header-cell *ngsHeaderCellDef>Name</th>
       <td ngs-cell *ngsCellDef="let element">
-        <div>{{element.name}}<sup *ngIf="element.required">*</sup></div>
+        <div>
+          {{element.name}}
+          @if (element.required) {
+            <sup>*</sup>
+          }
+        </div>
       </td>
     </ng-container>
 

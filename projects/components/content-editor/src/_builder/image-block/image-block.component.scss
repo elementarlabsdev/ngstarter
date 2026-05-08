@@ -41,13 +41,13 @@
     @apply cursor-pointer;
 
     &:hover {
-      @apply outline-2 outline-[var(--color-primary)];
+      @apply outline-2 outline-[var(--ngs-color-primary)];
     }
   }
 }
 
 //:host-context(.block.is-focused) {
 //  .uploaded-image {
-//    @apply outline-4 outline-[var(--color-primary)];
+//    @apply outline-4 outline-[var(--ngs-color-primary)];
 //  }
 //}

@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: space-between;
   padding: --spacing(1) --spacing(4);
-  font-size: theme(--text-sm);
+  font-size: var(--ngs-font-size-sm);
   min-height: --spacing(10);
 
   .title {
@@ -18,28 +18,28 @@
   }
 
   &[data-variant="neutral"] {
-    background: var(--color-secondary-container);
-    color: var(--color-on-secondary-container);
+    background: var(--ngs-color-secondary-container);
+    color: var(--ngs-color-on-secondary-container);
   }
 
   &[data-variant="informative"] {
-    background: var(--color-informative-container);
-    color: var(--color-on-informative-container);
+    background: var(--ngs-color-info-container);
+    color: var(--ngs-color-on-info-container);
   }
 
   &[data-variant="positive"] {
-    background: var(--color-positive-container);
-    color: var(--color-on-positive-container);
+    background: var(--ngs-color-success-container);
+    color: var(--ngs-color-on-success-container);
   }
 
   &[data-variant="warning"] {
-    background: var(--color-notice-container);
-    color: var(--color-on-notice-container);
+    background: var(--ngs-color-warning-container);
+    color: var(--ngs-color-on-warning-container);
   }
 
   &[data-variant="negative"] {
-    background: var(--color-error-container);
-    color: var(--color-on-error-container);
+    background: var(--ngs-color-danger-container);
+    color: var(--ngs-color-on-danger-container);
   }
 
   .content {

@@ -3,15 +3,15 @@
 :host {
   --ngs-notification-padding: --spacing(5);
   --ngs-notification-gap: --spacing(4);
-  --ngs-notification-bg: var(--color-surface-container-low);
-  --ngs-notification-hover-bg: var(--color-surface-container);
-  --ngs-notification-is-unread-bg: var(--color-primary-200);
-  --ngs-notification-is-unread-hover-bg: var(--color-primary-300);
+  --ngs-notification-bg: var(--ngs-color-surface-container-low);
+  --ngs-notification-hover-bg: var(--ngs-color-surface-container);
+  --ngs-notification-is-unread-bg: var(--ngs-color-primary-200);
+  --ngs-notification-is-unread-hover-bg: var(--ngs-color-primary-300);
 
   display: flex;
   width: 100%;
   position: relative;
-  border-radius: theme(--radius-xl);
+  border-radius: var(--ngs-radius-xl);
   gap: var(--ngs-notification-gap);
   padding: var(--ngs-notification-padding);
 
@@ -62,6 +62,6 @@
 }
 
 :host-context(html.dark) {
-  --ngs-notification-is-unread-bg: var(--color-neutral-950);
-  --ngs-notification-is-unread-hover-bg: var(--color-neutral-900);
+  --ngs-notification-is-unread-bg: var(--ngs-color-neutral-950);
+  --ngs-notification-is-unread-hover-bg: var(--ngs-color-neutral-900);
 }

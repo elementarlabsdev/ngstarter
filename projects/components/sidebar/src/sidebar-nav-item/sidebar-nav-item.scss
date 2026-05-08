@@ -51,10 +51,10 @@
     min-width: --spacing(5);
     align-items: center;
     justify-content: center;
-    font-size: theme(--text-2xs);
-    padding: 0 --spacing(1.5);
-    background: var(--color-primary);
-    color: var(--color-on-primary);
+    font-size: var(--ngs-font-size-xs);
+    padding: 0 --spacing(2);
+    background: var(--ngs-color-primary);
+    color: var(--ngs-color-on-primary);
   }
 
   .icon {
@@ -100,6 +100,24 @@
     .icon {
       color: var(--ngs-sidebar-nav-item-hover-icon-color);
     }
+  }
+}
+
+:host-context(.ngs-sidebar.compact:not(:hover)),
+:host-context(.ngs-sidenav.is-collapsed:not(:hover)) {
+  .inner {
+    justify-content: center;
+    padding: 0;
+    gap: 0;
+  }
+
+  .text,
+  .badge {
+    display: none;
+  }
+
+  .icon {
+    width: var(--ngs-sidebar-nav-item-icon-width);
   }
 }
 

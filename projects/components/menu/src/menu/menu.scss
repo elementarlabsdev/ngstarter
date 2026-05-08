@@ -5,9 +5,9 @@
 }
 
 .ngs-menu-panel {
-  background: var(--ngs-menu-background, var(--dropdown-bg));
-  box-shadow: var(--ngs-menu-shadow, var(--dropdown-shadow));
-  border-radius: var(--ngs-menu-border-radius, var(--dropdown-radius));
+  background: var(--ngs-menu-background, var(--ngs-dropdown-bg));
+  box-shadow: var(--ngs-menu-shadow, var(--ngs-dropdown-shadow));
+  border-radius: var(--ngs-menu-border-radius, var(--ngs-dropdown-radius));
   max-height: var(--ngs-menu-max-height, 90vh);
 
   @media (min-height: 640px) {
@@ -16,7 +16,7 @@
 
   min-width: var(--ngs-menu-min-width, 112px);
   max-width: var(--ngs-menu-max-width, 280px);
-  outline: var(--ngs-menu-border, var(--dropdown-border));
+  outline: var(--ngs-menu-border, var(--ngs-dropdown-border));
   overflow: auto;
   animation-name: ngs-menu-panel-showing;
   animation-duration: 150ms;

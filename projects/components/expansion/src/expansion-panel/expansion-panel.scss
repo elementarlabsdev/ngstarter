@@ -1,15 +1,15 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-expansion-panel-background: var(--color-surface);
-  --ngs-expansion-panel-color: var(--color-on-surface);
-  --ngs-expansion-panel-divider-color: var(--color-subtle);
-  --ngs-expansion-panel-disabled-color: var(--color-neutral-300);
+  --ngs-expansion-panel-background: var(--ngs-color-surface);
+  --ngs-expansion-panel-color: var(--ngs-color-on-surface);
+  --ngs-expansion-panel-divider-color: var(--ngs-color-subtle);
+  --ngs-expansion-panel-disabled-color: var(--ngs-color-neutral-300);
   --ngs-expansion-panel-header-height: --spacing(14);
   --ngs-expansion-panel-header-expanded-height: --spacing(16);
   --ngs-expansion-panel-content-padding: 3px 24px 16px 24px;
-  --ngs-expansion-panel-radius: theme(--radius-xl);
-  --ngs-expansion-panel-description-color: var(--color-on-surface-variant);
+  --ngs-expansion-panel-radius: var(--ngs-radius-xl);
+  --ngs-expansion-panel-description-color: var(--ngs-color-on-surface-variant);
 
   margin-bottom: -1px;
 

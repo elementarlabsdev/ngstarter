@@ -14,7 +14,8 @@
   }
 }
 
-:host-context(.ngs-sidebar.compact:not(:hover)) {
+:host-context(.ngs-sidebar.compact:not(:hover)),
+:host-context(.ngs-sidenav.is-collapsed:not(:hover)) {
   padding: var(--ngs-sidebar-header-compact-padding);
   display: flex;
   align-items: center;
@@ -34,7 +35,8 @@
   }
 }
 
-:host-context(.ngs-sidebar.compact:hover) {
+:host-context(.ngs-sidebar.compact:hover),
+:host-context(.ngs-sidenav.is-collapsed:hover) {
   ::ng-deep {
     .ngs-sidebar-compact-view-mode {
       display: none;

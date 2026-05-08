@@ -1,15 +1,15 @@
 @reference 'tailwindcss';
 
 :host {
-  background: var(--color-surface-container);
+  background: var(--ngs-color-surface-container);
   border-radius: --spacing(3);
   padding: --spacing(1);
-  box-shadow: theme(--shadow-lg);
+  box-shadow: var(--ngs-shadow-lg);
 
   button {
     &.is-active {
-      background: var(--color-surface-container-highest);
-      color: var(--color-primary);
+      background: var(--ngs-color-surface-container-highest);
+      color: var(--ngs-color-primary);
     }
   }
 }

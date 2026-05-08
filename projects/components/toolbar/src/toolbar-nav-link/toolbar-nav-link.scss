@@ -6,18 +6,18 @@
   padding: 0 --spacing(3);
   height: 100%;
   cursor: pointer;
-  color: var(--color-on-surface-variant);
+  color: var(--ngs-color-on-surface-variant);
   transition: color 0.2s;
   text-decoration: none;
   white-space: nowrap;
 
   &:hover {
-    color: var(--color-primary);
+    color: var(--ngs-color-primary);
     text-decoration: underline;
   }
 
   &.ngs-toolbar-nav-link-active {
-    color: var(--color-primary);
+    color: var(--ngs-color-primary);
     font-weight: 500;
   }
 }

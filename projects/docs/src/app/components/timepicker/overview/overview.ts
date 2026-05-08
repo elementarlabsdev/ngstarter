@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { Page } from '@meta/page/page';
-import { PageContentDirective } from '@meta/page/page-content.directive';
 import { Playground } from '@meta/playground/playground';
 import {
   BasicTimepickerExample
@@ -14,19 +12,15 @@ import {
 import {
   TimepickerIntervalExample
 } from '../_examples/timepicker-interval-example/timepicker-interval-example';
-import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   selector: 'app-overview',
   imports: [
-    Page,
-    PageContentDirective,
     Playground,
     BasicTimepickerExample,
     TimepickerWithDatepickerExample,
     TimepickerCustomToggleIconExample,
-    TimepickerIntervalExample,
-    PageTitleDirective
+    TimepickerIntervalExample
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'

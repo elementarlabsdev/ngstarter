@@ -2,12 +2,12 @@
 
 :host {
   display: block;
-  background: var(--color-neutral-200);
+  background: var(--ngs-color-neutral-200);
   padding: --spacing(1.5) --spacing(2);
   font-weight: 500;
 }
 
 :host-context(html.dark) {
-  background: var(--color-neutral-300);
-  color: var(--color-neutral-900);
+  background: var(--ngs-color-neutral-300);
+  color: var(--ngs-color-neutral-900);
 }

@@ -10,26 +10,26 @@
     &:empty {
       &:before {
         content: attr(data-empty-placeholder);
-        color: var(--color-neutral-500);
+        color: var(--ngs-color-neutral-500);
       }
     }
   }
 
   &.level-1 {
     .content {
-      font-size: theme(--text-5xl);
+      font-size: 3rem;
     }
   }
 
   &.level-2 {
     .content {
-      font-size: theme(--text-4xl);
+      font-size: 2.25rem;
     }
   }
 
   &.level-3 {
     .content {
-      font-size: theme(--text-3xl);
+      font-size: 1.875rem;
     }
   }
 }

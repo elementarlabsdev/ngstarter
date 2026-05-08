@@ -2,8 +2,8 @@
 
 .ngs-progress-bar {
   --ngs-progress-bar-height: 4px;
-  --ngs-progress-bar-track-color: var(--color-surface-container-highest);
-  --ngs-progress-bar-indicator-color: var(--color-primary);
+  --ngs-progress-bar-track-color: var(--ngs-color-surface-container-highest);
+  --ngs-progress-bar-indicator-color: var(--ngs-color-primary);
   --ngs-progress-bar-animation-multiplier: 1;
 
   display: block;

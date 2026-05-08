@@ -37,6 +37,6 @@
     display: flex;
     align-items: center;
     gap: --spacing(2.5);
-    font-size: theme(--text-sm);
+    font-size: var(--ngs-font-size-sm);
   }
 }

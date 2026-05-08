@@ -47,10 +47,10 @@
     align-items: center;
     justify-content: center;
     min-width: --spacing(5);
-    font-size: theme(--text-2xs);
-    padding: 0 --spacing(1.5);
-    background: var(--color-primary);
-    color: var(--color-on-primary);
+    font-size: var(--ngs-font-size-xs);
+    padding: 0 --spacing(2);
+    background: var(--ngs-color-primary);
+    color: var(--ngs-color-on-primary);
   }
 
   .icon {
@@ -72,8 +72,8 @@
     justify-content: center;
     transition: transform 200ms ease;
     color: var(--ngs-sidebar-nav-group-arrow-color);
-    width: --spacing(7);
-    height: --spacing(7);
+    width: 1.75rem;
+    height: 1.75rem;
     flex: none;
 
     &:empty {
@@ -112,7 +112,12 @@
   }
 }
 
-:host-context(.ngs-sidebar.compact) {
+:host-context(.ngs-sidebar.compact),
+:host-context(.ngs-sidenav.is-collapsed:not(:hover)) {
+  .text {
+    display: none;
+  }
+
   .text {
     ::ng-deep {
       .ngs-sidebar-full-view-mode {
@@ -124,10 +129,25 @@
       }
     }
   }
+
+  justify-content: center;
+  padding: 0;
+  gap: 0;
+
+  > .flex,
+  .badge,
+  .arrow {
+    display: none;
+  }
 }
 
 
-:host-context(.ngs-sidebar.compact:hover) {
+:host-context(.ngs-sidebar.compact:hover),
+:host-context(.ngs-sidenav.is-collapsed:hover) {
+  .text {
+    display: block;
+  }
+
   .text {
     ::ng-deep {
       .ngs-sidebar-compact-view-mode {
@@ -138,5 +158,13 @@
         display: block;
       }
     }
+  }
+
+  justify-content: flex-start;
+  padding: var(--ngs-sidebar-nav-item-padding);
+  gap: var(--ngs-sidebar-nav-item-gap);
+
+  > .flex {
+    display: flex;
   }
 }
