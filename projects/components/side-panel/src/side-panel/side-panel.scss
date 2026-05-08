@@ -6,8 +6,8 @@
   --ngs-side-panel-offset-y: 0;
   --ngs-side-panel-content-bg: none;
   --ngs-side-panel-transition-timing: 0.2s;
-  --ngs-side-panel-button-active-bg: var(--nav-item-active-bg);
-  --ngs-side-panel-button-active-color: var(--nav-item-active-color);
+  --ngs-side-panel-button-active-bg: var(--ngs-nav-item-active-bg);
+  --ngs-side-panel-button-active-color: var(--ngs-nav-item-active-color);
 
   display: block;
   position: relative;

@@ -7,12 +7,12 @@
   justify-content: center;
   flex-direction: column;
   cursor: pointer;
-  gap: --spacing(0.5);
+  gap: var(--ngs-rail-nav-item-gap);
   color: var(--ngs-rail-nav-bg-item-color);
 
   .icon {
-    padding: --spacing(1.5) --spacing(4);
-    border-radius: calc(infinity * 1px);
+    padding: var(--ngs-rail-nav-item-icon-padding);
+    border-radius: var(--ngs-rail-nav-item-icon-radius);
     color: var(--ngs-rail-nav-bg-item-icon-color);
     display: flex;
     align-items: center;
@@ -59,6 +59,6 @@
   }
 
   .label {
-    font-size: var(--text-tiny);
+    font-size: var(--ngs-rail-nav-label-font-size);
   }
 }

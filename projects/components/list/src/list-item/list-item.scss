@@ -12,11 +12,11 @@
   text-decoration: none;
   gap: var(--ngs-list-item-gap);
   border-radius: var(--ngs-list-item-radius);
-  color: var(--nav-item-color);
+  color: var(--ngs-list-item-color);
   font-size: var(--ngs-list-item-font-size);
 
   &:not(.is-active):hover {
-    color: var(--nav-item-hover-color);
+    color: var(--ngs-list-item-hover-color);
     background: var(--ngs-list-item-hover-bg);
   }
 

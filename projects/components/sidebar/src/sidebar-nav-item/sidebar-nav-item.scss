@@ -47,12 +47,12 @@
     display: inline-flex;
     flex: none;
     border-radius: calc(infinity * 1px);
-    height: --spacing(5);
-    min-width: --spacing(5);
+    height: var(--ngs-nav-badge-size);
+    min-width: var(--ngs-nav-badge-size);
     align-items: center;
     justify-content: center;
     font-size: var(--ngs-font-size-xs);
-    padding: 0 --spacing(2);
+    padding: var(--ngs-nav-badge-padding);
     background: var(--ngs-color-primary);
     color: var(--ngs-color-on-primary);
   }

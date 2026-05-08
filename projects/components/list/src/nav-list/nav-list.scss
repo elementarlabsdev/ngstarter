@@ -2,15 +2,18 @@
 
 :host {
   --ngs-list-padding: --spacing(3) 0;
-  --ngs-list-item-padding: --spacing(1) --spacing(3);
-  --ngs-list-item-min-height: --spacing(12);
-  --ngs-list-item-hover-bg: var(--nav-item-hover-bg);
-  --ngs-list-item-active-bg: var(--nav-item-active-bg);
+  --ngs-list-item-padding: var(--ngs-nav-item-padding);
+  --ngs-list-item-min-height: var(--ngs-nav-item-height);
+  --ngs-list-item-hover-bg: var(--ngs-nav-item-hover-bg);
+  --ngs-list-item-active-bg: var(--ngs-nav-item-active-bg);
+  --ngs-list-item-active-color: var(--ngs-nav-item-active-color);
   --ngs-list-item-disabled-opacity: 0.38;
   --ngs-list-item-title-font-size: 1rem;
-  --ngs-list-item-font-size: var(--nav-item-font-size);
-  --ngs-list-item-gap: --spacing(2);
-  --ngs-list-item-radius: var(--nav-item-radius);
+  --ngs-list-item-font-size: var(--ngs-nav-item-font-size);
+  --ngs-list-item-gap: var(--ngs-nav-item-gap);
+  --ngs-list-item-radius: var(--ngs-nav-item-radius);
+  --ngs-list-item-color: var(--ngs-nav-item-color);
+  --ngs-list-item-hover-color: var(--ngs-nav-item-hover-color);
 
   display: block;
   padding: var(--ngs-list-padding);

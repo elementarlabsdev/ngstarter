@@ -6,12 +6,12 @@
   --ngs-tab-panel-item-height: --spacing(15);
   --ngs-tab-panel-item-padding: --spacing(2);
   --ngs-tab-panel-item-gap: --spacing(1);
-  --ngs-tab-panel-item-color: var(--nav-item-color);
-  --ngs-tab-panel-item-hover-bg: var(--nav-item-hover-bg);
-  --ngs-tab-panel-item-hover-color: var(--nav-item-hover-color);
-  --ngs-tab-panel-item-active-bg: var(--nav-item-active-bg);
-  --ngs-tab-panel-item-active-color: var(--nav-item-active-color);
-  --ngs-tab-panel-item-border-radius: var(--ngs-radius-xl);
+  --ngs-tab-panel-item-color: var(--ngs-nav-item-color);
+  --ngs-tab-panel-item-hover-bg: var(--ngs-nav-item-hover-bg);
+  --ngs-tab-panel-item-hover-color: var(--ngs-nav-item-hover-color);
+  --ngs-tab-panel-item-active-bg: var(--ngs-nav-item-active-bg);
+  --ngs-tab-panel-item-active-color: var(--ngs-nav-item-active-color);
+  --ngs-tab-panel-item-border-radius: var(--ngs-nav-item-radius);
   --ngs-tab-panel-aside-width: --spacing(75);
   --ngs-tab-panel-nav-padding: 0;
   --ngs-tab-panel-nav-gap: --spacing(3);

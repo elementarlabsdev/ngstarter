@@ -33,12 +33,12 @@
     display: inline-flex;
     flex: none;
     border-radius: calc(infinity * 1px);
-    height: --spacing(5);
-    min-width: --spacing(5);
+    height: var(--ngs-nav-badge-size);
+    min-width: var(--ngs-nav-badge-size);
     align-items: center;
     justify-content: center;
     font-size: var(--ngs-font-size-xs);
-    padding: 0 --spacing(1.5);
+    padding: var(--ngs-nav-badge-padding);
     font-weight: bold;
   }
 
@@ -70,8 +70,8 @@
     justify-content: center;
     transition: transform 200ms ease;
     flex: none;
-    width: --spacing(7);
-    height: --spacing(7);
+    width: var(--ngs-nav-arrow-size);
+    height: var(--ngs-nav-arrow-size);
 
     &:empty {
       display: none;

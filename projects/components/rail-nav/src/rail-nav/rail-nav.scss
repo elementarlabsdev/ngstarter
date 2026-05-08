@@ -2,17 +2,21 @@
 
 :host {
   --ngs-rail-nav-bg: none;
-  --ngs-rail-nav-bg-item-icon-is-active-bg: var(--nav-item-active-bg);
-  --ngs-rail-nav-bg-item-icon-is-active-active-bg: var(--nav-item-active-bg);
-  --ngs-rail-nav-bg-item-icon-hover-bg: var(--nav-item-hover-bg);
-  --ngs-rail-nav-bg-item-icon-active-bg: var(--nav-item-hover-bg);
-  --ngs-rail-nav-bg-item-icon-color: var(--nav-item-icon-color);
-  --ngs-rail-nav-bg-item-icon-is-active-color: var(--nav-item-active-icon-color);
-  --ngs-rail-nav-bg-item-active-color: var(--nav-item-active-color);
-  --ngs-rail-nav-bg-item-color: var(--nav-item-color);
+  --ngs-rail-nav-bg-item-icon-is-active-bg: var(--ngs-nav-item-active-bg);
+  --ngs-rail-nav-bg-item-icon-is-active-active-bg: var(--ngs-nav-item-active-bg);
+  --ngs-rail-nav-bg-item-icon-hover-bg: var(--ngs-nav-item-hover-bg);
+  --ngs-rail-nav-bg-item-icon-active-bg: var(--ngs-nav-item-hover-bg);
+  --ngs-rail-nav-bg-item-icon-color: var(--ngs-nav-item-icon-color);
+  --ngs-rail-nav-bg-item-icon-is-active-color: var(--ngs-nav-item-active-icon-color);
+  --ngs-rail-nav-bg-item-active-color: var(--ngs-nav-item-active-color);
+  --ngs-rail-nav-bg-item-color: var(--ngs-nav-item-color);
   --ngs-rail-nav-width: --spacing(24);
-  --ngs-rail-nav-gap: --spacing(3);
+  --ngs-rail-nav-gap: var(--ngs-nav-items-gap);
   --ngs-rail-nav-padding: --spacing(0);
+  --ngs-rail-nav-label-font-size: var(--ngs-font-size-xs);
+  --ngs-rail-nav-item-gap: --spacing(0.5);
+  --ngs-rail-nav-item-icon-padding: --spacing(1.5) --spacing(4);
+  --ngs-rail-nav-item-icon-radius: var(--ngs-radius-full);
 
   display: flex;
   flex-direction: column;

@@ -13,7 +13,7 @@
   padding: var(--ngs-navigation-heading-padding);
   margin-bottom: var(--ngs-navigation-heading-margin-bottom);
   text-align: var(--ngs-navigation-heading-text-align);
-  height: --spacing(6);
+  height: var(--ngs-nav-heading-height);
   align-items: center;
 
   &:first-child {
