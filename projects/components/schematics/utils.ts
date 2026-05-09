@@ -67,6 +67,7 @@ export function setupNgStarterComponents(
   context: SchematicContext,
   options: SetupOptions
 ): void {
+  validateAngularVersion(tree);
   updatePackageJson(tree, options.updateExistingDependencies);
   setupTailwindFiles(tree, context, options.project);
 
@@ -189,6 +190,60 @@ function setupTailwindFiles(tree: Tree, context: SchematicContext, projectName?:
   writeJson(tree, ANGULAR_JSON_PATH, workspace as JsonObject);
 }
 
+function validateAngularVersion(tree: Tree): void {
+  const projectPackageJson = readJson<JsonObject>(tree, PACKAGE_JSON_PATH);
+  const requiredAngularVersion = packageJson.peerDependencies?.['@angular/core'];
+
+  if (!requiredAngularVersion) {
+    return;
+  }
+
+  const projectAngularVersion = findDependencyVersion(projectPackageJson, '@angular/core');
+
+  if (!projectAngularVersion) {
+    throw new SchematicsException(
+      `Required dependency "@angular/core" was not found in "${PACKAGE_JSON_PATH}".`
+    );
+  }
+
+  const supportedMajors = getMajorVersions(requiredAngularVersion);
+  const projectMajor = getMajorVersion(projectAngularVersion);
+
+  if (supportedMajors.length === 0 || projectMajor === undefined) {
+    throw new SchematicsException(
+      `Could not verify Angular compatibility. Required: ${requiredAngularVersion}, found: ${projectAngularVersion}.`
+    );
+  }
+
+  if (!supportedMajors.includes(projectMajor)) {
+    throw new SchematicsException(
+      `${packageJson.name} requires Angular ${requiredAngularVersion}, but the project uses @angular/core ${projectAngularVersion}. ` +
+        `Run "ng update @angular/core@${supportedMajors[0]} @angular/cli@${supportedMajors[0]}" before adding ${packageJson.name}.`
+    );
+  }
+}
+
+function findDependencyVersion(projectPackageJson: JsonObject, name: string): string | undefined {
+  const section = findDependencySection(projectPackageJson, name);
+  const version = section ? projectPackageJson[section]?.[name] : undefined;
+  return typeof version === 'string' ? version : undefined;
+}
+
+function getMajorVersions(versionRange: string): number[] {
+  const majors = new Set<number>();
+  const matches = versionRange.matchAll(/(\d+)\.\d+\.\d+/g);
+
+  for (const match of matches) {
+    majors.add(Number(match[1]));
+  }
+
+  return [...majors].sort((a, b) => a - b);
+}
+
+function getMajorVersion(versionRange: string): number | undefined {
+  return getMajorVersions(versionRange)[0];
+}
+
 function createPostcssConfig(tree: Tree, context: SchematicContext): void {
   const hasPostcssConfig = POSTCSS_CONFIGS.some(path => tree.exists(path));
 
@@ -236,14 +291,43 @@ function getBuildOptions(project: WorkspaceProject): JsonObject {
 
 function resolveGlobalStylePath(project: WorkspaceProject, buildOptions: JsonObject): string {
   const styles = Array.isArray(buildOptions['styles']) ? buildOptions['styles'] : [];
-  const firstStringStyle = styles.find((style: unknown): style is string => typeof style === 'string');
+  const firstStylePath = styles.reduce<string | undefined>((result, style) => {
+    if (result) {
+      return result;
+    }
 
-  if (firstStringStyle) {
-    return normalizeWorkspacePath(firstStringStyle);
+    if (typeof style === 'string') {
+      return style;
+    }
+
+    if (style && typeof style === 'object' && typeof (style as JsonObject)['input'] === 'string') {
+      return (style as JsonObject)['input'];
+    }
+
+    return undefined;
+  }, undefined);
+
+  if (firstStylePath) {
+    const stylePath = normalizeWorkspacePath(firstStylePath);
+    assertScssStylePath(stylePath);
+    return stylePath;
   }
 
   const sourceRoot = project.sourceRoot || joinWorkspacePath(project.root || '', 'src');
-  return normalizeWorkspacePath(joinWorkspacePath(sourceRoot, 'styles.scss'));
+  const stylePath = normalizeWorkspacePath(joinWorkspacePath(sourceRoot, 'styles.scss'));
+  assertScssStylePath(stylePath);
+  return stylePath;
+}
+
+function assertScssStylePath(stylePath: string): void {
+  if (stylePath.endsWith('.scss')) {
+    return;
+  }
+
+  throw new SchematicsException(
+    `${packageJson.name} supports only SCSS global styles. The selected project uses "${stylePath}". ` +
+      'Switch the project global style file to styles.scss and retry.'
+  );
 }
 
 function ensureGlobalStyleFile(tree: Tree, stylePath: string): void {
