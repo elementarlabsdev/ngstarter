@@ -1,0 +1,53 @@
+<section class="mb-5 flex flex-wrap items-center justify-between gap-6">
+  <h2 class="m-0 text-[1.45rem]">Smart spending alerts</h2>
+  <div class="flex flex-wrap justify-end gap-3">
+    <label class="flex h-[var(--ngs-button-height)] min-w-[min(24rem,100%)] items-center gap-3 rounded-full border border-[var(--ngs-color-border)] bg-[var(--minto-card-bg)] px-5 text-[var(--minto-muted-text)]">
+      <ngs-icon name="fluent:search-24-regular" />
+      <input class="w-full border-0 bg-transparent text-[var(--ngs-color-on-surface)] outline-0" type="search" placeholder="Search..." />
+    </label>
+    <button ngsButton="outlined">
+      Sort by: <strong>Urgency</strong>
+      <ngs-icon name="fluent:chevron-down-24-regular" />
+    </button>
+  </div>
+</section>
+
+<ngs-card appearance="outlined" class="overflow-hidden [--ngs-card-bg:var(--minto-card-shell-bg)] [--ngs-card-border-color:var(--minto-card-border)] [--ngs-card-border-radius:var(--minto-card-radius)]">
+  <div class="px-6 py-5 font-bold text-[var(--minto-muted-text)]">Pocket #003</div>
+  <div class="grid min-h-78 grid-cols-1 gap-6 rounded-[var(--minto-card-radius)] border border-[var(--minto-card-border)] bg-[var(--minto-card-bg)] px-6 py-8 xl:grid-cols-[minmax(0,1fr)_auto]">
+    <div class="flex items-center gap-5">
+      <span class="inline-flex size-18 items-center justify-center rounded-full bg-[var(--minto-orange)] text-3xl text-white">
+        <ngs-icon name="fluent:beach-24-filled" />
+      </span>
+      <div>
+        <h3 class="m-0 text-[1.45rem] leading-tight">Pocket #003</h3>
+        <p class="m-0 text-[var(--minto-muted-text)]">Trip</p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-start justify-start gap-3 xl:justify-end">
+      <button ngsButton="outlined">
+        <ngs-icon name="fluent:person-add-24-filled" />
+        Add friend
+      </button>
+      <button ngsButton="outlined">
+        <ngs-icon name="fluent:eye-24-filled" />
+        Review
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:col-span-2 xl:grid-cols-4">
+      @for (stat of content(); track stat.label) {
+        <div class="min-h-24 rounded-[var(--ngs-radius-xl)] bg-[var(--minto-soft-surface)] px-6 py-5">
+          <span class="mb-3 flex items-center gap-2 text-[var(--minto-muted-text)]">
+            <ngs-icon [name]="stat.icon" />
+            {{ stat.label }}
+          </span>
+          <strong class="text-[1.2rem]">{{ stat.value }}</strong>
+        </div>
+      }
+    </div>
+
+    <p class="m-0 text-[var(--minto-muted-text)] xl:col-span-2">Transaction affected by trend</p>
+  </div>
+</ngs-card>

@@ -1,0 +1,30 @@
+<ngs-card appearance="outlined" class="h-full overflow-hidden [--ngs-card-bg:var(--minto-card-shell-bg)] [--ngs-card-border-color:var(--minto-card-border)] [--ngs-card-border-radius:var(--minto-card-radius)]">
+  <div class="px-6 py-5 font-bold text-[var(--minto-muted-text)]">Summary and growth</div>
+  <div class="min-h-86 rounded-[var(--minto-card-radius)] border border-[var(--minto-card-border)] bg-[var(--minto-card-bg)] px-6 py-7">
+    <div class="mb-14 flex flex-wrap items-start justify-between gap-4">
+      <div>
+        <span class="mb-2 block text-[var(--minto-muted-text)]">Total balance</span>
+        <h2 class="text-[1.75rem] leading-tight">{{ content().totalBalance }}</h2>
+      </div>
+      <div class="flex flex-wrap justify-end gap-3">
+        <button ngsButton="outlined">
+          <ngs-icon name="fluent:share-24-regular" />
+          Share
+        </button>
+        <button ngsButton="outlined">
+          <ngs-icon name="fluent:settings-24-regular" />
+          Manage
+        </button>
+      </div>
+    </div>
+
+    <div class="mb-4 flex items-center justify-between gap-4">
+      <strong>Monthly saving goal</strong>
+      <span><strong>{{ content().goalSaved }}</strong> / {{ content().goalTotal }} ({{ content().goalPercent }})</span>
+    </div>
+    <div class="mb-5 h-10 overflow-hidden rounded-full bg-[var(--minto-progress-track)]" aria-label="Monthly saving progress">
+      <span class="block h-full bg-[var(--ngs-color-primary)]" [style.width]="content().goalWidth"></span>
+    </div>
+    <p class="m-0 text-[var(--minto-muted-text)]">Saving goal set for <strong>{{ content().pocketName }}</strong></p>
+  </div>
+</ngs-card>

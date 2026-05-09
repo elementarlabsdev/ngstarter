@@ -13,6 +13,11 @@ const routes: Routes = [
     title: 'Typography'
   },
   {
+    path: 'playground',
+    loadComponent: () => import('./playground/playground').then(c => c.ThemePlayground),
+    title: 'Theme Playground'
+  },
+  {
     path: 'customize-theme',
     loadComponent: () => import('./customize/customize').then(c => c.Customize),
     title: 'Customize Theme'

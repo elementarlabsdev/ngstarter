@@ -1,0 +1,24 @@
+<section class="grid grid-cols-1 gap-4 lg:grid-cols-2 min-[1500px]:grid-cols-4" aria-label="Wallet pockets">
+  @for (wallet of content(); track wallet.title) {
+    <ngs-card appearance="outlined" class="overflow-hidden [--ngs-card-bg:var(--minto-card-shell-bg)] [--ngs-card-border-color:var(--minto-card-border)] [--ngs-card-border-radius:var(--minto-card-radius)]">
+      <div class="px-6 py-5 font-bold text-[var(--minto-muted-text)]">{{ wallet.title }}</div>
+      <div class="grid min-h-50 content-start rounded-[var(--minto-card-radius)] border border-[var(--minto-card-border)] bg-[var(--minto-card-bg)] px-6 py-7">
+        <span class="mb-2 text-[var(--minto-muted-text)]">Balance</span>
+        <div class="mb-8 flex items-center justify-between gap-3">
+          <strong class="text-[clamp(1.65rem,2vw,2rem)] leading-none">{{ wallet.balance }}</strong>
+          <span class="flex items-center gap-1 text-[var(--minto-muted-text)]">
+            @if (wallet.trend === 'up') {
+              <ngs-icon [name]="wallet.trendIcon" class="text-[var(--ngs-color-primary)]" />
+            } @else {
+              <ngs-icon [name]="wallet.trendIcon" class="text-[var(--minto-danger)]" />
+            }
+            {{ wallet.delta }}
+          </span>
+        </div>
+        <a class="w-max font-extrabold text-[var(--ngs-color-on-surface)] no-underline" href="#" aria-label="View wallet details">
+          View details ->
+        </a>
+      </div>
+    </ngs-card>
+  }
+</section>

@@ -132,6 +132,10 @@
     background: var(--ngs-button-hover-bg);
   }
 
+  &:focus-visible {
+    box-shadow: 0 0 0 3px var(--ngs-state-focus-ring);
+  }
+
   &.is-reverse {
     .icon {
       left: auto;
@@ -215,18 +219,18 @@
 
   &.ngs-button-disabled {
     cursor: default;
-    --ngs-button-bg: color-mix(in srgb, var(--ngs-color-on-surface), transparent 88%) !important;
-    --ngs-button-color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%) !important;
-    --ngs-button-hover-bg: color-mix(in srgb, var(--ngs-color-on-surface), transparent 88%) !important;
+    --ngs-button-bg: var(--ngs-state-disabled-bg) !important;
+    --ngs-button-color: var(--ngs-state-disabled-color) !important;
+    --ngs-button-hover-bg: var(--ngs-state-disabled-bg) !important;
 
     &.ngs-button-text, &.ngs-button-outlined {
       --ngs-button-bg: transparent !important;
       --ngs-button-hover-bg: transparent !important;
-      --ngs-button-color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%) !important;
+      --ngs-button-color: var(--ngs-state-disabled-color) !important;
     }
 
     &.ngs-button-outlined {
-      border-color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 88%) !important;
+      border-color: var(--ngs-state-disabled-border) !important;
     }
 
     &:hover {

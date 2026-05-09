@@ -23,17 +23,17 @@
     cursor: default;
 
     .ngs-form-field-container {
-      background: color-mix(in srgb, var(--ngs-color-on-surface), transparent 95%);
-      border-color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 90%);
+      background: var(--ngs-state-disabled-bg);
+      border-color: var(--ngs-state-disabled-border);
     }
 
     .ngs-form-field-label {
-      color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%);
+      color: var(--ngs-state-disabled-color);
     }
 
     ::ng-deep {
       input {
-        color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%);
+        color: var(--ngs-state-disabled-color);
       }
     }
   }
@@ -41,7 +41,7 @@
   &.ngs-form-field-focused {
     .ngs-form-field-container {
       border-color: var(--ngs-field-border-focus-color);
-      box-shadow: 0 0 0 1px var(--ngs-field-border-focus-color);
+      box-shadow: 0 0 0 1px var(--ngs-field-border-focus-color), 0 0 0 3px var(--ngs-state-focus-ring);
     }
 
     .ngs-form-field-label {

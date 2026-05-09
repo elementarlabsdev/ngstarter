@@ -154,6 +154,12 @@ export class App implements OnInit {
           name: 'Typography',
           link: '/theme/typography'
         },
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Playground',
+          link: '/theme/playground'
+        },
         // {
         //   type: 'link',
         //   name: 'Customize Theme',

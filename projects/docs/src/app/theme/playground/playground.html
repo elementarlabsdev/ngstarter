@@ -1,0 +1,201 @@
+<app-page>
+  <h1 appPageTitle>Theme Playground</h1>
+
+  <div appPageContent>
+    <section class="theme-playground">
+      <ngs-card appearance="outlined" class="control-panel" aria-label="Theme controls">
+        <ngs-card-content>
+          <div class="control-grid">
+            <div class="control-group">
+              <div class="control-label">Theme</div>
+              <div class="segmented-control">
+                @for (item of themes; track item) {
+                  <button type="button" [ngsButton]="theme() === item ? 'filled' : 'tonal'" (click)="setTheme(item)">
+                    {{ item }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label">Scheme</div>
+              <div class="segmented-control">
+                @for (item of schemes; track item) {
+                  <button type="button" [ngsButton]="colorScheme() === item ? 'filled' : 'tonal'" (click)="setColorScheme(item)">
+                    {{ item }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label">Density</div>
+              <div class="segmented-control">
+                @for (item of densities; track item) {
+                  <button type="button" [ngsButton]="density() === item ? 'filled' : 'tonal'" (click)="setDensity(item)">
+                    {{ item }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label">Radius</div>
+              <div class="segmented-control">
+                @for (item of radii; track item) {
+                  <button type="button" [ngsButton]="radius() === item ? 'filled' : 'tonal'" (click)="setRadius(item)">
+                    {{ item }}
+                  </button>
+                }
+              </div>
+            </div>
+          </div>
+        </ngs-card-content>
+      </ngs-card>
+
+      <div class="preview-grid">
+        <ngs-card appearance="outlined" class="preview-card">
+          <ngs-card-header>
+            <ngs-card-title>Actions</ngs-card-title>
+            <ngs-card-subtitle>Button, icon button, badge</ngs-card-subtitle>
+          </ngs-card-header>
+
+          <ngs-card-content>
+            <div class="button-row">
+              <button ngsButton="filled" type="button">
+                <ngs-icon name="fluent:checkmark-24-regular" />
+                Filled
+              </button>
+              <button ngsButton="tonal" type="button">Tonal</button>
+              <button ngsButton="outlined" type="button">Outlined</button>
+              <button ngsButton="text" type="button">Text</button>
+              <button ngsButton="filled" type="button" disabled>Disabled</button>
+              <button ngsIconButton type="button" aria-label="More actions" ngsBadge="3">
+                <ngs-icon name="fluent:more-horizontal-24-regular" />
+              </button>
+            </div>
+          </ngs-card-content>
+
+          <ngs-card-actions align="end">
+            <button ngsButton="text" type="button">Cancel</button>
+            <button ngsButton="filled" type="button">Apply</button>
+          </ngs-card-actions>
+        </ngs-card>
+
+        <ngs-card appearance="outlined" class="preview-card">
+          <ngs-card-header>
+            <ngs-card-title>Form Controls</ngs-card-title>
+            <ngs-card-subtitle>Form field, input, select, checkbox, toggle</ngs-card-subtitle>
+          </ngs-card-header>
+
+          <ngs-card-content>
+            <div class="form-stack">
+              <ngs-form-field subscriptHiddenIfEmpty>
+                <ngs-label>Email</ngs-label>
+                <input ngsInput value="alex@ngstarter.dev" />
+              </ngs-form-field>
+
+              <ngs-form-field>
+                <ngs-label>Workspace</ngs-label>
+                <ngs-select value="analytics">
+                  <ngs-option value="analytics">Product analytics</ngs-option>
+                  <ngs-option value="operations">Operations</ngs-option>
+                  <ngs-option value="finance">Finance</ngs-option>
+                </ngs-select>
+                <ngs-hint>Uses the real select overlay.</ngs-hint>
+              </ngs-form-field>
+
+              <div class="inline-controls">
+                <ngs-checkbox [checked]="true">Remember filters</ngs-checkbox>
+                <ngs-slide-toggle [checked]="true">Live updates</ngs-slide-toggle>
+              </div>
+            </div>
+          </ngs-card-content>
+        </ngs-card>
+
+        <ngs-card appearance="outlined" class="preview-card is-wide">
+          <ngs-card-header>
+            <ngs-card-title>Data Surface</ngs-card-title>
+            <ngs-card-subtitle>Native table and alert variants</ngs-card-subtitle>
+          </ngs-card-header>
+
+          <ngs-card-content>
+            <div class="data-stack">
+              <ngs-alert variant="informative">
+                <ngs-icon name="fluent:info-24-regular" ngsAlertIcon />
+                <ngs-alert-title>Theme tokens applied</ngs-alert-title>
+                The table below is rendered by the project table directive.
+              </ngs-alert>
+
+              <div class="table-shell">
+                <table ngs-native-table>
+                  <thead>
+                    <tr>
+                      <th>Component</th>
+                      <th>Status</th>
+                      <th>Token family</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Button</td>
+                      <td>Ready</td>
+                      <td>--ngs-button-*</td>
+                    </tr>
+                    <tr>
+                      <td>Form field</td>
+                      <td>Ready</td>
+                      <td>--ngs-field-*</td>
+                    </tr>
+                    <tr>
+                      <td>Navigation</td>
+                      <td>Ready</td>
+                      <td>--ngs-nav-item-*</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </ngs-card-content>
+        </ngs-card>
+
+        <ngs-card appearance="outlined" class="preview-card">
+          <ngs-card-header>
+            <ngs-card-title>Overlay</ngs-card-title>
+            <ngs-card-subtitle>Menu rendered by the component overlay</ngs-card-subtitle>
+          </ngs-card-header>
+
+          <ngs-card-content>
+            <div class="overlay-demo">
+              <button ngsButton="filled" type="button" [ngsMenuTriggerFor]="reportMenu">
+                <ngs-icon name="fluent:document-add-24-regular" />
+                Create report
+              </button>
+
+              <button ngsIconButton type="button" aria-label="Open more actions" [ngsMenuTriggerFor]="reportMenu">
+                <ngs-icon name="fluent:more-vertical-24-regular" />
+              </button>
+            </div>
+          </ngs-card-content>
+        </ngs-card>
+      </div>
+    </section>
+
+    <ngs-menu #reportMenu="ngsMenu">
+      <ngs-menu-heading>Report</ngs-menu-heading>
+      <button ngs-menu-item>
+        <ngs-icon name="fluent:share-24-regular" />
+        Share dashboard
+      </button>
+      <button ngs-menu-item>
+        <ngs-icon name="fluent:arrow-download-24-regular" />
+        Export CSV
+      </button>
+      <ngs-menu-divider />
+      <button ngs-menu-item disabled>
+        <ngs-icon name="fluent:lock-closed-24-regular" />
+        Archive
+      </button>
+    </ngs-menu>
+  </div>
+</app-page>

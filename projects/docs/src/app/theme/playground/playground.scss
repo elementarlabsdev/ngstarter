@@ -1,0 +1,72 @@
+:host {
+  display: block;
+}
+
+.theme-playground {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.control-panel,
+.preview-card {
+  display: block;
+}
+
+.control-grid,
+.preview-grid,
+.form-stack,
+.data-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.control-group {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.control-label {
+  color: var(--ngs-color-on-surface-variant);
+  font-size: var(--ngs-font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.segmented-control,
+.button-row,
+.inline-controls,
+.overlay-demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.button-row {
+  align-items: flex-start;
+}
+
+.table-shell {
+  overflow: auto;
+  border: 1px solid var(--ngs-color-border);
+  border-radius: var(--ngs-control-radius);
+}
+
+.table-shell table {
+  min-width: 36rem;
+}
+
+@media (width >= 900px) {
+  .control-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .preview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .preview-card.is-wide {
+    grid-column: span 2;
+  }
+}

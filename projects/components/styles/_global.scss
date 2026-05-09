@@ -30,7 +30,7 @@ html {
 .input {
   border: 1px solid var(--ngs-field-border-color);
   border-radius: var(--ngs-field-radius);
-  background: var(--ngs-form-field-bg);
+  background: var(--ngs-form-field-bg, var(--ngs-field-bg));
   padding: 0 var(--ngs-field-padding-x);
   color: var(--ngs-field-text);
   font-size: var(--ngs-field-font-size);
