@@ -1,1 +1,9 @@
-
+:host {
+  .brand-logo {
+    font-family: "Space Grotesk", var(--ngs-font-family-base);
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+}

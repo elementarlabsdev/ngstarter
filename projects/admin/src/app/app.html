@@ -10,11 +10,8 @@
       >
         <ngs-scrollbar-area scrollbarWidth="6px" class="[--ngs-scrollbar-area-thumb-bg:var(--minto-dashed-line)]">
           <aside class="flex min-h-full flex-col gap-5 bg-[var(--minto-sidebar-bg)] px-3 py-4" aria-label="Main navigation">
-            <div class="flex items-center gap-3 border-b border-dashed border-[var(--minto-dashed-line)] px-1 pb-4 text-[1.35rem] font-extrabold">
-              <span class="inline-flex size-10 flex-none items-center justify-center rounded-[var(--ngs-radius-lg)] bg-[var(--ngs-color-primary)] text-[var(--ngs-color-on-primary)] shadow-[0_10px_22px_color-mix(in_srgb,var(--ngs-color-primary),transparent_72%)]">
-                <ngs-icon name="fluent:wallet-credit-card-24-filled" />
-              </span>
-              <span>{{ brandName() }}</span>
+            <div class="brand-logo border-b border-dashed border-[var(--minto-dashed-line)] px-1 pb-4">
+              {{ brandName() }}
             </div>
 
             <ngs-navigation

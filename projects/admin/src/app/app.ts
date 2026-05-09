@@ -44,7 +44,7 @@ import { WalletPocketsGrid } from './components/dashboard/wallet-pockets-grid/wa
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
-  protected readonly brandName = signal('Mintly');
+  protected readonly brandName = signal('Minty');
 
   protected readonly primaryNav = signal<readonly NavItem[]>([
     { key: 'dashboard', label: 'Dashboard', icon: 'fluent:grid-24-filled' },
