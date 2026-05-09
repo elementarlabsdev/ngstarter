@@ -56,7 +56,7 @@ jobs:
         if: steps.changed-components.outputs.changed == 'true'
         run: |
           npm whoami --registry=https://registry.npmjs.org/
-          npm access ls-collaborators @ngstarter-ui/components --registry=https://registry.npmjs.org/ >/dev/null
+          npm access list collaborators @ngstarter-ui/components --registry=https://registry.npmjs.org/ >/dev/null
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
