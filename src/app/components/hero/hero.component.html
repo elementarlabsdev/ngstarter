@@ -1,39 +1,40 @@
 <header
-  class="py-xl md:py-[80px] px-gutter text-center flex flex-col items-center justify-center min-h-[614px] bg-surface relative overflow-hidden">
-  <div
-    class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/5 rounded-full blur-3xl -z-10"></div>
-  <div class="max-w-3xl mx-auto space-y-lg relative z-10">
-    <h1 class="font-headline-xl text-headline-xl text-on-background tracking-tight font-bold">
-      Ship Angular apps <br/> <span class="text-primary-container">faster than ever.</span>
+  class="relative flex min-h-[640px] flex-col items-center justify-center overflow-hidden bg-surface px-6 py-24 text-center sm:px-8 lg:px-10">
+  <div class="absolute inset-x-0 top-0 h-px bg-border"></div>
+  <div class="relative z-10 mx-auto max-w-3xl space-y-6">
+    <div class="mx-auto flex w-max items-center gap-2 rounded-full border border-border bg-surface-container-low px-4 py-2 text-sm font-medium text-on-surface-variant">
+      <ngs-icon name="fluent:sparkle-24-regular" class="size-4 text-primary"/>
+      Angular UI component system
+    </div>
+    <h1 class="text-4xl font-bold leading-tight tracking-normal text-on-background md:text-6xl">
+      Ship Angular apps <br/> <span class="text-primary">faster than ever.</span>
     </h1>
-    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+    <p class="mx-auto max-w-2xl text-lg leading-8 text-on-surface-variant">
       A premium collection of high-performance, strictly-typed Angular components and templates. Built with signals,
       standalone components, and modern best practices.
     </p>
-    <div class="flex flex-wrap justify-center gap-5 pt-sm">
-      <a href="https://docs.ngstarter.com" target="_blank"
-        class="bg-primary-container text-on-primary px-lg py-md rounded-lg font-label-md text-label-md hover:bg-primary transition-colors flex items-center gap-xs shadow-[0_4px_12px_rgba(9,30,66,0.08)]">
+    <div class="flex flex-wrap justify-center gap-4 pt-2 [--ngs-button-font-size:0.975rem] [--ngs-button-font-weight:700] [--ngs-button-height:3.5rem] [--ngs-button-padding-x:1.5rem] [--ngs-button-radius:var(--ngs-radius-xl)] [--ngs-control-gap:0.75rem]">
+      <a ngsButton="filled" href="https://docs.ngstarter.com" target="_blank">
         Browse Components
-        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        <ngs-icon name="fluent:arrow-right-24-regular" class="size-5"/>
       </a>
-      <button
-        class="bg-surface text-primary-container border border-outline-variant px-lg py-md rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors flex items-center gap-xs">
-        <span class="material-symbols-outlined text-sm">terminal</span>
+      <button ngsButton="outlined" type="button" (click)="copyInstallCommand()" aria-label="Copy ng add command">
+        <ngs-icon name="fluent:code-24-regular" class="size-5"/>
         ng add &#64;ngstarter-ui/components
       </button>
     </div>
-    <div class="flex items-center justify-center gap-gutter pt-xl text-on-surface-variant opacity-70">
-      <div class="flex items-center gap-xs">
-        <span class="material-symbols-outlined icon-filled">check_circle</span>
-        <span class="font-body-sm text-body-sm">Angular 21+ Ready</span>
+    <div class="flex flex-wrap items-center justify-center gap-6 pt-8 text-on-surface-variant">
+      <div class="flex items-center gap-2">
+        <ngs-icon name="fluent:checkmark-circle-24-filled" class="size-5 text-success"/>
+        <span class="text-sm">Angular 21+ Ready</span>
       </div>
-      <div class="flex items-center gap-xs">
-        <span class="material-symbols-outlined icon-filled">check_circle</span>
-        <span class="font-body-sm text-body-sm">Strictly Typed</span>
+      <div class="flex items-center gap-2">
+        <ngs-icon name="fluent:checkmark-circle-24-filled" class="size-5 text-success"/>
+        <span class="text-sm">Strictly Typed</span>
       </div>
-      <div class="flex items-center gap-xs">
-        <span class="material-symbols-outlined icon-filled">check_circle</span>
-        <span class="font-body-sm text-body-sm">Signal Based</span>
+      <div class="flex items-center gap-2">
+        <ngs-icon name="fluent:checkmark-circle-24-filled" class="size-5 text-success"/>
+        <span class="text-sm">Signal Based</span>
       </div>
     </div>
   </div>

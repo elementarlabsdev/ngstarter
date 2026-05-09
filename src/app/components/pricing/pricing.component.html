@@ -1,106 +1,101 @@
-<section id="pricing" class="py-[120px] bg-surface-container-low px-gutter">
-  <div class="max-w-5xl mx-auto">
-    <div class="text-center mb-xl">
-      <h2 class="font-headline-lg text-headline-lg text-on-background mb-sm font-bold">Transparent Pricing</h2>
-      <p class="font-body-md text-body-md text-on-surface-variant max-w-2xl mx-auto">
+<section id="pricing" class="bg-surface-container-low px-6 py-24 sm:px-8 lg:px-10 lg:py-32">
+  <div class="mx-auto max-w-5xl">
+    <div class="mb-8 text-center">
+      <h2 class="mb-3 text-3xl font-bold text-on-background">Transparent Pricing</h2>
+      <p class="mx-auto max-w-2xl text-base leading-7 text-on-surface-variant">
         One-time purchase, lifetime
         updates. No recurring subscriptions.
       </p>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-xl mt-20">
-      <!-- Standard -->
-      <div
-        class="p-xl bg-surface rounded-[24px] border border-outline-variant shadow-sm flex flex-col hover:border-primary/30 transition-all hover:translate-y-[-4px]">
-        <div class="mb-lg">
-          <h3 class="font-headline-md text-headline-md text-on-background mb-xs font-bold">Standard</h3>
-          <p class="font-body-sm text-on-surface-variant">Perfect for solo developers and personal projects.</p>
+    <div class="mx-auto mt-16 grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-2">
+      <ngs-card appearance="raised" class="[--ngs-card-bg:var(--ngs-color-surface)] [--ngs-card-padding:2.25rem]">
+        <div ngs-card-content class="flex h-full flex-col gap-7">
+          <div class="space-y-3">
+            <h3 class="mb-2 text-2xl font-bold text-on-background">Standard</h3>
+            <p class="text-sm leading-6 text-on-surface-variant">Perfect for solo developers and personal projects.</p>
+          </div>
+          <div class="border-y border-border py-6 my-6">
+            <span class="text-4xl font-bold text-on-background">$29</span>
+            <span class="text-on-surface-variant">/project</span>
+          </div>
+          <ul class="flex grow flex-col gap-4">
+            <li class="flex items-center gap-2 text-sm text-on-surface">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" class="size-5 text-success"/>
+              All UI Components
+            </li>
+            <li class="flex items-center gap-2 text-sm text-on-surface">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" class="size-5 text-success"/>
+              All Admin Dashboards
+            </li>
+            <li class="flex items-center gap-2 text-sm text-on-surface">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" class="size-5 text-success"/>
+              Source Code
+            </li>
+            <li class="flex items-center gap-2 text-sm text-on-surface-variant">
+              <ngs-icon name="fluent:dismiss-circle-24-regular" class="size-5 text-on-surface-variant"/>
+              1 developer
+            </li>
+            <li class="flex items-center gap-2 text-sm text-on-surface-variant">
+              <ngs-icon name="fluent:dismiss-circle-24-regular" class="size-5 text-on-surface-variant"/>
+              1 project
+            </li>
+            <li class="flex items-center gap-2 text-sm text-on-surface-variant">
+              <ngs-icon name="fluent:dismiss-circle-24-regular" class="size-5 text-on-surface-variant"/>
+              1 domain (with subdomains)
+            </li>
+          </ul>
+          <a ngsButton="outlined" fullWidth href="https://buy.polar.sh/polar_cl_GsjVRJPKKqoLqPn8bRKt6g7omlmLLi6lAvmpO2qXyyW" data-polar-checkout data-polar-checkout-theme="dark" class="mt-4">
+            Choose Standard
+          </a>
         </div>
-        <div class="mb-lg">
-          <span class="text-[48px] font-bold text-on-background font-headline-xl">$29</span>
-          <span class="text-on-surface-variant font-label-md">/project</span>
-        </div>
-        <ul class="space-y-md mb-xl flex-grow">
-          <li class="flex items-center gap-xs font-body-sm text-on-surface">
-            <span class="material-symbols-outlined text-primary text-sm icon-filled">check_circle</span>
-            70+ UI Components
-          </li>
-          <li class="flex items-center gap-xs font-body-sm text-on-surface">
-            <span class="material-symbols-outlined text-primary text-sm icon-filled">check_circle</span>
-            Basic Admin Dashboard
-          </li>
-          <li class="flex items-center gap-xs font-body-sm text-on-surface opacity-50">
-            <span class="material-symbols-outlined text-outline text-sm">cancel</span>
-            Source Code (Private Repo)
-          </li>
-        </ul>
-        <a href="https://buy.polar.sh/polar_cl_GsjVRJPKKqoLqPn8bRKt6g7omlmLLi6lAvmpO2qXyyW" data-polar-checkout data-polar-checkout-theme="dark"
-          class="w-full py-md border border-outline-variant rounded-xl font-label-md hover:bg-surface-container transition-colors">
-          Choose Standard
-        </a>
-      </div>
-      <!-- Professional (Featured) -->
-      <div
-        class="p-xl bg-primary-container text-on-primary rounded-[24px] shadow-xl flex flex-col relative scale-105 z-10">
-        <div
-          class="absolute -top-4 left-1/2 -translate-x-1/2 bg-secondary text-on-secondary px-md py-1 rounded-full font-label-md uppercase tracking-widest text-[10px]">
+      </ngs-card>
+      <ngs-card appearance="raised" class="relative z-10 [--ngs-card-padding:2.25rem]"
+                style="--ngs-card-bg: var(--ngs-color-primary); --ngs-card-color: var(--ngs-color-on-primary);">
+        <div class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-secondary
+                    px-4 py-1 text-[10px] font-bold uppercase text-on-secondary">
           Most Popular
         </div>
-        <div class="mb-lg">
-          <h3 class="font-headline-md text-headline-md mb-xs text-white font-bold">Professional</h3>
-          <p class="font-body-sm text-white/80">Complete solution for startups and small teams.</p>
+        <div ngs-card-content class="flex h-full flex-col gap-7 text-on-primary">
+          <div class="space-y-3 pt-4">
+            <h3 class="mb-2 text-2xl font-bold">Professional</h3>
+            <p class="text-sm leading-6 text-on-primary/80">Complete solution for startups and small teams.</p>
+          </div>
+          <div class="border-y border-white/25 py-6 my-6">
+            <span class="text-4xl font-bold">$299</span>
+            <span class="text-on-primary/70">/unlimited</span>
+          </div>
+          <ul class="flex grow flex-col gap-4">
+            <li class="flex items-center gap-2 text-sm text-white">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" class="size-5 text-success"/>
+              All UI Components
+            </li>
+            <li class="flex items-center gap-2 text-sm text-white">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" class="size-5 text-success"/>
+              All Admin Dashboards
+            </li>
+            <li class="flex items-center gap-2 text-sm text-white">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" class="size-5 text-success"/>
+              Source Code
+            </li>
+            <li class="flex items-center gap-2 text-sm text-white">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" class="size-5 text-success"/>
+              Unlimited developers
+            </li>
+            <li class="flex items-center gap-2 text-sm text-white">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" class="size-5 text-success"/>
+              Unlimited projects
+            </li>
+            <li class="flex items-center gap-2 text-sm text-white">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" class="size-5 text-success"/>
+              Unlimited domains (with subdomains)
+            </li>
+          </ul>
+          <a ngsButton="filled" fullWidth href="https://buy.polar.sh/polar_cl_GsjVRJPKKqoLqPn8bRKt6g7omlmLLi6lAvmpO2qXyyW"
+             data-polar-checkout data-polar-checkout-theme="dark" class="mt-4 [--ngs-button-filled-bg:var(--ngs-color-surface)] [--ngs-button-filled-color:var(--ngs-color-primary)]">
+            Get Unlimited Access
+          </a>
         </div>
-        <div class="mb-lg">
-          <span class="text-[48px] font-bold font-headline-xl text-white">$299</span>
-          <span class="text-white/70 font-label-md">/unlimited</span>
-        </div>
-        <ul class="space-y-md mb-xl flex-grow">
-          <li class="flex items-center gap-xs font-body-sm">
-            <span class="material-symbols-outlined text-white text-sm icon-filled">check_circle</span>
-            All UI Components
-          </li>
-          <li class="flex items-center gap-xs font-body-sm">
-            <span class="material-symbols-outlined text-white text-sm icon-filled">check_circle</span>
-            Pro Admin Templates
-          </li>
-          <li class="flex items-center gap-xs font-body-sm">
-            <span class="material-symbols-outlined text-white text-sm icon-filled">check_circle</span>
-            GitHub Access
-          </li>
-        </ul>
-        <a href="https://buy.polar.sh/polar_cl_GsjVRJPKKqoLqPn8bRKt6g7omlmLLi6lAvmpO2qXyyW" data-polar-checkout data-polar-checkout-theme="dark"
-          class="w-full py-md bg-white text-primary px-xl rounded-xl font-label-md hover:bg-white/90 transition-colors shadow-lg">
-          Get Unlimited Access
-        </a>
-      </div>
-       Enterprise
-      <div
-        class="p-xl bg-surface rounded-[24px] border border-outline-variant shadow-sm flex flex-col hover:border-primary/30 transition-all hover:translate-y-[-4px]">
-        <div class="mb-lg">
-          <h3 class="font-headline-md text-headline-md text-on-background mb-xs font-bold">Enterprise</h3>
-          <p class="font-body-sm text-on-surface-variant">Custom features and dedicated support for large orgs.</p>
-        </div>
-        <div class="mb-lg">
-          <span class="text-[32px] font-bold text-on-background font-headline-xl">Contact Us</span>
-        </div>
-        <ul class="space-y-md mb-xl flex-grow">
-          <li class="flex items-center gap-xs font-body-sm text-on-surface">
-            <span class="material-symbols-outlined text-primary text-sm icon-filled">check_circle</span>
-            White-label License
-          </li>
-          <li class="flex items-center gap-xs font-body-sm text-on-surface">
-            <span class="material-symbols-outlined text-primary text-sm icon-filled">check_circle</span>
-            Custom Development
-          </li>
-          <li class="flex items-center gap-xs font-body-sm text-on-surface">
-            <span class="material-symbols-outlined text-primary text-sm icon-filled">check_circle</span>
-            Priority Support (Slack)
-          </li>
-        </ul>
-        <a href="https://buy.polar.sh/polar_cl_GsjVRJPKKqoLqPn8bRKt6g7omlmLLi6lAvmpO2qXyyW" data-polar-checkout data-polar-checkout-theme="dark"
-          class="w-full py-md border border-outline-variant rounded-xl font-label-md hover:bg-surface-container transition-colors">
-          Get Enterprise
-        </a>
-      </div>
+      </ngs-card>
     </div>
   </div>
 </section>

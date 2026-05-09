@@ -1,54 +1,211 @@
-<section class="py-[120px] px-gutter bg-surface">
-  <div class="max-w-7xl mx-auto">
-    <div class="flex flex-col md:flex-row justify-between items-end mb-xl gap-md">
+<section class="scroll-mt-24 bg-surface px-6 pb-24 pt-32 sm:px-8 lg:px-10 lg:pb-32 lg:pt-40">
+  <div class="mx-auto max-w-7xl">
+    <div class="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
       <div class="max-w-2xl">
-        <h2 class="font-headline-lg text-headline-lg text-on-background mb-sm font-bold">Ready-to-use Components</h2>
-        <p class="font-body-md text-body-md text-on-surface-variant">Over 50+ enterprise-grade components. Copy-paste ready, fully customizable, and accessible.</p>
+        <h2 class="mb-3 text-3xl font-bold text-on-background">Ready-to-use Components</h2>
+        <p class="text-base leading-7 text-on-surface-variant">Over 50+ enterprise-grade components. Copy-paste ready, fully customizable, and accessible.</p>
       </div>
-      <button class="text-primary-container font-label-md flex items-center gap-xs hover:underline">
+      <a ngsButton="text" class="text-primary" href="https://docs.ngstarter.com" target="_blank">
         View all components
-        <span class="material-symbols-outlined text-sm">open_in_new</span>
-      </button>
+        <ngs-icon name="fluent:open-24-regular" class="size-5"/>
+      </a>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-lg">
-      <div class="group cursor-pointer">
-        <div class="aspect-video bg-surface-container-high rounded-xl mb-md border border-outline-variant overflow-hidden flex items-center justify-center group-hover:border-primary/50 transition-colors">
-          <div class="flex gap-xs">
-            <div class="w-8 h-8 rounded bg-primary/20"></div>
-            <div class="w-8 h-8 rounded bg-primary/20"></div>
-            <div class="w-8 h-8 rounded bg-primary/20"></div>
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <ngs-card appearance="outlined" class="[--ngs-card-padding:1.25rem]">
+        <div ngs-card-content>
+          <div class="mb-4 flex aspect-video items-center justify-center overflow-hidden rounded-[var(--ngs-radius-lg)] border border-border bg-surface-container-high p-3">
+            <div class="w-full overflow-hidden rounded-[var(--ngs-radius-md)] border border-border bg-surface [--ngs-table-cell-padding:0.25rem_0.5rem] [--ngs-table-header-row-height:2rem] [--ngs-table-row-height:2rem]">
+              <table ngs-native-table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Button</td>
+                    <td>Ready</td>
+                  </tr>
+                  <tr>
+                    <td>Table</td>
+                    <td>Ready</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
+          <a class="group block rounded-[var(--ngs-radius-sm)] outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface" href="https://docs.ngstarter.com/components/table" target="_blank" rel="noreferrer">
+            <h4 class="font-bold text-on-background transition-colors group-hover:text-primary">Data Tables</h4>
+            <p class="mt-1 text-sm text-on-surface-variant">Filtering, sorting, pagination & virtualization.</p>
+          </a>
         </div>
-        <h4 class="font-body-md font-semibold text-on-background group-hover:text-primary transition-colors font-bold">Data Tables</h4>
-        <p class="font-label-md text-on-surface-variant">Filtering, sorting, pagination & virtualization.</p>
-      </div>
-      <div class="group cursor-pointer">
-        <div class="aspect-video bg-surface-container-high rounded-xl mb-md border border-outline-variant overflow-hidden flex items-center justify-center group-hover:border-primary/50 transition-colors">
-          <div class="w-24 h-12 rounded-full border-2 border-primary/30 flex items-center px-2">
-             <div class="w-8 h-8 rounded-full bg-primary/60"></div>
+      </ngs-card>
+      <ngs-card appearance="outlined" class="[--ngs-card-padding:1.25rem]">
+        <div ngs-card-content>
+          <div class="mb-4 flex aspect-video items-center justify-center overflow-hidden rounded-[var(--ngs-radius-lg)] border border-border bg-surface-container-high p-4">
+            <div class="w-full flex flex-col gap-4 space-y-4 rounded-[var(--ngs-radius-md)] bg-surface p-4 shadow-[var(--ngs-shadow-sm)]">
+              <ngs-checkbox [checked]="true">Strict mode</ngs-checkbox>
+              <ngs-slide-toggle [checked]="true">Live preview</ngs-slide-toggle>
+            </div>
           </div>
+          <a class="group block rounded-[var(--ngs-radius-sm)] outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface" href="https://docs.ngstarter.com/forms/checkbox" target="_blank" rel="noreferrer">
+            <h4 class="font-bold text-on-background transition-colors group-hover:text-primary">Form Controls</h4>
+            <p class="mt-1 text-sm text-on-surface-variant">Custom selects, datepickers, and multi-selects.</p>
+          </a>
         </div>
-        <h4 class="font-body-md font-semibold text-on-background group-hover:text-primary transition-colors font-bold">Form Controls</h4>
-        <p class="font-label-md text-on-surface-variant">Custom selects, datepickers, and multi-selects.</p>
-      </div>
-      <div class="group cursor-pointer">
-        <div class="aspect-video bg-surface-container-high rounded-xl mb-md border border-outline-variant overflow-hidden flex items-center justify-center group-hover:border-primary/50 transition-colors">
-          <div class="space-y-xs w-20">
-            <div class="h-2 w-full bg-primary/20 rounded"></div>
-            <div class="h-2 w-2/3 bg-primary/20 rounded"></div>
-            <div class="h-2 w-1/2 bg-primary/20 rounded"></div>
+      </ngs-card>
+      <ngs-card appearance="outlined" class="[--ngs-card-padding:1.25rem]">
+        <div ngs-card-content>
+          <div class="mb-4 flex aspect-video items-center justify-center overflow-hidden rounded-[var(--ngs-radius-lg)] border border-border bg-surface-container-high p-4">
+            <ngs-tab-group selectedIndex="1" animationDuration="0ms" class="block w-full rounded-[var(--ngs-radius-md)] bg-surface p-2 [--ngs-tab-label-font-size:0.75rem]">
+              <ngs-tab label="Core">
+                <div class="flex items-center gap-2 px-2 py-3 text-sm text-on-surface-variant">
+                  <ngs-icon name="fluent:box-24-regular" class="size-4 text-primary"/>
+                  100+ components
+                </div>
+              </ngs-tab>
+              <ngs-tab label="Forms">
+                <div class="flex items-center gap-2 px-2 py-3 text-sm text-on-surface-variant">
+                  <ngs-icon name="fluent:form-24-regular" class="size-4 text-primary"/>
+                  11+ controls
+                </div>
+              </ngs-tab>
+              <ngs-tab label="Data">
+                <div class="flex items-center gap-2 px-2 py-3 text-sm text-on-surface-variant">
+                  <ngs-icon name="fluent:table-24-regular" class="size-4 text-primary"/>
+                  50+ widgets
+                </div>
+              </ngs-tab>
+            </ngs-tab-group>
           </div>
+          <a class="group block rounded-[var(--ngs-radius-sm)] outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface" href="https://docs.ngstarter.com/components/tabs" target="_blank" rel="noreferrer">
+            <h4 class="font-bold text-on-background transition-colors group-hover:text-primary">Navigation</h4>
+            <p class="mt-1 text-sm text-on-surface-variant">Breadcrumbs, sidebars, and mega-menus.</p>
+          </a>
         </div>
-        <h4 class="font-body-md font-semibold text-on-background group-hover:text-primary transition-colors font-bold">Navigation</h4>
-        <p class="font-label-md text-on-surface-variant">Breadcrumbs, sidebars, and mega-menus.</p>
-      </div>
-      <div class="group cursor-pointer">
-        <div class="aspect-video bg-surface-container-high rounded-xl mb-md border border-outline-variant overflow-hidden flex items-center justify-center group-hover:border-primary/50 transition-colors">
-          <span class="material-symbols-outlined text-4xl text-primary/40">query_stats</span>
+      </ngs-card>
+      <ngs-card appearance="outlined" class="[--ngs-card-padding:1.25rem]">
+        <div ngs-card-content>
+          <div class="mb-4 flex aspect-video items-center justify-center overflow-hidden rounded-[var(--ngs-radius-lg)] border border-border bg-surface-container-high p-4">
+            <div class="flex flex-wrap items-center justify-center gap-3">
+              <button ngsButton="filled" type="button" tabindex="-1">
+                <ngs-icon name="fluent:checkmark-24-regular" class="size-4"/>
+                Save
+              </button>
+              <button ngsButton="tonal" type="button" tabindex="-1">Tonal</button>
+              <button ngsIconButton type="button" tabindex="-1" aria-label="More actions" ngsBadge="3">
+                <ngs-icon name="fluent:more-horizontal-24-regular" class="size-5"/>
+              </button>
+            </div>
+          </div>
+          <a class="group block rounded-[var(--ngs-radius-sm)] outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface" href="https://docs.ngstarter.com/forms/buttons" target="_blank" rel="noreferrer">
+            <h4 class="font-bold text-on-background transition-colors group-hover:text-primary">Actions</h4>
+            <p class="mt-1 text-sm text-on-surface-variant">Buttons, icon buttons, states and badges.</p>
+          </a>
         </div>
-        <h4 class="font-body-md font-semibold text-on-background group-hover:text-primary transition-colors font-bold">Analytics</h4>
-        <p class="font-label-md text-on-surface-variant">Charts, sparklines and dashboard widgets.</p>
-      </div>
+      </ngs-card>
+      <ngs-card appearance="outlined" class="[--ngs-card-padding:1.25rem]">
+        <div ngs-card-content>
+          <div class="mb-4 flex aspect-video items-center justify-center overflow-hidden rounded-[var(--ngs-radius-lg)] border border-border bg-surface-container-high p-4">
+            <ngs-alert variant="informative" class="w-full">
+              <ngs-icon name="fluent:alert-24-regular" ngsAlertIcon class="size-5"/>
+              <ngs-alert-title>Heads up</ngs-alert-title>
+              Component tokens applied.
+            </ngs-alert>
+          </div>
+          <a class="group block rounded-[var(--ngs-radius-sm)] outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface" href="https://docs.ngstarter.com/components/alert" target="_blank" rel="noreferrer">
+            <h4 class="font-bold text-on-background transition-colors group-hover:text-primary">Feedback</h4>
+            <p class="mt-1 text-sm text-on-surface-variant">Alerts with variants, icons and actions.</p>
+          </a>
+        </div>
+      </ngs-card>
+      <ngs-card appearance="outlined" class="[--ngs-card-padding:1.25rem]">
+        <div ngs-card-content>
+          <div class="mb-4 flex aspect-video items-center justify-center overflow-hidden rounded-[var(--ngs-radius-lg)] border border-border bg-surface-container-high p-4">
+            <ngs-avatar-group>
+              <ngs-dicebear key="Pavel Salauyou" preset="initials" class="size-12"/>
+              <ngs-dicebear key="Tate Stafford" preset="initials" class="size-12"/>
+              <ngs-dicebear key="Oscar Bristol" preset="initials" class="size-12"/>
+              <ngs-dicebear key="Andrew Notley" preset="initials" class="size-12"/>
+            </ngs-avatar-group>
+          </div>
+          <a class="group block rounded-[var(--ngs-radius-sm)] outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface" href="https://docs.ngstarter.com/components/avatar" target="_blank" rel="noreferrer">
+            <h4 class="font-bold text-on-background transition-colors group-hover:text-primary">Avatars</h4>
+            <p class="mt-1 text-sm text-on-surface-variant">Dicebear avatars, groups and generated identities.</p>
+          </a>
+        </div>
+      </ngs-card>
+      <ngs-card appearance="outlined" class="[--ngs-card-padding:1.25rem]">
+        <div ngs-card-content>
+          <div class="mb-4 flex aspect-video items-center justify-center overflow-hidden rounded-[var(--ngs-radius-lg)] border border-border bg-surface-container-high p-4">
+            <div class="w-full space-y-4 rounded-[var(--ngs-radius-md)] bg-surface p-4 shadow-[var(--ngs-shadow-sm)]">
+              <div class="flex items-center justify-between text-sm">
+                <span class="font-semibold text-on-surface">Install</span>
+                <span class="text-primary">82%</span>
+              </div>
+              <ngs-progress-bar mode="determinate" value="82"/>
+              <div class="flex items-center justify-between text-sm">
+                <span class="font-semibold text-on-surface">Adoption</span>
+                <span class="text-primary">64%</span>
+              </div>
+              <ngs-progress-bar mode="determinate" value="64"/>
+            </div>
+          </div>
+          <a class="group block rounded-[var(--ngs-radius-sm)] outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface" href="https://docs.ngstarter.com/components/progress-bar" target="_blank" rel="noreferrer">
+            <h4 class="font-bold text-on-background transition-colors group-hover:text-primary">Progress</h4>
+            <p class="mt-1 text-sm text-on-surface-variant">Determinate, buffer and indeterminate states.</p>
+          </a>
+        </div>
+      </ngs-card>
+      <ngs-card appearance="outlined" class="[--ngs-card-padding:1.25rem]">
+        <div ngs-card-content>
+          <div class="mb-4 flex aspect-video items-center justify-center overflow-hidden rounded-[var(--ngs-radius-lg)] border border-border bg-surface-container-high p-4">
+            <div class="w-full space-y-4 rounded-[var(--ngs-radius-md)] bg-surface p-4 shadow-[var(--ngs-shadow-sm)]">
+              <ngs-chip-set class="justify-center">
+                <ngs-chip>Angular</ngs-chip>
+                <ngs-chip>Signals</ngs-chip>
+                <ngs-chip appearance="outlined">SSR</ngs-chip>
+              </ngs-chip-set>
+              <ngs-chip-listbox aria-label="Component filters" class="justify-center">
+                <ngs-chip-option>Core</ngs-chip-option>
+                <ngs-chip-option selected>Forms</ngs-chip-option>
+                <ngs-chip-option appearance="outlined">Data</ngs-chip-option>
+              </ngs-chip-listbox>
+            </div>
+          </div>
+          <a class="group block rounded-[var(--ngs-radius-sm)] outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface" href="https://docs.ngstarter.com/components/chips" target="_blank" rel="noreferrer">
+            <h4 class="font-bold text-on-background transition-colors group-hover:text-primary">Chips</h4>
+            <p class="mt-1 text-sm text-on-surface-variant">Compact tags, selections and token-like metadata.</p>
+          </a>
+        </div>
+      </ngs-card>
+      <ngs-card appearance="outlined" class="[--ngs-card-padding:1.25rem]">
+        <div ngs-card-content>
+          <div class="mb-4 flex aspect-video items-center justify-center overflow-hidden rounded-[var(--ngs-radius-lg)] border border-border bg-surface-container-high p-4">
+            <div class="space-y-4 rounded-[var(--ngs-radius-md)] bg-surface p-4 shadow-[var(--ngs-shadow-sm)]">
+              <div class="flex items-center gap-3">
+                <span class="text-sm text-on-surface-variant">Open command</span>
+                <ngs-kbd-group>
+                  <ngs-kbd>⌘</ngs-kbd>
+                  <ngs-kbd>K</ngs-kbd>
+                </ngs-kbd-group>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-sm text-on-surface-variant">Save</span>
+                <ngs-kbd-group>
+                  <ngs-kbd>⌘</ngs-kbd>
+                  <ngs-kbd>S</ngs-kbd>
+                </ngs-kbd-group>
+              </div>
+            </div>
+          </div>
+          <a class="group block rounded-[var(--ngs-radius-sm)] outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface" href="https://docs.ngstarter.com/components/kbd" target="_blank" rel="noreferrer">
+            <h4 class="font-bold text-on-background transition-colors group-hover:text-primary">Keyboard</h4>
+            <p class="mt-1 text-sm text-on-surface-variant">Shortcut hints and grouped key combinations.</p>
+          </a>
+        </div>
+      </ngs-card>
     </div>
   </div>
 </section>
