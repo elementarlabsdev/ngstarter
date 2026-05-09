@@ -18,9 +18,14 @@ const routes: Routes = [
     title: 'Theme Playground'
   },
   {
-    path: 'customize-theme',
+    path: 'customize',
     loadComponent: () => import('./customize/customize').then(c => c.Customize),
     title: 'Customize Theme'
+  },
+  {
+    path: 'customize-theme',
+    redirectTo: 'customize',
+    pathMatch: 'full'
   },
 ];
 

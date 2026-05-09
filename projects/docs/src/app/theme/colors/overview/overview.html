@@ -1,6 +1,32 @@
 <app-page>
   <h1 appPageTitle>Colors</h1>
   <div appPageContent>
+    <p class="text-on-surface-variant">
+      NgStarter themes are driven by CSS custom properties. Use the <code>--ngs-*</code> tokens for component
+      overrides and the <code>--color-*</code> aliases through Tailwind utility classes such as
+      <code>bg-primary</code>, <code>text-on-surface</code>, or <code>border-border</code>.
+    </p>
+
+    <section class="theme-token-section not-prose">
+      @for (group of colorGroups; track group.name) {
+        <div class="theme-token-group">
+          <h2>{{ group.name }}</h2>
+
+          <div class="theme-token-grid">
+            @for (token of group.tokens; track token.css) {
+              <div class="theme-token-card">
+                <div class="theme-token-swatch" [style.background]="colorValue(token)"></div>
+                <div class="theme-token-meta">
+                  <code>{{ token.css }}</code>
+                  <span>{{ tokenAliases(token) }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </section>
+
     <h3>Primary Colors</h3>
     <ngs-playground exampleUrl="_docs/theme/colors/_examples" exampleName="primary-colors-example">
       <app-primary-colors-example/>
@@ -61,7 +87,7 @@
       <app-orange-colors-example/>
     </ngs-playground>
 
-    <h3>Ref Variant Colors</h3>
+    <h3>Red Variant Colors</h3>
     <ngs-playground exampleUrl="_docs/theme/colors/_examples" exampleName="red-colors-example">
       <app-red-colors-example/>
     </ngs-playground>

@@ -1,7 +1,41 @@
-<div class="px-20 py-10 prose dark:prose-invert max-w-full">
-  <h1 class="mat-headline-1">Customize Theme</h1>
-  <main class="w-2/3">
-    <h2>Install prebuilt theme</h2>
+<app-page>
+  <h1 appPageTitle>Customize Theme</h1>
 
-  </main>
-</div>
+  <div appPageContent>
+    <p>
+      A theme is a set of CSS custom properties applied to the document through
+      <code>data-ngs-theme</code> and <code>data-ngs-color-scheme</code>. Component styles read the
+      <code>--ngs-*</code> tokens, while Tailwind utilities read the mapped <code>--color-*</code> aliases.
+    </p>
+
+    <h2>Import themes</h2>
+    <p>
+      Import one of the prebuilt themes or your own theme file from the global stylesheet. The default theme
+      is enough for a single-theme app; import additional themes when users can switch between them.
+    </p>
+    <ngs-code-highlighter [code]="importThemes()" language="scss"/>
+
+    <h2>Create a custom theme</h2>
+    <p>
+      Create a stylesheet such as <code>src/styles/themes/acme.scss</code>. Define the light tokens under
+      <code>[data-ngs-theme='acme']</code> and the dark tokens under the same theme with
+      <code>data-ngs-color-scheme='dark'</code> or the <code>.dark</code> class.
+    </p>
+    <ngs-code-highlighter [code]="createTheme()" language="scss"/>
+
+    <h2>Use the theme by default</h2>
+    <p>
+      Register the theme name in <code>provideNgsTheme</code>. The service writes
+      <code>data-ngs-theme</code>, <code>data-ngs-color-scheme</code>, <code>data-ngs-density</code>,
+      and <code>data-ngs-radius</code> to the document root.
+    </p>
+    <ngs-code-highlighter [code]="provideTheme()" language="typescript"/>
+
+    <h2>Switch themes at runtime</h2>
+    <p>
+      Inject <code>ThemeManagerService</code> anywhere you need a theme control. The selected theme is persisted
+      by default, unless persistence is disabled in <code>provideNgsTheme</code>.
+    </p>
+    <ngs-code-highlighter [code]="switchTheme()" language="typescript"/>
+  </div>
+</app-page>

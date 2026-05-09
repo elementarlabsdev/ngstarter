@@ -11,6 +11,6 @@ import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
   styleUrl: './installation.scss'
 })
 export class Installation {
-  installProjectCommand = signal('ng new project-name --style=scss');
-  addProjectSchematics = signal('ng add @ngstarter-ui/components');
+  installProjectCommand = signal('npx @angular/cli@21 new project-name --style=scss');
+  addProjectSchematics = signal('cd project-name\nnpx ng add @ngstarter-ui/components');
 }
