@@ -7,7 +7,7 @@ RUN npm install
 COPY . .
 
 RUN npm run build:prod
-RUN npm run build:docs:prod -- --no-prerender
+RUN npm run build:docs:prod
 RUN npm run build:admin:prod
 
 # --- Final Stage ---
