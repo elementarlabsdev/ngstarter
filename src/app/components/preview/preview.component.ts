@@ -40,6 +40,7 @@ import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
     Tab,
     TabGroup,
   ],
-  templateUrl: './preview.component.html'
+  templateUrl: './preview.component.html',
+  styleUrl: './preview.component.scss'
 })
 export class PreviewComponent {}

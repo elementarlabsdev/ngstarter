@@ -1,0 +1,16 @@
+:host {
+  display: block;
+
+  .pricing-card {
+    --ngs-card-padding: 3rem;
+  }
+
+  .pricing-card-standard {
+    --ngs-card-bg: var(--ngs-color-surface);
+  }
+
+  .pricing-card-featured {
+    --ngs-card-bg: var(--ngs-color-primary);
+    --ngs-card-color: var(--ngs-color-on-primary);
+  }
+}

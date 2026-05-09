@@ -12,6 +12,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     CardContent,
     Icon,
   ],
-  templateUrl: './pricing.component.html'
+  templateUrl: './pricing.component.html',
+  styleUrl: './pricing.component.scss'
 })
 export class PricingComponent {}

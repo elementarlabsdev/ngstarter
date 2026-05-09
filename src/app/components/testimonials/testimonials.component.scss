@@ -1,0 +1,8 @@
+:host {
+  display: block;
+
+  .testimonial-card {
+    --ngs-card-bg: var(--ngs-color-surface-container-low);
+    --ngs-card-padding: 1.75rem;
+  }
+}

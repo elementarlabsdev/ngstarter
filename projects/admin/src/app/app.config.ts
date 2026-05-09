@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideNgsTheme({
-      theme: 'minto',
+      theme: 'wise',
       colorScheme: 'light',
       density: 'comfortable',
       radius: 'large',

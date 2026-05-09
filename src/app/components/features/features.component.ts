@@ -10,6 +10,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     CardContent,
     Icon,
   ],
-  templateUrl: './features.component.html'
+  templateUrl: './features.component.html',
+  styleUrl: './features.component.scss'
 })
 export class FeaturesComponent {}

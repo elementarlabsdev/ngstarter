@@ -1,0 +1,10 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .architecture-card {
+    --ngs-card-bg: var(--ngs-color-surface);
+    --ngs-card-padding: --spacing(6);
+  }
+}
