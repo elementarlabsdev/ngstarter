@@ -1,6 +1,7 @@
 name: Build and Deploy
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -9,6 +10,10 @@ on:
       - 'LICENSE'
       - '.gitignore'
       - '.dockerignore'
+
+concurrency:
+  group: deploy-main
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
@@ -39,11 +44,21 @@ jobs:
       - name: Check for component changes
         id: changed-components
         run: |
-          if git diff --quiet HEAD^ HEAD -- 'projects/components'; then
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          elif git diff --quiet HEAD^ HEAD -- 'projects/components'; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
+
+      - name: Verify NPM publish credentials
+        if: steps.changed-components.outputs.changed == 'true'
+        run: |
+          npm whoami --registry=https://registry.npmjs.org/
+          npm access ls-collaborators @ngstarter-ui/components --registry=https://registry.npmjs.org/ >/dev/null
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Update versions
         id: versioning
@@ -75,7 +90,11 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add package.json projects/components/package.json
-          git diff-index --quiet HEAD || (git commit -m "chore: bump versions (root: ${{ env.ROOT_VERSION }}, components: ${{ env.COMP_VERSION }}) [skip ci]" && git push)
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "chore: bump versions (root: ${{ env.ROOT_VERSION }}, components: ${{ env.COMP_VERSION }}) [skip ci]"
+            git pull --rebase origin main
+            git push
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
