@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "update-dependencies": {
+      "version": "1.0.28",
+      "description": "Update @ngstarter-ui/components dependencies and Tailwind CSS setup.",
+      "factory": "./ng-update/index#ngUpdate",
+      "schema": "./ng-update/schema.json"
+    }
+  }
+}

@@ -23,13 +23,16 @@
   ],
   "scripts": {},
   "ng-add": {
-    "save": "devDependencies"
+    "save": "dependencies"
+  },
+  "ng-update": {
+    "migrations": "./schematics/migrations.json",
+    "packageGroup": [
+      "@ngstarter-ui/components"
+    ]
   },
   "schematics": "./schematics/collection.json",
   "devDependencies": {
-    "tailwindcss": "^4.1.14",
-    "postcss": "^8.5.2",
-    "autoprefixer": "^10.4.17",
     "@types/jsdom": "^21.1.7"
   },
   "peerDependencies": {
@@ -43,6 +46,11 @@
     "@angular/ssr": "^21.1.4"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.2.2",
+    "@tailwindcss/typography": "^0.5.19",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.5.2",
+    "tailwindcss": "^4.2.2",
     "tslib": "^2.3.0",
     "jsdom": "^26.1.0"
   },
@@ -52,6 +60,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "exports": {
-    "./styles/themes/": "./styles/themes/"
+    "./styles/*": "./styles/*",
+    "./styles/themes/*": "./styles/themes/*"
   }
 }

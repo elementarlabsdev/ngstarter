@@ -5,6 +5,11 @@
     "entryFile": "index.ts"
   },
   "allowedNonPeerDependencies": [
+    "@tailwindcss/postcss",
+    "@tailwindcss/typography",
+    "autoprefixer",
+    "postcss",
+    "tailwindcss",
     "jsdom"
   ],
   "assets": [

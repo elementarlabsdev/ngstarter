@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "NgStarterComponentsNgAdd",
+  "title": "NgStarter Components ng-add Options",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "Angular application project to configure. Defaults to the workspace default project or the first application project."
+    },
+    "skipInstall": {
+      "type": "boolean",
+      "description": "Skip running the package manager install task.",
+      "default": false
+    }
+  }
+}
