@@ -89,9 +89,11 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add package.json projects/components/package.json
-          if ! git diff-index --quiet HEAD; then
+          git add package.json package-lock.json projects/components/package.json
+          if ! git diff --cached --quiet; then
             git commit -m "chore: bump versions (root: ${{ env.ROOT_VERSION }}, components: ${{ env.COMP_VERSION }}) [skip ci]"
+            git status --porcelain
+            test -z "$(git status --porcelain)"
             git pull --rebase origin main
             git push
           fi
