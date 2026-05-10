@@ -9,42 +9,55 @@
           [adaptive]="false"
           class="corporate-sidebar"
         >
-          <ngs-scrollbar-area scrollbarWidth="6px" class="corporate-scrollbar">
-            <aside class="sidebar-panel" aria-label="Corporate navigation">
+          <ngs-sidebar class="sidebar-panel" aria-label="Corporate navigation">
+            <ngs-sidebar-header class="sidebar-header">
               <div class="brand-row">
                 <img src="/corporate-logo.png" [alt]="brandName()" class="brand-logo" />
                 <button ngsIconButton aria-label="Collapse sidebar" class="sidebar-collapse">
                   <ngs-icon name="fluent:panel-left-contract-24-regular" />
                 </button>
               </div>
+            </ngs-sidebar-header>
 
-              @for (section of navSections(); track section.label ?? section.items[0].key) {
-                <div class="nav-section" [class.is-sidebar-bottom]="section.stickToBottom">
-                  @if (section.label) {
-                    <ngs-sidebar-nav-heading class="nav-heading">
-                      {{ section.label }}
-                    </ngs-sidebar-nav-heading>
-                  }
+            <ngs-sidebar-body class="sidebar-body">
+              <ngs-sidebar-nav activeKey="home" class="corporate-nav">
+                @for (section of navSections(); track section.label ?? section.items[0].key) {
+                  @if (!section.stickToBottom) {
+                    @if (section.label) {
+                      <ngs-sidebar-nav-heading class="nav-heading">
+                        {{ section.label }}
+                      </ngs-sidebar-nav-heading>
+                    }
 
-                  <ngs-navigation
-                    activeKey="home"
-                    class="corporate-nav"
-                    [class.with-heading]="section.label"
-                  >
                     @for (item of section.items; track item.key) {
-                      <button ngs-navigation-item [key]="item.key" class="nav-button">
-                        <ngs-icon [name]="item.icon" ngsNavigationItemIcon />
+                      <ngs-sidebar-nav-item [key]="item.key" class="nav-button">
+                        <ngs-icon [name]="item.icon" ngsSidebarNavItemIcon />
                         {{ item.label }}
                         @if (item.count) {
-                          <span ngsNavigationItemBadge>{{ item.count }}</span>
+                          <span ngsSidebarNavItemBadge>{{ item.count }}</span>
                         }
-                      </button>
+                      </ngs-sidebar-nav-item>
                     }
-                  </ngs-navigation>
-                </div>
-              }
-            </aside>
-          </ngs-scrollbar-area>
+                  }
+                }
+              </ngs-sidebar-nav>
+            </ngs-sidebar-body>
+
+            <ngs-sidebar-footer class="sidebar-footer">
+              <ngs-sidebar-nav activeKey="home" class="corporate-nav sidebar-footer-nav">
+                @for (section of navSections(); track section.label ?? section.items[0].key) {
+                  @if (section.stickToBottom) {
+                    @for (item of section.items; track item.key) {
+                      <ngs-sidebar-nav-item [key]="item.key" class="nav-button">
+                        <ngs-icon [name]="item.icon" ngsSidebarNavItemIcon />
+                        {{ item.label }}
+                      </ngs-sidebar-nav-item>
+                    }
+                  }
+                }
+              </ngs-sidebar-nav>
+            </ngs-sidebar-footer>
+          </ngs-sidebar>
         </ngs-sidenav>
 
         <ngs-sidenav-content>

@@ -9,14 +9,18 @@ import { Icon } from '@ngstarter-ui/components/icon';
 import { Layout, LayoutContent } from '@ngstarter-ui/components/layout';
 import { Menu, MenuDivider, MenuHeading, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
 import {
-  Navigation,
-  NavigationItem,
-  NavigationItemBadgeDirective,
-  NavigationItemIconDirective,
-} from '@ngstarter-ui/components/navigation';
+  Sidebar,
+  SidebarBody,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarNav,
+  SidebarNavHeading,
+  SidebarNavItem,
+  SidebarNavItemBadgeDirective,
+  SidebarNavItemIconDirective,
+} from '@ngstarter-ui/components/sidebar';
 import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
-import { SidebarNavHeading } from '@ngstarter-ui/components/sidebar';
 import { Sidenav, SidenavContainer, SidenavContent } from '@ngstarter-ui/components/sidenav';
 import {
   Cell,
@@ -113,15 +117,19 @@ interface Interview {
     HeaderCellDef,
     HeaderRow,
     HeaderRowDef,
-    Navigation,
-    NavigationItem,
-    NavigationItemBadgeDirective,
-    NavigationItemIconDirective,
     ProgressBar,
     Row,
     RowDef,
     ScrollbarArea,
+    Sidebar,
+    SidebarBody,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarNav,
     SidebarNavHeading,
+    SidebarNavItem,
+    SidebarNavItemBadgeDirective,
+    SidebarNavItemIconDirective,
     Sidenav,
     SidenavContainer,
     SidenavContent,

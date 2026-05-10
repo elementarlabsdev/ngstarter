@@ -70,12 +70,33 @@ input {
 }
 
 .sidebar-panel {
-  display: flex;
-  min-height: 100%;
-  flex-direction: column;
+  --ngs-sidebar-bg: var(--corporate-sidebar-bg);
+  --ngs-sidebar-width: 292px;
   gap: 1rem;
+  min-height: 100%;
   padding: 1rem 1.25rem;
+}
+
+ngs-sidebar.sidebar-panel.ngs-sidebar {
+  --ngs-sidebar-bg: var(--corporate-sidebar-bg);
   background: var(--corporate-sidebar-bg);
+}
+
+.sidebar-header {
+  flex: none;
+}
+
+.sidebar-body {
+  min-height: 0;
+  padding: 0;
+}
+
+.sidebar-footer {
+  padding-top: 0.75rem;
+}
+
+.sidebar-footer-nav {
+  flex-grow: 0;
 }
 
 .brand-row {
@@ -113,31 +134,21 @@ input {
   border-radius: 0.5rem !important;
 }
 
-.nav-section {
-  display: grid;
-  gap: 0.5rem;
-}
-
-.nav-section.is-sidebar-bottom {
-  margin-top: auto;
-  padding-top: 0.75rem;
-}
-
 .nav-heading {
   --ngs-nav-heading-height: auto;
   --ngs-sidebar-nav-heading-color: var(--corporate-muted);
   --ngs-sidebar-nav-heading-font-size: 0.75rem;
   --ngs-sidebar-nav-heading-font-weight: 500;
-  --ngs-sidebar-nav-heading-padding: 0 0.75rem;
-  --ngs-sidebar-nav-heading-margin-top: 0.625rem;
-  --ngs-sidebar-nav-heading-margin-bottom: 0;
+  --ngs-sidebar-nav-heading-padding: 0.35rem 0.75rem 0.25rem;
+  --ngs-sidebar-nav-heading-margin-top: 0.95rem;
+  --ngs-sidebar-nav-heading-margin-bottom: 0.2rem;
   --ngs-sidebar-nav-heading-text-align: start;
   --ngs-sidebar-nav-heading-text-transform: uppercase;
   line-height: 1.3;
 }
 
-.nav-section .nav-heading:first-child {
-  margin-top: 0.625rem;
+.corporate-nav .nav-heading:first-child {
+  margin-top: 0.95rem;
 }
 
 .nav-heading .line {
@@ -147,16 +158,24 @@ input {
 .corporate-nav {
   --ngs-color-primary: #ecebf1;
   --ngs-color-on-primary: #757783;
+  --ngs-nav-items-gap: 0.28rem;
+  --ngs-nav-item-height: 2.15rem;
+  --ngs-nav-item-padding: 0 0.7rem;
+  --ngs-nav-item-radius: var(--ngs-control-radius);
+  --ngs-nav-item-font-size: 0.95rem;
+  --ngs-nav-item-font-weight: 400;
+  --ngs-nav-item-gap: 0.7rem;
   --ngs-nav-item-color: #59677e;
   --ngs-nav-item-icon-color: #6d7d97;
+  --ngs-nav-item-icon-width: 1.25rem;
+  --ngs-nav-item-icon-size: 1.2rem;
   --ngs-nav-item-hover-bg: #ffffff;
+  --ngs-nav-item-hover-color: var(--corporate-text);
+  --ngs-nav-item-hover-icon-color: var(--corporate-primary);
   --ngs-nav-item-active-bg: #ffffff;
   --ngs-nav-item-active-color: var(--corporate-primary);
   --ngs-nav-item-active-icon-color: var(--corporate-primary);
-  --ngs-navigation-item-hover-bg: #ffffff;
-  --ngs-navigation-item-active-bg: #ffffff;
-  --ngs-navigation-item-active-color: var(--corporate-primary);
-  --ngs-navigation-item-active-icon-color: var(--corporate-primary);
+  flex-grow: 0;
 }
 
 .nav-button {
@@ -167,8 +186,7 @@ input {
   text-align: left;
 }
 
-.corporate-nav .badge,
-.nav-button .ngs-navigation-item-badge {
+.corporate-nav .badge {
   color: #757783 !important;
   background: #ecebf1 !important;
   font-weight: 400 !important;
@@ -439,16 +457,22 @@ input {
   --ngs-button-height: 2rem;
   --ngs-button-padding-x: 0.625rem;
   --ngs-button-font-size: 0.9rem;
-  --ngs-button-font-weight: 650;
+  --ngs-button-font-weight: 400;
   --ngs-button-content-gap: 0.35rem;
-  --ngs-button-color: var(--corporate-primary);
+  --ngs-button-color: var(--corporate-text);
   --ngs-button-hover-bg: color-mix(in srgb, var(--corporate-primary), transparent 92%);
   gap: 0.45rem;
-  color: var(--corporate-primary);
+  color: var(--corporate-text);
   line-height: 1;
 }
 
+.view-more:hover {
+  --ngs-button-color: var(--corporate-primary);
+  color: var(--corporate-primary);
+}
+
 .view-more ngs-icon {
+  --icon-size: 1rem;
   flex: none;
 }
 
@@ -533,9 +557,9 @@ input {
 }
 
 .status-pill .ngs-chip-control {
-  --icon-size: 0.78em;
-  width: 0.78em;
-  height: 0.78em;
+  --icon-size: 1.12em;
+  width: 1.12em;
+  height: 1.12em;
 }
 
 .status-overdue {
