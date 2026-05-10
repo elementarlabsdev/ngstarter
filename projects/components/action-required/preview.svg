@@ -6,9 +6,9 @@
   <circle cx="79" cy="71" r="8" fill="#E53E3E"/>
   <path d="M79 65V72" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
   <circle cx="79" cy="76" r="1.5" fill="#FFFFFF"/>
-  <rect x="136" y="58" width="58" height="4" rx="2" fill="#F3C4C4"/>
-  <rect x="136" y="68" width="76" height="4" rx="2" fill="#F3C4C4"/>
-  <rect x="136" y="78" width="45" height="4" rx="2" fill="#F3C4C4"/>
-  <rect x="205" y="60" width="27" height="22" rx="11" fill="#E53E3E"/>
+  <rect x="133" y="58" width="48" height="4" rx="2" fill="#F3C4C4"/>
+  <rect x="133" y="68" width="58" height="4" rx="2" fill="#F3C4C4"/>
+  <rect x="133" y="78" width="40" height="4" rx="2" fill="#F3C4C4"/>
+  <rect x="206" y="60" width="27" height="22" rx="11" fill="#E53E3E"/>
   <path d="M212 71H225" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
 </svg>

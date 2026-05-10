@@ -1,9 +1,16 @@
 <svg width="296" height="141" viewBox="0 0 296 141" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" fill="#F8FAFC"/>
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" stroke="#E2E8F0"/>
-  <rect x="61" y="43" width="174" height="60" rx="12" fill="#FFFFFF" stroke="#CBD5E1"/>
-  <rect x="72" y="53" width="44" height="20" rx="10" fill="#036FE3"/>
-  <rect x="122" y="53" width="44" height="20" rx="10" fill="#E2E8F0"/>
-  <rect x="172" y="53" width="44" height="20" rx="10" fill="#E2E8F0"/>
-  <path d="M78 95H218" stroke="#CBD5E1" stroke-width="4" stroke-linecap="round"/>
+  <rect x="62.5" y="54.5" width="171" height="50" rx="11.5" fill="#FFFFFF" stroke="#CBD5E1"/>
+  <path d="M75 54.5V45C75 40.5817 78.5817 37 83 37H118C122.418 37 126 40.5817 126 45V54.5" fill="#036FE3"/>
+  <path d="M75 54.5V45C75 40.5817 78.5817 37 83 37H118C122.418 37 126 40.5817 126 45V54.5" stroke="#036FE3"/>
+  <path d="M90 47H111" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+  <path d="M132 54.5V47C132 42.5817 135.582 39 140 39H168C172.418 39 176 42.5817 176 47V54.5" fill="#EEF6FF"/>
+  <path d="M132 54.5V47C132 42.5817 135.582 39 140 39H168C172.418 39 176 42.5817 176 47V54.5" stroke="#CBD5E1"/>
+  <path d="M145 48H164" stroke="#94A3B8" stroke-width="4" stroke-linecap="round"/>
+  <path d="M182 54.5V47C182 42.5817 185.582 39 190 39H213C217.418 39 221 42.5817 221 47V54.5" fill="#EEF6FF"/>
+  <path d="M182 54.5V47C182 42.5817 185.582 39 190 39H213C217.418 39 221 42.5817 221 47V54.5" stroke="#CBD5E1"/>
+  <path d="M194 48H209" stroke="#94A3B8" stroke-width="4" stroke-linecap="round"/>
+  <rect x="82" y="68" width="78" height="7" rx="3.5" fill="#CBD5E1"/>
+  <rect x="82" y="84" width="111" height="7" rx="3.5" fill="#E2E8F0"/>
 </svg>

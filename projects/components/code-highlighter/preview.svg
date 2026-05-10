@@ -1,10 +1,18 @@
 <svg width="296" height="141" viewBox="0 0 296 141" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" fill="#EFF6FF"/>
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" stroke="#E2E8F0"/>
-  <rect x="61" y="37" width="174" height="72" rx="12" fill="#111827" stroke="#111827"/>
-  <text x="82" y="62" fill="#16A34A" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" text-anchor="middle">&lt;</text>
-  <text x="107" y="62" fill="#D6EAFF" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" text-anchor="middle">/></text>
-  <rect x="86" y="76" width="74" height="4" rx="2" fill="#64748B"/>
-  <rect x="86" y="86" width="103" height="4" rx="2" fill="#64748B"/>
-  <rect x="86" y="96" width="58" height="4" rx="2" fill="#64748B"/>
+  <rect x="51.5" y="32.5" width="193" height="78" rx="11.5" fill="#FFFFFF" stroke="#CBD5E1"/>
+  <path d="M64 33H88V110H64C57.373 110 52 104.627 52 98V45C52 38.373 57.373 33 64 33Z" fill="#F1F5F9"/>
+  <path d="M88.5 33V110" stroke="#CBD5E1"/>
+  <text x="70" y="55" fill="#94A3B8" font-family="Arial, Helvetica, sans-serif" font-size="9" font-weight="700" text-anchor="middle">1</text>
+  <text x="70" y="73" fill="#94A3B8" font-family="Arial, Helvetica, sans-serif" font-size="9" font-weight="700" text-anchor="middle">2</text>
+  <text x="70" y="91" fill="#94A3B8" font-family="Arial, Helvetica, sans-serif" font-size="9" font-weight="700" text-anchor="middle">3</text>
+  <rect x="104" y="51" width="42" height="5" rx="2.5" fill="#036FE3"/>
+  <rect x="152" y="51" width="26" height="5" rx="2.5" fill="#94A3B8"/>
+  <rect x="184" y="51" width="35" height="5" rx="2.5" fill="#16A34A"/>
+  <rect x="116" y="69" width="54" height="5" rx="2.5" fill="#16A34A"/>
+  <rect x="178" y="69" width="24" height="5" rx="2.5" fill="#EA580C"/>
+  <rect x="208" y="69" width="18" height="5" rx="2.5" fill="#CBD5E1"/>
+  <rect x="104" y="87" width="34" height="5" rx="2.5" fill="#036FE3"/>
+  <rect x="145" y="87" width="52" height="5" rx="2.5" fill="#CBD5E1"/>
 </svg>

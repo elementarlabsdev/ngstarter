@@ -2,8 +2,8 @@
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" fill="#F8FAFC"/>
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" stroke="#E2E8F0"/>
   <circle cx="116" cy="70" r="29" fill="#036FE3"/>
-  <circle cx="116" cy="59" r="9" fill="#FFFFFF"/>
-  <path d="M96 90C101 77 131 77 136 90Z" fill="#FFFFFF"/>
+  <circle cx="116" cy="63" r="5" fill="#FFFFFF"/>
+  <path d="M105 82C108 75 124 75 127 82Z" fill="#FFFFFF"/>
   <circle cx="178" cy="70" r="23" fill="#BFDBFE"/>
   <text x="178" y="76" fill="#2563EB" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" text-anchor="middle">AB</text>
   <circle cx="207" cy="54" r="9" fill="#16A34A"/>

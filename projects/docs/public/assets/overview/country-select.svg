@@ -2,8 +2,23 @@
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" fill="#F8FAFC"/>
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" stroke="#E2E8F0"/>
   <rect x="64" y="47" width="168" height="47" rx="13" fill="#FFFFFF" stroke="#CBD5E1"/>
-  <circle cx="91" cy="70" r="13" fill="#2563EB"/>
-  <rect x="78" y="70" width="26" height="6" rx="0" fill="#FFFFFF"/>
+  <circle cx="91" cy="70" r="13" fill="#FFFFFF"/>
+  <clipPath id="country-select-usa-clip">
+    <circle cx="91" cy="70" r="13"/>
+  </clipPath>
+  <g clip-path="url(#country-select-usa-clip)">
+    <rect x="78" y="57" width="26" height="26" fill="#FFFFFF"/>
+    <rect x="78" y="57" width="26" height="4" fill="#E53E3E"/>
+    <rect x="78" y="65" width="26" height="4" fill="#E53E3E"/>
+    <rect x="78" y="73" width="26" height="4" fill="#E53E3E"/>
+    <rect x="78" y="81" width="26" height="4" fill="#E53E3E"/>
+    <rect x="78" y="57" width="12" height="12" fill="#036FE3"/>
+    <circle cx="82" cy="61" r="1" fill="#FFFFFF"/>
+    <circle cx="86" cy="61" r="1" fill="#FFFFFF"/>
+    <circle cx="82" cy="65" r="1" fill="#FFFFFF"/>
+    <circle cx="86" cy="65" r="1" fill="#FFFFFF"/>
+  </g>
+  <circle cx="91" cy="70" r="13" stroke="#CBD5E1"/>
   <path d="M116 70H168" stroke="#CBD5E1" stroke-width="5" stroke-linecap="round"/>
   <path d="M201 66L207 72L213 66" fill="none" stroke="#334155" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

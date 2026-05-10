@@ -2,7 +2,7 @@
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" fill="#F8FAFC"/>
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" stroke="#E2E8F0"/>
   <rect x="64" y="47" width="168" height="47" rx="13" fill="#FFFFFF" stroke="#CBD5E1"/>
-  <text x="91" y="76" fill="#16A34A" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" text-anchor="middle">$</text>
-  <path d="M116 70H168" stroke="#CBD5E1" stroke-width="5" stroke-linecap="round"/>
+  <text x="86" y="76" fill="#16A34A" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" text-anchor="middle">$</text>
+  <path d="M108 70H160" stroke="#CBD5E1" stroke-width="5" stroke-linecap="round"/>
   <path d="M201 66L207 72L213 66" fill="none" stroke="#334155" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

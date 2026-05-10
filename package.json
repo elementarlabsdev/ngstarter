@@ -31,6 +31,7 @@
     "build:prod": "ng build --configuration production",
     "build:docs:prod": "ng build docs --configuration production",
     "build:admin:prod": "ng build admin --configuration production",
+    "build:admin-corporate:prod": "ng build admin-corporate --configuration production",
     "publish:components": "npm run build:components:prod && npm run verify:components:package && cd dist/components && npm publish --access public",
     "clean": "rm -rf .angular/cache",
     "serve:ssr": "node dist/ngstarter/server/server.mjs",
