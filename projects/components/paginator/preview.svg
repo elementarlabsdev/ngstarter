@@ -1,0 +1,12 @@
+<svg width="296" height="141" viewBox="0 0 296 141" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" fill="#F8FAFC"/>
+  <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" stroke="#E2E8F0"/>
+  <rect x="74" y="58" width="28" height="24" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+  <text x="88" y="75" fill="#334155" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" text-anchor="middle">&lt;</text>
+  <rect x="110" y="58" width="24" height="24" rx="8" fill="#036FE3"/>
+  <text x="122" y="75" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" text-anchor="middle">1</text>
+  <rect x="142" y="58" width="24" height="24" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+  <text x="154" y="75" fill="#334155" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" text-anchor="middle">2</text>
+  <rect x="174" y="58" width="28" height="24" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+  <text x="188" y="75" fill="#334155" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" text-anchor="middle">&gt;</text>
+</svg>
