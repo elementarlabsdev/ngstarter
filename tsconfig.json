@@ -62,6 +62,12 @@
     },
     {
       "path": "./projects/admin/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/admin-corporate/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/admin-corporate/tsconfig.spec.json"
     }
   ]
 }

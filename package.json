@@ -34,7 +34,8 @@
     "clean": "rm -rf .angular/cache",
     "serve:ssr": "node dist/ngstarter/server/server.mjs",
     "serve:ssr:docs": "node dist/docs/server/server.mjs",
-    "serve:ssr:admin": "node dist/admin/server/server.mjs"
+    "serve:ssr:admin": "node dist/admin/server/server.mjs",
+    "serve:ssr:admin-corporate": "node dist/admin-corporate/server/server.mjs"
   },
   "private": true,
   "prettier": {

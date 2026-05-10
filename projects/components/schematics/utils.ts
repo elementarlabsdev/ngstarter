@@ -59,8 +59,18 @@ const DEV_DEPENDENCY_NAMES = new Set([
   'postcss',
   'tailwindcss',
 ]);
-const TAILWIND_IMPORT = '@use "tailwindcss";';
+const GOOGLE_FONTS_HREF =
+  'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;display=swap';
+const GOOGLE_FONTS_HREF_PATTERN =
+  /https:\/\/fonts\.googleapis\.com\/css2\?family=Manrope:wght@400;500;600;700;800(?:&amp;|&)family=Sora:wght@500;600;700(?:&amp;|&)display=swap/;
+const GOOGLE_FONTS_LINK = `<link href="${GOOGLE_FONTS_HREF}" rel="stylesheet"/>`;
 const NGS_THEME_IMPORT = '@use "@ngstarter-ui/components/styles/themes/default";';
+const NGS_THEME_PROVIDER = `provideNgsTheme({
+  theme: 'default',
+  colorScheme: 'auto',
+  density: 'comfortable',
+  radius: 'medium',
+}),`;
 
 export function setupNgStarterComponents(
   tree: Tree,
@@ -184,8 +194,12 @@ function setupTailwindFiles(tree: Tree, context: SchematicContext, projectName?:
 
   const buildOptions = getBuildOptions(project);
   const stylePath = resolveGlobalStylePath(project, buildOptions);
+  const indexPath = resolveIndexHtmlPath(project, buildOptions);
+  const appConfigPath = resolveAppConfigPath(project);
 
   ensureGlobalStyleFile(tree, stylePath);
+  ensureIndexGoogleFontsLink(tree, context, indexPath);
+  ensureAppConfigThemeProvider(tree, context, appConfigPath);
   ensureProjectStyleEntry(buildOptions, stylePath);
   writeJson(tree, ANGULAR_JSON_PATH, workspace as JsonObject);
 }
@@ -319,6 +333,26 @@ function resolveGlobalStylePath(project: WorkspaceProject, buildOptions: JsonObj
   return stylePath;
 }
 
+function resolveIndexHtmlPath(project: WorkspaceProject, buildOptions: JsonObject): string {
+  const index = buildOptions['index'];
+
+  if (typeof index === 'string') {
+    return normalizeWorkspacePath(index);
+  }
+
+  if (index && typeof index === 'object' && typeof (index as JsonObject)['input'] === 'string') {
+    return normalizeWorkspacePath((index as JsonObject)['input']);
+  }
+
+  const sourceRoot = project.sourceRoot || joinWorkspacePath(project.root || '', 'src');
+  return normalizeWorkspacePath(joinWorkspacePath(sourceRoot, 'index.html'));
+}
+
+function resolveAppConfigPath(project: WorkspaceProject): string {
+  const sourceRoot = project.sourceRoot || joinWorkspacePath(project.root || '', 'src');
+  return normalizeWorkspacePath(joinWorkspacePath(sourceRoot, 'app/app.config.ts'));
+}
+
 function assertScssStylePath(stylePath: string): void {
   if (stylePath.endsWith('.scss')) {
     return;
@@ -330,10 +364,99 @@ function assertScssStylePath(stylePath: string): void {
   );
 }
 
+function ensureIndexGoogleFontsLink(tree: Tree, context: SchematicContext, indexPath: string): void {
+  if (!tree.exists(indexPath)) {
+    context.logger.warn(`Index file "${indexPath}" was not found. Skipping Google Fonts setup.`);
+    return;
+  }
+
+  const content = readText(tree, indexPath);
+
+  if (GOOGLE_FONTS_HREF_PATTERN.test(content)) {
+    return;
+  }
+
+  const headMatch = /([ \t]*)<\/head>/i.exec(content);
+  const nextContent = headMatch
+    ? content.replace(/([ \t]*)<\/head>/i, (_match, indent: string, offset: number) => {
+        const needsLeadingNewline = !content.slice(0, offset).endsWith('\n');
+        return `${needsLeadingNewline ? '\n' : ''}${indent}  ${GOOGLE_FONTS_LINK}\n${indent}</head>`;
+      })
+    : `${content.trimEnd()}\n${GOOGLE_FONTS_LINK}\n`;
+
+  tree.overwrite(indexPath, nextContent);
+}
+
+function ensureAppConfigThemeProvider(tree: Tree, context: SchematicContext, appConfigPath: string): void {
+  if (!tree.exists(appConfigPath)) {
+    context.logger.warn(`App config "${appConfigPath}" was not found. Skipping NgStarter theme provider setup.`);
+    return;
+  }
+
+  const content = readText(tree, appConfigPath);
+
+  if (/provideNgsTheme\s*\(/.test(content)) {
+    return;
+  }
+
+  if (!/providers\s*:\s*\[/.test(content)) {
+    context.logger.warn(`No providers array found in "${appConfigPath}". Skipping NgStarter theme provider setup.`);
+    return;
+  }
+
+  const nextContent = insertThemeProvider(addCoreImport(content));
+  tree.overwrite(appConfigPath, nextContent);
+}
+
+function addCoreImport(content: string): string {
+  const coreImport = /import\s*\{([\s\S]*?)\}\s*from\s*['"]@ngstarter-ui\/components\/core['"];?/m;
+  const match = coreImport.exec(content);
+
+  if (match) {
+    const imports = match[1]
+      .split(',')
+      .map(item => item.trim())
+      .filter(Boolean);
+
+    if (!imports.includes('provideNgsTheme')) {
+      imports.push('provideNgsTheme');
+    }
+
+    return content.replace(
+      coreImport,
+      `import { ${imports.sort().join(', ')} } from '@ngstarter-ui/components/core';`
+    );
+  }
+
+  const importStatement = `import { provideNgsTheme } from '@ngstarter-ui/components/core';`;
+  const imports = [...content.matchAll(/import[\s\S]*?from\s*['"][^'"]+['"];?/g)];
+  const lastImport = imports[imports.length - 1];
+
+  if (!lastImport) {
+    return `${importStatement}\n${content}`;
+  }
+
+  const insertIndex = (lastImport.index ?? 0) + lastImport[0].length;
+  return `${content.slice(0, insertIndex)}\n${importStatement}${content.slice(insertIndex)}`;
+}
+
+function insertThemeProvider(content: string): string {
+  return content.replace(/(\n([ \t]*)providers\s*:\s*\[)([ \t]*)(\r?\n)?/, (_match, start, indent) => {
+    const providerIndent = `${indent}  `;
+    return `${start}\n${indentBlock(NGS_THEME_PROVIDER, providerIndent)}\n`;
+  });
+}
+
+function indentBlock(value: string, indent: string): string {
+  return value
+    .split('\n')
+    .map(line => `${indent}${line}`)
+    .join('\n');
+}
+
 function ensureGlobalStyleFile(tree: Tree, stylePath: string): void {
   const content = tree.exists(stylePath) ? readText(tree, stylePath) : '';
   const imports = [
-    { needle: /@use\s+["']tailwindcss["'];?/, statement: TAILWIND_IMPORT },
     {
       needle: /@use\s+["']@ngstarter-ui\/components\/styles\/themes\/[^"']+["'];?/,
       statement: NGS_THEME_IMPORT,

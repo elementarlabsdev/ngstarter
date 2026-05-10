@@ -1,13 +1,4 @@
 import { Component } from '@angular/core';
-import { Playground } from '@meta/playground/playground';
-import { PrimaryColorsExample } from '../_examples/primary-colors-example/primary-colors-example';
-import { SecondaryColorsExample } from '../_examples/secondary-colors-example/secondary-colors-example';
-import { TertiaryColorsExample } from '../_examples/tertiary-colors-example/tertiary-colors-example';
-import { ErrorColorsExample } from '../_examples/error-colors-example/error-colors-example';
-import { SurfaceColorsExample } from '../_examples/surface-colors-example/surface-colors-example';
-import { OutlineColorsExample } from '../_examples/outline-colors-example/outline-colors-example';
-import { NeutralColorsExample } from '../_examples/neutral-colors-example/neutral-colors-example';
-import { OtherColorsExample } from '../_examples/other-colors-example/other-colors-example';
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
@@ -17,27 +8,20 @@ interface ThemeColorToken {
   aliases?: string[];
 }
 
-interface ThemeColorGroup {
+interface ThemeColorSubgroup {
   name: string;
   tokens: ThemeColorToken[];
 }
 
+interface ThemeColorGroup {
+  name: string;
+  tokens: ThemeColorToken[];
+  subgroups?: ThemeColorSubgroup[];
+}
+
 @Component({
   selector: 'app-overview',
-  imports: [
-    Playground,
-    PrimaryColorsExample,
-    SecondaryColorsExample,
-    TertiaryColorsExample,
-    ErrorColorsExample,
-    SurfaceColorsExample,
-    OutlineColorsExample,
-    NeutralColorsExample,
-    OtherColorsExample,
-    Page,
-    PageContentDirective,
-    PageTitleDirective,
-  ],
+  imports: [Page, PageContentDirective, PageTitleDirective],
   templateUrl: './overview.html',
   styleUrl: './overview.scss',
 })
@@ -87,31 +71,60 @@ export class Overview {
     },
     {
       name: 'Status',
-      tokens: [
-        { css: '--ngs-color-danger', aliases: ['error', 'negative'] },
-        { css: '--ngs-color-on-danger', aliases: ['on-error', 'on-negative'] },
-        { css: '--ngs-color-danger-container', aliases: ['error-container', 'negative-container'] },
+      tokens: [],
+      subgroups: [
         {
-          css: '--ngs-color-on-danger-container',
-          aliases: ['on-error-container', 'on-negative-container'],
+          name: 'Danger',
+          tokens: [
+            { css: '--ngs-color-danger', aliases: ['error', 'negative'] },
+            { css: '--ngs-color-on-danger', aliases: ['on-error', 'on-negative'] },
+            {
+              css: '--ngs-color-danger-container',
+              aliases: ['error-container', 'negative-container'],
+            },
+            {
+              css: '--ngs-color-on-danger-container',
+              aliases: ['on-error-container', 'on-negative-container'],
+            },
+          ],
         },
-        { css: '--ngs-color-info', aliases: ['informative'] },
-        { css: '--ngs-color-on-info', aliases: ['on-informative'] },
-        { css: '--ngs-color-info-container', aliases: ['informative-container'] },
-        { css: '--ngs-color-on-info-container', aliases: ['on-informative-container'] },
-        { css: '--ngs-color-success', aliases: ['positive'] },
-        { css: '--ngs-color-on-success', aliases: ['on-positive'] },
-        { css: '--ngs-color-success-container', aliases: ['positive-container'] },
-        { css: '--ngs-color-on-success-container', aliases: ['on-positive-container'] },
-        { css: '--ngs-color-warning', aliases: ['notice'] },
-        { css: '--ngs-color-on-warning', aliases: ['on-notice'] },
-        { css: '--ngs-color-warning-container', aliases: ['notice-container'] },
-        { css: '--ngs-color-on-warning-container', aliases: ['on-notice-container'] },
-        { css: '--ngs-color-danger-container-lowest', aliases: ['error-container-lowest'] },
-        { css: '--ngs-color-danger-container-low', aliases: ['error-container-low'] },
-        { css: '--ngs-color-danger-container-high', aliases: ['error-container-high'] },
-        { css: '--ngs-color-danger-container-highest', aliases: ['error-container-highest'] },
-        { css: '--ngs-color-green-500' },
+        {
+          name: 'Info',
+          tokens: [
+            { css: '--ngs-color-info', aliases: ['informative'] },
+            { css: '--ngs-color-on-info', aliases: ['on-informative'] },
+            { css: '--ngs-color-info-container', aliases: ['informative-container'] },
+            { css: '--ngs-color-on-info-container', aliases: ['on-informative-container'] },
+          ],
+        },
+        {
+          name: 'Success',
+          tokens: [
+            { css: '--ngs-color-success', aliases: ['positive'] },
+            { css: '--ngs-color-on-success', aliases: ['on-positive'] },
+            { css: '--ngs-color-success-container', aliases: ['positive-container'] },
+            { css: '--ngs-color-on-success-container', aliases: ['on-positive-container'] },
+            { css: '--ngs-color-green-500' },
+          ],
+        },
+        {
+          name: 'Warning',
+          tokens: [
+            { css: '--ngs-color-warning', aliases: ['notice'] },
+            { css: '--ngs-color-on-warning', aliases: ['on-notice'] },
+            { css: '--ngs-color-warning-container', aliases: ['notice-container'] },
+            { css: '--ngs-color-on-warning-container', aliases: ['on-notice-container'] },
+          ],
+        },
+        {
+          name: 'Danger Containers',
+          tokens: [
+            { css: '--ngs-color-danger-container-lowest', aliases: ['error-container-lowest'] },
+            { css: '--ngs-color-danger-container-low', aliases: ['error-container-low'] },
+            { css: '--ngs-color-danger-container-high', aliases: ['error-container-high'] },
+            { css: '--ngs-color-danger-container-highest', aliases: ['error-container-highest'] },
+          ],
+        },
       ],
     },
     {
@@ -120,7 +133,6 @@ export class Overview {
         { css: '--ngs-color-background', aliases: ['background'] },
         { css: '--ngs-color-on-background', aliases: ['on-background'] },
         { css: '--ngs-color-surface', aliases: ['surface'] },
-        { css: '--ngs-color-surface-bright' },
         { css: '--ngs-color-on-surface', aliases: ['on-surface'] },
         { css: '--ngs-color-on-surface-variant', aliases: ['on-surface-variant'] },
         { css: '--ngs-color-surface-container-lowest', aliases: ['surface-container-lowest'] },

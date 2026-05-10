@@ -12,62 +12,87 @@
         <div class="theme-token-group">
           <h2>{{ group.name }}</h2>
 
-          <div class="theme-token-grid">
-            @for (token of group.tokens; track token.css) {
-              <div class="theme-token-card">
-                <div class="theme-token-swatch" [style.background]="colorValue(token)"></div>
-                <div class="theme-token-meta">
-                  <code>{{ token.css }}</code>
-                  <span>{{ tokenAliases(token) }}</span>
+          @if (group.subgroups; as subgroups) {
+            <div class="theme-token-subgroups">
+              @for (subgroup of subgroups; track subgroup.name) {
+                <div class="theme-token-subgroup">
+                  <h3>{{ subgroup.name }}</h3>
+
+                  <div class="theme-token-grid">
+                    @for (token of subgroup.tokens; track token.css) {
+                      <div class="theme-token-card">
+                        <div
+                          class="theme-token-swatch"
+                          [style.background]="colorValue(token)"
+                        ></div>
+                        <div class="theme-token-meta">
+                          <code>{{ token.css }}</code>
+                          <span>{{ tokenAliases(token) }}</span>
+                        </div>
+                      </div>
+                    }
+                  </div>
                 </div>
-              </div>
-            }
-          </div>
+              }
+            </div>
+          } @else {
+            <div class="theme-token-grid">
+              @for (token of group.tokens; track token.css) {
+                <div class="theme-token-card">
+                  <div class="theme-token-swatch" [style.background]="colorValue(token)"></div>
+                  <div class="theme-token-meta">
+                    <code>{{ token.css }}</code>
+                    <span>{{ tokenAliases(token) }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          }
         </div>
       }
     </section>
 
-    <h3>Primary Colors</h3>
-    <ngs-playground exampleUrl="_docs/theme/colors/_examples" exampleName="primary-colors-example">
-      <app-primary-colors-example />
-    </ngs-playground>
+    <!--    <h3>Primary Colors</h3>-->
+    <!--    <ngs-playground exampleUrl="_docs/theme/colors/_examples" exampleName="primary-colors-example">-->
+    <!--      <app-primary-colors-example />-->
+    <!--    </ngs-playground>-->
 
-    <h3>Secondary Colors</h3>
-    <ngs-playground
-      exampleUrl="_docs/theme/colors/_examples"
-      exampleName="secondary-colors-example"
-    >
-      <app-secondary-colors-example />
-    </ngs-playground>
+    <!--    <h3>Secondary Colors</h3>-->
+    <!--    <ngs-playground-->
+    <!--      exampleUrl="_docs/theme/colors/_examples"-->
+    <!--      exampleName="secondary-colors-example"-->
+    <!--    >-->
+    <!--      <app-secondary-colors-example />-->
+    <!--    </ngs-playground>-->
 
-    <h3>Tertiary Colors</h3>
-    <ngs-playground exampleUrl="_docs/theme/colors/_examples" exampleName="tertiary-colors-example">
-      <app-tertiary-colors-example />
-    </ngs-playground>
+    <!--    <h3>Tertiary Colors</h3>-->
+    <!--    <ngs-playground exampleUrl="_docs/theme/colors/_examples" exampleName="tertiary-colors-example">-->
+    <!--      <app-tertiary-colors-example />-->
+    <!--    </ngs-playground>-->
 
-    <h3>Error Colors</h3>
-    <ngs-playground exampleUrl="_docs/theme/colors/_examples" exampleName="error-colors-example">
-      <app-error-colors-example />
-    </ngs-playground>
+    <!--    <h3>Error Colors</h3>-->
+    <!--    <ngs-playground exampleUrl="_docs/theme/colors/_examples" exampleName="error-colors-example">-->
+    <!--      <app-error-colors-example />-->
+    <!--    </ngs-playground>-->
 
-    <h3>Surface Colors</h3>
-    <ngs-playground exampleUrl="_docs/theme/colors/_examples" exampleName="surface-colors-example">
-      <app-surface-colors-example />
-    </ngs-playground>
+    <!--    <h3>Surface Colors</h3>-->
+    <!--    <ngs-playground exampleUrl="_docs/theme/colors/_examples" exampleName="surface-colors-example">-->
+    <!--      <app-surface-colors-example />-->
+    <!--    </ngs-playground>-->
 
-    <h3>Other Colors</h3>
-    <ngs-playground exampleUrl="_docs/theme/colors/_examples" exampleName="other-colors-example">
-      <app-other-colors-example />
-    </ngs-playground>
+    <!--    <h3>Other Colors</h3>-->
+    <!--    <ngs-playground exampleUrl="_docs/theme/colors/_examples" exampleName="other-colors-example">-->
+    <!--      <app-other-colors-example />-->
+    <!--    </ngs-playground>-->
 
-    <h3>Outline Colors</h3>
-    <ngs-playground exampleUrl="_docs/theme/colors/_examples" exampleName="outline-colors-example">
-      <app-outline-colors-example />
-    </ngs-playground>
+    <!--    <h3>Outline Colors</h3>-->
+    <!--    <ngs-playground exampleUrl="_docs/theme/colors/_examples" exampleName="outline-colors-example">-->
+    <!--      <app-outline-colors-example />-->
+    <!--    </ngs-playground>-->
 
-    <h3>Neutral Colors</h3>
-    <ngs-playground exampleUrl="_docs/theme/colors/_examples" exampleName="neutral-colors-example">
-      <app-neutral-colors-example />
-    </ngs-playground>
+    <!--    <h3>Neutral Colors</h3>-->
+    <!--    <ngs-playground exampleUrl="_docs/theme/colors/_examples" exampleName="neutral-colors-example">-->
+    <!--      <app-neutral-colors-example />-->
+    <!--    </ngs-playground>-->
   </div>
 </app-page>
