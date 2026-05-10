@@ -7,7 +7,7 @@
   font-size: var(--ngs-font-size-sm);
   font-weight: 600;
   cursor: pointer;
-  --icon-size: --spacing(4.5);
+  --ngs-icon-size: --spacing(4.5);
 
   &:hover {
     color: var(--ngs-color-primary);

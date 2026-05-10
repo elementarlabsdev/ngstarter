@@ -18,7 +18,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    --icon-size: var(--ngs-font-size-xl);
+    --ngs-icon-size: var(--ngs-font-size-xl);
     border-radius: calc(infinity * 1px);
 
     &:hover {

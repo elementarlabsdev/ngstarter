@@ -20,7 +20,7 @@
     justify-content: center;
     border-radius: calc(infinity * 1px);
 
-    --icon-size: var(--ngs-font-size-xl);
+    --ngs-icon-size: var(--ngs-font-size-xl);
 
     &:hover {
       color: var(--ngs-color-tertiary-300);

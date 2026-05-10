@@ -6,16 +6,15 @@
             (opened)="onSelectOpened()"
             (closed)="onSelectClosed()">
   <ngs-select-header>
-    <div class="px-3 py-3 rounded-t sticky top-0 z-1">
+    <div class="sticky top-0 z-1 bg-surface-container-lowest">
       <input #searchInput
              type="text"
              placeholder="Search..."
              autocomplete="off"
              [(ngModel)]="searchTerm"
-             class="w-full bg-surface-container-low text-sm focus:outline-none rounded-[var(--input-radius)]
-                  focus:bg-surface-container-lowest focus:shadow-sm h-12 px-3">
+             class="w-full text-sm focus:outline-none border-b border-surface-container-high focus:border-b-primary h-14 px-3">
       @if (searchTerm().trim()) {
-        <div class="absolute end-4 top-1/2 -translate-y-1/2">
+        <div class="absolute end-1 top-1/2 -translate-y-1/2">
           <button
             ngsIconButton
             (click)="clearSearch($event)"

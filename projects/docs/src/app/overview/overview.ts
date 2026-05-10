@@ -39,7 +39,7 @@ export class Overview {
     {
       routerLink: '/components/announcement',
       imageUrl: 'assets/overview/announcement.svg',
-      name: 'AnnouncementData'
+      name: 'Announcement'
     },
     {
       routerLink: '/components/expansion-panel',

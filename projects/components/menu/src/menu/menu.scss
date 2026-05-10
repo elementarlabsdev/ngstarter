@@ -7,7 +7,7 @@
 .ngs-menu-panel {
   background: var(--ngs-menu-background, var(--ngs-dropdown-bg));
   box-shadow: var(--ngs-menu-shadow, var(--ngs-dropdown-shadow));
-  border-radius: var(--ngs-menu-border-radius, var(--ngs-dropdown-radius));
+  border-radius: var(--ngs-dropdown-radius);
   max-height: var(--ngs-menu-max-height, 90vh);
 
   @media (min-height: 640px) {
@@ -21,8 +21,7 @@
   animation-name: ngs-menu-panel-showing;
   animation-duration: 150ms;
   animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding: var(--ngs-menu-padding, var(--ngs-dropdown-padding, --spacing(2)));
 
   &.ngs-menu-below {
     transform-origin: top;
@@ -61,5 +60,5 @@
 }
 
 .ngs-menu-content {
-  padding: var(--ngs-menu-padding, 0);
+  padding: 0;
 }

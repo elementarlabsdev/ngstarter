@@ -1,1 +1,83 @@
 @use "../../components/styles/themes/default";
+
+.prose {
+  div:has(> table.ngs-table) {
+    margin-block: 1.5rem;
+    overflow-x: auto;
+    border: 1px solid var(--ngs-color-border);
+    border-radius: var(--ngs-radius-lg);
+    background: var(--ngs-table-bg);
+    box-shadow: var(--ngs-shadow-sm);
+  }
+
+  table.ngs-table {
+    --ngs-table-bg: var(--ngs-color-surface);
+    --ngs-table-background: var(--ngs-table-bg);
+    --ngs-table-header-bg: var(--ngs-color-surface-container-low);
+    --ngs-table-row-bg: var(--ngs-color-surface);
+    --ngs-table-border-color: var(--ngs-color-border);
+    --ngs-table-header-color: var(--ngs-color-on-surface-variant);
+    --ngs-table-cell-padding: 0.875rem 1rem;
+    --ngs-table-row-height: 3.25rem;
+    --ngs-table-header-row-height: 3rem;
+    --ngs-table-cell-font-size: 0.875rem;
+    --ngs-table-header-cell-font-size: 0.75rem;
+    --ngs-table-header-cell-font-weight: 700;
+
+    margin-block: 0;
+  }
+
+  table:not(.ngs-table) {
+    width: 100%;
+    min-width: 100%;
+    margin-block: 1.5rem;
+    overflow: hidden;
+    border: 1px solid var(--ngs-color-border);
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: var(--ngs-radius-lg);
+    background: var(--ngs-color-surface);
+    box-shadow: var(--ngs-shadow-sm);
+    color: var(--ngs-color-on-surface);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  table:not(.ngs-table) thead tr {
+    background: var(--ngs-color-surface-container-low);
+    color: var(--ngs-color-on-surface-variant);
+  }
+
+  table:not(.ngs-table) th {
+    padding: 0.875rem 1rem;
+    border: 0;
+    border-bottom: 1px solid var(--ngs-color-border);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-align: left;
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
+
+  table:not(.ngs-table) td {
+    padding: 0.875rem 1rem;
+    border: 0;
+    border-bottom: 1px solid var(--ngs-color-border);
+    color: var(--ngs-color-on-surface);
+    vertical-align: middle;
+  }
+
+  table:not(.ngs-table) tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  table:not(.ngs-table) code,
+  table.ngs-table code {
+    border-radius: var(--ngs-radius-sm);
+    background: var(--ngs-color-surface-container);
+    color: var(--ngs-color-on-surface);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+}

@@ -4,12 +4,12 @@
   display: flex;
   align-items: center;
   flex: none;
-  min-height: var(--ngs-menu-item-height, var(--option-height));
-  padding: var(--ngs-menu-item-padding, 0 --spacing(3));
-  border-radius: var(--ngs-menu-item-radius, var(--ngs-control-radius));
-  font-size: var(--ngs-menu-item-font-size, var(--ngs-font-size-sm));
+  min-height: var(--ngs-menu-item-height, var(--ngs-dropdown-height, var(--option-height)));
+  padding: var(--ngs-menu-item-padding, var(--ngs-dropdown-item-padding, 0 --spacing(3)));
+  border-radius: var(--ngs-menu-item-radius, var(--ngs-dropdown-item-radius, var(--ngs-control-radius)));
+  font-size: var(--ngs-menu-item-font-size, var(--ngs-dropdown-item-font-size, var(--ngs-font-size-sm)));
   font-weight: var(--ngs-menu-item-font-weight, inherit);
-  color: var(--ngs-menu-item-color, var(--ngs-color-on-surface));
+  color: var(--ngs-menu-item-color, var(--ngs-dropdown-item-color, var(--ngs-color-on-surface)));
   cursor: pointer;
   user-select: none;
   border: none;
@@ -23,19 +23,19 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  gap: var(--ngs-menu-item-gap, --spacing(2.5));
+  gap: var(--ngs-menu-item-gap, var(--ngs-dropdown-item-gap, --spacing(2.5)));
 
   &:hover:not([disabled]),
   &.ngs-menu-item-highlighted:not([disabled]) {
-    background: var(--ngs-menu-item-hover-background, var(--ngs-color-surface-container-high));
+    background: var(--ngs-menu-item-hover-background, var(--ngs-dropdown-item-hover-bg, var(--ngs-color-surface-container-high)));
   }
 
   &.ngs-menu-item-active:not([disabled]) {
-    background: var(--ngs-menu-item-active-background, var(--ngs-color-surface-container-highest));
+    background: var(--ngs-menu-item-active-background, var(--ngs-dropdown-item-active-bg, var(--ngs-color-surface-container-highest)));
   }
 
   &[disabled] {
-    color: var(--ngs-menu-item-disabled-color, var(--ngs-color-on-surface-variant));
+    color: var(--ngs-menu-item-disabled-color, var(--ngs-dropdown-item-disabled-color, var(--ngs-color-on-surface-variant)));
     cursor: default;
     pointer-events: none;
   }

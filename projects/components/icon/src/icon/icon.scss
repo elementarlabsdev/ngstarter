@@ -12,14 +12,14 @@
   }
 
   &:not([class*="text-"]) {
-    color: var(--icon-color);
+    color: var(--ngs-icon-color);
   }
 
   &:not([class*="w-"]):not([class*="size-"]) {
-    width: var(--icon-size);
+    width: var(--ngs-icon-size);
   }
 
   &:not([class*="h-"]):not([class*="size-"]) {
-    height: var(--icon-size);
+    height: var(--ngs-icon-size);
   }
 }

@@ -14,8 +14,7 @@
   overflow: hidden;
 
   .ngs-timepicker-content {
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding: var(--ngs-timepicker-content-padding, var(--ngs-dropdown-padding, --spacing(2)));
   }
 }
 

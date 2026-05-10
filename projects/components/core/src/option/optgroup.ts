@@ -11,11 +11,11 @@ import { Component, input, booleanAttribute } from '@angular/core';
   styles: [`
     :host {
       display: block;
-      --ngs-optgroup-label-padding: 0 16px;
-      --ngs-optgroup-label-height: 48px;
-      --ngs-optgroup-label-font-size: 12px;
+      --ngs-optgroup-label-padding: var(--ngs-dropdown-item-padding, 0 0.75rem);
+      --ngs-optgroup-label-height: var(--ngs-dropdown-height, var(--option-height, 48px));
+      --ngs-optgroup-label-font-size: var(--ngs-font-size-xs, 0.75rem);
       --ngs-optgroup-label-font-weight: 600;
-      --ngs-optgroup-label-color: rgba(0, 0, 0, 0.54);
+      --ngs-optgroup-label-color: var(--ngs-color-on-surface-variant, rgba(0, 0, 0, 0.54));
     }
     .ngs-optgroup-label {
       display: flex;

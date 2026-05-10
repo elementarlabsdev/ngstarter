@@ -43,7 +43,7 @@
   }
 
   &.is-active {
-    --icon-color: var(--ngs-rail-nav-bg-item-icon-is-active-color);
+    --ngs-icon-color: var(--ngs-rail-nav-bg-item-icon-is-active-color);
 
     .icon {
       background: var(--ngs-rail-nav-bg-item-icon-is-active-bg);

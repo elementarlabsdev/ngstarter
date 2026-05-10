@@ -7,4 +7,6 @@
   overflow: auto;
   min-height: 0;
   max-height: var(--ngs-select-panel-max-height, var(--ngs-dropdown-max-height, 256px));
+  padding: var(--ngs-select-content-padding, var(--ngs-dropdown-padding, --spacing(2)));
+  box-sizing: border-box;
 }

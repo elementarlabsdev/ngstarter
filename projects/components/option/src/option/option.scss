@@ -1,58 +1,50 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-option-padding: 0 16px;
-  --ngs-option-font-size: 14px;
-  --ngs-option-color: var(--ngs-color-on-surface);
-  --ngs-option-hover-background: var(--ngs-color-surface-container-high);
-  --ngs-option-selected-background: var(--ngs-color-primary-container);
-  --ngs-option-selected-color: var(--ngs-color-on-primary-container);
-  --ngs-option-active-background: var(--ngs-color-surface-container-highest);
-  --ngs-option-disabled-color: var(--ngs-color-on-surface-variant);
-
   display: flex;
   align-items: center;
-  height: var(--option-height, 48px);
-  padding: var(--ngs-option-padding);
-  font-size: var(--ngs-option-font-size);
-  color: var(--ngs-option-color);
+  height: var(--ngs-option-height, var(--ngs-dropdown-height, var(--option-height, 48px)));
+  padding: var(--ngs-option-padding, var(--ngs-dropdown-item-padding, 0 --spacing(3)));
+  border-radius: var(--ngs-option-radius, var(--ngs-dropdown-item-radius, var(--ngs-control-radius)));
+  font-size: var(--ngs-option-font-size, var(--ngs-dropdown-item-font-size, var(--ngs-font-size-sm)));
+  color: var(--ngs-option-color, var(--ngs-dropdown-item-color, var(--ngs-color-on-surface)));
   cursor: pointer;
   outline: none;
   position: relative;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  gap: --spacing(2);
+  gap: var(--ngs-option-gap, var(--ngs-dropdown-item-gap, --spacing(2)));
 
   &:hover:not(.ngs-option-disabled) {
-    background: var(--ngs-option-hover-background);
+    background: var(--ngs-option-hover-background, var(--ngs-dropdown-item-hover-bg, var(--ngs-color-surface-container-high)));
   }
 
   &.ngs-option-active:not(.ngs-option-disabled) {
-    background: var(--ngs-option-active-background);
+    background: var(--ngs-option-active-background, var(--ngs-dropdown-item-active-bg, var(--ngs-color-surface-container-highest)));
   }
 
   &.ngs-option-selected:not(.ngs-option-multiple) {
-    background: var(--ngs-option-selected-background);
-    color: var(--ngs-option-selected-color);
+    background: var(--ngs-option-selected-background, var(--ngs-dropdown-item-selected-bg, var(--ngs-color-primary-container)));
+    color: var(--ngs-option-selected-color, var(--ngs-dropdown-item-selected-color, var(--ngs-color-on-primary-container)));
   }
 
   &.ngs-option-multiple.ngs-option-selected {
     background: transparent;
 
     &:hover:not(.ngs-option-disabled) {
-      background: var(--ngs-option-hover-background);
+      background: var(--ngs-option-hover-background, var(--ngs-dropdown-item-hover-bg, var(--ngs-color-surface-container-high)));
     }
   }
 
   &.ngs-option-disabled {
-    color: var(--ngs-option-disabled-color);
+    color: var(--ngs-option-disabled-color, var(--ngs-dropdown-item-disabled-color, var(--ngs-color-on-surface-variant)));
     cursor: default;
     pointer-events: none;
   }
 
   .ngs-optgroup & {
-    padding-left: 32px;
+    padding-inline-start: var(--ngs-option-group-padding-start, var(--ngs-dropdown-item-nested-padding-start, calc(var(--ngs-dropdown-item-padding-x, --spacing(3)) + --spacing(4))));
   }
 }
 

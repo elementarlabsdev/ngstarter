@@ -283,7 +283,7 @@ ngs-sidebar.sidebar-panel.ngs-sidebar {
 }
 
 .profile-trigger ngs-icon {
-  --icon-size: 1rem;
+  --ngs-icon-size: 1rem;
   color: #7a7c86;
   font-size: 0.67rem;
 }
@@ -291,12 +291,12 @@ ngs-sidebar.sidebar-panel.ngs-sidebar {
 .corporate-menu-panel {
   --ngs-menu-background: #ffffff;
   --ngs-menu-border: 1px solid var(--corporate-border);
-  --ngs-menu-border-radius: 0.65rem;
+  --ngs-dropdown-radius: 0.65rem;
   --ngs-menu-min-width: 13rem;
   --ngs-menu-padding: 0.35rem;
   --ngs-menu-shadow: 0 16px 38px rgba(42, 40, 58, 0.12);
   --ngs-menu-divider-color: var(--corporate-border);
-  --ngs-menu-item-height: 2.1rem;
+  --ngs-dropdown-height: 2.15rem;
   --ngs-menu-item-padding: 0 0.7rem;
   --ngs-menu-item-radius: 0.45rem;
   --ngs-menu-item-font-size: 0.88rem;
@@ -472,7 +472,7 @@ ngs-sidebar.sidebar-panel.ngs-sidebar {
 }
 
 .view-more ngs-icon {
-  --icon-size: 1rem;
+  --ngs-icon-size: 1rem;
   flex: none;
 }
 
@@ -557,7 +557,7 @@ ngs-sidebar.sidebar-panel.ngs-sidebar {
 }
 
 .status-pill .ngs-chip-control {
-  --icon-size: 1.12em;
+  --ngs-icon-size: 1.12em;
   width: 1.12em;
   height: 1.12em;
 }
