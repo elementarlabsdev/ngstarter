@@ -13,6 +13,11 @@
     "jsdom"
   ],
   "assets": [
-    "styles"
+    "styles",
+    {
+      "glob": "**/*.json",
+      "input": "schematics",
+      "output": "schematics"
+    }
   ]
 }

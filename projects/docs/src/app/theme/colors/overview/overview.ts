@@ -1,23 +1,16 @@
 import { Component } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { PrimaryColorsExample } from '../_examples/primary-colors-example/primary-colors-example';
-import {
-  SecondaryColorsExample
-} from '../_examples/secondary-colors-example/secondary-colors-example';
+import { SecondaryColorsExample } from '../_examples/secondary-colors-example/secondary-colors-example';
 import { TertiaryColorsExample } from '../_examples/tertiary-colors-example/tertiary-colors-example';
 import { ErrorColorsExample } from '../_examples/error-colors-example/error-colors-example';
 import { SurfaceColorsExample } from '../_examples/surface-colors-example/surface-colors-example';
 import { OutlineColorsExample } from '../_examples/outline-colors-example/outline-colors-example';
-import { InverseColorsExample } from '../_examples/inverse-colors-example/inverse-colors-example';
 import { NeutralColorsExample } from '../_examples/neutral-colors-example/neutral-colors-example';
 import { OtherColorsExample } from '../_examples/other-colors-example/other-colors-example';
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
-import { GreenColorsExample } from '../_examples/green-colors-example/green-colors-example';
-import { BlueColorsExample } from '../_examples/blue-colors-example/blue-colors-example';
-import { OrangeColorsExample } from '../_examples/orange-colors-example/orange-colors-example';
-import { RedColorsExample } from '../_examples/red-colors-example/red-colors-example';
 
 interface ThemeColorToken {
   css: string;
@@ -39,19 +32,14 @@ interface ThemeColorGroup {
     ErrorColorsExample,
     SurfaceColorsExample,
     OutlineColorsExample,
-    InverseColorsExample,
     NeutralColorsExample,
     OtherColorsExample,
     Page,
     PageContentDirective,
     PageTitleDirective,
-    GreenColorsExample,
-    BlueColorsExample,
-    OrangeColorsExample,
-    RedColorsExample
   ],
   templateUrl: './overview.html',
-  styleUrl: './overview.scss'
+  styleUrl: './overview.scss',
 })
 export class Overview {
   readonly colorGroups: ThemeColorGroup[] = [
@@ -68,7 +56,7 @@ export class Overview {
         { css: '--ngs-color-primary-400' },
         { css: '--ngs-color-primary-500' },
         { css: '--ngs-color-primary-600' },
-      ]
+      ],
     },
     {
       name: 'Secondary',
@@ -83,7 +71,7 @@ export class Overview {
         { css: '--ngs-color-secondary-400' },
         { css: '--ngs-color-secondary-fixed' },
         { css: '--ngs-color-on-secondary-fixed' },
-      ]
+      ],
     },
     {
       name: 'Tertiary',
@@ -95,9 +83,7 @@ export class Overview {
         { css: '--ngs-color-tertiary-100' },
         { css: '--ngs-color-tertiary-200' },
         { css: '--ngs-color-tertiary-300' },
-        { css: '--ngs-color-tertiary-700' },
-        { css: '--ngs-color-tertiary-800' },
-      ]
+      ],
     },
     {
       name: 'Status',
@@ -105,7 +91,10 @@ export class Overview {
         { css: '--ngs-color-danger', aliases: ['error', 'negative'] },
         { css: '--ngs-color-on-danger', aliases: ['on-error', 'on-negative'] },
         { css: '--ngs-color-danger-container', aliases: ['error-container', 'negative-container'] },
-        { css: '--ngs-color-on-danger-container', aliases: ['on-error-container', 'on-negative-container'] },
+        {
+          css: '--ngs-color-on-danger-container',
+          aliases: ['on-error-container', 'on-negative-container'],
+        },
         { css: '--ngs-color-info', aliases: ['informative'] },
         { css: '--ngs-color-on-info', aliases: ['on-informative'] },
         { css: '--ngs-color-info-container', aliases: ['informative-container'] },
@@ -122,10 +111,8 @@ export class Overview {
         { css: '--ngs-color-danger-container-low', aliases: ['error-container-low'] },
         { css: '--ngs-color-danger-container-high', aliases: ['error-container-high'] },
         { css: '--ngs-color-danger-container-highest', aliases: ['error-container-highest'] },
-        { css: '--ngs-color-orange-container' },
-        { css: '--ngs-color-on-orange-container' },
         { css: '--ngs-color-green-500' },
-      ]
+      ],
     },
     {
       name: 'Surface',
@@ -149,7 +136,7 @@ export class Overview {
         { css: '--ngs-color-muted', aliases: ['muted'] },
         { css: '--ngs-color-emphasis', aliases: ['emphasis'] },
         { css: '--ngs-color-strong', aliases: ['strong'] },
-      ]
+      ],
     },
     {
       name: 'Neutral',
@@ -169,7 +156,7 @@ export class Overview {
         { css: '--ngs-color-neutral' },
         { css: '--ngs-color-black' },
         { css: '--ngs-color-white' },
-      ]
+      ],
     },
     {
       name: 'State',
@@ -182,7 +169,7 @@ export class Overview {
         { css: '--ngs-state-disabled-bg', aliases: ['state-disabled'] },
         { css: '--ngs-state-disabled-color' },
         { css: '--ngs-state-disabled-border' },
-      ]
+      ],
     },
   ];
 
@@ -191,6 +178,6 @@ export class Overview {
   }
 
   tokenAliases(token: ThemeColorToken): string {
-    return token.aliases?.map(alias => `--color-${alias}`).join(', ') || 'Component token only';
+    return token.aliases?.map((alias) => `--color-${alias}`).join(', ') || 'Component token only';
   }
 }

@@ -112,7 +112,7 @@ jobs:
 
       - name: Build components
         if: env.COMPONENTS_CHANGED == 'true'
-        run: npm run build:components:prod
+        run: npm run build:components:prod && npm run verify:components:package
 
       - name: Publish to NPM
         if: env.COMPONENTS_CHANGED == 'true'

@@ -1,14 +1,9 @@
 import { Component } from '@angular/core';
-import { Divider } from '@ngstarter-ui/components/divider';
 
 @Component({
   selector: 'app-primary-colors-example',
-  imports: [
-    Divider
-  ],
+  imports: [],
   templateUrl: './primary-colors-example.html',
-  styleUrl: './primary-colors-example.scss'
+  styleUrl: './primary-colors-example.scss',
 })
-export class PrimaryColorsExample {
-
-}
+export class PrimaryColorsExample {}

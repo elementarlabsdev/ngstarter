@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-other-colors-example',
-    imports: [],
-    templateUrl: './other-colors-example.html',
-    styleUrl: './other-colors-example.scss'
+  selector: 'app-other-colors-example',
+  imports: [],
+  templateUrl: './other-colors-example.html',
+  styleUrl: './other-colors-example.scss',
 })
-export class OtherColorsExample {
-
-}
+export class OtherColorsExample {}
