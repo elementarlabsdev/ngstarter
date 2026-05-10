@@ -65,7 +65,7 @@
                         <ng-container ngsSidebarNavItemBadge>{{ navItem.badge }}</ng-container>
                       }
                       {{ navItem.name }}
-                      <ngs-icon name="fluent:chevron-down-24-regular" class="size-3" ngsSidebarNavGroupToggleIcon/>
+                      <ngs-icon name="fluent:chevron-down-24-regular" class="size-4" ngsSidebarNavGroupToggleIcon/>
                     </ngs-sidebar-nav-group-toggle>
                     <ngs-sidebar-nav-group-menu [dataSource]="navItem.children | orderBy:'name'">
                       <ng-container *ngsSidebarNavItemDef="let child">
