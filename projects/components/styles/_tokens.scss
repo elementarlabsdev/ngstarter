@@ -172,6 +172,7 @@
   --ngs-dropdown-border: 1px solid var(--ngs-color-faint);
   --ngs-dropdown-max-height: 16rem;
   --ngs-option-height: var(--ngs-control-height-md);
+  --ngs-menu-item-radius: var(--ngs-control-radius);
 
   --ngs-dialog-bg: var(--ngs-color-surface-container-lowest);
   --ngs-dialog-color: var(--ngs-color-on-surface);
@@ -880,10 +881,10 @@
   --ngs-control-padding-x: --spacing(5);
 }
 
-[data-ngs-radius='none'] { --ngs-control-radius: var(--ngs-radius-none); --ngs-dialog-radius: var(--ngs-radius-none); --ngs-nav-item-radius: var(--ngs-radius-none); }
-[data-ngs-radius='small'] { --ngs-control-radius: var(--ngs-radius-sm); --ngs-dialog-radius: var(--ngs-radius-md); --ngs-nav-item-radius: var(--ngs-radius-sm); }
-[data-ngs-radius='medium'] { --ngs-control-radius: var(--ngs-radius-lg); --ngs-dialog-radius: var(--ngs-radius-xl); --ngs-nav-item-radius: var(--ngs-radius-lg); }
-[data-ngs-radius='large'] { --ngs-control-radius: var(--ngs-radius-xl); --ngs-dialog-radius: 1.25rem; --ngs-nav-item-radius: var(--ngs-radius-xl); }
+[data-ngs-radius='none'] { --ngs-control-radius: var(--ngs-radius-none); --ngs-dialog-radius: var(--ngs-radius-none); --ngs-nav-item-radius: var(--ngs-radius-none); --ngs-menu-item-radius: var(--ngs-radius-none); }
+[data-ngs-radius='small'] { --ngs-control-radius: var(--ngs-radius-sm); --ngs-dialog-radius: var(--ngs-radius-md); --ngs-nav-item-radius: var(--ngs-radius-sm); --ngs-menu-item-radius: var(--ngs-radius-sm); }
+[data-ngs-radius='medium'] { --ngs-control-radius: var(--ngs-radius-lg); --ngs-dialog-radius: var(--ngs-radius-xl); --ngs-nav-item-radius: var(--ngs-radius-lg); --ngs-menu-item-radius: var(--ngs-radius-lg); }
+[data-ngs-radius='large'] { --ngs-control-radius: var(--ngs-radius-xl); --ngs-dialog-radius: 1.25rem; --ngs-nav-item-radius: var(--ngs-radius-xl); --ngs-menu-item-radius: var(--ngs-radius-xl); }
 
 :root,
 .dark,
@@ -1033,6 +1034,7 @@
   --dropdown-border: var(--ngs-dropdown-border);
   --dropdown-max-height: var(--ngs-dropdown-max-height);
   --option-height: var(--ngs-option-height);
+  --menu-item-radius: var(--ngs-menu-item-radius);
   --overlay-backdrop-bg: var(--ngs-overlay-backdrop-bg);
   --overlay-backdrop-blur: var(--ngs-overlay-backdrop-blur);
   --icon-size: var(--ngs-icon-size);

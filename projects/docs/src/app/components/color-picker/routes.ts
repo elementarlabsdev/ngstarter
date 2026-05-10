@@ -7,14 +7,17 @@ export const routes: Routes = [
   {
     path: '',
     component: Common,
+    title: 'Color Picker',
     children: [
       {
         path: '',
-        component: Overview
+        component: Overview,
+        title: 'Color Picker'
       },
       {
         path: 'api',
-        component: Api
+        component: Api,
+        title: 'Color Picker / Api'
       }
     ]
   }

@@ -14,27 +14,33 @@ export const routes: Routes = [
   },
   {
     path: 'theme',
-    loadChildren: () => import('./theme/theme.module').then(m => m.ThemeModule)
+    loadChildren: () => import('./theme/routes').then(m => m.routes),
+    title: 'Theme'
   },
   {
     path: 'forms',
-    loadChildren: () => import('./forms/forms.module').then(m => m.FormsModule)
+    loadChildren: () => import('./forms/routes').then(m => m.routes),
+    title: 'Forms'
   },
   {
     path: 'components',
-    loadChildren: () => import('./components/components.routes').then(m => m.routes)
+    loadChildren: () => import('./components/components.routes').then(m => m.routes),
+    title: 'Components'
   },
   {
     path: 'libraries',
-    loadChildren: () => import('./libraries/routes').then(m => m.routes)
+    loadChildren: () => import('./libraries/routes').then(m => m.routes),
+    title: 'Libraries'
   },
   {
     path: 'navigation',
-    loadChildren: () => import('./navigation/navigation.module').then(m => m.NavigationModule)
+    loadChildren: () => import('./navigation/routes').then(m => m.routes),
+    title: 'Navigation'
   },
   {
     path: 'micro-charts',
-    loadChildren: () => import('./micro-charts/micro-charts.module').then(m => m.MicroChartsModule)
+    loadChildren: () => import('./micro-charts/routes').then(m => m.routes),
+    title: 'Micro Charts'
   },
   {
     path: '**',

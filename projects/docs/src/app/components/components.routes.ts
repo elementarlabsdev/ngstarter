@@ -3,290 +3,362 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: 'cookie-popup',
-    loadChildren: () => import('./cookie-popup/routes').then(m => m.routes)
+    loadChildren: () => import('./cookie-popup/routes').then(m => m.routes),
+    title: 'Cookie Popup'
   },
   {
     path: 'action-required',
-    loadChildren: () => import('./action-required/routes').then(m => m.routes)
+    loadChildren: () => import('./action-required/routes').then(m => m.routes),
+    title: 'Action Required'
   },
   {
     path: 'avatar',
-    loadChildren: () => import('./avatar/avatar.module').then(m => m.AvatarModule)
+    loadChildren: () => import('./avatar/routes').then(m => m.routes),
+    title: 'Avatar'
   },
   {
     path: 'kbd',
-    loadChildren: () => import('./kdb/routes').then(m => m.routes)
+    loadChildren: () => import('./kdb/routes').then(m => m.routes),
+    title: 'Kbd'
   },
   {
     path: 'timeline',
-    loadChildren: () => import('./timeline/timeline.module').then(m => m.TimelineModule)
+    loadChildren: () => import('./timeline/routes').then(m => m.routes),
+    title: 'Timeline'
   },
   {
     path: 'badge',
-    loadChildren: () => import('./badge/badge.module').then(m => m.BadgeModule)
+    loadChildren: () => import('./badge/routes').then(m => m.routes),
+    title: 'Badge'
   },
   {
     path: 'grid',
-    loadChildren: () => import('./grid/grid.module').then(m => m.GridModule)
+    loadChildren: () => import('./grid/routes').then(m => m.routes),
+    title: 'Grid'
   },
   {
     path: 'bottom-sheet',
-    loadChildren: () => import('./bottom-sheet/bottom-sheet.module').then(m => m.BottomSheetModule)
+    loadChildren: () => import('./bottom-sheet/routes').then(m => m.routes),
+    title: 'Bottom Sheet'
   },
   {
     path: 'card',
-    loadChildren: () => import('./card/card.module').then(m => m.CardModule)
+    loadChildren: () => import('./card/routes').then(m => m.routes),
+    title: 'Card'
   },
   {
     path: 'card-overlay',
-    loadChildren: () => import('./card-overlay/card-overlay.module').then(m => m.CardOverlayModule)
+    loadChildren: () => import('./card-overlay/routes').then(m => m.routes),
+    title: 'Card Overlay'
   },
   {
     path: 'carousel',
-    loadChildren: () => import('./carousel/routes').then(m => m.routes)
+    loadChildren: () => import('./carousel/routes').then(m => m.routes),
+    title: 'Carousel'
   },
   {
     path: 'chips',
-    loadChildren: () => import('./chips/routes').then(m => m.routes)
+    loadChildren: () => import('./chips/routes').then(m => m.routes),
+    title: 'Chips'
   },
   {
     path: 'crop',
-    loadChildren: () => import('./crop/crop-module').then(m => m.CropModule)
+    loadChildren: () => import('./crop/routes').then(m => m.routes),
+    title: 'Crop'
   },
   {
     path: 'emoji-picker',
-    loadChildren: () => import('./emoji-picker/routes').then(m => m.routes)
+    loadChildren: () => import('./emoji-picker/routes').then(m => m.routes),
+    title: 'Emoji Picker'
   },
   {
     path: 'datepicker',
-    loadChildren: () => import('./datepicker/routes').then(m => m.routes)
+    loadChildren: () => import('./datepicker/routes').then(m => m.routes),
+    title: 'Datepicker'
   },
   {
     path: 'timepicker',
-    loadChildren: () => import('./timepicker/routes').then(m => m.routes)
+    loadChildren: () => import('./timepicker/routes').then(m => m.routes),
+    title: 'Timepicker'
   },
   {
     path: 'icon',
-    loadChildren: () => import('./icon/icon.module').then(m => m.IconModule)
+    loadChildren: () => import('./icon/routes').then(m => m.routes),
+    title: 'Icon'
   },
   {
     path: 'dialog',
-    loadChildren: () => import('./dialog/dialog.module').then(m => m.DialogModule)
+    loadChildren: () => import('./dialog/routes').then(m => m.routes),
+    title: 'Dialog'
   },
   {
     path: 'divider',
-    loadChildren: () => import('./divider/divider.module').then(m => m.DividerModule)
+    loadChildren: () => import('./divider/routes').then(m => m.routes),
+    title: 'Divider'
   },
   {
     path: 'content-fade',
-    loadChildren: () => import('./content-fade/routes').then(m => m.routes)
+    loadChildren: () => import('./content-fade/routes').then(m => m.routes),
+    title: 'Content Fade'
   },
   {
     path: 'expansion-panel',
-    loadChildren: () => import('./expansion-panel/expansion-panel.module').then(m => m.ExpansionPanelModule)
+    loadChildren: () => import('./expansion-panel/routes').then(m => m.routes),
+    title: 'Expansion Panel'
   },
   {
     path: 'list',
-    loadChildren: () => import('./list/routes').then(m => m.routes)
+    loadChildren: () => import('./list/routes').then(m => m.routes),
+    title: 'List'
   },
   {
     path: 'menu',
-    loadChildren: () => import('./menu/menu.module').then(m => m.MenuModule)
+    loadChildren: () => import('./menu/routes').then(m => m.routes),
+    title: 'Menu'
   },
   {
     path: 'paginator',
-    loadChildren: () => import('./paginator/routes').then(m => m.routes)
+    loadChildren: () => import('./paginator/routes').then(m => m.routes),
+    title: 'Paginator'
   },
   {
     path: 'progress-bar',
-    loadChildren: () => import('./progress-bar/routes').then(m => m.routes)
+    loadChildren: () => import('./progress-bar/routes').then(m => m.routes),
+    title: 'Progress Bar'
   },
   {
     path: 'resizable-container',
-    loadChildren: () => import('./resizable-container/routes').then(m => m.routes)
+    loadChildren: () => import('./resizable-container/routes').then(m => m.routes),
+    title: 'Resizable Container'
   },
   {
     path: 'gauge',
-    loadChildren: () => import('./gauge/gauge.module').then(m => m.GaugeModule)
+    loadChildren: () => import('./gauge/routes').then(m => m.routes),
+    title: 'Gauge'
   },
   {
     path: 'guided-tour',
-    loadChildren: () => import('./guided-tour/routes').then(m => m.routes)
+    loadChildren: () => import('./guided-tour/routes').then(m => m.routes),
+    title: 'Guided Tour'
   },
   {
     path: 'progress-spinner',
-    loadChildren: () => import('./progress-spinner/progress-spinner.module').then(m => m.ProgressSpinnerModule)
+    loadChildren: () => import('./progress-spinner/routes').then(m => m.routes),
+    title: 'Progress Spinner'
   },
   {
     path: 'slider',
-    loadChildren: () => import('./slider/slider.module').then(m => m.SliderModule)
+    loadChildren: () => import('./slider/routes').then(m => m.routes),
+    title: 'Slider'
   },
   {
     path: 'thumbnail-maker',
-    loadChildren: () => import('./thumbnail-maker/thumbnail-maker.module').then(m => m.ThumbnailMakerModule)
+    loadChildren: () => import('./thumbnail-maker/routes').then(m => m.routes),
+    title: 'Thumbnail Maker'
   },
   {
     path: 'expand',
-    loadChildren: () => import('./expand/expand.module').then(m => m.ExpandModule)
+    loadChildren: () => import('./expand/routes').then(m => m.routes),
+    title: 'Expand'
   },
   {
     path: 'snackbar',
-    loadChildren: () => import('./snackbar/routes').then(m => m.routes)
+    loadChildren: () => import('./snackbar/routes').then(m => m.routes),
+    title: 'Snackbar'
   },
   {
     path: 'comment-editor',
-    loadChildren: () => import('./comment-editor/routes').then(m => m.routes)
+    loadChildren: () => import('./comment-editor/routes').then(m => m.routes),
+    title: 'Comment Editor'
   },
   {
     path: 'table',
-    loadChildren: () => import('./table/routes').then(m => m.routes)
+    loadChildren: () => import('./table/routes').then(m => m.routes),
+    title: 'Table'
   },
   {
     path: 'stepper',
-    loadChildren: () => import('./stepper/stepper.module').then(m => m.StepperModule)
+    loadChildren: () => import('./stepper/routes').then(m => m.routes),
+    title: 'Stepper'
   },
   {
     path: 'tabs',
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsModule)
+    loadChildren: () => import('./tabs/routes').then(m => m.routes),
+    title: 'Tabs'
   },
   {
     path: 'tooltip',
-    loadChildren: () => import('./tooltip/tooltip.module').then(m => m.TooltipModule)
+    loadChildren: () => import('./tooltip/routes').then(m => m.routes),
+    title: 'Tooltip'
   },
   {
     path: 'tree',
-    loadChildren: () => import('./tree/routes').then(m => m.routes)
+    loadChildren: () => import('./tree/routes').then(m => m.routes),
+    title: 'Tree'
   },
   {
     path: 'skeleton',
-    loadChildren: () => import('./skeleton/skeleton.module').then(m => m.SkeletonModule)
+    loadChildren: () => import('./skeleton/routes').then(m => m.routes),
+    title: 'Skeleton'
   },
   {
     path: 'alert',
-    loadChildren: () => import('./alert/routes').then(m => m.routes)
+    loadChildren: () => import('./alert/routes').then(m => m.routes),
+    title: 'Alert'
   },
   {
     path: 'popover',
-    loadChildren: () => import('./popover/routes').then(m => m.routes)
+    loadChildren: () => import('./popover/routes').then(m => m.routes),
+    title: 'Popover'
   },
   {
     path: 'color-picker',
-    loadChildren: () => import('./color-picker/routes').then(m => m.routes)
+    loadChildren: () => import('./color-picker/routes').then(m => m.routes),
+    title: 'Color Picker'
   },
   {
     path: 'color-switcher',
-    loadChildren: () => import('./color-switcher/routes').then(m => m.routes)
+    loadChildren: () => import('./color-switcher/routes').then(m => m.routes),
+    title: 'Color Switcher'
   },
   {
     path: 'upload',
-    loadChildren: () => import('./upload/routes').then(m => m.routes)
+    loadChildren: () => import('./upload/routes').then(m => m.routes),
+    title: 'Upload'
   },
   {
     path: 'command-bar',
-    loadChildren: () => import('./command-bar/routes').then(m => m.routes)
+    loadChildren: () => import('./command-bar/routes').then(m => m.routes),
+    title: 'Command Bar'
   },
   {
     path: 'filter-builder',
-    loadChildren: () => import('./filter-builder/filter-builder.module').then(m => m.FilterBuilderModule)
+    loadChildren: () => import('./filter-builder/routes').then(m => m.routes),
+    title: 'Filter Builder'
   },
   {
     path: 'panel',
-    loadChildren: () => import('./panel/panel.module').then(m => m.PanelModule)
+    loadChildren: () => import('./panel/routes').then(m => m.routes),
+    title: 'Panel'
   },
   {
     path: 'incidents',
-    loadChildren: () => import('./incidents/incidents.module').then(m => m.IncidentsModule)
+    loadChildren: () => import('./incidents/routes').then(m => m.routes),
+    title: 'Incidents'
   },
   {
     path: 'layout',
-    loadChildren: () => import('./layout/layout.module').then(m => m.LayoutModule)
+    loadChildren: () => import('./layout/routes').then(m => m.routes),
+    title: 'Layout'
   },
   {
     path: 'suggestions',
-    loadChildren: () => import('./suggestions/suggestions.module').then(m => m.SuggestionsModule)
+    loadChildren: () => import('./suggestions/routes').then(m => m.routes),
+    title: 'Suggestions'
   },
   {
     path: 'announcement',
-    loadChildren: () => import('./announcement/announcement.module').then(m => m.AnnouncementModule)
+    loadChildren: () => import('./announcement/routes').then(m => m.routes),
+    title: 'Announcement'
   },
   {
     path: 'empty-state',
-    loadChildren: () => import('./empty-state/routes').then(m => m.routes)
+    loadChildren: () => import('./empty-state/routes').then(m => m.routes),
+    title: 'Empty State'
   },
   {
     path: 'confirm',
-    loadChildren: () => import('./confirm/routes').then(m => m.routes)
+    loadChildren: () => import('./confirm/routes').then(m => m.routes),
+    title: 'Confirm'
   },
   {
     path: 'image-viewer',
-    loadChildren: () => import('./image-viewer/image-viewer.module').then(m => m.ImageViewerModule)
+    loadChildren: () => import('./image-viewer/routes').then(m => m.routes),
+    title: 'Image Viewer'
   },
   {
     path: 'video-viewer',
-    loadChildren: () => import('./video-viewer/video-viewer.module').then(m => m.VideoViewerModule)
+    loadChildren: () => import('./video-viewer/routes').then(m => m.routes),
+    title: 'Video Viewer'
   },
   {
     path: 'image-zoom-viewer',
-    loadChildren: () => import('./image-zoom-viewer/routes').then(m => m.routes)
+    loadChildren: () => import('./image-zoom-viewer/routes').then(m => m.routes),
+    title: 'Image Zoom Viewer'
   },
   {
     path: 'image-resizer',
-    loadChildren: () => import('./image-resizer/routes').then(m => m.routes)
+    loadChildren: () => import('./image-resizer/routes').then(m => m.routes),
+    title: 'Image Resizer'
   },
   {
     path: 'image-placeholder',
-    loadChildren: () => import('./image-placeholder/routes').then(m => m.routes)
+    loadChildren: () => import('./image-placeholder/routes').then(m => m.routes),
+    title: 'Image Placeholder'
   },
   {
     path: 'marquee',
-    loadChildren: () => import('./marquee/marquee.module').then(m => m.MarqueeModule)
+    loadChildren: () => import('./marquee/routes').then(m => m.routes),
+    title: 'Marquee'
   },
   {
     path: 'text-editor',
-    loadChildren: () => import('./text-editor/routes').then(m => m.routes)
+    loadChildren: () => import('./text-editor/routes').then(m => m.routes),
+    title: 'Text Editor'
   },
   {
     path: 'screen-loader',
-    loadChildren: () => import('./screen-loader/screen-loader.module').then(m => m.ScreenLoaderModule)
+    loadChildren: () => import('./screen-loader/routes').then(m => m.routes),
+    title: 'Screen Loader'
   },
   {
     path: 'sidenav',
-    loadChildren: () => import('./sidenav/sidenav.module').then(m => m.SidenavModule)
+    loadChildren: () => import('./sidenav/routes').then(m => m.routes),
+    title: 'Sidenav'
   },
   {
     path: 'drawer',
-    loadChildren: () => import('./drawer/routes').then(m => m.routes)
+    loadChildren: () => import('./drawer/routes').then(m => m.routes),
+    title: 'Drawer'
   },
   {
     path: 'comparison-slider',
-    loadChildren: () => import('./comparison-slider/routes').then(m => m.routes)
+    loadChildren: () => import('./comparison-slider/routes').then(m => m.routes),
+    title: 'Comparison Slider'
   },
   {
     path: 'signature-pad',
-    loadChildren: () => import('./signature-pad/signature-pad.module').then(m => m.SignaturePadModule)
+    loadChildren: () => import('./signature-pad/routes').then(m => m.routes),
+    title: 'Signature Pad'
   },
   {
     path: 'notifications',
-    loadChildren: () => import('./notifications/routes').then(m => m.routes)
+    loadChildren: () => import('./notifications/routes').then(m => m.routes),
+    title: 'Notifications'
   },
   {
     path: 'block-loader',
-    loadChildren: () => import('./block-loader/block-loader.module').then(m => m.BlockLoaderModule)
+    loadChildren: () => import('./block-loader/routes').then(m => m.routes),
+    title: 'Block Loader'
   },
   {
     path: 'code-highlighter',
-    loadChildren: () => import('./code-highlighter/routes').then(m => m.routes)
+    loadChildren: () => import('./code-highlighter/routes').then(m => m.routes),
+    title: 'Code Highlighter'
   },
   {
     path: 'tiles',
-    loadChildren: () => import('./tiles/routes').then(m => m.routes)
+    loadChildren: () => import('./tiles/routes').then(m => m.routes),
+    title: 'Tiles'
   },
   {
     path: 'split-pane',
-    loadChildren: () => import('./split-pane/routes').then(m => m.routes)
+    loadChildren: () => import('./split-pane/routes').then(m => m.routes),
+    title: 'Split Pane'
   },
   {
     path: 'toolbar',
-    loadChildren: () => import('./toolbar/routes').then(m => m.routes)
+    loadChildren: () => import('./toolbar/routes').then(m => m.routes),
+    title: 'Toolbar'
   },
 ];

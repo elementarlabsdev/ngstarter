@@ -21,6 +21,7 @@
     "start": "ng cache clean && ng serve --hmr",
     "start:docs": "ng cache clean && ng serve docs --hmr",
     "start:admin": "ng cache clean && ng serve admin --hmr",
+    "start:admin:corporate": "ng cache clean && ng serve admin-corporate --hmr",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "build": "ng build",

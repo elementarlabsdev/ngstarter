@@ -4,6 +4,7 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./common/common').then(c => c.Common),
+    title: 'Date Format Select',
     children: [
       {
         path: '',

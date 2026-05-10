@@ -1,24 +1,15 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-menu-item-height: var(--option-height);
-  --ngs-menu-item-padding: 0 --spacing(3);
-  --ngs-menu-item-font-size: var(--ngs-font-size-sm);
-  --ngs-menu-item-color: var(--ngs-color-on-surface);
-  --ngs-menu-item-hover-background: var(--ngs-color-surface-container-high);
-  --ngs-menu-item-selected-background: var(--ngs-color-primary-container);
-  --ngs-menu-item-selected-color: var(--ngs-color-on-primary-container);
-  --ngs-menu-item-active-background: var(--ngs-color-surface-container-highest);
-  --ngs-menu-item-disabled-color: var(--ngs-color-on-surface-variant);
-  --ngs-menu-item-gap: --spacing(2.5);
-
   display: flex;
   align-items: center;
   flex: none;
-  min-height: var(--ngs-menu-item-height);
-  padding: var(--ngs-menu-item-padding);
-  font-size: var(--ngs-menu-item-font-size);
-  color: var(--ngs-menu-item-color);
+  min-height: var(--ngs-menu-item-height, var(--option-height));
+  padding: var(--ngs-menu-item-padding, 0 --spacing(3));
+  border-radius: var(--ngs-menu-item-radius, var(--ngs-control-radius));
+  font-size: var(--ngs-menu-item-font-size, var(--ngs-font-size-sm));
+  font-weight: var(--ngs-menu-item-font-weight, inherit);
+  color: var(--ngs-menu-item-color, var(--ngs-color-on-surface));
   cursor: pointer;
   user-select: none;
   border: none;
@@ -32,19 +23,19 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  gap: var(--ngs-menu-item-gap);
+  gap: var(--ngs-menu-item-gap, --spacing(2.5));
 
   &:hover:not([disabled]),
   &.ngs-menu-item-highlighted:not([disabled]) {
-    background: var(--ngs-menu-item-hover-background);
+    background: var(--ngs-menu-item-hover-background, var(--ngs-color-surface-container-high));
   }
 
   &.ngs-menu-item-active:not([disabled]) {
-    background: var(--ngs-menu-item-active-background);
+    background: var(--ngs-menu-item-active-background, var(--ngs-color-surface-container-highest));
   }
 
   &[disabled] {
-    color: var(--ngs-menu-item-disabled-color);
+    color: var(--ngs-menu-item-disabled-color, var(--ngs-color-on-surface-variant));
     cursor: default;
     pointer-events: none;
   }

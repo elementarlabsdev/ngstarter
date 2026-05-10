@@ -7,19 +7,23 @@ export const routes: Routes = [
   {
     path: '',
     component: CommonComponent,
+    title: 'Card',
     children: [
       {
         path: '',
         redirectTo: 'overview',
-        pathMatch: 'full'
+        pathMatch: 'full',
+        title: 'Card / Overview'
       },
       {
         path: 'overview',
-        component: Overview
+        component: Overview,
+        title: 'Card / Overview'
       },
       {
         path: 'api',
-        component: ApiComponent
+        component: ApiComponent,
+        title: 'Card / Api'
       }
     ]
   }
