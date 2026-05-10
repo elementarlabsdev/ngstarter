@@ -325,7 +325,7 @@
             "server": "projects/admin-corporate/src/main.server.ts",
             "outputMode": "server",
             "security": {
-              "allowedHosts": []
+              "allowedHosts": ["*"]
             },
             "ssr": {
               "entry": "projects/admin-corporate/src/server.ts"
