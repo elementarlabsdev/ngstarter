@@ -1,9 +1,11 @@
 <svg width="296" height="141" viewBox="0 0 296 141" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" fill="#F8FAFC"/>
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" stroke="#E2E8F0"/>
-  <rect x="52" y="32" width="192" height="82" rx="12" fill="#111827" opacity="0.12"/>
-  <rect x="82" y="44" width="68" height="38" rx="10" fill="#FFFFFF" stroke="#036FE3"/>
-  <path d="M115 82L103 99L133 82Z" fill="#FFFFFF" stroke="#036FE3"/>
-  <circle cx="183" cy="63" r="16" fill="#036FE3"/>
-  <text x="183" y="69" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" text-anchor="middle">1</text>
+  <g transform="translate(0 -2.5)" data-auto-center="vertical">
+    <rect x="52" y="32" width="192" height="82" rx="12" fill="#111827" opacity="0.12"/>
+    <rect x="82" y="44" width="68" height="38" rx="10" fill="#FFFFFF" stroke="#036FE3"/>
+    <path d="M115 82L103 99L133 82Z" fill="#FFFFFF" stroke="#036FE3"/>
+    <circle cx="183" cy="63" r="16" fill="#036FE3"/>
+    <text x="183" y="69" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" text-anchor="middle">1</text>
+  </g>
 </svg>

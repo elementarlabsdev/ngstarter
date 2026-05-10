@@ -1,12 +1,14 @@
 <svg width="296" height="141" viewBox="0 0 296 141" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" fill="#F8FAFC"/>
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" stroke="#E2E8F0"/>
-  <rect x="72" y="74" width="78" height="26" rx="13" fill="#036FE3"/>
-  <path d="M94 87H128" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
-  <rect x="136.5" y="34.5" width="91" height="57" rx="11.5" fill="#FFFFFF" stroke="#CBD5E1"/>
-  <circle cx="153" cy="52" r="5" fill="#D6EAFF"/>
-  <path d="M152 52H154" stroke="#036FE3" stroke-width="2" stroke-linecap="round"/>
-  <path d="M167 50H208" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
-  <path d="M153 66H211" stroke="#CBD5E1" stroke-width="4" stroke-linecap="round"/>
-  <path d="M153 76H196" stroke="#CBD5E1" stroke-width="4" stroke-linecap="round"/>
+  <g transform="translate(0 3.5)" data-auto-center="vertical">
+    <rect x="72" y="74" width="78" height="26" rx="13" fill="#036FE3"/>
+    <path d="M94 87H128" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+    <rect x="136.5" y="34.5" width="91" height="57" rx="11.5" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <circle cx="153" cy="52" r="5" fill="#D6EAFF"/>
+    <path d="M152 52H154" stroke="#036FE3" stroke-width="2" stroke-linecap="round"/>
+    <path d="M167 50H208" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+    <path d="M153 66H211" stroke="#CBD5E1" stroke-width="4" stroke-linecap="round"/>
+    <path d="M153 76H196" stroke="#CBD5E1" stroke-width="4" stroke-linecap="round"/>
+  </g>
 </svg>

@@ -1,6 +1,8 @@
 <svg width="296" height="141" viewBox="0 0 296 141" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" fill="#F8FAFC"/>
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" stroke="#E2E8F0"/>
-  <path d="M148 39L190 63V88L148 112L106 88V63L148 39Z" fill="#036FE3"/>
-  <path d="M148 55L172 70V78L148 93L124 78V70L148 55Z" fill="#FFFFFF"/>
+  <g transform="translate(0 -5)" data-auto-center="vertical">
+    <path d="M148 39L190 63V88L148 112L106 88V63L148 39Z" fill="#036FE3"/>
+    <path d="M148 55L172 70V78L148 93L124 78V70L148 55Z" fill="#FFFFFF"/>
+  </g>
 </svg>

@@ -1,9 +1,11 @@
 <svg width="296" height="141" viewBox="0 0 296 141" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" fill="#F8FAFC"/>
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" stroke="#E2E8F0"/>
-  <rect x="57" y="38" width="182" height="69" rx="10" fill="#FFFFFF" stroke="#CBD5E1"/>
-  <rect x="57" y="38" width="182" height="16" rx="10" fill="#036FE3"/>
-  <rect x="70" y="65" width="43" height="30" rx="7" fill="#E2E8F0"/>
-  <rect x="124" y="65" width="45" height="30" rx="7" fill="#E2E8F0"/>
-  <rect x="180" y="65" width="43" height="30" rx="7" fill="#E2E8F0"/>
+  <g transform="translate(0 -2)" data-auto-center="vertical">
+    <rect x="57" y="38" width="182" height="69" rx="10" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <rect x="57" y="38" width="182" height="16" rx="10" fill="#036FE3"/>
+    <rect x="70" y="65" width="43" height="30" rx="7" fill="#E2E8F0"/>
+    <rect x="124" y="65" width="45" height="30" rx="7" fill="#E2E8F0"/>
+    <rect x="180" y="65" width="43" height="30" rx="7" fill="#E2E8F0"/>
+  </g>
 </svg>

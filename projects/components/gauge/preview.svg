@@ -1,8 +1,10 @@
 <svg width="296" height="141" viewBox="0 0 296 141" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" fill="#F8FAFC"/>
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" stroke="#E2E8F0"/>
-  <circle cx="148" cy="79" r="36" fill="none" stroke="#E2E8F0" stroke-width="12" stroke-dasharray="114 90" stroke-dashoffset="102"/>
-  <circle cx="148" cy="79" r="36" fill="none" stroke="#036FE3" stroke-width="12" stroke-dasharray="72 132" stroke-dashoffset="102"/>
-  <path d="M148 79L169 63" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
-  <circle cx="148" cy="79" r="5" fill="#334155"/>
+  <g transform="translate(0 -8.5)" data-auto-center="vertical">
+    <circle cx="148" cy="79" r="36" fill="none" stroke="#E2E8F0" stroke-width="12" stroke-dasharray="114 90" stroke-dashoffset="102"/>
+    <circle cx="148" cy="79" r="36" fill="none" stroke="#036FE3" stroke-width="12" stroke-dasharray="72 132" stroke-dashoffset="102"/>
+    <path d="M148 79L169 63" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="148" cy="79" r="5" fill="#334155"/>
+  </g>
 </svg>

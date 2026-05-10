@@ -1,17 +1,19 @@
 <svg width="296" height="141" viewBox="0 0 296 141" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" fill="#F8FAFC"/>
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" stroke="#E2E8F0"/>
-  <rect x="60" y="34" width="176" height="78" rx="12" fill="#D6EAFF"/>
-  <path d="M69 102L105 70L128 86L154 55L227 102H69Z" fill="#7AB8FF"/>
-  <circle cx="96" cy="58" r="10" fill="#FBC434"/>
-  <path d="M60 34H236V112H60V34ZM98 50V96H197V50H98Z" fill="#111827" opacity="0.38" fill-rule="evenodd"/>
-  <rect x="98.5" y="50.5" width="98" height="45" fill="transparent" stroke="#FFFFFF" stroke-width="3"/>
-  <path d="M131.5 51V96" stroke="#FFFFFF" stroke-opacity="0.65"/>
-  <path d="M164.5 51V96" stroke="#FFFFFF" stroke-opacity="0.65"/>
-  <path d="M99 65.5H196" stroke="#FFFFFF" stroke-opacity="0.65"/>
-  <path d="M99 80.5H196" stroke="#FFFFFF" stroke-opacity="0.65"/>
-  <rect x="94" y="46" width="9" height="9" rx="2" fill="#036FE3"/>
-  <rect x="192" y="46" width="9" height="9" rx="2" fill="#036FE3"/>
-  <rect x="94" y="91" width="9" height="9" rx="2" fill="#036FE3"/>
-  <rect x="192" y="91" width="9" height="9" rx="2" fill="#036FE3"/>
+  <g transform="translate(0 -2.5)" data-auto-center="vertical">
+    <rect x="60" y="34" width="176" height="78" rx="12" fill="#D6EAFF"/>
+    <path d="M69 102L105 70L128 86L154 55L227 102H69Z" fill="#7AB8FF"/>
+    <circle cx="96" cy="58" r="10" fill="#FBC434"/>
+    <path d="M60 34H236V112H60V34ZM98 50V96H197V50H98Z" fill="#111827" opacity="0.38" fill-rule="evenodd"/>
+    <rect x="98.5" y="50.5" width="98" height="45" fill="transparent" stroke="#FFFFFF" stroke-width="3"/>
+    <path d="M131.5 51V96" stroke="#FFFFFF" stroke-opacity="0.65"/>
+    <path d="M164.5 51V96" stroke="#FFFFFF" stroke-opacity="0.65"/>
+    <path d="M99 65.5H196" stroke="#FFFFFF" stroke-opacity="0.65"/>
+    <path d="M99 80.5H196" stroke="#FFFFFF" stroke-opacity="0.65"/>
+    <rect x="94" y="46" width="9" height="9" rx="2" fill="#036FE3"/>
+    <rect x="192" y="46" width="9" height="9" rx="2" fill="#036FE3"/>
+    <rect x="94" y="91" width="9" height="9" rx="2" fill="#036FE3"/>
+    <rect x="192" y="91" width="9" height="9" rx="2" fill="#036FE3"/>
+  </g>
 </svg>

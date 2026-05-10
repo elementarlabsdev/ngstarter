@@ -1,11 +1,13 @@
 <svg width="296" height="141" viewBox="0 0 296 141" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" fill="#F8FAFC"/>
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" stroke="#E2E8F0"/>
-  <rect x="78" y="55" width="72" height="29" rx="14.5" fill="#FFFFFF"/>
-  <circle cx="95" cy="69.5" r="7" fill="#036FE3"/>
-  <rect x="109" y="66" width="27" height="7" rx="3.5" fill="#D6EAFF"/>
-  <rect x="166" y="55" width="52" height="29" rx="14.5" fill="#036FE3"/>
-  <text x="192" y="75" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" text-anchor="middle">12</text>
-  <circle cx="214" cy="53" r="9" fill="#E53E3E"/>
-  <text x="214" y="57" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="9" font-weight="700" text-anchor="middle">3</text>
+  <g transform="translate(0 6.5)" data-auto-center="vertical">
+    <rect x="78" y="55" width="72" height="29" rx="14.5" fill="#FFFFFF"/>
+    <circle cx="95" cy="69.5" r="7" fill="#036FE3"/>
+    <rect x="109" y="66" width="27" height="7" rx="3.5" fill="#D6EAFF"/>
+    <rect x="166" y="55" width="52" height="29" rx="14.5" fill="#036FE3"/>
+    <text x="192" y="75" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" text-anchor="middle">12</text>
+    <circle cx="214" cy="53" r="9" fill="#E53E3E"/>
+    <text x="214" y="57" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="9" font-weight="700" text-anchor="middle">3</text>
+  </g>
 </svg>

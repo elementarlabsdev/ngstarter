@@ -1,7 +1,9 @@
 <svg width="296" height="141" viewBox="0 0 296 141" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" fill="#111827"/>
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" stroke="#334155"/>
-  <path d="M148 41L190 65V88L148 112L106 88V65L148 41Z" fill="#036FE3"/>
-  <path d="M148 56L172 70V80L148 94L124 80V70L148 56Z" fill="#FFFFFF"/>
-  <rect x="118" y="108" width="60" height="5" rx="2.5" fill="#CBD5E1"/>
+  <g transform="translate(0 -6.5)" data-auto-center="vertical">
+    <path d="M148 41L190 65V88L148 112L106 88V65L148 41Z" fill="#036FE3"/>
+    <path d="M148 56L172 70V80L148 94L124 80V70L148 56Z" fill="#FFFFFF"/>
+    <rect x="118" y="108" width="60" height="5" rx="2.5" fill="#CBD5E1"/>
+  </g>
 </svg>

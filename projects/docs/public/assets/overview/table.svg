@@ -1,19 +1,21 @@
 <svg width="296" height="141" viewBox="0 0 296 141" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" fill="#F8FAFC"/>
   <rect x="18.5" y="15.5" width="259" height="110" rx="16.5" stroke="#E2E8F0"/>
-  <rect x="61" y="39" width="174" height="67" rx="10" fill="#FFFFFF" stroke="#CBD5E1"/>
-  <rect x="61" y="39" width="174" height="16" rx="10" fill="#E2E8F0"/>
-  <path d="M105 39V106" stroke="#E2E8F0" stroke-width="1" stroke-linecap="round"/>
-  <path d="M154 39V106" stroke="#E2E8F0" stroke-width="1" stroke-linecap="round"/>
-  <path d="M61 71H235" stroke="#E2E8F0" stroke-width="1" stroke-linecap="round"/>
-  <path d="M61 88H235" stroke="#E2E8F0" stroke-width="1" stroke-linecap="round"/>
-  <rect x="75" y="62" width="19" height="3" rx="1.5" fill="#CBD5E1"/>
-  <rect x="75" y="79" width="24" height="3" rx="1.5" fill="#CBD5E1"/>
-  <rect x="75" y="96" width="18" height="3" rx="1.5" fill="#CBD5E1"/>
-  <rect x="119" y="62" width="24" height="3" rx="1.5" fill="#CBD5E1"/>
-  <rect x="119" y="79" width="19" height="3" rx="1.5" fill="#CBD5E1"/>
-  <rect x="119" y="96" width="24" height="3" rx="1.5" fill="#CBD5E1"/>
-  <rect x="169" y="62" width="30" height="3" rx="1.5" fill="#CBD5E1"/>
-  <rect x="169" y="79" width="21" height="3" rx="1.5" fill="#CBD5E1"/>
-  <rect x="169" y="96" width="27" height="3" rx="1.5" fill="#CBD5E1"/>
+  <g transform="translate(0 -2)" data-auto-center="vertical">
+    <rect x="61" y="39" width="174" height="67" rx="10" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <rect x="61" y="39" width="174" height="16" rx="10" fill="#E2E8F0"/>
+    <path d="M105 39V106" stroke="#E2E8F0" stroke-width="1" stroke-linecap="round"/>
+    <path d="M154 39V106" stroke="#E2E8F0" stroke-width="1" stroke-linecap="round"/>
+    <path d="M61 71H235" stroke="#E2E8F0" stroke-width="1" stroke-linecap="round"/>
+    <path d="M61 88H235" stroke="#E2E8F0" stroke-width="1" stroke-linecap="round"/>
+    <rect x="75" y="62" width="19" height="3" rx="1.5" fill="#CBD5E1"/>
+    <rect x="75" y="79" width="24" height="3" rx="1.5" fill="#CBD5E1"/>
+    <rect x="75" y="96" width="18" height="3" rx="1.5" fill="#CBD5E1"/>
+    <rect x="119" y="62" width="24" height="3" rx="1.5" fill="#CBD5E1"/>
+    <rect x="119" y="79" width="19" height="3" rx="1.5" fill="#CBD5E1"/>
+    <rect x="119" y="96" width="24" height="3" rx="1.5" fill="#CBD5E1"/>
+    <rect x="169" y="62" width="30" height="3" rx="1.5" fill="#CBD5E1"/>
+    <rect x="169" y="79" width="21" height="3" rx="1.5" fill="#CBD5E1"/>
+    <rect x="169" y="96" width="27" height="3" rx="1.5" fill="#CBD5E1"/>
+  </g>
 </svg>
