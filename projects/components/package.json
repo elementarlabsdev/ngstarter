@@ -60,6 +60,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "exports": {
+    "./ai/*": "./ai/*",
     "./styles/*": "./styles/*",
     "./styles/themes/*": "./styles/themes/*"
   }

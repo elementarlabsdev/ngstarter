@@ -3,26 +3,27 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        Our Alert Component is designed to make your app notifications stand out. It’s fully customizable and supports:
+        The Alert component shows an inline message inside the page. Use it to give users contextual
+        feedback about a state, result, warning, or problem near the part of the interface where it matters.
       </p>
-      <div class="mt-6">Key Features:</div>
+      <div class="mt-6">Use it for:</div>
       <ul class="list-disc ps-4 mt-3 my-6 flex flex-col gap-3">
         <li>
-          ✅ <strong>Icons</strong>: Add visual cues with ease.
+          <strong>Contextual feedback</strong>: Show messages inside forms, tables, cards, settings pages, or workflows.
         </li>
         <li>
-          ✅ <strong>Controls</strong>: Include buttons or actions to engage your users.
+          <strong>Status messages</strong>: Communicate success, information, warnings, notices, or errors.
         </li>
         <li>
-          ✅ <strong>Closable Alerts</strong>: Let users dismiss messages when they’re done.
+          <strong>Optional structure</strong>: Add a title, icon, close button, auto-close behavior, or small actions.
+        </li>
+        <li>
+          <strong>Semantic variants</strong>: Use variants such as default, positive, informative, negative, notice, or secondary.
         </li>
       </ul>
       <p>
-        It’s lightweight, easy to integrate, and works perfectly with .
-        Enhance your app’s user experience with modern, clean, and functional alerts.
-      </p>
-      <p>
-        Perfect for developers who want simplicity without sacrificing quality. Give it a try!
+        Do not use Alert for temporary toast messages, modal confirmations, critical required actions,
+        or small status labels inside table rows. Use Snack Bar, Dialog, Action Required, or Badge for those cases.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

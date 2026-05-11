@@ -3,28 +3,29 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Badge component is a small, informative element typically used to display counts, status, or labels.
-        It can be easily attached to other components to provide additional context without taking up much space.
+        The Badge directive attaches a small indicator to another element. Use it to show a count,
+        dot, short text, or compact label on top of a button, icon, text, avatar, tab, or navigation item.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Use it for:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Contextual Information</strong>: Great for showing notifications, counts, or status updates.
+            <strong>Counts</strong>: Show unread messages, notifications, tasks, updates, or pending items.
           </li>
           <li>
-            ✅ <strong>Flexible Positioning</strong>: Supports multiple positions relative to the host element.
+            <strong>Small labels</strong>: Add very short text when the label belongs to a specific host element.
           </li>
           <li>
-            ✅ <strong>Customizable Appearance</strong>: Choose from different sizes and colors to match your design.
+            <strong>Dot indicators</strong>: Use the small size when only presence of a state matters.
           </li>
           <li>
-            ✅ <strong>Dynamic Visibility</strong>: Easily hide or disable the badge based on your application's state.
+            <strong>Positioned context</strong>: Place the badge above, below, before, or after the host element with optional overlap.
           </li>
         </ul>
       </div>
       <p>
-        Whether you need to show the number of unread messages or highlight a new feature, the Badge component is a versatile tool for your UI.
+        Do not use Badge as a standalone block, long text label, avatar presence indicator, or full inline status pill.
+        Use Chip, Avatar presence, Alert, or Announcement for those cases.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

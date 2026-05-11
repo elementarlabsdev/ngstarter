@@ -3,29 +3,30 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        Introducing the <strong>Announcement Component</strong>, a simple and effective way to display
-        important messages at the top of your app. Whether it’s a critical update,
-        a promotion, or just a friendly reminder, this component ensures your users won’t miss it.
+        The Announcement component shows an important global message in the application layout,
+        most often in the header area. Use it when users need to see a visible app-wide notice
+        without blocking their current work.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Use it for:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Highly Visible</strong>: Always grabs attention without disrupting the user experience.
+            <strong>Global notices</strong>: Show a message that should be visible across the app or current layout.
           </li>
           <li>
-            ✅ <strong>User-Friendly</strong>: Intuitive behavior with dismissible options.
+            <strong>Header messages</strong>: Place billing, maintenance, deadline, onboarding, or product update notices near the top of the UI.
           </li>
           <li>
-            ✅ <strong>Customizable</strong>: Easily adapt the design to match your app's style.
+            <strong>Optional actions</strong>: Add an icon, title, link, variant, or close button when the message needs more context.
           </li>
           <li>
-            ✅ <strong>Seamless Integration</strong>: Built with Angular, it fits perfectly into your app.
+            <strong>Dynamic announcements</strong>: Use the announcement store and global announcement component for app-level messages.
           </li>
         </ul>
       </div>
       <p>
-        Keep your users informed with the <strong>Announcement Component</strong> — the perfect solution for delivering essential updates!
+        Do not use Announcement for field-level validation, local inline feedback, toast messages,
+        modal confirmations, or critical required actions. Use Alert, Snack Bar, Dialog, or Action Required for those cases.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

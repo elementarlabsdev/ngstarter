@@ -3,8 +3,30 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        Breadcrumbs are a navigation aid that helps users keep track of their location within a website or application.
-        They provide a clear path back to previous pages and improve user experience by simplifying navigation.
+        Breadcrumbs show the user's path inside an application hierarchy. Use them to help users understand
+        where they are and move back to parent levels such as projects, documents, settings sections,
+        folders, or entity detail pages.
+      </p>
+      <div class="my-7">
+        <div>Use them for:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            <strong>Hierarchical pages</strong>: Show paths like Home / Projects / Project A / Settings.
+          </li>
+          <li>
+            <strong>Parent navigation</strong>: Let users return to higher levels of the current structure.
+          </li>
+          <li>
+            <strong>Object context</strong>: Show where an entity, document, folder, or admin page belongs.
+          </li>
+          <li>
+            <strong>Global layout breadcrumbs</strong>: Use the breadcrumbs store when the layout should update breadcrumbs dynamically.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Do not use Breadcrumbs as the main app navigation, a tab switcher, a filter list, or a wizard progress indicator.
+        Use Navigation, Sidebar, Sidenav, Tabs, or Stepper for those cases.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

@@ -3,27 +3,32 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The <code class="code">BottomSheet</code> is a service for opening Material Design bottom sheets.
-        A bottom sheet is a surface anchored to the bottom edge of the screen that presents supplementary content
-        while retaining the current context.
+        The Bottom Sheet service opens a temporary panel attached to the bottom edge of the screen.
+        Use it to show supplementary actions or choices while keeping the user in the current page context,
+        especially in mobile and responsive interfaces.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Use it for:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Flexible Content</strong>: Open components or templates as bottom sheets.
+            <strong>Action lists</strong>: Present share, open with, quick actions, or object-specific options.
           </li>
           <li>
-            ✅ <strong>Configurable</strong>: Customize backdrop, closing behavior, focus, and dimensions.
+            <strong>Mobile choices</strong>: Show compact selections from the bottom of the viewport.
           </li>
           <li>
-            ✅ <strong>Service-based</strong>: Easy to trigger from anywhere in your application.
+            <strong>Temporary panels</strong>: Open a component or template without navigating away.
           </li>
           <li>
-            ✅ <strong>Lifecycle Management</strong>: Provides references to track the state of opened bottom sheets.
+            <strong>Data and results</strong>: Pass data into the sheet and return a result when it is dismissed.
           </li>
         </ul>
       </div>
+      <p>
+        Do not use Bottom Sheet for full modal flows, confirmations, long forms, side detail panels,
+        small anchored menus, or persistent navigation. Use Dialog, Confirm, Drawer, Side Panel, Menu,
+        Popover, Sidebar, or Sidenav for those cases.
+      </p>
     </main>
     <nav ngs-tab-nav-bar>
       <a routerLink="/components/bottom-sheet" ngs-tab-link>Overview</a>

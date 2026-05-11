@@ -16,10 +16,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideNgsTheme({
-      theme: 'wise',
+      theme: 'default',
       colorScheme: 'light',
       density: 'comfortable',
-      radius: 'large',
+      radius: 'medium',
       persist: false,
     }),
     provideAppInitializer(() => {

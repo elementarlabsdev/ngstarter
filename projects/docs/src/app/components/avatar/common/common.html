@@ -3,26 +3,31 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Avatar component is used to represent a user or entity with an image, initials, or icon.
-        It supports different variants, sizes, and can be grouped together.
+        The Avatar component represents a user, team, file, folder, or other entity with an image,
+        initials, generated placeholder, or icon. Use it as a compact identity marker in tables,
+        lists, comments, account menus, cards, and collaborator interfaces.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Use it for:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Flexible Content</strong>: Display images, text labels, or icons.
+            <strong>People and entities</strong>: Show users, teams, files, projects, or folders in a compact visual form.
           </li>
           <li>
-            ✅ <strong>Visual Variants</strong>: Support for solid, tonal, outlined, and plain styles.
+            <strong>Fallback identity</strong>: Use initials, icons, automatic colors, or DiceBear placeholders when no image is available.
           </li>
           <li>
-            ✅ <strong>Automatic Colors</strong>: Dynamically generate background and text colors.
+            <strong>Presence</strong>: Add online, offline, or away indicators for users and collaborators.
           </li>
           <li>
-            ✅ <strong>Avatar Groups</strong>: Easily stack multiple avatars together.
+            <strong>Groups</strong>: Stack multiple avatars and show hidden participants with an avatar-more item.
           </li>
         </ul>
       </div>
+      <p>
+        Do not use Avatar as a full user profile card, a standalone status label, or a decorative image.
+        Combine it with Card, Table, Select, Autocomplete, or other components when more structure is needed.
+      </p>
     </main>
     <nav ngs-tab-nav-bar>
       <a routerLink="/components/avatar" ngs-tab-link>Overview</a>

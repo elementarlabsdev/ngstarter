@@ -1,0 +1,1044 @@
+# NgStarter UI
+
+NgStarter UI is an AI-friendly Angular component kit for admin panels and product dashboards.
+
+Package: `@ngstarter-ui/components`
+Angular: 21
+Primary docs: https://ngstarter.com
+AI registry: https://ngstarter.com/ai/component-registry.json
+
+## Usage Rules
+
+- Import components from secondary entry points: `@ngstarter-ui/components/<component>`.
+- Import theme styles once in the app stylesheet.
+- Use `provideNgsTheme` from `@ngstarter-ui/components/core` for runtime theming.
+- Prefer `--ngs-*` CSS custom properties when customizing styles.
+- Do not import from private `src` paths in application code.
+
+## Setup
+
+```scss
+@use '@ngstarter-ui/components/styles/themes/default';
+```
+
+```ts
+import { provideNgsTheme } from '@ngstarter-ui/components/core';
+
+export const appConfig = {
+  providers: [provideNgsTheme({ theme: 'enterprise', colorScheme: 'auto' })],
+};
+```
+
+## Common Imports
+
+```ts
+import { Button } from '@ngstarter-ui/components/button';
+import { Dialog } from '@ngstarter-ui/components/dialog';
+import { Input } from '@ngstarter-ui/components/input';
+import { Select } from '@ngstarter-ui/components/select';
+import { Table } from '@ngstarter-ui/components/table';
+```
+
+## Recipes
+
+### admin-dashboard
+Build admin dashboards from NgStarter UI primitives instead of hand-rolled shell, cards, forms, tables, and pagination.
+
+Verification: `npm run verify:admin:components`
+
+Must use:
+- `@ngstarter-ui/components/sidenav`
+- `@ngstarter-ui/components/navigation`
+- `@ngstarter-ui/components/card`
+- `@ngstarter-ui/components/table`
+- `@ngstarter-ui/components/form-field`
+- `@ngstarter-ui/components/input`
+- `@ngstarter-ui/components/paginator`
+- `@ngstarter-ui/components/button`
+- `@ngstarter-ui/components/icon`
+- `@ngstarter-ui/components/checkbox`
+- `@ngstarter-ui/components/progress-bar`
+
+Must not:
+- Do not build admin tables with role="table" div grids when ngs-table fits.
+- Do not build search fields with plain input when ngs-form-field and ngsInput fit.
+- Do not build navigation menus with plain button lists when ngs-navigation fits.
+- Do not build KPI cards with plain article/div cards when ngs-card fits.
+- Do not restyle NgStarter components through wrapper-only classes when component selectors and component tokens fit.
+- Do not make ordinary table rows, labels, descriptions, sidebar items, or status text bold to imitate a screenshot.
+
+Typography:
+- Normal text weights: 400
+- Navigation weights: 400
+- Button weights: 500, 600
+- Heading weights: 600, 650
+- Reserve heavy weights for: brand marks, hero headings, primary KPI numbers, deliberate emphasis
+
+## Components
+
+- action-required: `@ngstarter-ui/components/action-required` docs: /components/action-required
+  purpose: Prompt users to resolve required account, setup, billing, or workflow actions.
+  use when: Use for dashboard notices that require user action before work can continue.
+  example topics: Basic action required
+  selectors: `ngs-action-required`
+  exports: `ActionRequired`
+  inputs: `actionText`, `buttonText`, `description`, `iconName`
+  outputs: `buttonClicked`
+  tokens: `--ngs-action-action-text-bg`, `--ngs-action-required-bg`, `--ngs-action-text-color`, `--ngs-color-danger-container`, `--ngs-color-danger-container-highest`, `--ngs-color-on-danger-container`, `--ngs-color-surface`, `--ngs-radius-xl`
+- alert: `@ngstarter-ui/components/alert` docs: /components/alert
+  purpose: Show inline status messages, warnings, errors, confirmations, or contextual notices.
+  use when: Use inside page content when the message should remain visible near the affected workflow.
+  example topics: Basic Alert, Alert Variants, Alert with icon, Alert with title, Alert actions
+  selectors: `[ngsAlertAction]`, `[ngsAlertClose]`, `[ngsAlertIcon]`, `[ngsAlertTitle]`, `ngs-alert`, `ngs-alert-title`
+  exports: `Alert`, `ALERT`, `AlertActionDirective`, `AlertCloseDirective`, `AlertIconDirective`, `AlertTitleDirective`, `AlertVariant`
+  inputs: `autoClose`, `bordered`, `variant`
+  outputs: `closed`
+  tokens: `--ngs-alert-action-border-radius`, `--ngs-alert-action-font-weight`, `--ngs-alert-action-height`, `--ngs-alert-action-hover-bg`, `--ngs-alert-action-hover-color`, `--ngs-alert-action-padding`, `--ngs-alert-action-with-icon-padding`, `--ngs-alert-actions-gap`, `--ngs-alert-bg-color`, `--ngs-alert-border-color`, `--ngs-alert-border-radius`, `--ngs-alert-border-width`, `--ngs-alert-color`, `--ngs-alert-font-size`, `--ngs-alert-gap`, `--ngs-alert-has-thumbnail-padding`
+- announcement: `@ngstarter-ui/components/announcement` docs: /components/announcement
+  purpose: Show prominent product, system, or marketing announcements with optional title, icon, and actions.
+  use when: Use for broadcast-style messages that should stand apart from normal form or page content.
+  example topics: Show/Hide announcement dynamically, Basic announcement, Announcement with title, Announcement with icons
+  selectors: `[ngsAnnouncementTitle]`, `ngs-announcement`, `ngs-announcement-global`
+  exports: `Announcement`, `AnnouncementData`, `AnnouncementGlobal`, `AnnouncementLinkTo`, `AnnouncementState`, `AnnouncementStore`, `AnnouncementTitle`, `AnnouncementVariant`
+  inputs: `closable`, `iconName`, `linkTo`, `title`, `variant`
+  outputs: `announcementClose`, `closed`
+  tokens: `--ngs-color-danger-container`, `--ngs-color-info-container`, `--ngs-color-on-danger-container`, `--ngs-color-on-info-container`, `--ngs-color-on-secondary-container`, `--ngs-color-on-success-container`, `--ngs-color-on-warning-container`, `--ngs-color-secondary-container`, `--ngs-color-success-container`, `--ngs-color-warning-container`, `--ngs-font-size-sm`
+- autocomplete: `@ngstarter-ui/components/autocomplete` docs: /forms/autocomplete
+  purpose: Let users search and choose from suggestions while typing.
+  use when: Use for large option lists where a select would be too slow or crowded.
+  example topics: Simple autocomplete, Custom Filter, Separate control and display values, Automatically highlighting the first option, Autocomplete with option groups, Autocomplete filter, Separate controls and display values, Auto highlight first person
+  selectors: `[ngsAutocomplete]`, `ngs-autocomplete`
+  exports: `Autocomplete`, `AutocompleteActivatedEvent`, `AutocompleteSelectedEvent`, `AutocompleteTrigger`
+  inputs: `aria-label`, `aria-labelledby`, `autoActiveFirstOption`, `autoSelectActiveOption`, `class`, `disableRipple`, `hideSingleSelectionIndicator`, `ngsAutocomplete`, `panelWidth`, `requireSelection`
+  outputs: `closed`, `opened`, `optionActivated`, `optionSelected`
+  tokens: `--ngs-autocomplete-panel-bg`, `--ngs-autocomplete-panel-border`, `--ngs-autocomplete-panel-max-height`, `--ngs-autocomplete-panel-padding`, `--ngs-autocomplete-panel-shadow`, `--ngs-dropdown-bg`, `--ngs-dropdown-border`, `--ngs-dropdown-max-height`, `--ngs-dropdown-padding`, `--ngs-dropdown-radius`, `--ngs-dropdown-shadow`
+- avatar: `@ngstarter-ui/components/avatar` docs: /components/avatar
+  purpose: Represent users, teams, or entities with initials, images, icons, generated colors, and presence.
+  use when: Use in account menus, lists, comments, assignees, collaborators, and activity feeds.
+  example topics: Basic Avatar, Avatar Variants, Presence Indicator, Avatar Sizes, Avatar With Images, Avatar With Icons, Grouped Avatars, Grouped and Total Avatars
+  selectors: `[ngs-avatar-more]`, `[ngs-avatar-total]`, `[ngs-avatar]`, `[ngs-dicebear]`, `ngs-avatar`, `ngs-avatar-group`, `ngs-avatar-more`, `ngs-avatar-total`, `ngs-dicebear`
+  exports: `Avatar`, `AVATAR_ACCESSOR`, `AvatarGroup`, `AvatarMore`, `AvatarPresenceIndicator`, `AvatarTotal`, `AvatarVariant`, `Dicebear`, `Preset`
+  inputs: `alt`, `automaticColor`, `clickable`, `image`, `key`, `label`, `presenceIndicator`, `preset`, `variant`
+  tokens: `--ngs-avatar-bg`, `--ngs-avatar-border-color`, `--ngs-avatar-border-color-auto`, `--ngs-avatar-border-radius`, `--ngs-avatar-border-width`, `--ngs-avatar-color`, `--ngs-avatar-font-weight`, `--ngs-avatar-group-item-border`, `--ngs-avatar-group-item-offset`, `--ngs-avatar-inner-border`, `--ngs-avatar-presence-indicator-away-bg`, `--ngs-avatar-presence-indicator-offline-bg`, `--ngs-avatar-presence-indicator-online-bg`, `--ngs-avatar-presence-indicator-outline`, `--ngs-avatar-presence-indicator-position-end`, `--ngs-avatar-presence-indicator-position-top`
+- badge: `@ngstarter-ui/components/badge` docs: /components/badge
+  purpose: Attach compact counts, statuses, or labels to another UI element.
+  use when: Use for notification counts, unread states, status dots, or small metadata on icons and avatars.
+  example topics: Basic Badges
+  selectors: `[ngsBadge]`, `ngs-badge-content`
+  exports: `Badge`, `BadgeContent`, `BadgePosition`, `BadgeSize`
+  inputs: `ngsBadge`, `ngsBadgeColor`, `ngsBadgeDescription`, `ngsBadgeDisabled`, `ngsBadgeHidden`, `ngsBadgeOverlap`, `ngsBadgePosition`, `ngsBadgeSize`
+  tokens: `--ngs-badge-background`, `--ngs-badge-background-color`, `--ngs-badge-font-size`, `--ngs-badge-large-size`, `--ngs-badge-size`, `--ngs-badge-small-size`, `--ngs-badge-text-color`, `--ngs-color-danger`, `--ngs-color-on-danger`, `--ngs-color-on-primary`, `--ngs-color-on-secondary`, `--ngs-color-on-surface-variant`, `--ngs-color-primary`, `--ngs-color-secondary`, `--ngs-color-surface-container-high`
+- block-loader: `@ngstarter-ui/components/block-loader` docs: /components/block-loader
+  purpose: Indicate that a bounded area of the UI is loading while preserving the surrounding page.
+  use when: Use when a panel, table, modal section, or card is refreshing independently.
+  example topics: Basic block loader, Block loader in a dialog, Block loader in modal, _modals
+  selectors: `[ngsBlockLoaderContainer]`, `ngs-block-loader`
+  exports: `BlockLoader`, `BlockLoaderContainerDirective`
+  inputs: `loading`, `spinnerDiameter`, `spinnerStrokeWidth`
+  tokens: `--ngs-block-loader-bg`, `--ngs-font-size-sm`
+- bottom-sheet: `@ngstarter-ui/components/bottom-sheet` docs: /components/bottom-sheet
+  purpose: Present mobile-friendly contextual actions or short forms from the bottom of the viewport.
+  use when: Use for temporary choices, mobile action menus, and lightweight task flows.
+  example topics: Basic Bottom Sheet, Bottom sheet
+  selectors: `ngs-bottom-sheet-container`
+  exports: `BOTTOM_SHEET_DATA`, `BOTTOM_SHEET_DEFAULT_OPTIONS`, `BottomSheet`, `BottomSheetConfig`, `BottomSheetContainer`, `BottomSheetRef`
+  tokens: `--ngs-bottom-sheet-container-background-color`, `--ngs-bottom-sheet-container-shape`, `--ngs-bottom-sheet-container-text-color`
+- breadcrumbs: `@ngstarter-ui/components/breadcrumbs` docs: /navigation/breadcrumbs
+  purpose: Show the user's current location in a hierarchy and provide parent navigation.
+  use when: Use in admin sections with nested routes, folders, projects, or record detail pages.
+  example topics: Basic breadcrumbs, Breadcrumbs with icons, Breadcrumbs with titles, Breadcrumbs with datasource, Breadcrumbs with last item as link, Breadcrumbs global (set breadcrumbs dynamically), Breadcrumbs global
+  selectors: `[ngs-breadcrumb-item]`, `[ngsBreadcrumbActiveItemDef]`, `[ngsBreadcrumbItemDef]`, `[ngsBreadcrumbItemIcon]`, `[ngsBreadcrumbItemIconDef]`, `[ngsBreadcrumbItemNameDef]`, `[ngsBreadcrumbItemTitleDef]`, `[ngsBreadcrumbSeparatorDef]`, `ngs-breadcrumb-item`, `ngs-breadcrumb-separator`, `ngs-breadcrumb-title`, `ngs-breadcrumbs`, `ngs-breadcrumbs-global`
+  exports: `Breadcrumb`, `BreadcrumbActiveItemDefDirective`, `BreadcrumbItem`, `BreadcrumbItemDefDirective`, `BreadcrumbItemIconDefDirective`, `BreadcrumbItemIconDirective`, `BreadcrumbItemNameDefDirective`, `BreadcrumbItemTitleDefDirective`, `Breadcrumbs`, `BreadcrumbSeparator`, `BreadcrumbSeparatorDefDirective`, `BreadcrumbsGlobal`
+  inputs: `dataSource`, `lastItemAsLink`, `separator`
+  tokens: `--ngs-breadcrumbs-active-item-color`, `--ngs-breadcrumbs-gap`, `--ngs-breadcrumbs-item-color`, `--ngs-breadcrumbs-item-font-size`, `--ngs-breadcrumbs-item-font-weight`, `--ngs-breadcrumbs-item-hover-color`, `--ngs-breadcrumbs-separator-color`, `--ngs-breadcrumbs-separator-font-size`, `--ngs-breadcrumbs-separator-position-top`, `--ngs-breadcrumbs-title-color`, `--ngs-breadcrumbs-title-font-size`, `--ngs-color-neutral-400`, `--ngs-color-neutral-800`, `--ngs-color-primary`, `--ngs-color-secondary`, `--ngs-font-size-md`
+- button: `@ngstarter-ui/components/button` docs: /forms/buttons
+  purpose: Trigger actions with filled, outlined, text, tonal, loading, disabled, and icon button states.
+  use when: Use for commands, form submission, toolbar actions, and navigation-like calls to action.
+  example topics: Basic Button, Outlined Button, Tonal Button, Flat Button, Icon Button, Button Loading, Hide text on mobile, Interactive disabled buttons
+  selectors: `a[ngsButton]`, `a[ngsIconButton]`, `button[ngsButton]`, `button[ngsIconButton]`
+  exports: `Button`, `ButtonVariant`
+  inputs: `disabled`, `disabledInteractive`, `disableRipple`, `fullWidth`, `hideTextOnMobile`, `loading`, `ngsButton`, `ngsIconButton`, `reverse`
+  tokens: `--ngs-button-bg`, `--ngs-button-border-radius`, `--ngs-button-color`, `--ngs-button-content-gap`, `--ngs-button-filled-bg`, `--ngs-button-filled-color`, `--ngs-button-font-size`, `--ngs-button-font-weight`, `--ngs-button-height`, `--ngs-button-hover-bg`, `--ngs-button-outlined-border`, `--ngs-button-outlined-color`, `--ngs-button-padding`, `--ngs-button-padding-x`, `--ngs-button-radius`, `--ngs-button-tonal-bg`
+- button-toggle: `@ngstarter-ui/components/button-toggle` docs: /forms/button-toggle
+  purpose: Let users choose one or more options from a compact segmented button group.
+  use when: Use for mode switching, view density, filters, or mutually exclusive short choices.
+  example topics: Basic Button Toggle, Selection Mode, Button toggle selection mode
+  selectors: `ngs-button-toggle`, `ngs-button-toggle-group`
+  exports: `ButtonToggle`, `ButtonToggleAppearance`, `ButtonToggleGroup`
+  inputs: `appearance`, `checked`, `disabled`, `hideSelectionIndicator`, `id`, `multiple`, `name`, `value`, `vertical`
+  outputs: `change`
+  tokens: `--ngs-button-height`, `--ngs-button-radius`, `--ngs-button-toggle-checked-bg-color`, `--ngs-button-toggle-checked-text-color`, `--ngs-button-toggle-group-bg`, `--ngs-button-toggle-group-border-color`, `--ngs-button-toggle-group-border-radius`, `--ngs-button-toggle-hover-bg-color`, `--ngs-button-toggle-selection-indicator-color`, `--ngs-button-toggle-text-color`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary`, `--ngs-color-surface-container`, `--ngs-color-surface-container-high`, `--ngs-color-surface-container-highest`
+- card: `@ngstarter-ui/components/card` docs: /components/card
+  purpose: Group related content, controls, media, and actions in a bordered or elevated container.
+  use when: Use for repeated dashboard widgets, previews, summaries, or compact content modules.
+  example topics: Basic Card, Card Appearance, Card Actions, Card Multiple Sections, Card Footer Loading
+  selectors: `[ngs-card-actions]`, `[ngs-card-aside]`, `[ngs-card-avatar]`, `[ngs-card-content]`, `[ngs-card-footer]`, `[ngs-card-image]`, `[ngs-card-lg-image]`, `[ngs-card-md-image]`, `[ngs-card-sm-image]`, `[ngs-card-subtitle]`, `[ngs-card-title]`, `[ngs-card-xl-image]`, `[ngsCardActions]`, `[ngsCardAvatar]`, `[ngsCardContent]`, `[ngsCardFooter]`, `[ngsCardImage]`, `[ngsCardImageLarge]`, `[ngsCardImageMedium]`, `[ngsCardImageSmall]`, `[ngsCardImageXLarge]`, `[ngsCardSubtitle]`, `[ngsCardTitle]`, `ngs-card`, `ngs-card-actions`, `ngs-card-aside`, `ngs-card-avatar`, `ngs-card-content`, `ngs-card-footer`, `ngs-card-header`, `ngs-card-image`, `ngs-card-subtitle`, `ngs-card-title`, `ngsCardAside`
+  exports: `Card`, `CARD_CONFIG`, `CardActions`, `CardActionsPosition`, `CardAppearance`, `CardAside`, `CardAvatar`, `CardConfig`, `CardContent`, `CardFooter`, `CardHeader`, `CardImage`
+  inputs: `align`, `appearance`, `withoutPadding`
+  tokens: `--ngs-card-bg`, `--ngs-card-border-color`, `--ngs-card-border-radius`, `--ngs-card-color`, `--ngs-card-content-font-size`, `--ngs-card-content-letter-spacing`, `--ngs-card-content-line-height`, `--ngs-card-padding`, `--ngs-card-shadow`, `--ngs-card-subtitle-color`, `--ngs-card-subtitle-font-size`, `--ngs-card-subtitle-font-weight`, `--ngs-card-subtitle-letter-spacing`, `--ngs-card-subtitle-line-height`, `--ngs-card-title-font-size`, `--ngs-card-title-font-weight`
+- card-overlay: `@ngstarter-ui/components/card-overlay` docs: /components/card-overlay
+  purpose: Reveal overlay content or actions on top of a card-like surface, often on hover or interaction.
+  use when: Use for media cards, galleries, previews, and quick actions over visual content.
+  example topics: Basic card overlay, Card overlay with translate, Card overlay with blur
+  selectors: `[ngsCardOverlayContainer]`, `ngs-card-overlay`
+  exports: `CardOverlay`, `CardOverlayContainerDirective`
+  inputs: `disabled`, `withBlur`, `withTranslate`
+- carousel: `@ngstarter-ui/components/carousel` docs: /components/carousel
+  purpose: Display a sequence of slides or panels that users can browse horizontally.
+  use when: Use for featured content, image galleries, onboarding panels, or compact previews.
+  example topics: Basic Carousel, Carousel controls with custom position, Carousel with fade effect, Carousel controls custom position, Carousel fade effect
+  selectors: `[ngs-carousel-card]`, `[ngsCarouselControls]`, `[ngsCarouselNext]`, `[ngsCarouselPrevious]`, `[ngsDraggableCarousel]`, `ngs-carousel`, `ngs-carousel-card`
+  exports: `Carousel`, `CAROUSEL`, `CAROUSEL_CARD`, `CarouselApiInterface`, `CarouselCard`, `CarouselCardInterface`, `CarouselControlsDirective`, `CarouselInterface`, `CarouselNextDirective`, `CarouselPreviousDirective`, `DraggableCarouselDirective`
+  inputs: `cardSelector`, `carousel`, `fade`, `resistanceFactor`, `snapDebounceTime`, `snapDuration`, `snapToCenter`, `stopPropagation`, `velocityThreshold`, `visibilityDebounceTime`
+  outputs: `indexChange`
+  tokens: `--ngs-carousel-gap`
+- checkbox: `@ngstarter-ui/components/checkbox` docs: /forms/checkbox
+  purpose: Capture independent boolean choices or multi-select options.
+  use when: Use for forms, preferences, tables, and filter groups where multiple values can be selected.
+  example topics: Basic Checkboxes, Checkbox with Description, Checkbox Group, Checkbox description
+  selectors: `[ngsCheckboxDescription]`, `ngs-checkbox`, `ngs-checkbox-group`
+  exports: `Checkbox`, `CheckboxChange`, `CheckboxDescription`, `CheckboxGroup`, `TransitionCheckState`
+  inputs: `aria-controls`, `aria-describedby`, `aria-expanded`, `aria-label`, `aria-labelledby`, `aria-owns`, `checked`, `color`, `disabled`, `disabledInteractive`, `disableRipple`, `id`, `indeterminate`, `labelPosition`, `name`, `required`, `tabIndex`, `value`
+  outputs: `change`, `indeterminateChange`
+  tokens: `--ngs-checkbox-checked-color`, `--ngs-checkbox-checkmark-color`, `--ngs-checkbox-description-color`, `--ngs-checkbox-description-font-size`, `--ngs-checkbox-disabled-color`, `--ngs-checkbox-gap`, `--ngs-checkbox-group-gap`, `--ngs-checkbox-label-font-size`, `--ngs-checkbox-size`, `--ngs-checkbox-unchecked-color`, `--ngs-color-danger`, `--ngs-color-neutral-500`, `--ngs-color-on-danger`, `--ngs-color-on-primary`, `--ngs-color-on-secondary`, `--ngs-color-on-surface`
+- chips: `@ngstarter-ui/components/chips` docs: /components/chips
+  purpose: Display compact tokens for tags, selected values, filters, or removable items.
+  use when: Use for tag entry, selected people/items, active filters, and small categorical metadata.
+  example topics: Basic Chips, Chips Appearance, Chips With Input, Chips Autocomplete, Chips With Icons, Chips Drag and Drop, Stacked Chips
+  selectors: `[ngsChipAvatar]`, `[ngsChipControl]`, `[ngsChipEdit]`, `[ngsChipRemove]`, `input[ngsChipInputFor]`, `ngs-chip`, `ngs-chip-avatar`, `ngs-chip-edit`, `ngs-chip-grid`, `ngs-chip-listbox`, `ngs-chip-option`, `ngs-chip-remove`, `ngs-chip-row`, `ngs-chip-set`
+  exports: `Chip`, `ChipAvatar`, `ChipControl`, `ChipEdit`, `ChipEditedEvent`, `ChipGrid`, `ChipInput`, `ChipInputEvent`, `ChipListbox`, `ChipOption`, `ChipRemove`, `ChipRow`
+  inputs: `appearance`, `disabled`, `editable`, `id`, `multiple`, `ngsChipInputAddOnBlur`, `ngsChipInputFor`, `placeholder`, `required`, `selected`, `value`
+  outputs: `chipInputTokenEnd`, `destroyed`, `edited`, `removed`, `selectionChange`, `valueChange`
+  tokens: `--ngs-chip-bg`, `--ngs-chip-color`, `--ngs-chip-font-size`, `--ngs-chip-font-weight`, `--ngs-chip-height`, `--ngs-chip-outline-color`, `--ngs-chip-padding`, `--ngs-chip-radius`, `--ngs-chip-selected-bg`, `--ngs-chip-selected-color`, `--ngs-chip-set-gap`, `--ngs-chip-set-spacing`, `--ngs-color-danger`, `--ngs-color-on-primary`, `--ngs-color-on-surface`, `--ngs-color-outline-variant`
+- code-highlighter: `@ngstarter-ui/components/code-highlighter` docs: /components/code-highlighter
+  purpose: Render formatted source code snippets with syntax highlighting.
+  use when: Use in docs, developer tools, examples, and configuration previews.
+  example topics: Basic Code Highlighter, With Title, Diff (GitHub Style), Highlight Lines, Full Feature, Code highlighter with title, Code highlighter diff, Code highlighter highlight lines
+  selectors: `ngs-code-highlighter`
+  exports: `CodeHighlighter`
+  inputs: `appearance`, `code`, `diff`, `highlightLines`, `language`, `showCopyButton`, `showLanguage`, `theme`, `title`
+  tokens: `--ngs-code-highlighter-bg`, `--ngs-code-highlighter-border`, `--ngs-code-highlighter-margin`, `--ngs-code-highlighter-padding`, `--ngs-code-highlighter-radius`, `--ngs-code-highlighter-title-color`, `--ngs-code-highlighter-title-padding`, `--ngs-color-background`, `--ngs-color-border`, `--ngs-color-danger`, `--ngs-color-neutral-500`, `--ngs-color-primary`, `--ngs-color-success`, `--ngs-font-size-sm`, `--ngs-font-size-xs`, `--ngs-radius-xl`
+- color-picker: `@ngstarter-ui/components/color-picker` docs: /components/color-picker
+  purpose: Let users choose or edit a color value.
+  use when: Use in branding, theme customization, design tools, and visual editors.
+  example topics: Basic color picker, Color picker with popover, Input with color picker
+  selectors: `[inputChange]`, `[ngs-color-picker-thumbnail]`, `[ngsColorPickerTriggerFor]`, `ngs-alpha`, `ngs-color-picker`, `ngs-color-picker-thumbnail`, `ngs-hue`, `ngs-saturation`
+  exports: `Alpha`, `BaseComponent`, `ChunksPipe`, `ColorPicker`, `ColorPickerInputDirective`, `ColorPickerPosition`, `ColorPickerResultFormat`, `ColorPickerThumbnail`, `ColorPickerTriggerForDirective`, `Hue`, `PositionManager`, `ReversePipe`
+  inputs: `asDropdown`, `color`, `colorFromHue`, `disabled`, `max`, `min`, `position`, `resultFormat`, `showOpacity`, `tinyColor`
+  outputs: `alphaChange`, `closed`, `colorChange`, `inputChange`, `opened`, `rawColorChange`
+  tokens: `--ngs-color-picker-alpha-height`, `--ngs-color-picker-alpha-pointer-border`, `--ngs-color-picker-alpha-pointer-shadow`, `--ngs-color-picker-alpha-pointer-size`, `--ngs-color-picker-alpha-width`, `--ngs-color-picker-as-dropdown-shadow`, `--ngs-color-picker-bg`, `--ngs-color-picker-border`, `--ngs-color-picker-border-radius`, `--ngs-color-picker-gap`, `--ngs-color-picker-hue-height`, `--ngs-color-picker-hue-pointer-border`, `--ngs-color-picker-hue-pointer-shadow`, `--ngs-color-picker-hue-pointer-size`, `--ngs-color-picker-hue-width`, `--ngs-color-picker-margin-offset`
+- color-scheme: `@ngstarter-ui/components/color-scheme`
+  purpose: Control or reflect light, dark, and automatic color scheme behavior.
+  use when: Use in theme settings and app shell preferences.
+  selectors: `[ngsColorSchemeDark]`, `[ngsColorSchemeLight]`, `ngs-color-scheme-switcher`
+  exports: `COLOR_SCHEME_LOCAL_KEY`, `ColorScheme`, `ColorSchemeDarkDirective`, `ColorSchemeLightDirective`, `ColorSchemeStore`, `ColorSchemeSwitcher`
+  outputs: `colorSchemeChanged`
+- color-switcher: `@ngstarter-ui/components/color-switcher` docs: /components/color-switcher
+  purpose: Switch the application accent or theme color.
+  use when: Use in personalization panels, demo toolbars, or tenant branding settings.
+  example topics: Basic color switcher, Color switcher with custom colors, Color switcher with disabled state, Color switcher as form control, Basic brand colors, Brand colors custom colors, Brand colors disabled, Brand colors as form control
+  selectors: `ngs-color-switcher`
+  exports: `ColorSwitcher`
+  inputs: `colors`, `disabled`, `selectedColor`
+  outputs: `colorChange`
+  tokens: `--ngs-brand-colors-color-size`, `--ngs-brand-colors-gap`, `--ngs-shadow-sm`
+- command-bar: `@ngstarter-ui/components/command-bar` docs: /components/command-bar
+  purpose: Expose a searchable list of commands and quick actions.
+  use when: Use for keyboard-centric admin tools, global command menus, and productivity workflows.
+  example topics: Basic command bar
+  selectors: `[ngs-command-bar-command]`, `ngs-command-bar`, `ngs-command-bar-command`, `ngs-command-bar-divider`
+  exports: `CommandBar`, `CommandBarCommand`, `CommandBarDivider`, `CommandBarPosition`
+  inputs: `open`, `position`, `shortcut`
+  tokens: `--ngs-color-neutral-100`, `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-color-neutral-600`, `--ngs-color-neutral-700`, `--ngs-color-neutral-800`, `--ngs-color-neutral-950`, `--ngs-color-primary-200`, `--ngs-command-bar-bg`, `--ngs-command-bar-border`, `--ngs-command-bar-border-radius`, `--ngs-command-bar-color`, `--ngs-command-bar-command-color`, `--ngs-command-bar-command-font-size`, `--ngs-command-bar-command-gap`, `--ngs-command-bar-command-height`
+- comment-editor: `@ngstarter-ui/components/comment-editor` docs: /components/comment-editor
+  purpose: Collect rich or plain comment input with editor-specific actions.
+  use when: Use in discussions, review flows, activity feeds, and collaboration surfaces.
+  example topics: Basic comment editor, Comment editor with toolbar that always visible, Comment editor with cancel button always visible, Comment editor with custom button labels, Comment editor with full view mode, Comment editor with upload error, Comment editor with max content height, Comment editor with custom icons
+  selectors: `[ngsCommentEditorCommand]`, `[ngsCommentEditorCommandBlockquote]`, `[ngsCommentEditorCommandBold]`, `[ngsCommentEditorCommandBulletList]`, `[ngsCommentEditorCommandCode]`, `[ngsCommentEditorCommandCodeBlock]`, `[ngsCommentEditorCommandEditLink]`, `[ngsCommentEditorCommandImage]`, `[ngsCommentEditorCommandItalic]`, `[ngsCommentEditorCommandLink]`, `[ngsCommentEditorCommandOrderedList]`, `[ngsCommentEditorCommandStrike]`, `[ngsCommentEditorCommandToggleToolbar]`, `[ngsCommentEditorCommandUnsetLink]`, `[ngsCommentEditorCommandYoutube]`, `ngs-comment-editor`, `ngs-comment-editor-bubble-menu`, `ngs-comment-editor-divider`, `ngs-comment-editor-footer-bar`, `ngs-comment-editor-toolbar`, `ngs-image-uploading-placeholder`, `ngs-link`, `ngs-youtube`
+  exports: `AngularNodeView`, `AngularNodeViewRenderer`, `AngularRenderer`, `COMMENT_EDITOR`, `COMMENT_EDITOR_BUBBLE_MENU`, `CommentEditor`, `CommentEditorAPI`, `CommentEditorBubbleMenu`, `CommentEditorCommandBlockquoteDirective`, `CommentEditorCommandBoldDirective`, `CommentEditorCommandBulletListDirective`, `CommentEditorCommandCodeBlockDirective`
+  inputs: `allowEmptyContent`, `autoClear`, `buttonCancelLabel`, `buttonSendLabel`, `cancelButtonAlwaysVisible`, `contentMaxHeight`, `decorations`, `deleteNode`, `editor`, `extension`, `fullViewMode`, `getPos`, `innerDecorations`, `loading`, `node`, `placeholder`, `selected`, `toolbarAlwaysVisible`, `updateAttributes`, `view`
+  outputs: `canceled`, `fileSelected`, `sent`
+  tokens: `--ngs-color-border`, `--ngs-color-neutral-100`, `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-color-neutral-500`, `--ngs-color-neutral-650`, `--ngs-color-neutral-700`, `--ngs-color-neutral-900`, `--ngs-color-neutral-950`, `--ngs-color-primary`, `--ngs-color-tertiary-100`, `--ngs-color-tertiary-200`, `--ngs-color-tertiary-300`, `--ngs-color-tertiary-700`, `--ngs-color-tertiary-800`, `--ngs-comment-editor-bg`
+- comparison-slider: `@ngstarter-ui/components/comparison-slider` docs: /components/comparison-slider
+  purpose: Compare two images or visual states with a draggable before/after divider.
+  use when: Use for image comparison, design review, maps, reports, or visual diffs.
+  example topics: Basic comparison slider
+  selectors: `[ngsComparisonSliderAfterImage]`, `[ngsComparisonSliderBeforeImage]`, `ngs-comparison-slider`
+  exports: `ComparisonSlider`, `ComparisonSliderAfterImageDirective`, `ComparisonSliderBeforeImageDirective`
+  inputs: `initialPosition`
+- confirm: `@ngstarter-ui/components/confirm` docs: /components/confirm
+  purpose: Ask users to confirm or cancel a consequential action.
+  use when: Use before destructive, irreversible, or high-impact operations.
+  example topics: Basic confirm, Show confirm from a modal dialog, Confirm form modal, Dialog with confirmation
+  selectors: `ngs-confirm`
+  exports: `Confirm`, `ConfirmManager`, `ConfirmOptions`, `ConfirmRef`
+- content-editor: `@ngstarter-ui/components/content-editor` docs: /libraries/content-editor
+  purpose: Provide a rich content editing surface for structured or formatted content.
+  use when: Use for posts, descriptions, CMS-like fields, notes, and editable rich text workflows.
+  selectors: `[ngsBlockSelection]`, `[ngsContentChangesObserver]`, `[ngsContentEditorContentEditable]`, `[ngsContentObserver]`, `[ngsFocusMonitor]`, `[ngsTableColumnsManager]`, `[ngsTableRowsManager]`, `[ngsTextSelectionPopup]`, `app-embed-block`, `ngs-add-link`, `ngs-audio-recorder`, `ngs-code-block`, `ngs-command-bar`, `ngs-content-builder`, `ngs-content-viewer`, `ngs-divider-block`, `ngs-draggable-table`, `ngs-edit-link`, `ngs-heading-block`, `ngs-image-block`, `ngs-list-block`, `ngs-paragraph-block`, `ngs-quote-block`, `ngs-table-block`, `ngs-text-color`, `ngs-video-block`, `table[ngsResizableTable]`
+  exports: `AddLinkDialog`, `AudioRecorderComponent`, `BaseErrorHandler`, `BlockSelectionDirective`, `Change`, `Changeset`, `CodeBlockComponent`, `CodeBlockDef`, `CommandBarComponent`, `compare`, `CONTENT_BUILDER`, `CONTENT_EDITOR_BLOCK`
+  inputs: `_alt`, `_caption`, `_settings`, `autoScrollContainerSelector`, `backgroundColors`, `blockSelector`, `captionPlaceholder`, `closestContentObserverClass`, `content`, `contentChangedDelay`, `detectAddedNode`, `disabled`, `id`, `ignoreClasses`, `index`, `insertAtCursor`, `minColumnWidth`, `mutationObserverDebounceTime`, `ngsContentEditorContentEditable`, `observedElement`, `options`, `placeholder`, `props`, `recentlyUsed`
+  outputs: `backgroundColorChanged`, `columnAdded`, `columnDeleted`, `columnManagingEnd`, `columnManagingStart`, `columnMoved`, `columnWidthChange`, `columnWidthChangeEnd`, `columnWidthChangeStart`, `contentChanged`, `displayTranscriptChange`, `initialized`, `moveEnd`, `moveStart`, `nodeAdded`, `pressedEnter`, `propsChanged`, `rowAdded`, `rowDeleted`, `rowManagingEnd`, `rowManagingStart`, `rowMoved`, `tagSelected`, `textColorChanged`
+  tokens: `--ngs-color-border`, `--ngs-color-neutral-200`, `--ngs-color-neutral-50`, `--ngs-color-neutral-500`, `--ngs-color-neutral-600`, `--ngs-color-on-surface`, `--ngs-color-primary`, `--ngs-color-primary-100`, `--ngs-color-primary-300`, `--ngs-color-primary-400`, `--ngs-color-secondary-fixed`, `--ngs-color-surface-container`, `--ngs-color-surface-container-high`, `--ngs-color-surface-container-highest`, `--ngs-color-surface-container-low`, `--ngs-content-builder-content-width`
+- content-fade: `@ngstarter-ui/components/content-fade` docs: /components/content-fade
+  purpose: Fade overflowing content to signal that more content is available.
+  use when: Use for previews, collapsed text, scrollable areas, or teaser content.
+  example topics: Basic content fade, Content fade with custom width, Content fade with custom position, Content fade custom width, Content fade custom position
+  selectors: `ngs-content-fade`
+  exports: `ContentFade`, `ContentFadePosition`
+  inputs: `color`, `position`, `width`
+  tokens: `--ngs-color-background`, `--ngs-content-fade-color`, `--ngs-content-fade-width`
+- cookie-popup: `@ngstarter-ui/components/cookie-popup` docs: /components/cookie-popup
+  purpose: Ask for cookie consent or present privacy-related choices.
+  use when: Use on public-facing pages that need consent messaging or tracking preferences.
+  example topics: Basic cookie popup
+  selectors: `[ngsCookiePopupAcceptAllButton]`, `[ngsCookiePopupAcceptNecessaryOnlyButton]`, `[ngsCookiePopupTitle]`, `ngs-cookie-popup`
+  exports: `CookiePopup`, `CookiePopupAcceptAllButtonDirective`, `CookiePopupAcceptNecessaryOnlyButtonDirective`, `CookiePopupAcceptType`, `CookiePopupTitleDirective`
+  inputs: `cookiePolicyUrl`, `visible`
+  outputs: `cookieAccepted`
+  tokens: `--ngs-color-surface-container-lowest`, `--ngs-font-size-sm`, `--ngs-radius-xl`, `--ngs-shadow-lg`
+- core: `@ngstarter-ui/components/core`
+  purpose: Provide shared primitives, utilities, pipes, directives, theming services, and low-level behavior used by NgStarter components.
+  use when: Import from core for theme setup, shared directives, utility pipes, ripple, focus helpers, and library infrastructure.
+  selectors: `[ngsAutoFocus]`, `[ngsDebounceTime][ngModel]`, `[ngsFocusElement]`, `[ngsRipple]`, `[ngsSoundEffect]`, `ngs-optgroup`, `ngs-option`, `textarea[ngsTextareaAutoSize]`
+  exports: `_Option`, `_OptionParent`, `AnalyticsService`, `arrayShallowEquals`, `Autofocusable`, `AUTOFOCUSABLE`, `AutoFocusDirective`, `DebounceTimeDirective`, `defaultRippleAnimationConfig`, `ENVIRONMENT`, `EnvironmentService`, `ErrorStateMatcher`
+  inputs: `checkChildren`, `debounceTime`, `disabled`, `label`, `maxRows`, `minRows`, `ngsAutoFocus`, `ngsRippleAnimation`, `ngsRippleCentered`, `ngsRippleColor`, `ngsRippleDisabled`, `ngsRippleRadius`, `ngsRippleTrigger`, `ngsRippleUnbounded`, `selected`, `soundSrc`, `value`
+  outputs: `elementBlurred`, `elementFocused`, `onSelectionChange`
+  tokens: `--ngs-color-on-primary-container`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary-container`, `--ngs-color-surface-container-high`, `--ngs-color-surface-container-highest`, `--ngs-control-radius`, `--ngs-dropdown-height`, `--ngs-dropdown-item-active-bg`, `--ngs-dropdown-item-color`, `--ngs-dropdown-item-disabled-color`, `--ngs-dropdown-item-font-size`, `--ngs-dropdown-item-gap`, `--ngs-dropdown-item-hover-bg`, `--ngs-dropdown-item-nested-padding-start`, `--ngs-dropdown-item-padding`
+- country-select: `@ngstarter-ui/components/country-select` docs: /forms/country
+  purpose: Let users choose a country from a localized or searchable country list.
+  use when: Use in addresses, profiles, billing, localization, and phone-related forms.
+  example topics: Basic country select
+  selectors: `ngs-country-select`
+  exports: `countries`, `Country`, `CountrySelect`
+  inputs: `disabled`, `placeholder`, `required`, `searchTerm`, `showCountryCode`
+  outputs: `closed`, `opened`
+  tokens: `--ngs-color-neutral-500`
+- crop: `@ngstarter-ui/components/crop` docs: /components/crop
+  purpose: Crop images or visual media to a selected region.
+  use when: Use for avatar upload, image preparation, media management, and visual editing.
+  example topics: Basic image crop
+  selectors: `ngs-crop`
+  exports: `Crop`, `CropSelection`
+  inputs: `minHeight`, `minWidth`, `shape`
+  outputs: `selectionApplied`
+- currency-select: `@ngstarter-ui/components/currency-select` docs: /forms/currency-select
+  purpose: Let users select a currency, often with country or code display.
+  use when: Use in billing, pricing, finance, marketplace, and localization forms.
+  example topics: Basic currency select, Currency select with country name, Currency with country name
+  selectors: `ngs-currency-select`
+  exports: `currencies`, `Currency`, `CurrencySelect`
+  inputs: `disabled`, `placeholder`, `required`, `searchTerm`, `showCountryName`
+  outputs: `closed`, `opened`
+- data-view: `@ngstarter-ui/components/data-view` docs: /libraries/data-view
+  purpose: Build feature-rich data grids with sorting, filtering, pagination, column settings, selection, and server-side loading.
+  use when: Use for operational datasets where users need to inspect, organize, filter, and act on records.
+  example topics: Data View, Basic data view, Data view with selection, Data view with pagination, Embedded data view, Data view with sorting, Data view with resizable columns, Data view with column settings
+  selectors: `[ngsDataViewActionBar]`, `[ngsDataViewEmptyData]`, `[ngsDataViewEmptyFilterResults]`, `ngs-data-view`, `ngs-data-view-action-bar`, `ngs-data-view-column-settings-dialog`
+  exports: `cellRenderer`, `ColumnSettingsDialogData`, `ColumnSettingsDialogResult`, `DATA_VIEW`, `DATA_VIEW_CONFIG`, `DataView`, `DataViewActionBar`, `DataViewActionBarAPI`, `DataViewActionBarDirective`, `DataViewAPI`, `DataViewCellRenderer`, `DataViewCellRendererDef`
+  inputs: `autoHeight`, `bodyScroll`, `bufferRows`, `cellRenderers`, `columnDefs`, `data`, `datasource`, `embedded`, `emptyFilterResultsIcon`, `emptyFilterResultsText`, `emptyIcon`, `emptyText`, `forceVisible`, `headerHeight`, `highlightHeader`, `hoverRows`, `loading`, `minColumnWidth`, `ngsDataViewActionBarWidth`, `pageIndex`, `pageSize`, `pageSizeOptions`, `paginator`, `paginatorAriaLabel`
+  outputs: `allRowsSelectionChanged`, `loadEnd`, `refreshEnd`, `selectionChanged`, `sortChange`
+  tokens: `--ngs-color-background`, `--ngs-color-border`, `--ngs-color-neutral-500`, `--ngs-color-on-background`, `--ngs-color-primary`, `--ngs-color-surface-container`, `--ngs-color-surface-container-low`, `--ngs-content-fade-color`, `--ngs-data-view-bg`, `--ngs-data-view-body-bg`, `--ngs-data-view-border-color`, `--ngs-data-view-cell-padding`, `--ngs-data-view-header-bg`, `--ngs-data-view-header-height`, `--ngs-data-view-hl-header-row-bg`, `--ngs-data-view-min-height`
+- date-format-select: `@ngstarter-ui/components/date-format-select` docs: /forms/date-format-select
+  purpose: Let users choose a preferred date display format.
+  use when: Use in account, localization, reporting, and tenant settings.
+  example topics: Basic date format select
+  selectors: `ngs-date-format-select`
+  exports: `DateFormat`, `DateFormatSelect`
+  inputs: `dateFormats`, `placeholder`
+- datepicker: `@ngstarter-ui/components/datepicker` docs: /components/datepicker
+  purpose: Let users pick dates from a calendar-oriented form control.
+  use when: Use for date fields, scheduling, filters, reporting ranges, and forms.
+  example topics: Basic Datepicker, Datepicker With Custom Icon, Datepicker With Custom Header, Datepicker Action Buttons, Basic Date Range Picker, Date Range Picker With Quick Presets, Datepicker custom icon, Datepicker actions button
+  selectors: `[ngsDatepickerApply]`, `[ngsDatepickerCancel]`, `[ngsDatepickerToggleIcon]`, `input[ngsDatepicker]`, `input[ngsEndDate]`, `input[ngsStartDate]`, `ngs-calendar`, `ngs-date-range-input`, `ngs-date-range-picker`, `ngs-datepicker`, `ngs-datepicker-actions`, `ngs-datepicker-toggle`, `ngs-month-view`, `ngs-multi-year-view`, `ngs-year-view`
+  exports: `Calendar`, `DateAdapter`, `Datepicker`, `DatepickerActions`, `DatepickerApply`, `DatepickerCancel`, `DatepickerInput`, `DatepickerIntl`, `DatepickerPreset`, `DatepickerToggle`, `DatepickerToggleIcon`, `DateRange`
+  inputs: `activeDate`, `maxDate`, `minDate`, `selected`, `separator`, `showQuickPresets`, `startAt`
+  outputs: `monthSelected`, `selectedChange`, `yearSelected`
+  tokens: `--ngs-calendar-cell-hover-bg`, `--ngs-calendar-cell-in-range-bg`, `--ngs-calendar-cell-radius`, `--ngs-calendar-cell-selected-bg`, `--ngs-calendar-cell-selected-color`, `--ngs-calendar-cell-size`, `--ngs-calendar-cell-today-border`, `--ngs-calendar-header-padding`, `--ngs-calendar-padding`, `--ngs-color-border`, `--ngs-color-on-primary`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-outline`, `--ngs-color-primary`, `--ngs-color-primary-container`
+- dialog: `@ngstarter-ui/components/dialog` docs: /components/dialog
+  purpose: Open focused modal workflows with title, content, actions, sizing, and scroll handling.
+  use when: Use when users must complete or dismiss a task before returning to the page.
+  example topics: Basic Dialog, Dialog With Scrollable Content, Dialog Sizing (height, min-height), Dialog scrollable content, Dialog sizing, Basic
+  selectors: `[ngs-dialog-actions]`, `[ngs-dialog-close]`, `[ngs-dialog-content]`, `[ngs-dialog-title]`, `[ngsDialogActions]`, `[ngsDialogClose]`, `[ngsDialogContent]`, `[ngsDialogTitle]`, `ngs-dialog-actions`, `ngs-dialog-container`, `ngs-dialog-content`, `ngs-dialog-title`
+  exports: `Dialog`, `DIALOG_DATA`, `DIALOG_DEFAULT_OPTIONS`, `DialogActions`, `DialogClose`, `DialogConfig`, `DialogContainer`, `DialogContent`, `DialogRef`, `DialogTitle`
+  inputs: `align`, `ariaLabel`, `id`, `ngs-dialog-close`, `ngsDialogClose`, `type`
+  tokens: `--ngs-color-on-surface`, `--ngs-control-height-lg`, `--ngs-dialog-actions-padding`, `--ngs-dialog-background`, `--ngs-dialog-bg`, `--ngs-dialog-border-radius`, `--ngs-dialog-box-shadow`, `--ngs-dialog-color`, `--ngs-dialog-container-max-width`, `--ngs-dialog-container-min-width`, `--ngs-dialog-header-padding`, `--ngs-dialog-headline-padding`, `--ngs-dialog-radius`, `--ngs-dialog-shadow`, `--ngs-dialog-title-font-size`, `--ngs-dialog-title-font-weight`
+- divider: `@ngstarter-ui/components/divider` docs: /components/divider
+  purpose: Separate groups of content or actions with a visual rule.
+  use when: Use in menus, panels, lists, forms, and dense layouts.
+  example topics: Basic Divider, Text Divider, Divider overview
+  selectors: `ngs-divider`, `ngs-text-divider`
+  exports: `Divider`, `TextDivider`
+  inputs: `fixedHeight`, `inset`, `vertical`
+  tokens: `--ngs-color-border`, `--ngs-divider-vertical-fixed-height`
+- drawer: `@ngstarter-ui/components/drawer` docs: /components/drawer
+  purpose: Show persistent or temporary side content without leaving the current page.
+  use when: Use for detail panels, filters, navigation, inspectors, and secondary workflows.
+  example topics: Basic drawer, Drawer without backdrop
+  selectors: `[ngsDrawerIgnoreOutsideClick]`, `ngs-drawer`
+  exports: `Drawer`, `DRAWER`, `DrawerIgnoreOutsideClickDirective`
+  inputs: `isOpen`, `showBackdrop`
+  outputs: `closed`, `opened`
+  tokens: `--ngs-color-surface-container-lowest`, `--ngs-drawer-transition`, `--ngs-drawer-transition-duration`, `--ngs-dropdown-border`, `--ngs-overlay-backdrop-bg`
+- emoji-picker: `@ngstarter-ui/components/emoji-picker` docs: /components/emoji-picker
+  purpose: Let users browse and insert emoji.
+  use when: Use in comments, chat, reactions, editors, and social features.
+  example topics: Basic emoji picker
+  selectors: `[ngsEmojiPickerTriggerFor]`, `ngs-emoji-picker`
+  exports: `EMOJI_PICKER_TRIGGER_FOR`, `EmojiPicker`, `EmojiPickerTriggerForDirective`
+  inputs: `language`, `position`, `selectEmojiLabel`
+  outputs: `closed`, `emojiSelected`, `opened`
+  tokens: `--ngs-color-neutral-500`, `--ngs-color-subtle`, `--ngs-color-surface-container-high`, `--ngs-color-surface-container-highest`, `--ngs-color-surface-container-low`, `--ngs-color-surface-container-lowest`, `--ngs-dropdown-bg`, `--ngs-dropdown-border`, `--ngs-dropdown-radius`, `--ngs-dropdown-shadow`, `--ngs-emoji-picker-bg`, `--ngs-emoji-picker-border`, `--ngs-emoji-picker-border-radius`, `--ngs-emoji-picker-list-height`, `--ngs-emoji-picker-list-width`, `--ngs-emoji-picker-margin`
+- empty-state: `@ngstarter-ui/components/empty-state` docs: /components/empty-state
+  purpose: Explain why content is absent and offer a next action.
+  use when: Use for empty tables, search results, dashboards, folders, and first-run states.
+  example topics: Basic empty state, Empty state with image, Empty state with icon, Empty state with custom icon, Empty state with actions
+  selectors: `[ngs-empty-state-title]`, `ngs-empty-state`, `ngs-empty-state-actions`, `ngs-empty-state-content`, `ngs-empty-state-icon`, `ngs-empty-state-image`, `ngs-empty-state-title`
+  exports: `EmptyState`, `EmptyStateActions`, `EmptyStateContent`, `EmptyStateIcon`, `EmptyStateImage`, `EmptyStateTitle`
+  tokens: `--ngs-color-neutral-500`, `--ngs-color-neutral-600`, `--ngs-color-surface-container`, `--ngs-empty-state-padding`, `--ngs-font-size-sm`, `--ngs-icon-size`
+- expand: `@ngstarter-ui/components/expand` docs: /components/expand
+  purpose: Show a short preview that can expand to reveal more content.
+  use when: Use for long text, descriptions, changelogs, comments, or compact summaries.
+  example topics: Basic Expand, Show button if expanded, Custom button labels, Expand show button if expanded, Expand custom button labels
+  selectors: `ngs-expand`
+  exports: `Expand`
+  inputs: `collapseLabel`, `color`, `expanded`, `expandLabel`, `height`, `showButtonIfExpanded`
+  outputs: `expandedChange`
+  tokens: `--ngs-color-background`, `--ngs-color-on-surface`, `--ngs-color-surface-container`, `--ngs-color-surface-container-high`, `--ngs-expand-button-bg`, `--ngs-expand-button-border-radius`, `--ngs-expand-button-box-shadow`, `--ngs-expand-button-color`, `--ngs-expand-button-font-size`, `--ngs-expand-button-hover-bg`, `--ngs-expand-button-hover-opacity`, `--ngs-expand-button-padding`, `--ngs-expand-expanded-height`, `--ngs-expand-fade-color`, `--ngs-shadow-md`
+- expansion: `@ngstarter-ui/components/expansion` docs: /components/expansion-panel
+  purpose: Group collapsible sections of content in an accordion-like layout.
+  use when: Use for settings groups, FAQs, advanced options, and dense detail pages.
+  example topics: Basic Expansion Panel, Expansion Panel with expand/collapse all toggles, Expansion Panel as Accordion, Expansion panel expand collapse toggles
+  selectors: `ngs-accordion`, `ngs-action-row`, `ngs-expansion-panel`, `ngs-expansion-panel-description`, `ngs-expansion-panel-header`, `ngs-expansion-panel-title`
+  exports: `Accordion`, `ActionRow`, `ExpansionPanel`, `ExpansionPanelDescription`, `ExpansionPanelHeader`, `ExpansionPanelTitle`
+  inputs: `disabled`, `expanded`, `hideToggle`, `multi`
+  outputs: `closed`, `expandedChange`, `opened`
+  tokens: `--ngs-color-neutral-300`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-subtle`, `--ngs-color-surface`, `--ngs-expansion-panel-background`, `--ngs-expansion-panel-color`, `--ngs-expansion-panel-content-padding`, `--ngs-expansion-panel-description-color`, `--ngs-expansion-panel-disabled-color`, `--ngs-expansion-panel-divider-color`, `--ngs-expansion-panel-header-expanded-height`, `--ngs-expansion-panel-header-height`, `--ngs-expansion-panel-radius`, `--ngs-radius-xl`
+- filter-builder: `@ngstarter-ui/components/filter-builder` docs: /components/filter-builder
+  purpose: Let users construct structured filtering rules for datasets.
+  use when: Use for advanced search, reports, saved views, and operational data filtering.
+  example topics: Basic filter builder
+  selectors: `[ngsFilterBuilderOperationDef]`, `[ngsFilterBuilderOperationIcon]`, `[ngsFilterBuilderOperationName]`, `ngs-filter-builder`
+  exports: `FilterBuilder`, `FilterBuilderCondition`, `FilterBuilderFieldDataSourceItem`, `FilterBuilderFieldDef`, `FilterBuilderGroup`, `FilterBuilderItemType`, `FilterBuilderOperationDefDirective`, `FilterBuilderOperationIconDirective`, `FilterBuilderOperationNameDirective`
+  inputs: `allowedDataTypes`, `categories`, `customOperations`, `fieldDefs`, `groupOperations`, `ngsFilterBuilderOperationDef`, `value`
+  outputs: `valueChanged`
+  tokens: `--ngs-color-border`, `--ngs-color-danger`, `--ngs-color-neutral-100`, `--ngs-color-neutral-200`, `--ngs-color-neutral-50`, `--ngs-color-neutral-600`, `--ngs-color-neutral-650`, `--ngs-color-on-primary`, `--ngs-color-on-primary-container`, `--ngs-color-on-secondary`, `--ngs-color-on-secondary-container`, `--ngs-color-on-surface`, `--ngs-color-primary`, `--ngs-color-primary-400`, `--ngs-color-primary-container`, `--ngs-color-secondary`
+- form-field: `@ngstarter-ui/components/form-field`
+  purpose: Wrap form controls with consistent labels, hints, errors, and field layout.
+  use when: Use as the standard shell around inputs, selects, and custom form controls.
+  selectors: `[ngsIconButtonPrefix]`, `[ngsIconButtonSuffix]`, `[ngsIconPrefix]`, `[ngsIconSuffix]`, `[ngsPrefix]`, `[ngsSuffix]`, `[ngsTextPrefix]`, `[ngsTextSuffix]`, `ngs-error`, `ngs-form-field`, `ngs-hint`, `ngs-label`
+  exports: `Error`, `FORM_FIELD`, `FORM_FIELD_DEFAULT_OPTIONS`, `FormField`, `FormFieldControl`, `FormFieldDefaultOptions`, `Hint`, `IconButtonPrefix`, `IconButtonSuffix`, `IconPrefix`, `IconSuffix`, `Label`
+  inputs: `align`, `subscriptHiddenIfEmpty`
+  tokens: `--ngs-field-bg`, `--ngs-field-border-color`, `--ngs-field-border-focus-color`, `--ngs-field-border-width`, `--ngs-field-color`, `--ngs-field-container-height`, `--ngs-field-disabled-bg`, `--ngs-field-error-color`, `--ngs-field-font-size`, `--ngs-field-infix-height`, `--ngs-field-label-color`, `--ngs-field-label-float-font-size`, `--ngs-field-line-height`, `--ngs-field-padding-x`, `--ngs-field-radius`, `--ngs-form-field-bg`
+- form-renderer: `@ngstarter-ui/components/form-renderer` docs: /forms/form-renderer
+  purpose: Render dynamic forms from configuration or schema-like definitions.
+  use when: Use for generated settings, surveys, admin forms, onboarding flows, or configurable forms.
+  example topics: Basic form renderer
+  selectors: `ngs-autocomplete-many-field`, `ngs-checkbox-field`, `ngs-component-loader`, `ngs-datepicker-field`, `ngs-divider-content`, `ngs-form-renderer`, `ngs-image-content`, `ngs-input-field`, `ngs-radio-group-field`, `ngs-select-field`, `ngs-text-content`, `ngs-textarea-field`, `ngs-timezone-field`, `ngs-toggle-field`
+  exports: `AutocompleteManyField`, `CheckboxField`, `ComponentConfig`, `ComponentImporter`, `ComponentLoader`, `ComponentNode`, `ComponentRegistryService`, `ContentConfig`, `CrossValidatorFn`, `DatepickerField`, `DividerContent`, `FORM_RENDERER_FIELD_REGISTRY`
+  inputs: `colspan`, `componentConfig`, `config`, `control`
+  outputs: `formSubmit`, `initialized`, `valueChanges`
+  tokens: `--ngs-color-outline-variant`, `--ngs-font-size-xs`, `--ngs-form-field-outlined-label-text-color`, `--ngs-form-field-outlined-label-text-size`, `--ngs-form-field-subscript-text-size`, `--ngs-form-field-subscript-text-tracking`, `--ngs-form-field-subscript-text-weight`
+- gauge: `@ngstarter-ui/components/gauge` docs: /components/gauge
+  purpose: Visualize progress, utilization, score, or capacity as a radial metric.
+  use when: Use in dashboards for KPIs, quotas, health, completion, or thresholds.
+  example topics: Basic Gauge, Gauge With Value, Gauge Custom Size, Gauge Custom Stroke Width
+  selectors: `ngs-gauge`, `ngs-gauge-value`
+  exports: `Gauge`, `GaugeValue`
+  inputs: `radius`, `strokeWidth`, `value`
+  tokens: `--ngs-color-neutral-300`, `--ngs-color-neutral-600`, `--ngs-color-neutral-700`, `--ngs-color-primary`, `--ngs-gauge-bg`, `--ngs-gauge-fill`, `--ngs-gauge-size`, `--ngs-gauge-value-color`
+- grid: `@ngstarter-ui/components/grid` docs: /components/grid
+  purpose: Arrange dashboard widgets or tiles in a responsive grid.
+  use when: Use for admin dashboards and configurable widget layouts.
+  selectors: `ngs-grid`
+  exports: `Grid`, `GRID`, `GridItem`, `GridItemAware`, `GridItemConfig`
+  inputs: `configs`, `items`, `plain`, `waitWhenAllItemsLoaded`
+  tokens: `--ngs-color-border`, `--ngs-grid-gap`, `--ngs-grid-item-colspan`, `--ngs-grid-item-height`, `--ngs-grid-item-skeleton-min-height`, `--ngs-radius-xl`
+- guided-tour: `@ngstarter-ui/components/guided-tour` docs: /components/guided-tour
+  purpose: Walk users through UI features step by step.
+  use when: Use for onboarding, feature discovery, setup guidance, and product education.
+  example topics: Basic Guided Tour, Backdrop Guided Tour, Wait For Guided Tour, Close On Backdrop Click, HTML and Template Support, Custom Buttons, Global Configuration, Keyboard Navigation
+  selectors: `[ngsTourAnchor]`, `ngs-tour-backdrop`, `ngs-tour-step`
+  exports: `provideTourConfig`, `TOUR_CONFIG`, `TOUR_STEP_COMPONENT`, `TourAnchorDirective`, `TourBackdrop`, `TourConfig`, `TourService`, `TourState`, `TourStep`, `TourStepConfig`, `TourStepPosition`
+  inputs: `animateEnterClass`, `animateLeaveClass`, `isFirst`, `isLast`, `ngsTourAnchor`, `position`, `step`
+  outputs: `backdropClick`
+  tokens: `--ngs-button-height`, `--ngs-button-padding`, `--ngs-color-primary`, `--ngs-color-subtle`, `--ngs-color-surface-container-lowest`, `--ngs-guided-tour-arrow-border-color`, `--ngs-guided-tour-step-bg`, `--ngs-guided-tour-step-border`, `--ngs-guided-tour-step-max-width`, `--ngs-guided-tour-step-radius`, `--ngs-guided-tour-step-shadow`, `--ngs-guided-tour-step-step-padding`, `--ngs-overlay-backdrop-bg`, `--ngs-radius-xl`, `--ngs-shadow-lg`
+- headless-stepper: `@ngstarter-ui/components/headless-stepper`
+  purpose: Provide stepper state and workflow primitives without imposing a full visual layout.
+  use when: Use when a custom multi-step UI needs NgStarter step logic but not the standard Stepper presentation.
+  selectors: `ngs-headless-step`, `ngs-headless-stepper`
+  exports: `HeadlessStep`, `HeadlessStepper`, `StepperSelectionEvent`
+  inputs: `linear`, `optional`, `selectedIndex`, `stepControl`
+- icon: `@ngstarter-ui/components/icon` docs: /components/icon
+  purpose: Render icons consistently across the UI.
+  use when: Use for buttons, menus, labels, empty states, navigation, and status indicators.
+  example topics: Symbols Icons (Default), Phosphor Icons, Circle Flags Icons, Symbols icons, Circle flags, Material symbols icons
+  selectors: `ngs-icon`
+  exports: `Icon`
+  inputs: `name`
+  tokens: `--ngs-icon-color`, `--ngs-icon-size`
+- image-designer: `@ngstarter-ui/components/image-designer` docs: /libraries/image-designer
+  purpose: Provide an image composition or editing workspace.
+  use when: Use for design tools, image customization, previews, and creative editing flows.
+  selectors: `ngs-effects`, `ngs-image-designer`, `ngs-settings`
+  exports: `AssetsDataSource`, `AssetsGetRowsParams`, `createDefaultPhotosDataSource`, `Effects`, `ElementConfig`, `GradientConfig`, `IMAGE_DESIGNER`, `ImageDesigner`, `ImageDesignerPhoto`, `ImageDesignerService`, `ImageDesignerSnapshot`, `ImageDesignerUploadFn`
+  inputs: `assetsDataSource`, `defaultFont`, `guidelineColor`, `historyLimit`, `imageSize`, `maxScale`, `minScale`, `photosDataSource`, `scale`, `showDownloadButton`, `showGuidelines`, `snapRange`, `snapshot`, `snapToShapes`, `snapToStageBorders`, `snapToStageCenter`, `title`, `uploadFn`
+  outputs: `snapshotChanged`
+  tokens: `--ngs-color-picker-thumbnail-bg`, `--ngs-list-item-radius`, `--ngs-list-padding`, `--ngs-slider-thumb-size`, `--ngs-slider-track-height`, `--ngs-tab-label-padding`, `--ngs-tab-panel-aside-width`, `--ngs-tab-panel-nav-padding`
+- image-placeholder: `@ngstarter-ui/components/image-placeholder` docs: /components/image-placeholder
+  purpose: Show a placeholder while an image is absent, loading, or unavailable.
+  use when: Use in cards, upload flows, media grids, avatars, and previews.
+  example topics: Basic image placeholder
+  selectors: `ngs-image-placeholder`
+  exports: `ImagePlaceholder`
+  tokens: `--ngs-color-neutral-100`, `--ngs-color-neutral-300`, `--ngs-color-neutral-400`, `--ngs-color-surface-container`
+- image-resizer: `@ngstarter-ui/components/image-resizer` docs: /components/image-resizer
+  purpose: Resize images or image regions interactively.
+  use when: Use in media editors, upload preparation, thumbnails, and design tools.
+  example topics: Basic image resizer
+  selectors: `[ngsImageResizeHandler]`, `[ngsImageResizerImage]`, `ngs-image-resizer`
+  exports: `ImageResizedEvent`, `ImageResizeHandlerDirective`, `ImageResizer`, `ImageResizerImageDirective`
+  inputs: `direction`, `imageMaxWidth`, `imageMinWidth`, `maxWidth`, `minWidth`, `targetElement`
+  outputs: `dimensionsChanged`, `imageResized`
+  tokens: `--ngs-color-on-secondary-fixed`, `--ngs-color-white`
+- image-viewer: `@ngstarter-ui/components/image-viewer` docs: /components/image-viewer
+  purpose: Display images in a focused viewer experience.
+  use when: Use for galleries, attachments, previews, and media detail views.
+  example topics: Basic image viewer, Image viewer with caption and description, Image viewer with title
+  selectors: `[ngsImageViewer]`, `[ngsImageViewerPicture]`, `[ngsImageViewerPictureCaption]`, `[ngsImageViewerPictureDescription]`, `[ngsImageViewerPictureTitle]`, `ngs-image-viewer`
+  exports: `IMAGE_VIEWER`, `IMAGE_VIEWER_PICTURE_DATA`, `IMAGE_VIEWER_PICTURE_REF`, `ImageViewer`, `ImageViewerDirective`, `ImageViewerPictureCaptionDirective`, `ImageViewerPictureDescriptionDirective`, `ImageViewerPictureDirective`, `ImageViewerPictureTitleDirective`, `PictureOptions`, `PictureRef`
+  inputs: `caption`, `description`, `sourceUrl`, `title`
+  tokens: `--ngs-color-neutral-100`, `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-color-neutral-400`, `--ngs-color-neutral-50`, `--ngs-color-neutral-600`, `--ngs-color-neutral-700`, `--ngs-color-neutral-800`, `--ngs-color-neutral-900`, `--ngs-color-neutral-950`, `--ngs-font-size-sm`, `--ngs-image-viewer-picture-scale`, `--ngs-shadow-sm`
+- image-zoom-viewer: `@ngstarter-ui/components/image-zoom-viewer` docs: /components/image-zoom-viewer
+  purpose: Display images with zoom and pan-style inspection.
+  use when: Use when users need to inspect high-detail images, documents, maps, or screenshots.
+  example topics: Basic image viewer, Basic image zoom viewer
+  selectors: `[ngsImageZoomViewerImage]`, `ngs-image-zoom-viewer`, `ngs-image-zoom-viewer-style`
+  exports: `ImageZoomViewer`, `ImageZoomViewerImage`, `ImageZoomViewerStyle`
+  tokens: `--ngs-overlay-backdrop-bg`
+- incidents: `@ngstarter-ui/components/incidents` docs: /components/incidents
+  purpose: Represent incident or issue states in operational dashboards.
+  use when: Use for monitoring, service health, incident lists, and response workflows.
+  example topics: Basic Incidents, Show/Hide Dynamicly, Incidents show hide dynamicly
+  selectors: `[ngs-incident]`, `[ngsIncidentButton]`, `[ngsIncidentClose]`, `[ngsIncidentIcon]`, `[ngsIncidentsToggleIcon]`, `ngs-incident`, `ngs-incident-details`, `ngs-incident-title`, `ngs-incidents`, `ngs-incidents-bar`, `ngs-incidents-container`, `ngs-incidents-description`, `ngs-incidents-global`, `ngs-incidents-list`, `ngs-incidents-title`
+  exports: `Incident`, `IncidentButtonDirective`, `IncidentCloseDirective`, `IncidentDetails`, `IncidentIconDirective`, `Incidents`, `INCIDENTS`, `IncidentsBar`, `IncidentsContainer`, `IncidentsDescription`, `IncidentsList`, `IncidentsState`
+  inputs: `fixed`, `incidentId`
+  tokens: `--ngs-color-neutral-500`, `--ngs-color-neutral-700`, `--ngs-color-neutral-900`, `--ngs-color-on-orange-container`, `--ngs-color-orange-container`, `--ngs-font-size-sm`, `--ngs-incident-bg`, `--ngs-incident-border-radius`, `--ngs-incident-border-start`, `--ngs-incident-close-color`, `--ngs-incident-close-hover-color`, `--ngs-incident-color`, `--ngs-incident-details-color`, `--ngs-incident-details-font-size`, `--ngs-incident-gap`, `--ngs-incident-padding`
+- inline-text-edit: `@ngstarter-ui/components/inline-text-edit` docs: /forms/inline-text-edit
+  purpose: Edit text in place without opening a separate form.
+  use when: Use for names, titles, labels, descriptions, and quick record edits.
+  example topics: Basic inline text edit
+  selectors: `[ngs-inline-text-edit]`, `ngs-inline-text-edit`
+  exports: `InlineTextEdit`
+  inputs: `delay`, `enabled`, `placeholder`
+  outputs: `contentChanged`
+  tokens: `--ngs-color-neutral-500`, `--ngs-color-on-surface`, `--ngs-color-outline`, `--ngs-color-primary`, `--ngs-field-radius`, `--ngs-form-field-outlined-caret-color`, `--ngs-form-field-outlined-input-text-color`, `--ngs-form-field-outlined-outline-color`, `--ngs-form-field-outlined-outline-width`
+- input: `@ngstarter-ui/components/input` docs: /forms/input
+  purpose: Style native text inputs and textareas consistently with NgStarter form fields.
+  use when: Use for standard text entry, search fields, and multiline form values.
+  example topics: Basic Inputs, Disabled Inputs, Textarea Autosize, Clear Button, Error Messages, Input with Hints, Input with Prefixes and Suffixes, Disabled
+  selectors: `input[ngsInput]`, `textarea[ngsInput]`
+  exports: `Input`
+  inputs: `disabled`, `errorStateMatcher`, `id`, `placeholder`, `readonly`, `required`
+- input-mask: `@ngstarter-ui/components/input-mask` docs: /forms/input-mask
+  purpose: Constrain text entry to a specific pattern.
+  use when: Use for phone numbers, IDs, codes, formatted numbers, and structured text.
+  example topics: Credit card number input mask, Credit card expiry date input mask, Credit card cvv input mask, Credit card input mask, Credit card expiry input mask
+  selectors: `[ngsCreditCardCvvMask]`, `[ngsCreditCardExpiryDateMask]`, `[ngsCreditCardNumberMask]`
+  exports: `CreditCardCvvMaskDirective`, `CreditCardExpiryDateMaskDirective`, `CreditCardNumberMaskDirective`
+  inputs: `placeholder`
+- input-validator: `@ngstarter-ui/components/input-validator` docs: /forms/input-validator
+  purpose: Validate user input and show validation feedback.
+  use when: Use for forms that need reusable client-side validation behavior.
+  example topics: Credit card input validator
+  exports: `expiryDateValidator`
+- kanban-board: `@ngstarter-ui/components/kanban-board` docs: /libraries/kanban-board
+  purpose: Organize items into draggable workflow columns.
+  use when: Use for tasks, deals, issues, content pipelines, and status-based workflows.
+  selectors: `[ngsKanbanItemDef]`, `ngs-kanban-board`
+  exports: `KanbanBoard`, `KanbanColumn`, `KanbanItem`, `KanbanItemDefDirective`, `KanbanItemSortedEvent`, `KanbanItemTransferredEvent`
+  inputs: `colors`, `columns`
+  outputs: `columnDelete`, `columnEdit`, `itemAdd`, `itemClick`, `itemSorted`
+  tokens: `--ngs-color-surface-container-lowest`, `--ngs-kanban-board-col-width`, `--ngs-kanban-board-column-gap`, `--ngs-kanban-board-padding-x`, `--ngs-radius-xl`, `--ngs-shadow-sm`
+- kbd: `@ngstarter-ui/components/kbd` docs: /components/kbd
+  purpose: Render keyboard keys or shortcuts.
+  use when: Use in help text, command menus, docs, and power-user workflows.
+  example topics: Basic Keyboard, Keyboard group, Keyboard in menu, Basic kbd, Kbd group, Kbd with menu
+  selectors: `ngs-kbd`, `ngs-kbd-group`
+  exports: `Kbd`, `KbdGroup`
+  tokens: `--ngs-color-surface-container`, `--ngs-font-size-xs`, `--ngs-radius-lg`
+- layout: `@ngstarter-ui/components/layout` docs: /components/layout
+  purpose: Compose common app layout regions for admin and dashboard screens.
+  use when: Use for shells, page scaffolding, content/sidebar layouts, and structural UI.
+  example topics: Layout header, Layout sidebar, Layout header with sidebar, Layout header with topbar, Layout footer, Layout header with footer, Layout aside, Layout with nested layouts example
+  selectors: `ngs-layout`, `ngs-layout-aside`, `ngs-layout-content`, `ngs-layout-footer`, `ngs-layout-header`, `ngs-layout-sidebar`, `ngs-layout-topbar`
+  exports: `Layout`, `LAYOUT`, `LAYOUT_CONTENT`, `LayoutApiService`, `LayoutAside`, `LayoutContent`, `LayoutContentInterface`, `LayoutFooter`, `LayoutHeader`, `LayoutSidebar`, `LayoutSidebarStore`, `LayoutSidebarVisibilityChange`
+  inputs: `autoscrollToTop`, `layoutId`, `root`
+  tokens: `--ngs-layout-aside-width`
+- list: `@ngstarter-ui/components/list` docs: /components/list
+  purpose: Display repeated rows of related content or actions.
+  use when: Use for navigation-adjacent lists, settings rows, activity feeds, and item collections.
+  example topics: Basic List, List With Sections, List With Selection, List With Single Selection, List Variants, Nav List
+  selectors: `[ngsLine]`, `[ngsListItemAvatar]`, `[ngsListItemIcon]`, `[ngsListItemLine]`, `[ngsListItemMeta]`, `[ngsListItemTitle]`, `[ngsSubheader]`, `a[ngs-list-item]`, `button[ngs-list-item]`, `ngs-action-list`, `ngs-list`, `ngs-list-item`, `ngs-list-option`, `ngs-nav-list`, `ngs-selection-list`
+  exports: `ActionList`, `List`, `ListItem`, `ListItemAvatar`, `ListItemIcon`, `ListItemLine`, `ListItemMeta`, `ListItemTitle`, `ListOption`, `NavList`, `SelectionList`, `Subheader`
+  inputs: `disabled`, `disableRipple`, `lines`, `multiple`, `ngsRippleDisabled`, `selected`, `value`
+  outputs: `selectedChange`, `selectionChange`
+  tokens: `--ngs-list-item-active-bg`, `--ngs-list-item-active-color`, `--ngs-list-item-color`, `--ngs-list-item-disabled-opacity`, `--ngs-list-item-font-size`, `--ngs-list-item-gap`, `--ngs-list-item-hover-bg`, `--ngs-list-item-hover-color`, `--ngs-list-item-line-color`, `--ngs-list-item-line-font-size`, `--ngs-list-item-min-height`, `--ngs-list-item-padding`, `--ngs-list-item-radius`, `--ngs-list-item-title-font-size`, `--ngs-list-padding`, `--ngs-nav-item-active-bg`
+- logo: `@ngstarter-ui/components/logo`
+  purpose: Render NgStarter or product logo variants.
+  use when: Use in app shells, headers, auth pages, and branding areas.
+  selectors: `[ngs-logo]`, `ngs-logo`, `ngs-logo-description`, `ngs-logo-shape`, `ngs-logo-text`
+  exports: `Logo`, `LogoDescription`, `LogoShape`, `LogoText`, `LogoTextSize`
+  inputs: `size`
+  tokens: `--ngs-color-primary`, `--ngs-color-tertiary`, `--ngs-font-size-sm`, `--ngs-font-size-xl`, `--ngs-font-size-xs`, `--ngs-logo-text-color`, `--ngs-logo-text-font-size`, `--ngs-logo-text-font-weight`, `--ngs-logo-text-hover-color`
+- marquee: `@ngstarter-ui/components/marquee` docs: /components/marquee
+  purpose: Animate a horizontal stream of repeated content.
+  use when: Use for compact announcements, logos, highlights, and non-critical decorative motion.
+  example topics: Basic marquee, Marquee reverse, Marquee with pause on hover, Marquee pause on hover
+  selectors: `[ngsMarqueeItem]`, `ngs-marquee`
+  exports: `Marquee`, `MarqueeItemDirective`
+  inputs: `pauseOnHover`, `reverse`
+  tokens: `--ngs-marquee-animation-duration`, `--ngs-marquee-gap`, `--ngs-marquee-pause`, `--ngs-marquee-reverse`
+- menu: `@ngstarter-ui/components/menu` docs: /components/menu
+  purpose: Show contextual action lists anchored to a trigger.
+  use when: Use for row actions, overflow menus, user menus, context menus, and toolbars.
+  example topics: Basic Menu, Menu With Icons, Menu Divider, Menu Heading, Menu Header & Footer, Nested Menu, Menu Positioning, Context Menu
+  selectors: `[ngs-menu-item]`, `[ngsContextMenuTriggerFor]`, `[ngsMenuContent]`, `[ngsMenuOptionGroup]`, `[ngsMenuTriggerFor]`, `ngs-menu`, `ngs-menu-divider`, `ngs-menu-footer`, `ngs-menu-header`, `ngs-menu-heading`, `ngs-menu-item`
+  exports: `ContextMenuTrigger`, `Menu`, `MENU_ITEM`, `MENU_TRIGGER`, `MenuCloseReason`, `MenuContent`, `MenuDivider`, `MenuFooter`, `MenuHeader`, `MenuHeading`, `MenuItem`, `MenuOptionGroupDirective`
+  inputs: `classList`, `disabled`, `multiple`, `ngsContextMenuTriggerData`, `ngsContextMenuTriggerFor`, `ngsMenuDisabled`, `ngsMenuTriggerData`, `ngsMenuTriggerFor`, `ngsMenuTriggerRestoreFocus`, `role`, `selected`, `xPosition`, `yPosition`
+  outputs: `_triggered`, `closed`, `menuClosed`, `menuOpened`, `valueChange`
+  tokens: `--ngs-color-neutral-500`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-subtle`, `--ngs-color-surface-container-high`, `--ngs-color-surface-container-highest`, `--ngs-control-radius`, `--ngs-dropdown-bg`, `--ngs-dropdown-border`, `--ngs-dropdown-height`, `--ngs-dropdown-item-active-bg`, `--ngs-dropdown-item-color`, `--ngs-dropdown-item-disabled-color`, `--ngs-dropdown-item-font-size`, `--ngs-dropdown-item-gap`, `--ngs-dropdown-item-hover-bg`
+- micro-chart: `@ngstarter-ui/components/micro-chart` docs: /micro-charts
+  purpose: Render compact inline charts for small dashboard metrics.
+  use when: Use in KPI cards, table cells, summaries, and dense analytics panels.
+  selectors: `ngs-mchart-bar`, `ngs-mchart-line`, `ngs-mchart-pie`, `ngs-mchart-tooltip`, `ngs-mchart-tooltip-body`, `ngs-mchart-tooltip-title`
+  exports: `BaseChartTooltip`, `MchartBar`, `MchartLine`, `MchartLineCurveType`, `MchartPie`, `MchartTooltip`, `MchartTooltipBody`, `MchartTooltipTitle`
+  inputs: `compact`, `curve`, `data`, `dataItemStrokeWidth`, `fillAreaGradient`, `fillGradient`, `gap`, `highlight`, `labels`, `legendContainerWidth`, `legendItemFontSize`, `legendItemHeight`, `legendItemSymbolBorderRadius`, `legendItemSymbolSize`, `legendOffset`, `markerDotSize`, `radius`, `responsive`, `showArea`, `showDataAnimation`, `showLegend`, `showMarkers`, `showValueOnSlices`, `strokeWidth`
+  tokens: `--ngs-color-background`, `--ngs-color-neutral`, `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-color-neutral-700`, `--ngs-color-neutral-800`, `--ngs-color-neutral-900`, `--ngs-color-neutral-950`, `--ngs-color-primary`, `--ngs-color-primary-200`, `--ngs-color-primary-500`, `--ngs-color-tertiary-200`, `--ngs-font-size-xs`, `--ngs-mchart-bar-bar-bg`, `--ngs-mchart-bar-bar-gradient-end-color`, `--ngs-mchart-bar-bar-gradient-start-color`
+- navigation: `@ngstarter-ui/components/navigation` docs: /navigation/navigation
+  purpose: Render primary or secondary navigation structures.
+  use when: Use in app shells, sidebars, product sections, and nested admin navigation.
+  example topics: Basic Navigation, Navigation with heading, Navigation with divider, Navigation with icons, Navigation with nested menu, Navigation with badges
+  selectors: `[ngs-navigation-item]`, `[ngsNavigationGroupToggleIcon]`, `[ngsNavigationItemBadge]`, `[ngsNavigationItemDef]`, `[ngsNavigationItemIcon]`, `ngs-navigation`, `ngs-navigation-divider`, `ngs-navigation-group`, `ngs-navigation-group-menu`, `ngs-navigation-group-toggle`, `ngs-navigation-heading`, `ngs-navigation-item`
+  exports: `Navigation`, `NAVIGATION`, `NAVIGATION_GROUP`, `NavigationDivider`, `NavigationGroup`, `NavigationGroupInterface`, `NavigationGroupMenu`, `NavigationGroupToggle`, `NavigationGroupToggleIconDirective`, `NavigationHeading`, `NavigationItem`, `NavigationItemBadgeDirective`
+  inputs: `activateByRoute`, `activeKey`, `appearance`, `badgeTextOnly`, `dataSource`, `forceActive`, `itemTypeProperty`, `key`
+  outputs: `itemClicked`
+  tokens: `--ngs-color-on-primary`, `--ngs-color-on-surface-variant`, `--ngs-color-outline`, `--ngs-color-primary`, `--ngs-color-subtle`, `--ngs-font-size-xs`, `--ngs-nav-arrow-size`, `--ngs-nav-badge-padding`, `--ngs-nav-badge-size`, `--ngs-nav-divider-height`, `--ngs-nav-divider-margin`, `--ngs-nav-group-toggle-icon-position-end`, `--ngs-nav-group-toggle-icon-size`, `--ngs-nav-group-toggle-padding-end`, `--ngs-nav-heading-after-margin`, `--ngs-nav-heading-font-size`
+- notifications: `@ngstarter-ui/components/notifications` docs: /components/notifications
+  purpose: Display notification lists, notification items, or notification surfaces.
+  use when: Use for user alerts, activity updates, inbox-style feeds, and app header popovers.
+  example topics: Basic notifications, Notification list
+  selectors: `[ngs-notification-actor]`, `[ngs-notification-content]`, `[ngs-notification-time]`, `[ngs-notification]`, `[ngsNotificationAvatar]`, `[ngsNotificationControlsDef]`, `[ngsNotificationDef]`, `[ngsNotificationProps]`, `ngs-notification`, `ngs-notification-actor`, `ngs-notification-content`, `ngs-notification-list`, `ngs-notification-message`, `ngs-notification-skeleton`, `ngs-notification-time`
+  exports: `Notification`, `NotificationActor`, `NotificationAvatarDirective`, `NotificationContent`, `NotificationControlsDefDirective`, `NotificationDefDirective`, `NotificationInterface`, `NotificationList`, `NotificationMessage`, `NotificationPropsDirective`, `NotificationSkeleton`, `NotificationTime`
+  inputs: `isUnread`, `ngsNotificationDef`, `notifications`, `static`
+  tokens: `--ngs-color-neutral-900`, `--ngs-color-neutral-950`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary-200`, `--ngs-color-primary-300`, `--ngs-color-surface-container`, `--ngs-color-surface-container-low`, `--ngs-font-size-sm`, `--ngs-font-size-xs`, `--ngs-notification-bg`, `--ngs-notification-gap`, `--ngs-notification-hover-bg`, `--ngs-notification-is-unread-bg`, `--ngs-notification-is-unread-hover-bg`, `--ngs-notification-list-gap`
+- number-input: `@ngstarter-ui/components/number-input` docs: /forms/number-input
+  purpose: Capture numeric values with appropriate controls and formatting.
+  use when: Use for quantities, limits, pricing, thresholds, and numeric settings.
+  example topics: Basic Number Input, Custom Controls, Min, Max Value, Number input custom controls, Number input min max
+  selectors: `[ngsDecreaseControl]`, `[ngsIncreaseControl]`, `[ngsNumberInputPrefix]`, `[ngsNumberInputSuffix]`, `ngs-number-input`
+  exports: `DecreaseControlDirective`, `IncreaseControlDirective`, `NumberInput`, `NumberInputPrefixDirective`, `NumberInputSuffixDirective`
+  inputs: `disabled`, `max`, `min`, `placeholder`, `readonly`, `required`, `step`
+  outputs: `valueChange`
+  tokens: `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-color-neutral-500`, `--ngs-color-neutral-600`, `--ngs-color-neutral-700`, `--ngs-color-surface-container`, `--ngs-color-surface-container-high`, `--ngs-number-input-control-active-bg`, `--ngs-number-input-control-active-color`, `--ngs-number-input-control-bg`, `--ngs-number-input-control-border`, `--ngs-number-input-control-border-radius`, `--ngs-number-input-control-color`, `--ngs-number-input-control-font-size`, `--ngs-number-input-control-hover-bg`, `--ngs-number-input-control-hover-color`
+- option: `@ngstarter-ui/components/option`
+  purpose: Provide reusable option primitives for select-like controls.
+  use when: Use internally or alongside option-based components such as select and autocomplete.
+  selectors: `ngs-optgroup`, `ngs-option`
+  exports: `_Option`, `_OptionParent`, `Optgroup`, `Option`, `OPTION`, `OPTION_PARENT`
+  inputs: `disabled`, `label`, `selected`, `value`
+  outputs: `onSelectionChange`
+  tokens: `--ngs-color-on-primary-container`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary-container`, `--ngs-color-surface-container-high`, `--ngs-color-surface-container-highest`, `--ngs-control-radius`, `--ngs-dropdown-height`, `--ngs-dropdown-item-active-bg`, `--ngs-dropdown-item-color`, `--ngs-dropdown-item-disabled-color`, `--ngs-dropdown-item-font-size`, `--ngs-dropdown-item-gap`, `--ngs-dropdown-item-hover-bg`, `--ngs-dropdown-item-nested-padding-start`, `--ngs-dropdown-item-padding`
+- overlay: `@ngstarter-ui/components/overlay`
+  purpose: Position floating UI relative to an anchor.
+  use when: Use for custom popovers, dropdowns, panels, menus, and floating surfaces.
+  exports: `OverlayPosition`, `PositionManager`
+- page-loading-bar: `@ngstarter-ui/components/page-loading-bar`
+  purpose: Show route or page-level loading progress.
+  use when: Use during navigation, large async page transitions, or app-wide loading states.
+  selectors: `ngs-page-loading-bar`
+  exports: `PageLoadingBar`
+  inputs: `fixed`
+  tokens: `--ngs-loading-bar-bg`, `--ngs-loading-bar-height`
+- paginator: `@ngstarter-ui/components/paginator` docs: /components/paginator
+  purpose: Navigate paged datasets.
+  use when: Use with tables, data views, lists, and server-side record browsing.
+  example topics: Basic Paginator, Configurable Paginator
+  selectors: `ngs-paginator`
+  exports: `DEFAULT_PAGE_SIZE`, `PageEvent`, `Paginator`, `PAGINATOR_DEFAULT_OPTIONS`, `PaginatorDefaultOptions`, `PaginatorIntl`
+  inputs: `disabled`, `hidePageSize`, `length`, `pageIndex`, `pageSize`, `pageSizeOptions`, `showFirstLastButtons`
+  outputs: `page`
+  tokens: `--ngs-color-on-surface`, `--ngs-font-size-sm`, `--ngs-form-field-container-min-height`, `--ngs-form-field-infix-min-height`, `--ngs-form-field-infix-padding-bottom`, `--ngs-form-field-infix-padding-top`, `--ngs-paginator-container-background`, `--ngs-paginator-container-background-color`, `--ngs-paginator-container-text-color`, `--ngs-paginator-container-text-font`, `--ngs-paginator-container-text-line-height`, `--ngs-paginator-container-text-size`, `--ngs-paginator-container-text-tracking`, `--ngs-paginator-container-text-weight`, `--ngs-paginator-items-per-page-label-margin`, `--ngs-paginator-page-size-margin-right`
+- panel: `@ngstarter-ui/components/panel` docs: /components/panel
+  purpose: Group content inside a structured panel surface.
+  use when: Use for dashboard sections, settings panels, details, and repeated admin modules.
+  example topics: Basic panel, Basic with extra columns (sidebar and aside), Panel with extra columns
+  selectors: `ngs-panel`, `ngs-panel-aside`, `ngs-panel-content`, `ngs-panel-footer`, `ngs-panel-header`, `ngs-panel-sidebar`, `ngs-panel-subheader`
+  exports: `Panel`, `PANEL_CONTENT`, `PanelAside`, `PanelContent`, `PanelContentInterface`, `PanelFooter`, `PanelHeader`, `PanelSidebar`, `PanelSubheader`
+  inputs: `absolute`, `autoHeight`
+  tokens: `--ngs-panel-footer-height`, `--ngs-panel-header-height`, `--ngs-panel-subheader-height`
+- password-strength: `@ngstarter-ui/components/password-strength` docs: /forms/password-strength
+  purpose: Show password quality feedback while users type.
+  use when: Use in signup, reset password, account security, and credential forms.
+  example topics: Basic password strength, Password strength info, Password toggle visibility
+  selectors: `ngs-pass-toggle-visibility`, `ngs-password-strength`, `ngs-password-strength-info`
+  exports: `Colors`, `Criteria`, `PassToggleVisibility`, `PasswordStrength`, `PasswordStrengthInfo`, `PasswordStrengthValidator`, `RegExpValidator`
+  inputs: `accentThreshold`, `customCharsCriteriaMessage`, `customValidator`, `digitsCriteriaMessage`, `enableDigitRule`, `enableLengthRule`, `enableLowerCaseLetterRule`, `enableScoreInfo`, `enableSpecialCharRule`, `enableUpperCaseLetterRule`, `externalError`, `lowerCaseCriteriaMessage`, `max`, `min`, `minCharsCriteriaMessage`, `ngsIconDone`, `ngsIconError`, `password`, `passwordComponent`, `specialCharsCriteriaMessage`, `tabindex`, `upperCaseCriteriaMessage`, `visible`, `warnThreshold`
+  outputs: `strengthChanged`
+  tokens: `--ngs-color-danger`, `--ngs-color-green-500`, `--ngs-color-warning`, `--ngs-progress-bar-active-indicator-color`, `--ngs-progress-bar-active-indicator-height`, `--ngs-progress-bar-track-height`
+- phone-input: `@ngstarter-ui/components/phone-input` docs: /forms/phone-input
+  purpose: Capture phone numbers with country-aware formatting and validation.
+  use when: Use in profiles, billing, contact forms, onboarding, and support workflows.
+  example topics: Basic phone input, Phone input with custom country list, Phone input with preferred country list, Phone input only countries, Phone input preferred countries
+  selectors: `ngs-phone-input`
+  exports: `Country`, `CountryCode`, `PhoneInput`, `PhoneNumberFormat`, `phoneValidator`, `SearchPipe`
+  inputs: `autocomplete`, `defaultSelectedCountryCode`, `disabled`, `errorStateMatcher`, `format`, `onlyCountries`, `placeholder`, `preferredCountries`
+  outputs: `countryChanged`
+  tokens: `--ngs-color-neutral-500`, `--ngs-color-neutral-600`, `--ngs-phone-input-color`, `--ngs-phone-input-flag-display`, `--ngs-phone-input-height`, `--ngs-phone-input-opacity`
+- pin-input: `@ngstarter-ui/components/pin-input` docs: /forms/pin-input
+  purpose: Capture short multi-digit verification or security codes.
+  use when: Use for OTP, MFA, invite codes, passcodes, and verification flows.
+  example topics: Basic Pin Input, Placeholder, Custom Length, Custom Symbols, Pin input with placeholder, Pin input length, Pin input accept custom symbols
+  selectors: `[ngsPinInput]`, `ngs-pin-input`
+  exports: `PinInput`, `PinInputDirective`
+  inputs: `acceptOnly`, `disabled`, `index`, `length`, `placeholder`
+  outputs: `valuePaste`
+  tokens: `--ngs-form-field-input-text-align`, `--ngs-form-field-width`, `--ngs-pin-gap`, `--ngs-pin-input-width`
+- popover: `@ngstarter-ui/components/popover` docs: /components/popover
+  purpose: Show lightweight contextual content anchored to another element.
+  use when: Use for quick details, simple forms, explanations, and non-modal contextual UI.
+  example topics: Basic Popover, Show popover by hover, Popover custom position, Popover lazy content, Popover with TemplateRef, Popover hover, Popover with custom position, Popover template ref
+  selectors: `[ngsPopoverContent]`, `[ngsPopoverOrigin]`, `[ngsPopoverTriggerFor]`, `ngs-popover`
+  exports: `Popover`, `POPOVER_TRIGGER`, `PopoverContent`, `PopoverOriginDirective`, `PopoverPosition`, `PopoverTrigger`, `PopoverTriggerFor`, `PopoverTriggerForDirective`
+  inputs: `closeOnOriginClick`, `closeOnOriginMouseLeave`, `delay`, `hasBackdrop`, `ngsPopoverContext`, `origin`, `position`, `trigger`
+  outputs: `closed`, `opened`
+  tokens: `--ngs-dropdown-bg`, `--ngs-dropdown-border`, `--ngs-dropdown-radius`, `--ngs-dropdown-shadow`, `--ngs-popover-bg`, `--ngs-popover-border`, `--ngs-popover-border-radius`, `--ngs-popover-margin`, `--ngs-popover-shadow`
+- progress-bar: `@ngstarter-ui/components/progress-bar` docs: /components/progress-bar
+  purpose: Show linear progress or completion state.
+  use when: Use for uploads, long-running tasks, setup completion, and bounded progress.
+  example topics: Basic Progress Bar, Intermediate Progress Bar, Buffer Progress Bar, Query Progress Bar
+  selectors: `ngs-progress-bar`
+  exports: `ProgressBar`, `ProgressBarMode`
+  inputs: `bufferValue`, `color`, `mode`, `value`
+  outputs: `animationEnd`
+  tokens: `--ngs-color-primary`, `--ngs-color-surface-container-highest`, `--ngs-progress-bar-animation-multiplier`, `--ngs-progress-bar-height`, `--ngs-progress-bar-indicator-color`, `--ngs-progress-bar-track-color`
+- radio: `@ngstarter-ui/components/radio` docs: /forms/radio
+  purpose: Let users choose exactly one option from a visible set.
+  use when: Use for short mutually exclusive choices in forms and settings.
+  example topics: Basic Radios, Radio Card, Basic radio
+  selectors: `ngs-radio-button`, `ngs-radio-group`
+  exports: `RadioButton`, `RadioGroup`
+  inputs: `checked`, `disabled`, `id`, `name`, `value`
+  outputs: `change`
+  tokens: `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary`, `--ngs-field-border-color`, `--ngs-radio-button-border-width`, `--ngs-radio-button-checked-color`, `--ngs-radio-button-disabled-color`, `--ngs-radio-button-disabled-label-color`, `--ngs-radio-button-gap`, `--ngs-radio-button-inner-circle-size`, `--ngs-radio-button-label-color`, `--ngs-radio-button-size`, `--ngs-radio-button-unchecked-color`
+- radio-card: `@ngstarter-ui/components/radio-card`
+  purpose: Let users choose one option from richer card-like choices.
+  use when: Use for plans, templates, payment methods, layouts, or options needing descriptions.
+  selectors: `ngs-radio-card`, `ngs-radio-card-content`, `ngs-radio-card-group`, `ngs-radio-card-title`
+  exports: `RadioCard`, `RadioCardContent`, `RadioCardGroup`, `RadioCardTitle`
+  inputs: `value`
+  tokens: `--ngs-color-border`, `--ngs-color-neutral-600`, `--ngs-color-primary`, `--ngs-color-primary-100`, `--ngs-font-size-sm`, `--ngs-radio-card-border-radius`, `--ngs-radio-card-color-border-hover`, `--ngs-radio-card-color-selected-bg`, `--ngs-radio-card-color-selected-border`, `--ngs-radio-card-content-color`, `--ngs-radio-card-content-font-size`, `--ngs-radio-card-group-gap`, `--ngs-radio-card-padding`, `--ngs-radio-card-title-font-size`, `--ngs-radio-card-title-gap`, `--ngs-radio-card-transition`
+- rail-nav: `@ngstarter-ui/components/rail-nav` docs: /navigation/rail-nav
+  purpose: Provide compact vertical navigation with icons and labels.
+  use when: Use in dense app shells where sidebar space is constrained.
+  example topics: Basic rail navigation, Rail navigation customization, Basic rail nav, Rail nav customization
+  selectors: `[ngs-rail-nav-item]`, `[ngsRailNavItemIcon]`, `ngs-rail-nav`, `ngs-rail-nav-item`
+  exports: `RAIL_NAV`, `RailNav`, `RailNavAPI`, `RailNavComponent`, `RailNavItem`, `RailNavItemIconDirective`
+  inputs: `activeKey`, `key`
+  tokens: `--ngs-font-size-xs`, `--ngs-icon-color`, `--ngs-nav-item-active-bg`, `--ngs-nav-item-active-color`, `--ngs-nav-item-active-icon-color`, `--ngs-nav-item-color`, `--ngs-nav-item-hover-bg`, `--ngs-nav-item-icon-color`, `--ngs-nav-items-gap`, `--ngs-radius-full`, `--ngs-rail-nav-bg`, `--ngs-rail-nav-bg-item-active-color`, `--ngs-rail-nav-bg-item-color`, `--ngs-rail-nav-bg-item-icon-active-bg`, `--ngs-rail-nav-bg-item-icon-color`, `--ngs-rail-nav-bg-item-icon-hover-bg`
+- resizable-container: `@ngstarter-ui/components/resizable-container` docs: /components/resizable-container
+  purpose: Let users resize a container or panel.
+  use when: Use for editors, inspectors, side panels, split workspaces, and dashboards.
+  example topics: Basic Resizable Container
+  selectors: `ngs-resizable-container`
+  exports: `ResizableContainer`
+  inputs: `minWidth`
+  outputs: `resized`
+  tokens: `--ngs-color-secondary`, `--ngs-color-surface-container-highest`
+- screen-loader: `@ngstarter-ui/components/screen-loader` docs: /components/screen-loader
+  purpose: Show a full-screen or page-level loading state.
+  use when: Use while initial app, route, or major page data is loading.
+  example topics: Basic screen loader
+  selectors: `ngs-screen-loader`
+  exports: `ScreenLoader`, `ScreenLoaderRef`, `ScreenLoaderService`
+  inputs: `opened`
+  tokens: `--ngs-color-background`, `--ngs-screen-loader-bg`
+- scroll-spy: `@ngstarter-ui/components/scroll-spy`
+  purpose: Track page sections and provide in-page navigation.
+  use when: Use in long docs pages, settings pages, and detail screens with many sections.
+  selectors: `[ngs-scroll-spy-back-to-top]`, `[ngs-scroll-spy-nav]`, `[ngs-scroll-spy-on]`, `[ngs-scroll-spy-title]`, `[ngsScrollSpyContainer]`, `ngs-scroll-spy-back-to-top`, `ngs-scroll-spy-nav`, `ngs-scroll-spy-on`, `ngs-scroll-spy-title`
+  exports: `SCROLL_SPY_NAV`, `ScrollSpyBackToTop`, `ScrollSpyContainerDirective`, `ScrollSpyNav`, `ScrollSpyOn`, `ScrollSpyTitle`
+  inputs: `targetId`
+  tokens: `--ngs-color-primary`, `--ngs-color-subtle`, `--ngs-font-size-sm`, `--ngs-font-size-xl`, `--ngs-icon-size`
+- scrollbar-area: `@ngstarter-ui/components/scrollbar-area`
+  purpose: Provide a styled scrollable region.
+  use when: Use when a panel, menu, list, or surface needs controlled scrolling.
+  selectors: `ngs-scrollbar-area`
+  exports: `ScrollbarArea`
+  inputs: `absolute`, `autoHide`, `scrollbarWidth`
+  outputs: `scrolled`
+  tokens: `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-radius-sm`, `--ngs-scrollbar-area-scroll-track-bg`, `--ngs-scrollbar-area-thumb-active-bg`, `--ngs-scrollbar-area-thumb-bg`, `--ngs-scrollbar-area-thumb-hover-bg`, `--ngs-scrollbar-area-width`
+- segmented: `@ngstarter-ui/components/segmented` docs: /forms/segmented
+  purpose: Switch between compact mutually exclusive modes or filters.
+  use when: Use for view modes, time ranges, filter states, and short setting groups.
+  example topics: Basic segmented control, Segmented control sizes, Segmented control disabled, Segmented control with icons, Segmented control with icons only, Segmented control with FormControl, Segmented control with ngModel, Basic segmented
+  selectors: `[ngs-segmented-button]`, `[ngsSegmentedIcon]`, `ngs-segmented`, `ngs-segmented-button`
+  exports: `Segmented`, `SEGMENTED`, `SegmentedButton`, `SegmentedIconDirective`, `SegmentedTriggerSize`
+  inputs: `disabled`, `iconOnly`, `size`, `value`
+  outputs: `valueChange`
+  tokens: `--ngs-button-radius`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary`, `--ngs-color-surface`, `--ngs-color-surface-container`, `--ngs-color-surface-container-highest`, `--ngs-font-size-sm`, `--ngs-font-size-xs`, `--ngs-icon-size`, `--ngs-segmented-bg`, `--ngs-segmented-button-color`, `--ngs-segmented-button-font-size`, `--ngs-segmented-button-gap`, `--ngs-segmented-button-height`, `--ngs-segmented-button-hover-bg`
+- select: `@ngstarter-ui/components/select` docs: /forms/select
+  purpose: Let users choose one or more options from a dropdown list.
+  use when: Use for forms and filters when options are known and fit in a menu.
+  example topics: Basic Select, Getting and setting the select value, Form Field Features, Disabled, Resetting the select value, Groups of Options, Multiple Selection, Customizing the trigger label
+  selectors: `ngs-select`, `ngs-select-body`, `ngs-select-footer`, `ngs-select-header`, `ngs-select-trigger`
+  exports: `_Select`, `Select`, `SELECT`, `SelectBody`, `SelectChange`, `SelectFooter`, `SelectHeader`, `SelectTrigger`
+  inputs: `aria-describedby`, `ariaLabel`, `disabled`, `hideCheckIcon`, `id`, `multiple`, `placeholder`, `required`, `tabIndex`, `value`
+  outputs: `closed`, `opened`, `selectionChange`
+  tokens: `--ngs-color-on-surface-variant`, `--ngs-color-outline`, `--ngs-dropdown-bg`, `--ngs-dropdown-border`, `--ngs-dropdown-max-height`, `--ngs-dropdown-padding`, `--ngs-dropdown-radius`, `--ngs-dropdown-shadow`, `--ngs-field-border-color`, `--ngs-field-font-size`, `--ngs-field-label-color`, `--ngs-field-line-height`, `--ngs-select-arrow-color`, `--ngs-select-border-color`, `--ngs-select-content-padding`, `--ngs-select-font-size`
+- side-panel: `@ngstarter-ui/components/side-panel` docs: /navigation/side-panel
+  purpose: Show secondary detail or task content beside the main page.
+  use when: Use for inspectors, edit panels, previews, and contextual details.
+  example topics: Basic side panel
+  selectors: `ngs-side-panel`, `ngs-side-panel-tab`
+  exports: `PanelPosition`, `SidePanel`, `SidePanelTab`, `SidePanelTabConfig`
+  inputs: `label`, `position`, `tabId`
+  outputs: `closed`, `opened`
+  tokens: `--ngs-nav-item-active-bg`, `--ngs-nav-item-active-color`, `--ngs-side-panel-button-active-bg`, `--ngs-side-panel-button-active-color`, `--ngs-side-panel-button-strip-width`, `--ngs-side-panel-content-bg`, `--ngs-side-panel-content-width`, `--ngs-side-panel-offset-y`, `--ngs-side-panel-transition-timing`
+- sidebar: `@ngstarter-ui/components/sidebar` docs: /navigation/sidebar
+  purpose: Provide vertical app navigation and supporting sidebar content.
+  use when: Use for admin app shells, workspace navigation, and persistent sections.
+  example topics: Basic sidebar, Sidebar with custom icons
+  selectors: `[ngs-sidebar-nav-item]`, `[ngsSidebarNavGroupToggleIcon]`, `[ngsSidebarNavItemBadge]`, `[ngsSidebarNavItemDef]`, `[ngsSidebarNavItemIcon]`, `ngs-sidebar`, `ngs-sidebar-body`, `ngs-sidebar-content`, `ngs-sidebar-divider`, `ngs-sidebar-footer`, `ngs-sidebar-header`, `ngs-sidebar-nav`, `ngs-sidebar-nav-group`, `ngs-sidebar-nav-group-menu`, `ngs-sidebar-nav-group-toggle`, `ngs-sidebar-nav-heading`, `ngs-sidebar-nav-item`
+  exports: `Sidebar`, `SIDEBAR_NAVIGATION`, `SIDEBAR_NAVIGATION_GROUP`, `SidebarBody`, `SidebarDivider`, `SidebarFooter`, `SidebarHeader`, `SidebarNav`, `SidebarNavGroup`, `SidebarNavGroupMenu`, `SidebarNavGroupToggle`, `SidebarNavGroupToggleIconDirective`
+  inputs: `activeKey`, `autoScrollToActiveItem`, `dataSource`, `forceActive`, `itemTypeProperty`, `key`
+  outputs: `itemClicked`
+  tokens: `--ngs-color-emphasis`, `--ngs-color-on-primary`, `--ngs-color-on-surface-variant`, `--ngs-color-outline`, `--ngs-color-outline-variant`, `--ngs-color-primary`, `--ngs-color-subtle`, `--ngs-font-size-xs`, `--ngs-nav-arrow-size`, `--ngs-nav-badge-padding`, `--ngs-nav-badge-size`, `--ngs-nav-divider-height`, `--ngs-nav-divider-margin`, `--ngs-nav-group-toggle-icon-position-end`, `--ngs-nav-group-toggle-icon-size`, `--ngs-nav-group-toggle-padding-end`
+- sidenav: `@ngstarter-ui/components/sidenav` docs: /components/sidenav
+  purpose: Provide side navigation that can be persistent or toggleable.
+  use when: Use for responsive layouts and app navigation shells.
+  example topics: Basic sidenav
+  selectors: `[ngsSidenavCollapsed]`, `[ngsSidenavExpanded]`, `ngs-sidenav`, `ngs-sidenav-container`, `ngs-sidenav-content`
+  exports: `AutoFocusTarget`, `Sidenav`, `SIDENAV`, `SidenavCollapsed`, `SidenavContainer`, `SidenavContent`, `SidenavExpanded`, `SidenavMode`, `SidenavPosition`
+  inputs: `adaptive`, `adaptiveBreakpoint`, `autoFocus`, `autosize`, `collapsed`, `disableClose`, `fixedWidth`, `hasBackdrop`, `mode`, `opened`, `position`
+  outputs: `backdropClick`
+  tokens: `--ngs-color-background`, `--ngs-overlay-backdrop-bg`, `--ngs-sidenav-backdrop-color`, `--ngs-sidenav-background-color`, `--ngs-sidenav-collapsed-width`, `--ngs-sidenav-divider-color`, `--ngs-sidenav-transition-duration`, `--ngs-sidenav-transition-timing-function`, `--ngs-sidenav-width`, `--ngs-sidenav-z-index`
+- signature-pad: `@ngstarter-ui/components/signature-pad` docs: /components/signature-pad
+  purpose: Capture a drawn signature.
+  use when: Use for approvals, contracts, confirmations, forms, and consent flows.
+  example topics: Basic signature pad
+  selectors: `ngs-signature-pad`
+  exports: `LazyBrush`, `LazyBrushOptions`, `LazyBrushUpdateOptions`, `LazyPoint`, `Point`, `SignaturePad`
+  inputs: `backgroundColor`, `colors`, `lazyEnabled`, `lazyFriction`, `lazyRadius`, `lineWidth`, `penColor`
+  outputs: `signatureCleared`, `signatureSaved`
+  tokens: `--ngs-brand-colors-color-size`, `--ngs-brand-colors-gap`, `--ngs-color-surface-container-highest`, `--ngs-color-surface-container-lowest`
+- skeleton: `@ngstarter-ui/components/skeleton` docs: /components/skeleton
+  purpose: Show placeholder shapes while content is loading.
+  use when: Use for cards, lists, tables, and pages where layout is known before data arrives.
+  example topics: Basic Skeleton
+  selectors: `ngs-skeleton`
+  exports: `Skeleton`
+  inputs: `roundedFull`
+  tokens: `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-color-neutral-500`, `--ngs-color-neutral-600`, `--ngs-radius-xl`, `--ngs-skeleton-from-bg`, `--ngs-skeleton-item-border-radius`, `--ngs-skeleton-to-bg`
+- slide-toggle: `@ngstarter-ui/components/slide-toggle` docs: /forms/slide-toggle
+  purpose: Capture a binary on/off setting.
+  use when: Use for preferences, feature toggles, visibility, and immediate boolean settings.
+  example topics: Basic Slide Toggle, Disabled Slide Toggle, Slide Toggle with Forms, Slide toggle disabled
+  selectors: `ngs-slide-toggle`
+  exports: `SlideToggle`, `SlideToggleChange`
+  inputs: `aria-describedby`, `aria-label`, `aria-labelledby`, `checked`, `color`, `disabled`, `disableRipple`, `hideIcon`, `id`, `labelPosition`, `name`, `required`, `tabIndex`
+  outputs: `change`, `toggleChange`
+  tokens: `--ngs-color-on-primary`, `--ngs-color-primary`, `--ngs-color-surface`, `--ngs-color-surface-container-highest`, `--ngs-slide-toggle-bar-checked-color`, `--ngs-slide-toggle-bar-color`, `--ngs-slide-toggle-height`, `--ngs-slide-toggle-thumb-checked-color`, `--ngs-slide-toggle-thumb-color`, `--ngs-slide-toggle-thumb-size`, `--ngs-slide-toggle-transition-duration`, `--ngs-slide-toggle-width`
+- slider: `@ngstarter-ui/components/slider` docs: /components/slider
+  purpose: Let users choose a numeric value from a continuous or stepped range.
+  use when: Use for volume, size, thresholds, opacity, ranges, and visual settings.
+  example topics: Basic Slider, Custom Thumb Label Formatting, Range Slider, Configurable Slider
+  selectors: `input[ngsSliderEndThumb]`, `input[ngsSliderStartThumb]`, `input[ngsSliderThumb]`, `ngs-slider`
+  exports: `Slider`, `SliderEndThumb`, `SliderStartThumb`, `SliderThumb`
+  inputs: `disabled`, `discrete`, `max`, `min`, `showTickMarks`, `step`, `value`
+  outputs: `valueChange`
+  tokens: `--ngs-color-on-primary`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary`, `--ngs-color-primary-100`, `--ngs-color-surface`, `--ngs-color-surface-container-high`, `--ngs-slider-thumb-color`, `--ngs-slider-thumb-ripple-color`, `--ngs-slider-thumb-size`, `--ngs-slider-tick-mark-active-color`, `--ngs-slider-tick-mark-color`, `--ngs-slider-track-active-color`, `--ngs-slider-track-active-height`, `--ngs-slider-track-color`, `--ngs-slider-track-height`
+- snack-bar: `@ngstarter-ui/components/snack-bar` docs: /components/snackbar
+  purpose: Show short transient feedback after an action.
+  use when: Use for save confirmations, undo prompts, background results, and non-blocking messages.
+  example topics: Basic Snackbar, Snackbar With Custom Component, Configurable Snackbar, Snackbar, Snackbar with custom
+  selectors: `ngs-simple-snack-bar`, `ngs-snack-bar-container`
+  exports: `provideSnackBarConfig`, `SimpleSnackBar`, `SNACK_BAR_CONFIG`, `SNACK_BAR_DATA`, `SnackBar`, `SnackBarConfig`, `SnackBarContainer`, `SnackBarHorizontalPosition`, `SnackBarRef`, `SnackBarVerticalPosition`
+  tokens: `--ngs-color-neutral-100`, `--ngs-color-neutral-950`, `--ngs-font-size-sm`, `--ngs-radius-xl`
+- sort: `@ngstarter-ui/components/sort`
+  purpose: Provide sorting behavior for table-like data.
+  use when: Use with tables, data views, and sortable column headers.
+  selectors: `[ngs-sort-header]`, `[ngsSort]`
+  exports: `EmrSort`, `Sort`, `SORT`, `SortDirection`, `SortDirective`, `SortHeader`, `SortModule`
+  inputs: `disabled`, `ngs-sort-header`, `ngsSortActive`, `ngsSortDirection`, `ngsSortDisableClear`, `ngsSortDisabled`, `ngsSortStart`, `sortActionDescription`
+  outputs: `ngsSortChange`
+- spinner: `@ngstarter-ui/components/spinner` docs: /components/progress-spinner
+  purpose: Use Spinner for basic progress spinner, configurable progress spinner, configurable spinner.
+  use when: Choose Spinner when the workflow matches examples such as Basic Progress Spinner, Configurable Progress Spinner, Configurable spinner.
+  example topics: Basic Progress Spinner, Configurable Progress Spinner, Configurable spinner
+  selectors: `ngs-progress-spinner`
+  exports: `ProgressSpinner`, `ProgressSpinnerModule`, `SpinnerMode`
+  inputs: `color`, `diameter`, `mode`, `strokeWidth`, `value`
+  tokens: `--ngs-color-danger`, `--ngs-color-primary`, `--ngs-color-secondary`, `--ngs-progress-spinner-active-indicator-width`, `--ngs-progress-spinner-animation-multiplier`, `--ngs-progress-spinner-color`
+- splash-screen: `@ngstarter-ui/components/splash-screen`
+  purpose: Show an initial branded loading screen.
+  use when: Use while the application bootstraps or waits for essential startup data.
+  selectors: `ngs-splash-screen`
+  exports: `SplashScreen`, `SplashScreenState`, `SplashScreenStore`
+  inputs: `animationDuration`, `hideDelay`
+  tokens: `--ngs-color-background`, `--ngs-splash-screen-bg`, `--ngs-splash-screen-hide-animation-duration`
+- split: `@ngstarter-ui/components/split` docs: /components/split-pane
+  purpose: Divide an interface into resizable panes.
+  use when: Use for editors, master-detail screens, inspectors, and multi-pane workspaces.
+  example topics: Basic Split Pane, Split Pane with Handle, Vertical Split Pane with Handle, Split Pane with 3 Columns and Minimum Sizes, Split Pane with Restricted Move, Basic split, Split handle, Split vertical handle
+  selectors: `[ngs-split-pane]`, `ngs-split`, `ngs-split-pane`
+  exports: `getAreaAbsorptionCapacity`, `getAreaAbsorptionCapacityPercent`, `getAreaAbsorptionCapacityPixel`, `getAreaMaxSize`, `getAreaMinSize`, `getElementPixelSize`, `getGutterSideAbsorptionCapacity`, `getInputPositiveNumber`, `getPointFromEvent`, `isUserSizesValid`, `provideSplit`, `Split`
+  inputs: `dir`, `direction`, `disabled`, `gutterDblClickDuration`, `gutterSize`, `gutterStep`, `lockSize`, `maxSize`, `minSize`, `order`, `restrictMove`, `size`, `unit`, `useTransition`, `visible`, `withHandle`
+  outputs: `dragEnd`, `dragStart`, `gutterClick`, `gutterDblClick`, `transitionEnd`
+  tokens: `--ngs-color-on-surface`, `--ngs-color-primary`, `--ngs-color-surface-container-high`, `--ngs-split-gutter-bg`, `--ngs-split-gutter-hover-bg`, `--ngs-split-gutter-size`, `--ngs-split-handle-offset`, `--ngs-split-handle-size`
+- stepper: `@ngstarter-ui/components/stepper` docs: /components/stepper
+  purpose: Guide users through a multi-step process.
+  use when: Use for onboarding, setup, checkout, configuration, and wizard-style forms.
+  example topics: Basic Stepper, Stepper Vertical, Stepper Header Position, Stepper That Displays Errors In The Steps, Stepper Responsive, Stepper Label Bottom Position, Stepper with errors state
+  selectors: `[ngsStepLabel]`, `button[ngsStepperNext]`, `button[ngsStepperPrevious]`, `ngs-step`, `ngs-stepper`
+  exports: `Step`, `StepLabel`, `Stepper`, `StepperNext`, `StepperPrevious`
+  inputs: `headerPosition`, `labelPosition`
+  tokens: `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-outline-variant`, `--ngs-color-primary`, `--ngs-color-success`, `--ngs-color-surface-container-high`, `--ngs-color-surface-container-highest`, `--ngs-stepper-content-padding`, `--ngs-stepper-header-gap`, `--ngs-stepper-header-padding`, `--ngs-stepper-icon-active-bg`, `--ngs-stepper-icon-bg`, `--ngs-stepper-icon-color`, `--ngs-stepper-icon-completed-bg`, `--ngs-stepper-icon-size`, `--ngs-stepper-label-active-color`
+- suggestions: `@ngstarter-ui/components/suggestions` docs: /components/suggestions
+  purpose: Display suggested actions, values, or next steps.
+  use when: Use for assistant-like recommendations, empty states, search, and productivity hints.
+  example topics: Basic suggestions
+  selectors: `[ngs-suggestion]`, `[ngsSuggestionIcon]`, `[ngsSuggestionThumb]`, `ngs-suggestion`, `ngs-suggestion-block`, `ngs-suggestions`
+  exports: `Suggestion`, `SuggestionBlock`, `SuggestionIconDirective`, `Suggestions`, `SuggestionThumbDirective`
+  inputs: `heading`, `inline`, `showDivider`
+  tokens: `--ngs-avatar-size`, `--ngs-color-on-surface`, `--ngs-color-surface-bright`, `--ngs-color-surface-container-high`, `--ngs-color-surface-container-low`, `--ngs-color-surface-container-lowest`, `--ngs-font-size-sm`, `--ngs-font-size-xs`, `--ngs-suggestion-block-content-padding`, `--ngs-suggestion-block-font-size`, `--ngs-suggestion-block-font-weight`, `--ngs-suggestion-block-heading-color`, `--ngs-suggestion-border-radius`, `--ngs-suggestion-height`, `--ngs-suggestion-hover-bg`, `--ngs-suggestion-padding`
+- tab-panel: `@ngstarter-ui/components/tab-panel` docs: /navigation/tab-panel
+  purpose: Organize related content into tabbed panels.
+  use when: Use for settings, details, and pages where sections share the same context.
+  example topics: Basic tab panel, Tab panel with panel inside, Tab panel compact state, Tab panel with panels inside, Tab panel compact
+  selectors: `[ngsTabPanelAsideContent]`, `[ngsTabPanelItemIcon]`, `ngs-tab-panel`, `ngs-tab-panel-aside`, `ngs-tab-panel-content`, `ngs-tab-panel-custom-item`, `ngs-tab-panel-footer`, `ngs-tab-panel-header`, `ngs-tab-panel-item`, `ngs-tab-panel-item-text`, `ngs-tab-panel-nav`
+  exports: `TAB_PANEL_ASIDE`, `TAB_PANEL_NAV`, `TabPanel`, `TabPanelApiService`, `TabPanelAside`, `TabPanelAsideContentDirective`, `TabPanelContent`, `TabPanelCustomItem`, `TabPanelFooter`, `TabPanelHeader`, `TabPanelItem`, `TabPanelItemIconDirective`
+  inputs: `activeItemId`, `compact`, `for`, `hideContentIfTabNotSelected`, `ngsTabPanelAsideContent`
+  outputs: `itemIdChanged`
+  tokens: `--ngs-font-size-xs`, `--ngs-nav-item-active-bg`, `--ngs-nav-item-active-color`, `--ngs-nav-item-color`, `--ngs-nav-item-hover-bg`, `--ngs-nav-item-hover-color`, `--ngs-nav-item-radius`, `--ngs-tab-panel-aside-width`, `--ngs-tab-panel-compact-item-height`, `--ngs-tab-panel-compact-item-width`, `--ngs-tab-panel-compact-width`, `--ngs-tab-panel-item-active-bg`, `--ngs-tab-panel-item-active-color`, `--ngs-tab-panel-item-border-radius`, `--ngs-tab-panel-item-color`, `--ngs-tab-panel-item-gap`
+- table: `@ngstarter-ui/components/table` docs: /components/table
+  purpose: Render structured tabular data with columns, rows, headers, sorting, selection, and sticky regions.
+  use when: Use for predictable tabular layouts; use Data View when users need richer dataset operations.
+  example topics: Native Table, Basic Table, Table With Pagination, Table With Sorting, Table With Filtering, Table With Selection, Table With Fixed Columns, Table With Fixed Header
+  selectors: `[ngs-cell]`, `[ngs-footer-cell]`, `[ngs-footer-row]`, `[ngs-header-cell]`, `[ngs-header-row]`, `[ngs-row]`, `[ngsCellDef]`, `[ngsColumnDef]`, `[ngsFooterCellDef]`, `[ngsFooterRowDef]`, `[ngsHeaderCellDef]`, `[ngsHeaderRowDef]`, `[ngsRowDef]`, `ng-template[ngsNoDataRow]`, `ngs-cell`, `ngs-footer-cell`, `ngs-footer-row`, `ngs-header-cell`, `ngs-header-row`, `ngs-row`, `ngs-table`, `ngs-text-column`, `table[ngs-native-table]`, `table[ngs-table]`, `td[ngs-cell]`, `td[ngs-footer-cell]`, `th[ngs-header-cell]`, `tr[ngs-footer-row]`, `tr[ngs-header-row]`, `tr[ngs-row]`
+  exports: `Cell`, `CellDef`, `ColumnDef`, `FooterCell`, `FooterCellDef`, `FooterRow`, `FooterRowDef`, `HeaderCell`, `HeaderCellDef`, `HeaderRow`, `HeaderRowDef`, `NativeTable`
+  inputs: `columns`, `hideBody`, `hideFooter`, `hideHeader`, `name`, `sticky`, `when`
+  tokens: `--ngs-color-surface-container`, `--ngs-data-view-header-bg`, `--ngs-data-view-hl-header-margin`, `--ngs-data-view-hl-header-row-bg`, `--ngs-data-view-row-bg`, `--ngs-radius-lg`, `--ngs-table-background`, `--ngs-table-border-color`, `--ngs-table-cell-font-size`, `--ngs-table-cell-padding`, `--ngs-table-header-bg`, `--ngs-table-header-cell-background`, `--ngs-table-header-cell-color`, `--ngs-table-header-cell-font-size`, `--ngs-table-header-cell-font-weight`, `--ngs-table-header-row-height`
+- tabs: `@ngstarter-ui/components/tabs` docs: /components/tabs
+  purpose: Switch between related views within the same page context.
+  use when: Use for compact section switching, detail page subsections, and alternate views.
+  example topics: Basic Tabs, Tabs with aligned labels, Tabs with custom label template, Tabs with the headers on the bottom, Paginated Tabs, Sortable Tabs, Tabs with custom animations, Tabs with headers on the bottom
+  selectors: `[ngs-tab-content]`, `[ngs-tab-label]`, `[ngs-tab-nav-bar]`, `[ngsTabContent]`, `[ngsTabLabel]`, `a[ngs-tab-link]`, `ngs-tab`, `ngs-tab-group`, `ngs-tab-nav-bar`, `ngs-tab-nav-panel`
+  exports: `Tab`, `TAB_CONTENT`, `TAB_LABEL`, `TabChangeEvent`, `TabContent`, `TabGroup`, `TabLabel`, `TabLink`, `TabNavBar`, `TabNavPanel`
+  inputs: `animate.enter`, `animate.leave`, `animationDuration`, `aria-label`, `aria-labelledby`, `disabled`, `disableRipple`, `headerPosition`, `label`, `ngs-align-tabs`, `ngs-stretch-tabs`, `ngsRippleDisabled`, `preserveContent`, `selectedIndex`, `tabPanel`
+  outputs: `focusChange`, `selectedIndexChange`, `selectedTabChange`
+  tokens: `--ngs-color-on-surface-variant`, `--ngs-color-outline-variant`, `--ngs-color-primary`, `--ngs-color-subtle`, `--ngs-color-surface-container-high`, `--ngs-tab-content-padding`, `--ngs-tab-group-animation-duration`, `--ngs-tab-group-header-border-bottom`, `--ngs-tab-group-header-border-top`, `--ngs-tab-label-active-border-bottom`, `--ngs-tab-label-active-border-top`, `--ngs-tab-label-active-color`, `--ngs-tab-label-color`, `--ngs-tab-label-cursor`, `--ngs-tab-label-disabled-color`, `--ngs-tab-label-disabled-cursor`
+- text-editor: `@ngstarter-ui/components/text-editor` docs: /components/text-editor
+  purpose: Provide a rich text editing control.
+  use when: Use for formatted descriptions, messages, notes, articles, and user-generated content.
+  example topics: Basic Text Editor, Text Editor with floating menu, Text editor floating menu
+  selectors: `[ngsTextEditorCommand]`, `[ngsTextEditorCommandBlockquote]`, `[ngsTextEditorCommandBold]`, `[ngsTextEditorCommandBulletList]`, `[ngsTextEditorCommandCode]`, `[ngsTextEditorCommandCodeBlock]`, `[ngsTextEditorCommandEditLink]`, `[ngsTextEditorCommandHeading]`, `[ngsTextEditorCommandHorizontalRule]`, `[ngsTextEditorCommandImage]`, `[ngsTextEditorCommandItalic]`, `[ngsTextEditorCommandLink]`, `[ngsTextEditorCommandOrderedList]`, `[ngsTextEditorCommandStrike]`, `[ngsTextEditorCommandUnsetLink]`, `[ngsTextEditorCommandYoutube]`, `ngs-image-uploading-placeholder`, `ngs-link`, `ngs-text-editor`, `ngs-text-editor-bubble-menu`, `ngs-text-editor-divider`, `ngs-text-editor-floating-menu`, `ngs-text-editor-toolbar`, `ngs-youtube`
+  exports: `AngularNodeView`, `AngularNodeViewRenderer`, `AngularRenderer`, `ImageUploadingPlaceholder`, `LinkDialog`, `TEXT_EDITOR`, `TEXT_EDITOR_BUBBLE_MENU`, `TextEditor`, `TextEditorAPI`, `TextEditorBubbleMenu`, `TextEditorCommandBlockquoteDirective`, `TextEditorCommandBoldDirective`
+  inputs: `content`, `contentMaxHeight`, `decorations`, `deleteNode`, `editor`, `extension`, `extensions`, `getPos`, `innerDecorations`, `level`, `node`, `placeholder`, `selected`, `updateAttributes`, `view`
+  outputs: `contentChange`, `fileSelected`
+  tokens: `--ngs-color-border`, `--ngs-color-neutral-100`, `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-color-neutral-500`, `--ngs-color-neutral-650`, `--ngs-color-neutral-700`, `--ngs-color-neutral-900`, `--ngs-color-neutral-950`, `--ngs-color-tertiary-100`, `--ngs-color-tertiary-200`, `--ngs-color-tertiary-300`, `--ngs-color-tertiary-700`, `--ngs-color-tertiary-800`, `--ngs-font-size-sm`, `--ngs-font-size-xl`
+- thumbnail-maker: `@ngstarter-ui/components/thumbnail-maker` docs: /components/thumbnail-maker
+  purpose: Create or adjust thumbnails from media.
+  use when: Use for video/image previews, content management, and media publishing workflows.
+  example topics: Basic thumbnail maker, Thumbnail maker with helper text, Thumbnail maker with file select
+  selectors: `[ngsDragImage]`, `ngs-thumbnail-maker`
+  exports: `DragImageDirective`, `ThumbnailMaker`, `ThumbnailMakerApi`
+  inputs: `content`, `helperText`, `scale`, `src`
+  tokens: `--ngs-color-neutral-950`, `--ngs-font-size-xs`, `--ngs-radius-lg`, `--ngs-thumbnail-height`, `--ngs-thumbnail-width`
+- tiles: `@ngstarter-ui/components/tiles` docs: /components/tiles
+  purpose: Lay out resizable tile-based content.
+  use when: Use for dashboards, visual builders, and configurable grid-like workspaces.
+  example topics: Basic tiles
+  selectors: `[ngsTileHandle]`, `ngs-tile`, `ngs-tiles`
+  exports: `ReorderFunction`, `Tile`, `TileHandleDirective`, `Tiles`, `TILES_REORDER`, `TileService`, `tilesShift`, `tilesSwap`
+  inputs: `columns`, `gap`, `height`, `height.lg`, `height.md`, `height.sm`, `height.xl`, `items`, `width`, `width.lg`, `width.md`, `width.sm`, `width.xl`
+  outputs: `layoutChanged`, `orderChanged`
+  tokens: `--ngs-color-border`, `--ngs-color-surface-container`, `--ngs-radius-xl`, `--ngs-tile-h`, `--ngs-tile-h-lg`, `--ngs-tile-h-md`, `--ngs-tile-h-sm`, `--ngs-tile-h-xl`, `--ngs-tile-w`, `--ngs-tile-w-lg`, `--ngs-tile-w-md`, `--ngs-tile-w-sm`, `--ngs-tile-w-xl`, `--ngs-tiles-columns`, `--ngs-tiles-gap`, `--ngs-tiles-row-height`
+- timeline: `@ngstarter-ui/components/timeline` docs: /components/timeline
+  purpose: Show events or activities in chronological order.
+  use when: Use for audit logs, histories, workflows, tracking, and activity feeds.
+  example topics: Basic Timeline, Timeline With Timestamp, Timeline With Custom Indicator, Timeline timestamp, Timeline with cutsom indicator
+  selectors: `[ngsTimelineItemIndicator]`, `ngs-timeline`, `ngs-timeline-attributes`, `ngs-timeline-content`, `ngs-timeline-description`, `ngs-timeline-header`, `ngs-timeline-item`, `ngs-timeline-subtitle`, `ngs-timeline-timestamp`, `ngs-timeline-title`
+  exports: `Timeline`, `TimelineAttributes`, `TimelineContent`, `TimelineDescription`, `TimelineHeader`, `TimelineItem`, `TimelineItemIndicatorDirective`, `TimelineSubtitle`, `TimelineTimestamp`, `TimelineTitle`
+  tokens: `--ngs-color-muted`, `--ngs-color-neutral-500`, `--ngs-color-neutral-800`, `--ngs-font-size-sm`, `--ngs-font-size-xs`, `--ngs-timeline-header-bg`, `--ngs-timeline-header-color`, `--ngs-timeline-header-font-size`, `--ngs-timeline-header-font-weight`, `--ngs-timeline-header-height`, `--ngs-timeline-header-padding`, `--ngs-timeline-header-text-transform`, `--ngs-timeline-indicator-bg`, `--ngs-timeline-indicator-border`, `--ngs-timeline-indicator-line-offset`, `--ngs-timeline-indicator-offset`
+- timepicker: `@ngstarter-ui/components/timepicker` docs: /components/timepicker
+  purpose: Let users choose a time value.
+  use when: Use for scheduling, reminders, availability, reports, and time-based filters.
+  example topics: Basic time picker, Integration with Datepicker, Customizing the toggle icon, Timepicker with interval, Basic timepicker, Timepicker with datepicker, Timepicker custom toggle icon, Timepicker interval
+  selectors: `[ngsTimepickerToggleIcon]`, `input[ngsTimepicker]`, `ngs-timepicker`, `ngs-timepicker-toggle`
+  exports: `Timepicker`, `TIMEPICKER_CONFIG`, `TimepickerConfig`, `TimepickerInput`, `TimepickerIntl`, `TimepickerToggle`, `TimepickerToggleIcon`
+  inputs: `disabled`, `for`, `interval`, `max`, `min`, `ngsTimepicker`, `openOnClick`
+  outputs: `closed`, `opened`
+  tokens: `--ngs-dropdown-bg`, `--ngs-dropdown-border`, `--ngs-dropdown-padding`, `--ngs-dropdown-radius`, `--ngs-dropdown-shadow`, `--ngs-timepicker-content-padding`
+- timezone-select: `@ngstarter-ui/components/timezone-select` docs: /forms/timezone
+  purpose: Let users choose a timezone.
+  use when: Use in profile, scheduling, localization, and tenant settings.
+  example topics: Basic timezone select
+  selectors: `ngs-timezone-select`
+  exports: `FilterTimezonesPipe`, `LocalizedTimezone`, `TimezoneGroup`, `TimezoneSelect`, `TimezoneUtils`
+  inputs: `aria-describedby`, `disabled`, `locale`, `placeholder`, `required`, `searchTerm`, `value`
+  outputs: `closed`, `opened`
+- toolbar: `@ngstarter-ui/components/toolbar` docs: /components/toolbar
+  purpose: Group frequently used page, editor, or content actions.
+  use when: Use above tables, editors, canvases, dashboards, and tool surfaces.
+  example topics: Basic Toolbar, Multi-row Toolbar, Toolbar with items, Responsive Toolbar with Overflow Menu, Responsive Toolbar Navigation, Toolbar overflow, Toolbar nav
+  selectors: `a[ngs-toolbar-nav-link]`, `ngs-toolbar`, `ngs-toolbar-item`, `ngs-toolbar-nav`, `ngs-toolbar-nav-link`, `ngs-toolbar-row`, `ngs-toolbar-spacer`, `ngs-toolbar-title`
+  exports: `Toolbar`, `ToolbarBaseItem`, `ToolbarItem`, `ToolbarNav`, `ToolbarNavLink`, `ToolbarRow`, `ToolbarSpacer`, `ToolbarTitle`
+  inputs: `active`, `hidden`
+  tokens: `--ngs-font-size-lg`, `--ngs-nav-item-active-color`, `--ngs-nav-item-color`, `--ngs-nav-item-font-size`, `--ngs-nav-item-height`, `--ngs-nav-item-hover-color`, `--ngs-nav-item-padding`, `--ngs-nav-item-radius`, `--ngs-toolbar-nav-link-active-color`, `--ngs-toolbar-nav-link-color`, `--ngs-toolbar-nav-link-font-size`, `--ngs-toolbar-nav-link-hover-color`, `--ngs-toolbar-nav-link-overflow-height`, `--ngs-toolbar-nav-link-padding`, `--ngs-toolbar-nav-link-radius`
+- tooltip: `@ngstarter-ui/components/tooltip` docs: /components/tooltip
+  purpose: Show short contextual help on hover or focus.
+  use when: Use for icon buttons, disabled explanations, abbreviations, and dense controls.
+  example topics: Basic Tooltip, Tooltip With a Custom Position, Tooltip show and hide delay, Tooltip manually showing and hiding, Tooltip disabled, Tooltip position at origin, Tooltip show hide delay, Tooltip manually show hide
+  selectors: `[ngsTooltip]`, `ngs-tooltip-content`
+  exports: `Tooltip`, `TOOLTIP_DEFAULT_OPTIONS`, `TooltipContent`, `TooltipDefaultOptions`, `TooltipPosition`, `TooltipVisibility`
+  inputs: `ngsTooltip`, `ngsTooltipClass`, `ngsTooltipDisabled`, `ngsTooltipHideDelay`, `ngsTooltipOffset`, `ngsTooltipPosition`, `ngsTooltipPositionAtOrigin`, `ngsTooltipShowDelay`
+  tokens: `--ngs-color-neutral-100`, `--ngs-color-neutral-950`, `--ngs-font-size-xs`, `--ngs-radius-md`, `--ngs-tooltip-border-radius`, `--ngs-tooltip-container-color`, `--ngs-tooltip-font-size`, `--ngs-tooltip-handset-font-size`, `--ngs-tooltip-handset-padding`, `--ngs-tooltip-line-height`, `--ngs-tooltip-max-width`, `--ngs-tooltip-padding`, `--ngs-tooltip-supporting-text-color`
+- tree: `@ngstarter-ui/components/tree` docs: /components/tree
+  purpose: Display hierarchical data with expandable parent and child nodes.
+  use when: Use for folders, permissions, categories, org charts, and nested navigation.
+  example topics: Basic tree, Tree with dynamic data
+  selectors: `[ngsTreeNodeDef]`, `[ngsTreeNodeOutlet]`, `[ngsTreeNodePadding]`, `[ngsTreeNodeToggle]`, `ngs-nested-tree-node`, `ngs-tree`, `ngs-tree-node`
+  exports: `NestedTreeNode`, `Tree`, `TreeNode`, `TreeNodeDef`, `TreeNodeOutlet`, `TreeNodePadding`, `TreeNodeToggle`
+  inputs: `disabled`, `ngsNestedTreeNode`, `ngsTreeNode`, `ngsTreeNodeDefWhen`, `ngsTreeNodePadding`, `ngsTreeNodePaddingIndent`, `ngsTreeNodeToggleRecursive`, `recursive`, `tabIndex`, `when`
+  outputs: `activation`, `expandedChange`
+  tokens: `--ngs-tree-container-background-color`, `--ngs-tree-node-min-height`, `--ngs-tree-node-text-color`, `--ngs-tree-node-text-font`, `--ngs-tree-node-text-size`, `--ngs-tree-node-text-weight`
+- upload: `@ngstarter-ui/components/upload` docs: /components/upload
+  purpose: Let users select, preview, and upload files.
+  use when: Use for attachments, documents, media, imports, and profile assets.
+  example topics: Basic Upload, Upload area, File list, File grid
+  selectors: `[ngs-file-control]`, `[ngsFileIcon]`, `[ngsGridFileControl]`, `[ngsUploadAreaDropState]`, `[ngsUploadAreaIcon]`, `[ngsUploadAreaInvalidState]`, `[ngsUploadAreaMainState]`, `[ngsUploadTrigger]`, `ngs-file`, `ngs-file-control`, `ngs-file-list`, `ngs-files-grid`, `ngs-grid-file`, `ngs-list-file`, `ngs-upload-allowed-types`, `ngs-upload-area`, `ngs-upload-container`, `ngs-upload-max-file-size`
+  exports: `File`, `FileControl`, `FileIconDirective`, `FileList`, `FilesGrid`, `GridFile`, `GridFileControlDirective`, `ListFile`, `UploadAllowedTypes`, `UploadArea`, `UploadAreaDropStateDirective`, `UploadAreaIconDirective`
+  inputs: `accept`, `allowHover`, `errorMessage`, `multiple`, `name`, `progress`, `progressingMessage`, `remainingTime`, `size`, `state`
+  outputs: `fileSelected`
+  tokens: `--ngs-color-danger`, `--ngs-color-danger-container-high`, `--ngs-color-danger-container-low`, `--ngs-color-neutral-300`, `--ngs-color-neutral-500`, `--ngs-color-neutral-600`, `--ngs-color-primary`, `--ngs-color-subtle`, `--ngs-color-surface-container`, `--ngs-color-surface-container-highest`, `--ngs-file-bg`, `--ngs-file-border-radius`, `--ngs-file-control-color`, `--ngs-file-control-font-size`, `--ngs-file-control-hover-color`, `--ngs-file-controls-gap`
+- video-player: `@ngstarter-ui/components/video-player` docs: /libraries/video-player
+  purpose: Play video content with application-level controls.
+  use when: Use for media libraries, lessons, previews, and product content.
+  selectors: `ngs-video-player`
+  exports: `VideoPlayer`, `VideoPlayerInterface`, `VideoPlayerOrientation`, `VideoPlayerService`
+  inputs: `autoPlay`, `disableClickToPlay`, `muted`, `orientation`, `payload`, `showDurationSlider`, `showFullscreen`, `showPlayButton`, `showSpeaker`, `src`, `thumbnailUrl`, `withCredentials`
+  outputs: `ended`, `error`, `loaded`, `pause`, `play`
+- video-viewer: `@ngstarter-ui/components/video-viewer` docs: /components/video-viewer
+  purpose: Display videos in a focused viewer experience.
+  use when: Use for video attachments, previews, galleries, and media detail pages.
+  example topics: Basic Video Viewer
+  selectors: `[ngsVideoViewer]`, `[ngsVideoViewerVideo]`, `[ngsVideoViewerVideoCaption]`, `[ngsVideoViewerVideoDescription]`, `[ngsVideoViewerVideoTitle]`, `ngs-video-viewer`
+  exports: `VIDEO_VIEWER`, `VIDEO_VIEWER_DATA`, `VIDEO_VIEWER_REF`, `VideoViewer`, `VideoViewerDirective`, `VideoViewerOptions`, `VideoViewerOrientation`, `VideoViewerRef`, `VideoViewerVideoCaptionDirective`, `VideoViewerVideoDescriptionDirective`, `VideoViewerVideoDirective`, `VideoViewerVideoTitleDirective`
+  inputs: `autoPlay`, `caption`, `description`, `muted`, `orientation`, `payload`, `showDurationSlider`, `showFullscreen`, `showPlayButton`, `showSpeaker`, `sourceUrl`, `title`
+  tokens: `--ngs-color-neutral-100`, `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-color-neutral-400`, `--ngs-color-neutral-50`, `--ngs-color-neutral-600`, `--ngs-color-neutral-700`, `--ngs-color-neutral-800`, `--ngs-color-neutral-900`, `--ngs-color-neutral-950`, `--ngs-font-size-sm`, `--ngs-shadow-sm`
+- visual-builder: `@ngstarter-ui/components/visual-builder` docs: /libraries/visual-builder
+  purpose: Provide a visual composition or builder workspace.
+  use when: Use for no-code/low-code editing, layouts, templates, and visual design workflows.
+  selectors: `ngs-visual-builder`
+  exports: `VisualBuilder`

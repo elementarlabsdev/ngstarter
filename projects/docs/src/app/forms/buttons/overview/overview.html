@@ -1,38 +1,56 @@
 <div class="prose max-w-full">
   <h3 id="basic-button">Basic Button</h3>
+  <p class="mb-4 text-neutral-600">
+    Use text buttons for low-emphasis actions or commands inside dense interfaces.
+  </p>
   <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="basic-buttons-example">
     <app-basic-buttons-example/>
   </ngs-playground>
 
   <h3 id="stroked-button">Outlined Button</h3>
+  <p class="mb-4 text-neutral-600">
+    Use outlined buttons for secondary actions that should stay visible without becoming primary.
+  </p>
   <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="stroked-buttons-example">
     <app-stroked-buttons-example/>
   </ngs-playground>
 
   <h3 id="basic-button">Tonal Button</h3>
+  <p class="mb-4 text-neutral-600">
+    Use tonal buttons for softer secondary actions, neutral commands, or repeated toolbar controls.
+  </p>
   <ngs-playground exampleUrl="_docs/forms/buttons/_examples" compact exampleName="tonal-buttons-example">
     <app-tonal-buttons-example/>
   </ngs-playground>
 
   <h3 id="flat-button">Flat Button</h3>
+  <p class="mb-4 text-neutral-600">
+    Use filled buttons for the main action in a form, dialog, page header, or workflow step.
+  </p>
   <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="flat-buttons-example">
     <app-flat-buttons-example/>
   </ngs-playground>
 
   <h3 id="icon-button">Icon Button</h3>
+  <p class="mb-4 text-neutral-600">
+    Use icon buttons for compact actions. Add an aria-label whenever the icon is the only visible label.
+  </p>
   <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="icon-buttons-example">
     <app-icon-buttons-example/>
   </ngs-playground>
 
   <h3 id="button-loading">Button Loading</h3>
+  <p class="mb-4 text-neutral-600">
+    Use loading state while an action is running to prevent duplicate submissions and show progress.
+  </p>
   <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="button-loading-example">
     <app-button-loading-example/>
   </ngs-playground>
 
   <h3 id="hide-text-on-mobile">Hide text on mobile</h3>
   <p>
-    The <code class="code">hideTextOnMobile</code> attribute allows you to hide the text on mobile devices
-    making the button look like an icon button.
+    Use <code class="code">hideTextOnMobile</code> when a button should keep its text on larger screens
+    but become icon-only in narrow layouts.
   </p>
   <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="hide-text-on-mobile-example">
     <app-hide-text-on-mobile-example/>
@@ -40,9 +58,8 @@
 
   <h3 id="interactive-disabled-buttons">Interactive disabled buttons</h3>
   <p>
-    Very often it is necessary to add an explanation of the reason for blocking a button
-    for this purpose there is an option <code class="code">disabledInteractive</code> which allows you to add
-    a tooltip to a disabled button.
+    Use <code class="code">disabledInteractive</code> when a disabled-looking button still needs to receive focus
+    so a tooltip can explain why the action is unavailable.
   </p>
   <ngs-playground exampleUrl="_docs/forms/buttons/_examples" exampleName="buttons-with-interactive-disabled-example">
     <app-buttons-with-interactive-disabled-example/>

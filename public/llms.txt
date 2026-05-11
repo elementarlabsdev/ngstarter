@@ -1,0 +1,169 @@
+# NgStarter UI
+
+NgStarter UI is an AI-friendly Angular component kit for admin panels and product dashboards.
+
+Package: `@ngstarter-ui/components`
+Angular: 21
+Primary docs: https://ngstarter.com
+AI registry: https://ngstarter.com/ai/component-registry.json
+
+## Usage Rules
+
+- Import components from secondary entry points: `@ngstarter-ui/components/<component>`.
+- Import theme styles once in the app stylesheet.
+- Use `provideNgsTheme` from `@ngstarter-ui/components/core` for runtime theming.
+- Prefer `--ngs-*` CSS custom properties when customizing styles.
+- Do not import from private `src` paths in application code.
+
+## Setup
+
+```scss
+@use '@ngstarter-ui/components/styles/themes/default';
+```
+
+```ts
+import { provideNgsTheme } from '@ngstarter-ui/components/core';
+
+export const appConfig = {
+  providers: [provideNgsTheme({ theme: 'enterprise', colorScheme: 'auto' })],
+};
+```
+
+## Common Imports
+
+```ts
+import { Button } from '@ngstarter-ui/components/button';
+import { Dialog } from '@ngstarter-ui/components/dialog';
+import { Input } from '@ngstarter-ui/components/input';
+import { Select } from '@ngstarter-ui/components/select';
+import { Table } from '@ngstarter-ui/components/table';
+```
+
+## Recipes
+
+### admin-dashboard
+Build admin dashboards from NgStarter UI primitives instead of hand-rolled shell, cards, forms, tables, and pagination.
+
+Verification: `npm run verify:admin:components`
+
+Must use:
+- `@ngstarter-ui/components/sidenav`
+- `@ngstarter-ui/components/navigation`
+- `@ngstarter-ui/components/card`
+- `@ngstarter-ui/components/table`
+- `@ngstarter-ui/components/form-field`
+- `@ngstarter-ui/components/input`
+- `@ngstarter-ui/components/paginator`
+- `@ngstarter-ui/components/button`
+- `@ngstarter-ui/components/icon`
+- `@ngstarter-ui/components/checkbox`
+- `@ngstarter-ui/components/progress-bar`
+
+## Components
+
+- action-required: `@ngstarter-ui/components/action-required` docs: /components/action-required
+- alert: `@ngstarter-ui/components/alert` docs: /components/alert
+- announcement: `@ngstarter-ui/components/announcement` docs: /components/announcement
+- autocomplete: `@ngstarter-ui/components/autocomplete` docs: /forms/autocomplete
+- avatar: `@ngstarter-ui/components/avatar` docs: /components/avatar
+- badge: `@ngstarter-ui/components/badge` docs: /components/badge
+- block-loader: `@ngstarter-ui/components/block-loader` docs: /components/block-loader
+- bottom-sheet: `@ngstarter-ui/components/bottom-sheet` docs: /components/bottom-sheet
+- breadcrumbs: `@ngstarter-ui/components/breadcrumbs` docs: /navigation/breadcrumbs
+- button: `@ngstarter-ui/components/button` docs: /forms/buttons
+- button-toggle: `@ngstarter-ui/components/button-toggle` docs: /forms/button-toggle
+- card: `@ngstarter-ui/components/card` docs: /components/card
+- card-overlay: `@ngstarter-ui/components/card-overlay` docs: /components/card-overlay
+- carousel: `@ngstarter-ui/components/carousel` docs: /components/carousel
+- checkbox: `@ngstarter-ui/components/checkbox` docs: /forms/checkbox
+- chips: `@ngstarter-ui/components/chips` docs: /components/chips
+- code-highlighter: `@ngstarter-ui/components/code-highlighter` docs: /components/code-highlighter
+- color-picker: `@ngstarter-ui/components/color-picker` docs: /components/color-picker
+- color-switcher: `@ngstarter-ui/components/color-switcher` docs: /components/color-switcher
+- command-bar: `@ngstarter-ui/components/command-bar` docs: /components/command-bar
+- comment-editor: `@ngstarter-ui/components/comment-editor` docs: /components/comment-editor
+- comparison-slider: `@ngstarter-ui/components/comparison-slider` docs: /components/comparison-slider
+- confirm: `@ngstarter-ui/components/confirm` docs: /components/confirm
+- content-editor: `@ngstarter-ui/components/content-editor` docs: /libraries/content-editor
+- content-fade: `@ngstarter-ui/components/content-fade` docs: /components/content-fade
+- cookie-popup: `@ngstarter-ui/components/cookie-popup` docs: /components/cookie-popup
+- country-select: `@ngstarter-ui/components/country-select` docs: /forms/country
+- crop: `@ngstarter-ui/components/crop` docs: /components/crop
+- currency-select: `@ngstarter-ui/components/currency-select` docs: /forms/currency-select
+- data-view: `@ngstarter-ui/components/data-view` docs: /libraries/data-view
+- date-format-select: `@ngstarter-ui/components/date-format-select` docs: /forms/date-format-select
+- datepicker: `@ngstarter-ui/components/datepicker` docs: /components/datepicker
+- dialog: `@ngstarter-ui/components/dialog` docs: /components/dialog
+- divider: `@ngstarter-ui/components/divider` docs: /components/divider
+- drawer: `@ngstarter-ui/components/drawer` docs: /components/drawer
+- emoji-picker: `@ngstarter-ui/components/emoji-picker` docs: /components/emoji-picker
+- empty-state: `@ngstarter-ui/components/empty-state` docs: /components/empty-state
+- expand: `@ngstarter-ui/components/expand` docs: /components/expand
+- expansion: `@ngstarter-ui/components/expansion` docs: /components/expansion-panel
+- filter-builder: `@ngstarter-ui/components/filter-builder` docs: /components/filter-builder
+- form-renderer: `@ngstarter-ui/components/form-renderer` docs: /forms/form-renderer
+- gauge: `@ngstarter-ui/components/gauge` docs: /components/gauge
+- grid: `@ngstarter-ui/components/grid` docs: /components/grid
+- guided-tour: `@ngstarter-ui/components/guided-tour` docs: /components/guided-tour
+- icon: `@ngstarter-ui/components/icon` docs: /components/icon
+- image-designer: `@ngstarter-ui/components/image-designer` docs: /libraries/image-designer
+- image-placeholder: `@ngstarter-ui/components/image-placeholder` docs: /components/image-placeholder
+- image-resizer: `@ngstarter-ui/components/image-resizer` docs: /components/image-resizer
+- image-viewer: `@ngstarter-ui/components/image-viewer` docs: /components/image-viewer
+- image-zoom-viewer: `@ngstarter-ui/components/image-zoom-viewer` docs: /components/image-zoom-viewer
+- incidents: `@ngstarter-ui/components/incidents` docs: /components/incidents
+- inline-text-edit: `@ngstarter-ui/components/inline-text-edit` docs: /forms/inline-text-edit
+- input: `@ngstarter-ui/components/input` docs: /forms/input
+- input-mask: `@ngstarter-ui/components/input-mask` docs: /forms/input-mask
+- input-validator: `@ngstarter-ui/components/input-validator` docs: /forms/input-validator
+- kanban-board: `@ngstarter-ui/components/kanban-board` docs: /libraries/kanban-board
+- kbd: `@ngstarter-ui/components/kbd` docs: /components/kbd
+- layout: `@ngstarter-ui/components/layout` docs: /components/layout
+- list: `@ngstarter-ui/components/list` docs: /components/list
+- marquee: `@ngstarter-ui/components/marquee` docs: /components/marquee
+- menu: `@ngstarter-ui/components/menu` docs: /components/menu
+- micro-chart: `@ngstarter-ui/components/micro-chart` docs: /micro-charts
+- navigation: `@ngstarter-ui/components/navigation` docs: /navigation/navigation
+- notifications: `@ngstarter-ui/components/notifications` docs: /components/notifications
+- number-input: `@ngstarter-ui/components/number-input` docs: /forms/number-input
+- paginator: `@ngstarter-ui/components/paginator` docs: /components/paginator
+- panel: `@ngstarter-ui/components/panel` docs: /components/panel
+- password-strength: `@ngstarter-ui/components/password-strength` docs: /forms/password-strength
+- phone-input: `@ngstarter-ui/components/phone-input` docs: /forms/phone-input
+- pin-input: `@ngstarter-ui/components/pin-input` docs: /forms/pin-input
+- popover: `@ngstarter-ui/components/popover` docs: /components/popover
+- progress-bar: `@ngstarter-ui/components/progress-bar` docs: /components/progress-bar
+- radio: `@ngstarter-ui/components/radio` docs: /forms/radio
+- rail-nav: `@ngstarter-ui/components/rail-nav` docs: /navigation/rail-nav
+- resizable-container: `@ngstarter-ui/components/resizable-container` docs: /components/resizable-container
+- screen-loader: `@ngstarter-ui/components/screen-loader` docs: /components/screen-loader
+- segmented: `@ngstarter-ui/components/segmented` docs: /forms/segmented
+- select: `@ngstarter-ui/components/select` docs: /forms/select
+- side-panel: `@ngstarter-ui/components/side-panel` docs: /navigation/side-panel
+- sidebar: `@ngstarter-ui/components/sidebar` docs: /navigation/sidebar
+- sidenav: `@ngstarter-ui/components/sidenav` docs: /components/sidenav
+- signature-pad: `@ngstarter-ui/components/signature-pad` docs: /components/signature-pad
+- skeleton: `@ngstarter-ui/components/skeleton` docs: /components/skeleton
+- slide-toggle: `@ngstarter-ui/components/slide-toggle` docs: /forms/slide-toggle
+- slider: `@ngstarter-ui/components/slider` docs: /components/slider
+- snack-bar: `@ngstarter-ui/components/snack-bar` docs: /components/snackbar
+- spinner: `@ngstarter-ui/components/spinner` docs: /components/progress-spinner
+- split: `@ngstarter-ui/components/split` docs: /components/split-pane
+- stepper: `@ngstarter-ui/components/stepper` docs: /components/stepper
+- suggestions: `@ngstarter-ui/components/suggestions` docs: /components/suggestions
+- tab-panel: `@ngstarter-ui/components/tab-panel` docs: /navigation/tab-panel
+- table: `@ngstarter-ui/components/table` docs: /components/table
+- tabs: `@ngstarter-ui/components/tabs` docs: /components/tabs
+- text-editor: `@ngstarter-ui/components/text-editor` docs: /components/text-editor
+- thumbnail-maker: `@ngstarter-ui/components/thumbnail-maker` docs: /components/thumbnail-maker
+- tiles: `@ngstarter-ui/components/tiles` docs: /components/tiles
+- timeline: `@ngstarter-ui/components/timeline` docs: /components/timeline
+- timepicker: `@ngstarter-ui/components/timepicker` docs: /components/timepicker
+- timezone-select: `@ngstarter-ui/components/timezone-select` docs: /forms/timezone
+- toolbar: `@ngstarter-ui/components/toolbar` docs: /components/toolbar
+- tooltip: `@ngstarter-ui/components/tooltip` docs: /components/tooltip
+- tree: `@ngstarter-ui/components/tree` docs: /components/tree
+- upload: `@ngstarter-ui/components/upload` docs: /components/upload
+- video-player: `@ngstarter-ui/components/video-player` docs: /libraries/video-player
+- video-viewer: `@ngstarter-ui/components/video-viewer` docs: /components/video-viewer
+- visual-builder: `@ngstarter-ui/components/visual-builder` docs: /libraries/visual-builder

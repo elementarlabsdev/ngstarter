@@ -1,93 +1,247 @@
-<ngs-layout root class="bg-[var(--minto-page-bg)] text-[var(--ngs-color-on-surface)]">
-  <ngs-layout-content>
-    <ngs-sidenav-container autosize autoFocus="false" hasBackdrop="false" class="bg-[var(--minto-page-bg)]">
-      <ngs-sidenav
-        [opened]="true"
-        mode="side"
-        fixedWidth="296"
-        [adaptive]="false"
-        class="[--ngs-sidenav-background-color:var(--minto-sidebar-bg)]"
-      >
-        <ngs-scrollbar-area scrollbarWidth="6px" class="[--ngs-scrollbar-area-thumb-bg:var(--minto-dashed-line)]">
-          <aside class="flex min-h-full flex-col gap-5 bg-[var(--minto-sidebar-bg)] px-3 py-4" aria-label="Main navigation">
-            <div class="brand-logo border-b border-dashed border-[var(--minto-dashed-line)] px-1 pb-4">
-              {{ brandName() }}
+<ngs-sidenav-container
+  class="admin-shell mx-auto my-24 block min-h-[min(1120px,calc(100vh-12rem))] w-[min(1720px,calc(100vw-10rem))] overflow-hidden border border-[var(--admin-border)] bg-[var(--ngs-color-surface)] shadow-[0_28px_70px_rgba(15,23,42,0.08)] max-[1180px]:m-0 max-[1180px]:min-h-screen max-[1180px]:w-screen"
+  autosize
+  autoFocus="false"
+  hasBackdrop="false"
+>
+  <ngs-sidenav
+    [opened]="true"
+    mode="side"
+    fixedWidth="292"
+    [adaptive]="false"
+    class="flex flex-col border-r border-[var(--admin-border)] bg-white px-4 py-5 max-[1180px]:px-3"
+  >
+    <div class="flex min-h-13 items-center gap-3 text-xl font-extrabold">
+      <div class="brand-mark">
+        <ngs-icon name="fluent:clipboard-task-list-24-filled" />
+      </div>
+      <span class="max-[1180px]:hidden">Protask</span>
+      <button ngsIconButton class="sidebar-collapse ml-auto" type="button" aria-label="Collapse sidebar">
+        <ngs-icon name="fluent:panel-left-contract-24-regular" />
+      </button>
+    </div>
+
+    <section class="mt-7">
+      <p class="mb-2.5 text-sm font-normal text-[var(--admin-muted)] max-[1180px]:hidden">Main Menu</p>
+      <ngs-navigation activeKey="Dashboard">
+        @for (item of navItems(); track item.label) {
+          <ngs-navigation-item [key]="item.label">
+            <ngs-icon [name]="item.icon" ngsNavigationItemIcon />
+            {{ item.label }}
+          </ngs-navigation-item>
+        }
+      </ngs-navigation>
+    </section>
+
+    <section class="favorites-section mt-7 max-[1180px]:hidden">
+      <div class="flex items-center justify-between">
+        <p class="mb-2.5 text-sm font-normal text-[var(--admin-muted)]">Favorites</p>
+        <button ngsIconButton type="button" aria-label="Add favorite">
+          <ngs-icon name="fluent:add-24-regular" />
+        </button>
+      </div>
+
+      <ngs-navigation>
+        @for (project of favorites(); track project.name) {
+          <ngs-navigation-item [key]="project.name">
+            <span class="project-mark" [style.background]="project.color" ngsNavigationItemIcon>
+              <ngs-icon [name]="project.icon" />
+            </span>
+            {{ project.name }}
+          </ngs-navigation-item>
+        }
+      </ngs-navigation>
+    </section>
+
+    <section class="mt-auto pt-8">
+      <p class="mb-2.5 text-sm font-normal text-[var(--admin-muted)] max-[1180px]:hidden">Other</p>
+      <ngs-navigation>
+        <ngs-navigation-item key="Help">
+          <ngs-icon name="fluent:question-circle-24-regular" ngsNavigationItemIcon />
+          Help &amp; Center
+        </ngs-navigation-item>
+        <ngs-navigation-item key="Settings">
+          <ngs-icon name="fluent:settings-24-regular" ngsNavigationItemIcon />
+          Settings
+        </ngs-navigation-item>
+      </ngs-navigation>
+    </section>
+
+    <div class="profile-card mt-6 flex items-center gap-3 border-t border-[var(--admin-border)] pt-6">
+      <div class="avatar">IK</div>
+      <div class="grid min-w-0 gap-0.5 max-[1180px]:hidden">
+        <span class="text-sm font-normal text-[#1f2329]">Insan K</span>
+        <span class="text-sm font-normal text-[var(--admin-muted)]">insank&#64;mail.com</span>
+      </div>
+      <ngs-icon class="ml-auto text-[#a3a7ad] max-[1180px]:hidden" name="fluent:chevron-down-24-regular" />
+    </div>
+  </ngs-sidenav>
+
+  <ngs-sidenav-content class="min-w-0 bg-white">
+    <header class="flex min-h-20 items-center justify-between border-b border-[var(--admin-border)] px-7 max-[860px]:items-start max-[860px]:flex-col max-[860px]:gap-4 max-[860px]:py-5">
+      <h1 class="text-[1.35rem] font-semibold">Dashboard</h1>
+      <div class="flex items-center gap-3">
+        <button ngsIconButton aria-label="Messages">
+          <ngs-icon name="fluent:chat-24-regular" />
+        </button>
+        <button ngsIconButton aria-label="Notifications">
+          <ngs-icon name="fluent:alert-24-regular" />
+        </button>
+        <button ngsButton="outlined">Manage Widget</button>
+      </div>
+    </header>
+
+    <div class="px-7 py-8">
+      <section class="mb-8 flex items-center justify-between gap-6 max-[860px]:items-start max-[860px]:flex-col">
+        <div>
+          <h2 class="text-[clamp(1.8rem,2vw,2.2rem)] leading-[1.05] font-bold tracking-normal">Welcome Back, Insan 👋</h2>
+          <p class="mt-2.5 font-normal text-[#575d65]">Let's rock today. We have 2 pending tasks and 5 new records.</p>
+        </div>
+
+        <div class="flex items-center gap-3 max-[860px]:w-full max-[860px]:flex-wrap">
+          <button ngsButton="outlined">
+            <ngs-icon name="fluent:calendar-ltr-24-regular" />
+            1 Nov - 7 Nov 2024
+          </button>
+          <button ngsButton="filled" class="add-button">
+            <ngs-icon name="fluent:add-24-regular" />
+            Add New
+          </button>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-3 gap-4 max-[860px]:grid-cols-1" aria-label="Task progress summary">
+        @for (stat of stats(); track stat.label) {
+          <ngs-card appearance="outlined" class="bg-white p-4">
+            <ngs-card-content withoutPadding>
+              <p class="text-xs font-semibold uppercase tracking-normal text-[#1f2329]">{{ stat.label }}</p>
+              <div class="mt-3 mb-3 flex items-center gap-2.5">
+                <strong class="text-3xl leading-none font-bold">{{ stat.value }}</strong>
+                <span class="text-sm font-normal text-[#31363d]">{{ stat.detail }}</span>
+              </div>
+              <ngs-progress-bar [value]="stat.progress" />
+              <div class="mt-4 flex items-center gap-3 text-sm font-normal text-[#6b7078]">
+                <span class="delta" [class.is-down]="stat.trend === 'down'">
+                  {{ stat.delta }}
+                  <ngs-icon [name]="stat.trend === 'up' ? 'fluent:arrow-trending-24-filled' : 'fluent:arrow-trending-down-24-filled'" />
+                </span>
+                <span>Compared to the last month</span>
+                <ngs-icon class="ml-auto text-[#1e2329]" name="fluent:info-24-regular" />
+              </div>
+            </ngs-card-content>
+          </ngs-card>
+        }
+      </section>
+
+      <ngs-card appearance="outlined" class="mt-6 block bg-white p-5">
+        <ngs-card-content withoutPadding>
+          <div class="flex items-center justify-between gap-4 max-[860px]:items-start max-[860px]:flex-col">
+            <div class="flex items-center gap-2.5">
+              <ngs-icon class="text-[#4b7fe8]" name="fluent:task-list-square-ltr-24-regular" />
+              <h3 class="text-xl font-semibold">Active Tasks</h3>
             </div>
 
-            <ngs-navigation
-              activeKey="dashboard"
-              class="[--ngs-navigation-item-height:3rem] [--ngs-navigation-items-gap:.5rem] [--ngs-navigation-item-padding:0_1.25rem] [--ngs-navigation-item-border-radius:1.75rem] [--ngs-navigation-item-font-weight:500] [--ngs-navigation-item-hover-bg:var(--minto-soft-surface)] [--ngs-navigation-item-active-bg:var(--minto-active-bg)] [--ngs-navigation-item-active-color:var(--ngs-color-on-surface)]"
-            >
-              @for (item of primaryNav(); track item.key) {
-                <button ngs-navigation-item [key]="item.key" class="border-0 bg-transparent text-left font-medium">
-                  <ngs-icon [name]="item.icon" ngsNavigationItemIcon />
-                  {{ item.label }}
-                </button>
-              }
-            </ngs-navigation>
+            <div class="flex items-center gap-3 max-[860px]:w-full max-[860px]:flex-wrap">
+              <ngs-form-field subscriptHiddenIfEmpty class="search-field">
+                <ngs-icon name="fluent:search-24-regular" ngsIconPrefix />
+                <ngs-label>Find a task</ngs-label>
+                <input ngsInput type="search" />
+              </ngs-form-field>
+              <button ngsButton="outlined">
+                <ngs-icon name="fluent:filter-24-regular" />
+                Options
+              </button>
+              <button ngsButton="outlined">
+                <ngs-icon name="fluent:arrow-upload-24-regular" />
+                Download
+              </button>
+            </div>
+          </div>
 
-            <ngs-navigation
-              class="border-t border-dashed border-[var(--minto-dashed-line)] pt-4 [--ngs-navigation-item-height:3rem] [--ngs-navigation-items-gap:.5rem] [--ngs-navigation-item-padding:0_1.25rem] [--ngs-navigation-item-border-radius:1.75rem] [--ngs-navigation-item-font-weight:500] [--ngs-navigation-item-hover-bg:var(--minto-soft-surface)] [--ngs-navigation-item-active-bg:var(--minto-active-bg)] [--ngs-navigation-item-active-color:var(--ngs-color-on-surface)]"
-            >
-              @for (item of secondaryNav(); track item.key) {
-                <button ngs-navigation-item [key]="item.key" class="border-0 bg-transparent text-left font-medium">
-                  <ngs-icon [name]="item.icon" ngsNavigationItemIcon />
-                  {{ item.label }}
-                </button>
-              }
-            </ngs-navigation>
+          <div class="mt-5 overflow-hidden rounded-xl border border-[rgba(15,23,42,0.06)] max-[860px]:overflow-x-auto">
+            <table ngs-table [dataSource]="tasks()">
+              <ng-container ngsColumnDef="select">
+                <th ngs-header-cell *ngsHeaderCellDef>
+                  <ngs-checkbox aria-label="Select all tasks" />
+                </th>
+                <td ngs-cell *ngsCellDef="let task">
+                  <ngs-checkbox [attr.aria-label]="'Select ' + task.name" />
+                </td>
+              </ng-container>
 
-            <ngs-navigation
-              class="mt-auto [--ngs-navigation-item-height:3rem] [--ngs-navigation-items-gap:.5rem] [--ngs-navigation-item-padding:0_1.25rem] [--ngs-navigation-item-border-radius:1.75rem] [--ngs-navigation-item-font-weight:500] [--ngs-navigation-item-hover-bg:var(--minto-soft-surface)] [--ngs-navigation-item-active-bg:var(--minto-active-bg)] [--ngs-navigation-item-active-color:var(--ngs-color-on-surface)]"
-            >
-              @for (item of utilityNav(); track item.key) {
-                <button ngs-navigation-item [key]="item.key" class="border-0 bg-transparent text-left font-medium">
-                  <ngs-icon [name]="item.icon" ngsNavigationItemIcon />
-                  {{ item.label }}
-                </button>
-              }
-            </ngs-navigation>
-          </aside>
-        </ngs-scrollbar-area>
-      </ngs-sidenav>
+              <ng-container ngsColumnDef="task">
+                <th ngs-header-cell *ngsHeaderCellDef>Task</th>
+                <td ngs-cell *ngsCellDef="let task" class="task-name">{{ task.name }}</td>
+              </ng-container>
 
-      <ngs-sidenav-content>
-        <ngs-scrollbar-area scrollbarWidth="6px" class="[--ngs-scrollbar-area-thumb-bg:var(--minto-dashed-line)]">
-          <section class="min-h-full rounded-[2rem] bg-[var(--minto-workspace-bg)] px-6 py-8 xl:mr-5 xl:my-5 xl:px-10 xl:py-12">
-            <header class="mb-10 flex flex-wrap items-start justify-between gap-6">
-              <h1 class="whitespace-nowrap text-[clamp(1.75rem,2vw,2.35rem)] font-[850] leading-[1.05]">
-                Dashboard overview
-              </h1>
+              <ng-container ngsColumnDef="project">
+                <th ngs-header-cell *ngsHeaderCellDef>Related Project</th>
+                <td ngs-cell *ngsCellDef="let task">
+                  <div class="flex items-center gap-2.5 font-normal text-[#1f2329]">
+                    <span class="project-mark" [style.background]="task.projectColor">
+                      <ngs-icon [name]="task.projectIcon" />
+                    </span>
+                    {{ task.project }}
+                  </div>
+                </td>
+              </ng-container>
 
-              <div class="flex flex-wrap justify-end gap-3">
-                <button ngsButton="outlined">
-                  <ngs-icon name="fluent:arrow-download-24-filled" />
-                  Deposit
-                </button>
-                <button ngsButton="outlined">
-                  <ngs-icon name="fluent:arrow-upload-24-filled" />
-                  Withdraw
-                </button>
-                <button ngsButton="outlined">
-                  <ngs-icon name="fluent:arrow-swap-24-regular" />
-                  Transfer
-                </button>
-                <button ngsButton="filled" class="[--ngs-button-filled-bg:var(--ngs-color-primary)] [--ngs-button-filled-color:var(--ngs-color-on-primary)] font-extrabold">
-                  <ngs-icon name="fluent:add-circle-24-filled" />
-                  New transaction
-                </button>
-              </div>
-            </header>
+              <ng-container ngsColumnDef="dates">
+                <th ngs-header-cell *ngsHeaderCellDef>Time Allotment</th>
+                <td ngs-cell *ngsCellDef="let task" class="dates-cell">{{ task.dates }}</td>
+              </ng-container>
 
-            <ngs-grid
-              plain
-              [configs]="dashboardGridConfigs()"
-              [items]="dashboardGridItems()"
-              class="[--ngs-grid-gap:--spacing(5)]"
+              <ng-container ngsColumnDef="importance">
+                <th ngs-header-cell *ngsHeaderCellDef>Importance</th>
+                <td ngs-cell *ngsCellDef="let task">
+                  <span class="importance" [class.is-medium]="task.importance === 'Medium'" [class.is-low]="task.importance === 'Low'">
+                    {{ task.importance }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <ng-container ngsColumnDef="completion">
+                <th ngs-header-cell *ngsHeaderCellDef>Completion</th>
+                <td ngs-cell *ngsCellDef="let task">
+                  <div class="completion-cell flex items-center gap-3">
+                    <ngs-progress-bar [value]="task.completion" />
+                    <span class="w-10 text-right font-normal text-[#3e444c]">{{ task.completion }}%</span>
+                  </div>
+                </td>
+              </ng-container>
+
+              <ng-container ngsColumnDef="actions">
+                <th ngs-header-cell *ngsHeaderCellDef></th>
+                <td ngs-cell *ngsCellDef="let task">
+                  <button ngsIconButton class="row-menu" type="button" [attr.aria-label]="'Actions for ' + task.name">
+                    <ngs-icon name="fluent:more-vertical-24-regular" />
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
+              <tr ngs-row *ngsRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
+
+          <footer class="mt-5 flex items-center justify-between gap-4 max-[860px]:items-start max-[860px]:flex-col">
+            <ngs-paginator
+              [length]="50"
+              [pageSize]="8"
+              [hidePageSize]="true"
+              aria-label="Task pagination"
             />
-          </section>
-        </ngs-scrollbar-area>
-      </ngs-sidenav-content>
-    </ngs-sidenav-container>
-  </ngs-layout-content>
-</ngs-layout>
+
+            <div class="flex items-center gap-4 text-sm font-normal text-[#3f454d]">
+              <span>Displaying 1 to 8 of 50 results</span>
+              <button ngsButton="outlined">
+                View All
+                <ngs-icon name="fluent:chevron-up-24-regular" />
+              </button>
+            </div>
+          </footer>
+        </ngs-card-content>
+      </ngs-card>
+    </div>
+  </ngs-sidenav-content>
+</ngs-sidenav-container>

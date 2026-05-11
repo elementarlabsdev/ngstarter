@@ -3,7 +3,33 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        Buttons allow users to take actions, and make choices, with a single tap.
+        Buttons let users run actions and commands such as save, create, edit, delete, open,
+        filter, download, confirm, or cancel. Use a real button for actions and an anchor with
+        ngsButton only when the control navigates to another URL.
+      </p>
+      <div class="my-7">
+        <div>Choose a variant by emphasis:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            <strong>Filled</strong>: Primary action on a screen, form, dialog, or toolbar.
+          </li>
+          <li>
+            <strong>Outlined</strong>: Secondary action that still needs clear visibility.
+          </li>
+          <li>
+            <strong>Tonal</strong>: Softer secondary action or neutral command.
+          </li>
+          <li>
+            <strong>Text</strong>: Low-emphasis action inside dense UI or supporting controls.
+          </li>
+          <li>
+            <strong>Icon button</strong>: Compact action with an icon only. Always provide an accessible label.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Do not use Button for sidebar navigation, menu items, tabs, toggle groups, checkboxes,
+        radios, selects, or plain links inside text. Use the matching navigation or form component instead.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

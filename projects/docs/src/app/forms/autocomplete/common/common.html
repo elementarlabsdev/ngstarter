@@ -3,7 +3,31 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The autocomplete is a normal text input enhanced by a panel of suggested options.
+        The Autocomplete component is a text input connected to a panel of suggested options.
+        Use it when users need to type, filter a list, and select one matching value.
+        It is best for searchable choices where a normal Select would feel too static or too long.
+      </p>
+      <div class="my-7">
+        <div>Use it for:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            <strong>Searchable selection</strong>: Let users find an item by typing part of its label.
+          </li>
+          <li>
+            <strong>Filtered options</strong>: Connect it to reactive forms and filter options as the input value changes.
+          </li>
+          <li>
+            <strong>Object values</strong>: Store an object as the value and show readable text with displayWith.
+          </li>
+          <li>
+            <strong>Grouped suggestions</strong>: Organize options with option groups when the list has clear sections.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Build Autocomplete with an ngs-form-field, an input using ngsInput and ngsAutocomplete,
+        an ngs-autocomplete panel, and ngs-option items. Do not use it for simple free text,
+        small static lists, command menus, or multi-value tags.
       </p>
     </main>
     <nav ngs-tab-nav-bar>
