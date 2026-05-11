@@ -3,9 +3,31 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Comment Editor component is a rich text editor based on Tiptap,
-        designed specifically for comments and discussions. It supports basic formatting,
-        lists, links, and media embedding.
+        Comment Editor is a simplified text editor for quick messages, comments, threads, and replies.
+        Use it when users need to compose a short or medium response and send it immediately.
+        It can include lightweight formatting, links, lists, images, and media when the comment flow needs them.
+      </p>
+      <div class="my-7">
+        <div>Use it for:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            Writing comments in tasks, projects, activity feeds, reviews, and support threads.
+          </li>
+          <li>
+            Replying to a conversation with a compact compose box.
+          </li>
+          <li>
+            Sending message HTML through the <code class="code">sent</code> event.
+          </li>
+          <li>
+            Adding a small toolbar, footer actions, cancel behavior, or image upload to a comment composer.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Do not use Comment Editor for long-form documents, CMS pages, complex content editing,
+        markdown editing, code editing, search, or display-only comments. Use Content Editor or
+        Text Editor when users need a fuller editing surface.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

@@ -1,2 +1,3 @@
 export const COLOR_SCHEME_LOCAL_KEY = 'ngstarter-color-scheme';
-export type ColorScheme = 'light' | 'dark';
+export type ColorScheme = 'light' | 'dark' | 'auto';
+export type ResolvedColorScheme = Exclude<ColorScheme, 'auto'>;

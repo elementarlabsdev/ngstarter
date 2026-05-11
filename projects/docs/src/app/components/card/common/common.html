@@ -3,7 +3,31 @@
   <div appPageContent>
     <div class="flex flex-col gap-4">
       <p class="text-lg text-muted-foreground">
-        A card is a flexible and extensible content container.
+        A card groups related content and actions into one meaningful block. Use it for dashboard widgets,
+        KPI panels, previews, summaries, settings sections, media content, or form sections where the
+        content belongs together.
+      </p>
+      <div class="my-7">
+        <div>Use it for:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            <strong>Content groups</strong>: Keep related text, data, media, and controls together.
+          </li>
+          <li>
+            <strong>Dashboard panels</strong>: Build widgets, metrics, summaries, and compact admin panels.
+          </li>
+          <li>
+            <strong>Structured sections</strong>: Add headers, titles, subtitles, avatars, images, actions, and footers.
+          </li>
+          <li>
+            <strong>Local actions</strong>: Place actions that apply only to the card content.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Do not use Card as a generic page layout wrapper, a decorative border, a modal, a drawer,
+        or a nested card inside another card. Use Tailwind layout utilities for page structure and
+        card tokens for component styling.
       </p>
 
       <nav ngs-tab-nav-bar>

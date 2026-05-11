@@ -3,30 +3,31 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Confirm component is a specialized dialog designed to prompt users for a clear decision, such as
-        confirming an action or acknowledging a message. It provides a consistent and user-friendly way to
-        handle critical interactions within your application.
+        Confirm is a standardized confirmation dialog for a short binary decision before an important action.
+        Use it through <code class="code">ConfirmManager.open(&#123; title, description &#125;)</code>
+        when users must confirm or cancel a destructive, irreversible, or high-impact operation.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Use it for:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Clear Intent</strong>: Designed specifically for binary choices (Yes/No, Confirm/Cancel).
+            Delete, unpublish, archive, reset, discard changes, leave with unsaved changes, or bulk actions.
           </li>
           <li>
-            ✅ <strong>Easy Integration</strong>: Simple API to trigger confirmation dialogs from anywhere in your app.
+            Short confirm/cancel decisions with one title and one description.
           </li>
           <li>
-            ✅ <strong>Configurable Content</strong>: Easily set the title and description to match the context of the action.
+            Handling the result through <code class="code">confirmed</code>, <code class="code">canceled</code>,
+            and <code class="code">closed</code> events on <code class="code">ConfirmRef</code>.
           </li>
           <li>
-            ✅ <strong>Consistent UX</strong>: Ensures that all confirmation prompts follow the same design language.
+            Showing confirmations from pages, tables, action bars, or even inside an existing dialog flow.
           </li>
         </ul>
       </div>
       <p>
-        Perfect for delete operations, form submissions, or any action that requires an extra layer of
-        verification to prevent accidental mistakes.
+        Do not use Confirm for long forms, custom modal layouts, wizards, informational dialogs,
+        settings panels, or choices with more than two outcomes. Use Dialog for custom modal content.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

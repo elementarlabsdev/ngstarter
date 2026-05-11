@@ -2,31 +2,32 @@
   <h1 appPageTitle>Crop</h1>
   <div appPageContent>
     <div class="mb-10">
-      <p class="lead">Fast, modern, and easy image cropping for Angular — fully compatible with and TailwindCSS.</p>
+      <p class="lead">
+        Crop lets users select a crop area on top of an existing image or visual preview.
+      </p>
       <p>
-        Add a polished, production-ready image cropping experience to your Angular app with minimal setup.
-        The component is touch-friendly, responsive, and integrates seamlessly with dialogs, forms, and theming.
+        Use it when the user needs to move and resize a rectangle or circle selection before another part of the app
+        applies the real image crop. The component emits the selected area as pixel values, percentages, and container
+        dimensions through <code>selectionApplied</code>.
       </p>
       <ul class="list-disc list-inside">
         <li>
-          <strong>✂️ Interactive cropping</strong>
-          <div>Drag to crop, pinch to zoom, and adjust with mouse or touch.</div>
+          <strong>Interactive crop area</strong>
+          <div>Users can move the selection and resize it with visible handles.</div>
         </li>
         <li>
-          <strong>🧩 integration</strong>
-          <div>Works with MatDialog, reactive forms, themes and accessibility patterns.</div>
+          <strong>Rectangle or circle shape</strong>
+          <div>Use rectangle for covers and thumbnails, or circle for avatar-style crops.</div>
         </li>
         <li>
-          <strong>📱 Responsive & mobile-first</strong>
-          <div>Adapts to any screen size and input method.</div>
+          <strong>Coordinates only</strong>
+          <div>The component does not upload files, save images, or process the final bitmap.</div>
         </li>
       </ul>
-      <div class="mt-5"><strong>Perfect for:</strong></div>
+      <div class="mt-5"><strong>Use it for:</strong></div>
       <p>
-        👤 Avatar uploaders, 📰 content editors, 📦 admin dashboards, 🧠 AI tools — any app that needs a simple and powerful image cropping experience.
-      </p>
-      <p>
-        🚀 Image Crop Component — the modern open-source solution for effortless image cropping in Angular.
+        Avatar dialogs, cover image forms, thumbnail preparation, media management screens, and content editor flows
+        where another service or canvas step performs the actual crop.
       </p>
     </div>
 

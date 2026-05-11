@@ -3,29 +3,34 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The <code class="code">ngs-code-highlighter</code> component provides a powerful way to display source code with syntax highlighting using the Shiki library.
-        It supports multiple themes, line highlighting, diff view, and more.
+        Code Highlighter shows read-only source code with syntax highlighting.
+        Use it for documentation snippets, API examples, configuration blocks, code previews,
+        and small diffs that users need to read or copy.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Use it for:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Modern Highlighting</strong>: Powered by Shiki for accurate and beautiful syntax highlighting.
+            Showing code examples in documentation, onboarding screens, or developer tools.
           </li>
           <li>
-            ✅ <strong>Customizable Themes</strong>: Support for various Shiki themes like github-light, nord, etc.
+            Displaying a filename or title above a code block.
           </li>
           <li>
-            ✅ <strong>Line Highlighting</strong>: Easily highlight specific lines or ranges of code.
+            Highlighting important lines or ranges inside a snippet.
           </li>
           <li>
-            ✅ <strong>Diff Support</strong>: Built-in support for displaying code changes with diff highlighting.
+            Showing added and removed lines in a compact diff view.
           </li>
           <li>
-            ✅ <strong>Copy to Clipboard</strong>: Optional button to allow users to quickly copy code.
+            Letting users copy code with an optional copy button.
           </li>
         </ul>
       </div>
+      <p>
+        Do not use Code Highlighter as a code editor, textarea, terminal log, markdown article,
+        or general text container. It is only for displaying code that is not edited in place.
+      </p>
     </main>
     <nav ngs-tab-nav-bar>
       <a routerLink="/components/code-highlighter" ngs-tab-link>Overview</a>

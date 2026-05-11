@@ -3,8 +3,31 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Comparison Slider component allows users to compare two images side-by-side using a draggable slider.
-        It is perfect for showcasing "before and after" results, such as photo edits, design changes, or product variations.
+        Comparison Slider compares two visual layers with a draggable vertical divider.
+        Use it for before-and-after images, photo edits, design changes, product variations,
+        UI before-and-after states, image processing results, maps, reports, and other visual diffs.
+      </p>
+      <div class="my-7">
+        <div>Use it for:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            Comparing a baseline image with an edited or changed image.
+          </li>
+          <li>
+            Showing two matching visual states in the same size and perspective.
+          </li>
+          <li>
+            Letting users drag the handle to reveal more of the before or after layer.
+          </li>
+          <li>
+            Setting the starting divider position with <code class="code">initialPosition</code>.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Always give the slider a stable width and height or aspect ratio. The before and after layers
+        should match in size and perspective. Do not use Comparison Slider as a gallery, carousel,
+        image viewer, range input, data table comparison, or text comparison tool.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

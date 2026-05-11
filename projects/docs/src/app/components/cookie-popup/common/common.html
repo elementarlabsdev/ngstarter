@@ -3,26 +3,32 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Cookie Popup component is a crucial tool for modern web applications to comply with privacy regulations.
-        It provides a non-intrusive way to inform users about cookie usage and collect their consent.
+        Cookie Popup is a non-blocking consent popup for cookie and privacy choices.
+        Use it on public pages or applications when users need to choose between accepting all cookies
+        or only necessary cookies.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Use it for:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Privacy Compliance</strong>: Helps meet GDPR and other privacy requirements.
+            Showing a short cookie or privacy consent message.
           </li>
           <li>
-            ✅ <strong>Customizable Actions</strong>: Allow users to accept all or only necessary cookies.
+            Linking to a cookie policy or privacy policy page.
           </li>
           <li>
-            ✅ <strong>Flexible Integration</strong>: Easily link to your detailed cookie policy.
+            Letting users choose <code class="code">all</code> or <code class="code">necessary</code> cookies.
           </li>
           <li>
-            ✅ <strong>Responsive Overlay</strong>: Positioned unobtrusively at the bottom of the screen.
+            Handling the selected consent type with the <code class="code">cookieAccepted</code> event.
           </li>
         </ul>
       </div>
+      <p>
+        Cookie Popup does not persist the choice by itself. Store the accepted consent state in a cookie,
+        localStorage, or backend and control <code class="code">visible</code> from the application.
+        Do not use Cookie Popup as a normal Dialog, Alert, Announcement, snackbar, or settings panel.
+      </p>
     </main>
     <nav ngs-tab-nav-bar>
       <a routerLink="/components/cookie-popup" ngs-tab-link>Overview</a>

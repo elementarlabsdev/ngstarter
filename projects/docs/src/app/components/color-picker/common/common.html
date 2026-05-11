@@ -3,27 +3,36 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Color Picker component allows users to select colors through a graphical interface.
-        It supports various formats like HEX, RGB, and HSL, and provides features like opacity control
-        and a preview of the selected color.
+        Color Picker is a form control for choosing a custom color.
+        Use it in theme settings, brand color forms, design editors, chart settings,
+        or any form where users need to pick an exact color value.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Use it for:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Multi-format Support</strong>: Work with HEX, RGB, and HSL color formats.
+            Choosing a custom color through saturation, hue, and optional opacity controls.
           </li>
           <li>
-            ✅ <strong>Opacity Control</strong>: Fine-tune color transparency with an easy-to-use slider.
+            Binding color values in Angular forms or with <code class="code">ngModel</code>.
           </li>
           <li>
-            ✅ <strong>Visual Preview</strong>: Instantly see the selected color in a dedicated thumbnail.
+            Returning color values as <code class="code">hex</code>, <code class="code">rgb</code>,
+            <code class="code">hsl</code>, or <code class="code">hsv</code>.
           </li>
           <li>
-            ✅ <strong>Flexible Integration</strong>: Use it as a standalone component or as a popover triggered by other elements.
+            Showing a small color preview with <code class="code">ngs-color-picker-thumbnail</code>.
+          </li>
+          <li>
+            Opening the picker from a thumbnail, button, or form-field suffix with
+            <code class="code">ngsColorPickerTriggerFor</code>.
           </li>
         </ul>
       </div>
+      <p>
+        Do not use Color Picker only to display status color, legend color, decorative swatches,
+        badges, or fixed color choices. For a fixed set of colors, use Color Switcher.
+      </p>
     </main>
     <nav ngs-tab-nav-bar>
       <a routerLink="/components/color-picker" ngs-tab-link>Overview</a>

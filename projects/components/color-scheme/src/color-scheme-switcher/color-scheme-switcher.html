@@ -1,3 +1,5 @@
 <button ngsIconButton (click)="toggleScheme()">
-  <ng-container [cdkPortalOutlet]="portal"/>
+  @if (portal) {
+    <ng-container [cdkPortalOutlet]="portal"/>
+  }
 </button>

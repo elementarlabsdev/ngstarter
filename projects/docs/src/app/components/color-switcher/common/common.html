@@ -3,27 +3,33 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        Introducing <strong>Color Switcher</strong>, a simple yet powerful inline color picker!
-      </p>
-      <p>
-        Easily select and customize colors for your brand directly within your app.
-        Designed to fit seamlessly into projects, this component makes color
-        picking effortless and intuitive.
+        Color Switcher lets users choose one color from a fixed allowed palette.
+        Use it for brand color presets, accent color presets, project colors,
+        category colors, tag colors, tenant branding, and theme playground controls.
       </p>
       <div class="my-7">
-        <div>Key features:</div>
+        <div>Use it for:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            🎨 <strong>Customizable</strong>: Tailor the color picker to match your app's design.
+            Selecting one color from a predefined list of allowed colors.
           </li>
           <li>
-            ⚡ <strong>Lightweight & Fast</strong>: Minimal impact on performance, smooth user experience.
+            Binding the selected color with <code class="code">selectedColor</code> and
+            <code class="code">colorChange</code>.
           </li>
           <li>
-            🛠️ <strong>Seamless Integration</strong>: Built specifically for Angular —just plug and play!
+            Using the component as an Angular form control with <code class="code">ngModel</code>.
+          </li>
+          <li>
+            Disabling the color choice when the palette should be visible but not editable.
           </li>
         </ul>
       </div>
+      <p>
+        Do not use Color Switcher for arbitrary custom colors; use Color Picker for that.
+        Do not use it for light, dark, or auto theme mode; use Color Scheme for that.
+        Do not replace it with Segmented or custom buttons when the task is choosing from a fixed color set.
+      </p>
     </main>
 
     <nav ngs-tab-nav-bar>

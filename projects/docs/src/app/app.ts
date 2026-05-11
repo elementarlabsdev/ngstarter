@@ -19,6 +19,7 @@ import { Logo, LogoDescription, LogoShape, LogoText } from '@ngstarter-ui/compon
 import { SplashScreen } from '@ngstarter-ui/components/splash-screen';
 import {
   ColorScheme,
+  ColorSchemeAutoDirective,
   ColorSchemeDarkDirective,
   ColorSchemeLightDirective,
   ColorSchemeSwitcher,
@@ -66,6 +67,7 @@ import { Toolbar, ToolbarItem, ToolbarSpacer } from '@ngstarter-ui/components/to
     ColorSchemeSwitcher,
     ColorSchemeLightDirective,
     ColorSchemeDarkDirective,
+    ColorSchemeAutoDirective,
     SoundEffectDirective,
     Button,
     Sidenav,

@@ -3,8 +3,31 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The checkbox component provides the same functionality as a native
-        <code>&lt;input type="checkbox"&gt;</code>, enhanced with styling and animations.
+        The Checkbox component lets users turn an independent option on or off, or choose multiple
+        options from a related set. Use it for preferences, permissions, checklist items, table row
+        selection, required consent, and parent-child selection with an indeterminate state.
+      </p>
+      <div class="my-7">
+        <div>Use it for:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            <strong>Independent choices</strong>: Enable or disable one option without affecting others.
+          </li>
+          <li>
+            <strong>Multiple selection</strong>: Let users select several values from a group.
+          </li>
+          <li>
+            <strong>Select all states</strong>: Use indeterminate when only some child items are selected.
+          </li>
+          <li>
+            <strong>Described options</strong>: Add a short explanation below the label when the choice needs context.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Do not use Checkbox for mutually exclusive choices, switch-style settings, compact mode groups,
+        dropdown selection, or action buttons. Use Radio, Slide Toggle, Button Toggle, Segmented,
+        Select, or Button for those cases.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

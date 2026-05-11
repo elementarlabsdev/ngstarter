@@ -1567,9 +1567,9 @@
       "exampleTopics": [
         "Basic Code Highlighter",
         "With Title",
-        "Diff (GitHub Style)",
+        "Diff",
         "Highlight Lines",
-        "Full Feature",
+        "With Language and Copy",
         "Code highlighter with title",
         "Code highlighter diff",
         "Code highlighter highlight lines",
@@ -1649,9 +1649,9 @@
       "purpose": "Let users choose or edit a color value.",
       "useWhen": "Use in branding, theme customization, design tools, and visual editors.",
       "exampleTopics": [
-        "Basic color picker",
-        "Color picker with popover",
-        "Input with color picker"
+        "Basic Color Picker",
+        "Color Picker With Popover",
+        "Input With Color Picker"
       ],
       "minimalExample": "<ngs-color-picker [(ngModel)]=\"color\" [asDropdown]=\"false\" class=\"mb-6\"/>\n<p>\n  Selected color: <strong>{{ color }}</strong>\n</p>\n<div ngs-color-picker-thumbnail [color]=\"color\"></div>",
       "exampleFiles": [
@@ -1766,13 +1766,14 @@
       "sourceRoot": "projects/components/color-scheme/src",
       "docsPath": null,
       "docsOverviewSource": null,
-      "purpose": "Control or reflect light, dark, and automatic color scheme behavior.",
-      "useWhen": "Use in theme settings and app shell preferences.",
+      "purpose": "Switch the application color scheme between light, dark, and auto.",
+      "useWhen": "Use anywhere in the UI where users need to control the global light, dark, or auto theme mode. Do not use it for brand colors, accent colors, object colors, statuses, or palettes.",
       "exampleTopics": [],
       "minimalExample": null,
       "exampleFiles": [],
       "previewAsset": "projects/components/color-scheme/preview.svg",
       "selectors": [
+        "[ngsColorSchemeAuto]",
         "[ngsColorSchemeDark]",
         "[ngsColorSchemeLight]",
         "ngs-color-scheme-switcher"
@@ -1780,10 +1781,12 @@
       "exportedSymbols": [
         "COLOR_SCHEME_LOCAL_KEY",
         "ColorScheme",
+        "ColorSchemeAutoDirective",
         "ColorSchemeDarkDirective",
         "ColorSchemeLightDirective",
         "ColorSchemeStore",
-        "ColorSchemeSwitcher"
+        "ColorSchemeSwitcher",
+        "ResolvedColorScheme"
       ],
       "inputs": [],
       "outputs": [
@@ -1803,13 +1806,13 @@
       "sourceRoot": "projects/components/color-switcher/src",
       "docsPath": "/components/color-switcher",
       "docsOverviewSource": "projects/docs/src/app/components/color-switcher/overview/overview.html",
-      "purpose": "Switch the application accent or theme color.",
-      "useWhen": "Use in personalization panels, demo toolbars, or tenant branding settings.",
+      "purpose": "Let users choose one color from a fixed allowed palette.",
+      "useWhen": "Use for brand color presets, accent color presets, project colors, category colors, tag colors, tenant branding, and theme playground controls. Use ColorPicker for arbitrary custom colors and ColorScheme for light, dark, or auto theme mode.",
       "exampleTopics": [
-        "Basic color switcher",
-        "Color switcher with custom colors",
-        "Color switcher with disabled state",
-        "Color switcher as form control",
+        "Basic Color Switcher",
+        "Custom Palette",
+        "Disabled State",
+        "Form Control",
         "Basic brand colors",
         "Brand colors custom colors",
         "Brand colors disabled",
@@ -1869,10 +1872,10 @@
       "sourceRoot": "projects/components/command-bar/src",
       "docsPath": "/components/command-bar",
       "docsOverviewSource": "projects/docs/src/app/components/command-bar/overview/overview.html",
-      "purpose": "Expose a searchable list of commands and quick actions.",
-      "useWhen": "Use for keyboard-centric admin tools, global command menus, and productivity workflows.",
+      "purpose": "Show a floating contextual action bar for selected items or temporary page state.",
+      "useWhen": "Use when rows, files, cards, canvas objects, or other page items are selected and users need quick actions such as edit, delete, archive, move, export, or share. Do not use it as a command palette, search UI, dropdown menu, header toolbar, navigation bar, autocomplete, or normal form action row.",
       "exampleTopics": [
-        "Basic command bar"
+        "Basic Command Bar"
       ],
       "minimalExample": "<ngs-checkbox [(ngModel)]=\"open\">Show command bar</ngs-checkbox>\n<div>\n  <ngs-form-field class=\"w-1/2 mt-4\">\n    <ngs-label>Tooltip position</ngs-label>\n    <ngs-select [formControl]=\"position\">\n      @for (positionOption of positionOptions; track positionOption) {\n        <ngs-option [value]=\"positionOption\">{{ positionOption }}</ngs-option>\n      }\n    </ngs-select>\n  </ngs-form-field>\n</div>\n<ngs-command-bar [open]=\"open\" [position]=\"position.value!\">\n  2 selected\n  <ngs-command-bar-divider/>\n  <ngs-command-bar-command shortcut=\"e\">Edit</ngs-command-bar-command>\n  <ngs-command-bar-divider/>\n  <ngs-command-bar-command shortcut=\"d\">Delete</ngs-command-bar-command>\n</ngs-command-bar>",
       "exampleFiles": [
@@ -1958,20 +1961,24 @@
       "sourceRoot": "projects/components/comment-editor/src",
       "docsPath": "/components/comment-editor",
       "docsOverviewSource": "projects/docs/src/app/components/comment-editor/overview/overview.html",
-      "purpose": "Collect rich or plain comment input with editor-specific actions.",
-      "useWhen": "Use in discussions, review flows, activity feeds, and collaboration surfaces.",
+      "purpose": "Provide a simplified text editor for quick messages, comments, threads, and replies.",
+      "useWhen": "Use in tasks, projects, activity feeds, reviews, support threads, and conversation replies where users write a short or medium message and send it immediately. Do not use for long-form documents, CMS pages, complex content editing, markdown editing, code editing, search, or display-only comments.",
       "exampleTopics": [
-        "Basic comment editor",
-        "Comment editor with toolbar that always visible",
-        "Comment editor with cancel button always visible",
-        "Comment editor with custom button labels",
+        "Basic Comment Editor",
+        "Toolbar Always Visible",
+        "Cancel Button Always Visible",
+        "Custom Button Labels",
+        "Full View Mode",
+        "Upload Error",
+        "Max Content Height",
+        "Custom Icons",
+        "Comment editor with toolbar",
+        "Comment editor cancel button always visible",
+        "Comment editor custom button labels",
         "Comment editor with full view mode",
         "Comment editor with upload error",
         "Comment editor with max content height",
-        "Comment editor with custom icons",
-        "Comment editor with toolbar",
-        "Comment editor cancel button always visible",
-        "Comment editor custom button labels"
+        "Comment editor with custom icons"
       ],
       "minimalExample": "<ngs-comment-editor #editor [imageUploadFn]=\"uploadFn\" (sent)=\"onSent($event)\"\n                    class=\"rounded-xl border border-muted\">\n  <ngs-comment-editor-toolbar>\n    <button ngsIconButton ngsTooltip=\"Bold\"\n            ngsCommentEditorCommand ngsCommentEditorCommandBold>\n      <ngs-icon name=\"fluent:text-bold-24-regular\"/>\n    </button>\n    <button ngsIconButton ngsTooltip=\"Italic\"\n            ngsCommentEditorCommand ngsCommentEditorCommandItalic>\n      <ngs-icon name=\"fluent:text-italic-24-regular\"/>\n    </button>\n    <button ngsIconButton ngsTooltip=\"Strike\"\n            ngsCommentEditorCommand ngsCommentEditorCommandStrike>\n      <ngs-icon name=\"fluent:text-strikethrough-24-regular\"/>\n    </button>\n    <ngs-comment-editor-divider />\n    <button ngsIconButton ngsTooltip=\"Bullet List\"\n            ngsCommentEditorCommand ngsCommentEditorCommandBulletList>\n      <ngs-icon name=\"fluent:text-bullet-list-ltr-24-regular\"/>\n    </button>\n    <button ngsIconButton ngsTooltip=\"Ordered List\"\n            ngsCommentEditorCommand ngsCommentEditorCommandOrderedList>\n      <ngs-icon name=\"fluent:text-number-list-ltr-24-regular\"/>\n    </button>\n    <button ngsIconButton ngsTooltip=\"Blockquote\"\n            ngsCommentEditorCommand ngsCommentEditorCommandBlockquote>\n      <ngs-icon name=\"fluent:text-quote-24-regular\"/>\n    </button>\n    <button ngsIconButton ngsTooltip=\"Code Block\"\n            ngsCommentEditorCommand ngsCommentEditorCommandCodeBlock>\n      <ngs-icon name=\"fluent:code-block-24-regular\"/>\n    </button>\n    <ngs-comment-editor-divider />\n    <button ngsIconButton ngsToolt\n...",
       "exampleFiles": [
@@ -2117,10 +2124,10 @@
       "sourceRoot": "projects/components/comparison-slider/src",
       "docsPath": "/components/comparison-slider",
       "docsOverviewSource": "projects/docs/src/app/components/comparison-slider/overview/overview.html",
-      "purpose": "Compare two images or visual states with a draggable before/after divider.",
-      "useWhen": "Use for image comparison, design review, maps, reports, or visual diffs.",
+      "purpose": "Compare two aligned visual layers with a draggable before-and-after divider.",
+      "useWhen": "Use for before-and-after images, photo edits, design changes, product variations, UI state diffs, image processing results, maps, reports, and other visual diffs. Give the component a stable width and height or aspect ratio, and do not use it as a gallery, carousel, image viewer, range input, data comparison table, or text comparison tool.",
       "exampleTopics": [
-        "Basic comparison slider"
+        "Basic Comparison Slider"
       ],
       "minimalExample": "<ngs-comparison-slider class=\"rounded-2xl w-[800px] h-[450px]\">\n  <img ngsComparisonSliderBeforeImage src=\"assets/chairs.jpg\">\n  <img ngsComparisonSliderAfterImage src=\"assets/chairs2.jpg\">\n</ngs-comparison-slider>",
       "exampleFiles": [
@@ -2160,11 +2167,11 @@
       "sourceRoot": "projects/components/confirm/src",
       "docsPath": "/components/confirm",
       "docsOverviewSource": "projects/docs/src/app/components/confirm/overview/overview.html",
-      "purpose": "Ask users to confirm or cancel a consequential action.",
-      "useWhen": "Use before destructive, irreversible, or high-impact operations.",
+      "purpose": "Show a standardized confirmation dialog for a short binary decision before an important action.",
+      "useWhen": "Use through ConfirmManager.open({ title, description }) before delete, unpublish, archive, reset, discard changes, leave with unsaved changes, bulk, destructive, irreversible, or high-impact operations. Do not use for long forms, custom modal layouts, wizards, informational dialogs, settings panels, or choices with more than two outcomes; use Dialog for custom modal content.",
       "exampleTopics": [
-        "Basic confirm",
-        "Show confirm from a modal dialog",
+        "Basic Confirm",
+        "Confirm From Dialog",
         "Confirm form modal",
         "Dialog with confirmation"
       ],
@@ -2215,9 +2222,11 @@
       "sourceRoot": "projects/components/content-editor/src",
       "docsPath": "/libraries/content-editor",
       "docsOverviewSource": "projects/docs/src/app/libraries/content-editor/overview/overview.html",
-      "purpose": "Provide a rich content editing surface for structured or formatted content.",
-      "useWhen": "Use for posts, descriptions, CMS-like fields, notes, and editable rich text workflows.",
-      "exampleTopics": [],
+      "purpose": "Provide a block-based builder for structured long-form content.",
+      "useWhen": "Use ngs-content-builder for articles, pages, documentation, knowledge base entries, rich notes, editable descriptions, landing content, and CMS-like editing workflows built from blocks such as paragraph, heading, list, quote, code, divider, table, image, video, and embed. Do not use for quick messages, comments, threads, or reply composers; use CommentEditor for that. Do not use for a simple text field or small rich text input; use TextEditor, Input, or Textarea depending on the task.",
+      "exampleTopics": [
+        "Content Editor"
+      ],
       "minimalExample": null,
       "exampleFiles": [],
       "previewAsset": "projects/components/content-editor/preview.svg",
@@ -2431,12 +2440,12 @@
       "sourceRoot": "projects/components/content-fade/src",
       "docsPath": "/components/content-fade",
       "docsOverviewSource": "projects/docs/src/app/components/content-fade/overview/overview.html",
-      "purpose": "Fade overflowing content to signal that more content is available.",
-      "useWhen": "Use for previews, collapsed text, scrollable areas, or teaser content.",
+      "purpose": "Add a visual gradient fade at the edge of clipped or scrollable content.",
+      "useWhen": "Use for horizontal preview text, teaser rows, chips, compact lists, or cropped inline content when an edge should fade out instead of ending abruptly. The parent container must provide width, height, scroll behavior, or overflow-hidden; ContentFade does not manage overflow, expansion, truncation, or scrolling by itself. Do not use for loading skeletons, collapsed content logic, tooltips, pagination, modal clipping, ellipsis truncation, or long article reading.",
       "exampleTopics": [
-        "Basic content fade",
-        "Content fade with custom width",
-        "Content fade with custom position",
+        "Basic Content Fade",
+        "Custom Width",
+        "Custom Position",
         "Content fade custom width",
         "Content fade custom position"
       ],
@@ -2493,10 +2502,10 @@
       "sourceRoot": "projects/components/cookie-popup/src",
       "docsPath": "/components/cookie-popup",
       "docsOverviewSource": "projects/docs/src/app/components/cookie-popup/overview/overview.html",
-      "purpose": "Ask for cookie consent or present privacy-related choices.",
-      "useWhen": "Use on public-facing pages that need consent messaging or tracking preferences.",
+      "purpose": "Collect a non-blocking cookie or privacy consent choice.",
+      "useWhen": "Use on public pages or apps when users need to accept all cookies or only necessary cookies and see a short cookie/privacy message with a policy link. The consumer must persist the accepted choice in a cookie, localStorage, or backend and control visible state. Do not use as a normal Dialog, Alert, Announcement, snackbar, or settings panel.",
       "exampleTopics": [
-        "Basic cookie popup"
+        "Basic Cookie Popup"
       ],
       "minimalExample": "<ngs-cookie-popup [visible]=\"visible()\"\n                  (cookieAccepted)=\"onCookieAccepted($event)\">\n  <ng-container ngsCookiePopupTitle>Cookie Settings</ng-container>\n  We use cookies to provide and improve services and ensure security. Click to view our\n  <a href=\"https://ngstarter.com/cookie-policy\" class=\"link\">cookie policy</a>.\n  You can choose to accept all or only necessary cookies, which may affect some functionalities.\n  <ng-container ngsCookiePopupAcceptNecessaryOnlyButton>Necessary cookies only</ng-container>\n  <ng-container ngsCookiePopupAcceptAllButton>Accept all cookies</ng-container>\n</ngs-cookie-popup>\n<button ngsButton=\"filled\" (click)=\"visible.set(false)\">Hide cookie popup</button>\n@if (acceptType()) {\n  <div class=\"mt-4\">\n    You are selected: <span class=\"font-bold\">{{ acceptType() }}</span> cookies type.\n  </div>\n}",
       "exampleFiles": [
@@ -2694,8 +2703,8 @@
       "sourceRoot": "projects/components/country-select/src",
       "docsPath": "/forms/country",
       "docsOverviewSource": "projects/docs/src/app/forms/country/overview/overview.html",
-      "purpose": "Let users choose a country from a localized or searchable country list.",
-      "useWhen": "Use in addresses, profiles, billing, localization, and phone-related forms.",
+      "purpose": "Let users choose a country from the built-in country list and store its ISO country code.",
+      "useWhen": "Use in addresses, user profiles, billing, shipping, legal forms, tax forms, tenant settings, and locale settings where the form value should be a country code such as US, PL, or DE. The component shows country flags and names, supports search by name or ISO code, and integrates with FormField. Do not use for phone dialing codes; use PhoneInput. Do not use for currency selection; use CurrencySelect. Do not use for custom region, city, office, or location lists; use Select or Autocomplete.",
       "exampleTopics": [
         "Basic country select"
       ],
@@ -2744,8 +2753,8 @@
       "sourceRoot": "projects/components/crop/src",
       "docsPath": "/components/crop",
       "docsOverviewSource": "projects/docs/src/app/components/crop/overview/overview.html",
-      "purpose": "Crop images or visual media to a selected region.",
-      "useWhen": "Use for avatar upload, image preparation, media management, and visual editing.",
+      "purpose": "Let users choose a rectangle or circle crop area on top of an existing image or visual preview.",
+      "useWhen": "Use for avatar dialogs, cover image forms, thumbnail preparation, media management screens, and content editor flows where the user chooses the visible crop area. Crop emits selectionApplied with pixel coordinates, percentages, and container size. It does not upload files, save images, zoom the image, open a gallery, compare images, or process the final bitmap; handle those steps outside the component.",
       "exampleTopics": [
         "Basic image crop"
       ],
@@ -2788,8 +2797,8 @@
       "sourceRoot": "projects/components/currency-select/src",
       "docsPath": "/forms/currency-select",
       "docsOverviewSource": "projects/docs/src/app/forms/currency-select/overview/overview.html",
-      "purpose": "Let users select a currency, often with country or code display.",
-      "useWhen": "Use in billing, pricing, finance, marketplace, and localization forms.",
+      "purpose": "Let users choose a currency from the built-in currency list and store its ISO currency code.",
+      "useWhen": "Use for billing, pricing, invoices, checkout, marketplace, finance settings, reporting settings, tenant settings, and locale settings where the form value should be a currency code such as USD, EUR, or PLN. The component shows a flag, ISO code, and symbol, supports search by currency name or code, and can show country names with showCountryName. Do not use for country selection; use CountrySelect. Do not use for entering a money amount; pair it with Input/FormField. Do not use for exchange calculators, rate tables, or number formatting.",
       "exampleTopics": [
         "Basic currency select",
         "Currency select with country name",
@@ -2844,8 +2853,8 @@
       "sourceRoot": "projects/components/data-view/src",
       "docsPath": "/libraries/data-view",
       "docsOverviewSource": "projects/docs/src/app/libraries/data-view/overview/overview.html",
-      "purpose": "Build feature-rich data grids with sorting, filtering, pagination, column settings, selection, and server-side loading.",
-      "useWhen": "Use for operational datasets where users need to inspect, organize, filter, and act on records.",
+      "purpose": "Build operational data grids for records that users need to inspect, organize, select, and act on.",
+      "useWhen": "Use for admin screens, CRM and ERP records, users, orders, invoices, logs, tasks, assets, and any dataset where the table is the main work surface. DataView is configured with columnDefs plus local data or a server-side datasource, and supports sorting, search/filter state, pagination, row selection, loading states, empty states, column resizing, column visibility and order, pinned or sticky columns, custom cell renderers, refresh, snapshots, and ngsDataViewActionBar. Do not use for small static tables or simple read-only tabular content; use Table. Do not use as a card list, layout grid, chart widget, report summary, or form editor.",
       "exampleTopics": [
         "Data View",
         "Basic data view",

@@ -3,8 +3,31 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Angular Command Bar component is a user interface element that contains commands
-        for interacting with the content of the window, panel, or parent region it overlays.
+        Command Bar is a floating action bar for contextual commands on the current page state.
+        Use it when users select rows, files, cards, objects, or other items and need quick actions
+        such as edit, delete, archive, move, export, or share.
+      </p>
+      <div class="my-7">
+        <div>Use it for:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            Showing a short context label, such as <code class="code">2 selected</code>.
+          </li>
+          <li>
+            Presenting compact actions for the selected items or active context.
+          </li>
+          <li>
+            Grouping related actions with <code class="code">ngs-command-bar-divider</code>.
+          </li>
+          <li>
+            Showing optional shortcut hints on individual commands.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Do not use Command Bar as a command palette, search UI, dropdown menu, header toolbar,
+        navigation bar, autocomplete, or normal form action row. It is for contextual actions
+        that appear only when a page or region has an active selection or temporary command state.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

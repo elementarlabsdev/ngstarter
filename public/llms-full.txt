@@ -213,7 +213,7 @@ Typography:
 - code-highlighter: `@ngstarter-ui/components/code-highlighter` docs: /components/code-highlighter
   purpose: Render formatted source code snippets with syntax highlighting.
   use when: Use in docs, developer tools, examples, and configuration previews.
-  example topics: Basic Code Highlighter, With Title, Diff (GitHub Style), Highlight Lines, Full Feature, Code highlighter with title, Code highlighter diff, Code highlighter highlight lines
+  example topics: Basic Code Highlighter, With Title, Diff, Highlight Lines, With Language and Copy, Code highlighter with title, Code highlighter diff, Code highlighter highlight lines
   selectors: `ngs-code-highlighter`
   exports: `CodeHighlighter`
   inputs: `appearance`, `code`, `diff`, `highlightLines`, `language`, `showCopyButton`, `showLanguage`, `theme`, `title`
@@ -221,77 +221,78 @@ Typography:
 - color-picker: `@ngstarter-ui/components/color-picker` docs: /components/color-picker
   purpose: Let users choose or edit a color value.
   use when: Use in branding, theme customization, design tools, and visual editors.
-  example topics: Basic color picker, Color picker with popover, Input with color picker
+  example topics: Basic Color Picker, Color Picker With Popover, Input With Color Picker
   selectors: `[inputChange]`, `[ngs-color-picker-thumbnail]`, `[ngsColorPickerTriggerFor]`, `ngs-alpha`, `ngs-color-picker`, `ngs-color-picker-thumbnail`, `ngs-hue`, `ngs-saturation`
   exports: `Alpha`, `BaseComponent`, `ChunksPipe`, `ColorPicker`, `ColorPickerInputDirective`, `ColorPickerPosition`, `ColorPickerResultFormat`, `ColorPickerThumbnail`, `ColorPickerTriggerForDirective`, `Hue`, `PositionManager`, `ReversePipe`
   inputs: `asDropdown`, `color`, `colorFromHue`, `disabled`, `max`, `min`, `position`, `resultFormat`, `showOpacity`, `tinyColor`
   outputs: `alphaChange`, `closed`, `colorChange`, `inputChange`, `opened`, `rawColorChange`
   tokens: `--ngs-color-picker-alpha-height`, `--ngs-color-picker-alpha-pointer-border`, `--ngs-color-picker-alpha-pointer-shadow`, `--ngs-color-picker-alpha-pointer-size`, `--ngs-color-picker-alpha-width`, `--ngs-color-picker-as-dropdown-shadow`, `--ngs-color-picker-bg`, `--ngs-color-picker-border`, `--ngs-color-picker-border-radius`, `--ngs-color-picker-gap`, `--ngs-color-picker-hue-height`, `--ngs-color-picker-hue-pointer-border`, `--ngs-color-picker-hue-pointer-shadow`, `--ngs-color-picker-hue-pointer-size`, `--ngs-color-picker-hue-width`, `--ngs-color-picker-margin-offset`
 - color-scheme: `@ngstarter-ui/components/color-scheme`
-  purpose: Control or reflect light, dark, and automatic color scheme behavior.
-  use when: Use in theme settings and app shell preferences.
-  selectors: `[ngsColorSchemeDark]`, `[ngsColorSchemeLight]`, `ngs-color-scheme-switcher`
-  exports: `COLOR_SCHEME_LOCAL_KEY`, `ColorScheme`, `ColorSchemeDarkDirective`, `ColorSchemeLightDirective`, `ColorSchemeStore`, `ColorSchemeSwitcher`
+  purpose: Switch the application color scheme between light, dark, and auto.
+  use when: Use anywhere in the UI where users need to control the global light, dark, or auto theme mode. Do not use it for brand colors, accent colors, object colors, statuses, or palettes.
+  selectors: `[ngsColorSchemeAuto]`, `[ngsColorSchemeDark]`, `[ngsColorSchemeLight]`, `ngs-color-scheme-switcher`
+  exports: `COLOR_SCHEME_LOCAL_KEY`, `ColorScheme`, `ColorSchemeAutoDirective`, `ColorSchemeDarkDirective`, `ColorSchemeLightDirective`, `ColorSchemeStore`, `ColorSchemeSwitcher`, `ResolvedColorScheme`
   outputs: `colorSchemeChanged`
 - color-switcher: `@ngstarter-ui/components/color-switcher` docs: /components/color-switcher
-  purpose: Switch the application accent or theme color.
-  use when: Use in personalization panels, demo toolbars, or tenant branding settings.
-  example topics: Basic color switcher, Color switcher with custom colors, Color switcher with disabled state, Color switcher as form control, Basic brand colors, Brand colors custom colors, Brand colors disabled, Brand colors as form control
+  purpose: Let users choose one color from a fixed allowed palette.
+  use when: Use for brand color presets, accent color presets, project colors, category colors, tag colors, tenant branding, and theme playground controls. Use ColorPicker for arbitrary custom colors and ColorScheme for light, dark, or auto theme mode.
+  example topics: Basic Color Switcher, Custom Palette, Disabled State, Form Control, Basic brand colors, Brand colors custom colors, Brand colors disabled, Brand colors as form control
   selectors: `ngs-color-switcher`
   exports: `ColorSwitcher`
   inputs: `colors`, `disabled`, `selectedColor`
   outputs: `colorChange`
   tokens: `--ngs-brand-colors-color-size`, `--ngs-brand-colors-gap`, `--ngs-shadow-sm`
 - command-bar: `@ngstarter-ui/components/command-bar` docs: /components/command-bar
-  purpose: Expose a searchable list of commands and quick actions.
-  use when: Use for keyboard-centric admin tools, global command menus, and productivity workflows.
-  example topics: Basic command bar
+  purpose: Show a floating contextual action bar for selected items or temporary page state.
+  use when: Use when rows, files, cards, canvas objects, or other page items are selected and users need quick actions such as edit, delete, archive, move, export, or share. Do not use it as a command palette, search UI, dropdown menu, header toolbar, navigation bar, autocomplete, or normal form action row.
+  example topics: Basic Command Bar
   selectors: `[ngs-command-bar-command]`, `ngs-command-bar`, `ngs-command-bar-command`, `ngs-command-bar-divider`
   exports: `CommandBar`, `CommandBarCommand`, `CommandBarDivider`, `CommandBarPosition`
   inputs: `open`, `position`, `shortcut`
   tokens: `--ngs-color-neutral-100`, `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-color-neutral-600`, `--ngs-color-neutral-700`, `--ngs-color-neutral-800`, `--ngs-color-neutral-950`, `--ngs-color-primary-200`, `--ngs-command-bar-bg`, `--ngs-command-bar-border`, `--ngs-command-bar-border-radius`, `--ngs-command-bar-color`, `--ngs-command-bar-command-color`, `--ngs-command-bar-command-font-size`, `--ngs-command-bar-command-gap`, `--ngs-command-bar-command-height`
 - comment-editor: `@ngstarter-ui/components/comment-editor` docs: /components/comment-editor
-  purpose: Collect rich or plain comment input with editor-specific actions.
-  use when: Use in discussions, review flows, activity feeds, and collaboration surfaces.
-  example topics: Basic comment editor, Comment editor with toolbar that always visible, Comment editor with cancel button always visible, Comment editor with custom button labels, Comment editor with full view mode, Comment editor with upload error, Comment editor with max content height, Comment editor with custom icons
+  purpose: Provide a simplified text editor for quick messages, comments, threads, and replies.
+  use when: Use in tasks, projects, activity feeds, reviews, support threads, and conversation replies where users write a short or medium message and send it immediately. Do not use for long-form documents, CMS pages, complex content editing, markdown editing, code editing, search, or display-only comments.
+  example topics: Basic Comment Editor, Toolbar Always Visible, Cancel Button Always Visible, Custom Button Labels, Full View Mode, Upload Error, Max Content Height, Custom Icons
   selectors: `[ngsCommentEditorCommand]`, `[ngsCommentEditorCommandBlockquote]`, `[ngsCommentEditorCommandBold]`, `[ngsCommentEditorCommandBulletList]`, `[ngsCommentEditorCommandCode]`, `[ngsCommentEditorCommandCodeBlock]`, `[ngsCommentEditorCommandEditLink]`, `[ngsCommentEditorCommandImage]`, `[ngsCommentEditorCommandItalic]`, `[ngsCommentEditorCommandLink]`, `[ngsCommentEditorCommandOrderedList]`, `[ngsCommentEditorCommandStrike]`, `[ngsCommentEditorCommandToggleToolbar]`, `[ngsCommentEditorCommandUnsetLink]`, `[ngsCommentEditorCommandYoutube]`, `ngs-comment-editor`, `ngs-comment-editor-bubble-menu`, `ngs-comment-editor-divider`, `ngs-comment-editor-footer-bar`, `ngs-comment-editor-toolbar`, `ngs-image-uploading-placeholder`, `ngs-link`, `ngs-youtube`
   exports: `AngularNodeView`, `AngularNodeViewRenderer`, `AngularRenderer`, `COMMENT_EDITOR`, `COMMENT_EDITOR_BUBBLE_MENU`, `CommentEditor`, `CommentEditorAPI`, `CommentEditorBubbleMenu`, `CommentEditorCommandBlockquoteDirective`, `CommentEditorCommandBoldDirective`, `CommentEditorCommandBulletListDirective`, `CommentEditorCommandCodeBlockDirective`
   inputs: `allowEmptyContent`, `autoClear`, `buttonCancelLabel`, `buttonSendLabel`, `cancelButtonAlwaysVisible`, `contentMaxHeight`, `decorations`, `deleteNode`, `editor`, `extension`, `fullViewMode`, `getPos`, `innerDecorations`, `loading`, `node`, `placeholder`, `selected`, `toolbarAlwaysVisible`, `updateAttributes`, `view`
   outputs: `canceled`, `fileSelected`, `sent`
   tokens: `--ngs-color-border`, `--ngs-color-neutral-100`, `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-color-neutral-500`, `--ngs-color-neutral-650`, `--ngs-color-neutral-700`, `--ngs-color-neutral-900`, `--ngs-color-neutral-950`, `--ngs-color-primary`, `--ngs-color-tertiary-100`, `--ngs-color-tertiary-200`, `--ngs-color-tertiary-300`, `--ngs-color-tertiary-700`, `--ngs-color-tertiary-800`, `--ngs-comment-editor-bg`
 - comparison-slider: `@ngstarter-ui/components/comparison-slider` docs: /components/comparison-slider
-  purpose: Compare two images or visual states with a draggable before/after divider.
-  use when: Use for image comparison, design review, maps, reports, or visual diffs.
-  example topics: Basic comparison slider
+  purpose: Compare two aligned visual layers with a draggable before-and-after divider.
+  use when: Use for before-and-after images, photo edits, design changes, product variations, UI state diffs, image processing results, maps, reports, and other visual diffs. Give the component a stable width and height or aspect ratio, and do not use it as a gallery, carousel, image viewer, range input, data comparison table, or text comparison tool.
+  example topics: Basic Comparison Slider
   selectors: `[ngsComparisonSliderAfterImage]`, `[ngsComparisonSliderBeforeImage]`, `ngs-comparison-slider`
   exports: `ComparisonSlider`, `ComparisonSliderAfterImageDirective`, `ComparisonSliderBeforeImageDirective`
   inputs: `initialPosition`
 - confirm: `@ngstarter-ui/components/confirm` docs: /components/confirm
-  purpose: Ask users to confirm or cancel a consequential action.
-  use when: Use before destructive, irreversible, or high-impact operations.
-  example topics: Basic confirm, Show confirm from a modal dialog, Confirm form modal, Dialog with confirmation
+  purpose: Show a standardized confirmation dialog for a short binary decision before an important action.
+  use when: Use through ConfirmManager.open({ title, description }) before delete, unpublish, archive, reset, discard changes, leave with unsaved changes, bulk, destructive, irreversible, or high-impact operations. Do not use for long forms, custom modal layouts, wizards, informational dialogs, settings panels, or choices with more than two outcomes; use Dialog for custom modal content.
+  example topics: Basic Confirm, Confirm From Dialog, Confirm form modal, Dialog with confirmation
   selectors: `ngs-confirm`
   exports: `Confirm`, `ConfirmManager`, `ConfirmOptions`, `ConfirmRef`
 - content-editor: `@ngstarter-ui/components/content-editor` docs: /libraries/content-editor
-  purpose: Provide a rich content editing surface for structured or formatted content.
-  use when: Use for posts, descriptions, CMS-like fields, notes, and editable rich text workflows.
+  purpose: Provide a block-based builder for structured long-form content.
+  use when: Use ngs-content-builder for articles, pages, documentation, knowledge base entries, rich notes, editable descriptions, landing content, and CMS-like editing workflows built from blocks such as paragraph, heading, list, quote, code, divider, table, image, video, and embed. Do not use for quick messages, comments, threads, or reply composers; use CommentEditor for that. Do not use for a simple text field or small rich text input; use TextEditor, Input, or Textarea depending on the task.
+  example topics: Content Editor
   selectors: `[ngsBlockSelection]`, `[ngsContentChangesObserver]`, `[ngsContentEditorContentEditable]`, `[ngsContentObserver]`, `[ngsFocusMonitor]`, `[ngsTableColumnsManager]`, `[ngsTableRowsManager]`, `[ngsTextSelectionPopup]`, `app-embed-block`, `ngs-add-link`, `ngs-audio-recorder`, `ngs-code-block`, `ngs-command-bar`, `ngs-content-builder`, `ngs-content-viewer`, `ngs-divider-block`, `ngs-draggable-table`, `ngs-edit-link`, `ngs-heading-block`, `ngs-image-block`, `ngs-list-block`, `ngs-paragraph-block`, `ngs-quote-block`, `ngs-table-block`, `ngs-text-color`, `ngs-video-block`, `table[ngsResizableTable]`
   exports: `AddLinkDialog`, `AudioRecorderComponent`, `BaseErrorHandler`, `BlockSelectionDirective`, `Change`, `Changeset`, `CodeBlockComponent`, `CodeBlockDef`, `CommandBarComponent`, `compare`, `CONTENT_BUILDER`, `CONTENT_EDITOR_BLOCK`
   inputs: `_alt`, `_caption`, `_settings`, `autoScrollContainerSelector`, `backgroundColors`, `blockSelector`, `captionPlaceholder`, `closestContentObserverClass`, `content`, `contentChangedDelay`, `detectAddedNode`, `disabled`, `id`, `ignoreClasses`, `index`, `insertAtCursor`, `minColumnWidth`, `mutationObserverDebounceTime`, `ngsContentEditorContentEditable`, `observedElement`, `options`, `placeholder`, `props`, `recentlyUsed`
   outputs: `backgroundColorChanged`, `columnAdded`, `columnDeleted`, `columnManagingEnd`, `columnManagingStart`, `columnMoved`, `columnWidthChange`, `columnWidthChangeEnd`, `columnWidthChangeStart`, `contentChanged`, `displayTranscriptChange`, `initialized`, `moveEnd`, `moveStart`, `nodeAdded`, `pressedEnter`, `propsChanged`, `rowAdded`, `rowDeleted`, `rowManagingEnd`, `rowManagingStart`, `rowMoved`, `tagSelected`, `textColorChanged`
   tokens: `--ngs-color-border`, `--ngs-color-neutral-200`, `--ngs-color-neutral-50`, `--ngs-color-neutral-500`, `--ngs-color-neutral-600`, `--ngs-color-on-surface`, `--ngs-color-primary`, `--ngs-color-primary-100`, `--ngs-color-primary-300`, `--ngs-color-primary-400`, `--ngs-color-secondary-fixed`, `--ngs-color-surface-container`, `--ngs-color-surface-container-high`, `--ngs-color-surface-container-highest`, `--ngs-color-surface-container-low`, `--ngs-content-builder-content-width`
 - content-fade: `@ngstarter-ui/components/content-fade` docs: /components/content-fade
-  purpose: Fade overflowing content to signal that more content is available.
-  use when: Use for previews, collapsed text, scrollable areas, or teaser content.
-  example topics: Basic content fade, Content fade with custom width, Content fade with custom position, Content fade custom width, Content fade custom position
+  purpose: Add a visual gradient fade at the edge of clipped or scrollable content.
+  use when: Use for horizontal preview text, teaser rows, chips, compact lists, or cropped inline content when an edge should fade out instead of ending abruptly. The parent container must provide width, height, scroll behavior, or overflow-hidden; ContentFade does not manage overflow, expansion, truncation, or scrolling by itself. Do not use for loading skeletons, collapsed content logic, tooltips, pagination, modal clipping, ellipsis truncation, or long article reading.
+  example topics: Basic Content Fade, Custom Width, Custom Position, Content fade custom width, Content fade custom position
   selectors: `ngs-content-fade`
   exports: `ContentFade`, `ContentFadePosition`
   inputs: `color`, `position`, `width`
   tokens: `--ngs-color-background`, `--ngs-content-fade-color`, `--ngs-content-fade-width`
 - cookie-popup: `@ngstarter-ui/components/cookie-popup` docs: /components/cookie-popup
-  purpose: Ask for cookie consent or present privacy-related choices.
-  use when: Use on public-facing pages that need consent messaging or tracking preferences.
-  example topics: Basic cookie popup
+  purpose: Collect a non-blocking cookie or privacy consent choice.
+  use when: Use on public pages or apps when users need to accept all cookies or only necessary cookies and see a short cookie/privacy message with a policy link. The consumer must persist the accepted choice in a cookie, localStorage, or backend and control visible state. Do not use as a normal Dialog, Alert, Announcement, snackbar, or settings panel.
+  example topics: Basic Cookie Popup
   selectors: `[ngsCookiePopupAcceptAllButton]`, `[ngsCookiePopupAcceptNecessaryOnlyButton]`, `[ngsCookiePopupTitle]`, `ngs-cookie-popup`
   exports: `CookiePopup`, `CookiePopupAcceptAllButtonDirective`, `CookiePopupAcceptNecessaryOnlyButtonDirective`, `CookiePopupAcceptType`, `CookiePopupTitleDirective`
   inputs: `cookiePolicyUrl`, `visible`
@@ -306,8 +307,8 @@ Typography:
   outputs: `elementBlurred`, `elementFocused`, `onSelectionChange`
   tokens: `--ngs-color-on-primary-container`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary-container`, `--ngs-color-surface-container-high`, `--ngs-color-surface-container-highest`, `--ngs-control-radius`, `--ngs-dropdown-height`, `--ngs-dropdown-item-active-bg`, `--ngs-dropdown-item-color`, `--ngs-dropdown-item-disabled-color`, `--ngs-dropdown-item-font-size`, `--ngs-dropdown-item-gap`, `--ngs-dropdown-item-hover-bg`, `--ngs-dropdown-item-nested-padding-start`, `--ngs-dropdown-item-padding`
 - country-select: `@ngstarter-ui/components/country-select` docs: /forms/country
-  purpose: Let users choose a country from a localized or searchable country list.
-  use when: Use in addresses, profiles, billing, localization, and phone-related forms.
+  purpose: Let users choose a country from the built-in country list and store its ISO country code.
+  use when: Use in addresses, user profiles, billing, shipping, legal forms, tax forms, tenant settings, and locale settings where the form value should be a country code such as US, PL, or DE. The component shows country flags and names, supports search by name or ISO code, and integrates with FormField. Do not use for phone dialing codes; use PhoneInput. Do not use for currency selection; use CurrencySelect. Do not use for custom region, city, office, or location lists; use Select or Autocomplete.
   example topics: Basic country select
   selectors: `ngs-country-select`
   exports: `countries`, `Country`, `CountrySelect`
@@ -315,24 +316,24 @@ Typography:
   outputs: `closed`, `opened`
   tokens: `--ngs-color-neutral-500`
 - crop: `@ngstarter-ui/components/crop` docs: /components/crop
-  purpose: Crop images or visual media to a selected region.
-  use when: Use for avatar upload, image preparation, media management, and visual editing.
+  purpose: Let users choose a rectangle or circle crop area on top of an existing image or visual preview.
+  use when: Use for avatar dialogs, cover image forms, thumbnail preparation, media management screens, and content editor flows where the user chooses the visible crop area. Crop emits selectionApplied with pixel coordinates, percentages, and container size. It does not upload files, save images, zoom the image, open a gallery, compare images, or process the final bitmap; handle those steps outside the component.
   example topics: Basic image crop
   selectors: `ngs-crop`
   exports: `Crop`, `CropSelection`
   inputs: `minHeight`, `minWidth`, `shape`
   outputs: `selectionApplied`
 - currency-select: `@ngstarter-ui/components/currency-select` docs: /forms/currency-select
-  purpose: Let users select a currency, often with country or code display.
-  use when: Use in billing, pricing, finance, marketplace, and localization forms.
+  purpose: Let users choose a currency from the built-in currency list and store its ISO currency code.
+  use when: Use for billing, pricing, invoices, checkout, marketplace, finance settings, reporting settings, tenant settings, and locale settings where the form value should be a currency code such as USD, EUR, or PLN. The component shows a flag, ISO code, and symbol, supports search by currency name or code, and can show country names with showCountryName. Do not use for country selection; use CountrySelect. Do not use for entering a money amount; pair it with Input/FormField. Do not use for exchange calculators, rate tables, or number formatting.
   example topics: Basic currency select, Currency select with country name, Currency with country name
   selectors: `ngs-currency-select`
   exports: `currencies`, `Currency`, `CurrencySelect`
   inputs: `disabled`, `placeholder`, `required`, `searchTerm`, `showCountryName`
   outputs: `closed`, `opened`
 - data-view: `@ngstarter-ui/components/data-view` docs: /libraries/data-view
-  purpose: Build feature-rich data grids with sorting, filtering, pagination, column settings, selection, and server-side loading.
-  use when: Use for operational datasets where users need to inspect, organize, filter, and act on records.
+  purpose: Build operational data grids for records that users need to inspect, organize, select, and act on.
+  use when: Use for admin screens, CRM and ERP records, users, orders, invoices, logs, tasks, assets, and any dataset where the table is the main work surface. DataView is configured with columnDefs plus local data or a server-side datasource, and supports sorting, search/filter state, pagination, row selection, loading states, empty states, column resizing, column visibility and order, pinned or sticky columns, custom cell renderers, refresh, snapshots, and ngsDataViewActionBar. Do not use for small static tables or simple read-only tabular content; use Table. Do not use as a card list, layout grid, chart widget, report summary, or form editor.
   example topics: Data View, Basic data view, Data view with selection, Data view with pagination, Embedded data view, Data view with sorting, Data view with resizable columns, Data view with column settings
   selectors: `[ngsDataViewActionBar]`, `[ngsDataViewEmptyData]`, `[ngsDataViewEmptyFilterResults]`, `ngs-data-view`, `ngs-data-view-action-bar`, `ngs-data-view-column-settings-dialog`
   exports: `cellRenderer`, `ColumnSettingsDialogData`, `ColumnSettingsDialogResult`, `DATA_VIEW`, `DATA_VIEW_CONFIG`, `DataView`, `DataViewActionBar`, `DataViewActionBarAPI`, `DataViewActionBarDirective`, `DataViewAPI`, `DataViewCellRenderer`, `DataViewCellRendererDef`

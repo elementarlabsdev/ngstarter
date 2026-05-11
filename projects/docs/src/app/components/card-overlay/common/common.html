@@ -3,7 +3,30 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The card overlay component is used to display content over a card or any other container.
+        The Card Overlay component shows contextual content on top of a card, image, or bounded container
+        when the user hovers it. Use it to reveal quick actions such as view, open, preview, or edit
+        without changing the underlying card layout.
+      </p>
+      <div class="my-7">
+        <div>Use it for:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            <strong>Hover actions</strong>: Reveal one or two actions over a card or image.
+          </li>
+          <li>
+            <strong>Media previews</strong>: Add a view or preview action over visual content.
+          </li>
+          <li>
+            <strong>Contextual controls</strong>: Keep secondary actions hidden until the user focuses on the item.
+          </li>
+          <li>
+            <strong>Bounded overlays</strong>: Use ngsCardOverlayContainer so the overlay is positioned and clipped inside the target.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Do not use Card Overlay for popovers, tooltips, menus, loading states, long text, complex forms,
+        or actions that must always be visible.
       </p>
     </main>
 

@@ -53,8 +53,8 @@ export const appConfig: ApplicationConfig = {
       return new Promise((resolve, reject) => {
         if (isPlatformBrowser(platformId)) {
           const localColorScheme = localStorage
-            ? (localStorage.getItem(COLOR_SCHEME_LOCAL_KEY) as ColorScheme || 'light')
-            : 'light';
+            ? (localStorage.getItem(COLOR_SCHEME_LOCAL_KEY) as ColorScheme || 'auto')
+            : 'auto';
           // but the best solution set it from backend
           colorSchemeStore.setScheme(localColorScheme);
         }

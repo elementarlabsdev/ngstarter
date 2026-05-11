@@ -3,24 +3,30 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Currency Select component is a powerful and flexible tool designed for web applications that require
-        internationalization and financial data entry. It provides an intuitive interface for users to search
-        and select currencies from a comprehensive list.
+        The Currency Select component is a form control for choosing a currency from the built-in currency list.
+        It shows a flag, ISO currency code, and symbol, supports search by name or code, and writes the selected
+        currency code to the form value.
+      </p>
+      <p>
+        Use it for billing, pricing, invoices, checkout, marketplace, finance settings, reporting settings, tenant
+        settings, and locale settings where the user must choose a currency. Do not use it to choose a country, enter
+        a money amount, build an exchange calculator, display rate tables, or format numbers.
       </p>
       <div class="my-7">
         <div>Key Features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Comprehensive Currency List</strong>: Includes global currencies with their codes and names.
+            <strong>Currency code value</strong>: Stores values such as USD, EUR, and PLN.
           </li>
           <li>
-            ✅ <strong>Search Functionality</strong>: Users can quickly find currencies by name or code.
+            <strong>Search functionality</strong>: Users can quickly find currencies by name or ISO code.
           </li>
           <li>
-            ✅ <strong>Customizable Display</strong>: Option to show country names alongside currencies.
+            <strong>Optional country name</strong>: Use <code>showCountryName</code> when the country context should
+            be visible next to the currency.
           </li>
           <li>
-            ✅ <strong>Integration-Ready</strong>: Works seamlessly with Angular Forms and FormField components.
+            <strong>Form integration</strong>: Works with Angular Forms and NgStarter FormField.
           </li>
         </ul>
       </div>

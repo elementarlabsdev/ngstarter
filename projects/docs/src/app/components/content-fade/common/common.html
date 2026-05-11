@@ -3,26 +3,32 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Content Fade component is a sleek and effective way to indicate that content continues beyond the visible area.
-        It applies a smooth gradient overlay to the edges of a container, providing a visual cue to users that there is more to see.
+        Content Fade is a visual gradient-mask wrapper that suggests content continues beyond the visible area.
+        Use it on clipped or scrollable previews when an edge should fade out instead of ending abruptly.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Use it for:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Visual Continuity</strong>: Clearly indicates hidden content without abrupt cut-offs.
+            Fading horizontal preview text, teaser rows, chips, compact lists, or cropped inline content.
           </li>
           <li>
-            ✅ <strong>Flexible Positioning</strong>: Apply fade to the start, end, or both sides of the container.
+            Showing a soft visual cue at the start, end, or both sides of an already constrained area.
           </li>
           <li>
-            ✅ <strong>Customizable Appearance</strong>: Easily adjust the color and width of the fade effect to match your design.
+            Matching the gradient color to the parent background with <code class="code">color</code>.
           </li>
           <li>
-            ✅ <strong>Lightweight & Efficient</strong>: Built for performance with minimal overhead.
+            Adjusting the gradient size with <code class="code">width</code>.
           </li>
         </ul>
       </div>
+      <p>
+        Content Fade does not manage overflow, scrolling, expansion, or truncation by itself.
+        Put it inside a container that sets the width, height, scroll behavior, or <code class="code">overflow-hidden</code>.
+        Do not use it for loading skeletons, collapsed content logic, tooltips, pagination, modal clipping,
+        ellipsis truncation, or long article reading.
+      </p>
     </main>
     <nav ngs-tab-nav-bar>
       <a routerLink="/components/content-fade" ngs-tab-link>Overview</a>

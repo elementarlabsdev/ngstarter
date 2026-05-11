@@ -3,26 +3,31 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Button Toggle component allows users to select one or more options from a set of related buttons.
-        It provides a clear and intuitive way to switch between different states or modes in your application.
+        The Button Toggle component lets users choose one or more states from a short set of related options.
+        Use it as a compact selection control for modes, formatting, filters, density, alignment,
+        or other preferences where the selected state should stay visible.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Use it for:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Single or Multiple Selection</strong>: Configure the toggle group to allow only one or several selections.
+            <strong>Mode switching</strong>: Select one view, format, sorting mode, period, or layout density.
           </li>
           <li>
-            ✅ <strong>Customizable Appearance</strong>: Choose between different styles to match your application's design.
+            <strong>Multiple compact choices</strong>: Let users select several short options in the same group.
           </li>
           <li>
-            ✅ <strong>Responsive and Accessible</strong>: Optimized for various devices and screen sizes, ensuring a seamless user experience.
+            <strong>Persistent state</strong>: Show the current value directly on the control.
           </li>
           <li>
-            ✅ <strong>Easy Integration</strong>: Simple to implement and use within Angular projects.
+            <strong>Form values</strong>: Bind selected values through Angular forms.
           </li>
         </ul>
       </div>
+      <p>
+        Do not use Button Toggle to run actions, navigate between pages, handle long option lists,
+        or replace radio, checkbox, select, slide toggle, or tabs when those controls better match the task.
+      </p>
     </main>
     <nav ngs-tab-nav-bar>
       <a routerLink="/forms/button-toggle" ngs-tab-link>Overview</a>
