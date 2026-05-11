@@ -3,23 +3,35 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Inline Text Edit component allows users to edit text directly in place, providing a smooth and efficient user experience.
-        It's perfect for titles, descriptions, and other editable content where a full form might be overkill.
+        Inline Text Edit lets users edit already visible text directly in place. It uses a contenteditable host,
+        emits the new trimmed text through <code>contentChanged</code>, saves on Enter or blur, and cancels the
+        current edit on Escape.
+      </p>
+      <p class="mt-3">
+        Use it for quick rename and edit-in-place flows such as project names, task names, card titles,
+        table labels, short descriptions, headings, and other small pieces of text where opening a separate
+        form would be too heavy.
+      </p>
+      <p class="mt-3">
+        Do not use Inline Text Edit for normal labeled forms, validation-heavy fields, textarea workflows,
+        rich text, comments, replies, large documents, value selection, or complex save/cancel flows with
+        explicit buttons. Use FormField with Input, Textarea, TextEditor, ContentEditor, CommentEditor,
+        Select, or a custom form for those cases.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Key features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>In-place Editing</strong>: Seamless transition between viewing and editing modes.
+            Edits the text directly where it is displayed.
           </li>
           <li>
-            ✅ <strong>Customizable Placeholder</strong>: Clearly indicate when content is missing.
+            Supports placeholder text for empty content.
           </li>
           <li>
-            ✅ <strong>Debounced Updates</strong>: Control the frequency of change emissions with a configurable delay.
+            Can delay <code>contentChanged</code> emissions with the <code>delay</code> input.
           </li>
           <li>
-            ✅ <strong>Keyboard Support</strong>: Use Enter to save and Escape to cancel edits.
+            Saves on Enter or blur and cancels on Escape.
           </li>
         </ul>
       </div>

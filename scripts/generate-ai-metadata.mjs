@@ -318,16 +318,16 @@ const curatedGuidance = new Map(Object.entries({
     useWhen: 'Use ngs-image-zoom-viewer around a normal image marked with ngsImageZoomViewerImage when users should quickly enlarge one inline image without a gallery structure. Good for articles, product pages, portfolios, documentation screenshots, reports, and image-rich content. The component clones the same image into an overlay, animates it from the original position to a larger centered view, closes on backdrop click or Escape, and recalculates zoom on window resize. Do not use for thumbnail galleries that need full-size sourceUrl, title, caption, or description; use ImageViewer. Do not use for image editing, crop selection, displayed-width resizing, or before/after comparison; use ImageDesigner, Crop, ImageResizer, or ComparisonSlider. Do not use for plain static images or placeholders.',
   },
   incidents: {
-    purpose: 'Represent incident or issue states in operational dashboards.',
-    useWhen: 'Use for monitoring, service health, incident lists, and response workflows.',
+    purpose: 'Show an application-level service incident or operational notice with a compact bar and expandable incident updates.',
+    useWhen: 'Use for service outages, degraded service, maintenance windows, global system status, and important operational notices that users should see across the app or portal. Compose manually with ngs-incidents, ngs-incidents-bar, ngs-incidents-title, ngs-incidents-description, ngs-incidents-list, ngs-incident, ngs-incident-title, ngs-incident-details, ngsIncidentIcon, ngsIncidentButton, and ngsIncidentClose. For global dynamic incidents, place ngs-incidents-global near the app root and call IncidentsStore.show({ title, description, incidents }) or hide(). Do not use for local inline messages; use Alert. Do not use for user-required critical actions; use ActionRequired. Do not use for toast notifications, table row statuses, empty states, or full incident management/history pages; use notification components, Badge, Status, EmptyState, Table, or DataView.',
   },
   'inline-text-edit': {
-    purpose: 'Edit text in place without opening a separate form.',
-    useWhen: 'Use for names, titles, labels, descriptions, and quick record edits.',
+    purpose: 'Let users edit already visible plain text directly in place with a contenteditable host.',
+    useWhen: 'Use for quick rename and edit-in-place flows such as project names, task names, card titles, table labels, short descriptions, headings, and other small text values where opening a separate form would be too heavy. It saves on Enter or blur, cancels on Escape, emits the trimmed value through contentChanged, supports placeholder, and can delay emissions with delay. Do not use for normal labeled forms, validation-heavy fields, or textarea workflows; use ngs-form-field with ngsInput or textarea. Do not use for rich text, long content, comments, replies, or documents; use TextEditor, ContentEditor, or CommentEditor. Do not use for value selection or complex save/cancel flows with explicit buttons.',
   },
   input: {
-    purpose: 'Style native text inputs and textareas consistently with NgStarter form fields.',
-    useWhen: 'Use for standard text entry, search fields, and multiline form values.',
+    purpose: 'Apply NgStarter form styling and FormField integration to native input and textarea controls.',
+    useWhen: 'Use input[ngsInput] or textarea[ngsInput] for regular text entry such as search, email, password, URL, plain phone-like text, textarea values in forms, filters, settings forms, profile forms, and admin forms. Usually place exactly one ngsInput control inside one ngs-form-field with ngs-label, ngs-hint, ngs-error, and optional prefix or suffix. It supports placeholder, required, disabled, readonly, focus behavior, Angular forms, and ErrorStateMatcher. Do not use for numeric controls with step/min/max UX; use NumberInput. Do not use for phone country/dial-code input; use PhoneInput. Do not use for masked formats by itself; pair ngsInput with InputMask directives. Do not use for Select, Autocomplete, Datepicker, Timepicker, CurrencySelect, CountrySelect, checkbox, radio, toggle, or buttons. Do not use for inline rename; use InlineTextEdit. Do not use for comments/replies or rich/block content; use CommentEditor, TextEditor, or ContentEditor. Do not use ngsInput as a layout wrapper or standalone replacement for FormField when label, hint, and error behavior are needed.',
   },
   'input-mask': {
     purpose: 'Constrain text entry to a specific pattern.',

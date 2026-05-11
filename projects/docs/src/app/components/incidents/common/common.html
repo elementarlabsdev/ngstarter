@@ -3,31 +3,38 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Incidents component is designed to manage and display system alerts, notifications, or critical events
-        within your application. It provides a structured way to present actionable information to users,
-        ensuring they stay informed about important changes or issues.
+        Incidents shows an application-level service incident or operational notice. It displays a compact
+        <code>ngs-incidents-bar</code> with a title and optional description, then expands into a
+        <code>ngs-incidents-list</code> with one or more <code>ngs-incident</code> updates.
+      </p>
+      <p class="mt-3">
+        Use it for service outages, degraded service, maintenance, global system status, and important
+        operational updates that users should see across the app or portal. Build it manually with the
+        Incidents components or show it dynamically with <code>IncidentsStore</code> and
+        <code>ngs-incidents-global</code>.
+      </p>
+      <p class="mt-3">
+        Do not use Incidents for a local inline message, a user action requirement, a toast, a table row
+        status, an empty state, or a full incident management/history page. Use Alert, ActionRequired,
+        notification components, Badge, Status, EmptyState, Table, or DataView for those cases.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Key features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Centralized Alerting</strong>: Aggregate and display multiple incidents in a single, organized view.
+            Application-level incident bar with title and description.
           </li>
           <li>
-            ✅ <strong>Interactive Elements</strong>: Support for expandable details, actions, and quick dismissals.
+            Expandable list of incident updates with titles and details.
           </li>
           <li>
-            ✅ <strong>Seamless Integration</strong>: Works with the IncidentsStore for state management and dynamic updates.
+            Optional icon, action, and close slots for each incident.
           </li>
           <li>
-            ✅ <strong>Responsive Layout</strong>: Adapts to different screen sizes, providing a clear overview on both desktop and mobile.
+            Store-driven global usage through <code>IncidentsStore</code> and <code>ngs-incidents-global</code>.
           </li>
         </ul>
       </div>
-      <p>
-        Whether you're building a monitoring dashboard, a support portal, or an enterprise management system,
-        the Incidents component helps you maintain transparency and improve user response times.
-      </p>
     </main>
     <nav ngs-tab-nav-bar>
       <a routerLink="/components/incidents" ngs-tab-link>Overview</a>

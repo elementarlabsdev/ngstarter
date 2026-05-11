@@ -3,24 +3,37 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The input component is a wrapper around the native HTML input and textarea elements.
-        It provides a consistent look and feel across different browsers and devices,
-        while also adding support for features like floating labels, error messages, and hints.
+        Input is the <code>ngsInput</code> directive for native <code>input</code> and
+        <code>textarea</code> elements. It connects standard text controls to NgStarter FormField styling,
+        floating label state, required and disabled state, readonly state, placeholders, focus behavior,
+        and Angular form error state.
+      </p>
+      <p class="mt-3">
+        Use it for regular text entry such as search, email, password, URL, plain phone-like text,
+        textarea comments in forms, filters, settings forms, profile forms, and admin forms. In most cases,
+        place one <code>input[ngsInput]</code> or <code>textarea[ngsInput]</code> inside one
+        <code>ngs-form-field</code> with <code>ngs-label</code>, hints, errors, and optional prefixes or suffixes.
+      </p>
+      <p class="mt-3">
+        Do not use Input for numeric controls with step/min/max behavior, phone country selection, custom
+        masks, selects, autocomplete, date/time pickers, currency or country selection, inline rename,
+        comments/replies, rich text, block content, checkbox, radio, toggles, buttons, or layout wrappers.
+        Use the dedicated NgStarter control for those cases.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Key features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Standard HTML Integration</strong>: Works seamlessly with native input and textarea.
+            Styles native <code>input</code> and <code>textarea</code> elements.
           </li>
           <li>
-            ✅ <strong>Floating Labels</strong>: Supports dynamic labels that respond to user interaction.
+            Integrates with FormField label, hint, error, prefix, and suffix slots.
           </li>
           <li>
-            ✅ <strong>Form Field Support</strong>: Integrates perfectly with form fields for hints and errors.
+            Supports Angular forms and configurable error state matching.
           </li>
           <li>
-            ✅ <strong>Customizable</strong>: Easy to style and extend to fit any design system.
+            Supports placeholder, required, disabled, readonly, and focus behavior.
           </li>
         </ul>
       </div>
