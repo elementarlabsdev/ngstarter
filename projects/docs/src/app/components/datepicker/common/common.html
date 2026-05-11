@@ -3,8 +3,16 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The datepicker allows users to enter a date either through text input, or by choosing a date from the calendar.
-        It is made up of several components and directives that work together.
+        Datepicker is a set of components and directives for choosing dates through an input and a calendar overlay.
+        Use <code>input[ngsDatepicker]</code>, <code>ngs-datepicker</code>, and usually
+        <code>ngs-datepicker-toggle</code> for a single date. Use <code>ngs-date-range-input</code> with
+        <code>ngs-date-range-picker</code> when the user must choose a start and end date.
+      </p>
+      <p>
+        Use it for date fields in forms, date filters, deadlines, birth dates, publish dates, schedules, reporting,
+        invoice dates, and order dates. The form value is a date object handled by the configured DateAdapter, not a
+        date format preference. Do not use it to choose a date display format, choose only a time, render a static
+        event calendar, build a scheduler, or format an existing date.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

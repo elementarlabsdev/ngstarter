@@ -3,23 +3,30 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Drawer component is a panel that slides out from the edge of the screen.
-        It is commonly used for navigation, filters, or additional context without losing the current page state.
+        Drawer is an overlay panel that slides in from the right side of the screen and keeps the current page as
+        context. It can contain any custom side content, including forms, filters, record details, settings, previews,
+        history, activity feeds, help content, quick actions, or another secondary workflow.
+      </p>
+      <p>
+        Use it when the main screen should stay visible as context while related content opens beside it. Drawer can
+        show a backdrop or stay non-blocking with <code>[showBackdrop]="false"</code>. Do not use it for a centered
+        modal workflow, short confirmation, mobile bottom action panel, or primary persistent application navigation.
       </p>
       <div class="my-7">
         <div>Key Features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Flexible Positioning</strong>: Slides out from the right side of the screen.
+            <strong>Side overlay</strong>: Slides out from the right side of the screen.
           </li>
           <li>
-            ✅ <strong>Backdrop Support</strong>: Optional backdrop to focus user attention on the drawer content.
+            <strong>Custom content</strong>: Project any content needed for the secondary panel.
           </li>
           <li>
-            ✅ <strong>Overlay Integration</strong>: Built on top of Angular CDK Overlay for robust behavior.
+            <strong>Backdrop support</strong>: Use a blocking backdrop or a non-blocking drawer.
           </li>
           <li>
-            ✅ <strong>Animations</strong>: Smooth transition animations for opening and closing.
+            <strong>Overlay integration</strong>: Built on Angular CDK Overlay with close behavior for backdrop,
+            outside click, and Escape.
           </li>
         </ul>
       </div>

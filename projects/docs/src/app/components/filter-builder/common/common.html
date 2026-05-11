@@ -3,7 +3,15 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Filter Builder is a powerful component that allows users to create complex data filtering conditions through an intuitive interface.
+        Filter Builder lets users create structured filtering rules by choosing a field, operation, and value. It can
+        group conditions with logical operators such as <code>and</code> and <code>or</code>, then emits the filter tree
+        as <code>FilterBuilderGroup[]</code> through <code>valueChanged</code>.
+      </p>
+      <p>
+        Use it for advanced filters, saved views, report builders, admin datasets, CRM or ERP records, audit logs,
+        catalogs, and segmentation workflows where a simple search field is not enough. The app is responsible for
+        translating the emitted filter tree into an API query, SQL or DSL condition, DataView datasource params, or
+        local filtering logic.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

@@ -3,8 +3,14 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Date Format Select component provides a user-friendly interface for choosing date formats from a predefined list.
-        It integrates seamlessly with Angular forms and provides a consistent experience.
+        The Date Format Select component is a form control for choosing a date display format from a predefined list.
+        It writes the selected format string to the form value, such as <code>MM/dd/yyyy</code>,
+        <code>dd.MM.yyyy</code>, or <code>yyyy-MM-dd</code>, while showing a readable label to the user.
+      </p>
+      <p>
+        Use it in account settings, profile settings, tenant settings, localization preferences, and reporting settings
+        where users choose how dates should appear. Do not use it to pick a date, choose a date range, open a calendar,
+        schedule events, filter by period, or format date values directly in a template.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

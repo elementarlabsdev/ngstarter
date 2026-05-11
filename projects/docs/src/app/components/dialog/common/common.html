@@ -3,8 +3,15 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        Диалоговые окна (Dialog) — это модальные окна, которые отображаются поверх основного контента приложения.
-        Они используются для уведомления пользователей о конкретных задачах, подтверждения действий или ввода данных.
+        Dialog opens a focused modal workflow above the current page. Open it with
+        <code>Dialog.open(ComponentOrTemplate, config)</code>, pass data through the config, and return a result with
+        <code>DialogRef.close(...)</code> or <code>ngs-dialog-close</code>. Dialog content is usually structured with
+        <code>ngs-dialog-title</code>, <code>ngs-dialog-content</code>, and <code>ngs-dialog-actions</code>.
+      </p>
+      <p>
+        Use Dialog for forms, editing records, creating objects, settings, detail views, wizard-like steps, scrollable
+        content, and custom modal workflows where users must complete or close the task before returning to the page.
+        Do not use it for a short binary confirmation, global message, mobile bottom action panel, or side inspector.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

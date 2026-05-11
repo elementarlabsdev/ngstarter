@@ -3,23 +3,29 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The <code>Emoji Picker</code> component provides a user-friendly interface for selecting emojis from various categories.
-        It supports multiple languages and can be easily integrated into any input field or message editor.
+        Emoji Picker is an overlay picker for choosing one Unicode emoji from a categorized list. Open it from a button
+        or toolbar action with <code>[ngsEmojiPickerTriggerFor]</code>, then use <code>emojiSelected</code> to receive
+        the selected emoji string.
+      </p>
+      <p>
+        Use it in comments, chats, quick messages, reactions, comment/editor toolbars, social features, and any text
+        entry flow where users need to insert or choose an emoji. Do not use it for interface icons, action menus,
+        complete text editing, stickers, GIFs, or media pickers.
       </p>
       <div class="my-7">
         <div>Key Features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Wide range of emojis</strong>: Supports a vast library of emojis categorized for easy navigation.
+            <strong>Categorized emoji list</strong>: Users can browse emoji grouped by category.
           </li>
           <li>
-            ✅ <strong>Multi-language support</strong>: Automatically adapts to the user's locale or a specified language.
+            <strong>Language support</strong>: Uses the current locale or a specific <code>language</code> input.
           </li>
           <li>
-            ✅ <strong>Flexible positioning</strong>: Can be used with a trigger and positioned relative to it.
+            <strong>Trigger positioning</strong>: Opens relative to the trigger and closes after selection.
           </li>
           <li>
-            ✅ <strong>Responsive and lightweight</strong>: Optimized for performance and works across all device sizes.
+            <strong>Hover preview</strong>: Shows the hovered emoji and label before selection.
           </li>
         </ul>
       </div>
