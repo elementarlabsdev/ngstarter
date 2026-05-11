@@ -3,20 +3,32 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Input Mask component is a powerful tool for enforcing specific formatting on user inputs.
-        It ensures that data is entered in a consistent and valid format, such as credit card numbers, expiry dates, or CVV codes.
+        Input Mask provides ready-made directives for formatting credit card inputs while the user types.
+        Use the mask directives on native <code>input</code> elements, usually together with
+        <code>ngsInput</code> inside <code>ngs-form-field</code>.
+      </p>
+      <p class="mt-3">
+        The available masks are <code>ngsCreditCardNumberMask</code>, <code>ngsCreditCardExpiryDateMask</code>,
+        and <code>ngsCreditCardCvvMask</code>. They format the visible value, set useful mobile keyboard and
+        autocomplete attributes where applicable, and write a cleaned form value for card number and expiry.
+      </p>
+      <p class="mt-3">
+        Do not treat Input Mask as a universal mask engine, validator, payment security layer, or compliance
+        solution. Do not use it for phone numbers, custom IDs, tax numbers, IBAN, postal codes, date pickers,
+        selects, currency or country fields, or formatting already saved data. Use PhoneInput, dedicated
+        field components, validators, backend checks, or a custom mask directive for those cases.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Key features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Formatted Input</strong>: Automatically formats user input as they type.
+            Formats card number, expiry date, and CVV/CVC fields while users type.
           </li>
           <li>
-            ✅ <strong>Validation Support</strong>: Works seamlessly with Angular forms for validation.
+            Works with native inputs and NgStarter Input/FormField composition.
           </li>
           <li>
-            ✅ <strong>Specialized Masks</strong>: Pre-configured masks for common credit card fields.
+            Keeps form values cleaner than the visible formatted text where supported.
           </li>
         </ul>
       </div>

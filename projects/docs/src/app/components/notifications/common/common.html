@@ -3,8 +3,22 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Notifications component is used to display a list of alerts, updates, or messages to the user.
-        It provides a structured way to present information with various types and actions.
+        Notifications display user-facing events in a structured feed or inbox:
+        comments, mentions, invitations, assignments, access requests, status changes,
+        completed processes, and other updates addressed to the current user.
+      </p>
+      <p class="mt-3">
+        Use a single notification for one event, or notification list with typed templates
+        when notifications come from an array and each type needs its own layout.
+      </p>
+      <p class="mt-3">
+        Use unread state for notifications the user has not seen yet. Use notification controls
+        for per-notification actions such as mute, delete, or mark as read.
+      </p>
+      <p class="mt-3">
+        Do not use Notifications for system messages on a page; use Alert or Announcement.
+        Do not use it for critical required actions; use ActionRequired. Do not use it for service health;
+        use Incidents. Do not use it for generic activity feeds that are not user notifications; use List.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

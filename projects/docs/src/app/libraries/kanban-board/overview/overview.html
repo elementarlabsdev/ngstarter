@@ -1,1 +1,27 @@
-asffa
+<h3>Kanban Board</h3>
+
+<p>
+  Kanban Board renders a horizontal workflow board with columns and draggable cards. Use it when users need
+  to move items through statuses such as tasks, issues, CRM deals, hiring stages, content pipelines, support
+  tickets, or any status-based workflow.
+</p>
+
+<p>
+  Pass <code>columns</code> with <code>id</code>, <code>name</code>, <code>color</code>, and <code>items</code>.
+  Each item should include at least <code>name</code> and <code>position</code>. Render each card with a custom
+  <code>ngsKanbanItemDef</code> template so the item body can use NgStarter components such as Avatar, Badge,
+  Icon, Button, and other card content.
+</p>
+
+<p>
+  The board updates local arrays with CDK drag/drop helpers and emits events such as <code>itemSorted</code>,
+  <code>itemTransferred</code>, <code>itemDropped</code>, <code>itemClick</code>, <code>itemAdd</code>,
+  <code>columnEdit</code>, and <code>columnDelete</code>. The application is responsible for saving the new
+  order, status, and business data to the backend.
+</p>
+
+<p>
+  Do not use Kanban Board for simple tables, static lists, dashboard widget layout, calendars, timelines,
+  arbitrary drag-and-drop builders, or screens without real workflow/status columns. Use Table, DataView,
+  List, Grid, calendar/timeline components, or a custom builder for those cases.
+</p>

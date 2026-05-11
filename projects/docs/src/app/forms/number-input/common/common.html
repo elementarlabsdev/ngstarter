@@ -3,8 +3,21 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Number Input component provides a user-friendly way to enter and adjust numeric values.
-        It supports minimum and maximum constraints, step intervals, and custom controls for increasing or decreasing the value.
+        Number Input is a form control for entering numeric values with optional increase and decrease controls.
+        Use it when users need to type a number or adjust it by a step.
+      </p>
+      <p class="mt-3">
+        Use it for quantities, limits, thresholds, durations, percentages, ratings, numeric settings,
+        seat counts, day counts, and budget-like numeric values.
+      </p>
+      <p class="mt-3">
+        Place ngs-number-input inside one ngs-form-field. Use Angular forms with ngModel or formControlName,
+        and use min, max, and step to control allowed values. Use custom increase and decrease templates
+        only when the default controls do not fit the design.
+      </p>
+      <p class="mt-3">
+        Do not use Number Input for text, phone numbers, OTP codes, currency selection, sliders, display-only KPI values,
+        progress, or charts.
       </p>
       <div class="my-7">
         <div>Key Features:</div>

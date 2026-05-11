@@ -30,8 +30,20 @@ import {
 export class Api {
   properties = [
     {
+      name: 'creditCardNumberValidator',
+      description: 'Validator function for credit card numbers. Cleans non-digits, checks length, and validates the Luhn checksum. Returns creditCardNumberInvalid.',
+      type: 'ValidatorFn',
+      default: '-'
+    },
+    {
       name: 'expiryDateValidator',
-      description: 'Validator function for credit card expiry date (MMYY format). Checks if the date is in the past.',
+      description: 'Validator function for credit card expiry date in MMYY format. Rejects invalid months and dates in the past. Returns expiryDateInvalid or expiryDateInPast.',
+      type: 'ValidatorFn',
+      default: '-'
+    },
+    {
+      name: 'creditCardCvvValidator',
+      description: 'Validator function for numeric CVV/CVC values. Defaults to 3–4 digits and accepts optional minLength and maxLength. Returns creditCardCvvInvalid.',
       type: 'ValidatorFn',
       default: '-'
     }

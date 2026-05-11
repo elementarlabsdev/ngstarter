@@ -3,8 +3,19 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Input Validator provides a set of validation functions and directives to ensure user input meets specific criteria.
-        It helps in maintaining data integrity and providing immediate feedback to users.
+        Input Validator provides ready-made Angular <code>ValidatorFn</code> functions for common form rules.
+        Use these validators with <code>FormControl</code>, <code>Validators.compose</code>, NgStarter
+        <code>ngs-form-field</code>, and <code>ngs-error</code>.
+      </p>
+      <p class="mt-3">
+        The current preset validators focus on payment fields: <code>creditCardNumberValidator()</code>,
+        <code>expiryDateValidator()</code>, and <code>creditCardCvvValidator()</code>. They pair naturally with
+        the credit card masks from Input Mask, but they do not format values themselves.
+      </p>
+      <p class="mt-3">
+        Do not use Input Validator as a UI component, input mask, replacement for Angular built-in validators,
+        backend validation, payment processor validation, or security/compliance layer. Use it as a client-side
+        helper for common reusable validation rules.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

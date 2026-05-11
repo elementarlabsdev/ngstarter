@@ -3,8 +3,21 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The <code>ngs-navigation</code> component is a versatile and accessible navigation menu designed for use in sidebars,
-        headers, or any other part of your application. It supports icons, badges, nesting, and dynamic data sources.
+        Navigation renders a persistent product navigation structure when ngs-sidebar is not used.
+        Use it for custom navigation areas, section navigation, settings navigation, admin navigation,
+        and nested navigation groups.
+      </p>
+      <p class="mt-3">
+        ngs-sidebar has its own navigation model, so do not duplicate this component inside ngs-sidebar.
+        Use Navigation when you need the same kind of navigation outside of Sidebar.
+      </p>
+      <p class="mt-3">
+        Navigation supports active items, route-based activation, headings, dividers, icons, badges,
+        nested groups, auto-scroll to the active item, and dynamic data sources.
+      </p>
+      <p class="mt-3">
+        Do not use Navigation for trigger-based action menus, ordinary row lists, breadcrumbs, tabs,
+        wizard steps, form selection, or table row actions.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

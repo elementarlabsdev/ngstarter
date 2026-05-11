@@ -3,8 +3,17 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The keyboard component (<code>ngs-kbd</code>) is used to display keyboard shortcuts and commands in a consistent and visually appealing way.
-        It is often used in menus, documentation, and hints to help users learn shortcuts.
+        Kbd displays keyboard keys and shortcut hints. Use <code>ngs-kbd</code> for one key such as
+        <code>⌘</code>, <code>Shift</code>, <code>K</code>, or <code>Esc</code>, and use
+        <code>ngs-kbd-group</code> to show a key combination with plus signs between keys.
+      </p>
+      <p class="mt-3">
+        Use it in menus, command palettes, toolbars, help text, onboarding, and documentation when users need
+        to see the shortcut for an action. Kbd is visual only; it does not register or handle keyboard events.
+      </p>
+      <p class="mt-3">
+        Do not use Kbd as a clickable button, status badge, tag, chip, normal body text, or shortcut handler.
+        Use Button, IconButton, Badge, Chips, normal text, or application keyboard handling for those cases.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

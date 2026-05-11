@@ -1,4 +1,14 @@
-<h3 id="basic-radio">Credit card input validator</h3>
+<h3 id="basic-radio">Credit card input validators</h3>
 <p>
-  The credit card input validator ensures that the entered expiry date is in the correct format (MMYY) and is not in the past.
+  Input Validator includes preset Angular validator functions for credit card number, expiry date, and CVV/CVC.
+  Use them with reactive forms and display messages through <code>ngs-error</code>.
+</p>
+<p>
+  <code>creditCardNumberValidator()</code> checks the cleaned card number length and Luhn checksum.
+  <code>expiryDateValidator()</code> expects <code>MMYY</code>, rejects invalid months, and rejects dates in the past.
+  <code>creditCardCvvValidator()</code> checks numeric CVV/CVC length, with optional min and max length settings.
+</p>
+<p>
+  These validators do not format input values. Pair them with Input Mask directives when users need formatted
+  payment fields.
 </p>

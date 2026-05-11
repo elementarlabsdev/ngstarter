@@ -3,26 +3,38 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The layout component is a foundational structure for building consistent and responsive web applications.
-        It provides a set of sub-components that help define different regions of your application, such as headers, sidebars, content areas, and footers.
+        Layout is the base top-level shell for an application, admin area, dashboard, or large workspace page.
+        It defines the main screen regions: topbar, header, sidebar, content, aside, and footer.
+      </p>
+      <p class="mt-3">
+        Use it when the whole screen needs a stable structural frame with managed height, nested layouts, scrollable content,
+        and an optional sidebar that can be shown, hidden, or toggled through LayoutApiService.
       </p>
       <div class="my-7">
         <div>Key Features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Semantic Regions</strong>: Clearly define headers, footers, sidebars, and main content.
+            Semantic regions for topbar, header, sidebar, content, aside, and footer.
           </li>
           <li>
-            ✅ <strong>Responsive Design</strong>: Easily create layouts that adapt to different screen sizes.
+            A root mode for full viewport application shells.
           </li>
           <li>
-            ✅ <strong>Flexible Composition</strong>: Nest layouts to create complex application structures.
+            Nested layouts for complex admin and workspace screens.
           </li>
           <li>
-            ✅ <strong>Built-in Scrolling</strong>: Integrated scroll management for content areas.
+            Built-in content scrolling with optional auto-scroll to top on navigation.
+          </li>
+          <li>
+            Sidebar visibility control by layoutId through LayoutApiService.
           </li>
         </ul>
       </div>
+      <p>
+        Do not use Layout as a small wrapper, card, spacing helper, form grouping tool, or generic grid system.
+        Use TailwindCSS grid, flex, and spacing classes inside layout regions. Use Grid for dashboard widgets,
+        DataView or Table for datasets, Drawer for overlay side panels, and navigation components inside sidebars.
+      </p>
     </main>
     <nav ngs-tab-nav-bar>
       <a routerLink="/components/layout" ngs-tab-link>Overview</a>

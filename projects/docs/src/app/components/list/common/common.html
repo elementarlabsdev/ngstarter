@@ -3,7 +3,20 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        Lists are continuous, vertical indexes of text or images.
+        List displays a vertical group of related rows: settings, files, messages, activity,
+        compact collections, simple navigation rows, or selectable options.
+      </p>
+      <p class="mt-3">
+        Use the row slots for consistent structure: icon or avatar on the left, title and secondary lines in the center,
+        and metadata or actions on the right.
+      </p>
+      <p class="mt-3">
+        Use ngs-selection-list with ngs-list-option when users choose one or more rows.
+        Use ngs-nav-list for simple navigation lists, and ngs-action-list for vertical action groups that are not dropdown menus.
+      </p>
+      <p class="mt-3">
+        Do not use List for large tabular data, columns, sorting, pagination, or bulk operations; use Table or DataView.
+        Do not use it for trigger-based dropdown actions; use Menu. Do not use it as a generic layout container.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

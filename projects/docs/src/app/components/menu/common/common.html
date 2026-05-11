@@ -3,24 +3,33 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Menu component provides a customizable and versatile dropdown or context menu system.
-        It supports multi-level nesting, icons, dividers, and various positioning strategies,
-        making it ideal for navigation and action menus in modern web applications.
+        Menu shows a short contextual set of commands in an overlay opened from a trigger button,
+        icon button, row, toolbar control, or right-click area.
+      </p>
+      <p class="mt-3">
+        Use it for row actions, overflow more actions, user menus, context menus, toolbar actions,
+        and nested command groups. Menu content is rendered in an overlay and can receive trigger data.
+      </p>
+      <p class="mt-3">
+        Do not use Menu for selecting form values; use Select, Autocomplete, ColorSwitcher, Datepicker,
+        or another dedicated control. Do not use it for persistent navigation; use Navigation, Sidebar,
+        Sidenav, or NavList. Do not use it for long lists, tables, filters, forms, modal workflows,
+        command palettes, or bulk action bars.
       </p>
       <div class="my-7">
         <div>Key Features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Nesting</strong>: Supports unlimited levels of nested submenus.
+            Trigger-based and right-click context menus.
           </li>
           <li>
-            ✅ <strong>Flexible Positioning</strong>: Automatic positioning relative to the trigger element.
+            Nested submenus for grouped commands.
           </li>
           <li>
-            ✅ <strong>Custom Content</strong>: Use with icons, dividers, and custom headers/footers.
+            Icons, dividers, headings, headers, and footers.
           </li>
           <li>
-            ✅ <strong>Lazy Rendering</strong>: Content is only rendered when the menu is opened.
+            Lazy rendering with trigger data.
           </li>
         </ul>
       </div>
