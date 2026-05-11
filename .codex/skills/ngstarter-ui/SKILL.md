@@ -49,6 +49,12 @@ export const appConfig = {
   checkboxes, and progress bars must use NgStarter components.
 - Do not hand-roll admin tables with `role="table"` or layout `div`s when `ngs-table` applies.
 - Do not hand-roll admin search fields with plain `input`; use `ngs-form-field` and `ngsInput`.
+- Use one `ngs-form-field` per form control. For groups of fields, use TailwindCSS grid/flex/layout
+  classes around multiple form fields, with each individual field wrapped in its own
+  `ngs-form-field`.
+- Do not use `ngs-form-field` as a generic layout container, card, spacing wrapper, or wrapper for
+  non-form UI. Do not wrap checkbox, radio, button, or toggle controls when they already have their
+  own label pattern.
 - Use TailwindCSS utility classes in templates for layout, responsive behavior, sizing, spacing,
   flex, grid, and alignment.
 - Start local SCSS files that use Tailwind tokens with `@reference 'tailwindcss';`.

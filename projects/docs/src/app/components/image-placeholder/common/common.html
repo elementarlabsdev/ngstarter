@@ -3,8 +3,19 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Image Placeholder component provides a visually appealing SVG-based placeholder for images that are still loading or failed to load.
-        It helps maintain the layout stability and improves the user experience by indicating where an image will eventually appear.
+        Image Placeholder is a simple SVG placeholder for a place where an image should appear. Use it when
+        an image is still loading, missing, unavailable, or failed to load, and the layout still needs to keep
+        the same size.
+      </p>
+      <p class="mt-3">
+        The component does not load images, handle upload state, or manage errors. It only renders a visual
+        placeholder inside the size you give it. Use it in image cards, media grids, upload slots, attachment
+        previews, product thumbnails, gallery cells, and banner or image preview areas.
+      </p>
+      <p class="mt-3">
+        Do not use Image Placeholder for full empty states, skeleton loading, progress indicators, image
+        viewing, crop or resize tools, upload dropzones, or user and team identity fallbacks. Use EmptyState,
+        Skeleton, ProgressSpinner, ImageViewer, Crop, ImageResizer, Upload, or Avatar for those cases.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

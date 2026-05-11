@@ -3,23 +3,36 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Image Zoom viewer component provides an interactive way to view images with a smooth zoom-in effect.
-        It is perfect for galleries, product pages, or any scenario where users need to see image details clearly.
+        Image Zoom Viewer gives an inline image a Medium-style zoom interaction. Wrap the image with
+        <code>ngs-image-zoom-viewer</code> and mark the image with <code>ngsImageZoomViewerImage</code>.
+        When the user clicks it, the component clones the same image into an overlay and animates it from
+        its current page position to a larger centered view.
+      </p>
+      <p class="mt-3">
+        Use it in articles, product pages, portfolios, documentation screenshots, and image-rich content where
+        users should quickly enlarge one inline image without opening a full gallery viewer. It closes on
+        backdrop click or Escape and recalculates the zoom on window resize.
+      </p>
+      <p class="mt-3">
+        Do not use Image Zoom Viewer for thumbnail galleries with full-size source URLs, titles, captions, or
+        descriptions; use ImageViewer. Do not use it for image editing, crop selection, displayed-width resizing,
+        before/after comparison, static images, or placeholders. Use ImageDesigner, Crop, ImageResizer,
+        ComparisonSlider, a normal <code>img</code>, or ImagePlaceholder for those cases.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Key features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Smooth Animation</strong>: Uses CSS transitions for a fluid zoom experience.
+            Click an inline image to zoom it into an overlay.
           </li>
           <li>
-            ✅ <strong>Overlay Support</strong>: Displays the zoomed image in a centered overlay.
+            Animates from the image's current page position.
           </li>
           <li>
-            ✅ <strong>Responsive</strong>: Automatically recalculates zoom level on window resize.
+            Recalculates zoom level on window resize.
           </li>
           <li>
-            ✅ <strong>Accessibility</strong>: Supports closing via the Escape key and backdrop clicks.
+            Closes with Escape or backdrop click.
           </li>
         </ul>
       </div>

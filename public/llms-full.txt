@@ -425,15 +425,15 @@ Typography:
   outputs: `valueChanged`
   tokens: `--ngs-color-border`, `--ngs-color-danger`, `--ngs-color-neutral-100`, `--ngs-color-neutral-200`, `--ngs-color-neutral-50`, `--ngs-color-neutral-600`, `--ngs-color-neutral-650`, `--ngs-color-on-primary`, `--ngs-color-on-primary-container`, `--ngs-color-on-secondary`, `--ngs-color-on-secondary-container`, `--ngs-color-on-surface`, `--ngs-color-primary`, `--ngs-color-primary-400`, `--ngs-color-primary-container`, `--ngs-color-secondary`
 - form-field: `@ngstarter-ui/components/form-field`
-  purpose: Wrap form controls with consistent labels, hints, errors, and field layout.
-  use when: Use as the standard shell around inputs, selects, and custom form controls.
+  purpose: Wrap one form control with the standard NgStarter field layout, label, hint, error, and prefix/suffix slots.
+  use when: Use one ngs-form-field around one form control: input ngsInput, textarea ngsInput, ngs-select, ngs-autocomplete input, datepicker input, CountrySelect, CurrencySelect, DateFormatSelect, PhoneInput, NumberInput, and custom controls that implement FormFieldControl. Use ngs-label for labels, ngs-hint for helper text, ngs-error for validation messages, and ngsIconPrefix/ngsIconButtonPrefix/ngsTextPrefix/ngsIconSuffix/ngsIconButtonSuffix/ngsTextSuffix for field adornments. For groups of fields, use TailwindCSS grid/flex/layout classes around multiple form fields; each individual control still gets its own ngs-form-field. Do not use ngs-form-field as a layout container, card, spacing wrapper, or wrapper around non-form UI. Do not wrap checkbox, radio, button, or toggle controls when they have their own label pattern.
   selectors: `[ngsIconButtonPrefix]`, `[ngsIconButtonSuffix]`, `[ngsIconPrefix]`, `[ngsIconSuffix]`, `[ngsPrefix]`, `[ngsSuffix]`, `[ngsTextPrefix]`, `[ngsTextSuffix]`, `ngs-error`, `ngs-form-field`, `ngs-hint`, `ngs-label`
   exports: `Error`, `FORM_FIELD`, `FORM_FIELD_DEFAULT_OPTIONS`, `FormField`, `FormFieldControl`, `FormFieldDefaultOptions`, `Hint`, `IconButtonPrefix`, `IconButtonSuffix`, `IconPrefix`, `IconSuffix`, `Label`
   inputs: `align`, `subscriptHiddenIfEmpty`
   tokens: `--ngs-field-bg`, `--ngs-field-border-color`, `--ngs-field-border-focus-color`, `--ngs-field-border-width`, `--ngs-field-color`, `--ngs-field-container-height`, `--ngs-field-disabled-bg`, `--ngs-field-error-color`, `--ngs-field-font-size`, `--ngs-field-infix-height`, `--ngs-field-label-color`, `--ngs-field-label-float-font-size`, `--ngs-field-line-height`, `--ngs-field-padding-x`, `--ngs-field-radius`, `--ngs-form-field-bg`
 - form-renderer: `@ngstarter-ui/components/form-renderer` docs: /forms/form-renderer
-  purpose: Render dynamic forms from configuration or schema-like definitions.
-  use when: Use for generated settings, surveys, admin forms, onboarding flows, or configurable forms.
+  purpose: Render backend-driven or config-driven forms from a FormConfig.
+  use when: Use when the backend or an admin configuration defines the form structure: dynamic settings, surveys, onboarding schemas, profile or config forms, CMS forms, tenant-specific forms, and feature-specific forms where fields can change without editing the Angular template. FormRenderer creates a FormGroup, renders fields from elements, places them through layout, applies validators and crossValidators, handles initialValue, visibleWhen, disabled state, content blocks, and emits valueChanges, formSubmit, and initialized. Do not use for ordinary static forms where fields are known in Angular code; build those manually with TailwindCSS grid/flex layout and one ngs-form-field per control. Do not use as a replacement for FormField, a wizard/stepper workflow, or an arbitrary page builder.
   example topics: Basic form renderer
   selectors: `ngs-autocomplete-many-field`, `ngs-checkbox-field`, `ngs-component-loader`, `ngs-datepicker-field`, `ngs-divider-content`, `ngs-form-renderer`, `ngs-image-content`, `ngs-input-field`, `ngs-radio-group-field`, `ngs-select-field`, `ngs-text-content`, `ngs-textarea-field`, `ngs-timezone-field`, `ngs-toggle-field`
   exports: `AutocompleteManyField`, `CheckboxField`, `ComponentConfig`, `ComponentImporter`, `ComponentLoader`, `ComponentNode`, `ComponentRegistryService`, `ContentConfig`, `CrossValidatorFn`, `DatepickerField`, `DividerContent`, `FORM_RENDERER_FIELD_REGISTRY`
@@ -441,23 +441,23 @@ Typography:
   outputs: `formSubmit`, `initialized`, `valueChanges`
   tokens: `--ngs-color-outline-variant`, `--ngs-font-size-xs`, `--ngs-form-field-outlined-label-text-color`, `--ngs-form-field-outlined-label-text-size`, `--ngs-form-field-subscript-text-size`, `--ngs-form-field-subscript-text-tracking`, `--ngs-form-field-subscript-text-weight`
 - gauge: `@ngstarter-ui/components/gauge` docs: /components/gauge
-  purpose: Visualize progress, utilization, score, or capacity as a radial metric.
-  use when: Use in dashboards for KPIs, quotas, health, completion, or thresholds.
+  purpose: Visualize one compact 0–100 percentage-like value as a circular radial metric.
+  use when: Use in dashboard cards, sidebar widgets, KPI panels, usage or quota blocks, storage usage, completion score, health score, capacity, and utilization indicators. Use ngs-gauge-value to show a number or short label inside the gauge, and customize size with Tailwind size classes or strokeWidth/radius. Do not use for linear process progress; use ProgressBar. Do not use for loading; use ProgressSpinner, BlockLoader, or Skeleton. Do not use for full analytical charts with axes, legends, multiple series, or trends. Do not use for small table-row statuses; use Badge or Status.
   example topics: Basic Gauge, Gauge With Value, Gauge Custom Size, Gauge Custom Stroke Width
   selectors: `ngs-gauge`, `ngs-gauge-value`
   exports: `Gauge`, `GaugeValue`
   inputs: `radius`, `strokeWidth`, `value`
   tokens: `--ngs-color-neutral-300`, `--ngs-color-neutral-600`, `--ngs-color-neutral-700`, `--ngs-color-primary`, `--ngs-gauge-bg`, `--ngs-gauge-fill`, `--ngs-gauge-size`, `--ngs-gauge-value-color`
 - grid: `@ngstarter-ui/components/grid` docs: /components/grid
-  purpose: Arrange dashboard widgets or tiles in a responsive grid.
-  use when: Use for admin dashboards and configurable widget layouts.
+  purpose: Render configuration-driven dashboard widgets in a 12-column grid.
+  use when: Use for admin dashboards, configurable widget layouts, analytics home screens, portal start pages, and nested dashboard sections where widget components are selected from configuration or data. Provide configs that map item types to lazy-loaded components and optional skeletons, and items with id, type, columns, height, content, skeletonHeight, and children. Widgets can inject GRID and call markItemAsLoaded(id), especially with waitWhenAllItemsLoaded. Do not use Grid as a normal CSS layout helper for forms, pages, cards, or repeated elements; use TailwindCSS grid/flex classes. Do not use for tables or datasets; use Table or DataView. Do not use for file/media grids; use upload/media components. Do not use as a drag-and-drop dashboard builder when interactive rearranging/resizing is required.
   selectors: `ngs-grid`
   exports: `Grid`, `GRID`, `GridItem`, `GridItemAware`, `GridItemConfig`
   inputs: `configs`, `items`, `plain`, `waitWhenAllItemsLoaded`
   tokens: `--ngs-color-border`, `--ngs-grid-gap`, `--ngs-grid-item-colspan`, `--ngs-grid-item-height`, `--ngs-grid-item-skeleton-min-height`, `--ngs-radius-xl`
 - guided-tour: `@ngstarter-ui/components/guided-tour` docs: /components/guided-tour
-  purpose: Walk users through UI features step by step.
-  use when: Use for onboarding, feature discovery, setup guidance, and product education.
+  purpose: Guide users through the real UI with ordered steps attached to existing elements.
+  use when: Use for first-run onboarding, feature discovery, setup guidance, new feature education, and complex screen walkthroughs where each step points at a real element through ngsTourAnchor, a selector, or an element callback. Use withBackdrop to highlight the current element, waitFor for dynamic content, route for tours that continue across pages, and template/htmlContent for richer step content. Do not use for simple hover hints; use Tooltip. Do not use for anchored menus or arbitrary floating content; use Popover. Do not use for confirmations or modal workflows; use Confirm or Dialog. Do not use for form wizards or multi-step data entry; use Stepper or HeadlessStepper. Do not use for documentation pages or marketing onboarding screens; use normal page content.
   example topics: Basic Guided Tour, Backdrop Guided Tour, Wait For Guided Tour, Close On Backdrop Click, HTML and Template Support, Custom Buttons, Global Configuration, Keyboard Navigation
   selectors: `[ngsTourAnchor]`, `ngs-tour-backdrop`, `ngs-tour-step`
   exports: `provideTourConfig`, `TOUR_CONFIG`, `TOUR_STEP_COMPONENT`, `TourAnchorDirective`, `TourBackdrop`, `TourConfig`, `TourService`, `TourState`, `TourStep`, `TourStepConfig`, `TourStepPosition`
@@ -465,37 +465,38 @@ Typography:
   outputs: `backdropClick`
   tokens: `--ngs-button-height`, `--ngs-button-padding`, `--ngs-color-primary`, `--ngs-color-subtle`, `--ngs-color-surface-container-lowest`, `--ngs-guided-tour-arrow-border-color`, `--ngs-guided-tour-step-bg`, `--ngs-guided-tour-step-border`, `--ngs-guided-tour-step-max-width`, `--ngs-guided-tour-step-radius`, `--ngs-guided-tour-step-shadow`, `--ngs-guided-tour-step-step-padding`, `--ngs-overlay-backdrop-bg`, `--ngs-radius-xl`, `--ngs-shadow-lg`
 - headless-stepper: `@ngstarter-ui/components/headless-stepper`
-  purpose: Provide stepper state and workflow primitives without imposing a full visual layout.
-  use when: Use when a custom multi-step UI needs NgStarter step logic but not the standard Stepper presentation.
+  purpose: Provide stepper state and validation logic without rendering a fixed visual stepper UI.
+  use when: Use for custom multi-step workflows where the product needs its own header, progress indicator, buttons, layout, or responsive presentation while keeping standard NgStarter step behavior. Use ngs-headless-stepper with ngs-headless-step when you need selectedIndex, selected step state, progressPercent, canMoveNext, next(), previous(), reset(), linear mode, optional steps, and stepControl validation. Good for custom wizards, onboarding forms, checkout flows, setup flows, and complex forms with a bespoke layout. Do not use when the standard visual Stepper fits; use Stepper. Do not use for guided tours over existing UI; use GuidedTour. Do not use as Tabs, Accordion, or for a simple single-page form without steps.
   selectors: `ngs-headless-step`, `ngs-headless-stepper`
   exports: `HeadlessStep`, `HeadlessStepper`, `StepperSelectionEvent`
   inputs: `linear`, `optional`, `selectedIndex`, `stepControl`
 - icon: `@ngstarter-ui/components/icon` docs: /components/icon
-  purpose: Render icons consistently across the UI.
-  use when: Use for buttons, menus, labels, empty states, navigation, and status indicators.
+  purpose: Render consistent SVG interface icons from installed Iconify icon sets.
+  use when: Use ngs-icon with a full Iconify name such as fluent:grid-24-regular or circle-flags:us for icons in NgStarter buttons, navigation, menus, form field prefixes and suffixes, statuses, metadata, empty states, alerts, announcements, table actions, toolbar actions, and compact flag markers. Size icons with Tailwind classes such as size-4, w-5, or h-5, or use the default --ngs-icon-size. Color icons with text color classes or --ngs-icon-color. Do not use ngs-icon as a clickable action by itself; wrap it in an NgStarter button such as button[ngsIconButton]. Do not use Icon for people or entities; use Avatar. Do not use Icon for counters or small labels; use Badge. Do not use Icon for large artwork, product illustrations, screenshots, or logos. Do not hand-roll inline SVG when an approved Iconify icon exists.
   example topics: Symbols Icons (Default), Phosphor Icons, Circle Flags Icons, Symbols icons, Circle flags, Material symbols icons
   selectors: `ngs-icon`
   exports: `Icon`
   inputs: `name`
   tokens: `--ngs-icon-color`, `--ngs-icon-size`
 - image-designer: `@ngstarter-ui/components/image-designer` docs: /libraries/image-designer
-  purpose: Provide an image composition or editing workspace.
-  use when: Use for design tools, image customization, previews, and creative editing flows.
+  purpose: Provide a full canvas-based image composition editor with layers, assets, text, backgrounds, effects, and snapshots.
+  use when: Use when users need to create or customize an image by composing multiple layers such as text, photos, uploaded assets, shapes, patterns, gradients, backgrounds, effects, opacity, typography, fit, flip, lock, and resize presets. Use for banner designers, social image builders, thumbnail editors, promo card creators, template-based creative tools, and embedded product design studios. Persist and restore work with ImageDesignerSnapshot, provide asset libraries with assetsDataSource or photosDataSource, handle uploads with uploadFn, and listen to snapshotChanged. Do not use for simple image viewing; use ImageViewer. Do not use for zoom/pan inspection; use ImageZoomViewer. Do not use for crop-only work; use Crop. Do not use for resize-only flows; use ImageResizer. Do not use for loading or missing-image placeholders; use ImagePlaceholder. Do not use for plain upload previews, color picking, or simple avatar/banner settings; use the smaller dedicated components or a normal form.
+  example topics: Image Designer
   selectors: `ngs-effects`, `ngs-image-designer`, `ngs-settings`
   exports: `AssetsDataSource`, `AssetsGetRowsParams`, `createDefaultPhotosDataSource`, `Effects`, `ElementConfig`, `GradientConfig`, `IMAGE_DESIGNER`, `ImageDesigner`, `ImageDesignerPhoto`, `ImageDesignerService`, `ImageDesignerSnapshot`, `ImageDesignerUploadFn`
   inputs: `assetsDataSource`, `defaultFont`, `guidelineColor`, `historyLimit`, `imageSize`, `maxScale`, `minScale`, `photosDataSource`, `scale`, `showDownloadButton`, `showGuidelines`, `snapRange`, `snapshot`, `snapToShapes`, `snapToStageBorders`, `snapToStageCenter`, `title`, `uploadFn`
   outputs: `snapshotChanged`
   tokens: `--ngs-color-picker-thumbnail-bg`, `--ngs-list-item-radius`, `--ngs-list-padding`, `--ngs-slider-thumb-size`, `--ngs-slider-track-height`, `--ngs-tab-label-padding`, `--ngs-tab-panel-aside-width`, `--ngs-tab-panel-nav-padding`
 - image-placeholder: `@ngstarter-ui/components/image-placeholder` docs: /components/image-placeholder
-  purpose: Show a placeholder while an image is absent, loading, or unavailable.
-  use when: Use in cards, upload flows, media grids, avatars, and previews.
+  purpose: Render a simple SVG placeholder inside an image slot when the real image is not available yet.
+  use when: Use for image cards, media grids, upload slots, attachment previews, product thumbnails, gallery cells, banner areas, and image preview areas when an image is loading, missing, unavailable, or failed to load and the layout should keep a stable size. Give ngs-image-placeholder an explicit width, height, or aspect ratio with Tailwind classes. The component does not load images, handle upload state, or manage errors; it only renders a visual placeholder. Do not use for full empty states; use EmptyState. Do not use for skeleton loading of a full block; use Skeleton. Do not use for spinners or blocking progress; use ProgressSpinner or BlockLoader. Do not use for viewing, crop, resize, or editing; use ImageViewer, Crop, ImageResizer, or ImageDesigner. Do not use for user or team identity fallback; use Avatar.
   example topics: Basic image placeholder
   selectors: `ngs-image-placeholder`
   exports: `ImagePlaceholder`
   tokens: `--ngs-color-neutral-100`, `--ngs-color-neutral-300`, `--ngs-color-neutral-400`, `--ngs-color-surface-container`
 - image-resizer: `@ngstarter-ui/components/image-resizer` docs: /components/image-resizer
-  purpose: Resize images or image regions interactively.
-  use when: Use in media editors, upload preparation, thumbnails, and design tools.
+  purpose: Let users interactively change the displayed width of an img element with side drag handles.
+  use when: Use ngs-image-resizer around a standard img marked with ngsImageResizerImage when users need to manually choose how large an image appears in an editor, content form, thumbnail preview, banner preview, or media preparation flow. Configure imageMinWidth and imageMaxWidth and listen to imageResized for rendered width, rendered height, naturalWidth, and naturalHeight. The component changes the displayed CSS width of the image; it does not crop, compress, upload, optimize, or rewrite the source file. Do not use for crop selection; use Crop. Do not use for zoom and pan inspection; use ImageZoomViewer. Do not use for simple viewing; use ImageViewer. Do not use for full canvas/layer editing; use ImageDesigner. Do not use for resizing panels or layout containers; use ResizableContainer. Do not use for backend image processing or placeholders.
   example topics: Basic image resizer
   selectors: `[ngsImageResizeHandler]`, `[ngsImageResizerImage]`, `ngs-image-resizer`
   exports: `ImageResizedEvent`, `ImageResizeHandlerDirective`, `ImageResizer`, `ImageResizerImageDirective`
@@ -503,17 +504,17 @@ Typography:
   outputs: `dimensionsChanged`, `imageResized`
   tokens: `--ngs-color-on-secondary-fixed`, `--ngs-color-white`
 - image-viewer: `@ngstarter-ui/components/image-viewer` docs: /components/image-viewer
-  purpose: Display images in a focused viewer experience.
-  use when: Use for galleries, attachments, previews, and media detail views.
+  purpose: Open a full-size image in a focused lightbox-style overlay from a thumbnail, card, or gallery item.
+  use when: Use ngsImageViewer on a group and ngsImageViewerPicture on each clickable preview item when users should click a thumbnail or card to inspect a full-size image from sourceUrl. The overlay supports close, loading spinner, zoom in/out, drag and pan when zoomed, and optional title, caption, and description via inputs or templates. Use for galleries, attachment previews, product images, media detail previews, portfolio images, and image cards. Do not use for inline zoom inspection without an overlay; use ImageZoomViewer. Do not use for image editing, layers, crop, or resizing; use ImageDesigner, Crop, or ImageResizer. Do not use for before/after comparison; use ComparisonSlider. Do not use for static non-clickable images; use normal img. Do not use for video previews; use VideoViewer. Do not use for missing or loading placeholders; use ImagePlaceholder.
   example topics: Basic image viewer, Image viewer with caption and description, Image viewer with title
   selectors: `[ngsImageViewer]`, `[ngsImageViewerPicture]`, `[ngsImageViewerPictureCaption]`, `[ngsImageViewerPictureDescription]`, `[ngsImageViewerPictureTitle]`, `ngs-image-viewer`
   exports: `IMAGE_VIEWER`, `IMAGE_VIEWER_PICTURE_DATA`, `IMAGE_VIEWER_PICTURE_REF`, `ImageViewer`, `ImageViewerDirective`, `ImageViewerPictureCaptionDirective`, `ImageViewerPictureDescriptionDirective`, `ImageViewerPictureDirective`, `ImageViewerPictureTitleDirective`, `PictureOptions`, `PictureRef`
   inputs: `caption`, `description`, `sourceUrl`, `title`
   tokens: `--ngs-color-neutral-100`, `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-color-neutral-400`, `--ngs-color-neutral-50`, `--ngs-color-neutral-600`, `--ngs-color-neutral-700`, `--ngs-color-neutral-800`, `--ngs-color-neutral-900`, `--ngs-color-neutral-950`, `--ngs-font-size-sm`, `--ngs-image-viewer-picture-scale`, `--ngs-shadow-sm`
 - image-zoom-viewer: `@ngstarter-ui/components/image-zoom-viewer` docs: /components/image-zoom-viewer
-  purpose: Display images with zoom and pan-style inspection.
-  use when: Use when users need to inspect high-detail images, documents, maps, or screenshots.
-  example topics: Basic image viewer, Basic image zoom viewer
+  purpose: Give an inline image a Medium-style click-to-zoom overlay animation from its current page position.
+  use when: Use ngs-image-zoom-viewer around a normal image marked with ngsImageZoomViewerImage when users should quickly enlarge one inline image without a gallery structure. Good for articles, product pages, portfolios, documentation screenshots, reports, and image-rich content. The component clones the same image into an overlay, animates it from the original position to a larger centered view, closes on backdrop click or Escape, and recalculates zoom on window resize. Do not use for thumbnail galleries that need full-size sourceUrl, title, caption, or description; use ImageViewer. Do not use for image editing, crop selection, displayed-width resizing, or before/after comparison; use ImageDesigner, Crop, ImageResizer, or ComparisonSlider. Do not use for plain static images or placeholders.
+  example topics: Basic image zoom viewer
   selectors: `[ngsImageZoomViewerImage]`, `ngs-image-zoom-viewer`, `ngs-image-zoom-viewer-style`
   exports: `ImageZoomViewer`, `ImageZoomViewerImage`, `ImageZoomViewerStyle`
   tokens: `--ngs-overlay-backdrop-bg`

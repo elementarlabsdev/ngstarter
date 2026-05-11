@@ -1,57 +1,78 @@
 <h3 class="mt-4">Basic Guided Tour</h3>
+<p class="mb-4 text-secondary">
+  Basic tour steps attach to existing UI elements and move the user through a screen in order.
+</p>
 <ngs-playground exampleUrl="_docs/components/guided-tour/_examples" compact exampleName="basic-guided-tour-example">
   <app-basic-guided-tour-example/>
 </ngs-playground>
 
     <h3 class="mt-8">Backdrop Guided Tour</h3>
-    <p class="mb-4 text-secondary">Example demonstrating backdrop with elements at different nesting levels.</p>
+    <p class="mb-4 text-secondary">
+      Use backdrop steps when the current element needs strong focus and the rest of the page should recede.
+    </p>
     <ngs-playground exampleUrl="_docs/components/guided-tour/_examples" compact exampleName="backdrop-guided-tour-example">
       <app-backdrop-guided-tour-example/>
     </ngs-playground>
 
     <h3 class="mt-8">Wait For Guided Tour</h3>
-    <p class="mb-4 text-secondary">Example demonstrating waiting for an element that appears dynamically.</p>
+    <p class="mb-4 text-secondary">
+      Use <code>waitFor</code> when a step targets content that appears after rendering, data loading, or user interaction.
+    </p>
     <ngs-playground exampleUrl="_docs/components/guided-tour/_examples" compact exampleName="wait-for-guided-tour-example">
       <app-wait-for-guided-tour-example/>
     </ngs-playground>
 
     <h3 class="mt-8">Close On Backdrop Click</h3>
-    <p class="mb-4 text-secondary">Example demonstrating closing the tour when clicking on the backdrop.</p>
+    <p class="mb-4 text-secondary">
+      Allow backdrop click closing only when the tour is optional and users can safely leave it at any point.
+    </p>
     <ngs-playground exampleUrl="_docs/components/guided-tour/_examples" compact exampleName="close-on-backdrop-click-example">
       <app-close-on-backdrop-click-example/>
     </ngs-playground>
 
     <h3 class="mt-8">HTML and Template Support</h3>
-    <p class="mb-4 text-secondary">Example demonstrating support for HTML strings and TemplateRef in step content.</p>
+    <p class="mb-4 text-secondary">
+      Use template content when a tour step needs richer Angular markup than a title and plain text.
+    </p>
     <ngs-playground exampleUrl="_docs/components/guided-tour/_examples" compact exampleName="template-guided-tour-example">
       <app-template-guided-tour-example/>
     </ngs-playground>
     <h3 class="mt-8">Custom Buttons</h3>
-    <p class="mb-4 text-secondary">Example demonstrating customization of button labels.</p>
+    <p class="mb-4 text-secondary">
+      Customize button labels when the step wording should match the product flow or user action.
+    </p>
     <ngs-playground exampleUrl="_docs/components/guided-tour/_examples" compact exampleName="custom-buttons-guided-tour-example">
       <app-custom-buttons-guided-tour-example/>
     </ngs-playground>
 
     <h3 class="mt-8">Global Configuration</h3>
-    <p class="mb-4 text-secondary">Example demonstrating global configuration using <code>provideTourConfig</code>.</p>
+    <p class="mb-4 text-secondary">
+      Use <code>provideTourConfig</code> to set default labels, padding, backdrop behavior, and keyboard support for all tours.
+    </p>
     <ngs-playground exampleUrl="_docs/components/guided-tour/_examples" compact exampleName="global-config-guided-tour-example">
       <app-global-config-guided-tour-example/>
     </ngs-playground>
 
     <h3 class="mt-8">Keyboard Navigation</h3>
-    <p class="mb-4 text-secondary">Example demonstrating keyboard navigation using arrows and Escape key.</p>
+    <p class="mb-4 text-secondary">
+      Keyboard navigation lets users move through a tour with arrow keys and close it with Escape.
+    </p>
     <ngs-playground exampleUrl="_docs/components/guided-tour/_examples" compact exampleName="keyboard-navigation-guided-tour-example">
       <app-keyboard-navigation-guided-tour-example/>
     </ngs-playground>
 
     <h3 class="mt-8">Positioning</h3>
-    <p class="mb-4 text-secondary">Example demonstrating all 12 explicit positioning options for tour steps (above, below, before, after).</p>
+    <p class="mb-4 text-secondary">
+      Use explicit positioning when the automatic placement would cover important UI or feel visually disconnected.
+    </p>
     <ngs-playground exampleUrl="_docs/components/guided-tour/_examples" compact exampleName="positioning-guided-tour-example">
       <app-positioning-guided-tour-example/>
     </ngs-playground>
 
     <h3 class="mt-8">Route Navigation</h3>
-    <p class="mb-4 text-secondary">Example demonstrating automatic navigation between routes during the tour.</p>
+    <p class="mb-4 text-secondary">
+      Route steps let one guided tour continue across pages while still pointing at real elements on each screen.
+    </p>
     <ngs-playground exampleUrl="_docs/components/guided-tour/_examples" compact exampleName="route-navigation-guided-tour-example">
       <app-route-navigation-guided-tour-example/>
     </ngs-playground>

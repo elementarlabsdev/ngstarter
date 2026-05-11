@@ -3,34 +3,39 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        Say hello to a sleek and user-friendly <strong>Image Viewer</strong> built with <strong>Angular</strong>! 🎉
+        Image Viewer opens a full-size image in a focused overlay from a thumbnail, card, or gallery item.
+        Wrap the image group with <code>ngsImageViewer</code>, mark each clickable item with
+        <code>ngsImageViewerPicture</code>, and pass <code>sourceUrl</code> for the full-size image.
       </p>
-      <p>
-        With this component, you can easily add **interactive image viewing** to your web app.
-        It’s designed to look great and work smoothly across all devices.
+      <p class="mt-3">
+        The overlay supports close, loading state, zoom in and out, drag/pan when zoomed, and optional
+        title, caption, and description through inputs or Angular templates. Use it for galleries,
+        attachments, product images, media previews, portfolio cards, and other places where a user
+        clicks a preview to inspect the full image.
+      </p>
+      <p class="mt-3">
+        Do not use Image Viewer for inline zoom inspection without an overlay, editing, crop selection,
+        displayed-width resizing, before/after comparison, plain static images, video previews, or missing
+        image placeholders. Use ImageZoomViewer, ImageDesigner, Crop, ImageResizer, ComparisonSlider,
+        a normal <code>img</code>, VideoViewer, or ImagePlaceholder for those cases.
       </p>
       <div class="my-6">
-        <div>Key Features:</div>
+        <div>Key features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Zoom</strong>: Let users explore images in detail.
+            Opens a full-size <code>sourceUrl</code> from a clickable preview.
           </li>
           <li>
-            ✅ <strong>Integration</strong>: Fits seamlessly into your Angular-based projects.
+            Supports title, caption, and description content.
           </li>
           <li>
-            ✅ <strong>Responsive Design</strong>: Perfect for any screen size.
+            Includes zoom and drag/pan behavior in the overlay.
           </li>
           <li>
-            ✅ <strong>Lightweight and Fast</strong>: No unnecessary bloat—just what you need!
+            Works with any preview markup inside <code>ngsImageViewerPicture</code>.
           </li>
         </ul>
       </div>
-      <p>Whether you’re building a gallery, product showcase, or a creative portfolio, this Image
-        Viewer will take your UI to the next level.</p>
-      <p>
-        👉 <span class="font-bold">Boost your app’s visuals with ease—try it today!</span>
-      </p>
     </main>
     <nav ngs-tab-nav-bar>
       <a routerLink="/components/image-viewer" ngs-tab-link>Overview</a>

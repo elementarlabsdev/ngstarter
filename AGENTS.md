@@ -64,6 +64,18 @@ Agents MUST NOT hand-roll these primitives with plain `div`, `table`, `button`, 
 no matching NgStarter component exists. CSS may tune layout, spacing, and visual fidelity, but it
 must not replace NgStarter component structure.
 
+Form construction rules:
+
+- Use one `ngs-form-field` for one form control such as `input[ngsInput]`, `textarea[ngsInput]`,
+  `ngs-select`, autocomplete inputs, datepicker inputs, country/currency/date-format/phone/number
+  controls, and custom controls that implement `FormFieldControl`.
+- Put groups of fields in TailwindCSS grid/flex/layout containers. Each individual field inside the
+  group still gets its own `ngs-form-field`.
+- Do not use `ngs-form-field` as a generic layout container, card, spacing wrapper, or wrapper for
+  non-form UI.
+- Do not wrap checkbox, radio, button, or toggle controls in `ngs-form-field` when they already have
+  their own label pattern.
+
 Styling rules for admin UIs:
 
 - Build page layout, responsive behavior, sizing, spacing, flex, grid, and alignment with

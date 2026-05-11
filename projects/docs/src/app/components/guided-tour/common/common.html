@@ -3,30 +3,35 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        Guided Tour component is a powerful tool for creating interactive walkthroughs and onboarding experiences
-        in your Angular applications. It helps users understand complex features and workflows by highlighting
-        specific elements and providing step-by-step instructions.
+        Guided Tour creates a step-by-step walkthrough on top of the real UI. Use it to teach users how a
+        screen works, introduce a new feature, or guide them through a complex flow by attaching steps to
+        existing elements with anchors or selectors.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Use Guided Tour when you need:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Interactive Steps</strong>: Guide users through various parts of your application.
+            A first-run onboarding tour or feature discovery flow.
           </li>
           <li>
-            ✅ <strong>Anchor-based Highlighting</strong>: Easily attach tour steps to specific UI elements.
+            Steps attached to real interface elements through <code>ngsTourAnchor</code>, selectors, or an element callback.
           </li>
           <li>
-            ✅ <strong>Customizable Templates</strong>: Fully control the appearance and content of each step.
+            Optional backdrop highlighting to focus attention on the current element.
           </li>
           <li>
-            ✅ <strong>Backdrop Support</strong>: Focus user attention by dimming the rest of the screen.
+            Navigation between steps, keyboard control, route changes, or waiting for dynamic elements.
           </li>
           <li>
-            ✅ <strong>Flexible Navigation</strong>: Support for keyboard, backdrop click, and programmatic control.
+            Custom step content with plain text, HTML, or an Angular template.
           </li>
         </ul>
       </div>
+      <p>
+        Do not use Guided Tour for a simple hover hint, anchored menu, confirmation dialog, form wizard,
+        documentation page, or marketing onboarding screen. Use Tooltip, Popover, Confirm, Dialog, Stepper,
+        or normal page content for those cases.
+      </p>
     </main>
     <nav ngs-tab-nav-bar>
       <a routerLink="/components/guided-tour" ngs-tab-link>Overview</a>

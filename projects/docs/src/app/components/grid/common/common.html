@@ -3,7 +3,14 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        This is a simple static grid component to show widgets in 12 columns grid.
+        Grid is a configuration-driven 12-column renderer for dashboard and widget layouts. It receives
+        <code>configs</code> that map widget types to lazy-loaded components, and <code>items</code> that define each
+        widget id, type, column span, height, content, skeleton, and nested children.
+      </p>
+      <p>
+        Use it for admin dashboards, configurable widget layouts, analytics home screens, portal start pages, and nested
+        dashboard sections where widget components are rendered from configuration or data. Do not use it as a normal
+        CSS layout helper for forms, pages, cards, or repeated elements; use Tailwind grid/flex classes for that.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

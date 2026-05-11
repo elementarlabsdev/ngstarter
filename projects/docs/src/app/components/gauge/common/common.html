@@ -3,31 +3,30 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        We’ve built a <strong>Gauge</strong> component for , designed to help you visualize
-        progress, metrics, and performance in a simple and beautiful way.
+        Gauge is a compact circular indicator for a value from 0 to 100. Use it to show a percentage metric such as
+        usage, quota, capacity, health, score, or completion.
       </p>
       <div class="my-6">
         <div>Key Features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Seamless Design</strong> – Fully compatible with for a smooth UI experience.
+            <strong>Radial metric</strong>: Shows a single percentage-like value in a compact circular shape.
           </li>
           <li>
-            ✅ <strong>Customizable</strong> – Adjust colors, sizes, and thresholds to fit your needs.
+            <strong>Value slot</strong>: Use <code>ngs-gauge-value</code> to display a number or short label.
           </li>
           <li>
-            ✅ <strong>Lightweight & Fast</strong> – Optimized for performance and responsiveness.
+            <strong>Custom size</strong>: Set dimensions with Tailwind size classes or component tokens.
           </li>
           <li>
-            ✅ <strong>Easy to Use</strong> – Simple API for quick integration into any Angular project.
+            <strong>Custom stroke</strong>: Adjust <code>strokeWidth</code> and <code>radius</code> for different visual weights.
           </li>
         </ul>
       </div>
       <p>
-        Perfect for dashboards, reports, and real-time data visualization.
-      </p>
-      <p>
-        Try it now and enhance your Angular apps with a modern Gauge component! 🚀
+        Use Gauge in dashboard cards, sidebar widgets, KPI panels, usage blocks, storage indicators, completion scores,
+        health scores, and utilization indicators. Do not use it for loading states, linear process progress, full
+        analytical charts, or small table-row statuses.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

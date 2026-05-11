@@ -3,9 +3,17 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        Form Renderer component is a powerful tool for building dynamic forms based on a JSON configuration.
-        It supports various field types, validation, and layout customization, making it easy to create complex forms
-        with minimal code.
+        Form Renderer builds backend-driven or config-driven forms from a <code>FormConfig</code>. It creates the
+        Angular <code>FormGroup</code>, renders fields from <code>elements</code>, places them through
+        <code>layout</code>, applies validators and cross validators, handles <code>initialValue</code>,
+        <code>visibleWhen</code>, disabled state, and emits <code>valueChanges</code>, <code>formSubmit</code>, and
+        <code>initialized</code>.
+      </p>
+      <p>
+        Use it when the backend or an admin configuration defines the form structure: dynamic settings, surveys,
+        onboarding schemas, profile or config forms, CMS forms, tenant-specific forms, and feature-specific forms.
+        Do not use it for normal static forms where fields are known in Angular code; build those manually with
+        Tailwind grid/flex layout and one <code>ngs-form-field</code> per control.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

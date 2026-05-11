@@ -3,23 +3,36 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Image Resizer component provides an intuitive interface for resizing images within your application.
-        It supports constraints like minimum and maximum width and emits events when dimensions change.
+        Image Resizer wraps a normal <code>img</code> element and gives users side drag handles for changing
+        the displayed image width. Mark the image with <code>ngsImageResizerImage</code>, set optional
+        <code>imageMinWidth</code> and <code>imageMaxWidth</code>, and listen to <code>imageResized</code>
+        for the current rendered size and natural image size.
+      </p>
+      <p class="mt-3">
+        Use it when users need to manually choose how large an image appears in an editor, content form,
+        thumbnail preview, banner preview, or media preparation flow. The component changes the image's
+        displayed CSS width; it does not crop, compress, upload, optimize, or rewrite the source file.
+      </p>
+      <p class="mt-3">
+        Do not use Image Resizer for crop selection, zoom and pan viewing, simple image viewing, full canvas
+        design, resizing panels or containers, server-side file processing, or loading placeholders. Use Crop,
+        ImageZoomViewer, ImageViewer, ImageDesigner, ResizableContainer, backend image processing, or
+        ImagePlaceholder for those cases.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Key features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Flexible Resizing</strong>: Easily adjust image dimensions with interactive handles.
+            Interactive side handles for changing image width.
           </li>
           <li>
-            ✅ <strong>Constraints</strong>: Set minimum and maximum width to maintain layout integrity.
+            Minimum and maximum width constraints.
           </li>
           <li>
-            ✅ <strong>Event Emission</strong>: Get real-time updates on image dimensions and natural size.
+            Emits rendered width, rendered height, natural width, and natural height.
           </li>
           <li>
-            ✅ <strong>Easy Integration</strong>: Works with standard HTML image elements via directives.
+            Works with a standard HTML image element through <code>ngsImageResizerImage</code>.
           </li>
         </ul>
       </div>
