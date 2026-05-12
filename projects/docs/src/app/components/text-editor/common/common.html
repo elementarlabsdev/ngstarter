@@ -3,24 +3,27 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Text Editor component is a powerful, flexible, and feature-rich WYSIWYG editor based on Tiptap.
-        It provides a seamless experience for creating and editing rich text content, with support for various
-        formatting options, image uploads, and custom extensions.
+        The <code>ngs-text-editor</code> component is a full WYSIWYG rich text editor based on Tiptap for editing
+        formatted HTML content. Use it for long descriptions, articles, notes, changelog entries, knowledge base content,
+        and admin fields that need headings, lists, links, images, embeds, code, and rich formatting.
       </p>
       <div class="my-7">
         <div>Key Features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Rich Formatting</strong>: Support for bold, italic, strike, code blocks, lists, and more.
+            <strong>Rich formatting</strong>: Supports headings, bold, italic, strike, lists, blockquotes, inline code,
+            code blocks, and horizontal rules.
           </li>
           <li>
-            ✅ <strong>Tiptap Integration</strong>: Built on top of the Tiptap editor for maximum extensibility.
+            <strong>Media and links</strong>: Add links, upload images with <code>imageUploadFn</code>, and insert
+            YouTube embeds.
           </li>
           <li>
-            ✅ <strong>Customizable Toolbar</strong>: Optional toolbar with configurable visibility.
+            <strong>Editor menus</strong>: Compose toolbars, bubble menus, floating menus, and command buttons around
+            the editor.
           </li>
           <li>
-            ✅ <strong>Image Uploads</strong>: Built-in support for image uploads with custom upload functions.
+            <strong>HTML output</strong>: Listen to <code>contentChange</code> when the editor content changes.
           </li>
         </ul>
       </div>

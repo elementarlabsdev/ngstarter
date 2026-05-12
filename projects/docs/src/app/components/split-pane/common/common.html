@@ -3,8 +3,22 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The <code>SplitPane</code> component provides a flexible way to divide a view into multiple resizable areas.
-        It supports both horizontal and vertical orientations, minimum and maximum sizes for panes, and custom drag handles.
+        Split creates a resizable multi-pane layout for workspaces where users need to drag gutters
+        between panes. Use <code class="code">ngs-split</code> with multiple
+        <code class="code">ngs-split-pane</code> regions when two or more panes must be manually resized.
+      </p>
+      <p class="mt-3">
+        Good examples include editors, IDE-like screens, analytics workspaces, master-detail-detail layouts,
+        source and preview views, inspector plus canvas plus logs, and other dense work areas.
+        Split supports horizontal or vertical direction, nested splits, percent or pixel sizing,
+        min and max sizes, locked panes, hidden panes, pane order, optional dotted gutter handles,
+        restricted gutter movement, and drag lifecycle events.
+      </p>
+      <p class="mt-3">
+        Do not use Split for ordinary responsive layout, a static two-column admin page, a single resizable box,
+        side navigation shells, temporary side overlays, local page sections, table column resizing, or image resizing.
+        Use TailwindCSS grid/flex, ResizableContainer, Sidenav, Sidebar, Drawer, Panel, table features,
+        or ImageResizer when those match the job better. Give the parent a stable height and width.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

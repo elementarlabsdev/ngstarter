@@ -67,6 +67,9 @@ export const appConfig = {
 - Keep normal admin text calm: body, table, navigation, form, metadata, and helper text should use
   `400` by default; buttons can use `500` or `600`; reserve `700+` for brand, hero headings,
   primary KPI numbers, or deliberate emphasis.
+- Use `SplashScreen` only once near the root app template for the initial branded bootstrap moment.
+  Do not use it as a page, route, form, table, or operation loader; use `PageLoadingBar`,
+  `ScreenLoader`, `BlockLoader`, `Skeleton`, or `ProgressBar` based on scope.
 - Do not import from private `src` paths in consumer code.
 - Do not collapse secondary entry points into the root package entry point.
 - Use existing `--ngs-*` tokens before adding new CSS custom properties.

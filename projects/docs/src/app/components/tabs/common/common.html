@@ -3,23 +3,24 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        Angular Tabs component provides a way to organize content into multiple tabs, where only one tab is visible at a time.
-        It supports both static and dynamic tabs, custom labels, and various animations.
+        The Tabs components switch between peer views inside one context. Use <code>ngs-tab-group</code> with
+        <code>ngs-tab</code> for local content tabs, or <code>ngs-tab-nav-bar</code> with
+        <code>a[ngs-tab-link]</code> and <code>ngs-tab-nav-panel</code> for route-linked tabs inside one section.
       </p>
       <div class="my-7">
         <div>Key Features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Flexible Organization</strong>: Organize complex content into manageable views.
+            <strong>Peer views</strong>: Switch between related sections such as overview, activity, files, and settings.
           </li>
           <li>
-            ✅ <strong>Customizable Labels</strong>: Use simple text or complex templates for tab headers.
+            <strong>Custom labels</strong>: Use simple text or label templates with icons and richer header content.
           </li>
           <li>
-            ✅ <strong>Animations</strong>: Built-in support for smooth transitions between tabs.
+            <strong>Navigation support</strong>: Use tab nav links for route-linked subsections, not primary app navigation.
           </li>
           <li>
-            ✅ <strong>Navigation Support</strong>: Can be used for page navigation with URL synchronization.
+            <strong>Overflow and motion</strong>: Supports disabled tabs, pagination controls, header placement, and animations.
           </li>
         </ul>
       </div>

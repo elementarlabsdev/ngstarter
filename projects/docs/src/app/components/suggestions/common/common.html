@@ -3,23 +3,25 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Suggestions component is a versatile and user-friendly interface element designed to provide users with
-        relevant recommendations or shortcuts in a structured and visually appealing way.
+        The <code>ngs-suggestions</code> component renders a structured list of grouped suggestions, search results,
+        recent items, or quick shortcuts near a search field, assistant input, or dropdown panel.
       </p>
       <div class="my-7">
         <div>Key Features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Contextual Relevance</strong>: Offers suggestions based on user input or current context.
+            <strong>Contextual relevance</strong>: Show suggestions based on user input, recent activity, or the current screen.
           </li>
           <li>
-            ✅ <strong>Flexible Layout</strong>: Supports icons, thumbnails, and categorized blocks of suggestions.
+            <strong>Flexible rows</strong>: Add icons with <code>ngsSuggestionIcon</code> or thumbnails with
+            <code>ngsSuggestionThumb</code>.
           </li>
           <li>
-            ✅ <strong>Interactive Design</strong>: Built-in ripple effects and smooth transitions for enhanced UX.
+            <strong>Grouped blocks</strong>: Use <code>ngs-suggestion-block</code> for headings, optional dividers,
+            and inline actions.
           </li>
           <li>
-            ✅ <strong>Categorized Blocks</strong>: Group suggestions with optional dividers and headings.
+            <strong>Dropdown-friendly</strong>: Use it as the visual list inside search, assistant, and command-like panels.
           </li>
         </ul>
       </div>

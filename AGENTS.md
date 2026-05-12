@@ -59,6 +59,8 @@ Required admin mappings:
 - Actions: `Button` and `Icon`.
 - Selection: `Checkbox`.
 - Progress and completion: `ProgressBar`.
+- Startup splash: `SplashScreen` only once near the root app template for initial branded bootstrap
+  loading; do not use it as a general page, route, form, table, or operation loader.
 
 Agents MUST NOT hand-roll these primitives with plain `div`, `table`, `button`, or `input` unless
 no matching NgStarter component exists. CSS may tune layout, spacing, and visual fidelity, but it

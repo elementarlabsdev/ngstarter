@@ -30,64 +30,28 @@ import {
 export class Api {
   properties = [
     {
+      name: 'content',
+      description: 'Initial HTML content rendered inside the editor',
+      type: 'string',
+      default: "''"
+    },
+    {
+      name: 'extensions',
+      description: 'Additional Tiptap extensions to register before the built-in editor extensions',
+      type: 'any[]',
+      default: '[]'
+    },
+    {
       name: 'contentMaxHeight',
       description: 'Maximum height of the content area',
       type: 'number',
       default: '–'
     },
     {
-      name: 'buttonCancelLabel',
-      description: 'Label for the cancel button',
-      type: 'string',
-      default: 'Cancel'
-    },
-    {
-      name: 'buttonSendLabel',
-      description: 'Label for the send button',
-      type: 'string',
-      default: 'Send'
-    },
-    {
       name: 'placeholder',
       description: 'Placeholder text',
       type: 'string',
       default: 'Write something …'
-    },
-    {
-      name: 'toolbarAlwaysVisible',
-      description: 'Whether the toolbar is always visible',
-      type: 'boolean',
-      default: 'false'
-    },
-    {
-      name: 'fullViewMode',
-      description: 'Whether the editor is in full view mode',
-      type: 'boolean',
-      default: 'false'
-    },
-    {
-      name: 'cancelButtonAlwaysVisible',
-      description: 'Whether the cancel button is always visible',
-      type: 'boolean',
-      default: 'false'
-    },
-    {
-      name: 'allowEmptyContent',
-      description: 'Whether to allow sending empty content',
-      type: 'boolean',
-      default: 'false'
-    },
-    {
-      name: 'autoClear',
-      description: 'Whether to automatically clear the editor after sending',
-      type: 'boolean',
-      default: 'true'
-    },
-    {
-      name: 'loading',
-      description: 'Whether the editor is in a loading state',
-      type: 'boolean',
-      default: 'false'
     },
     {
       name: 'imageUploadFn',
@@ -99,14 +63,32 @@ export class Api {
 
   events = [
     {
-      name: 'sent',
-      description: 'Emitted when the send button is clicked and content is valid',
-      type: 'EventEmitter<string>'
+      name: 'contentChange',
+      description: 'Emitted with the current HTML content whenever the editor updates',
+      type: 'OutputEmitterRef<string>'
+    }
+  ];
+
+  api = [
+    {
+      name: 'api.isCommandDisabled(command, options?)',
+      description: 'Returns whether a command cannot run in the current editor state',
+      type: 'boolean | null'
     },
     {
-      name: 'canceled',
-      description: 'Emitted when the cancel button is clicked',
-      type: 'EventEmitter<void>'
+      name: 'api.isActive(command, options?)',
+      description: 'Returns whether a mark, node, or command state is active',
+      type: 'boolean'
+    },
+    {
+      name: 'api.runCommand(command, options?)',
+      description: 'Runs a Tiptap chain command with focus',
+      type: 'void'
+    },
+    {
+      name: 'api.editor()',
+      description: 'Returns the underlying Tiptap editor instance',
+      type: 'Editor'
     }
   ];
 }

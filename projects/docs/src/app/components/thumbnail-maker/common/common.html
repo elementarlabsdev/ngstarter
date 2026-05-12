@@ -3,29 +3,31 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Thumbnail Maker component is a powerful and flexible tool designed to help users create and customize
-        thumbnails with ease. Whether you need to crop images, adjust scales, or provide interactive feedback,
-        this component provides a seamless experience for both developers and end-users.
+        The <code>ngs-thumbnail-maker</code> component lets users create a square thumbnail from an image by dragging
+        the image inside a fixed crop area and adjusting zoom. The app can then read the finished 300x300 thumbnail as a
+        data URL, blob, or canvas.
       </p>
       <div class="my-7">
         <div>Key Features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Image Cropping & Scaling</strong>: Easily adjust the visible area of an image to create the perfect thumbnail.
+            <strong>Drag positioning</strong>: Move the image inside the thumbnail frame before saving.
           </li>
           <li>
-            ✅ <strong>Interactive Controls</strong>: Includes built-in zoom controls and drag-to-reposition functionality.
+            <strong>Zoom controls</strong>: Use the built-in slider and plus/minus buttons to adjust scale.
           </li>
           <li>
-            ✅ <strong>Flexible API</strong>: Provides methods to retrieve the resulting thumbnail as a Data URL, Blob, or Canvas.
+            <strong>Bitmap output</strong>: Retrieve the final thumbnail through <code>getDataUrl()</code>,
+            <code>toBlob()</code>, or <code>getCanvas()</code>.
           </li>
           <li>
-            ✅ <strong>Customizable UI</strong>: Add helper text and adapt the styling to match your application's design.
+            <strong>Upload workflows</strong>: Combine with Upload when users need to select a local image first.
           </li>
         </ul>
       </div>
       <p>
-        Perfect for profile picture uploads, content management systems, or any application requiring user-driven image processing.
+        Use it for avatars, profile images, CMS thumbnails, media library previews, and card images that need a simple
+        square output.
       </p>
     </main>
     <nav ngs-tab-nav-bar>
