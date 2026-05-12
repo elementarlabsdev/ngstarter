@@ -12,5 +12,11 @@ PORT=4002 node dist/admin/server/server.mjs &
 # Start admin-corporate app on port 4003
 PORT=4003 node dist/admin-corporate/server/server.mjs &
 
+# Start admin-modern app on port 4004
+PORT=4004 node dist/admin-modern/server/server.mjs &
+
+# Start admin-classic app on port 4005
+PORT=4005 node dist/admin-classic/server/server.mjs &
+
 # Wait for all background processes
 wait
