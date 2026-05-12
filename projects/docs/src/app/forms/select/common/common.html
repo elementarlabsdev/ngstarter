@@ -3,8 +3,23 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Select component is a flexible and accessible input for choosing options from a list.
-        It supports single and multiple selection, searching, groups, and custom triggers.
+        Select lets users choose one or multiple values from a known dropdown list.
+        Use it in one <code class="code">ngs-form-field</code> for forms, filters, settings,
+        table filters, and admin configuration fields when the available options are predefined.
+      </p>
+      <p class="mt-3">
+        Use <code class="code">ngs-select</code> with <code class="code">ngs-option</code> for each option
+        and <code class="code">ngs-optgroup</code> when options need visible grouping. Select supports
+        placeholder, required and disabled states, single and multiple selection, Angular forms,
+        <code class="code">value</code>, <code class="code">selectionChange</code>, custom trigger content,
+        and optional header, body, and footer slots for richer dropdown panels.
+      </p>
+      <p class="mt-3">
+        Do not use Select as a command menu, action list, route navigation, compact mode switch,
+        simple visible radio group, rich card choice, or free text search input. Use Menu,
+        Navigation, Tabs, Segmented, Radio, RadioCard, or Autocomplete when those match the job better.
+        Use dedicated selectors such as CountrySelect, CurrencySelect, DateFormatSelect, or TimezoneSelect
+        when the domain already has its own component.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

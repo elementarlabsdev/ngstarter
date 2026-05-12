@@ -742,16 +742,16 @@ Typography:
   inputs: `value`
   tokens: `--ngs-color-border`, `--ngs-color-neutral-600`, `--ngs-color-primary`, `--ngs-color-primary-100`, `--ngs-font-size-sm`, `--ngs-radio-card-border-radius`, `--ngs-radio-card-color-border-hover`, `--ngs-radio-card-color-selected-bg`, `--ngs-radio-card-color-selected-border`, `--ngs-radio-card-content-color`, `--ngs-radio-card-content-font-size`, `--ngs-radio-card-group-gap`, `--ngs-radio-card-padding`, `--ngs-radio-card-title-font-size`, `--ngs-radio-card-title-gap`, `--ngs-radio-card-transition`
 - rail-nav: `@ngstarter-ui/components/rail-nav` docs: /navigation/rail-nav
-  purpose: Provide compact vertical navigation with icons and labels.
-  use when: Use in dense app shells where sidebar space is constrained.
+  purpose: Provide a compact vertical navigation rail with icons and short labels.
+  use when: Use ngs-rail-nav when an app or workspace shell needs compact vertical navigation but there is not enough space for a full sidebar. Use ngs-rail-nav-item or [ngs-rail-nav-item] for destinations, ngsRailNavItemIcon for icons, key on each item, activeKey on the rail, and railNav.api.isActive(key) when the active item should change icon or styling. Good for narrow editor or workspace navigation, secondary product navigation, compact admin shells, and switching between primary sections. Do not use when you need a full sidebar with groups, nested navigation, or supporting content; use Sidebar or Sidenav. Do not use inside ngs-sidebar because Sidebar has its own navigation. Do not use for normal section navigation in content; use Navigation. Do not use for tabs, breadcrumbs, menu actions, segmented controls, or one-off icon buttons.
   example topics: Basic rail navigation, Rail navigation customization, Basic rail nav, Rail nav customization
   selectors: `[ngs-rail-nav-item]`, `[ngsRailNavItemIcon]`, `ngs-rail-nav`, `ngs-rail-nav-item`
   exports: `RAIL_NAV`, `RailNav`, `RailNavAPI`, `RailNavComponent`, `RailNavItem`, `RailNavItemIconDirective`
   inputs: `activeKey`, `key`
   tokens: `--ngs-font-size-xs`, `--ngs-icon-color`, `--ngs-nav-item-active-bg`, `--ngs-nav-item-active-color`, `--ngs-nav-item-active-icon-color`, `--ngs-nav-item-color`, `--ngs-nav-item-hover-bg`, `--ngs-nav-item-icon-color`, `--ngs-nav-items-gap`, `--ngs-radius-full`, `--ngs-rail-nav-bg`, `--ngs-rail-nav-bg-item-active-color`, `--ngs-rail-nav-bg-item-color`, `--ngs-rail-nav-bg-item-icon-active-bg`, `--ngs-rail-nav-bg-item-icon-color`, `--ngs-rail-nav-bg-item-icon-hover-bg`
 - resizable-container: `@ngstarter-ui/components/resizable-container` docs: /components/resizable-container
-  purpose: Let users resize a container or panel.
-  use when: Use for editors, inspectors, side panels, split workspaces, and dashboards.
+  purpose: Let users manually resize the width of one container with a vertical drag handle.
+  use when: Use ngs-resizable-container around content when the user should manually adjust the width of a single block. Good for resizable preview panes, editor canvas or containers, inspector or detail panels, side content areas, responsive demo areas, chart previews, and docs playgrounds. Use minWidth for the minimum allowed width, resized to persist or synchronize the new width, and TailwindCSS classes for border, height, initial width, layout, and inner content. Do not use as a full split layout between two panels; use Split or a dedicated splitter when available. Do not use for image resizing; use ImageResizer. Do not use for table or DataView column resizing; use the table/DataView resizing feature. Do not use as a normal responsive container when users should not manually resize it; use TailwindCSS responsive utilities or container queries. Do not use for Drawer or Sidebar resizing when those components own their sizing model.
   example topics: Basic Resizable Container
   selectors: `ngs-resizable-container`
   exports: `ResizableContainer`
@@ -759,31 +759,31 @@ Typography:
   outputs: `resized`
   tokens: `--ngs-color-secondary`, `--ngs-color-surface-container-highest`
 - screen-loader: `@ngstarter-ui/components/screen-loader` docs: /components/screen-loader
-  purpose: Show a full-screen or page-level loading state.
-  use when: Use while initial app, route, or major page data is loading.
+  purpose: Show a full-screen blocking loading state for large global operations.
+  use when: Use ScreenLoader when the user must wait and should not interact with the app: initial app load, major route or page data loading, account switching, tenant switching, auth or session restore, heavy backend tasks, and large global operations. Prefer ScreenLoaderService.open(messageOrTemplate) for programmatic full-screen overlays, keep the returned ScreenLoaderRef, and always call ref.close() when the operation finishes. Use afterOpened() and afterClosed() only for side effects. Use ngs-screen-loader with opened and message only when the open state is controlled directly in a template. message can be a short string or TemplateRef. Do not use ScreenLoader for local block, card, table, or form loading; use BlockLoader, Skeleton, ProgressSpinner, ProgressBar, or component-specific loading states. Do not use for route navigation progress; use PageLoadingBar. Do not use for known percentage progress; use ProgressBar. Do not leave a service-opened loader without closing its ref.
   example topics: Basic screen loader
   selectors: `ngs-screen-loader`
   exports: `ScreenLoader`, `ScreenLoaderRef`, `ScreenLoaderService`
   inputs: `opened`
   tokens: `--ngs-color-background`, `--ngs-screen-loader-bg`
 - scroll-spy: `@ngstarter-ui/components/scroll-spy`
-  purpose: Track page sections and provide in-page navigation.
-  use when: Use in long docs pages, settings pages, and detail screens with many sections.
+  purpose: Provide in-page navigation for sections inside a long scrollable page or local scroll container.
+  use when: Use ScrollSpy when a long page or panel has stable section ids and needs a table-of-contents style navigation that highlights the active section while scrolling and smooth-scrolls to sections on click. Use ngs-scroll-spy-nav as the nav container, ngs-scroll-spy-on with targetId matching a section id, ngs-scroll-spy-title for the nav heading, and ngs-scroll-spy-back-to-top for a top shortcut. It uses ngs-layout-content or ngs-panel-content as the scroll container when present, otherwise document body. Good for docs pages, long settings pages, profile or detail pages with many sections, policy/help pages, long form review pages, and article-like admin pages. Do not use for primary product navigation; use Navigation, Sidebar, Sidenav, or RailNav. Do not use for tabs between views; use Tabs. Do not use for route breadcrumbs; use Breadcrumbs. Do not use for wizard steps; use Stepper or HeadlessStepper. Do not use on short pages without real scrolling or without stable section ids.
   selectors: `[ngs-scroll-spy-back-to-top]`, `[ngs-scroll-spy-nav]`, `[ngs-scroll-spy-on]`, `[ngs-scroll-spy-title]`, `[ngsScrollSpyContainer]`, `ngs-scroll-spy-back-to-top`, `ngs-scroll-spy-nav`, `ngs-scroll-spy-on`, `ngs-scroll-spy-title`
   exports: `SCROLL_SPY_NAV`, `ScrollSpyBackToTop`, `ScrollSpyContainerDirective`, `ScrollSpyNav`, `ScrollSpyOn`, `ScrollSpyTitle`
   inputs: `targetId`
   tokens: `--ngs-color-primary`, `--ngs-color-subtle`, `--ngs-font-size-sm`, `--ngs-font-size-xl`, `--ngs-icon-size`
 - scrollbar-area: `@ngstarter-ui/components/scrollbar-area`
-  purpose: Provide a styled scrollable region.
-  use when: Use when a panel, menu, list, or surface needs controlled scrolling.
+  purpose: Provide a styled scroll container for bounded UI regions.
+  use when: Use ngs-scrollbar-area when a sized panel, grid body, editor sidebar, asset list, menu, or similar surface needs consistent NgStarter scrollbars instead of native browser scrollbars. It hides native scrollbars, renders vertical and horizontal thumbs, supports auto-hide, thumb dragging, resize and mutation tracking, scrollbarWidth, autoHide, absolute fill mode, and scrolled output. Use [absolute]="true" when the scroll area should fill a positioned parent region such as ngs-panel-content or a DataView viewport; make sure the parent already has a stable height and width. Do not use as a generic layout wrapper, spacing helper, page-level replacement for normal browser scrolling, carousel or scroll-snap component, virtualization engine, or a workaround for missing parent sizing.
   selectors: `ngs-scrollbar-area`
   exports: `ScrollbarArea`
   inputs: `absolute`, `autoHide`, `scrollbarWidth`
   outputs: `scrolled`
   tokens: `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-radius-sm`, `--ngs-scrollbar-area-scroll-track-bg`, `--ngs-scrollbar-area-thumb-active-bg`, `--ngs-scrollbar-area-thumb-bg`, `--ngs-scrollbar-area-thumb-hover-bg`, `--ngs-scrollbar-area-width`
 - segmented: `@ngstarter-ui/components/segmented` docs: /forms/segmented
-  purpose: Switch between compact mutually exclusive modes or filters.
-  use when: Use for view modes, time ranges, filter states, and short setting groups.
+  purpose: Let users choose one value from a compact set of mutually exclusive modes or options.
+  use when: Use ngs-segmented with ngs-segmented-button when a short set of options should stay visible and only one value can be selected. Good for view modes, time ranges, display density, selection mode, chart or table mode, compact filters, and short settings. It works as an Angular form control through value, valueChange, ngModel, or formControlName, supports disabled state, sizes, text buttons, icons with ngsSegmentedIcon, and iconOnly buttons. Do not use Segmented for route or page navigation; use Tabs, Navigation, Sidebar, Sidenav, or RailNav. Do not use for independent on/off toggles; use ButtonToggle or SlideToggle. Do not use for long lists, rich option cards, dropdown choices, or fixed color palettes; use Radio, RadioCard, Select, Autocomplete, or ColorSwitcher.
   example topics: Basic segmented control, Segmented control sizes, Segmented control disabled, Segmented control with icons, Segmented control with icons only, Segmented control with FormControl, Segmented control with ngModel, Basic segmented
   selectors: `[ngs-segmented-button]`, `[ngsSegmentedIcon]`, `ngs-segmented`, `ngs-segmented-button`
   exports: `Segmented`, `SEGMENTED`, `SegmentedButton`, `SegmentedIconDirective`, `SegmentedTriggerSize`
@@ -791,8 +791,8 @@ Typography:
   outputs: `valueChange`
   tokens: `--ngs-button-radius`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary`, `--ngs-color-surface`, `--ngs-color-surface-container`, `--ngs-color-surface-container-highest`, `--ngs-font-size-sm`, `--ngs-font-size-xs`, `--ngs-icon-size`, `--ngs-segmented-bg`, `--ngs-segmented-button-color`, `--ngs-segmented-button-font-size`, `--ngs-segmented-button-gap`, `--ngs-segmented-button-height`, `--ngs-segmented-button-hover-bg`
 - select: `@ngstarter-ui/components/select` docs: /forms/select
-  purpose: Let users choose one or more options from a dropdown list.
-  use when: Use for forms and filters when options are known and fit in a menu.
+  purpose: Let users choose one or multiple values from a known dropdown list.
+  use when: Use ngs-select inside one ngs-form-field when a form, filter, setting, table filter, DataView filter, or admin configuration field should choose from predefined options. Use ngs-option for options, ngs-optgroup for visible grouping, multiple for array values, placeholder, required, disabled, Angular forms, value, and selectionChange for state. Use ngs-select-trigger to customize the closed label, and ngs-select-header, ngs-select-body, or ngs-select-footer when the dropdown panel needs search, custom scrolling, or supporting controls. Do not use Select as a command menu or action list; use Menu. Do not use for route or page navigation; use Navigation, Tabs, Sidebar, Sidenav, or RailNav. Do not use for compact visible mode switching; use Segmented. Do not use for simple visible choices or rich card choices; use Radio or RadioCard. Do not use for arbitrary free text or large remote search suggestion flows; use Autocomplete or a dedicated async picker. Do not use generic Select when a domain-specific control exists, such as CountrySelect, CurrencySelect, DateFormatSelect, or TimezoneSelect.
   example topics: Basic Select, Getting and setting the select value, Form Field Features, Disabled, Resetting the select value, Groups of Options, Multiple Selection, Customizing the trigger label
   selectors: `ngs-select`, `ngs-select-body`, `ngs-select-footer`, `ngs-select-header`, `ngs-select-trigger`
   exports: `_Select`, `Select`, `SELECT`, `SelectBody`, `SelectChange`, `SelectFooter`, `SelectHeader`, `SelectTrigger`
@@ -800,8 +800,8 @@ Typography:
   outputs: `closed`, `opened`, `selectionChange`
   tokens: `--ngs-color-on-surface-variant`, `--ngs-color-outline`, `--ngs-dropdown-bg`, `--ngs-dropdown-border`, `--ngs-dropdown-max-height`, `--ngs-dropdown-padding`, `--ngs-dropdown-radius`, `--ngs-dropdown-shadow`, `--ngs-field-border-color`, `--ngs-field-font-size`, `--ngs-field-label-color`, `--ngs-field-line-height`, `--ngs-select-arrow-color`, `--ngs-select-border-color`, `--ngs-select-content-padding`, `--ngs-select-font-size`
 - side-panel: `@ngstarter-ui/components/side-panel` docs: /navigation/side-panel
-  purpose: Show secondary detail or task content beside the main page.
-  use when: Use for inspectors, edit panels, previews, and contextual details.
+  purpose: Provide an embedded side utility panel with tabbed tools beside the main content.
+  use when: Use ngs-side-panel inside an app or workspace layout when the page needs persistent secondary tools or inspectors next to the primary content. Add ngs-side-panel-tab for each tab with tabId, label, and an optional Iconify icon name or custom icon TemplateRef. Good for info, outline, layers, activity, comments, assets, properties, preview settings, contextual inspectors, and quick tools in editors or admin workspaces. It can be positioned left or right and emits opened and closed. Do not use SidePanel as a temporary overlay; use Drawer. Do not use for modal workflows or confirmations; use Dialog or Confirm. Do not use as a generic page section; use Panel or Card. Do not use for primary app navigation; use Sidebar, Sidenav, Navigation, or RailNav. Do not use for tabs inside normal content; use Tabs. Do not use for simple action lists; use Menu.
   example topics: Basic side panel
   selectors: `ngs-side-panel`, `ngs-side-panel-tab`
   exports: `PanelPosition`, `SidePanel`, `SidePanelTab`, `SidePanelTabConfig`
@@ -809,8 +809,8 @@ Typography:
   outputs: `closed`, `opened`
   tokens: `--ngs-nav-item-active-bg`, `--ngs-nav-item-active-color`, `--ngs-side-panel-button-active-bg`, `--ngs-side-panel-button-active-color`, `--ngs-side-panel-button-strip-width`, `--ngs-side-panel-content-bg`, `--ngs-side-panel-content-width`, `--ngs-side-panel-offset-y`, `--ngs-side-panel-transition-timing`
 - sidebar: `@ngstarter-ui/components/sidebar` docs: /navigation/sidebar
-  purpose: Provide vertical app navigation and supporting sidebar content.
-  use when: Use for admin app shells, workspace navigation, and persistent sections.
+  purpose: Provide a complete vertical app or workspace sidebar with its own navigation system.
+  use when: Use ngs-sidebar as the content inside a shell sidebar region, usually inside Sidenav or LayoutSidebar, when an admin app or workspace needs persistent sidebar navigation and supporting sidebar content. Compose it with ngs-sidebar-header, ngs-sidebar-body, ngs-sidebar-footer, ngs-sidebar-nav, ngs-sidebar-nav-item, ngs-sidebar-nav-group, ngs-sidebar-nav-group-toggle, ngs-sidebar-nav-group-menu, ngs-sidebar-nav-heading, ngs-sidebar-divider, ngsSidebarNavItemIcon, ngsSidebarNavItemBadge, and ngsSidebarNavGroupToggleIcon. Good for brand or workspace header, main app navigation, grouped routes, badges, active item state through activeKey, autoScrollToActiveItem, and data-driven nav templates. Sidebar owns navigation; when ngs-sidebar is not used and persistent navigation is needed, use Navigation. Do not use Sidebar as a generic left column, card, drawer content, inspector, page section, tabs, menu, or compact icon rail. Use Sidenav for responsive open, collapse, or overlay shell behavior, RailNav for compact icon navigation, SidePanel for secondary tabbed tools, Drawer for temporary overlay side content, and Panel or Card for content grouping.
   example topics: Basic sidebar, Sidebar with custom icons
   selectors: `[ngs-sidebar-nav-item]`, `[ngsSidebarNavGroupToggleIcon]`, `[ngsSidebarNavItemBadge]`, `[ngsSidebarNavItemDef]`, `[ngsSidebarNavItemIcon]`, `ngs-sidebar`, `ngs-sidebar-body`, `ngs-sidebar-content`, `ngs-sidebar-divider`, `ngs-sidebar-footer`, `ngs-sidebar-header`, `ngs-sidebar-nav`, `ngs-sidebar-nav-group`, `ngs-sidebar-nav-group-menu`, `ngs-sidebar-nav-group-toggle`, `ngs-sidebar-nav-heading`, `ngs-sidebar-nav-item`
   exports: `Sidebar`, `SIDEBAR_NAVIGATION`, `SIDEBAR_NAVIGATION_GROUP`, `SidebarBody`, `SidebarDivider`, `SidebarFooter`, `SidebarHeader`, `SidebarNav`, `SidebarNavGroup`, `SidebarNavGroupMenu`, `SidebarNavGroupToggle`, `SidebarNavGroupToggleIconDirective`
@@ -818,8 +818,8 @@ Typography:
   outputs: `itemClicked`
   tokens: `--ngs-color-emphasis`, `--ngs-color-on-primary`, `--ngs-color-on-surface-variant`, `--ngs-color-outline`, `--ngs-color-outline-variant`, `--ngs-color-primary`, `--ngs-color-subtle`, `--ngs-font-size-xs`, `--ngs-nav-arrow-size`, `--ngs-nav-badge-padding`, `--ngs-nav-badge-size`, `--ngs-nav-divider-height`, `--ngs-nav-divider-margin`, `--ngs-nav-group-toggle-icon-position-end`, `--ngs-nav-group-toggle-icon-size`, `--ngs-nav-group-toggle-padding-end`
 - sidenav: `@ngstarter-ui/components/sidenav` docs: /components/sidenav
-  purpose: Provide side navigation that can be persistent or toggleable.
-  use when: Use for responsive layouts and app navigation shells.
+  purpose: Provide a responsive shell container for side surfaces that can open, close, collapse, overlay, or push content.
+  use when: Use ngs-sidenav-container with ngs-sidenav and ngs-sidenav-content when a page or app shell needs a side region with behavior: opened state, open/close/toggle methods, mode over/push/side, position start/end, collapsed icon-width state, disableClose, backdrop and backdropClick, adaptive mobile mode through adaptive and adaptiveBreakpoint, fixedWidth, autosize, and autoFocus. Use ngsSidenavCollapsed and ngsSidenavExpanded templates to render different content while collapsed or expanded. In admin shells, put ngs-sidebar inside ngs-sidenav when the side region is primary navigation; Sidebar owns the actual navigation items. Do not use Sidenav as the navigation structure itself; use Sidebar or Navigation inside it. Do not use for temporary task panels; use Drawer. Do not use for persistent tabbed utility tools; use SidePanel. Do not use for static local columns or content sections; use LayoutSidebar, Panel, or Tailwind layout. Do not use for modal workflows, confirmations, or action menus; use Dialog, Confirm, or Menu.
   example topics: Basic sidenav
   selectors: `[ngsSidenavCollapsed]`, `[ngsSidenavExpanded]`, `ngs-sidenav`, `ngs-sidenav-container`, `ngs-sidenav-content`
   exports: `AutoFocusTarget`, `Sidenav`, `SIDENAV`, `SidenavCollapsed`, `SidenavContainer`, `SidenavContent`, `SidenavExpanded`, `SidenavMode`, `SidenavPosition`
@@ -827,8 +827,8 @@ Typography:
   outputs: `backdropClick`
   tokens: `--ngs-color-background`, `--ngs-overlay-backdrop-bg`, `--ngs-sidenav-backdrop-color`, `--ngs-sidenav-background-color`, `--ngs-sidenav-collapsed-width`, `--ngs-sidenav-divider-color`, `--ngs-sidenav-transition-duration`, `--ngs-sidenav-transition-timing-function`, `--ngs-sidenav-width`, `--ngs-sidenav-z-index`
 - signature-pad: `@ngstarter-ui/components/signature-pad` docs: /components/signature-pad
-  purpose: Capture a drawn signature.
-  use when: Use for approvals, contracts, confirmations, forms, and consent flows.
+  purpose: Capture a handwritten signature and emit it as a PNG data URL.
+  use when: Use ngs-signature-pad in approval, contract, consent, delivery confirmation, onboarding, checkout, legal acknowledgement, or internal workflow forms where the user must draw a signature. It supports mouse, touch, or pen input, penColor, colors for the fixed allowed pen palette, lineWidth, backgroundColor, lazy brush smoothing through lazyRadius/lazyFriction/lazyEnabled, clear(), save(), signatureSaved with a base64 PNG data URL, and signatureCleared. Use the emitted PNG in app code to store or attach the signature to the workflow or document. Do not use SignaturePad as a general drawing canvas, image editor, annotation tool, sketch board, whiteboard, file upload, typed-name field, or legal validation system by itself. App code still needs to require the signature when needed, persist it, and enforce backend or legal rules.
   example topics: Basic signature pad
   selectors: `ngs-signature-pad`
   exports: `LazyBrush`, `LazyBrushOptions`, `LazyBrushUpdateOptions`, `LazyPoint`, `Point`, `SignaturePad`
@@ -836,16 +836,16 @@ Typography:
   outputs: `signatureCleared`, `signatureSaved`
   tokens: `--ngs-brand-colors-color-size`, `--ngs-brand-colors-gap`, `--ngs-color-surface-container-highest`, `--ngs-color-surface-container-lowest`
 - skeleton: `@ngstarter-ui/components/skeleton` docs: /components/skeleton
-  purpose: Show placeholder shapes while content is loading.
-  use when: Use for cards, lists, tables, and pages where layout is known before data arrives.
+  purpose: Show placeholder blocks for loading content when the final layout is already known.
+  use when: Use ngs-skeleton to preserve layout while cards, lists, table rows, dashboard widgets, chart areas, avatars, text lines, or media blocks are loading. Shape and size each skeleton with TailwindCSS utilities such as h-*, w-*, size-*, flex, grid, gap, and wrapper layouts so it roughly matches the UI that will replace it. Use roundedFull for circular placeholders such as avatars or icon circles. Do not use Skeleton for unknown long operations where progress matters; use ProgressBar. Do not use for global route or app loading; use PageLoadingBar or ScreenLoader. Do not use for blocking a local section; use BlockLoader. Do not use for empty results; use EmptyState. Do not use for image fallback after load failure; use ImagePlaceholder. Do not use random grey blocks that do not resemble the final content.
   example topics: Basic Skeleton
   selectors: `ngs-skeleton`
   exports: `Skeleton`
   inputs: `roundedFull`
   tokens: `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-color-neutral-500`, `--ngs-color-neutral-600`, `--ngs-radius-xl`, `--ngs-skeleton-from-bg`, `--ngs-skeleton-item-border-radius`, `--ngs-skeleton-to-bg`
 - slide-toggle: `@ngstarter-ui/components/slide-toggle` docs: /forms/slide-toggle
-  purpose: Capture a binary on/off setting.
-  use when: Use for preferences, feature toggles, visibility, and immediate boolean settings.
+  purpose: Capture a boolean on/off setting where checked means enabled.
+  use when: Use ngs-slide-toggle for settings and preferences where checked=true means the feature or state is enabled. Good for live updates, notifications, dark mode option, visibility, sidebar expanded or collapsed, animation on/off, table options, enable Wi-Fi, show archived, and allow comments. It is an Angular form control with checked, disabled, required, ngModel, formControlName, change, and toggleChange, and has its own label pattern, so do not wrap it in ngs-form-field. Do not use SlideToggle for choosing one value from many; use Radio, Segmented, or Select. Do not use for multiple independent selections in a list; use Checkbox. Do not use for button-like mode groups; use ButtonToggle. Do not use for actions, commands, navigation, or rich option cards; use Button, Navigation, or RadioCard. For “I agree” or “accept terms” confirmations, prefer Checkbox because the user is confirming, not enabling a setting.
   example topics: Basic Slide Toggle, Disabled Slide Toggle, Slide Toggle with Forms, Slide toggle disabled
   selectors: `ngs-slide-toggle`
   exports: `SlideToggle`, `SlideToggleChange`
@@ -853,8 +853,8 @@ Typography:
   outputs: `change`, `toggleChange`
   tokens: `--ngs-color-on-primary`, `--ngs-color-primary`, `--ngs-color-surface`, `--ngs-color-surface-container-highest`, `--ngs-slide-toggle-bar-checked-color`, `--ngs-slide-toggle-bar-color`, `--ngs-slide-toggle-height`, `--ngs-slide-toggle-thumb-checked-color`, `--ngs-slide-toggle-thumb-color`, `--ngs-slide-toggle-thumb-size`, `--ngs-slide-toggle-transition-duration`, `--ngs-slide-toggle-width`
 - slider: `@ngstarter-ui/components/slider` docs: /components/slider
-  purpose: Let users choose a numeric value from a continuous or stepped range.
-  use when: Use for volume, size, thresholds, opacity, ranges, and visual settings.
+  purpose: Let users choose one numeric value or a start/end range by dragging thumb controls.
+  use when: Use ngs-slider when approximate visual numeric adjustment is better than typing. Good for volume, opacity, zoom, size, threshold, percentage, rating or score, price range, numeric date or age range, chart settings, visual tuning, and filter ranges. Use input ngsSliderThumb for one value, or input ngsSliderStartThumb plus input ngsSliderEndThumb for a range. Configure min, max, step, disabled, discrete, showTickMarks, displayWith, Angular forms, and valueChange on thumbs. Do not use Slider to show progress or status; use ProgressBar or Gauge. Do not use when exact numeric entry is primary; use NumberInput or pair NumberInput with Slider. Do not use for named categories; use Select, Radio, or Segmented. Do not use for before/after image comparison; use ComparisonSlider. Do not use for pagination or table sorting/filter builder logic; use Paginator, Sort, or FilterBuilder.
   example topics: Basic Slider, Custom Thumb Label Formatting, Range Slider, Configurable Slider
   selectors: `input[ngsSliderEndThumb]`, `input[ngsSliderStartThumb]`, `input[ngsSliderThumb]`, `ngs-slider`
   exports: `Slider`, `SliderEndThumb`, `SliderStartThumb`, `SliderThumb`
@@ -862,8 +862,8 @@ Typography:
   outputs: `valueChange`
   tokens: `--ngs-color-on-primary`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary`, `--ngs-color-primary-100`, `--ngs-color-surface`, `--ngs-color-surface-container-high`, `--ngs-slider-thumb-color`, `--ngs-slider-thumb-ripple-color`, `--ngs-slider-thumb-size`, `--ngs-slider-tick-mark-active-color`, `--ngs-slider-tick-mark-color`, `--ngs-slider-track-active-color`, `--ngs-slider-track-active-height`, `--ngs-slider-track-color`, `--ngs-slider-track-height`
 - snack-bar: `@ngstarter-ui/components/snack-bar` docs: /components/snackbar
-  purpose: Show short transient feedback after an action.
-  use when: Use for save confirmations, undo prompts, background results, and non-blocking messages.
+  purpose: Show short transient overlay feedback after an action or background result.
+  use when: Use the SnackBar service for brief non-blocking messages such as Saved, Copied, Invite sent, Refresh complete, Export started, or Deleted, with an optional quick action such as Undo or View. Open with snackBar.open(message, action?, config?), openFromComponent, or openFromTemplate. Configure duration, horizontalPosition, verticalPosition, data, panelClass, custom component or template content, and use SnackBarRef.dismiss(), afterOpened(), and afterDismissed() for lifecycle handling. SnackBar should be short, temporary, and safe to miss. Do not use for field validation errors; use FormField errors. Do not use for persistent inline messages; use Alert. Do not use for global important header messages; use Announcement. Do not use for critical required actions; use ActionRequired. Do not use for confirmations before destructive actions; use Confirm. Do not use for modal workflows; use Dialog. Do not use for long-lived notification inboxes or event feeds; use Notifications. Do not use for incident/status banners or loading/progress states; use Incidents, ProgressBar, ScreenLoader, BlockLoader, or PageLoadingBar.
   example topics: Basic Snackbar, Snackbar With Custom Component, Configurable Snackbar, Snackbar, Snackbar with custom
   selectors: `ngs-simple-snack-bar`, `ngs-snack-bar-container`
   exports: `provideSnackBarConfig`, `SimpleSnackBar`, `SNACK_BAR_CONFIG`, `SNACK_BAR_DATA`, `SnackBar`, `SnackBarConfig`, `SnackBarContainer`, `SnackBarHorizontalPosition`, `SnackBarRef`, `SnackBarVerticalPosition`

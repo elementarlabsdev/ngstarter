@@ -3,24 +3,30 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Skeleton component is used to provide a visual indication that content is loading.
-        It creates a placeholder that mimics the layout of the actual content, helping to reduce
-        perceived loading time and improve user experience.
+        Skeleton is a visual placeholder block for loading content when the final layout is already known.
+        Use it to preserve layout while cards, lists, table rows, dashboard widgets, chart areas,
+        avatars, text lines, or media blocks are loading.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Use it for:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Visual Feedback</strong>: Provides immediate feedback that content is on its way.
+            Repeating the approximate shape and size of the UI that will replace it.
           </li>
           <li>
-            ✅ <strong>Layout Stability</strong>: Maintains the layout of the page while content is loading.
+            Sizing placeholders with TailwindCSS utilities such as <code class="code">h-*</code>,
+            <code class="code">w-*</code>, and <code class="code">size-*</code>.
           </li>
           <li>
-            ✅ <strong>Customizable</strong>: Can be styled to match any content type.
+            Using <code class="code">roundedFull</code> for circular placeholders such as avatars.
           </li>
         </ul>
       </div>
+      <p>
+        Do not use Skeleton for unknown long operations, global route loading, blocking a local section,
+        empty results, image fallback after load failure, or status text. Use ProgressBar, PageLoadingBar,
+        ScreenLoader, BlockLoader, EmptyState, or ImagePlaceholder when those match the state better.
+      </p>
     </main>
     <nav ngs-tab-nav-bar>
       <a routerLink="/components/skeleton" ngs-tab-link>Overview</a>

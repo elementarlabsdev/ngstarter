@@ -3,29 +3,32 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Signature Pad component is a sleek and intuitive tool designed for capturing digital signatures with precision.
-        Whether you're building a document signing platform, a delivery confirmation app, or a simple consent form,
-        this component provides a smooth drawing experience with customizable features.
+        Signature Pad lets users draw a handwritten signature and emits the result as a PNG data URL.
+        Use it in approval, contract, consent, delivery confirmation, onboarding, checkout,
+        legal acknowledgement, or internal workflow forms where the user must provide a drawn signature.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Use it for:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Smooth Drawing</strong>: Advanced stroke interpolation for a natural writing feel.
+            Capturing a signature with mouse, touch, or pen input.
           </li>
           <li>
-            ✅ <strong>Customizable Appearance</strong>: Control pen color, line width, and background to match your UI.
+            Emitting <code class="code">signatureSaved</code> with a base64 PNG data URL after drawing.
           </li>
           <li>
-            ✅ <strong>Lazy Brush</strong>: Optional "lazy" brush effect for more controlled and steady signatures.
+            Clearing the captured signature with <code class="code">signatureCleared</code>.
           </li>
           <li>
-            ✅ <strong>Easy Integration</strong>: Built as a standalone Angular component for rapid deployment.
+            Configuring pen color, allowed colors, line width, background color, and lazy brush smoothing.
           </li>
         </ul>
       </div>
       <p>
-        Optimized for both desktop and mobile devices, the Signature Pad ensures a consistent user experience across all platforms.
+        Do not use Signature Pad as a general drawing canvas, image editor, annotation tool,
+        sketch board, whiteboard, file upload, typed-name field, or legal validation system by itself.
+        App code should still require the signature when needed, store the emitted PNG,
+        attach it to the workflow or document, and enforce backend or legal rules.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

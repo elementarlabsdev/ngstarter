@@ -3,24 +3,31 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Resizable Container component is a versatile UI element that allows users to adjust the width of a content
-        area dynamically. It provides a draggable handle for resizing, making it ideal for creating flexible layouts,
-        sidebars, or preview panels.
+        Resizable Container lets users manually change the width of one container with a vertical drag handle.
+        It updates the container width within the parent bounds and emits the new width.
+      </p>
+      <p class="mt-3">
+        Use it for a resizable preview pane, editor canvas, inspector or detail panel,
+        side content area, responsive demo area, chart preview, or docs playground.
+      </p>
+      <p class="mt-3">
+        Do not use it for split layouts between two panels, image resizing, table column resizing,
+        or normal responsive containers that should resize automatically.
       </p>
       <div class="my-7">
         <div>Key Features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Interactive Resizing</strong>: Smooth, real-time width adjustment via a draggable handle.
+            Width resizing through a right-side drag handle.
           </li>
           <li>
-            ✅ <strong>Configurable Constraints</strong>: Define minimum width to maintain layout integrity.
+            Minimum width constraint.
           </li>
           <li>
-            ✅ <strong>Event Notification</strong>: Emits events on resize for synchronized UI updates.
+            resized event with the current width.
           </li>
           <li>
-            ✅ <strong>Flexible Content</strong>: Can wrap any content, including charts, text, or complex components.
+            Works with arbitrary content inside the container.
           </li>
         </ul>
       </div>

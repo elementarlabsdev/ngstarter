@@ -3,7 +3,22 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Slider component allows users to select a value or a range of values from a range by moving a slider thumb along a track.
+        Slider lets users choose a numeric value, or a start and end range, by dragging thumb controls
+        along a track. Use it when approximate visual adjustment is better than typing.
+      </p>
+      <p class="mt-3">
+        Good examples include volume, opacity, zoom, size, threshold, percentage, rating or score,
+        price range, numeric date or age range, chart settings, visual tuning, and filter ranges.
+        Use <code class="code">input ngsSliderThumb</code> for one value, or
+        <code class="code">input ngsSliderStartThumb</code> and <code class="code">input ngsSliderEndThumb</code>
+        for a range.
+      </p>
+      <p class="mt-3">
+        Do not use Slider to show progress or status, enter exact numbers as the primary workflow,
+        choose named categories, compare before and after images, paginate, or build table sorting logic.
+        Use ProgressBar, Gauge, NumberInput, Select, Radio, Segmented, ComparisonSlider, Paginator,
+        or Sort when those match the job better. If the value must be exact, pair Slider with NumberInput
+        or use NumberInput instead.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

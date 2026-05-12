@@ -3,8 +3,23 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The snackbar provides brief messages about app processes at the bottom of the screen.
-        It is ideal for non-intrusive notifications or confirmations that do not require user interaction.
+        SnackBar shows transient overlay feedback after an action or background result.
+        Use it for short non-blocking messages such as “Saved”, “Copied”, “Invite sent”,
+        “Refresh complete”, “Export started”, or “Deleted” with an optional quick action such as “Undo” or “View”.
+      </p>
+      <p class="mt-3">
+        Open snack bars through the <code class="code">SnackBar</code> service with
+        <code class="code">open(message, action?, config?)</code>,
+        <code class="code">openFromComponent</code>, or <code class="code">openFromTemplate</code>.
+        Configure duration, top or bottom placement, horizontal position, custom data,
+        and custom component or template content when needed.
+      </p>
+      <p class="mt-3">
+        Do not use SnackBar for field validation errors, persistent inline messages,
+        global important header messages, critical required actions, confirmations before destructive actions,
+        modal workflows, long-lived notification inboxes, incident banners, or loading and progress states.
+        Use FormField errors, Alert, Announcement, ActionRequired, Confirm, Dialog, Notifications,
+        Incidents, ProgressBar, or loaders when those match the job better.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

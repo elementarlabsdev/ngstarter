@@ -3,26 +3,33 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Sidebar component provides a robust and flexible navigation interface for your application.
-        It supports hierarchical menus, grouping, and custom content, ensuring a seamless user experience.
+        Sidebar is a complete vertical app or workspace sidebar for persistent navigation
+        and supporting sidebar content. Use it inside a shell sidebar region, usually within
+        Sidenav or LayoutSidebar, when the app needs a real sidebar with header, body, footer,
+        navigation items, groups, headings, dividers, badges, icons, and active state.
       </p>
       <div class="my-7">
-        <div>Key Features:</div>
+        <div>Use it for:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Hierarchical Navigation</strong>: Support for multi-level menus and groups.
+            App and admin shell sidebars with brand, workspace switcher, main navigation, and footer content.
           </li>
           <li>
-            ✅ <strong>Customizable</strong>: Easily adapt icons, labels, and overall styling.
+            Navigation with <code class="code">ngs-sidebar-nav</code>, <code class="code">ngs-sidebar-nav-item</code>,
+            active keys, icons, badges, headings, dividers, and expandable groups.
           </li>
           <li>
-            ✅ <strong>Responsive</strong>: Works across different screen sizes.
-          </li>
-          <li>
-            ✅ <strong>Integration</strong>: Built with Angular for high performance and reliability.
+            Data-driven sidebar navigation with item templates when the navigation tree comes from configuration.
           </li>
         </ul>
       </div>
+      <p>
+        Sidebar has its own navigation system. If <code class="code">ngs-sidebar</code> is not used
+        and a persistent navigation block is still needed, use Navigation instead. Do not use Sidebar
+        as a generic left column, card, drawer content, inspector, page section, tabs, menu, or compact
+        icon rail. Use Sidenav for responsive open, collapse, or overlay behavior, RailNav for compact
+        icon navigation, and SidePanel for secondary tabbed tools beside the main content.
+      </p>
     </main>
     <nav ngs-tab-nav-bar>
       <a routerLink="/navigation/sidebar" ngs-tab-link>Overview</a>

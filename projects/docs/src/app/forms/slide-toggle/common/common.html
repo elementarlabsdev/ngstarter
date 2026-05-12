@@ -3,7 +3,24 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The slide-toggle component is an on/off control that can be toggled via clicking or dragging.
+        Slide Toggle is a boolean switch for an on/off state. Use it for settings and preferences
+        where <code class="code">checked=true</code> means a feature or state is enabled.
+      </p>
+      <p class="mt-3">
+        Good examples include live updates, notifications, visibility, sidebar expanded or collapsed,
+        animation on or off, table options, enable Wi-Fi, show archived, and allow comments.
+        It works with <code class="code">checked</code>, <code class="code">disabled</code>,
+        <code class="code">required</code>, <code class="code">ngModel</code>,
+        <code class="code">formControlName</code>, <code class="code">change</code>, and
+        <code class="code">toggleChange</code>.
+      </p>
+      <p class="mt-3">
+        Slide Toggle has its own label pattern, so do not wrap it in <code class="code">ngs-form-field</code>.
+        Do not use it for choosing one value from many, multiple independent selections in a list,
+        button-like mode groups, commands, navigation, or rich option cards. Use Radio, Segmented,
+        Select, Checkbox, ButtonToggle, Button, Navigation, or RadioCard when those match the job better.
+        For “I agree” or “accept terms” confirmations, prefer Checkbox because the user is confirming,
+        not enabling a setting.
       </p>
     </main>
     <nav ngs-tab-nav-bar class="mb-6">

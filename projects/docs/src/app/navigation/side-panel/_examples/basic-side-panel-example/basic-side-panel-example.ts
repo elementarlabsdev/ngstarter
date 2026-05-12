@@ -5,8 +5,7 @@ import {
   Layout,
   LayoutHeader
 } from '@ngstarter-ui/components/layout';
-import { SidePanel } from '@ngstarter-ui/components/side-panel';
-import { SidePanelTab } from '@ngstarter-ui/components/side-panel/src/side-panel-tab/side-panel-tab';
+import { SidePanel, SidePanelTab } from '@ngstarter-ui/components/side-panel';
 
 @Component({
   selector: 'app-basic-side-panel-example',

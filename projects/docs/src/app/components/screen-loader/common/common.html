@@ -3,8 +3,20 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Screen Loader component provides a full-screen loading overlay to indicate that an operation is in progress.
-        It can be triggered programmatically via a service and supports custom messages and templates.
+        Screen Loader shows a full-screen blocking loading state when the user must wait
+        and should not interact with the app.
+      </p>
+      <p class="mt-3">
+        Use it for initial app load, major route or page data loading, account switching,
+        tenant switching, auth or session restore, heavy backend tasks, and large global operations.
+      </p>
+      <p class="mt-3">
+        Use ScreenLoaderService for programmatic overlays and always close the returned ref
+        when the operation finishes. Use the component directly only when the opened state is controlled in a template.
+      </p>
+      <p class="mt-3">
+        Do not use Screen Loader for local block, card, table, or form loading. Use BlockLoader,
+        Skeleton, ProgressSpinner, ProgressBar, PageLoadingBar, or component-specific loading states instead.
       </p>
       <div class="my-7">
         <div>Key Features:</div>

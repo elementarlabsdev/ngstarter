@@ -23,10 +23,10 @@
                     <ngs-sidebar-nav-item [key]="childNavItem.key">
                       <ng-container ngsSidebarNavItemIcon>
                         @if (childNavItem.icon) {
-                          <ngs-icon name="fluent:{{ navItem.icon }}"/>
+                          <ngs-icon name="fluent:{{ childNavItem.icon }}"/>
                         }
                       </ng-container>
-                      {{ navItem.label }}
+                      {{ childNavItem.label }}
                     </ngs-sidebar-nav-item>
                   }
                 </ngs-sidebar-nav-group-menu>

@@ -3,8 +3,21 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Side Panel component provides a slide-out container for additional content, navigation, or tools.
-        It supports multiple tabs and can be positioned on either side of the screen.
+        Side Panel provides an embedded side utility panel with a vertical strip of icon tabs
+        and an expandable content area. Use it inside app or workspace layouts when the main page
+        needs persistent secondary tools or inspectors beside the primary content.
+      </p>
+      <p class="mt-3">
+        Use <code class="code">ngs-side-panel</code> with <code class="code">ngs-side-panel-tab</code>
+        for panels such as info, outline, layers, activity, comments, assets, properties,
+        preview settings, and quick tools. Each tab has a <code class="code">tabId</code>,
+        <code class="code">label</code>, and optional icon name or custom icon template.
+      </p>
+      <p class="mt-3">
+        Do not use Side Panel as a temporary overlay, modal workflow, confirmation dialog,
+        generic page section, primary navigation, content tabs, or action menu. Use Drawer,
+        Dialog, Confirm, Panel, Sidebar, Sidenav, Navigation, RailNav, Tabs, or Menu when those
+        match the job better.
       </p>
     </main>
     <nav ngs-tab-nav-bar>
