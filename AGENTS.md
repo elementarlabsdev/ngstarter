@@ -41,15 +41,21 @@ Prefer the narrowest command that verifies the change. For component library cha
 
 ## Admin App Construction Rules
 
-When building or changing admin pages in `projects/admin`, agents MUST compose UI from NgStarter
+When building or changing admin pages in `projects/admin*`, agents MUST compose UI from NgStarter
 components before writing custom primitives.
 
 Required admin mappings:
 
-- App shell: `Sidenav`, `SidenavContainer`, `SidenavContent` from
+- Root viewport shell: `Layout` and `LayoutContent` from `@ngstarter-ui/components/layout`.
+- App shell: `Sidenav`, `SidenavContainer`, and `SidenavContent` from
   `@ngstarter-ui/components/sidenav`.
-- Navigation: `Navigation`, `NavigationItem`, `NavigationItemIconDirective` from
-  `@ngstarter-ui/components/navigation`.
+- Primary app navigation inside the sidenav: compact `Sidebar`, `SidebarHeader`, `SidebarBody`,
+  `SidebarFooter`, `SidebarNav`, `SidebarNavItem`, `SidebarNavItemIconDirective`, and
+  `SidebarNavItemBadgeDirective` from `@ngstarter-ui/components/sidebar`.
+- Local workspace surfaces: `Panel`, `PanelHeader`, `PanelContent`, `PanelAside`, `PanelSidebar`,
+  and `PanelFooter` from `@ngstarter-ui/components/panel`.
+- Secondary in-page navigation only when it is not the app rail: `Navigation`, `NavigationItem`,
+  and `NavigationItemIconDirective` from `@ngstarter-ui/components/navigation`.
 - Cards and KPI panels: `Card`, `CardContent`, and `CardFooter` when needed from
   `@ngstarter-ui/components/card`.
 - Datatables, operational admin datasets, and rich data grids: `DataView` from
@@ -62,6 +68,8 @@ Required admin mappings:
 - Actions: `Button` and `Icon`.
 - Selection: `Checkbox`.
 - Progress and completion: `ProgressBar`.
+- Scrollable panel, grid, sidebar, inspector, and chat message regions: `ScrollbarArea` from
+  `@ngstarter-ui/components/scrollbar-area`.
 - Startup splash: `SplashScreen` only once near the root app template for initial branded bootstrap
   loading; do not use it as a general page, route, form, table, or operation loader.
 
@@ -71,6 +79,36 @@ records, actions, selection, sorting, search, pagination, column sizing, column 
 server-driven data, use `DataView`. If the UI is only static/read-only tabular content with known
 template columns and no datatable behavior, use `Table`. CSS may tune layout, spacing, and visual
 fidelity, but it must not replace NgStarter component structure.
+
+Admin shell defaults:
+
+- Make the root admin app height through `<ngs-layout root>` and keep document/app containers at
+  viewport height with overflow hidden. Do not create the root `100vh` shell with a custom `main`,
+  route wrapper, or page `div`.
+- Direct children of `ngs-layout` must be layout region components only: `ngs-layout-topbar`,
+  `ngs-layout-header`, `ngs-layout-sidebar`, `ngs-layout-content`, `ngs-layout-aside`, and
+  `ngs-layout-footer`. Do not put arbitrary `div`, `main`, `section`, `body`, or `content` wrappers
+  directly inside `ngs-layout`.
+- Compose admin shells in this order: `ngs-layout[root]` > `ngs-layout-content` >
+  `ngs-sidenav-container` > `ngs-sidenav` + `ngs-sidenav-content` > `ngs-panel`.
+- Do not place another `Layout` inside `Sidenav`, `SidenavContent`, `Sidebar`, or `Panel`; the
+  single root `Layout` owns viewport sizing.
+- Put the compact app rail inside `ngs-sidenav` with `ngs-sidebar`. Do not use `ngs-navigation` for
+  the primary sidebar/rail.
+- Put the page/workspace header in `ngs-panel-header`, the scrollable main body in
+  `ngs-panel-content`, and any persistent right column such as an assistant, inspector, details
+  pane, or activity feed in `ngs-panel-aside`. Do not build a manual outer CSS grid that wraps
+  content and right aside when `ngs-panel-aside` fits.
+- `ngs-panel-content` should own the workspace scroll region. The actual scroll container inside it
+  should be `ngs-scrollbar-area`. The overall admin app, root layout, sidenav container, and panel
+  should not become taller than the viewport.
+- Use `ngs-scrollbar-area` for actual scrollable regions inside sized admin surfaces. For
+  `ngs-panel-content`, put `<ngs-scrollbar-area [absolute]="true">` inside the panel content and
+  move content padding to an inner element. For chat messages or other flex children, wrap the
+  scrollbar area in a `position: relative; min-height: 0; flex: 1` shell.
+- Chat-like assistants should be structured as a fixed-height panel aside with a scrollable messages
+  region and a composer anchored at the bottom, using `Card`, `CardHeader`, `CardContent`,
+  `FormField`, `Input`, `Button`, and `Icon` where applicable.
 
 Form construction rules:
 
@@ -83,6 +121,9 @@ Form construction rules:
   non-form UI.
 - Do not wrap checkbox, radio, button, or toggle controls in `ngs-form-field` when they already have
   their own label pattern.
+- In admin UIs, text inputs and search fields should not use visible CSS borders. Set form field
+  border tokens to zero/transparent and render the field edge with `outline` on the NgStarter field
+  container, including focused state. The outline must not change layout size.
 
 Styling rules for admin UIs:
 
@@ -97,6 +138,18 @@ Styling rules for admin UIs:
   `.tasks-panel`, or `.admin-navigation` when a component selector or component token fits.
 - Global visual customization should use CSS custom properties and theme tokens, especially
   `--ngs-*` variables.
+- Do not put visual styling in templates with `[style.*]`, `[attr.style]`, `[ngStyle]`, or inline
+  `style` attributes. This applies to component CSS variables, colors, gradients, spacing, sizing,
+  shadows, borders, typography, and other visual values. Add a purpose-named class in the template
+  and define the styles or component tokens in the local SCSS file.
+- Do not put arbitrary token utilities such as `border-[var(--...)]`, `bg-[var(--...)]`, or
+  `text-[var(--...)]` in admin templates for reusable visual styling. Define those visual rules in
+  local SCSS with a component selector or a purpose-named class, and keep templates focused on
+  structure, layout, and state.
+- Do not duplicate NgStarter global reset/base styles in admin app `styles.scss` files. Theme
+  styles already include baseline `body`, font smoothing, scrollbar, input, and component base
+  styles. The NgStarter theme also imports TailwindCSS, so admin app global styles should usually
+  import only the NgStarter theme.
 
 Typography rules for admin UIs:
 
@@ -163,8 +216,7 @@ import { Button } from '@ngstarter-ui/components/button';
 ```
 
 ```html
-<button ngsButton="filled">Save</button>
-<button ngsIconButton aria-label="Settings">...</button>
+<button ngsButton="filled">Save</button> <button ngsIconButton aria-label="Settings">...</button>
 ```
 
 For app setup:
