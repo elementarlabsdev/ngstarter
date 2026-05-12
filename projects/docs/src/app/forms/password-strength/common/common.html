@@ -3,8 +3,22 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Password Strength component provides visual feedback on the strength of a user's password based on various criteria.
-        It helps users create more secure passwords by showing real-time strength indicators and optional detailed requirements.
+        Password Strength provides real-time feedback while a user creates or changes a password.
+        It shows a strength bar and can show detailed requirement status for length, lowercase,
+        uppercase, digit, special character, and custom rules.
+      </p>
+      <p class="mt-3">
+        Use it next to a password input in signup, reset password, change password,
+        account security, and credential setup forms.
+      </p>
+      <p class="mt-3">
+        Use ngs-pass-toggle-visibility as a form-field suffix when users need to show or hide the password.
+        Use PasswordStrengthInfo when the form should explain exactly which requirements are satisfied.
+      </p>
+      <p class="mt-3">
+        Do not use Password Strength for OTP, MFA, invite codes, or passcodes; use PinInput.
+        Do not use it for generic text validation. Do not rely on it as the only password security policy;
+        the backend must validate the password too.
       </p>
       <div class="my-7">
         <div>Key Features:</div>

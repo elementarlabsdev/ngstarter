@@ -3,9 +3,18 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Progress Bar component is a visual indicator used to show the completion status of a task or process.
-        It supports multiple modes, including determinate, indeterminate, buffer, and query,
-        making it versatile for various use cases in modern web applications.
+        Progress Bar displays linear progress for an operation or process.
+        Use it for uploads, downloads, imports, setup completion, sync, processing,
+        form completion, buffering, and other horizontal progress states.
+      </p>
+      <p class="mt-3">
+        Use determinate when the percentage is known, indeterminate when work is happening but the percentage is unknown,
+        buffer when there is both primary and buffered progress, and query while waiting before known progress starts.
+      </p>
+      <p class="mt-3">
+        Do not use Progress Bar for router navigation, blocking an entire area, skeleton loading,
+        circular KPI metrics, mini charts, or status labels. Use PageLoadingBar, BlockLoader,
+        Skeleton, Gauge, MicroChart, or Badge instead.
       </p>
       <div class="my-7">
         <div>Key Features:</div>

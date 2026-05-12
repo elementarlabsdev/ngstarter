@@ -653,19 +653,19 @@ Typography:
   outputs: `onSelectionChange`
   tokens: `--ngs-color-on-primary-container`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary-container`, `--ngs-color-surface-container-high`, `--ngs-color-surface-container-highest`, `--ngs-control-radius`, `--ngs-dropdown-height`, `--ngs-dropdown-item-active-bg`, `--ngs-dropdown-item-color`, `--ngs-dropdown-item-disabled-color`, `--ngs-dropdown-item-font-size`, `--ngs-dropdown-item-gap`, `--ngs-dropdown-item-hover-bg`, `--ngs-dropdown-item-nested-padding-start`, `--ngs-dropdown-item-padding`
 - overlay: `@ngstarter-ui/components/overlay`
-  purpose: Position floating UI relative to an anchor.
-  use when: Use for custom popovers, dropdowns, panels, menus, and floating surfaces.
+  purpose: Provide low-level shared positioning utilities for components that create Angular CDK floating overlays.
+  use when: Use Overlay only when implementing a new NgStarter component or custom directive that directly manages Angular CDK Overlay, portal rendering, backdrop or outside-click behavior, close behavior, keyboard/focus handling, and anchored positioning. Use OverlayPosition values such as below-start, below-center, below-end, above-*, before-*, and after-*. Use new PositionManager().build(position) to create fallback ConnectedPosition[] pairs. Do not use Overlay directly when building a normal admin page or feature screen. Prefer higher-level components: Menu for action dropdowns and context menus, Popover for lightweight anchored content, Dialog for modal workflows, Drawer for side overlays, Select/Autocomplete/Datepicker/ColorPicker for form dropdowns, and Tooltip for simple hints.
   exports: `OverlayPosition`, `PositionManager`
 - page-loading-bar: `@ngstarter-ui/components/page-loading-bar`
-  purpose: Show route or page-level loading progress.
-  use when: Use during navigation, large async page transitions, or app-wide loading states.
+  purpose: Show a global thin loading bar during Angular Router navigation.
+  use when: Use ngs-page-loading-bar once in the top-level app shell or root layout, usually near the root layout or router outlet, to provide navigation feedback. It listens to Angular Router events automatically: NavigationStart shows the bar, and NavigationEnd, NavigationCancel, or NavigationError finish it. Use fixed when the bar should stay attached to the viewport. Do not use PageLoadingBar for loading a specific block, table, card, form, submit/save/upload operation, or async work inside a page. Use ProgressBar, ProgressSpinner, BlockLoader, Skeleton, ScreenLoader, or the component-specific loading state for local loading. Do not use it as a real task completion percentage; it is route navigation feedback only.
   selectors: `ngs-page-loading-bar`
   exports: `PageLoadingBar`
   inputs: `fixed`
   tokens: `--ngs-loading-bar-bg`, `--ngs-loading-bar-height`
 - paginator: `@ngstarter-ui/components/paginator` docs: /components/paginator
-  purpose: Navigate paged datasets.
-  use when: Use with tables, data views, lists, and server-side record browsing.
+  purpose: Control pages of a dataset with range label, previous/next navigation, optional first/last buttons, and page size selection.
+  use when: Use ngs-paginator next to paged tables, DataView screens, search results, record lists, and server-side browsing. Provide length for total records, pageSize for records per page, zero-based pageIndex for the current page, and pageSizeOptions for allowed page sizes. Handle the page event to update local data or request the next page from an API; PageEvent includes previousPageIndex, pageIndex, pageSize, and length. Use hidePageSize when the page size is fixed. Use showFirstLastButtons when users need quick first/last navigation. Use PaginatorIntl to localize labels and range text. Do not use Paginator for app route navigation; use Navigation, Tabs, or Breadcrumbs. Do not use for wizard or onboarding steps; use Stepper or HeadlessStepper. Do not use for carousel slides, media browsing, or standalone UI without a paged dataset. If DataView already owns pagination, use its pagination model instead of adding a separate paginator.
   example topics: Basic Paginator, Configurable Paginator
   selectors: `ngs-paginator`
   exports: `DEFAULT_PAGE_SIZE`, `PageEvent`, `Paginator`, `PAGINATOR_DEFAULT_OPTIONS`, `PaginatorDefaultOptions`, `PaginatorIntl`
@@ -673,16 +673,16 @@ Typography:
   outputs: `page`
   tokens: `--ngs-color-on-surface`, `--ngs-font-size-sm`, `--ngs-form-field-container-min-height`, `--ngs-form-field-infix-min-height`, `--ngs-form-field-infix-padding-bottom`, `--ngs-form-field-infix-padding-top`, `--ngs-paginator-container-background`, `--ngs-paginator-container-background-color`, `--ngs-paginator-container-text-color`, `--ngs-paginator-container-text-font`, `--ngs-paginator-container-text-line-height`, `--ngs-paginator-container-text-size`, `--ngs-paginator-container-text-tracking`, `--ngs-paginator-container-text-weight`, `--ngs-paginator-items-per-page-label-margin`, `--ngs-paginator-page-size-margin-right`
 - panel: `@ngstarter-ui/components/panel` docs: /components/panel
-  purpose: Group content inside a structured panel surface.
-  use when: Use for dashboard sections, settings panels, details, and repeated admin modules.
+  purpose: Create a local structured work area with header, subheader, sidebar, scrollable content, aside, and footer regions.
+  use when: Use ngs-panel inside a page or workspace for admin modules, settings areas, editors, detail panes, inspectors, dashboard sections, and local surfaces that need their own header, footer, side columns, and scrollable body. Use ngs-panel-header for local title, toolbar, or actions; ngs-panel-subheader for filters or secondary status; ngs-panel-sidebar for a local left column; ngs-panel-content for the main scrollable area; ngs-panel-aside for a local right column; and ngs-panel-footer for local footer actions or status. Use absolute when the panel should fill the parent bounds. Use TailwindCSS classes for sizing, borders, spacing, and inner layout. Do not use Panel as the top-level application shell; use Layout. Do not use for small content blocks; use Card. Do not use for overlay side panels; use Drawer. Do not use as a generic spacing wrapper or form grid; use TailwindCSS grid/flex and FormField.
   example topics: Basic panel, Basic with extra columns (sidebar and aside), Panel with extra columns
   selectors: `ngs-panel`, `ngs-panel-aside`, `ngs-panel-content`, `ngs-panel-footer`, `ngs-panel-header`, `ngs-panel-sidebar`, `ngs-panel-subheader`
   exports: `Panel`, `PANEL_CONTENT`, `PanelAside`, `PanelContent`, `PanelContentInterface`, `PanelFooter`, `PanelHeader`, `PanelSidebar`, `PanelSubheader`
   inputs: `absolute`, `autoHeight`
   tokens: `--ngs-panel-footer-height`, `--ngs-panel-header-height`, `--ngs-panel-subheader-height`
 - password-strength: `@ngstarter-ui/components/password-strength` docs: /forms/password-strength
-  purpose: Show password quality feedback while users type.
-  use when: Use in signup, reset password, account security, and credential forms.
+  purpose: Show real-time password strength feedback and requirement status while users create or change a password.
+  use when: Use PasswordStrength in signup, reset password, change password, account security, and credential setup forms. Use input type="password" ngsInput inside one ngs-form-field for the actual password field, then place ngs-password-strength [password]="password.value" below it for the strength bar. Use ngs-password-strength-info with a template reference to the strength component when users need to see requirement status for lowercase, uppercase, digit, special character, min length, or custom rules. Use ngs-pass-toggle-visibility as a suffix control inside the password form field when users need show/hide password behavior. Configure min, max, enableLengthRule, enableDigitRule, enableSpecialCharRule, and customValidator as needed, and listen to strengthChanged when the screen needs the score. Do not use PasswordStrength for OTP, MFA, invite codes, or passcodes; use PinInput. Do not use for generic text validation. Do not use for a login password field unless the user is creating or changing a password and strength feedback is useful. Do not rely on it as the only password security policy; backend validation is still required.
   example topics: Basic password strength, Password strength info, Password toggle visibility
   selectors: `ngs-pass-toggle-visibility`, `ngs-password-strength`, `ngs-password-strength-info`
   exports: `Colors`, `Criteria`, `PassToggleVisibility`, `PasswordStrength`, `PasswordStrengthInfo`, `PasswordStrengthValidator`, `RegExpValidator`
@@ -690,8 +690,8 @@ Typography:
   outputs: `strengthChanged`
   tokens: `--ngs-color-danger`, `--ngs-color-green-500`, `--ngs-color-warning`, `--ngs-progress-bar-active-indicator-color`, `--ngs-progress-bar-active-indicator-height`, `--ngs-progress-bar-track-height`
 - phone-input: `@ngstarter-ui/components/phone-input` docs: /forms/phone-input
-  purpose: Capture phone numbers with country-aware formatting and validation.
-  use when: Use in profiles, billing, contact forms, onboarding, and support workflows.
+  purpose: Capture real phone numbers with country selection, flag, dial code, formatting, and libphonenumber-js validation.
+  use when: Use ngs-phone-input inside one ngs-form-field for profile, contact, billing, onboarding, checkout, support, invite, and contact forms when the value must be a real phone number. Use formControlName or ngModel, show invalidPhone with ngs-error, set defaultSelectedCountryCode when the initial country should not be us, use onlyCountries to restrict available countries, preferredCountries to pin common countries to the top, format="default | national | international" for display formatting, and countryChanged when the screen needs to react to country changes. Do not use plain ngsInput, NumberInput, or InputMask for country-aware phone numbers. Do not use CountrySelect instead of PhoneInput; CountrySelect chooses a country but does not capture a phone number. Do not use for OTP, MFA, passcodes, or invite codes; use PinInput.
   example topics: Basic phone input, Phone input with custom country list, Phone input with preferred country list, Phone input only countries, Phone input preferred countries
   selectors: `ngs-phone-input`
   exports: `Country`, `CountryCode`, `PhoneInput`, `PhoneNumberFormat`, `phoneValidator`, `SearchPipe`
@@ -699,8 +699,8 @@ Typography:
   outputs: `countryChanged`
   tokens: `--ngs-color-neutral-500`, `--ngs-color-neutral-600`, `--ngs-phone-input-color`, `--ngs-phone-input-flag-display`, `--ngs-phone-input-height`, `--ngs-phone-input-opacity`
 - pin-input: `@ngstarter-ui/components/pin-input` docs: /forms/pin-input
-  purpose: Capture short multi-digit verification or security codes.
-  use when: Use for OTP, MFA, invite codes, passcodes, and verification flows.
+  purpose: Capture short one-character-per-cell codes for verification and secure access flows.
+  use when: Use ngs-pin-input as a standalone form control for OTP, MFA, SMS or email verification codes, invite codes, passcodes, payment verification, and secure access codes. Use ngModel or formControlName, length for the number of cells, placeholder for the empty-cell hint, acceptOnly for allowed symbols with digits as the default, and disabled for disabled state. The component manages one-character cells and focus movement between them. Do not use PinInput for phone numbers; use PhoneInput. Do not use for creating or changing passwords; use ngsInput with PasswordStrength. Do not use for numeric settings or quantities; use NumberInput. Do not use for long codes, serial numbers, coupons, or arbitrary text; use a normal ngsInput. Do not wrap it in ngs-form-field as if it were a single text input; the component renders its own internal form fields.
   example topics: Basic Pin Input, Placeholder, Custom Length, Custom Symbols, Pin input with placeholder, Pin input length, Pin input accept custom symbols
   selectors: `[ngsPinInput]`, `ngs-pin-input`
   exports: `PinInput`, `PinInputDirective`
@@ -708,8 +708,8 @@ Typography:
   outputs: `valuePaste`
   tokens: `--ngs-form-field-input-text-align`, `--ngs-form-field-width`, `--ngs-pin-gap`, `--ngs-pin-input-width`
 - popover: `@ngstarter-ui/components/popover` docs: /components/popover
-  purpose: Show lightweight contextual content anchored to another element.
-  use when: Use for quick details, simple forms, explanations, and non-modal contextual UI.
+  purpose: Show lightweight contextual content in an overlay anchored to a trigger element.
+  use when: Use Popover for short details, previews, small interactive content, compact forms, and richer explanations that need more than a plain tooltip but do not require a modal workflow. Put ngsPopoverTriggerFor on the trigger element and point it to ngs-popover or a TemplateRef. Use trigger="click" for explicit opening and trigger="hover" only for preview-style content that can disappear safely. Use position for below/above/before/after placement. Use ngsPopoverContext with ngsPopoverContent for lazy content that needs trigger data. Use a raw TemplateRef only when the standard ngs-popover-panel wrapper should be replaced. Use hasBackdrop, closeOnOriginClick, closeOnOriginMouseLeave, and origin only when custom close or anchoring behavior is needed. Do not use Popover for command lists; use Menu. Do not use for short plain hints; use Tooltip. Do not use for modal workflows, confirmations, or complex forms; use Dialog or Confirm. Do not use for side panels; use Drawer. Do not use for form dropdowns; use Select, Autocomplete, Datepicker, or ColorPicker. Do not use low-level Overlay directly when Popover fits.
   example topics: Basic Popover, Show popover by hover, Popover custom position, Popover lazy content, Popover with TemplateRef, Popover hover, Popover with custom position, Popover template ref
   selectors: `[ngsPopoverContent]`, `[ngsPopoverOrigin]`, `[ngsPopoverTriggerFor]`, `ngs-popover`
   exports: `Popover`, `POPOVER_TRIGGER`, `PopoverContent`, `PopoverOriginDirective`, `PopoverPosition`, `PopoverTrigger`, `PopoverTriggerFor`, `PopoverTriggerForDirective`
@@ -717,8 +717,8 @@ Typography:
   outputs: `closed`, `opened`
   tokens: `--ngs-dropdown-bg`, `--ngs-dropdown-border`, `--ngs-dropdown-radius`, `--ngs-dropdown-shadow`, `--ngs-popover-bg`, `--ngs-popover-border`, `--ngs-popover-border-radius`, `--ngs-popover-margin`, `--ngs-popover-shadow`
 - progress-bar: `@ngstarter-ui/components/progress-bar` docs: /components/progress-bar
-  purpose: Show linear progress or completion state.
-  use when: Use for uploads, long-running tasks, setup completion, and bounded progress.
+  purpose: Show linear progress for an operation or process.
+  use when: Use ngs-progress-bar for uploads, downloads, imports, setup completion, sync, processing, form completion, buffering, and other horizontal progress states. Use mode="determinate" with value from 0 to 100 when the percentage is known. Use mode="indeterminate" when work is happening but the percentage is unknown. Use mode="buffer" with value and bufferValue when both primary and buffered progress should be visible. Use mode="query" while waiting before known progress starts. Use animationEnd only when the screen must react after the transition finishes. Do not use ProgressBar for Angular Router navigation; use PageLoadingBar. Do not use to block a whole area; use BlockLoader. Do not use for skeleton content loading; use Skeleton. Do not use for circular KPI or percent metrics; use Gauge. Do not use for mini trends or charts; use MicroChart. Do not use as a status label; use Badge or text.
   example topics: Basic Progress Bar, Intermediate Progress Bar, Buffer Progress Bar, Query Progress Bar
   selectors: `ngs-progress-bar`
   exports: `ProgressBar`, `ProgressBarMode`
@@ -726,8 +726,8 @@ Typography:
   outputs: `animationEnd`
   tokens: `--ngs-color-primary`, `--ngs-color-surface-container-highest`, `--ngs-progress-bar-animation-multiplier`, `--ngs-progress-bar-height`, `--ngs-progress-bar-indicator-color`, `--ngs-progress-bar-track-color`
 - radio: `@ngstarter-ui/components/radio` docs: /forms/radio
-  purpose: Let users choose exactly one option from a visible set.
-  use when: Use for short mutually exclusive choices in forms and settings.
+  purpose: Let users choose exactly one option from a small visible set of mutually exclusive choices.
+  use when: Use ngs-radio-group with ngs-radio-button for simple text options in forms, settings, filters, and preference screens where all options should be visible and the user can choose only one. Put value on each radio button and bind the group value with value, ngModel, or formControlName. Use name when native form grouping matters, disabled on the group or individual radio button when needed, and change when the screen must react to selection changes. Do not use Radio for multiple selection; use Checkbox. Do not use for long option lists; use Select or Autocomplete. Do not use for rich options with descriptions, icons, or large clickable blocks; use RadioCard. Do not use as a segmented view switcher; use Segmented or ButtonToggle. Do not use for yes/no boolean settings when SlideToggle or Checkbox better matches the meaning.
   example topics: Basic Radios, Radio Card, Basic radio
   selectors: `ngs-radio-button`, `ngs-radio-group`
   exports: `RadioButton`, `RadioGroup`
@@ -735,8 +735,8 @@ Typography:
   outputs: `change`
   tokens: `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary`, `--ngs-field-border-color`, `--ngs-radio-button-border-width`, `--ngs-radio-button-checked-color`, `--ngs-radio-button-disabled-color`, `--ngs-radio-button-disabled-label-color`, `--ngs-radio-button-gap`, `--ngs-radio-button-inner-circle-size`, `--ngs-radio-button-label-color`, `--ngs-radio-button-size`, `--ngs-radio-button-unchecked-color`
 - radio-card: `@ngstarter-ui/components/radio-card`
-  purpose: Let users choose one option from richer card-like choices.
-  use when: Use for plans, templates, payment methods, layouts, or options needing descriptions.
+  purpose: Let users choose exactly one option from a small set of rich card-like choices.
+  use when: Use ngs-radio-card-group as a form control group and ngs-radio-card for each option when every option needs a large clickable card with title, icon, description, or supporting content. Use ngs-radio-card-title for the option name and optional icon, ngs-radio-card-content for details, value on each card, and formControlName or ngModel on the group. Use TailwindCSS grid or flex around the group to lay cards out in columns or rows. Good for plan selection, privacy modes, template choices, payment methods, layout options, delivery methods, onboarding choices, and settings choices with explanation. Do not use for simple short text options; use Radio. Do not use for multiple selection; use Checkbox or a dedicated checkbox-card pattern when available. Do not use for long lists; use Select or Autocomplete. Do not use as a normal content card without selection; use Card. Do not use as a segmented mode switch; use Segmented or ButtonToggle.
   selectors: `ngs-radio-card`, `ngs-radio-card-content`, `ngs-radio-card-group`, `ngs-radio-card-title`
   exports: `RadioCard`, `RadioCardContent`, `RadioCardGroup`, `RadioCardTitle`
   inputs: `value`

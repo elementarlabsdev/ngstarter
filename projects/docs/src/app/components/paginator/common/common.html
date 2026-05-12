@@ -3,7 +3,17 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The <code>ngs-paginator</code> provides a navigation for partitioned data.
+        Paginator controls pages of a dataset: tables, DataView screens, search results,
+        record lists, and server-side browsing.
+      </p>
+      <p class="mt-3">
+        Use length for the total number of records, pageSize for records per page,
+        pageIndex for the current zero-based page, and the page event to update local data
+        or request the next page from an API.
+      </p>
+      <p class="mt-3">
+        Do not use Paginator for app route navigation, wizard steps, carousel slides,
+        media browsing, or standalone UI without a paged dataset.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

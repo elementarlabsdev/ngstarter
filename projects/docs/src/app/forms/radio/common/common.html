@@ -3,7 +3,18 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        Radios allow the user to select one option from a set.
+        Radio lets users choose exactly one option from a small visible set of mutually exclusive choices.
+        Use it for simple text options in forms, settings, filters, and preference screens.
+      </p>
+      <p class="mt-3">
+        Use ngs-radio-group as the group container and ngs-radio-button for each option.
+        Bind the selected value through value, ngModel, or formControlName, and use disabled on the group
+        or on individual options when needed.
+      </p>
+      <p class="mt-3">
+        Do not use Radio for multiple selection, long option lists, rich card choices,
+        segmented view switching, or boolean toggles. Use Checkbox, Select, Autocomplete,
+        RadioCard, Segmented, ButtonToggle, SlideToggle, or Checkbox instead.
       </p>
     </main>
     <nav ngs-tab-nav-bar>
