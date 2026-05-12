@@ -45,9 +45,14 @@ export const appConfig = {
 ## Rules
 
 - Prefer existing NgStarter components before creating new UI primitives.
-- Admin app shells, navigation, cards, tables, form fields, pagination, buttons, icons,
-  checkboxes, and progress bars must use NgStarter components.
-- Do not hand-roll admin tables with `role="table"` or layout `div`s when `ngs-table` applies.
+- Admin app shells, navigation, cards, data views, static tables, form fields, pagination, buttons,
+  icons, checkboxes, and progress bars must use NgStarter components.
+- Use `DataView` when the UI is a datatable or working data surface: records, row actions,
+  selection, sorting, search, pagination, column sizing/settings, or server-driven data.
+- Use `Table` when the UI is static/read-only tabular content with known template columns and no
+  datatable behavior.
+- Do not hand-roll admin tables with `role="table"` or layout `div`s when `DataView` or `ngs-table`
+  applies.
 - Do not hand-roll admin search fields with plain `input`; use `ngs-form-field` and `ngsInput`.
 - Use one `ngs-form-field` per form control. For groups of fields, use TailwindCSS grid/flex/layout
   classes around multiple form fields, with each individual field wrapped in its own

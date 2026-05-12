@@ -145,7 +145,7 @@
               <ngs-form-field subscriptHiddenIfEmpty class="search-field">
                 <ngs-icon name="fluent:search-24-regular" ngsIconPrefix />
                 <ngs-label>Find a task</ngs-label>
-                <input ngsInput type="search" />
+                <input ngsInput type="search" [value]="taskSearch()" (input)="taskSearch.set($any($event.target).value)" />
               </ngs-form-field>
               <button ngsButton="outlined">
                 <ngs-icon name="fluent:filter-24-regular" />
@@ -158,74 +158,10 @@
             </div>
           </div>
 
-          <div class="mt-5 overflow-hidden rounded-xl border border-[rgba(15,23,42,0.06)] max-[860px]:overflow-x-auto">
-            <table ngs-table [dataSource]="tasks()">
-              <ng-container ngsColumnDef="select">
-                <th ngs-header-cell *ngsHeaderCellDef>
-                  <ngs-checkbox aria-label="Select all tasks" />
-                </th>
-                <td ngs-cell *ngsCellDef="let task">
-                  <ngs-checkbox [attr.aria-label]="'Select ' + task.name" />
-                </td>
-              </ng-container>
-
-              <ng-container ngsColumnDef="task">
-                <th ngs-header-cell *ngsHeaderCellDef>Task</th>
-                <td ngs-cell *ngsCellDef="let task" class="task-name">{{ task.name }}</td>
-              </ng-container>
-
-              <ng-container ngsColumnDef="project">
-                <th ngs-header-cell *ngsHeaderCellDef>Related Project</th>
-                <td ngs-cell *ngsCellDef="let task">
-                  <div class="flex items-center gap-2.5 font-normal text-[#1f2329]">
-                    <span class="project-mark" [style.background]="task.projectColor">
-                      <ngs-icon [name]="task.projectIcon" />
-                    </span>
-                    {{ task.project }}
-                  </div>
-                </td>
-              </ng-container>
-
-              <ng-container ngsColumnDef="dates">
-                <th ngs-header-cell *ngsHeaderCellDef>Time Allotment</th>
-                <td ngs-cell *ngsCellDef="let task" class="dates-cell">{{ task.dates }}</td>
-              </ng-container>
-
-              <ng-container ngsColumnDef="importance">
-                <th ngs-header-cell *ngsHeaderCellDef>Importance</th>
-                <td ngs-cell *ngsCellDef="let task">
-                  <span class="importance" [class.is-medium]="task.importance === 'Medium'" [class.is-low]="task.importance === 'Low'">
-                    {{ task.importance }}
-                  </span>
-                </td>
-              </ng-container>
-
-              <ng-container ngsColumnDef="completion">
-                <th ngs-header-cell *ngsHeaderCellDef>Completion</th>
-                <td ngs-cell *ngsCellDef="let task">
-                  <div class="completion-cell flex items-center gap-3">
-                    <ngs-progress-bar [value]="task.completion" />
-                    <span class="w-10 text-right font-normal text-[#3e444c]">{{ task.completion }}%</span>
-                  </div>
-                </td>
-              </ng-container>
-
-              <ng-container ngsColumnDef="actions">
-                <th ngs-header-cell *ngsHeaderCellDef></th>
-                <td ngs-cell *ngsCellDef="let task">
-                  <button ngsIconButton class="row-menu" type="button" [attr.aria-label]="'Actions for ' + task.name">
-                    <ngs-icon name="fluent:more-vertical-24-regular" />
-                  </button>
-                </td>
-              </ng-container>
-
-              <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
-              <tr ngs-row *ngsRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-          </div>
-
-          <footer class="mt-5 flex items-center justify-between gap-4 max-[860px]:items-start max-[860px]:flex-col">
+          <div class="mt-5 flex flex-col">
+            <footer class="order-2 mt-5 flex items-center justify-between gap-4 max-[860px]:items-start max-[860px]:flex-col">
             <ngs-paginator
+              #tasksPaginator
               [length]="50"
               [pageSize]="8"
               [hidePageSize]="true"
@@ -239,7 +175,29 @@
                 <ngs-icon name="fluent:chevron-up-24-regular" />
               </button>
             </div>
-          </footer>
+            </footer>
+
+            <ngs-data-view
+              class="order-1 h-[500px]"
+              [columnDefs]="taskColumnDefs"
+              [data]="tasks()"
+              [cellRenderers]="taskCellRenderers"
+              [search]="taskSearch()"
+              [paginator]="tasksPaginator"
+              [pageSize]="8"
+              [rowHeight]="62"
+              [headerHeight]="48"
+              withSelection
+              hoverRows
+              withPagination
+            >
+              <ngs-data-view-action-bar *ngsDataViewActionBar="let task; width: 64">
+                <button ngsIconButton class="row-menu" type="button" [attr.aria-label]="'Actions for ' + task.name">
+                  <ngs-icon name="fluent:more-vertical-24-regular" />
+                </button>
+              </ngs-data-view-action-bar>
+            </ngs-data-view>
+          </div>
         </ngs-card-content>
       </ngs-card>
     </div>

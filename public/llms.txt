@@ -42,7 +42,7 @@ import { Table } from '@ngstarter-ui/components/table';
 ## Recipes
 
 ### admin-dashboard
-Build admin dashboards from NgStarter UI primitives instead of hand-rolled shell, cards, forms, tables, and pagination.
+Build admin dashboards from NgStarter UI primitives instead of hand-rolled shell, cards, forms, datatables, static tables, and pagination.
 
 Verification: `npm run verify:admin:components`
 
@@ -50,6 +50,7 @@ Must use:
 - `@ngstarter-ui/components/sidenav`
 - `@ngstarter-ui/components/navigation`
 - `@ngstarter-ui/components/card`
+- `@ngstarter-ui/components/data-view`
 - `@ngstarter-ui/components/table`
 - `@ngstarter-ui/components/form-field`
 - `@ngstarter-ui/components/input`

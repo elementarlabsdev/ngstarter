@@ -31,13 +31,13 @@ export class Api {
   properties = [
     {
       name: 'value',
-      description: 'The selected timezone value',
+      description: 'The selected IANA time zone id',
       type: 'string | null',
       default: 'null'
     },
     {
       name: 'placeholder',
-      description: 'The placeholder text for the search input',
+      description: 'The placeholder text for the closed select trigger',
       type: 'string',
       default: "''"
     },
@@ -55,7 +55,7 @@ export class Api {
     },
     {
       name: 'locale',
-      description: 'The locale used for timezone formatting',
+      description: 'The locale used for timezone list formatting',
       type: 'string',
       default: 'inject(LOCALE_ID)'
     },

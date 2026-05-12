@@ -21,17 +21,16 @@ const requiredTemplatePatterns = [
   ['navigation uses NavigationItem', /<ngs-navigation-item\b/],
   ['cards use Card', /<ngs-card\b/],
   ['cards use CardContent', /<ngs-card-content\b/],
-  ['tables use NgStarter Table', /<table\b[^>]*\bngs-table\b/],
-  ['tables define NgStarter columns', /\bngsColumnDef=/],
-  ['tables use NgStarter header cells', /\bngs-header-cell\b/],
-  ['tables use NgStarter body cells', /\bngs-cell\b/],
-  ['tables use NgStarter header rows', /\bngs-header-row\b/],
-  ['tables use NgStarter rows', /\bngs-row\b/],
+  ['admin datatable uses DataView', /<ngs-data-view\b/],
+  ['DataView receives column definitions', /\[columnDefs\]=/],
+  ['DataView receives data', /\[data\]=/],
+  ['datatable rich cells use DataView cell renderers', /\[cellRenderers\]=/],
+  ['row actions use DataView action bar', /\bngsDataViewActionBar\b/],
   ['search uses FormField', /<ngs-form-field\b/],
   ['search uses Label', /<ngs-label\b/],
   ['search input uses ngsInput', /<input\b[^>]*\bngsInput\b/],
   ['pagination uses Paginator', /<ngs-paginator\b/],
-  ['selection uses Checkbox', /<ngs-checkbox\b/],
+  ['DataView selection is enabled', /\bwithSelection\b/],
   ['progress uses ProgressBar', /<ngs-progress-bar\b/],
   ['icons use Icon', /<ngs-icon\b/],
   ['actions use Button', /<button\b[^>]*\bngs(?:Button|IconButton)\b/],
@@ -40,7 +39,10 @@ const requiredTemplatePatterns = [
 const requiredImports = [
   ['Button', /import\s+\{[^}]*\bButton\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/button['"]/],
   ['Card', /import\s+\{[^}]*\bCard\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/card['"]/],
-  ['Checkbox', /import\s+\{[^}]*\bCheckbox\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/checkbox['"]/],
+  ['DataView', /import\s+\{[^}]*\bDataView\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/data-view['"]/],
+  ['DataViewActionBar', /import\s+\{[^}]*\bDataViewActionBar\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/data-view['"]/],
+  ['DataViewActionBarDirective', /import\s+\{[^}]*\bDataViewActionBarDirective\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/data-view['"]/],
+  ['DataViewColumnDef', /import\s+\{[^}]*\bDataViewColumnDef\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/data-view['"]/],
   ['FormField', /import\s+\{[^}]*\bFormField\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/form-field['"]/],
   ['Icon', /import\s+\{[^}]*\bIcon\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/icon['"]/],
   ['Input', /import\s+\{[^}]*\bInput\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/input['"]/],
@@ -48,7 +50,6 @@ const requiredImports = [
   ['Paginator', /import\s+\{[^}]*\bPaginator\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/paginator['"]/],
   ['ProgressBar', /import\s+\{[^}]*\bProgressBar\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/progress-bar['"]/],
   ['Sidenav', /import\s+\{[^}]*\bSidenav\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/sidenav['"]/],
-  ['Table', /import\s+\{[^}]*\bTable\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/table['"]/],
 ];
 
 const forbiddenTemplatePatterns = [
@@ -69,7 +70,7 @@ const requiredStylingPatterns = [
   ['local SCSS uses Tailwind spacing function', /--spacing\(/],
   ['local SCSS overrides cards by component selector', /\bngs-card\s*\{/],
   ['local SCSS overrides navigation by component selector', /\bngs-navigation\s*\{/],
-  ['local SCSS overrides table by directive selector', /\btable\[ngs-table\]\s*\{/],
+  ['local SCSS overrides DataView by component selector', /\bngs-data-view\s*\{/],
 ];
 
 const forbiddenStylePatterns = [
@@ -116,7 +117,8 @@ if (failures.length) {
   for (const failure of failures) {
     console.error(`- ${failure}`);
   }
-  console.error('\nUse NgStarter UI primitives for admin shell, navigation, cards, tables, forms, pagination, actions, selection, and progress.');
+  console.error('\nUse NgStarter UI primitives for admin shell, navigation, cards, datatables, static tables, forms, pagination, actions, selection, and progress.');
+  console.error('Use DataView for datatables/working datasets; use Table only for static/read-only tabular content.');
   console.error('Use Tailwind utilities for layout and local component-selector overrides with --spacing(N) in SCSS.');
   process.exit(1);
 }

@@ -72,15 +72,21 @@ export class Api {
     },
     {
       name: 'min',
-      description: 'The minimum selectable time.',
+      description: 'The minimum selectable time. Accepts a Date or a time string.',
       type: 'Date | string',
       default: '–'
     },
     {
       name: 'max',
-      description: 'The maximum selectable time.',
+      description: 'The maximum selectable time. Accepts a Date or a time string.',
       type: 'Date | string',
       default: '–'
+    },
+    {
+      name: 'openOnClick',
+      description: 'Whether focusing or clicking the input opens the timepicker panel.',
+      type: 'boolean',
+      default: 'true'
     }
   ];
 }

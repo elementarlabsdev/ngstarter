@@ -3,8 +3,9 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Upload component provides an interface for users to select and upload files. It supports various modes,
-        including single and multiple file uploads, drag-and-drop, and visual representation of the upload progress.
+        Upload provides the UI for selecting files, drag-and-drop upload areas, and file progress displays.
+        It emits selected files through fileSelected, but the application is responsible for validation,
+        uploading to a backend, retrying, deleting, and persisting uploaded file records.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

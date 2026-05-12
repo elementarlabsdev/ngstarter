@@ -47,11 +47,12 @@ const priorityExamples = new Map([
 const recipes = [
   {
     name: 'admin-dashboard',
-    description: 'Build admin dashboards from NgStarter UI primitives instead of hand-rolled shell, cards, forms, tables, and pagination.',
+    description: 'Build admin dashboards from NgStarter UI primitives instead of hand-rolled shell, cards, forms, datatables, static tables, and pagination.',
     mustUse: [
       '@ngstarter-ui/components/sidenav',
       '@ngstarter-ui/components/navigation',
       '@ngstarter-ui/components/card',
+      '@ngstarter-ui/components/data-view',
       '@ngstarter-ui/components/table',
       '@ngstarter-ui/components/form-field',
       '@ngstarter-ui/components/input',
@@ -65,7 +66,9 @@ const recipes = [
       appShell: ['SidenavContainer', 'Sidenav', 'SidenavContent'],
       navigation: ['Navigation', 'NavigationItem', 'NavigationItemIconDirective'],
       cards: ['Card', 'CardContent', 'CardFooter'],
-      table: ['Table', 'ColumnDef', 'HeaderCell', 'HeaderCellDef', 'Cell', 'CellDef', 'HeaderRow', 'HeaderRowDef', 'Row', 'RowDef'],
+      datatables: ['DataView'],
+      operationalDatasets: ['DataView'],
+      staticTables: ['Table', 'ColumnDef', 'HeaderCell', 'HeaderCellDef', 'Cell', 'CellDef', 'HeaderRow', 'HeaderRowDef', 'Row', 'RowDef'],
       search: ['FormField', 'Label', 'Input', 'IconPrefix'],
       pagination: ['Paginator'],
       actions: ['Button', 'Icon'],
@@ -73,7 +76,9 @@ const recipes = [
       progress: ['ProgressBar'],
     },
     mustNot: [
-      'Do not build admin tables with role="table" div grids when ngs-table fits.',
+      'Do not build datatables or operational admin datasets with role="table", plain table markup, or div grids when DataView fits.',
+      'Do not use DataView for purely static/read-only tabular content when ngs-table fits.',
+      'Do not build static/read-only tables with role="table" div grids when ngs-table fits.',
       'Do not build search fields with plain input when ngs-form-field and ngsInput fit.',
       'Do not build navigation menus with plain button lists when ngs-navigation fits.',
       'Do not build KPI cards with plain article/div cards when ngs-card fits.',
@@ -206,8 +211,8 @@ const curatedGuidance = new Map(Object.entries({
     useWhen: 'Use for horizontal preview text, teaser rows, chips, compact lists, or cropped inline content when an edge should fade out instead of ending abruptly. The parent container must provide width, height, scroll behavior, or overflow-hidden; ContentFade does not manage overflow, expansion, truncation, or scrolling by itself. Do not use for loading skeletons, collapsed content logic, tooltips, pagination, modal clipping, ellipsis truncation, or long article reading.',
   },
   core: {
-    purpose: 'Provide shared primitives, utilities, pipes, directives, theming services, and low-level behavior used by NgStarter components.',
-    useWhen: 'Import from core for theme setup, shared directives, utility pipes, ripple, focus helpers, and library infrastructure.',
+    purpose: 'Provide infrastructure primitives, theme setup, services, directives, pipes, tokens, and low-level utilities.',
+    useWhen: 'Use @ngstarter-ui/components/core for infrastructure, not for building screens directly. Use provideNgsTheme in app config to set theme, colorScheme, density, radius, primaryColor, persistence, and storageKey. Inject ThemeManagerService for runtime theme, color scheme, density, radius, and primary color changes. Use utility directives such as ngsRipple, ngsAutoFocus, ngsFocusElement, ngsTextareaAutoSize, and ngsDebounceTime when a specific low-level behavior is needed. Use pipes such as InitialsPipe, FormatFileSizePipe, SafeHtmlPipe, SafeResourceUrlPipe, OrderByPipe, FilterByPropertyPipe, and SearchByPropertyPipe when they fit. Use ErrorStateMatcher or ShowOnDirtyErrorStateMatcher for form error behavior, and observer/services/utils only for low-level infrastructure. Do not use core as a replacement for real UI components. Do not build admin screens from core primitives; choose concrete components such as Button, Card, DataView, Table, FormField, Dialog, Navigation, Layout, or other component entry points. Do not import Option from core directly for ordinary option lists when Select, Autocomplete, or another component owns the option pattern.',
   },
   'cookie-popup': {
     purpose: 'Collect a non-blocking cookie or privacy consent choice.',
@@ -227,7 +232,7 @@ const curatedGuidance = new Map(Object.entries({
   },
   'data-view': {
     purpose: 'Build operational data grids for records that users need to inspect, organize, select, and act on.',
-    useWhen: 'Use for admin screens, CRM and ERP records, users, orders, invoices, logs, tasks, assets, and any dataset where the table is the main work surface. DataView is configured with columnDefs plus local data or a server-side datasource, and supports sorting, search/filter state, pagination, row selection, loading states, empty states, column resizing, column visibility and order, pinned or sticky columns, custom cell renderers, refresh, snapshots, and ngsDataViewActionBar. Do not use for small static tables or simple read-only tabular content; use Table. Do not use as a card list, layout grid, chart widget, report summary, or form editor.',
+    useWhen: 'Use for datatables and working data surfaces in admin screens, CRM and ERP records, users, orders, invoices, logs, tasks, assets, and any dataset where the table is the main interactive work surface. Choose DataView when users need row actions, selection, sorting, search/filter state, pagination, loading or empty states, column resizing, column visibility/order, pinned or sticky columns, custom cell renderers, refresh, snapshots, server-side data, or ngsDataViewActionBar. DataView is configured with columnDefs plus local data or a server-side datasource. Do not use for small static tables or simple read-only tabular content; use Table. Do not use as a card list, layout grid, chart widget, report summary, or form editor.',
   },
   'date-format-select': {
     purpose: 'Let users choose a preferred date display format string from a predefined list.',
@@ -282,8 +287,8 @@ const curatedGuidance = new Map(Object.entries({
     useWhen: 'Use in dashboard cards, sidebar widgets, KPI panels, usage or quota blocks, storage usage, completion score, health score, capacity, and utilization indicators. Use ngs-gauge-value to show a number or short label inside the gauge, and customize size with Tailwind size classes or strokeWidth/radius. Do not use for linear process progress; use ProgressBar. Do not use for loading; use ProgressSpinner, BlockLoader, or Skeleton. Do not use for full analytical charts with axes, legends, multiple series, or trends. Do not use for small table-row statuses; use Badge or Status.',
   },
   grid: {
-    purpose: 'Render configuration-driven dashboard widgets in a 12-column grid.',
-    useWhen: 'Use for admin dashboards, configurable widget layouts, analytics home screens, portal start pages, and nested dashboard sections where widget components are selected from configuration or data. Provide configs that map item types to lazy-loaded components and optional skeletons, and items with id, type, columns, height, content, skeletonHeight, and children. Widgets can inject GRID and call markItemAsLoaded(id), especially with waitWhenAllItemsLoaded. Do not use Grid as a normal CSS layout helper for forms, pages, cards, or repeated elements; use TailwindCSS grid/flex classes. Do not use for tables or datasets; use Table or DataView. Do not use for file/media grids; use upload/media components. Do not use as a drag-and-drop dashboard builder when interactive rearranging/resizing is required.',
+    purpose: 'Render static dashboard widgets in a predefined 12-column layout.',
+    useWhen: 'Use ngs-grid when the application defines a static dashboard or widget layout and users do not need to rearrange, customize, or save the dashboard order. Provide configs that map item types to components and items with id, type, columns, height, content, skeletonHeight, and children. Widgets can inject GRID and call markItemAsLoaded(id), especially with waitWhenAllItemsLoaded. Use Grid for fixed analytics sections, portal start pages, and nested dashboard sections where the structure is known. Do not use Grid as a normal CSS layout helper for forms, pages, cards, or repeated elements; use TailwindCSS grid/flex classes. Do not use Grid for dashboards users can rearrange or change; use Tiles. Do not use for tables or datasets; use Table or DataView. Do not use for file/media grids; use upload/media components.',
   },
   'guided-tour': {
     purpose: 'Guide users through the real UI with ordered steps attached to existing elements.',
@@ -347,7 +352,7 @@ const curatedGuidance = new Map(Object.entries({
   },
   layout: {
     purpose: 'Provide the base top-level shell for an application, admin area, dashboard, or large workspace page.',
-    useWhen: 'Use ngs-layout as the outer structural frame when the whole screen needs topbar, header, sidebar, scrollable content, aside, or footer regions. Use root for a full viewport application shell. Use ngs-layout-content for the main scroll container, and LayoutApiService with layoutId when the sidebar must be shown, hidden, or toggled. Nested layouts are appropriate when a large app shell contains another structured workspace with its own header/content/footer. Do not use Layout as a small wrapper, card, spacing helper, form grouping tool, or generic grid system. Use TailwindCSS grid, flex, and spacing classes inside layout regions. Use Grid for dashboard widgets, DataView or Table for datasets, Drawer for overlay side panels, and Navigation, Sidebar, or Sidenav components inside sidebars.',
+    useWhen: 'Use ngs-layout as the outer structural frame when the whole screen needs topbar, header, sidebar, scrollable content, aside, or footer regions. Use root for a full viewport application shell. Use ngs-layout-content for the main scroll container, and LayoutApiService with layoutId when the sidebar must be shown, hidden, or toggled. Nested layouts are appropriate when a large app shell contains another structured workspace with its own header/content/footer. Do not use Layout as a small wrapper, card, spacing helper, form grouping tool, or generic grid system. Use TailwindCSS grid, flex, and spacing classes inside layout regions. Use Grid for static dashboard widgets, Tiles for dashboards users can rearrange or customize, DataView or Table for datasets, Drawer for overlay side panels, and Navigation, Sidebar, or Sidenav components inside sidebars.',
   },
   list: {
     purpose: 'Display a vertical group of related rows with consistent icon, avatar, title, line, meta, action, and selection structure.',
@@ -489,6 +494,10 @@ const curatedGuidance = new Map(Object.entries({
     purpose: 'Show short transient overlay feedback after an action or background result.',
     useWhen: 'Use the SnackBar service for brief non-blocking messages such as Saved, Copied, Invite sent, Refresh complete, Export started, or Deleted, with an optional quick action such as Undo or View. Open with snackBar.open(message, action?, config?), openFromComponent, or openFromTemplate. Configure duration, horizontalPosition, verticalPosition, data, panelClass, custom component or template content, and use SnackBarRef.dismiss(), afterOpened(), and afterDismissed() for lifecycle handling. SnackBar should be short, temporary, and safe to miss. Do not use for field validation errors; use FormField errors. Do not use for persistent inline messages; use Alert. Do not use for global important header messages; use Announcement. Do not use for critical required actions; use ActionRequired. Do not use for confirmations before destructive actions; use Confirm. Do not use for modal workflows; use Dialog. Do not use for long-lived notification inboxes or event feeds; use Notifications. Do not use for incident/status banners or loading/progress states; use Incidents, ProgressBar, ScreenLoader, BlockLoader, or PageLoadingBar.',
   },
+  spinner: {
+    purpose: 'Show a circular indicator for an ongoing operation.',
+    useWhen: 'Use ngs-progress-spinner when a compact circular loading indicator is needed inside a button, overlay, media viewer, widget, small page area, or next to an action. Use mode="indeterminate" when the remaining time or amount of work is unknown. Use mode="determinate" with value from 0 to 100 when progress is known. Configure diameter, strokeWidth, and color for the surface. Do not use ProgressSpinner for linear progress; use ProgressBar. Do not use it for known loading layouts; use Skeleton. Do not use it for router or page transition loading; use PageLoadingBar. Do not use it as a full-screen or blocking state by itself; use ScreenLoader or BlockLoader. Do not use it as a KPI or metric display; use Gauge or ProgressBar based on context.',
+  },
   sort: {
     purpose: 'Provide sortable header behavior and sort state for table-like data.',
     useWhen: 'Use ngsSort on a sortable table/list/data container and ngs-sort-header="fieldName" on header cells that should cycle through sort states. Sort tracks active column and direction (asc, desc, or cleared), supports ngsSortActive, ngsSortDirection, ngsSortStart, ngsSortDisableClear, ngsSortDisabled, per-header disabled state, sortActionDescription, and emits ngsSortChange with { active, direction }. Use it with Table sortable column headers, custom table-like data surfaces, and when wiring sort state into a local TableDataSource or server/API query. For DataView, usually prefer its built-in sortable column config and sortChange instead of manually adding ngs-sort-header. Do not use Sort as a visual sort icon only, filter builder, search, grouping, drag reorder, tab sorting, or generic “sort these cards” button. Sort only manages header state and emits the selected sort; the app/data source still applies local sorting or sends the sort state to the backend.',
@@ -514,8 +523,8 @@ const curatedGuidance = new Map(Object.entries({
     useWhen: 'Use ngs-tab-panel when a workspace or editor needs a vertical set of icon/text items that controls adjacent aside content. Use ngs-tab-panel-content with ngs-tab-panel-nav and ngs-tab-panel-item for the rail, bind items to content with matching for values and ngsTabPanelAsideContent ids inside ngs-tab-panel-aside, and use activeItemId to choose the active item. Good for image editors, design tools, asset panels, layers, inspectors, workspace switchers, tool palettes, and settings/tools inside dense work surfaces. Use compact for icon-only rails with tooltips, header/content/footer regions to group items, and ngs-tab-panel-custom-item for custom items such as avatars, workspaces, or add actions. Do not use TabPanel for ordinary horizontal page tabs; use Tabs. Do not use it for primary app navigation; use Sidebar, Navigation, Sidenav, or RailNav. Do not use it for temporary overlay side content; use Drawer. Do not use it for a structured page section; use Panel. Do not use it for workflow steps; use Stepper. Do not use it for contextual command lists; use Menu.',
   },
   table: {
-    purpose: 'Render structured tabular data with columns, rows, headers, sorting, selection, and sticky regions.',
-    useWhen: 'Use for predictable tabular layouts; use Data View when users need richer dataset operations.',
+    purpose: 'Render static or simple template-defined tabular data with known columns.',
+    useWhen: 'Use table[ngs-table] or ngs-table for static or simple tabular data where columns are known in Angular templates: read-only tables, documentation tables, settings summaries, static comparison rows, lightweight report tables, and small non-interactive admin tables. Define columns with ngsColumnDef, header/body/footer cells with ngsHeaderCellDef, ngsCellDef, and ngsFooterCellDef, and rows with ngsHeaderRowDef, ngsRowDef, and ngsFooterRowDef. Use TableDataSource only for lightweight local table behavior, not as a replacement for a real datatable. Use sticky/stickyEnd for fixed columns and sticky row defs for sticky header or footer. Use table[ngs-native-table] only for static HTML tables without a data source. Do not build tables with div role="table" or custom grid markup when ngs-table fits. Use DataView instead when the UI is a datatable or working data surface with row actions, selection, sorting, search/filter state, pagination, column sizing/settings, saved views, server-driven data, or complex record management. Use List for simple vertical rows without real columns. Use Tree for hierarchical rows. Use Grid or Tiles for dashboard layouts. Use Sort only for sort state behavior; it does not replace Table.',
   },
   tabs: {
     purpose: 'Switch between peer views inside one page or section context, with only one panel visible at a time.',
@@ -530,48 +539,48 @@ const curatedGuidance = new Map(Object.entries({
     useWhen: 'Use ngs-thumbnail-maker when users need to position and zoom an image inside a fixed square frame, then save the finished thumbnail as a data URL, Blob, or canvas. Good for avatars, profile images, CMS thumbnails, media library previews, product/user/project card images, and simple square preview generation. Provide the image URL or data URL through src, add helperText when users need drag instructions, and call api.getDataUrl(), api.toBlob(callback), or api.getCanvas() when saving. Combine with Upload or ngsUploadTrigger when users must select a local image first. Do not use ThumbnailMaker when the app needs arbitrary crop shapes, crop rectangles, circles, or crop coordinates; use Crop. Do not use it only to change displayed image width; use ImageResizer. Do not use it to view images; use ImageViewer or ImageZoomViewer. Do not use it as an image placeholder; use ImagePlaceholder. Do not use it for full canvas editing, layers, text, effects, or templates; use ImageDesigner. Do not use it as a plain upload picker without editing; use Upload.',
   },
   tiles: {
-    purpose: 'Lay out resizable tile-based content.',
-    useWhen: 'Use for dashboards, visual builders, and configurable grid-like workspaces.',
+    purpose: 'Lay out responsive dashboard tiles and support user-driven tile reordering/customization.',
+    useWhen: 'Use ngs-tiles with ngs-tile when users can rearrange dashboard cards or widgets, customize a dashboard, or save a changed widget order. Good for editable dashboards, portal home pages, workspace widgets, configurable analytics cards, media/card boards, and dashboard builders. Tiles can be the layout host for config-driven dashboard renderers: the app can render lazy widget components inside each ngs-tile, show Skeleton while widgets load, and persist the final item order from orderChanged or layoutChanged. Use width, height, width.sm/md/lg/xl, and height.sm/md/lg/xl to define responsive tile spans, and ngsTileHandle for drag handles. Provide items so reorder events can map visual order back to app data. Use Grid only for static predefined dashboard/widget layouts that users do not rearrange. Do not use Tiles for ordinary static responsive page layout; use TailwindCSS grid/flex. Do not use for split panes with gutters; use Split. Do not use for one manually resized box; use ResizableContainer. Do not use for simple cards, lists, tables, or datasets without tile reordering; use Card, List, Table, or DataView. Do not use for status-column workflows; use KanbanBoard.',
   },
   timeline: {
-    purpose: 'Show events or activities in chronological order.',
-    useWhen: 'Use for audit logs, histories, workflows, tracking, and activity feeds.',
+    purpose: 'Show a vertical chronological history of events.',
+    useWhen: 'Use ngs-timeline when users need to understand a sequence of events over time: audit logs, activity history, entity change history, project milestones, order or shipment history, workflow history, tracking events, and user actions. Use ngs-timeline-header to group events by date, month, phase, or period. Use ngs-timeline-item with ngs-timeline-timestamp, ngs-timeline-title, ngs-timeline-subtitle, ngs-timeline-description, ngs-timeline-attributes, and ngs-timeline-content to structure each event. Use ngsTimelineItemIndicator when the marker should show an actor, icon, status, or event type. Do not use Timeline for a realtime notification inbox or actionable notification feed; use Notifications. Do not use for a simple vertical collection without time/order meaning; use List. Do not use for tabular audit logs that need sorting, filtering, or many columns; use Table or DataView. Do not use for workflow steps the user must complete; use Stepper. Do not use for status columns; use KanbanBoard. Do not use for calendar/scheduler views or for a single operation status; use ProgressBar, Badge, or Status as appropriate.',
   },
   timepicker: {
-    purpose: 'Let users choose a time value.',
-    useWhen: 'Use for scheduling, reminders, availability, reports, and time-based filters.',
+    purpose: 'Let users choose or type a time of day in a form field.',
+    useWhen: 'Use input[ngsTimepicker] inside one ngs-form-field, connected to an ngs-timepicker instance, when a form needs a time of day: meeting time, event time, booking time, reminder time, deadline time, availability slot, report time filter, or schedule setting. Add ngs-timepicker-toggle as an icon suffix when users should open the dropdown explicitly. Use interval to control option steps such as 15, 30, or 60 minutes. Use min and max to limit selectable times. The input supports manual typing and localized display, while the model value can be a HH:mm-like string or a Date with the selected time merged into it. Combine Datepicker and Timepicker as separate controls when users need both date and time. Do not use Timepicker to choose a date; use Datepicker. Do not use it to choose a timezone; use TimezoneSelect. Do not use it for duration or numeric amounts of hours/minutes; use NumberInput or Slider. Do not use it for plain text without time validation; use ngsInput. Do not use it as a calendar, scheduler, or day-slot planner.',
   },
   'timezone-select': {
-    purpose: 'Let users choose a timezone.',
-    useWhen: 'Use in profile, scheduling, localization, and tenant settings.',
+    purpose: 'Let users choose an IANA time zone id in a form field.',
+    useWhen: 'Use ngs-timezone-select inside one ngs-form-field when a form must store a real time zone id such as Europe/Warsaw or America/New_York. Good for profile timezone, account preferences, organization or tenant default timezone, scheduling settings, calendar settings, report default timezone, localization preferences, and admin settings where backend data needs an IANA timezone string. The control is searchable, groups time zones by region, supports Angular forms, required, disabled, placeholder, locale-aware labels, opened, and closed. Do not use TimezoneSelect to choose a time of day; use Timepicker. Do not use it to choose a date; use Datepicker. Do not use it to choose a country or region; use CountrySelect. Do not use it for language or locale selection; use a dedicated locale/language control or Select. Do not use it for generic custom options; use Select. Do not use it for durations, numeric offsets, or timezone math; use NumberInput, Slider, or app logic. Do not use timezone as a date format setting; use DateFormatSelect for display formats.',
   },
   toolbar: {
-    purpose: 'Group frequently used page, editor, or content actions.',
-    useWhen: 'Use above tables, editors, canvases, dashboards, and tool surfaces.',
+    purpose: 'Provide a persistent command area for a page, panel, table, editor, canvas, or workspace surface.',
+    useWhen: 'Use ngs-toolbar when a local surface needs a title, short local navigation, and frequently used actions in a stable horizontal or multi-row command area. Use ngs-toolbar-title for the local title, ngs-toolbar-spacer to separate groups, ngs-toolbar-row for multi-row command areas, ngs-toolbar-item for actions that should participate in responsive overflow, and ngs-toolbar-nav with ngs-toolbar-nav-link for short local links inside the toolbar. Good places include table headers, panel headers, admin page headers, editor surfaces, dashboards, canvas tools, and workspace tool surfaces. Do not use Toolbar as a generic flex layout for arbitrary content. Do not use it for floating contextual actions on selected rows or objects; use CommandBar. Do not use it for dropdown command lists; use Menu. Do not use it for primary application navigation; use Sidebar, Sidenav, or Navigation. Do not replace specialized TextEditor or CommentEditor toolbars with the generic Toolbar.',
   },
   tooltip: {
-    purpose: 'Show short contextual help on hover or focus.',
-    useWhen: 'Use for icon buttons, disabled explanations, abbreviations, and dense controls.',
+    purpose: 'Show a short helper message for one interface element on hover, focus, or touch.',
+    useWhen: 'Use ngsTooltip as a directive on a trigger element when a short non-interactive helper message should explain an icon button, abbreviation, disabled state, dense control, compact label, or unclear affordance. Configure ngsTooltipPosition, ngsTooltipShowDelay, ngsTooltipHideDelay, ngsTooltipOffset, ngsTooltipDisabled, ngsTooltipClass, or ngsTooltipPositionAtOrigin when placement and timing need tuning. Export the directive as ngsTooltip when app logic must call show(), hide(), or toggle(). Keep tooltip text short and plain. Do not use Tooltip for interactive content, forms, action lists, rich previews, or long explanations; use Popover. Do not use it for command menus; use Menu. Do not use it for visible page messages; use Alert, Announcement, ActionRequired, or Incidents based on scope. Do not use it for form helper or validation text; use FormField hint and error. Do not use it for onboarding flows; use GuidedTour.',
   },
   tree: {
     purpose: 'Display hierarchical data with expandable parent and child nodes.',
-    useWhen: 'Use for folders, permissions, categories, org charts, and nested navigation.',
+    useWhen: 'Use ngs-tree when users need to inspect or navigate hierarchical data where parent and child levels matter: folders and files, categories, permissions, taxonomies, organization structures, nested settings, product/entity hierarchies, and other expandable trees. Use dataSource with childrenAccessor for nested/static data, or treeControl with a custom DataSource for flat trees and dynamic loading. Define node templates with *ngsTreeNodeDef and use when for different node types. Use ngsTreeNodePadding for indentation and ngsTreeNodeToggle for expand/collapse controls. Use ProgressBar or Skeleton inside node templates when children load on demand. Do not use Tree for a simple vertical collection; use List. Do not use it for primary application navigation; use Sidebar, Sidenav, Navigation, or RailNav. Do not use it for FAQ or settings sections; use ExpansionPanel. Do not use it for dense row data with columns, sorting, filters, or bulk actions; use Table or DataView. Do not use it for step-by-step workflows; use Stepper.',
   },
   upload: {
-    purpose: 'Let users select, preview, and upload files.',
-    useWhen: 'Use for attachments, documents, media, imports, and profile assets.',
+    purpose: 'Provide UI for selecting files, drag-and-drop upload areas, and file progress displays.',
+    useWhen: 'Use Upload components when users need to choose local files, drop files into an upload area, or see selected/uploading files with progress, errors, retry, remove, or cancel actions. Use ngsUploadTrigger on a button or clickable element to open the native file picker. Use ngs-upload-area for drag-and-drop with ngsUploadAreaMainState, ngsUploadAreaDropState, ngsUploadAreaInvalidState, and ngsUploadAreaIcon. Use accept and multiple to control allowed file types and multi-select. Use ngs-upload-container with ngs-upload-allowed-types and ngs-upload-max-file-size for upload hints. Use ngs-file-list with ngs-file for vertical file rows, or ngs-files-grid with ngs-grid-file for compact file cards. Use ngs-file-control and ngsGridFileControl for file-level actions. The component emits fileSelected with the selected File objects; the application must perform validation, backend upload, retry, deletion, persistence, and security checks. Do not treat Upload as a backend uploader, storage manager, or import wizard by itself. Do not use it for editing selected images; use Crop, ImageResizer, ThumbnailMaker, or ImageDesigner after selection. Do not use it for rich editor image upload flows; use the TextEditor or CommentEditor upload APIs. Do not use it to manage an existing document table with sorting and filtering; use Table or DataView.',
   },
   'video-player': {
-    purpose: 'Play video content with application-level controls.',
-    useWhen: 'Use for media libraries, lessons, previews, and product content.',
+    purpose: 'Play video inline inside the current page, card, carousel, media preview, lesson, or workspace layout.',
+    useWhen: 'Use ngs-video-player when video should stay embedded in the current layout with NgStarter-controlled playback UI. Pass src for the video source, optional thumbnailUrl for the poster preview, and orientation or payload.orientation for landscape, portrait, or square aspect ratio. Configure autoPlay, muted, disableClickToPlay, withCredentials, showPlayButton, showSpeaker, showFullscreen, and showDurationSlider to match the surface. Listen to play, pause, ended, loaded, and error for application state. Good for media previews, lessons, product videos, content previews, cards, carousel slides, and dashboard/workspace media blocks. The player wraps video.js and supports HLS m3u8 sources through video.js. Do not use VideoPlayer when the video should open as a focused overlay or lightbox; use VideoViewer. Do not use it as a gallery or list by itself; compose it with Carousel, Card, Grid, VideoViewer, or a layout component. Do not use it for YouTube, Vimeo, or other iframe-provider embeds when the provider player is required. Do not use it as a content editing API directly; use the ContentEditor video block for editable content.',
   },
   'video-viewer': {
-    purpose: 'Display videos in a focused viewer experience.',
-    useWhen: 'Use for video attachments, previews, galleries, and media detail pages.',
+    purpose: 'Open videos in a focused overlay or lightbox above the current page.',
+    useWhen: 'Use VideoViewer when a thumbnail, preview card, compact inline player, attachment, gallery item, or media library item should open a larger focused video viewing experience. Put ngsVideoViewer on the preview container and ngsVideoViewerVideo on each clickable preview item. Pass sourceUrl for the video source, plus optional title, caption, description, or template directives ngsVideoViewerVideoTitle, ngsVideoViewerVideoCaption, and ngsVideoViewerVideoDescription. Configure orientation, payload, autoPlay, muted, showPlayButton, showSpeaker, showFullscreen, and showDurationSlider to control the underlying VideoPlayer in the overlay. Good for video attachments, media previews, galleries, lessons, product videos, and media detail flows. Do not use VideoViewer when video should stay inline in the current layout; use VideoPlayer. Do not use it as a carousel, grid, or gallery layout by itself; compose previews with Card, Grid, Carousel, or another layout. Do not use it as a generic modal or form dialog; use Dialog or Drawer. Do not use it for YouTube, Vimeo, or iframe-provider embeds when the provider player is required.',
   },
   'visual-builder': {
-    purpose: 'Provide a visual composition or builder workspace.',
-    useWhen: 'Use for no-code/low-code editing, layouts, templates, and visual design workflows.',
+    purpose: 'Experimental scaffold for a future no-code or low-code visual workspace.',
+    useWhen: 'Do not use ngs-visual-builder for production admin screens, dashboards, visual editors, page builders, or real no-code/low-code workflows yet. The current component is only a placeholder: it has no inputs, outputs, layout regions, canvas, drag and drop, inspector, persistence, or editable block model. Mention it only as an experimental scaffold for future visual builder work. Use ContentEditor for block-based CMS/page content, ImageDesigner for creative image composition, Tiles for editable dashboard widgets or config-driven dashboard renderers, Grid for static dashboard layouts, FormRenderer for backend-driven forms, KanbanBoard for workflow columns, and normal NgStarter layout/components for admin screens.',
   },
 }));
 

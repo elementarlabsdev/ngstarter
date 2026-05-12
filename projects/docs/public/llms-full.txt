@@ -42,7 +42,7 @@ import { Table } from '@ngstarter-ui/components/table';
 ## Recipes
 
 ### admin-dashboard
-Build admin dashboards from NgStarter UI primitives instead of hand-rolled shell, cards, forms, tables, and pagination.
+Build admin dashboards from NgStarter UI primitives instead of hand-rolled shell, cards, forms, datatables, static tables, and pagination.
 
 Verification: `npm run verify:admin:components`
 
@@ -50,6 +50,7 @@ Must use:
 - `@ngstarter-ui/components/sidenav`
 - `@ngstarter-ui/components/navigation`
 - `@ngstarter-ui/components/card`
+- `@ngstarter-ui/components/data-view`
 - `@ngstarter-ui/components/table`
 - `@ngstarter-ui/components/form-field`
 - `@ngstarter-ui/components/input`
@@ -60,7 +61,9 @@ Must use:
 - `@ngstarter-ui/components/progress-bar`
 
 Must not:
-- Do not build admin tables with role="table" div grids when ngs-table fits.
+- Do not build datatables or operational admin datasets with role="table", plain table markup, or div grids when DataView fits.
+- Do not use DataView for purely static/read-only tabular content when ngs-table fits.
+- Do not build static/read-only tables with role="table" div grids when ngs-table fits.
 - Do not build search fields with plain input when ngs-form-field and ngsInput fit.
 - Do not build navigation menus with plain button lists when ngs-navigation fits.
 - Do not build KPI cards with plain article/div cards when ngs-card fits.
@@ -299,8 +302,8 @@ Typography:
   outputs: `cookieAccepted`
   tokens: `--ngs-color-surface-container-lowest`, `--ngs-font-size-sm`, `--ngs-radius-xl`, `--ngs-shadow-lg`
 - core: `@ngstarter-ui/components/core`
-  purpose: Provide shared primitives, utilities, pipes, directives, theming services, and low-level behavior used by NgStarter components.
-  use when: Import from core for theme setup, shared directives, utility pipes, ripple, focus helpers, and library infrastructure.
+  purpose: Provide infrastructure primitives, theme setup, services, directives, pipes, tokens, and low-level utilities.
+  use when: Use @ngstarter-ui/components/core for infrastructure, not for building screens directly. Use provideNgsTheme in app config to set theme, colorScheme, density, radius, primaryColor, persistence, and storageKey. Inject ThemeManagerService for runtime theme, color scheme, density, radius, and primary color changes. Use utility directives such as ngsRipple, ngsAutoFocus, ngsFocusElement, ngsTextareaAutoSize, and ngsDebounceTime when a specific low-level behavior is needed. Use pipes such as InitialsPipe, FormatFileSizePipe, SafeHtmlPipe, SafeResourceUrlPipe, OrderByPipe, FilterByPropertyPipe, and SearchByPropertyPipe when they fit. Use ErrorStateMatcher or ShowOnDirtyErrorStateMatcher for form error behavior, and observer/services/utils only for low-level infrastructure. Do not use core as a replacement for real UI components. Do not build admin screens from core primitives; choose concrete components such as Button, Card, DataView, Table, FormField, Dialog, Navigation, Layout, or other component entry points. Do not import Option from core directly for ordinary option lists when Select, Autocomplete, or another component owns the option pattern.
   selectors: `[ngsAutoFocus]`, `[ngsDebounceTime][ngModel]`, `[ngsFocusElement]`, `[ngsRipple]`, `[ngsSoundEffect]`, `ngs-optgroup`, `ngs-option`, `textarea[ngsTextareaAutoSize]`
   exports: `_Option`, `_OptionParent`, `AnalyticsService`, `arrayShallowEquals`, `Autofocusable`, `AUTOFOCUSABLE`, `AutoFocusDirective`, `DebounceTimeDirective`, `defaultRippleAnimationConfig`, `ENVIRONMENT`, `EnvironmentService`, `ErrorStateMatcher`
   inputs: `checkChildren`, `debounceTime`, `disabled`, `label`, `maxRows`, `minRows`, `ngsAutoFocus`, `ngsRippleAnimation`, `ngsRippleCentered`, `ngsRippleColor`, `ngsRippleDisabled`, `ngsRippleRadius`, `ngsRippleTrigger`, `ngsRippleUnbounded`, `selected`, `soundSrc`, `value`
@@ -333,7 +336,7 @@ Typography:
   outputs: `closed`, `opened`
 - data-view: `@ngstarter-ui/components/data-view` docs: /libraries/data-view
   purpose: Build operational data grids for records that users need to inspect, organize, select, and act on.
-  use when: Use for admin screens, CRM and ERP records, users, orders, invoices, logs, tasks, assets, and any dataset where the table is the main work surface. DataView is configured with columnDefs plus local data or a server-side datasource, and supports sorting, search/filter state, pagination, row selection, loading states, empty states, column resizing, column visibility and order, pinned or sticky columns, custom cell renderers, refresh, snapshots, and ngsDataViewActionBar. Do not use for small static tables or simple read-only tabular content; use Table. Do not use as a card list, layout grid, chart widget, report summary, or form editor.
+  use when: Use for datatables and working data surfaces in admin screens, CRM and ERP records, users, orders, invoices, logs, tasks, assets, and any dataset where the table is the main interactive work surface. Choose DataView when users need row actions, selection, sorting, search/filter state, pagination, loading or empty states, column resizing, column visibility/order, pinned or sticky columns, custom cell renderers, refresh, snapshots, server-side data, or ngsDataViewActionBar. DataView is configured with columnDefs plus local data or a server-side datasource. Do not use for small static tables or simple read-only tabular content; use Table. Do not use as a card list, layout grid, chart widget, report summary, or form editor.
   example topics: Data View, Basic data view, Data view with selection, Data view with pagination, Embedded data view, Data view with sorting, Data view with resizable columns, Data view with column settings
   selectors: `[ngsDataViewActionBar]`, `[ngsDataViewEmptyData]`, `[ngsDataViewEmptyFilterResults]`, `ngs-data-view`, `ngs-data-view-action-bar`, `ngs-data-view-column-settings-dialog`
   exports: `cellRenderer`, `ColumnSettingsDialogData`, `ColumnSettingsDialogResult`, `DATA_VIEW`, `DATA_VIEW_CONFIG`, `DataView`, `DataViewActionBar`, `DataViewActionBarAPI`, `DataViewActionBarDirective`, `DataViewAPI`, `DataViewCellRenderer`, `DataViewCellRendererDef`
@@ -449,8 +452,8 @@ Typography:
   inputs: `radius`, `strokeWidth`, `value`
   tokens: `--ngs-color-neutral-300`, `--ngs-color-neutral-600`, `--ngs-color-neutral-700`, `--ngs-color-primary`, `--ngs-gauge-bg`, `--ngs-gauge-fill`, `--ngs-gauge-size`, `--ngs-gauge-value-color`
 - grid: `@ngstarter-ui/components/grid` docs: /components/grid
-  purpose: Render configuration-driven dashboard widgets in a 12-column grid.
-  use when: Use for admin dashboards, configurable widget layouts, analytics home screens, portal start pages, and nested dashboard sections where widget components are selected from configuration or data. Provide configs that map item types to lazy-loaded components and optional skeletons, and items with id, type, columns, height, content, skeletonHeight, and children. Widgets can inject GRID and call markItemAsLoaded(id), especially with waitWhenAllItemsLoaded. Do not use Grid as a normal CSS layout helper for forms, pages, cards, or repeated elements; use TailwindCSS grid/flex classes. Do not use for tables or datasets; use Table or DataView. Do not use for file/media grids; use upload/media components. Do not use as a drag-and-drop dashboard builder when interactive rearranging/resizing is required.
+  purpose: Render static dashboard widgets in a predefined 12-column layout.
+  use when: Use ngs-grid when the application defines a static dashboard or widget layout and users do not need to rearrange, customize, or save the dashboard order. Provide configs that map item types to components and items with id, type, columns, height, content, skeletonHeight, and children. Widgets can inject GRID and call markItemAsLoaded(id), especially with waitWhenAllItemsLoaded. Use Grid for fixed analytics sections, portal start pages, and nested dashboard sections where the structure is known. Do not use Grid as a normal CSS layout helper for forms, pages, cards, or repeated elements; use TailwindCSS grid/flex classes. Do not use Grid for dashboards users can rearrange or change; use Tiles. Do not use for tables or datasets; use Table or DataView. Do not use for file/media grids; use upload/media components.
   selectors: `ngs-grid`
   exports: `Grid`, `GRID`, `GridItem`, `GridItemAware`, `GridItemConfig`
   inputs: `configs`, `items`, `plain`, `waitWhenAllItemsLoaded`
@@ -572,7 +575,7 @@ Typography:
   tokens: `--ngs-color-surface-container`, `--ngs-font-size-xs`, `--ngs-radius-lg`
 - layout: `@ngstarter-ui/components/layout` docs: /components/layout
   purpose: Provide the base top-level shell for an application, admin area, dashboard, or large workspace page.
-  use when: Use ngs-layout as the outer structural frame when the whole screen needs topbar, header, sidebar, scrollable content, aside, or footer regions. Use root for a full viewport application shell. Use ngs-layout-content for the main scroll container, and LayoutApiService with layoutId when the sidebar must be shown, hidden, or toggled. Nested layouts are appropriate when a large app shell contains another structured workspace with its own header/content/footer. Do not use Layout as a small wrapper, card, spacing helper, form grouping tool, or generic grid system. Use TailwindCSS grid, flex, and spacing classes inside layout regions. Use Grid for dashboard widgets, DataView or Table for datasets, Drawer for overlay side panels, and Navigation, Sidebar, or Sidenav components inside sidebars.
+  use when: Use ngs-layout as the outer structural frame when the whole screen needs topbar, header, sidebar, scrollable content, aside, or footer regions. Use root for a full viewport application shell. Use ngs-layout-content for the main scroll container, and LayoutApiService with layoutId when the sidebar must be shown, hidden, or toggled. Nested layouts are appropriate when a large app shell contains another structured workspace with its own header/content/footer. Do not use Layout as a small wrapper, card, spacing helper, form grouping tool, or generic grid system. Use TailwindCSS grid, flex, and spacing classes inside layout regions. Use Grid for static dashboard widgets, Tiles for dashboards users can rearrange or customize, DataView or Table for datasets, Drawer for overlay side panels, and Navigation, Sidebar, or Sidenav components inside sidebars.
   example topics: Layout header, Layout sidebar, Layout header with sidebar, Layout header with topbar, Layout footer, Layout header with footer, Layout aside, Layout with nested layouts example
   selectors: `ngs-layout`, `ngs-layout-aside`, `ngs-layout-content`, `ngs-layout-footer`, `ngs-layout-header`, `ngs-layout-sidebar`, `ngs-layout-topbar`
   exports: `Layout`, `LAYOUT`, `LAYOUT_CONTENT`, `LayoutApiService`, `LayoutAside`, `LayoutContent`, `LayoutContentInterface`, `LayoutFooter`, `LayoutHeader`, `LayoutSidebar`, `LayoutSidebarStore`, `LayoutSidebarVisibilityChange`
@@ -876,8 +879,8 @@ Typography:
   inputs: `disabled`, `ngs-sort-header`, `ngsSortActive`, `ngsSortDirection`, `ngsSortDisableClear`, `ngsSortDisabled`, `ngsSortStart`, `sortActionDescription`
   outputs: `ngsSortChange`
 - spinner: `@ngstarter-ui/components/spinner` docs: /components/progress-spinner
-  purpose: Use Spinner for basic progress spinner, configurable progress spinner, configurable spinner.
-  use when: Choose Spinner when the workflow matches examples such as Basic Progress Spinner, Configurable Progress Spinner, Configurable spinner.
+  purpose: Show a circular indicator for an ongoing operation.
+  use when: Use ngs-progress-spinner when a compact circular loading indicator is needed inside a button, overlay, media viewer, widget, small page area, or next to an action. Use mode="indeterminate" when the remaining time or amount of work is unknown. Use mode="determinate" with value from 0 to 100 when progress is known. Configure diameter, strokeWidth, and color for the surface. Do not use ProgressSpinner for linear progress; use ProgressBar. Do not use it for known loading layouts; use Skeleton. Do not use it for router or page transition loading; use PageLoadingBar. Do not use it as a full-screen or blocking state by itself; use ScreenLoader or BlockLoader. Do not use it as a KPI or metric display; use Gauge or ProgressBar based on context.
   example topics: Basic Progress Spinner, Configurable Progress Spinner, Configurable spinner
   selectors: `ngs-progress-spinner`
   exports: `ProgressSpinner`, `ProgressSpinnerModule`, `SpinnerMode`
@@ -925,8 +928,8 @@ Typography:
   outputs: `itemIdChanged`
   tokens: `--ngs-font-size-xs`, `--ngs-nav-item-active-bg`, `--ngs-nav-item-active-color`, `--ngs-nav-item-color`, `--ngs-nav-item-hover-bg`, `--ngs-nav-item-hover-color`, `--ngs-nav-item-radius`, `--ngs-tab-panel-aside-width`, `--ngs-tab-panel-compact-item-height`, `--ngs-tab-panel-compact-item-width`, `--ngs-tab-panel-compact-width`, `--ngs-tab-panel-item-active-bg`, `--ngs-tab-panel-item-active-color`, `--ngs-tab-panel-item-border-radius`, `--ngs-tab-panel-item-color`, `--ngs-tab-panel-item-gap`
 - table: `@ngstarter-ui/components/table` docs: /components/table
-  purpose: Render structured tabular data with columns, rows, headers, sorting, selection, and sticky regions.
-  use when: Use for predictable tabular layouts; use Data View when users need richer dataset operations.
+  purpose: Render static or simple template-defined tabular data with known columns.
+  use when: Use table[ngs-table] or ngs-table for static or simple tabular data where columns are known in Angular templates: read-only tables, documentation tables, settings summaries, static comparison rows, lightweight report tables, and small non-interactive admin tables. Define columns with ngsColumnDef, header/body/footer cells with ngsHeaderCellDef, ngsCellDef, and ngsFooterCellDef, and rows with ngsHeaderRowDef, ngsRowDef, and ngsFooterRowDef. Use TableDataSource only for lightweight local table behavior, not as a replacement for a real datatable. Use sticky/stickyEnd for fixed columns and sticky row defs for sticky header or footer. Use table[ngs-native-table] only for static HTML tables without a data source. Do not build tables with div role="table" or custom grid markup when ngs-table fits. Use DataView instead when the UI is a datatable or working data surface with row actions, selection, sorting, search/filter state, pagination, column sizing/settings, saved views, server-driven data, or complex record management. Use List for simple vertical rows without real columns. Use Tree for hierarchical rows. Use Grid or Tiles for dashboard layouts. Use Sort only for sort state behavior; it does not replace Table.
   example topics: Native Table, Basic Table, Table With Pagination, Table With Sorting, Table With Filtering, Table With Selection, Table With Fixed Columns, Table With Fixed Header
   selectors: `[ngs-cell]`, `[ngs-footer-cell]`, `[ngs-footer-row]`, `[ngs-header-cell]`, `[ngs-header-row]`, `[ngs-row]`, `[ngsCellDef]`, `[ngsColumnDef]`, `[ngsFooterCellDef]`, `[ngsFooterRowDef]`, `[ngsHeaderCellDef]`, `[ngsHeaderRowDef]`, `[ngsRowDef]`, `ng-template[ngsNoDataRow]`, `ngs-cell`, `ngs-footer-cell`, `ngs-footer-row`, `ngs-header-cell`, `ngs-header-row`, `ngs-row`, `ngs-table`, `ngs-text-column`, `table[ngs-native-table]`, `table[ngs-table]`, `td[ngs-cell]`, `td[ngs-footer-cell]`, `th[ngs-header-cell]`, `tr[ngs-footer-row]`, `tr[ngs-header-row]`, `tr[ngs-row]`
   exports: `Cell`, `CellDef`, `ColumnDef`, `FooterCell`, `FooterCellDef`, `FooterRow`, `FooterRowDef`, `HeaderCell`, `HeaderCellDef`, `HeaderRow`, `HeaderRowDef`, `NativeTable`
@@ -959,8 +962,8 @@ Typography:
   inputs: `content`, `helperText`, `scale`, `src`
   tokens: `--ngs-color-neutral-950`, `--ngs-font-size-xs`, `--ngs-radius-lg`, `--ngs-thumbnail-height`, `--ngs-thumbnail-width`
 - tiles: `@ngstarter-ui/components/tiles` docs: /components/tiles
-  purpose: Lay out resizable tile-based content.
-  use when: Use for dashboards, visual builders, and configurable grid-like workspaces.
+  purpose: Lay out responsive dashboard tiles and support user-driven tile reordering/customization.
+  use when: Use ngs-tiles with ngs-tile when users can rearrange dashboard cards or widgets, customize a dashboard, or save a changed widget order. Good for editable dashboards, portal home pages, workspace widgets, configurable analytics cards, media/card boards, and dashboard builders. Tiles can be the layout host for config-driven dashboard renderers: the app can render lazy widget components inside each ngs-tile, show Skeleton while widgets load, and persist the final item order from orderChanged or layoutChanged. Use width, height, width.sm/md/lg/xl, and height.sm/md/lg/xl to define responsive tile spans, and ngsTileHandle for drag handles. Provide items so reorder events can map visual order back to app data. Use Grid only for static predefined dashboard/widget layouts that users do not rearrange. Do not use Tiles for ordinary static responsive page layout; use TailwindCSS grid/flex. Do not use for split panes with gutters; use Split. Do not use for one manually resized box; use ResizableContainer. Do not use for simple cards, lists, tables, or datasets without tile reordering; use Card, List, Table, or DataView. Do not use for status-column workflows; use KanbanBoard.
   example topics: Basic tiles
   selectors: `[ngsTileHandle]`, `ngs-tile`, `ngs-tiles`
   exports: `ReorderFunction`, `Tile`, `TileHandleDirective`, `Tiles`, `TILES_REORDER`, `TileService`, `tilesShift`, `tilesSwap`
@@ -968,15 +971,15 @@ Typography:
   outputs: `layoutChanged`, `orderChanged`
   tokens: `--ngs-color-border`, `--ngs-color-surface-container`, `--ngs-radius-xl`, `--ngs-tile-h`, `--ngs-tile-h-lg`, `--ngs-tile-h-md`, `--ngs-tile-h-sm`, `--ngs-tile-h-xl`, `--ngs-tile-w`, `--ngs-tile-w-lg`, `--ngs-tile-w-md`, `--ngs-tile-w-sm`, `--ngs-tile-w-xl`, `--ngs-tiles-columns`, `--ngs-tiles-gap`, `--ngs-tiles-row-height`
 - timeline: `@ngstarter-ui/components/timeline` docs: /components/timeline
-  purpose: Show events or activities in chronological order.
-  use when: Use for audit logs, histories, workflows, tracking, and activity feeds.
+  purpose: Show a vertical chronological history of events.
+  use when: Use ngs-timeline when users need to understand a sequence of events over time: audit logs, activity history, entity change history, project milestones, order or shipment history, workflow history, tracking events, and user actions. Use ngs-timeline-header to group events by date, month, phase, or period. Use ngs-timeline-item with ngs-timeline-timestamp, ngs-timeline-title, ngs-timeline-subtitle, ngs-timeline-description, ngs-timeline-attributes, and ngs-timeline-content to structure each event. Use ngsTimelineItemIndicator when the marker should show an actor, icon, status, or event type. Do not use Timeline for a realtime notification inbox or actionable notification feed; use Notifications. Do not use for a simple vertical collection without time/order meaning; use List. Do not use for tabular audit logs that need sorting, filtering, or many columns; use Table or DataView. Do not use for workflow steps the user must complete; use Stepper. Do not use for status columns; use KanbanBoard. Do not use for calendar/scheduler views or for a single operation status; use ProgressBar, Badge, or Status as appropriate.
   example topics: Basic Timeline, Timeline With Timestamp, Timeline With Custom Indicator, Timeline timestamp, Timeline with cutsom indicator
   selectors: `[ngsTimelineItemIndicator]`, `ngs-timeline`, `ngs-timeline-attributes`, `ngs-timeline-content`, `ngs-timeline-description`, `ngs-timeline-header`, `ngs-timeline-item`, `ngs-timeline-subtitle`, `ngs-timeline-timestamp`, `ngs-timeline-title`
   exports: `Timeline`, `TimelineAttributes`, `TimelineContent`, `TimelineDescription`, `TimelineHeader`, `TimelineItem`, `TimelineItemIndicatorDirective`, `TimelineSubtitle`, `TimelineTimestamp`, `TimelineTitle`
   tokens: `--ngs-color-muted`, `--ngs-color-neutral-500`, `--ngs-color-neutral-800`, `--ngs-font-size-sm`, `--ngs-font-size-xs`, `--ngs-timeline-header-bg`, `--ngs-timeline-header-color`, `--ngs-timeline-header-font-size`, `--ngs-timeline-header-font-weight`, `--ngs-timeline-header-height`, `--ngs-timeline-header-padding`, `--ngs-timeline-header-text-transform`, `--ngs-timeline-indicator-bg`, `--ngs-timeline-indicator-border`, `--ngs-timeline-indicator-line-offset`, `--ngs-timeline-indicator-offset`
 - timepicker: `@ngstarter-ui/components/timepicker` docs: /components/timepicker
-  purpose: Let users choose a time value.
-  use when: Use for scheduling, reminders, availability, reports, and time-based filters.
+  purpose: Let users choose or type a time of day in a form field.
+  use when: Use input[ngsTimepicker] inside one ngs-form-field, connected to an ngs-timepicker instance, when a form needs a time of day: meeting time, event time, booking time, reminder time, deadline time, availability slot, report time filter, or schedule setting. Add ngs-timepicker-toggle as an icon suffix when users should open the dropdown explicitly. Use interval to control option steps such as 15, 30, or 60 minutes. Use min and max to limit selectable times. The input supports manual typing and localized display, while the model value can be a HH:mm-like string or a Date with the selected time merged into it. Combine Datepicker and Timepicker as separate controls when users need both date and time. Do not use Timepicker to choose a date; use Datepicker. Do not use it to choose a timezone; use TimezoneSelect. Do not use it for duration or numeric amounts of hours/minutes; use NumberInput or Slider. Do not use it for plain text without time validation; use ngsInput. Do not use it as a calendar, scheduler, or day-slot planner.
   example topics: Basic time picker, Integration with Datepicker, Customizing the toggle icon, Timepicker with interval, Basic timepicker, Timepicker with datepicker, Timepicker custom toggle icon, Timepicker interval
   selectors: `[ngsTimepickerToggleIcon]`, `input[ngsTimepicker]`, `ngs-timepicker`, `ngs-timepicker-toggle`
   exports: `Timepicker`, `TIMEPICKER_CONFIG`, `TimepickerConfig`, `TimepickerInput`, `TimepickerIntl`, `TimepickerToggle`, `TimepickerToggleIcon`
@@ -984,24 +987,24 @@ Typography:
   outputs: `closed`, `opened`
   tokens: `--ngs-dropdown-bg`, `--ngs-dropdown-border`, `--ngs-dropdown-padding`, `--ngs-dropdown-radius`, `--ngs-dropdown-shadow`, `--ngs-timepicker-content-padding`
 - timezone-select: `@ngstarter-ui/components/timezone-select` docs: /forms/timezone
-  purpose: Let users choose a timezone.
-  use when: Use in profile, scheduling, localization, and tenant settings.
+  purpose: Let users choose an IANA time zone id in a form field.
+  use when: Use ngs-timezone-select inside one ngs-form-field when a form must store a real time zone id such as Europe/Warsaw or America/New_York. Good for profile timezone, account preferences, organization or tenant default timezone, scheduling settings, calendar settings, report default timezone, localization preferences, and admin settings where backend data needs an IANA timezone string. The control is searchable, groups time zones by region, supports Angular forms, required, disabled, placeholder, locale-aware labels, opened, and closed. Do not use TimezoneSelect to choose a time of day; use Timepicker. Do not use it to choose a date; use Datepicker. Do not use it to choose a country or region; use CountrySelect. Do not use it for language or locale selection; use a dedicated locale/language control or Select. Do not use it for generic custom options; use Select. Do not use it for durations, numeric offsets, or timezone math; use NumberInput, Slider, or app logic. Do not use timezone as a date format setting; use DateFormatSelect for display formats.
   example topics: Basic timezone select
   selectors: `ngs-timezone-select`
   exports: `FilterTimezonesPipe`, `LocalizedTimezone`, `TimezoneGroup`, `TimezoneSelect`, `TimezoneUtils`
   inputs: `aria-describedby`, `disabled`, `locale`, `placeholder`, `required`, `searchTerm`, `value`
   outputs: `closed`, `opened`
 - toolbar: `@ngstarter-ui/components/toolbar` docs: /components/toolbar
-  purpose: Group frequently used page, editor, or content actions.
-  use when: Use above tables, editors, canvases, dashboards, and tool surfaces.
+  purpose: Provide a persistent command area for a page, panel, table, editor, canvas, or workspace surface.
+  use when: Use ngs-toolbar when a local surface needs a title, short local navigation, and frequently used actions in a stable horizontal or multi-row command area. Use ngs-toolbar-title for the local title, ngs-toolbar-spacer to separate groups, ngs-toolbar-row for multi-row command areas, ngs-toolbar-item for actions that should participate in responsive overflow, and ngs-toolbar-nav with ngs-toolbar-nav-link for short local links inside the toolbar. Good places include table headers, panel headers, admin page headers, editor surfaces, dashboards, canvas tools, and workspace tool surfaces. Do not use Toolbar as a generic flex layout for arbitrary content. Do not use it for floating contextual actions on selected rows or objects; use CommandBar. Do not use it for dropdown command lists; use Menu. Do not use it for primary application navigation; use Sidebar, Sidenav, or Navigation. Do not replace specialized TextEditor or CommentEditor toolbars with the generic Toolbar.
   example topics: Basic Toolbar, Multi-row Toolbar, Toolbar with items, Responsive Toolbar with Overflow Menu, Responsive Toolbar Navigation, Toolbar overflow, Toolbar nav
   selectors: `a[ngs-toolbar-nav-link]`, `ngs-toolbar`, `ngs-toolbar-item`, `ngs-toolbar-nav`, `ngs-toolbar-nav-link`, `ngs-toolbar-row`, `ngs-toolbar-spacer`, `ngs-toolbar-title`
   exports: `Toolbar`, `ToolbarBaseItem`, `ToolbarItem`, `ToolbarNav`, `ToolbarNavLink`, `ToolbarRow`, `ToolbarSpacer`, `ToolbarTitle`
   inputs: `active`, `hidden`
   tokens: `--ngs-font-size-lg`, `--ngs-nav-item-active-color`, `--ngs-nav-item-color`, `--ngs-nav-item-font-size`, `--ngs-nav-item-height`, `--ngs-nav-item-hover-color`, `--ngs-nav-item-padding`, `--ngs-nav-item-radius`, `--ngs-toolbar-nav-link-active-color`, `--ngs-toolbar-nav-link-color`, `--ngs-toolbar-nav-link-font-size`, `--ngs-toolbar-nav-link-hover-color`, `--ngs-toolbar-nav-link-overflow-height`, `--ngs-toolbar-nav-link-padding`, `--ngs-toolbar-nav-link-radius`
 - tooltip: `@ngstarter-ui/components/tooltip` docs: /components/tooltip
-  purpose: Show short contextual help on hover or focus.
-  use when: Use for icon buttons, disabled explanations, abbreviations, and dense controls.
+  purpose: Show a short helper message for one interface element on hover, focus, or touch.
+  use when: Use ngsTooltip as a directive on a trigger element when a short non-interactive helper message should explain an icon button, abbreviation, disabled state, dense control, compact label, or unclear affordance. Configure ngsTooltipPosition, ngsTooltipShowDelay, ngsTooltipHideDelay, ngsTooltipOffset, ngsTooltipDisabled, ngsTooltipClass, or ngsTooltipPositionAtOrigin when placement and timing need tuning. Export the directive as ngsTooltip when app logic must call show(), hide(), or toggle(). Keep tooltip text short and plain. Do not use Tooltip for interactive content, forms, action lists, rich previews, or long explanations; use Popover. Do not use it for command menus; use Menu. Do not use it for visible page messages; use Alert, Announcement, ActionRequired, or Incidents based on scope. Do not use it for form helper or validation text; use FormField hint and error. Do not use it for onboarding flows; use GuidedTour.
   example topics: Basic Tooltip, Tooltip With a Custom Position, Tooltip show and hide delay, Tooltip manually showing and hiding, Tooltip disabled, Tooltip position at origin, Tooltip show hide delay, Tooltip manually show hide
   selectors: `[ngsTooltip]`, `ngs-tooltip-content`
   exports: `Tooltip`, `TOOLTIP_DEFAULT_OPTIONS`, `TooltipContent`, `TooltipDefaultOptions`, `TooltipPosition`, `TooltipVisibility`
@@ -1009,7 +1012,7 @@ Typography:
   tokens: `--ngs-color-neutral-100`, `--ngs-color-neutral-950`, `--ngs-font-size-xs`, `--ngs-radius-md`, `--ngs-tooltip-border-radius`, `--ngs-tooltip-container-color`, `--ngs-tooltip-font-size`, `--ngs-tooltip-handset-font-size`, `--ngs-tooltip-handset-padding`, `--ngs-tooltip-line-height`, `--ngs-tooltip-max-width`, `--ngs-tooltip-padding`, `--ngs-tooltip-supporting-text-color`
 - tree: `@ngstarter-ui/components/tree` docs: /components/tree
   purpose: Display hierarchical data with expandable parent and child nodes.
-  use when: Use for folders, permissions, categories, org charts, and nested navigation.
+  use when: Use ngs-tree when users need to inspect or navigate hierarchical data where parent and child levels matter: folders and files, categories, permissions, taxonomies, organization structures, nested settings, product/entity hierarchies, and other expandable trees. Use dataSource with childrenAccessor for nested/static data, or treeControl with a custom DataSource for flat trees and dynamic loading. Define node templates with *ngsTreeNodeDef and use when for different node types. Use ngsTreeNodePadding for indentation and ngsTreeNodeToggle for expand/collapse controls. Use ProgressBar or Skeleton inside node templates when children load on demand. Do not use Tree for a simple vertical collection; use List. Do not use it for primary application navigation; use Sidebar, Sidenav, Navigation, or RailNav. Do not use it for FAQ or settings sections; use ExpansionPanel. Do not use it for dense row data with columns, sorting, filters, or bulk actions; use Table or DataView. Do not use it for step-by-step workflows; use Stepper.
   example topics: Basic tree, Tree with dynamic data
   selectors: `[ngsTreeNodeDef]`, `[ngsTreeNodeOutlet]`, `[ngsTreeNodePadding]`, `[ngsTreeNodeToggle]`, `ngs-nested-tree-node`, `ngs-tree`, `ngs-tree-node`
   exports: `NestedTreeNode`, `Tree`, `TreeNode`, `TreeNodeDef`, `TreeNodeOutlet`, `TreeNodePadding`, `TreeNodeToggle`
@@ -1017,8 +1020,8 @@ Typography:
   outputs: `activation`, `expandedChange`
   tokens: `--ngs-tree-container-background-color`, `--ngs-tree-node-min-height`, `--ngs-tree-node-text-color`, `--ngs-tree-node-text-font`, `--ngs-tree-node-text-size`, `--ngs-tree-node-text-weight`
 - upload: `@ngstarter-ui/components/upload` docs: /components/upload
-  purpose: Let users select, preview, and upload files.
-  use when: Use for attachments, documents, media, imports, and profile assets.
+  purpose: Provide UI for selecting files, drag-and-drop upload areas, and file progress displays.
+  use when: Use Upload components when users need to choose local files, drop files into an upload area, or see selected/uploading files with progress, errors, retry, remove, or cancel actions. Use ngsUploadTrigger on a button or clickable element to open the native file picker. Use ngs-upload-area for drag-and-drop with ngsUploadAreaMainState, ngsUploadAreaDropState, ngsUploadAreaInvalidState, and ngsUploadAreaIcon. Use accept and multiple to control allowed file types and multi-select. Use ngs-upload-container with ngs-upload-allowed-types and ngs-upload-max-file-size for upload hints. Use ngs-file-list with ngs-file for vertical file rows, or ngs-files-grid with ngs-grid-file for compact file cards. Use ngs-file-control and ngsGridFileControl for file-level actions. The component emits fileSelected with the selected File objects; the application must perform validation, backend upload, retry, deletion, persistence, and security checks. Do not treat Upload as a backend uploader, storage manager, or import wizard by itself. Do not use it for editing selected images; use Crop, ImageResizer, ThumbnailMaker, or ImageDesigner after selection. Do not use it for rich editor image upload flows; use the TextEditor or CommentEditor upload APIs. Do not use it to manage an existing document table with sorting and filtering; use Table or DataView.
   example topics: Basic Upload, Upload area, File list, File grid
   selectors: `[ngs-file-control]`, `[ngsFileIcon]`, `[ngsGridFileControl]`, `[ngsUploadAreaDropState]`, `[ngsUploadAreaIcon]`, `[ngsUploadAreaInvalidState]`, `[ngsUploadAreaMainState]`, `[ngsUploadTrigger]`, `ngs-file`, `ngs-file-control`, `ngs-file-list`, `ngs-files-grid`, `ngs-grid-file`, `ngs-list-file`, `ngs-upload-allowed-types`, `ngs-upload-area`, `ngs-upload-container`, `ngs-upload-max-file-size`
   exports: `File`, `FileControl`, `FileIconDirective`, `FileList`, `FilesGrid`, `GridFile`, `GridFileControlDirective`, `ListFile`, `UploadAllowedTypes`, `UploadArea`, `UploadAreaDropStateDirective`, `UploadAreaIconDirective`
@@ -1026,22 +1029,24 @@ Typography:
   outputs: `fileSelected`
   tokens: `--ngs-color-danger`, `--ngs-color-danger-container-high`, `--ngs-color-danger-container-low`, `--ngs-color-neutral-300`, `--ngs-color-neutral-500`, `--ngs-color-neutral-600`, `--ngs-color-primary`, `--ngs-color-subtle`, `--ngs-color-surface-container`, `--ngs-color-surface-container-highest`, `--ngs-file-bg`, `--ngs-file-border-radius`, `--ngs-file-control-color`, `--ngs-file-control-font-size`, `--ngs-file-control-hover-color`, `--ngs-file-controls-gap`
 - video-player: `@ngstarter-ui/components/video-player` docs: /libraries/video-player
-  purpose: Play video content with application-level controls.
-  use when: Use for media libraries, lessons, previews, and product content.
+  purpose: Play video inline inside the current page, card, carousel, media preview, lesson, or workspace layout.
+  use when: Use ngs-video-player when video should stay embedded in the current layout with NgStarter-controlled playback UI. Pass src for the video source, optional thumbnailUrl for the poster preview, and orientation or payload.orientation for landscape, portrait, or square aspect ratio. Configure autoPlay, muted, disableClickToPlay, withCredentials, showPlayButton, showSpeaker, showFullscreen, and showDurationSlider to match the surface. Listen to play, pause, ended, loaded, and error for application state. Good for media previews, lessons, product videos, content previews, cards, carousel slides, and dashboard/workspace media blocks. The player wraps video.js and supports HLS m3u8 sources through video.js. Do not use VideoPlayer when the video should open as a focused overlay or lightbox; use VideoViewer. Do not use it as a gallery or list by itself; compose it with Carousel, Card, Grid, VideoViewer, or a layout component. Do not use it for YouTube, Vimeo, or other iframe-provider embeds when the provider player is required. Do not use it as a content editing API directly; use the ContentEditor video block for editable content.
+  example topics: Video Player
   selectors: `ngs-video-player`
   exports: `VideoPlayer`, `VideoPlayerInterface`, `VideoPlayerOrientation`, `VideoPlayerService`
   inputs: `autoPlay`, `disableClickToPlay`, `muted`, `orientation`, `payload`, `showDurationSlider`, `showFullscreen`, `showPlayButton`, `showSpeaker`, `src`, `thumbnailUrl`, `withCredentials`
   outputs: `ended`, `error`, `loaded`, `pause`, `play`
 - video-viewer: `@ngstarter-ui/components/video-viewer` docs: /components/video-viewer
-  purpose: Display videos in a focused viewer experience.
-  use when: Use for video attachments, previews, galleries, and media detail pages.
+  purpose: Open videos in a focused overlay or lightbox above the current page.
+  use when: Use VideoViewer when a thumbnail, preview card, compact inline player, attachment, gallery item, or media library item should open a larger focused video viewing experience. Put ngsVideoViewer on the preview container and ngsVideoViewerVideo on each clickable preview item. Pass sourceUrl for the video source, plus optional title, caption, description, or template directives ngsVideoViewerVideoTitle, ngsVideoViewerVideoCaption, and ngsVideoViewerVideoDescription. Configure orientation, payload, autoPlay, muted, showPlayButton, showSpeaker, showFullscreen, and showDurationSlider to control the underlying VideoPlayer in the overlay. Good for video attachments, media previews, galleries, lessons, product videos, and media detail flows. Do not use VideoViewer when video should stay inline in the current layout; use VideoPlayer. Do not use it as a carousel, grid, or gallery layout by itself; compose previews with Card, Grid, Carousel, or another layout. Do not use it as a generic modal or form dialog; use Dialog or Drawer. Do not use it for YouTube, Vimeo, or iframe-provider embeds when the provider player is required.
   example topics: Basic Video Viewer
   selectors: `[ngsVideoViewer]`, `[ngsVideoViewerVideo]`, `[ngsVideoViewerVideoCaption]`, `[ngsVideoViewerVideoDescription]`, `[ngsVideoViewerVideoTitle]`, `ngs-video-viewer`
   exports: `VIDEO_VIEWER`, `VIDEO_VIEWER_DATA`, `VIDEO_VIEWER_REF`, `VideoViewer`, `VideoViewerDirective`, `VideoViewerOptions`, `VideoViewerOrientation`, `VideoViewerRef`, `VideoViewerVideoCaptionDirective`, `VideoViewerVideoDescriptionDirective`, `VideoViewerVideoDirective`, `VideoViewerVideoTitleDirective`
   inputs: `autoPlay`, `caption`, `description`, `muted`, `orientation`, `payload`, `showDurationSlider`, `showFullscreen`, `showPlayButton`, `showSpeaker`, `sourceUrl`, `title`
   tokens: `--ngs-color-neutral-100`, `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-color-neutral-400`, `--ngs-color-neutral-50`, `--ngs-color-neutral-600`, `--ngs-color-neutral-700`, `--ngs-color-neutral-800`, `--ngs-color-neutral-900`, `--ngs-color-neutral-950`, `--ngs-font-size-sm`, `--ngs-shadow-sm`
 - visual-builder: `@ngstarter-ui/components/visual-builder` docs: /libraries/visual-builder
-  purpose: Provide a visual composition or builder workspace.
-  use when: Use for no-code/low-code editing, layouts, templates, and visual design workflows.
+  purpose: Experimental scaffold for a future no-code or low-code visual workspace.
+  use when: Do not use ngs-visual-builder for production admin screens, dashboards, visual editors, page builders, or real no-code/low-code workflows yet. The current component is only a placeholder: it has no inputs, outputs, layout regions, canvas, drag and drop, inspector, persistence, or editable block model. Mention it only as an experimental scaffold for future visual builder work. Use ContentEditor for block-based CMS/page content, ImageDesigner for creative image composition, Tiles for editable dashboard widgets or config-driven dashboard renderers, Grid for static dashboard layouts, FormRenderer for backend-driven forms, KanbanBoard for workflow columns, and normal NgStarter layout/components for admin screens.
+  example topics: Visual Builder
   selectors: `ngs-visual-builder`
   exports: `VisualBuilder`

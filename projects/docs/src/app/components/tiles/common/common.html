@@ -3,24 +3,27 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Tiles component provides a flexible and responsive grid-based layout for displaying content in card-like
-        containers. It supports drag-and-drop reordering, customizable column spanning, and responsive dimensions,
-        making it ideal for dashboards, galleries, and interactive interfaces.
+        The Tiles component provides a flexible responsive grid for dashboards and card-like widgets that users can
+        rearrange. Use it as the layout host for dashboards that can change, including config-driven dashboards where
+        the app lazy-loads widget components, shows skeletons, and saves the user-defined order.
       </p>
       <div class="my-7">
         <div>Key Features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Drag-and-Drop</strong>: Interactive reordering of tiles with smooth animations.
+            <strong>Drag-and-drop</strong>: Reorder dashboard tiles with <code>ngsTileHandle</code>.
           </li>
           <li>
-            ✅ <strong>Responsive Design</strong>: Configure tile width and height for different breakpoints (sm, md, lg, xl).
+            <strong>Responsive spans</strong>: Configure tile width and height for different breakpoints
+            (<code>sm</code>, <code>md</code>, <code>lg</code>, <code>xl</code>).
           </li>
           <li>
-            ✅ <strong>Flexible Layout</strong>: Customizable grid columns and gap spacing.
+            <strong>Config-driven dashboards</strong>: Render lazy widget components and skeletons inside tiles when
+            the dashboard can be customized.
           </li>
           <li>
-            ✅ <strong>Developer-Friendly</strong>: Simple API for tracking order changes and layout updates.
+            <strong>Persistence hooks</strong>: Use <code>orderChanged</code> and <code>layoutChanged</code> to save the
+            updated dashboard layout.
           </li>
         </ul>
       </div>

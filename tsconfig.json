@@ -68,6 +68,18 @@
     },
     {
       "path": "./projects/admin-corporate/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/admin-modern/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/admin-modern/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/admin-classic/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/admin-classic/tsconfig.spec.json"
     }
   ]
 }

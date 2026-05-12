@@ -3,23 +3,26 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Timeline component is used to display a series of events in chronological order.
-        It is ideal for showing activity logs, project milestones, or any history-based information.
+        The <code>ngs-timeline</code> component displays events in a vertical chronological flow. Use it when the order
+        of events matters and users need to understand what happened, when it happened, who did it, and which metadata
+        belongs to each event.
       </p>
       <div class="my-7">
         <div>Key Features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Chronological Layout</strong>: Clearly presents events in a vertical flow.
+            <strong>Chronological layout</strong>: Show activity history, audit logs, milestones, and tracking events.
           </li>
           <li>
-            ✅ <strong>Customizable Content</strong>: Each timeline item can include titles, descriptions, timestamps, and custom attributes.
+            <strong>Structured items</strong>: Add title, subtitle, description, timestamp, attributes, and custom content.
           </li>
           <li>
-            ✅ <strong>Flexible Indicators</strong>: Use default dots or custom icons/components as event markers.
+            <strong>Custom indicators</strong>: Use the default marker or provide a custom icon/avatar through
+            <code>ngsTimelineItemIndicator</code>.
           </li>
           <li>
-            ✅ <strong>Sub-components</strong>: Highly modular structure with headers, items, titles, and more for full control.
+            <strong>Date grouping</strong>: Use <code>ngs-timeline-header</code> to group events by day, month, phase,
+            or another time period.
           </li>
         </ul>
       </div>

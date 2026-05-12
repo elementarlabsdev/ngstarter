@@ -1,7 +1,14 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardContent } from '@ngstarter-ui/components/card';
-import { Checkbox } from '@ngstarter-ui/components/checkbox';
+import {
+  cellRenderer,
+  DataView,
+  DataViewActionBar,
+  DataViewActionBarDirective,
+  DataViewCellRendererDef,
+  DataViewColumnDef,
+} from '@ngstarter-ui/components/data-view';
 import { FormField, IconPrefix, Label } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
@@ -12,18 +19,6 @@ import {
 import { Paginator } from '@ngstarter-ui/components/paginator';
 import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 import { Sidenav, SidenavContainer, SidenavContent } from '@ngstarter-ui/components/sidenav';
-import {
-  Cell,
-  CellDef,
-  ColumnDef,
-  HeaderCell,
-  HeaderCellDef,
-  HeaderRow,
-  HeaderRowDef,
-  Row,
-  RowDef,
-  Table,
-} from '@ngstarter-ui/components/table';
 import { Input } from '@ngstarter-ui/components/input';
 
 type NavItem = {
@@ -58,20 +53,110 @@ type Task = {
 };
 
 @Component({
+  selector: 'app-task-project-cell',
+  imports: [Icon],
+  template: `
+    <div class="flex items-center gap-2.5 font-normal text-[#1f2329]">
+      <span
+        class="inline-grid size-6 flex-none place-items-center rounded-[0.38rem] text-white"
+        [style.background]="element()?.projectColor"
+      >
+        <ngs-icon [name]="element()?.projectIcon ?? ''" />
+      </span>
+      <span class="truncate">{{ element()?.project }}</span>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+class TaskProjectCellRenderer {
+  readonly element = input<Task>();
+  readonly columnDef = input<DataViewColumnDef>();
+  readonly fieldData = input<string>();
+}
+
+@Component({
+  selector: 'app-task-importance-cell',
+  template: `
+    <span
+      class="inline-flex min-h-7 items-center rounded-lg px-3 text-[0.84rem] font-normal"
+      [style.color]="color()"
+      [style.background]="background()"
+    >
+      <span class="mr-2 size-1.5 rounded-full" [style.background]="color()"></span>
+      {{ fieldData() }}
+    </span>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+class TaskImportanceCellRenderer {
+  readonly element = input<Task>();
+  readonly columnDef = input<DataViewColumnDef>();
+  readonly fieldData = input<Task['importance']>();
+
+  protected color(): string {
+    switch (this.fieldData()) {
+      case 'Medium':
+        return '#cf7b3a';
+      case 'Low':
+        return '#4b83df';
+      default:
+        return '#c34d69';
+    }
+  }
+
+  protected background(): string {
+    switch (this.fieldData()) {
+      case 'Medium':
+        return '#fff7ef';
+      case 'Low':
+        return '#f2f7ff';
+      default:
+        return '#fff4f6';
+    }
+  }
+}
+
+@Component({
+  selector: 'app-task-completion-cell',
+  imports: [ProgressBar],
+  template: `
+    <div class="flex w-full items-center gap-2">
+      <ngs-progress-bar [value]="fieldData() ?? 0" />
+      <span class="w-8 text-right font-normal text-[#3e444c]">{{ fieldData() }}%</span>
+    </div>
+  `,
+  styles: [`
+    :host {
+      display: block;
+      width: 100%;
+    }
+
+    ngs-progress-bar {
+      --ngs-progress-bar-height: 0.375rem;
+      --ngs-progress-bar-indicator-color: var(--admin-teal);
+      --ngs-progress-bar-track-color: #ececef;
+      flex: 1 1 auto;
+      min-width: 3rem;
+    }
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+class TaskCompletionCellRenderer {
+  readonly element = input<Task>();
+  readonly columnDef = input<DataViewColumnDef>();
+  readonly fieldData = input<number>();
+}
+
+@Component({
   selector: 'app-root',
   imports: [
     Button,
     Card,
     CardContent,
-    Cell,
-    CellDef,
-    Checkbox,
-    ColumnDef,
+    DataView,
+    DataViewActionBar,
+    DataViewActionBarDirective,
     FormField,
-    HeaderCell,
-    HeaderCellDef,
-    HeaderRow,
-    HeaderRowDef,
     Icon,
     IconPrefix,
     Input,
@@ -81,19 +166,68 @@ type Task = {
     NavigationItemIconDirective,
     Paginator,
     ProgressBar,
-    Row,
-    RowDef,
     Sidenav,
     SidenavContainer,
     SidenavContent,
-    Table,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
-  protected readonly displayedColumns = ['select', 'task', 'project', 'dates', 'importance', 'completion', 'actions'];
+  protected readonly taskSearch = signal('');
+
+  protected readonly taskColumnDefs: DataViewColumnDef[] = [
+    {
+      name: 'Task',
+      field: 'name',
+      visible: true,
+      flex: 1.45,
+      sortable: true,
+      resizable: true,
+    },
+    {
+      name: 'Related Project',
+      field: 'project',
+      cellRenderer: 'project',
+      visible: true,
+      flex: 1.3,
+      sortable: true,
+      resizable: true,
+    },
+    {
+      name: 'Time Allotment',
+      field: 'dates',
+      visible: true,
+      flex: 1.25,
+      sortable: true,
+      resizable: true,
+    },
+    {
+      name: 'Importance',
+      field: 'importance',
+      cellRenderer: 'importance',
+      visible: true,
+      flex: 0.85,
+      sortable: true,
+      resizable: true,
+    },
+    {
+      name: 'Completion',
+      field: 'completion',
+      cellRenderer: 'completion',
+      visible: true,
+      flex: 1.15,
+      sortable: true,
+      resizable: true,
+    },
+  ];
+
+  protected readonly taskCellRenderers: DataViewCellRendererDef[] = [
+    cellRenderer('project', () => Promise.resolve(TaskProjectCellRenderer)),
+    cellRenderer('importance', () => Promise.resolve(TaskImportanceCellRenderer)),
+    cellRenderer('completion', () => Promise.resolve(TaskCompletionCellRenderer)),
+  ];
 
   protected readonly navItems = signal<readonly NavItem[]>([
     { label: 'Dashboard', icon: 'fluent:grid-24-regular', active: true },
@@ -136,7 +270,7 @@ export class App {
     },
   ]);
 
-  protected readonly tasks = signal<readonly Task[]>([
+  protected readonly tasks = signal<Task[]>([
     {
       name: 'Design Landing Page',
       project: 'Valhalla Platform',

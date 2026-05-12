@@ -98,34 +98,18 @@ ngs-progress-bar {
   border-radius: 99rem;
 }
 
-.completion-cell ngs-progress-bar {
-  --ngs-progress-bar-height: --spacing(1.5);
-  --ngs-progress-bar-indicator-color: var(--admin-teal);
-  flex: 1 1 auto;
-  min-width: --spacing(24);
-}
-
-table[ngs-table] {
-  width: 100%;
-}
-
-table[ngs-table] :where(th, td) {
+ngs-data-view {
+  --ngs-data-view-min-height: --spacing(125);
+  --ngs-data-view-radius: 0.75rem;
+  --ngs-data-view-root-border: 1px solid rgba(15, 23, 42, 0.06);
+  --ngs-data-view-border-color: rgba(15, 23, 42, 0.06);
+  --ngs-data-view-header-bg: #fafafa;
+  --ngs-data-view-body-bg: #ffffff;
+  --ngs-data-view-row-bg: #ffffff;
+  --ngs-data-view-row-hover-bg: #f8fafc;
+  --ngs-data-view-cell-padding: 0 --spacing(3);
+  --ngs-data-view-selection-column-width: --spacing(12);
   font-weight: 400;
-  white-space: nowrap;
-}
-
-table[ngs-table] :where(th:nth-child(1), td:nth-child(1)) {
-  width: --spacing(12);
-}
-
-table[ngs-table] :where(th:nth-child(2), td:nth-child(2)) {
-  min-width: --spacing(44);
-  white-space: normal;
-}
-
-table[ngs-table] :where(th:nth-child(7), td:nth-child(7)) {
-  width: --spacing(12);
-  text-align: right;
 }
 
 ngs-paginator {
@@ -186,43 +170,6 @@ ngs-paginator {
   background: #f0f1f2;
 }
 
-.task-name,
-.dates-cell {
-  color: #1f2329;
-  font-weight: 400;
-}
-
-.importance {
-  display: inline-flex;
-  align-items: center;
-  min-height: --spacing(7);
-  border-radius: 0.5rem;
-  color: #c34d69;
-  background: #fff4f6;
-  padding: 0 --spacing(3);
-  font-size: 0.84rem;
-  font-weight: 400;
-}
-
-.importance::before {
-  content: '';
-  width: --spacing(1.5);
-  height: --spacing(1.5);
-  margin-right: --spacing(2);
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.importance.is-medium {
-  color: #cf7b3a;
-  background: #fff7ef;
-}
-
-.importance.is-low {
-  color: #4b83df;
-  background: #f2f7ff;
-}
-
 .row-menu {
   --ngs-button-height: --spacing(10);
   width: --spacing(10);
@@ -234,7 +181,7 @@ ngs-paginator {
     width: 100%;
   }
 
-  table[ngs-table] {
+  ngs-data-view {
     min-width: --spacing(230);
   }
 }

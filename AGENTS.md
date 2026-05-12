@@ -52,8 +52,11 @@ Required admin mappings:
   `@ngstarter-ui/components/navigation`.
 - Cards and KPI panels: `Card`, `CardContent`, and `CardFooter` when needed from
   `@ngstarter-ui/components/card`.
-- Data tables: `Table`, `ColumnDef`, `HeaderCell`, `HeaderCellDef`, `Cell`, `CellDef`,
-  `HeaderRow`, `HeaderRowDef`, `Row`, and `RowDef` from `@ngstarter-ui/components/table`.
+- Datatables, operational admin datasets, and rich data grids: `DataView` from
+  `@ngstarter-ui/components/data-view`.
+- Static, read-only, or simple template-defined tables: `Table`, `ColumnDef`, `HeaderCell`, `HeaderCellDef`,
+  `Cell`, `CellDef`, `HeaderRow`, `HeaderRowDef`, `Row`, and `RowDef` from
+  `@ngstarter-ui/components/table`.
 - Search and text fields: `FormField`, `Label`, prefix/suffix directives, and `Input`.
 - Pagination: `Paginator`.
 - Actions: `Button` and `Icon`.
@@ -63,8 +66,11 @@ Required admin mappings:
   loading; do not use it as a general page, route, form, table, or operation loader.
 
 Agents MUST NOT hand-roll these primitives with plain `div`, `table`, `button`, or `input` unless
-no matching NgStarter component exists. CSS may tune layout, spacing, and visual fidelity, but it
-must not replace NgStarter component structure.
+no matching NgStarter component exists. If the UI is a datatable or working data surface with
+records, actions, selection, sorting, search, pagination, column sizing, column settings, or
+server-driven data, use `DataView`. If the UI is only static/read-only tabular content with known
+template columns and no datatable behavior, use `Table`. CSS may tune layout, spacing, and visual
+fidelity, but it must not replace NgStarter component structure.
 
 Form construction rules:
 

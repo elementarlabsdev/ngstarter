@@ -3,29 +3,31 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        The Video Viewer component is designed for seamless video playback within your application.
-        It provides a rich set of features including customizable overlays, titles, and descriptions,
-        ensuring an engaging user experience across all devices.
+        VideoViewer opens a video in a focused overlay or lightbox above the current page. Use it when
+        a thumbnail, preview card, or compact inline player should open a larger viewing experience with
+        a close control, optional title, caption, description, and playback controls. Use VideoPlayer
+        when video should stay inline in the page layout.
       </p>
       <div class="my-7">
         <div>Key Features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            ✅ <strong>Overlay Integration</strong>: Opens video in a full-screen or modal-like overlay for focused viewing.
+            Opens video previews in a full-screen overlay.
           </li>
           <li>
-            ✅ <strong>Rich Content Support</strong>: Easily add titles, captions, and descriptions to your videos.
+            Supports plain or templated title, caption, and description content.
           </li>
           <li>
-            ✅ <strong>Responsive Playback</strong>: Optimized for various orientations (landscape, portrait, square).
+            Passes orientation and playback options to the underlying VideoPlayer.
           </li>
           <li>
-            ✅ <strong>Advanced Controls</strong>: Full control over autoplay, muting, and visibility of playback controls.
+            Works well with cards, grids, carousels, media libraries, and attachment previews.
           </li>
         </ul>
       </div>
       <p>
-        Perfect for galleries, educational platforms, or any application that requires a professional-grade video viewing experience.
+        Compose preview layouts with Card, Grid, Carousel, or your own layout. VideoViewer is not a
+        generic modal, form dialog, or carousel by itself.
       </p>
     </main>
     <nav ngs-tab-nav-bar>

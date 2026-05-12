@@ -31,55 +31,55 @@ export class Api {
   properties = [
     {
       name: 'ngs-timeline',
-      description: 'Главный контейнер для элементов временной шкалы (timeline items).',
+      description: 'Main container for timeline headers and items.',
       type: 'component',
       default: '–'
     },
     {
       name: 'ngs-timeline-item',
-      description: 'Элемент временной шкалы.',
+      description: 'One event or entry in the timeline.',
       type: 'component',
       default: '–'
     },
     {
       name: 'ngs-timeline-header',
-      description: 'Заголовок группы элементов временной шкалы (например, дата).',
+      description: 'Group heading for timeline items, often a date or period.',
       type: 'component',
       default: '–'
     },
     {
       name: 'ngs-timeline-title',
-      description: 'Заголовок события в элементе временной шкалы.',
+      description: 'Primary title for the timeline event.',
       type: 'component',
       default: '–'
     },
     {
       name: 'ngs-timeline-subtitle',
-      description: 'Подзаголовок события.',
+      description: 'Secondary title or supporting line for the event.',
       type: 'component',
       default: '–'
     },
     {
       name: 'ngs-timeline-description',
-      description: 'Описание события.',
+      description: 'Short event description.',
       type: 'component',
       default: '–'
     },
     {
       name: 'ngs-timeline-timestamp',
-      description: 'Метка времени для события.',
+      description: 'Time or date label for the event.',
       type: 'component',
       default: '–'
     },
     {
       name: 'ngs-timeline-attributes',
-      description: 'Дополнительные атрибуты или метаданные события.',
+      description: 'Extra metadata, actor details, links, badges, or attributes for the event.',
       type: 'component',
       default: '–'
     },
     {
       name: 'ngsTimelineItemIndicator',
-      description: 'Директива для кастомизации индикатора события (используется внутри ng-template).',
+      description: 'Template directive for a custom event indicator.',
       type: 'directive',
       default: '–'
     }
