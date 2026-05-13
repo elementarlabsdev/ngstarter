@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { booleanAttribute, Component, input } from '@angular/core';
 
 @Component({
   selector: 'ngs-sidebar',
@@ -7,7 +7,11 @@ import { Component } from '@angular/core';
   styleUrl: './sidebar.scss',
   host: {
     'class': 'ngs-sidebar',
+    '[class.only-compact]': 'onlyCompact()'
   }
 })
 export class Sidebar {
+  onlyCompact = input(false, {
+    transform: booleanAttribute
+  });
 }

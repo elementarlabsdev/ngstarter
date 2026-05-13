@@ -168,3 +168,29 @@
     display: flex;
   }
 }
+
+:host-context(.ngs-sidebar.only-compact) {
+  .text {
+    display: none;
+
+    ::ng-deep {
+      .ngs-sidebar-full-view-mode {
+        display: none;
+      }
+
+      .ngs-sidebar-compact-view-mode {
+        display: block;
+      }
+    }
+  }
+
+  justify-content: center;
+  padding: 0;
+  gap: 0;
+
+  > .flex,
+  .badge,
+  .arrow {
+    display: none;
+  }
+}

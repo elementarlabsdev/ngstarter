@@ -23,3 +23,8 @@
 :host-context(.ngs-sidenav.is-collapsed:hover) {
   overflow-y: auto;
 }
+
+:host-context(.ngs-sidebar.only-compact) {
+  overflow-y: hidden;
+  padding: 0;
+}

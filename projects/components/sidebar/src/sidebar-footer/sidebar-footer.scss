@@ -2,4 +2,55 @@
 
 :host {
   flex: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  ::ng-deep {
+    .ngs-sidebar-compact-view-mode {
+      display: none;
+    }
+  }
+
+  &.as-block {
+    display: block;
+  }
+}
+
+:host-context(.ngs-sidebar.compact:not(:hover)),
+:host-context(.ngs-sidenav.is-collapsed:not(:hover)) {
+  ::ng-deep {
+    .ngs-sidebar-full-view-mode {
+      display: none;
+    }
+
+    .ngs-sidebar-compact-view-mode {
+      display: block;
+    }
+  }
+}
+
+:host-context(.ngs-sidebar.compact:hover),
+:host-context(.ngs-sidenav.is-collapsed:hover) {
+  ::ng-deep {
+    .ngs-sidebar-compact-view-mode {
+      display: none;
+    }
+
+    .ngs-sidebar-full-view-mode {
+      display: block;
+    }
+  }
+}
+
+:host-context(.ngs-sidebar.only-compact) {
+  ::ng-deep {
+    .ngs-sidebar-full-view-mode {
+      display: none;
+    }
+
+    .ngs-sidebar-compact-view-mode {
+      display: block;
+    }
+  }
 }

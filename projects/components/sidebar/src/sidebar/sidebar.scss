@@ -24,3 +24,7 @@
 :host(.compact:hover) {
   width: var(--ngs-sidebar-width);
 }
+
+:host(.only-compact) {
+  width: var(--ngs-sidenav-collapsed-width, 74px);
+}

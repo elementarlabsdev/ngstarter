@@ -63,8 +63,8 @@ ngs-sidebar {
 }
 
 ngs-sidebar-header {
-  --ngs-sidebar-header-compact-padding: --spacing(4) 0 --spacing(6);
-  padding: --spacing(4) 0 --spacing(6) !important;
+  --ngs-sidebar-header-compact-padding: 0 --spacing(6) --spacing(6) 0;
+  // padding: --spacing(4) 0 --spacing(6) !important;
 }
 
 ngs-sidebar-body {

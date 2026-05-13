@@ -104,6 +104,7 @@
 }
 
 :host-context(.ngs-sidebar.compact:not(:hover)),
+:host-context(.ngs-sidebar.only-compact),
 :host-context(.ngs-sidenav.is-collapsed:not(:hover)) {
   .inner {
     justify-content: center;

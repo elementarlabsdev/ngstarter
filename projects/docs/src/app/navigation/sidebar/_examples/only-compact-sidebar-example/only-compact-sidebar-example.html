@@ -1,0 +1,22 @@
+<div class="h-[420px] w-24 relative">
+  <ngs-sidebar onlyCompact class="border border-muted rounded-2xl">
+    <ngs-sidebar-header class="h-14 px-4 border-b border-b-muted text-primary font-bold justify-center">
+      NG
+    </ngs-sidebar-header>
+
+    <ngs-sidebar-body>
+      <ngs-sidebar-nav activeKey="dashboard" class="p-3">
+        @for (navItem of navItems; track navItem.key) {
+          <ngs-sidebar-nav-item [key]="navItem.key" [attr.aria-label]="navItem.label">
+            <ngs-icon [name]="navItem.icon" ngsSidebarNavItemIcon/>
+            {{ navItem.label }}
+          </ngs-sidebar-nav-item>
+        }
+      </ngs-sidebar-nav>
+    </ngs-sidebar-body>
+
+    <ngs-sidebar-footer class="h-14 px-4 border-t border-t-muted justify-center">
+      <ngs-icon name="fluent:person-circle-24-regular"/>
+    </ngs-sidebar-footer>
+  </ngs-sidebar>
+</div>

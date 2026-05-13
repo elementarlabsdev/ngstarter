@@ -5,8 +5,15 @@
 
   flex: none;
   grid-area: header;
+  width: 100%;
+  display: flex;
+  align-items: center;
 
   &:not([class*="h-"]):not(.is-auto-height) {
     height: var(--ngs-panel-header-height);
+  }
+
+  &.as-block {
+    display: block;
   }
 }

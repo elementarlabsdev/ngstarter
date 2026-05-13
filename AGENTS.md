@@ -180,6 +180,10 @@ Admin shell defaults:
   single root `Layout` owns viewport sizing.
 - Put the compact app rail inside `ngs-sidenav` with `ngs-sidebar`. Do not use `ngs-navigation` for
   the primary sidebar/rail.
+- When content inside `ngs-sidenav` or `ngs-sidebar` must render different blocks for expanded and
+  compact states, use `*ngsSidenavExpanded` and `*ngsSidenavCollapsed` from
+  `@ngstarter-ui/components/sidenav`. Do not use ad hoc CSS classes such as
+  `.ngs-sidebar-full-view-mode` or `.ngs-sidebar-compact-view-mode` in docs or admin examples.
 - Put the page/workspace header in `ngs-panel-header`, the scrollable main body in
   `ngs-panel-content`, and any persistent right column such as an assistant, inspector, details
   pane, or activity feed in `ngs-panel-aside`. Do not build a manual outer CSS grid that wraps
@@ -258,6 +262,8 @@ Styling rules for admin UIs:
   styles already include baseline `body`, font smoothing, scrollbar, input, and component base
   styles. The NgStarter theme also imports TailwindCSS, so admin app global styles should usually
   import only the NgStarter theme.
+- Do not add element reset rules such as `h1, h2, p, ul { margin: 0; }`; TailwindCSS and the
+  NgStarter theme already provide these baseline resets.
 
 Typography rules for admin UIs:
 

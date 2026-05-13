@@ -5,8 +5,15 @@
 
   flex: none;
   grid-area: footer;
+  display: flex;
+  align-items: center;
+  width: 100%;
 
   &:not([class*="h-"]):not(.is-auto-height) {
     height: var(--ngs-panel-footer-height);
+  }
+
+  &.as-block {
+    display: block;
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { booleanAttribute, Component, input } from '@angular/core';
 
 @Component({
   selector: 'ngs-sidebar-header',
@@ -7,8 +7,11 @@ import { Component } from '@angular/core';
   styleUrl: './sidebar-header.scss',
   host: {
     'class': 'ngs-sidebar-header',
+    '[class.as-block]': 'block()'
   }
 })
 export class SidebarHeader {
-
+  block = input(false, {
+    transform: booleanAttribute
+  });
 }

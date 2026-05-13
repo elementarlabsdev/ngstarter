@@ -7,10 +7,14 @@ import { booleanAttribute, Component, input } from '@angular/core';
   styleUrl: './panel-footer.scss',
   host: {
     'class': 'ngs-panel-footer',
-    '[class.is-auto-height]': 'autoHeight()'
+    '[class.is-auto-height]': 'autoHeight()',
+    '[class.as-block]': 'block()',
   }
 })
 export class PanelFooter {
+  block = input(false, {
+    transform: booleanAttribute
+  });
   autoHeight = input(false, {
     transform: booleanAttribute
   });

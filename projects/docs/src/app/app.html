@@ -2,7 +2,7 @@
 <ngs-splash-screen>
   <ngs-logo>
     <ngs-logo-text size="large">NGSTARTER UI</ngs-logo-text>
-<!--    <ngs-logo-description>Angular UI Kit &amp; Admin Panel</ngs-logo-description>-->
+    <!--    <ngs-logo-description>Angular UI Kit &amp; Admin Panel</ngs-logo-description>-->
   </ngs-logo>
 </ngs-splash-screen>
 <ngs-layout root>
@@ -19,7 +19,7 @@
                    (openedChange)="onSidebarOpenedChange($event)"
                    class="border-e border-e-subtle">
         <ngs-sidebar>
-          <ngs-sidebar-header class="h-18 border-b border-b-subtle">
+          <ngs-sidebar-header block class="h-18 border-b border-b-subtle">
             <div class="h-full flex items-center justify-center" *ngsSidenavCollapsed>
               <a routerLink="/" ngs-logo>
                 <ngs-logo-shape/>
@@ -28,7 +28,8 @@
             <div class="ps-5 pe-4 h-full flex items-center justify-between" *ngsSidenavExpanded>
               <a routerLink="/" ngs-logo>
                 <ngs-logo-text>NGSTARTER</ngs-logo-text>
-                <ngs-logo-description>Angular UI Kit <span class="text-2xs text-red-500 uppercase">Alpha</span></ngs-logo-description>
+                <ngs-logo-description>Angular UI Kit <span class="text-2xs text-red-500 uppercase">Alpha</span>
+                </ngs-logo-description>
               </a>
               @if (!sidenav.isMobile()) {
                 <ngs-slide-toggle [(ngModel)]="sidebarExpanded" id="collapse-sidebar"/>
@@ -91,11 +92,11 @@
               <button ngsIconButton (click)="sidenav.toggle()">
                 <ngs-icon name="fluent:navigation-24-regular"/>
               </button>
-<!--              <ngs-toolbar-nav>-->
-<!--                <a ngs-toolbar-nav-link href="https://ngstarter.com">Home</a>-->
-<!--                <a ngs-toolbar-nav-link href="https://demo.ngstarter.com" target="_blank">Live Preview</a>-->
-<!--                <a ngs-toolbar-nav-link href="https://ngstarter.com/documentation">Documentation</a>-->
-<!--              </ngs-toolbar-nav>-->
+              <!--              <ngs-toolbar-nav>-->
+              <!--                <a ngs-toolbar-nav-link href="https://ngstarter.com">Home</a>-->
+              <!--                <a ngs-toolbar-nav-link href="https://demo.ngstarter.com" target="_blank">Live Preview</a>-->
+              <!--                <a ngs-toolbar-nav-link href="https://ngstarter.com/documentation">Documentation</a>-->
+              <!--              </ngs-toolbar-nav>-->
               <ngs-toolbar-spacer/>
               <ngs-toolbar-item class="flex items-center gap-4">
                 <a href="https://x.com/elementarlabs" target="_blank">

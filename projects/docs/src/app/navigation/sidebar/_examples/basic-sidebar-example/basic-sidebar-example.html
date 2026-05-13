@@ -1,6 +1,6 @@
 <div class="h-[600px] w-[300px] relative">
   <ngs-sidebar class="border border-muted rounded-2xl">
-    <ngs-sidebar-header class="flex h-14 items-center px-4 font-bold text-primary border-b border-b-muted">
+    <ngs-sidebar-header class="h-14 px-4 font-bold text-primary border-b border-b-muted">
       NGSTARTER
     </ngs-sidebar-header>
     <ngs-sidebar-body>
@@ -16,7 +16,7 @@
                     }
                   </ng-container>
                   {{ navItem.label }}
-                  <ngs-icon name="fluent:chevron-down-24-regular" ngsSidebarNavGroupToggleIcon/>
+                  <ngs-icon name="fluent:chevron-down-24-regular" class="size-4" ngsSidebarNavGroupToggleIcon/>
                 </ngs-sidebar-nav-group-toggle>
                 <ngs-sidebar-nav-group-menu>
                   @for (childNavItem of navItem.children; track childNavItem) {
@@ -49,8 +49,8 @@
         }
       </ngs-sidebar-nav>
     </ngs-sidebar-body>
-    <ngs-sidebar-footer class="flex h-14 items-center px-4 text-sm border-t border-t-muted">
-      Copyright &copy; 2024
+    <ngs-sidebar-footer class="h-14 px-4 text-sm border-t border-t-muted">
+      Copyright &copy; 2026
     </ngs-sidebar-footer>
   </ngs-sidebar>
 </div>

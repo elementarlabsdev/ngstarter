@@ -15,6 +15,7 @@
   outline: 0;
   box-sizing: border-box;
   overflow-y: auto;
+  overflow-x: hidden;
   transform: translate3d(-100%, 0, 0);
   width: var(--ngs-sidenav-width);
   background: var(--ngs-sidenav-background-color);
