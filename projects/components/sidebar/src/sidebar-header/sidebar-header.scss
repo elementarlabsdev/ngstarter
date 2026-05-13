@@ -26,9 +26,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
 
   ::ng-deep {
     .ngs-sidebar-full-view-mode {
@@ -55,7 +52,6 @@
 }
 
 :host-context(.ngs-sidebar.only-compact) {
-  padding: var(--ngs-sidebar-header-compact-padding);
   display: flex;
   align-items: center;
   justify-content: center;

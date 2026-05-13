@@ -7,12 +7,12 @@
       class="modern-shell grid h-full min-h-0 w-full overflow-hidden"
     >
       <ngs-sidenav [opened]="true" mode="side" [fixedWidth]="88" [adaptive]="false">
-        <ngs-sidebar class="modern-sidebar compact" aria-label="Primary navigation">
-          <ngs-sidebar-header flex class="justify-center">
+        <ngs-sidebar onlyCompact class="modern-sidebar" aria-label="Primary navigation">
+          <ngs-sidebar-header class="justify-center">
             <img class="brand-logo" src="/modern-logo.png" alt="Talent OS" />
           </ngs-sidebar-header>
 
-          <ngs-sidebar-body>
+          <ngs-sidebar-body class="py-7">
             <ngs-sidebar-nav activeKey="Vacancies" class="rail-nav">
               @for (item of navItems(); track item.key) {
                 <ngs-sidebar-nav-item [key]="item.key" [attr.aria-label]="item.label">
@@ -33,7 +33,7 @@
             </ngs-sidebar-nav>
           </ngs-sidebar-body>
 
-          <ngs-sidebar-footer flex class="justify-center">
+          <ngs-sidebar-footer class="justify-center">
             <button ngsIconButton class="support-button" aria-label="Support">
               <ngs-icon name="fluent:headphones-24-regular" />
             </button>

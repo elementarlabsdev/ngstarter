@@ -59,11 +59,11 @@ ngs-sidebar {
   --ngs-sidebar-bg: var(--modern-sidebar);
   --ngs-sidebar-width: --spacing(22);
   --ngs-sidenav-collapsed-width: --spacing(22);
-  padding: --spacing(6) --spacing(4);
+  padding: --spacing(5) --spacing(4);
 }
 
 ngs-sidebar-header {
-  --ngs-sidebar-header-compact-padding: 0 --spacing(6) --spacing(6) 0;
+  --ngs-sidebar-header-compact-padding: 0;
   // padding: --spacing(4) 0 --spacing(6) !important;
 }
 
