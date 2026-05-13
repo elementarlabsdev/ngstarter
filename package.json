@@ -20,7 +20,6 @@
     "ng": "ng",
     "start": "ng cache clean && ng serve --hmr",
     "start:docs": "ng cache clean && ng serve docs --hmr",
-    "start:admin": "ng cache clean && ng serve admin --hmr",
     "start:admin:corporate": "ng cache clean && ng serve admin-corporate --hmr",
     "start:admin:modern": "ng cache clean && ng serve admin-modern --hmr",
     "start:admin:classic": "ng cache clean && ng serve admin-classic --hmr",
@@ -34,7 +33,6 @@
     "verify:components:package": "node scripts/verify-components-package.mjs",
     "build:prod": "ng build --configuration production",
     "build:docs:prod": "ng build docs --configuration production",
-    "build:admin:prod": "ng build admin --configuration production",
     "build:admin-corporate:prod": "ng build admin-corporate --configuration production",
     "build:admin-modern:prod": "ng build admin-modern --configuration production",
     "build:admin-classic:prod": "ng build admin-classic --configuration production",
@@ -42,7 +40,6 @@
     "clean": "rm -rf .angular/cache",
     "serve:ssr": "node dist/ngstarter/server/server.mjs",
     "serve:ssr:docs": "node dist/docs/server/server.mjs",
-    "serve:ssr:admin": "node dist/admin/server/server.mjs",
     "serve:ssr:admin-corporate": "node dist/admin-corporate/server/server.mjs",
     "serve:ssr:admin-modern": "node dist/admin-modern/server/server.mjs",
     "serve:ssr:admin-classic": "node dist/admin-classic/server/server.mjs"
