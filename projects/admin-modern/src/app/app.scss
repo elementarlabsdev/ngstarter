@@ -409,38 +409,39 @@ ngs-card {
   background: transparent;
 }
 
-.type-pill,
-.tag-chip {
-  display: inline-flex;
-  align-items: center;
-  min-height: --spacing(5);
-  border-radius: 0.35rem;
-  padding: 0 --spacing(2);
-  font-size: 0.75rem;
-  line-height: 1;
+.vacancy-type-chip {
+  --ngs-chip-height: --spacing(5);
+  --ngs-chip-radius: 0.35rem;
+  --ngs-chip-padding: 0 --spacing(2);
+  --ngs-chip-color: #ffffff;
+  --ngs-chip-font-size: 0.75rem;
+  --ngs-chip-font-weight: 600;
 }
 
-.type-pill {
-  color: #ffffff;
-  font-weight: 600;
+.vacancy-type-chip.is-blue {
+  --ngs-chip-bg: var(--modern-blue);
 }
 
-.type-pill.is-blue {
-  background: var(--modern-blue);
+.vacancy-type-chip.is-orange {
+  --ngs-chip-bg: #ff6818;
 }
 
-.type-pill.is-orange {
-  background: #ff6818;
+.vacancy-type-chip.is-dark {
+  --ngs-chip-bg: #0b0c10;
 }
 
-.type-pill.is-dark {
-  background: #0b0c10;
+.vacancy-tags {
+  --ngs-chip-set-gap: --spacing(2);
 }
 
-.tag-chip {
-  color: #141820;
-  background: #f4f4f5;
-  font-weight: 400;
+.vacancy-tag-chip {
+  --ngs-chip-height: --spacing(5);
+  --ngs-chip-radius: 0.35rem;
+  --ngs-chip-padding: 0 --spacing(2);
+  --ngs-chip-bg: #f4f4f5;
+  --ngs-chip-color: #141820;
+  --ngs-chip-font-size: 0.75rem;
+  --ngs-chip-font-weight: 400;
 }
 
 .ai-column-footer {

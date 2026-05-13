@@ -7,7 +7,7 @@ on:
       - main
     paths-ignore:
       - 'README.md'
-      - 'LICENSE'
+      - '../../LICENSE.md'
       - '.gitignore'
       - '.dockerignore'
 

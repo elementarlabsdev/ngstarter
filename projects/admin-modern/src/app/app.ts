@@ -9,6 +9,7 @@ import {
   CardFooter,
   CardHeader,
 } from '@ngstarter-ui/components/card';
+import { Chip, ChipSet } from '@ngstarter-ui/components/chips';
 import {
   FormField,
   IconButtonSuffix,
@@ -83,6 +84,8 @@ interface NotificationItem {
     CardAside,
     CardContent,
     CardHeader,
+    Chip,
+    ChipSet,
     FormField,
     Icon,
     IconPrefix,

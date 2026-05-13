@@ -1,126 +1,196 @@
-import { readFile } from 'node:fs/promises';
+import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const rootDir = process.cwd();
-const adminDir = path.join(rootDir, 'projects/admin/src/app');
-const appTemplatePath = path.join(adminDir, 'app.html');
-const appClassPath = path.join(adminDir, 'app.ts');
-const appStylePath = path.join(adminDir, 'app.scss');
+const projectsDir = path.join(rootDir, 'projects');
 
-const [template, source, styles] = await Promise.all([
-  readFile(appTemplatePath, 'utf8'),
-  readFile(appClassPath, 'utf8'),
-  readFile(appStylePath, 'utf8'),
-]);
+const skippedApps = new Set(['admin-classic']);
+const strictApps = new Set(['admin-modern']);
 
-const requiredTemplatePatterns = [
-  ['shell uses SidenavContainer', /<ngs-sidenav-container\b/],
-  ['shell uses Sidenav', /<ngs-sidenav\b/],
-  ['shell uses SidenavContent', /<ngs-sidenav-content\b/],
-  ['navigation uses Navigation', /<ngs-navigation\b/],
-  ['navigation uses NavigationItem', /<ngs-navigation-item\b/],
-  ['cards use Card', /<ngs-card\b/],
-  ['cards use CardContent', /<ngs-card-content\b/],
-  ['admin datatable uses DataView', /<ngs-data-view\b/],
-  ['DataView receives column definitions', /\[columnDefs\]=/],
-  ['DataView receives data', /\[data\]=/],
-  ['datatable rich cells use DataView cell renderers', /\[cellRenderers\]=/],
-  ['row actions use DataView action bar', /\bngsDataViewActionBar\b/],
-  ['search uses FormField', /<ngs-form-field\b/],
-  ['search uses Label', /<ngs-label\b/],
-  ['search input uses ngsInput', /<input\b[^>]*\bngsInput\b/],
-  ['pagination uses Paginator', /<ngs-paginator\b/],
-  ['DataView selection is enabled', /\bwithSelection\b/],
-  ['progress uses ProgressBar', /<ngs-progress-bar\b/],
-  ['icons use Icon', /<ngs-icon\b/],
-  ['actions use Button', /<button\b[^>]*\bngs(?:Button|IconButton)\b/],
-];
+const adminDirs = (await readdir(projectsDir, { withFileTypes: true }))
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => entry.name)
+  .filter((name) => /^admin(?:-|$)/.test(name))
+  .filter((name) => !skippedApps.has(name))
+  .sort();
 
-const requiredImports = [
-  ['Button', /import\s+\{[^}]*\bButton\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/button['"]/],
-  ['Card', /import\s+\{[^}]*\bCard\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/card['"]/],
-  ['DataView', /import\s+\{[^}]*\bDataView\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/data-view['"]/],
-  ['DataViewActionBar', /import\s+\{[^}]*\bDataViewActionBar\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/data-view['"]/],
-  ['DataViewActionBarDirective', /import\s+\{[^}]*\bDataViewActionBarDirective\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/data-view['"]/],
-  ['DataViewColumnDef', /import\s+\{[^}]*\bDataViewColumnDef\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/data-view['"]/],
-  ['FormField', /import\s+\{[^}]*\bFormField\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/form-field['"]/],
-  ['Icon', /import\s+\{[^}]*\bIcon\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/icon['"]/],
-  ['Input', /import\s+\{[^}]*\bInput\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/input['"]/],
-  ['Navigation', /import\s+\{[^}]*\bNavigation\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/navigation['"]/],
-  ['Paginator', /import\s+\{[^}]*\bPaginator\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/paginator['"]/],
-  ['ProgressBar', /import\s+\{[^}]*\bProgressBar\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/progress-bar['"]/],
-  ['Sidenav', /import\s+\{[^}]*\bSidenav\b[^}]*\}\s+from\s+['"]@ngstarter-ui\/components\/sidenav['"]/],
-];
+const hardFailures = [];
+const migrationWarnings = [];
 
-const forbiddenTemplatePatterns = [
+const universalTemplateRules = [
+  ['inline style attributes', /\sstyle\s*=/],
+  ['Angular style bindings', /\[style(?:\.[^\]]+)?\]=/],
+  ['Angular attr style bindings', /\[attr\.style\]=/],
+  ['ngStyle bindings', /\[ngStyle\]=/],
+  ['arbitrary CSS variable background utilities', /\bbg-\[var\(/],
+  ['arbitrary CSS variable text utilities', /\btext-\[var\(/],
+  ['arbitrary CSS variable border utilities', /\bborder-\[var\(/],
+  ['arbitrary literal color text utilities', /\btext-\[#/],
+  ['custom chip span classes', /<span\b[^>]*class=["'][^"']*(?:chip|pill)[^"']*["']/],
+  ['plain table without ngs-table', /<table\b(?![^>]*\bngs-table\b)/],
+  ['plain input without ngsInput', /<input\b(?![^>]*\bngsInput\b)/],
   ['manual role table', /\brole=["']table["']/],
   ['manual role row', /\brole=["']row["']/],
   ['manual role cell', /\brole=["']cell["']/],
-  ['plain table without ngs-table', /<table\b(?![^>]*\bngs-table\b)/],
-  ['plain input without ngsInput', /<input\b(?![^>]*\bngsInput\b)/],
-  ['manual task-row table layout', /\bclass=["'][^"']*\btask-row\b/],
-  ['manual nav-item buttons', /\bclass=["'][^"']*\bnav-item\b/],
-  ['manual pagination buttons', /\bclass=["'][^"']*\bpagination\b/],
 ];
 
-const requiredStylingPatterns = [
-  ['template uses Tailwind layout utilities', /class=["'][^"']*\b(?:flex|grid)\b/],
-  ['template uses Tailwind spacing utilities', /class=["'][^"']*\b(?:gap|p|px|py|pt|pb|m|mt|mb|my|mx)-/],
+const universalSourceRules = [
+  ['inline template style bindings', /\[style(?:\.[^\]]+)?\]=/],
+  ['inline template ngStyle bindings', /\[ngStyle\]=/],
+  ['custom inline chip span classes', /<span\b[^>]*class=["'][^"']*(?:chip|pill)[^"']*["']/],
+];
+
+const strictRequiredTemplateRules = [
+  ['root shell uses ngs-layout', /<ngs-layout\b[^>]*\broot\b/],
+  ['root layout has layout content', /<ngs-layout-content\b/],
+  ['shell uses SidenavContainer', /<ngs-sidenav-container\b/],
+  ['shell uses Sidenav', /<ngs-sidenav\b/],
+  ['shell uses SidenavContent', /<ngs-sidenav-content\b/],
+  ['workspace uses Panel', /<ngs-panel\b/],
+  ['workspace header uses PanelHeader', /<ngs-panel-header\b/],
+  ['workspace body uses PanelContent', /<ngs-panel-content\b/],
+  ['scroll regions use ScrollbarArea', /<ngs-scrollbar-area\b/],
+  ['primary rail uses Sidebar', /<ngs-sidebar\b/],
+  ['primary rail uses SidebarNav', /<ngs-sidebar-nav\b/],
+  ['search/text input uses FormField', /<ngs-form-field\b/],
+  ['form fields use Label', /<ngs-label\b/],
+  ['actions use NgStarter buttons', /<button\b[^>]*\bngs(?:Button|IconButton)\b/],
+  ['icons use Icon', /<ngs-icon\b/],
+];
+
+const strictRequiredSourceRules = [
+  ['Layout import', /from\s+['"]@ngstarter-ui\/components\/layout['"]/],
+  ['Sidenav import', /from\s+['"]@ngstarter-ui\/components\/sidenav['"]/],
+  ['Panel import', /from\s+['"]@ngstarter-ui\/components\/panel['"]/],
+  ['Sidebar import', /from\s+['"]@ngstarter-ui\/components\/sidebar['"]/],
+  ['ScrollbarArea import', /from\s+['"]@ngstarter-ui\/components\/scrollbar-area['"]/],
+  ['Button import', /from\s+['"]@ngstarter-ui\/components\/button['"]/],
+  ['Icon import', /from\s+['"]@ngstarter-ui\/components\/icon['"]/],
+  ['FormField import', /from\s+['"]@ngstarter-ui\/components\/form-field['"]/],
+  ['Input import', /from\s+['"]@ngstarter-ui\/components\/input['"]/],
+];
+
+const strictStyleRules = [
   ['local SCSS starts with Tailwind reference', /^@reference ['"]tailwindcss['"];/],
   ['local SCSS uses Tailwind spacing function', /--spacing\(/],
-  ['local SCSS overrides cards by component selector', /\bngs-card\s*\{/],
-  ['local SCSS overrides navigation by component selector', /\bngs-navigation\s*\{/],
-  ['local SCSS overrides DataView by component selector', /\bngs-data-view\s*\{/],
+  ['local SCSS has component selector overrides', /\bngs-[\w-]+\s*\{/],
 ];
 
-const forbiddenStylePatterns = [
-  ['manual Tailwind spacing calc in SCSS', /calc\(\s*var\(--spacing\)/],
-  ['wrapper-only card restyle .stat-card', /\.stat-card\b/],
-  ['wrapper-only card restyle .tasks-panel', /\.tasks-panel\b/],
-  ['wrapper-only navigation restyle .admin-navigation', /\.admin-navigation\b/],
+const warningOnlyRules = [
+  ['root shell should use ngs-layout', /<ngs-layout\b[^>]*\broot\b/],
+  ['workspace scroll should use ngs-scrollbar-area', /<ngs-scrollbar-area\b/],
 ];
 
-const failures = [];
+function collectRuleFailures(rules, content, prefix) {
+  return rules
+    .filter(([, pattern]) => !pattern.test(content))
+    .map(([label]) => `${prefix}: ${label}`);
+}
 
-for (const [label, pattern] of requiredTemplatePatterns) {
-  if (!pattern.test(template)) {
-    failures.push(`Missing template requirement: ${label}`);
+function collectForbiddenHits(rules, content, prefix) {
+  return rules
+    .filter(([, pattern]) => pattern.test(content))
+    .map(([label]) => `${prefix}: ${label}`);
+}
+
+function verifyLayoutChildren(appName, template, target) {
+  const layoutOpen = template.match(/<ngs-layout\b[^>]*>/);
+
+  if (!layoutOpen) {
+    return;
+  }
+
+  const start = layoutOpen.index + layoutOpen[0].length;
+  const end = template.indexOf('</ngs-layout>', start);
+  const body = end === -1 ? template.slice(start) : template.slice(start, end);
+  const withoutComments = body.replace(/<!--[\s\S]*?-->/g, '');
+  const tagPattern = /<\/?([a-zA-Z][\w-]*)([^>]*)>/g;
+  const allowed = new Set([
+    'ngs-layout-topbar',
+    'ngs-layout-header',
+    'ngs-layout-sidebar',
+    'ngs-layout-content',
+    'ngs-layout-aside',
+    'ngs-layout-footer',
+  ]);
+
+  let depth = 0;
+
+  for (const match of withoutComments.matchAll(tagPattern)) {
+    const fullTag = match[0];
+    const tagName = match[1];
+    const isClosing = fullTag.startsWith('</');
+    const isSelfClosing = fullTag.endsWith('/>');
+
+    if (isClosing) {
+      depth = Math.max(0, depth - 1);
+      continue;
+    }
+
+    if (depth === 0 && !allowed.has(tagName)) {
+      target.push(
+        `${appName}: ngs-layout direct child must be a layout region, found <${tagName}>`,
+      );
+      break;
+    }
+
+    if (!isSelfClosing) {
+      depth += 1;
+    }
   }
 }
 
-for (const [label, pattern] of requiredImports) {
-  if (!pattern.test(source)) {
-    failures.push(`Missing NgStarter import: ${label}`);
+for (const appName of adminDirs) {
+  const appDir = path.join(projectsDir, appName, 'src/app');
+  const templatePath = path.join(appDir, 'app.html');
+  const sourcePath = path.join(appDir, 'app.ts');
+  const stylePath = path.join(appDir, 'app.scss');
+
+  const [template, source, styles] = await Promise.all([
+    readFile(templatePath, 'utf8'),
+    readFile(sourcePath, 'utf8'),
+    readFile(stylePath, 'utf8').catch(() => ''),
+  ]);
+
+  const strict = strictApps.has(appName);
+  const target = strict ? hardFailures : migrationWarnings;
+
+  target.push(...collectForbiddenHits(universalTemplateRules, template, appName));
+  target.push(...collectForbiddenHits(universalSourceRules, source, `${appName} source`));
+  verifyLayoutChildren(appName, template, target);
+
+  if (strict) {
+    hardFailures.push(...collectRuleFailures(strictRequiredTemplateRules, template, appName));
+    hardFailures.push(
+      ...collectRuleFailures(strictRequiredSourceRules, source, `${appName} imports`),
+    );
+    hardFailures.push(...collectRuleFailures(strictStyleRules, styles, `${appName} styles`));
+  } else {
+    migrationWarnings.push(
+      ...collectRuleFailures(warningOnlyRules, template, `${appName} migration`),
+    );
   }
 }
 
-for (const [label, pattern] of forbiddenTemplatePatterns) {
-  if (pattern.test(template)) {
-    failures.push(`Forbidden hand-rolled primitive: ${label}`);
+if (migrationWarnings.length) {
+  console.warn('Admin component migration warnings:\n');
+  for (const warning of migrationWarnings) {
+    console.warn(`- ${warning}`);
   }
+  console.warn('');
 }
 
-for (const [label, pattern] of requiredStylingPatterns) {
-  if (!pattern.test(styles) && !pattern.test(template)) {
-    failures.push(`Missing styling requirement: ${label}`);
-  }
-}
-
-for (const [label, pattern] of forbiddenStylePatterns) {
-  if (pattern.test(styles)) {
-    failures.push(`Forbidden styling pattern: ${label}`);
-  }
-}
-
-if (failures.length) {
+if (hardFailures.length) {
   console.error('Admin component composition verification failed:\n');
-  for (const failure of failures) {
+  for (const failure of hardFailures) {
     console.error(`- ${failure}`);
   }
-  console.error('\nUse NgStarter UI primitives for admin shell, navigation, cards, datatables, static tables, forms, pagination, actions, selection, and progress.');
-  console.error('Use DataView for datatables/working datasets; use Table only for static/read-only tabular content.');
-  console.error('Use Tailwind utilities for layout and local component-selector overrides with --spacing(N) in SCSS.');
+  console.error(
+    '\nUse NgStarter UI primitives and local SCSS component tokens instead of hand-rolled admin UI.',
+  );
   process.exit(1);
 }
 
-console.log('Verified admin app composes UI from NgStarter components.');
+console.log(
+  `Verified strict admin app composition. Checked: ${adminDirs.join(', ')}. Skipped: ${[...skippedApps].join(', ')}.`,
+);

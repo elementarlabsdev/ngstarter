@@ -46,7 +46,22 @@ export const appConfig = {
 
 - Prefer existing NgStarter components before creating new UI primitives.
 - Admin app shells, navigation, cards, data views, static tables, form fields, pagination, buttons,
-  icons, checkboxes, and progress bars must use NgStarter components.
+  icons, checkboxes, chips, and progress bars must use NgStarter components.
+- Choose NgStarter components by UI job: `Menu` for action menus, `Popover` for compact non-menu
+  overlays, `List`/`SelectionList` for listboxes and rows, `Notifications` for feeds,
+  `Avatar`/`Badge` for identity and counters, `Tooltip` for icon help, `Alert`/`Announcement`/
+  `EmptyState`/`ActionRequired` for status and empty states, `Skeleton`/`BlockLoader`/
+  `ScreenLoader`/`PageLoadingBar`/`ProgressSpinner` for loading, `Autocomplete`/`NumberInput`/
+  `PinInput`/`Slider`/`ColorPicker`/`Timepicker`/`TimezoneSelect` for specialized inputs,
+  `ButtonToggle`/`Segmented`/`SlideToggle`/`RadioCard` for choices, `Breadcrumbs`/`Toolbar`/
+  `Divider`/`Expansion`/`Stepper`/`Tree`/`Timeline`/`SidePanel`/`TabPanel` for structure,
+  `KanbanBoard`/`FilterBuilder`/`FormRenderer` for workflow surfaces, `TextEditor`/
+  `CommentEditor`/`InlineTextEdit`/`EmojiPicker`/`CodeHighlighter` for rich text and code,
+  `GuidedTour`/`ScrollSpy` for onboarding and long-page navigation, `Split`/`VisualBuilder` for
+  resizable builders, and media components such as `ImageViewer`, `VideoViewer`, `Carousel`,
+  `ImageResizer`, `ThumbnailMaker`, `Crop`, and `VideoPlayer` for media.
+- Use `ngs-chip`, `ngs-chip-set`, `ngs-chip-listbox`, and `ngs-chip-option` for tags, categories,
+  compact statuses, filter chips, and similar pill UI. Do not hand-roll these with `span` or `div`.
 - For admin app viewport shells, start with `ngs-layout root` and `ngs-layout-content`; do not make
   the root `100vh` shell with a custom `main` or page wrapper.
 - Direct children of `ngs-layout` must be layout region components only: `ngs-layout-topbar`,
@@ -61,6 +76,12 @@ export const appConfig = {
   and persistent right columns such as AI assistants, inspectors, details panes, or feeds in
   `ngs-panel-aside`. Do not wrap `ngs-panel-content` and a right aside in a hand-rolled outer grid
   when `ngs-panel-aside` fits.
+- Use the standard admin recipes by default: list pages use `PanelHeader` for filters/actions and
+  `PanelContent` + `ScrollbarArea` for records; master/detail pages put the inspector in
+  `PanelAside` or `SidePanel`; dashboards use `Card` KPI blocks and NgStarter chart/progress
+  primitives; settings pages use one `FormField` per control; kanban pages use `KanbanBoard`; chat
+  assistants use fixed-height `PanelAside` + `CardFooter` composer; notification headers use
+  `Popover` + `List`/`NotificationList`, while account actions use `Menu`.
 - Keep `ngs-panel-content` as the workspace scroll region, with `ngs-scrollbar-area` as the actual
   scroll container inside it. The root layout, sidenav container, and panel should stay at viewport
   height and must not grow taller than the screen.

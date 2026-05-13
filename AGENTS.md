@@ -14,7 +14,9 @@ as `@ngstarter-ui/components/button`, `@ngstarter-ui/components/dialog`, and
   low-level utilities.
 - `projects/components/styles/themes` contains theme stylesheet entry points.
 - `projects/docs` is the documentation/demo application.
-- `projects/admin` and `projects/admin-corporate` are admin demo applications.
+- `projects/admin`, `projects/admin-modern`, and `projects/admin-corporate` are admin demo
+  applications. `projects/admin-classic` is a placeholder until it is converted to a real admin
+  demo and is intentionally skipped by the admin verifier.
 
 ## Commands
 
@@ -54,20 +56,103 @@ Required admin mappings:
   `SidebarNavItemBadgeDirective` from `@ngstarter-ui/components/sidebar`.
 - Local workspace surfaces: `Panel`, `PanelHeader`, `PanelContent`, `PanelAside`, `PanelSidebar`,
   and `PanelFooter` from `@ngstarter-ui/components/panel`.
+- Secondary workspaces, inspectors, and persistent tool tabs: `SidePanel` and `SidePanelTab` from
+  `@ngstarter-ui/components/side-panel`; use `TabPanel`, `TabPanelHeader`, `TabPanelNav`,
+  `TabPanelContent`, `TabPanelAside`, and related tab panel parts from
+  `@ngstarter-ui/components/tab-panel` for tabbed work surfaces.
 - Secondary in-page navigation only when it is not the app rail: `Navigation`, `NavigationItem`,
   and `NavigationItemIconDirective` from `@ngstarter-ui/components/navigation`.
+- Rail-style compact secondary navigation: `RailNav`, `RailNavItem`, and
+  `RailNavItemIconDirective` from `@ngstarter-ui/components/rail-nav`; do not use it for the
+  primary admin app rail when `Sidebar` inside `Sidenav` is the intended shell.
+- Breadcrumb trails and page hierarchy: `Breadcrumbs`, `Breadcrumb`, `BreadcrumbItem`, and related
+  breadcrumb directives from `@ngstarter-ui/components/breadcrumbs`.
+- Toolbars, dense action rows, and editor/action headers: `Toolbar`, `ToolbarRow`, `ToolbarItem`,
+  `ToolbarNav`, `ToolbarNavLink`, `ToolbarSpacer`, and `ToolbarTitle` from
+  `@ngstarter-ui/components/toolbar`.
+- Section separators and labeled separators: `Divider` and `TextDivider` from
+  `@ngstarter-ui/components/divider`.
 - Cards and KPI panels: `Card`, `CardContent`, and `CardFooter` when needed from
   `@ngstarter-ui/components/card`.
+- Card-hover media/action overlays: `CardOverlay` and `CardOverlayContainerDirective` from
+  `@ngstarter-ui/components/card-overlay`.
 - Datatables, operational admin datasets, and rich data grids: `DataView` from
   `@ngstarter-ui/components/data-view`.
 - Static, read-only, or simple template-defined tables: `Table`, `ColumnDef`, `HeaderCell`, `HeaderCellDef`,
   `Cell`, `CellDef`, `HeaderRow`, `HeaderRowDef`, `Row`, and `RowDef` from
   `@ngstarter-ui/components/table`.
 - Search and text fields: `FormField`, `Label`, prefix/suffix directives, and `Input`.
+- Autocomplete fields and suggestions attached to text inputs: `Autocomplete` and `Option` from
+  `@ngstarter-ui/components/autocomplete`.
+- Select-like date/time/location format controls: `DateFormatSelect` from
+  `@ngstarter-ui/components/date-format-select`, `TimezoneSelect` from
+  `@ngstarter-ui/components/timezone-select`, and `Timepicker`, `TimepickerInput`, and
+  `TimepickerToggle` from `@ngstarter-ui/components/timepicker`.
+- Numeric, masked, PIN, slider, and color inputs: `NumberInput` and number controls from
+  `@ngstarter-ui/components/number-input`, mask directives from
+  `@ngstarter-ui/components/input-mask`, `PinInput` from `@ngstarter-ui/components/pin-input`,
+  `Slider` and thumb directives from `@ngstarter-ui/components/slider`, and `ColorPicker` from
+  `@ngstarter-ui/components/color-picker`.
+- Input validation helpers: validators and validator options from
+  `@ngstarter-ui/components/input-validator`.
+- Generated or schema-driven forms: `FormRenderer` and related field/layout configs from
+  `@ngstarter-ui/components/form-renderer`.
 - Pagination: `Paginator`.
 - Actions: `Button` and `Icon`.
-- Selection: `Checkbox`.
-- Progress and completion: `ProgressBar`.
+- Action menus, command menus, and contextual action lists: `Menu`, `MenuItem`, `MenuHeader`,
+  `MenuFooter`, `MenuDivider`, `MenuTrigger`, and `ContextMenuTrigger` from
+  `@ngstarter-ui/components/menu`.
+- Popover content such as notifications, compact previews, pickers, and non-menu overlays:
+  `Popover`, `PopoverContent`, `PopoverTriggerForDirective`, and `PopoverOriginDirective` from
+  `@ngstarter-ui/components/popover`.
+- Tooltips for icon-only controls and dense UI affordances: `Tooltip` and `TooltipContent` from
+  `@ngstarter-ui/components/tooltip`.
+- Dialog confirmations and transient feedback: `Confirm` and `ConfirmManager` from
+  `@ngstarter-ui/components/confirm`, `SnackBar` and related snack-bar classes from
+  `@ngstarter-ui/components/snack-bar`.
+- Larger temporary overlays: `Drawer` from `@ngstarter-ui/components/drawer` and `BottomSheet` from
+  `@ngstarter-ui/components/bottom-sheet`.
+- Command palettes and command bars: `CommandBar`, `CommandBarCommand`, and `CommandBarDivider`
+  from `@ngstarter-ui/components/command-bar`.
+- Selection: `Checkbox`, `RadioButton`, `RadioGroup`, `RadioCard`, and `RadioCardGroup` where
+  appropriate; use `ButtonToggle`/`ButtonToggleGroup` or `Segmented`/`SegmentedButton` for
+  segmented choices, and `SlideToggle` for binary switches.
+- Tags, categories, compact statuses, and filter chips: `Chip`, `ChipSet`, `ChipListbox`, and
+  `ChipOption` from `@ngstarter-ui/components/chips`.
+- Lists, listboxes, and notification rows: `List`, `ListItem`, `SelectionList`, `ListOption`, and
+  list item avatar/icon/title/line/meta directives from `@ngstarter-ui/components/list`.
+- Notifications and activity feeds: `NotificationList`, `NotificationDefDirective`, and
+  notification primitives from `@ngstarter-ui/components/notifications`.
+- Avatars, people indicators, and avatar stacks: `Avatar`, `AvatarGroup`, `AvatarMore`,
+  `AvatarPresenceIndicator`, and `AvatarTotal` from `@ngstarter-ui/components/avatar`.
+- Badges and small counters: `Badge`.
+- Progress and completion: `ProgressBar`, `ProgressSpinner`, `Skeleton`, `BlockLoader`,
+  `ScreenLoader`, and `PageLoadingBar` according to loading scope.
+- Empty, blocked, required-action, and informational states: `EmptyState`, `ActionRequired`,
+  `Alert`, `Announcement`, and `Incidents`.
+- Disclosure and multi-step flows: `ExpansionPanel`, `Accordion`, `Stepper`, `Step`,
+  `StepperNext`, `StepperPrevious`, `HeadlessStepper`, and `HeadlessStep`.
+- Keyboard shortcut hints: `Kbd` and `KbdGroup`.
+- Trees and hierarchical data: `Tree`, `TreeNode`, `TreeNodeDef`, `TreeNodePadding`, and
+  `TreeNodeToggle`.
+- Timelines and activity history: `Timeline`, `TimelineItem`, `TimelineHeader`,
+  `TimelineTimestamp`, `TimelineTitle`, `TimelineSubtitle`, `TimelineDescription`, and
+  `TimelineContent`.
+- Kanban and drag-sort work boards: `KanbanBoard`, `KanbanColumn`, `KanbanItem`, and
+  `KanbanItemDefDirective`.
+- Filter/query builders: `FilterBuilder` and related filter builder definitions/directives.
+- Charts and compact metrics: `Gauge`, `GaugeValue`, and micro chart components from
+  `@ngstarter-ui/components/gauge` and `@ngstarter-ui/components/micro-chart`.
+- Rich text, comments, and code: `TextEditor`, `CommentEditor`, their toolbar/command directives,
+  `InlineTextEdit`, `EmojiPicker`, `EmojiPickerTriggerForDirective`, and `CodeHighlighter`.
+- Media previews and editing: `ImageViewer`, `VideoViewer`, `ImagePlaceholder`, `ImageResizer`,
+  `ImageZoomViewer`, `Crop`, `Carousel`, `ComparisonSlider`, `ThumbnailMaker`, and `VideoPlayer`.
+- Resizable split panes and spatial layout editing: `Split`, `SplitArea`, `SplitPane`, and
+  `VisualBuilder`.
+- Content affordances and utilities: `ContentFade`, `Expand`, `Marquee`, `Suggestions`,
+  `ScrollSpy`, `ScrollSpyNav`, `ScrollSpyContainerDirective`, `GuidedTour`/`TourService` via
+  `@ngstarter-ui/components/guided-tour`, `ColorSwitcher`, `CookiePopup`, `Logo`, `Tiles`, and
+  `ResizableContainer`.
 - Scrollable panel, grid, sidebar, inspector, and chat message regions: `ScrollbarArea` from
   `@ngstarter-ui/components/scrollbar-area`.
 - Startup splash: `SplashScreen` only once near the root app template for initial branded bootstrap
@@ -109,6 +194,29 @@ Admin shell defaults:
 - Chat-like assistants should be structured as a fixed-height panel aside with a scrollable messages
   region and a composer anchored at the bottom, using `Card`, `CardHeader`, `CardContent`,
   `FormField`, `Input`, `Button`, and `Icon` where applicable.
+
+Admin generation recipes:
+
+- List page: `Layout` > `LayoutContent` > `SidenavContainer` > `Sidenav` with `Sidebar` +
+  `SidenavContent` > `Panel`; put filters/search/actions in `PanelHeader`, records in
+  `PanelContent` with `ScrollbarArea`, and use `DataView` for operational datasets or `Card` grids
+  for browse-style records.
+- Master/detail page: keep the list in `PanelContent` and put the details inspector in
+  `PanelAside` or `SidePanel`; use `List`, `DataView`, `Tabs`/`TabPanel`, `Timeline`, and `Card`
+  rather than custom split panes unless the page is genuinely resizable.
+- Dashboard page: use `PanelHeader` for top controls, `PanelContent` with `ScrollbarArea`, `Card`
+  for KPI blocks, `ProgressBar`, `Gauge`, or micro charts for compact metrics, and `Table` or
+  `DataView` for supporting records.
+- Settings/form page: use `Card` or `PanelContent` sections with one `FormField` per form control;
+  use `Select`, `Autocomplete`, `SlideToggle`, `ButtonToggle`, `Segmented`, `RadioCard`,
+  `Checkbox`, and specialized inputs instead of custom controls.
+- Kanban/workflow page: use `KanbanBoard` for columns/cards and `Drawer`, `Popover`, `Menu`, or
+  `SidePanel` for card actions and details.
+- Chat assistant page/aside: use a fixed-height `PanelAside`, `CardHeader`, scrollable
+  `CardContent` with `ScrollbarArea`, and a `CardFooter` composer with `FormField`, `Input`, and
+  an icon button suffix.
+- Notification/user header: use `Popover` + `List`/`NotificationList` for notification feeds, and
+  `Menu` for profile/account actions. Do not use `Menu` for listbox-like notification content.
 
 Form construction rules:
 
@@ -169,7 +277,20 @@ Before finishing an admin UI change, run:
 npm run verify:admin:components
 ```
 
-If the verifier fails, refactor to NgStarter components before reporting completion.
+Before reporting completion, also scan the changed admin templates for:
+
+- `[style.*]`, `[attr.style]`, `[ngStyle]`, or inline `style`.
+- `bg-[var(...)]`, `text-[var(...)]`, `border-[var(...)]`, or literal color utilities such as
+  `text-[#...]` for reusable visual styling.
+- Custom `span`/`div` pills, chips, avatars, menus, popovers, listboxes, tables, pagination, or
+  form controls where an NgStarter component exists.
+- Plain `<input>` without `ngsInput`, plain `<table>` without `ngs-table`, and manual
+  `role="table"`, `role="row"`, or `role="cell"` data grids.
+- Scrollable admin regions without `ngs-scrollbar-area`.
+
+If the verifier fails, refactor to NgStarter components before reporting completion. Migration
+warnings from older demos identify existing debt; new or modified admin UI should satisfy the
+strict rules.
 
 ## Theming
 

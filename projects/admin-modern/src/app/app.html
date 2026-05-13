@@ -179,14 +179,14 @@
                           <div class="min-w-0">
                             <div class="flex items-center gap-2">
                               <h2 class="truncate text-lg font-semibold">{{ vacancy.title }}</h2>
-                              <span
-                                class="type-pill"
+                              <ngs-chip
+                                class="vacancy-type-chip"
                                 [class.is-blue]="vacancy.typeTone === 'blue'"
                                 [class.is-orange]="vacancy.typeTone === 'orange'"
                                 [class.is-dark]="vacancy.typeTone === 'dark'"
                               >
                                 {{ vacancy.type }}
-                              </span>
+                              </ngs-chip>
                             </div>
                             <p
                               class="vacancy-meta mt-1 flex items-center gap-1 text-xs font-normal"
@@ -214,11 +214,11 @@
                             {{ vacancy.summary }}
                           </p>
 
-                          <div class="mt-5 flex flex-wrap gap-2">
+                          <ngs-chip-set class="vacancy-tags mt-5">
                             @for (tag of vacancy.tags; track tag) {
-                              <span class="tag-chip">{{ tag }}</span>
+                              <ngs-chip class="vacancy-tag-chip">{{ tag }}</ngs-chip>
                             }
-                          </div>
+                          </ngs-chip-set>
 
                           <footer
                             class="vacancy-card-footer mt-5 flex items-center gap-4 pt-3 text-xs font-normal"
