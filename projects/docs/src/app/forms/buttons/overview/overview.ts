@@ -5,17 +5,9 @@ import { StrokedButtonsExample } from '../_examples/stroked-buttons-example/stro
 import { FlatButtonsExample } from '../_examples/flat-buttons-example/flat-buttons-example';
 import { IconButtonsExample } from '../_examples/icon-buttons-example/icon-buttons-example';
 import { ButtonLoadingExample } from '../_examples/button-loading-example/button-loading-example';
-import { Page } from '@meta/page/page';
-import { PageAsideDirective } from '@meta/page/page-aside.directive';
 import {
   ButtonsWithInteractiveDisabledExample
 } from '../_examples/buttons-with-interactive-disabled-example/buttons-with-interactive-disabled-example';
-import {
-  ScrollSpyBackToTop,
-  ScrollSpyNav,
-  ScrollSpyOn,
-  ScrollSpyTitle
-} from '@ngstarter-ui/components/scroll-spy';
 import { TonalButtonsExample } from '../_examples/tonal-buttons-example/tonal-buttons-example';
 import { HideTextOnMobileExample } from '../_examples/hide-text-on-mobile-example/hide-text-on-mobile-example';
 
@@ -27,14 +19,9 @@ import { HideTextOnMobileExample } from '../_examples/hide-text-on-mobile-exampl
     FlatButtonsExample,
     IconButtonsExample,
     ButtonLoadingExample,
-    PageAsideDirective,
     ButtonsWithInteractiveDisabledExample,
-    ScrollSpyNav,
-    ScrollSpyTitle,
-    ScrollSpyOn,
     TonalButtonsExample,
-    HideTextOnMobileExample,
-    ScrollSpyBackToTop
+    HideTextOnMobileExample
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'
