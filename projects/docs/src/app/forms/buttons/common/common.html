@@ -40,4 +40,17 @@
       <router-outlet/>
     </ngs-tab-nav-panel>
   </div>
+  <div appPageAside class="sticky top-16">
+    <nav ngs-scroll-spy-nav>
+      <ngs-scroll-spy-title>On this page</ngs-scroll-spy-title>
+      <a ngs-scroll-spy-on targetId="basic-button">Basic Button</a>
+      <a ngs-scroll-spy-on targetId="stroked-button">Outlined Button</a>
+      <a ngs-scroll-spy-on targetId="flat-button">Flat Button</a>
+      <a ngs-scroll-spy-on targetId="icon-button">Icon Button</a>
+      <a ngs-scroll-spy-on targetId="button-loading">Button Loading</a>
+      <a ngs-scroll-spy-on targetId="hide-text-on-mobile">Hide text on mobile</a>
+      <a ngs-scroll-spy-on targetId="interactive-disabled-buttons">Interactive Disabled</a>
+      <button ngs-scroll-spy-back-to-top>Back to top</button>
+    </nav>
+  </div>
 </app-page>

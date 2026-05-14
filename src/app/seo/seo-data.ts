@@ -97,10 +97,6 @@ export const faqItems = [
     answer: 'Standard includes one developer, one project, and one domain. Professional includes unlimited developers, unlimited projects, and unlimited domains.',
   },
   {
-    question: 'Does NgStarter support standalone Angular components?',
-    answer: 'Yes. NgStarter components are standalone Angular components built for modern Angular applications with signals and strict TypeScript APIs.',
-  },
-  {
     question: 'Do I get the source code?',
     answer: 'Yes. Both pricing plans include source code for the NgStarter UI components and admin dashboards.',
   },
