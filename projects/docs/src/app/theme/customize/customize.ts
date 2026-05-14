@@ -118,7 +118,6 @@ export const appConfig: ApplicationConfig = {
     provideNgsTheme({
       theme: 'acme',
       colorScheme: 'auto',
-      density: 'comfortable',
       radius: 'medium',
     }),
   ],

@@ -18,7 +18,6 @@ export const appConfig: ApplicationConfig = {
     provideNgsTheme({
       theme: 'default',
       colorScheme: 'light',
-      density: 'comfortable',
       radius: 'medium',
       persist: false,
     }),

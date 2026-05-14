@@ -37,6 +37,7 @@ import { Error } from '../error/error';
     '[class.ngs-form-field-has-label]': 'labelChild()',
     '[class.ngs-form-field-empty]': 'control()?.empty',
     '[class.ngs-form-field-focused]': 'control()?.focused',
+    '[class.ngs-form-field-multiline]': 'control()?.multiline',
     '[class.ngs-form-field-subscript-hidden-if-empty]': 'subscriptHiddenIfEmpty()',
     '[class.ngs-form-field-has-icon-prefix]': 'iconPrefixChildren().length > 0',
     '[class.ngs-form-field-has-icon-button-prefix]': 'iconButtonPrefixChildren().length > 0',

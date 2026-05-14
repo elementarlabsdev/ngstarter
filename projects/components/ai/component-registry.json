@@ -2566,7 +2566,7 @@
       "docsPath": null,
       "docsOverviewSource": null,
       "purpose": "Provide infrastructure primitives, theme setup, services, directives, pipes, tokens, and low-level utilities.",
-      "useWhen": "Use @ngstarter-ui/components/core for infrastructure, not for building screens directly. Use provideNgsTheme in app config to set theme, colorScheme, density, radius, primaryColor, persistence, and storageKey. Inject ThemeManagerService for runtime theme, color scheme, density, radius, and primary color changes. Use utility directives such as ngsRipple, ngsAutoFocus, ngsFocusElement, ngsTextareaAutoSize, and ngsDebounceTime when a specific low-level behavior is needed. Use pipes such as InitialsPipe, FormatFileSizePipe, SafeHtmlPipe, SafeResourceUrlPipe, OrderByPipe, FilterByPropertyPipe, and SearchByPropertyPipe when they fit. Use ErrorStateMatcher or ShowOnDirtyErrorStateMatcher for form error behavior, and observer/services/utils only for low-level infrastructure. Do not use core as a replacement for real UI components. Do not build admin screens from core primitives; choose concrete components such as Button, Card, DataView, Table, FormField, Dialog, Navigation, Layout, or other component entry points. Do not import Option from core directly for ordinary option lists when Select, Autocomplete, or another component owns the option pattern.",
+      "useWhen": "Use @ngstarter-ui/components/core for infrastructure, not for building screens directly. Use provideNgsTheme in app config to set theme, colorScheme, radius, primaryColor, persistence, and storageKey. Inject ThemeManagerService for runtime theme, color scheme, radius, and primary color changes. Use utility directives such as ngsRipple, ngsAutoFocus, ngsFocusElement, ngsTextareaAutoSize, and ngsDebounceTime when a specific low-level behavior is needed. Use pipes such as InitialsPipe, FormatFileSizePipe, SafeHtmlPipe, SafeResourceUrlPipe, OrderByPipe, FilterByPropertyPipe, and SearchByPropertyPipe when they fit. Use ErrorStateMatcher or ShowOnDirtyErrorStateMatcher for form error behavior, and observer/services/utils only for low-level infrastructure. Do not use core as a replacement for real UI components. Do not build admin screens from core primitives; choose concrete components such as Button, Card, DataView, Table, FormField, Dialog, Navigation, Layout, or other component entry points. Do not import Option from core directly for ordinary option lists when Select, Autocomplete, or another component owns the option pattern.",
       "exampleTopics": [],
       "minimalExample": null,
       "exampleFiles": [],
@@ -2607,7 +2607,6 @@
         "MutationObserverService",
         "NGS_THEME_OPTIONS",
         "NgsColorScheme",
-        "NgsDensity",
         "NgsRadius",
         "NgsThemeName",
         "NgsThemeOptions",
@@ -2747,7 +2746,8 @@
         "opened"
       ],
       "cssTokens": [
-        "--ngs-color-neutral-500"
+        "--ngs-color-neutral-500",
+        "--ngs-dropdown-item-gap"
       ],
       "example": null
     },
@@ -2848,7 +2848,10 @@
         "closed",
         "opened"
       ],
-      "cssTokens": [],
+      "cssTokens": [
+        "--ngs-color-neutral-500",
+        "--ngs-dropdown-item-gap"
+      ],
       "example": null
     },
     {
@@ -3922,6 +3925,7 @@
       ],
       "outputs": [],
       "cssTokens": [
+        "--ngs-button-height",
         "--ngs-field-bg",
         "--ngs-field-border-color",
         "--ngs-field-border-focus-color",
@@ -3932,9 +3936,13 @@
         "--ngs-field-error-color",
         "--ngs-field-font-size",
         "--ngs-field-infix-height",
+        "--ngs-field-infix-padding-bottom",
+        "--ngs-field-infix-padding-top",
+        "--ngs-field-input-height",
         "--ngs-field-label-color",
         "--ngs-field-label-float-font-size",
         "--ngs-field-line-height",
+        "--ngs-field-no-label-padding-y",
         "--ngs-field-padding-x",
         "--ngs-field-radius",
         "--ngs-form-field-bg",
@@ -3945,11 +3953,14 @@
         "--ngs-form-field-container-min-height",
         "--ngs-form-field-disabled-bg",
         "--ngs-form-field-error-color",
+        "--ngs-form-field-icon-button-height",
         "--ngs-form-field-infix-min-height",
         "--ngs-form-field-infix-padding-bottom",
         "--ngs-form-field-infix-padding-top",
+        "--ngs-form-field-input-height",
         "--ngs-form-field-input-text-align",
         "--ngs-form-field-label-color",
+        "--ngs-form-field-no-label-padding-y",
         "--ngs-form-field-padding-x",
         "--ngs-form-field-padding-y",
         "--ngs-form-field-width",
@@ -7302,6 +7313,7 @@
         "--ngs-color-outline",
         "--ngs-dropdown-bg",
         "--ngs-dropdown-border",
+        "--ngs-dropdown-item-gap",
         "--ngs-dropdown-max-height",
         "--ngs-dropdown-padding",
         "--ngs-dropdown-radius",
@@ -7319,7 +7331,8 @@
         "--ngs-select-panel-border",
         "--ngs-select-panel-max-height",
         "--ngs-select-panel-shadow",
-        "--ngs-select-placeholder-color"
+        "--ngs-select-placeholder-color",
+        "--ngs-select-trigger-gap"
       ],
       "example": "<ngs-select [value]=\"value\">...</ngs-select>"
     },

@@ -2,7 +2,7 @@
   <ngs-label>Clearable input</ngs-label>
   <input ngsInput type="text" [(ngModel)]="value">
   @if (value) {
-    <button ngsIconSuffix ngsIconButton aria-label="Clear" (click)="value=''">
+    <button ngsIconButtonSuffix ngsIconButton aria-label="Clear" (click)="value=''">
       <ngs-icon name="fluent:dismiss-24-regular"/>
     </button>
   }

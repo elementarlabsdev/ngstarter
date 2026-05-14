@@ -68,7 +68,6 @@ const NGS_THEME_IMPORT = '@use "@ngstarter-ui/components/styles/themes/default";
 const NGS_THEME_PROVIDER = `provideNgsTheme({
   theme: 'default',
   colorScheme: 'auto',
-  density: 'comfortable',
   radius: 'medium',
 }),`;
 

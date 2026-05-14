@@ -10,24 +10,24 @@
   <ngs-select-trigger class="select-trigger">
     @let selectedCurrency = selectedCurrencyDisplay();
     @if (selectedCurrency) {
-      <div class="flex items-center gap-2">
-        <span class="text-xl leading-[0]">{{ selectedCurrency.flag }}</span>
-        <div>
+      <span class="ngs-select-trigger-content">
+        <span class="ngs-select-trigger-icon">{{ selectedCurrency.flag }}</span>
+        <span class="ngs-select-trigger-text">
           <span class="currency-code">
             {{ selectedCurrency.code }}
-            <span class="text-neutral-500 inline-block ms-0.5">{{ selectedCurrency.symbol }}</span>
+            <span class="currency-symbol">{{ selectedCurrency.symbol }}</span>
           </span>
           @if (showCountryName()) {
             &ndash; {{ selectedCurrency.name }}
           }
-        </div>
-      </div>
+        </span>
+      </span>
     }
 
     @if (!selectedCurrencyDisplay() && placeholder) {
-      <div class="placeholder-text">
+      <span class="ngs-select-trigger-text placeholder-text">
         {{ placeholder }}
-      </div>
+      </span>
     }
   </ngs-select-trigger>
 
@@ -56,18 +56,18 @@
 
   @for (currency of filteredCurrencies(); track currency.code) {
     <ngs-option [value]="currency.code">
-      <div class="flex items-center gap-2 h-full">
-        <span class="text-xl leading-[0]">{{ currency.flag }}</span>
-        <div>
-          <span class="currency-code uppercase">
+      <span class="select-option-content">
+        <span class="select-option-icon">{{ currency.flag }}</span>
+        <span class="select-option-text">
+          <span class="currency-code">
             {{ currency.code }}
-            <span class="text-neutral-500 inline-block ms-0.5">{{ currency.symbol }}</span>
+            <span class="currency-symbol">{{ currency.symbol }}</span>
           </span>
           @if (showCountryName()) {
             &ndash; {{ currency.name }}
           }
-        </div>
-      </div>
+        </span>
+      </span>
     </ngs-option>
   } @empty {
     @if (searchTerm()) {

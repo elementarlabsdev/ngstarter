@@ -40,7 +40,6 @@ export const appConfig: ApplicationConfig = {
     provideNgsTheme({
       theme: 'default',
       colorScheme: 'auto',
-      density: 'comfortable',
       radius: 'medium',
     }),
     provideAppInitializer(() => {

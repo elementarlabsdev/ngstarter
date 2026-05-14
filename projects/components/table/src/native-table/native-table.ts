@@ -7,6 +7,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   templateUrl: './native-table.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './native-table.scss',
+  host: {
+    'class': 'ngs-native-table not-prose',
+  }
 })
 export class NativeTable {
 

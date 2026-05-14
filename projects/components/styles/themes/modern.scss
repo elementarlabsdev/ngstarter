@@ -104,14 +104,15 @@
   --ngs-field-border-focus-color: #4f46e5;
   --ngs-field-radius: var(--ngs-radius-lg);
   --ngs-field-font-size: 0.9375rem;
-  --ngs-field-container-height: calc(3.375rem + var(--ngs-density-scale) * 1px);
-  --ngs-field-infix-height: calc(3.375rem + var(--ngs-density-scale) * 1px);
+  --ngs-field-container-height: 3.125rem;
+  --ngs-field-infix-height: 3.125rem;
   --ngs-field-padding-x: --spacing(4);
   --ngs-field-filled-bg: #f3f5ff;
   --ngs-dropdown-bg: rgba(255, 255, 255, 0.98);
   --ngs-dropdown-shadow: 0 20px 52px rgba(39, 52, 105, 0.18);
   --ngs-dropdown-radius: var(--ngs-radius-xl);
   --ngs-dropdown-border: 1px solid rgba(215, 222, 238, 0.9);
+  --ngs-dropdown-height: 2.625rem;
   --ngs-dialog-radius: 1.75rem;
   --ngs-dialog-shadow: 0 34px 86px rgba(39, 52, 105, 0.24);
   --ngs-overlay-backdrop-bg: rgba(23, 32, 51, 0.30);
@@ -128,7 +129,7 @@
   --ngs-table-header-cell-font-size: 0.75rem;
   --ngs-table-header-cell-font-weight: 800;
 
-  --ngs-nav-item-height: calc(2.875rem + var(--ngs-density-scale) * 1px);
+  --ngs-nav-item-height: var(--ngs-dropdown-height);
   --ngs-nav-items-gap: --spacing(1.5);
   --ngs-nav-item-padding: 0 --spacing(4);
   --ngs-nav-item-radius: var(--ngs-radius-full);

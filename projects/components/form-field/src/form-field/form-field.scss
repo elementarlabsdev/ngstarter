@@ -13,8 +13,10 @@
   --ngs-form-field-error-color: var(--ngs-field-error-color);
   --ngs-form-field-container-min-height: var(--ngs-field-container-height);
   --ngs-form-field-infix-min-height: var(--ngs-field-infix-height);
-  --ngs-form-field-infix-padding-top: 23px;
-  --ngs-form-field-infix-padding-bottom: 8px;
+  --ngs-form-field-input-height: var(--ngs-field-input-height);
+  --ngs-form-field-infix-padding-top: var(--ngs-field-infix-padding-top);
+  --ngs-form-field-infix-padding-bottom: var(--ngs-field-infix-padding-bottom);
+  --ngs-form-field-no-label-padding-y: var(--ngs-field-no-label-padding-y);
 
   display: block;
   width: var(--ngs-form-field-width, 100%);
@@ -68,15 +70,18 @@
   .ngs-form-field-wrapper {
     display: flex;
     flex-direction: column;
+    height: var(--ngs-form-field-container-min-height);
   }
 
   .ngs-form-field-container {
     position: relative;
+    box-sizing: border-box;
     border: var(--ngs-form-field-border-width) solid var(--ngs-form-field-border-color);
     border-radius: var(--ngs-form-field-border-radius);
     background: var(--ngs-form-field-bg);
     padding: 0 var(--ngs-form-field-padding-x);
     transition: border-color 0.2s, box-shadow 0.2s;
+    height: var(--ngs-form-field-container-min-height);
     min-height: var(--ngs-form-field-container-min-height);
     display: flex;
     align-items: center;
@@ -86,7 +91,7 @@
     }
 
     &:has(.ngs-form-field-icon-button-prefix) {
-      padding-left: --spacing(1);
+      padding-left: --spacing(0.5);
     }
 
     &:has(.ngs-form-field-icon-suffix) {
@@ -94,31 +99,61 @@
     }
 
     &:has(.ngs-form-field-icon-button-suffix) {
-      padding-right: --spacing(1);
+      padding-right: --spacing(0.5);
     }
   }
 
   .ngs-form-field-infix {
+    box-sizing: border-box;
     flex: 1;
     position: relative;
     padding: var(--ngs-form-field-infix-padding-top) 0 var(--ngs-form-field-infix-padding-bottom) 0;
     min-width: 0;
+    height: 100%;
     min-height: var(--ngs-form-field-infix-min-height);
     display: flex;
     flex-direction: column;
     overflow: hidden;
   }
 
+  &.ngs-form-field-multiline {
+    .ngs-form-field-wrapper {
+      height: auto;
+      min-height: var(--ngs-form-field-container-min-height);
+    }
+
+    .ngs-form-field-container {
+      height: auto;
+      min-height: var(--ngs-form-field-container-min-height);
+      align-items: stretch;
+    }
+
+    .ngs-form-field-infix {
+      height: auto;
+      min-height: calc(var(--ngs-form-field-infix-min-height) - 2px);
+      overflow: visible;
+    }
+
+    ::ng-deep textarea.ngs-input {
+      min-height: var(--ngs-form-field-input-height);
+      resize: vertical;
+    }
+
+    ::ng-deep textarea.ngs-input[ngsTextareaAutoSize] {
+      resize: none !important;
+    }
+  }
+
   &:not(.ngs-form-field-has-label) {
     .ngs-form-field-infix {
-      padding: 8px 0;
+      padding: var(--ngs-form-field-no-label-padding-y) 0;
       display: flex;
       justify-content: center;
     }
 
     .ngs-form-field-text-prefix,
     .ngs-form-field-text-suffix {
-      padding: 8px 0;
+      padding: var(--ngs-form-field-no-label-padding-y) 0;
     }
   }
 
@@ -198,7 +233,13 @@
     display: block;
 
     &:not(textarea):not(ngs-select):not(.ngs-chip-input) {
-      height: 20px;
+      height: var(--ngs-form-field-input-height);
+    }
+
+    &:is(ngs-select) {
+      height: var(--ngs-form-field-input-height);
+      min-height: var(--ngs-form-field-input-height);
+      overflow: hidden;
     }
 
     &::placeholder {
@@ -226,7 +267,7 @@
       color: inherit;
       outline: none !important;
       display: flex;
-      height: 20px;
+      height: var(--ngs-form-field-input-height);
 
       &::placeholder {
         color: var(--ngs-form-field-label-color);
@@ -286,6 +327,16 @@
   .ngs-form-field-icon-button-suffix,
   .ngs-form-field-text-suffix {
     margin-left: 0.5rem;
+  }
+
+  .ngs-form-field-icon-prefix,
+  .ngs-form-field-icon-suffix,
+  .ngs-form-field-icon-button-prefix,
+  .ngs-form-field-icon-button-suffix {
+    --ngs-button-height: var(
+      --ngs-form-field-icon-button-height,
+      calc(var(--ngs-form-field-container-min-height) - 2px)
+    );
   }
 
   .ngs-form-field-text-prefix,

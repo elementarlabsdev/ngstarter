@@ -16,7 +16,6 @@ import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
 import { NativeTable } from '@ngstarter-ui/components/table';
 
 type ThemeName = 'default' | 'enterprise' | 'modern';
-type DensityName = 'compact' | 'comfortable' | 'spacious';
 type RadiusName = 'none' | 'small' | 'medium' | 'large';
 type SchemeName = 'light' | 'dark' | 'auto';
 
@@ -59,12 +58,10 @@ export class ThemePlayground {
 
   readonly theme = this.themeManager.theme;
   readonly colorScheme = this.themeManager.colorScheme;
-  readonly density = this.themeManager.density;
   readonly radius = this.themeManager.radius;
 
   readonly themes: ThemeName[] = ['default', 'enterprise', 'modern'];
   readonly schemes: SchemeName[] = ['light', 'dark', 'auto'];
-  readonly densities: DensityName[] = ['compact', 'comfortable', 'spacious'];
   readonly radii: RadiusName[] = ['none', 'small', 'medium', 'large'];
 
   setTheme(theme: ThemeName): void {
@@ -73,10 +70,6 @@ export class ThemePlayground {
 
   setColorScheme(colorScheme: SchemeName): void {
     this.themeManager.setColorScheme(colorScheme);
-  }
-
-  setDensity(density: DensityName): void {
-    this.themeManager.setDensity(density);
   }
 
   setRadius(radius: RadiusName): void {

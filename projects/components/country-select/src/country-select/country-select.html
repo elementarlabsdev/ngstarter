@@ -10,19 +10,21 @@
   <ngs-select-trigger class="select-trigger">
     @let selectedCountry = selectedCountryDisplay();
     @if (selectedCountry) {
-      <div class="flex items-center gap-2">
-        <span class="text-xl leading-[0]">{{ selectedCountry.flag }}</span>
-        {{ selectedCountry.name }}
-        @if (showCountryCode()) {
-          <span class="code">({{ selectedCountry.code }})</span>
-        }
-      </div>
+      <span class="ngs-select-trigger-content">
+        <span class="ngs-select-trigger-icon">{{ selectedCountry.flag }}</span>
+        <span class="ngs-select-trigger-text">
+          {{ selectedCountry.name }}
+          @if (showCountryCode()) {
+            <span class="code">({{ selectedCountry.code }})</span>
+          }
+        </span>
+      </span>
     }
 
     @if (!selectedCountryDisplay() && placeholder) {
-      <div class="placeholder-text">
+      <span class="ngs-select-trigger-text placeholder-text">
         {{ placeholder }}
-      </div>
+      </span>
     }
   </ngs-select-trigger>
 
@@ -51,13 +53,15 @@
 
   @for (country of filteredCountries(); track country.code) {
     <ngs-option [value]="country.code">
-      <div class="flex items-center gap-2 h-full">
-        <span class="text-xl leading-[0]">{{ country.flag }}</span>
-        {{ country.name }}
-        @if (showCountryCode()) {
-          <span class="code">({{ country.code }})</span>
-        }
-      </div>
+      <span class="select-option-content">
+        <span class="select-option-icon">{{ country.flag }}</span>
+        <span class="select-option-text">
+          {{ country.name }}
+          @if (showCountryCode()) {
+            <span class="code">({{ country.code }})</span>
+          }
+        </span>
+      </span>
     </ngs-option>
   } @empty {
     @if (searchTerm()) {

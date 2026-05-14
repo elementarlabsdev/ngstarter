@@ -29,17 +29,6 @@
             </div>
 
             <div class="control-group">
-              <div class="control-label">Density</div>
-              <div class="segmented-control">
-                @for (item of densities; track item) {
-                  <button type="button" [ngsButton]="density() === item ? 'filled' : 'tonal'" (click)="setDensity(item)">
-                    {{ item }}
-                  </button>
-                }
-              </div>
-            </div>
-
-            <div class="control-group">
               <div class="control-label">Radius</div>
               <div class="segmented-control">
                 @for (item of radii; track item) {

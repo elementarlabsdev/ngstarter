@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Button } from '@ngstarter-ui/components/button';
-import { FormField, IconSuffix } from '@ngstarter-ui/components/form-field';
+import {FormField, IconButtonSuffix, IconSuffix} from '@ngstarter-ui/components/form-field';
 import { Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 
@@ -15,7 +15,8 @@ import { Input } from '@ngstarter-ui/components/input';
     IconSuffix,
     Input,
     Label,
-    FormField
+    FormField,
+    IconButtonSuffix
   ],
   templateUrl: './clear-button-example.html',
   styleUrl: './clear-button-example.scss'

@@ -2,7 +2,6 @@ import { afterNextRender, DOCUMENT, effect, inject, Injectable, signal } from '@
 import {
   NGS_THEME_OPTIONS,
   NgsColorScheme,
-  NgsDensity,
   NgsRadius,
   NgsThemeName,
   NgsThemeOptions,
@@ -11,7 +10,6 @@ import {
 interface StoredThemeState {
   theme?: NgsThemeName;
   colorScheme?: NgsColorScheme;
-  density?: NgsDensity;
   radius?: NgsRadius;
   primaryColor?: string;
 }
@@ -26,13 +24,11 @@ export class ThemeManagerService {
 
   private readonly _theme = signal<NgsThemeName>('default');
   private readonly _colorScheme = signal<Exclude<NgsColorScheme, 'auto'>>('light');
-  private readonly _density = signal<NgsDensity>('comfortable');
   private readonly _radius = signal<NgsRadius>('medium');
   private readonly _primaryColor = signal<string | null>(null);
 
   readonly theme = this._theme.asReadonly();
   readonly colorScheme = this._colorScheme.asReadonly();
-  readonly density = this._density.asReadonly();
   readonly radius = this._radius.asReadonly();
   readonly primaryColor = this._primaryColor.asReadonly();
 
@@ -80,11 +76,6 @@ export class ThemeManagerService {
     this._persist({ theme }, persist);
   }
 
-  setDensity(density: NgsDensity, persist = true): void {
-    this._density.set(density);
-    this._persist({ density }, persist);
-  }
-
   setRadius(radius: NgsRadius, persist = true): void {
     this._radius.set(radius);
     this._persist({ radius }, persist);
@@ -98,10 +89,6 @@ export class ThemeManagerService {
   applyTheme(options: NgsThemeOptions, persist = false): void {
     if (options.theme) {
       this._theme.set(options.theme);
-    }
-
-    if (options.density) {
-      this._density.set(options.density);
     }
 
     if (options.radius) {
@@ -195,7 +182,6 @@ export class ThemeManagerService {
     root.classList?.toggle('dark', this._colorScheme() === 'dark');
     root.setAttribute('data-ngs-theme', this._theme());
     root.setAttribute('data-ngs-color-scheme', this._colorScheme());
-    root.setAttribute('data-ngs-density', this._density());
     root.setAttribute('data-ngs-radius', this._radius());
 
     if (primaryColor && root.style) {

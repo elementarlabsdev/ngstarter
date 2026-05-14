@@ -81,6 +81,10 @@ export class Input implements OnInit, DoCheck, FormFieldControl<string> {
   private _errorState = signal(false);
   get errorState(): boolean { return this._errorState(); }
 
+  get multiline(): boolean {
+    return this.elementRef.nativeElement.tagName?.toLowerCase() === 'textarea';
+  }
+
   isRequired = computed(() => {
     if (this._required()) {
       return true;
