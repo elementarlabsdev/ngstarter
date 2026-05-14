@@ -86,19 +86,19 @@
     display: flex;
     align-items: center;
 
-    &:has(.ngs-form-field-icon-prefix) {
+    :host.ngs-form-field-has-icon-prefix & {
       padding-left: --spacing(2);
     }
 
-    &:has(.ngs-form-field-icon-button-prefix) {
+    :host.ngs-form-field-has-icon-button-prefix & {
       padding-left: --spacing(0.5);
     }
 
-    &:has(.ngs-form-field-icon-suffix) {
+    :host.ngs-form-field-has-icon-suffix & {
       padding-right: --spacing(2);
     }
 
-    &:has(.ngs-form-field-icon-button-suffix) {
+    :host.ngs-form-field-has-icon-button-suffix & {
       padding-right: --spacing(0.5);
     }
   }
@@ -139,9 +139,6 @@
       resize: vertical;
     }
 
-    ::ng-deep textarea.ngs-input[ngsTextareaAutoSize] {
-      resize: none !important;
-    }
   }
 
   &:not(.ngs-form-field-has-label) {
@@ -192,8 +189,10 @@
 
   ::ng-deep {
     input {
+      font-size: var(--ngs-field-font-size);
       line-height: var(--ngs-field-line-height);
       outline: none !important;
+      resize: none;
       text-align: var(--ngs-form-field-input-text-align, start);
 
       &::placeholder {
@@ -204,13 +203,10 @@
 
     textarea {
       min-height: 22px;
+      font-size: var(--ngs-field-font-size);
       line-height: var(--ngs-field-line-height);
       outline: none !important;
       text-align: var(--ngs-form-field-input-text-align, start);
-
-      &[ngsTextareaAutoSize] {
-        resize: none !important;
-      }
 
       &::placeholder {
         color: var(--ngs-form-field-label-color);
@@ -287,60 +283,37 @@
     ::ng-deep .ngs-chip-input,
     ::ng-deep .ngs-phone-input,
     ::ng-deep .ngs-number-input,
-    ::ng-deep ngs-select {
+    ::ng-deep ngs-select,
+    ::ng-deep .ngs-date-range-input {
       &::placeholder,
       .ngs-select-placeholder {
         opacity: 0 !important;
         color: transparent !important;
       }
     }
-
-    ::ng-deep .ngs-date-range-input {
-      &::placeholder {
-        opacity: 0 !important;
-        color: transparent !important;
-      }
-    }
   }
 
-  .ngs-form-field-prefix,
-  .ngs-form-field-icon-prefix,
-  .ngs-form-field-icon-button-prefix,
-  .ngs-form-field-suffix,
-  .ngs-form-field-icon-suffix,
-  .ngs-form-field-icon-button-suffix,
-  .ngs-form-field-text-prefix,
-  .ngs-form-field-text-suffix {
+  .ngs-form-field-affix {
     display: flex;
     align-items: center;
   }
 
-  .ngs-form-field-prefix,
-  .ngs-form-field-icon-prefix,
-  .ngs-form-field-icon-button-prefix,
-  .ngs-form-field-text-prefix {
+  .ngs-form-field-before {
     margin-right: 0.5rem;
   }
 
-  .ngs-form-field-suffix,
-  .ngs-form-field-icon-suffix,
-  .ngs-form-field-icon-button-suffix,
-  .ngs-form-field-text-suffix {
+  .ngs-form-field-after {
     margin-left: 0.5rem;
   }
 
-  .ngs-form-field-icon-prefix,
-  .ngs-form-field-icon-suffix,
-  .ngs-form-field-icon-button-prefix,
-  .ngs-form-field-icon-button-suffix {
+  .ngs-form-field-icon-affix {
     --ngs-button-height: var(
       --ngs-form-field-icon-button-height,
       calc(var(--ngs-form-field-container-min-height) - 2px)
     );
   }
 
-  .ngs-form-field-text-prefix,
-  .ngs-form-field-text-suffix {
+  .ngs-form-field-text-affix {
     color: var(--ngs-form-field-label-color);
     white-space: nowrap;
     font-size: var(--ngs-field-font-size);
