@@ -10,23 +10,23 @@ This End User License Agreement ("Agreement") is a legal agreement between you (
 
 Subject to the terms of this Agreement, ElementarLabs grants you a non-exclusive, non-transferable, non-sublicensable license to use the Software.
 
-The license is granted on a **per-developer (seat-based)** basis unless otherwise specified.
+The license is granted according to the limits included in the purchased plan.
 
 ---
 
 ## 2. License Types
 
-### 2.1 Developer License
+### 2.1 Standard License
 
-Each license allows use of the Software by **one (1) developer**.
+A Standard License allows use of the Software by **one (1) developer** for **one (1) project** and **one (1) domain**, including subdomains.
 
 A developer is defined as any individual who directly or indirectly works with the Software’s source code.
 
 ---
 
-### 2.2 Team License
+### 2.2 Professional License
 
-A Team License allows use of the Software by the number of developers corresponding to the number of purchased licenses.
+A Professional License allows use of the Software by **unlimited developers** across **unlimited projects** and **unlimited domains**, including subdomains.
 
 ---
 

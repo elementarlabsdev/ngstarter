@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">NgStarter Open Graph image</title>
+  <desc id="desc">NgStarter AI-friendly Angular UI components library for admin apps.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="0.48" stop-color="#eef7ff"/>
+      <stop offset="1" stop-color="#f4f0ff"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#155eef"/>
+      <stop offset="1" stop-color="#00a3a3"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="20" stdDeviation="28" flood-color="#0f172a" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="64" y="64" width="1072" height="502" rx="40" fill="#ffffff" filter="url(#shadow)"/>
+  <rect x="96" y="96" width="1008" height="438" rx="28" fill="#f8fafc" stroke="#dbe4ef" stroke-width="2"/>
+  <text x="136" y="240" fill="#0f172a" font-family="Arial, Helvetica, sans-serif" font-size="76" font-weight="800">NgStarter</text>
+  <text x="136" y="330" fill="#155eef" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="700">AI-friendly Angular</text>
+  <text x="136" y="396" fill="#155eef" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="700">UI components library</text>
+  <text x="136" y="496" fill="#475569" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="500">Admin dashboards, standalone components, signals, themes.</text>
+  <g transform="translate(650 148)">
+    <rect width="390" height="292" rx="24" fill="#ffffff" stroke="#dbe4ef" stroke-width="2"/>
+    <rect x="28" y="30" width="148" height="22" rx="11" fill="#155eef"/>
+    <rect x="28" y="72" width="334" height="46" rx="12" fill="#e2e8f0"/>
+    <rect x="28" y="138" width="94" height="94" rx="18" fill="#dff7f4"/>
+    <rect x="148" y="138" width="94" height="94" rx="18" fill="#e8efff"/>
+    <rect x="268" y="138" width="94" height="94" rx="18" fill="#f1eaff"/>
+    <rect x="28" y="252" width="334" height="14" rx="7" fill="#cbd5e1"/>
+  </g>
+</svg>

@@ -57,7 +57,7 @@ const COMPONENT_TITLES: Record<string, SeoTitleConfig> = {
   notifications: { label: 'Notifications', detail: 'Notification Feeds' },
   paginator: { label: 'Paginator', detail: 'Page Navigation' },
   panel: { label: 'Panel', detail: 'Workspace Layouts' },
-  popover: { label: 'Popover', detail: 'Overlay UI' },
+  popover: { label: 'Popover', detail: 'Click & Hover Overlay' },
   'progress-bar': { label: 'Progress Bar', detail: 'Progress Feedback' },
   'progress-spinner': { label: 'Progress Spinner', detail: 'Loading States' },
   'resizable-container': { label: 'Resizable Container', detail: 'Resizable Layouts' },
@@ -100,7 +100,7 @@ const FORM_TITLES: Record<string, SeoTitleConfig> = {
   'number-input': { label: 'Number Input', detail: 'Numeric Form Controls' },
   'password-strength': { label: 'Password Strength', detail: 'Password Validation Feedback' },
   'phone-input': { label: 'Phone Input', detail: 'International Phone Fields' },
-  'pin-input': { label: 'Pin Input', detail: 'One-time Code Entry' },
+  'pin-input': { label: 'Pin Input', detail: 'OTP & MFA Forms' },
   radio: { label: 'Radio', detail: 'Single-choice Form Controls' },
   segmented: { label: 'Segmented', detail: 'Segmented Choice Controls' },
   select: { label: 'Select', detail: 'Dropdown Selection UI' },
@@ -124,6 +124,12 @@ const LIBRARY_TITLES: Record<string, SeoTitleConfig> = {
   'kanban-board': { label: 'Kanban Board', detail: 'Workflow Boards' },
   'video-player': { label: 'Video Player', detail: 'Media Playback UI' },
   'visual-builder': { label: 'Visual Builder', detail: 'Drag and Drop UI Building' },
+};
+
+const MICRO_CHART_TITLES: Record<string, SeoTitleConfig> = {
+  'bar-chart': { label: 'Bar Chart', detail: 'Compact Comparisons' },
+  'line-chart': { label: 'Line Chart', detail: 'Sparkline Trends' },
+  'pie-chart': { label: 'Pie Chart', detail: 'Proportional Breakdowns' },
 };
 
 @Injectable({ providedIn: 'root' })
@@ -152,22 +158,35 @@ export class DocsTitleStrategy extends TitleStrategy {
     }
 
     if (section === 'forms') {
+      if (!slug) {
+        return this.withSiteTitle('Angular Form Components', 'Inputs, Validation, and Controls');
+      }
+
       return this.catalogTitle(slug, FORM_TITLES, 'Component', isApi);
     }
 
     if (section === 'navigation') {
+      if (!slug) {
+        return this.withSiteTitle('Angular Navigation Components', 'Sidebars, Tabs, and Breadcrumbs');
+      }
+
       return this.catalogTitle(slug, NAVIGATION_TITLES, 'Component', isApi);
     }
 
     if (section === 'libraries') {
+      if (!slug) {
+        return this.withSiteTitle('Angular UI Libraries', 'Data Grids, Editors, and Builders');
+      }
+
       return this.catalogTitle(slug, LIBRARY_TITLES, 'Library', isApi);
     }
 
     if (section === 'micro-charts') {
-      return this.withSiteTitle(
-        this.angularTitle(this.toTitleCase(slug), 'Component', isApi),
-        'Compact Data Visualization',
-      );
+      if (!slug) {
+        return this.withSiteTitle('Angular Micro Chart Components', 'Compact Data Visualization');
+      }
+
+      return this.catalogTitle(slug, MICRO_CHART_TITLES, 'Component', isApi);
     }
 
     if (section === 'theme') {

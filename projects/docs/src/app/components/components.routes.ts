@@ -2,6 +2,15 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    loadComponent: () => import('../@meta/category-overview/category-overview').then(c => c.CategoryOverview),
+    title: 'Angular Components Documentation',
+    data: {
+      seoIntro: 'The NgStarter Angular components documentation covers accessible, standalone UI components for admin panels, dashboards, product interfaces, forms, overlays, data tables, navigation, feedback, loading states, media, and workflow screens.'
+    }
+  },
+  {
     path: 'cookie-popup',
     loadChildren: () => import('./cookie-popup/routes').then(m => m.routes),
     title: 'Cookie Popup'

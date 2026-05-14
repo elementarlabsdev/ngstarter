@@ -2,6 +2,15 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    loadComponent: () => import('../@meta/category-overview/category-overview').then(c => c.CategoryOverview),
+    title: 'Angular Navigation Components',
+    data: {
+      seoIntro: 'The NgStarter Angular navigation components documentation covers breadcrumbs, sidebars, rail navigation, side panels, tab panels, and in-page navigation patterns for admin shells and product dashboards.'
+    }
+  },
+  {
     path: 'breadcrumbs',
     loadChildren: () => import('./breadcrumbs/routes').then(m => m.routes),
     title: 'Breadcrumbs'

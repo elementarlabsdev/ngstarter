@@ -2,6 +2,15 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    loadComponent: () => import('../@meta/category-overview/category-overview').then(c => c.CategoryOverview),
+    title: 'Angular UI Libraries',
+    data: {
+      seoIntro: 'The NgStarter Angular UI libraries documentation covers advanced components for data grids, Kanban boards, visual builders, content editors, image design, and video playback in complex admin and product workflows.'
+    }
+  },
+  {
     path: 'image-designer',
     loadChildren: () => import('./image-designer/routes').then(m => m.routes),
     title: 'Image Designer'
