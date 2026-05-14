@@ -1,4 +1,4 @@
 User-Agent: *
 Disallow:
 
-Sitemap: https://demo.ngstarter.com/sitemap.xml
+Sitemap: https://ngstarter.com/sitemap.xml

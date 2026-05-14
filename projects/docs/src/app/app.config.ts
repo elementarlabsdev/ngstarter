@@ -16,7 +16,6 @@ import {
   ENVIRONMENT,
   EnvironmentService,
   GlobalStore,
-  PageTitleStrategyService,
   provideNgsTheme,
   ThemeManagerService,
 } from '@ngstarter-ui/components/core';
@@ -26,6 +25,7 @@ import { isPlatformBrowser } from '@angular/common';
 import {
   FORM_RENDERER_FIELD_REGISTRY,
 } from '@ngstarter-ui/components/form-renderer';
+import { DocsTitleStrategy } from './seo/docs-title-strategy';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -60,13 +60,16 @@ export const appConfig: ApplicationConfig = {
         }
 
         layoutSidebarStore.showSidebarVisibility('root', true); // show or hide main sidebar on initial state
-        globalStore.setPageTitle(envService.getValue('pageTitle') || 'NgStarter');
+        globalStore.setPageTitle(envService.getValue('pageTitle', ''));
         resolve(true);
       });
     }),
     {
       provide: ENVIRONMENT,
-      useValue: {}
+      useValue: {
+        pageTitle: 'NgStarter',
+        siteUrl: 'https://docs.ngstarter.com',
+      }
     },
     {
       provide: FORM_RENDERER_FIELD_REGISTRY,
@@ -79,7 +82,7 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: TitleStrategy,
-      useClass: PageTitleStrategyService
+      useClass: DocsTitleStrategy
     }
   ]
 };
