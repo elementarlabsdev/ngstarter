@@ -43,6 +43,14 @@ html {
   }
 }
 
+.ngs-input {
+  &:focus,
+  &:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+
 .ngs-ripple {
   position: relative;
   overflow: hidden;

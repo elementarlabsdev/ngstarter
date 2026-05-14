@@ -90,7 +90,7 @@
   --ngs-state-active-bg: color-mix(in srgb, var(--ngs-color-on-surface), transparent 90%);
   --ngs-state-selected-bg: color-mix(in srgb, var(--ngs-color-primary), transparent 88%);
   --ngs-state-selected-color: var(--ngs-color-primary);
-  --ngs-state-focus-ring: color-mix(in srgb, var(--ngs-color-primary), transparent 64%);
+  --ngs-state-focus-ring: var(--ngs-field-border-focus-color);
   --ngs-state-disabled-bg: color-mix(in srgb, var(--ngs-color-on-surface), transparent 95%);
   --ngs-state-disabled-color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%);
   --ngs-state-disabled-border: color-mix(in srgb, var(--ngs-color-on-surface), transparent 90%);
@@ -498,7 +498,7 @@
   --ngs-state-active-bg: #e4e9ef;
   --ngs-state-selected-bg: #e3ebf5;
   --ngs-state-selected-color: #173b66;
-  --ngs-state-focus-ring: rgba(23, 59, 102, 0.18);
+  --ngs-state-focus-ring: var(--ngs-field-border-focus-color);
   --ngs-state-disabled-bg: #eef2f6;
   --ngs-state-disabled-color: #8b97a7;
   --ngs-state-disabled-border: #d5dce5;
@@ -634,7 +634,7 @@
   --ngs-state-active-bg: #202b37;
   --ngs-state-selected-bg: #173b66;
   --ngs-state-selected-color: #d7e7ff;
-  --ngs-state-focus-ring: rgba(143, 184, 255, 0.26);
+  --ngs-state-focus-ring: var(--ngs-field-border-focus-color);
   --ngs-state-disabled-bg: #182230;
   --ngs-state-disabled-color: #758295;
   --ngs-state-disabled-border: #293544;
@@ -740,7 +740,7 @@
   --ngs-state-active-bg: linear-gradient(135deg, rgba(79, 70, 229, 0.13), rgba(15, 118, 110, 0.12));
   --ngs-state-selected-bg: linear-gradient(135deg, #e6e9ff, #ccfbf1);
   --ngs-state-selected-color: #3730a3;
-  --ngs-state-focus-ring: rgba(79, 70, 229, 0.22);
+  --ngs-state-focus-ring: var(--ngs-field-border-focus-color);
   --ngs-state-disabled-bg: #edf1f8;
   --ngs-state-disabled-color: #9aa6c0;
   --ngs-state-disabled-border: #d7deee;
@@ -877,7 +877,7 @@
   --ngs-state-active-bg: linear-gradient(135deg, rgba(165, 180, 252, 0.18), rgba(94, 234, 212, 0.16));
   --ngs-state-selected-bg: linear-gradient(135deg, #3730a3, #115e59);
   --ngs-state-selected-color: #eef2ff;
-  --ngs-state-focus-ring: rgba(165, 180, 252, 0.32);
+  --ngs-state-focus-ring: var(--ngs-field-border-focus-color);
   --ngs-state-disabled-bg: #1b2138;
   --ngs-state-disabled-color: #697491;
   --ngs-state-disabled-border: #28304a;

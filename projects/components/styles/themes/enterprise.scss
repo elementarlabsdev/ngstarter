@@ -81,7 +81,7 @@
   --ngs-state-active-bg: #e4e9ef;
   --ngs-state-selected-bg: #e3ebf5;
   --ngs-state-selected-color: #173b66;
-  --ngs-state-focus-ring: rgba(23, 59, 102, 0.18);
+  --ngs-state-focus-ring: var(--ngs-field-border-focus-color);
   --ngs-state-disabled-bg: #eef2f6;
   --ngs-state-disabled-color: #8b97a7;
   --ngs-state-disabled-border: #d5dce5;
@@ -218,7 +218,7 @@
     --ngs-state-active-bg: #202b37;
     --ngs-state-selected-bg: #173b66;
     --ngs-state-selected-color: #d7e7ff;
-    --ngs-state-focus-ring: rgba(143, 184, 255, 0.26);
+    --ngs-state-focus-ring: var(--ngs-field-border-focus-color);
     --ngs-state-disabled-bg: #182230;
     --ngs-state-disabled-color: #758295;
     --ngs-state-disabled-border: #293544;
@@ -318,7 +318,7 @@
   --ngs-state-active-bg: #202b37;
   --ngs-state-selected-bg: #173b66;
   --ngs-state-selected-color: #d7e7ff;
-  --ngs-state-focus-ring: rgba(143, 184, 255, 0.26);
+  --ngs-state-focus-ring: var(--ngs-field-border-focus-color);
   --ngs-state-disabled-bg: #182230;
   --ngs-state-disabled-color: #758295;
   --ngs-state-disabled-border: #293544;

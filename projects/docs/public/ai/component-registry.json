@@ -3966,8 +3966,7 @@
         "--ngs-form-field-width",
         "--ngs-state-disabled-bg",
         "--ngs-state-disabled-border",
-        "--ngs-state-disabled-color",
-        "--ngs-state-focus-ring"
+        "--ngs-state-disabled-color"
       ],
       "example": null
     },
@@ -4885,7 +4884,7 @@
           "name": "clear-button-example",
           "title": "Clear button",
           "file": "projects/docs/src/app/forms/input/_examples/clear-button-example/clear-button-example.html",
-          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Clearable input</ngs-label>\n  <input ngsInput type=\"text\" [(ngModel)]=\"value\">\n  @if (value) {\n    <button ngsIconSuffix ngsIconButton aria-label=\"Clear\" (click)=\"value=''\">\n      <ngs-icon name=\"fluent:dismiss-24-regular\"/>\n    </button>\n  }\n</ngs-form-field>"
+          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Clearable input</ngs-label>\n  <input ngsInput type=\"text\" [(ngModel)]=\"value\">\n  @if (value) {\n    <button ngsIconButtonSuffix ngsIconButton aria-label=\"Clear\" (click)=\"value=''\">\n      <ngs-icon name=\"fluent:dismiss-24-regular\"/>\n    </button>\n  }\n</ngs-form-field>"
         },
         {
           "name": "disabled-example",

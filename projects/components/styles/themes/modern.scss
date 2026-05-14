@@ -81,7 +81,7 @@
   --ngs-state-active-bg: linear-gradient(135deg, rgba(79, 70, 229, 0.13), rgba(15, 118, 110, 0.12));
   --ngs-state-selected-bg: linear-gradient(135deg, #e6e9ff, #ccfbf1);
   --ngs-state-selected-color: #3730a3;
-  --ngs-state-focus-ring: rgba(79, 70, 229, 0.22);
+  --ngs-state-focus-ring: var(--ngs-field-border-focus-color);
   --ngs-state-disabled-bg: #edf1f8;
   --ngs-state-disabled-color: #9aa6c0;
   --ngs-state-disabled-border: #d7deee;
@@ -220,7 +220,7 @@
     --ngs-state-active-bg: linear-gradient(135deg, rgba(165, 180, 252, 0.18), rgba(94, 234, 212, 0.16));
     --ngs-state-selected-bg: linear-gradient(135deg, #3730a3, #115e59);
     --ngs-state-selected-color: #eef2ff;
-    --ngs-state-focus-ring: rgba(165, 180, 252, 0.32);
+    --ngs-state-focus-ring: var(--ngs-field-border-focus-color);
     --ngs-state-disabled-bg: #1b2138;
     --ngs-state-disabled-color: #697491;
     --ngs-state-disabled-border: #28304a;
@@ -321,7 +321,7 @@
   --ngs-state-active-bg: linear-gradient(135deg, rgba(165, 180, 252, 0.18), rgba(94, 234, 212, 0.16));
   --ngs-state-selected-bg: linear-gradient(135deg, #3730a3, #115e59);
   --ngs-state-selected-color: #eef2ff;
-  --ngs-state-focus-ring: rgba(165, 180, 252, 0.32);
+  --ngs-state-focus-ring: var(--ngs-field-border-focus-color);
   --ngs-state-disabled-bg: #1b2138;
   --ngs-state-disabled-color: #697491;
   --ngs-state-disabled-border: #28304a;

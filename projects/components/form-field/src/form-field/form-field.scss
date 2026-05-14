@@ -43,7 +43,7 @@
   &.ngs-form-field-focused {
     .ngs-form-field-container {
       border-color: var(--ngs-field-border-focus-color);
-      box-shadow: 0 0 0 1px var(--ngs-field-border-focus-color), 0 0 0 3px var(--ngs-state-focus-ring);
+      box-shadow: 0 0 0 1px var(--ngs-field-border-focus-color);
     }
 
     .ngs-form-field-label {
