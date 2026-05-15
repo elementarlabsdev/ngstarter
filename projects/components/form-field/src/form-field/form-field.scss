@@ -5,19 +5,19 @@
   --ngs-form-field-border-color: var(--ngs-field-border-color);
   --ngs-form-field-border-width: var(--ngs-field-border-width);
   --ngs-form-field-border-radius: var(--ngs-field-radius);
-  --ngs-form-field-padding-x: var(--ngs-field-padding-x);
   --ngs-form-field-bg: var(--ngs-field-bg);
   --ngs-form-field-disabled-bg: var(--ngs-field-disabled-bg);
   --ngs-form-field-label-color: var(--ngs-field-label-color);
   --ngs-form-field-error-color: var(--ngs-field-error-color);
   --ngs-form-field-container-min-height: var(--ngs-field-height, var(--ngs-field-container-height));
+  --ngs-form-field-padding-x: var(--ngs-field-padding-x);
   --ngs-form-field-input-height: var(--ngs-field-input-height);
-  --ngs-form-field-infix-padding-bottom: max(0.125rem, calc(var(--ngs-form-field-container-min-height) * 0.16));
-  --ngs-form-field-infix-padding-top: max(
-    0px,
-    calc(var(--ngs-form-field-container-min-height) - var(--ngs-form-field-input-height) - var(--ngs-form-field-infix-padding-bottom))
-  );
-  --ngs-form-field-no-label-padding-y: var(--ngs-form-field-infix-padding-bottom);
+  --ngs-form-field-affix-gap: --spacing(1);
+  --ngs-form-field-icon-affix-padding-x: --spacing(2);
+  --ngs-form-field-icon-button-affix-padding-x: --spacing(1);
+  --ngs-form-field-infix-padding-top: var(--ngs-field-infix-padding-top);
+  --ngs-form-field-infix-padding-bottom: var(--ngs-field-infix-padding-bottom);
+  --ngs-form-field-no-label-padding-y: var(--ngs-field-no-label-padding-y);
 
   display: block;
   width: var(--ngs-form-field-width, 100%);
@@ -86,22 +86,22 @@
     min-height: var(--ngs-form-field-container-min-height);
     display: flex;
     align-items: center;
+  }
 
-    :host.ngs-form-field-has-icon-prefix & {
-      padding-left: --spacing(2);
-    }
+  &.ngs-form-field-has-icon-prefix .ngs-form-field-container {
+    padding-left: var(--ngs-form-field-icon-affix-padding-x);
+  }
 
-    :host.ngs-form-field-has-icon-button-prefix & {
-      padding-left: --spacing(0.5);
-    }
+  &.ngs-form-field-has-icon-button-prefix .ngs-form-field-container {
+    padding-left: var(--ngs-form-field-icon-button-affix-padding-x);
+  }
 
-    :host.ngs-form-field-has-icon-suffix & {
-      padding-right: --spacing(2);
-    }
+  &.ngs-form-field-has-icon-suffix .ngs-form-field-container {
+    padding-right: var(--ngs-form-field-icon-affix-padding-x);
+  }
 
-    :host.ngs-form-field-has-icon-button-suffix & {
-      padding-right: --spacing(0.5);
-    }
+  &.ngs-form-field-has-icon-button-suffix .ngs-form-field-container {
+    padding-right: var(--ngs-form-field-icon-button-affix-padding-x);
   }
 
   .ngs-form-field-infix {
@@ -304,36 +304,30 @@
   }
 
   .ngs-form-field-affix {
-    --ngs-button-height: var(
-      --ngs-form-field-affix-button-height,
-      calc(var(--ngs-form-field-container-min-height) - 2px)
-    );
     display: flex;
     align-items: center;
+
+    &:empty {
+      display: none;
+    }
   }
 
   .ngs-form-field-before {
-    margin-right: 0.5rem;
+    margin-right: var(--ngs-form-field-affix-gap);
   }
 
   .ngs-form-field-after {
-    margin-left: 0.5rem;
-  }
-
-  .ngs-form-field-icon-affix {
-    --ngs-button-height: var(
-      --ngs-form-field-icon-button-height,
-      calc(var(--ngs-form-field-container-min-height) - 2px)
-    );
+    margin-left: var(--ngs-form-field-affix-gap);
   }
 
   .ngs-form-field-text-affix {
     color: var(--ngs-form-field-label-color);
     white-space: nowrap;
     font-size: var(--ngs-field-font-size);
-    line-height: var(--ngs-field-line-height);
+    // line-height: var(--ngs-field-line-height);
     padding-top: var(--ngs-form-field-infix-padding-top);
     padding-bottom: var(--ngs-form-field-infix-padding-bottom);
+    line-height: 0;
   }
 
   .subscript-wrapper {

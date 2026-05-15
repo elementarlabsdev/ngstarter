@@ -25,7 +25,6 @@ import {
   SidebarNavItemIconDirective,
 } from '@ngstarter-ui/components/sidebar';
 import { Sidenav, SidenavContainer, SidenavContent } from '@ngstarter-ui/components/sidenav';
-import { CorporateMiniChart } from './corporate-mini-chart/corporate-mini-chart';
 
 interface NavItem {
   readonly key: string;
@@ -49,41 +48,6 @@ interface ForecastSummary {
   readonly peak?: number;
 }
 
-interface AccountHealth {
-  readonly name: string;
-  readonly owner: string;
-  readonly avatar: string;
-  readonly score: number;
-  readonly status: 'Healthy' | 'Watch' | 'At risk';
-}
-
-interface RenewalStage {
-  readonly stage: string;
-  readonly accounts: number;
-  readonly amount: string;
-  readonly progress: number;
-}
-
-interface SlaMetric {
-  readonly label: string;
-  readonly icon: string;
-  readonly value: string;
-  readonly target: string;
-}
-
-interface ProductAdoption {
-  readonly name: string;
-  readonly seats: string;
-  readonly change: string;
-  readonly progress: number;
-}
-
-interface ExecutiveNote {
-  readonly title: string;
-  readonly description: string;
-  readonly icon: string;
-}
-
 @Component({
   selector: 'app-root',
   imports: [
@@ -91,12 +55,6 @@ interface ExecutiveNote {
     Badge,
     BreadcrumbsGlobal,
     Button,
-    Card,
-    CardAside,
-    CardContent,
-    CardHeader,
-    Chip,
-    CorporateMiniChart,
     FormField,
     Icon,
     IconPrefix,
@@ -109,7 +67,6 @@ interface ExecutiveNote {
     MenuHeading,
     MenuItem,
     MenuTrigger,
-    ProgressBar,
     ScrollbarArea,
     Sidebar,
     SidebarBody,
@@ -198,52 +155,4 @@ export class App {
     bars: [46, 52, 48, 61, 70, 74, 82],
     peak: 74,
   });
-
-  protected readonly accountHealth = signal<readonly AccountHealth[]>([
-    { name: 'Acme Logistics', owner: 'Maya Chen', avatar: 'A', score: 88, status: 'Healthy' },
-    { name: 'Northwind Health', owner: 'Noah Reed', avatar: 'N', score: 62, status: 'Watch' },
-    { name: 'Helio Energy', owner: 'Leah Park', avatar: 'H', score: 42, status: 'At risk' },
-    { name: 'Orbit Retail', owner: 'Iris Morgan', avatar: 'O', score: 74, status: 'Healthy' },
-  ]);
-
-  protected readonly renewalPipeline = signal<readonly RenewalStage[]>([
-    { stage: 'Discovery', accounts: 18, amount: '$312K', progress: 36 },
-    { stage: 'Proposal', accounts: 11, amount: '$486K', progress: 58 },
-    { stage: 'Legal', accounts: 7, amount: '$271K', progress: 72 },
-    { stage: 'Committed', accounts: 5, amount: '$426K', progress: 91 },
-  ]);
-
-  protected readonly slaMetrics = signal<readonly SlaMetric[]>([
-    { label: 'First response', icon: 'fluent:timer-24-regular', value: '14m', target: 'Target 20m' },
-    { label: 'Resolution', icon: 'fluent:checkmark-circle-24-regular', value: '91%', target: 'Target 88%' },
-    { label: 'Backlog', icon: 'fluent:tray-item-add-24-regular', value: '38', target: 'Down 12%' },
-    { label: 'Escalations', icon: 'fluent:warning-24-regular', value: '12', target: '3 critical' },
-  ]);
-
-  protected readonly productAdoption = signal<readonly ProductAdoption[]>([
-    { name: 'Workflow Builder', seats: '1,284', change: '+18%', progress: 82 },
-    { name: 'Analytics Studio', seats: '944', change: '+11%', progress: 68 },
-    { name: 'Automation Rules', seats: '718', change: '+7%', progress: 54 },
-    { name: 'Client Portal', seats: '1,502', change: '+24%', progress: 91 },
-  ]);
-
-  protected readonly executiveNotes = signal<readonly ExecutiveNote[]>([
-    {
-      title: 'Finance cohort needs pricing review',
-      description: 'Three strategic renewals need guardrail approval before Friday.',
-      icon: 'fluent:money-24-regular',
-    },
-    {
-      title: 'Support volume moved to stable',
-      description: 'Automation deflected 212 low-priority tickets this week.',
-      icon: 'fluent:bot-24-regular',
-    },
-    {
-      title: 'Enterprise adoption is ahead of plan',
-      description: 'Client Portal usage reached a new weekly high across tier-one accounts.',
-      icon: 'fluent:rocket-24-regular',
-    },
-  ]);
-
-  protected readonly weekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'] as const;
 }
