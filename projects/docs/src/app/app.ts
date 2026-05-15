@@ -1073,6 +1073,10 @@ export class App implements OnInit {
   private _activateLink() {
     const activeLink = this.navItemLinks.find(
       navItem => {
+        if (this.location.path() === '' && navItem.link === '/') {
+          return true;
+        }
+
         if (navItem.link === this.location.path()) {
           return true;
         }

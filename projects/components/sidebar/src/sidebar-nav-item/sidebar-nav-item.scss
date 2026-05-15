@@ -107,8 +107,8 @@
 :host-context(.ngs-sidebar.only-compact),
 :host-context(.ngs-sidenav.is-collapsed:not(:hover)) {
   .inner {
-    justify-content: center;
-    padding: 0;
+    justify-content: flex-start;
+    padding: var(--ngs-sidebar-nav-item-padding);
     gap: 0;
   }
 
@@ -119,14 +119,6 @@
 
   .icon {
     width: var(--ngs-sidebar-nav-item-icon-width);
-  }
-}
-
-:host-context(.ngs-sidebar.compact:hover),
-:host-context(.ngs-sidenav.is-collapsed:hover) {
-  .inner {
-    justify-content: flex-start;
-    padding-inline-start: var(--ngs-sidebar-nav-compact-icon-padding-start);
   }
 }
 
