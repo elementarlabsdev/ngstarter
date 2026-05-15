@@ -46,6 +46,14 @@ Prefer the narrowest command that verifies the change. For component library cha
 When building or changing admin pages in `projects/admin*`, agents MUST compose UI from NgStarter
 components before writing custom primitives.
 
+When implementing UI from screenshots, mockups, or visual references, agents MUST first map every
+visible region, control, list, table, card, chart, grid, tile, toolbar, navigation element, form
+field, popover, and status indicator to existing NgStarter components. Visual fidelity is achieved
+by composing and theming those components, not by recreating component behavior with plain `div`,
+`span`, `button`, `input`, CSS-only grids, or ad hoc primitives. If a screenshot shows a dashboard
+or widget layout, use `Grid` for a fixed app-defined dashboard and `Tiles`/`Tile` only when users can
+reorder, customize, or persist dashboard tile layout.
+
 Required admin mappings:
 
 - Root viewport shell: `Layout` and `LayoutContent` from `@ngstarter-ui/components/layout`.
@@ -208,9 +216,10 @@ Admin generation recipes:
 - Master/detail page: keep the list in `PanelContent` and put the details inspector in
   `PanelAside` or `SidePanel`; use `List`, `DataView`, `Tabs`/`TabPanel`, `Timeline`, and `Card`
   rather than custom split panes unless the page is genuinely resizable.
-- Dashboard page: use `PanelHeader` for top controls, `PanelContent` with `ScrollbarArea`, `Card`
-  for KPI blocks, `ProgressBar`, `Gauge`, or micro charts for compact metrics, and `Table` or
-  `DataView` for supporting records.
+- Dashboard page: use `PanelHeader` for top controls, `PanelContent` with `ScrollbarArea`, `Grid`
+  for fixed app-defined widget layouts, `Tiles`/`Tile` only for user-reorderable/customizable
+  widget layouts, `Card` for KPI blocks, `ProgressBar`, `Gauge`, or micro charts for compact
+  metrics, and `Table` or `DataView` for supporting records.
 - Settings/form page: use `Card` or `PanelContent` sections with one `FormField` per form control;
   use `Select`, `Autocomplete`, `SlideToggle`, `ButtonToggle`, `Segmented`, `RadioCard`,
   `Checkbox`, and specialized inputs instead of custom controls.

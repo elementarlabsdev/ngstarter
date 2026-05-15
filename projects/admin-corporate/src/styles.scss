@@ -126,7 +126,7 @@ ngs-sidebar.sidebar-panel.ngs-sidebar {
   --ngs-color-primary: #ecebf1;
   --ngs-color-on-primary: #757783;
   --ngs-nav-items-gap: 0.28rem;
-  --ngs-nav-item-height: 2.15rem;
+  --ngs-nav-item-height: 2.5rem;
   --ngs-nav-item-padding: 0 0.7rem;
   --ngs-nav-item-radius: var(--ngs-control-radius);
   --ngs-nav-item-font-size: 0.95rem;
@@ -160,15 +160,16 @@ ngs-sidebar.sidebar-panel.ngs-sidebar {
   font-weight: 400 !important;
 }
 
-.workspace {
+ngs-panel.workspace-panel {
+  --ngs-panel-bg: var(--corporate-sidebar-bg);
   position: relative;
-  min-height: 100%;
+  height: 100%;
+  min-height: 0;
   background: var(--corporate-sidebar-bg);
 }
 
 .topbar {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 3;
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -177,6 +178,12 @@ ngs-sidebar.sidebar-panel.ngs-sidebar {
   height: 3.875rem;
   padding: 0 1.5rem;
   background: var(--corporate-sidebar-bg);
+}
+
+ngs-panel.workspace-panel ngs-panel-content {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
 }
 
 ngs-breadcrumbs-global.topbar-breadcrumbs {
@@ -935,6 +942,480 @@ ngs-form-field.search-field.ngs-form-field-focused .ngs-form-field-container {
   display: grid;
   gap: 0.25rem;
   min-width: 0;
+}
+
+ngs-toolbar.dashboard-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.75rem;
+  overflow: visible;
+}
+
+ngs-toolbar.dashboard-heading h1 {
+  margin: 0;
+  color: #292d34;
+  font-size: clamp(2.2rem, 4vw, 3.25rem);
+  font-weight: 760;
+  line-height: 1.05;
+}
+
+ngs-toolbar.dashboard-heading p {
+  margin: 0.85rem 0 0;
+  color: #4d5363;
+  font-size: 1.05rem;
+  font-weight: 400;
+}
+
+.dashboard-title {
+  min-width: 0;
+}
+
+.dashboard-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: none;
+  padding-top: 0.25rem;
+}
+
+.period-button,
+.export-button {
+  --ngs-button-height: 2.65rem;
+  --ngs-button-border-radius: 0.55rem;
+  --ngs-button-padding-x: 1rem;
+  --ngs-button-font-weight: 650;
+  --ngs-button-content-gap: 0.5rem;
+}
+
+.period-button {
+  --ngs-button-outlined-border: #c9d2e3;
+  --ngs-button-outlined-color: #2d3038;
+  background: #ffffff;
+}
+
+.export-button {
+  --ngs-button-filled-bg: #3368e8;
+  --ngs-button-filled-color: #ffffff;
+}
+
+ngs-grid.dashboard-grid {
+  --ngs-grid-gap: 1.5rem;
+  display: block;
+}
+
+ngs-card.overview-card {
+  --ngs-card-bg: #ffffff;
+  --ngs-card-border-color: #dfe6f1;
+  --ngs-card-border-radius: 0.5rem;
+  --ngs-card-padding: 0;
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid #dfe6f1;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+ngs-grid.dashboard-grid ngs-card.overview-card {
+  height: 100%;
+}
+
+ngs-card.overview-card ngs-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 4.7rem;
+  padding: 1.45rem 1.75rem 0.8rem;
+}
+
+ngs-card.overview-card h2 {
+  margin: 0;
+  color: #171b22;
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+ngs-card.metric-card {
+  --ngs-card-border-radius: 0.85rem;
+  min-height: 11.75rem;
+}
+
+ngs-card.metric-card .metric-card-header {
+  position: relative;
+  min-height: auto;
+  padding: 1.95rem 2rem 0;
+}
+
+ngs-card.metric-card .metric-card-header .aside {
+  position: absolute;
+  top: 1.35rem;
+  right: 1.5rem;
+  pointer-events: none;
+}
+
+ngs-card.metric-card .metric-card-header .ngs-card-header-text {
+  min-width: 0;
+  padding-right: 5rem;
+}
+
+ngs-card.metric-card .metric-value {
+  padding: 1.35rem 2rem 0;
+}
+
+ngs-card.metric-card .metric-card-footer {
+  padding: 1.1rem 2rem 1.65rem;
+}
+
+.metric-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #464956;
+  font-size: 1.08rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.metric-label ngs-icon {
+  --ngs-icon-size: 1.3rem;
+  color: #4a4e5c;
+}
+
+.metric-value strong {
+  color: #141820;
+  font-size: 3.85rem;
+  font-weight: 780;
+  line-height: 0.9;
+  letter-spacing: 0;
+}
+
+.metric-chip {
+  --ngs-chip-height: 1.85rem;
+  --ngs-chip-radius: 999px;
+  --ngs-chip-padding: 0 0.82rem;
+  --ngs-chip-bg: #d8f8df;
+  --ngs-chip-color: #14a045;
+  --ngs-chip-font-size: 0.92rem;
+  --ngs-chip-font-weight: 700;
+  width: max-content;
+}
+
+.metric-chip-muted {
+  --ngs-chip-bg: #f2f3f5;
+  --ngs-chip-color: #444a58;
+}
+
+.metric-chip ngs-icon {
+  --ngs-icon-size: 0.95rem;
+}
+
+.metric-watermark {
+  --ngs-icon-size: 5.35rem;
+  width: 5.35rem;
+  height: 5.35rem;
+  color: #e6edfb;
+}
+
+.pipeline-widget {
+  min-height: 29rem;
+}
+
+.pipeline-widget ngs-card-header,
+.activity-widget ngs-card-header,
+.task-widget ngs-card-header,
+.regional-widget ngs-card-header,
+.revenue-widget ngs-card-header,
+.team-widget ngs-card-header {
+  padding-bottom: 1.1rem;
+}
+
+.ghost-action {
+  --ngs-button-height: 2rem;
+  --ngs-button-border-radius: 0.5rem;
+  color: #535866;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.view-link {
+  --ngs-button-height: 2rem;
+  --ngs-button-padding-x: 0.35rem;
+  --ngs-button-font-weight: 650;
+  color: #0b5bd3;
+}
+
+.pipeline-bars {
+  display: grid;
+  gap: 1rem;
+  padding: 1.4rem 1.75rem 2rem;
+}
+
+.pipeline-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 3.45rem;
+  overflow: hidden;
+  border-radius: 0.45rem;
+  background: #dce6fb;
+}
+
+.pipeline-stage ngs-progress-bar {
+  --ngs-progress-bar-height: 3.45rem;
+  --ngs-progress-bar-track-color: #dce6fb;
+  --ngs-progress-bar-indicator-color: #4979ec;
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+}
+
+.pipeline-stage-accent ngs-progress-bar {
+  --ngs-progress-bar-indicator-color: #f4b24b;
+}
+
+.pipeline-stage-success ngs-progress-bar {
+  --ngs-progress-bar-indicator-color: #56c39c;
+}
+
+.pipeline-fill,
+.pipeline-stage em {
+  position: relative;
+  z-index: 1;
+}
+
+.pipeline-fill {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding-left: 1.65rem;
+}
+
+.pipeline-fill strong,
+.pipeline-stage em {
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.pipeline-fill span {
+  color: rgba(255, 255, 255, 0.34);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.pipeline-stage-accent .pipeline-fill strong,
+.pipeline-stage-accent .pipeline-fill span {
+  color: #151820;
+}
+
+.pipeline-stage em {
+  margin-left: auto;
+  padding-right: 1.2rem;
+  color: #3f4552;
+}
+
+.activity-widget {
+  min-height: 29rem;
+}
+
+.activity-timeline {
+  display: block;
+  padding: 0.25rem 1.25rem 1.25rem 1.75rem;
+}
+
+.activity-timeline .ngs-timeline-item {
+  --ngs-timeline-item-gap: 0.75rem;
+}
+
+.activity-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 999px;
+}
+
+.activity-indicator ngs-icon {
+  --ngs-icon-size: 1rem;
+}
+
+.activity-success {
+  color: #0da64d;
+  background: #ccf7dc;
+}
+
+.activity-info {
+  color: #3f72a8;
+  background: #d3e8ff;
+}
+
+.activity-warning {
+  color: #eb8a00;
+  background: #ffe8a8;
+}
+
+.activity-neutral {
+  color: #656b78;
+  background: #e8eaee;
+}
+
+.activity-timeline ngs-timeline-title {
+  color: #22262f;
+  font-size: 0.95rem;
+  line-height: 1.42;
+}
+
+.activity-timeline ngs-timeline-title strong {
+  font-weight: 700;
+}
+
+.activity-timeline ngs-timeline-title span {
+  color: #0759c9;
+  font-weight: 700;
+}
+
+.activity-timeline ngs-timeline-description {
+  color: #3f4552;
+  font-size: 0.88rem;
+  font-weight: 550;
+}
+
+.task-widget,
+.regional-widget {
+  min-height: 22.5rem;
+}
+
+.task-list,
+.team-list {
+  --ngs-list-padding: 0.75rem 1.75rem 1.35rem;
+  --ngs-list-item-padding: 0;
+  --ngs-list-item-min-height: 5.1rem;
+  --ngs-list-item-gap: 0.85rem;
+}
+
+.task-row,
+.team-row {
+  border-radius: 0;
+  background: transparent;
+}
+
+.task-dot {
+  width: 0.58rem;
+  height: 0.58rem;
+  border-radius: 999px;
+  background: #3368e8;
+}
+
+.task-row [ngsListItemTitle],
+.team-row [ngsListItemTitle] {
+  color: #1f232b;
+  font-weight: 700;
+}
+
+.task-row [ngsListItemLine],
+.team-row [ngsListItemLine] {
+  color: #303646;
+  font-weight: 400;
+}
+
+.task-row [ngsListItemMeta] {
+  color: #3f4552;
+  font-size: 0.86rem;
+  font-weight: 650;
+}
+
+.regional-list {
+  display: grid;
+  gap: 1.55rem;
+  padding: 1rem 1.75rem 1.75rem;
+}
+
+.regional-row {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.regional-row > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.regional-row strong,
+.regional-row span {
+  color: #3f4552;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.regional-row ngs-progress-bar {
+  --ngs-progress-bar-height: 0.55rem;
+  --ngs-progress-bar-track-color: #edf0f4;
+  --ngs-progress-bar-indicator-color: #2f66e5;
+  border-radius: 999px;
+}
+
+.revenue-widget,
+.team-widget {
+  min-height: 17.5rem;
+}
+
+.section-action-icon {
+  color: #79808f;
+}
+
+.revenue-chart {
+  --ngs-mchart-bar-bar-bg: #3168e8;
+  --ngs-mchart-bar-highlight-bg: #e6ebf7;
+  display: block;
+  width: calc(100% - 3.5rem);
+  height: 8.1rem;
+  margin: 0.75rem 1.75rem 0.55rem;
+}
+
+.revenue-months {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.25rem;
+  padding: 0 1.75rem 1.45rem;
+  color: #3f4552;
+  font-size: 0.86rem;
+  font-weight: 650;
+}
+
+.team-list {
+  --ngs-list-padding: 0.7rem 1.75rem 1.4rem;
+  --ngs-list-item-min-height: 3.65rem;
+}
+
+.team-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 999px;
+}
+
+.team-icon ngs-icon {
+  --ngs-icon-size: 1rem;
+}
+
+.team-icon-alert {
+  color: #dc3632;
+  background: #ffe0dd;
+}
+
+.team-icon-message {
+  color: #526f90;
+  background: #dcecff;
 }
 
 .chat-button {

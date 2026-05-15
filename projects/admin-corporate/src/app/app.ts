@@ -1,17 +1,16 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 import { Badge } from '@ngstarter-ui/components/badge';
 import { BreadcrumbsGlobal, BreadcrumbsStore } from '@ngstarter-ui/components/breadcrumbs';
 import { Button } from '@ngstarter-ui/components/button';
-import { Card, CardAside, CardContent, CardHeader } from '@ngstarter-ui/components/card';
-import { Chip } from '@ngstarter-ui/components/chips';
 import { InitialsPipe } from '@ngstarter-ui/components/core';
 import { FormField, IconPrefix } from '@ngstarter-ui/components/form-field';
+import { Grid, GridItem, GridItemConfig } from '@ngstarter-ui/components/grid';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
 import { Layout, LayoutContent } from '@ngstarter-ui/components/layout';
 import { Menu, MenuDivider, MenuHeading, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
-import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
+import { Panel, PanelContent, PanelHeader } from '@ngstarter-ui/components/panel';
 import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import {
   Sidebar,
@@ -25,6 +24,7 @@ import {
   SidebarNavItemIconDirective,
 } from '@ngstarter-ui/components/sidebar';
 import { Sidenav, SidenavContainer, SidenavContent } from '@ngstarter-ui/components/sidenav';
+import { Toolbar, ToolbarItem, ToolbarSpacer, ToolbarTitle } from '@ngstarter-ui/components/toolbar';
 
 interface NavItem {
   readonly key: string;
@@ -39,13 +39,49 @@ interface NavSection {
   readonly items: readonly NavItem[];
 }
 
-interface ForecastSummary {
+interface DashboardMetric {
+  readonly title: string;
   readonly value: string;
-  readonly summary: string;
-  readonly confidence: string;
+  readonly icon: string;
+  readonly watermark: string;
+  readonly note: string;
+  readonly positive?: boolean;
+}
+
+interface PipelineStage {
+  readonly label: string;
+  readonly count: string;
+  readonly value: string;
   readonly progress: number;
-  readonly bars: readonly number[];
-  readonly peak?: number;
+  readonly tone: 'primary' | 'accent' | 'success';
+}
+
+interface ActivityItem {
+  readonly icon: string;
+  readonly tone: 'success' | 'info' | 'warning' | 'neutral';
+  readonly actor: string;
+  readonly action: string;
+  readonly subject: string;
+  readonly time: string;
+}
+
+interface TaskItem {
+  readonly title: string;
+  readonly priority: string;
+  readonly due: string;
+}
+
+interface RegionalSale {
+  readonly region: string;
+  readonly value: string;
+  readonly percent: number;
+}
+
+interface TeamUpdate {
+  readonly icon: string;
+  readonly tone: 'alert' | 'message';
+  readonly title: string;
+  readonly message: string;
 }
 
 @Component({
@@ -56,6 +92,7 @@ interface ForecastSummary {
     BreadcrumbsGlobal,
     Button,
     FormField,
+    Grid,
     Icon,
     IconPrefix,
     InitialsPipe,
@@ -67,6 +104,9 @@ interface ForecastSummary {
     MenuHeading,
     MenuItem,
     MenuTrigger,
+    Panel,
+    PanelContent,
+    PanelHeader,
     ScrollbarArea,
     Sidebar,
     SidebarBody,
@@ -80,6 +120,10 @@ interface ForecastSummary {
     Sidenav,
     SidenavContainer,
     SidenavContent,
+    Toolbar,
+    ToolbarItem,
+    ToolbarSpacer,
+    ToolbarTitle,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -147,12 +191,189 @@ export class App {
     },
   ]);
 
-  protected readonly forecast = signal<ForecastSummary>({
-    value: '$1.18M',
-    summary: 'Forecast is tracking above plan with expansion concentrated in enterprise accounts.',
-    confidence: 'High confidence',
-    progress: 78,
-    bars: [46, 52, 48, 61, 70, 74, 82],
-    peak: 74,
+  protected readonly dashboardMetrics = signal<readonly DashboardMetric[]>([
+    {
+      title: 'Total Revenue',
+      value: '$2.4M',
+      icon: 'fluent:wallet-credit-card-24-regular',
+      watermark: 'fluent:money-24-regular',
+      note: '+12.5% vs last month',
+      positive: true,
+    },
+    {
+      title: 'New Leads',
+      value: '342',
+      icon: 'fluent:people-add-24-regular',
+      watermark: 'fluent:people-add-24-regular',
+      note: '+8.2% vs last month',
+      positive: true,
+    },
+    {
+      title: 'Active Deals',
+      value: '89',
+      icon: 'fluent:briefcase-24-regular',
+      watermark: 'fluent:handshake-24-regular',
+      note: 'Across 4 stages',
+    },
+  ]);
+
+  protected readonly pipelineStages = signal<readonly PipelineStage[]>([
+    { label: 'Discovery', count: '124 Leads', value: '$840k Value', progress: 100, tone: 'primary' },
+    { label: 'Proposal', count: '68 Deals', value: '$1.2M Value', progress: 75, tone: 'primary' },
+    { label: 'Negotiation', count: '32 Deals', value: '$450k Value', progress: 45, tone: 'accent' },
+    { label: 'Closed Won', count: '15 Deals', value: '$280k Value', progress: 25, tone: 'success' },
+  ]);
+
+  protected readonly recentActivity = signal<readonly ActivityItem[]>([
+    {
+      icon: 'fluent:checkmark-24-regular',
+      tone: 'success',
+      actor: 'Sarah Jenkins',
+      action: 'closed the',
+      subject: 'Acme Corp',
+      time: '2 hours ago - $45,000',
+    },
+    {
+      icon: 'fluent:call-24-regular',
+      tone: 'info',
+      actor: 'Mike Ross',
+      action: 'logged a call with',
+      subject: 'TechGlobal',
+      time: '4 hours ago',
+    },
+    {
+      icon: 'fluent:mail-24-regular',
+      tone: 'warning',
+      actor: 'System',
+      action: 'sent automated follow-up to',
+      subject: '12 leads',
+      time: 'Yesterday at 4:30 PM',
+    },
+    {
+      icon: 'fluent:document-edit-24-regular',
+      tone: 'neutral',
+      actor: 'Amanda Lin',
+      action: 'updated proposal for',
+      subject: 'Beta Innovations',
+      time: 'Yesterday at 2:15 PM',
+    },
+  ]);
+
+  protected readonly taskSummary = signal<readonly TaskItem[]>([
+    { title: 'Q4 Revenue Review', priority: 'High Priority', due: 'Due Tomorrow' },
+    { title: 'Acme Corp Follow-up', priority: 'High Priority', due: 'Oct 24' },
+    { title: 'Regional Lead Meeting', priority: 'Medium Priority', due: 'Oct 26' },
+  ]);
+
+  protected readonly regionalSales = signal<readonly RegionalSale[]>([
+    { region: 'North America', value: '$1.2M', percent: 50 },
+    { region: 'Europe', value: '$0.8M', percent: 33 },
+    { region: 'Asia', value: '$0.4M', percent: 17 },
+  ]);
+
+  protected readonly revenueGrowth = signal([46, 64, 52, 82, 70, 100]);
+  protected readonly revenueMonths = signal(['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct']);
+
+  protected readonly teamUpdates = signal<readonly TeamUpdate[]>([
+    {
+      icon: 'fluent:warning-24-regular',
+      tone: 'alert',
+      title: 'Quota Alert',
+      message: 'Team is at 85% of Q4 goal.',
+    },
+    {
+      icon: 'fluent:comment-24-regular',
+      tone: 'message',
+      title: 'James Miller',
+      message: '"Just updated the Acme docs."',
+    },
+  ]);
+
+  protected readonly dashboardGridConfigs = signal<GridItemConfig[]>([
+    {
+      type: 'dashboard-widget',
+      plain: true,
+      component: () =>
+        import('./corporate-dashboard-widget/corporate-dashboard-widget')
+          .then(component => component.CorporateDashboardWidget),
+    },
+  ]);
+
+  protected readonly dashboardGridItems = computed<GridItem[]>(() => {
+    const metrics = this.dashboardMetrics();
+
+    return [
+      ...metrics.map((metric, index) => ({
+        id: `metric-${index}`,
+        type: 'dashboard-widget',
+        columns: 4,
+        height: '11.75rem',
+        content: {
+          kind: 'metric',
+          metric,
+        },
+      })),
+      {
+        id: 'pipeline',
+        type: 'dashboard-widget',
+        columns: 8,
+        height: '29rem',
+        content: {
+          kind: 'pipeline',
+          stages: this.pipelineStages(),
+        },
+      },
+      {
+        id: 'activity',
+        type: 'dashboard-widget',
+        columns: 4,
+        height: '29rem',
+        content: {
+          kind: 'activity',
+          items: this.recentActivity(),
+        },
+      },
+      {
+        id: 'tasks',
+        type: 'dashboard-widget',
+        columns: 6,
+        height: '22.5rem',
+        content: {
+          kind: 'tasks',
+          items: this.taskSummary(),
+        },
+      },
+      {
+        id: 'regional',
+        type: 'dashboard-widget',
+        columns: 6,
+        height: '22.5rem',
+        content: {
+          kind: 'regional',
+          items: this.regionalSales(),
+        },
+      },
+      {
+        id: 'revenue',
+        type: 'dashboard-widget',
+        columns: 6,
+        height: '17.5rem',
+        content: {
+          kind: 'revenue',
+          values: this.revenueGrowth(),
+          months: this.revenueMonths(),
+        },
+      },
+      {
+        id: 'team',
+        type: 'dashboard-widget',
+        columns: 6,
+        height: '17.5rem',
+        content: {
+          kind: 'team',
+          items: this.teamUpdates(),
+        },
+      },
+    ];
   });
 }

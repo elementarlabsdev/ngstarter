@@ -1,0 +1,182 @@
+@switch (content().kind) {
+  @case ('metric') {
+    @let metric = content().metric;
+    <ngs-card appearance="outlined" class="overview-card metric-card">
+      <ngs-card-header class="metric-card-header">
+        <ngs-card-title class="metric-label">
+          <ngs-icon [name]="metric.icon" />
+          {{ metric.title }}
+        </ngs-card-title>
+        <ngs-card-aside>
+          <ngs-icon [name]="metric.watermark" class="metric-watermark" />
+        </ngs-card-aside>
+      </ngs-card-header>
+      <ngs-card-content withoutPadding class="metric-value">
+        <strong>{{ metric.value }}</strong>
+      </ngs-card-content>
+      <ngs-card-footer class="metric-card-footer">
+        <ngs-chip class="metric-chip" [class.metric-chip-muted]="!metric.positive">
+          <ngs-icon [name]="metric.positive ? 'fluent:arrow-trending-24-regular' : 'fluent:clock-24-regular'" />
+          {{ metric.note }}
+        </ngs-chip>
+      </ngs-card-footer>
+    </ngs-card>
+  }
+
+  @case ('pipeline') {
+    <ngs-card appearance="outlined" class="overview-card pipeline-widget">
+      <ngs-card-header>
+        <h2>Sales Pipeline</h2>
+        <button ngsIconButton aria-label="Pipeline actions" class="ghost-action">
+          <ngs-icon name="fluent:more-horizontal-24-regular" />
+        </button>
+      </ngs-card-header>
+      <ngs-card-content withoutPadding>
+        <div class="pipeline-bars">
+          @for (stage of content().stages; track stage.label) {
+            <div
+              class="pipeline-stage"
+              [class.pipeline-stage-accent]="stage.tone === 'accent'"
+              [class.pipeline-stage-success]="stage.tone === 'success'"
+            >
+              <div class="pipeline-fill">
+                <strong>{{ stage.count }}</strong>
+                <span>{{ stage.label }}</span>
+              </div>
+              <ngs-progress-bar [value]="stage.progress" />
+              <em>{{ stage.value }}</em>
+            </div>
+          }
+        </div>
+      </ngs-card-content>
+    </ngs-card>
+  }
+
+  @case ('activity') {
+    <ngs-card appearance="outlined" class="overview-card activity-widget">
+      <ngs-card-header>
+        <h2>Recent Activity</h2>
+        <button ngsButton="text" class="view-link">View All</button>
+      </ngs-card-header>
+      <ngs-card-content withoutPadding>
+        <ngs-timeline class="activity-timeline">
+          @for (activity of content().items; track activity.actor + activity.subject) {
+            <ngs-timeline-item>
+              <ng-template ngsTimelineItemIndicator>
+                <span
+                  class="activity-indicator"
+                  [class.activity-success]="activity.tone === 'success'"
+                  [class.activity-info]="activity.tone === 'info'"
+                  [class.activity-warning]="activity.tone === 'warning'"
+                  [class.activity-neutral]="activity.tone === 'neutral'"
+                >
+                  <ngs-icon [name]="activity.icon" />
+                </span>
+              </ng-template>
+              <ngs-timeline-title>
+                <strong>{{ activity.actor }}</strong>
+                {{ activity.action }}
+                <span>{{ activity.subject }}</span>
+              </ngs-timeline-title>
+              <ngs-timeline-description>{{ activity.time }}</ngs-timeline-description>
+            </ngs-timeline-item>
+          }
+        </ngs-timeline>
+      </ngs-card-content>
+    </ngs-card>
+  }
+
+  @case ('tasks') {
+    <ngs-card appearance="outlined" class="overview-card task-widget">
+      <ngs-card-header>
+        <h2>Top Task Summary</h2>
+        <ngs-icon name="fluent:important-24-regular" class="section-action-icon" />
+      </ngs-card-header>
+      <ngs-card-content withoutPadding>
+        <ngs-list disableRipple class="task-list">
+          @for (task of content().items; track task.title) {
+            <ngs-list-item [lines]="2" class="task-row">
+              <span ngsListItemIcon class="task-dot"></span>
+              <span ngsListItemTitle>{{ task.title }}</span>
+              <span ngsListItemLine>{{ task.priority }}</span>
+              <span ngsListItemMeta>{{ task.due }}</span>
+            </ngs-list-item>
+          }
+        </ngs-list>
+      </ngs-card-content>
+    </ngs-card>
+  }
+
+  @case ('regional') {
+    <ngs-card appearance="outlined" class="overview-card regional-widget">
+      <ngs-card-header>
+        <h2>Regional Sales</h2>
+        <ngs-icon name="fluent:globe-24-regular" class="section-action-icon" />
+      </ngs-card-header>
+      <ngs-card-content withoutPadding>
+        <div class="regional-list">
+          @for (region of content().items; track region.region) {
+            <div class="regional-row">
+              <div>
+                <strong>{{ region.region }}</strong>
+                <span>{{ region.value }} ({{ region.percent }}%)</span>
+              </div>
+              <ngs-progress-bar [value]="region.percent" />
+            </div>
+          }
+        </div>
+      </ngs-card-content>
+    </ngs-card>
+  }
+
+  @case ('revenue') {
+    <ngs-card appearance="outlined" class="overview-card revenue-widget">
+      <ngs-card-header>
+        <h2>Revenue Growth</h2>
+        <ngs-icon name="fluent:arrow-trending-lines-24-regular" class="section-action-icon" />
+      </ngs-card-header>
+      <ngs-card-content withoutPadding>
+        <ngs-mchart-bar
+          [data]="content().values"
+          [labels]="content().months"
+          [gap]="0.18"
+          [radius]="6"
+          responsive
+          class="revenue-chart"
+        />
+        <div class="revenue-months">
+          @for (month of content().months; track month) {
+            <span>{{ month }}</span>
+          }
+        </div>
+      </ngs-card-content>
+    </ngs-card>
+  }
+
+  @case ('team') {
+    <ngs-card appearance="outlined" class="overview-card team-widget">
+      <ngs-card-header>
+        <h2>Team Updates</h2>
+        <ngs-icon name="fluent:megaphone-24-regular" class="section-action-icon" />
+      </ngs-card-header>
+      <ngs-card-content withoutPadding>
+        <ngs-list disableRipple class="team-list">
+          @for (update of content().items; track update.title) {
+            <ngs-list-item [lines]="2" class="team-row">
+              <span
+                ngsListItemIcon
+                class="team-icon"
+                [class.team-icon-alert]="update.tone === 'alert'"
+                [class.team-icon-message]="update.tone === 'message'"
+              >
+                <ngs-icon [name]="update.icon" />
+              </span>
+              <span ngsListItemTitle>{{ update.title }}</span>
+              <span ngsListItemLine>{{ update.message }}</span>
+            </ngs-list-item>
+          }
+        </ngs-list>
+      </ngs-card-content>
+    </ngs-card>
+  }
+}

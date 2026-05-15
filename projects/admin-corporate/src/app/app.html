@@ -61,10 +61,11 @@
         </ngs-sidenav>
 
         <ngs-sidenav-content>
-          <ngs-scrollbar-area scrollbarWidth="6px" class="corporate-scrollbar">
-            <main class="workspace">
-              <header class="topbar">
+          <ngs-panel class="workspace-panel">
+            <ngs-panel-header autoHeight class="topbar">
+              <ngs-toolbar>
                 <ngs-breadcrumbs-global class="topbar-breadcrumbs" />
+                <ngs-toolbar-spacer />
                 <ngs-form-field subscriptHiddenIfEmpty class="search-field" aria-label="Search">
                   <ngs-icon name="fluent:search-24-regular" ngsIconPrefix />
                   <input ngsInput type="search" placeholder="Search..." />
@@ -131,18 +132,46 @@
                     </button>
                   </ngs-menu>
                 </div>
-              </header>
+              </ngs-toolbar>
+            </ngs-panel-header>
+
+            <ngs-panel-content>
+              <ngs-scrollbar-area [absolute]="true" scrollbarWidth="6px" class="corporate-scrollbar">
               <section class="dashboard">
-                <h1>Hello {{ userName() }}, here is your operations snapshot</h1>
+                <ngs-toolbar class="dashboard-heading">
+                  <ngs-toolbar-title class="dashboard-title">
+                    <h1>Dashboard Overview</h1>
+                    <p>Here's what's happening with your sales pipeline today.</p>
+                  </ngs-toolbar-title>
 
-                
+                  <ngs-toolbar-spacer />
+
+                  <ngs-toolbar-item class="dashboard-actions">
+                    <button ngsButton="outlined" class="period-button">
+                      <ngs-icon name="fluent:calendar-24-regular" />
+                      Last 30 Days
+                    </button>
+                    <button ngsButton="filled" class="export-button">
+                      <ngs-icon name="fluent:arrow-download-24-regular" />
+                      Export Report
+                    </button>
+                  </ngs-toolbar-item>
+                </ngs-toolbar>
+
+                <ngs-grid
+                  [configs]="dashboardGridConfigs()"
+                  [items]="dashboardGridItems()"
+                  plain
+                  class="dashboard-grid"
+                />
               </section>
-            </main>
 
-            <button ngsIconButton aria-label="Open support chat" class="chat-button">
-              <ngs-icon name="fluent:chat-24-filled" />
-            </button>
-          </ngs-scrollbar-area>
+              <button ngsIconButton aria-label="Open support chat" class="chat-button">
+                <ngs-icon name="fluent:chat-24-filled" />
+              </button>
+            </ngs-scrollbar-area>
+          </ngs-panel-content>
+        </ngs-panel>
         </ngs-sidenav-content>
       </ngs-sidenav-container>
     </div>
