@@ -7547,6 +7547,9 @@
         "--ngs-sidebar-divider-margin",
         "--ngs-sidebar-header-compact-padding",
         "--ngs-sidebar-nav-bg",
+        "--ngs-sidebar-nav-compact-icon-padding-start",
+        "--ngs-sidebar-nav-compact-inline-padding",
+        "--ngs-sidebar-nav-compact-item-width",
         "--ngs-sidebar-nav-divider-bg",
         "--ngs-sidebar-nav-divider-height",
         "--ngs-sidebar-nav-divider-margin",
@@ -7611,6 +7614,7 @@
         "--ngs-sidebar-nav-nested-item-indicator-width",
         "--ngs-sidebar-nav-nested-item-margin",
         "--ngs-sidebar-nav-nested-item-padding",
+        "--ngs-sidebar-nav-padding",
         "--ngs-sidebar-width",
         "--ngs-sidenav-collapsed-width"
       ],

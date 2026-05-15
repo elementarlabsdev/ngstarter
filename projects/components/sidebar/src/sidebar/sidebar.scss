@@ -28,6 +28,14 @@
   --ngs-sidebar-nav-item-active-icon-color: var(--ngs-nav-item-active-icon-color);
   --ngs-sidebar-nav-item-icon-size: var(--ngs-nav-item-icon-size);
   --ngs-sidebar-nav-item-gap: var(--ngs-nav-item-gap);
+  --ngs-sidebar-nav-compact-inline-padding: --spacing(3);
+  --ngs-sidebar-nav-compact-item-width: min(
+    var(--ngs-sidebar-nav-item-width),
+    calc(var(--ngs-sidenav-collapsed-width, 74px) - (var(--ngs-sidebar-nav-compact-inline-padding) * 2))
+  );
+  --ngs-sidebar-nav-compact-icon-padding-start: calc(
+    (var(--ngs-sidebar-nav-compact-item-width) - var(--ngs-sidebar-nav-item-icon-width)) / 2
+  );
   --ngs-sidebar-nav-item-has-icon-padding-start: var(--ngs-nav-item-gap);
   --ngs-sidebar-nav-heading-color: var(--ngs-color-emphasis);
   --ngs-sidebar-nav-heading-font-size: var(--ngs-font-size-xs);

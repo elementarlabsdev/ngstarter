@@ -161,7 +161,8 @@
   }
 
   justify-content: flex-start;
-  padding: var(--ngs-sidebar-nav-item-padding);
+  padding-inline-start: var(--ngs-sidebar-nav-compact-icon-padding-start);
+  padding-inline-end: var(--ngs-sidebar-nav-group-toggle-has-icon-padding-end);
   gap: var(--ngs-sidebar-nav-item-gap);
 
   > .flex {

@@ -122,6 +122,14 @@
   }
 }
 
+:host-context(.ngs-sidebar.compact:hover),
+:host-context(.ngs-sidenav.is-collapsed:hover) {
+  .inner {
+    justify-content: flex-start;
+    padding-inline-start: var(--ngs-sidebar-nav-compact-icon-padding-start);
+  }
+}
+
 :host-context(.ngs-sidebar-nav-group-menu) {
   .inner {
     margin: var(--ngs-sidebar-nav-nested-item-margin);
