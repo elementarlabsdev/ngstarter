@@ -18,7 +18,7 @@ import {
 import { SIDEBAR_NAVIGATION } from '../types';
 import { SidebarNavStore } from '../sidebar.store';
 import { SidebarNavGroup } from '../sidebar-nav-group/sidebar-nav-group';
-import { SidebarNavItemDefDirective } from './sidebar-nav-item-def.directive';
+import { SidebarNavItemDefDirective } from '../sidebar-nav-item-def.directive';
 
 @Component({
   selector: 'ngs-sidebar-nav',

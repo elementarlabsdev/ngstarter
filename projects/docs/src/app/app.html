@@ -38,7 +38,9 @@
           </ngs-sidebar-header>
           <ngs-sidebar-body>
             <ngs-scrollbar-area>
-              <ngs-sidebar-nav [activeKey]="activeKey" [dataSource]="navItems" autoScrollToActiveItem class="px-3 py-6">
+              <ngs-sidebar-nav [activeKey]="activeKey"
+                               [dataSource]="navItems"
+                               autoScrollToActiveItem>
                 <ng-container *ngsSidebarNavItemDef="'link'; let navItem">
                   <a ngs-sidebar-nav-item [routerLink]="navItem.link" [key]="navItem.key">
                     @if (navItem.icon) {

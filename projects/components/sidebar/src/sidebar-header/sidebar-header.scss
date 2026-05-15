@@ -2,8 +2,6 @@
 @reference '../../../styles/_common.scss';
 
 :host {
-  --ngs-sidebar-header-compact-padding: --spacing(4) 0;
-
   flex: none;
   width: 100%;
   display: flex;

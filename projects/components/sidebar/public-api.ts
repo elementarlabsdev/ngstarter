@@ -2,7 +2,7 @@ export * from './src/sidebar/sidebar';
 export * from './src/sidebar-header/sidebar-header';
 export * from './src/sidebar-body/sidebar-body';
 export * from './src/sidebar-nav/sidebar-nav';
-export * from './src/sidebar-nav/sidebar-nav-item-def.directive';
+export * from './src/sidebar-nav-item-def.directive';
 export * from './src/sidebar-footer/sidebar-footer';
 export * from './src/sidebar-nav-item/sidebar-nav-item';
 export * from './src/sidebar-nav-group/sidebar-nav-group';
