@@ -10,37 +10,37 @@
           class="corporate-sidebar"
         >
           <ngs-sidebar class="sidebar-panel" aria-label="Corporate navigation">
-            <ngs-sidebar-header class="sidebar-header">
-              <div class="brand-row">
-                <img src="/corporate-logo.png" [alt]="brandName()" class="brand-logo" />
-                <button ngsIconButton aria-label="Collapse sidebar" class="sidebar-collapse">
-                  <ngs-icon name="fluent:panel-left-contract-24-regular" />
-                </button>
-              </div>
+            <ngs-sidebar-header class="justify-between">
+              <img src="/corporate-logo.png" [alt]="brandName()" class="brand-logo" />
+              <button ngsIconButton aria-label="Collapse sidebar" class="sidebar-collapse">
+                <ngs-icon name="fluent:panel-left-contract-24-regular" />
+              </button>
             </ngs-sidebar-header>
 
             <ngs-sidebar-body class="sidebar-body">
-              <ngs-sidebar-nav activeKey="home" class="corporate-nav">
-                @for (section of navSections(); track section.label ?? section.items[0].key) {
-                  @if (!section.stickToBottom) {
-                    @if (section.label) {
-                      <ngs-sidebar-nav-heading class="nav-heading">
-                        {{ section.label }}
-                      </ngs-sidebar-nav-heading>
-                    }
+              <ngs-scrollbar-area>
+                <ngs-sidebar-nav activeKey="home" class="corporate-nav">
+                  @for (section of navSections(); track section.label ?? section.items[0].key) {
+                    @if (!section.stickToBottom) {
+                      @if (section.label) {
+                        <ngs-sidebar-nav-heading class="nav-heading">
+                          {{ section.label }}
+                        </ngs-sidebar-nav-heading>
+                      }
 
-                    @for (item of section.items; track item.key) {
-                      <ngs-sidebar-nav-item [key]="item.key" class="nav-button">
-                        <ngs-icon [name]="item.icon" ngsSidebarNavItemIcon />
-                        {{ item.label }}
-                        @if (item.count) {
-                          <span ngsSidebarNavItemBadge>{{ item.count }}</span>
-                        }
-                      </ngs-sidebar-nav-item>
+                      @for (item of section.items; track item.key) {
+                        <ngs-sidebar-nav-item [key]="item.key" class="nav-button">
+                          <ngs-icon [name]="item.icon" ngsSidebarNavItemIcon />
+                          {{ item.label }}
+                          @if (item.count) {
+                            <span ngsSidebarNavItemBadge>{{ item.count }}</span>
+                          }
+                        </ngs-sidebar-nav-item>
+                      }
                     }
                   }
-                }
-              </ngs-sidebar-nav>
+                </ngs-sidebar-nav>
+              </ngs-scrollbar-area>
             </ngs-sidebar-body>
 
             <ngs-sidebar-footer class="sidebar-footer">
@@ -64,11 +64,11 @@
           <ngs-scrollbar-area scrollbarWidth="6px" class="corporate-scrollbar">
             <main class="workspace">
               <header class="topbar">
-                <div class="topbar-title">Home</div>
-                <label class="search-field" aria-label="Search">
-                  <ngs-icon name="fluent:search-24-regular" />
-                  <input type="search" placeholder="Search..." />
-                </label>
+                <ngs-breadcrumbs-global class="topbar-breadcrumbs" />
+                <ngs-form-field subscriptHiddenIfEmpty class="search-field" aria-label="Search">
+                  <ngs-icon name="fluent:search-24-regular" ngsIconPrefix />
+                  <input ngsInput type="search" placeholder="Search..." />
+                </ngs-form-field>
                 <div class="topbar-actions">
                   <button ngsButton="outlined" class="upgrade-button">
                     <ngs-icon name="fluent:flash-24-filled" />
@@ -93,12 +93,7 @@
                     aria-label="Profile menu"
                     [ngsMenuTriggerFor]="profileMenu"
                   >
-                    <ngs-avatar
-                      [label]="userName()[0]"
-                      class="profile-avatar"
-                      [style.--ngs-avatar-bg]="'#036fe3'"
-                      [style.--ngs-avatar-color]="'#fff'"
-                    />
+                    <ngs-avatar [label]="userName() | initials"/>
                     <ngs-icon name="fluent:chevron-down-24-regular" />
                   </button>
 
@@ -139,260 +134,182 @@
               </header>
 
               <section class="dashboard">
-                <h1>Hello {{ userName() }}, Welcome Back</h1>
+                <h1>Hello {{ userName() }}, here is your operations snapshot</h1>
 
-                <section class="stats-grid" aria-label="Recruitment statistics">
-                  @for (card of stats(); track card.title) {
-                    <ngs-card appearance="outlined" class="metric-card">
-                      <ngs-card-header class="metric-heading">
-                        <span class="metric-title">
-                          <ngs-icon [name]="card.icon" />
-                          {{ card.title }}
-                        </span>
-                        <ngs-card-aside>
-                          <ngs-icon name="fluent:chevron-down-24-regular" />
-                        </ngs-card-aside>
-                      </ngs-card-header>
-                      <ngs-card-content withoutPadding>
-                        <div class="metric-value-row">
-                          <strong>{{ card.value }}</strong>
-                          <span>
-                            <ngs-icon name="fluent:arrow-trending-24-filled" />
-                            {{ card.delta }} <small>vs last week</small>
-                          </span>
-                        </div>
-                        <app-corporate-mini-chart
-                          class="mini-chart"
-                          [data]="card.bars"
-                          [labels]="weekdays"
-                          [peak]="card.peak"
-                        />
-                      </ngs-card-content>
-                    </ngs-card>
-                  }
-                </section>
-
-                <section class="content-grid">
-                  <ngs-card appearance="outlined" class="panel tasks-panel">
+                <section class="operations-grid" aria-label="Customer operations dashboard">
+                  <ngs-card appearance="outlined" class="panel forecast-card">
                     <ngs-card-header class="panel-header">
                       <h2>
-                        <ngs-icon name="fluent:clipboard-task-list-ltr-24-filled" />
-                        Upcoming Task
+                        <ngs-icon name="fluent:chart-multiple-24-filled" />
+                        Revenue Forecast
                       </h2>
                       <ngs-card-aside>
                         <button ngsButton="text" type="button" class="view-more" [reverse]="true">
-                          View more
+                          Open forecast
                           <ngs-icon name="fluent:chevron-right-24-regular" />
                         </button>
                       </ngs-card-aside>
                     </ngs-card-header>
                     <ngs-card-content withoutPadding>
-                    <table ngs-table [dataSource]="tasks()" class="task-table">
-                      <ng-container ngsColumnDef="title">
-                        <th ngs-header-cell *ngsHeaderCellDef>Title</th>
-                        <td ngs-cell *ngsCellDef="let task">
-                          <span class="task-title">
-                            <ngs-checkbox
-                              aria-label="Task completed"
-                              [checked]="!!task.checked"
-                              color="accent"
-                              class="task-checkbox"
-                            />
-                            {{ task.title }}
-                          </span>
-                        </td>
-                      </ng-container>
-
-                      <ng-container ngsColumnDef="owner">
-                        <th ngs-header-cell *ngsHeaderCellDef>Assigned To</th>
-                        <td ngs-cell *ngsCellDef="let task">
-                          <span class="person-cell">
-                            <ngs-avatar
-                              [label]="task.avatar"
-                              class="corporate-avatar"
-                              [style.--ngs-avatar-bg]="avatarColor(task.avatar)"
-                              [style.--ngs-avatar-color]="'#fff'"
-                            />
-                            {{ task.owner }}
-                          </span>
-                        </td>
-                      </ng-container>
-
-                      <ng-container ngsColumnDef="status">
-                        <th ngs-header-cell *ngsHeaderCellDef>Status</th>
-                        <td ngs-cell *ngsCellDef="let task">
-                          <ngs-chip
-                            appearance="filled"
-                            class="status-pill"
-                            [class.status-overdue]="task.status === 'Overdue'"
-                            [class.status-todo]="task.status === 'Todo'"
-                            [class.status-doing]="task.status === 'Doing'"
-                            [style.--ngs-chip-bg]="task.status === 'Overdue' ? '#ffdada' : task.status === 'Doing' ? '#dff0ff' : '#eeeef4'"
-                            [style.--ngs-chip-color]="task.status === 'Overdue' ? '#6c2525' : task.status === 'Doing' ? '#224a72' : '#373945'"
-                          >
-                            {{ task.status }}
-                            <ngs-icon ngsChipControl name="fluent:chevron-down-24-regular" />
-                          </ngs-chip>
-                        </td>
-                      </ng-container>
-
-                      <ng-container ngsColumnDef="dueDate">
-                        <th ngs-header-cell *ngsHeaderCellDef>Due Date</th>
-                        <td ngs-cell *ngsCellDef="let task">{{ task.dueDate }}</td>
-                      </ng-container>
-
-                      <tr ngs-header-row *ngsHeaderRowDef="taskColumns"></tr>
-                      <tr ngs-row *ngsRowDef="let row; columns: taskColumns;"></tr>
-                    </table>
-                      <button ngsButton="text" class="add-task">
-                        <ngs-icon name="fluent:add-24-regular" />
-                        Add task
-                      </button>
+                      <div class="forecast-summary">
+                        <div>
+                          <span>Projected ARR</span>
+                          <strong>{{ forecast().value }}</strong>
+                          <p>{{ forecast().summary }}</p>
+                        </div>
+                        <ngs-chip appearance="filled" class="health-chip health-strong">
+                          {{ forecast().confidence }}
+                        </ngs-chip>
+                      </div>
+                      <div class="forecast-progress">
+                        <span>{{ forecast().progress }}% of quarterly target</span>
+                        <ngs-progress-bar [value]="forecast().progress" />
+                      </div>
+                      <app-corporate-mini-chart
+                        class="forecast-chart"
+                        [data]="forecast().bars"
+                        [labels]="weekdays"
+                        [peak]="forecast().peak"
+                      />
                     </ngs-card-content>
                   </ngs-card>
 
-                  <ngs-card appearance="outlined" class="panel interview-panel">
+                  <ngs-card appearance="outlined" class="panel health-card">
                     <ngs-card-header class="panel-header">
                       <h2>
-                        <ngs-icon name="fluent:person-call-24-filled" />
-                        Upcoming Interview
+                        <ngs-icon name="fluent:heart-pulse-24-filled" />
+                        Account Health
                       </h2>
                       <ngs-card-aside>
                         <button ngsButton="text" type="button" class="view-more" [reverse]="true">
-                          View more
+                          Review
                           <ngs-icon name="fluent:chevron-right-24-regular" />
                         </button>
                       </ngs-card-aside>
                     </ngs-card-header>
                     <ngs-card-content withoutPadding>
-                      <div class="month-tabs">
-                        <button ngsIconButton aria-label="Previous month">
-                          <ngs-icon name="fluent:chevron-left-24-regular" />
-                        </button>
-                        <span>January 2025</span>
-                        <strong>February 2025</strong>
-                        <span>March 2025</span>
-                        <button ngsIconButton aria-label="Next month">
-                          <ngs-icon name="fluent:chevron-right-24-regular" />
-                        </button>
-                      </div>
-                      <div class="interview-list">
-                        @for (interview of interviews(); track interview.day + interview.date + interview.time) {
-                          <div class="interview-row">
-                            <time>
-                              <span>{{ interview.day }}</span>
-                              <strong>{{ interview.date }}</strong>
-                            </time>
-                            <ngs-card
-                              appearance="outlined"
-                              class="interview-card"
-                              [class.accent-green]="interview.accent === 'green'"
-                              [class.accent-blue]="interview.accent === 'blue'"
-                              [class.accent-orange]="interview.accent === 'orange'"
+                      <div class="health-list">
+                        @for (account of accountHealth(); track account.name) {
+                          <div class="health-row">
+                            <ngs-avatar [label]="account.avatar" class="corporate-avatar" />
+                            <div>
+                              <strong>{{ account.name }}</strong>
+                              <span>{{ account.owner }}</span>
+                              <ngs-progress-bar [value]="account.score" />
+                            </div>
+                            <ngs-chip
+                              appearance="filled"
+                              class="health-chip"
+                              [class.health-strong]="account.status === 'Healthy'"
+                              [class.health-watch]="account.status === 'Watch'"
+                              [class.health-risk]="account.status === 'At risk'"
                             >
-                              <strong>{{ interview.time }}</strong>
-                              <span>
-                                <ngs-icon name="fluent:globe-clock-24-regular" />
-                                {{ interview.timezone }}
-                                <ngs-avatar
-                                  [label]="interview.person[0]"
-                                  class="corporate-avatar avatar-small"
-                                  [style.--ngs-avatar-bg]="avatarColor(interview.person[0])"
-                                  [style.--ngs-avatar-color]="'#fff'"
-                                />
-                                {{ interview.person }}
-                              </span>
-                            </ngs-card>
+                              {{ account.status }}
+                            </ngs-chip>
                           </div>
                         }
                       </div>
                     </ngs-card-content>
                   </ngs-card>
 
-                  <ngs-card appearance="outlined" class="panel compact-panel">
+                  <ngs-card appearance="outlined" class="panel pipeline-card">
                     <ngs-card-header class="panel-header">
                       <h2>
-                        <ngs-icon name="fluent:clipboard-checkmark-24-filled" />
-                        Compliance
+                        <ngs-icon name="fluent:flowchart-24-filled" />
+                        Renewal Pipeline
                       </h2>
                       <ngs-card-aside>
                         <button ngsButton="text" type="button" class="view-more" [reverse]="true">
-                          View more
+                          Manage
                           <ngs-icon name="fluent:chevron-right-24-regular" />
                         </button>
                       </ngs-card-aside>
                     </ngs-card-header>
                     <ngs-card-content withoutPadding>
-                      <table ngs-table [dataSource]="compliance()" class="compact-table compliance-table">
-                        <ng-container ngsColumnDef="name">
-                          <th ngs-header-cell *ngsHeaderCellDef>Name</th>
-                          <td ngs-cell *ngsCellDef="let item">
-                            <span class="person-cell">
-                              <ngs-avatar
-                                [label]="item.avatar"
-                                class="corporate-avatar"
-                                [style.--ngs-avatar-bg]="avatarColor(item.avatar)"
-                                [style.--ngs-avatar-color]="'#fff'"
-                              />
-                              {{ item.name }}
-                            </span>
-                          </td>
-                        </ng-container>
-
-                        <ng-container ngsColumnDef="progress">
-                          <th ngs-header-cell *ngsHeaderCellDef>Progress</th>
-                          <td ngs-cell *ngsCellDef="let item">
-                            <span class="progress-cell">
-                              <ngs-progress-bar [value]="item.progress" />
-                              <strong>{{ item.progress }}%</strong>
-                            </span>
-                          </td>
-                        </ng-container>
-
-                        <tr ngs-header-row *ngsHeaderRowDef="complianceColumns"></tr>
-                        <tr ngs-row *ngsRowDef="let row; columns: complianceColumns;"></tr>
-                      </table>
+                      <div class="pipeline-list">
+                        @for (stage of renewalPipeline(); track stage.stage) {
+                          <div class="pipeline-row">
+                            <div>
+                              <strong>{{ stage.stage }}</strong>
+                              <span>{{ stage.accounts }} accounts</span>
+                            </div>
+                            <strong>{{ stage.amount }}</strong>
+                            <ngs-progress-bar [value]="stage.progress" />
+                          </div>
+                        }
+                      </div>
                     </ngs-card-content>
                   </ngs-card>
 
-                  <ngs-card appearance="outlined" class="panel compact-panel">
+                  <ngs-card appearance="outlined" class="panel sla-card">
                     <ngs-card-header class="panel-header">
                       <h2>
-                        <ngs-icon name="fluent:contact-card-24-filled" />
-                        Lastest Applicant
+                        <ngs-icon name="fluent:timer-24-filled" />
+                        SLA Monitor
                       </h2>
                       <ngs-card-aside>
                         <button ngsButton="text" type="button" class="view-more" [reverse]="true">
-                          View more
+                          Details
                           <ngs-icon name="fluent:chevron-right-24-regular" />
                         </button>
                       </ngs-card-aside>
                     </ngs-card-header>
                     <ngs-card-content withoutPadding>
-                      <table ngs-table [dataSource]="applicants()" class="compact-table applicant-table">
-                        <ng-container ngsColumnDef="name">
-                          <th ngs-header-cell *ngsHeaderCellDef>Name</th>
-                          <td ngs-cell *ngsCellDef="let applicant">
-                            <span class="person-cell">
-                              <ngs-avatar
-                                [label]="applicant.avatar"
-                                class="corporate-avatar"
-                                [style.--ngs-avatar-bg]="avatarColor(applicant.avatar)"
-                                [style.--ngs-avatar-color]="'#fff'"
-                              />
-                              {{ applicant.name }}
-                            </span>
-                          </td>
-                        </ng-container>
+                      <div class="sla-grid">
+                        @for (metric of slaMetrics(); track metric.label) {
+                          <div class="sla-tile">
+                            <ngs-icon [name]="metric.icon" />
+                            <span>{{ metric.label }}</span>
+                            <strong>{{ metric.value }}</strong>
+                            <small>{{ metric.target }}</small>
+                          </div>
+                        }
+                      </div>
+                    </ngs-card-content>
+                  </ngs-card>
 
-                        <ng-container ngsColumnDef="job">
-                          <th ngs-header-cell *ngsHeaderCellDef>Job Applied</th>
-                          <td ngs-cell *ngsCellDef="let applicant">{{ applicant.job }}</td>
-                        </ng-container>
+                  <ngs-card appearance="outlined" class="panel adoption-card">
+                    <ngs-card-header class="panel-header">
+                      <h2>
+                        <ngs-icon name="fluent:apps-list-detail-24-filled" />
+                        Product Adoption
+                      </h2>
+                    </ngs-card-header>
+                    <ngs-card-content withoutPadding>
+                      <div class="adoption-list">
+                        @for (product of productAdoption(); track product.name) {
+                          <div class="adoption-row">
+                            <div>
+                              <strong>{{ product.name }}</strong>
+                              <span>{{ product.seats }} seats active</span>
+                            </div>
+                            <span>{{ product.change }}</span>
+                            <ngs-progress-bar [value]="product.progress" />
+                          </div>
+                        }
+                      </div>
+                    </ngs-card-content>
+                  </ngs-card>
 
-                        <tr ngs-header-row *ngsHeaderRowDef="applicantColumns"></tr>
-                        <tr ngs-row *ngsRowDef="let row; columns: applicantColumns;"></tr>
-                      </table>
+                  <ngs-card appearance="outlined" class="panel notes-card">
+                    <ngs-card-header class="panel-header">
+                      <h2>
+                        <ngs-icon name="fluent:note-24-filled" />
+                        Executive Notes
+                      </h2>
+                    </ngs-card-header>
+                    <ngs-card-content withoutPadding>
+                      <div class="note-list">
+                        @for (note of executiveNotes(); track note.title) {
+                          <div class="note-row">
+                            <ngs-icon [name]="note.icon" />
+                            <div>
+                              <strong>{{ note.title }}</strong>
+                              <span>{{ note.description }}</span>
+                            </div>
+                          </div>
+                        }
+                      </div>
                     </ngs-card-content>
                   </ngs-card>
                 </section>

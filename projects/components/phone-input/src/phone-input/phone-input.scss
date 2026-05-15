@@ -9,7 +9,8 @@
   }
 
   .flag-icon {
-    margin-inline-end: --spacing(2);
+    margin-inline-end: --spacing(1);
+    --ngs-icon-size: 20px;
   }
 
   &.is-floating {
@@ -21,7 +22,6 @@
   .phone-input-container {
     display: flex;
     align-items: center;
-    height: var(--ngs-phone-input-height, 24px);
   }
 
   input {
@@ -48,12 +48,11 @@
   .country-selector {
     display: flex;
     align-items: center;
+    line-height: 0;
     border-radius: 0;
     color: var(--ngs-phone-input-color);
     flex-shrink: 0;
     height: initial;
-    line-height: unset;
-    padding: 1px;
     opacity: var(--ngs-phone-input-opacity, 0);
     transition: opacity 200ms;
     border: unset;

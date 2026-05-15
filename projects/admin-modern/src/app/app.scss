@@ -199,13 +199,6 @@ ngs-form-field {
   color: #263342;
 }
 
-.profile-avatar {
-  --ngs-avatar-size: --spacing(11);
-  --ngs-avatar-bg: linear-gradient(135deg, #f08a52, #0f1720 72%);
-  --ngs-avatar-color: #ffffff;
-  --ngs-avatar-font-weight: 700;
-}
-
 ::ng-deep .modern-header-menu {
   min-width: --spacing(72);
   max-width: --spacing(82);

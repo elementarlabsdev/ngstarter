@@ -6,17 +6,18 @@
   --ngs-form-field-border-width: var(--ngs-field-border-width);
   --ngs-form-field-border-radius: var(--ngs-field-radius);
   --ngs-form-field-padding-x: var(--ngs-field-padding-x);
-  --ngs-form-field-padding-y: 1.75rem;
   --ngs-form-field-bg: var(--ngs-field-bg);
   --ngs-form-field-disabled-bg: var(--ngs-field-disabled-bg);
   --ngs-form-field-label-color: var(--ngs-field-label-color);
   --ngs-form-field-error-color: var(--ngs-field-error-color);
-  --ngs-form-field-container-min-height: var(--ngs-field-container-height);
-  --ngs-form-field-infix-min-height: var(--ngs-field-infix-height);
+  --ngs-form-field-container-min-height: var(--ngs-field-height, var(--ngs-field-container-height));
   --ngs-form-field-input-height: var(--ngs-field-input-height);
-  --ngs-form-field-infix-padding-top: var(--ngs-field-infix-padding-top);
-  --ngs-form-field-infix-padding-bottom: var(--ngs-field-infix-padding-bottom);
-  --ngs-form-field-no-label-padding-y: var(--ngs-field-no-label-padding-y);
+  --ngs-form-field-infix-padding-bottom: max(0.125rem, calc(var(--ngs-form-field-container-min-height) * 0.16));
+  --ngs-form-field-infix-padding-top: max(
+    0px,
+    calc(var(--ngs-form-field-container-min-height) - var(--ngs-form-field-input-height) - var(--ngs-form-field-infix-padding-bottom))
+  );
+  --ngs-form-field-no-label-padding-y: var(--ngs-form-field-infix-padding-bottom);
 
   display: block;
   width: var(--ngs-form-field-width, 100%);
@@ -110,7 +111,7 @@
     padding: var(--ngs-form-field-infix-padding-top) 0 var(--ngs-form-field-infix-padding-bottom) 0;
     min-width: 0;
     height: 100%;
-    min-height: var(--ngs-form-field-infix-min-height);
+    min-height: var(--ngs-form-field-container-min-height);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -130,7 +131,7 @@
 
     .ngs-form-field-infix {
       height: auto;
-      min-height: calc(var(--ngs-form-field-infix-min-height) - 2px);
+      min-height: calc(var(--ngs-form-field-container-min-height) - 2px);
       overflow: visible;
     }
 
@@ -142,15 +143,24 @@
   }
 
   &:not(.ngs-form-field-has-label) {
-    .ngs-form-field-infix {
+    .ngs-form-field-infix,
+    .ngs-form-field-affix {
+      box-sizing: border-box;
       padding: var(--ngs-form-field-no-label-padding-y) 0;
-      display: flex;
-      justify-content: center;
     }
 
-    .ngs-form-field-text-prefix,
-    .ngs-form-field-text-suffix {
-      padding: var(--ngs-form-field-no-label-padding-y) 0;
+    .ngs-form-field-affix {
+      --ngs-button-height: calc(
+        var(--ngs-form-field-container-min-height) -
+        var(--ngs-form-field-no-label-padding-y) -
+        var(--ngs-form-field-no-label-padding-y)
+      );
+      height: 100%;
+    }
+
+    .ngs-form-field-infix {
+      display: flex;
+      justify-content: center;
     }
   }
 
@@ -294,6 +304,10 @@
   }
 
   .ngs-form-field-affix {
+    --ngs-button-height: var(
+      --ngs-form-field-affix-button-height,
+      calc(var(--ngs-form-field-container-min-height) - 2px)
+    );
     display: flex;
     align-items: center;
   }

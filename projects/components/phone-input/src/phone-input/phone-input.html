@@ -3,7 +3,7 @@
     type="button"
     ngsRipple
     [ngsMenuTriggerFor]="menu"
-    class="country-selector"
+    class="country-selector pe-1.5"
     [disabled]="disabled"
     (menuOpened)="menuSearchInput()?.nativeElement?.focus()">
     @if (selectedCountry()) {
@@ -13,7 +13,7 @@
         <span class="country-selector-code">{{ selectedCountry()?.phoneCode }}</span>
       }
     }
-    <ngs-icon name="fluent:chevron-down-24-regular" class="!text-lg text-neutral-500 relative -top-px"/>
+    <ngs-icon name="fluent:chevron-down-24-regular" class="text-neutral-500 size-4 relative -top-px ms-0.5"/>
   </button>
   <input
     ngsInput

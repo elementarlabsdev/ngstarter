@@ -1,13 +1,18 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 import { Badge } from '@ngstarter-ui/components/badge';
+import { BreadcrumbsGlobal, BreadcrumbsStore } from '@ngstarter-ui/components/breadcrumbs';
 import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardAside, CardContent, CardHeader } from '@ngstarter-ui/components/card';
-import { Checkbox } from '@ngstarter-ui/components/checkbox';
-import { Chip, ChipControl } from '@ngstarter-ui/components/chips';
+import { Chip } from '@ngstarter-ui/components/chips';
+import { InitialsPipe } from '@ngstarter-ui/components/core';
+import { FormField, IconPrefix } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
+import { Input } from '@ngstarter-ui/components/input';
 import { Layout, LayoutContent } from '@ngstarter-ui/components/layout';
 import { Menu, MenuDivider, MenuHeading, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
+import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
+import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import {
   Sidebar,
   SidebarBody,
@@ -19,21 +24,7 @@ import {
   SidebarNavItemBadgeDirective,
   SidebarNavItemIconDirective,
 } from '@ngstarter-ui/components/sidebar';
-import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
-import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import { Sidenav, SidenavContainer, SidenavContent } from '@ngstarter-ui/components/sidenav';
-import {
-  Cell,
-  CellDef,
-  ColumnDef,
-  HeaderCell,
-  HeaderCellDef,
-  HeaderRow,
-  HeaderRowDef,
-  Row,
-  RowDef,
-  Table,
-} from '@ngstarter-ui/components/table';
 import { CorporateMiniChart } from './corporate-mini-chart/corporate-mini-chart';
 
 interface NavItem {
@@ -49,43 +40,48 @@ interface NavSection {
   readonly items: readonly NavItem[];
 }
 
-interface StatCard {
-  readonly title: string;
-  readonly icon: string;
+interface ForecastSummary {
   readonly value: string;
-  readonly delta: string;
+  readonly summary: string;
+  readonly confidence: string;
+  readonly progress: number;
   readonly bars: readonly number[];
   readonly peak?: number;
 }
 
-interface Task {
-  readonly title: string;
+interface AccountHealth {
+  readonly name: string;
   readonly owner: string;
   readonly avatar: string;
-  readonly status: 'Overdue' | 'Todo' | 'Doing';
-  readonly dueDate: string;
-  readonly checked?: boolean;
+  readonly score: number;
+  readonly status: 'Healthy' | 'Watch' | 'At risk';
 }
 
-interface ComplianceItem {
-  readonly name: string;
-  readonly avatar: string;
+interface RenewalStage {
+  readonly stage: string;
+  readonly accounts: number;
+  readonly amount: string;
   readonly progress: number;
 }
 
-interface Applicant {
-  readonly name: string;
-  readonly avatar: string;
-  readonly job: string;
+interface SlaMetric {
+  readonly label: string;
+  readonly icon: string;
+  readonly value: string;
+  readonly target: string;
 }
 
-interface Interview {
-  readonly day: string;
-  readonly date: string;
-  readonly time: string;
-  readonly timezone: string;
-  readonly person: string;
-  readonly accent: 'primary' | 'green' | 'blue' | 'orange';
+interface ProductAdoption {
+  readonly name: string;
+  readonly seats: string;
+  readonly change: string;
+  readonly progress: number;
+}
+
+interface ExecutiveNote {
+  readonly title: string;
+  readonly description: string;
+  readonly icon: string;
 }
 
 @Component({
@@ -93,16 +89,19 @@ interface Interview {
   imports: [
     Avatar,
     Badge,
+    BreadcrumbsGlobal,
     Button,
     Card,
     CardAside,
     CardContent,
     CardHeader,
-    Checkbox,
     Chip,
-    ChipControl,
     CorporateMiniChart,
+    FormField,
     Icon,
+    IconPrefix,
+    InitialsPipe,
+    Input,
     Layout,
     LayoutContent,
     Menu,
@@ -110,16 +109,7 @@ interface Interview {
     MenuHeading,
     MenuItem,
     MenuTrigger,
-    Cell,
-    CellDef,
-    ColumnDef,
-    HeaderCell,
-    HeaderCellDef,
-    HeaderRow,
-    HeaderRowDef,
     ProgressBar,
-    Row,
-    RowDef,
     ScrollbarArea,
     Sidebar,
     SidebarBody,
@@ -133,231 +123,127 @@ interface Interview {
     Sidenav,
     SidenavContainer,
     SidenavContent,
-    Table,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
+  private readonly _breadcrumbsStore = inject(BreadcrumbsStore);
+
   protected readonly brandName = signal('Corporate');
-  protected readonly userName = signal('Virgil Varelino');
+  protected readonly userName = signal('Pavel Sal');
+
+  constructor() {
+    this._breadcrumbsStore.setBreadcrumbs([
+      {
+        id: 'home',
+        name: 'Dashboard',
+        type: null,
+      },
+    ]);
+  }
 
   protected readonly navSections = signal<readonly NavSection[]>([
     {
       items: [
-        { key: 'home', label: 'Home', icon: 'fluent:home-24-filled' },
-        { key: 'calendar', label: 'Calendar', icon: 'fluent:calendar-ltr-24-regular', count: 16 },
-        { key: 'task', label: 'Task', icon: 'fluent:clipboard-task-24-regular', count: 40 },
+        { key: 'home', label: 'Dashboard', icon: 'fluent:grid-24-filled' },
+        { key: 'inbox', label: 'Work Queue', icon: 'fluent:tray-item-add-24-regular', count: 18 },
+        { key: 'calendar', label: 'Schedule', icon: 'fluent:calendar-ltr-24-regular', count: 9 },
       ],
     },
     {
-      label: 'Talent & Recruitment',
+      label: 'Customer Operations',
       items: [
-        { key: 'jobs', label: 'Jobs', icon: 'fluent:briefcase-24-regular', count: 120 },
-        { key: 'interviews', label: 'Interviews', icon: 'fluent:person-feedback-24-regular', count: 42 },
-        { key: 'offers', label: 'Offers', icon: 'fluent:document-signature-24-regular', count: 20 },
-        { key: 'visa', label: 'Visa', icon: 'fluent:card-ui-24-regular', count: 14 },
-        { key: 'candidates', label: 'Candidates', icon: 'fluent:people-community-24-regular', count: 42 },
+        { key: 'accounts', label: 'Accounts', icon: 'fluent:building-people-24-regular', count: 64 },
+        { key: 'success-plans', label: 'Success Plans', icon: 'fluent:target-arrow-24-regular', count: 28 },
+        { key: 'renewals', label: 'Renewals', icon: 'fluent:document-sync-24-regular', count: 17 },
+        { key: 'support', label: 'Support Queue', icon: 'fluent:headset-24-regular', count: 31 },
+        { key: 'feedback', label: 'Product Feedback', icon: 'fluent:chat-multiple-24-regular', count: 12 },
       ],
     },
     {
-      label: 'Internal',
+      label: 'Revenue',
       items: [
-        { key: 'staff', label: 'Staff', icon: 'fluent:person-24-regular' },
-        { key: 'compliance', label: 'Compliance', icon: 'fluent:shield-task-24-regular' },
-        {
-          key: 'onboarding',
-          label: 'Onboarding & Offboarding',
-          icon: 'fluent:people-swap-24-regular',
-        },
-        { key: 'training', label: 'Training', icon: 'fluent:learning-app-24-regular' },
+        { key: 'pipeline', label: 'Pipeline', icon: 'fluent:chart-multiple-24-regular', count: 48 },
+        { key: 'forecast', label: 'Forecast', icon: 'fluent:arrow-trending-24-regular' },
+        { key: 'contracts', label: 'Contracts', icon: 'fluent:document-signature-24-regular', count: 22 },
+        { key: 'invoices', label: 'Invoices', icon: 'fluent:receipt-money-24-regular', count: 8 },
       ],
     },
     {
-      label: 'Management',
+      label: 'Company',
       items: [
-        { key: 'report', label: 'Report', icon: 'fluent:chart-multiple-24-regular' },
-        { key: 'users', label: 'Users', icon: 'fluent:people-team-24-regular' },
-        { key: 'settings', label: 'Compliance Settings', icon: 'fluent:settings-24-regular' },
-        { key: 'agency', label: 'Agency', icon: 'fluent:building-24-regular' },
-        { key: 'career', label: 'Career Site', icon: 'fluent:window-apps-24-regular' },
+        { key: 'teams', label: 'Teams', icon: 'fluent:people-team-24-regular' },
+        { key: 'knowledge', label: 'Knowledge Base', icon: 'fluent:book-open-24-regular' },
+        { key: 'automation', label: 'Automation', icon: 'fluent:flowchart-24-regular' },
+        { key: 'security', label: 'Security', icon: 'fluent:shield-keyhole-24-regular' },
+        { key: 'analytics', label: 'Analytics', icon: 'fluent:data-pie-24-regular' },
       ],
     },
     {
       stickToBottom: true,
       items: [
         { key: 'preferences', label: 'Preferences', icon: 'fluent:options-24-regular' },
-        { key: 'help', label: 'Help & Support', icon: 'fluent:headphones-24-regular' },
+        { key: 'help', label: 'Help Center', icon: 'fluent:question-circle-24-regular' },
       ],
     },
   ]);
 
-  protected readonly stats = signal<readonly StatCard[]>([
-    {
-      title: 'Total Candidates',
-      icon: 'fluent:people-team-24-filled',
-      value: '421',
-      delta: '12%',
-      bars: [34, 58, 46, 72, 56, 78, 92],
-      peak: 59,
-    },
-    {
-      title: 'Candidate Interviewed',
-      icon: 'fluent:person-call-24-filled',
-      value: '240',
-      delta: '12%',
-      bars: [30, 66, 52, 82, 54, 84, 44],
-    },
-    {
-      title: 'Active Jobs',
-      icon: 'fluent:briefcase-24-filled',
-      value: '124',
-      delta: '12%',
-      bars: [30, 44, 42, 70, 84, 56, 78],
-    },
-    {
-      title: 'Offer Accepted',
-      icon: 'fluent:mail-inbox-checkmark-24-filled',
-      value: '210',
-      delta: '12%',
-      bars: [30, 46, 42, 48, 62, 78, 90],
-    },
+  protected readonly forecast = signal<ForecastSummary>({
+    value: '$1.18M',
+    summary: 'Forecast is tracking above plan with expansion concentrated in enterprise accounts.',
+    confidence: 'High confidence',
+    progress: 78,
+    bars: [46, 52, 48, 61, 70, 74, 82],
+    peak: 74,
+  });
+
+  protected readonly accountHealth = signal<readonly AccountHealth[]>([
+    { name: 'Acme Logistics', owner: 'Maya Chen', avatar: 'A', score: 88, status: 'Healthy' },
+    { name: 'Northwind Health', owner: 'Noah Reed', avatar: 'N', score: 62, status: 'Watch' },
+    { name: 'Helio Energy', owner: 'Leah Park', avatar: 'H', score: 42, status: 'At risk' },
+    { name: 'Orbit Retail', owner: 'Iris Morgan', avatar: 'O', score: 74, status: 'Healthy' },
   ]);
 
-  protected readonly tasks = signal<readonly Task[]>([
-    {
-      title: 'Join the Teacher Growth Workshop',
-      owner: 'John Freed',
-      avatar: 'J',
-      status: 'Overdue',
-      dueDate: 'Fri, 14 Feb',
-    },
-    {
-      title: 'Get Midterm Materials Ready',
-      owner: 'Panji Dwi',
-      avatar: 'P',
-      status: 'Todo',
-      dueDate: 'Thu, 13 Feb',
-      checked: true,
-    },
-    {
-      title: 'Interview feedback for JC',
-      owner: 'Luca Modric',
-      avatar: 'L',
-      status: 'Doing',
-      dueDate: 'Wed, 12 Feb',
-    },
-    {
-      title: 'Update Student Progress Reports',
-      owner: 'Yahyo',
-      avatar: 'Y',
-      status: 'Doing',
-      dueDate: 'Wed, 12 Feb',
-    },
-    {
-      title: 'Catch Up with the Curriculum Team',
-      owner: 'Aditya Irawan',
-      avatar: 'A',
-      status: 'Doing',
-      dueDate: 'Thu, 13 Feb',
-      checked: true,
-    },
+  protected readonly renewalPipeline = signal<readonly RenewalStage[]>([
+    { stage: 'Discovery', accounts: 18, amount: '$312K', progress: 36 },
+    { stage: 'Proposal', accounts: 11, amount: '$486K', progress: 58 },
+    { stage: 'Legal', accounts: 7, amount: '$271K', progress: 72 },
+    { stage: 'Committed', accounts: 5, amount: '$426K', progress: 91 },
   ]);
 
-  protected readonly compliance = signal<readonly ComplianceItem[]>([
-    { name: 'Tea Assiddiq', avatar: 'T', progress: 50 },
-    { name: 'Rizki Kurniawan', avatar: 'R', progress: 25 },
-    { name: 'Taufik Hidayat', avatar: 'T', progress: 80 },
-    { name: 'Mufti Hidayat', avatar: 'M', progress: 25 },
-    { name: 'Wildan Athok', avatar: 'W', progress: 10 },
+  protected readonly slaMetrics = signal<readonly SlaMetric[]>([
+    { label: 'First response', icon: 'fluent:timer-24-regular', value: '14m', target: 'Target 20m' },
+    { label: 'Resolution', icon: 'fluent:checkmark-circle-24-regular', value: '91%', target: 'Target 88%' },
+    { label: 'Backlog', icon: 'fluent:tray-item-add-24-regular', value: '38', target: 'Down 12%' },
+    { label: 'Escalations', icon: 'fluent:warning-24-regular', value: '12', target: '3 critical' },
   ]);
 
-  protected readonly applicants = signal<readonly Applicant[]>([
-    { name: 'Liam Carter', avatar: 'L', job: 'IT Support for School' },
-    { name: 'Aditya Irawan', avatar: 'A', job: 'Math Teacher' },
-    { name: 'Jamal Mahfud', avatar: 'J', job: 'IT Support for School' },
-    { name: 'Mason Turner', avatar: 'M', job: 'School Administrator' },
-    { name: 'Panji Dwi', avatar: 'P', job: 'Teacher Assistant' },
+  protected readonly productAdoption = signal<readonly ProductAdoption[]>([
+    { name: 'Workflow Builder', seats: '1,284', change: '+18%', progress: 82 },
+    { name: 'Analytics Studio', seats: '944', change: '+11%', progress: 68 },
+    { name: 'Automation Rules', seats: '718', change: '+7%', progress: 54 },
+    { name: 'Client Portal', seats: '1,502', change: '+24%', progress: 91 },
   ]);
 
-  protected readonly interviews = signal<readonly Interview[]>([
+  protected readonly executiveNotes = signal<readonly ExecutiveNote[]>([
     {
-      day: 'Thu',
-      date: '17',
-      time: '09:00AM - 10:00AM',
-      timezone: 'GMT+8',
-      person: 'Ahmad Zainy',
-      accent: 'orange',
+      title: 'Finance cohort needs pricing review',
+      description: 'Three strategic renewals need guardrail approval before Friday.',
+      icon: 'fluent:money-24-regular',
     },
     {
-      day: 'Thu',
-      date: '17',
-      time: '11:00AM - 12:00AM',
-      timezone: 'GMT+7',
-      person: 'Yahyo',
-      accent: 'green',
+      title: 'Support volume moved to stable',
+      description: 'Automation deflected 212 low-priority tickets this week.',
+      icon: 'fluent:bot-24-regular',
     },
     {
-      day: 'Thu',
-      date: '17',
-      time: '01:00PM - 02:00PM',
-      timezone: 'GMT+9',
-      person: 'Tea Assiddiq',
-      accent: 'blue',
-    },
-    {
-      day: 'Sat',
-      date: '18',
-      time: '11:00AM - 12:00AM',
-      timezone: 'GMT+1',
-      person: 'Ahmad Zainy',
-      accent: 'green',
-    },
-    {
-      day: 'Tue',
-      date: '19',
-      time: '01:00PM - 02:00PM',
-      timezone: 'GMT+8',
-      person: 'Panji Dwi',
-      accent: 'green',
-    },
-    {
-      day: 'Tue',
-      date: '19',
-      time: '02:00PM - 03:00PM',
-      timezone: 'GMT+8',
-      person: 'Panji Dwi',
-      accent: 'blue',
-    },
-    {
-      day: 'Wed',
-      date: '20',
-      time: '09:00AM - 10:00AM',
-      timezone: 'GMT+10',
-      person: 'Tea Assiddiq',
-      accent: 'orange',
+      title: 'Enterprise adoption is ahead of plan',
+      description: 'Client Portal usage reached a new weekly high across tier-one accounts.',
+      icon: 'fluent:rocket-24-regular',
     },
   ]);
 
   protected readonly weekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'] as const;
-  protected readonly taskColumns = ['title', 'owner', 'status', 'dueDate'] as const;
-  protected readonly complianceColumns = ['name', 'progress'] as const;
-  protected readonly applicantColumns = ['name', 'job'] as const;
-
-  protected avatarColor(label: string): string {
-    const colors: Record<string, string> = {
-      A: '#38aeea',
-      J: '#38aeea',
-      L: '#35ad70',
-      M: '#036fe3',
-      P: '#38aeea',
-      R: '#036fe3',
-      T: '#35ad70',
-      W: '#35ad70',
-      Y: '#036fe3',
-    };
-
-    return colors[label] ?? '#036fe3';
-  }
 }
