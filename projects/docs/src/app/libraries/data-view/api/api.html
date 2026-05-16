@@ -1,0 +1,187 @@
+<p class="docs-seo-intro mb-6 text-base leading-7 text-neutral-600">
+  The NgStarter Angular Data View API documents the inputs, outputs, configuration providers, directives, and TypeScript interfaces used to build sortable, filterable, selectable, paginated, and server-driven Angular data grids.
+</p>
+
+<p>
+  Import Data View from <code>&#64;ngstarter-ui/components/data-view</code>. Configure columns with
+  <code>DataViewColumnDef</code>, pass local records through <code>data</code>, or use
+  <code>DataViewDatasource</code> with <code>rowModelType="serverSide"</code> for backend paging, sorting, and filtering.
+</p>
+
+<h3>Data View Inputs</h3>
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="properties">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <div [innerHTML]="element.name"></div>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <code class="text-xs">{{ element.type }}</code>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="default">
+      <th ngs-header-cell *ngsHeaderCellDef>Default</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <code class="text-xs">{{ element.default }}</code>
+      </td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+<h3>Outputs</h3>
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="outputs">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Event</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <code class="text-xs">{{ element.name }}</code>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Payload</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <code class="text-xs">{{ element.type }}</code>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="default">
+      <th ngs-header-cell *ngsHeaderCellDef>When</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+<h3>Column Definition</h3>
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="columnProperties">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <div [innerHTML]="element.name"></div>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <code class="text-xs">{{ element.type }}</code>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="default">
+      <th ngs-header-cell *ngsHeaderCellDef>Default</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <code class="text-xs">{{ element.default }}</code>
+      </td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+<h3>Server-side Datasource</h3>
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="datasourceProperties">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">API</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <code class="text-xs">{{ element.name }}</code>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <code class="text-xs">{{ element.type }}</code>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="default">
+      <th ngs-header-cell *ngsHeaderCellDef>Notes</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+<h3>Public API and Templates</h3>
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="publicApis">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">API</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <code class="text-xs">{{ element.name }}</code>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <code class="text-xs">{{ element.type }}</code>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="default">
+      <th ngs-header-cell *ngsHeaderCellDef>Usage</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+<h3>Global Configuration</h3>
+<p>
+  Use <code>provideDataView(config)</code> to set defaults for Data View instances in an Angular app. Component inputs
+  override provider defaults for a specific grid.
+</p>
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="configProperties">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Config</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <code class="text-xs">{{ element.name }}</code>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <code class="text-xs">{{ element.type }}</code>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="default">
+      <th ngs-header-cell *ngsHeaderCellDef>Default</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <code class="text-xs">{{ element.default }}</code>
+      </td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

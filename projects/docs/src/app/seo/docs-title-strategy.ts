@@ -126,6 +126,27 @@ const LIBRARY_TITLES: Record<string, SeoTitleConfig> = {
   'visual-builder': { label: 'Visual Builder', detail: 'Drag and Drop UI Building' },
 };
 
+const DATA_VIEW_EXAMPLE_TITLES: Record<string, SeoTitleConfig> = {
+  'basic-dataview': { label: 'Data View Basic', detail: 'Client-side Angular Data Grid' },
+  'column-pinning': { label: 'Data View Column Pinning', detail: 'Pinned Columns for Wide Tables' },
+  'column-settings': { label: 'Data View Column Settings', detail: 'Visibility, Order, and Pinning' },
+  'custom-cell-renderers': { label: 'Data View Custom Cell Renderers', detail: 'Rich Angular Grid Cells' },
+  'custom-empty-state': { label: 'Data View Custom Empty State', detail: 'No Data and No Results UI' },
+  embedded: { label: 'Data View Embedded', detail: 'Compact Grids in Panels and Cards' },
+  'filter-data': { label: 'Data View Filtering', detail: 'Search and Filtered Results' },
+  'loading-state': { label: 'Data View Loading State', detail: 'Grid Loading and Refresh Feedback' },
+  'pinning-pagination': { label: 'Data View Pinning and Pagination', detail: 'Wide Paginated Tables' },
+  refresh: { label: 'Data View Refresh', detail: 'Client and Server Data Reloading' },
+  'resizable-columns': { label: 'Data View Resizable Columns', detail: 'Adjustable Grid Column Widths' },
+  'server-side-empty-state': { label: 'Data View Server-side Empty State', detail: 'Empty API Responses' },
+  'server-side': { label: 'Data View Server-side', detail: 'Backend Pagination, Sorting, and Filtering' },
+  'sticky-columns': { label: 'Data View Sticky Columns', detail: 'Horizontal Scrolling Tables' },
+  'with-action-bar': { label: 'Data View Action Bar', detail: 'Row Actions for Admin Tables' },
+  'with-pagination': { label: 'Data View Pagination', detail: 'Paged Angular Grid Records' },
+  'with-selection': { label: 'Data View Selection', detail: 'Row Selection and Bulk Actions' },
+  'with-sorting': { label: 'Data View Sorting', detail: 'Sortable Angular Grid Columns' },
+};
+
 const MICRO_CHART_TITLES: Record<string, SeoTitleConfig> = {
   'bar-chart': { label: 'Bar Chart', detail: 'Compact Comparisons' },
   'line-chart': { label: 'Line Chart', detail: 'Sparkline Trends' },
@@ -176,6 +197,10 @@ export class DocsTitleStrategy extends TitleStrategy {
     if (section === 'libraries') {
       if (!slug) {
         return this.withSiteTitle('Angular UI Libraries', 'Data Grids, Editors, and Builders');
+      }
+
+      if (slug === 'data-view' && segments[2] && segments[2] !== 'api') {
+        return this.catalogTitle(segments[2], DATA_VIEW_EXAMPLE_TITLES, 'Example', false);
       }
 
       return this.catalogTitle(slug, LIBRARY_TITLES, 'Library', isApi);

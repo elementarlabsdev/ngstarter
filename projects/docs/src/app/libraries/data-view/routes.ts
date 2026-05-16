@@ -2,11 +2,6 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: '',
-    loadComponent: () => import('./overview/overview').then(c => c.Overview),
-    title: 'Data View'
-  },
-  {
     path: 'basic-dataview',
     loadComponent: () => import('./basic-dataview/basic-dataview').then(c => c.BasicDataview),
     title: 'Data View / Basic Dataview'
@@ -95,5 +90,23 @@ export const routes: Routes = [
     path: 'with-selection',
     loadComponent: () => import('./with-selection/with-selection').then(c => c.DataviewWithSelection),
     title: 'Data View / With Selection'
+  },
+  {
+    path: '',
+    loadComponent: () => import('./common/common').then(c => c.Common),
+    title: 'Data View',
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        loadComponent: () => import('./overview/overview').then(c => c.Overview),
+        title: 'Data View / Overview'
+      },
+      {
+        path: 'api',
+        loadComponent: () => import('./api/api').then(c => c.Api),
+        title: 'Data View / Api'
+      },
+    ]
   },
 ];

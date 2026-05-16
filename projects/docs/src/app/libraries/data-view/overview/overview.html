@@ -1,117 +1,12 @@
-<app-page>
-  <h1 appPageTitle>Data View</h1>
-  <div appPageContent>
-    <main class="mb-10">
-      <p class="docs-seo-intro mb-6 text-base leading-7 text-neutral-600">
-        The NgStarter Angular Data View component lets you build operational data grids for records that users need to inspect, organize, select, and act on. Use for datatables and working data surfaces in admin screens, CRM and ERP records, users, orders, invoices, logs, tasks, assets, and any dataset where the table is the main interactive work surface. It includes examples for Data View, Basic data view, Data view with selection, and Data view with pagination.
-      </p>
-
-      <p>
-        Data View is an operational data grid for records that users need to inspect, organize, select, and act on.
-        Build it with <code>columnDefs</code> and either local <code>data</code> or a server-side <code>datasource</code>.
-        It supports sorting, search/filter state, pagination, row selection, loading states, empty states, column
-        resizing, column visibility, column order, pinned or sticky columns, custom cell renderers, refresh, and an
-        optional action bar.
-      </p>
-
-      <p>
-        Use Data View for admin screens, CRM and ERP records, users, orders, invoices, logs, tasks, assets, and any
-        dataset where the table is the main work surface. Use the simpler Table component for small static tables or
-        read-only tabular content that does not need row selection, column operations, pagination, server loading, or
-        custom cell behavior.
-      </p>
-    </main>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <a routerLink="basic-dataview" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Basic data view</h3>
-        <p class="text-secondary mb-0">Simple tabular data presentation with essential features.</p>
-      </a>
-
-      <a routerLink="with-selection" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Data view with selection</h3>
-        <p class="text-secondary mb-0">Allow users to select rows for further actions.</p>
-      </a>
-
-      <a routerLink="with-pagination" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Data view with pagination</h3>
-        <p class="text-secondary mb-0">Navigate through large datasets with ease.</p>
-      </a>
-
-      <a routerLink="embedded" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Embedded data view</h3>
-        <p class="text-secondary mb-0">Data view integrated into other components or containers.</p>
-      </a>
-
-      <a routerLink="with-sorting" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Data view with sorting</h3>
-        <p class="text-secondary mb-0">Quickly sort columns to organize data.</p>
-      </a>
-
-      <a routerLink="resizable-columns" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Data view with resizable columns</h3>
-        <p class="text-secondary mb-0">Adjust column widths to suit user preferences.</p>
-      </a>
-
-      <a routerLink="column-settings" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Data view with column settings</h3>
-        <p class="text-secondary mb-0">Manage column visibility and ordering.</p>
-      </a>
-
-      <a routerLink="column-pinning" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Data view with column pinning</h3>
-        <p class="text-secondary mb-0">Pin important columns for easy reference.</p>
-      </a>
-
-      <a routerLink="pinning-pagination" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Data view with column pinning and pagination</h3>
-        <p class="text-secondary mb-0">Combine pinning and pagination for better usability.</p>
-      </a>
-
-      <a routerLink="custom-cell-renderers" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Data view with custom cell renderers</h3>
-        <p class="text-secondary mb-0">Customize how data is displayed within cells.</p>
-      </a>
-
-      <a routerLink="with-action-bar" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Data view with action bar</h3>
-        <p class="text-secondary mb-0">Add a dedicated action bar for common operations.</p>
-      </a>
-
-      <a routerLink="filter-data" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Data view filter data</h3>
-        <p class="text-secondary mb-0">Apply flexible filters to find specific data.</p>
-      </a>
-
-      <a routerLink="loading-state" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Data view loading state</h3>
-        <p class="text-secondary mb-0">Indicate when data is being loaded or refreshed.</p>
-      </a>
-
-      <a routerLink="sticky-columns" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Data view with sticky columns</h3>
-        <p class="text-secondary mb-0">Keep certain columns visible while scrolling horizontally.</p>
-      </a>
-
-      <a routerLink="server-side" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Data view with server side data loading</h3>
-        <p class="text-secondary mb-0">Efficiently handle large datasets with server-side operations.</p>
-      </a>
-
-      <a routerLink="server-side-empty-state" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Data view with server side data loading (empty state)</h3>
-        <p class="text-secondary mb-0">Handle cases where no data is available from the server.</p>
-      </a>
-
-      <a routerLink="custom-empty-state" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Data view with custom empty state</h3>
-        <p class="text-secondary mb-0">Provide meaningful feedback when no data is displayed.</p>
-      </a>
-
-      <a routerLink="refresh" class="block p-6 border rounded-lg hover:bg-emphasis transition-colors">
-        <h3 class="mt-0">Data view refresh (client and server side)</h3>
-        <p class="text-secondary mb-0">Easily refresh data to keep it up to date.</p>
-      </a>
-    </div>
-  </div>
-</app-page>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-10 gap-6">
+  @for (item of items; track item.routerLink) {
+    <ngs-card [routerLink]="item.routerLink" class="cursor-pointer transition-colors hover:bg-emphasis" appearance="outlined">
+      <ngs-card-header>
+        <ngs-card-title>{{ item.title }}</ngs-card-title>
+      </ngs-card-header>
+      <ngs-card-content>
+        <p class="text-secondary mb-0">{{ item.description }}</p>
+      </ngs-card-content>
+    </ngs-card>
+  }
+</div>

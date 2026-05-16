@@ -1,0 +1,32 @@
+<app-page>
+  <h1 appPageTitle>Data View</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p class="docs-seo-intro mb-6 text-base leading-7 text-neutral-600">
+        The NgStarter Angular Data View component lets you build AI-friendly data grids for operational records that users need to inspect, sort, filter, select, paginate, refresh, and act on. Use it for Angular admin screens, CRM and ERP tables, users, orders, invoices, logs, tasks, assets, and server-driven datasets where the table is the main interactive work surface.
+      </p>
+
+      <p>
+        Data View is an operational data grid built with <code>columnDefs</code> and either local
+        <code>data</code> or a server-side <code>datasource</code>. It supports sorting, search and filter state,
+        pagination, row selection, loading states, empty states, column resizing, column visibility, column order,
+        pinned or sticky columns, custom cell renderers, refresh, snapshots, and an optional action bar.
+      </p>
+
+      <p>
+        Use Data View when users work with records, column state, selections, server loading, or saved table views.
+        Use the simpler Table component for small static tables or read-only tabular content that does not need row
+        selection, column operations, pagination, server loading, or custom cell behavior.
+      </p>
+    </main>
+
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/libraries/data-view" ngs-tab-link>Overview</a>
+      <a routerLink="/libraries/data-view/api" ngs-tab-link>Api</a>
+    </nav>
+
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

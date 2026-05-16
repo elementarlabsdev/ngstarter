@@ -10,9 +10,13 @@
   --ngs-paginator-container-text-weight: 400;
   --ngs-paginator-page-size-margin-right: 8px;
   --ngs-paginator-items-per-page-label-margin: 0 4px;
-  --ngs-paginator-range-label-margin: 0 32px 0 24px;
+  --ngs-paginator-range-label-margin: 0 --spacing(5) 0 --spacing(4);
 
   display: block;
+
+  ngs-form-field {
+    --ngs-form-field-container-min-height: auto;
+  }
 
   .ngs-paginator-container {
     display: flex;
@@ -23,7 +27,6 @@
     min-height: 40px;
     background: var(--ngs-paginator-container-background-color);
     color: var(--ngs-paginator-container-text-color);
-    font-family: var(--ngs-paginator-container-text-font);
     line-height: var(--ngs-paginator-container-text-line-height);
     font-size: var(--ngs-paginator-container-text-size);
     letter-spacing: var(--ngs-paginator-container-text-tracking);
