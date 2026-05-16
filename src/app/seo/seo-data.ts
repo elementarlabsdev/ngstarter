@@ -105,48 +105,6 @@ const offers = [
   },
 ];
 
-const productReviews = [
-  {
-    '@type': 'Review',
-    reviewBody: 'The most complete AI-friendly Angular component library I\'ve used. The performance is unmatched, and the design system is beautiful.',
-    reviewRating: {
-      '@type': 'Rating',
-      ratingValue: '5',
-      bestRating: '5',
-    },
-    author: {
-      '@type': 'Person',
-      name: 'John Doe',
-    },
-  },
-  {
-    '@type': 'Review',
-    reviewBody: 'Speed of delivery is crucial for us. These templates saved us months of development time while maintaining top-tier quality.',
-    reviewRating: {
-      '@type': 'Rating',
-      ratingValue: '5',
-      bestRating: '5',
-    },
-    author: {
-      '@type': 'Person',
-      name: 'Marcus Rodriguez',
-    },
-  },
-  {
-    '@type': 'Review',
-    reviewBody: 'Strict typing and standalone components by default make the DX incredible. I don\'t think I can ever go back to standard libraries.',
-    reviewRating: {
-      '@type': 'Rating',
-      ratingValue: '5',
-      bestRating: '5',
-    },
-    author: {
-      '@type': 'Person',
-      name: 'Elena Lysenko',
-    },
-  },
-];
-
 const softwareSchema: JsonLdObject = {
   '@type': 'SoftwareApplication',
   '@id': `${SITE_URL}/#software`,
@@ -172,13 +130,6 @@ const productSchema: JsonLdObject = {
   category: 'Angular UI components library',
   description: 'Standalone Angular UI components, admin dashboard templates, source code, and themes for production Angular applications.',
   image: DEFAULT_OG_IMAGE,
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '5',
-    reviewCount: productReviews.length,
-    bestRating: '5',
-  },
-  review: productReviews,
   offers,
 };
 

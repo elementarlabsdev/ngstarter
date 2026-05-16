@@ -41,7 +41,6 @@ Import one theme stylesheet once in your app styles:
 Other presets are available for faster admin styling:
 
 ```scss
-@use '@ngstarter-ui/components/styles/themes/enterprise';
 @use '@ngstarter-ui/components/styles/themes/modern';
 @use '@ngstarter-ui/components/styles/themes/compact';
 ```
@@ -60,7 +59,7 @@ import { provideNgsTheme } from '@ngstarter-ui/components/core';
 export const appConfig = {
   providers: [
     provideNgsTheme({
-      theme: 'enterprise',
+      theme: 'modern',
       colorScheme: 'auto',
       density: 'compact',
       radius: 'small',
@@ -83,7 +82,7 @@ themeManager.changeColorScheme('dark');
 The same values can be controlled with document attributes:
 
 ```html
-<html data-ngs-theme="enterprise" data-ngs-density="compact" data-ngs-radius="small">
+<html data-ngs-theme="modern" data-ngs-density="compact" data-ngs-radius="small">
 ```
 
 ## Component Demos

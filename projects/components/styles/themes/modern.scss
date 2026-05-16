@@ -90,12 +90,10 @@
   --ngs-control-height-sm: calc(2.25rem + var(--ngs-density-scale) * 1px);
   --ngs-control-height-md: calc(3rem + var(--ngs-density-scale) * 1px);
   --ngs-control-height-lg: calc(3.5rem + var(--ngs-density-scale) * 1px);
-  --ngs-control-padding-x: --spacing(5);
   --ngs-control-gap: --spacing(2.5);
   --ngs-control-radius: var(--ngs-radius-xl);
   --ngs-icon-size: --spacing(6);
   --ngs-button-font-size: 0.9375rem;
-  --ngs-button-font-weight: 700;
   --ngs-button-tonal-bg: linear-gradient(135deg, var(--ngs-color-primary-container), var(--ngs-color-secondary-container));
   --ngs-button-tonal-color: var(--ngs-color-on-primary-container);
   --ngs-button-outlined-border: var(--ngs-color-outline-variant);
@@ -107,7 +105,6 @@
   --ngs-field-font-size: 0.9375rem;
   --ngs-field-container-height: 3.125rem;
   --ngs-field-infix-height: 3.125rem;
-  --ngs-field-padding-x: --spacing(4);
   --ngs-field-filled-bg: var(--ngs-color-surface-container);
   --ngs-dropdown-bg: rgba(255, 255, 255, 0.98);
   --ngs-dropdown-shadow: 0 20px 52px rgba(39, 52, 105, 0.18);
@@ -125,17 +122,13 @@
   --ngs-table-border-color: var(--ngs-color-border);
   --ngs-table-row-height: calc(3.5rem + var(--ngs-density-scale) * 1px);
   --ngs-table-header-row-height: calc(3.25rem + var(--ngs-density-scale) * 1px);
-  --ngs-table-cell-padding: --spacing(2) --spacing(5);
   --ngs-table-cell-font-size: 0.9375rem;
   --ngs-table-header-cell-font-size: 0.75rem;
-  --ngs-table-header-cell-font-weight: 800;
 
   --ngs-nav-item-height: var(--ngs-dropdown-height);
   --ngs-nav-items-gap: --spacing(1.5);
-  --ngs-nav-item-padding: 0 --spacing(4);
   --ngs-nav-item-radius: var(--ngs-radius-full);
   --ngs-nav-item-font-size: 0.9375rem;
-  --ngs-nav-item-font-weight: 700;
   --ngs-nav-item-color: #566176;
   --ngs-nav-item-hover-color: #172033;
   --ngs-nav-item-active-color: var(--ngs-color-primary);
@@ -146,11 +139,9 @@
   --ngs-nav-item-active-icon-color: var(--ngs-color-primary);
   --ngs-nav-item-icon-font-size: 1.375rem;
   --ngs-nav-heading-font-size: 0.75rem;
-  --ngs-nav-heading-font-weight: 800;
   --ngs-nav-heading-margin-top: --spacing(7);
   --ngs-nav-heading-margin-bottom: --spacing(2);
   --ngs-nav-divider-margin: --spacing(6) 0;
-  --ngs-nav-nested-item-margin: 0 0 0 52px;
 }
 
 @media (prefers-color-scheme: dark) {

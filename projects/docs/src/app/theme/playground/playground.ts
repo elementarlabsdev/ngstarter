@@ -15,7 +15,7 @@ import { Select, Option } from '@ngstarter-ui/components/select';
 import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
 import { NativeTable } from '@ngstarter-ui/components/table';
 
-type ThemeName = 'default' | 'enterprise' | 'modern';
+type ThemeName = 'default' | 'modern';
 type RadiusName = 'none' | 'small' | 'medium' | 'large';
 type SchemeName = 'light' | 'dark' | 'auto';
 
@@ -60,7 +60,7 @@ export class ThemePlayground {
   readonly colorScheme = this.themeManager.colorScheme;
   readonly radius = this.themeManager.radius;
 
-  readonly themes: ThemeName[] = ['default', 'enterprise', 'modern'];
+  readonly themes: ThemeName[] = ['default', 'modern'];
   readonly schemes: SchemeName[] = ['light', 'dark', 'auto'];
   readonly radii: RadiusName[] = ['none', 'small', 'medium', 'large'];
 

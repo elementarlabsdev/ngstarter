@@ -994,7 +994,7 @@ function buildLlms(registry, full = false) {
     "import { provideNgsTheme } from '@ngstarter-ui/components/core';",
     '',
     'export const appConfig = {',
-    '  providers: [provideNgsTheme({ theme: \'enterprise\', colorScheme: \'auto\' })],',
+    '  providers: [provideNgsTheme({ theme: \'modern\', colorScheme: \'auto\' })],',
     '};',
     '```',
     '',

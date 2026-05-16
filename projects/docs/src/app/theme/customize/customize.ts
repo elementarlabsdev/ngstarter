@@ -17,7 +17,6 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
 })
 export class Customize {
   importThemes = signal(`@use '@ngstarter-ui/components/styles/themes/default';
-@use '@ngstarter-ui/components/styles/themes/enterprise';
 @use '@ngstarter-ui/components/styles/themes/modern';
 @use './styles/themes/acme';`);
 

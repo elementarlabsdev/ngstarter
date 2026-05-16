@@ -1,6 +1,6 @@
 import { InjectionToken, Provider } from '@angular/core';
 
-export type NgsThemeName = 'default' | 'enterprise' | 'modern' | string;
+export type NgsThemeName = 'default' | 'modern' | string;
 export type NgsColorScheme = 'light' | 'dark' | 'auto';
 export type NgsRadius = 'none' | 'small' | 'medium' | 'large';
 

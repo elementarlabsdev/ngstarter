@@ -52,27 +52,16 @@ ngs-sidenav {
 
 ngs-sidebar {
   --ngs-sidebar-bg: var(--modern-sidebar);
-  padding: --spacing(5) --spacing(4);
-}
-
-ngs-sidebar-header {
-  --ngs-sidebar-header-compact-padding: 0;
-  // padding: --spacing(4) 0 --spacing(6) !important;
 }
 
 ngs-sidebar-body {
   min-height: 0;
 }
 
-ngs-sidebar-footer {
-  padding-top: --spacing(6);
-}
-
 ngs-sidebar-nav {
   --ngs-sidebar-nav-items-gap: --spacing(3.5);
   --ngs-sidebar-nav-item-width: --spacing(12);
   --ngs-sidebar-nav-item-height: --spacing(12);
-  --ngs-sidebar-nav-item-padding: 0;
   --ngs-sidebar-nav-item-radius: 0.8rem;
   --ngs-sidebar-nav-item-color: #13171e;
   --ngs-sidebar-nav-item-icon-color: #13171e;
@@ -130,7 +119,6 @@ ngs-panel-aside {
 button[ngsButton] {
   --ngs-button-height: --spacing(11);
   --ngs-button-border-radius: 0.72rem;
-  font-weight: 500;
 }
 
 button[ngsIconButton] {
@@ -195,7 +183,6 @@ ngs-form-field {
 ::ng-deep .modern-header-menu {
   min-width: --spacing(72);
   max-width: --spacing(82);
-  padding: --spacing(2);
 }
 
 ::ng-deep .account-menu-panel {
@@ -215,13 +202,10 @@ ngs-form-field {
   align-items: center;
   justify-content: space-between;
   min-height: --spacing(13);
-  padding: 0 --spacing(3) 0 --spacing(4);
   background: var(--ngs-menu-background, var(--ngs-dropdown-bg));
 }
 
 .notifications-listbox {
-  --ngs-list-padding: --spacing(2);
-  --ngs-list-item-padding: --spacing(3);
   --ngs-list-item-min-height: --spacing(17);
   --ngs-list-item-radius: var(
     --ngs-menu-item-radius,
@@ -272,27 +256,20 @@ ngs-form-field {
   background: var(--modern-blue);
 }
 
-.notifications-popover-footer {
-  padding: --spacing(2) --spacing(3) --spacing(3);
-}
-
 .mark-read-button {
   width: 100%;
   justify-content: center;
 }
 
 ::ng-deep .menu-title {
-  padding: --spacing(2) --spacing(3) --spacing(1.5);
   color: var(--modern-text);
   font-size: 0.875rem;
-  font-weight: 600;
 }
 
 ::ng-deep .account-menu-header {
   display: flex;
   align-items: center;
   gap: --spacing(3);
-  padding: --spacing(2) --spacing(3) --spacing(3);
 }
 
 ::ng-deep .menu-item-stack {
@@ -305,7 +282,6 @@ ngs-form-field {
 ::ng-deep .menu-item-title {
   color: var(--modern-text);
   font-size: 0.875rem;
-  font-weight: 500;
   line-height: 1.2;
 }
 
@@ -401,7 +377,6 @@ ngs-card {
   --ngs-chip-padding: 0 --spacing(2);
   --ngs-chip-color: #ffffff;
   --ngs-chip-font-size: 0.75rem;
-  --ngs-chip-font-weight: 600;
 }
 
 .vacancy-type-chip.is-blue {
@@ -427,7 +402,6 @@ ngs-card {
   --ngs-chip-bg: #f4f4f5;
   --ngs-chip-color: #141820;
   --ngs-chip-font-size: 0.75rem;
-  --ngs-chip-font-weight: 400;
 }
 
 .ai-column-footer {
@@ -524,10 +498,6 @@ ngs-card {
 }
 
 @media (max-width: 760px) {
-  ngs-sidebar {
-    padding-inline: --spacing(3);
-  }
-
   .filter-button {
     min-width: calc(50% - --spacing(2));
   }
