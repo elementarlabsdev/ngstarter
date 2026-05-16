@@ -14,6 +14,9 @@ export type SeoData = {
 export const SITE_URL = 'https://ngstarter.com';
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og/ngstarter-og.png`;
 
+const merchantReturnPolicyId = `${SITE_URL}/terms#return-policy`;
+const shippingServiceId = `${SITE_URL}/terms#digital-delivery`;
+
 const organizationSchema: JsonLdObject = {
   '@type': 'Organization',
   '@id': `${SITE_URL}/#organization`,
@@ -23,6 +26,12 @@ const organizationSchema: JsonLdObject = {
   sameAs: [
     'https://x.com/elementarlabs',
   ],
+  hasMerchantReturnPolicy: {
+    '@id': merchantReturnPolicyId,
+  },
+  hasShippingService: {
+    '@id': shippingServiceId,
+  },
 };
 
 const websiteSchema: JsonLdObject = {
@@ -36,6 +45,27 @@ const websiteSchema: JsonLdObject = {
   inLanguage: 'en',
 };
 
+const merchantReturnPolicySchema: JsonLdObject = {
+  '@type': 'MerchantReturnPolicy',
+  '@id': merchantReturnPolicyId,
+  merchantReturnLink: `${SITE_URL}/terms`,
+};
+
+const shippingServiceSchema: JsonLdObject = {
+  '@type': 'ShippingService',
+  '@id': shippingServiceId,
+  name: 'Digital delivery',
+  description: 'NgStarter licenses, source code, and updates are delivered online after purchase.',
+  shippingConditions: {
+    '@type': 'ShippingConditions',
+    shippingRate: {
+      '@type': 'MonetaryAmount',
+      value: '0',
+      currency: 'USD',
+    },
+  },
+};
+
 const offers = [
   {
     '@type': 'Offer',
@@ -45,6 +75,15 @@ const offers = [
     url: `${SITE_URL}/pricing`,
     availability: 'https://schema.org/InStock',
     category: 'Standard License',
+    hasMerchantReturnPolicy: {
+      '@id': merchantReturnPolicyId,
+    },
+    shippingDetails: {
+      '@type': 'OfferShippingDetails',
+      hasShippingService: {
+        '@id': shippingServiceId,
+      },
+    },
   },
   {
     '@type': 'Offer',
@@ -54,6 +93,57 @@ const offers = [
     url: `${SITE_URL}/pricing`,
     availability: 'https://schema.org/InStock',
     category: 'Professional License',
+    hasMerchantReturnPolicy: {
+      '@id': merchantReturnPolicyId,
+    },
+    shippingDetails: {
+      '@type': 'OfferShippingDetails',
+      hasShippingService: {
+        '@id': shippingServiceId,
+      },
+    },
+  },
+];
+
+const productReviews = [
+  {
+    '@type': 'Review',
+    reviewBody: 'The most complete AI-friendly Angular component library I\'ve used. The performance is unmatched, and the design system is beautiful.',
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: '5',
+      bestRating: '5',
+    },
+    author: {
+      '@type': 'Person',
+      name: 'John Doe',
+    },
+  },
+  {
+    '@type': 'Review',
+    reviewBody: 'Speed of delivery is crucial for us. These templates saved us months of development time while maintaining top-tier quality.',
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: '5',
+      bestRating: '5',
+    },
+    author: {
+      '@type': 'Person',
+      name: 'Marcus Rodriguez',
+    },
+  },
+  {
+    '@type': 'Review',
+    reviewBody: 'Strict typing and standalone components by default make the DX incredible. I don\'t think I can ever go back to standard libraries.',
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: '5',
+      bestRating: '5',
+    },
+    author: {
+      '@type': 'Person',
+      name: 'Elena Lysenko',
+    },
   },
 ];
 
@@ -75,11 +165,20 @@ const productSchema: JsonLdObject = {
   '@id': `${SITE_URL}/#product`,
   name: 'NgStarter',
   brand: {
-    '@id': `${SITE_URL}/#organization`,
+    '@type': 'Brand',
+    name: 'NgStarter',
+    url: SITE_URL,
   },
   category: 'Angular UI components library',
   description: 'Standalone Angular UI components, admin dashboard templates, source code, and themes for production Angular applications.',
   image: DEFAULT_OG_IMAGE,
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '5',
+    reviewCount: productReviews.length,
+    bestRating: '5',
+  },
+  review: productReviews,
   offers,
 };
 
@@ -147,6 +246,8 @@ export const HOME_SEO: SeoData = {
   structuredData: [
     organizationSchema,
     websiteSchema,
+    merchantReturnPolicySchema,
+    shippingServiceSchema,
     softwareSchema,
     productSchema,
     faqSchema,
@@ -161,6 +262,8 @@ export const PRICING_SEO: SeoData = {
   structuredData: [
     organizationSchema,
     websiteSchema,
+    merchantReturnPolicySchema,
+    shippingServiceSchema,
     productSchema,
     webPageSchema('/pricing', 'Pricing | NgStarter Angular UI Components', pricingDescription),
   ],
@@ -173,7 +276,8 @@ export const LICENSE_SEO: SeoData = {
   structuredData: [
     organizationSchema,
     websiteSchema,
-    productSchema,
+    merchantReturnPolicySchema,
+    shippingServiceSchema,
     webPageSchema('/license', 'License | NgStarter', licenseDescription),
   ],
 };
