@@ -26,9 +26,6 @@ ul {
 }
 
 .modern-shell {
-  --ngs-sidenav-width: --spacing(22);
-  --ngs-sidenav-collapsed-width: --spacing(22);
-  --ngs-sidebar-width: --spacing(22);
   --modern-blue: #0b63e5;
   --modern-text: #090b10;
   --modern-muted: #6e7480;
@@ -46,19 +43,15 @@ ul {
 }
 
 ngs-sidenav {
-  --ngs-sidenav-width: --spacing(22) !important;
   background: var(--modern-workspace);
 }
 
 .modern-shell > ngs-sidenav-content {
-  --ngs-sidenav-width: --spacing(22) !important;
   background: var(--modern-workspace);
 }
 
 ngs-sidebar {
   --ngs-sidebar-bg: var(--modern-sidebar);
-  --ngs-sidebar-width: --spacing(22);
-  --ngs-sidenav-collapsed-width: --spacing(22);
   padding: --spacing(5) --spacing(4);
 }
 
@@ -531,17 +524,7 @@ ngs-card {
 }
 
 @media (max-width: 760px) {
-  ngs-sidenav {
-    --ngs-sidenav-width: --spacing(18);
-  }
-
-  .modern-shell > ngs-sidenav-content {
-    --ngs-sidenav-width: --spacing(18) !important;
-  }
-
   ngs-sidebar {
-    --ngs-sidebar-width: --spacing(18);
-    --ngs-sidenav-collapsed-width: --spacing(18);
     padding-inline: --spacing(3);
   }
 

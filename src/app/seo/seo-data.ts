@@ -192,6 +192,10 @@ export const faqItems = [
     answer: 'Yes. NgStarter can be used in commercial applications, SaaS products, internal tools, and client projects under the purchased license terms.',
   },
   {
+    question: 'How long does trial mode last?',
+    answer: 'Trial mode is available for 3 months. After the trial period ends, you need to purchase a valid Standard or Professional license.',
+  },
+  {
     question: 'What is included in Standard and Professional?',
     answer: 'Standard includes one developer, one project, and one domain. Professional includes unlimited developers, unlimited projects, and unlimited domains.',
   },

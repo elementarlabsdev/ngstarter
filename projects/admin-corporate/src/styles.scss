@@ -39,7 +39,6 @@ input {
 }
 
 .corporate-shell {
-  --ngs-sidenav-width: 292px;
   width: 100%;
   height: 100dvh !important;
   min-height: 0;
@@ -53,12 +52,10 @@ input {
 }
 
 .corporate-sidebar {
-  --ngs-sidenav-width: 292px !important;
   background: var(--corporate-sidebar-bg);
 }
 
 .corporate-shell > ngs-sidenav-content {
-  --ngs-sidenav-width: 292px !important;
   position: absolute;
   inset: 0;
   height: auto;
@@ -71,7 +68,6 @@ input {
 
 .sidebar-panel {
   --ngs-sidebar-bg: var(--corporate-sidebar-bg);
-  --ngs-sidebar-width: 292px;
   gap: 1rem;
   min-height: 100%;
   padding: 1rem 1.25rem;
