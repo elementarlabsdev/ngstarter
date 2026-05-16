@@ -79,9 +79,9 @@
   --ngs-color-surface-container: color-mix(in srgb, var(--ngs-color-primary-seed), #ffffff 94%);
   --ngs-color-surface-container-high: color-mix(in srgb, var(--ngs-color-primary-seed), #ffffff 88%);
   --ngs-color-surface-container-highest: color-mix(in srgb, var(--ngs-color-primary-seed), #ffffff 80%);
-  --ngs-color-outline: color-mix(in srgb, var(--ngs-color-primary), #000000 70%);
-  --ngs-color-outline-variant: color-mix(in srgb, var(--ngs-color-primary), #000000 84%);
-  --ngs-color-border: var(--ngs-color-surface-container-high);
+  --ngs-color-outline: color-mix(in srgb, var(--ngs-color-primary-seed), #64748b 82%);
+  --ngs-color-outline-variant: color-mix(in srgb, var(--ngs-color-primary-seed), #cbd5e1 90%);
+  --ngs-color-border: color-mix(in srgb, var(--ngs-color-primary-seed), #e2e8f0 92%);
   --ngs-color-faint: var(--ngs-color-surface-container);
   --ngs-color-subtle: var(--ngs-color-surface-container-high);
   --ngs-color-muted: var(--ngs-color-surface-container-highest);
@@ -347,8 +347,9 @@
     --ngs-color-surface-container: color-mix(in srgb, var(--ngs-color-primary-seed), #1e293b 92%);
     --ngs-color-surface-container-high: color-mix(in srgb, var(--ngs-color-primary-seed), #334155 90%);
     --ngs-color-surface-container-highest: color-mix(in srgb, var(--ngs-color-primary-seed), #475569 88%);
-    --ngs-color-outline: color-mix(in srgb, var(--ngs-color-primary), #ffffff 70%);
-    --ngs-color-outline-variant: color-mix(in srgb, var(--ngs-color-primary), #ffffff 84%);
+    --ngs-color-outline: color-mix(in srgb, var(--ngs-color-primary-seed), #94a3b8 82%);
+    --ngs-color-outline-variant: color-mix(in srgb, var(--ngs-color-primary-seed), #334155 90%);
+    --ngs-color-border: color-mix(in srgb, var(--ngs-color-primary-seed), #26324a 92%);
     --ngs-color-faint: var(--ngs-color-surface-container-low);
     --ngs-color-subtle: var(--ngs-color-surface-container);
     --ngs-color-muted: var(--ngs-color-surface-container-high);
@@ -415,8 +416,9 @@
   --ngs-color-surface-container: color-mix(in srgb, var(--ngs-color-primary-seed), #1e293b 92%);
   --ngs-color-surface-container-high: color-mix(in srgb, var(--ngs-color-primary-seed), #334155 90%);
   --ngs-color-surface-container-highest: color-mix(in srgb, var(--ngs-color-primary-seed), #475569 88%);
-  --ngs-color-outline: color-mix(in srgb, var(--ngs-color-primary), #ffffff 70%);
-  --ngs-color-outline-variant: color-mix(in srgb, var(--ngs-color-primary), #ffffff 84%);
+  --ngs-color-outline: color-mix(in srgb, var(--ngs-color-primary-seed), #94a3b8 82%);
+  --ngs-color-outline-variant: color-mix(in srgb, var(--ngs-color-primary-seed), #334155 90%);
+  --ngs-color-border: color-mix(in srgb, var(--ngs-color-primary-seed), #26324a 92%);
   --ngs-color-faint: var(--ngs-color-surface-container-low);
   --ngs-color-subtle: var(--ngs-color-surface-container);
   --ngs-color-muted: var(--ngs-color-surface-container-high);

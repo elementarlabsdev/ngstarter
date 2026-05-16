@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
 import {
@@ -10,7 +10,7 @@ import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 import { FormField, Label, Suffix } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 import { Card, CardContent } from '@ngstarter-ui/components/card';
-import { generateNgsThemeProperties } from '@ngstarter-ui/components/core';
+import { generateNgsThemeProperties, ThemeManagerService } from '@ngstarter-ui/components/core';
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
@@ -38,15 +38,27 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
   styleUrl: './generator.scss',
 })
 export class ThemeGenerator {
-  seedColor = signal('#7c3aed');
+  private readonly themeManager = inject(ThemeManagerService);
+
+  seedColor = signal(this.themeManager.primaryColor() ?? '#036fe3');
 
   presets = [
     '#036fe3',
-    '#7c3aed',
-    '#0f766e',
-    '#db2777',
-    '#ea580c',
+    '#155eef',
     '#2563eb',
+    '#7c3aed',
+    '#9333ea',
+    '#c026d3',
+    '#0f766e',
+    '#059669',
+    '#16a34a',
+    '#db2777',
+    '#e11d48',
+    '#ea580c',
+    '#d97706',
+    '#ca8a04',
+    '#0891b2',
+    '#475569',
   ];
 
   readonly cssSeed = computed(() => `:root,
@@ -75,7 +87,13 @@ const darkCss = generateNgsThemeCssText('${this.seedColor()}', 'dark');`);
   readonly darkRoles = computed(() => this.themeRoles('dark'));
 
   setSeedColor(color: string): void {
-    this.seedColor.set(color);
+    const nextColor = color.trim();
+
+    this.seedColor.set(nextColor);
+
+    if (this.isSeedColor(nextColor)) {
+      this.themeManager.setPrimaryColor(nextColor);
+    }
   }
 
   private themeRoles(colorScheme: 'light' | 'dark') {
@@ -92,11 +110,17 @@ const darkCss = generateNgsThemeCssText('${this.seedColor()}', 'dark');`);
       '--ngs-color-info-container',
       '--ngs-color-surface',
       '--ngs-color-surface-container',
+      '--ngs-color-border',
       '--ngs-color-outline',
+      '--ngs-color-outline-variant',
       '--ngs-state-selected-bg',
     ].map(name => ({
       name,
       value: properties[name as keyof typeof properties] ?? '',
     }));
+  }
+
+  private isSeedColor(color: string): boolean {
+    return /^#(?:[\da-f]{3}|[\da-f]{6})$/i.test(color);
   }
 }

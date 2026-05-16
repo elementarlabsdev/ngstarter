@@ -162,8 +162,9 @@ function generateLightThemeProperties(seed: Rgb): NgsThemeCssProperties {
   const infoContainer = colorFromTone(source, 92, 0.38, 8);
   const status = makeStatusColors('light');
   const neutral = makeNeutralScale(source, 'light');
-  const outline = colorFromTone(source, 57, 0.18);
-  const outlineVariant = colorFromTone(source, 86, 0.14);
+  const border = colorFromTone(source, 90, 0.08);
+  const outline = colorFromTone(source, 56, 0.12);
+  const outlineVariant = colorFromTone(source, 86, 0.08);
 
   return withSharedGeneratedProperties({
     '--ngs-color-primary': primary,
@@ -209,7 +210,7 @@ function generateLightThemeProperties(seed: Rgb): NgsThemeCssProperties {
     '--ngs-color-surface-container-highest': neutral[3],
     '--ngs-color-outline': outline,
     '--ngs-color-outline-variant': outlineVariant,
-    '--ngs-color-border': neutral[2],
+    '--ngs-color-border': border,
     '--ngs-color-faint': neutral[1],
     '--ngs-color-subtle': neutral[2],
     '--ngs-color-muted': neutral[3],
@@ -242,8 +243,9 @@ function generateDarkThemeProperties(seed: Rgb): NgsThemeCssProperties {
   const infoContainer = colorFromTone(source, 30, 0.62, 8);
   const status = makeStatusColors('dark');
   const neutral = makeNeutralScale(source, 'dark');
-  const outline = colorFromTone(source, 62, 0.16);
-  const outlineVariant = colorFromTone(source, 30, 0.12);
+  const border = colorFromTone(source, 22, 0.08);
+  const outline = colorFromTone(source, 66, 0.12);
+  const outlineVariant = colorFromTone(source, 28, 0.08);
 
   return withSharedGeneratedProperties({
     '--ngs-color-primary': primary,
@@ -289,7 +291,7 @@ function generateDarkThemeProperties(seed: Rgb): NgsThemeCssProperties {
     '--ngs-color-surface-container-highest': neutral[4],
     '--ngs-color-outline': outline,
     '--ngs-color-outline-variant': outlineVariant,
-    '--ngs-color-border': neutral[3],
+    '--ngs-color-border': border,
     '--ngs-color-faint': neutral[1],
     '--ngs-color-subtle': neutral[2],
     '--ngs-color-muted': neutral[3],

@@ -4391,6 +4391,7 @@
       "purpose": "Provide a full canvas-based image composition editor with layers, assets, text, backgrounds, effects, and snapshots.",
       "useWhen": "Use when users need to create or customize an image by composing multiple layers such as text, photos, uploaded assets, shapes, patterns, gradients, backgrounds, effects, opacity, typography, fit, flip, lock, and resize presets. Use for banner designers, social image builders, thumbnail editors, promo card creators, template-based creative tools, and embedded product design studios. Persist and restore work with ImageDesignerSnapshot, provide asset libraries with assetsDataSource or photosDataSource, handle uploads with uploadFn, and listen to snapshotChanged. Do not use for simple image viewing; use ImageViewer. Do not use for zoom/pan inspection; use ImageZoomViewer. Do not use for crop-only work; use Crop. Do not use for resize-only flows; use ImageResizer. Do not use for loading or missing-image placeholders; use ImagePlaceholder. Do not use for plain upload previews, color picking, or simple avatar/banner settings; use the smaller dedicated components or a normal form.",
       "exampleTopics": [
+        "Visual Builder",
         "Image Designer"
       ],
       "minimalExample": null,
