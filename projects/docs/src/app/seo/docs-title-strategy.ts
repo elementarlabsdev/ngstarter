@@ -239,6 +239,10 @@ export class DocsTitleStrategy extends TitleStrategy {
       return this.withSiteTitle('Angular Theme Playground', 'Preview Tokens and Component Styles');
     }
 
+    if (slug === 'generator') {
+      return this.withSiteTitle('Angular Theme Generator', 'Seed Colors and CSS Color Mix');
+    }
+
     return this.withSiteTitle('Angular Theme Documentation', 'Tokens and Runtime Theming');
   }
 

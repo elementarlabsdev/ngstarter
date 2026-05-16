@@ -17,6 +17,11 @@ export const routes: Routes = [
     title: 'Theme Playground'
   },
   {
+    path: 'generator',
+    loadComponent: () => import('./generator/generator').then(c => c.ThemeGenerator),
+    title: 'Theme Generator'
+  },
+  {
     path: 'customize',
     loadComponent: () => import('./customize/customize').then(c => c.Customize),
     title: 'Customize Theme'

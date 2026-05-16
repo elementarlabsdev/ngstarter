@@ -163,6 +163,12 @@ export class App implements OnInit {
           link: '/theme/playground'
         },
         {
+          key: 'theme-generator',
+          type: 'link',
+          name: 'Theme Generator',
+          link: '/theme/generator'
+        },
+        {
           type: 'link',
           name: 'Customize Theme',
           key: 'customize',

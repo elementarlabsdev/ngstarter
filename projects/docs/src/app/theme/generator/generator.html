@@ -1,0 +1,149 @@
+<app-page>
+  <h1 appPageTitle>Theme Generator</h1>
+
+  <div appPageContent>
+    <p>
+      Pick a primary seed color and preview how the default NgStarter theme derives tonal roles with
+      CSS <code>color-mix()</code>. Runtime theming uses the same seed, so the generated palette
+      remains CSS-driven.
+    </p>
+
+    <div class="theme-generator-grid">
+      <ngs-card>
+        <ngs-card-content>
+          <div class="generator-control-stack">
+            <ngs-form-field>
+              <ngs-label>Primary seed</ngs-label>
+              <input
+                type="text"
+                [ngModel]="seedColor()"
+                (ngModelChange)="setSeedColor($event)"
+                ngsInput
+                placeholder="#7c3aed"
+              >
+              <button
+                ngs-color-picker-thumbnail
+                [color]="seedColor()"
+                [ngsColorPickerTriggerFor]="colorPicker"
+                ngsSuffix
+                class="cursor-pointer"
+                aria-label="Choose primary seed color"
+              ></button>
+              <ng-template #colorPicker>
+                <ngs-color-picker
+                  [ngModel]="seedColor()"
+                  (ngModelChange)="setSeedColor($event)"
+                  resultFormat="hex"
+                  [showOpacity]="false"
+                />
+              </ng-template>
+            </ngs-form-field>
+
+            <div class="preset-row">
+              @for (preset of presets; track preset) {
+                <button
+                  type="button"
+                  ngsIconButton
+                  class="preset-swatch"
+                  [class.is-active]="seedColor() === preset"
+                  [style.--preset-color]="preset"
+                  [attr.aria-label]="'Use ' + preset"
+                  (click)="setSeedColor(preset)"
+                ></button>
+              }
+            </div>
+
+            <ngs-color-picker
+              [ngModel]="seedColor()"
+              (ngModelChange)="setSeedColor($event)"
+              resultFormat="hex"
+              [showOpacity]="false"
+              [asDropdown]="false"
+            />
+          </div>
+        </ngs-card-content>
+      </ngs-card>
+
+      <div class="preview-column">
+        <section
+          class="theme-preview"
+          data-ngs-theme="default"
+          data-ngs-color-scheme="light"
+          [style.--ngs-color-primary-seed]="seedColor()"
+        >
+          <div class="preview-header">
+            <span>Light preview</span>
+            <strong>{{ seedColor() }}</strong>
+          </div>
+          <div class="preview-surface">
+            <div class="preview-kpi">
+              <span>Revenue</span>
+              <strong>$128.4K</strong>
+            </div>
+            <button ngsButton="filled">Primary action</button>
+            <button ngsButton="tonal">Tonal action</button>
+          </div>
+          <div class="preview-list">
+            <span class="preview-list-item is-selected">Selected surface</span>
+            <span class="preview-list-item">Default surface</span>
+          </div>
+        </section>
+
+        <section
+          class="theme-preview"
+          data-ngs-theme="default"
+          data-ngs-color-scheme="dark"
+          [style.--ngs-color-primary-seed]="seedColor()"
+        >
+          <div class="preview-header">
+            <span>Dark preview</span>
+            <strong>{{ seedColor() }}</strong>
+          </div>
+          <div class="preview-surface">
+            <div class="preview-kpi">
+              <span>Revenue</span>
+              <strong>$128.4K</strong>
+            </div>
+            <button ngsButton="filled">Primary action</button>
+            <button ngsButton="tonal">Tonal action</button>
+          </div>
+          <div class="preview-list">
+            <span class="preview-list-item is-selected">Selected surface</span>
+            <span class="preview-list-item">Default surface</span>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <h2>Light roles</h2>
+    <div class="role-grid">
+      @for (role of lightRoles(); track role.name) {
+        <div class="role-card">
+          <span class="role-swatch" [style.background]="role.value"></span>
+          <span class="role-name">{{ role.name }}</span>
+          <code>{{ role.value }}</code>
+        </div>
+      }
+    </div>
+
+    <h2>Dark roles</h2>
+    <div class="role-grid">
+      @for (role of darkRoles(); track role.name) {
+        <div class="role-card">
+          <span class="role-swatch" [style.background]="role.value"></span>
+          <span class="role-name">{{ role.name }}</span>
+          <code>{{ role.value }}</code>
+        </div>
+      }
+    </div>
+
+    <h2>CSS seed color</h2>
+    <ngs-code-highlighter [code]="cssSeed()" language="scss"/>
+
+    <h2>Runtime seed</h2>
+    <ngs-code-highlighter [code]="runtimeTheme()" language="typescript"/>
+
+    <h2>Static CSS output</h2>
+    <ngs-code-highlighter [code]="typescriptGenerator()" language="typescript"/>
+  </div>
+</app-page>

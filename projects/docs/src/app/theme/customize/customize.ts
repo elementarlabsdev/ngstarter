@@ -111,6 +111,21 @@ export class Customize {
   --ngs-color-border: #334155;
 }`);
 
+  cssGeneratedTheme = signal(`:root,
+[data-ngs-theme='default'] {
+  --ngs-color-primary-seed: #7c3aed;
+}
+
+/* The default theme derives tonal roles from the seed with color-mix():
+   --ngs-color-primary
+   --ngs-color-primary-container
+   --ngs-color-secondary
+   --ngs-color-tertiary
+   --ngs-color-info
+   --ngs-color-surface-container
+   --ngs-color-outline
+   and the matching dark-scheme roles. */`);
+
   provideTheme = signal(`import { provideNgsTheme } from '@ngstarter-ui/components/core';
 
 export const appConfig: ApplicationConfig = {

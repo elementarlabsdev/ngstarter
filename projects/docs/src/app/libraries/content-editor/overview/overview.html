@@ -1,35 +1,38 @@
-<p class="docs-seo-intro mb-6 text-base leading-7 text-neutral-600">
-  The NgStarter Angular Content Editor component lets you provide a block-based builder for structured long-form content. Use ngs-content-builder for articles, pages, documentation, knowledge base entries, rich notes, editable descriptions, landing content, and CMS-like editing workflows built from blocks such as paragraph, heading, list, quote, code, divider, table, image, video, and embed. It includes examples for Content Editor.
-</p>
-
-<section>
-  <h1 class="ngs-title-large mb-4">Content Editor</h1>
-  <p class="mb-4 text-neutral-600">
-    Content Editor is a block-based builder for structured long-form content.
-    Use it for articles, pages, documentation, knowledge base entries, rich notes,
-    editable descriptions, landing content, and CMS-like editing workflows.
-  </p>
-  <div class="my-7">
-    <div>Use it for:</div>
-    <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
-      <li>
-        Building content from blocks such as paragraph, heading, list, quote, code, divider, table, image, video, and embed.
-      </li>
-      <li>
-        Reordering, duplicating, deleting, and multi-selecting blocks inside an editor surface.
-      </li>
-      <li>
-        Persisting structured <code class="code">ContentEditorBlock[]</code> data through the
-        <code class="code">contentChanged</code> event.
-      </li>
-      <li>
-        Passing block options such as image and video upload functions.
-      </li>
-    </ul>
+<app-page>
+  <h1 appPageTitle>Content Editor</h1>
+  <div appPageContent>
+    <p class="docs-seo-intro mb-6 text-base leading-7 text-neutral-600">
+      The NgStarter Angular Content Editor component lets you provide a block-based builder for structured long-form content. Use ngs-content-builder for articles, pages, documentation, knowledge base entries, rich notes, editable descriptions, landing content, and CMS-like editing workflows built from blocks such as paragraph, heading, list, quote, code, divider, table, image, video, and embed. It includes examples for Content Editor.
+    </p>
+    <section>
+      <p class="mb-4 text-neutral-600">
+        Content Editor is a block-based builder for structured long-form content.
+        Use it for articles, pages, documentation, knowledge base entries, rich notes,
+        editable descriptions, landing content, and CMS-like editing workflows.
+      </p>
+      <div class="my-7">
+        <div>Use it for:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            Building content from blocks such as paragraph, heading, list, quote, code, divider, table, image, video, and embed.
+          </li>
+          <li>
+            Reordering, duplicating, deleting, and multi-selecting blocks inside an editor surface.
+          </li>
+          <li>
+            Persisting structured <code class="code">ContentEditorBlock[]</code> data through the
+            <code class="code">contentChanged</code> event.
+          </li>
+          <li>
+            Passing block options such as image and video upload functions.
+          </li>
+        </ul>
+      </div>
+      <p class="mb-4 text-neutral-600">
+        Do not use Content Editor for quick messages, comments, threads, or reply composers; use Comment Editor for that.
+        Do not use it for a simple text field or a small rich text input; use Text Editor, Input, or Textarea depending on the task.
+        Do not use <code class="code">ngs-content-viewer</code> for production display-only content until its viewer behavior is completed.
+      </p>
+    </section>
   </div>
-  <p class="mb-4 text-neutral-600">
-    Do not use Content Editor for quick messages, comments, threads, or reply composers; use Comment Editor for that.
-    Do not use it for a simple text field or a small rich text input; use Text Editor, Input, or Textarea depending on the task.
-    Do not use <code class="code">ngs-content-viewer</code> for production display-only content until its viewer behavior is completed.
-  </p>
-</section>
+</app-page>

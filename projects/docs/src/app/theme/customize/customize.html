@@ -23,6 +23,14 @@
     </p>
     <ngs-code-highlighter [code]="createTheme()" language="scss"/>
 
+    <h2>Generate default colors from CSS</h2>
+    <p>
+      The default theme can derive its tonal roles from one seed color with CSS
+      <code>color-mix()</code>. Override <code>--ngs-color-primary-seed</code> when you want a
+      CSS-only branded palette without generating every token yourself.
+    </p>
+    <ngs-code-highlighter [code]="cssGeneratedTheme()" language="scss"/>
+
     <h2>Use the theme by default</h2>
     <p>
       Register the theme name in <code>provideNgsTheme</code>. The service writes

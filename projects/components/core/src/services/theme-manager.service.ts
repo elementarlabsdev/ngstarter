@@ -6,6 +6,9 @@ import {
   NgsThemeName,
   NgsThemeOptions,
 } from '../tokens/theme.token';
+import {
+  NGS_GENERATED_THEME_PROPERTY_NAMES,
+} from '../theming/theme-generator';
 
 interface StoredThemeState {
   theme?: NgsThemeName;
@@ -184,10 +187,20 @@ export class ThemeManagerService {
     root.setAttribute('data-ngs-color-scheme', this._colorScheme());
     root.setAttribute('data-ngs-radius', this._radius());
 
-    if (primaryColor && root.style) {
-      root.style.setProperty('--ngs-color-primary', primaryColor);
-    } else if (root.style) {
-      root.style.removeProperty('--ngs-color-primary');
+    if (!root.style) {
+      return;
+    }
+
+    if (primaryColor) {
+      for (const name of NGS_GENERATED_THEME_PROPERTY_NAMES) {
+        root.style.removeProperty(name);
+      }
+
+      root.style.setProperty('--ngs-color-primary-seed', primaryColor);
+    } else {
+      for (const name of NGS_GENERATED_THEME_PROPERTY_NAMES) {
+        root.style.removeProperty(name);
+      }
     }
   }
 
