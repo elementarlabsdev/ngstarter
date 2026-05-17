@@ -1,6 +1,7 @@
 import { DestroyRef, effect, inject, PLATFORM_ID, DOCUMENT } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
+import { ThemeManagerService } from '@ngstarter-ui/components/core';
 import { COLOR_SCHEME_LOCAL_KEY, ColorScheme, ResolvedColorScheme } from './color-scheme.model';
 
 type ColorSchemeState = {
@@ -13,11 +14,18 @@ const initialState: ColorSchemeState = {
   resolvedTheme: 'light',
 };
 
+const COLOR_SCHEMES: readonly ColorScheme[] = ['light', 'dark', 'auto'];
+
+function isColorScheme(value: string | null): value is ColorScheme {
+  return value !== null && COLOR_SCHEMES.includes(value as ColorScheme);
+}
+
 export const ColorSchemeStore = signalStore(
   withState(initialState),
   withMethods((store) => {
     const platformId = inject(PLATFORM_ID);
     const document = inject(DOCUMENT);
+    const themeManager = inject(ThemeManagerService);
 
     const resolveScheme = (scheme: ColorScheme): ResolvedColorScheme => {
       if (scheme !== 'auto') {
@@ -35,8 +43,14 @@ export const ColorSchemeStore = signalStore(
           resolvedTheme: resolveScheme(scheme),
         });
 
+        themeManager.setColorScheme(scheme);
+
         if (isPlatformBrowser(platformId)) {
-          localStorage.setItem(COLOR_SCHEME_LOCAL_KEY, scheme);
+          try {
+            localStorage.setItem(COLOR_SCHEME_LOCAL_KEY, scheme);
+          } catch {
+            // Ignore unavailable storage so the switcher still works in memory.
+          }
         }
       },
     };
@@ -47,6 +61,18 @@ export const ColorSchemeStore = signalStore(
       const platformId = inject(PLATFORM_ID);
       const destroyRef = inject(DestroyRef);
       const media = document.defaultView?.matchMedia?.('(prefers-color-scheme: dark)');
+
+      if (isPlatformBrowser(platformId)) {
+        try {
+          const storedScheme = localStorage.getItem(COLOR_SCHEME_LOCAL_KEY);
+
+          if (isColorScheme(storedScheme)) {
+            store.setScheme(storedScheme);
+          }
+        } catch {
+          // Ignore unavailable storage so the default auto scheme can be resolved below.
+        }
+      }
 
       if (isPlatformBrowser(platformId) && media) {
         const updateResolvedScheme = () => {

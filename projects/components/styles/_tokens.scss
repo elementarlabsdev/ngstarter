@@ -355,6 +355,12 @@
     --ngs-color-muted: var(--ngs-color-surface-container-high);
     --ngs-color-emphasis: color-mix(in srgb, var(--ngs-color-primary), #ffffff 40%);
     --ngs-color-strong: color-mix(in srgb, var(--ngs-color-primary), #ffffff 20%);
+    --ngs-nav-item-color: var(--ngs-color-neutral-800);
+    --ngs-nav-item-hover-color: var(--ngs-color-neutral-950);
+    --ngs-nav-item-active-color: var(--ngs-color-neutral-950);
+    --ngs-nav-item-icon-color: var(--ngs-color-neutral-700);
+    --ngs-nav-item-hover-icon-color: var(--ngs-color-neutral-950);
+    --ngs-nav-item-active-icon-color: var(--ngs-color-primary);
   }
 }
 
@@ -424,6 +430,12 @@
   --ngs-color-muted: var(--ngs-color-surface-container-high);
   --ngs-color-emphasis: color-mix(in srgb, var(--ngs-color-primary), #ffffff 40%);
   --ngs-color-strong: color-mix(in srgb, var(--ngs-color-primary), #ffffff 20%);
+  --ngs-nav-item-color: var(--ngs-color-neutral-800);
+  --ngs-nav-item-hover-color: var(--ngs-color-neutral-950);
+  --ngs-nav-item-active-color: var(--ngs-color-neutral-950);
+  --ngs-nav-item-icon-color: var(--ngs-color-neutral-700);
+  --ngs-nav-item-hover-icon-color: var(--ngs-color-neutral-950);
+  --ngs-nav-item-active-icon-color: var(--ngs-color-primary);
 }
 
 [data-ngs-theme='modern']:not([data-ngs-color-scheme='dark']):not(.dark) {
@@ -651,12 +663,12 @@
   --ngs-table-header-bg: linear-gradient(135deg, var(--ngs-color-surface-container), var(--ngs-color-secondary-container));
   --ngs-table-row-bg: var(--ngs-color-surface);
   --ngs-table-border-color: var(--ngs-color-border);
-  --ngs-nav-item-color: #b6c0d6;
+  --ngs-nav-item-color: #d5dcf0;
   --ngs-nav-item-hover-color: #eef2ff;
   --ngs-nav-item-active-color: #eef2ff;
   --ngs-nav-item-hover-bg: var(--ngs-state-hover-bg);
   --ngs-nav-item-active-bg: var(--ngs-state-selected-bg);
-  --ngs-nav-item-icon-color: #8d98b5;
+  --ngs-nav-item-icon-color: #b6c0d6;
   --ngs-nav-item-hover-icon-color: var(--ngs-color-primary);
   --ngs-nav-item-active-icon-color: var(--ngs-color-secondary);
 }
