@@ -130,7 +130,7 @@ export function generateNgsThemeProperties(
     return {
       '--ngs-color-primary-seed': primaryColor,
       '--ngs-color-primary': primaryColor,
-      '--ngs-color-on-primary': contrastColor('--ngs-color-primary'),
+      '--ngs-color-on-primary': '#ffffff',
     };
   }
 
@@ -167,27 +167,27 @@ function generateLightThemeProperties(seed: Rgb): NgsThemeCssProperties {
   return withSharedGeneratedProperties({
     '--ngs-color-primary': primary,
     '--ngs-color-primary-seed': primary,
-    '--ngs-color-on-primary': contrastColor('--ngs-color-primary'),
+    '--ngs-color-on-primary': contrastColor(primary),
     '--ngs-color-primary-container': primaryContainer,
-    '--ngs-color-on-primary-container': contrastColor('--ngs-color-primary-container'),
+    '--ngs-color-on-primary-container': contrastColor(primaryContainer),
     '--ngs-color-secondary': secondary,
-    '--ngs-color-on-secondary': contrastColor('--ngs-color-secondary'),
+    '--ngs-color-on-secondary': contrastColor(secondary),
     '--ngs-color-secondary-container': secondaryContainer,
-    '--ngs-color-on-secondary-container': contrastColor('--ngs-color-secondary-container'),
+    '--ngs-color-on-secondary-container': contrastColor(secondaryContainer),
     '--ngs-color-tertiary': tertiary,
-    '--ngs-color-on-tertiary': contrastColor('--ngs-color-tertiary'),
+    '--ngs-color-on-tertiary': contrastColor(tertiary),
     '--ngs-color-tertiary-container': tertiaryContainer,
-    '--ngs-color-on-tertiary-container': contrastColor('--ngs-color-tertiary-container'),
+    '--ngs-color-on-tertiary-container': contrastColor(tertiaryContainer),
     '--ngs-color-info': info,
-    '--ngs-color-on-info': contrastColor('--ngs-color-info'),
+    '--ngs-color-on-info': contrastColor(info),
     '--ngs-color-info-container': infoContainer,
-    '--ngs-color-on-info-container': contrastColor('--ngs-color-info-container'),
+    '--ngs-color-on-info-container': contrastColor(infoContainer),
     ...status,
     '--ngs-color-background': neutral[0],
-    '--ngs-color-on-background': contrastColor('--ngs-color-background'),
+    '--ngs-color-on-background': contrastColor(neutral[0]),
     '--ngs-color-surface': neutral[1],
     '--ngs-color-surface-bright': '#ffffff',
-    '--ngs-color-on-surface': contrastColor('--ngs-color-surface'),
+    '--ngs-color-on-surface': contrastColor(neutral[1]),
     '--ngs-color-on-surface-variant': neutral[6],
     '--ngs-color-neutral-50': neutral[0],
     '--ngs-color-neutral-100': neutral[1],
@@ -231,7 +231,7 @@ function generateLightThemeProperties(seed: Rgb): NgsThemeCssProperties {
 
 function generateDarkThemeProperties(seed: Rgb): NgsThemeCssProperties {
   const source = rgbToHsl(seed);
-  const primary = colorFromTone(source, 76, 0.82);
+  const primary = colorFromTone(source, 82, 0.82);
   const primaryContainer = colorFromTone(source, 28, 0.78);
   const secondary = colorFromTone(source, 78, 0.36, -8);
   const secondaryContainer = colorFromTone(source, 28, 0.3, -8);
@@ -248,27 +248,27 @@ function generateDarkThemeProperties(seed: Rgb): NgsThemeCssProperties {
   return withSharedGeneratedProperties({
     '--ngs-color-primary': primary,
     '--ngs-color-primary-seed': toHex(seed),
-    '--ngs-color-on-primary': contrastColor('--ngs-color-primary'),
+    '--ngs-color-on-primary': contrastColor(primary),
     '--ngs-color-primary-container': primaryContainer,
-    '--ngs-color-on-primary-container': contrastColor('--ngs-color-primary-container'),
+    '--ngs-color-on-primary-container': contrastColor(primaryContainer),
     '--ngs-color-secondary': secondary,
-    '--ngs-color-on-secondary': contrastColor('--ngs-color-secondary'),
+    '--ngs-color-on-secondary': contrastColor(secondary),
     '--ngs-color-secondary-container': secondaryContainer,
-    '--ngs-color-on-secondary-container': contrastColor('--ngs-color-secondary-container'),
+    '--ngs-color-on-secondary-container': contrastColor(secondaryContainer),
     '--ngs-color-tertiary': tertiary,
-    '--ngs-color-on-tertiary': contrastColor('--ngs-color-tertiary'),
+    '--ngs-color-on-tertiary': contrastColor(tertiary),
     '--ngs-color-tertiary-container': tertiaryContainer,
-    '--ngs-color-on-tertiary-container': contrastColor('--ngs-color-tertiary-container'),
+    '--ngs-color-on-tertiary-container': contrastColor(tertiaryContainer),
     '--ngs-color-info': info,
-    '--ngs-color-on-info': contrastColor('--ngs-color-info'),
+    '--ngs-color-on-info': contrastColor(info),
     '--ngs-color-info-container': infoContainer,
-    '--ngs-color-on-info-container': contrastColor('--ngs-color-info-container'),
+    '--ngs-color-on-info-container': contrastColor(infoContainer),
     ...status,
     '--ngs-color-background': neutral[0],
-    '--ngs-color-on-background': contrastColor('--ngs-color-background'),
+    '--ngs-color-on-background': contrastColor(neutral[0]),
     '--ngs-color-surface': neutral[1],
     '--ngs-color-surface-bright': neutral[2],
-    '--ngs-color-on-surface': contrastColor('--ngs-color-surface'),
+    '--ngs-color-on-surface': contrastColor(neutral[1]),
     '--ngs-color-on-surface-variant': neutral[8],
     '--ngs-color-neutral-50': neutral[0],
     '--ngs-color-neutral-100': neutral[1],
@@ -351,48 +351,62 @@ function makeNeutralScale(source: Hsl, colorScheme: NgsGeneratedThemeColorScheme
 
 function makeStatusColors(colorScheme: NgsGeneratedThemeColorScheme): NgsThemeCssProperties {
   if (colorScheme === 'dark') {
+    const danger = '#f87171';
+    const dangerContainer = '#7f1d1d';
+    const success = '#4ade80';
+    const successContainer = '#166534';
+    const warning = '#fbbf24';
+    const warningContainer = '#78350f';
+
     return {
-      '--ngs-color-danger': '#f87171',
-      '--ngs-color-on-danger': contrastColor('--ngs-color-danger'),
-      '--ngs-color-danger-container': '#7f1d1d',
-      '--ngs-color-on-danger-container': contrastColor('--ngs-color-danger-container'),
+      '--ngs-color-danger': danger,
+      '--ngs-color-on-danger': contrastColor(danger),
+      '--ngs-color-danger-container': dangerContainer,
+      '--ngs-color-on-danger-container': contrastColor(dangerContainer),
       '--ngs-color-danger-container-lowest': '#1f0707',
       '--ngs-color-danger-container-low': '#2f0b0b',
       '--ngs-color-danger-container-high': '#5f1717',
       '--ngs-color-danger-container-highest': '#7f1d1d',
-      '--ngs-color-success': '#4ade80',
-      '--ngs-color-on-success': contrastColor('--ngs-color-success'),
-      '--ngs-color-success-container': '#166534',
-      '--ngs-color-on-success-container': contrastColor('--ngs-color-success-container'),
-      '--ngs-color-warning': '#fbbf24',
-      '--ngs-color-on-warning': contrastColor('--ngs-color-warning'),
-      '--ngs-color-warning-container': '#78350f',
-      '--ngs-color-on-warning-container': contrastColor('--ngs-color-warning-container'),
-      '--ngs-color-orange-container': '#78350f',
-      '--ngs-color-on-orange-container': contrastColor('--ngs-color-orange-container'),
+      '--ngs-color-success': success,
+      '--ngs-color-on-success': contrastColor(success),
+      '--ngs-color-success-container': successContainer,
+      '--ngs-color-on-success-container': contrastColor(successContainer),
+      '--ngs-color-warning': warning,
+      '--ngs-color-on-warning': contrastColor(warning),
+      '--ngs-color-warning-container': warningContainer,
+      '--ngs-color-on-warning-container': contrastColor(warningContainer),
+      '--ngs-color-orange-container': warningContainer,
+      '--ngs-color-on-orange-container': contrastColor(warningContainer),
       '--ngs-color-green-500': '#4ade80',
     };
   }
 
+  const danger = '#dc2626';
+  const dangerContainer = '#fee2e2';
+  const success = '#16a34a';
+  const successContainer = '#dcfce7';
+  const warning = '#d97706';
+  const warningContainer = '#fef3c7';
+
   return {
-    '--ngs-color-danger': '#dc2626',
-    '--ngs-color-on-danger': contrastColor('--ngs-color-danger'),
-    '--ngs-color-danger-container': '#fee2e2',
-    '--ngs-color-on-danger-container': contrastColor('--ngs-color-danger-container'),
+    '--ngs-color-danger': danger,
+    '--ngs-color-on-danger': contrastColor(danger),
+    '--ngs-color-danger-container': dangerContainer,
+    '--ngs-color-on-danger-container': contrastColor(dangerContainer),
     '--ngs-color-danger-container-lowest': '#fffafa',
     '--ngs-color-danger-container-low': '#fef2f2',
     '--ngs-color-danger-container-high': '#fecaca',
     '--ngs-color-danger-container-highest': '#fca5a5',
-    '--ngs-color-success': '#16a34a',
-    '--ngs-color-on-success': contrastColor('--ngs-color-success'),
-    '--ngs-color-success-container': '#dcfce7',
-    '--ngs-color-on-success-container': contrastColor('--ngs-color-success-container'),
-    '--ngs-color-warning': '#d97706',
-    '--ngs-color-on-warning': contrastColor('--ngs-color-warning'),
-    '--ngs-color-warning-container': '#fef3c7',
-    '--ngs-color-on-warning-container': contrastColor('--ngs-color-warning-container'),
-    '--ngs-color-orange-container': '#fef3c7',
-    '--ngs-color-on-orange-container': contrastColor('--ngs-color-orange-container'),
+    '--ngs-color-success': success,
+    '--ngs-color-on-success': contrastColor(success),
+    '--ngs-color-success-container': successContainer,
+    '--ngs-color-on-success-container': contrastColor(successContainer),
+    '--ngs-color-warning': warning,
+    '--ngs-color-on-warning': contrastColor(warning),
+    '--ngs-color-warning-container': warningContainer,
+    '--ngs-color-on-warning-container': contrastColor(warningContainer),
+    '--ngs-color-orange-container': warningContainer,
+    '--ngs-color-on-orange-container': contrastColor(warningContainer),
     '--ngs-color-green-500': '#16a34a',
   };
 }
@@ -405,8 +419,18 @@ function colorFromTone(source: Hsl, lightness: number, saturationMultiplier = 1,
   });
 }
 
-function contrastColor(propertyName: `--ngs-${string}`): string {
-  return `contrast-color(var(${propertyName}))`;
+function contrastColor(color: string): '#000000' | '#ffffff' {
+  const rgb = parseColor(color);
+
+  if (!rgb) {
+    return '#ffffff';
+  }
+
+  const luminance = relativeLuminance(rgb);
+  const contrastWithBlack = (luminance + 0.05) / 0.05;
+  const contrastWithWhite = 1.05 / (luminance + 0.05);
+
+  return contrastWithBlack >= contrastWithWhite ? '#000000' : '#ffffff';
 }
 
 function parseColor(color: string): Rgb | null {
@@ -585,6 +609,18 @@ function toHex({ r, g, b }: Rgb): string {
 
 function toHexChannel(value: number): string {
   return clamp(Math.round(value), 0, 255).toString(16).padStart(2, '0');
+}
+
+function relativeLuminance({ r, g, b }: Rgb): number {
+  const [red, green, blue] = [r, g, b].map(channel => {
+    const normalized = channel / 255;
+
+    return normalized <= 0.03928
+      ? normalized / 12.92
+      : ((normalized + 0.055) / 1.055) ** 2.4;
+  });
+
+  return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
 }
 
 function normalizeHue(hue: number): number {
