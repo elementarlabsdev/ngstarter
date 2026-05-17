@@ -20,12 +20,26 @@
         Including font assets
       </h4>
       <p>
-        Typography APIs lets you specify any font-face. The default font-face value is configured
-        to Google's Roboto font with the 300, 400, and 500 font-weight styles. To use Roboto, your application must
-        load the font. The easiest way to load Roboto, or any other
-        custom font, is by using Google Fonts. The following snippet can be placed in your application's
-        to load Roboto from Google Fonts.
+        NgStarter reads its base font from the <code>--ngs-font-family-base</code> theme token.
+        You can use any font family, as long as the font files are loaded by your application.
+        The easiest option is a Google Fonts link in <code>src/index.html</code>; self-hosted
+        fonts work the same way through <code>@font-face</code>.
       </p>
+      <ngs-code-highlighter [code]="fontLink()" language="html"/>
+
+      <h3>Changing the app font</h3>
+      <p>
+        Override <code>--ngs-font-family-base</code> in the global stylesheet after importing the
+        NgStarter theme. Components, form controls, tables, menus, overlays, and the mapped
+        Tailwind <code>--font-sans</code> alias will inherit the new family.
+      </p>
+      <ngs-code-highlighter [code]="themeFontToken()" language="scss"/>
+
+      <p>
+        For a custom theme, put the same token inside that theme selector. Keep the fallback stack so
+        the interface remains readable while the web font is loading or if the font request fails.
+      </p>
+      <ngs-code-highlighter [code]="customThemeFont()" language="scss"/>
 
       <h4>Inline text elements</h4>
       <div class="border border-muted p-7 rounded-xl">

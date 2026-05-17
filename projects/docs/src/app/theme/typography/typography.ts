@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 import { Page } from '@meta/page/page';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
 
 @Component({
   imports: [
+    CodeHighlighter,
     FormsModule,
     Page,
     PageTitleDirective,
@@ -13,5 +15,15 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
   styleUrl: './typography.scss'
 })
 export class Typography {
+  fontLink = signal(`<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">`);
 
+  themeFontToken = signal(`:root,
+[data-ngs-theme='default'] {
+  --ngs-font-family-base: "Manrope", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}`);
+
+  customThemeFont = signal(`[data-ngs-theme='acme'] {
+  --ngs-font-family-base: "Manrope", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}`);
 }
