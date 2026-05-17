@@ -139,6 +139,12 @@ export class App {
     this._breadcrumbsStore.setBreadcrumbs([
       {
         id: 'home',
+        name: 'Home',
+        type: 'link',
+        route: '/',
+      },
+      {
+        id: 'dashboard',
         name: 'Dashboard',
         type: null,
       },

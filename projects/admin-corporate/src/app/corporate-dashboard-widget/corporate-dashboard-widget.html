@@ -1,23 +1,29 @@
 @switch (content().kind) {
   @case ('metric') {
     @let metric = content().metric;
-    <ngs-card appearance="outlined" class="overview-card metric-card">
-      <ngs-card-header class="metric-card-header">
-        <ngs-card-title class="metric-label">
-          <ngs-icon [name]="metric.icon" />
-          {{ metric.title }}
+    <ngs-card appearance="outlined">
+      <ngs-card-header>
+        <ngs-card-title>
+          <div class="flex items-center gap-2">
+            <ngs-icon [name]="metric.icon" />
+            {{ metric.title }}
+          </div>
         </ngs-card-title>
-        <ngs-card-aside>
-          <ngs-icon [name]="metric.watermark" class="metric-watermark" />
-        </ngs-card-aside>
       </ngs-card-header>
-      <ngs-card-content withoutPadding class="metric-value">
-        <strong>{{ metric.value }}</strong>
+      <ngs-card-content>
+        <div class="absolute right-4 top-2 opacity-10 text-primary">
+          <ngs-icon [name]="metric.watermark" class="metric-watermark" />
+        </div>
+        <div>
+          <strong class="text-5xl">{{ metric.value }}</strong>
+        </div>
       </ngs-card-content>
-      <ngs-card-footer class="metric-card-footer">
+      <ngs-card-footer>
         <ngs-chip class="metric-chip" [class.metric-chip-muted]="!metric.positive">
-          <ngs-icon [name]="metric.positive ? 'fluent:arrow-trending-24-regular' : 'fluent:clock-24-regular'" />
-          {{ metric.note }}
+          <div class="flex items-center gap-2">
+            <ngs-icon [name]="metric.positive ? 'fluent:arrow-trending-24-regular' : 'fluent:clock-24-regular'" />
+            {{ metric.note }}
+          </div>
         </ngs-chip>
       </ngs-card-footer>
     </ngs-card>
@@ -26,12 +32,14 @@
   @case ('pipeline') {
     <ngs-card appearance="outlined" class="overview-card pipeline-widget">
       <ngs-card-header>
-        <h2>Sales Pipeline</h2>
-        <button ngsIconButton aria-label="Pipeline actions" class="ghost-action">
-          <ngs-icon name="fluent:more-horizontal-24-regular" />
-        </button>
+        <ngs-card-title>Sales Pipeline</ngs-card-title>
+        <ngs-card-aside>
+          <button ngsIconButton aria-label="Pipeline actions">
+            <ngs-icon name="fluent:more-horizontal-24-regular" />
+          </button>
+        </ngs-card-aside>
       </ngs-card-header>
-      <ngs-card-content withoutPadding>
+      <ngs-card-content>
         <div class="pipeline-bars">
           @for (stage of content().stages; track stage.label) {
             <div
@@ -55,10 +63,12 @@
   @case ('activity') {
     <ngs-card appearance="outlined" class="overview-card activity-widget">
       <ngs-card-header>
-        <h2>Recent Activity</h2>
-        <button ngsButton="text" class="view-link">View All</button>
+        <ngs-card-title>Recent Activity</ngs-card-title>
+        <ngs-card-aside>
+          <button ngsButton="text" class="view-link">View All</button>
+        </ngs-card-aside>
       </ngs-card-header>
-      <ngs-card-content withoutPadding>
+      <ngs-card-content>
         <ngs-timeline class="activity-timeline">
           @for (activity of content().items; track activity.actor + activity.subject) {
             <ngs-timeline-item>
@@ -89,11 +99,13 @@
   @case ('tasks') {
     <ngs-card appearance="outlined" class="overview-card task-widget">
       <ngs-card-header>
-        <h2>Top Task Summary</h2>
-        <ngs-icon name="fluent:important-24-regular" class="section-action-icon" />
+        <ngs-card-title>Top Task Summary</ngs-card-title>
+        <ngs-card-aside>
+          <ngs-icon name="fluent:important-24-regular" class="section-action-icon" />
+        </ngs-card-aside>
       </ngs-card-header>
-      <ngs-card-content withoutPadding>
-        <ngs-list disableRipple class="task-list">
+      <ngs-card-content>
+        <ngs-list>
           @for (task of content().items; track task.title) {
             <ngs-list-item [lines]="2" class="task-row">
               <span ngsListItemIcon class="task-dot"></span>
@@ -110,10 +122,12 @@
   @case ('regional') {
     <ngs-card appearance="outlined" class="overview-card regional-widget">
       <ngs-card-header>
-        <h2>Regional Sales</h2>
-        <ngs-icon name="fluent:globe-24-regular" class="section-action-icon" />
+        <ngs-card-title>Regional Sales</ngs-card-title>
+        <ngs-card-aside>
+          <ngs-icon name="fluent:globe-24-regular" class="section-action-icon" />
+        </ngs-card-aside>
       </ngs-card-header>
-      <ngs-card-content withoutPadding>
+      <ngs-card-content>
         <div class="regional-list">
           @for (region of content().items; track region.region) {
             <div class="regional-row">
@@ -132,10 +146,12 @@
   @case ('revenue') {
     <ngs-card appearance="outlined" class="overview-card revenue-widget">
       <ngs-card-header>
-        <h2>Revenue Growth</h2>
-        <ngs-icon name="fluent:arrow-trending-lines-24-regular" class="section-action-icon" />
+        <ngs-card-title>Revenue Growth</ngs-card-title>
+        <ngs-card-aside>
+          <ngs-icon name="fluent:arrow-trending-lines-24-regular" class="section-action-icon" />
+        </ngs-card-aside>
       </ngs-card-header>
-      <ngs-card-content withoutPadding>
+      <ngs-card-content>
         <ngs-mchart-bar
           [data]="content().values"
           [labels]="content().months"
@@ -156,10 +172,12 @@
   @case ('team') {
     <ngs-card appearance="outlined" class="overview-card team-widget">
       <ngs-card-header>
-        <h2>Team Updates</h2>
-        <ngs-icon name="fluent:megaphone-24-regular" class="section-action-icon" />
+        <ngs-card-title>Team Updates</ngs-card-title>
+        <ngs-card-aside>
+          <ngs-icon name="fluent:megaphone-24-regular" class="section-action-icon" />
+        </ngs-card-aside>
       </ngs-card-header>
-      <ngs-card-content withoutPadding>
+      <ngs-card-content>
         <ngs-list disableRipple class="team-list">
           @for (update of content().items; track update.title) {
             <ngs-list-item [lines]="2" class="team-row">

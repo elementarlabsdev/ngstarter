@@ -1,5 +1,13 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { Card, CardAside, CardContent, CardFooter, CardHeader, CardTitle } from '@ngstarter-ui/components/card';
+import {
+  Card,
+  CardActions,
+  CardAside,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@ngstarter-ui/components/card';
 import { Chip } from '@ngstarter-ui/components/chips';
 import { GridItemAware } from '@ngstarter-ui/components/grid';
 import { Icon } from '@ngstarter-ui/components/icon';
@@ -40,6 +48,7 @@ import {
     TimelineItem,
     TimelineItemIndicatorDirective,
     TimelineTitle,
+    CardActions,
   ],
   templateUrl: './corporate-dashboard-widget.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

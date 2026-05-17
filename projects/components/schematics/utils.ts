@@ -60,9 +60,9 @@ const DEV_DEPENDENCY_NAMES = new Set([
   'tailwindcss',
 ]);
 const GOOGLE_FONTS_HREF =
-  'https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&amp;display=swap';
+  'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;display=swap';
 const GOOGLE_FONTS_HREF_PATTERN =
-  /https:\/\/fonts\.googleapis\.com\/css2\?family=Source\+Sans\+3:wght@400;500;600;700(?:&amp;|&)display=swap/;
+  /https:\/\/fonts\.googleapis\.com\/css2\?family=DM\+Sans:wght@400;500;600;700(?:&amp;|&)display=swap/;
 const GOOGLE_FONTS_LINK = `<link href="${GOOGLE_FONTS_HREF}" rel="stylesheet"/>`;
 const NGS_THEME_IMPORT = '@use "@ngstarter-ui/components/styles/themes/default";';
 const NGS_THEME_PROVIDER = `provideNgsTheme({
