@@ -10,11 +10,10 @@
     </div>
 
     <ngs-accordion class="block space-y-3">
-      @for (faq of faqs; track faq.question) {
+      @for (faq of faqs(); track faq.question) {
         <ngs-expansion-panel>
           <ngs-expansion-panel-header>
             <ngs-expansion-panel-title>{{ faq.question }}</ngs-expansion-panel-title>
-            <ngs-expansion-panel-description>NgStarter</ngs-expansion-panel-description>
           </ngs-expansion-panel-header>
           <p class="leading-7 text-on-surface-variant">{{ faq.answer }}</p>
         </ngs-expansion-panel>

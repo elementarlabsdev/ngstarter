@@ -14,9 +14,6 @@ interface Hsl {
   l: number;
 }
 
-const LIGHT_TEXT = '#ffffff';
-const DARK_TEXT = '#0f172a';
-
 export const NGS_GENERATED_THEME_PROPERTY_NAMES = [
   '--ngs-color-primary-seed',
   '--ngs-color-primary',
@@ -133,6 +130,7 @@ export function generateNgsThemeProperties(
     return {
       '--ngs-color-primary-seed': primaryColor,
       '--ngs-color-primary': primaryColor,
+      '--ngs-color-on-primary': contrastColor('--ngs-color-primary'),
     };
   }
 
@@ -169,27 +167,27 @@ function generateLightThemeProperties(seed: Rgb): NgsThemeCssProperties {
   return withSharedGeneratedProperties({
     '--ngs-color-primary': primary,
     '--ngs-color-primary-seed': primary,
-    '--ngs-color-on-primary': readableOn(primary),
+    '--ngs-color-on-primary': contrastColor('--ngs-color-primary'),
     '--ngs-color-primary-container': primaryContainer,
-    '--ngs-color-on-primary-container': readableOn(primaryContainer, DARK_TEXT, primary),
+    '--ngs-color-on-primary-container': contrastColor('--ngs-color-primary-container'),
     '--ngs-color-secondary': secondary,
-    '--ngs-color-on-secondary': readableOn(secondary),
+    '--ngs-color-on-secondary': contrastColor('--ngs-color-secondary'),
     '--ngs-color-secondary-container': secondaryContainer,
-    '--ngs-color-on-secondary-container': readableOn(secondaryContainer, DARK_TEXT, secondary),
+    '--ngs-color-on-secondary-container': contrastColor('--ngs-color-secondary-container'),
     '--ngs-color-tertiary': tertiary,
-    '--ngs-color-on-tertiary': readableOn(tertiary),
+    '--ngs-color-on-tertiary': contrastColor('--ngs-color-tertiary'),
     '--ngs-color-tertiary-container': tertiaryContainer,
-    '--ngs-color-on-tertiary-container': readableOn(tertiaryContainer, DARK_TEXT, tertiary),
+    '--ngs-color-on-tertiary-container': contrastColor('--ngs-color-tertiary-container'),
     '--ngs-color-info': info,
-    '--ngs-color-on-info': readableOn(info),
+    '--ngs-color-on-info': contrastColor('--ngs-color-info'),
     '--ngs-color-info-container': infoContainer,
-    '--ngs-color-on-info-container': readableOn(infoContainer, DARK_TEXT, info),
+    '--ngs-color-on-info-container': contrastColor('--ngs-color-info-container'),
     ...status,
     '--ngs-color-background': neutral[0],
-    '--ngs-color-on-background': neutral[11],
+    '--ngs-color-on-background': contrastColor('--ngs-color-background'),
     '--ngs-color-surface': neutral[1],
     '--ngs-color-surface-bright': '#ffffff',
-    '--ngs-color-on-surface': neutral[11],
+    '--ngs-color-on-surface': contrastColor('--ngs-color-surface'),
     '--ngs-color-on-surface-variant': neutral[6],
     '--ngs-color-neutral-50': neutral[0],
     '--ngs-color-neutral-100': neutral[1],
@@ -218,13 +216,13 @@ function generateLightThemeProperties(seed: Rgb): NgsThemeCssProperties {
     '--ngs-color-strong': neutral[6],
     '--ngs-state-selected-color': primary,
     '--ngs-button-tonal-bg': secondaryContainer,
-    '--ngs-button-tonal-color': readableOn(secondaryContainer, DARK_TEXT, secondary),
+    '--ngs-button-tonal-color': 'var(--ngs-color-on-secondary-container)',
     '--ngs-button-outlined-border': outlineVariant,
     '--ngs-field-border-color': outlineVariant,
     '--ngs-field-border-focus-color': primary,
     '--ngs-field-filled-bg': neutral[1],
     '--ngs-dropdown-item-selected-bg': primaryContainer,
-    '--ngs-dropdown-item-selected-color': readableOn(primaryContainer, DARK_TEXT, primary),
+    '--ngs-dropdown-item-selected-color': 'var(--ngs-color-on-primary-container)',
     '--ngs-nav-item-active-color': primary,
     '--ngs-nav-item-active-bg': primaryContainer,
     '--ngs-nav-item-active-icon-color': primary,
@@ -250,27 +248,27 @@ function generateDarkThemeProperties(seed: Rgb): NgsThemeCssProperties {
   return withSharedGeneratedProperties({
     '--ngs-color-primary': primary,
     '--ngs-color-primary-seed': toHex(seed),
-    '--ngs-color-on-primary': readableOn(primary),
+    '--ngs-color-on-primary': contrastColor('--ngs-color-primary'),
     '--ngs-color-primary-container': primaryContainer,
-    '--ngs-color-on-primary-container': readableOn(primaryContainer),
+    '--ngs-color-on-primary-container': contrastColor('--ngs-color-primary-container'),
     '--ngs-color-secondary': secondary,
-    '--ngs-color-on-secondary': readableOn(secondary),
+    '--ngs-color-on-secondary': contrastColor('--ngs-color-secondary'),
     '--ngs-color-secondary-container': secondaryContainer,
-    '--ngs-color-on-secondary-container': readableOn(secondaryContainer),
+    '--ngs-color-on-secondary-container': contrastColor('--ngs-color-secondary-container'),
     '--ngs-color-tertiary': tertiary,
-    '--ngs-color-on-tertiary': readableOn(tertiary),
+    '--ngs-color-on-tertiary': contrastColor('--ngs-color-tertiary'),
     '--ngs-color-tertiary-container': tertiaryContainer,
-    '--ngs-color-on-tertiary-container': readableOn(tertiaryContainer),
+    '--ngs-color-on-tertiary-container': contrastColor('--ngs-color-tertiary-container'),
     '--ngs-color-info': info,
-    '--ngs-color-on-info': readableOn(info),
+    '--ngs-color-on-info': contrastColor('--ngs-color-info'),
     '--ngs-color-info-container': infoContainer,
-    '--ngs-color-on-info-container': readableOn(infoContainer),
+    '--ngs-color-on-info-container': contrastColor('--ngs-color-info-container'),
     ...status,
     '--ngs-color-background': neutral[0],
-    '--ngs-color-on-background': neutral[11],
+    '--ngs-color-on-background': contrastColor('--ngs-color-background'),
     '--ngs-color-surface': neutral[1],
     '--ngs-color-surface-bright': neutral[2],
-    '--ngs-color-on-surface': neutral[11],
+    '--ngs-color-on-surface': contrastColor('--ngs-color-surface'),
     '--ngs-color-on-surface-variant': neutral[8],
     '--ngs-color-neutral-50': neutral[0],
     '--ngs-color-neutral-100': neutral[1],
@@ -299,13 +297,13 @@ function generateDarkThemeProperties(seed: Rgb): NgsThemeCssProperties {
     '--ngs-color-strong': neutral[9],
     '--ngs-state-selected-color': primary,
     '--ngs-button-tonal-bg': secondaryContainer,
-    '--ngs-button-tonal-color': readableOn(secondaryContainer),
+    '--ngs-button-tonal-color': 'var(--ngs-color-on-secondary-container)',
     '--ngs-button-outlined-border': outlineVariant,
     '--ngs-field-border-color': outlineVariant,
     '--ngs-field-border-focus-color': primary,
     '--ngs-field-filled-bg': neutral[2],
     '--ngs-dropdown-item-selected-bg': primaryContainer,
-    '--ngs-dropdown-item-selected-color': readableOn(primaryContainer),
+    '--ngs-dropdown-item-selected-color': 'var(--ngs-color-on-primary-container)',
     '--ngs-nav-item-active-color': primary,
     '--ngs-nav-item-active-bg': primaryContainer,
     '--ngs-nav-item-active-icon-color': primary,
@@ -355,46 +353,46 @@ function makeStatusColors(colorScheme: NgsGeneratedThemeColorScheme): NgsThemeCs
   if (colorScheme === 'dark') {
     return {
       '--ngs-color-danger': '#f87171',
-      '--ngs-color-on-danger': '#450a0a',
+      '--ngs-color-on-danger': contrastColor('--ngs-color-danger'),
       '--ngs-color-danger-container': '#7f1d1d',
-      '--ngs-color-on-danger-container': '#fef2f2',
+      '--ngs-color-on-danger-container': contrastColor('--ngs-color-danger-container'),
       '--ngs-color-danger-container-lowest': '#1f0707',
       '--ngs-color-danger-container-low': '#2f0b0b',
       '--ngs-color-danger-container-high': '#5f1717',
       '--ngs-color-danger-container-highest': '#7f1d1d',
       '--ngs-color-success': '#4ade80',
-      '--ngs-color-on-success': '#052e16',
+      '--ngs-color-on-success': contrastColor('--ngs-color-success'),
       '--ngs-color-success-container': '#166534',
-      '--ngs-color-on-success-container': '#dcfce7',
+      '--ngs-color-on-success-container': contrastColor('--ngs-color-success-container'),
       '--ngs-color-warning': '#fbbf24',
-      '--ngs-color-on-warning': '#451a03',
+      '--ngs-color-on-warning': contrastColor('--ngs-color-warning'),
       '--ngs-color-warning-container': '#78350f',
-      '--ngs-color-on-warning-container': '#fef3c7',
+      '--ngs-color-on-warning-container': contrastColor('--ngs-color-warning-container'),
       '--ngs-color-orange-container': '#78350f',
-      '--ngs-color-on-orange-container': '#fef3c7',
+      '--ngs-color-on-orange-container': contrastColor('--ngs-color-orange-container'),
       '--ngs-color-green-500': '#4ade80',
     };
   }
 
   return {
     '--ngs-color-danger': '#dc2626',
-    '--ngs-color-on-danger': '#ffffff',
+    '--ngs-color-on-danger': contrastColor('--ngs-color-danger'),
     '--ngs-color-danger-container': '#fee2e2',
-    '--ngs-color-on-danger-container': '#7f1d1d',
+    '--ngs-color-on-danger-container': contrastColor('--ngs-color-danger-container'),
     '--ngs-color-danger-container-lowest': '#fffafa',
     '--ngs-color-danger-container-low': '#fef2f2',
     '--ngs-color-danger-container-high': '#fecaca',
     '--ngs-color-danger-container-highest': '#fca5a5',
     '--ngs-color-success': '#16a34a',
-    '--ngs-color-on-success': '#ffffff',
+    '--ngs-color-on-success': contrastColor('--ngs-color-success'),
     '--ngs-color-success-container': '#dcfce7',
-    '--ngs-color-on-success-container': '#14532d',
+    '--ngs-color-on-success-container': contrastColor('--ngs-color-success-container'),
     '--ngs-color-warning': '#d97706',
-    '--ngs-color-on-warning': '#ffffff',
+    '--ngs-color-on-warning': contrastColor('--ngs-color-warning'),
     '--ngs-color-warning-container': '#fef3c7',
-    '--ngs-color-on-warning-container': '#78350f',
+    '--ngs-color-on-warning-container': contrastColor('--ngs-color-warning-container'),
     '--ngs-color-orange-container': '#fef3c7',
-    '--ngs-color-on-orange-container': '#78350f',
+    '--ngs-color-on-orange-container': contrastColor('--ngs-color-orange-container'),
     '--ngs-color-green-500': '#16a34a',
   };
 }
@@ -407,17 +405,8 @@ function colorFromTone(source: Hsl, lightness: number, saturationMultiplier = 1,
   });
 }
 
-function readableOn(color: string, dark = DARK_TEXT, light = LIGHT_TEXT): string {
-  const bg = parseColor(color);
-
-  if (!bg) {
-    return light;
-  }
-
-  const darkContrast = contrastRatio(bg, parseColor(dark) ?? { r: 15, g: 23, b: 42 });
-  const lightContrast = contrastRatio(bg, parseColor(light) ?? { r: 255, g: 255, b: 255 });
-
-  return darkContrast >= lightContrast ? dark : light;
+function contrastColor(propertyName: `--ngs-${string}`): string {
+  return `contrast-color(var(${propertyName}))`;
 }
 
 function parseColor(color: string): Rgb | null {
@@ -596,24 +585,6 @@ function toHex({ r, g, b }: Rgb): string {
 
 function toHexChannel(value: number): string {
   return clamp(Math.round(value), 0, 255).toString(16).padStart(2, '0');
-}
-
-function contrastRatio(first: Rgb, second: Rgb): number {
-  const firstLuminance = relativeLuminance(first);
-  const secondLuminance = relativeLuminance(second);
-  const lighter = Math.max(firstLuminance, secondLuminance);
-  const darker = Math.min(firstLuminance, secondLuminance);
-
-  return (lighter + 0.05) / (darker + 0.05);
-}
-
-function relativeLuminance({ r, g, b }: Rgb): number {
-  return [r, g, b]
-    .map(channel => {
-      const value = channel / 255;
-      return value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
-    })
-    .reduce((total, value, index) => total + value * [0.2126, 0.7152, 0.0722][index], 0);
 }
 
 function normalizeHue(hue: number): number {

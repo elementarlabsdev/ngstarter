@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {
   Accordion,
   ExpansionPanel,
@@ -10,7 +10,6 @@ import { faqItems } from '../../seo/seo-data';
 
 @Component({
   selector: 'app-faq',
-  standalone: true,
   imports: [
     Accordion,
     ExpansionPanel,
@@ -21,5 +20,5 @@ import { faqItems } from '../../seo/seo-data';
   templateUrl: './faq.component.html',
 })
 export class FaqComponent {
-  readonly faqs = faqItems;
+  readonly faqs = signal(faqItems);
 }
