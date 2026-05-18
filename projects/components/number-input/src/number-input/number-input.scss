@@ -66,6 +66,16 @@
     border: var(--ngs-number-input-control-border);
     top: 1px;
 
+    .control-icon {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     ::ng-deep {
       ngs-icon {
         --ngs-icon-size: --spacing(5);

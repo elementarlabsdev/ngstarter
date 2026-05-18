@@ -8,14 +8,18 @@
     @if (_decreaseControlRef()) {
       <ng-template [ngTemplateOutlet]="_decreaseControlTemplateRef"/>
     } @else {
-      <span>&minus;</span>
+      <svg class="control-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path d="M3.5 8h9"/>
+      </svg>
     }
   </button>
   <button class="control control-increase" ngsRipple [disabled]="isIncreaseDisabled()" (click)="increase($event, input)">
     @if (_increaseControlRef()) {
       <ng-template [ngTemplateOutlet]="_increaseControlTemplateRef"/>
     } @else {
-      <span>&plus;</span>
+      <svg class="control-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path d="M8 3.5v9M3.5 8h9"/>
+      </svg>
     }
   </button>
 </div>
