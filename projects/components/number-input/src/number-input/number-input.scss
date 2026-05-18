@@ -13,19 +13,17 @@
   --ngs-number-input-suffix-gap: --spacing(3);
   --ngs-number-input-control-size: --spacing(7);
   --ngs-number-input-control-border: none;
+  --ngs-number-input-controls-wdith: --spacing(16);
 
   display: flex !important;
   gap: var(--ngs-number-input-gap);
+  padding-right: var(--ngs-number-input-controls-wdith);
 
-
-  .input {
+  .number-input {
     width: auto;
     max-width: none;
     flex-grow: 1;
     min-width: 0;
-  }
-
-  .input {
     background: none;
     outline: none;
     color: currentColor;
@@ -33,17 +31,22 @@
     border: none;
   }
 
-  .input::-webkit-outer-spin-button,
-  .input::-webkit-inner-spin-button {
+  .number-input::-webkit-outer-spin-button,
+  .number-input::-webkit-inner-spin-button {
     appearance: none;
     margin: 0;
   }
 
   .controls {
-    display: flex;
-    height: 100%;
     gap: 0.375rem;
     user-select: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .control {
