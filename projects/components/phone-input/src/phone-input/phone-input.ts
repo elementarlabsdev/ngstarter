@@ -21,7 +21,6 @@ import {
   AsYouType,
   CountryCode as CC,
   PhoneNumber,
-  getExampleNumber,
   parsePhoneNumberFromString,
 } from 'libphonenumber-js';
 import { Subject } from 'rxjs';
@@ -83,23 +82,11 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
   readonly menuSearchInput = viewChild<ElementRef<HTMLInputElement>>('menuSearchInput');
   readonly focusable = viewChild.required<ElementRef>('focusable');
 
-  focused = false;
   private _focused = signal(false);
-  errorState = false;
   private _errorState = signal(false);
   id = '';
   private _id = signal(`ngs-phone-input-${PhoneInput.nextId++}`);
   placeholder = '';
-  empty = true;
-  shouldLabelFloat = false;
-
-  private _shouldLabelFloat = computed(() => {
-    return this._focused() || !this.empty;
-  });
-
-  private _empty = computed(() => {
-    return !this.phoneNumber;
-  });
 
   readonly countryChanged = output<Country>();
 
@@ -110,13 +97,36 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
   preferredCountriesInDropDown: Country[] = [];
   selectedCountry = signal<Country | null>(null);
   numberInstance?: PhoneNumber;
-  value: any;
+  private _value: any;
   searchCriteria?: string;
 
   private _previousFormattedNumber?: string;
 
   onTouched = () => {}
   propagateChange = (_: any) => {}
+
+  get focused(): boolean {
+    return this._focused();
+  }
+
+  get errorState(): boolean {
+    return this._errorState();
+  }
+
+  get empty(): boolean {
+    return !this.phoneNumber;
+  }
+
+  get shouldLabelFloat(): boolean {
+    return this._focused() || !this.empty;
+  }
+
+  set value(value: any) {
+    this.writeValue(value);
+  }
+  get value(): any {
+    return this._value;
+  }
 
   autocomplete = input<AutoFill>('on');
   errorStateMatcher = input<ErrorStateMatcher>(this._errorStateMatcher);
@@ -178,16 +188,17 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
     this.fetchCountryData();
 
     effect(() => {
-      this.phoneNumber = this.formattedPhoneNumber;
+      this.format();
+
+      if (this.numberInstance) {
+        this.phoneNumber = this.formattedPhoneNumber;
+      }
+
       this.stateChanges.next();
     });
 
     effect(() => {
       this.id = this._id();
-      this.focused = this._focused();
-      this.errorState = this._errorState();
-      this.empty = this._empty();
-      this.shouldLabelFloat = this._shouldLabelFloat();
       this.placeholder = this._placeholder();
     });
   }
@@ -253,9 +264,10 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
 
   public onPhoneNumberChange(): void {
     if (!this.phoneNumber) {
-      this.value = '';
+      this.clearValue('');
       this.propagateChange(this.value);
       this._changeDetectorRef.markForCheck();
+      this.stateChanges.next();
       return;
     }
 
@@ -265,7 +277,7 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
         this.selectedCountry()?.shortCode.toUpperCase() as CC,
       );
       this.formatAsYouTypeIfEnabled();
-      this.value = this.numberInstance?.number;
+      this._value = this.numberInstance?.number ?? this.phoneNumber.toString();
 
       if (this.numberInstance && this.numberInstance.isValid()) {
         if (this.phoneNumber !== this.formattedPhoneNumber) {
@@ -282,11 +294,12 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
     } catch (e) {
       // if no possible numbers are there,
       // then the full number is passed so that validator could be triggered and proper error could be shown
-      this.value = this.phoneNumber.toString();
+      this._value = this.phoneNumber.toString();
     }
 
     this.propagateChange(this.value);
     this._changeDetectorRef.markForCheck();
+    this.stateChanges.next();
   }
 
   public onCountrySelect(country: Country, el: any): void {
@@ -343,25 +356,33 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
   }
 
   writeValue(value: any): void {
-    if (value) {
-      this.numberInstance = parsePhoneNumberFromString(value);
+    if (!value) {
+      this.clearValue(value);
+      this.stateChanges.next();
+      this._changeDetectorRef.detectChanges();
+      return;
+    }
 
-      if (this.numberInstance) {
-        const countryCode = this.numberInstance.country;
-        this.phoneNumber = this.formattedPhoneNumber;
+    this._value = value;
+    this.numberInstance = parsePhoneNumberFromString(value);
 
-        if (!countryCode) {
-          return;
-        }
+    if (this.numberInstance) {
+      const countryCode = this.numberInstance.country;
+      this.phoneNumber = this.formattedPhoneNumber;
 
-        const country = this.getCountry(countryCode);
-        this.selectedCountry.set(country);
-        this.countryChanged.emit(country);
+      if (!countryCode) {
+        this.stateChanges.next(undefined);
         this._changeDetectorRef.detectChanges();
-        this.stateChanges.next();
-      } else {
-        this.phoneNumber = value;
+        return;
       }
+
+      const country = this.getCountry(countryCode);
+      this.selectedCountry.set(country);
+      this.countryChanged.emit(country);
+      this._changeDetectorRef.detectChanges();
+      this.stateChanges.next();
+    } else {
+      this.phoneNumber = value;
     }
 
     this.stateChanges.next(undefined);
@@ -384,10 +405,17 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
   }
 
   reset(): void {
-    this.phoneNumber = '';
+    this.clearValue(null);
     this.propagateChange(null);
     this._changeDetectorRef.markForCheck();
     this.stateChanges.next(undefined);
+  }
+
+  private clearValue(value: any): void {
+    this._value = value ?? '';
+    this.phoneNumber = '';
+    this.numberInstance = undefined;
+    this._previousFormattedNumber = undefined;
   }
 
   private get formattedPhoneNumber(): string {
