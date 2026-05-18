@@ -6,12 +6,15 @@
   --ngs-select-placeholder-color: var(--ngs-field-label-color);
   --ngs-select-border-color: var(--ngs-field-border-color);
   --ngs-select-min-width: 120px;
+  --ngs-select-arrow-container-width: --spacing(5);
+  --ngs-select-arrow-size: 18px;
 
   display: inline-block;
   outline: none;
   cursor: pointer;
   font-size: var(--ngs-select-font-size);
   min-width: var(--ngs-select-min-width);
+  padding-right: var(--ngs-select-arrow-container-width);
 
   &.ngs-select-disabled {
     cursor: default;
@@ -59,8 +62,8 @@
   }
 
   .ngs-select-arrow {
-    width: 18px;
-    height: 18px;
+    width: var(--ngs-select-arrow-size);
+    height: var(--ngs-select-arrow-size);
     display: flex;
     color: var(--ngs-select-arrow-color);
   }
@@ -71,6 +74,11 @@
     flex-shrink: 0;
     display: inline-flex;
     transition: transform 200ms ease;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--ngs-select-arrow-container-width);
 
     .ngs-form-field:not(.ngs-form-field-has-label) &,
     .ngs-paginator & {
@@ -94,38 +102,33 @@
     }
   }
 
-  ::ng-deep ngs-select-trigger,
-  ::ng-deep .ngs-select-trigger-content {
-    display: flex;
-    align-items: center;
-    min-width: 0;
-    max-width: 100%;
-    height: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-  }
+  ::ng-deep {
+    ngs-select-trigger,
+    .ngs-select-trigger-content {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      max-width: 100%;
+      height: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+    }
 
-  ::ng-deep .ngs-select-trigger-content {
-    gap: var(--ngs-select-trigger-gap, var(--ngs-dropdown-item-gap, --spacing(2)));
-  }
+    .ngs-select-trigger-content {
+      gap: var(--ngs-select-trigger-gap, var(--ngs-dropdown-item-gap, --spacing(2)));
+    }
 
-  ::ng-deep .ngs-select-trigger-icon {
-    flex: none;
-    line-height: 0;
-  }
+    .ngs-select-trigger-icon {
+      flex: none;
+      line-height: 0;
+    }
 
-  ::ng-deep .ngs-select-trigger-text {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
-:host-context(.ngs-form-field) {
-  .ngs-select-arrow-wrapper {
-    position: relative;
-    top: -8px;
+    .ngs-select-trigger-text {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 }
 
