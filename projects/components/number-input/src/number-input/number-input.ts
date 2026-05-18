@@ -14,6 +14,7 @@ import {
   signal,
   computed,
   effect,
+  HostListener,
 } from '@angular/core';
 import { ControlValueAccessor, FormGroupDirective, NgControl, NgForm } from '@angular/forms';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -157,13 +158,15 @@ export class NumberInput implements FormFieldControl<any>, ControlValueAccessor,
     controlElement.setAttribute('aria-describedby', ids.join(' '));
   }
 
-  onFocusIn(event: FocusEvent) {
+  @HostListener('focusin')
+  onFocusIn() {
     if (!this._focused()) {
       this._focused.set(true);
       this.stateChanges.next();
     }
   }
 
+  @HostListener('focusout', ['$event'])
   onFocusOut(event: FocusEvent) {
     if (!this._elementRef.nativeElement.contains(event.relatedTarget as Element)) {
       this.touched = true;

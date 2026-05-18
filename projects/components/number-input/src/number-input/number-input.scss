@@ -66,14 +66,9 @@
     border: var(--ngs-number-input-control-border);
     top: 1px;
 
-    span {
-      position: relative;
-      top: -1px;
-    }
-
     ::ng-deep {
-      .mat-icon {
-        line-height: 24px;
+      ngs-icon {
+        --ngs-icon-size: --spacing(5);
       }
     }
 
