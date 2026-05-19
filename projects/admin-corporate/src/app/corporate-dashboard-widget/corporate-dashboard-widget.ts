@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import {
   Card,
-  CardActions,
   CardAside,
   CardContent,
   CardFooter,
@@ -48,9 +47,9 @@ import {
     TimelineItem,
     TimelineItemIndicatorDirective,
     TimelineTitle,
-    CardActions,
   ],
   templateUrl: './corporate-dashboard-widget.html',
+  styleUrl: './corporate-dashboard-widget.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CorporateDashboardWidget implements GridItemAware {

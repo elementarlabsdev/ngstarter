@@ -202,6 +202,13 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "prebundle": {
+              "exclude": [
+                "emojibase-data"
+              ]
+            }
+          },
           "configurations": {
             "production": {
               "buildTarget": "docs:build:production"
@@ -278,6 +285,13 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "prebundle": {
+              "exclude": [
+                "emojibase-data"
+              ]
+            }
+          },
           "configurations": {
             "production": {
               "buildTarget": "admin-corporate:build:production"
@@ -353,6 +367,13 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "prebundle": {
+              "exclude": [
+                "emojibase-data"
+              ]
+            }
+          },
           "configurations": {
             "production": {
               "buildTarget": "admin-modern:build:production"
@@ -429,6 +450,13 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "prebundle": {
+              "exclude": [
+                "emojibase-data"
+              ]
+            }
+          },
           "configurations": {
             "production": {
               "buildTarget": "admin-classic:build:production"

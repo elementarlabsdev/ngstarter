@@ -1,7 +1,7 @@
 @switch (content().kind) {
   @case ('metric') {
     @let metric = content().metric;
-    <ngs-card appearance="outlined">
+    <ngs-card appearance="outlined" class="h-full">
       <ngs-card-header>
         <ngs-card-title>
           <div class="flex items-center gap-2">
@@ -15,7 +15,7 @@
           <ngs-icon [name]="metric.watermark" class="metric-watermark" />
         </div>
         <div>
-          <strong class="text-5xl">{{ metric.value }}</strong>
+          <strong class="text-5xl font-normal">{{ metric.value }}</strong>
         </div>
       </ngs-card-content>
       <ngs-card-footer>
@@ -30,7 +30,7 @@
   }
 
   @case ('pipeline') {
-    <ngs-card appearance="outlined" class="overview-card pipeline-widget">
+    <ngs-card appearance="outlined" class="h-full">
       <ngs-card-header>
         <ngs-card-title>Sales Pipeline</ngs-card-title>
         <ngs-card-aside>
@@ -61,7 +61,7 @@
   }
 
   @case ('activity') {
-    <ngs-card appearance="outlined" class="overview-card activity-widget">
+    <ngs-card appearance="outlined" class="h-full">
       <ngs-card-header>
         <ngs-card-title>Recent Activity</ngs-card-title>
         <ngs-card-aside>
@@ -97,7 +97,7 @@
   }
 
   @case ('tasks') {
-    <ngs-card appearance="outlined" class="overview-card task-widget">
+    <ngs-card appearance="outlined" class="h-full">
       <ngs-card-header>
         <ngs-card-title>Top Task Summary</ngs-card-title>
         <ngs-card-aside>
@@ -120,7 +120,7 @@
   }
 
   @case ('regional') {
-    <ngs-card appearance="outlined" class="overview-card regional-widget">
+    <ngs-card appearance="outlined" class="h-full">
       <ngs-card-header>
         <ngs-card-title>Regional Sales</ngs-card-title>
         <ngs-card-aside>
@@ -144,7 +144,7 @@
   }
 
   @case ('revenue') {
-    <ngs-card appearance="outlined" class="overview-card revenue-widget">
+    <ngs-card appearance="outlined" class="h-full">
       <ngs-card-header>
         <ngs-card-title>Revenue Growth</ngs-card-title>
         <ngs-card-aside>
@@ -170,7 +170,7 @@
   }
 
   @case ('team') {
-    <ngs-card appearance="outlined" class="overview-card team-widget">
+    <ngs-card appearance="outlined" class="h-full">
       <ngs-card-header>
         <ngs-card-title>Team Updates</ngs-card-title>
         <ngs-card-aside>
