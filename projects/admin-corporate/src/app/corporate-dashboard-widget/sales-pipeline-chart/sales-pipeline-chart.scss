@@ -1,0 +1,14 @@
+@reference 'tailwindcss';
+
+:host {
+  --pipeline-primary: #4979ec;
+  --pipeline-accent: #f4b24b;
+  --pipeline-success: #56c39c;
+  display: block;
+  height: 16.75rem;
+}
+
+.sales-pipeline-chart {
+  width: 100%;
+  height: 100%;
+}

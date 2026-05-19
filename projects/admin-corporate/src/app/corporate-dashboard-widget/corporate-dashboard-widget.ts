@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle
 } from '@ngstarter-ui/components/card';
-import { Chip } from '@ngstarter-ui/components/chips';
+import {Chip, ChipShape} from '@ngstarter-ui/components/chips';
 import { GridItemAware } from '@ngstarter-ui/components/grid';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { List, ListItem, ListItemIcon, ListItemLine, ListItemMeta, ListItemTitle } from '@ngstarter-ui/components/list';
@@ -21,6 +21,7 @@ import {
   TimelineItemIndicatorDirective,
   TimelineTitle,
 } from '@ngstarter-ui/components/timeline';
+import { SalesPipelineChart } from './sales-pipeline-chart/sales-pipeline-chart';
 
 @Component({
   selector: 'app-corporate-dashboard-widget',
@@ -42,11 +43,13 @@ import {
     ListItemTitle,
     MchartBar,
     ProgressBar,
+    SalesPipelineChart,
     Timeline,
     TimelineDescription,
     TimelineItem,
     TimelineItemIndicatorDirective,
     TimelineTitle,
+    ChipShape,
   ],
   templateUrl: './corporate-dashboard-widget.html',
   styleUrl: './corporate-dashboard-widget.scss',

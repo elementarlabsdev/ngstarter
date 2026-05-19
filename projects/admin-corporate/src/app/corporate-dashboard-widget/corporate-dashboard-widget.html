@@ -40,23 +40,22 @@
         </ngs-card-aside>
       </ngs-card-header>
       <ngs-card-content>
-        <div class="pipeline-bars">
+        <app-sales-pipeline-chart [stages]="content().stages" />
+      </ngs-card-content>
+      <ngs-card-footer>
+        <div class="flex gap-3">
           @for (stage of content().stages; track stage.label) {
-            <div
-              class="pipeline-stage"
-              [class.pipeline-stage-accent]="stage.tone === 'accent'"
-              [class.pipeline-stage-success]="stage.tone === 'success'"
+            <ngs-chip
+              class="pipeline-chip"
+              [class.pipeline-chip-accent]="stage.tone === 'accent'"
+              [class.pipeline-chip-success]="stage.tone === 'success'"
             >
-              <div class="pipeline-fill">
-                <strong>{{ stage.count }}</strong>
-                <span>{{ stage.label }}</span>
-              </div>
-              <ngs-progress-bar [value]="stage.progress" />
-              <em>{{ stage.value }}</em>
-            </div>
+              <ngs-icon name="fluent:target-arrow-24-regular" ngsChipShape />
+              {{ stage.label }} - {{ stage.value }}
+            </ngs-chip>
           }
         </div>
-      </ngs-card-content>
+      </ngs-card-footer>
     </ngs-card>
   }
 
@@ -65,11 +64,11 @@
       <ngs-card-header>
         <ngs-card-title>Recent Activity</ngs-card-title>
         <ngs-card-aside>
-          <button ngsButton="text" class="view-link">View All</button>
+          <button ngsButton>View All</button>
         </ngs-card-aside>
       </ngs-card-header>
       <ngs-card-content>
-        <ngs-timeline class="activity-timeline">
+        <ngs-timeline>
           @for (activity of content().items; track activity.actor + activity.subject) {
             <ngs-timeline-item>
               <ng-template ngsTimelineItemIndicator>

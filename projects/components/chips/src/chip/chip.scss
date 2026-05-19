@@ -48,6 +48,10 @@
     padding-left: --spacing(1.5);
   }
 
+  &:has(.shape:not(:empty)) {
+    padding-left: --spacing(1.5);
+  }
+
   &:has(.ngs-chip-remove:not(:empty)) {
     padding-right: --spacing(1.5);
   }
@@ -64,6 +68,18 @@
       width: --spacing(6);
       height: --spacing(6);
       border-radius: 50%;
+    }
+  }
+
+  .shape {
+    position: relative;
+    max-height: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:empty {
+      display: none;
     }
   }
 
@@ -128,7 +144,6 @@
       color: var(--ngs-color-danger);
     }
   }
-
 
   &.ngs-chip-editing {
     .avatar,

@@ -9,3 +9,4 @@ export * from './src/chip-edit';
 export * from './src/chip-remove';
 export * from './src/chip-input';
 export * from './src/chip-control';
+export * from './src/chip-shape';
