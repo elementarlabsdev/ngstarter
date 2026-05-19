@@ -1400,6 +1400,7 @@ ngs-card.metric-card .metric-card-footer {
   z-index: 20;
   --ngs-button-height: 3.25rem;
   color: #ffffff;
+  --ngs-button-border-radius: 999px;
   background: linear-gradient(180deg, #46a1ff, #036fe3);
   box-shadow: 0 10px 22px rgba(3, 111, 227, 0.28);
 }

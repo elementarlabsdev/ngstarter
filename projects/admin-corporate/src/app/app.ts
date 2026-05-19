@@ -269,12 +269,15 @@ export class App {
     { title: 'Q4 Revenue Review', priority: 'High Priority', due: 'Due Tomorrow' },
     { title: 'Acme Corp Follow-up', priority: 'High Priority', due: 'Oct 24' },
     { title: 'Regional Lead Meeting', priority: 'Medium Priority', due: 'Oct 26' },
+    { title: 'Enterprise Renewal Prep', priority: 'Medium Priority', due: 'Oct 28' },
+    { title: 'Partner Pipeline Audit', priority: 'Low Priority', due: 'Oct 30' },
   ]);
 
   protected readonly regionalSales = signal<readonly RegionalSale[]>([
     { region: 'North America', value: '$1.2M', percent: 50 },
     { region: 'Europe', value: '$0.8M', percent: 33 },
     { region: 'Asia', value: '$0.4M', percent: 17 },
+    { region: 'Latin America', value: '$0.2M', percent: 9 },
   ]);
 
   protected readonly revenueGrowth = signal([46, 64, 52, 82, 70, 100]);
@@ -292,6 +295,18 @@ export class App {
       tone: 'message',
       title: 'James Miller',
       message: '"Just updated the Acme docs."',
+    },
+    {
+      icon: 'fluent:people-team-24-regular',
+      tone: 'message',
+      title: 'Sales Standup',
+      message: 'Pipeline review starts at 3:00 PM.',
+    },
+    {
+      icon: 'fluent:target-arrow-24-regular',
+      tone: 'alert',
+      title: 'Forecast Check',
+      message: 'West region needs commit updates.',
     },
   ]);
 
@@ -313,7 +328,7 @@ export class App {
         id: `metric-${index}`,
         type: 'dashboard-widget',
         columns: 4,
-        height: '11.75rem',
+        // height: '11.75rem',
         content: {
           kind: 'metric',
           metric,
@@ -323,7 +338,7 @@ export class App {
         id: 'pipeline',
         type: 'dashboard-widget',
         columns: 8,
-        height: '29rem',
+        height: '27rem',
         content: {
           kind: 'pipeline',
           stages: this.pipelineStages(),
@@ -333,7 +348,7 @@ export class App {
         id: 'activity',
         type: 'dashboard-widget',
         columns: 4,
-        height: '29rem',
+        // height: '29rem',
         content: {
           kind: 'activity',
           items: this.recentActivity(),
@@ -343,7 +358,7 @@ export class App {
         id: 'tasks',
         type: 'dashboard-widget',
         columns: 6,
-        height: '22.5rem',
+        // height: '29rem',
         content: {
           kind: 'tasks',
           items: this.taskSummary(),
@@ -363,7 +378,7 @@ export class App {
         id: 'revenue',
         type: 'dashboard-widget',
         columns: 6,
-        height: '17.5rem',
+        // height: '17.5rem',
         content: {
           kind: 'revenue',
           values: this.revenueGrowth(),
@@ -374,7 +389,7 @@ export class App {
         id: 'team',
         type: 'dashboard-widget',
         columns: 6,
-        height: '17.5rem',
+        // height: '22.5rem',
         content: {
           kind: 'team',
           items: this.teamUpdates(),
