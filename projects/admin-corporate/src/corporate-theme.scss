@@ -71,4 +71,8 @@
   --corporate-orange: #ec6d28;
   --corporate-gold: #f1bd28;
   --corporate-shadow: 0 24px 65px rgba(59, 56, 75, 0.18);
+
+  ngs-card {
+    --ngs-card-border-color: var(--corporate-border-strong);
+  }
 }

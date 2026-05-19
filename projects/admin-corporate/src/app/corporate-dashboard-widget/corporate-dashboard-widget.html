@@ -131,7 +131,7 @@
           @for (region of content().items; track region.region) {
             <div class="regional-row">
               <div>
-                <strong>{{ region.region }}</strong>
+                <span>{{ region.region }}</span>
                 <span>{{ region.value }} ({{ region.percent }}%)</span>
               </div>
               <ngs-progress-bar [value]="region.percent" />

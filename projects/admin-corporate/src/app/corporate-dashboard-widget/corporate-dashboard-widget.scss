@@ -22,4 +22,8 @@
     --ngs-chip-bg: color-mix(in srgb, var(--pipeline-success) 18%, transparent);
     --ngs-chip-color: #28604c;
   }
+
+  ngs-list {
+    --ngs-list-padding: 0;
+  }
 }

@@ -1313,20 +1313,7 @@ ngs-card.metric-card .metric-card-footer {
 
 .task-row [ngsListItemTitle],
 .team-row [ngsListItemTitle] {
-  color: #1f232b;
-  font-weight: 700;
-}
-
-.task-row [ngsListItemLine],
-.team-row [ngsListItemLine] {
-  color: #303646;
-  font-weight: 400;
-}
-
-.task-row [ngsListItemMeta] {
-  color: #3f4552;
-  font-size: 0.86rem;
-  font-weight: 650;
+  font-weight: 500;
 }
 
 .regional-list {
@@ -1345,17 +1332,8 @@ ngs-card.metric-card .metric-card-footer {
   gap: 1rem;
 }
 
-.regional-row strong,
-.regional-row span {
-  color: #3f4552;
-  font-size: 1rem;
-  font-weight: 700;
-}
-
 .regional-row ngs-progress-bar {
   --ngs-progress-bar-height: 0.55rem;
-  --ngs-progress-bar-track-color: #edf0f4;
-  --ngs-progress-bar-indicator-color: #2f66e5;
   border-radius: 999px;
 }
 

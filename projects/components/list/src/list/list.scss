@@ -14,8 +14,11 @@
   --ngs-list-item-radius: var(--ngs-nav-item-radius);
   --ngs-list-item-color: var(--ngs-nav-item-color);
   --ngs-list-item-hover-color: var(--ngs-nav-item-hover-color);
+  --ngs-list-gap: --spacing(1);
 
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ngs-list-gap);
   padding: var(--ngs-list-padding);
 
   &.ngs-list-disabled {
