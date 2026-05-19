@@ -11,7 +11,6 @@ import {Chip, ChipShape} from '@ngstarter-ui/components/chips';
 import { GridItemAware } from '@ngstarter-ui/components/grid';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { List, ListItem, ListItemIcon, ListItemLine, ListItemMeta, ListItemTitle } from '@ngstarter-ui/components/list';
-import { MchartBar } from '@ngstarter-ui/components/micro-chart';
 import { Button } from '@ngstarter-ui/components/button';
 import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 import {
@@ -21,6 +20,7 @@ import {
   TimelineItemIndicatorDirective,
   TimelineTitle,
 } from '@ngstarter-ui/components/timeline';
+import { RevenueGrowthChart } from './revenue-growth-chart/revenue-growth-chart';
 import { SalesPipelineChart } from './sales-pipeline-chart/sales-pipeline-chart';
 
 @Component({
@@ -41,8 +41,8 @@ import { SalesPipelineChart } from './sales-pipeline-chart/sales-pipeline-chart'
     ListItemLine,
     ListItemMeta,
     ListItemTitle,
-    MchartBar,
     ProgressBar,
+    RevenueGrowthChart,
     SalesPipelineChart,
     Timeline,
     TimelineDescription,

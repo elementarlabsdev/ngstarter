@@ -1347,22 +1347,9 @@ ngs-card.metric-card .metric-card-footer {
 }
 
 .revenue-chart {
-  --ngs-mchart-bar-bar-bg: #3168e8;
-  --ngs-mchart-bar-highlight-bg: #e6ebf7;
   display: block;
   width: calc(100% - 3.5rem);
-  height: 8.1rem;
-  margin: 0.75rem 1.75rem 0.55rem;
-}
-
-.revenue-months {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 0.25rem;
-  padding: 0 1.75rem 1.45rem;
-  color: #3f4552;
-  font-size: 0.86rem;
-  font-weight: 650;
+  margin: 0.7rem 1.75rem 1.35rem;
 }
 
 .team-list {

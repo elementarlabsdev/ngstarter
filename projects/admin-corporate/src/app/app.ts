@@ -25,6 +25,8 @@ import {
 } from '@ngstarter-ui/components/sidebar';
 import { Sidenav, SidenavContainer, SidenavContent } from '@ngstarter-ui/components/sidenav';
 import { Toolbar, ToolbarItem, ToolbarSpacer, ToolbarTitle } from '@ngstarter-ui/components/toolbar';
+import {Logo} from "@ngstarter-ui/components/logo";
+import {SplashScreen} from "@ngstarter-ui/components/splash-screen";
 
 interface NavItem {
   readonly key: string;
@@ -124,6 +126,8 @@ interface TeamUpdate {
     ToolbarItem,
     ToolbarSpacer,
     ToolbarTitle,
+    Logo,
+    SplashScreen,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',

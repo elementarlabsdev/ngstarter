@@ -151,19 +151,11 @@
         </ngs-card-aside>
       </ngs-card-header>
       <ngs-card-content>
-        <ngs-mchart-bar
-          [data]="content().values"
+        <app-revenue-growth-chart
+          [values]="content().values"
           [labels]="content().months"
-          [gap]="0.18"
-          [radius]="6"
-          responsive
           class="revenue-chart"
         />
-        <div class="revenue-months">
-          @for (month of content().months; track month) {
-            <span>{{ month }}</span>
-          }
-        </div>
       </ngs-card-content>
     </ngs-card>
   }
