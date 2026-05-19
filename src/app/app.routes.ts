@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { HOME_SEO, LICENSE_SEO, PRICING_SEO, PRIVACY_SEO, TERMS_SEO } from './seo/seo-data';
+import { HOME_SEO, LICENSE_SEO, PRICING_SEO, PRIVACY_SEO, TEMPLATES_SEO, TERMS_SEO } from './seo/seo-data';
 
 export const routes: Routes = [
   {
@@ -18,6 +18,14 @@ export const routes: Routes = [
       seo: PRICING_SEO,
     },
     loadComponent: () => import('./pages/pricing/pricing').then(c => c.Pricing),
+  },
+  {
+    path: 'templates',
+    title: TEMPLATES_SEO.title,
+    data: {
+      seo: TEMPLATES_SEO,
+    },
+    loadComponent: () => import('./pages/templates/templates').then(c => c.Templates),
   },
   {
     path: 'license',

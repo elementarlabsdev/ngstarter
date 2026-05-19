@@ -190,6 +190,7 @@ function webPageSchema(path: string, name: string, description: string): JsonLdO
 
 const homeDescription = 'NgStarter is an AI-friendly Angular components library for admin dashboards, product interfaces, and enterprise Angular apps with standalone, signal-based UI components.';
 const pricingDescription = 'Compare NgStarter Standard and Professional pricing for Angular UI components, admin dashboards, source code, support, projects, developers, and domains.';
+const templatesDescription = 'Explore NgStarter Angular admin templates, starting with the Corporate dashboard template for sales pipelines, revenue reporting, regional performance, tasks, and team updates.';
 const licenseDescription = 'Read the NgStarter commercial license terms for Standard and Professional Angular UI component library plans.';
 const privacyDescription = 'Read the NgStarter privacy policy for data collection, payments, analytics, and contact information.';
 const termsDescription = 'Read the NgStarter terms of service for purchases, product access, acceptable use, and support.';
@@ -221,6 +222,33 @@ export const PRICING_SEO: SeoData = {
     shippingServiceSchema,
     productSchema,
     webPageSchema('/pricing', 'Pricing | NgStarter Angular UI Components', pricingDescription),
+  ],
+};
+
+export const TEMPLATES_SEO: SeoData = {
+  title: 'Angular Admin Templates | NgStarter',
+  description: templatesDescription,
+  canonicalPath: '/templates',
+  ogImage: `${SITE_URL}/templates/admin-corporate-dashboard.png`,
+  structuredData: [
+    organizationSchema,
+    websiteSchema,
+    productSchema,
+    webPageSchema('/templates', 'Angular Admin Templates | NgStarter', templatesDescription),
+    {
+      '@type': 'SoftwareSourceCode',
+      '@id': `${SITE_URL}/templates#corporate-template`,
+      name: 'Corporate Admin Dashboard Template',
+      description: templatesDescription,
+      codeRepository: 'https://github.com/elementarlabsdev/ngstarter',
+      runtimePlatform: 'Angular',
+      programmingLanguage: 'TypeScript',
+      image: `${SITE_URL}/templates/admin-corporate-dashboard.png`,
+      url: 'https://admin-corporate.ngstarter.com',
+      isPartOf: {
+        '@id': `${SITE_URL}/#product`,
+      },
+    },
   ],
 };
 
