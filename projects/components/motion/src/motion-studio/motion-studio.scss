@@ -297,8 +297,9 @@
   box-sizing: border-box;
   pointer-events: none;
   content: '';
-  border: calc(2px * var(--ngs-motion-studio-preview-inverse-scale)) solid
+  outline: calc(2px * var(--ngs-motion-studio-preview-inverse-scale)) solid
     var(--ngs-color-primary);
+  outline-offset: 0;
   opacity: 0;
   box-shadow: none;
 }
@@ -458,31 +459,31 @@
 }
 
 .ngs-motion-studio__resize-handle.is-nw {
-  top: calc(-6px * var(--ngs-motion-studio-preview-inverse-scale));
-  left: calc(-6px * var(--ngs-motion-studio-preview-inverse-scale));
+  top: calc(-7px * var(--ngs-motion-studio-preview-inverse-scale));
+  left: calc(-7px * var(--ngs-motion-studio-preview-inverse-scale));
   cursor: nwse-resize;
 }
 
 .ngs-motion-studio__resize-handle.is-ne {
-  top: calc(-6px * var(--ngs-motion-studio-preview-inverse-scale));
-  right: calc(-6px * var(--ngs-motion-studio-preview-inverse-scale));
+  top: calc(-7px * var(--ngs-motion-studio-preview-inverse-scale));
+  right: calc(-7px * var(--ngs-motion-studio-preview-inverse-scale));
   cursor: nesw-resize;
 }
 
 .ngs-motion-studio__resize-handle.is-se {
-  right: calc(-6px * var(--ngs-motion-studio-preview-inverse-scale));
-  bottom: calc(-6px * var(--ngs-motion-studio-preview-inverse-scale));
+  right: calc(-7px * var(--ngs-motion-studio-preview-inverse-scale));
+  bottom: calc(-7px * var(--ngs-motion-studio-preview-inverse-scale));
   cursor: nwse-resize;
 }
 
 .ngs-motion-studio__resize-handle.is-sw {
-  bottom: calc(-6px * var(--ngs-motion-studio-preview-inverse-scale));
-  left: calc(-6px * var(--ngs-motion-studio-preview-inverse-scale));
+  bottom: calc(-7px * var(--ngs-motion-studio-preview-inverse-scale));
+  left: calc(-7px * var(--ngs-motion-studio-preview-inverse-scale));
   cursor: nesw-resize;
 }
 
 .ngs-motion-studio__resize-handle.is-n {
-  top: calc(-6px * var(--ngs-motion-studio-preview-inverse-scale));
+  top: calc(-7px * var(--ngs-motion-studio-preview-inverse-scale));
   left: 50%;
   transform: translateX(-50%);
   cursor: ns-resize;
@@ -490,13 +491,13 @@
 
 .ngs-motion-studio__resize-handle.is-e {
   top: 50%;
-  right: calc(-6px * var(--ngs-motion-studio-preview-inverse-scale));
+  right: calc(-7px * var(--ngs-motion-studio-preview-inverse-scale));
   transform: translateY(-50%);
   cursor: ew-resize;
 }
 
 .ngs-motion-studio__resize-handle.is-s {
-  bottom: calc(-6px * var(--ngs-motion-studio-preview-inverse-scale));
+  bottom: calc(-7px * var(--ngs-motion-studio-preview-inverse-scale));
   left: 50%;
   transform: translateX(-50%);
   cursor: ns-resize;
@@ -504,7 +505,7 @@
 
 .ngs-motion-studio__resize-handle.is-w {
   top: 50%;
-  left: calc(-6px * var(--ngs-motion-studio-preview-inverse-scale));
+  left: calc(-7px * var(--ngs-motion-studio-preview-inverse-scale));
   transform: translateY(-50%);
   cursor: ew-resize;
 }

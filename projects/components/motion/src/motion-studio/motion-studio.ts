@@ -31,6 +31,7 @@ import {
   ListItemMeta,
   ListItemTitle,
 } from '@ngstarter-ui/components/list';
+import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
 import {
   Panel,
   PanelContent,
@@ -124,6 +125,9 @@ import { MotionPlayer } from '../motion-player/motion-player';
     ListItemLine,
     ListItemMeta,
     ListItemTitle,
+    Menu,
+    MenuItem,
+    MenuTrigger,
     MotionPlayer,
     NgStyle,
     Panel,
@@ -2757,7 +2761,7 @@ export class MotionStudio {
   }
 
   protected layerHeight(entry: CanvasLayerEntry): number | null {
-    if (entry.layer.type === 'text' && !this.isSingleLineTextLayer(entry.layer)) {
+    if (entry.layer.type === 'text' && !this.isUnbrokenTextLayer(entry.layer)) {
       return null;
     }
 
@@ -2830,11 +2834,7 @@ export class MotionStudio {
   }
 
   protected isSingleLineTextLayer(layer: MotionLayer): boolean {
-    if (layer.type !== 'text') {
-      return false;
-    }
-
-    return !/[\r\n]/.test(this.layerText(layer));
+    return this.isUnbrokenTextLayer(layer);
   }
 
   protected layerTextMeasureStyle(layer: MotionLayer): Record<string, string | number | null> {
@@ -2857,7 +2857,7 @@ export class MotionStudio {
       return null;
     }
 
-    if (this.isSingleLineTextLayer(layer)) {
+    if (this.isUnbrokenTextLayer(layer)) {
       return 'flex-start';
     }
 
@@ -3057,11 +3057,21 @@ export class MotionStudio {
     this.jsonStatus.set('');
   }
 
+  protected openExportJsonDrawer(drawer: Drawer): void {
+    this.openExportJson();
+    drawer.open();
+  }
+
   protected openImportJson(): void {
     this.jsonPanelMode.set('import');
     this.jsonDraft.set(this.exportJson());
     this.jsonIssues.set([]);
     this.jsonStatus.set('');
+  }
+
+  protected openImportJsonDrawer(drawer: Drawer): void {
+    this.openImportJson();
+    drawer.open();
   }
 
   protected setJsonDraft(value: string): void {
@@ -3455,7 +3465,7 @@ export class MotionStudio {
 
     const layer = findMotionLayer(this.draft().layers, interaction.layerId);
 
-    if (layer?.type === 'text' && !this.isSingleLineTextLayer(layer)) {
+    if (layer?.type === 'text' && !this.isUnbrokenTextLayer(layer)) {
       constrainTextLayoutToContent(
         next,
         interaction.startLayout,
@@ -5956,13 +5966,24 @@ const resizeMotionLayoutProportionally = (
   handle: CanvasResizeHandle,
 ): void => {
   const aspectRatio = start.width / Math.max(1, start.height);
-  const widthDelta = handle.includes('w') ? -dx : dx;
-  const heightDelta = handle.includes('n') ? -dy : dy;
-  const dominantDelta =
-    Math.abs(widthDelta) >= Math.abs(heightDelta * aspectRatio)
-      ? widthDelta
-      : heightDelta * aspectRatio;
-  const width = Math.max(MIN_LAYER_SIZE, start.width + dominantDelta);
+  const horizontalDirection = handle.includes('w') ? -1 : handle.includes('e') ? 1 : 0;
+  const verticalDirection = handle.includes('n') ? -1 : handle.includes('s') ? 1 : 0;
+  const widthDelta = horizontalDirection * dx;
+  const heightDeltaAsWidth = verticalDirection * dy * aspectRatio;
+  let proportionalDelta = 0;
+
+  if (horizontalDirection && verticalDirection) {
+    const diagonalY = verticalDirection / Math.max(0.0001, aspectRatio);
+    const denominator = horizontalDirection * horizontalDirection + diagonalY * diagonalY;
+
+    proportionalDelta = (dx * horizontalDirection + dy * diagonalY) / denominator;
+  } else if (horizontalDirection) {
+    proportionalDelta = widthDelta;
+  } else if (verticalDirection) {
+    proportionalDelta = heightDeltaAsWidth;
+  }
+
+  const width = Math.max(MIN_LAYER_SIZE, start.width + proportionalDelta);
   const height = Math.max(MIN_LAYER_SIZE, width / Math.max(0.0001, aspectRatio));
 
   next.width = width;
@@ -5974,6 +5995,14 @@ const resizeMotionLayoutProportionally = (
 
   if (handle.includes('n')) {
     next.y = start.y + start.height - height;
+  }
+
+  if (horizontalDirection && !verticalDirection) {
+    next.y = start.y + (start.height - height) / 2;
+  }
+
+  if (verticalDirection && !horizontalDirection) {
+    next.x = start.x + (start.width - width) / 2;
   }
 };
 

@@ -236,11 +236,7 @@ export class MotionPlayer {
   }
 
   protected isSingleLineTextLayer(layer: MotionLayer): boolean {
-    if (layer.type !== 'text') {
-      return false;
-    }
-
-    return !/[\r\n]/.test(this.layerText(layer));
+    return this.isUnbrokenTextLayer(layer);
   }
 
   protected layerImageSrc(layer: MotionLayer): string {

@@ -79,14 +79,24 @@
         <ngs-chip>{{ formatTime(duration()) }}</ngs-chip>
       </ngs-chip-set>
 
-      <button ngsButton="outlined" type="button" (click)="openImportJson(); jsonDrawer.open()">
-        <ngs-icon name="fluent:arrow-import-24-regular" />
-        Import
+      <button
+        ngsIconButton
+        type="button"
+        aria-label="Motion JSON actions"
+        [ngsMenuTriggerFor]="jsonActionsMenu"
+      >
+        <ngs-icon name="fluent:more-vertical-24-regular" />
       </button>
-      <button ngsButton="outlined" type="button" (click)="openExportJson(); jsonDrawer.open()">
-        <ngs-icon name="fluent:arrow-export-up-24-regular" />
-        Export
-      </button>
+      <ngs-menu #jsonActionsMenu="ngsMenu">
+        <button ngs-menu-item type="button" (click)="openImportJsonDrawer(jsonDrawer)">
+          <ngs-icon name="fluent:arrow-import-24-regular" />
+          Import JSON
+        </button>
+        <button ngs-menu-item type="button" (click)="openExportJsonDrawer(jsonDrawer)">
+          <ngs-icon name="fluent:arrow-export-up-24-regular" />
+          Export JSON
+        </button>
+      </ngs-menu>
     </ngs-toolbar>
   </ngs-panel-header>
 
@@ -1969,6 +1979,31 @@
                       (input)="setLayerLetterSpacing($any($event.target).value)"
                     />
                   </ngs-form-field>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Text color</ngs-label>
+                    <input
+                      ngsInput
+                      [value]="layer.style?.color || ''"
+                      (input)="setLayerStyleString('color', $any($event.target).value)"
+                    />
+                    <button
+                      ngs-color-picker-thumbnail
+                      ngsSuffix
+                      type="button"
+                      class="ngs-motion-studio__color-trigger"
+                      [color]="layer.style?.color || '#ffffff'"
+                      [ngsColorPickerTriggerFor]="textColorPicker"
+                      aria-label="Choose text color"
+                    ></button>
+                    <ng-template #textColorPicker>
+                      <ngs-color-picker
+                        [ngModel]="layer.style?.color || '#ffffff'"
+                        (ngModelChange)="setLayerStyleString('color', $event)"
+                        resultFormat="hex"
+                        [showOpacity]="false"
+                      />
+                    </ng-template>
+                  </ngs-form-field>
                   <div class="ngs-motion-studio__align-control">
                     <span>Align</span>
                     <ngs-segmented
@@ -2016,31 +2051,33 @@
                     </ngs-select>
                   </ngs-form-field>
                 }
-                <ngs-form-field subscriptHiddenIfEmpty>
-                  <ngs-label>Color</ngs-label>
-                  <input
-                    ngsInput
-                    [value]="layer.style?.color || ''"
-                    (input)="setLayerStyleString('color', $any($event.target).value)"
-                  />
-                  <button
-                    ngs-color-picker-thumbnail
-                    ngsSuffix
-                    type="button"
-                    class="ngs-motion-studio__color-trigger"
-                    [color]="layer.style?.color || '#ffffff'"
-                    [ngsColorPickerTriggerFor]="colorPicker"
-                    aria-label="Choose text color"
-                  ></button>
-                  <ng-template #colorPicker>
-                    <ngs-color-picker
-                      [ngModel]="layer.style?.color || '#ffffff'"
-                      (ngModelChange)="setLayerStyleString('color', $event)"
-                      resultFormat="hex"
-                      [showOpacity]="false"
+                @if (layer.type !== 'text') {
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Color</ngs-label>
+                    <input
+                      ngsInput
+                      [value]="layer.style?.color || ''"
+                      (input)="setLayerStyleString('color', $any($event.target).value)"
                     />
-                  </ng-template>
-                </ngs-form-field>
+                    <button
+                      ngs-color-picker-thumbnail
+                      ngsSuffix
+                      type="button"
+                      class="ngs-motion-studio__color-trigger"
+                      [color]="layer.style?.color || '#ffffff'"
+                      [ngsColorPickerTriggerFor]="colorPicker"
+                      aria-label="Choose color"
+                    ></button>
+                    <ng-template #colorPicker>
+                      <ngs-color-picker
+                        [ngModel]="layer.style?.color || '#ffffff'"
+                        (ngModelChange)="setLayerStyleString('color', $event)"
+                        resultFormat="hex"
+                        [showOpacity]="false"
+                      />
+                    </ng-template>
+                  </ngs-form-field>
+                }
                 <ngs-form-field subscriptHiddenIfEmpty>
                   <ngs-label>Background</ngs-label>
                   <input
