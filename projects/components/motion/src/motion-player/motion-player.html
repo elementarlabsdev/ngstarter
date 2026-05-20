@@ -1,1 +1,81 @@
-<p>motion-player works!</p>
+<div
+  class="ngs-motion-player__viewport"
+  [ngStyle]="stageVariables()"
+  [style.aspect-ratio]="composition().width + ' / ' + composition().height"
+>
+  <div class="ngs-motion-player__stage">
+    <ng-template
+      #layerTemplate
+      let-layer
+      let-parentWidth="parentWidth"
+      let-parentHeight="parentHeight"
+    >
+      @if (isLayerVisible(layer)) {
+        <div
+          class="ngs-motion-player__layer"
+          [class.ngs-motion-player__layer--group]="layer.type === 'group'"
+          [class.ngs-motion-player__layer--text]="layer.type === 'text'"
+          [ngStyle]="layerStyle(layer, parentWidth, parentHeight)"
+        >
+          @switch (layer.type) {
+            @case ('text') {
+              <div class="ngs-motion-player__text">{{ layerText(layer) }}</div>
+            }
+            @case ('image') {
+              @if (layerImageSrc(layer)) {
+                <img
+                  class="ngs-motion-player__image"
+                  [src]="layerImageSrc(layer)"
+                  [alt]="layer.name || ''"
+                  [ngStyle]="imageStyle(layer)"
+                />
+              }
+            }
+            @case ('shape') {
+              <div
+                class="ngs-motion-player__shape"
+                [class.ngs-motion-player__shape--ellipse]="layerShapeKind(layer) === 'ellipse'"
+              ></div>
+            }
+            @case ('group') {
+              @for (childLayer of childLayers(layer); track childLayer.id) {
+                <ng-container
+                  [ngTemplateOutlet]="layerTemplate"
+                  [ngTemplateOutletContext]="{
+                    $implicit: childLayer,
+                    parentWidth: layerWidth(layer),
+                    parentHeight: layerHeight(layer),
+                  }"
+                />
+              }
+            }
+          }
+        </div>
+      }
+    </ng-template>
+
+    @for (layer of sortedLayers(); track layer.id) {
+      <ng-container
+        [ngTemplateOutlet]="layerTemplate"
+        [ngTemplateOutletContext]="{
+          $implicit: layer,
+          parentWidth: composition().width,
+          parentHeight: composition().height,
+        }"
+      />
+    }
+  </div>
+
+  @if (controls()) {
+    <div class="ngs-motion-player__controls">
+      <span>{{ internalTime() | number: '1.0-0' }}ms</span>
+      <input
+        type="range"
+        min="0"
+        [max]="composition().duration"
+        [value]="internalTime()"
+        (input)="seek($any($event.target).valueAsNumber)"
+      />
+    </div>
+  }
+</div>

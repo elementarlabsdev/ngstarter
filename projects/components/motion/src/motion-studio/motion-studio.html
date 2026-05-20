@@ -1,1 +1,2230 @@
-<p>motion-studio works!</p>
+<ngs-panel class="ngs-motion-studio__panel">
+  <ngs-panel-header flex class="ngs-motion-studio__header">
+    <ngs-toolbar>
+      <ngs-toolbar-title>
+        <div class="ngs-motion-studio__brand">
+          <span>Motion Studio</span>
+          <small
+            >{{ draft().composition.width }}x{{ draft().composition.height }} ·
+            {{ draft().composition.fps }}fps</small
+          >
+        </div>
+      </ngs-toolbar-title>
+
+      <button
+        ngsIconButton
+        type="button"
+        aria-label="Undo"
+        [disabled]="!canUndo()"
+        (click)="undo()"
+      >
+        <ngs-icon name="fluent:arrow-undo-24-regular" />
+      </button>
+      <button
+        ngsIconButton
+        type="button"
+        aria-label="Redo"
+        [disabled]="!canRedo()"
+        (click)="redo()"
+      >
+        <ngs-icon name="fluent:arrow-redo-24-regular" />
+      </button>
+      <button
+        ngsButton="outlined"
+        type="button"
+        [disabled]="!canGroupSelection()"
+        (click)="groupSelectedLayers()"
+      >
+        <ngs-icon name="fluent:group-24-regular" />
+        Group
+      </button>
+      <button
+        ngsButton="outlined"
+        type="button"
+        [disabled]="!canUngroupSelection()"
+        (click)="ungroupSelectedLayer()"
+      >
+        <ngs-icon name="fluent:group-dismiss-24-regular" />
+        Ungroup
+      </button>
+      <button ngsButton="outlined" type="button" (click)="addScene()">
+        <ngs-icon name="fluent:video-clip-24-regular" />
+        Scene
+      </button>
+
+      <ngs-toolbar-spacer />
+
+      <div class="ngs-motion-studio__transport">
+        <button ngsIconButton type="button" aria-label="Jump to start" (click)="seek(0)">
+          <ngs-icon name="fluent:previous-24-regular" />
+        </button>
+        <button
+          ngsButton="filled"
+          type="button"
+          class="ngs-motion-studio__play"
+          (click)="togglePlayback()"
+        >
+          <ngs-icon [name]="playing() ? 'fluent:pause-24-regular' : 'fluent:play-24-regular'" />
+          {{ playing() ? 'Pause' : 'Play' }}
+        </button>
+        <button ngsIconButton type="button" aria-label="Jump to end" (click)="seek(duration())">
+          <ngs-icon name="fluent:next-24-regular" />
+        </button>
+      </div>
+
+      <ngs-toolbar-spacer />
+
+      <ngs-chip-set class="ngs-motion-studio__timecode">
+        <ngs-chip>{{ formatTime(currentTime()) }}</ngs-chip>
+        <ngs-chip>{{ formatTime(duration()) }}</ngs-chip>
+      </ngs-chip-set>
+
+      <button ngsButton="outlined" type="button" (click)="openImportJson(); jsonDrawer.open()">
+        <ngs-icon name="fluent:arrow-import-24-regular" />
+        Import
+      </button>
+      <button ngsButton="outlined" type="button" (click)="openExportJson(); jsonDrawer.open()">
+        <ngs-icon name="fluent:arrow-export-up-24-regular" />
+        Export
+      </button>
+    </ngs-toolbar>
+  </ngs-panel-header>
+
+  <ngs-panel-content class="ngs-motion-studio__body">
+    <ngs-panel class="ngs-motion-studio__editor">
+      <ngs-panel-sidebar class="ngs-motion-studio__library" aria-label="Motion library">
+        <ngs-tab-panel activeItemId="media" class="ngs-motion-studio__library-panel">
+          <ngs-tab-panel-content>
+            <ngs-tab-panel-nav>
+              <ngs-tab-panel-item for="media">
+                <ngs-icon name="fluent:folder-24-regular" ngsTabPanelItemIcon />
+                <ngs-tab-panel-item-text>Media</ngs-tab-panel-item-text>
+              </ngs-tab-panel-item>
+              <ngs-tab-panel-item for="layers">
+                <ngs-icon name="fluent:layer-24-regular" ngsTabPanelItemIcon />
+                <ngs-tab-panel-item-text>Layers</ngs-tab-panel-item-text>
+              </ngs-tab-panel-item>
+              <ngs-tab-panel-item for="text">
+                <ngs-icon name="fluent:text-font-24-regular" ngsTabPanelItemIcon />
+                <ngs-tab-panel-item-text>Text</ngs-tab-panel-item-text>
+              </ngs-tab-panel-item>
+              <ngs-tab-panel-item for="shapes">
+                <ngs-icon name="fluent:shapes-24-regular" ngsTabPanelItemIcon />
+                <ngs-tab-panel-item-text>Shapes</ngs-tab-panel-item-text>
+              </ngs-tab-panel-item>
+              <ngs-tab-panel-item for="presets">
+                <ngs-icon name="fluent:sparkle-24-regular" ngsTabPanelItemIcon />
+                <ngs-tab-panel-item-text>Presets</ngs-tab-panel-item-text>
+              </ngs-tab-panel-item>
+              <ngs-tab-panel-item for="effects">
+                <ngs-icon name="fluent:wand-24-regular" ngsTabPanelItemIcon />
+                <ngs-tab-panel-item-text>Effects</ngs-tab-panel-item-text>
+              </ngs-tab-panel-item>
+            </ngs-tab-panel-nav>
+          </ngs-tab-panel-content>
+
+          <ngs-tab-panel-aside>
+            <ng-template ngsTabPanelAsideContent="media">
+              <div class="ngs-motion-studio__tab-content">
+                <button
+                  ngsButton="outlined"
+                  type="button"
+                  class="ngs-motion-studio__add-layer"
+                  (click)="addTextLayer()"
+                >
+                  <ngs-icon name="fluent:text-font-24-regular" />
+                  Text layer
+                </button>
+                <button
+                  ngsButton="outlined"
+                  type="button"
+                  class="ngs-motion-studio__add-layer"
+                  (click)="addShapeLayer()"
+                >
+                  <ngs-icon name="fluent:shapes-24-regular" />
+                  Shape layer
+                </button>
+
+                <ngs-form-field subscriptHiddenIfEmpty class="ngs-motion-studio__asset-upload">
+                  <ngs-label>Upload assets</ngs-label>
+                  <input
+                    ngsInput
+                    type="file"
+                    multiple
+                    accept="image/*,video/*,audio/*,application/json,.json"
+                    (change)="uploadAssetFiles($event)"
+                  />
+                </ngs-form-field>
+
+                <div class="ngs-motion-studio__asset-summary">
+                  <ngs-chip-set>
+                    <ngs-chip>{{ assets().length }} assets</ngs-chip>
+                    <ngs-chip>{{ imageAssets().length }} images</ngs-chip>
+                  </ngs-chip-set>
+                  @if (assetStatus()) {
+                    <small>{{ assetStatus() }}</small>
+                  }
+                </div>
+
+                @if (assets().length) {
+                  <div class="ngs-motion-studio__asset-list">
+                    @for (asset of assets(); track asset.id) {
+                      <div class="ngs-motion-studio__asset-card">
+                        <div class="ngs-motion-studio__asset-preview">
+                          @if (asset.type === 'image') {
+                            <img [src]="asset.src" [alt]="asset.name || asset.id" />
+                          } @else {
+                            <ngs-icon [name]="assetIcon(asset)" />
+                          }
+                        </div>
+                        <div class="ngs-motion-studio__asset-meta">
+                          <strong>{{ asset.name || asset.id }}</strong>
+                          <small>
+                            {{ assetTypeLabel(asset) }}
+                            @if (assetDimensionsLabel(asset)) {
+                              · {{ assetDimensionsLabel(asset) }}
+                            }
+                            @if (assetSizeLabel(asset)) {
+                              · {{ assetSizeLabel(asset) }}
+                            }
+                          </small>
+                        </div>
+                        <button
+                          ngsIconButton
+                          type="button"
+                          aria-label="Add image layer"
+                          [disabled]="asset.type !== 'image'"
+                          (click)="addImageLayerFromAsset(asset, $event)"
+                        >
+                          <ngs-icon name="fluent:add-square-24-regular" />
+                        </button>
+                        <button
+                          ngsIconButton
+                          type="button"
+                          aria-label="Remove asset"
+                          (click)="removeAsset(asset, $event)"
+                        >
+                          <ngs-icon name="fluent:delete-24-regular" />
+                        </button>
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  <div class="ngs-motion-studio__drop-zone">
+                    <ngs-icon name="fluent:folder-open-24-regular" />
+                    <span>Assets</span>
+                    <small>Upload images, video, audio, and JSON assets into this document.</small>
+                  </div>
+                }
+              </div>
+            </ng-template>
+
+            <ng-template ngsTabPanelAsideContent="layers">
+              <ngs-scrollbar-area [absolute]="false" class="ngs-motion-studio__scroll">
+                <div class="ngs-motion-studio__layer-stack">
+                  @for (item of timelineRows(); track item.layer.id) {
+                    <div
+                      class="ngs-motion-studio__layer-row"
+                      [class.is-selected]="isLayerSelected(item.layer)"
+                      [class.is-muted]="item.layer.hidden"
+                      (click)="selectLayer(item.layer, $event)"
+                    >
+                      <ngs-icon [name]="layerIcon(item.layer)" />
+                      <span>{{ item.layer.name || item.layer.id }}</span>
+                      <small>{{ item.layer.type }}</small>
+                      <button
+                        ngsIconButton
+                        type="button"
+                        aria-label="Duplicate layer"
+                        (click)="duplicateLayer(item.layer, $event)"
+                      >
+                        <ngs-icon name="fluent:copy-24-regular" />
+                      </button>
+                      <button
+                        ngsIconButton
+                        type="button"
+                        aria-label="Move layer forward"
+                        (click)="moveLayerForward(item.layer, $event)"
+                      >
+                        <ngs-icon name="fluent:arrow-up-24-regular" />
+                      </button>
+                      <button
+                        ngsIconButton
+                        type="button"
+                        aria-label="Move layer backward"
+                        (click)="moveLayerBackward(item.layer, $event)"
+                      >
+                        <ngs-icon name="fluent:arrow-down-24-regular" />
+                      </button>
+                      <button
+                        ngsIconButton
+                        type="button"
+                        [attr.aria-label]="item.layer.hidden ? 'Show layer' : 'Hide layer'"
+                        (click)="toggleLayerHidden(item.layer, $event)"
+                      >
+                        <ngs-icon
+                          [name]="
+                            item.layer.hidden
+                              ? 'fluent:eye-off-24-regular'
+                              : 'fluent:eye-24-regular'
+                          "
+                        />
+                      </button>
+                      <button
+                        ngsIconButton
+                        type="button"
+                        [attr.aria-label]="item.layer.locked ? 'Unlock layer' : 'Lock layer'"
+                        (click)="toggleLayerLocked(item.layer, $event)"
+                      >
+                        <ngs-icon
+                          [name]="
+                            item.layer.locked
+                              ? 'fluent:lock-closed-24-regular'
+                              : 'fluent:lock-open-24-regular'
+                          "
+                        />
+                      </button>
+                      <button
+                        ngsIconButton
+                        type="button"
+                        aria-label="Remove layer"
+                        (click)="removeLayer(item.layer, $event)"
+                      >
+                        <ngs-icon name="fluent:delete-24-regular" />
+                      </button>
+                    </div>
+                  }
+                </div>
+              </ngs-scrollbar-area>
+            </ng-template>
+
+            <ng-template ngsTabPanelAsideContent="text">
+              <ngs-scrollbar-area [absolute]="false" class="ngs-motion-studio__scroll">
+                <div class="ngs-motion-studio__kit-section">
+                  <button
+                    ngsButton="outlined"
+                    type="button"
+                    class="ngs-motion-studio__add-layer"
+                    (click)="addTextLayer()"
+                  >
+                    <ngs-icon name="fluent:add-24-regular" />
+                    Blank text
+                  </button>
+                  <div class="ngs-motion-studio__preset-grid">
+                    @for (preset of textPresets(); track preset.id) {
+                      <button
+                        type="button"
+                        class="ngs-motion-studio__preset-card"
+                        draggable="true"
+                        [attr.data-motion-preset-category]="preset.category"
+                        (dragstart)="startPresetDrag(preset, $event)"
+                        (dragend)="finishPresetDrag()"
+                        (click)="applyPreset(preset)"
+                      >
+                        <span class="ngs-motion-studio__preset-preview"></span>
+                        <strong>{{ preset.name }}</strong>
+                        <small>{{ preset.description }}</small>
+                      </button>
+                    }
+                  </div>
+                </div>
+              </ngs-scrollbar-area>
+            </ng-template>
+
+            <ng-template ngsTabPanelAsideContent="shapes">
+              <ngs-scrollbar-area [absolute]="false" class="ngs-motion-studio__scroll">
+                <div class="ngs-motion-studio__kit-section">
+                  <button
+                    ngsButton="outlined"
+                    type="button"
+                    class="ngs-motion-studio__add-layer"
+                    (click)="addShapeLayer()"
+                  >
+                    <ngs-icon name="fluent:add-24-regular" />
+                    Blank shape
+                  </button>
+                  <div class="ngs-motion-studio__preset-grid">
+                    @for (preset of shapePresets(); track preset.id) {
+                      <button
+                        type="button"
+                        class="ngs-motion-studio__preset-card"
+                        draggable="true"
+                        [attr.data-motion-preset-category]="preset.category"
+                        (dragstart)="startPresetDrag(preset, $event)"
+                        (dragend)="finishPresetDrag()"
+                        (click)="applyPreset(preset)"
+                      >
+                        <span class="ngs-motion-studio__preset-preview"></span>
+                        <strong>{{ preset.name }}</strong>
+                        <small>{{ preset.description }}</small>
+                      </button>
+                    }
+                  </div>
+                </div>
+              </ngs-scrollbar-area>
+            </ng-template>
+
+            <ng-template ngsTabPanelAsideContent="presets">
+              <ngs-scrollbar-area [absolute]="false" class="ngs-motion-studio__scroll">
+                <div class="ngs-motion-studio__kit-section">
+                  @for (group of presetCategoryGroups; track group.category) {
+                    <section class="ngs-motion-studio__preset-category">
+                      <header class="ngs-motion-studio__mini-header">
+                        <strong>{{ group.label }}</strong>
+                        <small>{{ presetsByCategory(group.category).length }}</small>
+                      </header>
+                      <div class="ngs-motion-studio__preset-grid">
+                        @for (preset of presetsByCategory(group.category); track preset.id) {
+                          <button
+                            type="button"
+                            class="ngs-motion-studio__preset-card"
+                            draggable="true"
+                            [attr.data-motion-preset-category]="preset.category"
+                            (dragstart)="startPresetDrag(preset, $event)"
+                            (dragend)="finishPresetDrag()"
+                            (click)="applyPreset(preset)"
+                          >
+                            <span class="ngs-motion-studio__preset-preview"></span>
+                            <strong>{{ preset.name }}</strong>
+                            <small>{{ preset.description }}</small>
+                          </button>
+                        }
+                      </div>
+                    </section>
+                  }
+                </div>
+              </ngs-scrollbar-area>
+            </ng-template>
+
+            <ng-template ngsTabPanelAsideContent="effects">
+              <ngs-scrollbar-area [absolute]="false" class="ngs-motion-studio__scroll">
+                <div class="ngs-motion-studio__kit-section">
+                  <section class="ngs-motion-studio__preset-category">
+                    <header class="ngs-motion-studio__mini-header">
+                      <strong>Animations</strong>
+                      <small>{{ selectedLayer() ? 'Layer' : 'None' }}</small>
+                    </header>
+                    <div class="ngs-motion-studio__animation-presets">
+                      @for (preset of animationPresets; track preset.value) {
+                        <button
+                          ngsButton="outlined"
+                          type="button"
+                          [disabled]="!selectedLayer()"
+                          (click)="applyAnimationPreset(preset.value)"
+                        >
+                          {{ preset.label }}
+                        </button>
+                      }
+                    </div>
+                  </section>
+
+                  <section class="ngs-motion-studio__preset-category">
+                    <header class="ngs-motion-studio__mini-header">
+                      <strong>Transition in</strong>
+                      <small>{{
+                        selectedLayer() ? transitionTypeValue(selectedLayer()!, 'in') : 'None'
+                      }}</small>
+                    </header>
+                    <div class="ngs-motion-studio__animation-presets">
+                      @for (preset of transitionPresetTypes; track preset.value) {
+                        <button
+                          ngsButton="outlined"
+                          type="button"
+                          [disabled]="!selectedLayer()"
+                          (click)="applyTransitionPreset('in', preset.value)"
+                        >
+                          {{ preset.label }}
+                        </button>
+                      }
+                    </div>
+                  </section>
+
+                  <section class="ngs-motion-studio__preset-category">
+                    <header class="ngs-motion-studio__mini-header">
+                      <strong>Transition out</strong>
+                      <small>{{
+                        selectedLayer() ? transitionTypeValue(selectedLayer()!, 'out') : 'None'
+                      }}</small>
+                    </header>
+                    <div class="ngs-motion-studio__animation-presets">
+                      @for (preset of transitionPresetTypes; track preset.value) {
+                        <button
+                          ngsButton="outlined"
+                          type="button"
+                          [disabled]="!selectedLayer()"
+                          (click)="applyTransitionPreset('out', preset.value)"
+                        >
+                          {{ preset.label }}
+                        </button>
+                      }
+                    </div>
+                  </section>
+                </div>
+              </ngs-scrollbar-area>
+            </ng-template>
+          </ngs-tab-panel-aside>
+        </ngs-tab-panel>
+      </ngs-panel-sidebar>
+
+      <ngs-panel-content class="ngs-motion-studio__main" aria-label="Preview and timeline">
+        <section class="ngs-motion-studio__preview-toolbar" aria-label="Preview controls">
+          <div class="ngs-motion-studio__preview-controls">
+            <ngs-chip-set>
+              <ngs-chip>Fit</ngs-chip>
+              <ngs-chip>100%</ngs-chip>
+            </ngs-chip-set>
+            <ngs-checkbox [checked]="gridVisible()" (change)="toggleGridVisible($event)">
+              Grid
+            </ngs-checkbox>
+            <ngs-checkbox [checked]="snapToGrid()" (change)="toggleSnapToGrid($event)">
+              Snap
+            </ngs-checkbox>
+            <ngs-form-field subscriptHiddenIfEmpty class="ngs-motion-studio__grid-size">
+              <ngs-label>Grid</ngs-label>
+              <input
+                ngsInput
+                type="number"
+                min="4"
+                step="4"
+                [value]="gridSize()"
+                (input)="setGridSize($any($event.target).value)"
+              />
+            </ngs-form-field>
+          </div>
+          <span>
+            {{ draft().layers.length }} layers · {{ selectedLayerCount() }} selected ·
+            {{ validationIssues().length }} issues
+          </span>
+        </section>
+
+        <section
+          class="ngs-motion-studio__canvas-shell"
+          aria-label="Preview canvas"
+          (pointerdown)="clearCanvasSelection($event)"
+        >
+          <div class="ngs-motion-studio__canvas-board">
+            <div class="ngs-motion-studio__stage-frame">
+              <div
+                class="ngs-motion-studio__stage-canvas"
+                [class.is-grid-visible]="gridVisible()"
+                [class.is-preset-drop-target]="draggedPresetId()"
+                [style.background-size]="canvasGridSize()"
+                (dragover)="handleCanvasPresetDragOver($event)"
+                (dragleave)="handleCanvasPresetDragLeave($event)"
+                (drop)="dropPresetOnCanvas($event)"
+              >
+                <ngs-motion-player
+                  [document]="draft()"
+                  [currentTime]="currentTime()"
+                  [playing]="playing()"
+                  [clip]="false"
+                  (currentTimeChange)="seek($event)"
+                  (ended)="stopPlayback()"
+                />
+
+                <div
+                  class="ngs-motion-studio__canvas-overlay"
+                  [class.is-resizing]="canvasInteractionType() === 'canvas-resize'"
+                  (pointerdown)="clearCanvasSelection($event)"
+                >
+                  @for (layer of canvasLayers(); track layer.id) {
+                    <div
+                      role="button"
+                      tabindex="0"
+                      class="ngs-motion-studio__canvas-layer"
+                      [class.is-text]="layer.type === 'text'"
+                      [class.is-unbroken-text]="isUnbrokenTextLayer(layer)"
+                      [class.is-selected]="isLayerSelected(layer)"
+                      [class.is-locked]="layer.locked"
+                      [style.left.%]="layerLeft(layer)"
+                      [style.top.%]="layerTop(layer)"
+                      [style.width.%]="layerWidth(layer)"
+                      [style.height.%]="layerHeight(layer)"
+                      [style.transform]="layerOverlayTransform(layer)"
+                      [style.justify-content]="layerTextJustifyContent(layer)"
+                      [style.zIndex]="layerZIndex(layer)"
+                      [attr.aria-label]="'Select ' + (layer.name || layer.id)"
+                      (pointerdown)="startCanvasMove(layer, $event)"
+                      (dblclick)="startTextEdit(layer, $event)"
+                    >
+                      @if (layer.type === 'text') {
+                        <span class="ngs-motion-studio__text-selection-box">
+                          @if (isEditingTextLayer(layer)) {
+                            <textarea
+                              ngsInput
+                              class="ngs-motion-studio__inline-text-editor"
+                              [attr.data-motion-layer-id]="layer.id"
+                              [ngStyle]="layerTextMeasureStyle(layer)"
+                              [value]="layerText(layer)"
+                              (input)="setLayerTextById(layer.id, $any($event.target).value)"
+                              (blur)="finishTextEdit()"
+                              (keydown)="handleInlineTextKeydown($event)"
+                              (pointerdown)="$event.stopPropagation()"
+                              (click)="$event.stopPropagation()"
+                            ></textarea>
+                          } @else {
+                            <span
+                              class="ngs-motion-studio__text-measure"
+                              [ngStyle]="layerTextMeasureStyle(layer)"
+                              [textContent]="layerText(layer)"
+                            ></span>
+                          }
+                          @if (isLayerSelected(layer) && !layer.locked) {
+                            <span
+                              class="ngs-motion-studio__resize-handle is-nw"
+                              (pointerdown)="startCanvasResize(layer, 'nw', $event)"
+                            ></span>
+                            <span
+                              class="ngs-motion-studio__resize-handle is-ne"
+                              (pointerdown)="startCanvasResize(layer, 'ne', $event)"
+                            ></span>
+                            <span
+                              class="ngs-motion-studio__resize-handle is-se"
+                              (pointerdown)="startCanvasResize(layer, 'se', $event)"
+                            ></span>
+                            <span
+                              class="ngs-motion-studio__resize-handle is-sw"
+                              (pointerdown)="startCanvasResize(layer, 'sw', $event)"
+                            ></span>
+                          }
+                        </span>
+                      } @else {
+                        @if (isLayerSelected(layer) && !layer.locked) {
+                          <span
+                            class="ngs-motion-studio__resize-handle is-nw"
+                            (pointerdown)="startCanvasResize(layer, 'nw', $event)"
+                          ></span>
+                          <span
+                            class="ngs-motion-studio__resize-handle is-ne"
+                            (pointerdown)="startCanvasResize(layer, 'ne', $event)"
+                          ></span>
+                          <span
+                            class="ngs-motion-studio__resize-handle is-se"
+                            (pointerdown)="startCanvasResize(layer, 'se', $event)"
+                          ></span>
+                          <span
+                            class="ngs-motion-studio__resize-handle is-sw"
+                            (pointerdown)="startCanvasResize(layer, 'sw', $event)"
+                          ></span>
+                        }
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="ngs-motion-studio__timeline" aria-label="Timeline">
+          <div class="ngs-motion-studio__timeline-toolbar">
+            <div>
+              <strong>Timeline</strong>
+              <small>{{ timelineRows().length }} tracks · {{ timelineZoomLabel() }}</small>
+            </div>
+            <ngs-slider [min]="0" [max]="duration()" [step]="100">
+              <input ngsSliderThumb [value]="currentTime()" (valueChange)="seek($event)" />
+            </ngs-slider>
+
+            <div class="ngs-motion-studio__timeline-zoom" aria-label="Timeline zoom">
+              <span>Zoom</span>
+              <ngs-segmented
+                size="sm"
+                [value]="timelineZoomMode()"
+                (valueChange)="setTimelineZoom($event)"
+              >
+                @for (option of timelineZoomOptions; track option.value) {
+                  <button ngs-segmented-button type="button" [value]="option.value">
+                    {{ option.label }}
+                  </button>
+                }
+              </ngs-segmented>
+            </div>
+          </div>
+
+          <div class="ngs-motion-studio__timeline-scroll">
+            <div
+              class="ngs-motion-studio__timeline-grid"
+              [class.is-preset-drop-target]="draggedPresetId()"
+              [style.width]="timelineGridWidth()"
+              (pointerdown)="startTimelineBoxSelect($event)"
+              (click)="seekFromTimeline($event)"
+              (dragover)="handleTimelinePresetDragOver($event)"
+              (dragleave)="handleTimelinePresetDragLeave($event)"
+              (drop)="dropPresetOnTimeline($event)"
+            >
+              <div class="ngs-motion-studio__track-label ngs-motion-studio__ruler-label">
+                Tracks
+              </div>
+              <div class="ngs-motion-studio__ruler" (pointerdown)="startPlayheadDrag($event)">
+                @for (tick of timelineTicks(); track tick.time) {
+                  <span class="ngs-motion-studio__tick" [style.left.%]="tick.left">
+                    {{ tick.label }}
+                  </span>
+                }
+                <span class="ngs-motion-studio__playhead" [style.left.%]="playheadPercent()"></span>
+              </div>
+              @if (keyframeSnapGuide(); as snapGuide) {
+                <span
+                  class="ngs-motion-studio__keyframe-snap-guide"
+                  [class.is-playhead]="snapGuide.type === 'playhead'"
+                  [class.is-layer-edge]="
+                    snapGuide.type === 'layer-start' || snapGuide.type === 'layer-end'
+                  "
+                  [class.is-scene-edge]="
+                    snapGuide.type === 'scene-start' || snapGuide.type === 'scene-end'
+                  "
+                  [class.is-keyframe]="snapGuide.type === 'keyframe'"
+                  [class.is-frame-grid]="snapGuide.type === 'frame-grid'"
+                  [style.left]="keyframeSnapGuideLeft()"
+                >
+                  <span>{{ snapGuide.label }}</span>
+                  <small>{{ formatTime(snapGuide.absoluteTime) }}</small>
+                </span>
+              }
+              @if (timelineSelectionBox(); as selectionBox) {
+                <span
+                  class="ngs-motion-studio__timeline-selection-box"
+                  [style.left.px]="selectionBox.left"
+                  [style.top.px]="selectionBox.top"
+                  [style.width.px]="selectionBox.width"
+                  [style.height.px]="selectionBox.height"
+                ></span>
+              }
+
+              <button
+                type="button"
+                class="ngs-motion-studio__track-label ngs-motion-studio__scene-label"
+                (click)="$event.stopPropagation()"
+              >
+                <ngs-icon name="fluent:video-clip-24-regular" />
+                <span>Scenes</span>
+              </button>
+              <div class="ngs-motion-studio__track ngs-motion-studio__scene-track">
+                @for (scene of scenes(); track scene.id) {
+                  <button
+                    type="button"
+                    class="ngs-motion-studio__scene-clip"
+                    [class.is-selected]="isSceneSelected(scene)"
+                    [style.left.%]="sceneLeft(scene)"
+                    [style.width.%]="sceneWidth(scene)"
+                    (click)="selectScene(scene, $event)"
+                  >
+                    @if (scene.transitionIn) {
+                      <span
+                        class="ngs-motion-studio__transition-zone is-in"
+                        [style.width.%]="sceneTransitionWidth(scene, 'in')"
+                      ></span>
+                    }
+                    @if (scene.transitionOut) {
+                      <span
+                        class="ngs-motion-studio__transition-zone is-out"
+                        [style.width.%]="sceneTransitionWidth(scene, 'out')"
+                      ></span>
+                    }
+                    <span>{{ scene.name || scene.id }}</span>
+                  </button>
+                }
+              </div>
+
+              @for (item of timelineRows(); track item.layer.id) {
+                <div
+                  class="ngs-motion-studio__track-label ngs-motion-studio__layer-track-label"
+                  [class.is-selected]="isLayerSelected(item.layer)"
+                >
+                  <button
+                    ngsIconButton
+                    type="button"
+                    class="ngs-motion-studio__track-toggle"
+                    [disabled]="!item.layer.animations?.length"
+                    [attr.aria-label]="
+                      isLayerAnimationExpanded(item.layer)
+                        ? 'Collapse animation tracks'
+                        : 'Expand animation tracks'
+                    "
+                    (click)="toggleLayerAnimationTracks(item.layer, $event)"
+                  >
+                    <ngs-icon
+                      [name]="
+                        isLayerAnimationExpanded(item.layer)
+                          ? 'fluent:chevron-down-24-regular'
+                          : 'fluent:chevron-right-24-regular'
+                      "
+                    />
+                  </button>
+                  <button
+                    type="button"
+                    class="ngs-motion-studio__track-label-main"
+                    (click)="selectLayer(item.layer, $event); $event.stopPropagation()"
+                  >
+                    <ngs-icon [name]="layerIcon(item.layer)" />
+                    <span>{{ item.layer.name || item.layer.id }}</span>
+                  </button>
+                </div>
+                <div class="ngs-motion-studio__track">
+                  <button
+                    type="button"
+                    class="ngs-motion-studio__clip"
+                    [class.is-selected]="isLayerSelected(item.layer)"
+                    [style.left.%]="clipLeft(item.layer)"
+                    [style.width.%]="clipWidth(item.layer)"
+                    (pointerdown)="startTimelineMove(item.layer, $event)"
+                    (click)="$event.stopPropagation()"
+                  >
+                    <span
+                      class="ngs-motion-studio__clip-handle is-start"
+                      (pointerdown)="startTimelineTrim(item.layer, 'start', $event)"
+                    ></span>
+                    @if (item.layer.transitions?.in) {
+                      <span
+                        class="ngs-motion-studio__transition-zone is-in"
+                        [style.width.%]="transitionWidth(item.layer, 'in')"
+                      ></span>
+                    }
+                    @if (item.layer.transitions?.out) {
+                      <span
+                        class="ngs-motion-studio__transition-zone is-out"
+                        [style.width.%]="transitionWidth(item.layer, 'out')"
+                      ></span>
+                    }
+                    <span>{{ item.layer.name || item.layer.id }}</span>
+                    <span
+                      class="ngs-motion-studio__clip-handle is-end"
+                      (pointerdown)="startTimelineTrim(item.layer, 'end', $event)"
+                    ></span>
+                  </button>
+                  @if (!isLayerAnimationExpanded(item.layer)) {
+                    @for (marker of layerKeyframeMarkers(item.layer); track marker.id) {
+                      <button
+                        type="button"
+                        class="ngs-motion-studio__keyframe-marker"
+                        [class.is-selected]="isLayerSelected(item.layer)"
+                        [class.is-keyframe-selected]="
+                          isKeyframeSelected(
+                            item.layer,
+                            marker.animationIndex,
+                            marker.keyframeIndex
+                          )
+                        "
+                        [style.left.%]="marker.left"
+                        [attr.data-motion-layer-id]="item.layer.id"
+                        [attr.data-motion-animation-index]="marker.animationIndex"
+                        [attr.data-motion-keyframe-index]="marker.keyframeIndex"
+                        [attr.aria-label]="
+                          marker.property + ' keyframe at ' + formatTime(marker.localTime)
+                        "
+                        (pointerdown)="
+                          startTimelineKeyframeMove(
+                            item.layer,
+                            marker.animationIndex,
+                            marker.keyframeIndex,
+                            $event
+                          )
+                        "
+                        (click)="
+                          selectTimelineKeyframe(
+                            item.layer,
+                            marker.animationIndex,
+                            marker.keyframeIndex,
+                            $event
+                          )
+                        "
+                      ></button>
+                    }
+                  }
+                </div>
+
+                @for (track of layerAnimationTrackRows(item.layer); track track.id) {
+                  <button
+                    type="button"
+                    class="ngs-motion-studio__track-label ngs-motion-studio__animation-track-label"
+                    [class.is-selected]="isLayerSelected(item.layer)"
+                    (click)="selectLayer(item.layer, $event); $event.stopPropagation()"
+                  >
+                    <ngs-icon name="fluent:diamond-24-regular" />
+                    <span>{{ track.animation.property }}</span>
+                  </button>
+                  <div class="ngs-motion-studio__track ngs-motion-studio__animation-track">
+                    <span
+                      class="ngs-motion-studio__animation-track-span"
+                      [style.left.%]="clipLeft(item.layer)"
+                      [style.width.%]="clipWidth(item.layer)"
+                    ></span>
+                    @for (marker of track.markers; track marker.id) {
+                      <button
+                        type="button"
+                        class="ngs-motion-studio__keyframe-marker is-track-keyframe"
+                        [class.is-selected]="isLayerSelected(item.layer)"
+                        [class.is-keyframe-selected]="
+                          isKeyframeSelected(
+                            item.layer,
+                            marker.animationIndex,
+                            marker.keyframeIndex
+                          )
+                        "
+                        [style.left.%]="marker.left"
+                        [attr.data-motion-layer-id]="item.layer.id"
+                        [attr.data-motion-animation-index]="marker.animationIndex"
+                        [attr.data-motion-keyframe-index]="marker.keyframeIndex"
+                        [attr.aria-label]="
+                          marker.property + ' keyframe at ' + formatTime(marker.localTime)
+                        "
+                        (pointerdown)="
+                          startTimelineKeyframeMove(
+                            item.layer,
+                            marker.animationIndex,
+                            marker.keyframeIndex,
+                            $event
+                          )
+                        "
+                        (click)="
+                          selectTimelineKeyframe(
+                            item.layer,
+                            marker.animationIndex,
+                            marker.keyframeIndex,
+                            $event
+                          )
+                        "
+                      ></button>
+                    }
+                  </div>
+                }
+              }
+            </div>
+          </div>
+        </section>
+      </ngs-panel-content>
+
+      <ngs-panel-aside class="ngs-motion-studio__inspector" aria-label="Inspector">
+        <ngs-scrollbar-area [absolute]="false" class="ngs-motion-studio__scroll">
+          @if (selectedLayer(); as layer) {
+            <section class="ngs-motion-studio__inspector-section">
+              <header>
+                <ngs-icon [name]="layerIcon(layer)" />
+                <div>
+                  <strong>{{ layer.name || layer.id }}</strong>
+                  <small>{{ layer.type }}</small>
+                </div>
+              </header>
+
+              <ngs-form-field subscriptHiddenIfEmpty>
+                <ngs-label>Name</ngs-label>
+                <input
+                  ngsInput
+                  [value]="layer.name || ''"
+                  (input)="setLayerName($any($event.target).value)"
+                />
+              </ngs-form-field>
+
+              @if (layer.type === 'text') {
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Text</ngs-label>
+                  <textarea
+                    ngsInput
+                    [value]="layer.props?.['text'] || ''"
+                    (input)="setLayerText($any($event.target).value)"
+                  ></textarea>
+                </ngs-form-field>
+              }
+
+              @if (layer.type === 'image') {
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Asset</ngs-label>
+                  <ngs-select
+                    [value]="layerAssetId(layer)"
+                    (selectionChange)="setLayerImageAsset($event)"
+                  >
+                    @for (asset of imageAssets(); track asset.id) {
+                      <ngs-option [value]="asset.id">{{ asset.name || asset.id }}</ngs-option>
+                    }
+                  </ngs-select>
+                </ngs-form-field>
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Source</ngs-label>
+                  <input
+                    ngsInput
+                    [value]="layerImageSrcValue(layer)"
+                    (input)="setLayerImageSrc($any($event.target).value)"
+                  />
+                </ngs-form-field>
+              }
+            </section>
+
+            <section class="ngs-motion-studio__inspector-section">
+              <h3>Transform</h3>
+              <div class="ngs-motion-studio__field-grid">
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>X</ngs-label>
+                  <input
+                    ngsInput
+                    type="number"
+                    [value]="formatTransformValue(layer.layout.x)"
+                    (input)="setLayerLayoutNumber('x', $any($event.target).value)"
+                  />
+                </ngs-form-field>
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Y</ngs-label>
+                  <input
+                    ngsInput
+                    type="number"
+                    [value]="formatTransformValue(layer.layout.y)"
+                    (input)="setLayerLayoutNumber('y', $any($event.target).value)"
+                  />
+                </ngs-form-field>
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>W</ngs-label>
+                  <input
+                    ngsInput
+                    type="number"
+                    [value]="formatTransformValue(layer.layout.width)"
+                    (input)="setLayerLayoutNumber('width', $any($event.target).value)"
+                  />
+                </ngs-form-field>
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>H</ngs-label>
+                  <input
+                    ngsInput
+                    type="number"
+                    [value]="formatTransformValue(layer.layout.height)"
+                    (input)="setLayerLayoutNumber('height', $any($event.target).value)"
+                  />
+                </ngs-form-field>
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Rotate</ngs-label>
+                  <input
+                    ngsInput
+                    type="number"
+                    [value]="formatTransformValue(layer.layout.rotation || 0)"
+                    (input)="setLayerLayoutNumber('rotation', $any($event.target).value)"
+                  />
+                </ngs-form-field>
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Scale</ngs-label>
+                  <input
+                    ngsInput
+                    type="number"
+                    step="0.05"
+                    [value]="formatTransformValue(layer.layout.scale || 1)"
+                    (input)="setLayerLayoutNumber('scale', $any($event.target).value)"
+                  />
+                </ngs-form-field>
+              </div>
+            </section>
+
+            <section class="ngs-motion-studio__inspector-section">
+              <h3>Timing</h3>
+              <div class="ngs-motion-studio__field-grid">
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Start</ngs-label>
+                  <input
+                    ngsInput
+                    type="number"
+                    [value]="layer.start"
+                    (input)="setLayerNumber('start', $any($event.target).value)"
+                  />
+                </ngs-form-field>
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Duration</ngs-label>
+                  <input
+                    ngsInput
+                    type="number"
+                    [value]="layer.duration"
+                    (input)="setLayerNumber('duration', $any($event.target).value)"
+                  />
+                </ngs-form-field>
+              </div>
+            </section>
+
+            <section class="ngs-motion-studio__inspector-section">
+              <header class="ngs-motion-studio__section-header">
+                <h3>Transitions</h3>
+                <div class="ngs-motion-studio__section-actions">
+                  <ngs-chip-set>
+                    <ngs-chip>{{ transitionCount(layer) }} active</ngs-chip>
+                  </ngs-chip-set>
+                  <button
+                    ngsButton="outlined"
+                    type="button"
+                    [disabled]="!transitionCount(layer)"
+                    (click)="clearLayerTransitions('active')"
+                  >
+                    Clear transitions
+                  </button>
+                </div>
+              </header>
+
+              <div class="ngs-motion-studio__transition-list ngs-motion-studio__animation-list">
+                @for (edge of transitionEdges; track edge) {
+                  <div class="ngs-motion-studio__transition-card ngs-motion-studio__animation-row">
+                    <header class="ngs-motion-studio__section-header">
+                      <div>
+                        <strong>{{ edge === 'in' ? 'In' : 'Out' }}</strong>
+                        <small>{{ transitionTypeValue(layer, edge) }}</small>
+                      </div>
+                      <button
+                        ngsIconButton
+                        type="button"
+                        aria-label="Remove transition"
+                        [disabled]="!hasLayerTransition(layer, edge)"
+                        (click)="removeLayerTransition(edge)"
+                      >
+                        <ngs-icon name="fluent:dismiss-24-regular" />
+                      </button>
+                    </header>
+
+                    <div
+                      class="ngs-motion-studio__transition-presets ngs-motion-studio__animation-presets"
+                    >
+                      @for (preset of transitionPresetTypes; track preset.value) {
+                        <button
+                          ngsButton="outlined"
+                          type="button"
+                          (click)="applyTransitionPreset(edge, preset.value)"
+                        >
+                          {{ preset.label }}
+                        </button>
+                      }
+                    </div>
+
+                    <div class="ngs-motion-studio__transition-grid ngs-motion-studio__field-grid">
+                      <ngs-form-field subscriptHiddenIfEmpty>
+                        <ngs-label>Type</ngs-label>
+                        <ngs-select
+                          [value]="transitionTypeValue(layer, edge)"
+                          (selectionChange)="setLayerTransitionType(edge, $event)"
+                        >
+                          @for (type of transitionTypes; track type.value) {
+                            <ngs-option [value]="type.value">{{ type.label }}</ngs-option>
+                          }
+                        </ngs-select>
+                      </ngs-form-field>
+                      <ngs-form-field subscriptHiddenIfEmpty>
+                        <ngs-label>Duration</ngs-label>
+                        <input
+                          ngsInput
+                          type="number"
+                          min="100"
+                          step="100"
+                          [value]="transitionDurationValue(layer, edge)"
+                          (input)="setLayerTransitionDuration(edge, $any($event.target).value)"
+                        />
+                      </ngs-form-field>
+                      <ngs-form-field subscriptHiddenIfEmpty>
+                        <ngs-label>Easing</ngs-label>
+                        <ngs-select
+                          [value]="transitionEasingValue(layer, edge)"
+                          (selectionChange)="setLayerTransitionEasing(edge, $event)"
+                        >
+                          @for (easing of easingOptions; track easing.value) {
+                            <ngs-option [value]="easing.value">{{ easing.label }}</ngs-option>
+                          }
+                        </ngs-select>
+                      </ngs-form-field>
+                      <ngs-form-field subscriptHiddenIfEmpty>
+                        <ngs-label>Direction</ngs-label>
+                        <ngs-select
+                          [value]="transitionDirectionValue(layer, edge)"
+                          (selectionChange)="setLayerTransitionDirection(edge, $event)"
+                        >
+                          @for (direction of transitionDirections; track direction.value) {
+                            <ngs-option [value]="direction.value">
+                              {{ direction.label }}
+                            </ngs-option>
+                          }
+                        </ngs-select>
+                      </ngs-form-field>
+                      <ngs-form-field subscriptHiddenIfEmpty>
+                        <ngs-label>Distance</ngs-label>
+                        <input
+                          ngsInput
+                          type="number"
+                          min="0"
+                          step="10"
+                          [value]="transitionDistanceValue(layer, edge)"
+                          (input)="setLayerTransitionDistance(edge, $any($event.target).value)"
+                        />
+                      </ngs-form-field>
+                    </div>
+                  </div>
+                }
+              </div>
+            </section>
+
+            <section class="ngs-motion-studio__inspector-section">
+              <header class="ngs-motion-studio__section-header">
+                <h3>Animations</h3>
+                <div class="ngs-motion-studio__section-actions">
+                  <ngs-chip-set>
+                    <ngs-chip>{{ layer.animations?.length || 0 }} tracks</ngs-chip>
+                  </ngs-chip-set>
+                  <button
+                    ngsButton="outlined"
+                    type="button"
+                    [disabled]="!layer.animations?.length"
+                    (click)="clearAnimationTracks('active')"
+                  >
+                    Clear animations
+                  </button>
+                </div>
+              </header>
+
+              @if (selectedKeyframeCount() > 1) {
+                <div class="ngs-motion-studio__selected-keyframe">
+                  <div class="ngs-motion-studio__selected-keyframe-title">
+                    <ngs-icon name="fluent:diamond-24-regular" />
+                    <div>
+                      <strong>{{ selectedKeyframeBulkTitle() }}</strong>
+                      <small>{{ selectedKeyframeBulkSubtitle() }}</small>
+                    </div>
+                    <button
+                      ngsIconButton
+                      type="button"
+                      aria-label="Remove selected keyframes"
+                      (click)="removeSelectedKeyframes()"
+                    >
+                      <ngs-icon name="fluent:delete-24-regular" />
+                    </button>
+                  </div>
+
+                  <div class="ngs-motion-studio__curve-editor">
+                    <div class="ngs-motion-studio__curve-editor-header">
+                      <div>
+                        <strong>Bulk curve</strong>
+                        <small>{{ selectedKeyframesEasingLabel() }}</small>
+                      </div>
+                      <ngs-chip-set>
+                        <ngs-chip>{{ selectedKeyframeCount() }} points</ngs-chip>
+                      </ngs-chip-set>
+                    </div>
+
+                    <svg
+                      class="ngs-motion-studio__curve-preview"
+                      viewBox="0 0 120 72"
+                      role="img"
+                      aria-label="Selected keyframes easing curve"
+                    >
+                      <path
+                        class="ngs-motion-studio__curve-grid"
+                        d="M12 10H108M12 36H108M12 62H108M12 10V62M60 10V62M108 10V62"
+                      />
+                      <path class="ngs-motion-studio__curve-reference" d="M12 62L108 10" />
+                      <path
+                        class="ngs-motion-studio__curve-line"
+                        [attr.d]="selectedKeyframesCurvePath()"
+                      />
+                    </svg>
+
+                    <div class="ngs-motion-studio__easing-presets">
+                      @for (preset of easingPresets; track preset.value) {
+                        <button
+                          ngsButton="outlined"
+                          type="button"
+                          size="sm"
+                          [class.is-selected]="isSelectedKeyframesEasing(preset.value)"
+                          (click)="setSelectedKeyframesEasingPreset(preset.value)"
+                        >
+                          {{ preset.label }}
+                        </button>
+                      }
+                    </div>
+
+                    <div class="ngs-motion-studio__curve-actions">
+                      <button
+                        ngsButton="outlined"
+                        type="button"
+                        size="sm"
+                        (click)="copySelectedKeyframes()"
+                      >
+                        Copy keyframes
+                      </button>
+                      <button
+                        ngsButton="outlined"
+                        type="button"
+                        size="sm"
+                        [disabled]="!canPasteKeyframes()"
+                        (click)="pasteKeyframes()"
+                      >
+                        Paste at playhead
+                      </button>
+                      <button
+                        ngsButton="outlined"
+                        type="button"
+                        size="sm"
+                        (click)="applySelectedKeyframesEasingToTracks()"
+                      >
+                        Apply to tracks
+                      </button>
+                      <button
+                        ngsButton="outlined"
+                        type="button"
+                        size="sm"
+                        (click)="clearSelectedKeyframesEasing()"
+                      >
+                        Use track easing
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              } @else if (selectedKeyframeDetails(); as selectedKeyframe) {
+                <div class="ngs-motion-studio__selected-keyframe">
+                  <div class="ngs-motion-studio__selected-keyframe-title">
+                    <ngs-icon name="fluent:diamond-24-regular" />
+                    <div>
+                      <strong>{{ selectedKeyframe.animation.property }}</strong>
+                      <small>{{ formatTime(selectedKeyframe.absoluteTime) }}</small>
+                    </div>
+                    <button
+                      ngsIconButton
+                      type="button"
+                      aria-label="Duplicate selected keyframe"
+                      (click)="duplicateSelectedKeyframe()"
+                    >
+                      <ngs-icon name="fluent:copy-24-regular" />
+                    </button>
+                    <button
+                      ngsIconButton
+                      type="button"
+                      aria-label="Remove selected keyframe"
+                      (click)="removeSelectedKeyframe()"
+                    >
+                      <ngs-icon name="fluent:delete-24-regular" />
+                    </button>
+                  </div>
+
+                  @if (selectedKeyframeMeta(); as keyframeMeta) {
+                    <div class="ngs-motion-studio__selected-keyframe-meta">
+                      <span>
+                        <small>Layer</small>
+                        <strong>{{ keyframeMeta.layerName }}</strong>
+                      </span>
+                      <span>
+                        <small>Local</small>
+                        <strong>{{ keyframeMeta.localTime }}</strong>
+                      </span>
+                      <span>
+                        <small>Timeline</small>
+                        <strong>{{ keyframeMeta.absoluteTime }}</strong>
+                      </span>
+                      <span>
+                        <small>Point</small>
+                        <strong>{{ keyframeMeta.trackLabel }}</strong>
+                      </span>
+                    </div>
+                  }
+
+                  <div class="ngs-motion-studio__selected-keyframe-grid">
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>Property</ngs-label>
+                      <ngs-select
+                        [value]="selectedKeyframe.animation.property"
+                        (selectionChange)="setSelectedKeyframeProperty($event)"
+                      >
+                        @for (property of animationProperties; track property.value) {
+                          <ngs-option [value]="property.value">{{ property.label }}</ngs-option>
+                        }
+                      </ngs-select>
+                    </ngs-form-field>
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>Time</ngs-label>
+                      <input
+                        ngsInput
+                        type="number"
+                        min="0"
+                        step="100"
+                        [value]="selectedKeyframe.keyframe.time"
+                        (input)="setSelectedKeyframeTime($any($event.target).value)"
+                      />
+                    </ngs-form-field>
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>Value</ngs-label>
+                      <input
+                        ngsInput
+                        [value]="formatKeyframeValue(selectedKeyframe.keyframe.value)"
+                        (input)="setSelectedKeyframeValue($any($event.target).value)"
+                      />
+                    </ngs-form-field>
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>Easing</ngs-label>
+                      <ngs-select
+                        [value]="
+                          selectedKeyframe.keyframe.easing ||
+                          selectedKeyframe.animation.easing ||
+                          'linear'
+                        "
+                        (selectionChange)="setSelectedKeyframeEasing($event)"
+                      >
+                        @for (easing of easingOptions; track easing.value) {
+                          <ngs-option [value]="easing.value">{{ easing.label }}</ngs-option>
+                        }
+                      </ngs-select>
+                    </ngs-form-field>
+                  </div>
+
+                  <div class="ngs-motion-studio__curve-editor">
+                    <div class="ngs-motion-studio__curve-editor-header">
+                      <div>
+                        <strong>Curve</strong>
+                        <small>{{ selectedKeyframeEasingLabel() }}</small>
+                      </div>
+                      <ngs-chip-set>
+                        <ngs-chip>{{ selectedKeyframe.animation.property }}</ngs-chip>
+                      </ngs-chip-set>
+                    </div>
+
+                    <svg
+                      class="ngs-motion-studio__curve-preview"
+                      viewBox="0 0 120 72"
+                      role="img"
+                      aria-label="Selected easing curve"
+                    >
+                      <path
+                        class="ngs-motion-studio__curve-grid"
+                        d="M12 10H108M12 36H108M12 62H108M12 10V62M60 10V62M108 10V62"
+                      />
+                      <path class="ngs-motion-studio__curve-reference" d="M12 62L108 10" />
+                      <path
+                        class="ngs-motion-studio__curve-line"
+                        [attr.d]="selectedEasingCurvePath()"
+                      />
+                      @for (dot of selectedEasingPreviewDots(); track dot.index) {
+                        <circle
+                          class="ngs-motion-studio__curve-dot"
+                          [class.is-current]="dot.current"
+                          [attr.cx]="dot.x"
+                          [attr.cy]="dot.y"
+                          [attr.r]="dot.radius"
+                        />
+                      }
+                    </svg>
+
+                    <div class="ngs-motion-studio__easing-presets">
+                      @for (preset of easingPresets; track preset.value) {
+                        <button
+                          ngsButton="outlined"
+                          type="button"
+                          size="sm"
+                          [class.is-selected]="isSelectedKeyframeEasing(preset.value)"
+                          (click)="setSelectedKeyframeEasingPreset(preset.value)"
+                        >
+                          {{ preset.label }}
+                        </button>
+                      }
+                    </div>
+
+                    <div class="ngs-motion-studio__curve-actions">
+                      <button
+                        ngsButton="outlined"
+                        type="button"
+                        size="sm"
+                        (click)="copySelectedKeyframes()"
+                      >
+                        Copy keyframe
+                      </button>
+                      <button
+                        ngsButton="outlined"
+                        type="button"
+                        size="sm"
+                        [disabled]="!canPasteKeyframes()"
+                        (click)="pasteKeyframes()"
+                      >
+                        Paste at playhead
+                      </button>
+                      <button
+                        ngsButton="outlined"
+                        type="button"
+                        size="sm"
+                        (click)="applySelectedKeyframeEasingToTrack()"
+                      >
+                        Apply to track
+                      </button>
+                      <button
+                        ngsButton="outlined"
+                        type="button"
+                        size="sm"
+                        (click)="clearSelectedKeyframeEasing()"
+                      >
+                        Use track easing
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              }
+
+              <div class="ngs-motion-studio__preset-builder">
+                <div class="grid grid-cols-2 gap-3">
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Preset</ngs-label>
+                    <ngs-select
+                      [value]="selectedAnimationPreset()"
+                      (selectionChange)="setSelectedAnimationPreset($event)"
+                    >
+                      @for (preset of animationPresets; track preset.value) {
+                        <ngs-option [value]="preset.value">{{ preset.label }}</ngs-option>
+                      }
+                    </ngs-select>
+                  </ngs-form-field>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Easing</ngs-label>
+                    <ngs-select
+                      [value]="animationPresetSettings().easing"
+                      (selectionChange)="setAnimationPresetEasing($event)"
+                    >
+                      @for (easing of easingOptions; track easing.value) {
+                        <ngs-option [value]="easing.value">{{ easing.label }}</ngs-option>
+                      }
+                    </ngs-select>
+                  </ngs-form-field>
+                  <div class="ngs-motion-studio__preset-mode">
+                    <span>Mode</span>
+                    <ngs-segmented
+                      size="sm"
+                      [value]="animationPresetApplyMode()"
+                      (valueChange)="setAnimationPresetApplyMode($event)"
+                    >
+                      @for (mode of animationPresetApplyModes; track mode.value) {
+                        <button ngs-segmented-button type="button" [value]="mode.value">
+                          {{ mode.label }}
+                        </button>
+                      }
+                    </ngs-segmented>
+                  </div>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Duration</ngs-label>
+                    <input
+                      ngsInput
+                      type="number"
+                      min="100"
+                      step="100"
+                      [value]="animationPresetSettings().duration"
+                      (input)="setAnimationPresetNumber('duration', $any($event.target).value)"
+                    />
+                  </ngs-form-field>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Delay</ngs-label>
+                    <input
+                      ngsInput
+                      type="number"
+                      step="100"
+                      [value]="animationPresetSettings().delay"
+                      (input)="setAnimationPresetNumber('delay', $any($event.target).value)"
+                    />
+                  </ngs-form-field>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Direction</ngs-label>
+                    <ngs-select
+                      [value]="animationPresetSettings().direction"
+                      (selectionChange)="setAnimationPresetDirection($event)"
+                    >
+                      @for (direction of transitionDirections; track direction.value) {
+                        <ngs-option [value]="direction.value">{{ direction.label }}</ngs-option>
+                      }
+                    </ngs-select>
+                  </ngs-form-field>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Distance</ngs-label>
+                    <input
+                      ngsInput
+                      type="number"
+                      min="0"
+                      step="10"
+                      [value]="animationPresetSettings().distance"
+                      (input)="setAnimationPresetNumber('distance', $any($event.target).value)"
+                    />
+                  </ngs-form-field>
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    ngsButton="filled"
+                    type="button"
+                    (click)="applySelectedAnimationPresetToLayer()"
+                  >
+                    Apply to layer
+                  </button>
+                  <button
+                    ngsButton="outlined"
+                    type="button"
+                    [disabled]="selectedLayerCount() < 2"
+                    (click)="applySelectedAnimationPresetToSelection()"
+                  >
+                    Apply to selection
+                  </button>
+                  <button
+                    ngsButton="outlined"
+                    type="button"
+                    (click)="recordCurrentTransformKeyframes()"
+                  >
+                    Key transform
+                  </button>
+                  <button
+                    ngsButton="outlined"
+                    type="button"
+                    [disabled]="selectedLayerCount() < 2"
+                    (click)="clearLayerEffects('selection')"
+                  >
+                    Clear selection
+                  </button>
+                </div>
+              </div>
+
+              <div class="ngs-motion-studio__animation-presets">
+                @for (preset of animationPresets; track preset.value) {
+                  <button
+                    ngsButton="outlined"
+                    type="button"
+                    (click)="applyAnimationPreset(preset.value)"
+                  >
+                    {{ preset.label }}
+                  </button>
+                }
+              </div>
+
+              <div class="ngs-motion-studio__animation-presets">
+                @for (property of animationProperties; track property.value) {
+                  <button
+                    ngsButton="outlined"
+                    type="button"
+                    (click)="addLayerAnimation(property.value)"
+                  >
+                    {{ property.label }}
+                  </button>
+                }
+              </div>
+
+              @if (layer.animations?.length) {
+                <div class="ngs-motion-studio__animation-list">
+                  @for (
+                    animation of layer.animations ?? [];
+                    track animationTrackId(animation, $index);
+                    let animationIndex = $index
+                  ) {
+                    <div class="ngs-motion-studio__animation-row">
+                      <div class="ngs-motion-studio__animation-header">
+                        <ngs-form-field subscriptHiddenIfEmpty>
+                          <ngs-label>Property</ngs-label>
+                          <ngs-select
+                            [value]="animation.property"
+                            (selectionChange)="setLayerAnimationProperty(animationIndex, $event)"
+                          >
+                            @for (property of animationProperties; track property.value) {
+                              <ngs-option [value]="property.value">{{ property.label }}</ngs-option>
+                            }
+                          </ngs-select>
+                        </ngs-form-field>
+
+                        <ngs-form-field subscriptHiddenIfEmpty>
+                          <ngs-label>Easing</ngs-label>
+                          <ngs-select
+                            [value]="animation.easing || 'linear'"
+                            (selectionChange)="setLayerAnimationEasing(animationIndex, $event)"
+                          >
+                            @for (easing of easingOptions; track easing.value) {
+                              <ngs-option [value]="easing.value">{{ easing.label }}</ngs-option>
+                            }
+                          </ngs-select>
+                        </ngs-form-field>
+
+                        <button
+                          ngsIconButton
+                          type="button"
+                          aria-label="Move animation up"
+                          [disabled]="animationIndex === 0"
+                          (click)="moveLayerAnimation(animationIndex, -1, $event)"
+                        >
+                          <ngs-icon name="fluent:arrow-up-24-regular" />
+                        </button>
+
+                        <button
+                          ngsIconButton
+                          type="button"
+                          aria-label="Move animation down"
+                          [disabled]="animationIndex === (layer.animations?.length || 0) - 1"
+                          (click)="moveLayerAnimation(animationIndex, 1, $event)"
+                        >
+                          <ngs-icon name="fluent:arrow-down-24-regular" />
+                        </button>
+
+                        <button
+                          ngsIconButton
+                          type="button"
+                          aria-label="Remove animation"
+                          (click)="removeLayerAnimation(animationIndex)"
+                        >
+                          <ngs-icon name="fluent:delete-24-regular" />
+                        </button>
+                      </div>
+
+                      <div class="ngs-motion-studio__keyframe-list">
+                        @for (
+                          keyframe of animation.keyframes;
+                          track keyframe.time + '-' + $index;
+                          let keyframeIndex = $index
+                        ) {
+                          <div
+                            class="ngs-motion-studio__keyframe-row"
+                            [class.is-selected]="
+                              isKeyframeSelected(layer, animationIndex, keyframeIndex)
+                            "
+                            (click)="
+                              selectTimelineKeyframe(layer, animationIndex, keyframeIndex, $event)
+                            "
+                          >
+                            <ngs-chip>{{ formatTime(keyframe.time) }}</ngs-chip>
+                            <ngs-form-field subscriptHiddenIfEmpty>
+                              <ngs-label>Time</ngs-label>
+                              <input
+                                ngsInput
+                                type="number"
+                                min="0"
+                                step="100"
+                                [value]="keyframe.time"
+                                (input)="
+                                  setLayerKeyframeTime(
+                                    animationIndex,
+                                    keyframeIndex,
+                                    $any($event.target).value
+                                  )
+                                "
+                              />
+                            </ngs-form-field>
+                            <ngs-form-field subscriptHiddenIfEmpty>
+                              <ngs-label>Value</ngs-label>
+                              <input
+                                ngsInput
+                                [value]="formatKeyframeValue(keyframe.value)"
+                                (input)="
+                                  setLayerKeyframeValue(
+                                    animationIndex,
+                                    keyframeIndex,
+                                    $any($event.target).value
+                                  )
+                                "
+                              />
+                            </ngs-form-field>
+                            <ngs-form-field subscriptHiddenIfEmpty>
+                              <ngs-label>Easing</ngs-label>
+                              <ngs-select
+                                [value]="keyframe.easing || animation.easing || 'linear'"
+                                (selectionChange)="
+                                  setLayerKeyframeEasing(animationIndex, keyframeIndex, $event)
+                                "
+                              >
+                                @for (easing of easingOptions; track easing.value) {
+                                  <ngs-option [value]="easing.value">{{ easing.label }}</ngs-option>
+                                }
+                              </ngs-select>
+                            </ngs-form-field>
+                            <button
+                              ngsIconButton
+                              type="button"
+                              aria-label="Duplicate keyframe"
+                              (click)="
+                                duplicateLayerKeyframe(animationIndex, keyframeIndex, $event)
+                              "
+                            >
+                              <ngs-icon name="fluent:copy-24-regular" />
+                            </button>
+                            <button
+                              ngsIconButton
+                              type="button"
+                              aria-label="Remove keyframe"
+                              (click)="removeLayerKeyframe(animationIndex, keyframeIndex)"
+                            >
+                              <ngs-icon name="fluent:dismiss-24-regular" />
+                            </button>
+                          </div>
+                        }
+                      </div>
+
+                      <button
+                        ngsButton="outlined"
+                        type="button"
+                        class="ngs-motion-studio__add-keyframe"
+                        (click)="addLayerKeyframe(animationIndex)"
+                      >
+                        <ngs-icon name="fluent:add-circle-24-regular" />
+                        Add keyframe
+                      </button>
+                    </div>
+                  }
+                </div>
+              } @else {
+                <p class="ngs-motion-studio__empty-copy">
+                  Add an animation property to create editable keyframes on the timeline.
+                </p>
+              }
+            </section>
+
+            <section class="ngs-motion-studio__inspector-section">
+              <h3>Style</h3>
+              <div class="ngs-motion-studio__field-grid">
+                @if (layer.type === 'text') {
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Font</ngs-label>
+                    <ngs-select
+                      [value]="layer.style?.fontFamily || fontFamilies[0].value"
+                      (selectionChange)="setLayerFontFamily($event)"
+                    >
+                      @for (font of fontFamilies; track font.value) {
+                        <ngs-option [value]="font.value">{{ font.label }}</ngs-option>
+                      }
+                    </ngs-select>
+                  </ngs-form-field>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Font size</ngs-label>
+                    <input
+                      ngsInput
+                      type="number"
+                      min="1"
+                      step="1"
+                      [value]="layer.style?.fontSize || 72"
+                      (input)="setLayerFontSize($any($event.target).value)"
+                    />
+                  </ngs-form-field>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Weight</ngs-label>
+                    <ngs-select
+                      [value]="layer.style?.fontWeight || 700"
+                      (selectionChange)="setLayerFontWeight($event)"
+                    >
+                      @for (weight of fontWeights; track weight.value) {
+                        <ngs-option [value]="weight.value">{{ weight.label }}</ngs-option>
+                      }
+                    </ngs-select>
+                  </ngs-form-field>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Line height</ngs-label>
+                    <input
+                      ngsInput
+                      type="number"
+                      min="0.1"
+                      step="0.05"
+                      [value]="layer.style?.lineHeight || 1.05"
+                      (input)="setLayerLineHeight($any($event.target).value)"
+                    />
+                  </ngs-form-field>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Spacing</ngs-label>
+                    <input
+                      ngsInput
+                      type="number"
+                      step="0.5"
+                      [value]="layer.style?.letterSpacing || 0"
+                      (input)="setLayerLetterSpacing($any($event.target).value)"
+                    />
+                  </ngs-form-field>
+                  <div class="ngs-motion-studio__align-control">
+                    <span>Align</span>
+                    <ngs-segmented
+                      size="sm"
+                      [value]="layer.style?.textAlign || 'left'"
+                      (valueChange)="setLayerTextAlign($event)"
+                    >
+                      <button
+                        ngs-segmented-button
+                        type="button"
+                        value="left"
+                        aria-label="Align left"
+                      >
+                        <ngs-icon name="fluent:text-align-left-24-regular" />
+                      </button>
+                      <button
+                        ngs-segmented-button
+                        type="button"
+                        value="center"
+                        aria-label="Align center"
+                      >
+                        <ngs-icon name="fluent:text-align-center-24-regular" />
+                      </button>
+                      <button
+                        ngs-segmented-button
+                        type="button"
+                        value="right"
+                        aria-label="Align right"
+                      >
+                        <ngs-icon name="fluent:text-align-right-24-regular" />
+                      </button>
+                    </ngs-segmented>
+                  </div>
+                }
+                @if (layer.type === 'image') {
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Object fit</ngs-label>
+                    <ngs-select
+                      [value]="layer.style?.objectFit || 'cover'"
+                      (selectionChange)="setLayerObjectFit($event)"
+                    >
+                      @for (option of objectFitOptions; track option.value) {
+                        <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
+                      }
+                    </ngs-select>
+                  </ngs-form-field>
+                }
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Color</ngs-label>
+                  <input
+                    ngsInput
+                    [value]="layer.style?.color || ''"
+                    (input)="setLayerStyleString('color', $any($event.target).value)"
+                  />
+                  <button
+                    ngs-color-picker-thumbnail
+                    ngsSuffix
+                    type="button"
+                    class="ngs-motion-studio__color-trigger"
+                    [color]="layer.style?.color || '#ffffff'"
+                    [ngsColorPickerTriggerFor]="colorPicker"
+                    aria-label="Choose text color"
+                  ></button>
+                  <ng-template #colorPicker>
+                    <ngs-color-picker
+                      [ngModel]="layer.style?.color || '#ffffff'"
+                      (ngModelChange)="setLayerStyleString('color', $event)"
+                      resultFormat="hex"
+                      [showOpacity]="false"
+                    />
+                  </ng-template>
+                </ngs-form-field>
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Background</ngs-label>
+                  <input
+                    ngsInput
+                    [value]="layer.style?.background || ''"
+                    (input)="setLayerStyleString('background', $any($event.target).value)"
+                  />
+                  <button
+                    ngs-color-picker-thumbnail
+                    ngsSuffix
+                    type="button"
+                    class="ngs-motion-studio__color-trigger"
+                    [color]="layer.style?.background || '#38bdf8'"
+                    [ngsColorPickerTriggerFor]="backgroundPicker"
+                    aria-label="Choose background color"
+                  ></button>
+                  <ng-template #backgroundPicker>
+                    <ngs-color-picker
+                      [ngModel]="layer.style?.background || '#38bdf8'"
+                      (ngModelChange)="setLayerStyleString('background', $event)"
+                      resultFormat="hex"
+                      [showOpacity]="false"
+                    />
+                  </ng-template>
+                </ngs-form-field>
+              </div>
+            </section>
+
+            <section class="ngs-motion-studio__inspector-section">
+              <h3>Actions</h3>
+              <div class="ngs-motion-studio__inspector-actions">
+                <button ngsButton="outlined" type="button" (click)="toggleLayerHidden(layer)">
+                  <ngs-icon
+                    [name]="layer.hidden ? 'fluent:eye-24-regular' : 'fluent:eye-off-24-regular'"
+                  />
+                  {{ layer.hidden ? 'Show' : 'Hide' }}
+                </button>
+                <button ngsButton="outlined" type="button" (click)="toggleLayerLocked(layer)">
+                  <ngs-icon
+                    [name]="
+                      layer.locked ? 'fluent:lock-open-24-regular' : 'fluent:lock-closed-24-regular'
+                    "
+                  />
+                  {{ layer.locked ? 'Unlock' : 'Lock' }}
+                </button>
+                <button ngsButton="outlined" type="button" (click)="copySelectedLayers()">
+                  <ngs-icon name="fluent:copy-24-regular" />
+                  Copy
+                </button>
+                <button ngsButton="outlined" type="button" (click)="duplicateSelectedLayers()">
+                  <ngs-icon name="fluent:copy-add-24-regular" />
+                  Duplicate
+                </button>
+                <button
+                  ngsButton="outlined"
+                  type="button"
+                  [disabled]="!canPasteLayer()"
+                  (click)="pasteLayers()"
+                >
+                  <ngs-icon name="fluent:clipboard-paste-24-regular" />
+                  Paste
+                </button>
+                <button ngsButton="outlined" type="button" (click)="removeSelectedLayer()">
+                  <ngs-icon name="fluent:delete-24-regular" />
+                  Remove
+                </button>
+              </div>
+            </section>
+          } @else if (selectedScene(); as scene) {
+            <section class="ngs-motion-studio__inspector-section">
+              <header>
+                <ngs-icon name="fluent:video-clip-24-regular" />
+                <div>
+                  <strong>{{ scene.name || scene.id }}</strong>
+                  <small>
+                    {{ sceneLayerCount(scene) }} layers · {{ sceneTransitionCount(scene) }}
+                    transitions
+                  </small>
+                </div>
+              </header>
+
+              <ngs-form-field subscriptHiddenIfEmpty>
+                <ngs-label>Name</ngs-label>
+                <input
+                  ngsInput
+                  [value]="scene.name || ''"
+                  (input)="setSceneName($any($event.target).value)"
+                />
+              </ngs-form-field>
+
+              <div class="grid grid-cols-2 gap-3">
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Start</ngs-label>
+                  <input
+                    ngsInput
+                    type="number"
+                    min="0"
+                    step="100"
+                    [value]="scene.start"
+                    (input)="setSceneNumber('start', $any($event.target).value)"
+                  />
+                </ngs-form-field>
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Duration</ngs-label>
+                  <input
+                    ngsInput
+                    type="number"
+                    min="100"
+                    step="100"
+                    [value]="scene.duration"
+                    (input)="setSceneNumber('duration', $any($event.target).value)"
+                  />
+                </ngs-form-field>
+              </div>
+            </section>
+
+            <section class="ngs-motion-studio__inspector-section">
+              <header class="ngs-motion-studio__section-header">
+                <h3>Scene layers</h3>
+                <ngs-chip-set>
+                  <ngs-chip>{{ sceneLayerCount(scene) }} selected</ngs-chip>
+                </ngs-chip-set>
+              </header>
+
+              <div class="ngs-motion-studio__scene-layer-list">
+                @for (item of timelineRows(); track item.layer.id) {
+                  <button
+                    ngsButton="outlined"
+                    type="button"
+                    [class.is-selected]="isLayerInScene(scene, item.layer)"
+                    (click)="toggleSceneLayer(item.layer, $event)"
+                  >
+                    <ngs-icon [name]="layerIcon(item.layer)" />
+                    {{ item.layer.name || item.layer.id }}
+                  </button>
+                }
+              </div>
+            </section>
+
+            <section class="ngs-motion-studio__inspector-section">
+              <header class="ngs-motion-studio__section-header">
+                <h3>Scene transitions</h3>
+                <ngs-chip-set>
+                  <ngs-chip>{{ sceneTransitionCount(scene) }} active</ngs-chip>
+                </ngs-chip-set>
+              </header>
+
+              <div class="ngs-motion-studio__transition-list ngs-motion-studio__animation-list">
+                @for (edge of transitionEdges; track edge) {
+                  <div class="ngs-motion-studio__transition-card ngs-motion-studio__animation-row">
+                    <header class="ngs-motion-studio__section-header">
+                      <div>
+                        <strong>{{ edge === 'in' ? 'In' : 'Out' }}</strong>
+                        <small>{{ sceneTransitionTypeValue(scene, edge) }}</small>
+                      </div>
+                      <button
+                        ngsIconButton
+                        type="button"
+                        aria-label="Remove scene transition"
+                        [disabled]="!hasSceneTransition(scene, edge)"
+                        (click)="removeSceneTransition(edge)"
+                      >
+                        <ngs-icon name="fluent:dismiss-24-regular" />
+                      </button>
+                    </header>
+
+                    <div
+                      class="ngs-motion-studio__transition-presets ngs-motion-studio__animation-presets"
+                    >
+                      @for (preset of transitionPresetTypes; track preset.value) {
+                        <button
+                          ngsButton="outlined"
+                          type="button"
+                          (click)="applySceneTransitionPreset(edge, preset.value)"
+                        >
+                          {{ preset.label }}
+                        </button>
+                      }
+                    </div>
+
+                    <div class="ngs-motion-studio__transition-grid ngs-motion-studio__field-grid">
+                      <ngs-form-field subscriptHiddenIfEmpty>
+                        <ngs-label>Type</ngs-label>
+                        <ngs-select
+                          [value]="sceneTransitionTypeValue(scene, edge)"
+                          (selectionChange)="setSceneTransitionType(edge, $event)"
+                        >
+                          @for (type of transitionTypes; track type.value) {
+                            <ngs-option [value]="type.value">{{ type.label }}</ngs-option>
+                          }
+                        </ngs-select>
+                      </ngs-form-field>
+                      <ngs-form-field subscriptHiddenIfEmpty>
+                        <ngs-label>Duration</ngs-label>
+                        <input
+                          ngsInput
+                          type="number"
+                          min="100"
+                          step="100"
+                          [value]="sceneTransitionDurationValue(scene, edge)"
+                          (input)="setSceneTransitionDuration(edge, $any($event.target).value)"
+                        />
+                      </ngs-form-field>
+                      <ngs-form-field subscriptHiddenIfEmpty>
+                        <ngs-label>Easing</ngs-label>
+                        <ngs-select
+                          [value]="sceneTransitionEasingValue(scene, edge)"
+                          (selectionChange)="setSceneTransitionEasing(edge, $event)"
+                        >
+                          @for (easing of easingOptions; track easing.value) {
+                            <ngs-option [value]="easing.value">{{ easing.label }}</ngs-option>
+                          }
+                        </ngs-select>
+                      </ngs-form-field>
+                      <ngs-form-field subscriptHiddenIfEmpty>
+                        <ngs-label>Direction</ngs-label>
+                        <ngs-select
+                          [value]="sceneTransitionDirectionValue(scene, edge)"
+                          (selectionChange)="setSceneTransitionDirection(edge, $event)"
+                        >
+                          @for (direction of transitionDirections; track direction.value) {
+                            <ngs-option [value]="direction.value">
+                              {{ direction.label }}
+                            </ngs-option>
+                          }
+                        </ngs-select>
+                      </ngs-form-field>
+                      <ngs-form-field subscriptHiddenIfEmpty>
+                        <ngs-label>Distance</ngs-label>
+                        <input
+                          ngsInput
+                          type="number"
+                          min="0"
+                          step="10"
+                          [value]="sceneTransitionDistanceValue(scene, edge)"
+                          (input)="setSceneTransitionDistance(edge, $any($event.target).value)"
+                        />
+                      </ngs-form-field>
+                    </div>
+                  </div>
+                }
+              </div>
+            </section>
+
+            <section class="ngs-motion-studio__inspector-section">
+              <h3>Actions</h3>
+              <div class="ngs-motion-studio__inspector-actions">
+                <button ngsButton="outlined" type="button" (click)="removeSelectedScene()">
+                  <ngs-icon name="fluent:delete-24-regular" />
+                  Remove scene
+                </button>
+              </div>
+            </section>
+          } @else {
+            <section class="ngs-motion-studio__empty-inspector">
+              <ngs-icon name="fluent:cursor-click-24-regular" />
+              <strong>Select a layer or scene</strong>
+              <span>Choose a layer, clip, or scene to edit its motion settings.</span>
+            </section>
+          }
+        </ngs-scrollbar-area>
+      </ngs-panel-aside>
+    </ngs-panel>
+  </ngs-panel-content>
+</ngs-panel>
+
+<ngs-drawer #jsonDrawer="ngsDrawer">
+  <ngs-panel class="ngs-motion-studio__json-drawer">
+    <ngs-panel-header class="ngs-motion-studio__json-header">
+      <div>
+        <strong>{{ jsonPanelTitle() }}</strong>
+        <small>{{ draft().layers.length }} layers · {{ formatTime(duration()) }}</small>
+      </div>
+      <button
+        ngsIconButton
+        type="button"
+        aria-label="Close JSON panel"
+        (click)="jsonDrawer.close()"
+      >
+        <ngs-icon name="fluent:dismiss-24-regular" />
+      </button>
+    </ngs-panel-header>
+
+    <ngs-panel-content class="ngs-motion-studio__json-content">
+      <ngs-scrollbar-area [absolute]="true">
+        <div class="ngs-motion-studio__json-body">
+          @if (jsonPanelMode() === 'import') {
+            <ngs-form-field subscriptHiddenIfEmpty>
+              <ngs-label>JSON file</ngs-label>
+              <input
+                ngsInput
+                type="file"
+                accept="application/json,.json"
+                (change)="loadJsonFile($event)"
+              />
+            </ngs-form-field>
+          }
+
+          <ngs-form-field subscriptHiddenIfEmpty class="ngs-motion-studio__json-field">
+            <ngs-label>Motion document JSON</ngs-label>
+            <textarea
+              ngsInput
+              spellcheck="false"
+              [value]="jsonDraft()"
+              (input)="setJsonDraft($any($event.target).value)"
+            ></textarea>
+          </ngs-form-field>
+
+          @if (jsonIssues().length) {
+            <div class="ngs-motion-studio__json-issues" role="alert">
+              @for (issue of jsonIssues(); track issue) {
+                <span>{{ issue }}</span>
+              }
+            </div>
+          }
+
+          @if (jsonStatus()) {
+            <p class="ngs-motion-studio__json-status">{{ jsonStatus() }}</p>
+          }
+        </div>
+      </ngs-scrollbar-area>
+    </ngs-panel-content>
+
+    <ngs-panel-footer class="ngs-motion-studio__json-footer">
+      <button ngsButton="outlined" type="button" (click)="jsonDrawer.close()">Close</button>
+      @if (jsonPanelMode() === 'export') {
+        <button ngsButton="outlined" type="button" (click)="copyJson()">
+          <ngs-icon name="fluent:copy-24-regular" />
+          Copy JSON
+        </button>
+        <button ngsButton="filled" type="button" (click)="downloadJson()">
+          <ngs-icon name="fluent:arrow-download-24-regular" />
+          Download
+        </button>
+      } @else {
+        <button ngsButton="filled" type="button" (click)="importJson() && jsonDrawer.close()">
+          <ngs-icon name="fluent:arrow-import-24-regular" />
+          Import JSON
+        </button>
+      }
+    </ngs-panel-footer>
+  </ngs-panel>
+</ngs-drawer>

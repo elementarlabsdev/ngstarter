@@ -1,0 +1,1591 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  min-height: 720px;
+  --ngs-motion-studio-border: color-mix(in srgb, var(--ngs-color-outline) 72%, transparent);
+  --ngs-motion-studio-muted: color-mix(in srgb, var(--ngs-color-text-secondary) 86%, transparent);
+  --ngs-motion-studio-rail: color-mix(in srgb, var(--ngs-color-surface) 92%, #f8fafc);
+  --ngs-motion-studio-workspace: #f3f5f8;
+  --ngs-motion-studio-canvas: #eef1f5;
+  --ngs-motion-studio-track: #f8fafc;
+  --ngs-motion-studio-clip: #dbeafe;
+  --ngs-motion-studio-clip-border: #60a5fa;
+  --ngs-motion-studio-playhead: #ef4444;
+}
+
+.ngs-motion-studio__panel {
+  height: 100%;
+  min-height: inherit;
+  overflow: hidden;
+  background: var(--ngs-color-surface);
+}
+
+.ngs-motion-studio__header {
+  border-bottom: 1px solid var(--ngs-motion-studio-border);
+  background: var(--ngs-color-surface);
+}
+
+.ngs-motion-studio__brand {
+  display: grid;
+  gap: 2px;
+}
+
+.ngs-motion-studio__brand span {
+  color: var(--ngs-color-text);
+  font-size: var(--ngs-font-size-sm);
+  font-weight: 650;
+}
+
+.ngs-motion-studio__brand small,
+.ngs-motion-studio__timeline-toolbar small,
+.ngs-motion-studio__preview-toolbar span,
+.ngs-motion-studio__inspector-section small,
+.ngs-motion-studio__drop-zone small,
+.ngs-motion-studio__asset-summary small,
+.ngs-motion-studio__asset-meta small,
+.ngs-motion-studio__preset-card small,
+.ngs-motion-studio__layer-row small {
+  color: var(--ngs-motion-studio-muted);
+  font-size: var(--ngs-font-size-xs);
+  font-weight: 400;
+}
+
+.ngs-motion-studio__transport {
+  display: flex;
+  align-items: center;
+  gap: --spacing(1);
+}
+
+.ngs-motion-studio__play {
+  min-width: 104px;
+}
+
+.ngs-motion-studio__timecode {
+  white-space: nowrap;
+}
+
+.ngs-motion-studio__body {
+  min-height: 0;
+  overflow: hidden;
+}
+
+ngs-panel.ngs-motion-studio__editor.has-sidebar.has-aside {
+  display: grid;
+  grid-template-areas: 'sidebar body aside';
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-columns: 340px minmax(0, 1fr) 340px;
+  gap: 0;
+  height: 100%;
+  min-height: 0;
+  background: var(--ngs-motion-studio-workspace);
+}
+
+.ngs-motion-studio__library,
+.ngs-motion-studio__inspector {
+  min-width: 0;
+  min-height: 0;
+  background: var(--ngs-motion-studio-rail);
+}
+
+.ngs-motion-studio__library {
+  border-right: 1px solid var(--ngs-motion-studio-border);
+}
+
+.ngs-motion-studio__library-panel {
+  --ngs-tab-panel-width: --spacing(21);
+  --ngs-tab-panel-aside-width: calc(100% - var(--ngs-tab-panel-width));
+  --ngs-tab-panel-nav-padding: --spacing(3) --spacing(2);
+  --ngs-tab-panel-nav-gap: --spacing(1);
+  --ngs-tab-panel-item-width: 100%;
+  --ngs-tab-panel-item-padding: 0 --spacing(2);
+  --ngs-tab-panel-item-gap: --spacing(2);
+  --ngs-tab-panel-item-icon-font-size: 1.1rem;
+
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+}
+
+.ngs-motion-studio__library-panel ngs-tab-panel-content {
+  border-right: 1px solid var(--ngs-motion-studio-border);
+  background: var(--ngs-color-surface);
+}
+
+.ngs-motion-studio__library-panel ngs-tab-panel-aside {
+  min-width: 0;
+  min-height: 0;
+}
+
+.ngs-motion-studio__inspector {
+  border-left: 1px solid var(--ngs-motion-studio-border);
+}
+
+.ngs-motion-studio__main {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) 238px;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ngs-motion-studio__preview-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: --spacing(3);
+  min-height: 48px;
+  padding: 0 --spacing(4);
+  border-bottom: 1px solid var(--ngs-motion-studio-border);
+  background: var(--ngs-color-surface);
+}
+
+.ngs-motion-studio__preview-controls {
+  display: flex;
+  align-items: center;
+  gap: --spacing(3);
+  min-width: 0;
+}
+
+.ngs-motion-studio__grid-size {
+  width: 96px;
+}
+
+.ngs-motion-studio__canvas-shell {
+  min-height: 0;
+  padding: --spacing(5);
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgb(15 23 42 / 4%) 1px, transparent 1px),
+    linear-gradient(0deg, rgb(15 23 42 / 4%) 1px, transparent 1px), var(--ngs-motion-studio-canvas);
+  background-size: 24px 24px;
+}
+
+.ngs-motion-studio__canvas-board {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.ngs-motion-studio__stage-frame {
+  width: min(100%, 980px);
+  max-height: 100%;
+  border: 1px solid var(--ngs-motion-studio-border);
+  border-radius: var(--ngs-motion-player-radius, var(--ngs-radius-md));
+}
+
+.ngs-motion-studio__stage-canvas {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+  border-radius: var(--ngs-motion-player-radius, var(--ngs-radius-md));
+}
+
+.ngs-motion-studio__stage-canvas.is-grid-visible::before {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  content: '';
+  background-image:
+    linear-gradient(90deg, rgb(59 130 246 / 22%) 1px, transparent 1px),
+    linear-gradient(0deg, rgb(59 130 246 / 22%) 1px, transparent 1px);
+  background-size: inherit;
+}
+
+.ngs-motion-studio__stage-canvas.is-preset-drop-target {
+  outline: 2px solid color-mix(in srgb, var(--ngs-color-primary) 72%, transparent);
+  outline-offset: 4px;
+}
+
+.ngs-motion-studio__stage-canvas.is-preset-drop-target::after {
+  position: absolute;
+  inset: --spacing(4);
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  color: var(--ngs-color-primary);
+  font-size: var(--ngs-font-size-sm);
+  font-weight: 650;
+  pointer-events: none;
+  content: 'Drop preset';
+  background: color-mix(in srgb, var(--ngs-color-primary) 9%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--ngs-color-primary) 58%, transparent);
+  border-radius: var(--ngs-radius-md);
+}
+
+.ngs-motion-studio__stage-canvas ngs-motion-player {
+  display: block;
+  width: 100%;
+  min-height: 0;
+}
+
+.ngs-motion-studio__canvas-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+}
+
+.ngs-motion-studio__canvas-layer {
+  position: absolute;
+  box-sizing: border-box;
+  padding: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  transform-origin: 0 0;
+  text-align: start;
+  cursor: move;
+}
+
+.ngs-motion-studio__canvas-layer:hover,
+.ngs-motion-studio__canvas-layer.is-selected {
+  border-color: var(--ngs-color-primary);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 78%),
+    0 0 0 1px color-mix(in srgb, var(--ngs-color-primary) 22%, transparent);
+}
+
+.ngs-motion-studio__canvas-layer.is-locked {
+  cursor: default;
+}
+
+.ngs-motion-studio__canvas-overlay.is-resizing .ngs-motion-studio__canvas-layer:not(.is-selected) {
+  pointer-events: none;
+}
+
+.ngs-motion-studio__canvas-overlay.is-resizing
+  .ngs-motion-studio__canvas-layer:not(.is-selected):hover {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.ngs-motion-studio__canvas-layer.is-text {
+  display: flex;
+  height: auto !important;
+  min-height: 0;
+  border: 0;
+  box-shadow: none;
+}
+
+.ngs-motion-studio__canvas-layer.is-text:hover,
+.ngs-motion-studio__canvas-layer.is-text.is-selected {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.ngs-motion-studio__text-selection-box {
+  position: relative;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  height: auto;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+.ngs-motion-studio__canvas-layer.is-unbroken-text .ngs-motion-studio__text-selection-box {
+  max-width: none;
+}
+
+.ngs-motion-studio__canvas-layer.is-text:hover .ngs-motion-studio__text-selection-box,
+.ngs-motion-studio__canvas-layer.is-text.is-selected .ngs-motion-studio__text-selection-box {
+  outline: 1px solid var(--ngs-color-primary);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 78%),
+    0 0 0 1px color-mix(in srgb, var(--ngs-color-primary) 22%, transparent);
+}
+
+.ngs-motion-studio__canvas-overlay.is-resizing
+  .ngs-motion-studio__canvas-layer.is-text:not(.is-selected):hover
+  .ngs-motion-studio__text-selection-box {
+  outline: 0;
+  box-shadow: none;
+}
+
+.ngs-motion-studio__text-measure {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  height: auto;
+  min-height: inherit;
+  overflow: visible;
+  visibility: hidden;
+  white-space: pre-wrap;
+  overflow-wrap: normal;
+  word-break: keep-all;
+  pointer-events: none;
+}
+
+.ngs-motion-studio__inline-text-editor {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  min-width: 1ch;
+  height: auto;
+  min-height: inherit;
+  padding: 0;
+  overflow: visible;
+  color: inherit;
+  resize: none;
+  background: rgb(255 255 255 / 8%);
+  border: 0;
+  outline: 0;
+  white-space: pre-wrap;
+  overflow-wrap: normal;
+  word-break: keep-all;
+  caret-color: currentColor;
+}
+
+.ngs-motion-studio__canvas-layer.is-unbroken-text .ngs-motion-studio__text-measure {
+  max-width: none;
+  white-space: pre;
+}
+
+.ngs-motion-studio__canvas-layer.is-unbroken-text .ngs-motion-studio__inline-text-editor {
+  max-width: none;
+  white-space: pre;
+}
+
+.ngs-motion-studio__resize-handle {
+  position: absolute;
+  z-index: 2;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border: 2px solid var(--ngs-color-primary);
+  border-radius: 999px;
+  box-shadow: 0 1px 4px rgb(15 23 42 / 18%);
+}
+
+.ngs-motion-studio__resize-handle.is-nw {
+  top: -6px;
+  left: -6px;
+  cursor: nwse-resize;
+}
+
+.ngs-motion-studio__resize-handle.is-ne {
+  top: -6px;
+  right: -6px;
+  cursor: nesw-resize;
+}
+
+.ngs-motion-studio__resize-handle.is-se {
+  right: -6px;
+  bottom: -6px;
+  cursor: nwse-resize;
+}
+
+.ngs-motion-studio__resize-handle.is-sw {
+  bottom: -6px;
+  left: -6px;
+  cursor: nesw-resize;
+}
+
+.ngs-motion-studio__timeline {
+  display: grid;
+  grid-template-rows: 56px minmax(0, 1fr);
+  min-height: 0;
+  border-top: 1px solid var(--ngs-motion-studio-border);
+  background: var(--ngs-color-surface);
+}
+
+.ngs-motion-studio__timeline-toolbar {
+  display: grid;
+  grid-template-columns: 176px minmax(0, 1fr) auto;
+  gap: --spacing(4);
+  align-items: center;
+  padding: 0 --spacing(4);
+  border-bottom: 1px solid var(--ngs-motion-studio-border);
+}
+
+.ngs-motion-studio__timeline-toolbar > div {
+  display: grid;
+  gap: 2px;
+}
+
+.ngs-motion-studio__timeline-toolbar strong {
+  color: var(--ngs-color-text);
+  font-size: var(--ngs-font-size-sm);
+  font-weight: 650;
+}
+
+.ngs-motion-studio__timeline-zoom {
+  display: flex;
+  align-items: center;
+  gap: --spacing(2);
+}
+
+.ngs-motion-studio__timeline-zoom > span {
+  color: var(--ngs-motion-studio-muted);
+  font-size: var(--ngs-font-size-xs);
+}
+
+.ngs-motion-studio__timeline-scroll {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+.ngs-motion-studio__timeline-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 176px minmax(0, 1fr);
+  grid-auto-rows: 34px;
+  min-height: 0;
+  overflow-x: clip;
+  overflow-y: visible;
+  cursor: crosshair;
+}
+
+.ngs-motion-studio__timeline-grid.is-preset-drop-target {
+  outline: 2px solid color-mix(in srgb, var(--ngs-color-primary) 72%, transparent);
+  outline-offset: -2px;
+}
+
+.ngs-motion-studio__timeline-grid.is-preset-drop-target::after {
+  position: absolute;
+  z-index: 8;
+  inset: 34px --spacing(2) --spacing(2) calc(176px + --spacing(2));
+  display: grid;
+  place-items: center;
+  color: var(--ngs-color-primary);
+  font-size: var(--ngs-font-size-sm);
+  font-weight: 650;
+  pointer-events: none;
+  content: 'Drop preset on timeline';
+  background: color-mix(in srgb, var(--ngs-color-primary) 8%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--ngs-color-primary) 58%, transparent);
+  border-radius: var(--ngs-radius-md);
+}
+
+.ngs-motion-studio__ruler,
+.ngs-motion-studio__track {
+  position: relative;
+  border-bottom: 1px solid var(--ngs-motion-studio-border);
+  background: var(--ngs-motion-studio-track);
+}
+
+.ngs-motion-studio__ruler {
+  background: linear-gradient(180deg, #fff, #f8fafc);
+}
+
+.ngs-motion-studio__tick {
+  position: absolute;
+  top: 9px;
+  translate: -50% 0;
+  color: var(--ngs-motion-studio-muted);
+  font-size: 11px;
+  pointer-events: none;
+}
+
+.ngs-motion-studio__tick::before {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  width: 1px;
+  height: 999px;
+  content: '';
+  background: rgb(15 23 42 / 7%);
+}
+
+.ngs-motion-studio__playhead {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  bottom: -999px;
+  width: 2px;
+  pointer-events: none;
+  background: var(--ngs-motion-studio-playhead);
+  box-shadow: 0 0 0 1px rgb(239 68 68 / 18%);
+}
+
+.ngs-motion-studio__playhead::before {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  content: '';
+  background: var(--ngs-motion-studio-playhead);
+  border-radius: 999px;
+  translate: -50% -50%;
+}
+
+.ngs-motion-studio__keyframe-snap-guide {
+  position: absolute;
+  z-index: 7;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  pointer-events: none;
+  background: var(--ngs-color-primary);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ngs-color-primary) 20%, transparent);
+  translate: -50% 0;
+}
+
+.ngs-motion-studio__keyframe-snap-guide > span {
+  position: absolute;
+  top: --spacing(1);
+  left: 50%;
+  display: block;
+  padding: --spacing(1) --spacing(2);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--ngs-color-primary);
+  border-radius: var(--ngs-radius-sm);
+  box-shadow: 0 6px 18px rgb(15 23 42 / 16%);
+  translate: -50% 0;
+}
+
+.ngs-motion-studio__keyframe-snap-guide > small {
+  position: absolute;
+  top: --spacing(7);
+  left: 50%;
+  display: block;
+  padding: 1px --spacing(1);
+  color: var(--ngs-color-text);
+  font-size: 10px;
+  white-space: nowrap;
+  background: #fff;
+  border: 1px solid var(--ngs-motion-studio-border);
+  border-radius: var(--ngs-radius-sm);
+  translate: -50% 0;
+}
+
+.ngs-motion-studio__keyframe-snap-guide.is-scene-edge {
+  background: #22c55e;
+}
+
+.ngs-motion-studio__keyframe-snap-guide.is-scene-edge > span {
+  background: #15803d;
+}
+
+.ngs-motion-studio__keyframe-snap-guide.is-layer-edge,
+.ngs-motion-studio__keyframe-snap-guide.is-keyframe {
+  background: #f59e0b;
+}
+
+.ngs-motion-studio__keyframe-snap-guide.is-layer-edge > span,
+.ngs-motion-studio__keyframe-snap-guide.is-keyframe > span {
+  background: #b45309;
+}
+
+.ngs-motion-studio__keyframe-snap-guide.is-frame-grid {
+  background: #64748b;
+}
+
+.ngs-motion-studio__keyframe-snap-guide.is-frame-grid > span {
+  background: #475569;
+}
+
+.ngs-motion-studio__timeline-selection-box {
+  position: absolute;
+  z-index: 6;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--ngs-color-primary) 12%, transparent);
+  border: 1px solid var(--ngs-color-primary);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ngs-color-primary) 16%, transparent);
+}
+
+.ngs-motion-studio__track-label {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: --spacing(2);
+  align-items: center;
+  min-width: 0;
+  padding: 0 --spacing(3);
+  color: var(--ngs-color-text);
+  text-align: left;
+  background: #fff;
+  border: 0;
+  border-right: 1px solid var(--ngs-motion-studio-border);
+  border-bottom: 1px solid var(--ngs-motion-studio-border);
+  cursor: pointer;
+}
+
+.ngs-motion-studio__layer-track-label {
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: --spacing(1);
+  padding: 0 --spacing(2);
+  cursor: default;
+}
+
+.ngs-motion-studio__track-toggle[ngsIconButton] {
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+}
+
+.ngs-motion-studio__track-label-main {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: --spacing(2);
+  align-items: center;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  color: inherit;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.ngs-motion-studio__track-label span {
+  overflow: hidden;
+  font-size: var(--ngs-font-size-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ngs-motion-studio__track-label.is-selected {
+  color: var(--ngs-color-primary);
+  background: color-mix(in srgb, var(--ngs-color-primary) 8%, white);
+}
+
+.ngs-motion-studio__ruler-label {
+  cursor: default;
+  color: var(--ngs-motion-studio-muted);
+  font-size: var(--ngs-font-size-xs);
+  font-weight: 650;
+}
+
+.ngs-motion-studio__scene-label {
+  color: color-mix(in srgb, var(--ngs-color-primary) 82%, var(--ngs-color-text));
+  background: color-mix(in srgb, var(--ngs-color-primary) 6%, white);
+}
+
+.ngs-motion-studio__scene-track {
+  background: color-mix(in srgb, #ecfeff 58%, var(--ngs-motion-studio-track));
+}
+
+.ngs-motion-studio__animation-track-label {
+  padding-left: --spacing(8);
+  color: var(--ngs-motion-studio-muted);
+  background: #fbfdff;
+}
+
+.ngs-motion-studio__animation-track {
+  background:
+    linear-gradient(90deg, rgb(15 23 42 / 5%) 1px, transparent 1px) 0 0 / 64px 100%,
+    #fbfdff;
+}
+
+.ngs-motion-studio__animation-track-span {
+  position: absolute;
+  top: 11px;
+  bottom: 11px;
+  min-width: 24px;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--ngs-color-primary) 10%, transparent);
+  border-radius: 999px;
+}
+
+.ngs-motion-studio__clip {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  min-width: 28px;
+  overflow: hidden;
+  color: #1e3a8a;
+  text-align: left;
+  background: var(--ngs-motion-studio-clip);
+  border: 1px solid #93c5fd;
+  border-radius: 6px;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.ngs-motion-studio__scene-clip {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  min-width: 36px;
+  overflow: hidden;
+  color: #155e75;
+  text-align: left;
+  background: color-mix(in srgb, #a5f3fc 54%, #fff);
+  border: 1px solid #67e8f9;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.ngs-motion-studio__scene-clip > span:not(.ngs-motion-studio__transition-zone) {
+  position: relative;
+  z-index: 1;
+  display: block;
+  padding: 0 --spacing(2);
+  overflow: hidden;
+  font-size: 11px;
+  line-height: 22px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ngs-motion-studio__scene-clip.is-selected {
+  color: var(--ngs-color-primary);
+  background: color-mix(in srgb, var(--ngs-color-primary) 12%, #fff);
+  border-color: var(--ngs-color-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ngs-color-primary) 16%, transparent);
+}
+
+.ngs-motion-studio__clip
+  span:not(.ngs-motion-studio__transition-zone, .ngs-motion-studio__clip-handle) {
+  position: relative;
+  z-index: 1;
+  display: block;
+  padding: 0 --spacing(2);
+  overflow: hidden;
+  font-size: 11px;
+  line-height: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ngs-motion-studio__clip-handle {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  padding: 0;
+  cursor: ew-resize;
+}
+
+.ngs-motion-studio__clip-handle.is-start {
+  left: 0;
+}
+
+.ngs-motion-studio__clip-handle.is-end {
+  right: 0;
+}
+
+.ngs-motion-studio__clip.is-selected {
+  background: color-mix(in srgb, var(--ngs-color-primary) 18%, #fff);
+  border-color: var(--ngs-color-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ngs-color-primary) 16%, transparent);
+}
+
+.ngs-motion-studio__transition-zone {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  min-width: 10px;
+  pointer-events: none;
+}
+
+.ngs-motion-studio__transition-zone.is-in {
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, #22c55e 38%, transparent),
+    color-mix(in srgb, #22c55e 8%, transparent)
+  );
+  border-right: 1px solid color-mix(in srgb, #22c55e 42%, transparent);
+}
+
+.ngs-motion-studio__transition-zone.is-out {
+  right: 0;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, #f97316 8%, transparent),
+    color-mix(in srgb, #f97316 38%, transparent)
+  );
+  border-left: 1px solid color-mix(in srgb, #f97316 42%, transparent);
+}
+
+.ngs-motion-studio__keyframe-marker {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  background: #f59e0b;
+  border: 1px solid #fff;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgb(15 23 42 / 18%);
+  cursor: ew-resize;
+  rotate: 45deg;
+  translate: -50% -50%;
+}
+
+.ngs-motion-studio__keyframe-marker.is-selected {
+  background: var(--ngs-color-primary);
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--ngs-color-primary) 18%, transparent),
+    0 1px 4px rgb(15 23 42 / 18%);
+}
+
+.ngs-motion-studio__keyframe-marker.is-keyframe-selected {
+  background: #0f172a;
+  border-color: #fff;
+  box-shadow:
+    0 0 0 2px var(--ngs-color-primary),
+    0 0 0 5px color-mix(in srgb, var(--ngs-color-primary) 18%, transparent),
+    0 2px 8px rgb(15 23 42 / 22%);
+}
+
+.ngs-motion-studio__keyframe-marker.is-track-keyframe {
+  top: 50%;
+  width: 10px;
+  height: 10px;
+}
+
+.ngs-motion-studio__tab-content,
+.ngs-motion-studio__layer-stack,
+.ngs-motion-studio__asset-list,
+.ngs-motion-studio__preset-grid,
+.ngs-motion-studio__kit-section {
+  display: flex;
+  flex-direction: column;
+  gap: --spacing(3);
+  padding: --spacing(4);
+}
+
+.ngs-motion-studio__kit-section {
+  padding: --spacing(4);
+}
+
+.ngs-motion-studio__kit-section .ngs-motion-studio__preset-grid {
+  padding: 0;
+}
+
+.ngs-motion-studio__scroll {
+  min-height: 0;
+}
+
+.ngs-motion-studio__add-layer {
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.ngs-motion-studio__scene-layer-list {
+  display: grid;
+  gap: --spacing(2);
+}
+
+.ngs-motion-studio__scene-layer-list button[ngsButton] {
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+.ngs-motion-studio__scene-layer-list button[ngsButton].is-selected {
+  color: var(--ngs-color-primary);
+  background: color-mix(in srgb, var(--ngs-color-primary) 8%, white);
+}
+
+.ngs-motion-studio__asset-upload {
+  width: 100%;
+}
+
+.ngs-motion-studio__asset-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: --spacing(2);
+}
+
+.ngs-motion-studio__asset-list {
+  gap: --spacing(2);
+  padding: 0;
+}
+
+.ngs-motion-studio__asset-card {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) auto auto;
+  gap: --spacing(2);
+  align-items: center;
+  min-width: 0;
+  padding: --spacing(2);
+  background: #fff;
+  border: 1px solid var(--ngs-motion-studio-border);
+  border-radius: var(--ngs-radius-md);
+}
+
+.ngs-motion-studio__asset-preview {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 42px;
+  overflow: hidden;
+  color: var(--ngs-motion-studio-muted);
+  background: #f8fafc;
+  border: 1px solid color-mix(in srgb, var(--ngs-motion-studio-border) 76%, transparent);
+  border-radius: var(--ngs-radius-sm);
+}
+
+.ngs-motion-studio__asset-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ngs-motion-studio__asset-meta {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.ngs-motion-studio__asset-meta strong {
+  overflow: hidden;
+  color: var(--ngs-color-text);
+  font-size: var(--ngs-font-size-sm);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ngs-motion-studio__asset-card button[ngsIconButton] {
+  width: 30px;
+  height: 30px;
+}
+
+.ngs-motion-studio__drop-zone {
+  display: grid;
+  place-items: center;
+  gap: --spacing(2);
+  min-height: 148px;
+  padding: --spacing(4);
+  color: var(--ngs-motion-studio-muted);
+  text-align: center;
+  background: #fff;
+  border: 1px dashed var(--ngs-motion-studio-border);
+  border-radius: var(--ngs-radius-md);
+}
+
+.ngs-motion-studio__drop-zone span {
+  color: var(--ngs-color-text);
+  font-weight: 650;
+}
+
+.ngs-motion-studio__layer-row {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) repeat(6, auto);
+  gap: --spacing(2);
+  align-items: center;
+  width: 100%;
+  padding: --spacing(2);
+  color: var(--ngs-color-text);
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--ngs-motion-studio-border);
+  border-radius: var(--ngs-radius-md);
+  cursor: pointer;
+}
+
+.ngs-motion-studio__layer-row > span {
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--ngs-font-size-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ngs-motion-studio__layer-row > small {
+  grid-column: 2;
+  line-height: 1;
+}
+
+.ngs-motion-studio__layer-row button[ngsIconButton] {
+  width: 30px;
+  height: 30px;
+}
+
+.ngs-motion-studio__layer-row.is-selected {
+  border-color: var(--ngs-color-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ngs-color-primary) 12%, transparent);
+}
+
+.ngs-motion-studio__layer-row.is-muted {
+  opacity: 0.58;
+}
+
+.ngs-motion-studio__preset-card {
+  display: grid;
+  gap: --spacing(2);
+  width: 100%;
+  padding: --spacing(3);
+  color: var(--ngs-color-text);
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--ngs-motion-studio-border);
+  border-radius: var(--ngs-radius-md);
+  cursor: pointer;
+}
+
+.ngs-motion-studio__preset-card[draggable='true'] {
+  cursor: grab;
+}
+
+.ngs-motion-studio__preset-card[draggable='true']:active {
+  cursor: grabbing;
+}
+
+.ngs-motion-studio__preset-category {
+  display: grid;
+  gap: --spacing(2);
+}
+
+.ngs-motion-studio__preset-category + .ngs-motion-studio__preset-category {
+  padding-top: --spacing(3);
+  border-top: 1px solid var(--ngs-motion-studio-border);
+}
+
+.ngs-motion-studio__mini-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: --spacing(2);
+}
+
+.ngs-motion-studio__mini-header strong {
+  color: var(--ngs-color-text);
+  font-size: var(--ngs-font-size-sm);
+  font-weight: 650;
+}
+
+.ngs-motion-studio__mini-header small {
+  color: var(--ngs-motion-studio-muted);
+  font-size: var(--ngs-font-size-xs);
+}
+
+.ngs-motion-studio__preset-card:hover,
+.ngs-motion-studio__layer-row:hover {
+  border-color: color-mix(in srgb, var(--ngs-color-primary) 52%, var(--ngs-motion-studio-border));
+}
+
+.ngs-motion-studio__preset-preview {
+  display: block;
+  height: 64px;
+  background:
+    linear-gradient(90deg, #bfdbfe 0 42%, transparent 42%),
+    linear-gradient(180deg, #eff6ff, #f8fafc);
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+}
+
+.ngs-motion-studio__preset-card[data-motion-preset-category='text']
+  .ngs-motion-studio__preset-preview {
+  background:
+    linear-gradient(
+      180deg,
+      transparent 0 24%,
+      #0f172a 24% 44%,
+      transparent 44% 60%,
+      #64748b 60% 72%,
+      transparent 72%
+    ),
+    linear-gradient(180deg, #eff6ff, #f8fafc);
+}
+
+.ngs-motion-studio__preset-card[data-motion-preset-category='shape']
+  .ngs-motion-studio__preset-preview {
+  background:
+    radial-gradient(circle at 72% 45%, #22d3ee 0 18%, transparent 19%),
+    linear-gradient(90deg, #2563eb 0 52%, transparent 52%),
+    linear-gradient(180deg, #eff6ff, #f8fafc);
+}
+
+.ngs-motion-studio__preset-card[data-motion-preset-category='lower-third']
+  .ngs-motion-studio__preset-preview {
+  background:
+    linear-gradient(90deg, transparent 0 8%, #fff 8% 74%, transparent 74%),
+    linear-gradient(180deg, transparent 0 54%, #dbeafe 54% 86%, transparent 86%),
+    linear-gradient(180deg, #eff6ff, #f8fafc);
+}
+
+.ngs-motion-studio__preset-card[data-motion-preset-category='metric']
+  .ngs-motion-studio__preset-preview {
+  background:
+    linear-gradient(180deg, transparent 0 20%, #0f172a 20% 72%, transparent 72%),
+    linear-gradient(90deg, transparent 0 12%, #60a5fa 12% 42%, transparent 42%),
+    linear-gradient(180deg, #eff6ff, #f8fafc);
+}
+
+.ngs-motion-studio__preset-card[data-motion-preset-category='background']
+  .ngs-motion-studio__preset-preview {
+  background:
+    linear-gradient(90deg, rgb(59 130 246 / 24%) 1px, transparent 1px),
+    linear-gradient(0deg, rgb(59 130 246 / 24%) 1px, transparent 1px),
+    linear-gradient(135deg, #0f172a, #1d4ed8);
+  background-size:
+    18px 18px,
+    18px 18px,
+    auto;
+}
+
+.ngs-motion-studio__preset-card strong {
+  font-size: var(--ngs-font-size-sm);
+  font-weight: 650;
+}
+
+.ngs-motion-studio__inspector .ngs-scrollbar-area,
+.ngs-motion-studio__library .ngs-scrollbar-area {
+  height: 100%;
+}
+
+.ngs-motion-studio__inspector-section {
+  display: grid;
+  gap: --spacing(3);
+  padding: --spacing(4);
+  border-bottom: 1px solid var(--ngs-motion-studio-border);
+}
+
+.ngs-motion-studio__inspector-section header {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: --spacing(2);
+  align-items: center;
+}
+
+.ngs-motion-studio__inspector-section header > div {
+  display: grid;
+  min-width: 0;
+}
+
+.ngs-motion-studio__inspector-section header.ngs-motion-studio__section-header {
+  display: flex;
+  grid-template-columns: none;
+  justify-content: space-between;
+}
+
+.ngs-motion-studio__section-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: --spacing(2);
+  justify-content: flex-end;
+}
+
+.ngs-motion-studio__section-actions button[ngsButton] {
+  min-height: 28px;
+}
+
+.ngs-motion-studio__inspector-section strong,
+.ngs-motion-studio__inspector-section h3 {
+  margin: 0;
+  color: var(--ngs-color-text);
+  font-size: var(--ngs-font-size-sm);
+  font-weight: 650;
+}
+
+.ngs-motion-studio__field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: --spacing(3);
+}
+
+.ngs-motion-studio__animation-presets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: --spacing(2);
+}
+
+.ngs-motion-studio__preset-builder {
+  display: grid;
+  gap: --spacing(3);
+  padding: --spacing(3);
+  background: color-mix(in srgb, var(--ngs-color-primary) 5%, #fff);
+  border: 1px solid
+    color-mix(in srgb, var(--ngs-color-primary) 24%, var(--ngs-motion-studio-border));
+  border-radius: var(--ngs-radius-md);
+}
+
+.ngs-motion-studio__preset-mode {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: --spacing(1);
+}
+
+.ngs-motion-studio__preset-mode > span {
+  color: var(--ngs-motion-studio-muted);
+  font-size: var(--ngs-font-size-xs);
+}
+
+.ngs-motion-studio__selected-keyframe {
+  display: grid;
+  gap: --spacing(3);
+  padding: --spacing(3);
+  background: color-mix(in srgb, var(--ngs-color-primary) 8%, #fff);
+  border: 1px solid
+    color-mix(in srgb, var(--ngs-color-primary) 36%, var(--ngs-motion-studio-border));
+  border-radius: var(--ngs-radius-md);
+}
+
+.ngs-motion-studio__selected-keyframe-title {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto auto;
+  gap: --spacing(2);
+  align-items: center;
+}
+
+.ngs-motion-studio__selected-keyframe-title > div {
+  display: grid;
+  min-width: 0;
+}
+
+.ngs-motion-studio__selected-keyframe-title strong {
+  overflow: hidden;
+  color: var(--ngs-color-text);
+  font-size: var(--ngs-font-size-sm);
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ngs-motion-studio__selected-keyframe-title small {
+  color: var(--ngs-motion-studio-muted);
+  font-size: var(--ngs-font-size-xs);
+}
+
+.ngs-motion-studio__selected-keyframe-meta {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: --spacing(1);
+}
+
+.ngs-motion-studio__selected-keyframe-meta > span {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+  padding: --spacing(2);
+  background: color-mix(in srgb, var(--ngs-color-primary) 5%, #fff);
+  border: 1px solid color-mix(in srgb, var(--ngs-color-primary) 16%, transparent);
+  border-radius: var(--ngs-radius-sm);
+}
+
+.ngs-motion-studio__selected-keyframe-meta small {
+  color: var(--ngs-motion-studio-muted);
+  font-size: 10px;
+  line-height: 1.1;
+}
+
+.ngs-motion-studio__selected-keyframe-meta strong {
+  overflow: hidden;
+  color: var(--ngs-color-text);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ngs-motion-studio__selected-keyframe-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: --spacing(2);
+}
+
+.ngs-motion-studio__curve-editor {
+  display: grid;
+  gap: --spacing(3);
+  padding: --spacing(3);
+  background: #fff;
+  border: 1px solid
+    color-mix(in srgb, var(--ngs-color-primary) 18%, var(--ngs-motion-studio-border));
+  border-radius: var(--ngs-radius-md);
+}
+
+.ngs-motion-studio__curve-editor-header {
+  display: flex;
+  gap: --spacing(2);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ngs-motion-studio__curve-editor-header > div {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.ngs-motion-studio__curve-editor-header strong {
+  color: var(--ngs-color-text);
+  font-size: var(--ngs-font-size-sm);
+  font-weight: 650;
+}
+
+.ngs-motion-studio__curve-editor-header small {
+  color: var(--ngs-motion-studio-muted);
+  font-size: var(--ngs-font-size-xs);
+}
+
+.ngs-motion-studio__curve-preview {
+  display: block;
+  width: 100%;
+  height: 112px;
+  overflow: visible;
+  background:
+    linear-gradient(180deg, rgb(248 250 252 / 86%), rgb(255 255 255 / 96%)),
+    radial-gradient(
+      circle at 50% 50%,
+      color-mix(in srgb, var(--ngs-color-primary) 8%, transparent),
+      transparent 58%
+    );
+  border: 1px solid var(--ngs-motion-studio-border);
+  border-radius: var(--ngs-radius-md);
+}
+
+.ngs-motion-studio__curve-grid {
+  fill: none;
+  stroke: rgb(15 23 42 / 10%);
+  stroke-width: 0.75;
+}
+
+.ngs-motion-studio__curve-reference {
+  fill: none;
+  stroke: rgb(15 23 42 / 14%);
+  stroke-dasharray: 3 3;
+  stroke-linecap: round;
+  stroke-width: 1;
+}
+
+.ngs-motion-studio__curve-line {
+  fill: none;
+  stroke: var(--ngs-color-primary);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.ngs-motion-studio__curve-dot {
+  fill: color-mix(in srgb, var(--ngs-color-primary) 24%, #fff);
+  stroke: var(--ngs-color-primary);
+  stroke-width: 1.5;
+}
+
+.ngs-motion-studio__curve-dot.is-current {
+  fill: var(--ngs-color-primary);
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+.ngs-motion-studio__easing-presets,
+.ngs-motion-studio__curve-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: --spacing(2);
+}
+
+.ngs-motion-studio__easing-presets button[ngsButton].is-selected {
+  color: #fff;
+  background: var(--ngs-color-primary);
+  border-color: var(--ngs-color-primary);
+}
+
+.ngs-motion-studio__animation-presets button[ngsButton] {
+  justify-content: flex-start;
+}
+
+.ngs-motion-studio__animation-list {
+  display: grid;
+  gap: --spacing(3);
+}
+
+.ngs-motion-studio__animation-row {
+  display: grid;
+  gap: --spacing(3);
+  padding: --spacing(3);
+  background: #fff;
+  border: 1px solid var(--ngs-motion-studio-border);
+  border-radius: var(--ngs-radius-md);
+}
+
+.ngs-motion-studio__animation-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) repeat(3, auto);
+  gap: --spacing(2);
+  align-items: center;
+}
+
+.ngs-motion-studio__keyframe-list {
+  display: grid;
+  gap: --spacing(2);
+}
+
+.ngs-motion-studio__keyframe-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 0.85fr) minmax(0, 0.9fr) minmax(0, 1fr) auto auto;
+  gap: --spacing(2);
+  align-items: center;
+  padding: --spacing(1);
+  border: 1px solid transparent;
+  border-radius: var(--ngs-radius-sm);
+}
+
+.ngs-motion-studio__keyframe-row.is-selected {
+  background: color-mix(in srgb, var(--ngs-color-primary) 8%, #fff);
+  border-color: color-mix(in srgb, var(--ngs-color-primary) 36%, var(--ngs-motion-studio-border));
+}
+
+.ngs-motion-studio__keyframe-row ngs-chip {
+  white-space: nowrap;
+}
+
+.ngs-motion-studio__add-keyframe {
+  justify-content: flex-start;
+}
+
+.ngs-motion-studio__empty-copy {
+  margin: 0;
+  color: var(--ngs-motion-studio-muted);
+  font-size: var(--ngs-font-size-sm);
+}
+
+.ngs-motion-studio__align-control {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: --spacing(1);
+}
+
+.ngs-motion-studio__align-control > span {
+  color: var(--ngs-color-text-secondary);
+  font-size: var(--ngs-font-size-xs);
+}
+
+.ngs-motion-studio__align-control ngs-segmented {
+  width: max-content;
+}
+
+.ngs-motion-studio__color-trigger {
+  cursor: pointer;
+}
+
+.ngs-motion-studio__inspector-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: --spacing(2);
+}
+
+.ngs-motion-studio__inspector-actions button:last-child {
+  grid-column: 1 / -1;
+}
+
+.ngs-motion-studio__empty-inspector {
+  display: grid;
+  place-items: center;
+  gap: --spacing(2);
+  min-height: 320px;
+  padding: --spacing(6);
+  color: var(--ngs-motion-studio-muted);
+  text-align: center;
+}
+
+.ngs-motion-studio__empty-inspector strong {
+  color: var(--ngs-color-text);
+}
+
+ngs-form-field {
+  --ngs-field-border-color: transparent;
+  --ngs-field-border-width: 0;
+}
+
+.ngs-motion-studio__json-drawer {
+  width: min(720px, 100vw);
+  height: 100%;
+  background: var(--ngs-color-surface);
+}
+
+.ngs-motion-studio__json-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: --spacing(3);
+  padding: --spacing(4);
+  border-bottom: 1px solid var(--ngs-motion-studio-border);
+}
+
+.ngs-motion-studio__json-header > div {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.ngs-motion-studio__json-header strong {
+  color: var(--ngs-color-text);
+  font-size: var(--ngs-font-size-base);
+  font-weight: 650;
+}
+
+.ngs-motion-studio__json-header small {
+  color: var(--ngs-motion-studio-muted);
+  font-size: var(--ngs-font-size-xs);
+}
+
+.ngs-motion-studio__json-content {
+  position: relative;
+  min-height: 0;
+}
+
+.ngs-motion-studio__json-body {
+  display: grid;
+  gap: --spacing(4);
+  padding: --spacing(4);
+}
+
+.ngs-motion-studio__json-field textarea {
+  min-height: 560px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.ngs-motion-studio__json-issues {
+  display: grid;
+  gap: --spacing(1);
+  padding: --spacing(3);
+  color: #991b1b;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: var(--ngs-radius-md);
+}
+
+.ngs-motion-studio__json-issues span,
+.ngs-motion-studio__json-status {
+  font-size: var(--ngs-font-size-sm);
+}
+
+.ngs-motion-studio__json-status {
+  margin: 0;
+  color: var(--ngs-motion-studio-muted);
+}
+
+.ngs-motion-studio__json-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: --spacing(2);
+  padding: --spacing(4);
+  border-top: 1px solid var(--ngs-motion-studio-border);
+}
+
+@media (max-width: 1100px) {
+  ngs-panel.ngs-motion-studio__editor.has-sidebar.has-aside {
+    grid-template-areas: 'sidebar body';
+    grid-template-columns: 260px minmax(0, 1fr);
+  }
+
+  .ngs-motion-studio__inspector {
+    display: none;
+  }
+}
+
+@media (max-width: 820px) {
+  ngs-panel.ngs-motion-studio__editor.has-sidebar.has-aside {
+    grid-template-areas: 'body';
+    grid-template-columns: 1fr;
+  }
+
+  .ngs-motion-studio__library {
+    display: none;
+  }
+
+  .ngs-motion-studio__main {
+    grid-template-rows: auto minmax(0, 1fr) 220px;
+  }
+}

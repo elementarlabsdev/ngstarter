@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate-ai-metadata.mjs",
   "package": "@ngstarter-ui/components",
   "description": "AI-readable registry for NgStarter UI Angular secondary entry points.",
-  "componentCount": 119,
+  "componentCount": 120,
   "conventions": {
     "importPattern": "@ngstarter-ui/components/<component>",
     "selectorPrefix": "ngs",
@@ -1488,6 +1488,7 @@
         "[ngsChipControl]",
         "[ngsChipEdit]",
         "[ngsChipRemove]",
+        "[ngsChipShape]",
         "input[ngsChipInputFor]",
         "ngs-chip",
         "ngs-chip-avatar",
@@ -1497,7 +1498,8 @@
         "ngs-chip-option",
         "ngs-chip-remove",
         "ngs-chip-row",
-        "ngs-chip-set"
+        "ngs-chip-set",
+        "ngs-chip-shape"
       ],
       "exportedSymbols": [
         "Chip",
@@ -1512,7 +1514,8 @@
         "ChipOption",
         "ChipRemove",
         "ChipRow",
-        "ChipSet"
+        "ChipSet",
+        "ChipShape"
       ],
       "inputs": [
         "appearance",
@@ -5276,6 +5279,8 @@
         "selectionChange"
       ],
       "cssTokens": [
+        "--ngs-color-neutral",
+        "--ngs-list-gap",
         "--ngs-list-item-active-bg",
         "--ngs-list-item-active-color",
         "--ngs-list-item-color",
@@ -5657,6 +5662,130 @@
         "--ngs-mchart-pie-value-color",
         "--ngs-radius-lg",
         "--ngs-shadow-sm"
+      ],
+      "example": null
+    },
+    {
+      "name": "motion",
+      "title": "Motion",
+      "overviewName": "Motion",
+      "category": "libraries",
+      "package": "@ngstarter-ui/components",
+      "importPath": "@ngstarter-ui/components/motion",
+      "publicApi": "projects/components/motion/public-api.ts",
+      "sourceRoot": "projects/components/motion/src",
+      "docsPath": "/libraries/motion",
+      "docsOverviewSource": "projects/docs/src/app/libraries/motion/overview/overview.html",
+      "purpose": "The NgStarter Angular Motion library renders JSON-defined animated compositions and provides a visual studio for assembling scenes from layers, presets, keyframes, and low-level motion properties.",
+      "useWhen": "Choose Motion when the workflow matches examples such as Motion, Basic motion.",
+      "exampleTopics": [
+        "Motion",
+        "Basic motion"
+      ],
+      "minimalExample": "<div class=\"motion-example\">\n  <ngs-motion-studio [document]=\"document()\" (documentChange)=\"document.set($event)\" />\n</div>",
+      "exampleFiles": [
+        {
+          "name": "basic-motion-example",
+          "title": "Basic motion",
+          "file": "projects/docs/src/app/libraries/motion/_examples/basic-motion-example/basic-motion-example.html",
+          "source": "<div class=\"motion-example\">\n  <ngs-motion-studio [document]=\"document()\" (documentChange)=\"document.set($event)\" />\n</div>"
+        }
+      ],
+      "previewAsset": null,
+      "selectors": [
+        "ngs-motion-player",
+        "ngs-motion-studio"
+      ],
+      "exportedSymbols": [
+        "applyMotionTransition",
+        "clampMotionTime",
+        "coerceMotionNumber",
+        "coerceMotionPrimitive",
+        "coerceMotionString",
+        "createDefaultMotionDocument",
+        "flattenMotionLayers",
+        "interpolateMotionValue",
+        "MOTION_PRESETS",
+        "MotionAnimation",
+        "MotionAsset",
+        "MotionComposition",
+        "MotionDocument",
+        "MotionDocumentValidationIssue",
+        "MotionEasingName",
+        "MotionEditorSettings",
+        "MotionFontFace",
+        "MotionKeyframe",
+        "MotionLayer",
+        "MotionLayerSnapshot",
+        "MotionLayerType",
+        "MotionLayout",
+        "MotionPlayer",
+        "MotionPreset",
+        "MotionPrimitive",
+        "MotionScene",
+        "MotionShapeKind",
+        "MotionStudio",
+        "MotionStyle",
+        "MotionTimelineTrack",
+        "MotionTransition",
+        "MotionValue",
+        "resolveMotionAnimation",
+        "resolveMotionLayerSnapshot",
+        "sortMotionLayers",
+        "validateMotionDocument"
+      ],
+      "inputs": [
+        "clip",
+        "controls",
+        "currentTime",
+        "document",
+        "loop",
+        "playing"
+      ],
+      "outputs": [
+        "currentTimeChange",
+        "documentChange",
+        "ended"
+      ],
+      "cssTokens": [
+        "--ngs-color-outline",
+        "--ngs-color-primary",
+        "--ngs-color-surface",
+        "--ngs-color-text",
+        "--ngs-color-text-secondary",
+        "--ngs-field-border-color",
+        "--ngs-field-border-width",
+        "--ngs-font-size-base",
+        "--ngs-font-size-sm",
+        "--ngs-font-size-xs",
+        "--ngs-motion-background",
+        "--ngs-motion-player-controls-background",
+        "--ngs-motion-player-controls-color",
+        "--ngs-motion-player-controls-gap",
+        "--ngs-motion-player-controls-inset",
+        "--ngs-motion-player-controls-padding",
+        "--ngs-motion-player-controls-radius",
+        "--ngs-motion-player-radius",
+        "--ngs-motion-studio-border",
+        "--ngs-motion-studio-canvas",
+        "--ngs-motion-studio-clip",
+        "--ngs-motion-studio-clip-border",
+        "--ngs-motion-studio-muted",
+        "--ngs-motion-studio-playhead",
+        "--ngs-motion-studio-rail",
+        "--ngs-motion-studio-track",
+        "--ngs-motion-studio-workspace",
+        "--ngs-radius-md",
+        "--ngs-radius-sm",
+        "--ngs-tab-panel-aside-width",
+        "--ngs-tab-panel-item-gap",
+        "--ngs-tab-panel-item-height",
+        "--ngs-tab-panel-item-icon-font-size",
+        "--ngs-tab-panel-item-padding",
+        "--ngs-tab-panel-item-width",
+        "--ngs-tab-panel-nav-gap",
+        "--ngs-tab-panel-nav-padding",
+        "--ngs-tab-panel-width"
       ],
       "example": null
     },

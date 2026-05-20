@@ -8,9 +8,8 @@ describe('MotionPlayer', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MotionPlayer]
-    })
-    .compileComponents();
+      imports: [MotionPlayer],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MotionPlayer);
     component = fixture.componentInstance;

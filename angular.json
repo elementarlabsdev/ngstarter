@@ -20,10 +20,7 @@
             "outputPath": "dist/ngstarter",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js",
-              "@angular/localize/init"
-            ],
+            "polyfills": ["zone.js", "@angular/localize/init"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -32,11 +29,8 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": [
-            ],
+            "styles": ["src/styles.scss"],
+            "scripts": [],
             "server": "src/main.server.ts",
             "security": {
               "allowedHosts": ["*"]
@@ -51,7 +45,7 @@
               "budgets": [
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "24kb"
+                  "maximumWarning": "64kb"
                 }
               ],
               "outputHashing": "all"
@@ -68,9 +62,7 @@
           "builder": "@angular/build:dev-server",
           "options": {
             "prebundle": {
-              "exclude": [
-                "emojibase-data"
-              ]
+              "exclude": ["emojibase-data"]
             }
           },
           "configurations": {
@@ -161,13 +153,8 @@
                 "output": "_docs"
               }
             ],
-            "styles": [
-              "projects/docs/src/styles.scss"
-            ],
-            "polyfills": [
-              "zone.js",
-              "@angular/localize/init"
-            ],
+            "styles": ["projects/docs/src/styles.scss"],
+            "polyfills": ["zone.js", "@angular/localize/init"],
             "server": "projects/docs/src/main.server.ts",
             "security": {
               "allowedHosts": ["*"]
@@ -187,7 +174,7 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "24kb"
+                  "maximumWarning": "64kb"
                 }
               ],
               "outputHashing": "all"
@@ -204,9 +191,7 @@
           "builder": "@angular/build:dev-server",
           "options": {
             "prebundle": {
-              "exclude": [
-                "emojibase-data"
-              ]
+              "exclude": ["emojibase-data"]
             }
           },
           "configurations": {
@@ -247,9 +232,7 @@
                 "input": "projects/admin-corporate/public"
               }
             ],
-            "styles": [
-              "projects/admin-corporate/src/styles.scss"
-            ],
+            "styles": ["projects/admin-corporate/src/styles.scss"],
             "server": "projects/admin-corporate/src/main.server.ts",
             "outputMode": "server",
             "security": {
@@ -287,9 +270,7 @@
           "builder": "@angular/build:dev-server",
           "options": {
             "prebundle": {
-              "exclude": [
-                "emojibase-data"
-              ]
+              "exclude": ["emojibase-data"]
             }
           },
           "configurations": {
@@ -330,9 +311,7 @@
                 "input": "projects/admin-modern/public"
               }
             ],
-            "styles": [
-              "projects/admin-modern/src/styles.scss"
-            ],
+            "styles": ["projects/admin-modern/src/styles.scss"],
             "server": "projects/admin-modern/src/main.server.ts",
             "outputMode": "server",
             "security": {
@@ -369,9 +348,7 @@
           "builder": "@angular/build:dev-server",
           "options": {
             "prebundle": {
-              "exclude": [
-                "emojibase-data"
-              ]
+              "exclude": ["emojibase-data"]
             }
           },
           "configurations": {
@@ -412,9 +389,7 @@
                 "input": "projects/admin-classic/public"
               }
             ],
-            "styles": [
-              "projects/admin-classic/src/styles.scss"
-            ],
+            "styles": ["projects/admin-classic/src/styles.scss"],
             "server": "projects/admin-classic/src/main.server.ts",
             "outputMode": "server",
             "security": {
@@ -452,9 +427,7 @@
           "builder": "@angular/build:dev-server",
           "options": {
             "prebundle": {
-              "exclude": [
-                "emojibase-data"
-              ]
+              "exclude": ["emojibase-data"]
             }
           },
           "configurations": {

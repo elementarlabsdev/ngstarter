@@ -124,6 +124,7 @@ Must use:
 - marquee: `@ngstarter-ui/components/marquee` docs: /components/marquee
 - menu: `@ngstarter-ui/components/menu` docs: /components/menu
 - micro-chart: `@ngstarter-ui/components/micro-chart` docs: /micro-charts
+- motion: `@ngstarter-ui/components/motion` docs: /libraries/motion
 - navigation: `@ngstarter-ui/components/navigation` docs: /navigation/navigation
 - notifications: `@ngstarter-ui/components/notifications` docs: /components/notifications
 - number-input: `@ngstarter-ui/components/number-input` docs: /forms/number-input
