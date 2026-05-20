@@ -56,6 +56,7 @@ export interface MotionEditorSettings {
   snapToGrid?: boolean;
   gridSize?: number;
   zoom?: number;
+  previewScale?: number;
 }
 
 export interface MotionLayout {
@@ -213,6 +214,7 @@ export const createDefaultMotionDocument = (): MotionDocument => ({
     snapToGrid: false,
     gridSize: 80,
     zoom: 0,
+    previewScale: 1,
   },
   layers: [
     {

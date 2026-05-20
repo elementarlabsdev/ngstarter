@@ -1,7 +1,8 @@
 <div
   class="ngs-motion-player__viewport"
   [ngStyle]="stageVariables()"
-  [style.aspect-ratio]="composition().width + ' / ' + composition().height"
+  [style.transform]="playerTransform()"
+  (wheel)="handleScaleWheel($event)"
 >
   <div class="ngs-motion-player__stage">
     <ng-template

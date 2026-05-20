@@ -91,8 +91,15 @@
   </ngs-panel-header>
 
   <ngs-panel-content class="ngs-motion-studio__body">
-    <ngs-panel class="ngs-motion-studio__editor">
-      <ngs-panel-sidebar class="ngs-motion-studio__library" aria-label="Motion library">
+    <ngs-split class="ngs-motion-studio__editor" direction="horizontal" restrictMove [gutterSize]="8">
+      <ngs-split-pane
+        withHandle
+        class="ngs-motion-studio__library-pane"
+        [size]="24"
+        [minSize]="18"
+        [maxSize]="34"
+      >
+        <div class="ngs-motion-studio__library" aria-label="Motion library">
         <ngs-tab-panel activeItemId="media" class="ngs-motion-studio__library-panel">
           <ngs-tab-panel-content>
             <ngs-tab-panel-nav>
@@ -221,80 +228,91 @@
 
             <ng-template ngsTabPanelAsideContent="layers">
               <ngs-scrollbar-area [absolute]="false" class="ngs-motion-studio__scroll">
-                <div class="ngs-motion-studio__layer-stack">
+                <ngs-list class="ngs-motion-studio__layer-list">
                   @for (item of timelineRows(); track item.layer.id) {
-                    <div
-                      class="ngs-motion-studio__layer-row"
-                      [class.is-selected]="isLayerSelected(item.layer)"
+                    <ngs-list-item
+                      lines="2"
+                      class="ngs-motion-studio__layer-item"
+                      [class.is-active]="isLayerSelected(item.layer)"
                       [class.is-muted]="item.layer.hidden"
-                      (click)="selectLayer(item.layer, $event)"
+                      (click)="selectLayerFromLibrary(item.layer, $event)"
                     >
-                      <ngs-icon [name]="layerIcon(item.layer)" />
-                      <span>{{ item.layer.name || item.layer.id }}</span>
-                      <small>{{ item.layer.type }}</small>
-                      <button
-                        ngsIconButton
-                        type="button"
-                        aria-label="Duplicate layer"
-                        (click)="duplicateLayer(item.layer, $event)"
-                      >
-                        <ngs-icon name="fluent:copy-24-regular" />
-                      </button>
-                      <button
-                        ngsIconButton
-                        type="button"
-                        aria-label="Move layer forward"
-                        (click)="moveLayerForward(item.layer, $event)"
-                      >
-                        <ngs-icon name="fluent:arrow-up-24-regular" />
-                      </button>
-                      <button
-                        ngsIconButton
-                        type="button"
-                        aria-label="Move layer backward"
-                        (click)="moveLayerBackward(item.layer, $event)"
-                      >
-                        <ngs-icon name="fluent:arrow-down-24-regular" />
-                      </button>
-                      <button
-                        ngsIconButton
-                        type="button"
-                        [attr.aria-label]="item.layer.hidden ? 'Show layer' : 'Hide layer'"
-                        (click)="toggleLayerHidden(item.layer, $event)"
-                      >
-                        <ngs-icon
-                          [name]="
-                            item.layer.hidden
-                              ? 'fluent:eye-off-24-regular'
-                              : 'fluent:eye-24-regular'
-                          "
-                        />
-                      </button>
-                      <button
-                        ngsIconButton
-                        type="button"
-                        [attr.aria-label]="item.layer.locked ? 'Unlock layer' : 'Lock layer'"
-                        (click)="toggleLayerLocked(item.layer, $event)"
-                      >
-                        <ngs-icon
-                          [name]="
-                            item.layer.locked
-                              ? 'fluent:lock-closed-24-regular'
-                              : 'fluent:lock-open-24-regular'
-                          "
-                        />
-                      </button>
-                      <button
-                        ngsIconButton
-                        type="button"
-                        aria-label="Remove layer"
-                        (click)="removeLayer(item.layer, $event)"
-                      >
-                        <ngs-icon name="fluent:delete-24-regular" />
-                      </button>
-                    </div>
+                      <ngs-icon [name]="layerIcon(item.layer)" ngsListItemIcon />
+                      <span ngsListItemTitle>{{ item.layer.name || item.layer.id }}</span>
+                      <span ngsListItemLine>
+                        Name: {{ item.layer.name || item.layer.id }} · {{ item.layer.type }}
+                        @if (item.layer.hidden) {
+                          · hidden
+                        }
+                        @if (item.layer.locked) {
+                          · locked
+                        }
+                      </span>
+                      <div ngsListItemMeta class="ngs-motion-studio__layer-actions">
+                        <button
+                          ngsIconButton
+                          type="button"
+                          aria-label="Duplicate layer"
+                          (click)="duplicateLayer(item.layer, $event)"
+                        >
+                          <ngs-icon name="fluent:copy-24-regular" />
+                        </button>
+                        <button
+                          ngsIconButton
+                          type="button"
+                          aria-label="Move layer forward"
+                          (click)="moveLayerForward(item.layer, $event)"
+                        >
+                          <ngs-icon name="fluent:arrow-up-24-regular" />
+                        </button>
+                        <button
+                          ngsIconButton
+                          type="button"
+                          aria-label="Move layer backward"
+                          (click)="moveLayerBackward(item.layer, $event)"
+                        >
+                          <ngs-icon name="fluent:arrow-down-24-regular" />
+                        </button>
+                        <button
+                          ngsIconButton
+                          type="button"
+                          [attr.aria-label]="item.layer.hidden ? 'Show layer' : 'Hide layer'"
+                          (click)="toggleLayerHidden(item.layer, $event)"
+                        >
+                          <ngs-icon
+                            [name]="
+                              item.layer.hidden
+                                ? 'fluent:eye-off-24-regular'
+                                : 'fluent:eye-24-regular'
+                            "
+                          />
+                        </button>
+                        <button
+                          ngsIconButton
+                          type="button"
+                          [attr.aria-label]="item.layer.locked ? 'Unlock layer' : 'Lock layer'"
+                          (click)="toggleLayerLocked(item.layer, $event)"
+                        >
+                          <ngs-icon
+                            [name]="
+                              item.layer.locked
+                                ? 'fluent:lock-closed-24-regular'
+                                : 'fluent:lock-open-24-regular'
+                            "
+                          />
+                        </button>
+                        <button
+                          ngsIconButton
+                          type="button"
+                          aria-label="Remove layer"
+                          (click)="removeLayer(item.layer, $event)"
+                        >
+                          <ngs-icon name="fluent:delete-24-regular" />
+                        </button>
+                      </div>
+                    </ngs-list-item>
                   }
-                </div>
+                </ngs-list>
               </ngs-scrollbar-area>
             </ng-template>
 
@@ -464,15 +482,43 @@
             </ng-template>
           </ngs-tab-panel-aside>
         </ngs-tab-panel>
-      </ngs-panel-sidebar>
+        </div>
+      </ngs-split-pane>
 
-      <ngs-panel-content class="ngs-motion-studio__main" aria-label="Preview and timeline">
+      <ngs-split-pane withHandle class="ngs-motion-studio__workspace-pane" [size]="52" [minSize]="36">
+        <section class="ngs-motion-studio__main" aria-label="Preview and timeline">
+          <ngs-split
+            class="ngs-motion-studio__workspace-split"
+            direction="vertical"
+            restrictMove
+            [gutterSize]="8"
+          >
+            <ngs-split-pane
+              withHandle
+              class="ngs-motion-studio__preview-pane"
+              [size]="68"
+              [minSize]="42"
+            >
         <section class="ngs-motion-studio__preview-toolbar" aria-label="Preview controls">
           <div class="ngs-motion-studio__preview-controls">
             <ngs-chip-set>
-              <ngs-chip>Fit</ngs-chip>
-              <ngs-chip>100%</ngs-chip>
+              <ngs-chip>
+                {{ draft().composition.width }}x{{ draft().composition.height }}
+              </ngs-chip>
             </ngs-chip-set>
+            <ngs-form-field subscriptHiddenIfEmpty class="ngs-motion-studio__preview-scale">
+              <ngs-label>Scale</ngs-label>
+              <input
+                ngsInput
+                type="number"
+                [min]="previewScaleBounds().min * 100"
+                [max]="previewScaleBounds().max * 100"
+                [step]="previewScaleStep() * 100"
+                [value]="previewScalePercent()"
+                (input)="setPreviewScalePercent($any($event.target).value)"
+              />
+              <span ngsSuffix>%</span>
+            </ngs-form-field>
             <ngs-checkbox [checked]="gridVisible()" (change)="toggleGridVisible($event)">
               Grid
             </ngs-checkbox>
@@ -498,65 +544,79 @@
         </section>
 
         <section
+          #previewViewport
           class="ngs-motion-studio__canvas-shell"
           aria-label="Preview canvas"
+          (wheel)="handlePreviewWheel($event)"
           (pointerdown)="clearCanvasSelection($event)"
         >
           <div class="ngs-motion-studio__canvas-board">
-            <div class="ngs-motion-studio__stage-frame">
+            <div
+              class="ngs-motion-studio__stage-scale-shell"
+              [style.width.px]="previewStageWidth()"
+              [style.height.px]="previewStageHeight()"
+            >
               <div
-                class="ngs-motion-studio__stage-canvas"
-                [class.is-grid-visible]="gridVisible()"
-                [class.is-preset-drop-target]="draggedPresetId()"
-                [style.background-size]="canvasGridSize()"
-                (dragover)="handleCanvasPresetDragOver($event)"
-                (dragleave)="handleCanvasPresetDragLeave($event)"
-                (drop)="dropPresetOnCanvas($event)"
+                class="ngs-motion-studio__stage-frame"
+                [style.width.px]="draft().composition.width"
+                [style.height.px]="draft().composition.height"
+                [style.transform]="previewStageTransform()"
+                [style.--ngs-motion-studio-preview-scale]="previewScale()"
+                [style.--ngs-motion-studio-preview-inverse-scale]="previewInverseScale()"
               >
-                <ngs-motion-player
-                  [document]="draft()"
-                  [currentTime]="currentTime()"
-                  [playing]="playing()"
-                  [clip]="false"
-                  (currentTimeChange)="seek($event)"
-                  (ended)="stopPlayback()"
-                />
+                <div
+                  class="ngs-motion-studio__stage-canvas"
+                  [class.is-grid-visible]="gridVisible()"
+                  [class.is-preset-drop-target]="draggedPresetId()"
+                  [style.background-size]="canvasGridSize()"
+                  (dragover)="handleCanvasPresetDragOver($event)"
+                  (dragleave)="handleCanvasPresetDragLeave($event)"
+                  (drop)="dropPresetOnCanvas($event)"
+                >
+                  <ngs-motion-player
+                    [document]="draft()"
+                    [currentTime]="currentTime()"
+                    [playing]="playing()"
+                    [clip]="false"
+                    (currentTimeChange)="seek($event)"
+                    (ended)="stopPlayback()"
+                  />
 
                 <div
                   class="ngs-motion-studio__canvas-overlay"
                   [class.is-resizing]="canvasInteractionType() === 'canvas-resize'"
                   (pointerdown)="clearCanvasSelection($event)"
                 >
-                  @for (layer of canvasLayers(); track layer.id) {
+                  @for (entry of canvasLayers(); track entry.layer.id) {
                     <div
                       role="button"
                       tabindex="0"
                       class="ngs-motion-studio__canvas-layer"
-                      [class.is-text]="layer.type === 'text'"
-                      [class.is-unbroken-text]="isUnbrokenTextLayer(layer)"
-                      [class.is-selected]="isLayerSelected(layer)"
-                      [class.is-locked]="layer.locked"
-                      [style.left.%]="layerLeft(layer)"
-                      [style.top.%]="layerTop(layer)"
-                      [style.width.%]="layerWidth(layer)"
-                      [style.height.%]="layerHeight(layer)"
-                      [style.transform]="layerOverlayTransform(layer)"
-                      [style.justify-content]="layerTextJustifyContent(layer)"
-                      [style.zIndex]="layerZIndex(layer)"
-                      [attr.aria-label]="'Select ' + (layer.name || layer.id)"
-                      (pointerdown)="startCanvasMove(layer, $event)"
-                      (dblclick)="startTextEdit(layer, $event)"
+                      [class.is-text]="entry.layer.type === 'text'"
+                      [class.is-unbroken-text]="isUnbrokenTextLayer(entry.layer)"
+                      [class.is-selected]="isLayerSelected(entry.layer)"
+                      [class.is-locked]="entry.layer.locked"
+                      [style.left.%]="layerLeft(entry)"
+                      [style.top.%]="layerTop(entry)"
+                      [style.width.%]="layerWidth(entry)"
+                      [style.height.%]="layerHeight(entry)"
+                      [style.transform]="layerOverlayTransform(entry)"
+                      [style.justify-content]="layerTextJustifyContent(entry.layer)"
+                      [style.zIndex]="layerZIndex(entry.layer)"
+                      [attr.aria-label]="'Select ' + (entry.layer.name || entry.layer.id)"
+                      (pointerdown)="startCanvasMove(entry.layer, $event)"
+                      (dblclick)="startTextEdit(entry.layer, $event)"
                     >
-                      @if (layer.type === 'text') {
+                      @if (entry.layer.type === 'text') {
                         <span class="ngs-motion-studio__text-selection-box">
-                          @if (isEditingTextLayer(layer)) {
+                          @if (isEditingTextLayer(entry.layer)) {
                             <textarea
                               ngsInput
                               class="ngs-motion-studio__inline-text-editor"
-                              [attr.data-motion-layer-id]="layer.id"
-                              [ngStyle]="layerTextMeasureStyle(layer)"
-                              [value]="layerText(layer)"
-                              (input)="setLayerTextById(layer.id, $any($event.target).value)"
+                              [attr.data-motion-layer-id]="entry.layer.id"
+                              [ngStyle]="layerTextMeasureStyle(entry.layer)"
+                              [value]="layerText(entry.layer)"
+                              (input)="setLayerTextById(entry.layer.id, $any($event.target).value)"
                               (blur)="finishTextEdit()"
                               (keydown)="handleInlineTextKeydown($event)"
                               (pointerdown)="$event.stopPropagation()"
@@ -565,46 +625,46 @@
                           } @else {
                             <span
                               class="ngs-motion-studio__text-measure"
-                              [ngStyle]="layerTextMeasureStyle(layer)"
-                              [textContent]="layerText(layer)"
+                              [ngStyle]="layerTextMeasureStyle(entry.layer)"
+                              [textContent]="layerText(entry.layer)"
                             ></span>
                           }
-                          @if (isLayerSelected(layer) && !layer.locked) {
+                          @if (isLayerSelected(entry.layer) && !entry.layer.locked) {
                             <span
                               class="ngs-motion-studio__resize-handle is-nw"
-                              (pointerdown)="startCanvasResize(layer, 'nw', $event)"
+                              (pointerdown)="startCanvasResize(entry.layer, 'nw', $event)"
                             ></span>
                             <span
                               class="ngs-motion-studio__resize-handle is-ne"
-                              (pointerdown)="startCanvasResize(layer, 'ne', $event)"
+                              (pointerdown)="startCanvasResize(entry.layer, 'ne', $event)"
                             ></span>
                             <span
                               class="ngs-motion-studio__resize-handle is-se"
-                              (pointerdown)="startCanvasResize(layer, 'se', $event)"
+                              (pointerdown)="startCanvasResize(entry.layer, 'se', $event)"
                             ></span>
                             <span
                               class="ngs-motion-studio__resize-handle is-sw"
-                              (pointerdown)="startCanvasResize(layer, 'sw', $event)"
+                              (pointerdown)="startCanvasResize(entry.layer, 'sw', $event)"
                             ></span>
                           }
                         </span>
                       } @else {
-                        @if (isLayerSelected(layer) && !layer.locked) {
+                        @if (isLayerSelected(entry.layer) && !entry.layer.locked) {
                           <span
                             class="ngs-motion-studio__resize-handle is-nw"
-                            (pointerdown)="startCanvasResize(layer, 'nw', $event)"
+                            (pointerdown)="startCanvasResize(entry.layer, 'nw', $event)"
                           ></span>
                           <span
                             class="ngs-motion-studio__resize-handle is-ne"
-                            (pointerdown)="startCanvasResize(layer, 'ne', $event)"
+                            (pointerdown)="startCanvasResize(entry.layer, 'ne', $event)"
                           ></span>
                           <span
                             class="ngs-motion-studio__resize-handle is-se"
-                            (pointerdown)="startCanvasResize(layer, 'se', $event)"
+                            (pointerdown)="startCanvasResize(entry.layer, 'se', $event)"
                           ></span>
                           <span
                             class="ngs-motion-studio__resize-handle is-sw"
-                            (pointerdown)="startCanvasResize(layer, 'sw', $event)"
+                            (pointerdown)="startCanvasResize(entry.layer, 'sw', $event)"
                           ></span>
                         }
                       }
@@ -612,10 +672,19 @@
                   }
                 </div>
               </div>
+              </div>
             </div>
           </div>
         </section>
 
+            </ngs-split-pane>
+            <ngs-split-pane
+              withHandle
+              class="ngs-motion-studio__timeline-pane"
+              [size]="32"
+              [minSize]="20"
+              [maxSize]="58"
+            >
         <section class="ngs-motion-studio__timeline" aria-label="Timeline">
           <div class="ngs-motion-studio__timeline-toolbar">
             <div>
@@ -893,9 +962,19 @@
             </div>
           </div>
         </section>
-      </ngs-panel-content>
+            </ngs-split-pane>
+          </ngs-split>
+        </section>
+      </ngs-split-pane>
 
-      <ngs-panel-aside class="ngs-motion-studio__inspector" aria-label="Inspector">
+      <ngs-split-pane
+        withHandle
+        class="ngs-motion-studio__inspector-pane"
+        [size]="24"
+        [minSize]="18"
+        [maxSize]="34"
+      >
+        <div class="ngs-motion-studio__inspector" aria-label="Inspector">
         <ngs-scrollbar-area [absolute]="false" class="ngs-motion-studio__scroll">
           @if (selectedLayer(); as layer) {
             <section class="ngs-motion-studio__inspector-section">
@@ -2146,8 +2225,9 @@
             </section>
           }
         </ngs-scrollbar-area>
-      </ngs-panel-aside>
-    </ngs-panel>
+        </div>
+      </ngs-split-pane>
+    </ngs-split>
   </ngs-panel-content>
 </ngs-panel>
 

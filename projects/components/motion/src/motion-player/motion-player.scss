@@ -1,11 +1,13 @@
 .ngs-motion-player__viewport {
   position: relative;
   display: block;
-  width: 100%;
+  width: calc(var(--ngs-motion-width) * 1px);
+  height: calc(var(--ngs-motion-height) * 1px);
   overflow: visible;
   container-type: size;
   background: var(--ngs-motion-background);
   border-radius: var(--ngs-motion-player-radius, var(--ngs-radius-md, 12px));
+  transform-origin: 0 0;
 }
 
 :host(.ngs-motion-player--clip) .ngs-motion-player__viewport {

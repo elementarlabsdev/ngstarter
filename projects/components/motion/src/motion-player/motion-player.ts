@@ -50,16 +50,23 @@ export class MotionPlayer {
   readonly loop = input(false);
   readonly controls = input(false);
   readonly clip = input(true);
+  readonly scale = input<number | undefined>(undefined);
+  readonly minScale = input(0.5);
+  readonly maxScale = input(2);
+  readonly scaleStep = input(0.1);
 
   readonly currentTimeChange = output<number>();
   readonly ended = output<void>();
+  readonly scaleChange = output<number>();
 
   protected readonly internalTime = signal(0);
+  protected readonly internalScale = signal(1);
 
   protected readonly activeDocument = computed(
     () => this.document() ?? createDefaultMotionDocument(),
   );
   protected readonly composition = computed(() => this.activeDocument().composition);
+  protected readonly safeScaleBounds = computed(() => readMotionScaleBounds(this.minScale(), this.maxScale()));
   protected readonly sortedLayers = computed(() => sortMotionLayers(this.activeDocument().layers));
   protected readonly stageVariables = computed(() => {
     const composition = this.composition();
@@ -70,12 +77,27 @@ export class MotionPlayer {
       '--ngs-motion-background': composition.background ?? 'transparent',
     };
   });
+  protected readonly playerScale = computed(() => {
+    const bounds = this.safeScaleBounds();
+
+    return clampMotionScale(this.internalScale(), bounds.min, bounds.max);
+  });
+  protected readonly playerTransform = computed(() => `scale(${this.playerScale()})`);
 
   private readonly _syncCurrentTime = effect(() => {
     const controlledTime = this.currentTime();
 
     if (controlledTime !== undefined) {
       this.internalTime.set(clampMotionTime(controlledTime, this.activeDocument()));
+    }
+  });
+
+  private readonly _syncScale = effect(() => {
+    const controlledScale = this.scale();
+
+    if (controlledScale !== undefined) {
+      const bounds = this.safeScaleBounds();
+      this.internalScale.set(clampMotionScale(controlledScale, bounds.min, bounds.max));
     }
   });
 
@@ -220,6 +242,22 @@ export class MotionPlayer {
     return coerceMotionString(this.layerSnapshot(layer).props['kind'], 'rectangle');
   }
 
+  protected handleScaleWheel(event: WheelEvent): void {
+    if (!event.metaKey && !event.ctrlKey) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const bounds = this.safeScaleBounds();
+    const direction = event.deltaY < 0 ? 1 : -1;
+    const step = Math.max(0.01, Math.abs(this.scaleStep()));
+    const nextScale = clampMotionScale(this.playerScale() + direction * step, bounds.min, bounds.max);
+
+    this.internalScale.set(nextScale);
+    this.scaleChange.emit(nextScale);
+  }
+
   private sceneEffect(layer: MotionLayer): SceneEffect {
     const scene = this.sceneForLayer(layer);
 
@@ -310,6 +348,24 @@ const joinStyleFilters = (
 
   return layerFilter ?? sceneFilter ?? null;
 };
+
+const readMotionScaleBounds = (minScale: number, maxScale: number): MotionScaleBounds => {
+  const min = Number.isFinite(minScale) ? Math.max(0.01, minScale) : 0.5;
+  const max = Number.isFinite(maxScale) ? Math.max(min, maxScale) : 2;
+
+  return { min, max };
+};
+
+const clampMotionScale = (scale: number, minScale: number, maxScale: number): number => {
+  const nextScale = Number.isFinite(scale) ? scale : 1;
+
+  return Math.min(maxScale, Math.max(minScale, Math.round(nextScale * 100) / 100));
+};
+
+interface MotionScaleBounds {
+  min: number;
+  max: number;
+}
 
 interface SceneEffect {
   opacity: number;
