@@ -152,16 +152,26 @@
                   Shape layer
                 </button>
 
-                <ngs-form-field subscriptHiddenIfEmpty class="ngs-motion-studio__asset-upload">
-                  <ngs-label>Upload assets</ngs-label>
-                  <input
-                    ngsInput
-                    type="file"
+                <ngs-upload-container class="ngs-motion-studio__asset-upload">
+                  <ngs-upload-area
+                    ngsUploadTrigger
                     multiple
                     accept="image/*,video/*,audio/*,application/json,.json"
-                    (change)="uploadAssetFiles($event)"
-                  />
-                </ngs-form-field>
+                    (fileSelected)="uploadAssetFiles($event)"
+                  >
+                    <ngs-icon name="fluent:folder-open-24-regular" ngsUploadAreaIcon />
+                    <ng-container ngsUploadAreaMainState>
+                      Drag assets here or choose files
+                    </ng-container>
+                    <ng-container ngsUploadAreaDropState>Drop assets here</ng-container>
+                    <ng-container ngsUploadAreaInvalidState>
+                      Images, video, audio, and JSON files only.
+                    </ng-container>
+                  </ngs-upload-area>
+                  <ngs-upload-allowed-types>
+                    Images, video, audio, and JSON assets
+                  </ngs-upload-allowed-types>
+                </ngs-upload-container>
 
                 <div class="ngs-motion-studio__asset-summary">
                   <ngs-chip-set>
@@ -215,12 +225,6 @@
                         </button>
                       </div>
                     }
-                  </div>
-                } @else {
-                  <div class="ngs-motion-studio__drop-zone">
-                    <ngs-icon name="fluent:folder-open-24-regular" />
-                    <span>Assets</span>
-                    <small>Upload images, video, audio, and JSON assets into this document.</small>
                   </div>
                 }
               </div>
@@ -490,14 +494,15 @@
           <ngs-split
             class="ngs-motion-studio__workspace-split"
             direction="vertical"
-            restrictMove
-            [gutterSize]="8"
+            unit="pixel"
+            [gutterSize]="0"
           >
             <ngs-split-pane
-              withHandle
-              class="ngs-motion-studio__preview-pane"
-              [size]="68"
-              [minSize]="42"
+              class="ngs-motion-studio__preview-toolbar-pane"
+              [size]="48"
+              [minSize]="48"
+              [maxSize]="48"
+              lockSize
             >
         <section class="ngs-motion-studio__preview-toolbar" aria-label="Preview controls">
           <div class="ngs-motion-studio__preview-controls">
@@ -542,6 +547,21 @@
             {{ validationIssues().length }} issues
           </span>
         </section>
+            </ngs-split-pane>
+
+            <ngs-split-pane class="ngs-motion-studio__workspace-body-pane">
+              <ngs-split
+                class="ngs-motion-studio__workspace-body-split"
+                direction="vertical"
+                restrictMove
+                [gutterSize]="8"
+              >
+                <ngs-split-pane
+                  withHandle
+                  class="ngs-motion-studio__preview-pane"
+                  [size]="68"
+                  [minSize]="42"
+                >
 
         <section
           #previewViewport
@@ -593,6 +613,7 @@
                       tabindex="0"
                       class="ngs-motion-studio__canvas-layer"
                       [class.is-text]="entry.layer.type === 'text'"
+                      [class.is-single-line-text]="isSingleLineTextLayer(entry.layer)"
                       [class.is-unbroken-text]="isUnbrokenTextLayer(entry.layer)"
                       [class.is-selected]="isLayerSelected(entry.layer)"
                       [class.is-locked]="entry.layer.locked"
@@ -639,12 +660,28 @@
                               (pointerdown)="startCanvasResize(entry.layer, 'ne', $event)"
                             ></span>
                             <span
+                              class="ngs-motion-studio__resize-handle is-e"
+                              (pointerdown)="startCanvasResize(entry.layer, 'e', $event)"
+                            ></span>
+                            <span
                               class="ngs-motion-studio__resize-handle is-se"
                               (pointerdown)="startCanvasResize(entry.layer, 'se', $event)"
                             ></span>
                             <span
+                              class="ngs-motion-studio__resize-handle is-s"
+                              (pointerdown)="startCanvasResize(entry.layer, 's', $event)"
+                            ></span>
+                            <span
                               class="ngs-motion-studio__resize-handle is-sw"
                               (pointerdown)="startCanvasResize(entry.layer, 'sw', $event)"
+                            ></span>
+                            <span
+                              class="ngs-motion-studio__resize-handle is-w"
+                              (pointerdown)="startCanvasResize(entry.layer, 'w', $event)"
+                            ></span>
+                            <span
+                              class="ngs-motion-studio__resize-handle is-n"
+                              (pointerdown)="startCanvasResize(entry.layer, 'n', $event)"
                             ></span>
                           }
                         </span>
@@ -659,12 +696,28 @@
                             (pointerdown)="startCanvasResize(entry.layer, 'ne', $event)"
                           ></span>
                           <span
+                            class="ngs-motion-studio__resize-handle is-e"
+                            (pointerdown)="startCanvasResize(entry.layer, 'e', $event)"
+                          ></span>
+                          <span
                             class="ngs-motion-studio__resize-handle is-se"
                             (pointerdown)="startCanvasResize(entry.layer, 'se', $event)"
                           ></span>
                           <span
+                            class="ngs-motion-studio__resize-handle is-s"
+                            (pointerdown)="startCanvasResize(entry.layer, 's', $event)"
+                          ></span>
+                          <span
                             class="ngs-motion-studio__resize-handle is-sw"
                             (pointerdown)="startCanvasResize(entry.layer, 'sw', $event)"
+                          ></span>
+                          <span
+                            class="ngs-motion-studio__resize-handle is-w"
+                            (pointerdown)="startCanvasResize(entry.layer, 'w', $event)"
+                          ></span>
+                          <span
+                            class="ngs-motion-studio__resize-handle is-n"
+                            (pointerdown)="startCanvasResize(entry.layer, 'n', $event)"
                           ></span>
                         }
                       }
@@ -687,13 +740,10 @@
             >
         <section class="ngs-motion-studio__timeline" aria-label="Timeline">
           <div class="ngs-motion-studio__timeline-toolbar">
-            <div>
+            <div class="ngs-motion-studio__timeline-title">
               <strong>Timeline</strong>
               <small>{{ timelineRows().length }} tracks · {{ timelineZoomLabel() }}</small>
             </div>
-            <ngs-slider [min]="0" [max]="duration()" [step]="100">
-              <input ngsSliderThumb [value]="currentTime()" (valueChange)="seek($event)" />
-            </ngs-slider>
 
             <div class="ngs-motion-studio__timeline-zoom" aria-label="Timeline zoom">
               <span>Zoom</span>
@@ -964,6 +1014,8 @@
         </section>
             </ngs-split-pane>
           </ngs-split>
+            </ngs-split-pane>
+          </ngs-split>
         </section>
       </ngs-split-pane>
 
@@ -977,6 +1029,14 @@
         <div class="ngs-motion-studio__inspector" aria-label="Inspector">
         <ngs-scrollbar-area [absolute]="false" class="ngs-motion-studio__scroll">
           @if (selectedLayer(); as layer) {
+            <ngs-accordion multi class="ngs-motion-studio__inspector-accordion">
+              <ngs-expansion-panel [expanded]="true">
+                <ngs-expansion-panel-header>
+                  <ngs-expansion-panel-title>Layer</ngs-expansion-panel-title>
+                  <ngs-expansion-panel-description>
+                    {{ layer.name || layer.id }} · {{ layer.type }}
+                  </ngs-expansion-panel-description>
+                </ngs-expansion-panel-header>
             <section class="ngs-motion-studio__inspector-section">
               <header>
                 <ngs-icon [name]="layerIcon(layer)" />
@@ -1113,7 +1173,16 @@
                 </ngs-form-field>
               </div>
             </section>
+              </ngs-expansion-panel>
 
+              <ngs-expansion-panel>
+                <ngs-expansion-panel-header>
+                  <ngs-expansion-panel-title>Motion</ngs-expansion-panel-title>
+                  <ngs-expansion-panel-description>
+                    {{ layer.animations?.length || 0 }} tracks · {{ transitionCount(layer) }}
+                    transitions
+                  </ngs-expansion-panel-description>
+                </ngs-expansion-panel-header>
             <section class="ngs-motion-studio__inspector-section">
               <header class="ngs-motion-studio__section-header">
                 <h3>Transitions</h3>
@@ -1833,7 +1902,15 @@
                 </p>
               }
             </section>
+              </ngs-expansion-panel>
 
+              <ngs-expansion-panel>
+                <ngs-expansion-panel-header>
+                  <ngs-expansion-panel-title>Style</ngs-expansion-panel-title>
+                  <ngs-expansion-panel-description>
+                    {{ layer.type === 'text' ? 'Text appearance' : 'Layer appearance' }}
+                  </ngs-expansion-panel-description>
+                </ngs-expansion-panel-header>
             <section class="ngs-motion-studio__inspector-section">
               <h3>Style</h3>
               <div class="ngs-motion-studio__field-grid">
@@ -1991,7 +2068,15 @@
                 </ngs-form-field>
               </div>
             </section>
+              </ngs-expansion-panel>
 
+              <ngs-expansion-panel>
+                <ngs-expansion-panel-header>
+                  <ngs-expansion-panel-title>Actions</ngs-expansion-panel-title>
+                  <ngs-expansion-panel-description>
+                    Visibility, copy, duplicate, remove
+                  </ngs-expansion-panel-description>
+                </ngs-expansion-panel-header>
             <section class="ngs-motion-studio__inspector-section">
               <h3>Actions</h3>
               <div class="ngs-motion-studio__inspector-actions">
@@ -2032,7 +2117,18 @@
                 </button>
               </div>
             </section>
+              </ngs-expansion-panel>
+            </ngs-accordion>
           } @else if (selectedScene(); as scene) {
+            <ngs-accordion multi class="ngs-motion-studio__inspector-accordion">
+              <ngs-expansion-panel [expanded]="true">
+                <ngs-expansion-panel-header>
+                  <ngs-expansion-panel-title>Scene</ngs-expansion-panel-title>
+                  <ngs-expansion-panel-description>
+                    {{ sceneLayerCount(scene) }} layers · {{ sceneTransitionCount(scene) }}
+                    transitions
+                  </ngs-expansion-panel-description>
+                </ngs-expansion-panel-header>
             <section class="ngs-motion-studio__inspector-section">
               <header>
                 <ngs-icon name="fluent:video-clip-24-regular" />
@@ -2079,7 +2175,15 @@
                 </ngs-form-field>
               </div>
             </section>
+              </ngs-expansion-panel>
 
+              <ngs-expansion-panel>
+                <ngs-expansion-panel-header>
+                  <ngs-expansion-panel-title>Scene layers</ngs-expansion-panel-title>
+                  <ngs-expansion-panel-description>
+                    {{ sceneLayerCount(scene) }} selected
+                  </ngs-expansion-panel-description>
+                </ngs-expansion-panel-header>
             <section class="ngs-motion-studio__inspector-section">
               <header class="ngs-motion-studio__section-header">
                 <h3>Scene layers</h3>
@@ -2102,7 +2206,15 @@
                 }
               </div>
             </section>
+              </ngs-expansion-panel>
 
+              <ngs-expansion-panel>
+                <ngs-expansion-panel-header>
+                  <ngs-expansion-panel-title>Scene transitions</ngs-expansion-panel-title>
+                  <ngs-expansion-panel-description>
+                    {{ sceneTransitionCount(scene) }} active
+                  </ngs-expansion-panel-description>
+                </ngs-expansion-panel-header>
             <section class="ngs-motion-studio__inspector-section">
               <header class="ngs-motion-studio__section-header">
                 <h3>Scene transitions</h3>
@@ -2207,7 +2319,13 @@
                 }
               </div>
             </section>
+              </ngs-expansion-panel>
 
+              <ngs-expansion-panel>
+                <ngs-expansion-panel-header>
+                  <ngs-expansion-panel-title>Actions</ngs-expansion-panel-title>
+                  <ngs-expansion-panel-description>Scene operations</ngs-expansion-panel-description>
+                </ngs-expansion-panel-header>
             <section class="ngs-motion-studio__inspector-section">
               <h3>Actions</h3>
               <div class="ngs-motion-studio__inspector-actions">
@@ -2217,6 +2335,8 @@
                 </button>
               </div>
             </section>
+              </ngs-expansion-panel>
+            </ngs-accordion>
           } @else {
             <section class="ngs-motion-studio__empty-inspector">
               <ngs-icon name="fluent:cursor-click-24-regular" />

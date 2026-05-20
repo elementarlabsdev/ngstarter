@@ -40,6 +40,10 @@
   overflow: visible;
 }
 
+.ngs-motion-player__layer--single-line-text {
+  overflow: hidden;
+}
+
 .ngs-motion-player__text,
 .ngs-motion-player__shape,
 .ngs-motion-player__image {
@@ -54,6 +58,13 @@
   white-space: pre-wrap;
   overflow-wrap: normal;
   word-break: keep-all;
+}
+
+.ngs-motion-player__layer--single-line-text .ngs-motion-player__text {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: pre;
 }
 
 .ngs-motion-player__shape {

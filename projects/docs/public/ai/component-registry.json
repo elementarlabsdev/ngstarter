@@ -5757,11 +5757,16 @@
         "scaleChange"
       ],
       "cssTokens": [
-        "--ngs-color-outline",
+        "--ngs-color-border",
+        "--ngs-color-danger-container-high",
         "--ngs-color-primary",
         "--ngs-color-surface",
         "--ngs-color-text",
         "--ngs-color-text-secondary",
+        "--ngs-expansion-panel-content-padding",
+        "--ngs-expansion-panel-header-expanded-height",
+        "--ngs-expansion-panel-header-height",
+        "--ngs-expansion-panel-radius",
         "--ngs-field-border-color",
         "--ngs-field-border-width",
         "--ngs-font-size-base",
@@ -5784,10 +5789,8 @@
         "--ngs-motion-player-controls-padding",
         "--ngs-motion-player-controls-radius",
         "--ngs-motion-player-radius",
-        "--ngs-motion-studio-border",
         "--ngs-motion-studio-canvas",
         "--ngs-motion-studio-clip",
-        "--ngs-motion-studio-clip-border",
         "--ngs-motion-studio-muted",
         "--ngs-motion-studio-playhead",
         "--ngs-motion-studio-preview-inverse-scale",
@@ -5809,7 +5812,10 @@
         "--ngs-tab-panel-item-width",
         "--ngs-tab-panel-nav-gap",
         "--ngs-tab-panel-nav-padding",
-        "--ngs-tab-panel-width"
+        "--ngs-tab-panel-width",
+        "--ngs-upload-area-border-radius",
+        "--ngs-upload-area-font-size",
+        "--ngs-upload-area-padding"
       ],
       "example": null
     },

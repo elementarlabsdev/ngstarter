@@ -225,6 +225,24 @@ export class MotionPlayer {
     return coerceMotionString(this.layerSnapshot(layer).props['text'], '');
   }
 
+  protected isUnbrokenTextLayer(layer: MotionLayer): boolean {
+    if (layer.type !== 'text') {
+      return false;
+    }
+
+    const text = this.layerText(layer);
+
+    return text.length > 0 && !/\s/.test(text);
+  }
+
+  protected isSingleLineTextLayer(layer: MotionLayer): boolean {
+    if (layer.type !== 'text') {
+      return false;
+    }
+
+    return !/[\r\n]/.test(this.layerText(layer));
+  }
+
   protected layerImageSrc(layer: MotionLayer): string {
     const props = this.layerSnapshot(layer).props;
     const src = coerceMotionString(props['src'], '');

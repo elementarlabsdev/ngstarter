@@ -16,6 +16,8 @@
           class="ngs-motion-player__layer"
           [class.ngs-motion-player__layer--group]="layer.type === 'group'"
           [class.ngs-motion-player__layer--text]="layer.type === 'text'"
+          [class.ngs-motion-player__layer--single-line-text]="isSingleLineTextLayer(layer)"
+          [class.ngs-motion-player__layer--unbroken-text]="isUnbrokenTextLayer(layer)"
           [ngStyle]="layerStyle(layer, parentWidth, parentHeight)"
         >
           @switch (layer.type) {

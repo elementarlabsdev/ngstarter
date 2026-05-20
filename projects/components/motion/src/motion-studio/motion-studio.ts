@@ -38,11 +38,17 @@ import {
   PanelHeader,
 } from '@ngstarter-ui/components/panel';
 import { Drawer } from '@ngstarter-ui/components/drawer';
+import {
+  Accordion,
+  ExpansionPanel,
+  ExpansionPanelDescription,
+  ExpansionPanelHeader,
+  ExpansionPanelTitle,
+} from '@ngstarter-ui/components/expansion';
 import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import { Segmented, SegmentedButton } from '@ngstarter-ui/components/segmented';
 import { Option, Select, SelectChange } from '@ngstarter-ui/components/select';
 import { Split, SplitPane } from '@ngstarter-ui/components/split';
-import { Slider, SliderThumb } from '@ngstarter-ui/components/slider';
 import {
   TabPanel,
   TabPanelAside,
@@ -54,6 +60,17 @@ import {
   TabPanelNav,
 } from '@ngstarter-ui/components/tab-panel';
 import { Toolbar, ToolbarSpacer, ToolbarTitle } from '@ngstarter-ui/components/toolbar';
+import {
+  UploadAllowedTypes,
+  UploadArea,
+  UploadAreaDropStateDirective,
+  UploadAreaIconDirective,
+  UploadAreaInvalidStateDirective,
+  UploadAreaMainStateDirective,
+  UploadContainer,
+  UploadFileSelectedEvent,
+  UploadTriggerDirective,
+} from '@ngstarter-ui/components/upload';
 import {
   MotionDocument,
   MotionEditorSettings,
@@ -83,6 +100,7 @@ import { MotionPlayer } from '../motion-player/motion-player';
 @Component({
   selector: 'ngs-motion-studio',
   imports: [
+    Accordion,
     Button,
     Checkbox,
     Chip,
@@ -91,6 +109,10 @@ import { MotionPlayer } from '../motion-player/motion-player';
     ColorPickerThumbnail,
     ColorPickerTriggerForDirective,
     Drawer,
+    ExpansionPanel,
+    ExpansionPanelDescription,
+    ExpansionPanelHeader,
+    ExpansionPanelTitle,
     FormField,
     FormsModule,
     Icon,
@@ -115,8 +137,6 @@ import { MotionPlayer } from '../motion-player/motion-player';
     Select,
     Split,
     SplitPane,
-    Slider,
-    SliderThumb,
     Suffix,
     TabPanel,
     TabPanelAside,
@@ -129,6 +149,14 @@ import { MotionPlayer } from '../motion-player/motion-player';
     Toolbar,
     ToolbarSpacer,
     ToolbarTitle,
+    UploadAllowedTypes,
+    UploadArea,
+    UploadAreaDropStateDirective,
+    UploadAreaIconDirective,
+    UploadAreaInvalidStateDirective,
+    UploadAreaMainStateDirective,
+    UploadContainer,
+    UploadTriggerDirective,
   ],
   templateUrl: './motion-studio.html',
   styleUrl: './motion-studio.scss',
@@ -916,9 +944,8 @@ export class MotionStudio {
     return this.presets().filter((preset) => preset.category === category);
   }
 
-  protected async uploadAssetFiles(event: Event): Promise<void> {
-    const inputElement = event.target as HTMLInputElement | null;
-    const files = Array.from(inputElement?.files ?? []);
+  protected async uploadAssetFiles(event: UploadFileSelectedEvent): Promise<void> {
+    const files = event.files;
 
     if (!files.length) {
       return;
@@ -935,10 +962,6 @@ export class MotionStudio {
       this.assetStatus.set(`Added ${assets.length} asset${assets.length === 1 ? '' : 's'}.`);
     } catch (error) {
       this.assetStatus.set(error instanceof Error ? error.message : 'Could not load assets.');
-    } finally {
-      if (inputElement) {
-        inputElement.value = '';
-      }
     }
   }
 
@@ -2734,7 +2757,7 @@ export class MotionStudio {
   }
 
   protected layerHeight(entry: CanvasLayerEntry): number | null {
-    if (entry.layer.type === 'text') {
+    if (entry.layer.type === 'text' && !this.isSingleLineTextLayer(entry.layer)) {
       return null;
     }
 
@@ -2801,7 +2824,17 @@ export class MotionStudio {
       return false;
     }
 
-    return !/[ \t]/.test(this.layerText(layer));
+    const text = this.layerText(layer);
+
+    return text.length > 0 && !/\s/.test(text);
+  }
+
+  protected isSingleLineTextLayer(layer: MotionLayer): boolean {
+    if (layer.type !== 'text') {
+      return false;
+    }
+
+    return !/[\r\n]/.test(this.layerText(layer));
   }
 
   protected layerTextMeasureStyle(layer: MotionLayer): Record<string, string | number | null> {
@@ -2824,7 +2857,7 @@ export class MotionStudio {
       return null;
     }
 
-    if (this.isUnbrokenTextLayer(layer)) {
+    if (this.isSingleLineTextLayer(layer)) {
       return 'flex-start';
     }
 
@@ -3422,7 +3455,7 @@ export class MotionStudio {
 
     const layer = findMotionLayer(this.draft().layers, interaction.layerId);
 
-    if (layer?.type === 'text') {
+    if (layer?.type === 'text' && !this.isSingleLineTextLayer(layer)) {
       constrainTextLayoutToContent(
         next,
         interaction.startLayout,
@@ -6004,7 +6037,7 @@ const measureTextLayerContentHeight = (
   element.style.lineHeight = `${style.lineHeight ?? 1.05}`;
   element.style.letterSpacing =
     style.letterSpacing !== undefined ? `${style.letterSpacing}px` : 'normal';
-  element.style.whiteSpace = /[ \t]/.test(text) ? 'pre-wrap' : 'pre';
+  element.style.whiteSpace = /\s/.test(text) ? 'pre-wrap' : 'pre';
   element.style.overflowWrap = 'normal';
   element.style.wordBreak = 'keep-all';
   element.style.visibility = 'hidden';
