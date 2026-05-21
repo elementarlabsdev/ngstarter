@@ -6,6 +6,7 @@ import { Grid, GridItem, GridItemConfig } from '@ngstarter-ui/components/grid';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
 import { Layout, LayoutContent } from '@ngstarter-ui/components/layout';
+import { Logo, LogoText } from '@ngstarter-ui/components/logo';
 import { Panel, PanelContent, PanelHeader } from '@ngstarter-ui/components/panel';
 import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import {
@@ -53,6 +54,8 @@ interface NavSection {
     Label,
     Layout,
     LayoutContent,
+    Logo,
+    LogoText,
     Panel,
     PanelContent,
     PanelHeader,
@@ -161,7 +164,7 @@ export class App {
       content: {
         kind: 'calendar',
         title: 'Retail moment calendar',
-        subtitle: 'January, 2024',
+        subtitle: 'June, 2026',
       },
     },
     {

@@ -22,10 +22,9 @@
 
         <ngs-sidebar class="modern-sidebar" aria-label="Modern analytics navigation">
           <ngs-sidebar-header class="sidebar-header">
-            <div class="brand-lockup">
-              <div class="brand-mark">F</div>
-              <p class="brand-name">alc-AI</p>
-            </div>
+            <ngs-logo class="brand-logo" aria-label="Falc-AI">
+              <ngs-logo-text size="large">F</ngs-logo-text>
+            </ngs-logo>
           </ngs-sidebar-header>
 
           <ngs-sidebar-body>
@@ -56,8 +55,7 @@
                     }
                   </ngs-sidebar-nav-group-menu>
                 </ngs-sidebar-nav-group>
-              </ngs-sidebar-nav>
-              <ngs-sidebar-nav class="modern-nav footer-nav">
+
                 <ngs-sidebar-nav-group>
                   <ngs-sidebar-nav-group-toggle>
                     <ngs-icon name="fluent:building-24-regular" ngsSidebarNavItemIcon />
@@ -119,6 +117,7 @@
 
               <ngs-toolbar-item>
                 <ngs-form-field subscriptHiddenIfEmpty class="search-field">
+                  <ngs-label>Search</ngs-label>
                   <ngs-icon name="fluent:search-24-regular" ngsIconPrefix />
                   <input
                     ngsInput

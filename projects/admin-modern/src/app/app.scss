@@ -36,10 +36,17 @@ ngs-sidebar-footer {
 
 ngs-sidebar-nav.nav-card {
   display: block;
-  padding: --spacing(6) --spacing(1);
-  border-radius: --spacing(9) --spacing(9) --spacing(3) --spacing(3);
-  background: #fbfbfa;
-  box-shadow: 0 16px 40px color-mix(in srgb, var(--ngs-color-neutral-500) 6%, transparent);
+  padding: --spacing(4) --spacing(1);
+}
+
+ngs-sidebar-nav.nav-card > ngs-sidebar-nav-group,
+ngs-sidebar-nav.nav-card > ngs-sidebar-nav-item {
+  display: block;
+  margin-bottom: --spacing(2);
+  overflow: hidden;
+  border-radius: --spacing(8);
+  background: white;
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--ngs-color-neutral-500) 5%, transparent);
 }
 
 ngs-sidebar-nav-heading {
@@ -87,7 +94,7 @@ ngs-panel.workspace-panel {
 
 ngs-panel-header.workspace-header {
   display: block;
-  padding: --spacing(6) --spacing(7) --spacing(6) --spacing(15);
+  padding: --spacing(6) --spacing(12) --spacing(6) --spacing(12);
   border: 0;
 }
 
@@ -120,7 +127,6 @@ ngs-form-field.search-field.ngs-form-field-focused {
   outline-color: color-mix(in srgb, var(--ngs-color-primary) 55%, transparent);
 }
 
-.brand-lockup,
 .page-title,
 .user-copy,
 .filter-toolbar {
@@ -128,37 +134,11 @@ ngs-form-field.search-field.ngs-form-field-focused {
   align-items: center;
 }
 
-.brand-lockup {
-  gap: --spacing(1);
-  min-width: 0;
-}
-
-.brand-mark {
-  display: grid;
-  width: --spacing(10);
-  height: --spacing(14);
-  place-items: center;
-  border-radius: 0;
-  background: transparent;
-  color: #060606;
-  font-size: 4.2rem;
-  font-weight: 700;
-  line-height: 0.8;
-}
-
-.brand-name,
-.brand-meta,
 .user-name,
 .user-email,
 .page-title h1,
 .page-title p {
   margin: 0;
-}
-
-.brand-name {
-  color: var(--modern-ink);
-  font-size: 1.36rem;
-  font-weight: 500;
 }
 
 .user-email {
@@ -198,23 +178,11 @@ ngs-form-field.search-field.ngs-form-field-focused {
 
 .dashboard-stage {
   min-width: 1160px;
-  padding: 0 --spacing(7) --spacing(4) --spacing(15);
+  padding: 0 --spacing(12) --spacing(4) --spacing(12);
 }
 
 .analytics-grid {
   display: block;
-}
-
-.footer-nav {
-  display: block;
-  margin-top: --spacing(3);
-}
-
-.footer-nav ngs-sidebar-nav-item {
-  margin-bottom: --spacing(2);
-  border-radius: --spacing(8);
-  background: white;
-  box-shadow: 0 10px 28px color-mix(in srgb, var(--ngs-color-neutral-500) 7%, transparent);
 }
 
 .user-card {
