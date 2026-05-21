@@ -36,7 +36,6 @@ ngs-sidebar-footer {
 
 ngs-sidebar-nav.nav-card {
   display: block;
-  padding: --spacing(4) --spacing(1);
 }
 
 ngs-sidebar-nav.nav-card > ngs-sidebar-nav-group,
@@ -49,10 +48,20 @@ ngs-sidebar-nav.nav-card > ngs-sidebar-nav-item {
   box-shadow: 0 10px 28px color-mix(in srgb, var(--ngs-color-neutral-500) 5%, transparent);
 }
 
+ngs-sidebar.modern-sidebar ngs-sidebar-nav-item::before,
+ngs-sidebar.modern-sidebar ngs-sidebar-nav-item::after {
+  display: none;
+  content: none;
+}
+
+ngs-sidebar.modern-sidebar ngs-sidebar-nav-item ::ng-deep .inner.ngs-ripple {
+  margin-left: 0;
+}
+
 ngs-sidebar-nav-heading {
   margin-top: --spacing(8);
   margin-bottom: --spacing(3);
-  color: #bebebb;
+  color: #8c8c88;
   font-weight: 400;
 }
 
@@ -123,9 +132,9 @@ ngs-form-field.search-field input[ngsInput]::placeholder {
   color: #8d8d89;
 }
 
-ngs-form-field.search-field.ngs-form-field-focused {
-  outline-color: color-mix(in srgb, var(--ngs-color-primary) 55%, transparent);
-}
+//ngs-form-field.search-field.ngs-form-field-focused {
+//  outline-color: color-mix(in srgb, var(--ngs-color-primary) 55%, transparent);
+//}
 
 .page-title,
 .user-copy,

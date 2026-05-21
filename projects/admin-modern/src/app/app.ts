@@ -125,32 +125,60 @@ export class App {
 
   protected readonly dashboardGridConfigs = signal<GridItemConfig[]>([
     {
-      type: 'analytics-widget',
+      type: 'map-widget',
       plain: true,
       component: () =>
-        import('./modern-dashboard-widget').then((module) => module.ModernDashboardWidget),
+        import('./widgets/map-dashboard-widget').then((module) => module.MapDashboardWidget),
+    },
+    {
+      type: 'gauge-widget',
+      plain: true,
+      component: () =>
+        import('./widgets/gauge-dashboard-widget').then((module) => module.GaugeDashboardWidget),
+    },
+    {
+      type: 'calendar-widget',
+      plain: true,
+      component: () =>
+        import('./widgets/calendar-dashboard-widget').then((module) => module.CalendarDashboardWidget),
+    },
+    {
+      type: 'line-widget',
+      plain: true,
+      component: () =>
+        import('./widgets/line-dashboard-widget').then((module) => module.LineDashboardWidget),
+    },
+    {
+      type: 'activity-widget',
+      plain: true,
+      component: () =>
+        import('./widgets/activity-dashboard-widget').then((module) => module.ActivityDashboardWidget),
+    },
+    {
+      type: 'events-widget',
+      plain: true,
+      component: () =>
+        import('./widgets/events-dashboard-widget').then((module) => module.EventsDashboardWidget),
     },
   ]);
 
   protected readonly dashboardGridItems = signal<GridItem[]>([
     {
       id: 'zone-map',
-      type: 'analytics-widget',
+      type: 'map-widget',
       columns: 4,
       height: '405px',
       content: {
-        kind: 'map',
         title: 'Live floor signals',
         subtitle: 'Zone activity from the last ten minutes',
       },
     },
     {
       id: 'conversion-pulse',
-      type: 'analytics-widget',
+      type: 'gauge-widget',
       columns: 4,
       height: '405px',
       content: {
-        kind: 'gauge',
         title: 'Assisted sale rate',
         subtitle: 'Compared with yesterday',
         value: 73,
@@ -158,11 +186,10 @@ export class App {
     },
     {
       id: 'campaign-calendar',
-      type: 'analytics-widget',
+      type: 'calendar-widget',
       columns: 4,
       height: '405px',
       content: {
-        kind: 'calendar',
         title: 'Retail moment calendar',
         subtitle: 'June, 2026',
       },
@@ -173,22 +200,20 @@ export class App {
       children: [
         {
           id: 'queue-forecast',
-          type: 'analytics-widget',
+          type: 'line-widget',
           columns: 12,
           height: '352px',
           content: {
-            kind: 'line',
             title: 'Checkout lane pressure',
             subtitle: 'Average wait forecast by hour',
           },
         },
         {
           id: 'traffic-moments',
-          type: 'analytics-widget',
+          type: 'activity-widget',
           columns: 12,
           height: '282px',
           content: {
-            kind: 'activity',
             title: 'Store movement windows',
             subtitle: 'Customer movement highlights',
           },
@@ -197,11 +222,10 @@ export class App {
     },
     {
       id: 'signal-ledger',
-      type: 'analytics-widget',
+      type: 'events-widget',
       columns: 6,
       height: '658px',
       content: {
-        kind: 'events',
         title: 'Detection history',
         subtitle: 'Latest automated detections',
       },

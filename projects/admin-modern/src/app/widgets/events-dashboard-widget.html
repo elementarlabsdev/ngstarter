@@ -1,0 +1,40 @@
+<app-widget-shell [title]="content().title" [subtitle]="content().subtitle" [events]="true">
+  <table ngs-table [dataSource]="events" class="events-table">
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Signal Type</th>
+      <td ngs-cell *ngsCellDef="let row">
+        <ngs-chip appearance="filled" class="event-chip" [class.tone-warm]="row.tone === 'warm'" [class.tone-green]="row.tone === 'green'" [class.tone-blue]="row.tone === 'blue'">
+          {{ row.type }}
+        </ngs-chip>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="id">
+      <th ngs-header-cell *ngsHeaderCellDef>Signal ID</th>
+      <td ngs-cell *ngsCellDef="let row">{{ row.id }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="date">
+      <th ngs-header-cell *ngsHeaderCellDef>Date</th>
+      <td ngs-cell *ngsCellDef="let row">{{ row.date }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="time">
+      <th ngs-header-cell *ngsHeaderCellDef>Time</th>
+      <td ngs-cell *ngsCellDef="let row">{{ row.time }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="action">
+      <th ngs-header-cell *ngsHeaderCellDef></th>
+      <td ngs-cell *ngsCellDef="let row">
+        <button ngsIconButton type="button" aria-label="Play signal" ngsTooltip="Play signal">
+          <ngs-icon name="fluent:play-24-filled" />
+        </button>
+      </td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="eventColumns"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: eventColumns"></tr>
+  </table>
+  <button ngsButton type="button" class="view-all-button">View All</button>
+</app-widget-shell>

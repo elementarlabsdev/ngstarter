@@ -1,6 +1,19 @@
 @use '../../components/styles/themes/default';
 @reference 'tailwindcss';
 
+:root {
+  --ngs-dropdown-item-hover-bg: #eeeeed;
+  --ngs-dropdown-item-active-bg: #eeeeed;
+  --ngs-dropdown-item-selected-bg: #eeeeed;
+  --ngs-dropdown-item-selected-color: #171719;
+  --ngs-menu-item-hover-background: #eeeeed;
+  --ngs-menu-item-active-background: #eeeeed;
+  --ngs-option-hover-background: #eeeeed;
+  --ngs-option-active-background: #eeeeed;
+  --ngs-option-selected-background: #eeeeed;
+  --ngs-option-selected-color: #171719;
+}
+
 .modern-root {
   --modern-bg: #f1f1f0;
   --modern-ink: #171719;
@@ -23,13 +36,13 @@
 
     overflow: visible;
     border-radius: 0 --spacing(9) --spacing(9) 0;
-    background: var(--modern-sidebar-bg);
+    --ngs-sidenav-background-color: rgba(255, 255, 255, 0.25);
   }
 
   ngs-sidebar.modern-sidebar {
     border: 0;
     border-radius: 0 --spacing(9) --spacing(9) 0;
-    background: var(--modern-sidebar-bg);
+    background: rgba(255, 255, 255, 0.15);
   }
 
   ngs-sidenav-content {
@@ -44,19 +57,22 @@
   }
 
   ngs-sidebar-nav.modern-nav {
+    --ngs-sidebar-nav-padding: --spacing(4) --spacing(2);
     --ngs-sidebar-nav-gap: --spacing(3);
     --ngs-sidebar-nav-item-height: --spacing(13);
     --ngs-sidebar-nav-item-radius: 999px;
     --ngs-sidebar-nav-item-font-weight: 400;
-    --ngs-sidebar-nav-item-active-bg: var(--modern-soft);
+    --ngs-sidebar-nav-item-active-bg: #eeeeed;
     --ngs-sidebar-nav-item-active-color: var(--modern-ink);
-    --ngs-sidebar-nav-item-hover-bg: #f4f4f3;
-    --ngs-sidebar-nav-group-toggle-active-bg: var(--modern-soft);
+    --ngs-sidebar-nav-item-hover-bg: #eeeeed;
+    --ngs-sidebar-nav-group-toggle-active-bg: transparent;
     --ngs-sidebar-nav-group-toggle-active-color: var(--modern-ink);
     --ngs-sidebar-nav-group-toggle-active-icon-color: var(--modern-ink);
     --ngs-sidebar-nav-group-arrow-color: #90908c;
     --ngs-sidebar-nav-nested-item-height: --spacing(11);
     --ngs-sidebar-nav-nested-item-color: #686865;
+    --ngs-sidebar-nav-nested-item-hover-bg: #eeeeed;
+    --ngs-sidebar-nav-nested-item-active-bg: #eeeeed;
     --ngs-sidebar-nav-nested-item-active-color: var(--modern-ink);
   }
 
@@ -111,13 +127,11 @@
     color: var(--modern-ink);
   }
 
-  app-modern-dashboard-widget {
-    button[ngsIconButton] {
-      --ngs-button-radius: 999px;
-      --ngs-button-height: --spacing(11);
-      --ngs-button-bg: rgba(255, 255, 255, 0.62);
-      --ngs-button-color: #5f5f5c;
-    }
+  ngs-card.dashboard-widget button[ngsIconButton] {
+    --ngs-button-radius: 999px;
+    --ngs-button-height: --spacing(11);
+    --ngs-button-bg: rgba(255, 255, 255, 0.62);
+    --ngs-button-color: #5f5f5c;
   }
 
   ngs-chip.legend-chip,

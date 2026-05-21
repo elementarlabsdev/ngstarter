@@ -1,0 +1,18 @@
+<app-widget-shell [title]="content().title" [subtitle]="content().subtitle">
+  <div class="gauge-widget">
+    <div class="semi-gauge" aria-label="Assisted sale rate 73 percent">
+      <div class="semi-gauge-track"></div>
+      <div class="semi-gauge-fill"></div>
+      <div class="semi-gauge-rest"></div>
+      <div class="semi-gauge-value">
+        <strong>{{ content().value }}%</strong>
+        <span>Since yesterday</span>
+      </div>
+    </div>
+
+    <div class="legend-row">
+      <ngs-chip appearance="outlined" class="legend-chip sale-chip">Assisted sale</ngs-chip>
+      <ngs-chip appearance="outlined" class="legend-chip avg-chip">Average basket</ngs-chip>
+    </div>
+  </div>
+</app-widget-shell>

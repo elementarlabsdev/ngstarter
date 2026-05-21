@@ -1,0 +1,30 @@
+<app-widget-shell [title]="content().title" [subtitle]="content().subtitle" [calendar]="true">
+  <div class="calendar-widget">
+    <div class="calendar-toolbar">
+      <button ngsIconButton type="button" aria-label="Previous month" ngsTooltip="Previous month">
+        <ngs-icon name="fluent:arrow-left-24-regular" />
+      </button>
+      <p>{{ content().subtitle }}</p>
+      <button ngsIconButton type="button" aria-label="Next month" ngsTooltip="Next month">
+        <ngs-icon name="fluent:arrow-right-24-regular" />
+      </button>
+    </div>
+
+    <div class="calendar-grid">
+      @for (day of calendarDays; track $index) {
+        <button
+          ngsButton
+          type="button"
+          class="calendar-day"
+          [class.is-active]="day.state === 'active'"
+          [class.is-muted]="day.state === 'muted'"
+          [class.has-green-marker]="day.marker === 'green'"
+          [class.has-rose-marker]="day.marker === 'rose'"
+          [class.has-blue-marker]="day.marker === 'blue'"
+        >
+          {{ day.day }}
+        </button>
+      }
+    </div>
+  </div>
+</app-widget-shell>

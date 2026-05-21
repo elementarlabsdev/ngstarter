@@ -1,0 +1,29 @@
+@reference 'tailwindcss';
+
+table.events-table {
+  width: 100%;
+}
+
+table.events-table ::ng-deep th {
+  border-color: #dededb;
+  color: #787874;
+  font-weight: 500;
+}
+
+table.events-table ::ng-deep td {
+  border-color: #dededb;
+  color: var(--modern-ink);
+}
+
+table.events-table ::ng-deep tbody tr {
+  border-radius: 999px;
+  background: white;
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--ngs-color-neutral-500) 6%, transparent);
+}
+
+.view-all-button {
+  display: flex;
+  margin: --spacing(3) auto 0;
+  color: var(--modern-ink);
+  font-size: 1.02rem;
+}

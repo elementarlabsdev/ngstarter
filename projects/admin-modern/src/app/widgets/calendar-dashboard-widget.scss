@@ -1,0 +1,70 @@
+@reference 'tailwindcss';
+
+.calendar-widget {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: --spacing(4);
+  height: 100%;
+  margin-top: 0;
+  padding-top: --spacing(2);
+}
+
+.calendar-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: --spacing(16);
+  padding-inline: 0;
+}
+
+.calendar-toolbar p {
+  margin: 0;
+  color: var(--modern-ink);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.calendar-grid {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 2px;
+}
+
+.calendar-day {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  font-weight: 500;
+  justify-self: stretch;
+}
+
+.calendar-day.has-green-marker::before,
+.calendar-day.has-rose-marker::before,
+.calendar-day.has-blue-marker::before {
+  position: absolute;
+  top: --spacing(1);
+  left: 50%;
+  width: --spacing(2);
+  height: --spacing(2);
+  border-radius: 999px;
+  content: '';
+  transform: translateX(-50%);
+}
+
+.calendar-day.has-green-marker::before {
+  background: #9acb80;
+}
+
+.calendar-day.has-rose-marker::before {
+  background: #e19b9c;
+}
+
+.calendar-day.has-blue-marker::before {
+  background: #8ea2d8;
+}

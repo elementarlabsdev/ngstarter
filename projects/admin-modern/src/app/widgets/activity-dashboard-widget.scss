@@ -1,0 +1,64 @@
+@reference 'tailwindcss';
+
+.activity-widget {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: --spacing(5);
+  align-items: center;
+  height: 100%;
+  padding: --spacing(2) --spacing(6) 0;
+}
+
+.timeline-rail {
+  position: absolute;
+  inset-inline: --spacing(8);
+  top: 48%;
+  height: --spacing(10);
+  border-radius: 999px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent --spacing(5),
+      color-mix(in srgb, var(--ngs-color-neutral-300) 80%, transparent) --spacing(5),
+      color-mix(in srgb, var(--ngs-color-neutral-300) 80%, transparent) --spacing(6)
+    );
+}
+
+.activity-token {
+  position: relative;
+  z-index: 1;
+  justify-content: flex-start;
+  padding: --spacing(4);
+}
+
+.activity-token ::ng-deep .content {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: --spacing(3);
+  line-height: 1.25;
+}
+
+.activity-token ::ng-deep .icon {
+  flex: 0 0 auto;
+  left: 0;
+}
+
+.activity-token span {
+  display: grid;
+  gap: --spacing(1);
+  min-width: 0;
+  text-align: left;
+}
+
+.activity-token strong {
+  font-size: 1.55rem;
+  font-weight: 600;
+}
+
+.activity-token small {
+  color: color-mix(in srgb, currentColor 64%, transparent);
+  font-size: 0.8rem;
+}

@@ -1,5 +1,16 @@
 <ngs-layout root class="modern-root">
   <ngs-layout-content>
+    <div class="fixed right-0 top-0 z-5">
+      <button
+        ngsIconButton
+        type="button"
+        aria-label="Collapse navigation"
+        class="floating-collapse"
+        ngsTooltip="Collapse navigation"
+      >
+        <ngs-icon name="fluent:chevron-left-24-regular" />
+      </button>
+    </div>
     <ngs-sidenav-container autosize autoFocus="false" hasBackdrop="false" class="modern-shell">
       <ngs-sidenav
         [opened]="true"
@@ -8,22 +19,10 @@
         [adaptive]="false"
         class="modern-sidenav"
       >
-        <div class="absolute right-0 top-0 z-5">
-          <button
-            ngsIconButton
-            type="button"
-            aria-label="Collapse navigation"
-            class="floating-collapse"
-            ngsTooltip="Collapse navigation"
-          >
-            <ngs-icon name="fluent:chevron-left-24-regular" />
-          </button>
-        </div>
-
         <ngs-sidebar class="modern-sidebar" aria-label="Modern analytics navigation">
           <ngs-sidebar-header class="sidebar-header">
-            <ngs-logo class="brand-logo" aria-label="Falc-AI">
-              <ngs-logo-text size="large">F</ngs-logo-text>
+            <ngs-logo class="brand-logo" aria-label="Modern">
+              <ngs-logo-text size="large">Modern</ngs-logo-text>
             </ngs-logo>
           </ngs-sidebar-header>
 
@@ -34,7 +33,7 @@
                   <ngs-sidebar-nav-group-toggle>
                     <ngs-icon name="fluent:home-24-regular" ngsSidebarNavItemIcon />
                     Dashboard
-                    <ngs-icon name="fluent:chevron-down-24-regular" ngsSidebarNavGroupToggleIcon />
+                    <ngs-icon name="fluent:chevron-down-24-regular" class="size-5" ngsSidebarNavGroupToggleIcon />
                   </ngs-sidebar-nav-group-toggle>
 
                   <ngs-sidebar-nav-group-menu>
@@ -60,7 +59,7 @@
                   <ngs-sidebar-nav-group-toggle>
                     <ngs-icon name="fluent:building-24-regular" ngsSidebarNavItemIcon />
                     Organization
-                    <ngs-icon name="fluent:chevron-down-24-regular" ngsSidebarNavGroupToggleIcon />
+                    <ngs-icon name="fluent:chevron-down-24-regular" class="size-5" ngsSidebarNavGroupToggleIcon />
                   </ngs-sidebar-nav-group-toggle>
 
                   <ngs-sidebar-nav-group-menu>
@@ -95,7 +94,7 @@
                 <span class="user-name">Cameron Harper</span>
                 <span class="user-email">harper&#64;gmail.com</span>
               </span>
-              <ngs-icon name="fluent:chevron-down-24-regular" class="size-4" />
+              <ngs-icon name="fluent:chevron-down-24-regular" class="size-5" />
             </button>
           </ngs-sidebar-footer>
         </ngs-sidebar>
@@ -107,9 +106,7 @@
             <ngs-toolbar>
               <ngs-toolbar-title>
                 <div class="page-title">
-                  <div>
-                    <h1>Store Analytics - Realtime</h1>
-                  </div>
+                  <h1>Store Analytics - Realtime</h1>
                 </div>
               </ngs-toolbar-title>
 

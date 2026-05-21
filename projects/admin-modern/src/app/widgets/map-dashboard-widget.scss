@@ -1,0 +1,73 @@
+@reference 'tailwindcss';
+
+.map-widget {
+  position: relative;
+  display: grid;
+  height: 100%;
+  place-items: center;
+  padding: --spacing(4) --spacing(1) 0;
+}
+
+.map-widget svg {
+  width: 100%;
+  height: 100%;
+}
+
+.map-wall,
+.map-line {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ngs-color-neutral-500) 32%, transparent);
+  stroke-width: 3;
+}
+
+.map-line {
+  stroke-width: 2;
+}
+
+.map-line.strong {
+  stroke: color-mix(in srgb, var(--ngs-color-neutral-700) 38%, transparent);
+}
+
+.map-dash {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ngs-color-neutral-400) 48%, transparent);
+  stroke-dasharray: 5 5;
+  stroke-width: 2;
+}
+
+.map-marker {
+  position: absolute;
+  min-width: --spacing(10);
+  padding: 0;
+  font-weight: 650;
+}
+
+.marker-one {
+  left: 13%;
+  top: 62%;
+}
+
+.marker-two {
+  left: 31%;
+  top: 33%;
+}
+
+.marker-three {
+  right: 19%;
+  top: 29%;
+}
+
+.marker-four {
+  left: 45%;
+  top: 61%;
+}
+
+.marker-five {
+  left: 33%;
+  top: 72%;
+}
+
+.marker-six {
+  right: 17%;
+  top: 67%;
+}

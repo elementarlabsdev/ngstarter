@@ -1,0 +1,31 @@
+<ngs-card
+  appearance="filled"
+  class="dashboard-widget"
+  [class.is-calendar]="calendar()"
+  [class.is-events]="events()"
+>
+  <ngs-card-header>
+    <ngs-card-title>
+      {{ title() }}
+      <ngs-icon name="fluent:info-24-regular" />
+    </ngs-card-title>
+    <ngs-card-subtitle>{{ subtitle() }}</ngs-card-subtitle>
+    <ngs-card-aside>
+      <button
+        ngsIconButton
+        type="button"
+        aria-label="Open widget details"
+        ngsTooltip="Open details"
+      >
+        <ngs-icon name="fluent:arrow-maximize-24-regular" />
+      </button>
+      <button ngsIconButton type="button" aria-label="Widget menu" ngsTooltip="More actions">
+        <ngs-icon name="fluent:more-horizontal-24-regular" />
+      </button>
+    </ngs-card-aside>
+  </ngs-card-header>
+
+  <ngs-card-content>
+    <ng-content />
+  </ngs-card-content>
+</ngs-card>

@@ -1,0 +1,76 @@
+@reference 'tailwindcss';
+
+.gauge-widget {
+  position: relative;
+  display: grid;
+  height: 100%;
+  place-items: center;
+  grid-template-rows: 1fr auto;
+  gap: --spacing(3);
+}
+
+.semi-gauge {
+  position: relative;
+  width: min(76%, 315px);
+  aspect-ratio: 2 / 1;
+  align-self: end;
+}
+
+.semi-gauge-track,
+.semi-gauge-fill,
+.semi-gauge-rest {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px 999px 0 0;
+  transform-origin: 50% 100%;
+}
+
+.semi-gauge-track {
+  border: --spacing(9) solid #e8e8e8;
+  border-bottom: 0;
+}
+
+.semi-gauge-fill {
+  border: --spacing(9) solid #efb7b9;
+  border-right-color: transparent;
+  border-bottom: 0;
+  transform: rotate(7deg);
+}
+
+.semi-gauge-rest {
+  right: -1%;
+  left: auto;
+  width: 27%;
+  border: --spacing(9) solid #e8e8e8;
+  border-left-color: transparent;
+  border-bottom: 0;
+  transform: rotate(9deg);
+}
+
+.semi-gauge-value {
+  position: absolute;
+  left: 50%;
+  bottom: calc(--spacing(1) * -1);
+  display: grid;
+  place-items: center;
+  transform: translateX(-50%);
+  color: var(--modern-ink);
+}
+
+.semi-gauge-value strong {
+  font-size: 2.1rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.semi-gauge-value span {
+  color: var(--ngs-color-neutral-500);
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: --spacing(2);
+}
