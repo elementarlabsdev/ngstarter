@@ -1,0 +1,44 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+}
+
+.render-export-example {
+  width: 100%;
+}
+
+.render-export-example__stage {
+  display: grid;
+  min-height: 420px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--ngs-radius-lg);
+  background:
+    radial-gradient(circle, rgba(15, 23, 42, 0.08) 1px, transparent 1px) 0 0 / 18px 18px,
+    var(--ngs-color-surface-container-lowest);
+}
+
+.render-export-example__meta {
+  dt {
+    color: var(--ngs-color-on-surface-variant);
+    font-size: var(--ngs-font-size-xs);
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 600;
+  }
+}
+
+.render-export-example__code {
+  max-height: 420px;
+  overflow: auto;
+  border-radius: var(--ngs-radius-md);
+  background: var(--ngs-color-surface-container-low);
+  color: var(--ngs-color-on-surface);
+  font-size: var(--ngs-font-size-xs);
+  line-height: 1.55;
+  margin: 0;
+  padding: --spacing(3);
+}

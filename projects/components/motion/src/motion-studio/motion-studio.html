@@ -32,6 +32,30 @@
       <button
         ngsButton="outlined"
         type="button"
+        aria-label="Edit history"
+        [ngsMenuTriggerFor]="historyMenu"
+      >
+        <ngs-icon name="fluent:history-24-regular" />
+        {{ latestHistoryLabel() }}
+      </button>
+      <ngs-menu #historyMenu="ngsMenu">
+        @if (actionHistory().length) {
+          @for (entry of actionHistory().slice().reverse(); track entry.id) {
+            <button ngs-menu-item type="button" disabled>
+              <ngs-icon name="fluent:checkmark-circle-24-regular" />
+              {{ entry.timestamp }} · {{ entry.label }}
+            </button>
+          }
+        } @else {
+          <button ngs-menu-item type="button" disabled>
+            <ngs-icon name="fluent:info-24-regular" />
+            No edits yet
+          </button>
+        }
+      </ngs-menu>
+      <button
+        ngsButton="outlined"
+        type="button"
         [disabled]="!canGroupSelection()"
         (click)="groupSelectedLayers()"
       >
@@ -49,8 +73,27 @@
       </button>
       <button ngsButton="outlined" type="button" (click)="addScene()">
         <ngs-icon name="fluent:video-clip-24-regular" />
-        Scene
+        New scene
       </button>
+      <button
+        ngsIconButton
+        type="button"
+        aria-label="Keyboard shortcuts"
+        [ngsMenuTriggerFor]="shortcutsMenu"
+      >
+        <ngs-icon name="fluent:info-24-regular" />
+      </button>
+      <ngs-menu #shortcutsMenu="ngsMenu">
+        <button ngs-menu-item type="button" disabled>Space · Play / pause</button>
+        <button ngs-menu-item type="button" disabled>⌘Z · Undo</button>
+        <button ngs-menu-item type="button" disabled>⇧⌘Z · Redo</button>
+        <button ngs-menu-item type="button" disabled>⌘D · Duplicate selection</button>
+        <button ngs-menu-item type="button" disabled>⌘G · Group layers</button>
+        <button ngs-menu-item type="button" disabled>⇧⌘G · Ungroup</button>
+        <button ngs-menu-item type="button" disabled>⌘C / ⌘V · Copy / paste</button>
+        <button ngs-menu-item type="button" disabled>Delete · Remove selection</button>
+        <button ngs-menu-item type="button" disabled>Shift drag · Add to selection</button>
+      </ngs-menu>
 
       <ngs-toolbar-spacer />
 
@@ -96,6 +139,92 @@
           <ngs-icon name="fluent:arrow-export-up-24-regular" />
           Export JSON
         </button>
+        <button ngs-menu-item type="button" (click)="openExportManifestDrawer(jsonDrawer)">
+          <ngs-icon name="fluent:document-data-24-regular" />
+          Export manifest
+        </button>
+        <button ngs-menu-item type="button" (click)="openRenderExportDrawer(renderExportDrawer)">
+          <ngs-icon name="fluent:video-clip-24-regular" />
+          Export video
+        </button>
+        <button ngs-menu-item type="button" [disabled]="!localStorageKey()" (click)="clearStoredDraft($event)">
+          <ngs-icon name="fluent:eraser-24-regular" />
+          Clear local draft
+        </button>
+      </ngs-menu>
+      <ngs-menu #layerContextMenu="ngsMenu">
+        <button ngs-menu-item type="button" (click)="copySelectedLayers()">
+          <ngs-icon name="fluent:copy-24-regular" />
+          Copy layer
+        </button>
+        <button ngs-menu-item type="button" (click)="duplicateSelectedLayers()">
+          <ngs-icon name="fluent:copy-add-24-regular" />
+          Duplicate
+        </button>
+        <button ngs-menu-item type="button" [disabled]="!canPasteLayer()" (click)="pasteLayers()">
+          <ngs-icon name="fluent:clipboard-paste-24-regular" />
+          Paste
+        </button>
+        <button ngs-menu-item type="button" (click)="recordCurrentTransformKeyframes()">
+          <ngs-icon name="fluent:diamond-24-regular" />
+          Key transform
+        </button>
+        <button ngs-menu-item type="button" (click)="clearAnimationTracks('active')">
+          <ngs-icon name="fluent:history-24-regular" />
+          Clear animations
+        </button>
+        <button ngs-menu-item type="button" (click)="clearLayerTransitions('active')">
+          <ngs-icon name="fluent:arrow-swap-24-regular" />
+          Clear transitions
+        </button>
+        <button ngs-menu-item type="button" (click)="removeSelectedLayer()">
+          <ngs-icon name="fluent:delete-24-regular" />
+          Remove
+        </button>
+      </ngs-menu>
+      <ngs-menu #sceneContextMenu="ngsMenu">
+        <button ngs-menu-item type="button" (click)="playSelectedScene($event)">
+          <ngs-icon name="fluent:play-24-regular" />
+          Play scene
+        </button>
+        <button ngs-menu-item type="button" (click)="duplicateSelectedScene($event)">
+          <ngs-icon name="fluent:copy-add-24-regular" />
+          Duplicate scene
+        </button>
+        <button ngs-menu-item type="button" (click)="prepareSelectedSceneExport($event)">
+          <ngs-icon name="fluent:arrow-export-24-regular" />
+          Export scene
+        </button>
+        <button ngs-menu-item type="button" (click)="removeSelectedScene()">
+          <ngs-icon name="fluent:delete-24-regular" />
+          Remove scene
+        </button>
+      </ngs-menu>
+      <ngs-menu #transitionContextMenu="ngsMenu">
+        <button ngs-menu-item type="button" (click)="previewSelectedTransition($event)">
+          <ngs-icon name="fluent:play-24-regular" />
+          Preview transition
+        </button>
+        <button ngs-menu-item type="button" (click)="applySelectedTransitionPreset('fade', $event)">
+          <ngs-icon name="fluent:arrow-swap-24-regular" />
+          Replace with fade
+        </button>
+        <button ngs-menu-item type="button" (click)="applySelectedTransitionPreset('slide', $event)">
+          <ngs-icon name="fluent:arrow-swap-24-regular" />
+          Replace with slide
+        </button>
+        <button ngs-menu-item type="button" (click)="applySelectedTransitionPreset('wipe', $event)">
+          <ngs-icon name="fluent:arrow-swap-24-regular" />
+          Replace with wipe
+        </button>
+        <button ngs-menu-item type="button" (click)="applySelectedTransitionPreset('scale', $event)">
+          <ngs-icon name="fluent:arrow-swap-24-regular" />
+          Replace with scale
+        </button>
+        <button ngs-menu-item type="button" (click)="removeSelectedTransition($event)">
+          <ngs-icon name="fluent:delete-24-regular" />
+          Remove transition
+        </button>
       </ngs-menu>
     </ngs-toolbar>
   </ngs-panel-header>
@@ -116,6 +245,10 @@
               <ngs-tab-panel-item for="media">
                 <ngs-icon name="fluent:folder-24-regular" ngsTabPanelItemIcon />
                 <ngs-tab-panel-item-text>Media</ngs-tab-panel-item-text>
+              </ngs-tab-panel-item>
+              <ngs-tab-panel-item for="background">
+                <ngs-icon name="fluent:image-globe-24-regular" ngsTabPanelItemIcon />
+                <ngs-tab-panel-item-text>Background</ngs-tab-panel-item-text>
               </ngs-tab-panel-item>
               <ngs-tab-panel-item for="layers">
                 <ngs-icon name="fluent:layer-24-regular" ngsTabPanelItemIcon />
@@ -161,6 +294,15 @@
                   <ngs-icon name="fluent:shapes-24-regular" />
                   Shape layer
                 </button>
+                <button
+                  ngsButton="outlined"
+                  type="button"
+                  class="ngs-motion-studio__add-layer"
+                  (click)="addAudioLayer()"
+                >
+                  <ngs-icon name="fluent:music-note-2-24-regular" />
+                  Audio layer
+                </button>
 
                 <ngs-upload-container class="ngs-motion-studio__asset-upload">
                   <ngs-upload-area
@@ -186,17 +328,58 @@
                 <div class="ngs-motion-studio__asset-summary">
                   <ngs-chip-set>
                     <ngs-chip>{{ assets().length }} assets</ngs-chip>
-                    <ngs-chip>{{ imageAssets().length }} images</ngs-chip>
+                    <ngs-chip>{{ mediaAssets().length }} media</ngs-chip>
+                    <ngs-chip>{{ audioAssets().length }} audio</ngs-chip>
+                    <ngs-chip>{{ filteredAssets().length }} shown</ngs-chip>
                   </ngs-chip-set>
                   @if (assetStatus()) {
                     <small>{{ assetStatus() }}</small>
                   }
                 </div>
 
-                @if (assets().length) {
-                  <div class="ngs-motion-studio__asset-list">
-                    @for (asset of assets(); track asset.id) {
-                      <div class="ngs-motion-studio__asset-card">
+                <div class="ngs-motion-studio__asset-controls">
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Filter</ngs-label>
+                    <ngs-select [value]="assetFilter()" (selectionChange)="setAssetFilter($event)">
+                      @for (option of assetFilterOptions; track option.value) {
+                        <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
+                      }
+                    </ngs-select>
+                  </ngs-form-field>
+                  <div class="ngs-motion-studio__preset-mode">
+                    <span>View</span>
+                    <ngs-segmented
+                      size="sm"
+                      [value]="assetViewMode()"
+                      (valueChange)="setAssetViewMode($event)"
+                    >
+                      @for (option of assetViewOptions; track option.value) {
+                        <button ngs-segmented-button type="button" [value]="option.value">
+                          {{ option.label }}
+                        </button>
+                      }
+                    </ngs-segmented>
+                  </div>
+                </div>
+
+                @if (filteredAssets().length) {
+                  <div
+                    class="ngs-motion-studio__asset-list"
+                    [class.is-list-view]="assetViewMode() === 'list'"
+                  >
+                    @for (asset of filteredAssets(); track asset.id) {
+                      <div
+                        class="ngs-motion-studio__asset-card"
+                        [class.is-draggable]="
+                          asset.type === 'image' || asset.type === 'video' || asset.type === 'audio'
+                        "
+                        [class.has-warning]="isAssetMissing(asset)"
+                        [draggable]="
+                          asset.type === 'image' || asset.type === 'video' || asset.type === 'audio'
+                        "
+                        (dragstart)="startAssetDrag(asset, $event)"
+                        (dragend)="finishAssetDrag()"
+                      >
                         <div class="ngs-motion-studio__asset-preview">
                           @if (asset.type === 'image') {
                             <img [src]="asset.src" [alt]="asset.name || asset.id" />
@@ -208,6 +391,9 @@
                           <strong>{{ asset.name || asset.id }}</strong>
                           <small>
                             {{ assetTypeLabel(asset) }}
+                            @if (isAssetMissing(asset)) {
+                              · missing source
+                            }
                             @if (assetDimensionsLabel(asset)) {
                               · {{ assetDimensionsLabel(asset) }}
                             }
@@ -219,11 +405,29 @@
                         <button
                           ngsIconButton
                           type="button"
-                          aria-label="Add image layer"
-                          [disabled]="asset.type !== 'image'"
+                          aria-label="Add media layer"
+                          [disabled]="
+                            asset.type !== 'image' &&
+                            asset.type !== 'video' &&
+                            asset.type !== 'audio'
+                          "
                           (click)="addImageLayerFromAsset(asset, $event)"
                         >
                           <ngs-icon name="fluent:add-square-24-regular" />
+                        </button>
+                        <button
+                          ngsIconButton
+                          type="button"
+                          aria-label="Replace selected media"
+                          [disabled]="
+                            (asset.type !== 'image' &&
+                              asset.type !== 'video' &&
+                              asset.type !== 'audio') ||
+                            !canReplaceSelectedLayerAsset()
+                          "
+                          (click)="replaceSelectedLayerAsset(asset, $event)"
+                        >
+                          <ngs-icon name="fluent:arrow-sync-24-regular" />
                         </button>
                         <button
                           ngsIconButton
@@ -236,38 +440,470 @@
                       </div>
                     }
                   </div>
+                } @else if (assets().length) {
+                  <div class="ngs-motion-studio__empty-inline">
+                    <ngs-icon name="fluent:filter-dismiss-24-regular" />
+                    <span>No assets match the current filter.</span>
+                  </div>
                 }
               </div>
             </ng-template>
 
+            <ng-template ngsTabPanelAsideContent="background">
+              <ngs-scrollbar-area [absolute]="false" class="ngs-motion-studio__scroll">
+                <div class="ngs-motion-studio__kit-section">
+                  <div
+                    class="ngs-motion-studio__background-preview"
+                    [class.is-dynamic-aurora]="compositionBackgroundEffectType() === 'aurora'"
+                    [class.is-dynamic-spotlight]="compositionBackgroundEffectType() === 'spotlight'"
+                    [class.is-dynamic-mesh]="compositionBackgroundEffectType() === 'mesh'"
+                    [style.background]="compositionBackground()"
+                    aria-hidden="true"
+                  ></div>
+
+                  <section class="ngs-motion-studio__background-section">
+                    <div class="ngs-motion-studio__mini-header">
+                      <div>
+                        <strong>Global background</strong>
+                        <small>Applied to the whole video composition.</small>
+                      </div>
+                      <ngs-chip-set>
+                        <ngs-chip>{{ draft().composition.width }}x{{ draft().composition.height }}</ngs-chip>
+                      </ngs-chip-set>
+                    </div>
+
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>CSS background</ngs-label>
+                      <input
+                        ngsInput
+                        [value]="compositionBackground()"
+                        (input)="setCompositionBackground($any($event.target).value)"
+                      />
+                    </ngs-form-field>
+                  </section>
+
+                  <section class="ngs-motion-studio__background-section">
+                    <div class="ngs-motion-studio__mini-header">
+                      <div>
+                        <strong>Color</strong>
+                        <small>Use a solid canvas color.</small>
+                      </div>
+                    </div>
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>Color</ngs-label>
+                      <input
+                        ngsInput
+                        [value]="solidBackgroundColor()"
+                        (input)="setBackgroundColor($any($event.target).value)"
+                      />
+                      <button
+                        ngs-color-picker-thumbnail
+                        ngsSuffix
+                        type="button"
+                        class="ngs-motion-studio__color-trigger"
+                        [color]="solidBackgroundColor()"
+                        [ngsColorPickerTriggerFor]="compositionBackgroundColorPicker"
+                        aria-label="Choose video background color"
+                      ></button>
+                      <ng-template #compositionBackgroundColorPicker>
+                        <ngs-color-picker
+                          [ngModel]="solidBackgroundColor()"
+                          (ngModelChange)="setBackgroundColor($event)"
+                          resultFormat="hex"
+                          [showOpacity]="false"
+                        />
+                      </ng-template>
+                    </ngs-form-field>
+                  </section>
+
+                  <section class="ngs-motion-studio__background-section">
+                    <div class="ngs-motion-studio__mini-header">
+                      <div>
+                        <strong>Gradient</strong>
+                        <small>Create or pick a global gradient.</small>
+                      </div>
+                      <button ngsButton="outlined" type="button" (click)="generateBackground()">
+                        <ngs-icon name="fluent:sparkle-24-regular" />
+                        Generate
+                      </button>
+                    </div>
+
+                    <div class="ngs-motion-studio__background-color-row">
+                      <ngs-form-field subscriptHiddenIfEmpty>
+                        <ngs-label>From</ngs-label>
+                        <input
+                          ngsInput
+                          [value]="backgroundGradientFrom()"
+                          (input)="setBackgroundGradientColor('from', $any($event.target).value)"
+                        />
+                        <button
+                          ngs-color-picker-thumbnail
+                          ngsSuffix
+                          type="button"
+                          class="ngs-motion-studio__color-trigger"
+                          [color]="backgroundGradientFrom()"
+                          [ngsColorPickerTriggerFor]="backgroundGradientFromPicker"
+                          aria-label="Choose gradient start color"
+                        ></button>
+                        <ng-template #backgroundGradientFromPicker>
+                          <ngs-color-picker
+                            [ngModel]="backgroundGradientFrom()"
+                            (ngModelChange)="setBackgroundGradientColor('from', $event)"
+                            resultFormat="hex"
+                            [showOpacity]="false"
+                          />
+                        </ng-template>
+                      </ngs-form-field>
+
+                      <ngs-form-field subscriptHiddenIfEmpty>
+                        <ngs-label>To</ngs-label>
+                        <input
+                          ngsInput
+                          [value]="backgroundGradientTo()"
+                          (input)="setBackgroundGradientColor('to', $any($event.target).value)"
+                        />
+                        <button
+                          ngs-color-picker-thumbnail
+                          ngsSuffix
+                          type="button"
+                          class="ngs-motion-studio__color-trigger"
+                          [color]="backgroundGradientTo()"
+                          [ngsColorPickerTriggerFor]="backgroundGradientToPicker"
+                          aria-label="Choose gradient end color"
+                        ></button>
+                        <ng-template #backgroundGradientToPicker>
+                          <ngs-color-picker
+                            [ngModel]="backgroundGradientTo()"
+                            (ngModelChange)="setBackgroundGradientColor('to', $event)"
+                            resultFormat="hex"
+                            [showOpacity]="false"
+                          />
+                        </ng-template>
+                      </ngs-form-field>
+                    </div>
+
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>Direction</ngs-label>
+                      <ngs-select
+                        [value]="backgroundGradientDirection()"
+                        (selectionChange)="setBackgroundGradientDirection($event)"
+                      >
+                        @for (option of backgroundGradientDirections; track option.value) {
+                          <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
+                        }
+                      </ngs-select>
+                    </ngs-form-field>
+
+                    <div class="ngs-motion-studio__background-preset-list">
+                      @for (preset of backgroundGradientPresets; track preset.label) {
+                        <button
+                          ngsButton="outlined"
+                          type="button"
+                          class="ngs-motion-studio__background-preset"
+                          (click)="applyBackgroundPreset(preset)"
+                        >
+                          <span
+                            class="ngs-motion-studio__background-preset-thumb"
+                            [style.background]="preset.value"
+                          ></span>
+                          {{ preset.label }}
+                        </button>
+                      }
+                    </div>
+                  </section>
+
+                  <section class="ngs-motion-studio__background-section">
+                    <div class="ngs-motion-studio__mini-header">
+                      <div>
+                        <strong>Dynamic</strong>
+                        <small>Animated background presets.</small>
+                      </div>
+                    </div>
+                    <div class="ngs-motion-studio__background-preset-list">
+                      @for (preset of backgroundDynamicPresets; track preset.label) {
+                        <button
+                          ngsButton="outlined"
+                          type="button"
+                          class="ngs-motion-studio__background-preset"
+                          (click)="applyBackgroundPreset(preset)"
+                        >
+                          <span
+                            class="ngs-motion-studio__background-preset-thumb"
+                            [class.is-dynamic-aurora]="preset.effect?.type === 'aurora'"
+                            [class.is-dynamic-spotlight]="preset.effect?.type === 'spotlight'"
+                            [class.is-dynamic-mesh]="preset.effect?.type === 'mesh'"
+                            [style.background]="preset.value"
+                          ></span>
+                          {{ preset.label }}
+                        </button>
+                      }
+                    </div>
+                  </section>
+
+                  <section class="ngs-motion-studio__background-section">
+                    <div class="ngs-motion-studio__mini-header">
+                      <div>
+                        <strong>Image</strong>
+                        <small>Use an uploaded image as the video background.</small>
+                      </div>
+                    </div>
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>Image asset</ngs-label>
+                      <ngs-select
+                        [disabled]="!imageAssets().length"
+                        (selectionChange)="setBackgroundImageAsset($event)"
+                      >
+                        @for (asset of imageAssets(); track asset.id) {
+                          <ngs-option [value]="asset.id">{{ asset.name || asset.id }}</ngs-option>
+                        }
+                      </ngs-select>
+                    </ngs-form-field>
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>Fit</ngs-label>
+                      <ngs-select
+                        [value]="backgroundImageFit()"
+                        (selectionChange)="setBackgroundImageFit($event)"
+                      >
+                        @for (option of backgroundImageFitOptions; track option.value) {
+                          <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
+                        }
+                      </ngs-select>
+                    </ngs-form-field>
+                  </section>
+
+                  <button ngsButton="outlined" type="button" (click)="clearCompositionBackground()">
+                    <ngs-icon name="fluent:dismiss-circle-24-regular" />
+                    Transparent background
+                  </button>
+                </div>
+              </ngs-scrollbar-area>
+            </ng-template>
+
             <ng-template ngsTabPanelAsideContent="layers">
               <ngs-scrollbar-area [absolute]="false" class="ngs-motion-studio__scroll">
+                <section class="ngs-motion-studio__storyboard">
+                  <header class="ngs-motion-studio__mini-header">
+                    <strong>Scenes</strong>
+                    <small>
+                      {{ scenes().length }} clips · {{ sceneValidationIssues().length }} issues
+                    </small>
+                  </header>
+
+                  <ngs-list class="ngs-motion-studio__storyboard-list">
+                    @for (scene of scenes(); track scene.id; let index = $index) {
+                      <ngs-list-item
+                        lines="2"
+                        class="ngs-motion-studio__storyboard-item"
+                        [class.is-active]="isSceneSelected(scene)"
+                        [class.is-current]="isSceneActive(scene)"
+                        [class.is-drop-target]="isSceneStoryboardDropTarget(scene)"
+                        draggable="true"
+                        (click)="selectScene(scene, $event)"
+                        (dragstart)="startSceneStoryboardDrag(scene, $event)"
+                        (dragend)="finishSceneStoryboardDrag()"
+                        (dragover)="handleSceneStoryboardDragOver(scene, $event)"
+                        (dragleave)="handleSceneStoryboardDragLeave(scene, $event)"
+                        (drop)="dropSceneBefore(scene, $event)"
+                        [ngsContextMenuTriggerFor]="sceneContextMenu"
+                        (contextmenu)="selectSceneContext(scene, $event)"
+                      >
+                        <span
+                          ngsListItemIcon
+                          class="ngs-motion-studio__storyboard-thumb"
+                          [class.is-intro]="sceneThumbnailTone(scene) === 'is-intro'"
+                          [class.is-metric]="sceneThumbnailTone(scene) === 'is-metric'"
+                          [class.is-testimonial]="
+                            sceneThumbnailTone(scene) === 'is-testimonial'
+                          "
+                          [class.is-product]="sceneThumbnailTone(scene) === 'is-product'"
+                          [class.is-outro]="sceneThumbnailTone(scene) === 'is-outro'"
+                          aria-hidden="true"
+                        >
+                          {{ sceneThumbnailLabel(scene) }}
+                        </span>
+                        <span ngsListItemTitle>{{ scene.name || scene.id }}</span>
+                        <span ngsListItemLine>
+                          {{ sceneRangeLabel(scene) }} · {{ sceneLayerCount(scene) }} layers ·
+                          {{ sceneIssueSummary(scene) }}
+                        </span>
+                        <div ngsListItemMeta class="ngs-motion-studio__layer-actions">
+                          <button
+                            ngsIconButton
+                            type="button"
+                            aria-label="Play scene"
+                            (click)="selectScene(scene, $event); playSelectedScene($event)"
+                          >
+                            <ngs-icon name="fluent:play-24-regular" />
+                          </button>
+                          <button
+                            ngsIconButton
+                            type="button"
+                            aria-label="Duplicate scene"
+                            (click)="duplicateScene(scene, $event)"
+                          >
+                            <ngs-icon name="fluent:copy-add-24-regular" />
+                          </button>
+                          <button
+                            ngsIconButton
+                            type="button"
+                            aria-label="Remove scene"
+                            (click)="removeScene(scene, $event)"
+                          >
+                            <ngs-icon name="fluent:delete-24-regular" />
+                          </button>
+                        </div>
+                      </ngs-list-item>
+                    }
+                  </ngs-list>
+
+                </section>
+
+                <div class="ngs-motion-studio__layer-search">
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Search layers</ngs-label>
+                    <ngs-icon name="fluent:search-24-regular" ngsPrefix />
+                    <input
+                      ngsInput
+                      [value]="layerSearch()"
+                      (input)="setLayerSearch($any($event.target).value)"
+                    />
+                  </ngs-form-field>
+                </div>
+
                 <ngs-list class="ngs-motion-studio__layer-list">
-                  @for (item of timelineRows(); track item.layer.id) {
-                    <ngs-list-item
-                      lines="2"
-                      class="ngs-motion-studio__layer-item"
-                      [class.is-active]="isLayerSelected(item.layer)"
-                      [class.is-muted]="item.layer.hidden"
-                      (click)="selectLayerFromLibrary(item.layer, $event)"
-                    >
-                      <ngs-icon [name]="layerIcon(item.layer)" ngsListItemIcon />
-                      <span ngsListItemTitle>{{ item.layer.name || item.layer.id }}</span>
-                      <span ngsListItemLine>
-                        Name: {{ item.layer.name || item.layer.id }} · {{ item.layer.type }}
-                        @if (item.layer.hidden) {
-                          · hidden
+                  @for (row of layerPanelRows(); track row.id) {
+                    @if (row.kind === 'group') {
+	                      <ngs-list-item
+	                        lines="2"
+	                        class="ngs-motion-studio__layer-scene-item"
+	                        [class.is-active]="row.scene && isSceneSelected(row.scene)"
+	                        [class.is-current]="isSceneActive(row.scene)"
+	                        [class.is-unassigned]="!row.scene"
+	                        [class.is-layer-drop-target]="isLayerSceneDropTarget(row.scene)"
+	                        (click)="row.scene && selectScene(row.scene, $event)"
+	                        (dragover)="handleLayerSceneDragOver(row.scene, $event)"
+	                        (dragleave)="handleLayerSceneDragLeave(row.scene, $event)"
+	                        (drop)="dropLayerOnScene(row.scene, $event)"
+                          [ngsContextMenuTriggerFor]="sceneContextMenu"
+                          (contextmenu)="row.scene && selectSceneContext(row.scene, $event)"
+	                      >
+                        <button
+                          ngsIconButton
+                          type="button"
+                          ngsListItemIcon
+                          aria-label="Toggle scene"
+                          [disabled]="!row.scene"
+                          (click)="toggleLayerSceneCollapsed(row.scene, $event)"
+                        >
+                          <ngs-icon [name]="row.icon" />
+                        </button>
+                        <span ngsListItemTitle>{{ row.label }}</span>
+                        <span ngsListItemLine>{{ row.description }}</span>
+                        @if (row.scene) {
+                          <div ngsListItemMeta class="ngs-motion-studio__layer-actions">
+                            <button
+                              ngsIconButton
+                              type="button"
+                              aria-label="Assign selected layers to scene"
+                              [disabled]="!selectedLayerCount()"
+                              (click)="assignSelectedLayersToScene(row.scene, $event)"
+                            >
+                              <ngs-icon name="fluent:add-square-multiple-24-regular" />
+                            </button>
+                            <button
+                              ngsIconButton
+                              type="button"
+                              aria-label="Remove selected layers from scene"
+                              [disabled]="!sceneSelectedLayerCount(row.scene)"
+                              (click)="removeSelectedLayersFromScene(row.scene, $event)"
+                            >
+                              <ngs-icon name="fluent:dismiss-24-regular" />
+                            </button>
+                          </div>
                         }
-                        @if (item.layer.locked) {
-                          · locked
+                      </ngs-list-item>
+                    } @else {
+                      <ngs-list-item
+                        lines="2"
+                        class="ngs-motion-studio__layer-item"
+                        [class.is-active]="isLayerSelected(row.item.layer)"
+                        [class.is-in-selected-scene]="selectedSceneContainsLayer(row.item.layer)"
+                        [class.has-scene-warning]="layerSceneWarningMessage(row.item.layer)"
+	                        [class.is-muted]="row.item.layer.hidden"
+	                        [class.is-nested-in-scene]="row.scene"
+	                        [class.is-layer-drop-target]="isLayerSceneDropTarget(row.scene)"
+	                        draggable="true"
+	                        (click)="selectLayerFromLibrary(row.item.layer, $event)"
+	                        (dragstart)="startLayerSceneDrag(row, $event)"
+	                        (dragend)="finishLayerSceneDrag()"
+	                        (dragover)="handleLayerSceneDragOver(row.scene, $event)"
+	                        (dragleave)="handleLayerSceneDragLeave(row.scene, $event)"
+	                        (drop)="dropLayerOnScene(row.scene, $event)"
+                          [ngsContextMenuTriggerFor]="layerContextMenu"
+                          (contextmenu)="selectLayerContext(row.item.layer, $event)"
+	                      >
+                        @if (layerSceneWarningMessage(row.item.layer); as sceneWarning) {
+                          <ngs-icon
+                            name="fluent:warning-24-regular"
+                            class="ngs-motion-studio__layer-warning-icon"
+                            [ngsTooltip]="sceneWarning"
+                            ngsTooltipPosition="above"
+                          />
                         }
-                      </span>
-                      <div ngsListItemMeta class="ngs-motion-studio__layer-actions">
+                        <ngs-icon [name]="layerIcon(row.item.layer)" ngsListItemIcon />
+                        <span ngsListItemTitle>{{ row.item.layer.name || row.item.layer.id }}</span>
+                        <span ngsListItemLine>
+                          Name: {{ row.item.layer.name || row.item.layer.id }} ·
+                          {{ row.item.layer.type }}
+                          @if (row.item.layer.hidden) {
+                            · hidden
+                          }
+                          @if (row.item.layer.locked) {
+                            · locked
+                          }
+                          @if (row.scene) {
+                            · in {{ row.scene.name || row.scene.id }}
+                          } @else if (selectedSceneLayerLabel(row.item.layer)) {
+                            · {{ selectedSceneLayerLabel(row.item.layer) }}
+                          }
+                        </span>
+                        <div ngsListItemMeta class="ngs-motion-studio__layer-actions">
+                          @if (row.scene) {
+                            <button
+                              ngsIconButton
+                              type="button"
+                              class="is-active"
+                              aria-label="Remove layer from scene"
+                              (click)="toggleSceneLayerInScene(row.scene, row.item.layer, $event)"
+                            >
+                              <ngs-icon name="fluent:checkbox-checked-24-regular" />
+                            </button>
+                          } @else if (selectedScene()) {
+                            <button
+                              ngsIconButton
+                              type="button"
+                              [class.is-active]="selectedSceneContainsLayer(row.item.layer)"
+                              [attr.aria-label]="
+                                selectedSceneContainsLayer(row.item.layer)
+                                  ? 'Remove layer from scene'
+                                  : 'Add layer to scene'
+                              "
+                              (click)="toggleSceneLayer(row.item.layer, $event)"
+                            >
+                              <ngs-icon
+                                [name]="
+                                  selectedSceneContainsLayer(row.item.layer)
+                                    ? 'fluent:checkbox-checked-24-regular'
+                                    : 'fluent:checkbox-unchecked-24-regular'
+                                "
+                              />
+                            </button>
+                          }
                         <button
                           ngsIconButton
                           type="button"
                           aria-label="Duplicate layer"
-                          (click)="duplicateLayer(item.layer, $event)"
+                          (click)="duplicateLayer(row.item.layer, $event)"
                         >
                           <ngs-icon name="fluent:copy-24-regular" />
                         </button>
@@ -275,7 +911,7 @@
                           ngsIconButton
                           type="button"
                           aria-label="Move layer forward"
-                          (click)="moveLayerForward(item.layer, $event)"
+                          (click)="moveLayerForward(row.item.layer, $event)"
                         >
                           <ngs-icon name="fluent:arrow-up-24-regular" />
                         </button>
@@ -283,19 +919,19 @@
                           ngsIconButton
                           type="button"
                           aria-label="Move layer backward"
-                          (click)="moveLayerBackward(item.layer, $event)"
+                          (click)="moveLayerBackward(row.item.layer, $event)"
                         >
                           <ngs-icon name="fluent:arrow-down-24-regular" />
                         </button>
                         <button
                           ngsIconButton
                           type="button"
-                          [attr.aria-label]="item.layer.hidden ? 'Show layer' : 'Hide layer'"
-                          (click)="toggleLayerHidden(item.layer, $event)"
+                          [attr.aria-label]="row.item.layer.hidden ? 'Show layer' : 'Hide layer'"
+                          (click)="toggleLayerHidden(row.item.layer, $event)"
                         >
                           <ngs-icon
                             [name]="
-                              item.layer.hidden
+                              row.item.layer.hidden
                                 ? 'fluent:eye-off-24-regular'
                                 : 'fluent:eye-24-regular'
                             "
@@ -304,12 +940,12 @@
                         <button
                           ngsIconButton
                           type="button"
-                          [attr.aria-label]="item.layer.locked ? 'Unlock layer' : 'Lock layer'"
-                          (click)="toggleLayerLocked(item.layer, $event)"
+                          [attr.aria-label]="row.item.layer.locked ? 'Unlock layer' : 'Lock layer'"
+                          (click)="toggleLayerLocked(row.item.layer, $event)"
                         >
                           <ngs-icon
                             [name]="
-                              item.layer.locked
+                              row.item.layer.locked
                                 ? 'fluent:lock-closed-24-regular'
                                 : 'fluent:lock-open-24-regular'
                             "
@@ -319,12 +955,13 @@
                           ngsIconButton
                           type="button"
                           aria-label="Remove layer"
-                          (click)="removeLayer(item.layer, $event)"
+                          (click)="removeLayer(row.item.layer, $event)"
                         >
                           <ngs-icon name="fluent:delete-24-regular" />
                         </button>
                       </div>
                     </ngs-list-item>
+                    }
                   }
                 </ngs-list>
               </ngs-scrollbar-area>
@@ -407,19 +1044,50 @@
                       </header>
                       <div class="ngs-motion-studio__preset-grid">
                         @for (preset of presetsByCategory(group.category); track preset.id) {
-                          <button
-                            type="button"
-                            class="ngs-motion-studio__preset-card"
-                            draggable="true"
-                            [attr.data-motion-preset-category]="preset.category"
-                            (dragstart)="startPresetDrag(preset, $event)"
-                            (dragend)="finishPresetDrag()"
-                            (click)="applyPreset(preset)"
-                          >
-                            <span class="ngs-motion-studio__preset-preview"></span>
-                            <strong>{{ preset.name }}</strong>
-                            <small>{{ preset.description }}</small>
-                          </button>
+                          @if (preset.category === 'scene') {
+                            <div
+                              class="ngs-motion-studio__preset-card ngs-motion-studio__scene-template-card"
+                              draggable="true"
+                              [attr.data-motion-preset-category]="preset.category"
+                              (dragstart)="startPresetDrag(preset, $event)"
+                              (dragend)="finishPresetDrag()"
+                            >
+                              <span class="ngs-motion-studio__preset-preview"></span>
+                              <strong>{{ preset.name }}</strong>
+                              <small>{{ preset.description }}</small>
+                              <div class="ngs-motion-studio__template-actions">
+                                <button
+                                  ngsButton="outlined"
+                                  type="button"
+                                  (click)="insertSceneTemplateAfterSelection(preset, $event)"
+                                >
+                                  Insert
+                                </button>
+                                <button
+                                  ngsButton="outlined"
+                                  type="button"
+                                  [disabled]="!selectedScene()"
+                                  (click)="applySceneTemplateToSelected(preset, $event)"
+                                >
+                                  Apply
+                                </button>
+                              </div>
+                            </div>
+                          } @else {
+                            <button
+                              type="button"
+                              class="ngs-motion-studio__preset-card"
+                              draggable="true"
+                              [attr.data-motion-preset-category]="preset.category"
+                              (dragstart)="startPresetDrag(preset, $event)"
+                              (dragend)="finishPresetDrag()"
+                              (click)="applyPreset(preset)"
+                            >
+                              <span class="ngs-motion-studio__preset-preview"></span>
+                              <strong>{{ preset.name }}</strong>
+                              <small>{{ preset.description }}</small>
+                            </button>
+                          }
                         }
                       </div>
                     </section>
@@ -436,18 +1104,25 @@
                       <strong>Animations</strong>
                       <small>{{ selectedLayer() ? 'Layer' : 'None' }}</small>
                     </header>
-                    <div class="ngs-motion-studio__animation-presets">
-                      @for (preset of animationPresets; track preset.value) {
-                        <button
-                          ngsButton="outlined"
-                          type="button"
-                          [disabled]="!selectedLayer()"
-                          (click)="applyAnimationPreset(preset.value)"
-                        >
-                          {{ preset.label }}
-                        </button>
-                      }
-                    </div>
+                    @for (group of animationPresetGroups; track group.category) {
+                      <div class="ngs-motion-studio__animation-group">
+                        <div class="ngs-motion-studio__animation-group-header">
+                          <small>{{ group.label }}</small>
+                        </div>
+                        <div class="ngs-motion-studio__animation-presets">
+                          @for (preset of animationPresetsByCategory(group.category); track preset.value) {
+                            <button
+                              ngsButton="outlined"
+                              type="button"
+                              [disabled]="!selectedLayer()"
+                              (click)="applyAnimationPreset(preset.value)"
+                            >
+                              {{ preset.label }}
+                            </button>
+                          }
+                        </div>
+                      </div>
+                    }
                   </section>
 
                   <section class="ngs-motion-studio__preset-category">
@@ -540,6 +1215,19 @@
             <ngs-checkbox [checked]="snapToGrid()" (change)="toggleSnapToGrid($event)">
               Snap
             </ngs-checkbox>
+            <ngs-checkbox
+              [checked]="showOnlySelectedScene()"
+              [disabled]="!selectedScene()"
+              (change)="toggleShowOnlySelectedScene($event)"
+            >
+              Scene only
+            </ngs-checkbox>
+            <ngs-checkbox [checked]="safeAreaVisible()" (change)="toggleSafeAreaVisible($event)">
+              Safe area
+            </ngs-checkbox>
+            <ngs-checkbox [checked]="layerStatusVisible()" (change)="toggleLayerStatusVisible($event)">
+              Status
+            </ngs-checkbox>
             <ngs-form-field subscriptHiddenIfEmpty class="ngs-motion-studio__grid-size">
               <ngs-label>Grid</ngs-label>
               <input
@@ -552,10 +1240,16 @@
               />
             </ngs-form-field>
           </div>
-          <span>
-            {{ draft().layers.length }} layers · {{ selectedLayerCount() }} selected ·
-            {{ validationIssues().length }} issues
-          </span>
+          <button
+            ngsIconButton
+            type="button"
+            class="ngs-motion-studio__preview-summary-trigger"
+            [attr.aria-label]="previewSummaryLabel()"
+            [ngsTooltip]="previewSummaryLabel()"
+            ngsTooltipPosition="below"
+          >
+            <ngs-icon name="fluent:info-24-regular" />
+          </button>
         </section>
             </ngs-split-pane>
 
@@ -578,7 +1272,7 @@
           class="ngs-motion-studio__canvas-shell"
           aria-label="Preview canvas"
           (wheel)="handlePreviewWheel($event)"
-          (pointerdown)="clearCanvasSelection($event)"
+          (pointerdown)="startCanvasBoxSelect($event)"
         >
           <div class="ngs-motion-studio__canvas-board">
             <div
@@ -597,37 +1291,53 @@
                 <div
                   class="ngs-motion-studio__stage-canvas"
                   [class.is-grid-visible]="gridVisible()"
-                  [class.is-preset-drop-target]="draggedPresetId()"
+                  [class.is-preset-drop-target]="draggedPresetId() || draggedAssetId()"
                   [style.background-size]="canvasGridSize()"
-                  (dragover)="handleCanvasPresetDragOver($event)"
+                  (dragover)="handleCanvasLibraryDragOver($event)"
                   (dragleave)="handleCanvasPresetDragLeave($event)"
-                  (drop)="dropPresetOnCanvas($event)"
+                  (drop)="dropLibraryItemOnCanvas($event)"
                 >
                   <ngs-motion-player
-                    [document]="draft()"
+                    [document]="previewDocument()"
                     [currentTime]="currentTime()"
                     [playing]="playing()"
                     [clip]="false"
-                    (currentTimeChange)="seek($event)"
+                    (currentTimeChange)="handlePlayerTimeChange($event)"
                     (ended)="stopPlayback()"
                   />
+                  @if (safeAreaVisible()) {
+                    <div class="ngs-motion-studio__safe-area" aria-hidden="true"></div>
+                  }
 
                 <div
-                  class="ngs-motion-studio__canvas-overlay"
-                  [class.is-resizing]="canvasInteractionType() === 'canvas-resize'"
-                  (pointerdown)="clearCanvasSelection($event)"
-                >
+	                  class="ngs-motion-studio__canvas-overlay"
+	                  [class.is-resizing]="canvasInteractionType() === 'canvas-resize'"
+	                  [class.has-selected-scene]="selectedScene()"
+	                  (pointerdown)="startCanvasBoxSelect($event)"
+	                >
+                  @for (guide of alignmentGuides(); track guide.id) {
+                    <span
+                      class="ngs-motion-studio__alignment-guide"
+                      [class.is-vertical]="guide.orientation === 'vertical'"
+                      [class.is-horizontal]="guide.orientation === 'horizontal'"
+                      [style.left.px]="guide.orientation === 'vertical' ? guide.position : null"
+                      [style.top.px]="guide.orientation === 'horizontal' ? guide.position : null"
+                    ></span>
+                  }
                   @for (entry of canvasLayers(); track entry.layer.id) {
                     <div
                       role="button"
                       tabindex="0"
                       class="ngs-motion-studio__canvas-layer"
+                      [attr.data-motion-layer-id]="entry.layer.id"
                       [class.is-text]="entry.layer.type === 'text'"
                       [class.is-single-line-text]="isSingleLineTextLayer(entry.layer)"
-                      [class.is-unbroken-text]="isUnbrokenTextLayer(entry.layer)"
-                      [class.is-selected]="isLayerSelected(entry.layer)"
-                      [class.is-locked]="entry.layer.locked"
-                      [style.left.%]="layerLeft(entry)"
+	                      [class.is-unbroken-text]="isUnbrokenTextLayer(entry.layer)"
+	                      [class.is-selected]="isLayerSelected(entry.layer)"
+	                      [class.is-locked]="entry.layer.locked"
+	                      [class.is-in-selected-scene]="entry.selectedSceneState === 'in'"
+	                      [class.is-out-selected-scene]="entry.selectedSceneState === 'out'"
+	                      [style.left.%]="layerLeft(entry)"
                       [style.top.%]="layerTop(entry)"
                       [style.width.%]="layerWidth(entry)"
                       [style.height.%]="layerHeight(entry)"
@@ -635,8 +1345,10 @@
                       [style.justify-content]="layerTextJustifyContent(entry.layer)"
                       [style.zIndex]="layerZIndex(entry.layer)"
                       [attr.aria-label]="'Select ' + (entry.layer.name || entry.layer.id)"
+                      [ngsContextMenuTriggerFor]="layerContextMenu"
                       (pointerdown)="startCanvasMove(entry.layer, $event)"
                       (dblclick)="startTextEdit(entry.layer, $event)"
+                      (contextmenu)="selectLayerContext(entry.layer, $event)"
                     >
                       @if (entry.layer.type === 'text') {
                         <span class="ngs-motion-studio__text-selection-box">
@@ -731,7 +1443,27 @@
                           ></span>
                         }
                       }
+                      @if (layerStatusVisible() && (entry.layer.hidden || entry.layer.locked)) {
+                        <span class="ngs-motion-studio__layer-status-badges">
+                          @if (entry.layer.hidden) {
+                            <span>Hidden</span>
+                          }
+                          @if (entry.layer.locked) {
+                            <span>Locked</span>
+                          }
+                        </span>
+                      }
                     </div>
+                  }
+                  @if (canvasSelectionBox(); as selectionBox) {
+                    <div
+                      class="ngs-motion-studio__canvas-selection-box"
+                      [style.left.px]="selectionBox.left"
+                      [style.top.px]="selectionBox.top"
+                      [style.width.px]="selectionBox.width"
+                      [style.height.px]="selectionBox.height"
+                      aria-hidden="true"
+                    ></div>
                   }
                 </div>
               </div>
@@ -752,10 +1484,16 @@
           <div class="ngs-motion-studio__timeline-toolbar">
             <div class="ngs-motion-studio__timeline-title">
               <strong>Timeline</strong>
-              <small>{{ timelineRows().length }} tracks · {{ timelineZoomLabel() }}</small>
+              <small>{{ timelineTrackCount() }} tracks · {{ timelineZoomLabel() }}</small>
             </div>
 
             <div class="ngs-motion-studio__timeline-zoom" aria-label="Timeline zoom">
+              <button ngsButton="outlined" type="button" (click)="setRenderRangeInToPlayhead($event)">
+                In
+              </button>
+              <button ngsButton="outlined" type="button" (click)="setRenderRangeOutToPlayhead($event)">
+                Out
+              </button>
               <span>Zoom</span>
               <ngs-segmented
                 size="sm"
@@ -771,16 +1509,16 @@
             </div>
           </div>
 
-          <div class="ngs-motion-studio__timeline-scroll">
+          <div class="ngs-motion-studio__timeline-scroll" (wheel)="handleTimelineWheel($event)">
             <div
               class="ngs-motion-studio__timeline-grid"
-              [class.is-preset-drop-target]="draggedPresetId()"
+              [class.is-preset-drop-target]="draggedPresetId() || draggedAssetId()"
               [style.width]="timelineGridWidth()"
               (pointerdown)="startTimelineBoxSelect($event)"
               (click)="seekFromTimeline($event)"
-              (dragover)="handleTimelinePresetDragOver($event)"
+              (dragover)="handleTimelineLibraryDragOver($event)"
               (dragleave)="handleTimelinePresetDragLeave($event)"
-              (drop)="dropPresetOnTimeline($event)"
+              (drop)="dropLibraryItemOnTimeline($event)"
             >
               <div class="ngs-motion-studio__track-label ngs-motion-studio__ruler-label">
                 Tracks
@@ -793,6 +1531,11 @@
                 }
                 <span class="ngs-motion-studio__playhead" [style.left.%]="playheadPercent()"></span>
               </div>
+              <span
+                class="ngs-motion-studio__timeline-playhead-line"
+                [style.left]="playheadGridLeftStyle()"
+                aria-hidden="true"
+              ></span>
               @if (keyframeSnapGuide(); as snapGuide) {
                 <span
                   class="ngs-motion-studio__keyframe-snap-guide"
@@ -820,43 +1563,149 @@
                   [style.height.px]="selectionBox.height"
                 ></span>
               }
-
-              <button
-                type="button"
-                class="ngs-motion-studio__track-label ngs-motion-studio__scene-label"
-                (click)="$event.stopPropagation()"
+              <span
+                class="ngs-motion-studio__render-range"
+                [style.left]="renderExportRangeLeftStyle()"
+                [style.width]="renderExportRangeWidthStyle()"
               >
-                <ngs-icon name="fluent:video-clip-24-regular" />
-                <span>Scenes</span>
-              </button>
-              <div class="ngs-motion-studio__track ngs-motion-studio__scene-track">
-                @for (scene of scenes(); track scene.id) {
+                <span class="ngs-motion-studio__render-range-label is-start">
+                  {{ renderExportRange().fromFrame }}
+                </span>
+                <span class="ngs-motion-studio__render-range-label is-end">
+                  {{ renderExportRange().toFrame }}
+                </span>
+                <button
+                  type="button"
+                  class="ngs-motion-studio__render-range-handle is-start"
+                  aria-label="Move export in point"
+                  (pointerdown)="startRenderRangeDrag('start', $event)"
+                ></button>
+                <button
+                  type="button"
+                  class="ngs-motion-studio__render-range-handle is-end"
+                  aria-label="Move export out point"
+                  (pointerdown)="startRenderRangeDrag('end', $event)"
+                ></button>
+              </span>
+
+              @if (scenes().length) {
+                @for (scene of scenes(); track scene.id; let sceneIndex = $index) {
                   <button
                     type="button"
-                    class="ngs-motion-studio__scene-clip"
+                    class="ngs-motion-studio__track-label ngs-motion-studio__scene-label"
                     [class.is-selected]="isSceneSelected(scene)"
-                    [style.left.%]="sceneLeft(scene)"
-                    [style.width.%]="sceneWidth(scene)"
+                    [class.is-current]="isSceneActive(scene)"
                     (click)="selectScene(scene, $event)"
+                    (contextmenu)="selectSceneContext(scene, $event)"
                   >
-                    @if (scene.transitionIn) {
-                      <span
-                        class="ngs-motion-studio__transition-zone is-in"
-                        [style.width.%]="sceneTransitionWidth(scene, 'in')"
-                      ></span>
-                    }
-                    @if (scene.transitionOut) {
-                      <span
-                        class="ngs-motion-studio__transition-zone is-out"
-                        [style.width.%]="sceneTransitionWidth(scene, 'out')"
-                      ></span>
-                    }
-                    <span>{{ scene.name || scene.id }}</span>
+                    <ngs-icon name="fluent:video-clip-24-regular" />
+                    <span>{{ scene.name || scene.id || 'Scene ' + (sceneIndex + 1) }}</span>
                   </button>
+                  <div class="ngs-motion-studio__track ngs-motion-studio__scene-track">
+                    <button
+                      type="button"
+                      class="ngs-motion-studio__scene-clip"
+                      [class.is-selected]="isSceneSelected(scene)"
+                      [class.is-current]="isSceneActive(scene)"
+                      [style.left.%]="sceneLeft(scene)"
+                      [style.width.%]="sceneWidth(scene)"
+                      [ngsContextMenuTriggerFor]="sceneContextMenu"
+                      (pointerdown)="startSceneTimelineMove(scene, $event)"
+                      (click)="selectScene(scene, $event)"
+                      (contextmenu)="selectSceneContext(scene, $event)"
+                    >
+                      <span
+                        class="ngs-motion-studio__clip-handle is-start"
+                        (pointerdown)="startSceneTimelineTrim(scene, 'start', $event)"
+                      ></span>
+                      @if (scene.transitionIn) {
+                        <span
+                          class="ngs-motion-studio__transition-zone ngs-motion-studio__scene-transition-zone is-in"
+                          [class.is-selected]="isSceneTransitionSelected(scene, 'in')"
+                          [style.width.%]="sceneTransitionWidth(scene, 'in')"
+                          [title]="'Scene transition in: ' + sceneTransitionTypeValue(scene, 'in')"
+                          [ngsContextMenuTriggerFor]="transitionContextMenu"
+                          (click)="selectSceneTransition(scene, 'in', $event)"
+                          (contextmenu)="selectSceneTransition(scene, 'in', $event)"
+                        >
+                          In
+                          <span
+                            class="ngs-motion-studio__transition-handle is-in"
+                            (pointerdown)="startSceneTransitionTimelineResize(scene, 'in', $event)"
+                          ></span>
+                        </span>
+                      }
+                      @if (scene.transitionOut) {
+                        <span
+                          class="ngs-motion-studio__transition-zone ngs-motion-studio__scene-transition-zone is-out"
+                          [class.is-selected]="isSceneTransitionSelected(scene, 'out')"
+                          [style.width.%]="sceneTransitionWidth(scene, 'out')"
+                          [title]="'Scene transition out: ' + sceneTransitionTypeValue(scene, 'out')"
+                          [ngsContextMenuTriggerFor]="transitionContextMenu"
+                          (click)="selectSceneTransition(scene, 'out', $event)"
+                          (contextmenu)="selectSceneTransition(scene, 'out', $event)"
+                        >
+                          Out
+                          <span
+                            class="ngs-motion-studio__transition-handle is-out"
+                            (pointerdown)="startSceneTransitionTimelineResize(scene, 'out', $event)"
+                          ></span>
+                        </span>
+                      }
+                      <span>{{ scene.name || scene.id }}</span>
+                      <span
+                        class="ngs-motion-studio__clip-handle is-end"
+                        (pointerdown)="startSceneTimelineTrim(scene, 'end', $event)"
+                      ></span>
+                    </button>
+                  </div>
                 }
-              </div>
+              } @else {
+                <button
+                  type="button"
+                  class="ngs-motion-studio__track-label ngs-motion-studio__scene-label"
+                  (click)="$event.stopPropagation()"
+                >
+                  <ngs-icon name="fluent:video-clip-24-regular" />
+                  <span>Scenes</span>
+                </button>
+                <div class="ngs-motion-studio__track ngs-motion-studio__scene-track"></div>
+              }
 
-              @for (item of timelineRows(); track item.layer.id) {
+              @if (sceneTransitionRows().length) {
+                <button
+                  type="button"
+                  class="ngs-motion-studio__track-label ngs-motion-studio__transition-track-label"
+                  (click)="$event.stopPropagation()"
+                >
+                  <ngs-icon name="fluent:arrow-swap-24-regular" />
+                  <span>Scene transitions</span>
+                </button>
+                <div class="ngs-motion-studio__track ngs-motion-studio__transition-track">
+                  @for (scene of sceneTransitionRows(); track scene.id) {
+                    @for (segment of sceneTransitionTrackSegments(scene); track $index) {
+                      <button
+                        type="button"
+                        class="ngs-motion-studio__transition-track-segment"
+                        [class.is-in]="segment.edge === 'in'"
+                        [class.is-out]="segment.edge === 'out'"
+                        [class.is-selected]="isSceneTransitionSelected(scene, segment.edge)"
+                        [style.left.%]="segment.left"
+                        [style.width.%]="segment.width"
+                        [title]="(scene.name || scene.id) + ' · ' + segment.label"
+                        [ngsContextMenuTriggerFor]="transitionContextMenu"
+                        (pointerdown)="startSceneTransitionTimelineResize(scene, segment.edge, $event)"
+                        (click)="selectSceneTransition(scene, segment.edge, $event)"
+                        (contextmenu)="selectSceneTransition(scene, segment.edge, $event)"
+                      >
+                        {{ scene.name || scene.id }} · {{ segment.edge }}
+                      </button>
+                    }
+                  }
+                </div>
+              }
+
+              @for (item of layerTimelineRows(); track item.layer.id) {
                 <div
                   class="ngs-motion-studio__track-label ngs-motion-studio__layer-track-label"
                   [class.is-selected]="isLayerSelected(item.layer)"
@@ -889,16 +1738,56 @@
                     <ngs-icon [name]="layerIcon(item.layer)" />
                     <span>{{ item.layer.name || item.layer.id }}</span>
                   </button>
+                  <div class="ngs-motion-studio__audio-track-controls">
+                    <button
+                      ngsIconButton
+                      type="button"
+                      [class.is-active]="item.layer.props?.['muted'] === true"
+                      aria-label="Mute audio layer"
+                      (click)="toggleAudioLayerMuted(item.layer, $event)"
+                    >
+                      <ngs-icon name="fluent:dismiss-24-regular" />
+                    </button>
+                    <button
+                      ngsIconButton
+                      type="button"
+                      [class.is-active]="item.layer.props?.['solo'] === true"
+                      aria-label="Solo audio layer"
+                      (click)="toggleAudioLayerSolo(item.layer, $event)"
+                    >
+                      <ngs-icon name="fluent:checkmark-circle-24-regular" />
+                    </button>
+                    <button
+                      ngsIconButton
+                      type="button"
+                      aria-label="Lower audio volume"
+                      (click)="adjustAudioLayerVolume(item.layer, -0.1, $event)"
+                    >
+                      <ngs-icon name="fluent:arrow-down-24-regular" />
+                    </button>
+                    <span>{{ audioVolumeLabel(item.layer) }}</span>
+                    <button
+                      ngsIconButton
+                      type="button"
+                      aria-label="Raise audio volume"
+                      (click)="adjustAudioLayerVolume(item.layer, 0.1, $event)"
+                    >
+                      <ngs-icon name="fluent:arrow-up-24-regular" />
+                    </button>
+                  </div>
                 </div>
                 <div class="ngs-motion-studio__track">
                   <button
                     type="button"
                     class="ngs-motion-studio__clip"
                     [class.is-selected]="isLayerSelected(item.layer)"
+                    [class.is-audio]="item.layer.type === 'audio'"
                     [style.left.%]="clipLeft(item.layer)"
                     [style.width.%]="clipWidth(item.layer)"
+                    [ngsContextMenuTriggerFor]="layerContextMenu"
                     (pointerdown)="startTimelineMove(item.layer, $event)"
                     (click)="$event.stopPropagation()"
+                    (contextmenu)="selectLayerContext(item.layer, $event)"
                   >
                     <span
                       class="ngs-motion-studio__clip-handle is-start"
@@ -907,16 +1796,61 @@
                     @if (item.layer.transitions?.in) {
                       <span
                         class="ngs-motion-studio__transition-zone is-in"
+                        [class.is-selected]="isLayerTransitionSelected(item.layer, 'in')"
                         [style.width.%]="transitionWidth(item.layer, 'in')"
-                      ></span>
+                        [ngsContextMenuTriggerFor]="transitionContextMenu"
+                        (click)="selectLayerTransition(item.layer, 'in', $event)"
+                        (contextmenu)="selectLayerTransition(item.layer, 'in', $event)"
+                      >
+                        In
+                        <span
+                          class="ngs-motion-studio__transition-handle is-in"
+                          (pointerdown)="startLayerTransitionTimelineResize(item.layer, 'in', $event)"
+                        ></span>
+                      </span>
                     }
                     @if (item.layer.transitions?.out) {
                       <span
                         class="ngs-motion-studio__transition-zone is-out"
+                        [class.is-selected]="isLayerTransitionSelected(item.layer, 'out')"
                         [style.width.%]="transitionWidth(item.layer, 'out')"
+                        [ngsContextMenuTriggerFor]="transitionContextMenu"
+                        (click)="selectLayerTransition(item.layer, 'out', $event)"
+                        (contextmenu)="selectLayerTransition(item.layer, 'out', $event)"
+                      >
+                        Out
+                        <span
+                          class="ngs-motion-studio__transition-handle is-out"
+                          (pointerdown)="startLayerTransitionTimelineResize(item.layer, 'out', $event)"
+                        ></span>
+                      </span>
+                    }
+                    @if (item.layer.type === 'audio') {
+                      <span
+                        class="ngs-motion-studio__audio-fade is-in"
+                        [style.width.%]="audioFadeWidth(item.layer, 'in')"
+                      ></span>
+                      <span
+                        class="ngs-motion-studio__audio-fade is-out"
+                        [style.width.%]="audioFadeWidth(item.layer, 'out')"
+                      ></span>
+                      <span
+                        class="ngs-motion-studio__audio-fade-handle is-in"
+                        [style.left.%]="audioFadeWidth(item.layer, 'in')"
+                        (pointerdown)="startAudioFadeTimelineResize(item.layer, 'in', $event)"
+                      ></span>
+                      <span
+                        class="ngs-motion-studio__audio-fade-handle is-out"
+                        [style.right.%]="audioFadeWidth(item.layer, 'out')"
+                        (pointerdown)="startAudioFadeTimelineResize(item.layer, 'out', $event)"
                       ></span>
                     }
                     <span>{{ item.layer.name || item.layer.id }}</span>
+                    @if (item.layer.type === 'audio') {
+                      <small class="ngs-motion-studio__clip-meta">
+                        {{ audioStatusLabel(item.layer) }}
+                      </small>
+                    }
                     <span
                       class="ngs-motion-studio__clip-handle is-end"
                       (pointerdown)="startTimelineTrim(item.layer, 'end', $event)"
@@ -962,6 +1896,38 @@
                     }
                   }
                 </div>
+
+                @if (layerHasTransitions(item.layer)) {
+                  <button
+                    type="button"
+                    class="ngs-motion-studio__track-label ngs-motion-studio__transition-track-label"
+                    [class.is-selected]="isLayerSelected(item.layer)"
+                    (click)="selectLayer(item.layer, $event); $event.stopPropagation()"
+                  >
+                    <ngs-icon name="fluent:arrow-swap-24-regular" />
+                    <span>Transitions</span>
+                  </button>
+                  <div class="ngs-motion-studio__track ngs-motion-studio__transition-track">
+                    @for (segment of layerTransitionTrackSegments(item.layer); track segment.id) {
+                      <button
+                        type="button"
+                        class="ngs-motion-studio__transition-track-segment"
+                        [class.is-in]="segment.edge === 'in'"
+                        [class.is-out]="segment.edge === 'out'"
+                        [class.is-selected]="isLayerTransitionSelected(item.layer, segment.edge)"
+                        [style.left.%]="segment.left"
+                        [style.width.%]="segment.width"
+                        [title]="segment.label"
+                        [ngsContextMenuTriggerFor]="transitionContextMenu"
+                        (pointerdown)="startLayerTransitionTimelineResize(item.layer, segment.edge, $event)"
+                        (click)="selectLayerTransition(item.layer, segment.edge, $event)"
+                        (contextmenu)="selectLayerTransition(item.layer, segment.edge, $event)"
+                      >
+                        {{ segment.edge }}
+                      </button>
+                    }
+                  </div>
+                }
 
                 @for (track of layerAnimationTrackRows(item.layer); track track.id) {
                   <button
@@ -1019,6 +1985,78 @@
                   </div>
                 }
               }
+
+              @if (audioTimelineRows().length) {
+                <button
+                  type="button"
+                  class="ngs-motion-studio__track-label ngs-motion-studio__audio-section-label"
+                  (click)="$event.stopPropagation()"
+                >
+                  <ngs-icon name="fluent:music-note-2-24-regular" />
+                  <span>Audio</span>
+                </button>
+                <div class="ngs-motion-studio__track ngs-motion-studio__audio-section-track"></div>
+              }
+
+              @for (item of audioTimelineRows(); track item.layer.id) {
+                <div
+                  class="ngs-motion-studio__track-label ngs-motion-studio__layer-track-label ngs-motion-studio__audio-track-label"
+                  [class.is-selected]="isLayerSelected(item.layer)"
+                >
+                  <button
+                    type="button"
+                    class="ngs-motion-studio__track-label-main"
+                    (click)="selectLayer(item.layer, $event); $event.stopPropagation()"
+                  >
+                    <ngs-icon [name]="layerIcon(item.layer)" />
+                    <span>{{ item.layer.name || item.layer.id }}</span>
+                  </button>
+                </div>
+                <div class="ngs-motion-studio__track ngs-motion-studio__audio-track">
+                  <button
+                    type="button"
+                    class="ngs-motion-studio__clip is-audio"
+                    [class.is-selected]="isLayerSelected(item.layer)"
+                    [style.left.%]="clipLeft(item.layer)"
+                    [style.width.%]="clipWidth(item.layer)"
+                    [ngsContextMenuTriggerFor]="layerContextMenu"
+                    (pointerdown)="startTimelineMove(item.layer, $event)"
+                    (click)="$event.stopPropagation()"
+                    (contextmenu)="selectLayerContext(item.layer, $event)"
+                  >
+                    <span
+                      class="ngs-motion-studio__clip-handle is-start"
+                      (pointerdown)="startTimelineTrim(item.layer, 'start', $event)"
+                    ></span>
+                    <span
+                      class="ngs-motion-studio__audio-fade is-in"
+                      [style.width.%]="audioFadeWidth(item.layer, 'in')"
+                    ></span>
+                    <span
+                      class="ngs-motion-studio__audio-fade is-out"
+                      [style.width.%]="audioFadeWidth(item.layer, 'out')"
+                    ></span>
+                    <span
+                      class="ngs-motion-studio__audio-fade-handle is-in"
+                      [style.left.%]="audioFadeWidth(item.layer, 'in')"
+                      (pointerdown)="startAudioFadeTimelineResize(item.layer, 'in', $event)"
+                    ></span>
+                    <span
+                      class="ngs-motion-studio__audio-fade-handle is-out"
+                      [style.right.%]="audioFadeWidth(item.layer, 'out')"
+                      (pointerdown)="startAudioFadeTimelineResize(item.layer, 'out', $event)"
+                    ></span>
+                    <span>{{ item.layer.name || item.layer.id }}</span>
+                    <small class="ngs-motion-studio__clip-meta">
+                      {{ audioStatusLabel(item.layer) }}
+                    </small>
+                    <span
+                      class="ngs-motion-studio__clip-handle is-end"
+                      (pointerdown)="startTimelineTrim(item.layer, 'end', $event)"
+                    ></span>
+                  </button>
+                </div>
+              }
             </div>
           </div>
         </section>
@@ -1038,8 +2076,144 @@
       >
         <div class="ngs-motion-studio__inspector" aria-label="Inspector">
         <ngs-scrollbar-area [absolute]="false" class="ngs-motion-studio__scroll">
-          @if (selectedLayer(); as layer) {
+          @if (selectedTransitionDetails(); as transitionDetails) {
             <ngs-accordion multi class="ngs-motion-studio__inspector-accordion">
+              <ngs-expansion-panel [expanded]="true">
+                <ngs-expansion-panel-header>
+                  <ngs-expansion-panel-title>Transition</ngs-expansion-panel-title>
+                  <ngs-expansion-panel-description>
+                    {{ transitionDetails.kind }} · {{ transitionDetails.edge }}
+                  </ngs-expansion-panel-description>
+                </ngs-expansion-panel-header>
+                <section class="ngs-motion-studio__inspector-section">
+                  <header class="ngs-motion-studio__section-header">
+                    <div>
+                      <h3>{{ transitionDetails.title }}</h3>
+                      <small>{{ transitionDetails.transition.type }} · {{ formatTime(transitionDetails.transition.duration) }}</small>
+                    </div>
+                    <ngs-chip-set>
+                      <ngs-chip>{{ transitionDetails.kind }}</ngs-chip>
+                      <ngs-chip>{{ transitionDetails.edge }}</ngs-chip>
+                    </ngs-chip-set>
+                  </header>
+
+                  <div class="ngs-motion-studio__field-grid">
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>Type</ngs-label>
+                      <ngs-select
+                        [value]="selectedTransitionTypeValue(transitionDetails)"
+                        (selectionChange)="setSelectedTransitionType($event)"
+                      >
+                        @for (option of transitionTypes; track option.value) {
+                          <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
+                        }
+                      </ngs-select>
+                    </ngs-form-field>
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>Duration</ngs-label>
+                      <input
+                        ngsInput
+                        type="number"
+                        min="100"
+                        step="100"
+                        [value]="transitionDetails.transition.duration"
+                        (input)="setSelectedTransitionDuration($any($event.target).value)"
+                      />
+                    </ngs-form-field>
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>Easing</ngs-label>
+                      <ngs-select
+                        [value]="transitionDetails.transition.easing || 'easeOutCubic'"
+                        (selectionChange)="setSelectedTransitionEasing($event)"
+                      >
+                        @for (option of easingOptions; track option.value) {
+                          <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
+                        }
+                      </ngs-select>
+                    </ngs-form-field>
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>Direction</ngs-label>
+                      <ngs-select
+                        [value]="selectedTransitionDirectionValue(transitionDetails)"
+                        (selectionChange)="setSelectedTransitionDirection($event)"
+                      >
+                        @for (option of transitionDirections; track option.value) {
+                          <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
+                        }
+                      </ngs-select>
+                    </ngs-form-field>
+                    <ngs-form-field subscriptHiddenIfEmpty>
+                      <ngs-label>Distance</ngs-label>
+                      <input
+                        ngsInput
+                        type="number"
+                        min="0"
+                        step="10"
+                        [value]="selectedTransitionDistanceValue(transitionDetails)"
+                        (input)="setSelectedTransitionDistance($any($event.target).value)"
+                      />
+                    </ngs-form-field>
+                  </div>
+                  <div class="ngs-motion-studio__inspector-actions">
+                    <button ngsButton="outlined" type="button" (click)="previewSelectedTransition($event)">
+                      <ngs-icon name="fluent:play-24-regular" />
+                      Preview
+                    </button>
+                    <button ngsButton="outlined" type="button" (click)="applySelectedTransitionPreset('fade', $event)">
+                      Fade
+                    </button>
+                    <button ngsButton="outlined" type="button" (click)="applySelectedTransitionPreset('slide', $event)">
+                      Slide
+                    </button>
+                    <button ngsButton="outlined" type="button" (click)="applySelectedTransitionPreset('wipe', $event)">
+                      Wipe
+                    </button>
+                    <button ngsButton="outlined" type="button" (click)="removeSelectedTransition($event)">
+                      <ngs-icon name="fluent:delete-24-regular" />
+                      Remove
+                    </button>
+                  </div>
+                </section>
+              </ngs-expansion-panel>
+            </ngs-accordion>
+          } @else if (selectedLayer(); as layer) {
+            <ngs-accordion multi class="ngs-motion-studio__inspector-accordion">
+              @if (selectedLayerCount() > 1) {
+                <ngs-expansion-panel [expanded]="true">
+                  <ngs-expansion-panel-header>
+                    <ngs-expansion-panel-title>Selection</ngs-expansion-panel-title>
+                    <ngs-expansion-panel-description>
+                      {{ selectedLayerCount() }} layers
+                    </ngs-expansion-panel-description>
+                  </ngs-expansion-panel-header>
+                  <section class="ngs-motion-studio__inspector-section">
+                    <header class="ngs-motion-studio__section-header">
+                      <h3>Batch actions</h3>
+                      <ngs-chip-set>
+                        <ngs-chip>{{ selectedLayerCount() }} selected</ngs-chip>
+                      </ngs-chip-set>
+                    </header>
+                    <div class="ngs-motion-studio__inspector-actions">
+                      <button ngsButton="outlined" type="button" (click)="groupSelectedLayers()">
+                        <ngs-icon name="fluent:group-24-regular" />
+                        Group
+                      </button>
+                      <button ngsButton="outlined" type="button" (click)="duplicateSelectedLayers()">
+                        <ngs-icon name="fluent:copy-add-24-regular" />
+                        Duplicate
+                      </button>
+                      <button ngsButton="outlined" type="button" (click)="clearLayerEffects('selection')">
+                        <ngs-icon name="fluent:dismiss-circle-24-regular" />
+                        Clear effects
+                      </button>
+                      <button ngsButton="outlined" type="button" (click)="removeSelectedLayer()">
+                        <ngs-icon name="fluent:delete-24-regular" />
+                        Remove
+                      </button>
+                    </div>
+                  </section>
+                </ngs-expansion-panel>
+              }
               <ngs-expansion-panel [expanded]="true">
                 <ngs-expansion-panel-header>
                   <ngs-expansion-panel-title>Layer</ngs-expansion-panel-title>
@@ -1076,14 +2250,14 @@
                 </ngs-form-field>
               }
 
-              @if (layer.type === 'image') {
+              @if (layer.type === 'image' || layer.type === 'video') {
                 <ngs-form-field subscriptHiddenIfEmpty>
                   <ngs-label>Asset</ngs-label>
                   <ngs-select
                     [value]="layerAssetId(layer)"
                     (selectionChange)="setLayerImageAsset($event)"
                   >
-                    @for (asset of imageAssets(); track asset.id) {
+                    @for (asset of mediaAssets(); track asset.id) {
                       <ngs-option [value]="asset.id">{{ asset.name || asset.id }}</ngs-option>
                     }
                   </ngs-select>
@@ -1096,6 +2270,98 @@
                     (input)="setLayerImageSrc($any($event.target).value)"
                   />
                 </ngs-form-field>
+                <div class="ngs-motion-studio__inspector-actions">
+                  <button ngsButton="outlined" type="button" (click)="clearLayerMediaSource()">
+                    <ngs-icon name="fluent:dismiss-24-regular" />
+                    Remove source
+                  </button>
+                  @if (isMediaPlaceholderLayer(layer)) {
+                    <ngs-chip-set>
+                      <ngs-chip>Placeholder</ngs-chip>
+                    </ngs-chip-set>
+                  }
+                </div>
+              }
+
+              @if (layer.type === 'audio') {
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Asset</ngs-label>
+                  <ngs-select
+                    [value]="layerAssetId(layer)"
+                    (selectionChange)="setLayerAudioAsset($event)"
+                  >
+                    @for (asset of audioAssets(); track asset.id) {
+                      <ngs-option [value]="asset.id">{{ asset.name || asset.id }}</ngs-option>
+                    }
+                  </ngs-select>
+                </ngs-form-field>
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Source</ngs-label>
+                  <input
+                    ngsInput
+                    [value]="layerImageSrcValue(layer)"
+                    (input)="setLayerAudioSrc($any($event.target).value)"
+                  />
+                </ngs-form-field>
+                <div class="ngs-motion-studio__field-grid">
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Offset ms</ngs-label>
+                    <input
+                      ngsInput
+                      type="number"
+                      min="0"
+                      [value]="layer.props?.['offset'] || 0"
+                      (input)="setLayerAudioOffset($any($event.target).valueAsNumber)"
+                    />
+                  </ngs-form-field>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Volume</ngs-label>
+                    <input
+                      ngsInput
+                      type="number"
+                      min="0"
+                      step="0.05"
+                      [value]="layer.props?.['volume'] || 1"
+                      (input)="setLayerAudioVolume($any($event.target).valueAsNumber)"
+                    />
+                  </ngs-form-field>
+                </div>
+                <div class="ngs-motion-studio__field-grid">
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Fade in ms</ngs-label>
+                    <input
+                      ngsInput
+                      type="number"
+                      min="0"
+                      [value]="layer.props?.['fadeIn'] || 0"
+                      (input)="setLayerAudioFadeIn($any($event.target).valueAsNumber)"
+                    />
+                  </ngs-form-field>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Fade out ms</ngs-label>
+                    <input
+                      ngsInput
+                      type="number"
+                      min="0"
+                      [value]="layer.props?.['fadeOut'] || 0"
+                      (input)="setLayerAudioFadeOut($any($event.target).valueAsNumber)"
+                    />
+                  </ngs-form-field>
+                </div>
+                <div class="ngs-motion-studio__inline-options">
+                  <ngs-checkbox
+                    [checked]="layer.props?.['muted'] === true"
+                    (change)="toggleLayerAudioMuted($event)"
+                  >
+                    Muted
+                  </ngs-checkbox>
+                  <ngs-checkbox
+                    [checked]="layer.props?.['solo'] === true"
+                    (change)="toggleLayerAudioSolo($event)"
+                  >
+                    Solo
+                  </ngs-checkbox>
+                </div>
               }
             </section>
 
@@ -1158,6 +2424,80 @@
                   />
                 </ngs-form-field>
               </div>
+              <div class="ngs-motion-studio__align-actions" aria-label="Layer alignment">
+                <button
+                  ngsIconButton
+                  type="button"
+                  aria-label="Align left"
+                  [disabled]="!canAlignSelection()"
+                  (click)="alignSelectedLayers('left')"
+                >
+                  <ngs-icon name="fluent:align-left-24-regular" />
+                </button>
+                <button
+                  ngsIconButton
+                  type="button"
+                  aria-label="Align horizontal center"
+                  [disabled]="!canAlignSelection()"
+                  (click)="alignSelectedLayers('center')"
+                >
+                  <ngs-icon name="fluent:align-center-horizontal-24-regular" />
+                </button>
+                <button
+                  ngsIconButton
+                  type="button"
+                  aria-label="Align right"
+                  [disabled]="!canAlignSelection()"
+                  (click)="alignSelectedLayers('right')"
+                >
+                  <ngs-icon name="fluent:align-right-24-regular" />
+                </button>
+                <button
+                  ngsIconButton
+                  type="button"
+                  aria-label="Align top"
+                  [disabled]="!canAlignSelection()"
+                  (click)="alignSelectedLayers('top')"
+                >
+                  <ngs-icon name="fluent:align-top-24-regular" />
+                </button>
+                <button
+                  ngsIconButton
+                  type="button"
+                  aria-label="Align vertical middle"
+                  [disabled]="!canAlignSelection()"
+                  (click)="alignSelectedLayers('middle')"
+                >
+                  <ngs-icon name="fluent:align-center-vertical-24-regular" />
+                </button>
+                <button
+                  ngsIconButton
+                  type="button"
+                  aria-label="Align bottom"
+                  [disabled]="!canAlignSelection()"
+                  (click)="alignSelectedLayers('bottom')"
+                >
+                  <ngs-icon name="fluent:align-bottom-24-regular" />
+                </button>
+                <button
+                  ngsButton="outlined"
+                  type="button"
+                  size="sm"
+                  [disabled]="!canDistributeSelection()"
+                  (click)="distributeSelectedLayers('horizontal')"
+                >
+                  Distribute X
+                </button>
+                <button
+                  ngsButton="outlined"
+                  type="button"
+                  size="sm"
+                  [disabled]="!canDistributeSelection()"
+                  (click)="distributeSelectedLayers('vertical')"
+                >
+                  Distribute Y
+                </button>
+              </div>
             </section>
 
             <section class="ngs-motion-studio__inspector-section">
@@ -1219,6 +2559,15 @@
                         <strong>{{ edge === 'in' ? 'In' : 'Out' }}</strong>
                         <small>{{ transitionTypeValue(layer, edge) }}</small>
                       </div>
+                      <button
+                        ngsIconButton
+                        type="button"
+                        aria-label="Preview transition"
+                        [disabled]="!hasLayerTransition(layer, edge)"
+                        (click)="previewLayerTransition(edge)"
+                      >
+                        <ngs-icon name="fluent:play-circle-24-regular" />
+                      </button>
                       <button
                         ngsIconButton
                         type="button"
@@ -1609,6 +2958,38 @@
               }
 
               <div class="ngs-motion-studio__preset-builder">
+                <div class="ngs-motion-studio__preset-builder-preview">
+                  <div>
+                    <strong>{{ selectedAnimationPresetMeta().label }}</strong>
+                    <small>
+                      {{ selectedAnimationPresetMeta().category }} ·
+                      {{ animationPresetSettings().duration }}ms ·
+                      {{ animationPresetSettings().easing }}
+                    </small>
+                  </div>
+                  <svg
+                    class="ngs-motion-studio__preset-curve"
+                    viewBox="0 0 120 72"
+                    role="img"
+                    aria-label="Animation preset easing preview"
+                  >
+                    <path
+                      class="ngs-motion-studio__curve-grid"
+                      d="M12 10H108M12 36H108M12 62H108M12 10V62M60 10V62M108 10V62"
+                    />
+                    <path class="ngs-motion-studio__curve-reference" d="M12 62L108 10" />
+                    <path class="ngs-motion-studio__curve-line" [attr.d]="animationPresetCurvePath()" />
+                    @for (dot of animationPresetPreviewDots(); track dot.index) {
+                      <circle
+                        class="ngs-motion-studio__curve-dot"
+                        [class.is-current]="dot.current"
+                        [attr.cx]="dot.x"
+                        [attr.cy]="dot.y"
+                        [attr.r]="dot.radius"
+                      />
+                    }
+                  </svg>
+                </div>
                 <div class="grid grid-cols-2 gap-3">
                   <ngs-form-field subscriptHiddenIfEmpty>
                     <ngs-label>Preset</ngs-label>
@@ -1721,6 +3102,13 @@
                     (click)="clearLayerEffects('selection')"
                   >
                     Clear selection
+                  </button>
+                  <button
+                    ngsButton="outlined"
+                    type="button"
+                    (click)="resetAnimationPresetBuilder()"
+                  >
+                    Reset
                   </button>
                 </div>
               </div>
@@ -2038,7 +3426,7 @@
                     </ngs-segmented>
                   </div>
                 }
-                @if (layer.type === 'image') {
+                @if (layer.type === 'image' || layer.type === 'video') {
                   <ngs-form-field subscriptHiddenIfEmpty>
                     <ngs-label>Object fit</ngs-label>
                     <ngs-select
@@ -2271,6 +3659,15 @@
                       <button
                         ngsIconButton
                         type="button"
+                        aria-label="Preview scene transition"
+                        [disabled]="!hasSceneTransition(scene, edge)"
+                        (click)="previewSceneTransition(edge)"
+                      >
+                        <ngs-icon name="fluent:play-circle-24-regular" />
+                      </button>
+                      <button
+                        ngsIconButton
+                        type="button"
                         aria-label="Remove scene transition"
                         [disabled]="!hasSceneTransition(scene, edge)"
                         (click)="removeSceneTransition(edge)"
@@ -2360,12 +3757,108 @@
 
               <ngs-expansion-panel>
                 <ngs-expansion-panel-header>
+                  <ngs-expansion-panel-title>Scene templates</ngs-expansion-panel-title>
+                  <ngs-expansion-panel-description>
+                    Apply or insert templates
+                  </ngs-expansion-panel-description>
+                </ngs-expansion-panel-header>
+            <section class="ngs-motion-studio__inspector-section">
+              <header class="ngs-motion-studio__section-header">
+                <h3>Scene templates</h3>
+                <ngs-chip-set>
+                  <ngs-chip>{{ sceneTemplatePresets().length }} templates</ngs-chip>
+                </ngs-chip-set>
+              </header>
+              <div class="ngs-motion-studio__scene-template-list">
+                @for (preset of sceneTemplatePresets(); track preset.id) {
+                  <div class="ngs-motion-studio__scene-template-row">
+                    <div>
+                      <strong>{{ preset.name }}</strong>
+                      <small>{{ preset.description }}</small>
+                    </div>
+                    <div class="ngs-motion-studio__template-actions">
+                      <button
+                        ngsButton="outlined"
+                        type="button"
+                        (click)="insertSceneTemplateAfterSelection(preset, $event)"
+                      >
+                        Insert
+                      </button>
+                      <button
+                        ngsButton="outlined"
+                        type="button"
+                        (click)="applySceneTemplateToSelected(preset, $event)"
+                      >
+                        Apply
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            </section>
+              </ngs-expansion-panel>
+
+              <ngs-expansion-panel>
+                <ngs-expansion-panel-header>
+                  <ngs-expansion-panel-title>Validation</ngs-expansion-panel-title>
+                  <ngs-expansion-panel-description>
+                    {{ selectedSceneIssues().length }} issues
+                  </ngs-expansion-panel-description>
+                </ngs-expansion-panel-header>
+            <section class="ngs-motion-studio__inspector-section">
+              <header class="ngs-motion-studio__section-header">
+                <h3>Scene validation</h3>
+                <ngs-chip-set>
+                  <ngs-chip>{{ selectedSceneIssues().length }} issues</ngs-chip>
+                </ngs-chip-set>
+              </header>
+              @if (selectedSceneIssues().length) {
+                <ngs-list class="ngs-motion-studio__scene-issue-list">
+                  @for (issue of selectedSceneIssues(); track issue.id) {
+                    <ngs-list-item lines="1" class="ngs-motion-studio__scene-issue-item">
+                      <ngs-icon
+                        [name]="
+                          issue.severity === 'error'
+                            ? 'fluent:error-circle-24-regular'
+                            : issue.severity === 'warning'
+                              ? 'fluent:warning-24-regular'
+                              : 'fluent:info-24-regular'
+                        "
+                        ngsListItemIcon
+                      />
+                      <span ngsListItemTitle>{{ issue.message }}</span>
+                    </ngs-list-item>
+                  }
+                </ngs-list>
+              } @else {
+                <div class="ngs-motion-studio__scene-validation-empty">
+                  <ngs-icon name="fluent:checkmark-circle-24-regular" />
+                  <span>Scene is ready.</span>
+                </div>
+              }
+            </section>
+              </ngs-expansion-panel>
+
+              <ngs-expansion-panel>
+                <ngs-expansion-panel-header>
                   <ngs-expansion-panel-title>Actions</ngs-expansion-panel-title>
                   <ngs-expansion-panel-description>Scene operations</ngs-expansion-panel-description>
                 </ngs-expansion-panel-header>
             <section class="ngs-motion-studio__inspector-section">
               <h3>Actions</h3>
               <div class="ngs-motion-studio__inspector-actions">
+                <button ngsButton="outlined" type="button" (click)="playSelectedScene($event)">
+                  <ngs-icon name="fluent:play-24-regular" />
+                  Play scene
+                </button>
+                <button ngsButton="outlined" type="button" (click)="duplicateSelectedScene($event)">
+                  <ngs-icon name="fluent:copy-add-24-regular" />
+                  Duplicate scene
+                </button>
+                <button ngsButton="outlined" type="button" (click)="prepareSelectedSceneExport($event)">
+                  <ngs-icon name="fluent:arrow-export-24-regular" />
+                  Export scene
+                </button>
                 <button ngsButton="outlined" type="button" (click)="removeSelectedScene()">
                   <ngs-icon name="fluent:delete-24-regular" />
                   Remove scene
@@ -2421,7 +3914,9 @@
           }
 
           <ngs-form-field subscriptHiddenIfEmpty class="ngs-motion-studio__json-field">
-            <ngs-label>Motion document JSON</ngs-label>
+            <ngs-label>
+              {{ jsonPanelMode() === 'manifest' ? 'Render manifest JSON' : 'Motion document JSON' }}
+            </ngs-label>
             <textarea
               ngsInput
               spellcheck="false"
@@ -2447,7 +3942,7 @@
 
     <ngs-panel-footer class="ngs-motion-studio__json-footer">
       <button ngsButton="outlined" type="button" (click)="jsonDrawer.close()">Close</button>
-      @if (jsonPanelMode() === 'export') {
+      @if (jsonPanelMode() === 'export' || jsonPanelMode() === 'manifest') {
         <button ngsButton="outlined" type="button" (click)="copyJson()">
           <ngs-icon name="fluent:copy-24-regular" />
           Copy JSON
@@ -2462,6 +3957,315 @@
           Import JSON
         </button>
       }
+    </ngs-panel-footer>
+  </ngs-panel>
+</ngs-drawer>
+
+<ngs-drawer #renderExportDrawer="ngsDrawer">
+  <ngs-panel class="ngs-motion-studio__json-drawer">
+    <ngs-panel-header class="ngs-motion-studio__json-header">
+      <div>
+        <strong>Export render</strong>
+        <small>
+          {{ renderExportPlan().frames.length }} frames ·
+          {{ renderExportPlan().options.fps }} fps
+        </small>
+      </div>
+      <button
+        ngsIconButton
+        type="button"
+        aria-label="Close render export"
+        (click)="renderExportDrawer.close()"
+      >
+        <ngs-icon name="fluent:dismiss-24-regular" />
+      </button>
+    </ngs-panel-header>
+
+    <ngs-panel-content class="ngs-motion-studio__json-content">
+      <ngs-scrollbar-area [absolute]="true">
+        <div class="ngs-motion-studio__json-body">
+          <section class="ngs-motion-studio__inspector-section">
+            <header class="ngs-motion-studio__section-header">
+              <h3>Preview</h3>
+              <ngs-chip-set>
+                <ngs-chip>Frame {{ renderExportPreviewFrame() }}</ngs-chip>
+                <ngs-chip>~{{ renderExportEstimate().estimatedSeconds }}s</ngs-chip>
+              </ngs-chip-set>
+            </header>
+            <div class="ngs-motion-studio__render-preview">
+              <ngs-motion-renderer
+                [document]="renderExportRequest().document"
+                [frame]="renderExportPreviewFrame()"
+                [scale]="0.16"
+              />
+            </div>
+          </section>
+
+          <section class="ngs-motion-studio__inspector-section">
+            <header class="ngs-motion-studio__section-header">
+              <h3>Output</h3>
+              <ngs-chip-set>
+                <ngs-chip>{{ renderExportPlan().options.output }}</ngs-chip>
+                <ngs-chip>{{ renderExportPlan().options.format }}</ngs-chip>
+              </ngs-chip-set>
+            </header>
+
+            <div class="ngs-motion-studio__field-grid">
+              <ngs-form-field subscriptHiddenIfEmpty>
+                <ngs-label>Preset</ngs-label>
+                <ngs-select
+                  [value]="selectedRenderExportPreset()"
+                  (selectionChange)="applyRenderExportPreset($event)"
+                >
+                  @for (preset of renderExportPresets; track preset.id) {
+                    <ngs-option [value]="preset.id">{{ preset.label }}</ngs-option>
+                  }
+                </ngs-select>
+              </ngs-form-field>
+
+              <ngs-form-field subscriptHiddenIfEmpty>
+                <ngs-label>Type</ngs-label>
+                <ngs-select
+                  [value]="renderExportOutput()"
+                  (selectionChange)="setRenderExportOutput($event)"
+                >
+                  <ngs-option [value]="'video'">Video</ngs-option>
+                  <ngs-option [value]="'frames'">Frames</ngs-option>
+                </ngs-select>
+              </ngs-form-field>
+
+              <ngs-form-field subscriptHiddenIfEmpty>
+                <ngs-label>FPS</ngs-label>
+                <input
+                  ngsInput
+                  type="number"
+                  min="1"
+                  [value]="renderExportPlan().options.fps"
+                  (input)="setRenderExportFps($any($event.target).valueAsNumber)"
+                />
+              </ngs-form-field>
+
+              <ngs-form-field subscriptHiddenIfEmpty>
+                <ngs-label>Scale</ngs-label>
+                <input
+                  ngsInput
+                  type="number"
+                  min="0.1"
+                  step="0.1"
+                  [value]="renderExportPlan().options.scale"
+                  (input)="setRenderExportScale($any($event.target).valueAsNumber)"
+                />
+              </ngs-form-field>
+            </div>
+
+            <div class="ngs-motion-studio__field-grid">
+              <ngs-form-field subscriptHiddenIfEmpty>
+                <ngs-label>Range</ngs-label>
+                <ngs-select
+                  [value]="renderExportRangeMode()"
+                  (selectionChange)="setRenderExportRangeMode($event)"
+                >
+                  <ngs-option [value]="'document'">Full document</ngs-option>
+                  <ngs-option [value]="'scene'">Selected scene</ngs-option>
+                  <ngs-option [value]="'custom'">Custom</ngs-option>
+                </ngs-select>
+              </ngs-form-field>
+
+              <ngs-form-field subscriptHiddenIfEmpty>
+                <ngs-label>Scene</ngs-label>
+                <ngs-select
+                  [value]="selectedSceneId()"
+                  [disabled]="!scenes().length"
+                  (selectionChange)="setRenderExportScene($event)"
+                >
+                  @for (scene of scenes(); track scene.id) {
+                    <ngs-option [value]="scene.id">{{ scene.name || scene.id }}</ngs-option>
+                  }
+                </ngs-select>
+              </ngs-form-field>
+
+              <ngs-form-field subscriptHiddenIfEmpty>
+                <ngs-label>From frame</ngs-label>
+                <input
+                  ngsInput
+                  type="number"
+                  min="0"
+                  [value]="renderExportPlan().options.fromFrame"
+                  (input)="setRenderExportFromFrame($any($event.target).valueAsNumber)"
+                />
+              </ngs-form-field>
+
+              <ngs-form-field subscriptHiddenIfEmpty>
+                <ngs-label>To frame</ngs-label>
+                <input
+                  ngsInput
+                  type="number"
+                  min="0"
+                  [value]="renderExportPlan().options.toFrame"
+                  (input)="setRenderExportToFrame($any($event.target).valueAsNumber)"
+                />
+              </ngs-form-field>
+
+              <ngs-form-field subscriptHiddenIfEmpty>
+                <ngs-label>Frame step</ngs-label>
+                <input
+                  ngsInput
+                  type="number"
+                  min="1"
+                  [value]="renderExportPlan().options.frameStep"
+                  (input)="setRenderExportFrameStep($any($event.target).valueAsNumber)"
+                />
+              </ngs-form-field>
+            </div>
+
+            <div class="ngs-motion-studio__inline-options">
+              <ngs-checkbox
+                [checked]="renderExportBatchScenes()"
+                [disabled]="!scenes().length"
+                (change)="toggleRenderExportBatchScenes($event)"
+              >
+                Batch scenes
+              </ngs-checkbox>
+            </div>
+
+            <dl class="ngs-motion-studio__render-summary">
+              <div>
+                <dt>Range</dt>
+                <dd>
+                  {{ renderExportRange().fromFrame }}-{{ renderExportRange().toFrame }}
+                </dd>
+              </div>
+              <div>
+                <dt>Audio</dt>
+                <dd>{{ renderExportPlan().audioTracks.length }} tracks</dd>
+              </div>
+              <div>
+                <dt>Fonts</dt>
+                <dd>{{ renderExportPlan().manifest.fonts.length }} faces</dd>
+              </div>
+              <div>
+                <dt>Workload</dt>
+                <dd>
+                  {{ renderExportEstimate().megapixels }} MP/frame ·
+                  {{ renderExportBatchFrameCount() }} frames
+                </dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="ngs-motion-studio__inspector-section">
+            <header class="ngs-motion-studio__section-header">
+              <h3>Job</h3>
+              <ngs-chip-set>
+                <ngs-chip>{{ renderExportJob()?.status ?? 'idle' }}</ngs-chip>
+                <ngs-chip>{{ renderExportProgressValue() }}%</ngs-chip>
+              </ngs-chip-set>
+            </header>
+
+            <ngs-progress-bar [value]="renderExportProgressValue()" />
+
+            @if (renderExportJob()) {
+              <p class="ngs-motion-studio__json-status">
+                {{ renderExportJob()?.message }}
+              </p>
+            } @else {
+              <p class="ngs-motion-studio__json-status">
+                Start export emits a render request for the app host or local runner.
+              </p>
+            }
+          </section>
+
+          @if (renderExportQueue().length || renderExportHistory().length) {
+            <section class="ngs-motion-studio__inspector-section">
+              <header class="ngs-motion-studio__section-header">
+                <h3>Queue</h3>
+                <ngs-chip-set>
+                  <ngs-chip>{{ renderExportQueue().length }} active</ngs-chip>
+                  <ngs-chip>{{ renderExportHistory().length }} done</ngs-chip>
+                </ngs-chip-set>
+              </header>
+
+              @if (renderExportQueue().length) {
+                <ngs-list class="ngs-motion-studio__render-list">
+                  @for (job of renderExportQueue(); track job.requestId) {
+                    <ngs-list-item>
+                      <ngs-icon ngsListItemIcon name="fluent:arrow-sync-24-regular" />
+                      <span ngsListItemTitle>{{ job.status }}</span>
+                      <span ngsListItemLine>{{ job.message }}</span>
+                      <span ngsListItemMeta>{{ job.percent }}%</span>
+                    </ngs-list-item>
+                  }
+                </ngs-list>
+              }
+
+              @if (renderExportHistory().length) {
+                <ngs-list class="ngs-motion-studio__render-list">
+                  @for (job of renderExportHistory(); track job.requestId) {
+                    <ngs-list-item>
+                      <ngs-icon ngsListItemIcon name="fluent:checkmark-circle-24-regular" />
+                      <span ngsListItemTitle>{{ job.status }} · {{ job.output }}</span>
+                      <span ngsListItemLine>{{ job.frames }} frames · {{ job.completedAt }}</span>
+                      <span ngsListItemMeta>{{ job.percent }}%</span>
+                    </ngs-list-item>
+                  }
+                </ngs-list>
+                <button ngsButton="text" type="button" (click)="clearRenderExportHistory()">
+                  Clear history
+                </button>
+              }
+            </section>
+          }
+
+          <section class="ngs-motion-studio__inspector-section">
+            <header class="ngs-motion-studio__section-header">
+              <h3>Validation</h3>
+              <ngs-chip-set>
+                <ngs-chip>{{ renderExportPlan().validation.length }} issues</ngs-chip>
+              </ngs-chip-set>
+            </header>
+
+            @if (renderExportPlan().validation.length) {
+              <div class="ngs-motion-studio__json-issues" role="alert">
+                @for (issue of renderExportPlan().validation; track issue.path + issue.code) {
+                  <span>{{ issue.message }}</span>
+                }
+              </div>
+            } @else {
+              <p class="ngs-motion-studio__json-status">Ready for render.</p>
+            }
+          </section>
+
+          <section class="ngs-motion-studio__inspector-section">
+            <header class="ngs-motion-studio__section-header">
+              <h3>CLI command</h3>
+            </header>
+            <pre class="ngs-motion-studio__render-command">{{ renderExportCommand() }}</pre>
+            @if (renderExportStatus()) {
+              <p class="ngs-motion-studio__json-status">{{ renderExportStatus() }}</p>
+            }
+          </section>
+        </div>
+      </ngs-scrollbar-area>
+    </ngs-panel-content>
+
+    <ngs-panel-footer class="ngs-motion-studio__json-footer">
+      <button ngsButton="outlined" type="button" (click)="renderExportDrawer.close()">Close</button>
+      <button ngsButton="outlined" type="button" (click)="cancelRenderExportJob()">
+        <ngs-icon name="fluent:dismiss-circle-24-regular" />
+        Cancel
+      </button>
+      <button ngsButton="outlined" type="button" (click)="downloadRenderDocument()">
+        <ngs-icon name="fluent:arrow-download-24-regular" />
+        Document
+      </button>
+      <button ngsButton="outlined" type="button" (click)="startRenderExportJob()">
+        <ngs-icon name="fluent:play-24-regular" />
+        Start export
+      </button>
+      <button ngsButton="filled" type="button" (click)="copyRenderExportCommand()">
+        <ngs-icon name="fluent:copy-24-regular" />
+        Copy command
+      </button>
     </ngs-panel-footer>
   </ngs-panel>
 </ngs-drawer>

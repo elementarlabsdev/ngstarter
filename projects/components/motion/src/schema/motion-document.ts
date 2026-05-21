@@ -2,7 +2,7 @@ export type MotionPrimitive = string | number | boolean | null;
 
 export type MotionValue = MotionPrimitive | MotionValue[] | { [key: string]: MotionValue };
 
-export type MotionLayerType = 'text' | 'shape' | 'image' | 'group' | string;
+export type MotionLayerType = 'text' | 'shape' | 'image' | 'video' | 'audio' | 'group' | string;
 
 export type MotionShapeKind = 'rectangle' | 'ellipse';
 
@@ -24,6 +24,15 @@ export interface MotionComposition {
   fps: number;
   duration: number;
   background?: string;
+  backgroundEffect?: MotionBackgroundEffect;
+}
+
+export type MotionBackgroundEffectType = 'aurora' | 'spotlight' | 'mesh' | string;
+
+export interface MotionBackgroundEffect {
+  type: MotionBackgroundEffectType;
+  speed?: number;
+  intensity?: number;
 }
 
 export interface MotionAsset {

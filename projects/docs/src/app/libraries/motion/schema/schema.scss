@@ -1,0 +1,23 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+}
+
+ngs-card-content {
+  @apply flex flex-col gap-4;
+}
+
+ngs-card-content p {
+  @apply m-0 text-sm leading-6 text-neutral-600;
+}
+
+pre {
+  @apply m-0 max-h-96 overflow-auto rounded-md p-4 text-xs leading-5;
+  background: var(--ngs-color-surface-container);
+  color: var(--ngs-color-on-surface);
+}
+
+code {
+  @apply font-mono;
+}

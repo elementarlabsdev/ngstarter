@@ -174,7 +174,7 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "64kb"
+                  "maximumWarning": "80kb"
                 }
               ],
               "outputHashing": "all"

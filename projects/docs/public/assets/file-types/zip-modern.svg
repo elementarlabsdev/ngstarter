@@ -1,0 +1,16 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="zip-title zip-desc">
+  <title id="zip-title">ZIP file icon</title>
+  <desc id="zip-desc">A ZIP file icon with rounded corners and centered file type label.</desc>
+  <defs>
+    <linearGradient id="zip-pageGradient" x1="22" y1="10" x2="106" y2="118" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD15C"/>
+      <stop offset="1" stop-color="#C48612"/>
+    </linearGradient>
+  </defs>
+  <rect x="19" y="10" width="90" height="108" rx="12" fill="url(#zip-pageGradient)"/>
+  <g transform="translate(0 -4)">
+    <path d="M61 34Q61 32 63 32H65Q67 32 67 34V66Q67 68 65 68H63Q61 68 61 66V34ZM53 34Q51 34 51 36V37Q51 39 53 39H61V34H53ZM67 39V44H75Q77 44 77 42V41Q77 39 75 39H67ZM53 44Q51 44 51 46V47Q51 49 53 49H61V44H53ZM67 49V54H75Q77 54 77 52V51Q77 49 75 49H67ZM53 54Q51 54 51 56V57Q51 59 53 59H61V54H53ZM67 59V64H75Q77 64 77 62V61Q77 59 75 59H67Z" fill="white" fill-opacity="0.66"/>
+  </g>
+  <rect x="27" y="82" width="74" height="28" rx="7" fill="white" fill-opacity="0.96"/>
+  <text x="64" y="96" text-anchor="middle" dominant-baseline="middle" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="700" letter-spacing="1" fill="#C48612">ZIP</text>
+</svg>

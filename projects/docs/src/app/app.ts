@@ -933,6 +933,12 @@ export class App implements OnInit {
           name: 'Basic Example',
           link: '/libraries/motion/basic-example',
         },
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Render Export',
+          link: '/libraries/motion/render-export',
+        },
       ],
     },
     {

@@ -1,0 +1,76 @@
+<div class="render-export-example grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]">
+  <ngs-card appearance="outlined">
+    <ngs-card-header>
+      <ngs-card-title>Renderer frame</ngs-card-title>
+      <ngs-chip-set>
+        <ngs-chip>{{ renderTime }} ms</ngs-chip>
+        <ngs-chip>{{ manifest().composition.frameCount }} frames</ngs-chip>
+      </ngs-chip-set>
+    </ngs-card-header>
+
+    <ngs-card-content>
+      <div class="render-export-example__stage">
+        <ngs-motion-renderer [document]="document" [time]="renderTime" [scale]="0.5" />
+      </div>
+    </ngs-card-content>
+  </ngs-card>
+
+  <div class="grid gap-4">
+    <ngs-card appearance="outlined">
+      <ngs-card-header>
+        <ngs-card-title>Render plan</ngs-card-title>
+        <ngs-chip-set>
+          <ngs-chip>{{ renderPlan().frames.length }} samples</ngs-chip>
+          <ngs-chip>{{ renderPlan().options.format }}</ngs-chip>
+        </ngs-chip-set>
+      </ngs-card-header>
+
+      <ngs-card-content>
+        <dl class="render-export-example__meta grid gap-3 sm:grid-cols-3">
+          <div>
+            <dt>Output</dt>
+            <dd>{{ renderPlan().options.output }}</dd>
+          </div>
+          <div>
+            <dt>Size</dt>
+            <dd>{{ manifest().composition.width }}x{{ manifest().composition.height }}</dd>
+          </div>
+          <div>
+            <dt>Validation</dt>
+            <dd>{{ exportIssues().length ? exportIssues().length + ' issues' : 'Ready' }}</dd>
+          </div>
+        </dl>
+      </ngs-card-content>
+    </ngs-card>
+
+    <ngs-card appearance="outlined">
+      <ngs-card-header>
+        <ngs-card-title>Export manifest</ngs-card-title>
+      </ngs-card-header>
+
+      <ngs-card-content>
+        <pre class="render-export-example__code">{{ manifestJson() }}</pre>
+      </ngs-card-content>
+    </ngs-card>
+
+    <ngs-card appearance="outlined">
+      <ngs-card-header>
+        <ngs-card-title>Runner API</ngs-card-title>
+      </ngs-card-header>
+
+      <ngs-card-content>
+        <pre class="render-export-example__code">{{ runnerCode }}</pre>
+      </ngs-card-content>
+    </ngs-card>
+
+    <ngs-card appearance="outlined">
+      <ngs-card-header>
+        <ngs-card-title>Audio layer</ngs-card-title>
+      </ngs-card-header>
+
+      <ngs-card-content>
+        <pre class="render-export-example__code">{{ audioLayerJson }}</pre>
+      </ngs-card-content>
+    </ngs-card>
+  </div>
+</div>

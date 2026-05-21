@@ -1,0 +1,18 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="json-title json-desc">
+  <title id="json-title">JSON file icon</title>
+  <desc id="json-desc">A JSON file icon with rounded corners and centered file type label.</desc>
+  <defs>
+    <linearGradient id="json-pageGradient" x1="22" y1="10" x2="106" y2="118" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#667085"/>
+      <stop offset="1" stop-color="#202939"/>
+    </linearGradient>
+  </defs>
+  <rect x="19" y="10" width="90" height="108" rx="12" fill="url(#json-pageGradient)"/>
+  <g transform="translate(0 -1)">
+    <path d="M51 33C45 33 43 37 43 41V45C43 48 41 50 38 50C41 50 43 52 43 55V59C43 63 45 67 51 67" stroke="white" stroke-opacity="0.42" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M77 33C83 33 85 37 85 41V45C85 48 87 50 90 50C87 50 85 52 85 55V59C85 63 83 67 77 67" stroke="white" stroke-opacity="0.42" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M57 43H70M57 57H73" stroke="white" stroke-opacity="0.44" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <rect x="27" y="82" width="74" height="28" rx="7" fill="white" fill-opacity="0.96"/>
+  <text x="64" y="96" text-anchor="middle" dominant-baseline="middle" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="1" fill="#202939">JSON</text>
+</svg>

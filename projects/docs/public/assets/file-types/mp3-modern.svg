@@ -1,0 +1,16 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mp3-title mp3-desc">
+  <title id="mp3-title">MP3 file icon</title>
+  <desc id="mp3-desc">A MP3 file icon with rounded corners and centered file type label.</desc>
+  <defs>
+    <linearGradient id="mp3-pageGradient" x1="22" y1="10" x2="106" y2="118" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D36BFF"/>
+      <stop offset="1" stop-color="#8A2BC6"/>
+    </linearGradient>
+  </defs>
+  <rect x="19" y="10" width="90" height="108" rx="12" fill="url(#mp3-pageGradient)"/>
+  <g transform="translate(0 0)">
+    <path d="M52 56V35L82 30V49M52 56C52 59.5 49.2 62 45.5 62C41.8 62 39 59.5 39 56C39 52.5 41.8 50 45.5 50C49.2 50 52 52.5 52 56ZM82 49C82 52.5 79.2 55 75.5 55C71.8 55 69 52.5 69 49C69 45.5 71.8 43 75.5 43C79.2 43 82 45.5 82 49Z" stroke="white" stroke-opacity="0.36" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <rect x="27" y="82" width="74" height="28" rx="7" fill="white" fill-opacity="0.96"/>
+  <text x="64" y="96" text-anchor="middle" dominant-baseline="middle" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="700" letter-spacing="1" fill="#8A2BC6">MP3</text>
+</svg>

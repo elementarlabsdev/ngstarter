@@ -4,6 +4,16 @@
   [style.transform]="playerTransform()"
   (wheel)="handleScaleWheel($event)"
 >
+  @if (backgroundEffectType(); as effectType) {
+    <div
+      class="ngs-motion-player__background-effect"
+      [class.ngs-motion-player__background-effect--aurora]="effectType === 'aurora'"
+      [class.ngs-motion-player__background-effect--spotlight]="effectType === 'spotlight'"
+      [class.ngs-motion-player__background-effect--mesh]="effectType === 'mesh'"
+      [ngStyle]="backgroundEffectStyle()"
+      aria-hidden="true"
+    ></div>
+  }
   <div class="ngs-motion-player__stage">
     <ng-template
       #layerTemplate
@@ -11,7 +21,7 @@
       let-parentWidth="parentWidth"
       let-parentHeight="parentHeight"
     >
-      @if (isLayerVisible(layer)) {
+      @if (isLayerVisible(layer) && isLayerRenderable(layer)) {
         <div
           class="ngs-motion-player__layer"
           [class.ngs-motion-player__layer--group]="layer.type === 'group'"
@@ -32,6 +42,23 @@
                   [alt]="layer.name || ''"
                   [ngStyle]="imageStyle(layer)"
                 />
+              } @else if (isLayerMediaPlaceholder(layer)) {
+                <div class="ngs-motion-player__media-placeholder"></div>
+              }
+            }
+            @case ('video') {
+              @if (layerImageSrc(layer)) {
+                <video
+                  class="ngs-motion-player__video"
+                  [src]="layerImageSrc(layer)"
+                  muted
+                  playsinline
+                  preload="metadata"
+                  [attr.data-motion-video-time]="layerMediaTime(layer)"
+                  [ngStyle]="imageStyle(layer)"
+                ></video>
+              } @else if (isLayerMediaPlaceholder(layer)) {
+                <div class="ngs-motion-player__media-placeholder"></div>
               }
             }
             @case ('shape') {
@@ -71,12 +98,12 @@
 
   @if (controls()) {
     <div class="ngs-motion-player__controls">
-      <span>{{ internalTime() | number: '1.0-0' }}ms</span>
+      <span>{{ displayTime() | number: '1.0-0' }}ms</span>
       <input
         type="range"
         min="0"
         [max]="composition().duration"
-        [value]="internalTime()"
+        [value]="displayTime()"
         (input)="seek($any($event.target).valueAsNumber)"
       />
     </div>

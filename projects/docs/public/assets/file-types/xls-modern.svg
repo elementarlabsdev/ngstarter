@@ -1,0 +1,16 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="xls-title xls-desc">
+  <title id="xls-title">XLS file icon</title>
+  <desc id="xls-desc">A XLS file icon with rounded corners and centered file type label.</desc>
+  <defs>
+    <linearGradient id="xls-pageGradient" x1="22" y1="10" x2="106" y2="118" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4AD991"/>
+      <stop offset="1" stop-color="#168F58"/>
+    </linearGradient>
+  </defs>
+  <rect x="19" y="10" width="90" height="108" rx="12" fill="url(#xls-pageGradient)"/>
+  <g transform="translate(0 0)">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M42 33C38.686 33 36 35.686 36 39V61C36 64.314 38.686 67 42 67H86C89.314 67 92 64.314 92 61V39C92 35.686 89.314 33 86 33H42ZM43 37C41.343 37 40 38.343 40 40V49H54V37H43ZM57 37H71V49H57V37ZM74 37V49H88V40C88 38.343 86.657 37 85 37H74ZM40 52V61C40 62.657 41.343 64 43 64H54V52H40ZM57 52H71V64H57V52ZM74 52V64H85C86.657 64 88 62.657 88 61V52H74Z" fill="white" fill-opacity="0.5"/>
+  </g>
+  <rect x="27" y="82" width="74" height="28" rx="7" fill="white" fill-opacity="0.96"/>
+  <text x="64" y="96" text-anchor="middle" dominant-baseline="middle" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="700" letter-spacing="1" fill="#168F58">XLS</text>
+</svg>

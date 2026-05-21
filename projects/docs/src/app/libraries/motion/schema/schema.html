@@ -1,0 +1,94 @@
+<app-page>
+  <h1 appPageTitle>Motion JSON Schema</h1>
+
+  <div appPageContent>
+    <div class="mb-8 max-w-5xl">
+      <p class="docs-seo-intro mb-5 text-base leading-7 text-neutral-600">
+        Motion documents describe a composition as data: canvas settings, assets, scenes, layers,
+        timing, animations, transitions, audio, and export options. The studio edits this shape
+        visually, while the player renders the same JSON without studio-only state.
+      </p>
+
+      <ngs-chip-set>
+        <ngs-chip>composition</ngs-chip>
+        <ngs-chip>assets</ngs-chip>
+        <ngs-chip>scenes</ngs-chip>
+        <ngs-chip>layers</ngs-chip>
+        <ngs-chip>animations</ngs-chip>
+        <ngs-chip>transitions</ngs-chip>
+        <ngs-chip>audio</ngs-chip>
+        <ngs-chip>export</ngs-chip>
+      </ngs-chip-set>
+    </div>
+
+    <div class="grid gap-5 lg:grid-cols-2">
+      <ngs-card>
+        <ngs-card-header>
+          <ngs-card-title>Document</ngs-card-title>
+        </ngs-card-header>
+        <ngs-card-content>
+          <p>
+            The document root keeps render settings and references to reusable objects. Layer ids
+            stay stable so timelines, scenes, selection state, and JSON import/export can point to
+            the same entities.
+          </p>
+          <pre><code>{{ documentExample }}</code></pre>
+        </ngs-card-content>
+      </ngs-card>
+
+      <ngs-card>
+        <ngs-card-header>
+          <ngs-card-title>Layer</ngs-card-title>
+        </ngs-card-header>
+        <ngs-card-content>
+          <p>
+            A layer owns visual content, layout, style, timing, keyframes, and optional enter/exit
+            transitions. Text, shape, image, video, group, and audio layers share the same timeline
+            contract.
+          </p>
+          <pre><code>{{ layerExample }}</code></pre>
+        </ngs-card-content>
+      </ngs-card>
+
+      <ngs-card>
+        <ngs-card-header>
+          <ngs-card-title>Scene</ngs-card-title>
+        </ngs-card-header>
+        <ngs-card-content>
+          <p>
+            Scenes are named time ranges that group the visible layer ids for a section of the
+            video. They make longer videos editable as chapters and allow scene-level transitions.
+          </p>
+          <pre><code>{{ sceneExample }}</code></pre>
+        </ngs-card-content>
+      </ngs-card>
+
+      <ngs-card>
+        <ngs-card-header>
+          <ngs-card-title>Audio</ngs-card-title>
+        </ngs-card-header>
+        <ngs-card-content>
+          <p>
+            Audio is stored as a layer so trimming, fades, mute, solo, and scene export use the same
+            scheduling model as visual elements.
+          </p>
+          <pre><code>{{ audioExample }}</code></pre>
+        </ngs-card-content>
+      </ngs-card>
+
+      <ngs-card class="lg:col-span-2">
+        <ngs-card-header>
+          <ngs-card-title>Export Job</ngs-card-title>
+        </ngs-card-header>
+        <ngs-card-content>
+          <p>
+            Export settings can be saved alongside the document or passed to the render runner. The
+            same JSON can target previews, scene renders, transparent clips, GIFs, and final MP4
+            output.
+          </p>
+          <pre><code>{{ exportExample }}</code></pre>
+        </ngs-card-content>
+      </ngs-card>
+    </div>
+  </div>
+</app-page>

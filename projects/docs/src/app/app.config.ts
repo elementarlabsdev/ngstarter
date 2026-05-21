@@ -24,6 +24,7 @@ import { ColorSchemeStore } from '@ngstarter-ui/components/color-scheme';
 import {
   FORM_RENDERER_FIELD_REGISTRY,
 } from '@ngstarter-ui/components/form-renderer';
+import { provideMotionRenderMockRunner } from '@ngstarter-ui/components/motion';
 import { DocsTitleStrategy } from './seo/docs-title-strategy';
 
 export const appConfig: ApplicationConfig = {
@@ -36,6 +37,10 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideStore(),
     provideNativeDateAdapter(),
+    provideMotionRenderMockRunner({
+      frameDelay: 8,
+      encodeDelay: 260,
+    }),
     provideNgsTheme({
       theme: 'default',
       colorScheme: 'auto',

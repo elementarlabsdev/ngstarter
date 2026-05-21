@@ -1,5 +1,6 @@
 .ngs-motion-player__viewport {
   position: relative;
+  isolation: isolate;
   display: block;
   width: calc(var(--ngs-motion-width) * 1px);
   height: calc(var(--ngs-motion-height) * 1px);
@@ -17,6 +18,7 @@
 .ngs-motion-player__stage {
   position: absolute;
   inset: 0;
+  z-index: 1;
   overflow: visible;
 }
 
@@ -46,7 +48,9 @@
 
 .ngs-motion-player__text,
 .ngs-motion-player__shape,
-.ngs-motion-player__image {
+.ngs-motion-player__image,
+.ngs-motion-player__video,
+.ngs-motion-player__media-placeholder {
   display: block;
   width: 100%;
   height: 100%;
@@ -76,12 +80,111 @@
   border-radius: 9999px;
 }
 
-.ngs-motion-player__image {
+.ngs-motion-player__image,
+.ngs-motion-player__video {
   object-fit: cover;
+}
+
+.ngs-motion-player__media-placeholder {
+  background:
+    linear-gradient(135deg, rgb(37 99 235 / 18%) 25%, transparent 25%) 0 0 / 24px 24px,
+    linear-gradient(315deg, rgb(37 99 235 / 18%) 25%, transparent 25%) 0 0 / 24px 24px,
+    color-mix(in srgb, #eff6ff 86%, white);
+  border: 2px dashed rgb(37 99 235 / 42%);
+  border-radius: inherit;
+}
+
+.ngs-motion-player__background-effect {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: var(--ngs-motion-background-opacity, 1);
+}
+
+.ngs-motion-player__background-effect::before,
+.ngs-motion-player__background-effect::after {
+  position: absolute;
+  inset: -18%;
+  content: '';
+  will-change: background-position, transform;
+}
+
+.ngs-motion-player__background-effect::before {
+  transform:
+    translate3d(
+      var(--ngs-motion-background-x-a, 0),
+      var(--ngs-motion-background-y-a, 0),
+      0
+    )
+    rotate(var(--ngs-motion-background-rotate, 0deg))
+    scale(var(--ngs-motion-background-scale, 1));
+}
+
+.ngs-motion-player__background-effect::after {
+  mix-blend-mode: screen;
+  transform:
+    translate3d(
+      var(--ngs-motion-background-x-b, 0),
+      var(--ngs-motion-background-y-b, 0),
+      0
+    )
+    rotate(calc(var(--ngs-motion-background-rotate, 0deg) * -1))
+    scale(var(--ngs-motion-background-scale, 1));
+}
+
+.ngs-motion-player__background-effect--aurora::before {
+  background:
+    radial-gradient(circle at 18% 24%, rgb(56 189 248 / 54%) 0 12%, transparent 34%),
+    radial-gradient(circle at 78% 34%, rgb(34 197 94 / 40%) 0 14%, transparent 36%),
+    radial-gradient(circle at 46% 82%, rgb(99 102 241 / 32%) 0 12%, transparent 34%);
+  filter: blur(12px);
+}
+
+.ngs-motion-player__background-effect--aurora::after {
+  background:
+    linear-gradient(115deg, transparent 18%, rgb(255 255 255 / 18%) 42%, transparent 66%),
+    radial-gradient(circle at 68% 18%, rgb(14 165 233 / 26%) 0 16%, transparent 40%);
+  background-position: var(--ngs-motion-background-position, 50% 50%);
+  background-size: 180% 180%;
+}
+
+.ngs-motion-player__background-effect--spotlight::before {
+  background:
+    radial-gradient(circle at var(--ngs-motion-background-position, 50% 36%), rgb(255 255 255 / 82%) 0 9%, transparent 34%),
+    radial-gradient(circle at 20% 88%, rgb(59 130 246 / 22%) 0 14%, transparent 38%);
+  filter: blur(8px);
+}
+
+.ngs-motion-player__background-effect--spotlight::after {
+  background:
+    conic-gradient(from 180deg at 50% 28%, transparent 0 16%, rgb(255 255 255 / 22%) 20% 28%, transparent 36% 100%),
+    linear-gradient(90deg, transparent, rgb(99 102 241 / 16%), transparent);
+  background-position: var(--ngs-motion-background-position, 50% 50%);
+  background-size: 220% 180%;
+}
+
+.ngs-motion-player__background-effect--mesh::before {
+  background:
+    radial-gradient(circle at 14% 78%, rgb(251 191 36 / 42%) 0 12%, transparent 34%),
+    radial-gradient(circle at 84% 22%, rgb(59 130 246 / 44%) 0 16%, transparent 38%),
+    radial-gradient(circle at 48% 48%, rgb(20 184 166 / 24%) 0 10%, transparent 32%);
+  filter: blur(10px);
+}
+
+.ngs-motion-player__background-effect--mesh::after {
+  background:
+    linear-gradient(120deg, rgb(255 255 255 / 0%) 0 34%, rgb(255 255 255 / 20%) 48%, rgb(255 255 255 / 0%) 64%),
+    radial-gradient(circle at 70% 74%, rgb(244 114 182 / 22%) 0 12%, transparent 34%);
+  background-position: var(--ngs-motion-background-position, 50% 50%);
+  background-size: 190% 190%;
 }
 
 .ngs-motion-player__controls {
   position: absolute;
+  z-index: 2;
   right: var(--ngs-motion-player-controls-inset, 12px);
   bottom: var(--ngs-motion-player-controls-inset, 12px);
   left: var(--ngs-motion-player-controls-inset, 12px);

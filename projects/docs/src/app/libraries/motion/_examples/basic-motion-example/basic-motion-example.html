@@ -1,3 +1,7 @@
 <div class="motion-example">
-  <ngs-motion-studio [document]="document()" (documentChange)="document.set($event)" />
+  <ngs-motion-studio
+    localStorageKey="ngs-motion-basic-draft"
+    [document]="document()"
+    (documentChange)="document.set($event)"
+  />
 </div>

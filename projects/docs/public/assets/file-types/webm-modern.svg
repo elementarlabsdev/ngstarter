@@ -1,0 +1,17 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="webm-title webm-desc">
+  <title id="webm-title">WEBM file icon</title>
+  <desc id="webm-desc">A WEBM file icon with rounded corners and centered file type label.</desc>
+  <defs>
+    <linearGradient id="webm-pageGradient" x1="22" y1="10" x2="106" y2="118" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#53B5FF"/>
+      <stop offset="1" stop-color="#5034D5"/>
+    </linearGradient>
+  </defs>
+  <rect x="19" y="10" width="90" height="108" rx="12" fill="url(#webm-pageGradient)"/>
+  <g transform="translate(0 -4)">
+    <rect x="39" y="35" width="50" height="30" rx="6" stroke="white" stroke-opacity="0.36" stroke-width="5"/>
+    <path d="M58 43V57L72 50L58 43Z" fill="white" fill-opacity="0.44"/>
+  </g>
+  <rect x="27" y="82" width="74" height="28" rx="7" fill="white" fill-opacity="0.96"/>
+  <text x="64" y="96" text-anchor="middle" dominant-baseline="middle" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="1" fill="#5034D5">WEBM</text>
+</svg>

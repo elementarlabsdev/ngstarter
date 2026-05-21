@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { DecimalPipe, isPlatformBrowser, NgStyle, NgTemplateOutlet } from '@angular/common';
 import {
+  MotionBackgroundEffect,
   MotionDocument,
   MotionLayer,
   MotionLayerSnapshot,
@@ -46,6 +47,7 @@ export class MotionPlayer {
 
   readonly document = input<MotionDocument | null>(createDefaultMotionDocument());
   readonly currentTime = input<number | undefined>(undefined);
+  readonly renderTime = input<number | null>(null);
   readonly playing = input(false);
   readonly loop = input(false);
   readonly controls = input(false);
@@ -66,6 +68,10 @@ export class MotionPlayer {
     () => this.document() ?? createDefaultMotionDocument(),
   );
   protected readonly composition = computed(() => this.activeDocument().composition);
+  protected readonly backgroundEffect = computed(() => this.composition().backgroundEffect ?? null);
+  protected readonly backgroundEffectType = computed(() =>
+    normalizeMotionBackgroundEffectType(this.backgroundEffect()),
+  );
   protected readonly safeScaleBounds = computed(() => readMotionScaleBounds(this.minScale(), this.maxScale()));
   protected readonly sortedLayers = computed(() => sortMotionLayers(this.activeDocument().layers));
   protected readonly stageVariables = computed(() => {
@@ -83,6 +89,14 @@ export class MotionPlayer {
     return clampMotionScale(this.internalScale(), bounds.min, bounds.max);
   });
   protected readonly playerTransform = computed(() => `scale(${this.playerScale()})`);
+  protected readonly displayTime = computed(() => {
+    const renderTime = this.renderTime();
+
+    return renderTime === null ? this.internalTime() : clampMotionTime(renderTime, this.activeDocument());
+  });
+  protected readonly backgroundEffectStyle = computed(() =>
+    createMotionBackgroundEffectStyle(this.backgroundEffect(), this.displayTime()),
+  );
 
   private readonly _syncCurrentTime = effect(() => {
     const controlledTime = this.currentTime();
@@ -102,7 +116,7 @@ export class MotionPlayer {
   });
 
   private readonly _playback = effect((onCleanup) => {
-    if (!this._isBrowser || !this.playing()) {
+    if (!this._isBrowser || !this.playing() || this.renderTime() !== null) {
       return;
     }
 
@@ -156,7 +170,7 @@ export class MotionPlayer {
   }
 
   protected layerSnapshot(layer: MotionLayer): MotionLayerSnapshot {
-    return resolveMotionLayerSnapshot(layer, this.internalTime());
+    return resolveMotionLayerSnapshot(layer, this.displayTime());
   }
 
   protected layerStyle(
@@ -221,6 +235,10 @@ export class MotionPlayer {
     return this.layerSnapshot(layer).visible && this.isLayerVisibleInScene(layer);
   }
 
+  protected isLayerRenderable(layer: MotionLayer): boolean {
+    return layer.type !== 'audio';
+  }
+
   protected layerText(layer: MotionLayer): string {
     return coerceMotionString(this.layerSnapshot(layer).props['text'], '');
   }
@@ -252,8 +270,24 @@ export class MotionPlayer {
     return this.activeDocument().assets?.find((asset) => asset.id === assetId)?.src ?? '';
   }
 
+  protected isLayerMediaPlaceholder(layer: MotionLayer): boolean {
+    if (layer.type !== 'image' && layer.type !== 'video') {
+      return false;
+    }
+
+    const props = this.layerSnapshot(layer).props;
+    const hasAsset = !!coerceMotionString(props['assetId'], '');
+    const hasSource = !!coerceMotionString(props['src'], '');
+
+    return props['placeholder'] === true || (!hasAsset && !hasSource);
+  }
+
   protected layerShapeKind(layer: MotionLayer): string {
     return coerceMotionString(this.layerSnapshot(layer).props['kind'], 'rectangle');
+  }
+
+  protected layerMediaTime(layer: MotionLayer): number {
+    return Math.max(0, (this.displayTime() - layer.start) / 1000);
   }
 
   protected handleScaleWheel(event: WheelEvent): void {
@@ -279,7 +313,7 @@ export class MotionPlayer {
       return EMPTY_SCENE_EFFECT;
     }
 
-    const localTime = this.internalTime() - scene.start;
+    const localTime = this.displayTime() - scene.start;
     const scratchLayout: MotionLayout = { x: 0, y: 0, width: 1, height: 1, scale: 1 };
     const scratchStyle: MotionStyle = {};
     let opacity = 1;
@@ -335,7 +369,7 @@ export class MotionPlayer {
   }
 
   private sceneForLayer(layer: MotionLayer): MotionScene | null {
-    const time = this.internalTime();
+    const time = this.displayTime();
 
     return (
       this.activeDocument().scenes?.find(
@@ -348,7 +382,7 @@ export class MotionPlayer {
   }
 
   private sceneContainsLayer(scene: MotionScene, layerId: string): boolean {
-    return !scene.layerIds?.length || scene.layerIds.includes(layerId);
+    return !scene.layerIds || scene.layerIds.includes(layerId);
   }
 }
 
@@ -374,6 +408,38 @@ const clampMotionScale = (scale: number, minScale: number, maxScale: number): nu
   const nextScale = Number.isFinite(scale) ? scale : 1;
 
   return Math.min(maxScale, Math.max(minScale, Math.round(nextScale * 100) / 100));
+};
+
+const normalizeMotionBackgroundEffectType = (
+  effect: MotionBackgroundEffect | null,
+): 'aurora' | 'spotlight' | 'mesh' | null => {
+  if (effect?.type === 'aurora' || effect?.type === 'spotlight' || effect?.type === 'mesh') {
+    return effect.type;
+  }
+
+  return null;
+};
+
+const createMotionBackgroundEffectStyle = (
+  effect: MotionBackgroundEffect | null,
+  time: number,
+): Record<string, string> => {
+  const speed = Math.max(0.1, Number(effect?.speed ?? 1));
+  const intensity = Math.max(0, Math.min(1, Number(effect?.intensity ?? 1)));
+  const phase = (time / 1000) * speed;
+
+  return {
+    '--ngs-motion-background-opacity': `${0.7 + intensity * 0.3}`,
+    '--ngs-motion-background-x-a': `${Math.sin(phase * 0.72) * 7}%`,
+    '--ngs-motion-background-y-a': `${Math.cos(phase * 0.54) * 6}%`,
+    '--ngs-motion-background-x-b': `${Math.cos(phase * 0.46) * 9}%`,
+    '--ngs-motion-background-y-b': `${Math.sin(phase * 0.62) * 7}%`,
+    '--ngs-motion-background-rotate': `${Math.sin(phase * 0.32) * 12}deg`,
+    '--ngs-motion-background-scale': `${1.05 + Math.sin(phase * 0.38) * 0.035}`,
+    '--ngs-motion-background-position': `${50 + Math.sin(phase * 0.5) * 14}% ${
+      50 + Math.cos(phase * 0.4) * 12
+    }%`,
+  };
 };
 
 interface MotionScaleBounds {

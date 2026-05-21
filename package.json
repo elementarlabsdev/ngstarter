@@ -33,6 +33,7 @@
     "verify:components:package": "node scripts/verify-components-package.mjs",
     "build:prod": "ng build --configuration production",
     "build:docs:prod": "ng build docs --configuration production",
+    "render:motion": "node scripts/render-motion.mjs",
     "build:admin-corporate:prod": "ng build admin-corporate --configuration production",
     "build:admin-modern:prod": "ng build admin-modern --configuration production",
     "build:admin-classic:prod": "ng build admin-classic --configuration production",
