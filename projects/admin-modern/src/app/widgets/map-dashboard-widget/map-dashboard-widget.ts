@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
-import { WidgetShell } from './widget-shell';
-import { DashboardWidgetContent } from './widget-content';
+import { DashboardWidgetContent } from '../shared/widget-content';
+import { WidgetShell } from '../shared/widget-shell';
 
 @Component({
   selector: 'app-map-dashboard-widget',

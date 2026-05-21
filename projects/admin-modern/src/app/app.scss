@@ -87,6 +87,11 @@ ngs-sidebar-nav-item.is-active {
   color: var(--modern-ink);
 }
 
+ngs-sidebar-nav.nav-card > ngs-sidebar-nav-item.is-active,
+ngs-sidebar-nav.nav-card > ngs-sidebar-nav-group > ngs-sidebar-nav-group-toggle.is-active {
+  --ngs-sidebar-nav-item-font-weight: 600;
+}
+
 ngs-sidebar-nav-item.is-active ngs-icon {
   color: var(--modern-ink);
 }

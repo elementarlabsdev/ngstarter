@@ -128,37 +128,37 @@ export class App {
       type: 'map-widget',
       plain: true,
       component: () =>
-        import('./widgets/map-dashboard-widget').then((module) => module.MapDashboardWidget),
+        import('./widgets/map-dashboard-widget/map-dashboard-widget').then((module) => module.MapDashboardWidget),
     },
     {
       type: 'gauge-widget',
       plain: true,
       component: () =>
-        import('./widgets/gauge-dashboard-widget').then((module) => module.GaugeDashboardWidget),
+        import('./widgets/gauge-dashboard-widget/gauge-dashboard-widget').then((module) => module.GaugeDashboardWidget),
     },
     {
       type: 'calendar-widget',
       plain: true,
       component: () =>
-        import('./widgets/calendar-dashboard-widget').then((module) => module.CalendarDashboardWidget),
+        import('./widgets/calendar-dashboard-widget/calendar-dashboard-widget').then((module) => module.CalendarDashboardWidget),
     },
     {
       type: 'line-widget',
       plain: true,
       component: () =>
-        import('./widgets/line-dashboard-widget').then((module) => module.LineDashboardWidget),
+        import('./widgets/line-dashboard-widget/line-dashboard-widget').then((module) => module.LineDashboardWidget),
     },
     {
       type: 'activity-widget',
       plain: true,
       component: () =>
-        import('./widgets/activity-dashboard-widget').then((module) => module.ActivityDashboardWidget),
+        import('./widgets/activity-dashboard-widget/activity-dashboard-widget').then((module) => module.ActivityDashboardWidget),
     },
     {
       type: 'events-widget',
       plain: true,
       component: () =>
-        import('./widgets/events-dashboard-widget').then((module) => module.EventsDashboardWidget),
+        import('./widgets/events-dashboard-widget/events-dashboard-widget').then((module) => module.EventsDashboardWidget),
     },
   ]);
 

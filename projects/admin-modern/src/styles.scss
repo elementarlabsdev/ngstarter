@@ -22,6 +22,7 @@
   --modern-sidebar-bg: #ebebea;
   --modern-blue-muted: #8c989f;
   --ngs-layout-bg: var(--modern-bg);
+  --ngs-button-height: --spacing(13);
   color: var(--modern-ink);
 
   ngs-sidenav-container.modern-shell,
@@ -62,11 +63,15 @@
     --ngs-sidebar-nav-item-height: --spacing(13);
     --ngs-sidebar-nav-item-radius: 999px;
     --ngs-sidebar-nav-item-font-weight: 400;
-    --ngs-sidebar-nav-item-active-bg: #eeeeed;
+    --ngs-sidebar-nav-item-active-bg: transparent;
     --ngs-sidebar-nav-item-active-color: var(--modern-ink);
-    --ngs-sidebar-nav-item-hover-bg: #eeeeed;
+    --ngs-sidebar-nav-item-active-icon-color: var(--modern-ink);
+    --ngs-sidebar-nav-item-hover-bg: transparent;
+    --ngs-sidebar-nav-item-hover-color: var(--modern-ink);
+    --ngs-sidebar-nav-item-hover-icon-color: var(--modern-ink);
     --ngs-sidebar-nav-group-toggle-active-bg: transparent;
     --ngs-sidebar-nav-group-toggle-active-color: var(--modern-ink);
+    --ngs-sidebar-nav-group-toggle-hover-icon-color: var(--modern-ink);
     --ngs-sidebar-nav-group-toggle-active-icon-color: var(--modern-ink);
     --ngs-sidebar-nav-group-arrow-color: #90908c;
     --ngs-sidebar-nav-nested-item-height: --spacing(11);

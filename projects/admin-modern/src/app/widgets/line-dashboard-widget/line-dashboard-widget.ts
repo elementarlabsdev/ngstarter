@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MchartLine } from '@ngstarter-ui/components/micro-chart';
-import { DashboardWidgetContent } from './widget-content';
-import { WidgetShell } from './widget-shell';
+import { DashboardWidgetContent } from '../shared/widget-content';
+import { WidgetShell } from '../shared/widget-shell';
 
 @Component({
   selector: 'app-line-dashboard-widget',

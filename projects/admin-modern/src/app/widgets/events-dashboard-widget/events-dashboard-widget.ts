@@ -15,8 +15,8 @@ import {
   Table,
 } from '@ngstarter-ui/components/table';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
-import { DashboardWidgetContent, EventRow } from './widget-content';
-import { WidgetShell } from './widget-shell';
+import { DashboardWidgetContent, EventRow } from '../shared/widget-content';
+import { WidgetShell } from '../shared/widget-shell';
 
 @Component({
   selector: 'app-events-dashboard-widget',
