@@ -88,7 +88,14 @@
               New Organization
             </button>
 
-            <button type="button" ngsButton fullWidth reverse class="user-card">
+            <button
+              type="button"
+              ngsButton
+              fullWidth
+              reverse
+              class="user-card"
+              [ngsMenuTriggerFor]="profileMenu"
+            >
               <ngs-avatar label="CH" />
               <span class="user-copy">
                 <span class="user-name">Cameron Harper</span>
@@ -96,6 +103,36 @@
               </span>
               <ngs-icon name="fluent:chevron-down-24-regular" class="size-5" />
             </button>
+
+            <ngs-menu #profileMenu="ngsMenu" xPosition="after" yPosition="above" classList="modern-user-menu">
+              <ngs-menu-header class="user-menu-header">
+                <ngs-avatar label="CH" />
+                <span class="user-menu-copy">
+                  <span class="user-menu-name">Cameron Harper</span>
+                  <span class="user-menu-email">harper&#64;gmail.com</span>
+                  <span class="user-menu-meta">Store operations lead</span>
+                </span>
+              </ngs-menu-header>
+              <ngs-menu-divider />
+              <ngs-menu-heading>Workspace</ngs-menu-heading>
+              <button ngs-menu-item type="button">
+                <ngs-icon name="fluent:building-shop-24-regular" />
+                Downtown Market
+              </button>
+              <button ngs-menu-item type="button">
+                <ngs-icon name="fluent:shield-checkmark-24-regular" />
+                Admin access
+              </button>
+              <ngs-menu-divider />
+              <button ngs-menu-item type="button">
+                <ngs-icon name="fluent:settings-24-regular" />
+                Account settings
+              </button>
+              <button ngs-menu-item type="button">
+                <ngs-icon name="fluent:sign-out-24-regular" />
+                Sign out
+              </button>
+            </ngs-menu>
           </ngs-sidebar-footer>
         </ngs-sidebar>
       </ngs-sidenav>

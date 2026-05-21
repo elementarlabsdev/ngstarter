@@ -7,6 +7,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
 import { Layout, LayoutContent } from '@ngstarter-ui/components/layout';
 import { Logo, LogoText } from '@ngstarter-ui/components/logo';
+import { Menu, MenuDivider, MenuHeading, MenuHeader, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
 import { Panel, PanelContent, PanelHeader } from '@ngstarter-ui/components/panel';
 import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import {
@@ -56,6 +57,12 @@ interface NavSection {
     LayoutContent,
     Logo,
     LogoText,
+    Menu,
+    MenuDivider,
+    MenuHeading,
+    MenuHeader,
+    MenuItem,
+    MenuTrigger,
     Panel,
     PanelContent,
     PanelHeader,

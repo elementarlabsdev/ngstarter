@@ -6,12 +6,53 @@
   --ngs-dropdown-item-active-bg: #eeeeed;
   --ngs-dropdown-item-selected-bg: #eeeeed;
   --ngs-dropdown-item-selected-color: #171719;
+  --ngs-dropdown-item-radius: 999px;
   --ngs-menu-item-hover-background: #eeeeed;
   --ngs-menu-item-active-background: #eeeeed;
+  --ngs-menu-item-radius: 999px;
   --ngs-option-hover-background: #eeeeed;
   --ngs-option-active-background: #eeeeed;
   --ngs-option-selected-background: #eeeeed;
   --ngs-option-selected-color: #171719;
+  --ngs-option-radius: 999px;
+}
+
+.modern-user-menu {
+  --ngs-menu-min-width: 270px;
+  --ngs-menu-max-width: 270px;
+  --ngs-menu-padding: --spacing(2);
+  --ngs-menu-item-height: --spacing(11);
+
+  .user-menu-header {
+    display: flex;
+    align-items: center;
+    gap: --spacing(3);
+    padding: --spacing(2) --spacing(2) --spacing(3);
+  }
+
+  .user-menu-copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: --spacing(0.5);
+    line-height: 1.2;
+  }
+
+  .user-menu-name {
+    color: #171719;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .user-menu-email,
+  .user-menu-meta {
+    color: #8b8b88;
+    font-size: 0.82rem;
+  }
+
+  ngs-icon {
+    color: #72726f;
+  }
 }
 
 .modern-root {
