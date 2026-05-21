@@ -222,8 +222,7 @@ ngs-form-field.search-field.ngs-form-field-focused {
   gap: --spacing(3);
   width: 100%;
   min-height: --spacing(13);
-  padding-inline: --spacing(2);
-  border-radius: --spacing(4);
+  padding-inline-start: --spacing(2);
   color: var(--modern-ink);
 }
 
