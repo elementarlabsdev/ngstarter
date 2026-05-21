@@ -99,44 +99,44 @@ export class App {
 
   protected readonly dashboardSections = signal<readonly NavSection[]>([
     {
-      label: 'My Templates',
+      label: 'Saved Studios',
       items: [
-        { key: 'hourly', label: 'Store Analytics - Hourly', icon: 'fluent:clock-24-regular' },
+        { key: 'daily-room', label: 'Content Room - Daily', icon: 'fluent:clock-24-regular' },
         {
           key: 'realtime',
-          label: 'Store Analytics - Realtime',
+          label: 'Launch Room - Live',
           icon: 'fluent:chart-multiple-24-regular',
         },
       ],
     },
     {
-      label: 'General Templates',
+      label: 'Creative Workflows',
       items: [
-        { key: 'security-events', label: 'Security Events & Feed', icon: 'fluent:apps-list-24-regular' },
-        { key: 'marketing', label: 'Marketing Insights', icon: 'fluent:apps-list-24-regular' },
-        { key: 'visits', label: 'Analysis of visits', icon: 'fluent:apps-list-24-regular' },
-        { key: 'purchases', label: 'Purchases of goods', icon: 'fluent:apps-list-24-regular' },
-        { key: 'security-dept', label: 'Security department', icon: 'fluent:apps-list-24-regular' },
+        { key: 'prompt-lab', label: 'Prompt experiment board', icon: 'fluent:beaker-24-regular' },
+        { key: 'voice-checks', label: 'Brand voice checks', icon: 'fluent:text-grammar-wand-24-regular' },
+        { key: 'asset-gen', label: 'Asset generation queue', icon: 'fluent:image-multiple-24-regular' },
+        { key: 'editorial', label: 'Editorial review desk', icon: 'fluent:document-edit-24-regular' },
+        { key: 'publishing', label: 'Publishing calendar', icon: 'fluent:calendar-ltr-24-regular' },
       ],
     },
   ]);
 
   protected readonly organizationItems = signal<readonly NavItem[]>([
-    { key: 'teams', label: 'Team structure', icon: 'fluent:people-team-24-regular' },
-    { key: 'locations', label: 'Store locations', icon: 'fluent:location-24-regular' },
-    { key: 'access', label: 'Access roles', icon: 'fluent:key-24-regular' },
+    { key: 'brand-kits', label: 'Brand kits', icon: 'fluent:paint-brush-24-regular' },
+    { key: 'channels', label: 'Channel presets', icon: 'fluent:megaphone-24-regular' },
+    { key: 'model-access', label: 'Model access', icon: 'fluent:key-24-regular' },
   ]);
 
   protected readonly footerItems = signal<readonly NavItem[]>([
-    { key: 'insights', label: 'Insights', icon: 'fluent:lightbulb-24-regular' },
+    { key: 'briefing', label: 'Creative briefing', icon: 'fluent:lightbulb-24-regular' },
   ]);
 
   protected readonly dashboardGridConfigs = signal<GridItemConfig[]>([
     {
-      type: 'map-widget',
+      type: 'audience-widget',
       plain: true,
       component: () =>
-        import('./widgets/map-dashboard-widget/map-dashboard-widget').then((module) => module.MapDashboardWidget),
+        import('./widgets/audience-dashboard-widget/audience-dashboard-widget').then((module) => module.AudienceDashboardWidget),
     },
     {
       type: 'gauge-widget',
@@ -157,10 +157,10 @@ export class App {
         import('./widgets/line-dashboard-widget/line-dashboard-widget').then((module) => module.LineDashboardWidget),
     },
     {
-      type: 'activity-widget',
+      type: 'model-spend-widget',
       plain: true,
       component: () =>
-        import('./widgets/activity-dashboard-widget/activity-dashboard-widget').then((module) => module.ActivityDashboardWidget),
+        import('./widgets/model-spend-widget/model-spend-widget').then((module) => module.ModelSpendWidget),
     },
     {
       type: 'events-widget',
@@ -172,13 +172,13 @@ export class App {
 
   protected readonly dashboardGridItems = signal<GridItem[]>([
     {
-      id: 'zone-map',
-      type: 'map-widget',
+      id: 'audience-pulse',
+      type: 'audience-widget',
       columns: 4,
       height: '405px',
       content: {
-        title: 'Live floor signals',
-        subtitle: 'Zone activity from the last ten minutes',
+        title: 'Audience pulse',
+        subtitle: 'Predicted response quality by channel',
       },
     },
     {
@@ -187,9 +187,9 @@ export class App {
       columns: 4,
       height: '405px',
       content: {
-        title: 'Assisted sale rate',
-        subtitle: 'Compared with yesterday',
-        value: 73,
+        title: 'Brand alignment',
+        subtitle: 'Generated drafts matching voice rules',
+        value: 88,
       },
     },
     {
@@ -198,8 +198,8 @@ export class App {
       columns: 4,
       height: '405px',
       content: {
-        title: 'Retail moment calendar',
-        subtitle: 'June, 2026',
+        title: 'Publishing calendar',
+        subtitle: 'October, 2026',
       },
     },
     {
@@ -212,18 +212,18 @@ export class App {
           columns: 12,
           height: '352px',
           content: {
-            title: 'Checkout lane pressure',
-            subtitle: 'Average wait forecast by hour',
+            title: 'Generation latency',
+            subtitle: 'Average render time across model lanes',
           },
         },
         {
-          id: 'traffic-moments',
-          type: 'activity-widget',
+          id: 'model-spend',
+          type: 'model-spend-widget',
           columns: 12,
           height: '282px',
           content: {
-            title: 'Store movement windows',
-            subtitle: 'Customer movement highlights',
+            title: 'Model spend mix',
+            subtitle: 'Token budget by model family',
           },
         },
       ],
@@ -234,8 +234,8 @@ export class App {
       columns: 6,
       height: '658px',
       content: {
-        title: 'Detection history',
-        subtitle: 'Latest automated detections',
+        title: 'Content audit log',
+        subtitle: 'Latest review and publishing events',
       },
     },
   ]);

@@ -1,0 +1,33 @@
+<app-widget-shell [title]="content().title" [subtitle]="content().subtitle">
+  <div class="model-spend-widget">
+    <div class="spend-summary">
+      <div>
+        <span>Monthly usage</span>
+        <strong>71%</strong>
+      </div>
+
+      <ngs-chip appearance="filled" class="budget-chip">
+        <ngs-icon name="fluent:wallet-24-regular" />
+        On pace
+      </ngs-chip>
+    </div>
+
+    <div class="spend-lanes">
+      @for (lane of lanes; track lane.label) {
+        <div
+          class="spend-lane"
+          [class.lane-text]="lane.className === 'lane-text'"
+          [class.lane-image]="lane.className === 'lane-image'"
+          [class.lane-review]="lane.className === 'lane-review'"
+        >
+          <div class="lane-copy">
+            <strong>{{ lane.label }}</strong>
+            <span>{{ lane.detail }}</span>
+          </div>
+          <span class="lane-value">{{ lane.value }}%</span>
+          <ngs-progress-bar [value]="lane.value" />
+        </div>
+      }
+    </div>
+  </div>
+</app-widget-shell>

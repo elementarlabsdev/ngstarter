@@ -47,11 +47,11 @@ export class EventsDashboardWidget {
 
   protected readonly eventColumns = ['type', 'id', 'date', 'time', 'action'];
   protected readonly events: readonly EventRow[] = [
-    { type: 'Team assist', id: '1729408', date: '12/11/23', time: '12:00 am', tone: 'warm' },
-    { type: 'Shelf pickup', id: '1729416', date: '12/11/23', time: '12:00 am', tone: 'green' },
-    { type: 'Dwell spike', id: '1729442', date: '12/11/23', time: '12:00 am', tone: 'blue' },
-    { type: 'Shelf pickup', id: '1729488', date: '12/11/23', time: '12:00 am', tone: 'green' },
-    { type: 'Team assist', id: '1729501', date: '12/11/23', time: '12:00 am', tone: 'warm' },
-    { type: 'Shelf pickup', id: '1729539', date: '12/11/23', time: '12:00 am', tone: 'green' },
+    { type: 'Voice approved', id: 'CS-2408', date: '10/08/26', time: '09:10 am', tone: 'green' },
+    { type: 'Image flagged', id: 'CS-2416', date: '10/08/26', time: '09:25 am', tone: 'warm' },
+    { type: 'Copy revised', id: 'CS-2442', date: '10/08/26', time: '09:40 am', tone: 'blue' },
+    { type: 'Post scheduled', id: 'CS-2488', date: '10/08/26', time: '10:05 am', tone: 'green' },
+    { type: 'Legal check', id: 'CS-2501', date: '10/08/26', time: '10:18 am', tone: 'warm' },
+    { type: 'Asset exported', id: 'CS-2539', date: '10/08/26', time: '10:40 am', tone: 'green' },
   ];
 }

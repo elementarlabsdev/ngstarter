@@ -192,14 +192,7 @@
     --ngs-chip-font-weight: 500;
   }
 
-  .map-marker {
-    --ngs-button-height: --spacing(10);
-    --ngs-button-radius: 999px;
-    --ngs-button-bg: #d8efbd;
-    --ngs-button-color: #416c2b;
-  }
-
-  .sale-chip {
+  .aligned-chip {
     --ngs-chip-bg: color-mix(in srgb, #efb7b9 30%, white);
     --ngs-chip-color: #92565a;
   }
@@ -223,12 +216,6 @@
       --ngs-button-bg: #e9e9e8;
       --ngs-button-color: #b9b9b6;
     }
-  }
-
-  ngs-mchart-line.wait-chart {
-    --ngs-mchart-line-line-bg: #8cc96e;
-    --ngs-mchart-line-area-gradient-start-color: color-mix(in srgb, #8cc96e 62%, transparent);
-    --ngs-mchart-line-area-gradient-end-color: color-mix(in srgb, white 94%, transparent);
   }
 
   table.events-table {
@@ -257,21 +244,6 @@
   .tone-blue {
     --ngs-chip-bg: #dfe7ff;
     --ngs-chip-color: #536aa5;
-  }
-
-  .activity-token {
-    --ngs-button-radius: --spacing(5);
-    --ngs-button-height: --spacing(25);
-  }
-
-  .token-green {
-    --ngs-button-bg: #dff4ca;
-    --ngs-button-color: #416c2b;
-  }
-
-  .token-blue {
-    --ngs-button-bg: #dfe7ff;
-    --ngs-button-color: #5267a6;
   }
 
   .view-all-button {

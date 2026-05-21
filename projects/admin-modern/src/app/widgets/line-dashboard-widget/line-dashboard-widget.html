@@ -1,24 +1,5 @@
 <app-widget-shell [title]="content().title" [subtitle]="content().subtitle">
   <div class="line-widget">
-    <div class="chart-shell">
-      <ngs-mchart-line
-        [data]="lineData"
-        curve="curveBumpX"
-        responsive
-        showArea
-        fillAreaGradient
-        class="wait-chart"
-      />
-      <div class="chart-callout">18 min</div>
-    </div>
-
-    <div class="axis-row">
-      <span>12:00 am</span>
-      <span>01:00 pm</span>
-      <span>02:00 pm</span>
-      <strong>03:00 pm</strong>
-      <span>04:00 pm</span>
-      <span>05:00 pm</span>
-    </div>
+    <app-generation-latency-chart [labels]="labels" [values]="latencyData" />
   </div>
 </app-widget-shell>

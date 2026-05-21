@@ -1,7 +1,7 @@
 <app-widget-shell [title]="content().title" [subtitle]="content().subtitle" [events]="true">
   <table ngs-table [dataSource]="events" class="events-table">
     <ng-container ngsColumnDef="type">
-      <th ngs-header-cell *ngsHeaderCellDef>Signal Type</th>
+      <th ngs-header-cell *ngsHeaderCellDef>Review Type</th>
       <td ngs-cell *ngsCellDef="let row">
         <ngs-chip appearance="filled" class="event-chip" [class.tone-warm]="row.tone === 'warm'" [class.tone-green]="row.tone === 'green'" [class.tone-blue]="row.tone === 'blue'">
           {{ row.type }}
@@ -10,7 +10,7 @@
     </ng-container>
 
     <ng-container ngsColumnDef="id">
-      <th ngs-header-cell *ngsHeaderCellDef>Signal ID</th>
+      <th ngs-header-cell *ngsHeaderCellDef>Asset ID</th>
       <td ngs-cell *ngsCellDef="let row">{{ row.id }}</td>
     </ng-container>
 
@@ -27,7 +27,7 @@
     <ng-container ngsColumnDef="action">
       <th ngs-header-cell *ngsHeaderCellDef></th>
       <td ngs-cell *ngsCellDef="let row">
-        <button ngsIconButton type="button" aria-label="Play signal" ngsTooltip="Play signal">
+        <button ngsIconButton type="button" aria-label="Open review" ngsTooltip="Open review">
           <ngs-icon name="fluent:play-24-filled" />
         </button>
       </td>
@@ -36,5 +36,5 @@
     <tr ngs-header-row *ngsHeaderRowDef="eventColumns"></tr>
     <tr ngs-row *ngsRowDef="let row; columns: eventColumns"></tr>
   </table>
-  <button ngsButton type="button" class="view-all-button">View All</button>
+  <button ngsButton type="button" class="view-all-button">Open Queue</button>
 </app-widget-shell>
