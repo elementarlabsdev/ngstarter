@@ -982,6 +982,7 @@ function buildLlms(registry, full = false) {
     '- Import theme styles once in the app stylesheet.',
     '- Use `provideNgsTheme` from `@ngstarter-ui/components/core` for runtime theming.',
     '- Prefer `--ngs-*` CSS custom properties when customizing styles.',
+    '- Put global component style overrides and global CSS variable overrides only in `styles.scss`; for component-scoped overrides, define them in that component\'s stylesheet so they apply only there.',
     '- Do not import from private `src` paths in application code.',
     '',
     '## Setup',
