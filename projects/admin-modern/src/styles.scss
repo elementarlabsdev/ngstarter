@@ -1,1 +1,211 @@
 @use '../../components/styles/themes/default';
+@reference 'tailwindcss';
+
+.modern-root {
+  --modern-bg: #f1f1f0;
+  --modern-ink: #171719;
+  --modern-muted: #8f8f8c;
+  --modern-soft: #eeeeed;
+  --modern-sidebar-bg: #ebebea;
+  --modern-blue-muted: #8c989f;
+  --ngs-layout-bg: var(--modern-bg);
+  color: var(--modern-ink);
+
+  ngs-sidenav-container.modern-shell,
+  ngs-panel.workspace-panel,
+  ngs-panel-header.workspace-header {
+    background: var(--modern-bg);
+  }
+
+  ngs-sidenav.modern-sidenav {
+    --ngs-sidenav-bg: transparent;
+    --ngs-sidenav-border-width: 0;
+
+    overflow: visible;
+    border-radius: 0 --spacing(9) --spacing(9) 0;
+    background: var(--modern-sidebar-bg);
+  }
+
+  ngs-sidebar.modern-sidebar {
+    border: 0;
+    border-radius: 0 --spacing(9) --spacing(9) 0;
+    background: var(--modern-sidebar-bg);
+  }
+
+  ngs-sidenav-content {
+    position: relative;
+    z-index: 20;
+  }
+
+  ngs-sidebar-nav.modern-nav {
+    --ngs-sidebar-nav-gap: --spacing(3);
+    --ngs-sidebar-nav-item-height: --spacing(13);
+    --ngs-sidebar-nav-item-radius: 999px;
+    --ngs-sidebar-nav-item-font-weight: 400;
+    --ngs-sidebar-nav-item-active-bg: var(--modern-soft);
+    --ngs-sidebar-nav-item-active-color: var(--modern-ink);
+    --ngs-sidebar-nav-item-hover-bg: #f4f4f3;
+    --ngs-sidebar-nav-group-toggle-active-bg: var(--modern-soft);
+    --ngs-sidebar-nav-group-toggle-active-color: var(--modern-ink);
+    --ngs-sidebar-nav-group-toggle-active-icon-color: var(--modern-ink);
+    --ngs-sidebar-nav-group-arrow-color: #90908c;
+    --ngs-sidebar-nav-nested-item-height: --spacing(11);
+    --ngs-sidebar-nav-nested-item-color: #686865;
+    --ngs-sidebar-nav-nested-item-active-color: var(--modern-ink);
+  }
+
+  ngs-sidebar-nav.footer-nav {
+    --ngs-sidebar-nav-item-active-bg: white;
+  }
+
+  ngs-form-field.search-field {
+    --ngs-field-bg: white;
+    --ngs-field-border-color: transparent;
+    --ngs-field-border-width: 0;
+    --ngs-field-radius: 999px;
+    --ngs-field-height: --spacing(14);
+  }
+
+  button[ngsButton],
+  button[ngsIconButton],
+  a[ngsButton],
+  a[ngsIconButton] {
+    --ngs-button-radius: 999px;
+  }
+
+  button[ngsIconButton],
+  a[ngsIconButton] {
+    --ngs-button-height: --spacing(14);
+    --ngs-button-bg: rgba(255, 255, 255, 0.72);
+    --ngs-button-color: #5f5f5c;
+  }
+
+  button[ngsIconButton].floating-collapse {
+    --ngs-button-height: --spacing(14);
+    --ngs-button-bg: white;
+    --ngs-button-color: #5b5b58;
+    --ngs-button-hover-bg: white;
+  }
+
+  button[ngsButton].new-board-button {
+    --ngs-button-radius: 999px;
+    --ngs-button-color: var(--modern-ink);
+    --ngs-button-bg: color-mix(in srgb, #e8f6df 72%, white);
+    --ngs-button-height: --spacing(17);
+  }
+
+  .analytics-grid {
+    --ngs-grid-gap: --spacing(2);
+  }
+
+  ngs-card.dashboard-widget {
+    --ngs-card-bg: #f8f8f7;
+    --ngs-card-border-width: 0;
+    --ngs-card-radius: --spacing(8);
+    --ngs-card-padding: --spacing(4);
+  }
+
+  ngs-card-title {
+    color: var(--modern-ink);
+  }
+
+  app-modern-dashboard-widget {
+    button[ngsIconButton] {
+      --ngs-button-radius: 999px;
+      --ngs-button-height: --spacing(11);
+      --ngs-button-bg: rgba(255, 255, 255, 0.62);
+      --ngs-button-color: #5f5f5c;
+    }
+  }
+
+  ngs-chip.legend-chip,
+  ngs-chip.event-chip {
+    --ngs-chip-font-weight: 500;
+  }
+
+  .map-marker {
+    --ngs-button-height: --spacing(10);
+    --ngs-button-radius: 999px;
+    --ngs-button-bg: #d8efbd;
+    --ngs-button-color: #416c2b;
+  }
+
+  .sale-chip {
+    --ngs-chip-bg: color-mix(in srgb, #efb7b9 30%, white);
+    --ngs-chip-color: #92565a;
+  }
+
+  .avg-chip {
+    --ngs-chip-bg: #eeeeec;
+    --ngs-chip-color: #858581;
+  }
+
+  .calendar-day {
+    --ngs-button-radius: --spacing(4);
+    --ngs-button-bg: white;
+    --ngs-button-color: #333331;
+
+    &.is-active {
+      --ngs-button-bg: #d8efbd;
+      --ngs-button-color: #416c2b;
+    }
+
+    &.is-muted {
+      --ngs-button-bg: #e9e9e8;
+      --ngs-button-color: #b9b9b6;
+    }
+  }
+
+  ngs-mchart-line.wait-chart {
+    --ngs-mchart-line-line-bg: #8cc96e;
+    --ngs-mchart-line-area-gradient-start-color: color-mix(in srgb, #8cc96e 62%, transparent);
+    --ngs-mchart-line-area-gradient-end-color: color-mix(in srgb, white 94%, transparent);
+  }
+
+  table.events-table {
+    --ngs-table-row-height: --spacing(15);
+    --ngs-table-header-row-height: --spacing(12);
+    --ngs-table-cell-padding: 0 --spacing(3);
+  }
+
+  .events-table {
+    button[ngsIconButton] {
+      --ngs-button-height: --spacing(8);
+      --ngs-button-width: --spacing(8);
+    }
+  }
+
+  .tone-warm {
+    --ngs-chip-bg: #f8e8cd;
+    --ngs-chip-color: #9a6b2f;
+  }
+
+  .tone-green {
+    --ngs-chip-bg: #dff4ca;
+    --ngs-chip-color: #4c7b31;
+  }
+
+  .tone-blue {
+    --ngs-chip-bg: #dfe7ff;
+    --ngs-chip-color: #536aa5;
+  }
+
+  .activity-token {
+    --ngs-button-radius: --spacing(5);
+    --ngs-button-height: --spacing(25);
+  }
+
+  .token-green {
+    --ngs-button-bg: #dff4ca;
+    --ngs-button-color: #416c2b;
+  }
+
+  .token-blue {
+    --ngs-button-bg: #dfe7ff;
+    --ngs-button-color: #5267a6;
+  }
+
+  .view-all-button {
+    --ngs-button-height: --spacing(12);
+  }
+}

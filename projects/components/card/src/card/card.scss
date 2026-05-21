@@ -3,7 +3,7 @@
 :host {
   --ngs-card-bg: var(--ngs-color-surface-container);
   --ngs-card-color: var(--ngs-color-on-surface);
-  --ngs-card-border-radius: var(--ngs-radius-xl);
+  --ngs-card-radius: var(--ngs-radius-xl);
   --ngs-card-border-color: var(--ngs-color-subtle);
   --ngs-card-shadow: none;
   --ngs-card-padding: --spacing(4);
@@ -12,7 +12,7 @@
   flex-direction: column;
   box-sizing: border-box;
   position: relative;
-  border-radius: var(--ngs-card-border-radius);
+  border-radius: var(--ngs-card-radius);
   background: var(--ngs-card-bg);
   color: var(--ngs-card-color);
   box-shadow: var(--ngs-card-shadow);

@@ -14,6 +14,7 @@ AI registry: https://ngstarter.com/ai/component-registry.json
 - Use `provideNgsTheme` from `@ngstarter-ui/components/core` for runtime theming.
 - Prefer `--ngs-*` CSS custom properties when customizing styles.
 - Put global component style overrides and global CSS variable overrides only in `styles.scss`; for component-scoped overrides, define them in that component's stylesheet so they apply only there.
+- When implementing a screenshot or mockup that shows a chart, build the chart with ECharts in a dedicated standalone component instead of drawing it inline or with ad hoc markup.
 - Do not import from private `src` paths in application code.
 
 ## Setup

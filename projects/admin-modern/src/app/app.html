@@ -1,0 +1,165 @@
+<ngs-layout root class="modern-root">
+  <ngs-layout-content>
+    <ngs-sidenav-container autosize autoFocus="false" hasBackdrop="false" class="modern-shell">
+      <ngs-sidenav
+        [opened]="true"
+        mode="side"
+        [fixedWidth]="292"
+        [adaptive]="false"
+        class="modern-sidenav"
+      >
+        <div class="absolute right-0 top-0 z-5">
+          <button
+            ngsIconButton
+            type="button"
+            aria-label="Collapse navigation"
+            class="floating-collapse"
+            ngsTooltip="Collapse navigation"
+          >
+            <ngs-icon name="fluent:chevron-left-24-regular" />
+          </button>
+        </div>
+
+        <ngs-sidebar class="modern-sidebar" aria-label="Modern analytics navigation">
+          <ngs-sidebar-header class="sidebar-header">
+            <div class="brand-lockup">
+              <div class="brand-mark">F</div>
+              <p class="brand-name">alc-AI</p>
+            </div>
+          </ngs-sidebar-header>
+
+          <ngs-sidebar-body>
+            <ngs-scrollbar-area>
+              <ngs-sidebar-nav activeKey="realtime" class="modern-nav nav-card">
+                <ngs-sidebar-nav-group>
+                  <ngs-sidebar-nav-group-toggle>
+                    <ngs-icon name="fluent:home-24-regular" ngsSidebarNavItemIcon />
+                    Dashboard
+                    <ngs-icon name="fluent:chevron-down-24-regular" ngsSidebarNavGroupToggleIcon />
+                  </ngs-sidebar-nav-group-toggle>
+
+                  <ngs-sidebar-nav-group-menu>
+                    @for (section of dashboardSections(); track section.label ?? section.items[0].key) {
+                    @if (section.label) {
+                      <ngs-sidebar-nav-heading>{{ section.label }}</ngs-sidebar-nav-heading>
+                    }
+
+                    @for (item of section.items; track item.key) {
+                      <ngs-sidebar-nav-item [key]="item.key">
+                        <ngs-icon [name]="item.icon" ngsSidebarNavItemIcon />
+                        {{ item.label }}
+                        @if (item.badge) {
+                          <span ngsSidebarNavItemBadge>{{ item.badge }}</span>
+                        }
+                      </ngs-sidebar-nav-item>
+                    }
+                    }
+                  </ngs-sidebar-nav-group-menu>
+                </ngs-sidebar-nav-group>
+              </ngs-sidebar-nav>
+
+              <ngs-sidebar-nav class="modern-nav footer-nav">
+                <ngs-sidebar-nav-group>
+                  <ngs-sidebar-nav-group-toggle>
+                    <ngs-icon name="fluent:building-24-regular" ngsSidebarNavItemIcon />
+                    Organization
+                    <ngs-icon name="fluent:chevron-down-24-regular" ngsSidebarNavGroupToggleIcon />
+                  </ngs-sidebar-nav-group-toggle>
+
+                  <ngs-sidebar-nav-group-menu>
+                    @for (item of organizationItems(); track item.key) {
+                    <ngs-sidebar-nav-item [key]="item.key">
+                      <ngs-icon [name]="item.icon" ngsSidebarNavItemIcon />
+                      {{ item.label }}
+                    </ngs-sidebar-nav-item>
+                    }
+                  </ngs-sidebar-nav-group-menu>
+                </ngs-sidebar-nav-group>
+
+                @for (item of footerItems(); track item.key) {
+                <ngs-sidebar-nav-item [key]="item.key">
+                  <ngs-icon [name]="item.icon" ngsSidebarNavItemIcon />
+                  {{ item.label }}
+                </ngs-sidebar-nav-item>
+                }
+              </ngs-sidebar-nav>
+            </ngs-scrollbar-area>
+          </ngs-sidebar-body>
+
+          <ngs-sidebar-footer>
+            <button ngsButton="filled" type="button" fullWidth>
+              <ngs-icon name="fluent:add-24-regular" />
+              New Template
+            </button>
+
+            <button type="button" ngsButton fullWidth reverse class="user-card">
+              <ngs-avatar label="CH" />
+              <span class="user-copy">
+                <span class="user-name">Cameron Harper</span>
+                <span class="user-email">harper&#64;gmail.com</span>
+              </span>
+              <ngs-icon name="fluent:chevron-down-24-regular" class="size-4" />
+            </button>
+          </ngs-sidebar-footer>
+        </ngs-sidebar>
+      </ngs-sidenav>
+
+      <ngs-sidenav-content>
+        <ngs-panel class="workspace-panel">
+          <ngs-panel-header autoHeight class="workspace-header">
+            <ngs-toolbar>
+              <ngs-toolbar-title>
+                <div class="page-title">
+                  <div>
+                    <h1>Store Analytics - Realtime</h1>
+                  </div>
+                </div>
+              </ngs-toolbar-title>
+
+              <ngs-toolbar-spacer />
+
+              <ngs-toolbar-item>
+                <ngs-form-field subscriptHiddenIfEmpty class="search-field">
+                  <ngs-label>Search</ngs-label>
+                  <ngs-icon name="fluent:search-24-regular" ngsIconPrefix />
+                  <input
+                    ngsInput
+                    type="search"
+                    placeholder="Search"
+                    [value]="search()"
+                    (input)="search.set($any($event.target).value)"
+                  />
+                  <button
+                    ngsIconButton
+                    ngsIconButtonSuffix
+                    type="button"
+                    aria-label="Filter search"
+                    ngsTooltip="Filter search"
+                  >
+                    <ngs-icon name="fluent:filter-24-regular" />
+                  </button>
+                </ngs-form-field>
+              </ngs-toolbar-item>
+            </ngs-toolbar>
+
+<!--            <ngs-toolbar class="filter-toolbar">-->
+<!--            </ngs-toolbar>-->
+          </ngs-panel-header>
+
+          <ngs-panel-content>
+            <ngs-scrollbar-area [absolute]="true" class="workspace-scrollbar">
+              <div class="dashboard-stage">
+                <ngs-grid
+                  [configs]="dashboardGridConfigs()"
+                  [items]="dashboardGridItems()"
+                  plain
+                  class="analytics-grid"
+                />
+              </div>
+            </ngs-scrollbar-area>
+          </ngs-panel-content>
+        </ngs-panel>
+      </ngs-sidenav-content>
+    </ngs-sidenav-container>
+  </ngs-layout-content>
+</ngs-layout>
