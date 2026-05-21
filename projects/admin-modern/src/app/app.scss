@@ -13,7 +13,7 @@ ngs-sidenav-container.modern-shell {
 
 ngs-sidebar.modern-sidebar {
   height: 100%;
-  padding: --spacing(6) --spacing(3) --spacing(4);
+  padding: --spacing(6) --spacing(4) --spacing(4);
 }
 
 ngs-sidebar-header.sidebar-header {
@@ -110,6 +110,11 @@ ngs-panel-header.workspace-header {
   display: block;
   padding: --spacing(6) --spacing(12) --spacing(6) --spacing(12);
   border: 0;
+  transition: padding-left 200ms ease;
+}
+
+ngs-panel.workspace-panel.is-sidenav-closed ngs-panel-header.workspace-header {
+  padding-left: --spacing(24);
 }
 
 ngs-panel-content {

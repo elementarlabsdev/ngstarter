@@ -87,6 +87,8 @@
   }
 
   ngs-sidebar.modern-sidebar {
+    --ngs-sidebar-width: var(--ngs-sidenav-width);
+
     border: 0;
     border-radius: 0 --spacing(9) --spacing(9) 0;
     background: rgba(255, 255, 255, 0.15);

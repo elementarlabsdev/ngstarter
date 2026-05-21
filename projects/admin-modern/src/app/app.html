@@ -108,10 +108,9 @@
 
             <ngs-menu #profileMenu="ngsMenu" xPosition="after" yPosition="above" classList="modern-user-menu">
               <ngs-menu-header class="user-menu-header">
-                <ngs-avatar label="CH" />
+                <ngs-avatar label="CH" class="size-11" />
                 <span class="user-menu-copy">
                   <span class="user-menu-name">Cameron Harper</span>
-                  <span class="user-menu-email">harper&#64;gmail.com</span>
                   <span class="user-menu-meta">Store operations lead</span>
                 </span>
               </ngs-menu-header>
@@ -140,7 +139,7 @@
       </ngs-sidenav>
 
       <ngs-sidenav-content>
-        <ngs-panel class="workspace-panel">
+        <ngs-panel class="workspace-panel" [class.is-sidenav-closed]="!sidenavOpened()">
           <ngs-panel-header autoHeight class="workspace-header">
             <ngs-toolbar>
               <ngs-toolbar-title>
