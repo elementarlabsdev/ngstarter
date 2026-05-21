@@ -95,6 +95,7 @@ interface NavSection {
 })
 export class App {
   protected readonly search = signal('');
+  protected readonly sidenavOpened = signal(true);
 
   protected readonly dashboardSections = signal<readonly NavSection[]>([
     {

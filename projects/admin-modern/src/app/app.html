@@ -4,16 +4,18 @@
       <button
         ngsIconButton
         type="button"
-        aria-label="Collapse navigation"
+        [attr.aria-label]="sidenavOpened() ? 'Hide navigation' : 'Show navigation'"
+        [class.is-closed]="!sidenavOpened()"
         class="floating-collapse"
-        ngsTooltip="Collapse navigation"
+        [ngsTooltip]="sidenavOpened() ? 'Hide navigation' : 'Show navigation'"
+        (click)="sidenavOpened.update((opened) => !opened)"
       >
-        <ngs-icon name="fluent:chevron-left-24-regular" />
+        <ngs-icon [name]="sidenavOpened() ? 'fluent:chevron-left-24-regular' : 'fluent:chevron-right-24-regular'" />
       </button>
     </div>
     <ngs-sidenav-container autosize autoFocus="false" hasBackdrop="false" class="modern-shell">
       <ngs-sidenav
-        [opened]="true"
+        [opened]="sidenavOpened()"
         mode="side"
         [fixedWidth]="292"
         [adaptive]="false"
