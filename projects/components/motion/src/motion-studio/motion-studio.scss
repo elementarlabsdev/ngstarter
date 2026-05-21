@@ -1734,15 +1734,10 @@
   opacity: 1;
 }
 
-.ngs-motion-studio__layer-list {
-  --ngs-list-padding: --spacing(3);
-  --ngs-list-gap: --spacing(1);
-  --ngs-list-item-padding: --spacing(1) --spacing(2);
-  --ngs-list-item-min-height: 42px;
-  --ngs-list-item-title-font-size: var(--ngs-font-size-sm);
-  --ngs-list-item-line-font-size: var(--ngs-font-size-xs);
-  --ngs-list-item-gap: --spacing(2);
-  --ngs-list-item-radius: var(--ngs-radius-md);
+.ngs-motion-studio__layer-tree {
+  display: grid;
+  gap: --spacing(1);
+  padding: --spacing(3);
 }
 
 .ngs-motion-studio__layer-search {
@@ -1751,6 +1746,59 @@
 
 .ngs-motion-studio__layer-search ngs-form-field {
   width: 100%;
+}
+
+.ngs-motion-studio__layer-tree .ngs-motion-studio__layer-tree-node {
+  position: relative;
+  display: grid;
+  grid-template-columns: 22px 18px minmax(0, 1fr);
+  gap: --spacing(2);
+  align-items: center;
+  min-height: 42px;
+  padding-top: --spacing(1);
+  padding-right: --spacing(2);
+  padding-bottom: --spacing(1);
+  border-radius: var(--ngs-radius-md);
+}
+
+.ngs-motion-studio__layer-tree-toggle[ngsIconButton] {
+  width: 22px;
+  min-width: 22px;
+  height: 22px;
+}
+
+.ngs-motion-studio__layer-tree-toggle[ngsIconButton][disabled] {
+  opacity: 0;
+}
+
+.ngs-motion-studio__layer-tree-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.ngs-motion-studio__layer-tree-main {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.ngs-motion-studio__layer-tree-title,
+.ngs-motion-studio__layer-tree-line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ngs-motion-studio__layer-tree-title {
+  color: var(--ngs-color-text);
+  font-size: var(--ngs-font-size-sm);
+  font-weight: 500;
+}
+
+.ngs-motion-studio__layer-tree-line {
+  color: var(--ngs-motion-studio-muted);
+  font-size: var(--ngs-font-size-xs);
+  line-height: 1.2;
 }
 
 .ngs-motion-studio__layer-item {
@@ -1794,7 +1842,7 @@
 }
 
 .ngs-motion-studio__layer-item.is-nested-in-scene {
-  margin-left: --spacing(4);
+  margin-left: 0;
 }
 
 .ngs-motion-studio__layer-item[draggable='true'] {
@@ -1879,6 +1927,7 @@
   transition: opacity 120ms ease;
 }
 
+.ngs-motion-studio__layer-tree-node:hover .ngs-motion-studio__layer-actions,
 .ngs-motion-studio__layer-item:hover .ngs-motion-studio__layer-actions {
   pointer-events: auto;
   opacity: 1;

@@ -11,7 +11,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { NgStyle } from '@angular/common';
+import { NgStyle, NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
 import { Checkbox, CheckboxChange } from '@ngstarter-ui/components/checkbox';
@@ -64,6 +64,13 @@ import {
   TabPanelNav,
 } from '@ngstarter-ui/components/tab-panel';
 import { Toolbar, ToolbarSpacer, ToolbarTitle } from '@ngstarter-ui/components/toolbar';
+import {
+  Tree,
+  TreeNode,
+  TreeNodeDef,
+  TreeNodePadding,
+  TreeNodeToggle,
+} from '@ngstarter-ui/components/tree';
 import {
   UploadAllowedTypes,
   UploadArea,
@@ -152,6 +159,7 @@ import { MOTION_RENDER_RUNNER, MotionRenderRunnerHandle } from '../render/motion
     MotionPlayer,
     MotionRenderer,
     NgStyle,
+    NgTemplateOutlet,
     Panel,
     PanelContent,
     PanelFooter,
@@ -178,6 +186,11 @@ import { MOTION_RENDER_RUNNER, MotionRenderRunnerHandle } from '../render/motion
     Toolbar,
     ToolbarSpacer,
     ToolbarTitle,
+    Tree,
+    TreeNode,
+    TreeNodeDef,
+    TreeNodePadding,
+    TreeNodeToggle,
     UploadAllowedTypes,
     UploadArea,
     UploadAreaDropStateDirective,
@@ -221,7 +234,6 @@ export class MotionStudio {
   protected readonly timelineSelectionBox = signal<TimelineSelectionBox | null>(null);
   protected readonly selectedSceneId = signal<string | null>(null);
   protected readonly selectedTransition = signal<SelectedTransitionRef | null>(null);
-  protected readonly collapsedSceneIds = signal<string[]>([]);
   protected readonly layerSearch = signal('');
   protected readonly expandedAnimationLayerIds = signal<string[]>([]);
   protected readonly presets = signal<MotionPreset[]>(MOTION_PRESETS);
@@ -504,88 +516,91 @@ export class MotionStudio {
       this.audioTimelineRows().length
     );
   });
-  protected readonly layerPanelRows = computed<LayerPanelRow[]>(() => {
-    const rows = this.timelineRows();
+  protected readonly layerPanelTreeNodes = computed<LayerPanelTreeNode[]>(() => {
     const scenes = this.scenes();
+    const query = this.layerSearch().trim().toLowerCase();
+    const layers = this.draft().layers;
 
     if (!scenes.length) {
-      const query = this.layerSearch().trim().toLowerCase();
-
-      return rows
-        .filter((item) => !query || layerMatchesQuery(item.layer, query))
-        .map((item) => ({
-          kind: 'layer',
-          id: `layer:${item.layer.id}`,
-          item,
-          scene: null,
-        }));
+      return this.buildLayerPanelTreeNodes(layers, {
+        idPrefix: 'layer',
+        query,
+        scene: null,
+      });
     }
 
     const assignedLayerIds = new Set<string>();
-    const panelRows: LayerPanelRow[] = [];
-    const query = this.layerSearch().trim().toLowerCase();
+    const nodes: LayerPanelTreeNode[] = [];
 
     for (const scene of scenes) {
-      const allSceneRows = rows.filter((item) => sceneContainsLayer(scene, item.layer.id));
-      const sceneRows = query
-        ? allSceneRows.filter((item) => layerMatchesQuery(item.layer, query))
-        : allSceneRows;
+      const allSceneRows = this.timelineRows().filter((item) =>
+        sceneContainsLayer(scene, item.layer.id),
+      );
+      const children = this.buildLayerPanelTreeNodes(layers, {
+        filterLayer: (layer) => sceneContainsLayer(scene, layer.id),
+        idPrefix: `scene:${scene.id}`,
+        query,
+        scene,
+      });
       const sceneMatches = query ? sceneMatchesQuery(scene, query) : true;
-
-      if (sceneMatches || sceneRows.length) {
-        panelRows.push({
-          kind: 'group',
-          id: `scene:${scene.id}`,
-          label: scene.name || scene.id,
-          description: `${allSceneRows.length} layers · ${this.formatTime(scene.start)} - ${this.formatTime(scene.start + scene.duration)}`,
-          icon: this.isLayerSceneCollapsed(scene) ? 'fluent:chevron-right-24-regular' : 'fluent:chevron-down-24-regular',
-          scene,
-        });
-      }
 
       for (const item of allSceneRows) {
         assignedLayerIds.add(item.layer.id);
       }
 
-      if (this.isLayerSceneCollapsed(scene)) {
-        continue;
-      }
-
-      for (const item of sceneRows) {
-        panelRows.push({
-          kind: 'layer',
-          id: `scene:${scene.id}:layer:${item.layer.id}`,
-          item,
+      if (sceneMatches || children.length) {
+        nodes.push({
+          kind: 'group',
+          id: `scene:${scene.id}`,
+          label: scene.name || scene.id,
+          description: `${allSceneRows.length} layers · ${this.formatTime(scene.start)} - ${this.formatTime(scene.start + scene.duration)}`,
+          icon: 'fluent:video-clip-24-regular',
           scene,
+          children,
         });
       }
     }
 
-    const unassignedRows = rows
-      .filter((item) => !assignedLayerIds.has(item.layer.id))
-      .filter((item) => !query || layerMatchesQuery(item.layer, query));
+    const unassignedChildren = this.buildLayerPanelTreeNodes(layers, {
+      filterLayer: (layer) => !assignedLayerIds.has(layer.id),
+      idPrefix: 'unassigned',
+      query,
+      scene: null,
+    });
 
-    if (unassignedRows.length) {
-      panelRows.push({
+    if (unassignedChildren.length) {
+      nodes.push({
         kind: 'group',
         id: 'scene:unassigned',
         label: 'No scene',
-        description: `${unassignedRows.length} layers`,
+        description: `${unassignedChildren.length} layers`,
         icon: 'fluent:layers-24-regular',
         scene: null,
+        children: unassignedChildren,
       });
-
-      for (const item of unassignedRows) {
-        panelRows.push({
-          kind: 'layer',
-          id: `unassigned:layer:${item.layer.id}`,
-          item,
-          scene: null,
-        });
-      }
     }
 
-    return panelRows;
+    return nodes;
+  });
+  protected readonly layerTreeChildrenAccessor = (
+    node: LayerPanelTreeNode,
+  ): LayerPanelTreeNode[] => node.children ?? [];
+  protected readonly layerTreeHasChild = (_: number, node: LayerPanelTreeNode): boolean =>
+    !!node.children?.length;
+  private readonly layerTreeView = viewChild<Tree<LayerPanelTreeNode>>('layerTree');
+  private readonly expandLayerTreeEffect = effect(() => {
+    const tree = this.layerTreeView();
+    const nodes = this.layerPanelTreeNodes();
+
+    if (!tree || !nodes.length) {
+      return;
+    }
+
+    queueMicrotask(() => {
+      for (const node of nodes) {
+        this.expandLayerTreeNode(tree, node);
+      }
+    });
   });
   protected readonly canvasLayers = computed(() => this.buildCanvasLayerEntries(this.draft().layers));
   protected readonly validationIssues = computed(() => validateMotionDocument(this.draft()));
@@ -1398,24 +1413,6 @@ export class MotionStudio {
 
   protected setLayerSearch(value: string): void {
     this.layerSearch.set(value);
-  }
-
-  protected toggleLayerSceneCollapsed(scene: MotionScene | null, event?: Event): void {
-    event?.stopPropagation();
-
-    if (!scene) {
-      return;
-    }
-
-    const sceneId = scene.id;
-
-    this.collapsedSceneIds.update((ids) =>
-      ids.includes(sceneId) ? ids.filter((id) => id !== sceneId) : [...ids, sceneId],
-    );
-  }
-
-  protected isLayerSceneCollapsed(scene: MotionScene | null): boolean {
-    return !!scene && this.collapsedSceneIds().includes(scene.id);
   }
 
   protected sceneSelectedLayerCount(scene: MotionScene): number {
@@ -2630,6 +2627,62 @@ export class MotionStudio {
     return Number(!!scene.transitionIn) + Number(!!scene.transitionOut);
   }
 
+  protected layerTreeNodeLabel(node: LayerPanelTreeNode): string {
+    if (node.kind === 'group') {
+      return node.label;
+    }
+
+    return node.item.layer.name || node.item.layer.id;
+  }
+
+  protected isLayerTreeNodeActive(node: LayerPanelTreeNode): boolean {
+    if (node.kind === 'group') {
+      return !!node.scene && this.isSceneSelected(node.scene);
+    }
+
+    return this.isLayerSelected(node.item.layer);
+  }
+
+  protected isLayerTreeNodeCurrent(node: LayerPanelTreeNode): boolean {
+    return node.kind === 'group' && this.isSceneActive(node.scene);
+  }
+
+  protected isLayerTreeNodeInSelectedScene(node: LayerPanelTreeNode): boolean {
+    return node.kind === 'layer' && this.selectedSceneContainsLayer(node.item.layer);
+  }
+
+  protected isLayerTreeNodeMuted(node: LayerPanelTreeNode): boolean {
+    return node.kind === 'layer' && !!node.item.layer.hidden;
+  }
+
+  protected layerTreeNodeWarningMessage(node: LayerPanelTreeNode): string {
+    return node.kind === 'layer' ? this.layerSceneWarningMessage(node.item.layer) : '';
+  }
+
+  protected selectLayerTreeNode(node: LayerPanelTreeNode, event: MouseEvent): void {
+    if (node.kind === 'group') {
+      if (node.scene) {
+        this.selectScene(node.scene, event);
+      }
+
+      return;
+    }
+
+    this.selectLayerFromLibrary(node.item.layer, event);
+  }
+
+  protected selectLayerTreeNodeContext(node: LayerPanelTreeNode, event: MouseEvent): void {
+    if (node.kind === 'group') {
+      if (node.scene) {
+        this.selectSceneContext(node.scene, event);
+      }
+
+      return;
+    }
+
+    this.selectLayerContext(node.item.layer, event);
+  }
+
   protected startLayerSceneDrag(row: LayerPanelLayerRow, event: DragEvent): void {
     event.stopPropagation();
     const item = {
@@ -2645,6 +2698,14 @@ export class MotionStudio {
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = 'move';
     }
+  }
+
+  protected startLayerTreeNodeDrag(node: LayerPanelTreeNode, event: DragEvent): void {
+    if (node.kind !== 'layer') {
+      return;
+    }
+
+    this.startLayerSceneDrag(node, event);
   }
 
   protected finishLayerSceneDrag(): void {
@@ -6421,6 +6482,58 @@ export class MotionStudio {
     return resolveMotionLayerSnapshot(layer, this.currentTime()).layout;
   }
 
+  private buildLayerPanelTreeNodes(
+    layers: MotionLayer[],
+    options: {
+      filterLayer?: (layer: MotionLayer) => boolean;
+      idPrefix: string;
+      query: string;
+      scene: MotionScene | null;
+      depth?: number;
+    },
+  ): LayerPanelLayerTreeNode[] {
+    const depth = options.depth ?? 0;
+
+    return sortLayersForCanvas(layers).flatMap((layer) => {
+      const children = this.buildLayerPanelTreeNodes(layer.children ?? [], {
+        ...options,
+        idPrefix: `${options.idPrefix}:layer:${layer.id}`,
+        depth: depth + 1,
+      });
+      const matchesFilter = options.filterLayer ? options.filterLayer(layer) : true;
+      const matchesQuery = !options.query || layerMatchesQuery(layer, options.query);
+
+      if ((!matchesFilter || !matchesQuery) && !children.length) {
+        return [];
+      }
+
+      return [
+        {
+          kind: 'layer' as const,
+          id: `${options.idPrefix}:layer:${layer.id}`,
+          item: {
+            layer,
+            depth,
+          },
+          scene: options.scene,
+          children,
+        },
+      ];
+    });
+  }
+
+  private expandLayerTreeNode(tree: Tree<LayerPanelTreeNode>, node: LayerPanelTreeNode): void {
+    if (!node.children?.length) {
+      return;
+    }
+
+    tree.expand(node);
+
+    for (const child of node.children) {
+      this.expandLayerTreeNode(tree, child);
+    }
+  }
+
   private buildCanvasLayerEntries(
     layers: MotionLayer[],
     parentEntry: CanvasLayerEntry | null = null,
@@ -9438,7 +9551,7 @@ interface TimelineLayerRow {
   depth: number;
 }
 
-type LayerPanelRow = LayerPanelGroupRow | LayerPanelLayerRow;
+type LayerPanelTreeNode = LayerPanelGroupTreeNode | LayerPanelLayerTreeNode;
 
 interface LayerPanelGroupRow {
   kind: 'group';
@@ -9454,6 +9567,14 @@ interface LayerPanelLayerRow {
   id: string;
   item: TimelineLayerRow;
   scene: MotionScene | null;
+}
+
+interface LayerPanelGroupTreeNode extends LayerPanelGroupRow {
+  children?: LayerPanelTreeNode[];
+}
+
+interface LayerPanelLayerTreeNode extends LayerPanelLayerRow {
+  children?: LayerPanelTreeNode[];
 }
 
 interface LayerSceneDragItem {

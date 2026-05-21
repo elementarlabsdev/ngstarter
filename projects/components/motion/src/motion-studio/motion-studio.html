@@ -770,200 +770,254 @@
                   </ngs-form-field>
                 </div>
 
-                <ngs-list class="ngs-motion-studio__layer-list">
-                  @for (row of layerPanelRows(); track row.id) {
-                    @if (row.kind === 'group') {
-	                      <ngs-list-item
-	                        lines="2"
-	                        class="ngs-motion-studio__layer-scene-item"
-	                        [class.is-active]="row.scene && isSceneSelected(row.scene)"
-	                        [class.is-current]="isSceneActive(row.scene)"
-	                        [class.is-unassigned]="!row.scene"
-	                        [class.is-layer-drop-target]="isLayerSceneDropTarget(row.scene)"
-	                        (click)="row.scene && selectScene(row.scene, $event)"
-	                        (dragover)="handleLayerSceneDragOver(row.scene, $event)"
-	                        (dragleave)="handleLayerSceneDragLeave(row.scene, $event)"
-	                        (drop)="dropLayerOnScene(row.scene, $event)"
-                          [ngsContextMenuTriggerFor]="sceneContextMenu"
-                          (contextmenu)="row.scene && selectSceneContext(row.scene, $event)"
-	                      >
+                <ngs-tree
+                  #layerTree
+                  class="ngs-motion-studio__layer-tree"
+                  [dataSource]="layerPanelTreeNodes()"
+                  [childrenAccessor]="layerTreeChildrenAccessor"
+                >
+                  <ngs-tree-node
+                    *ngsTreeNodeDef="let node"
+                    ngsTreeNodePadding
+                    class="ngs-motion-studio__layer-tree-node"
+                    [class.ngs-motion-studio__layer-scene-item]="node.kind === 'group'"
+                    [class.ngs-motion-studio__layer-item]="node.kind === 'layer'"
+                    [class.is-active]="isLayerTreeNodeActive(node)"
+                    [class.is-current]="isLayerTreeNodeCurrent(node)"
+                    [class.is-unassigned]="node.kind === 'group' && !node.scene"
+                    [class.is-in-selected-scene]="isLayerTreeNodeInSelectedScene(node)"
+                    [class.has-scene-warning]="layerTreeNodeWarningMessage(node)"
+                    [class.is-muted]="isLayerTreeNodeMuted(node)"
+                    [class.is-nested-in-scene]="node.kind === 'layer' && node.scene"
+                    [class.is-layer-drop-target]="isLayerSceneDropTarget(node.scene)"
+                    [attr.draggable]="node.kind === 'layer' ? 'true' : null"
+                    [ngsContextMenuTriggerFor]="node.kind === 'group' ? sceneContextMenu : layerContextMenu"
+                    [cdkTreeNodeTypeaheadLabel]="layerTreeNodeLabel(node)"
+                    (click)="selectLayerTreeNode(node, $event)"
+                    (contextmenu)="selectLayerTreeNodeContext(node, $event)"
+                    (dragstart)="startLayerTreeNodeDrag(node, $event)"
+                    (dragend)="finishLayerSceneDrag()"
+                    (dragover)="handleLayerSceneDragOver(node.scene, $event)"
+                    (dragleave)="handleLayerSceneDragLeave(node.scene, $event)"
+                    (drop)="dropLayerOnScene(node.scene, $event)"
+                  >
+                    <button
+                      ngsIconButton
+                      type="button"
+                      disabled
+                      class="ngs-motion-studio__layer-tree-toggle"
+                      aria-label="Leaf layer"
+                    ></button>
+                    <ng-container
+                      [ngTemplateOutlet]="layerTreeNodeContent"
+                      [ngTemplateOutletContext]="{ $implicit: node }"
+                    />
+                  </ngs-tree-node>
+
+                  <ngs-tree-node
+                    *ngsTreeNodeDef="let node; when: layerTreeHasChild"
+                    ngsTreeNodePadding
+                    ngsTreeNodeToggle
+                    class="ngs-motion-studio__layer-tree-node"
+                    [class.ngs-motion-studio__layer-scene-item]="node.kind === 'group'"
+                    [class.ngs-motion-studio__layer-item]="node.kind === 'layer'"
+                    [class.is-active]="isLayerTreeNodeActive(node)"
+                    [class.is-current]="isLayerTreeNodeCurrent(node)"
+                    [class.is-unassigned]="node.kind === 'group' && !node.scene"
+                    [class.is-in-selected-scene]="isLayerTreeNodeInSelectedScene(node)"
+                    [class.has-scene-warning]="layerTreeNodeWarningMessage(node)"
+                    [class.is-muted]="isLayerTreeNodeMuted(node)"
+                    [class.is-nested-in-scene]="node.kind === 'layer' && node.scene"
+                    [class.is-layer-drop-target]="isLayerSceneDropTarget(node.scene)"
+                    [attr.draggable]="node.kind === 'layer' ? 'true' : null"
+                    [ngsContextMenuTriggerFor]="node.kind === 'group' ? sceneContextMenu : layerContextMenu"
+                    [cdkTreeNodeTypeaheadLabel]="layerTreeNodeLabel(node)"
+                    (click)="selectLayerTreeNode(node, $event)"
+                    (contextmenu)="selectLayerTreeNodeContext(node, $event)"
+                    (dragstart)="startLayerTreeNodeDrag(node, $event)"
+                    (dragend)="finishLayerSceneDrag()"
+                    (dragover)="handleLayerSceneDragOver(node.scene, $event)"
+                    (dragleave)="handleLayerSceneDragLeave(node.scene, $event)"
+                    (drop)="dropLayerOnScene(node.scene, $event)"
+                  >
+                    <button
+                      ngsIconButton
+                      type="button"
+                      class="ngs-motion-studio__layer-tree-toggle"
+                      [attr.aria-label]="'Toggle ' + layerTreeNodeLabel(node)"
+                      ngsTreeNodeToggle
+                      (click)="$event.stopPropagation()"
+                    >
+                      @if (layerTree.isExpanded(node)) {
+                        <ngs-icon name="fluent:chevron-down-24-regular" />
+                      } @else {
+                        <ngs-icon name="fluent:chevron-right-24-regular" />
+                      }
+                    </button>
+                    <ng-container
+                      [ngTemplateOutlet]="layerTreeNodeContent"
+                      [ngTemplateOutletContext]="{ $implicit: node }"
+                    />
+                  </ngs-tree-node>
+                </ngs-tree>
+
+                <ng-template #layerTreeNodeContent let-node>
+                  @if (node.kind === 'group') {
+                    <ngs-icon [name]="node.icon" class="ngs-motion-studio__layer-tree-icon" />
+                    <span class="ngs-motion-studio__layer-tree-main">
+                      <span class="ngs-motion-studio__layer-tree-title">{{ node.label }}</span>
+                      <span class="ngs-motion-studio__layer-tree-line">{{ node.description }}</span>
+                    </span>
+                    @if (node.scene) {
+                      <div class="ngs-motion-studio__layer-actions">
                         <button
                           ngsIconButton
                           type="button"
-                          ngsListItemIcon
-                          aria-label="Toggle scene"
-                          [disabled]="!row.scene"
-                          (click)="toggleLayerSceneCollapsed(row.scene, $event)"
+                          aria-label="Assign selected layers to scene"
+                          [disabled]="!selectedLayerCount()"
+                          (click)="assignSelectedLayersToScene(node.scene, $event)"
                         >
-                          <ngs-icon [name]="row.icon" />
-                        </button>
-                        <span ngsListItemTitle>{{ row.label }}</span>
-                        <span ngsListItemLine>{{ row.description }}</span>
-                        @if (row.scene) {
-                          <div ngsListItemMeta class="ngs-motion-studio__layer-actions">
-                            <button
-                              ngsIconButton
-                              type="button"
-                              aria-label="Assign selected layers to scene"
-                              [disabled]="!selectedLayerCount()"
-                              (click)="assignSelectedLayersToScene(row.scene, $event)"
-                            >
-                              <ngs-icon name="fluent:add-square-multiple-24-regular" />
-                            </button>
-                            <button
-                              ngsIconButton
-                              type="button"
-                              aria-label="Remove selected layers from scene"
-                              [disabled]="!sceneSelectedLayerCount(row.scene)"
-                              (click)="removeSelectedLayersFromScene(row.scene, $event)"
-                            >
-                              <ngs-icon name="fluent:dismiss-24-regular" />
-                            </button>
-                          </div>
-                        }
-                      </ngs-list-item>
-                    } @else {
-                      <ngs-list-item
-                        lines="2"
-                        class="ngs-motion-studio__layer-item"
-                        [class.is-active]="isLayerSelected(row.item.layer)"
-                        [class.is-in-selected-scene]="selectedSceneContainsLayer(row.item.layer)"
-                        [class.has-scene-warning]="layerSceneWarningMessage(row.item.layer)"
-	                        [class.is-muted]="row.item.layer.hidden"
-	                        [class.is-nested-in-scene]="row.scene"
-	                        [class.is-layer-drop-target]="isLayerSceneDropTarget(row.scene)"
-	                        draggable="true"
-	                        (click)="selectLayerFromLibrary(row.item.layer, $event)"
-	                        (dragstart)="startLayerSceneDrag(row, $event)"
-	                        (dragend)="finishLayerSceneDrag()"
-	                        (dragover)="handleLayerSceneDragOver(row.scene, $event)"
-	                        (dragleave)="handleLayerSceneDragLeave(row.scene, $event)"
-	                        (drop)="dropLayerOnScene(row.scene, $event)"
-                          [ngsContextMenuTriggerFor]="layerContextMenu"
-                          (contextmenu)="selectLayerContext(row.item.layer, $event)"
-	                      >
-                        @if (layerSceneWarningMessage(row.item.layer); as sceneWarning) {
-                          <ngs-icon
-                            name="fluent:warning-24-regular"
-                            class="ngs-motion-studio__layer-warning-icon"
-                            [ngsTooltip]="sceneWarning"
-                            ngsTooltipPosition="above"
-                          />
-                        }
-                        <ngs-icon [name]="layerIcon(row.item.layer)" ngsListItemIcon />
-                        <span ngsListItemTitle>{{ row.item.layer.name || row.item.layer.id }}</span>
-                        <span ngsListItemLine>
-                          Name: {{ row.item.layer.name || row.item.layer.id }} ·
-                          {{ row.item.layer.type }}
-                          @if (row.item.layer.hidden) {
-                            · hidden
-                          }
-                          @if (row.item.layer.locked) {
-                            · locked
-                          }
-                          @if (row.scene) {
-                            · in {{ row.scene.name || row.scene.id }}
-                          } @else if (selectedSceneLayerLabel(row.item.layer)) {
-                            · {{ selectedSceneLayerLabel(row.item.layer) }}
-                          }
-                        </span>
-                        <div ngsListItemMeta class="ngs-motion-studio__layer-actions">
-                          @if (row.scene) {
-                            <button
-                              ngsIconButton
-                              type="button"
-                              class="is-active"
-                              aria-label="Remove layer from scene"
-                              (click)="toggleSceneLayerInScene(row.scene, row.item.layer, $event)"
-                            >
-                              <ngs-icon name="fluent:checkbox-checked-24-regular" />
-                            </button>
-                          } @else if (selectedScene()) {
-                            <button
-                              ngsIconButton
-                              type="button"
-                              [class.is-active]="selectedSceneContainsLayer(row.item.layer)"
-                              [attr.aria-label]="
-                                selectedSceneContainsLayer(row.item.layer)
-                                  ? 'Remove layer from scene'
-                                  : 'Add layer to scene'
-                              "
-                              (click)="toggleSceneLayer(row.item.layer, $event)"
-                            >
-                              <ngs-icon
-                                [name]="
-                                  selectedSceneContainsLayer(row.item.layer)
-                                    ? 'fluent:checkbox-checked-24-regular'
-                                    : 'fluent:checkbox-unchecked-24-regular'
-                                "
-                              />
-                            </button>
-                          }
-                        <button
-                          ngsIconButton
-                          type="button"
-                          aria-label="Duplicate layer"
-                          (click)="duplicateLayer(row.item.layer, $event)"
-                        >
-                          <ngs-icon name="fluent:copy-24-regular" />
+                          <ngs-icon name="fluent:add-square-multiple-24-regular" />
                         </button>
                         <button
                           ngsIconButton
                           type="button"
-                          aria-label="Move layer forward"
-                          (click)="moveLayerForward(row.item.layer, $event)"
+                          aria-label="Remove selected layers from scene"
+                          [disabled]="!sceneSelectedLayerCount(node.scene)"
+                          (click)="removeSelectedLayersFromScene(node.scene, $event)"
                         >
-                          <ngs-icon name="fluent:arrow-up-24-regular" />
-                        </button>
-                        <button
-                          ngsIconButton
-                          type="button"
-                          aria-label="Move layer backward"
-                          (click)="moveLayerBackward(row.item.layer, $event)"
-                        >
-                          <ngs-icon name="fluent:arrow-down-24-regular" />
-                        </button>
-                        <button
-                          ngsIconButton
-                          type="button"
-                          [attr.aria-label]="row.item.layer.hidden ? 'Show layer' : 'Hide layer'"
-                          (click)="toggleLayerHidden(row.item.layer, $event)"
-                        >
-                          <ngs-icon
-                            [name]="
-                              row.item.layer.hidden
-                                ? 'fluent:eye-off-24-regular'
-                                : 'fluent:eye-24-regular'
-                            "
-                          />
-                        </button>
-                        <button
-                          ngsIconButton
-                          type="button"
-                          [attr.aria-label]="row.item.layer.locked ? 'Unlock layer' : 'Lock layer'"
-                          (click)="toggleLayerLocked(row.item.layer, $event)"
-                        >
-                          <ngs-icon
-                            [name]="
-                              row.item.layer.locked
-                                ? 'fluent:lock-closed-24-regular'
-                                : 'fluent:lock-open-24-regular'
-                            "
-                          />
-                        </button>
-                        <button
-                          ngsIconButton
-                          type="button"
-                          aria-label="Remove layer"
-                          (click)="removeLayer(row.item.layer, $event)"
-                        >
-                          <ngs-icon name="fluent:delete-24-regular" />
+                          <ngs-icon name="fluent:dismiss-24-regular" />
                         </button>
                       </div>
-                    </ngs-list-item>
                     }
+                  } @else {
+                    @if (layerSceneWarningMessage(node.item.layer); as sceneWarning) {
+                      <ngs-icon
+                        name="fluent:warning-24-regular"
+                        class="ngs-motion-studio__layer-warning-icon"
+                        [ngsTooltip]="sceneWarning"
+                        ngsTooltipPosition="above"
+                      />
+                    }
+                    <ngs-icon
+                      [name]="layerIcon(node.item.layer)"
+                      class="ngs-motion-studio__layer-tree-icon"
+                    />
+                    <span class="ngs-motion-studio__layer-tree-main">
+                      <span class="ngs-motion-studio__layer-tree-title">
+                        {{ node.item.layer.name || node.item.layer.id }}
+                      </span>
+                      <span class="ngs-motion-studio__layer-tree-line">
+                        Name: {{ node.item.layer.name || node.item.layer.id }} ·
+                        {{ node.item.layer.type }}
+                        @if (node.item.layer.hidden) {
+                          · hidden
+                        }
+                        @if (node.item.layer.locked) {
+                          · locked
+                        }
+                        @if (node.scene) {
+                          · in {{ node.scene.name || node.scene.id }}
+                        } @else if (selectedSceneLayerLabel(node.item.layer)) {
+                          · {{ selectedSceneLayerLabel(node.item.layer) }}
+                        }
+                      </span>
+                    </span>
+                    <div class="ngs-motion-studio__layer-actions">
+                      @if (node.scene) {
+                        <button
+                          ngsIconButton
+                          type="button"
+                          class="is-active"
+                          aria-label="Remove layer from scene"
+                          (click)="toggleSceneLayerInScene(node.scene, node.item.layer, $event)"
+                        >
+                          <ngs-icon name="fluent:checkbox-checked-24-regular" />
+                        </button>
+                      } @else if (selectedScene()) {
+                        <button
+                          ngsIconButton
+                          type="button"
+                          [class.is-active]="selectedSceneContainsLayer(node.item.layer)"
+                          [attr.aria-label]="
+                            selectedSceneContainsLayer(node.item.layer)
+                              ? 'Remove layer from scene'
+                              : 'Add layer to scene'
+                          "
+                          (click)="toggleSceneLayer(node.item.layer, $event)"
+                        >
+                          <ngs-icon
+                            [name]="
+                              selectedSceneContainsLayer(node.item.layer)
+                                ? 'fluent:checkbox-checked-24-regular'
+                                : 'fluent:checkbox-unchecked-24-regular'
+                            "
+                          />
+                        </button>
+                      }
+                      <button
+                        ngsIconButton
+                        type="button"
+                        aria-label="Duplicate layer"
+                        (click)="duplicateLayer(node.item.layer, $event)"
+                      >
+                        <ngs-icon name="fluent:copy-24-regular" />
+                      </button>
+                      <button
+                        ngsIconButton
+                        type="button"
+                        aria-label="Move layer forward"
+                        (click)="moveLayerForward(node.item.layer, $event)"
+                      >
+                        <ngs-icon name="fluent:arrow-up-24-regular" />
+                      </button>
+                      <button
+                        ngsIconButton
+                        type="button"
+                        aria-label="Move layer backward"
+                        (click)="moveLayerBackward(node.item.layer, $event)"
+                      >
+                        <ngs-icon name="fluent:arrow-down-24-regular" />
+                      </button>
+                      <button
+                        ngsIconButton
+                        type="button"
+                        [attr.aria-label]="node.item.layer.hidden ? 'Show layer' : 'Hide layer'"
+                        (click)="toggleLayerHidden(node.item.layer, $event)"
+                      >
+                        <ngs-icon
+                          [name]="
+                            node.item.layer.hidden
+                              ? 'fluent:eye-off-24-regular'
+                              : 'fluent:eye-24-regular'
+                          "
+                        />
+                      </button>
+                      <button
+                        ngsIconButton
+                        type="button"
+                        [attr.aria-label]="node.item.layer.locked ? 'Unlock layer' : 'Lock layer'"
+                        (click)="toggleLayerLocked(node.item.layer, $event)"
+                      >
+                        <ngs-icon
+                          [name]="
+                            node.item.layer.locked
+                              ? 'fluent:lock-closed-24-regular'
+                              : 'fluent:lock-open-24-regular'
+                          "
+                        />
+                      </button>
+                      <button
+                        ngsIconButton
+                        type="button"
+                        aria-label="Remove layer"
+                        (click)="removeLayer(node.item.layer, $event)"
+                      >
+                        <ngs-icon name="fluent:delete-24-regular" />
+                      </button>
+                    </div>
                   }
-                </ngs-list>
+                </ng-template>
               </ngs-scrollbar-area>
             </ng-template>
 
