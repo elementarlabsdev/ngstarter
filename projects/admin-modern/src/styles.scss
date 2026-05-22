@@ -125,6 +125,9 @@
     --ngs-sidebar-nav-nested-item-hover-bg: #eeeeed;
     --ngs-sidebar-nav-nested-item-active-bg: #eeeeed;
     --ngs-sidebar-nav-nested-item-active-color: var(--modern-ink);
+    --ngs-sidebar-nav-item-padding: 0 --spacing(4);
+    --ngs-sidebar-nav-nested-item-padding: 0 --spacing(4);
+    --ngs-sidebar-nav-heading-padding: 0 --spacing(5);
   }
 
   ngs-form-field.search-field {

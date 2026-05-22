@@ -59,6 +59,11 @@ ngs-sidebar.modern-sidebar ngs-sidebar-nav-item ::ng-deep .inner.ngs-ripple {
 
 ngs-sidebar-nav-heading {
   margin-top: --spacing(8);
+
+  &:first-child {
+    margin-top: --spacing(0);
+  }
+
   margin-bottom: --spacing(3);
   color: #8c8c88;
   font-weight: 400;
