@@ -87,6 +87,11 @@ ngs-sidebar-nav-group-toggle ngs-icon {
   color: #90908c;
 }
 
+ngs-sidebar-nav-group-toggle:not(.is-active):hover,
+ngs-sidebar-nav-group-toggle:not(.is-active):hover ngs-icon {
+  color: var(--modern-ink);
+}
+
 ngs-sidebar-nav-item.is-active {
   color: var(--modern-ink);
 }
