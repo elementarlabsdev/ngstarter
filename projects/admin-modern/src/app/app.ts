@@ -28,6 +28,7 @@ import {
 import { Sidenav, SidenavContainer, SidenavContent } from '@ngstarter-ui/components/sidenav';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
 import { Toolbar, ToolbarItem, ToolbarSpacer, ToolbarTitle } from '@ngstarter-ui/components/toolbar';
+import {SplashScreen} from "@ngstarter-ui/components/splash-screen";
 
 interface NavItem {
   readonly key: string;
@@ -88,6 +89,7 @@ interface NavSection {
     ToolbarSpacer,
     ToolbarTitle,
     Tooltip,
+    SplashScreen,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
