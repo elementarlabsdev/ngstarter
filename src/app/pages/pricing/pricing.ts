@@ -21,6 +21,7 @@ import {
   RowDef,
   Table,
 } from '@ngstarter-ui/components/table';
+import { PricingComponent } from '../../components/pricing/pricing.component';
 import { pricingFaqItems } from '../../seo/seo-data';
 
 @Component({
@@ -41,6 +42,7 @@ import { pricingFaqItems } from '../../seo/seo-data';
     HeaderRow,
     HeaderRowDef,
     Icon,
+    PricingComponent,
     RouterLink,
     Row,
     RowDef,
@@ -118,6 +120,14 @@ export class Pricing {
       professionalTone: 'positive',
     },
     {
+      icon: 'fluent:timer-24-regular',
+      title: 'Trial mode',
+      standard: '3 months',
+      standardTone: 'positive',
+      professional: '3 months',
+      professionalTone: 'positive',
+    },
+    {
       icon: 'fluent:arrow-sync-24-regular',
       title: 'Updates',
       standard: 'Licensed project',
@@ -131,14 +141,6 @@ export class Pricing {
       standard: 'Standard',
       standardTone: 'neutral',
       professional: 'Priority',
-      professionalTone: 'positive',
-    },
-    {
-      icon: 'fluent:timer-24-regular',
-      title: 'Trial mode',
-      standard: '3 months',
-      standardTone: 'positive',
-      professional: '3 months',
       professionalTone: 'positive',
     },
     {

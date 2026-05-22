@@ -1,103 +1,26 @@
+@reference 'tailwindcss';
+
 :host {
   display: block;
 
-  .pricing-card {
-    --ngs-card-padding: 3rem;
-    position: relative;
-  }
-
-  .pricing-card-standard {
-    --ngs-card-bg: var(--ngs-color-surface);
-  }
-
-  .pricing-card-featured {
-    --ngs-card-bg: var(--ngs-color-primary);
-    --ngs-card-color: var(--ngs-color-on-primary);
-    color: var(--ngs-color-on-primary);
-  }
-
-  .pricing-badge {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: var(--ngs-radius-full);
-    background: var(--ngs-color-secondary);
-    color: var(--ngs-color-on-secondary);
-    padding: 0.25rem 1rem;
-    font-size: 0.625rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .price-divider,
-  .featured-price-divider {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.5rem;
-    border-block: 1px solid var(--ngs-color-border);
-    padding-block: 1.5rem;
-  }
-
-  .featured-price-divider {
-    border-color: rgb(255 255 255 / 25%);
-  }
-
-  .feature-row,
-  .featured-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    line-height: 1.6;
-  }
-
-  .feature-row {
-    color: var(--ngs-color-on-surface);
-  }
-
-  .featured-row {
-    color: var(--ngs-color-on-primary);
-  }
-
-  .feature-row ngs-icon,
-  .featured-row ngs-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-    flex: none;
-    margin-top: 0.125rem;
-  }
-
-  .feature-row ngs-icon {
-    color: var(--ngs-color-success);
-  }
-
-  .featured-row ngs-icon {
-    color: var(--ngs-color-on-primary);
-  }
-
-  .featured-button {
-    --ngs-button-filled-bg: var(--ngs-color-surface);
-    --ngs-button-filled-color: var(--ngs-color-primary);
-  }
-
-  .comparison-card,
   .guide-card,
   .links-card {
     --ngs-card-bg: var(--ngs-color-surface-container-lowest);
   }
 
   .comparison-card {
-    --ngs-card-padding: 1rem;
+    --ngs-card-bg: transparent;
+    --ngs-card-border-color: transparent;
+    --ngs-card-padding: 0.5rem;
   }
 
   .comparison-stage {
     display: grid;
-    grid-template-columns: minmax(17rem, 0.72fr) minmax(0, 1.28fr);
+    grid-template-columns: minmax(13.5rem, 0.54fr) minmax(0, 1fr);
     align-items: stretch;
     gap: 0;
+    max-width: 62rem;
+    margin-inline: auto;
   }
 
   .comparison-featured-plan {
@@ -107,54 +30,53 @@
     min-height: 100%;
     flex-direction: column;
     gap: 2rem;
-    border-radius: var(--ngs-radius-xl);
+    border-radius: theme(--radius-2xl) 0 0 theme(--radius-2xl);
     background: var(--ngs-color-surface);
-    box-shadow: var(--ngs-shadow-lg);
-    padding: 2rem;
+    padding: 1.5rem 1.75rem;
   }
 
   .featured-plan-title {
     display: flex;
     align-items: center;
-    gap: 0.875rem;
+    gap: 0.625rem;
   }
 
   .featured-plan-title ngs-icon {
-    width: 2rem;
-    height: 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
     color: var(--ngs-color-primary);
   }
 
   .featured-plan-title h3 {
     margin: 0;
     color: var(--ngs-color-on-background);
-    font-size: 1.625rem;
-    font-weight: 700;
+    font-size: 1.25rem;
+    font-weight: 650;
   }
 
   .comparison-featured-plan p {
     margin: 0.85rem 0 0;
     color: var(--ngs-color-on-surface-variant);
-    font-size: 0.95rem;
-    line-height: 1.65;
+    font-size: 0.875rem;
+    line-height: 1.55;
   }
 
-  .comparison-featured-plan ul {
-    display: grid;
-    flex: 1;
-    gap: 1.05rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
+  //.comparison-featured-plan ul {
+  //  display: grid;
+  //  flex: 1;
+  //  gap: 0.75rem;
+  //  margin: 0;
+  //  padding: 0;
+  //  list-style: none;
+  //}
 
   .comparison-featured-plan li {
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
     color: var(--ngs-color-on-surface);
-    font-size: 0.95rem;
-    line-height: 1.55;
+    font-size: 0.875rem;
+    line-height: 1.45;
   }
 
   .comparison-featured-plan li ngs-icon {
@@ -168,33 +90,33 @@
   .featured-plan-price {
     display: flex;
     align-items: baseline;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.5rem;
     border-top: 1px solid var(--ngs-color-border);
-    padding-top: 1.5rem;
+    padding-top: 1.25rem;
   }
 
   .featured-plan-price span {
     color: var(--ngs-color-on-background);
-    font-size: 2rem;
+    font-size: 1.75rem;
     font-weight: 700;
   }
 
   .featured-plan-price strong {
     color: var(--ngs-color-on-surface-variant);
-    font-size: 0.95rem;
+    font-size: 0.875rem;
     font-weight: 500;
   }
 
   .featured-plan-button {
     --ngs-button-radius: var(--ngs-radius-xl);
-    --ngs-button-height: 3.25rem;
+    --ngs-button-height: 2.875rem;
   }
 
   .comparison-icon {
     display: inline-flex;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2rem;
+    height: 2rem;
     flex: none;
     align-items: center;
     justify-content: center;
@@ -204,8 +126,8 @@
   }
 
   .comparison-icon ngs-icon {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1rem;
+    height: 1rem;
   }
 
   .comparison-table-wrap {
@@ -213,7 +135,7 @@
   }
 
   table[ngs-table].comparison-table {
-    min-width: 44rem;
+    min-width: 36rem;
     border-collapse: separate;
     border-spacing: 0;
   }
@@ -222,11 +144,11 @@
     border: 0;
     background: transparent;
     color: var(--ngs-color-on-surface-variant);
-    font-size: 0.8rem;
+    font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.08em;
-    padding: 1.25rem 1rem 1.5rem;
-    text-align: center;
+    padding: 0.875rem 1.25rem 1rem;
+    text-align: left;
     text-transform: uppercase;
     vertical-align: bottom;
   }
@@ -242,8 +164,8 @@
   .comparison-table td[ngs-cell] {
     border-top: 1px solid var(--ngs-color-border);
     background: var(--ngs-color-surface-container-low);
-    padding: 1rem;
-    text-align: center;
+    padding: 0.75rem 1.25rem;
+    text-align: left;
     vertical-align: middle;
   }
 
@@ -258,13 +180,13 @@
   .comparison-feature {
     display: flex;
     align-items: flex-start;
-    gap: 0.875rem;
+    gap: 0.625rem;
     min-width: 0;
   }
 
   .comparison-feature strong {
     color: var(--ngs-color-on-background);
-    font-size: 0.95rem;
+    font-size: 0.875rem;
     font-weight: 650;
     line-height: 1.35;
   }
@@ -272,18 +194,18 @@
   .matrix-value {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.5rem;
-    min-height: 2rem;
+    min-height: 1.75rem;
     color: var(--ngs-color-on-surface);
-    font-size: 0.95rem;
+    font-size: 0.875rem;
     font-weight: 600;
     line-height: 1.55;
   }
 
   .matrix-value ngs-icon {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1rem;
+    height: 1rem;
     flex: none;
   }
 
@@ -309,6 +231,7 @@
 
   .guide-card {
     --ngs-card-padding: 2rem;
+    --ngs-card-border-radius: theme(--radius-2xl);
   }
 
   .links-card {
@@ -347,10 +270,6 @@
   }
 
   @media (max-width: 640px) {
-    .pricing-card {
-      --ngs-card-padding: 1.5rem;
-    }
-
     .comparison-stage {
       grid-template-columns: 1fr;
     }

@@ -35,97 +35,9 @@
       </div>
     </div>
 
-    <div class="mx-auto mt-16 grid max-w-5xl gap-8 md:grid-cols-2">
-      <ngs-card appearance="raised" class="pricing-card pricing-card-standard">
-        <div ngs-card-content class="flex h-full flex-col gap-7">
-          <div>
-            <h2 class="text-2xl font-semibold text-on-background">Standard</h2>
-            <p class="mt-3 text-sm leading-6 text-on-surface-variant">
-              A focused Angular UI components license for a solo developer building one commercial
-              app, SaaS admin, client portal, or internal dashboard.
-            </p>
-          </div>
-          <div class="price-divider">
-            <span class="text-4xl font-bold text-on-background">$29</span>
-            <span class="text-on-surface-variant">one time / project</span>
-          </div>
-          <ul class="flex grow flex-col gap-4">
-            <li class="feature-row">
-              <ngs-icon name="fluent:checkmark-circle-24-filled" />
-              1 developer, 1 project, 1 domain with subdomains
-            </li>
-            <li class="feature-row">
-              <ngs-icon name="fluent:checkmark-circle-24-filled" />
-              All Angular UI components and admin dashboard templates
-            </li>
-            <li class="feature-row">
-              <ngs-icon name="fluent:checkmark-circle-24-filled" />
-              Source code for the component library and templates
-            </li>
-            <li class="feature-row">
-              <ngs-icon name="fluent:checkmark-circle-24-filled" />
-              Standard support through GitHub tickets
-            </li>
-          </ul>
-          <a
-            ngsButton="outlined"
-            fullWidth
-            href="https://buy.polar.sh/polar_cl_GsjVRJPKKqoLqPn8bRKt6g7omlmLLi6lAvmpO2qXyyW"
-            data-polar-checkout
-            data-polar-checkout-theme="dark"
-          >
-            Choose Standard
-          </a>
-        </div>
-      </ngs-card>
+    <app-pricing class="mt-16 block" [showIntro]="false" [embedded]="true" />
 
-      <ngs-card appearance="raised" class="pricing-card pricing-card-featured">
-        <div class="pricing-badge">Most Popular</div>
-        <div ngs-card-content class="flex h-full flex-col gap-7">
-          <div>
-            <h2 class="text-2xl font-semibold">Professional</h2>
-            <p class="mt-3 text-sm leading-6 text-on-primary">
-              The complete Angular UI kit license for teams that build multiple products, agency
-              client apps, internal tools, and long-lived dashboard systems.
-            </p>
-          </div>
-          <div class="featured-price-divider">
-            <span class="text-4xl font-bold">$299</span>
-            <span>one time / unlimited</span>
-          </div>
-          <ul class="flex grow flex-col gap-4">
-            <li class="featured-row">
-              <ngs-icon name="fluent:checkmark-circle-24-filled" />
-              Unlimited developers, projects, and domains
-            </li>
-            <li class="featured-row">
-              <ngs-icon name="fluent:checkmark-circle-24-filled" />
-              All Angular UI components and admin dashboard templates
-            </li>
-            <li class="featured-row">
-              <ngs-icon name="fluent:checkmark-circle-24-filled" />
-              Source code for the component library and templates
-            </li>
-            <li class="featured-row">
-              <ngs-icon name="fluent:checkmark-circle-24-filled" />
-              Priority support through GitHub tickets
-            </li>
-          </ul>
-          <a
-            ngsButton="filled"
-            fullWidth
-            href="https://buy.polar.sh/polar_cl_GsjVRJPKKqoLqPn8bRKt6g7omlmLLi6lAvmpO2qXyyW"
-            data-polar-checkout
-            data-polar-checkout-theme="dark"
-            class="featured-button"
-          >
-            Get Unlimited Access
-          </a>
-        </div>
-      </ngs-card>
-    </div>
-
-    <section class="mt-20">
+    <section class="mt-32">
       <div class="mx-auto max-w-3xl text-center">
         <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-primary">Compare plans</p>
         <h2 class="text-3xl font-semibold text-on-background">Standard vs Professional</h2>
@@ -138,7 +50,7 @@
       <ngs-card appearance="outlined" class="comparison-card mt-10">
         <div ngs-card-content>
           <div class="comparison-stage">
-            <aside class="comparison-featured-plan">
+            <aside class="comparison-featured-plan border-e border-e-border">
               <div>
                 <div class="featured-plan-title">
                   <ngs-icon name="fluent:sparkle-24-filled" />
@@ -147,10 +59,10 @@
                 <p>Best for teams shipping more than one Angular product or client project.</p>
               </div>
 
-              <ul>
+              <ul class="flex flex-col gap-6 grow">
                 @for (item of professionalHighlights; track item) {
-                  <li>
-                    <ngs-icon name="fluent:checkmark-24-filled" />
+                  <li class="flex items-center gap-2">
+                    <ngs-icon name="fluent:checkmark-24-filled" class="relative -top-0.5" />
                     {{ item }}
                   </li>
                 }
@@ -174,11 +86,11 @@
             </aside>
 
             <div class="comparison-table-wrap">
-              <table ngs-table [dataSource]="comparisonRows" class="comparison-table">
+              <table ngs-table [dataSource]="comparisonRows" class="comparison-table rounded-e-2xl overflow-hidden">
                 <ng-container ngsColumnDef="feature">
                   <th ngs-header-cell *ngsHeaderCellDef>Feature</th>
                   <td ngs-cell *ngsCellDef="let row">
-                    <div class="comparison-feature">
+                    <div class="h-full flex items-center gap-3">
                       <span class="comparison-icon">
                         <ngs-icon [name]="row.icon" />
                       </span>

@@ -14,6 +14,15 @@
     --ngs-card-color: var(--ngs-color-on-primary);
   }
 
+  .pricing-section-embedded {
+    background: transparent;
+    padding: 0;
+  }
+
+  .pricing-section-embedded .pricing-grid {
+    margin-top: 0;
+  }
+
   .review-card {
     --ngs-card-padding: 1.5rem;
   }
