@@ -1,4 +1,3 @@
-import { isPlatformBrowser } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -9,8 +8,6 @@ import {
   signal,
   input,
   model,
-  output,
-  PLATFORM_ID,
   forwardRef,
   effect,
   DestroyRef,
@@ -18,7 +15,7 @@ import {
   NgZone,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { SIDENAV } from '../types';
 import { combineLatest, switchMap, of, distinctUntilChanged } from 'rxjs';
 
@@ -55,15 +52,15 @@ export type SidenavPosition = 'start' | 'end';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Sidenav {
-  private _platformId = inject(PLATFORM_ID);
   private _breakpointObserver = inject(BreakpointObserver);
   private _destroyRef = inject(DestroyRef);
   private _ngZone = inject(NgZone);
   _elementRef = inject(ElementRef);
+
   readonly isHovered = signal(false);
   protected _isSettled = signal(false);
-
   private _isBreakpointMatched = signal(false);
+
   private _previousOpened: boolean | null = null;
 
   /** Indicates whether the sidenav is in mobile (adaptive) mode. */
@@ -124,10 +121,8 @@ export class Sidenav {
     transform: booleanAttribute
   });
   adaptiveBreakpoint = input('(max-width: 991.98px)');
-
   opened = model(false);
   fixedWidth = input<number | string | null>(null);
-
   mode = input<SidenavMode>('over');
   position = input<SidenavPosition>('start');
   collapsed = input(false, {
@@ -136,7 +131,6 @@ export class Sidenav {
   disableClose = input(false, {
     transform: booleanAttribute
   });
-
 
   open(): Promise<void> {
     return this.toggle(true);
@@ -149,17 +143,5 @@ export class Sidenav {
   toggle(isOpen: boolean = !this.opened()): Promise<void> {
     this.opened.set(isOpen);
     return Promise.resolve();
-  }
-
-  _getWidth(): number {
-    if (this.fixedWidth() !== null && this.fixedWidth() !== undefined) {
-      return typeof this.fixedWidth() === 'number' ? this.fixedWidth() as number : parseInt(this.fixedWidth() as string, 10);
-    }
-
-    if (this._elementRef.nativeElement && this._elementRef.nativeElement.offsetWidth > 0) {
-      return this._elementRef.nativeElement.offsetWidth;
-    }
-
-    return 280;
   }
 }

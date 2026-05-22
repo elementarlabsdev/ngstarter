@@ -9,11 +9,3 @@ export interface CalendarDay {
   readonly state?: 'active' | 'muted';
   readonly marker?: 'green' | 'rose' | 'blue';
 }
-
-export interface EventRow {
-  readonly type: string;
-  readonly id: string;
-  readonly date: string;
-  readonly time: string;
-  readonly tone: 'warm' | 'green' | 'blue';
-}

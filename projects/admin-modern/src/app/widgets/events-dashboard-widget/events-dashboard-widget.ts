@@ -15,8 +15,16 @@ import {
   Table,
 } from '@ngstarter-ui/components/table';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
-import { DashboardWidgetContent, EventRow } from '../shared/widget-content';
+import { DashboardWidgetContent } from '../shared/widget-content';
 import { WidgetShell } from '../shared/widget-shell';
+
+interface ResearchSignalRow {
+  readonly signal: string;
+  readonly source: string;
+  readonly priority: string;
+  readonly owner: string;
+  readonly tone: 'warm' | 'green' | 'blue';
+}
 
 @Component({
   selector: 'app-events-dashboard-widget',
@@ -45,13 +53,15 @@ export class EventsDashboardWidget {
   readonly id = input.required<string>();
   readonly content = input.required<DashboardWidgetContent>();
 
-  protected readonly eventColumns = ['type', 'id', 'date', 'time', 'action'];
-  protected readonly events: readonly EventRow[] = [
-    { type: 'Voice approved', id: 'CS-2408', date: '10/08/26', time: '09:10 am', tone: 'green' },
-    { type: 'Image flagged', id: 'CS-2416', date: '10/08/26', time: '09:25 am', tone: 'warm' },
-    { type: 'Copy revised', id: 'CS-2442', date: '10/08/26', time: '09:40 am', tone: 'blue' },
-    { type: 'Post scheduled', id: 'CS-2488', date: '10/08/26', time: '10:05 am', tone: 'green' },
-    { type: 'Legal check', id: 'CS-2501', date: '10/08/26', time: '10:18 am', tone: 'warm' },
-    { type: 'Asset exported', id: 'CS-2539', date: '10/08/26', time: '10:40 am', tone: 'green' },
+  protected readonly signalColumns = ['signal', 'source', 'priority', 'owner', 'action'];
+  protected readonly signals: readonly ResearchSignalRow[] = [
+    { signal: 'Pricing confusion', source: 'Support chat', priority: 'High', owner: 'Mira', tone: 'warm' },
+    { signal: 'Template request', source: 'Beta survey', priority: 'Medium', owner: 'Anton', tone: 'blue' },
+    { signal: 'Proof gap', source: 'Sales call', priority: 'High', owner: 'Lena', tone: 'warm' },
+    { signal: 'Setup praise', source: 'Onboarding poll', priority: 'Low', owner: 'Noah', tone: 'green' },
+    { signal: 'Export friction', source: 'Session replay', priority: 'Medium', owner: 'Iris', tone: 'blue' },
+    { signal: 'Tone mismatch', source: 'Brand QA', priority: 'High', owner: 'Sasha', tone: 'warm' },
+    { signal: 'Mobile interest', source: 'Community post', priority: 'Medium', owner: 'Theo', tone: 'blue' },
+    { signal: 'Workflow win', source: 'Customer note', priority: 'Low', owner: 'Priya', tone: 'green' },
   ];
 }

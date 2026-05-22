@@ -234,8 +234,8 @@ export class App {
       columns: 6,
       height: '658px',
       content: {
-        title: 'Content audit log',
-        subtitle: 'Latest review and publishing events',
+        title: 'Research signals board',
+        subtitle: 'Audience insights awaiting triage',
       },
     },
   ]);

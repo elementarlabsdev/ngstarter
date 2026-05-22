@@ -1,39 +1,45 @@
 <app-widget-shell [title]="content().title" [subtitle]="content().subtitle" [events]="true">
-  <table ngs-table [dataSource]="events" class="events-table rounded-2xl overflow-hidden">
-    <ng-container ngsColumnDef="type">
-      <th ngs-header-cell *ngsHeaderCellDef>Review Type</th>
+  <table ngs-table [dataSource]="signals" class="events-table rounded-2xl overflow-hidden">
+    <ng-container ngsColumnDef="signal">
+      <th ngs-header-cell *ngsHeaderCellDef>Signal</th>
       <td ngs-cell *ngsCellDef="let row">
-        <ngs-chip appearance="filled" class="event-chip" [class.tone-warm]="row.tone === 'warm'" [class.tone-green]="row.tone === 'green'" [class.tone-blue]="row.tone === 'blue'">
-          {{ row.type }}
+        <ngs-chip
+          appearance="filled"
+          class="event-chip"
+          [class.tone-warm]="row.tone === 'warm'"
+          [class.tone-green]="row.tone === 'green'"
+          [class.tone-blue]="row.tone === 'blue'"
+        >
+          {{ row.signal }}
         </ngs-chip>
       </td>
     </ng-container>
 
-    <ng-container ngsColumnDef="id">
-      <th ngs-header-cell *ngsHeaderCellDef>Asset ID</th>
-      <td ngs-cell *ngsCellDef="let row">{{ row.id }}</td>
+    <ng-container ngsColumnDef="source">
+      <th ngs-header-cell *ngsHeaderCellDef>Source</th>
+      <td ngs-cell *ngsCellDef="let row">{{ row.source }}</td>
     </ng-container>
 
-    <ng-container ngsColumnDef="date">
-      <th ngs-header-cell *ngsHeaderCellDef>Date</th>
-      <td ngs-cell *ngsCellDef="let row">{{ row.date }}</td>
+    <ng-container ngsColumnDef="priority">
+      <th ngs-header-cell *ngsHeaderCellDef>Priority</th>
+      <td ngs-cell *ngsCellDef="let row">{{ row.priority }}</td>
     </ng-container>
 
-    <ng-container ngsColumnDef="time">
-      <th ngs-header-cell *ngsHeaderCellDef>Time</th>
-      <td ngs-cell *ngsCellDef="let row">{{ row.time }}</td>
+    <ng-container ngsColumnDef="owner">
+      <th ngs-header-cell *ngsHeaderCellDef>Owner</th>
+      <td ngs-cell *ngsCellDef="let row">{{ row.owner }}</td>
     </ng-container>
 
     <ng-container ngsColumnDef="action">
       <th ngs-header-cell *ngsHeaderCellDef></th>
       <td ngs-cell *ngsCellDef="let row">
-        <button ngsIconButton type="button" aria-label="Open review" ngsTooltip="Open review">
-          <ngs-icon name="fluent:play-24-filled" />
+        <button ngsIconButton type="button" aria-label="Open research signal" ngsTooltip="Open signal">
+          <ngs-icon name="fluent:eye-24-regular" />
         </button>
       </td>
     </ng-container>
 
-    <tr ngs-header-row *ngsHeaderRowDef="eventColumns"></tr>
-    <tr ngs-row *ngsRowDef="let row; columns: eventColumns"></tr>
+    <tr ngs-header-row *ngsHeaderRowDef="signalColumns"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: signalColumns"></tr>
   </table>
 </app-widget-shell>
