@@ -124,27 +124,10 @@ ngs-panel-content {
 
 ngs-form-field.search-field {
   width: min(24vw, 390px);
-  color: #666663;
-  outline: 0;
-  border-radius: 999px;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, #cfcfcb 34%, transparent);
+  --ngs-form-field-icon-affix-padding-x: --spacing(3);
+  --ngs-form-field-border-radius: 999px;
+  --ngs-form-field-affix-gap: --spacing(2);
 }
-
-ngs-form-field.search-field ngs-icon {
-  color: #30302e;
-}
-
-ngs-form-field.search-field input[ngsInput] {
-  color: #60605c;
-}
-
-ngs-form-field.search-field input[ngsInput]::placeholder {
-  color: #8d8d89;
-}
-
-//ngs-form-field.search-field.ngs-form-field-focused {
-//  outline-color: color-mix(in srgb, var(--ngs-color-primary) 55%, transparent);
-//}
 
 .page-title,
 .user-copy,
