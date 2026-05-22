@@ -211,7 +211,7 @@ export class App {
     {
       id: 'left-stack',
       columns: 12,
-      columnsLg: 6,
+      columnsMd: 6,
       children: [
         {
           id: 'queue-forecast',
@@ -239,7 +239,7 @@ export class App {
       id: 'signal-ledger',
       type: 'events-widget',
       columns: 12,
-      columnsLg: 6,
+      columnsMd: 6,
       height: '658px',
       content: {
         title: 'Research signals board',
