@@ -83,7 +83,7 @@
 
     overflow: visible;
     border-radius: 0 --spacing(9) --spacing(9) 0;
-    --ngs-sidenav-background-color: rgba(255, 255, 255, 0.35);
+    --ngs-sidenav-background-color: #f7f7f7;
   }
 
   ngs-sidebar.modern-sidebar {
@@ -96,7 +96,6 @@
 
   ngs-sidenav-content {
     position: relative;
-    z-index: 20;
   }
 
   ngs-logo.splash-logo .brand-logo-image {

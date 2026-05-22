@@ -174,7 +174,9 @@ export class App {
     {
       id: 'audience-pulse',
       type: 'audience-widget',
-      columns: 4,
+      columns: 12,
+      columnsMd: 6,
+      columnsXl: 4,
       height: '405px',
       content: {
         title: 'Audience pulse',
@@ -184,7 +186,9 @@ export class App {
     {
       id: 'conversion-pulse',
       type: 'gauge-widget',
-      columns: 4,
+      columns: 12,
+      columnsMd: 6,
+      columnsXl: 4,
       height: '405px',
       content: {
         title: 'Brand alignment',
@@ -195,7 +199,9 @@ export class App {
     {
       id: 'campaign-calendar',
       type: 'calendar-widget',
-      columns: 4,
+      columns: 12,
+      columnsMd: 6,
+      columnsXl: 4,
       height: '405px',
       content: {
         title: 'Publishing calendar',
@@ -204,7 +210,8 @@ export class App {
     },
     {
       id: 'left-stack',
-      columns: 6,
+      columns: 12,
+      columnsLg: 6,
       children: [
         {
           id: 'queue-forecast',
@@ -231,7 +238,8 @@ export class App {
     {
       id: 'signal-ledger',
       type: 'events-widget',
-      columns: 6,
+      columns: 12,
+      columnsLg: 6,
       height: '658px',
       content: {
         title: 'Research signals board',

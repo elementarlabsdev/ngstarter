@@ -5,7 +5,6 @@
   min-height: 100vh;
   color: var(--modern-ink);
   background: var(--modern-bg);
-}
 
 ngs-sidenav-container.modern-shell {
   height: 100%;
@@ -179,8 +178,9 @@ ngs-form-field.search-field {
 }
 
 .dashboard-stage {
-  min-width: 1160px;
-  padding: 0 --spacing(12) --spacing(4) --spacing(12);
+  width: 100%;
+  min-width: 0;
+  padding: 0 --spacing(12) --spacing(4);
 }
 
 .analytics-grid {
@@ -248,4 +248,28 @@ ngs-form-field.search-field {
   .page-title h1 {
     font-size: 2rem;
   }
+
+  .dashboard-stage {
+    padding-inline: --spacing(6);
+  }
+}
+
+@media (max-width: 760px) {
+  ngs-panel-header.workspace-header {
+    padding: --spacing(5) --spacing(5) --spacing(4) --spacing(18);
+  }
+
+  ngs-panel.workspace-panel.is-sidenav-closed ngs-panel-header.workspace-header {
+    padding-left: --spacing(18);
+  }
+
+  ngs-form-field.search-field {
+    width: min(52vw, 260px);
+    min-width: 0;
+  }
+
+  .dashboard-stage {
+    padding-inline: --spacing(3);
+  }
+}
 }

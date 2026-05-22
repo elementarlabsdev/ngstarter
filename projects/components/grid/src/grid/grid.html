@@ -5,7 +5,11 @@
 <ng-template #itemsTpl let-items>
   @for (item of items; track $index) {
     <div class="ngs-grid-item"
-         [style.--ngs-grid-item-colspan]="item.columns || 12">
+         [style.--ngs-grid-item-colspan]="item.columns || 12"
+         [style.--ngs-grid-item-colspan-sm]="item.columnsSm ?? null"
+         [style.--ngs-grid-item-colspan-md]="item.columnsMd ?? null"
+         [style.--ngs-grid-item-colspan-lg]="item.columnsLg ?? null"
+         [style.--ngs-grid-item-colspan-xl]="item.columnsXl ?? null">
       @if (item.children?.length > 0) {
         <div class="ngs-grid-container">
           <ng-container *ngTemplateOutlet="itemsTpl; context: { $implicit: item.children }"/>
@@ -13,6 +17,10 @@
       } @else {
         <div class="ngs-grid-item-content"
              [style.--ngs-grid-item-height]="item.height"
+             [style.--ngs-grid-item-height-sm]="item.heightSm ?? null"
+             [style.--ngs-grid-item-height-md]="item.heightMd ?? null"
+             [style.--ngs-grid-item-height-lg]="item.heightLg ?? null"
+             [style.--ngs-grid-item-height-xl]="item.heightXl ?? null"
              [class.plain]="getItemConfig(item.type).plain || plain()"
              [class.hidden]="!_allLoaded()">
           <ng-container [ngComponentOutlet]="getItemComponent(item.type) | async"

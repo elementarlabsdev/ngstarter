@@ -21,9 +21,10 @@
     <ngs-sidenav-container autosize autoFocus="false" hasBackdrop="false" class="modern-shell">
       <ngs-sidenav
         [opened]="sidenavOpened()"
+        (openedChange)="sidenavOpened.set($event)"
         mode="side"
         [fixedWidth]="292"
-        [adaptive]="false"
+        adaptiveBreakpoint="(max-width: 1180px)"
         class="modern-sidenav"
       >
         <ngs-sidebar class="modern-sidebar" aria-label="Modern analytics navigation">

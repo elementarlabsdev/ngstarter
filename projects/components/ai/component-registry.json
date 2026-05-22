@@ -4137,7 +4137,7 @@
       "docsPath": "/components/grid",
       "docsOverviewSource": "projects/docs/src/app/components/grid/overview/overview.html",
       "purpose": "Render static dashboard widgets in a predefined 12-column layout.",
-      "useWhen": "Use ngs-grid when the application defines a static dashboard or widget layout and users do not need to rearrange, customize, or save the dashboard order. Provide configs that map item types to components and items with id, type, columns, height, content, skeletonHeight, and children. Widgets can inject GRID and call markItemAsLoaded(id), especially with waitWhenAllItemsLoaded. Use Grid for fixed analytics sections, portal start pages, and nested dashboard sections where the structure is known. Do not use Grid as a normal CSS layout helper for forms, pages, cards, or repeated elements; use TailwindCSS grid/flex classes. Do not use Grid for dashboards users can rearrange or change; use Tiles. Do not use for tables or datasets; use Table or DataView. Do not use for file/media grids; use upload/media components.",
+      "useWhen": "Use ngs-grid when the application defines a static dashboard or widget layout and users do not need to rearrange, customize, or save the dashboard order. Provide configs that map item types to components and items with id, type, columns, optional responsive columnsSm/columnsMd/columnsLg/columnsXl, height, optional responsive heightSm/heightMd/heightLg/heightXl, content, skeletonHeight, and children. Widgets can inject GRID and call markItemAsLoaded(id), especially with waitWhenAllItemsLoaded. Use Grid for fixed analytics sections, portal start pages, and nested dashboard sections where the structure is known. Do not use Grid as a normal CSS layout helper for forms, pages, cards, or repeated elements; use TailwindCSS grid/flex classes. Do not use Grid for dashboards users can rearrange or change; use Tiles. Do not use for tables or datasets; use Table or DataView. Do not use for file/media grids; use upload/media components.",
       "exampleTopics": [],
       "minimalExample": null,
       "exampleFiles": [],
@@ -4163,7 +4163,17 @@
         "--ngs-color-border",
         "--ngs-grid-gap",
         "--ngs-grid-item-colspan",
+        "--ngs-grid-item-colspan-lg",
+        "--ngs-grid-item-colspan-md",
+        "--ngs-grid-item-colspan-sm",
+        "--ngs-grid-item-colspan-xl",
+        "--ngs-grid-item-effective-colspan",
+        "--ngs-grid-item-effective-height",
         "--ngs-grid-item-height",
+        "--ngs-grid-item-height-lg",
+        "--ngs-grid-item-height-md",
+        "--ngs-grid-item-height-sm",
+        "--ngs-grid-item-height-xl",
         "--ngs-grid-item-skeleton-min-height",
         "--ngs-radius-xl"
       ],
@@ -5352,8 +5362,7 @@
         "--ngs-font-size-xs",
         "--ngs-logo-text-color",
         "--ngs-logo-text-font-size",
-        "--ngs-logo-text-font-weight",
-        "--ngs-logo-text-hover-color"
+        "--ngs-logo-text-font-weight"
       ],
       "example": null
     },
