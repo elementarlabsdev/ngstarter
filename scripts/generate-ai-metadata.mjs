@@ -86,7 +86,7 @@ const recipes = [
       'Do not make ordinary table rows, labels, descriptions, sidebar items, or status text bold to imitate a screenshot.',
     ],
     styling: {
-      template: 'Use TailwindCSS utility classes for layout, responsive behavior, sizing, spacing, flex, grid, and alignment.',
+      template: 'Use TailwindCSS utility classes for layout, responsive behavior, sizing, spacing, flex, grid, alignment, and routine margins/padding such as mt-10 and p-6 instead of custom margin-top: 2.5rem and padding: 1.5rem in SCSS.',
       localScss: [
         "Start local SCSS files that use Tailwind tokens with @reference 'tailwindcss';",
         'Use --spacing(N) for spacing values in local SCSS.',
@@ -982,6 +982,7 @@ function buildLlms(registry, full = false) {
     '- Import theme styles once in the app stylesheet.',
     '- Use `provideNgsTheme` from `@ngstarter-ui/components/core` for runtime theming.',
     '- Prefer `--ngs-*` CSS custom properties when customizing styles.',
+    '- Use TailwindCSS utility classes for routine layout spacing, including margins and padding; prefer classes like `mt-10` and `p-6` over custom SCSS such as `margin-top: 2.5rem` or `padding: 1.5rem`.',
     '- Put global component style overrides and global CSS variable overrides only in `styles.scss`; for component-scoped overrides, define them in that component\'s stylesheet so they apply only there.',
     '- In component SCSS files, all component-local styling must be nested under the `:host` selector. Do not write top-level component-local selectors outside `:host`.',
     '- Standalone `ngs-form-field` controls outside forms, such as header, toolbar, or compact filter fields, do not require `ngs-label` when they have clear placeholder text or an `aria-label`/`aria-labelledby` context. Form fields inside actual forms should still use `ngs-label`.',

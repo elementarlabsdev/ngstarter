@@ -93,7 +93,7 @@
         "Do not make ordinary table rows, labels, descriptions, sidebar items, or status text bold to imitate a screenshot."
       ],
       "styling": {
-        "template": "Use TailwindCSS utility classes for layout, responsive behavior, sizing, spacing, flex, grid, and alignment.",
+        "template": "Use TailwindCSS utility classes for layout, responsive behavior, sizing, spacing, flex, grid, alignment, and routine margins/padding such as mt-10 and p-6 instead of custom margin-top: 2.5rem and padding: 1.5rem in SCSS.",
         "localScss": [
           "Start local SCSS files that use Tailwind tokens with @reference 'tailwindcss';",
           "Use --spacing(N) for spacing values in local SCSS.",
