@@ -78,12 +78,12 @@ export class BrandAlignmentChart implements AfterViewInit, OnDestroy {
           endAngle: 0,
           min: 0,
           max: 100,
-          center: ['50%', '72%'],
-          radius: '96%',
+          center: ['50%', '70%'],
+          radius: '104%',
           splitNumber: 4,
           progress: {
             show: true,
-            width: 34,
+            width: 38,
             roundCap: true,
             itemStyle: {
               color: alignmentColor,
@@ -92,7 +92,7 @@ export class BrandAlignmentChart implements AfterViewInit, OnDestroy {
           axisLine: {
             roundCap: true,
             lineStyle: {
-              width: 34,
+              width: 38,
               color: [[1, trackColor]],
             },
           },
@@ -115,13 +115,13 @@ export class BrandAlignmentChart implements AfterViewInit, OnDestroy {
             offsetCenter: [0, '-4%'],
             formatter: '{value}%',
             color: textColor,
-            fontSize: 34,
+            fontSize: 38,
             fontWeight: 500,
           },
           title: {
             offsetCenter: [0, '20%'],
             color: mutedColor,
-            fontSize: 14,
+            fontSize: 15,
             fontWeight: 400,
           },
           data: [

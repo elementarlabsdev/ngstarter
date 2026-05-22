@@ -4,11 +4,12 @@
   display: grid;
   height: 100%;
   place-items: center;
-  grid-template-rows: 1fr auto;
-  gap: --spacing(3);
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: --spacing(2);
 
   app-brand-alignment-chart {
-    align-self: end;
+    align-self: center;
+    justify-self: center;
   }
 
   .legend-row {

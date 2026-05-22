@@ -1,5 +1,5 @@
 <app-widget-shell [title]="content().title" [subtitle]="content().subtitle" [events]="true">
-  <table ngs-table [dataSource]="events" class="events-table">
+  <table ngs-table [dataSource]="events" class="events-table rounded-2xl overflow-hidden">
     <ng-container ngsColumnDef="type">
       <th ngs-header-cell *ngsHeaderCellDef>Review Type</th>
       <td ngs-cell *ngsCellDef="let row">
@@ -36,5 +36,4 @@
     <tr ngs-header-row *ngsHeaderRowDef="eventColumns"></tr>
     <tr ngs-row *ngsRowDef="let row; columns: eventColumns"></tr>
   </table>
-  <button ngsButton type="button" class="view-all-button">Open Queue</button>
 </app-widget-shell>

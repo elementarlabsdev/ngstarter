@@ -252,6 +252,8 @@ Styling rules for admin UIs:
   TailwindCSS utility classes in templates.
 - Start local component SCSS files that use Tailwind tokens with `@reference 'tailwindcss';`.
 - In local SCSS, express spacing values with the Tailwind function `--spacing(N)`.
+- In component SCSS files, all component-local styling MUST be nested under the `:host` selector;
+  do not write top-level component-local selectors outside `:host`.
 - Locally override NgStarter components through component or directive selectors such as
   `ngs-card`, `ngs-navigation`, `ngs-form-field`, `table[ngs-table]`, `button[ngsButton]`, and
   `button[ngsIconButton]`.

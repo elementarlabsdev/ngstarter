@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { Chip } from '@ngstarter-ui/components/chips';
+import { Chip, ChipShape } from '@ngstarter-ui/components/chips';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 import { DashboardWidgetContent } from '../shared/widget-content';
@@ -14,7 +14,7 @@ interface SpendLane {
 
 @Component({
   selector: 'app-model-spend-widget',
-  imports: [Chip, Icon, ProgressBar, WidgetShell],
+  imports: [Chip, ChipShape, Icon, ProgressBar, WidgetShell],
   templateUrl: './model-spend-widget.html',
   styleUrl: './model-spend-widget.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

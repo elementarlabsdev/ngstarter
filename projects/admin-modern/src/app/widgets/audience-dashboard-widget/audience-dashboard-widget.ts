@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { Chip } from '@ngstarter-ui/components/chips';
+import { Chip, ChipShape } from '@ngstarter-ui/components/chips';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 import { DashboardWidgetContent } from '../shared/widget-content';
@@ -14,7 +14,7 @@ interface ChannelScore {
 
 @Component({
   selector: 'app-audience-dashboard-widget',
-  imports: [Chip, Icon, ProgressBar, WidgetShell],
+  imports: [Chip, ChipShape, Icon, ProgressBar, WidgetShell],
   templateUrl: './audience-dashboard-widget.html',
   styleUrl: './audience-dashboard-widget.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
