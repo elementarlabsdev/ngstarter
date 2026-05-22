@@ -99,10 +99,9 @@
     z-index: 20;
   }
 
-  ngs-logo.brand-logo {
-    --ngs-logo-text-color: #060606;
-    --ngs-logo-text-font-size: 4.2rem;
-    --ngs-logo-text-font-weight: 700;
+  ngs-logo.splash-logo .brand-logo-image {
+    width: calc(--spacing(15) * 1253 / 257);
+    height: --spacing(15);
   }
 
   ngs-sidebar-nav.modern-nav {

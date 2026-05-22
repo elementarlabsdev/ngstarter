@@ -161,6 +161,9 @@ Required admin mappings:
   `ScrollSpy`, `ScrollSpyNav`, `ScrollSpyContainerDirective`, `GuidedTour`/`TourService` via
   `@ngstarter-ui/components/guided-tour`, `ColorSwitcher`, `CookiePopup`, `Logo`, `Tiles`, and
   `ResizableContainer`.
+- `ngs-logo-shape` is only for compact square or near-square logo marks/emblems. Do not use it for
+  long wordmark images or full-width brand logos; place those directly inside `ngs-logo` or compose
+  them with `ngs-logo-text`.
 - Scrollable panel, grid, sidebar, inspector, and chat message regions: `ScrollbarArea` from
   `@ngstarter-ui/components/scrollbar-area`.
 - Startup splash: `SplashScreen` only once near the root app template for initial branded bootstrap
@@ -242,6 +245,10 @@ Form construction rules:
   non-form UI.
 - Do not wrap checkbox, radio, button, or toggle controls in `ngs-form-field` when they already have
   their own label pattern.
+- Standalone `ngs-form-field` controls outside forms, such as header, toolbar, or compact filter
+  fields, do not require `ngs-label` when they have clear placeholder text or an
+  `aria-label`/`aria-labelledby` context. Form fields inside actual forms should still use
+  `ngs-label`.
 - In admin UIs, text inputs and search fields should not use visible CSS borders. Set form field
   border tokens to zero/transparent and render the field edge with `outline` on the NgStarter field
   container, including focused state. The outline must not change layout size.

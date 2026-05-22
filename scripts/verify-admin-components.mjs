@@ -53,7 +53,6 @@ const strictRequiredTemplateRules = [
   ['primary rail uses Sidebar', /<ngs-sidebar\b/],
   ['primary rail uses SidebarNav', /<ngs-sidebar-nav\b/],
   ['search/text input uses FormField', /<ngs-form-field\b/],
-  ['form fields use Label', /<ngs-label\b/],
   ['actions use NgStarter buttons', /<button\b[^>]*\bngs(?:Button|IconButton)\b/],
   ['icons use Icon', /<ngs-icon\b/],
 ];
