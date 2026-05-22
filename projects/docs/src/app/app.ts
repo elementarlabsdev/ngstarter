@@ -48,6 +48,7 @@ import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
 import { FormsModule } from '@angular/forms';
 import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import { Toolbar, ToolbarItem, ToolbarSpacer } from '@ngstarter-ui/components/toolbar';
+import { DocsNavigationService } from './navigation/docs-navigation.service';
 
 @Component({
   selector: 'app-root',
@@ -112,6 +113,7 @@ export class App implements OnInit {
   private _seoService = inject(SeoService);
   private _envService = inject(EnvironmentService);
   private _router = inject(Router);
+  private readonly docsNavigation = inject(DocsNavigationService);
 
   router = inject(Router);
   location = inject(Location);
@@ -1103,17 +1105,19 @@ export class App implements OnInit {
   }
 
   constructor() {
+    this.docsNavigation.registerNavItems(this.navItems);
+
     afterNextRender(() => {
-      // Scroll a page to top if url changed
       this._router.events
         .pipe(
-          filter(event=> event instanceof NavigationEnd)
+          filter((event): event is NavigationEnd => event instanceof NavigationEnd)
         )
-        .subscribe(() => {
-          window.scrollTo({
-            top: 0,
-            left: 0
-          });
+        .subscribe((event) => {
+          if (event.urlAfterRedirects.includes('#')) {
+            return;
+          }
+
+          requestAnimationFrame(() => this.scrollPageToTop());
         })
       ;
     });
@@ -1147,5 +1151,33 @@ export class App implements OnInit {
 
   onSidebarOpenedChange(event: any) {
     console.log(event);
+  }
+
+  private scrollPageToTop(): void {
+    const targets = new Set<HTMLElement>();
+    const scrollingElement = document.scrollingElement;
+
+    if (scrollingElement instanceof HTMLElement) {
+      targets.add(scrollingElement);
+    }
+
+    document
+      .querySelectorAll<HTMLElement>('ngs-sidenav-content, ngs-panel-content, .ngs-sidenav-content, .ngs-panel-content')
+      .forEach((element) => targets.add(element));
+
+    for (const target of targets) {
+      target.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'auto'
+      });
+      target.scrollTop = 0;
+    }
+
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'auto'
+    });
   }
 }

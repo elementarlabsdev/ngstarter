@@ -5,7 +5,7 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection
 } from '@angular/core';
-import { provideRouter, TitleStrategy, withViewTransitions } from '@angular/router';
+import { provideRouter, TitleStrategy, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
@@ -31,7 +31,14 @@ export const appConfig: ApplicationConfig = {
     ColorSchemeStore,
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withViewTransitions()),
+    provideRouter(
+      routes,
+      withInMemoryScrolling({
+        anchorScrolling: 'enabled',
+        scrollPositionRestoration: 'top',
+      }),
+      withViewTransitions()
+    ),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch()),
     provideStore(),

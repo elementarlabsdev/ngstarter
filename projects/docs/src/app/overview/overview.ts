@@ -1,14 +1,18 @@
 import { Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardContent, CardFooter } from '@ngstarter-ui/components/card';
 import { OrderByPipe } from '@ngstarter-ui/components/core';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   imports: [
     RouterLink,
+    Button,
     Card,
     CardContent,
     CardFooter,
+    Icon,
     OrderByPipe
   ],
   templateUrl: './overview.html',

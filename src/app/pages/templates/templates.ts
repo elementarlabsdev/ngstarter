@@ -100,5 +100,44 @@ export class Templates {
     'Commercial source code included with NgStarter plans',
   ];
 
+  readonly dashboardComponents = [
+    {
+      title: 'Layout',
+      href: 'https://docs.ngstarter.com/components/layout',
+      icon: 'fluent:layout-column-two-24-regular',
+      description: 'Root app shells, viewport regions, and dashboard workspace structure.',
+    },
+    {
+      title: 'Sidenav',
+      href: 'https://docs.ngstarter.com/components/sidenav',
+      icon: 'fluent:panel-left-24-regular',
+      description: 'Responsive side navigation, collapsed states, and admin app rails.',
+    },
+    {
+      title: 'Sidebar',
+      href: 'https://docs.ngstarter.com/navigation/sidebar',
+      icon: 'fluent:navigation-24-regular',
+      description: 'Primary admin navigation with icons, badges, groups, and active states.',
+    },
+    {
+      title: 'Card',
+      href: 'https://docs.ngstarter.com/components/card',
+      icon: 'fluent:card-ui-24-regular',
+      description: 'Metric panels, dashboard widgets, and repeated content surfaces.',
+    },
+    {
+      title: 'Data View',
+      href: 'https://docs.ngstarter.com/libraries/data-view',
+      icon: 'fluent:table-24-regular',
+      description: 'Operational data grids with sorting, selection, pagination, and server data.',
+    },
+    {
+      title: 'Micro Charts',
+      href: 'https://docs.ngstarter.com/micro-charts',
+      icon: 'fluent:chart-multiple-24-regular',
+      description: 'Compact dashboard trends and comparisons for KPI-heavy screens.',
+    },
+  ];
+
   readonly faqs = templatesFaqItems;
 }

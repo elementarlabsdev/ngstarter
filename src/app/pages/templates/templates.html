@@ -168,6 +168,33 @@
       </ngs-card>
     </section>
 
+    <section class="mt-20" aria-labelledby="template-components-title">
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-primary">
+          Component foundation
+        </p>
+        <h2 id="template-components-title" class="text-3xl font-semibold text-on-background">
+          Dashboard templates are composed from documented NgStarter components
+        </h2>
+        <p class="mt-4 text-base leading-7 text-on-surface-variant">
+          Review the building blocks behind the admin templates before adapting the source code to
+          your product workflow.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        @for (component of dashboardComponents; track component.href) {
+          <ngs-card appearance="outlined" class="template-component-card">
+            <a ngs-card-content [href]="component.href">
+              <ngs-icon [name]="component.icon" class="detail-icon" />
+              <h3>{{ component.title }}</h3>
+              <p>{{ component.description }}</p>
+            </a>
+          </ngs-card>
+        }
+      </div>
+    </section>
+
     <section class="mx-auto mt-20 max-w-4xl" aria-labelledby="template-faq-title">
       <div class="mb-10 text-center">
         <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-primary">FAQ</p>
