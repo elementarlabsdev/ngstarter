@@ -10,10 +10,6 @@
   align-items: center;
   gap: --spacing(3);
 
-  &:hover {
-    filter: brightness(110%);
-  }
-
   .content {
     display: flex;
     flex-direction: column;

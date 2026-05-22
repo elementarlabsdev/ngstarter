@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate-ai-metadata.mjs",
   "package": "@ngstarter-ui/components",
   "description": "AI-readable registry for NgStarter UI Angular secondary entry points.",
-  "componentCount": 119,
+  "componentCount": 120,
   "conventions": {
     "importPattern": "@ngstarter-ui/components/<component>",
     "selectorPrefix": "ngs",
@@ -1171,12 +1171,12 @@
       "cssTokens": [
         "--ngs-card-bg",
         "--ngs-card-border-color",
-        "--ngs-card-border-radius",
         "--ngs-card-color",
         "--ngs-card-content-font-size",
         "--ngs-card-content-letter-spacing",
         "--ngs-card-content-line-height",
         "--ngs-card-padding",
+        "--ngs-card-radius",
         "--ngs-card-shadow",
         "--ngs-card-subtitle-color",
         "--ngs-card-subtitle-font-size",
@@ -1488,6 +1488,7 @@
         "[ngsChipControl]",
         "[ngsChipEdit]",
         "[ngsChipRemove]",
+        "[ngsChipShape]",
         "input[ngsChipInputFor]",
         "ngs-chip",
         "ngs-chip-avatar",
@@ -1497,7 +1498,8 @@
         "ngs-chip-option",
         "ngs-chip-remove",
         "ngs-chip-row",
-        "ngs-chip-set"
+        "ngs-chip-set",
+        "ngs-chip-shape"
       ],
       "exportedSymbols": [
         "Chip",
@@ -1512,7 +1514,8 @@
         "ChipOption",
         "ChipRemove",
         "ChipRow",
-        "ChipSet"
+        "ChipSet",
+        "ChipShape"
       ],
       "inputs": [
         "appearance",
@@ -5276,6 +5279,8 @@
         "selectionChange"
       ],
       "cssTokens": [
+        "--ngs-color-neutral",
+        "--ngs-list-gap",
         "--ngs-list-item-active-bg",
         "--ngs-list-item-active-color",
         "--ngs-list-item-color",
@@ -5658,6 +5663,36 @@
         "--ngs-radius-lg",
         "--ngs-shadow-sm"
       ],
+      "example": null
+    },
+    {
+      "name": "motion",
+      "title": "Motion",
+      "overviewName": "Motion",
+      "category": null,
+      "package": "@ngstarter-ui/components",
+      "importPath": "@ngstarter-ui/components/motion",
+      "publicApi": "projects/components/motion/public-api.ts",
+      "sourceRoot": "projects/components/motion/src",
+      "docsPath": null,
+      "docsOverviewSource": null,
+      "purpose": "Use Motion when an Angular admin or dashboard screen needs this UI pattern.",
+      "useWhen": "Use Motion as the standard NgStarter component for this UI need.",
+      "exampleTopics": [],
+      "minimalExample": null,
+      "exampleFiles": [],
+      "previewAsset": null,
+      "selectors": [
+        "ngs-motion-player",
+        "ngs-motion-studio"
+      ],
+      "exportedSymbols": [
+        "MotionPlayer",
+        "MotionStudio"
+      ],
+      "inputs": [],
+      "outputs": [],
+      "cssTokens": [],
       "example": null
     },
     {
