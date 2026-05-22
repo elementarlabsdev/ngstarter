@@ -160,7 +160,7 @@ export class BasicFormRendererExample {
         type: 'image',
         content: {
           src: 'https://angular.io/assets/images/logos/angular/angular.svg',
-          alt: 'Логотип Angular',
+          alt: 'Angular logo',
           width: 200,
         }
       },

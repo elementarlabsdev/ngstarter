@@ -81,7 +81,7 @@ export class Api {
   carouselNextProperties = [
     {
       name: 'carousel',
-      description: 'Сarousel instance if the control is external',
+      description: 'Carousel instance if the control is external',
       type: 'Carousel',
       default: '–'
     }
@@ -89,7 +89,7 @@ export class Api {
   carouselPreviousProperties = [
     {
       name: 'carousel',
-      description: 'Сarousel instance if the control is external',
+      description: 'Carousel instance if the control is external',
       type: 'Carousel',
       default: '–'
     }

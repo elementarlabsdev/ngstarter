@@ -7,14 +7,14 @@ import { DataViewColumnDef, DataView } from '@ngstarter-ui/components/data-view'
   imports: [DataView],
   template: `
     <div style="height: 400px; border: 2px solid red; padding: 10px; display: flex; flex-direction: column;">
-      <h3>Контейнер 400px, данных на 2 строки</h3>
+      <h3>400px container, data with 2 rows</h3>
       <ngs-data-view
         [columnDefs]="columnDefs"
         [data]="data"
         class="border border-border rounded-xl overflow-hidden"
       />
       <div style="background: #eee; padding: 10px; margin-top: 10px;">
-        Этот блок должен быть сразу под таблицей, если пустое место убрано.
+        This block should be directly below the table if the empty space has been removed.
       </div>
     </div>
   `
