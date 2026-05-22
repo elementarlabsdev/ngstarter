@@ -23,9 +23,7 @@ const organizationSchema: JsonLdObject = {
   name: 'NgStarter',
   url: SITE_URL,
   logo: `${SITE_URL}/favicon.ico`,
-  sameAs: [
-    'https://x.com/elementarlabs',
-  ],
+  sameAs: ['https://x.com/elementarlabs'],
   hasMerchantReturnPolicy: {
     '@id': merchantReturnPolicyId,
   },
@@ -114,7 +112,8 @@ const softwareSchema: JsonLdObject = {
   programmingLanguage: 'TypeScript',
   url: SITE_URL,
   softwareHelp: 'https://docs.ngstarter.com/',
-  description: 'AI-friendly Angular UI components library for admin dashboards, product interfaces, and enterprise Angular apps.',
+  description:
+    'AI-friendly Angular UI components library for admin dashboards, product interfaces, and enterprise Angular apps.',
   offers,
 };
 
@@ -128,38 +127,114 @@ const productSchema: JsonLdObject = {
     url: SITE_URL,
   },
   category: 'Angular UI components library',
-  description: 'Standalone Angular UI components, admin dashboard templates, source code, and themes for production Angular applications.',
+  description:
+    'Standalone Angular UI components, admin dashboard templates, source code, and themes for production Angular applications.',
   image: DEFAULT_OG_IMAGE,
   offers,
 };
 
-export const faqItems = [
+export const pricingFaqItems = [
   {
     question: 'Is NgStarter open source?',
-    answer: 'NgStarter is a commercial Angular UI components library. Purchases include source code access according to the selected license.',
+    answer:
+      'NgStarter is a commercial Angular UI components library. Purchases include source code access according to the selected license.',
   },
   {
     question: 'Can I use NgStarter in commercial projects?',
-    answer: 'Yes. NgStarter can be used in commercial applications, SaaS products, internal tools, and client projects under the purchased license terms.',
-  },
-  {
-    question: 'How long does trial mode last?',
-    answer: 'Trial mode is available for 3 months. After the trial period ends, you need to purchase a valid Standard or Professional license.',
-  },
-  {
-    question: 'What is included in Standard and Professional?',
-    answer: 'Standard includes one developer, one project, and one domain. Professional includes unlimited developers, unlimited projects, and unlimited domains.',
+    answer:
+      'Yes. NgStarter can be used in commercial applications, SaaS products, internal tools, and client projects under the purchased license terms.',
   },
   {
     question: 'Do I get the source code?',
-    answer: 'Yes. Both pricing plans include source code for the NgStarter UI components and admin dashboards.',
+    answer:
+      'Yes. Standard and Professional both include source code for the NgStarter UI components and admin dashboard templates.',
+  },
+  {
+    question: 'Are updates included?',
+    answer: 'Yes. Product updates are included according to the purchased plan and license scope.',
+  },
+  {
+    question: 'What support is included?',
+    answer:
+      'Standard includes GitHub ticket support. Professional includes priority GitHub ticket support for teams and multi-project usage.',
+  },
+  {
+    question: 'How long does trial mode last?',
+    answer:
+      'Trial mode is available for 3 months. After the trial period ends, you need to purchase a valid Standard or Professional license.',
+  },
+  {
+    question: 'What is included in Standard and Professional?',
+    answer:
+      'Standard includes one developer, one project, and one domain. Professional includes unlimited developers, unlimited projects, and unlimited domains.',
+  },
+  {
+    question: 'Can I use one license for multiple client projects?',
+    answer:
+      'Use Professional when you need unlimited projects, domains, developers, or agency client work. Standard is limited to one project and one domain.',
   },
 ];
 
-const faqSchema: JsonLdObject = {
+export const faqItems = pricingFaqItems;
+
+export const templatesFaqItems = [
+  {
+    question: 'Can I customize the Angular admin dashboard templates?',
+    answer:
+      'Yes. The templates include source code through the NgStarter license, so you can adapt layouts, widgets, routes, styles, and data integration for your product.',
+  },
+  {
+    question: 'Are the templates included in the NgStarter license?',
+    answer:
+      'Yes. Standard and Professional both include the Angular admin dashboard templates. Choose Professional for unlimited projects, domains, and developers.',
+  },
+  {
+    question: 'Do the templates include source code?',
+    answer:
+      'Yes. Template source code is included together with the NgStarter UI component source code under the selected commercial license.',
+  },
+  {
+    question: 'Are the admin templates responsive?',
+    answer:
+      'Yes. The templates are built with responsive Angular app shell patterns, reusable NgStarter components, and layouts that adapt across desktop and smaller screens.',
+  },
+  {
+    question: 'Do the templates support dark mode?',
+    answer:
+      'Yes. NgStarter templates are designed around theme tokens and can be used with dark-mode compatible NgStarter themes.',
+  },
+];
+
+const pricingFaqSchema: JsonLdObject = {
+  '@type': 'FAQPage',
+  '@id': `${SITE_URL}/pricing#faq`,
+  mainEntity: pricingFaqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+
+const homeFaqSchema: JsonLdObject = {
   '@type': 'FAQPage',
   '@id': `${SITE_URL}/#faq`,
-  mainEntity: faqItems.map((item) => ({
+  mainEntity: faqItems.slice(0, 5).map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+
+const templatesFaqSchema: JsonLdObject = {
+  '@type': 'FAQPage',
+  '@id': `${SITE_URL}/templates#faq`,
+  mainEntity: templatesFaqItems.map((item) => ({
     '@type': 'Question',
     name: item.question,
     acceptedAnswer: {
@@ -188,12 +263,18 @@ function webPageSchema(path: string, name: string, description: string): JsonLdO
   };
 }
 
-const homeDescription = 'NgStarter is an AI-friendly Angular components library for admin dashboards, product interfaces, and enterprise Angular apps with standalone, signal-based UI components.';
-const pricingDescription = 'Compare NgStarter Standard and Professional pricing for Angular UI components, admin dashboards, source code, support, projects, developers, and domains.';
-const templatesDescription = 'Explore NgStarter Angular admin templates for corporate revenue operations and modern creative analytics dashboards with responsive app shells, charts, and production-ready UI.';
-const licenseDescription = 'Read the NgStarter commercial license terms for Standard and Professional Angular UI component library plans.';
-const privacyDescription = 'Read the NgStarter privacy policy for data collection, payments, analytics, and contact information.';
-const termsDescription = 'Read the NgStarter terms of service for purchases, product access, acceptable use, and support.';
+const homeDescription =
+  'NgStarter is an AI-friendly Angular components library for admin dashboards, product interfaces, and enterprise Angular apps with standalone, signal-based UI components.';
+const pricingDescription =
+  'Compare NgStarter Standard and Professional pricing for Angular UI components, admin templates, source code, commercial licenses, support, updates, and trial access.';
+const templatesDescription =
+  'Explore Angular admin dashboard templates built with NgStarter UI for SaaS, CRM, analytics, and internal tools with source code, charts, responsive layouts, and dark mode.';
+const licenseDescription =
+  'Read the NgStarter commercial license terms for Standard and Professional Angular UI component library plans.';
+const privacyDescription =
+  'Read the NgStarter privacy policy for data collection, payments, analytics, and contact information.';
+const termsDescription =
+  'Read the NgStarter terms of service for purchases, product access, acceptable use, and support.';
 
 export const HOME_SEO: SeoData = {
   title: 'NgStarter - AI-Friendly Angular Components Library for Admin Apps',
@@ -206,13 +287,17 @@ export const HOME_SEO: SeoData = {
     shippingServiceSchema,
     softwareSchema,
     productSchema,
-    faqSchema,
-    webPageSchema('/', 'NgStarter - AI-Friendly Angular Components Library for Admin Apps', homeDescription),
+    homeFaqSchema,
+    webPageSchema(
+      '/',
+      'NgStarter - AI-Friendly Angular Components Library for Admin Apps',
+      homeDescription,
+    ),
   ],
 };
 
 export const PRICING_SEO: SeoData = {
-  title: 'Pricing | NgStarter Angular UI Components',
+  title: 'NgStarter Pricing | Angular UI Components & Admin Templates',
   description: pricingDescription,
   canonicalPath: '/pricing',
   structuredData: [
@@ -220,13 +305,19 @@ export const PRICING_SEO: SeoData = {
     websiteSchema,
     merchantReturnPolicySchema,
     shippingServiceSchema,
+    softwareSchema,
     productSchema,
-    webPageSchema('/pricing', 'Pricing | NgStarter Angular UI Components', pricingDescription),
+    pricingFaqSchema,
+    webPageSchema(
+      '/pricing',
+      'NgStarter Pricing - Angular UI Components & Admin Templates',
+      pricingDescription,
+    ),
   ],
 };
 
 export const TEMPLATES_SEO: SeoData = {
-  title: 'Angular Admin Templates | NgStarter',
+  title: 'Angular Admin Dashboard Templates | NgStarter UI',
   description: templatesDescription,
   canonicalPath: '/templates',
   ogImage: `${SITE_URL}/templates/admin-corporate-dashboard.png`,
@@ -234,12 +325,18 @@ export const TEMPLATES_SEO: SeoData = {
     organizationSchema,
     websiteSchema,
     productSchema,
-    webPageSchema('/templates', 'Angular Admin Templates | NgStarter', templatesDescription),
+    templatesFaqSchema,
+    webPageSchema(
+      '/templates',
+      'Angular Admin Dashboard Templates Built with NgStarter UI',
+      templatesDescription,
+    ),
     {
       '@type': 'SoftwareSourceCode',
       '@id': `${SITE_URL}/templates#corporate-template`,
       name: 'Corporate Admin Dashboard Template',
-      description: 'A sales operations dashboard for pipelines, revenue growth, regional sales, task summaries, and team updates.',
+      description:
+        'A sales operations dashboard for pipelines, revenue growth, regional sales, task summaries, and team updates.',
       codeRepository: 'https://github.com/elementarlabsdev/ngstarter',
       runtimePlatform: 'Angular',
       programmingLanguage: 'TypeScript',
@@ -253,7 +350,8 @@ export const TEMPLATES_SEO: SeoData = {
       '@type': 'SoftwareSourceCode',
       '@id': `${SITE_URL}/templates#modern-template`,
       name: 'Modern Admin Dashboard Template',
-      description: 'A soft, rounded creative analytics dashboard with responsive sidenav navigation, ECharts-powered widgets, calendar planning, and research signal tracking.',
+      description:
+        'A soft, rounded creative analytics dashboard with responsive sidenav navigation, ECharts-powered widgets, calendar planning, and research signal tracking.',
       codeRepository: 'https://github.com/elementarlabsdev/ngstarter',
       runtimePlatform: 'Angular',
       programmingLanguage: 'TypeScript',

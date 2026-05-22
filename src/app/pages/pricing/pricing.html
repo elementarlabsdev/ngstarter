@@ -1,1 +1,329 @@
-<app-pricing />
+<section
+  class="pricing-page bg-surface-container px-6 pb-24 pt-24 sm:px-8 lg:px-10 lg:pb-32 lg:pt-32"
+>
+  <div class="mx-auto max-w-7xl">
+    <div class="mx-auto max-w-4xl text-center">
+      <p class="mb-4 text-sm font-semibold uppercase tracking-wide text-primary">Pricing</p>
+      <h1
+        class="app-display-font text-4xl font-bold leading-tight tracking-normal text-on-background md:text-6xl"
+      >
+        NgStarter Pricing - Angular UI Components & Admin Templates
+      </h1>
+      <p class="mx-auto mt-6 max-w-3xl text-lg leading-8 text-on-surface-variant">
+        Choose a one-time NgStarter license for standalone Angular UI components, admin dashboard
+        templates, source code, commercial usage, updates, and GitHub support. Start in trial mode
+        for 3 months, then keep shipping with the plan that fits your project scope.
+      </p>
+      <div
+        class="mt-8 flex flex-wrap justify-center gap-4 [--ngs-button-font-size:0.975rem] [--ngs-button-font-weight:700] [--ngs-button-height:3.5rem] [--ngs-button-padding-x:1.5rem] [--ngs-button-radius:var(--ngs-radius-xl)] [--ngs-control-gap:0.75rem]"
+      >
+        <a
+          ngsButton="filled"
+          href="https://buy.polar.sh/polar_cl_GsjVRJPKKqoLqPn8bRKt6g7omlmLLi6lAvmpO2qXyyW"
+          data-polar-checkout
+          data-polar-checkout-theme="dark"
+          rel="noreferrer"
+          reverse
+        >
+          Buy NgStarter
+          <ngs-icon name="fluent:arrow-right-24-regular" />
+        </a>
+        <a ngsButton="outlined" routerLink="/templates">
+          View Templates
+          <ngs-icon name="fluent:grid-24-regular" />
+        </a>
+      </div>
+    </div>
+
+    <div class="mx-auto mt-16 grid max-w-5xl gap-8 md:grid-cols-2">
+      <ngs-card appearance="raised" class="pricing-card pricing-card-standard">
+        <div ngs-card-content class="flex h-full flex-col gap-7">
+          <div>
+            <h2 class="text-2xl font-semibold text-on-background">Standard</h2>
+            <p class="mt-3 text-sm leading-6 text-on-surface-variant">
+              A focused Angular UI components license for a solo developer building one commercial
+              app, SaaS admin, client portal, or internal dashboard.
+            </p>
+          </div>
+          <div class="price-divider">
+            <span class="text-4xl font-bold text-on-background">$29</span>
+            <span class="text-on-surface-variant">one time / project</span>
+          </div>
+          <ul class="flex grow flex-col gap-4">
+            <li class="feature-row">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" />
+              1 developer, 1 project, 1 domain with subdomains
+            </li>
+            <li class="feature-row">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" />
+              All Angular UI components and admin dashboard templates
+            </li>
+            <li class="feature-row">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" />
+              Source code for the component library and templates
+            </li>
+            <li class="feature-row">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" />
+              Standard support through GitHub tickets
+            </li>
+          </ul>
+          <a
+            ngsButton="outlined"
+            fullWidth
+            href="https://buy.polar.sh/polar_cl_GsjVRJPKKqoLqPn8bRKt6g7omlmLLi6lAvmpO2qXyyW"
+            data-polar-checkout
+            data-polar-checkout-theme="dark"
+          >
+            Choose Standard
+          </a>
+        </div>
+      </ngs-card>
+
+      <ngs-card appearance="raised" class="pricing-card pricing-card-featured">
+        <div class="pricing-badge">Most Popular</div>
+        <div ngs-card-content class="flex h-full flex-col gap-7">
+          <div>
+            <h2 class="text-2xl font-semibold">Professional</h2>
+            <p class="mt-3 text-sm leading-6 text-on-primary">
+              The complete Angular UI kit license for teams that build multiple products, agency
+              client apps, internal tools, and long-lived dashboard systems.
+            </p>
+          </div>
+          <div class="featured-price-divider">
+            <span class="text-4xl font-bold">$299</span>
+            <span>one time / unlimited</span>
+          </div>
+          <ul class="flex grow flex-col gap-4">
+            <li class="featured-row">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" />
+              Unlimited developers, projects, and domains
+            </li>
+            <li class="featured-row">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" />
+              All Angular UI components and admin dashboard templates
+            </li>
+            <li class="featured-row">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" />
+              Source code for the component library and templates
+            </li>
+            <li class="featured-row">
+              <ngs-icon name="fluent:checkmark-circle-24-filled" />
+              Priority support through GitHub tickets
+            </li>
+          </ul>
+          <a
+            ngsButton="filled"
+            fullWidth
+            href="https://buy.polar.sh/polar_cl_GsjVRJPKKqoLqPn8bRKt6g7omlmLLi6lAvmpO2qXyyW"
+            data-polar-checkout
+            data-polar-checkout-theme="dark"
+            class="featured-button"
+          >
+            Get Unlimited Access
+          </a>
+        </div>
+      </ngs-card>
+    </div>
+
+    <section class="mt-20">
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-primary">Compare plans</p>
+        <h2 class="text-3xl font-semibold text-on-background">Standard vs Professional</h2>
+        <p class="mt-4 text-base leading-7 text-on-surface-variant">
+          Both plans include the same NgStarter UI components, templates, source code, and
+          commercial usage rights. The difference is how many people, products, and domains the
+          license covers.
+        </p>
+      </div>
+      <ngs-card appearance="outlined" class="comparison-card mt-10">
+        <div ngs-card-content>
+          <div class="comparison-stage">
+            <aside class="comparison-featured-plan">
+              <div>
+                <div class="featured-plan-title">
+                  <ngs-icon name="fluent:sparkle-24-filled" />
+                  <h3>Professional</h3>
+                </div>
+                <p>Best for teams shipping more than one Angular product or client project.</p>
+              </div>
+
+              <ul>
+                @for (item of professionalHighlights; track item) {
+                  <li>
+                    <ngs-icon name="fluent:checkmark-24-filled" />
+                    {{ item }}
+                  </li>
+                }
+              </ul>
+
+              <div class="featured-plan-price">
+                <span>$299</span>
+                <strong>one time / unlimited</strong>
+              </div>
+
+              <a
+                ngsButton="filled"
+                fullWidth
+                href="https://buy.polar.sh/polar_cl_GsjVRJPKKqoLqPn8bRKt6g7omlmLLi6lAvmpO2qXyyW"
+                data-polar-checkout
+                data-polar-checkout-theme="dark"
+                class="featured-plan-button"
+              >
+                Get Professional
+              </a>
+            </aside>
+
+            <div class="comparison-table-wrap">
+              <table ngs-table [dataSource]="comparisonRows" class="comparison-table">
+                <ng-container ngsColumnDef="feature">
+                  <th ngs-header-cell *ngsHeaderCellDef>Feature</th>
+                  <td ngs-cell *ngsCellDef="let row">
+                    <div class="comparison-feature">
+                      <span class="comparison-icon">
+                        <ngs-icon [name]="row.icon" />
+                      </span>
+                      <strong>{{ row.title }}</strong>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <ng-container ngsColumnDef="standard">
+                  <th ngs-header-cell *ngsHeaderCellDef>
+                    <span>Standard</span>
+                  </th>
+                  <td ngs-cell *ngsCellDef="let row">
+                    <div
+                      class="matrix-value"
+                      [class.is-positive]="row.standardTone === 'positive'"
+                      [class.is-limited]="row.standardTone === 'limited'"
+                    >
+                      @if (row.standardTone === 'positive') {
+                        <ngs-icon name="fluent:checkmark-24-filled" />
+                      } @else if (row.standardTone === 'limited') {
+                        <ngs-icon name="fluent:lock-closed-24-filled" />
+                      }
+                      <span>{{ row.standard }}</span>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <ng-container ngsColumnDef="professional">
+                  <th ngs-header-cell *ngsHeaderCellDef class="professional-column-heading">
+                    <span>Professional</span>
+                  </th>
+                  <td ngs-cell *ngsCellDef="let row" class="professional-cell">
+                    <div
+                      class="matrix-value professional-value"
+                      [class.is-positive]="row.professionalTone === 'positive'"
+                      [class.is-limited]="row.professionalTone === 'limited'"
+                    >
+                      @if (row.professionalTone === 'positive') {
+                        <ngs-icon name="fluent:checkmark-24-filled" />
+                      }
+                      <span>{{ row.professional }}</span>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <tr ngs-header-row *ngsHeaderRowDef="comparisonColumns"></tr>
+                <tr ngs-row *ngsRowDef="let row; columns: comparisonColumns"></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </ngs-card>
+    </section>
+
+    <section class="mt-20 grid gap-8 lg:grid-cols-[1fr_0.9fr]">
+      <ngs-card appearance="outlined" class="guide-card">
+        <div ngs-card-content>
+          <p class="text-sm font-semibold uppercase tracking-wide text-primary">
+            Which plan should I choose?
+          </p>
+          <h2 class="mt-3 text-3xl font-semibold text-on-background">
+            Match the license to your delivery model
+          </h2>
+          <div class="mt-8 grid gap-5 md:grid-cols-2">
+            <div>
+              <h3 class="text-lg font-semibold text-on-background">Choose Standard when</h3>
+              <ul class="mt-4 space-y-3 text-sm leading-6 text-on-surface-variant">
+                <li>You are the only developer working with the NgStarter source code.</li>
+                <li>
+                  You are building one Angular admin, dashboard, SaaS portal, or internal tool.
+                </li>
+                <li>Your app ships on one production domain, including its subdomains.</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-on-background">Choose Professional when</h3>
+              <ul class="mt-4 space-y-3 text-sm leading-6 text-on-surface-variant">
+                <li>Your team has multiple Angular developers or contractors.</li>
+                <li>You build more than one product, tenant app, agency client app, or domain.</li>
+                <li>You want priority support for production UI and template questions.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </ngs-card>
+
+      <ngs-card appearance="outlined" class="links-card">
+        <div ngs-card-content>
+          <p class="text-sm font-semibold uppercase tracking-wide text-primary">
+            Need more context?
+          </p>
+          <h2 class="mt-3 text-2xl font-semibold text-on-background">Explore before you buy</h2>
+          <div class="mt-6 grid gap-3">
+            <a
+              class="resource-link"
+              href="https://docs.ngstarter.com"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <ngs-icon name="fluent:book-24-regular" />
+              Documentation
+            </a>
+            <a class="resource-link" routerLink="/templates">
+              <ngs-icon name="fluent:grid-24-regular" />
+              Admin templates
+            </a>
+            <a class="resource-link" routerLink="/license">
+              <ngs-icon name="fluent:document-bullet-list-24-regular" />
+              License terms
+            </a>
+            <a
+              class="resource-link"
+              href="https://admin-corporate.ngstarter.com"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <ngs-icon name="fluent:open-24-regular" />
+              Live dashboard demo
+            </a>
+          </div>
+        </div>
+      </ngs-card>
+    </section>
+
+    <section class="pricing-faq mx-auto mt-20 max-w-4xl">
+      <div class="mb-10 text-center">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-primary">FAQ</p>
+        <h2 class="text-3xl font-semibold text-on-background">
+          Angular UI components licensing questions
+        </h2>
+        <p class="mx-auto mt-4 max-w-2xl text-base leading-7 text-on-surface-variant">
+          Answers about source code, commercial use, updates, support, and the 3-month trial mode.
+        </p>
+      </div>
+      <ngs-accordion class="block space-y-3">
+        @for (faq of faqs; track faq.question) {
+          <ngs-expansion-panel>
+            <ngs-expansion-panel-header>
+              <ngs-expansion-panel-title>{{ faq.question }}</ngs-expansion-panel-title>
+            </ngs-expansion-panel-header>
+            <p class="leading-7 text-on-surface-variant">{{ faq.answer }}</p>
+          </ngs-expansion-panel>
+        }
+      </ngs-accordion>
+    </section>
+  </div>
+</section>

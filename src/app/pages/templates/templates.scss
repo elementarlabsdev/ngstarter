@@ -1,17 +1,23 @@
 :host {
   display: block;
 
+  .template-actions {
+    --ngs-button-font-size: 0.975rem;
+    --ngs-button-font-weight: 700;
+    --ngs-button-height: 3.5rem;
+    --ngs-button-padding-x: 1.5rem;
+    --ngs-button-radius: var(--ngs-radius-xl);
+    --ngs-control-gap: 0.75rem;
+  }
+
   .template-preview-card {
     --ngs-card-padding: 0.75rem;
     --ngs-card-bg: var(--ngs-color-surface-container-lowest);
   }
 
   .template-copy {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
     gap: 1rem;
     align-items: center;
-    padding: 0.75rem 0.75rem 1.25rem;
   }
 
   .template-copy > ngs-icon {
@@ -20,7 +26,7 @@
     color: var(--ngs-color-primary);
   }
 
-  .template-copy h2 {
+  .template-copy h3 {
     margin: 0 0 0.25rem;
     color: var(--ngs-color-on-background);
     font-size: 1.25rem;
@@ -46,7 +52,8 @@
     --ngs-card-bg: var(--ngs-color-surface-container-lowest);
   }
 
-  .template-detail-card h2 {
+  .template-detail-card h2,
+  .template-detail-card h3 {
     margin: 1rem 0 0.5rem;
     color: var(--ngs-color-on-background);
     font-size: 1.125rem;
@@ -64,6 +71,28 @@
     width: 2rem;
     height: 2rem;
     color: var(--ngs-color-primary);
+  }
+
+  .template-value-card {
+    --ngs-card-padding: 2rem;
+    --ngs-card-bg: var(--ngs-color-surface-container-lowest);
+  }
+
+  .included-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    color: var(--ngs-color-on-surface-variant);
+    font-size: 0.925rem;
+    line-height: 1.6;
+  }
+
+  .included-row ngs-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: none;
+    margin-top: 0.125rem;
+    color: var(--ngs-color-success);
   }
 
   @media (max-width: 640px) {
