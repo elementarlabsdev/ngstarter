@@ -1,40 +1,79 @@
 :host {
   display: block;
-}
 
-.template-preview-card {
-  --ngs-card-padding: 0.75rem;
-  --ngs-card-bg: var(--ngs-color-surface-container-lowest);
-}
+  .template-preview-card {
+    --ngs-card-padding: 0.75rem;
+    --ngs-card-bg: var(--ngs-color-surface-container-lowest);
+  }
 
-.template-screenshot {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: var(--ngs-radius-xl);
-}
+  .template-copy {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.75rem 0.75rem 1.25rem;
+  }
 
-.template-detail-card {
-  --ngs-card-padding: 1.5rem;
-  --ngs-card-bg: var(--ngs-color-surface-container-lowest);
-}
+  .template-copy > ngs-icon {
+    width: 2rem;
+    height: 2rem;
+    color: var(--ngs-color-primary);
+  }
 
-.template-detail-card h2 {
-  margin: 1rem 0 0.5rem;
-  color: var(--ngs-color-on-background);
-  font-size: 1.125rem;
-  font-weight: 700;
-}
+  .template-copy h2 {
+    margin: 0 0 0.25rem;
+    color: var(--ngs-color-on-background);
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
 
-.template-detail-card p {
-  margin: 0;
-  color: var(--ngs-color-on-surface-variant);
-  font-size: 0.95rem;
-  line-height: 1.7;
-}
+  .template-copy p {
+    margin: 0;
+    color: var(--ngs-color-on-surface-variant);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
 
-.detail-icon {
-  width: 2rem;
-  height: 2rem;
-  color: var(--ngs-color-primary);
+  .template-screenshot {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--ngs-radius-xl);
+  }
+
+  .template-detail-card {
+    --ngs-card-padding: 1.5rem;
+    --ngs-card-bg: var(--ngs-color-surface-container-lowest);
+  }
+
+  .template-detail-card h2 {
+    margin: 1rem 0 0.5rem;
+    color: var(--ngs-color-on-background);
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+
+  .template-detail-card p {
+    margin: 0;
+    color: var(--ngs-color-on-surface-variant);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .detail-icon {
+    width: 2rem;
+    height: 2rem;
+    color: var(--ngs-color-primary);
+  }
+
+  @media (max-width: 640px) {
+    .template-copy {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .template-copy a[ngsButton] {
+      grid-column: 1 / -1;
+      justify-self: start;
+    }
+  }
 }

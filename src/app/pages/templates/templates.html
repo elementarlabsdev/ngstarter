@@ -6,16 +6,20 @@
         Angular admin templates
       </div>
       <h1 class="mt-6 text-4xl font-bold leading-tight tracking-normal text-on-background md:text-6xl">
-        Corporate Admin Dashboard Template
+        Angular Admin Dashboard Templates
       </h1>
       <p class="mx-auto mt-5 max-w-2xl text-lg leading-8 text-on-surface-variant">
-        A production-ready Angular admin dashboard template for sales pipelines, revenue growth,
-        regional sales, task summaries, and team updates. Built with NgStarter UI components,
-        ECharts widgets, and responsive dashboard layout.
+        Production-ready Angular admin dashboard templates for revenue operations, creative analytics,
+        realtime dashboards, and responsive product workspaces. Built with NgStarter UI components,
+        ECharts widgets, and polished app shell layouts.
       </p>
       <div class="mt-8 flex flex-wrap justify-center gap-4 [--ngs-button-font-size:0.975rem] [--ngs-button-font-weight:700] [--ngs-button-height:3.5rem] [--ngs-button-padding-x:1.5rem] [--ngs-button-radius:var(--ngs-radius-xl)] [--ngs-control-gap:0.75rem]">
         <a ngsButton="filled" href="https://admin-corporate.ngstarter.com" target="_blank" rel="noreferrer">
-          Live Demo
+          Corporate Demo
+          <ngs-icon name="fluent:open-24-regular" class="size-5" />
+        </a>
+        <a ngsButton="outlined" href="https://admin-modern.ngstarter.com" target="_blank" rel="noreferrer">
+          Modern Demo
           <ngs-icon name="fluent:open-24-regular" class="size-5" />
         </a>
         <a ngsButton="outlined" routerLink="/pricing">
@@ -27,12 +31,52 @@
 
     <ngs-card appearance="outlined" class="template-preview-card mt-14">
       <div ngs-card-content>
+        <div class="template-copy">
+          <ngs-icon name="fluent:briefcase-24-regular" />
+          <div>
+            <h2>Corporate Admin Dashboard Template</h2>
+            <p>
+              A sales operations dashboard for pipelines, revenue growth, regional sales, task summaries,
+              and team updates.
+            </p>
+          </div>
+          <a ngsButton="outlined" href="https://admin-corporate.ngstarter.com" target="_blank" rel="noreferrer">
+            Demo
+            <ngs-icon name="fluent:open-24-regular" />
+          </a>
+        </div>
         <img
           src="/templates/admin-corporate-dashboard.png"
           alt="Corporate admin dashboard template with sales pipeline, recent activity, task summary, regional sales, and revenue widgets"
           class="template-screenshot"
           width="2880"
           height="2200"
+        />
+      </div>
+    </ngs-card>
+
+    <ngs-card appearance="outlined" class="template-preview-card mt-8">
+      <div ngs-card-content>
+        <div class="template-copy">
+          <ngs-icon name="fluent:sparkle-24-regular" />
+          <div>
+            <h2>Modern Admin Dashboard Template</h2>
+            <p>
+              A soft, rounded creative analytics dashboard with responsive sidenav navigation,
+              ECharts-powered performance widgets, calendar planning, and research signal tracking.
+            </p>
+          </div>
+          <a ngsButton="outlined" href="https://admin-modern.ngstarter.com" target="_blank" rel="noreferrer">
+            Demo
+            <ngs-icon name="fluent:open-24-regular" />
+          </a>
+        </div>
+        <img
+          src="/templates/admin-modern-dashboard.png"
+          alt="Modern admin dashboard template with creative studio analytics, brand alignment, calendar, generation latency, model spend, and research signals widgets"
+          class="template-screenshot"
+          width="1984"
+          height="1250"
         />
       </div>
     </ngs-card>
