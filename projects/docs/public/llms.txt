@@ -80,6 +80,7 @@ Must use:
 - breadcrumbs: `@ngstarter-ui/components/breadcrumbs` docs: /navigation/breadcrumbs
 - button: `@ngstarter-ui/components/button` docs: /forms/buttons
 - button-toggle: `@ngstarter-ui/components/button-toggle` docs: /forms/button-toggle
+- calendar: `@ngstarter-ui/components/calendar` docs: /components/calendar
 - card: `@ngstarter-ui/components/card` docs: /components/card
 - card-overlay: `@ngstarter-ui/components/card-overlay` docs: /components/card-overlay
 - carousel: `@ngstarter-ui/components/carousel` docs: /components/carousel

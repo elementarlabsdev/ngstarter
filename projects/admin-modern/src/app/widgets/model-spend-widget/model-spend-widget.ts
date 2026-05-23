@@ -25,7 +25,7 @@ export class ModelSpendWidget {
 
   protected readonly lanes: readonly SpendLane[] = [
     { label: 'Text models', detail: 'Drafting and rewrite passes', value: 58, className: 'lane-text' },
-    { label: 'Image models', detail: 'Concept boards and variants', value: 27, className: 'lane-image' },
-    { label: 'Review tools', detail: 'Safety, brand, and legal checks', value: 15, className: 'lane-review' },
+    // { label: 'Image models', detail: 'Concept boards and variants', value: 27, className: 'lane-image' },
+    // { label: 'Review tools', detail: 'Safety, brand, and legal checks', value: 15, className: 'lane-review' },
   ];
 }

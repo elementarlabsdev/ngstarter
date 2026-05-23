@@ -1,0 +1,243 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-calendar-gap: --spacing(1);
+  --ngs-calendar-header-gap: --spacing(2);
+  --ngs-calendar-day-min-height: --spacing(12);
+  --ngs-calendar-day-radius: var(--ngs-radius-md);
+  --ngs-calendar-day-bg: transparent;
+  --ngs-calendar-day-hover-bg: var(--ngs-color-surface-container);
+  --ngs-calendar-day-selected-bg: var(--ngs-color-primary);
+  --ngs-calendar-day-selected-color: var(--ngs-color-on-primary);
+  --ngs-calendar-day-today-outline: 1px solid var(--ngs-color-primary);
+  --ngs-calendar-day-muted-color: var(--ngs-color-on-surface-variant);
+  --ngs-calendar-weekday-color: var(--ngs-color-on-surface-variant);
+  --ngs-calendar-event-primary: var(--ngs-color-primary);
+  --ngs-calendar-event-success: var(--ngs-color-success);
+  --ngs-calendar-event-warning: var(--ngs-color-warning);
+  --ngs-calendar-event-danger: var(--ngs-color-danger);
+  --ngs-calendar-event-info: var(--ngs-color-info);
+  --ngs-calendar-event-neutral: var(--ngs-color-outline);
+  --ngs-calendar-event-green: var(--ngs-color-success);
+  --ngs-calendar-event-rose: var(--ngs-color-danger);
+  --ngs-calendar-event-blue: var(--ngs-color-info);
+  --ngs-calendar-header-margin-bottom: 0;
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  gap: var(--ngs-calendar-gap);
+  color: var(--ngs-color-on-surface);
+
+  .ngs-calendar-header {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--ngs-calendar-header-gap);
+    min-width: 0;
+    margin-bottom: var(--ngs-calendar-header-margin-bottom);
+  }
+
+  .ngs-calendar-period {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--ngs-color-on-surface);
+    font-size: var(--ngs-font-size-lg);
+    font-weight: 600;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ngs-calendar-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ngs-calendar-header-gap);
+  }
+
+  .ngs-calendar-today-button {
+    --ngs-button-height: --spacing(9);
+    --ngs-button-padding-x: --spacing(3);
+  }
+
+  .ngs-calendar-weekdays,
+  .ngs-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: var(--ngs-calendar-gap);
+  }
+
+  .ngs-calendar-weekday {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: --spacing(7);
+    color: var(--ngs-calendar-weekday-color);
+    font-size: var(--ngs-font-size-xs);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .ngs-calendar-grid {
+    flex: 1;
+    min-height: 0;
+  }
+
+  button.ngs-calendar-day {
+    --ngs-button-bg: var(--ngs-calendar-day-bg);
+    --ngs-button-border-radius: var(--ngs-calendar-day-radius);
+    --ngs-button-height: auto;
+    --ngs-button-padding: --spacing(1);
+
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    min-width: 0;
+    min-height: var(--ngs-calendar-day-min-height);
+    color: var(--ngs-color-on-surface);
+    font-weight: 400;
+    gap: --spacing(1);
+
+    &:not(.ngs-calendar-day-has-events) {
+      justify-content: center;
+    }
+
+    &:not(.ngs-calendar-day-selected):not(.ngs-button-disabled):hover {
+      --ngs-button-bg: var(--ngs-calendar-day-hover-bg);
+    }
+
+    &.ngs-calendar-day-muted {
+      color: var(--ngs-calendar-day-muted-color);
+    }
+
+    &.ngs-calendar-day-hidden {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    &.ngs-calendar-day-selected {
+      --ngs-button-bg: var(--ngs-calendar-day-selected-bg);
+
+      color: var(--ngs-calendar-day-selected-color);
+    }
+
+    &.ngs-calendar-day-today:not(.ngs-calendar-day-selected) {
+      outline: var(--ngs-calendar-day-today-outline);
+      outline-offset: -1px;
+    }
+
+    ::ng-deep > .content {
+      display: flex;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      flex: 1 1 auto;
+      flex-direction: column;
+      align-items: center;
+      justify-content: inherit;
+      gap: inherit;
+      line-height: normal;
+    }
+  }
+
+  .ngs-calendar-day-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: --spacing(6);
+    height: --spacing(6);
+    line-height: 1;
+  }
+
+  .ngs-calendar-event-markers {
+    display: inline-flex;
+    max-width: 100%;
+    min-height: --spacing(1.5);
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+  }
+
+  .ngs-calendar-event-marker {
+    width: --spacing(1.5);
+    height: --spacing(1.5);
+    flex: none;
+    border-radius: 999px;
+    background: var(--ngs-calendar-event-primary);
+
+    &.ngs-calendar-event-success {
+      background: var(--ngs-calendar-event-success);
+    }
+
+    &.ngs-calendar-event-warning {
+      background: var(--ngs-calendar-event-warning);
+    }
+
+    &.ngs-calendar-event-danger {
+      background: var(--ngs-calendar-event-danger);
+    }
+
+    &.ngs-calendar-event-info {
+      background: var(--ngs-calendar-event-info);
+    }
+
+    &.ngs-calendar-event-neutral {
+      background: var(--ngs-calendar-event-neutral);
+    }
+
+    &.ngs-calendar-event-green {
+      background: var(--ngs-calendar-event-green);
+    }
+
+    &.ngs-calendar-event-rose {
+      background: var(--ngs-calendar-event-rose);
+    }
+
+    &.ngs-calendar-event-blue {
+      background: var(--ngs-calendar-event-blue);
+    }
+  }
+
+  .ngs-calendar-event-list {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .ngs-calendar-event-title {
+    display: block;
+    box-sizing: border-box;
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding-inline: --spacing(1);
+    border-radius: var(--ngs-radius-sm);
+    background: color-mix(in srgb, var(--ngs-calendar-event-primary), transparent 88%);
+    color: currentColor;
+    font-size: var(--ngs-font-size-xs);
+    font-weight: 400;
+    line-height: 1.35;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ngs-calendar-day-selected {
+    .ngs-calendar-event-marker {
+      background: currentColor;
+    }
+
+    .ngs-calendar-event-title {
+      background: color-mix(in srgb, currentColor, transparent 84%);
+    }
+  }
+}

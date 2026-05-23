@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate-ai-metadata.mjs",
   "package": "@ngstarter-ui/components",
   "description": "AI-readable registry for NgStarter UI Angular secondary entry points.",
-  "componentCount": 120,
+  "componentCount": 121,
   "conventions": {
     "importPattern": "@ngstarter-ui/components/<component>",
     "selectorPrefix": "ngs",
@@ -1060,6 +1060,116 @@
         "--ngs-color-surface-container",
         "--ngs-color-surface-container-high",
         "--ngs-color-surface-container-highest"
+      ],
+      "example": null
+    },
+    {
+      "name": "calendar",
+      "title": "Calendar",
+      "overviewName": "Calendar",
+      "category": "components",
+      "package": "@ngstarter-ui/components",
+      "importPath": "@ngstarter-ui/components/calendar",
+      "publicApi": "projects/components/calendar/public-api.ts",
+      "sourceRoot": "projects/components/calendar/src",
+      "docsPath": "/components/calendar",
+      "docsOverviewSource": "projects/docs/src/app/components/calendar/overview/overview.html",
+      "purpose": "The NgStarter Angular Calendar component renders an inline month calendar for dashboards, scheduling widgets, event summaries, availability previews, and date-driven product surfaces.",
+      "useWhen": "Choose Calendar when the workflow matches examples such as Basic Calendar, Calendar With Events, Calendar With Min And Max Dates, Calendar min max.",
+      "exampleTopics": [
+        "Basic Calendar",
+        "Calendar With Events",
+        "Calendar With Min And Max Dates",
+        "Calendar min max"
+      ],
+      "minimalExample": "<div class=\"calendar-example\">\n  <ngs-calendar [selected]=\"selectedDate()\" (selectedChange)=\"selectedDate.set($event)\" />\n</div>",
+      "exampleFiles": [
+        {
+          "name": "basic-calendar-example",
+          "title": "Basic calendar",
+          "file": "projects/docs/src/app/components/calendar/_examples/basic-calendar-example/basic-calendar-example.html",
+          "source": "<div class=\"calendar-example\">\n  <ngs-calendar [selected]=\"selectedDate()\" (selectedChange)=\"selectedDate.set($event)\" />\n</div>"
+        },
+        {
+          "name": "calendar-min-max-example",
+          "title": "Calendar min max",
+          "file": "projects/docs/src/app/components/calendar/_examples/calendar-min-max-example/calendar-min-max-example.html",
+          "source": "<div class=\"calendar-example\">\n  <ngs-calendar\n    [selected]=\"selectedDate()\"\n    [minDate]=\"minDate\"\n    [maxDate]=\"maxDate\"\n    [firstDayOfWeek]=\"1\"\n    [showAdjacentDays]=\"false\"\n    (selectedChange)=\"selectedDate.set($event)\"\n  />\n</div>"
+        },
+        {
+          "name": "calendar-with-events-example",
+          "title": "Calendar with events",
+          "file": "projects/docs/src/app/components/calendar/_examples/calendar-with-events-example/calendar-with-events-example.html",
+          "source": "<div class=\"calendar-example\">\n  <ngs-calendar\n    [selected]=\"selectedDate()\"\n    [events]=\"events\"\n    [showEventTitles]=\"true\"\n    (selectedChange)=\"selectedDate.set($event)\"\n  />\n</div>"
+        }
+      ],
+      "previewAsset": null,
+      "selectors": [
+        "ngs-calendar"
+      ],
+      "exportedSymbols": [
+        "Calendar",
+        "CalendarDateInput",
+        "CalendarEvent",
+        "CalendarEventColor"
+      ],
+      "inputs": [
+        "events",
+        "firstDayOfWeek",
+        "locale",
+        "maxDate",
+        "minDate",
+        "selected",
+        "showAdjacentDays",
+        "showEventTitles",
+        "showTodayButton",
+        "startAt"
+      ],
+      "outputs": [
+        "eventSelected",
+        "monthChange",
+        "selectedChange"
+      ],
+      "cssTokens": [
+        "--ngs-button-bg",
+        "--ngs-button-border-radius",
+        "--ngs-button-height",
+        "--ngs-button-padding",
+        "--ngs-button-padding-x",
+        "--ngs-calendar-day-bg",
+        "--ngs-calendar-day-hover-bg",
+        "--ngs-calendar-day-min-height",
+        "--ngs-calendar-day-muted-color",
+        "--ngs-calendar-day-radius",
+        "--ngs-calendar-day-selected-bg",
+        "--ngs-calendar-day-selected-color",
+        "--ngs-calendar-day-today-outline",
+        "--ngs-calendar-event-blue",
+        "--ngs-calendar-event-danger",
+        "--ngs-calendar-event-green",
+        "--ngs-calendar-event-info",
+        "--ngs-calendar-event-neutral",
+        "--ngs-calendar-event-primary",
+        "--ngs-calendar-event-rose",
+        "--ngs-calendar-event-success",
+        "--ngs-calendar-event-warning",
+        "--ngs-calendar-gap",
+        "--ngs-calendar-header-gap",
+        "--ngs-calendar-weekday-color",
+        "--ngs-color-danger",
+        "--ngs-color-info",
+        "--ngs-color-on-primary",
+        "--ngs-color-on-surface",
+        "--ngs-color-on-surface-variant",
+        "--ngs-color-outline",
+        "--ngs-color-primary",
+        "--ngs-color-success",
+        "--ngs-color-surface-container",
+        "--ngs-color-warning",
+        "--ngs-font-size-lg",
+        "--ngs-font-size-xs",
+        "--ngs-radius-md",
+        "--ngs-radius-sm"
       ],
       "example": null
     },

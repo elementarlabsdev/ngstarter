@@ -1,0 +1,46 @@
+<app-page>
+  <h1 appPageTitle>Calendar</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Calendar renders an inline month view for dashboards, scheduling surfaces, date-focused
+        widgets, and event summaries. Use <code>ngs-calendar</code> when the calendar itself is the
+        interface, not just an overlay attached to a form input.
+      </p>
+      <div class="my-6">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            <strong>Month navigation</strong>: Move between months and keep the active month
+            synchronized with the selected date.
+          </li>
+          <li>
+            <strong>Date selection</strong>: Bind <code>selected</code> and listen to
+            <code>selectedChange</code> for interactive dashboards and filters.
+          </li>
+          <li>
+            <strong>Event markers</strong>: Pass lightweight event records to render colored markers
+            or compact event titles on each day.
+          </li>
+          <li>
+            <strong>Calendar constraints</strong>: Use <code>minDate</code>, <code>maxDate</code>,
+            <code>firstDayOfWeek</code>, and <code>locale</code> to match regional and workflow
+            requirements.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Use Calendar for dashboard widgets, editorial schedules, availability previews, account
+        timelines, and compact operational planning views. Use Datepicker instead when a form field
+        needs an input-triggered date picker overlay.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/calendar" ngs-tab-link>Overview</a>
+      <a routerLink="/components/calendar/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet />
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

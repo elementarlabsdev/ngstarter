@@ -178,6 +178,15 @@ Typography:
   inputs: `appearance`, `checked`, `disabled`, `hideSelectionIndicator`, `id`, `multiple`, `name`, `value`, `vertical`
   outputs: `change`
   tokens: `--ngs-button-height`, `--ngs-button-radius`, `--ngs-button-toggle-checked-bg-color`, `--ngs-button-toggle-checked-text-color`, `--ngs-button-toggle-group-bg`, `--ngs-button-toggle-group-border-color`, `--ngs-button-toggle-group-border-radius`, `--ngs-button-toggle-hover-bg-color`, `--ngs-button-toggle-selection-indicator-color`, `--ngs-button-toggle-text-color`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary`, `--ngs-color-surface-container`, `--ngs-color-surface-container-high`, `--ngs-color-surface-container-highest`
+- calendar: `@ngstarter-ui/components/calendar` docs: /components/calendar
+  purpose: The NgStarter Angular Calendar component renders an inline month calendar for dashboards, scheduling widgets, event summaries, availability previews, and date-driven product surfaces.
+  use when: Choose Calendar when the workflow matches examples such as Basic Calendar, Calendar With Events, Calendar With Min And Max Dates, Calendar min max.
+  example topics: Basic Calendar, Calendar With Events, Calendar With Min And Max Dates, Calendar min max
+  selectors: `ngs-calendar`
+  exports: `Calendar`, `CalendarDateInput`, `CalendarEvent`, `CalendarEventColor`
+  inputs: `events`, `firstDayOfWeek`, `locale`, `maxDate`, `minDate`, `selected`, `showAdjacentDays`, `showEventTitles`, `showTodayButton`, `startAt`
+  outputs: `eventSelected`, `monthChange`, `selectedChange`
+  tokens: `--ngs-button-bg`, `--ngs-button-border-radius`, `--ngs-button-height`, `--ngs-button-padding`, `--ngs-button-padding-x`, `--ngs-calendar-day-bg`, `--ngs-calendar-day-hover-bg`, `--ngs-calendar-day-min-height`, `--ngs-calendar-day-muted-color`, `--ngs-calendar-day-radius`, `--ngs-calendar-day-selected-bg`, `--ngs-calendar-day-selected-color`, `--ngs-calendar-day-today-outline`, `--ngs-calendar-event-blue`, `--ngs-calendar-event-danger`, `--ngs-calendar-event-green`
 - card: `@ngstarter-ui/components/card` docs: /components/card
   purpose: Group related content, controls, media, and actions in a bordered or elevated container.
   use when: Use for repeated dashboard widgets, previews, summaries, or compact content modules.

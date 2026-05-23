@@ -377,7 +377,7 @@ export class App implements OnInit {
       type: 'group',
       icon: 'fluent:grid-24-regular',
       name: 'Components',
-      badge: 68,
+      badge: 69,
       children: [
         {
           key: uuid(),
@@ -492,6 +492,12 @@ export class App implements OnInit {
           type: 'link',
           name: 'Chips',
           link: '/components/chips'
+        },
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Calendar',
+          link: '/components/calendar'
         },
         {
           key: uuid(),

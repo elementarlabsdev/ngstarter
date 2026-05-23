@@ -1,0 +1,11 @@
+@reference 'tailwindcss';
+
+:host {
+  .calendar-example {
+    max-width: --spacing(128);
+  }
+
+  ngs-calendar {
+    --ngs-calendar-day-min-height: --spacing(20);
+  }
+}
