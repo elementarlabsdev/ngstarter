@@ -298,6 +298,33 @@
                   ngsButton="outlined"
                   type="button"
                   class="ngs-motion-studio__add-layer"
+                  (click)="addPathLayer()"
+                >
+                  <ngs-icon name="fluent:draw-shape-24-regular" />
+                  Path layer
+                </button>
+                <button
+                  ngsButton="outlined"
+                  type="button"
+                  class="ngs-motion-studio__add-layer"
+                  (click)="addCaptionLayer()"
+                >
+                  <ngs-icon name="fluent:closed-caption-24-regular" />
+                  Caption layer
+                </button>
+                <button
+                  ngsButton="outlined"
+                  type="button"
+                  class="ngs-motion-studio__add-layer"
+                  (click)="addWaveformLayer()"
+                >
+                  <ngs-icon name="fluent:music-note-2-24-regular" />
+                  Waveform layer
+                </button>
+                <button
+                  ngsButton="outlined"
+                  type="button"
+                  class="ngs-motion-studio__add-layer"
                   (click)="addAudioLayer()"
                 >
                   <ngs-icon name="fluent:music-note-2-24-regular" />
@@ -1033,6 +1060,15 @@
                     <ngs-icon name="fluent:add-24-regular" />
                     Blank text
                   </button>
+                  <button
+                    ngsButton="outlined"
+                    type="button"
+                    class="ngs-motion-studio__add-layer"
+                    (click)="addCaptionLayer()"
+                  >
+                    <ngs-icon name="fluent:closed-caption-24-regular" />
+                    Caption
+                  </button>
                   <div class="ngs-motion-studio__preset-grid">
                     @for (preset of textPresets(); track preset.id) {
                       <button
@@ -1065,6 +1101,24 @@
                   >
                     <ngs-icon name="fluent:add-24-regular" />
                     Blank shape
+                  </button>
+                  <button
+                    ngsButton="outlined"
+                    type="button"
+                    class="ngs-motion-studio__add-layer"
+                    (click)="addPathLayer()"
+                  >
+                    <ngs-icon name="fluent:draw-shape-24-regular" />
+                    Path
+                  </button>
+                  <button
+                    ngsButton="outlined"
+                    type="button"
+                    class="ngs-motion-studio__add-layer"
+                    (click)="addWaveformLayer()"
+                  >
+                    <ngs-icon name="fluent:music-note-2-24-regular" />
+                    Waveform
                   </button>
                   <div class="ngs-motion-studio__preset-grid">
                     @for (preset of shapePresets(); track preset.id) {
@@ -1355,6 +1409,7 @@
                     [document]="previewDocument()"
                     [currentTime]="currentTime()"
                     [playing]="playing()"
+                    [animateBackground]="true"
                     [clip]="false"
                     (currentTimeChange)="handlePlayerTimeChange($event)"
                     (ended)="stopPlayback()"
@@ -2304,6 +2359,57 @@
                 </ngs-form-field>
               }
 
+              @if (layer.type === 'caption') {
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Caption</ngs-label>
+                  <textarea
+                    ngsInput
+                    [value]="layer.props?.['text'] || ''"
+                    (input)="setLayerCaptionText($any($event.target).value)"
+                  ></textarea>
+                </ngs-form-field>
+              }
+
+              @if (layer.type === 'path' || layer.type === 'svg') {
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Path data</ngs-label>
+                  <textarea
+                    ngsInput
+                    [value]="layer.props?.['d'] || ''"
+                    (input)="setLayerPathData($any($event.target).value)"
+                  ></textarea>
+                </ngs-form-field>
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>ViewBox</ngs-label>
+                  <input
+                    ngsInput
+                    [value]="layer.props?.['viewBox'] || '0 0 100 100'"
+                    (input)="setLayerSvgViewBox($any($event.target).value)"
+                  />
+                </ngs-form-field>
+                @if (layer.type === 'svg') {
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>SVG markup</ngs-label>
+                    <textarea
+                      ngsInput
+                      [value]="layer.props?.['svg'] || ''"
+                      (input)="setLayerSvgMarkup($any($event.target).value)"
+                    ></textarea>
+                  </ngs-form-field>
+                }
+              }
+
+              @if (layer.type === 'waveform') {
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Samples</ngs-label>
+                  <textarea
+                    ngsInput
+                    [value]="layer.props?.['samples'] || ''"
+                    (input)="setLayerWaveformSamples($any($event.target).value)"
+                  ></textarea>
+                </ngs-form-field>
+              }
+
               @if (layer.type === 'image' || layer.type === 'video') {
                 <ngs-form-field subscriptHiddenIfEmpty>
                   <ngs-label>Asset</ngs-label>
@@ -2475,6 +2581,44 @@
                     step="0.05"
                     [value]="formatTransformValue(layer.layout.scale || 1)"
                     (input)="setLayerLayoutNumber('scale', $any($event.target).value)"
+                  />
+                </ngs-form-field>
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Scale X</ngs-label>
+                  <input
+                    ngsInput
+                    type="number"
+                    step="0.05"
+                    [value]="formatTransformValue(layer.layout.scaleX || 1)"
+                    (input)="setLayerLayoutNumber('scaleX', $any($event.target).value)"
+                  />
+                </ngs-form-field>
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Scale Y</ngs-label>
+                  <input
+                    ngsInput
+                    type="number"
+                    step="0.05"
+                    [value]="formatTransformValue(layer.layout.scaleY || 1)"
+                    (input)="setLayerLayoutNumber('scaleY', $any($event.target).value)"
+                  />
+                </ngs-form-field>
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Skew X</ngs-label>
+                  <input
+                    ngsInput
+                    type="number"
+                    [value]="formatTransformValue(layer.layout.skewX || 0)"
+                    (input)="setLayerLayoutNumber('skewX', $any($event.target).value)"
+                  />
+                </ngs-form-field>
+                <ngs-form-field subscriptHiddenIfEmpty>
+                  <ngs-label>Skew Y</ngs-label>
+                  <input
+                    ngsInput
+                    type="number"
+                    [value]="formatTransformValue(layer.layout.skewY || 0)"
+                    (input)="setLayerLayoutNumber('skewY', $any($event.target).value)"
                   />
                 </ngs-form-field>
               </div>
@@ -3360,13 +3504,13 @@
                 <ngs-expansion-panel-header>
                   <ngs-expansion-panel-title>Style</ngs-expansion-panel-title>
                   <ngs-expansion-panel-description>
-                    {{ layer.type === 'text' ? 'Text appearance' : 'Layer appearance' }}
+                    {{ layer.type === 'text' || layer.type === 'caption' ? 'Text appearance' : 'Layer appearance' }}
                   </ngs-expansion-panel-description>
                 </ngs-expansion-panel-header>
             <section class="ngs-motion-studio__inspector-section">
               <h3>Style</h3>
               <div class="ngs-motion-studio__field-grid">
-                @if (layer.type === 'text') {
+                @if (layer.type === 'text' || layer.type === 'caption') {
                   <ngs-form-field subscriptHiddenIfEmpty>
                     <ngs-label>Font</ngs-label>
                     <ngs-select
@@ -3493,7 +3637,36 @@
                     </ngs-select>
                   </ngs-form-field>
                 }
-                @if (layer.type !== 'text') {
+                @if (layer.type === 'path' || layer.type === 'svg') {
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Fill</ngs-label>
+                    <input
+                      ngsInput
+                      [value]="layer.style?.fill || ''"
+                      (input)="setLayerStyleString('fill', $any($event.target).value)"
+                    />
+                  </ngs-form-field>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Stroke</ngs-label>
+                    <input
+                      ngsInput
+                      [value]="layer.style?.stroke || ''"
+                      (input)="setLayerStyleString('stroke', $any($event.target).value)"
+                    />
+                  </ngs-form-field>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Stroke width</ngs-label>
+                    <input
+                      ngsInput
+                      type="number"
+                      min="0"
+                      step="0.5"
+                      [value]="layer.style?.strokeWidth || 0"
+                      (input)="setLayerStyleNumber('strokeWidth', $any($event.target).value)"
+                    />
+                  </ngs-form-field>
+                }
+                @if (layer.type !== 'text' && layer.type !== 'caption') {
                   <ngs-form-field subscriptHiddenIfEmpty>
                     <ngs-label>Color</ngs-label>
                     <input

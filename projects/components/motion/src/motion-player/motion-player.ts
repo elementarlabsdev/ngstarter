@@ -19,6 +19,7 @@ import {
   MotionLayout,
   MotionScene,
   MotionStyle,
+  MotionValue,
   createDefaultMotionDocument,
 } from '../schema/motion-document';
 import {
@@ -52,6 +53,7 @@ export class MotionPlayer {
   readonly loop = input(false);
   readonly controls = input(false);
   readonly clip = input(true);
+  readonly animateBackground = input(false);
   readonly scale = input<number | undefined>(undefined);
   readonly minScale = input(0.5);
   readonly maxScale = input(2);
@@ -63,6 +65,7 @@ export class MotionPlayer {
 
   protected readonly internalTime = signal(0);
   protected readonly internalScale = signal(1);
+  protected readonly ambientBackgroundTime = signal(0);
 
   protected readonly activeDocument = computed(
     () => this.document() ?? createDefaultMotionDocument(),
@@ -94,8 +97,15 @@ export class MotionPlayer {
 
     return renderTime === null ? this.internalTime() : clampMotionTime(renderTime, this.activeDocument());
   });
+  protected readonly backgroundDisplayTime = computed(() => {
+    if (this.renderTime() !== null || this.playing() || !this.animateBackground()) {
+      return this.displayTime();
+    }
+
+    return this.ambientBackgroundTime();
+  });
   protected readonly backgroundEffectStyle = computed(() =>
-    createMotionBackgroundEffectStyle(this.backgroundEffect(), this.displayTime()),
+    createMotionBackgroundEffectStyle(this.backgroundEffect(), this.backgroundDisplayTime()),
   );
 
   private readonly _syncCurrentTime = effect(() => {
@@ -127,6 +137,30 @@ export class MotionPlayer {
       const delta = frameTime - previousFrameTime;
       previousFrameTime = frameTime;
       this.advance(delta);
+      frameId = requestAnimationFrame(tick);
+    };
+
+    frameId = requestAnimationFrame(tick);
+    onCleanup(() => cancelAnimationFrame(frameId));
+  });
+
+  private readonly _ambientBackgroundPlayback = effect((onCleanup) => {
+    if (
+      !this._isBrowser ||
+      !this.animateBackground() ||
+      this.playing() ||
+      this.renderTime() !== null ||
+      !this.backgroundEffect()
+    ) {
+      return;
+    }
+
+    let frameId = 0;
+    const startedAt = performance.now();
+    const baseTime = this.displayTime();
+
+    const tick = (frameTime: number) => {
+      this.ambientBackgroundTime.set(baseTime + frameTime - startedAt);
       frameId = requestAnimationFrame(tick);
     };
 
@@ -243,12 +277,37 @@ export class MotionPlayer {
     return coerceMotionString(this.layerSnapshot(layer).props['text'], '');
   }
 
+  protected layerCaptionText(layer: MotionLayer): string {
+    const snapshot = this.layerSnapshot(layer);
+    const cues = snapshot.props['cues'];
+
+    if (Array.isArray(cues)) {
+      const cue = cues.find((item) => {
+        if (!item || typeof item !== 'object' || Array.isArray(item)) {
+          return false;
+        }
+
+        const cueValue = item as Record<string, unknown>;
+        const start = readMotionNumber(cueValue['start'], 0);
+        const end = readMotionNumber(cueValue['end'], Number.POSITIVE_INFINITY);
+
+        return snapshot.localTime >= start && snapshot.localTime <= end;
+      }) as Record<string, unknown> | undefined;
+
+      if (cue) {
+        return coerceMotionString(cue['text'] as MotionValue | undefined, '');
+      }
+    }
+
+    return coerceMotionString(snapshot.props['text'], '');
+  }
+
   protected isUnbrokenTextLayer(layer: MotionLayer): boolean {
-    if (layer.type !== 'text') {
+    if (layer.type !== 'text' && layer.type !== 'caption') {
       return false;
     }
 
-    const text = this.layerText(layer);
+    const text = layer.type === 'caption' ? this.layerCaptionText(layer) : this.layerText(layer);
 
     return text.length > 0 && !/\s/.test(text);
   }
@@ -284,6 +343,70 @@ export class MotionPlayer {
 
   protected layerShapeKind(layer: MotionLayer): string {
     return coerceMotionString(this.layerSnapshot(layer).props['kind'], 'rectangle');
+  }
+
+  protected layerPathData(layer: MotionLayer): string {
+    return coerceMotionString(
+      this.layerSnapshot(layer).props['d'],
+      'M 8 50 C 24 8, 76 8, 92 50 C 76 92, 24 92, 8 50 Z',
+    );
+  }
+
+  protected layerSvgMarkup(layer: MotionLayer): string {
+    return coerceMotionString(this.layerSnapshot(layer).props['svg'], '');
+  }
+
+  protected layerSvgViewBox(layer: MotionLayer): string {
+    return coerceMotionString(this.layerSnapshot(layer).props['viewBox'], '0 0 100 100');
+  }
+
+  protected layerFill(layer: MotionLayer): string {
+    const snapshot = this.layerSnapshot(layer);
+
+    return snapshot.style.fill ?? snapshot.style.background ?? 'currentColor';
+  }
+
+  protected layerStroke(layer: MotionLayer): string {
+    const snapshot = this.layerSnapshot(layer);
+
+    return snapshot.style.stroke ?? 'none';
+  }
+
+  protected layerStrokeWidth(layer: MotionLayer): number {
+    const value = this.layerSnapshot(layer).style.strokeWidth;
+
+    return Number.isFinite(value) ? Math.max(0, value ?? 0) : 0;
+  }
+
+  protected layerStrokeLinecap(layer: MotionLayer): string {
+    return coerceMotionString(this.layerSnapshot(layer).props['strokeLinecap'], 'round');
+  }
+
+  protected layerStrokeLinejoin(layer: MotionLayer): string {
+    return coerceMotionString(this.layerSnapshot(layer).props['strokeLinejoin'], 'round');
+  }
+
+  protected waveformBars(layer: MotionLayer): MotionWaveformBar[] {
+    const snapshot = this.layerSnapshot(layer);
+    const samples = readMotionNumberArray(snapshot.props['samples']);
+    const values = samples.length ? samples : createFallbackWaveformSamples(layer.id);
+    const count = Math.max(1, values.length);
+    const gap = Math.min(1.8, 22 / count);
+    const width = Math.max(0.8, (100 - gap * (count - 1)) / count);
+    const progress = Math.max(0, Math.min(1, snapshot.localTime / Math.max(1, layer.duration)));
+
+    return values.map((sample, index) => {
+      const active = index / Math.max(1, count - 1) <= progress;
+      const height = Math.max(4, Math.min(96, Math.abs(sample) * 92));
+
+      return {
+        index,
+        x: index * (width + gap),
+        y: 50 - height / 2,
+        width,
+        height: active ? height : Math.max(4, height * 0.42),
+      };
+    });
   }
 
   protected layerMediaTime(layer: MotionLayer): number {
@@ -442,6 +565,44 @@ const createMotionBackgroundEffectStyle = (
   };
 };
 
+const readMotionNumber = (value: unknown, fallback: number): number => {
+  const numberValue = Number(value);
+
+  return Number.isFinite(numberValue) ? numberValue : fallback;
+};
+
+const readMotionNumberArray = (value: unknown): number[] => {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => Number(item))
+      .filter((item) => Number.isFinite(item))
+      .map((item) => Math.max(0, Math.min(1, Math.abs(item))));
+  }
+
+  if (typeof value === 'string') {
+    return value
+      .split(/[\s,]+/)
+      .map((item) => Number(item))
+      .filter((item) => Number.isFinite(item))
+      .map((item) => Math.max(0, Math.min(1, Math.abs(item))));
+  }
+
+  return [];
+};
+
+const createFallbackWaveformSamples = (seed: string): number[] => {
+  const seedValue = seed.split('').reduce((total, char) => total + char.charCodeAt(0), 0);
+
+  return Array.from({ length: 36 }, (_, index) => {
+    const value =
+      Math.sin(index * 0.72 + seedValue * 0.03) * 0.36 +
+      Math.cos(index * 0.31 + seedValue * 0.02) * 0.22 +
+      0.56;
+
+    return Math.max(0.08, Math.min(1, value));
+  });
+};
+
 interface MotionScaleBounds {
   min: number;
   max: number;
@@ -452,6 +613,14 @@ interface SceneEffect {
   transform: string;
   filter: string | null;
   clipPath: string | null;
+}
+
+interface MotionWaveformBar {
+  index: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
 
 const EMPTY_SCENE_EFFECT: SceneEffect = {

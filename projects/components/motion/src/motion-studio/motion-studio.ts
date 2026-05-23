@@ -375,12 +375,19 @@ export class MotionStudio {
     { label: 'X', value: 'x' },
     { label: 'Y', value: 'y' },
     { label: 'Scale', value: 'scale' },
+    { label: 'Scale X', value: 'scaleX' },
+    { label: 'Scale Y', value: 'scaleY' },
+    { label: 'Skew X', value: 'skewX' },
+    { label: 'Skew Y', value: 'skewY' },
     { label: 'Rotate', value: 'rotation' },
     { label: 'Width', value: 'width' },
     { label: 'Height', value: 'height' },
     { label: 'Font size', value: 'fontSize' },
     { label: 'Color', value: 'color' },
     { label: 'Background', value: 'background' },
+    { label: 'Fill', value: 'fill' },
+    { label: 'Stroke', value: 'stroke' },
+    { label: 'Stroke width', value: 'strokeWidth' },
   ];
   protected readonly animationPresets: Array<{
     label: string;
@@ -423,9 +430,18 @@ export class MotionStudio {
     { label: 'Ease in', value: 'easeInCubic' },
     { label: 'Ease out', value: 'easeOutCubic' },
     { label: 'Ease in out', value: 'easeInOutCubic' },
+    { label: 'Quart in', value: 'easeInQuart' },
+    { label: 'Quart out', value: 'easeOutQuart' },
+    { label: 'Quart in out', value: 'easeInOutQuart' },
     { label: 'Smooth', value: 'smooth' },
+    { label: 'Back in', value: 'easeInBack' },
     { label: 'Overshoot', value: 'easeOutBack' },
+    { label: 'Back in out', value: 'easeInOutBack' },
+    { label: 'Bounce in', value: 'easeInBounce' },
     { label: 'Bounce', value: 'easeOutBounce' },
+    { label: 'Bounce in out', value: 'easeInOutBounce' },
+    { label: 'Spring', value: 'spring' },
+    { label: 'Soft spring', value: 'springSoft' },
     { label: 'Quad in', value: 'easeInQuad' },
     { label: 'Quad out', value: 'easeOutQuad' },
     { label: 'Quad in out', value: 'easeInOutQuad' },
@@ -438,6 +454,8 @@ export class MotionStudio {
     { label: 'Smooth', value: 'smooth' },
     { label: 'Overshoot', value: 'easeOutBack' },
     { label: 'Bounce', value: 'easeOutBounce' },
+    { label: 'Spring', value: 'spring' },
+    { label: 'Soft spring', value: 'springSoft' },
   ];
   protected readonly transitionTypes: Array<{ label: string; value: MotionTransitionType }> = [
     { label: 'None', value: 'none' },
@@ -1631,6 +1649,18 @@ export class MotionStudio {
     this.addLayer('shape');
   }
 
+  protected addPathLayer(): void {
+    this.addLayer('path');
+  }
+
+  protected addCaptionLayer(): void {
+    this.addLayer('caption');
+  }
+
+  protected addWaveformLayer(): void {
+    this.addLayer('waveform');
+  }
+
   protected addAudioLayer(): void {
     this.addLayer('audio');
   }
@@ -1987,11 +2017,49 @@ export class MotionStudio {
     });
   }
 
+  protected setLayerCaptionText(value: string): void {
+    this.setLayerText(value);
+  }
+
+  protected setLayerPathData(value: string): void {
+    this.setSelectedLayerPropString('d', value);
+  }
+
+  protected setLayerSvgMarkup(value: string): void {
+    this.setSelectedLayerPropString('svg', value);
+  }
+
+  protected setLayerSvgViewBox(value: string): void {
+    this.setSelectedLayerPropString('viewBox', value);
+  }
+
+  protected setLayerWaveformSamples(value: string): void {
+    this.updateSelectedLayer((layer) => {
+      layer.props = {
+        ...(layer.props ?? {}),
+        samples: value
+          .split(/[\s,]+/)
+          .map((item) => Number(item))
+          .filter((item) => Number.isFinite(item))
+          .map((item) => Math.max(0, Math.min(1, Math.abs(item)))),
+      };
+    });
+  }
+
   protected setLayerTextById(layerId: string, value: string): void {
     this.updateLayer(layerId, (layer) => {
       layer.props = {
         ...(layer.props ?? {}),
         text: value,
+      };
+    });
+  }
+
+  private setSelectedLayerPropString(property: string, value: string): void {
+    this.updateSelectedLayer((layer) => {
+      layer.props = {
+        ...(layer.props ?? {}),
+        [property]: value,
       };
     });
   }
@@ -2928,7 +2996,17 @@ export class MotionStudio {
   }
 
   protected setLayerLayoutNumber(
-    property: 'x' | 'y' | 'width' | 'height' | 'rotation' | 'scale',
+    property:
+      | 'x'
+      | 'y'
+      | 'width'
+      | 'height'
+      | 'rotation'
+      | 'scale'
+      | 'scaleX'
+      | 'scaleY'
+      | 'skewX'
+      | 'skewY',
     value: unknown,
   ): void {
     const nextValue = coerceNumber(value);
@@ -2936,7 +3014,7 @@ export class MotionStudio {
     this.updateSelectedLayer((layer) => {
       layer.layout = {
         ...layer.layout,
-        [property]: property === 'scale' ? Math.max(0.05, nextValue) : nextValue,
+        [property]: property.startsWith('scale') ? Math.max(0.05, nextValue) : nextValue,
       };
     });
   }
@@ -5045,8 +5123,15 @@ export class MotionStudio {
     switch (layer.type) {
       case 'text':
         return 'fluent:text-font-24-regular';
+      case 'caption':
+        return 'fluent:closed-caption-24-regular';
       case 'shape':
         return 'fluent:shapes-24-regular';
+      case 'path':
+      case 'svg':
+        return 'fluent:draw-shape-24-regular';
+      case 'waveform':
+        return 'fluent:music-note-2-24-regular';
       case 'image':
         return 'fluent:image-24-regular';
       case 'video':
@@ -5726,21 +5811,13 @@ export class MotionStudio {
     const layer: MotionLayer = {
       id: createMotionLayerId(type),
       type,
-      name: type === 'text' ? 'Text layer' : 'Shape layer',
+      name: createDefaultLayerName(type),
       start: this.currentTime(),
       duration: 3000,
       zIndex: this.draft().layers.length + 1,
-      layout: {
-        x: type === 'text' ? 160 : 220,
-        y: type === 'text' ? 160 : 360,
-        width: type === 'text' ? 720 : 420,
-        height: type === 'text' ? 120 : 220,
-      },
-      style:
-        type === 'text'
-          ? { color: '#ffffff', fontSize: 72, fontWeight: 700, lineHeight: 1.05 }
-          : { background: '#38bdf8', borderRadius: 24 },
-      props: type === 'text' ? { text: 'Text layer' } : { kind: 'rectangle' },
+      layout: createDefaultLayerLayout(type),
+      style: createDefaultLayerStyle(type),
+      props: createDefaultLayerProps(type),
     };
 
     this.updateDocument((document) => {
@@ -8867,6 +8944,93 @@ const createMotionLayerId = (prefix: string): string => {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 };
 
+const createDefaultLayerName = (type: MotionLayerType): string => {
+  switch (type) {
+    case 'text':
+      return 'Text layer';
+    case 'caption':
+      return 'Caption layer';
+    case 'shape':
+      return 'Shape layer';
+    case 'path':
+      return 'Path layer';
+    case 'svg':
+      return 'SVG layer';
+    case 'waveform':
+      return 'Waveform layer';
+    default:
+      return `${type.charAt(0).toUpperCase()}${type.slice(1)} layer`;
+  }
+};
+
+const createDefaultLayerLayout = (type: MotionLayerType): MotionLayout => {
+  switch (type) {
+    case 'text':
+      return { x: 160, y: 160, width: 720, height: 120 };
+    case 'caption':
+      return { x: 320, y: 820, width: 1280, height: 132 };
+    case 'path':
+    case 'svg':
+      return { x: 220, y: 260, width: 520, height: 320 };
+    case 'waveform':
+      return { x: 240, y: 700, width: 1040, height: 160 };
+    case 'shape':
+    default:
+      return { x: 220, y: 360, width: 420, height: 220 };
+  }
+};
+
+const createDefaultLayerStyle = (type: MotionLayerType): MotionStyle => {
+  switch (type) {
+    case 'text':
+      return { color: '#ffffff', fontSize: 72, fontWeight: 700, lineHeight: 1.05 };
+    case 'caption':
+      return {
+        color: '#ffffff',
+        background: '#020617',
+        borderRadius: 28,
+        fontSize: 46,
+        fontWeight: 600,
+        lineHeight: 1.18,
+      };
+    case 'path':
+    case 'svg':
+      return {
+        color: '#38bdf8',
+        fill: '#38bdf8',
+        stroke: '#ffffff',
+        strokeWidth: 0,
+      };
+    case 'waveform':
+      return { color: '#38bdf8' };
+    case 'shape':
+    default:
+      return { background: '#38bdf8', borderRadius: 24 };
+  }
+};
+
+const createDefaultLayerProps = (type: MotionLayerType): Record<string, MotionValue> => {
+  switch (type) {
+    case 'text':
+      return { text: 'Text layer' };
+    case 'caption':
+      return { text: 'Caption line' };
+    case 'path':
+    case 'svg':
+      return {
+        d: 'M 8 50 C 24 8, 76 8, 92 50 C 76 92, 24 92, 8 50 Z',
+        viewBox: '0 0 100 100',
+      };
+    case 'waveform':
+      return {
+        samples: [0.22, 0.54, 0.38, 0.78, 0.46, 0.92, 0.58, 0.35, 0.72, 0.5, 0.84, 0.32],
+      };
+    case 'shape':
+    default:
+      return { kind: 'rectangle' };
+  }
+};
+
 const createCopiedMotionLayer = (
   layer: MotionLayer,
   options: { mode: 'duplicate' | 'paste'; index: number; zIndex: number },
@@ -9871,8 +10035,15 @@ const createDefaultEndValue = (
       return layer.layout.y + 80;
     case 'scale':
       return roundMotionNumber((layer.layout.scale ?? 1) + 0.12, 2);
+    case 'scaleX':
+      return roundMotionNumber((layer.layout.scaleX ?? 1) + 0.12, 2);
+    case 'scaleY':
+      return roundMotionNumber((layer.layout.scaleY ?? 1) + 0.12, 2);
     case 'rotation':
       return (layer.layout.rotation ?? 0) + 8;
+    case 'skewX':
+    case 'skewY':
+      return startValue + 8;
     case 'width':
       return layer.layout.width + 120;
     case 'height':
@@ -9932,9 +10103,20 @@ const defaultStyleAnimationValue = (property: string): MotionValue => {
 };
 
 const isLayoutAnimationProperty = (property: string): property is keyof MotionLayout => {
-  return ['x', 'y', 'width', 'height', 'rotation', 'scale', 'anchorX', 'anchorY'].includes(
-    property,
-  );
+  return [
+    'x',
+    'y',
+    'width',
+    'height',
+    'rotation',
+    'scale',
+    'scaleX',
+    'scaleY',
+    'skewX',
+    'skewY',
+    'anchorX',
+    'anchorY',
+  ].includes(property);
 };
 
 const isStyleAnimationProperty = (property: string): property is keyof MotionStyle => {
@@ -9966,6 +10148,10 @@ const isNumericAnimationProperty = (property: string): boolean => {
     'height',
     'rotation',
     'scale',
+    'scaleX',
+    'scaleY',
+    'skewX',
+    'skewY',
     'anchorX',
     'anchorY',
     'strokeWidth',
@@ -9991,9 +10177,18 @@ const MOTION_EASING_NAMES: MotionEasingName[] = [
   'easeInCubic',
   'easeOutCubic',
   'easeInOutCubic',
+  'easeInQuart',
+  'easeOutQuart',
+  'easeInOutQuart',
   'smooth',
+  'easeInBack',
   'easeOutBack',
+  'easeInOutBack',
+  'easeInBounce',
   'easeOutBounce',
+  'easeInOutBounce',
+  'spring',
+  'springSoft',
 ];
 
 const coerceMotionEasing = (value: unknown): MotionEasingName => {
@@ -10051,16 +10246,46 @@ const sampleMotionEasing = (easing: MotionEasingName, progress: number): number 
       return value < 0.5
         ? 4 * value * value * value
         : (value - 1) * (2 * value - 2) * (2 * value - 2) + 1;
+    case 'easeInQuart':
+      return value ** 4;
+    case 'easeOutQuart':
+      return 1 - (1 - value) ** 4;
+    case 'easeInOutQuart':
+      return value < 0.5 ? 8 * value ** 4 : 1 - (-2 * value + 2) ** 4 / 2;
     case 'smooth':
       return value * value * value * (value * (value * 6 - 15) + 10);
+    case 'easeInBack': {
+      const c1 = 1.70158;
+      const c3 = c1 + 1;
+
+      return c3 * value ** 3 - c1 * value ** 2;
+    }
     case 'easeOutBack': {
       const c1 = 1.70158;
       const c3 = c1 + 1;
 
       return 1 + c3 * (value - 1) ** 3 + c1 * (value - 1) ** 2;
     }
+    case 'easeInOutBack': {
+      const c1 = 1.70158;
+      const c2 = c1 * 1.525;
+
+      return value < 0.5
+        ? ((2 * value) ** 2 * ((c2 + 1) * 2 * value - c2)) / 2
+        : ((2 * value - 2) ** 2 * ((c2 + 1) * (value * 2 - 2) + c2) + 2) / 2;
+    }
+    case 'easeInBounce':
+      return 1 - sampleEaseOutBounce(1 - value);
     case 'easeOutBounce':
       return sampleEaseOutBounce(value);
+    case 'easeInOutBounce':
+      return value < 0.5
+        ? (1 - sampleEaseOutBounce(1 - 2 * value)) / 2
+        : (1 + sampleEaseOutBounce(2 * value - 1)) / 2;
+    case 'spring':
+      return 1 - Math.cos(value * Math.PI * 4.5) * Math.exp(-value * 6);
+    case 'springSoft':
+      return 1 - Math.cos(value * Math.PI * 3) * Math.exp(-value * 5);
     case 'linear':
     default:
       return value;

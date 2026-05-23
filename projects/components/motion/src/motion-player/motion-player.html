@@ -26,6 +26,9 @@
           class="ngs-motion-player__layer"
           [class.ngs-motion-player__layer--group]="layer.type === 'group'"
           [class.ngs-motion-player__layer--text]="layer.type === 'text'"
+          [class.ngs-motion-player__layer--caption]="layer.type === 'caption'"
+          [class.ngs-motion-player__layer--path]="layer.type === 'path' || layer.type === 'svg'"
+          [class.ngs-motion-player__layer--waveform]="layer.type === 'waveform'"
           [class.ngs-motion-player__layer--single-line-text]="isSingleLineTextLayer(layer)"
           [class.ngs-motion-player__layer--unbroken-text]="isUnbrokenTextLayer(layer)"
           [ngStyle]="layerStyle(layer, parentWidth, parentHeight)"
@@ -33,6 +36,9 @@
           @switch (layer.type) {
             @case ('text') {
               <div class="ngs-motion-player__text">{{ layerText(layer) }}</div>
+            }
+            @case ('caption') {
+              <div class="ngs-motion-player__caption">{{ layerCaptionText(layer) }}</div>
             }
             @case ('image') {
               @if (layerImageSrc(layer)) {
@@ -60,6 +66,64 @@
               } @else if (isLayerMediaPlaceholder(layer)) {
                 <div class="ngs-motion-player__media-placeholder"></div>
               }
+            }
+            @case ('path') {
+              <svg
+                class="ngs-motion-player__svg"
+                [attr.viewBox]="layerSvgViewBox(layer)"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <path
+                  class="ngs-motion-player__path"
+                  [attr.d]="layerPathData(layer)"
+                  [attr.fill]="layerFill(layer)"
+                  [attr.stroke]="layerStroke(layer)"
+                  [attr.stroke-width]="layerStrokeWidth(layer)"
+                  [attr.stroke-linecap]="layerStrokeLinecap(layer)"
+                  [attr.stroke-linejoin]="layerStrokeLinejoin(layer)"
+                ></path>
+              </svg>
+            }
+            @case ('svg') {
+              @if (layerSvgMarkup(layer)) {
+                <div class="ngs-motion-player__svg-markup" [innerHTML]="layerSvgMarkup(layer)"></div>
+              } @else {
+                <svg
+                  class="ngs-motion-player__svg"
+                  [attr.viewBox]="layerSvgViewBox(layer)"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    class="ngs-motion-player__path"
+                    [attr.d]="layerPathData(layer)"
+                    [attr.fill]="layerFill(layer)"
+                    [attr.stroke]="layerStroke(layer)"
+                    [attr.stroke-width]="layerStrokeWidth(layer)"
+                    [attr.stroke-linecap]="layerStrokeLinecap(layer)"
+                    [attr.stroke-linejoin]="layerStrokeLinejoin(layer)"
+                  ></path>
+                </svg>
+              }
+            }
+            @case ('waveform') {
+              <svg
+                class="ngs-motion-player__waveform"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                @for (bar of waveformBars(layer); track bar.index) {
+                  <rect
+                    [attr.x]="bar.x"
+                    [attr.y]="bar.y"
+                    [attr.width]="bar.width"
+                    [attr.height]="bar.height"
+                    rx="1.4"
+                  ></rect>
+                }
+              </svg>
             }
             @case ('shape') {
               <div

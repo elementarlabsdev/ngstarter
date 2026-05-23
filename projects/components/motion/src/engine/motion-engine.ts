@@ -21,13 +21,32 @@ const EASINGS: Record<MotionEasingName, (value: number) => number> = {
   easeOutCubic: (value) => --value * value * value + 1,
   easeInOutCubic: (value) =>
     value < 0.5 ? 4 * value * value * value : (value - 1) * (2 * value - 2) * (2 * value - 2) + 1,
+  easeInQuart: (value) => value * value * value * value,
+  easeOutQuart: (value) => 1 - (1 - value) ** 4,
+  easeInOutQuart: (value) =>
+    value < 0.5 ? 8 * value ** 4 : 1 - (-2 * value + 2) ** 4 / 2,
   smooth: (value) => value * value * value * (value * (value * 6 - 15) + 10),
+  easeInBack: (value) => {
+    const c1 = 1.70158;
+    const c3 = c1 + 1;
+
+    return c3 * value ** 3 - c1 * value ** 2;
+  },
   easeOutBack: (value) => {
     const c1 = 1.70158;
     const c3 = c1 + 1;
 
     return 1 + c3 * (value - 1) ** 3 + c1 * (value - 1) ** 2;
   },
+  easeInOutBack: (value) => {
+    const c1 = 1.70158;
+    const c2 = c1 * 1.525;
+
+    return value < 0.5
+      ? ((2 * value) ** 2 * ((c2 + 1) * 2 * value - c2)) / 2
+      : ((2 * value - 2) ** 2 * ((c2 + 1) * (value * 2 - 2) + c2) + 2) / 2;
+  },
+  easeInBounce: (value) => 1 - EASINGS.easeOutBounce(1 - value),
   easeOutBounce: (value) => {
     const n1 = 7.5625;
     const d1 = 2.75;
@@ -46,6 +65,12 @@ const EASINGS: Record<MotionEasingName, (value: number) => number> = {
 
     return n1 * (value -= 2.625 / d1) * value + 0.984375;
   },
+  easeInOutBounce: (value) =>
+    value < 0.5
+      ? (1 - EASINGS.easeOutBounce(1 - 2 * value)) / 2
+      : (1 + EASINGS.easeOutBounce(2 * value - 1)) / 2,
+  spring: (value) => 1 - Math.cos(value * Math.PI * 4.5) * Math.exp(-value * 6),
+  springSoft: (value) => 1 - Math.cos(value * Math.PI * 3) * Math.exp(-value * 5),
 };
 
 export const clampMotionTime = (time: number, document: MotionDocument): number => {
@@ -104,24 +129,59 @@ export const resolveMotionAnimation = (
     return null;
   }
 
-  if (localTime <= keyframes[0].time) {
+  const effectiveTime = resolveMotionAnimationTime(animation, keyframes, localTime);
+
+  if (effectiveTime <= keyframes[0].time) {
     return keyframes[0].value;
   }
 
   const last = keyframes[keyframes.length - 1];
-  if (localTime >= last.time) {
+  if (effectiveTime >= last.time) {
     return last.value;
   }
 
-  const nextIndex = keyframes.findIndex((keyframe) => keyframe.time >= localTime);
+  const nextIndex = keyframes.findIndex((keyframe) => keyframe.time >= effectiveTime);
   const previous = keyframes[Math.max(0, nextIndex - 1)];
   const next = keyframes[nextIndex];
   const span = Math.max(1, next.time - previous.time);
-  const progress = (localTime - previous.time) / span;
+  const progress = (effectiveTime - previous.time) / span;
   const easingName = next.easing ?? animation.easing ?? 'linear';
   const eased = EASINGS[easingName](Math.max(0, Math.min(1, progress)));
 
   return interpolateMotionValue(previous.value, next.value, eased);
+};
+
+const resolveMotionAnimationTime = (
+  animation: MotionAnimation,
+  keyframes: MotionKeyframe[],
+  localTime: number,
+): number => {
+  const delay = Math.max(0, animation.delay ?? 0);
+  const startTime = keyframes[0].time;
+  const endTime = keyframes[keyframes.length - 1].time;
+  const span = Math.max(1, endTime - startTime);
+  const delayedTime = localTime - delay;
+
+  if (delayedTime <= startTime) {
+    return startTime;
+  }
+
+  const repeat =
+    animation.repeat === 'infinite'
+      ? Number.POSITIVE_INFINITY
+      : Math.max(1, Math.floor(animation.repeat ?? 1));
+  const iteration = Math.floor((delayedTime - startTime) / span);
+
+  if (Number.isFinite(repeat) && iteration >= repeat) {
+    return animation.direction === 'reverse' ? startTime : endTime;
+  }
+
+  const elapsed = (delayedTime - startTime) % span;
+  const reversed =
+    animation.direction === 'reverse' ||
+    (animation.direction === 'alternate' && iteration % 2 === 1);
+
+  return reversed ? endTime - elapsed : startTime + elapsed;
 };
 
 export const interpolateMotionValue = (
@@ -138,7 +198,7 @@ export const interpolateMotionValue = (
   }
 
   if (typeof from === 'string' && typeof to === 'string') {
-    return interpolateMotionString(from, to, progress);
+    return interpolateMotionColor(from, to, progress) ?? interpolateMotionString(from, to, progress);
   }
 
   return progress < 1 ? from : to;
@@ -174,6 +234,64 @@ const parseMotionNumberString = (
     prefix,
     value: Number(`${prefix || ''}${numberValue}`),
     suffix,
+  };
+};
+
+const interpolateMotionColor = (from: string, to: string, progress: number): string | null => {
+  const fromColor = parseMotionColor(from);
+  const toColor = parseMotionColor(to);
+
+  if (!fromColor || !toColor) {
+    return null;
+  }
+
+  const channel = (start: number, end: number) => Math.round(start + (end - start) * progress);
+  const alpha = fromColor.a + (toColor.a - fromColor.a) * progress;
+
+  if (alpha < 1) {
+    return `rgba(${channel(fromColor.r, toColor.r)}, ${channel(fromColor.g, toColor.g)}, ${channel(fromColor.b, toColor.b)}, ${roundMotionNumber(alpha, 3)})`;
+  }
+
+  return `rgb(${channel(fromColor.r, toColor.r)}, ${channel(fromColor.g, toColor.g)}, ${channel(fromColor.b, toColor.b)})`;
+};
+
+const parseMotionColor = (
+  value: string,
+): { r: number; g: number; b: number; a: number } | null => {
+  const normalized = value.trim();
+  const hex = normalized.match(/^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i);
+
+  if (hex) {
+    const raw = hex[1];
+    const full =
+      raw.length === 3
+        ? raw
+            .split('')
+            .map((part) => `${part}${part}`)
+            .join('')
+        : raw;
+
+    return {
+      r: Number.parseInt(full.slice(0, 2), 16),
+      g: Number.parseInt(full.slice(2, 4), 16),
+      b: Number.parseInt(full.slice(4, 6), 16),
+      a: full.length === 8 ? Number.parseInt(full.slice(6, 8), 16) / 255 : 1,
+    };
+  }
+
+  const rgb = normalized.match(
+    /^rgba?\(\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)(?:\s*,\s*(\d+(?:\.\d+)?))?\s*\)$/i,
+  );
+
+  if (!rgb) {
+    return null;
+  }
+
+  return {
+    r: Number(rgb[1]),
+    g: Number(rgb[2]),
+    b: Number(rgb[3]),
+    a: rgb[4] === undefined ? 1 : Number(rgb[4]),
   };
 };
 
@@ -218,9 +336,20 @@ const applyMotionValue = (
 };
 
 const isLayoutProperty = (property: string): property is keyof MotionLayout => {
-  return ['x', 'y', 'width', 'height', 'rotation', 'scale', 'anchorX', 'anchorY'].includes(
-    property,
-  );
+  return [
+    'x',
+    'y',
+    'width',
+    'height',
+    'rotation',
+    'scale',
+    'scaleX',
+    'scaleY',
+    'skewX',
+    'skewY',
+    'anchorX',
+    'anchorY',
+  ].includes(property);
 };
 
 const isStyleProperty = (property: string): property is keyof MotionStyle => {
@@ -248,8 +377,12 @@ const buildMotionTransform = (layout: MotionLayout): string => {
   const anchorY = layout.anchorY ?? 0;
   const rotation = layout.rotation ?? 0;
   const scale = layout.scale ?? 1;
+  const scaleX = layout.scaleX ?? 1;
+  const scaleY = layout.scaleY ?? 1;
+  const skewX = layout.skewX ?? 0;
+  const skewY = layout.skewY ?? 0;
 
-  return `translate(${-anchorX * 100}%, ${-anchorY * 100}%) rotate(${rotation}deg) scale(${scale})`;
+  return `translate(${-anchorX * 100}%, ${-anchorY * 100}%) rotate(${rotation}deg) skew(${skewX}deg, ${skewY}deg) scale(${scale * scaleX}, ${scale * scaleY})`;
 };
 
 const applyMotionTransitions = (
@@ -407,7 +540,7 @@ export const coerceMotionPrimitive = (
     typeof value === 'number' ||
     typeof value === 'boolean'
   ) {
-    return value;
+    return value as MotionPrimitive;
   }
 
   return fallback;

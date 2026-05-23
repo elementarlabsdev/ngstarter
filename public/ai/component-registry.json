@@ -5913,6 +5913,7 @@
         "validateMotionExport"
       ],
       "inputs": [
+        "animateBackground",
         "clip",
         "controls",
         "currentTime",
@@ -5978,6 +5979,7 @@
         "--ngs-motion-background-x-b",
         "--ngs-motion-background-y-a",
         "--ngs-motion-background-y-b",
+        "--ngs-motion-caption-background",
         "--ngs-motion-height",
         "--ngs-motion-player-controls-background",
         "--ngs-motion-player-controls-color",

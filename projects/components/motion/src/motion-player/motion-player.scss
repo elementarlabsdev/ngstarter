@@ -42,14 +42,28 @@
   overflow: visible;
 }
 
+.ngs-motion-player__layer--caption {
+  overflow: visible;
+}
+
+.ngs-motion-player__layer--path,
+.ngs-motion-player__layer--waveform {
+  color: inherit;
+  background: transparent;
+}
+
 .ngs-motion-player__layer--single-line-text {
   overflow: hidden;
 }
 
 .ngs-motion-player__text,
+.ngs-motion-player__caption,
 .ngs-motion-player__shape,
 .ngs-motion-player__image,
 .ngs-motion-player__video,
+.ngs-motion-player__svg,
+.ngs-motion-player__svg-markup,
+.ngs-motion-player__waveform,
 .ngs-motion-player__media-placeholder {
   display: block;
   width: 100%;
@@ -71,6 +85,20 @@
   white-space: pre;
 }
 
+.ngs-motion-player__caption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: 0.14em 0.28em;
+  color: inherit;
+  text-align: center;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: color-mix(in srgb, var(--ngs-motion-caption-background, #020617) 72%, transparent);
+  border-radius: inherit;
+}
+
 .ngs-motion-player__shape {
   background: inherit;
   border-radius: inherit;
@@ -83,6 +111,27 @@
 .ngs-motion-player__image,
 .ngs-motion-player__video {
   object-fit: cover;
+}
+
+.ngs-motion-player__svg,
+.ngs-motion-player__svg-markup > svg,
+.ngs-motion-player__waveform {
+  overflow: visible;
+}
+
+.ngs-motion-player__svg-markup {
+  color: inherit;
+}
+
+.ngs-motion-player__svg-markup > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ngs-motion-player__waveform {
+  color: inherit;
+  fill: currentColor;
 }
 
 .ngs-motion-player__media-placeholder {

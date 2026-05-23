@@ -1515,6 +1515,7 @@
 
 .ngs-motion-studio__background-preview {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
   min-height: 132px;
   border: 1px solid var(--ngs-color-border);
@@ -1526,6 +1527,7 @@
 .ngs-motion-studio__background-preset-thumb::before {
   position: absolute;
   inset: -24%;
+  z-index: 0;
   pointer-events: none;
   content: '';
   opacity: 0;
@@ -1607,6 +1609,9 @@
 
 .ngs-motion-studio__background-preset-thumb {
   position: relative;
+  isolation: isolate;
+  display: block;
+  flex: none;
   overflow: hidden;
   width: 28px;
   height: 20px;

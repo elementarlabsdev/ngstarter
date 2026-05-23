@@ -644,7 +644,7 @@ Typography:
   example topics: Motion, Basic motion, Render export
   selectors: `ngs-motion-player`, `ngs-motion-renderer`, `ngs-motion-studio`
   exports: `applyMotionTransition`, `clampMotionTime`, `coerceMotionNumber`, `coerceMotionPrimitive`, `coerceMotionString`, `createDefaultMotionDocument`, `createMotionRenderCliCommand`, `createMotionRenderDocument`, `createMotionRenderEventRunner`, `createMotionRenderManifest`, `createMotionRenderMockRunner`, `createMotionRenderProgress`
-  inputs: `clip`, `controls`, `currentTime`, `document`, `frame`, `initialPreviewScale`, `localStorageKey`, `loop`, `maxScale`, `minScale`, `playing`, `previewScaleMax`, `previewScaleMin`, `previewScaleStep`, `renderTime`, `scale`, `scaleStep`, `time`
+  inputs: `animateBackground`, `clip`, `controls`, `currentTime`, `document`, `frame`, `initialPreviewScale`, `localStorageKey`, `loop`, `maxScale`, `minScale`, `playing`, `previewScaleMax`, `previewScaleMin`, `previewScaleStep`, `renderTime`, `scale`, `scaleStep`, `time`
   outputs: `currentTimeChange`, `documentChange`, `ended`, `renderRequest`, `scaleChange`
   tokens: `--ngs-color-border`, `--ngs-color-danger`, `--ngs-color-danger-container-high`, `--ngs-color-danger-container-low`, `--ngs-color-on-primary`, `--ngs-color-on-surface`, `--ngs-color-primary`, `--ngs-color-surface`, `--ngs-color-surface-container-low`, `--ngs-color-text`, `--ngs-color-text-secondary`, `--ngs-color-warning`, `--ngs-expansion-panel-content-padding`, `--ngs-expansion-panel-header-expanded-height`, `--ngs-expansion-panel-header-height`, `--ngs-expansion-panel-radius`
 - navigation: `@ngstarter-ui/components/navigation` docs: /navigation/navigation

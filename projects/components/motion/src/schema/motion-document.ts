@@ -2,7 +2,18 @@ export type MotionPrimitive = string | number | boolean | null;
 
 export type MotionValue = MotionPrimitive | MotionValue[] | { [key: string]: MotionValue };
 
-export type MotionLayerType = 'text' | 'shape' | 'image' | 'video' | 'audio' | 'group' | string;
+export type MotionLayerType =
+  | 'text'
+  | 'caption'
+  | 'shape'
+  | 'path'
+  | 'svg'
+  | 'waveform'
+  | 'image'
+  | 'video'
+  | 'audio'
+  | 'group'
+  | string;
 
 export type MotionShapeKind = 'rectangle' | 'ellipse';
 
@@ -14,9 +25,18 @@ export type MotionEasingName =
   | 'easeInCubic'
   | 'easeOutCubic'
   | 'easeInOutCubic'
+  | 'easeInQuart'
+  | 'easeOutQuart'
+  | 'easeInOutQuart'
   | 'smooth'
+  | 'easeInBack'
   | 'easeOutBack'
-  | 'easeOutBounce';
+  | 'easeInOutBack'
+  | 'easeInBounce'
+  | 'easeOutBounce'
+  | 'easeInOutBounce'
+  | 'spring'
+  | 'springSoft';
 
 export interface MotionComposition {
   width: number;
@@ -75,6 +95,10 @@ export interface MotionLayout {
   height: number;
   rotation?: number;
   scale?: number;
+  scaleX?: number;
+  scaleY?: number;
+  skewX?: number;
+  skewY?: number;
   anchorX?: number;
   anchorY?: number;
 }
@@ -110,6 +134,9 @@ export interface MotionAnimation<T extends MotionValue = MotionValue> {
   property: string;
   keyframes: MotionKeyframe<T>[];
   easing?: MotionEasingName;
+  delay?: number;
+  repeat?: number | 'infinite';
+  direction?: 'normal' | 'reverse' | 'alternate';
 }
 
 export interface MotionTransition {
