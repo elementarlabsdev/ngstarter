@@ -1155,6 +1155,7 @@
         "--ngs-calendar-event-warning",
         "--ngs-calendar-gap",
         "--ngs-calendar-header-gap",
+        "--ngs-calendar-header-margin-bottom",
         "--ngs-calendar-weekday-color",
         "--ngs-color-danger",
         "--ngs-color-info",
@@ -3197,6 +3198,7 @@
         "Datepicker With Custom Header",
         "Datepicker Action Buttons",
         "Basic Date Range Picker",
+        "Extended Date Range Picker",
         "Date Range Picker With Quick Presets",
         "Datepicker custom icon",
         "Datepicker actions button",
@@ -3270,15 +3272,21 @@
       ],
       "inputs": [
         "activeDate",
+        "calendarCount",
+        "extended",
         "maxDate",
         "minDate",
+        "rangePreviewDate",
         "selected",
         "separator",
+        "sharedRangePreview",
         "showQuickPresets",
-        "startAt"
+        "startAt",
+        "visibleCalendars"
       ],
       "outputs": [
         "monthSelected",
+        "rangePreviewDateChange",
         "selectedChange",
         "yearSelected"
       ],

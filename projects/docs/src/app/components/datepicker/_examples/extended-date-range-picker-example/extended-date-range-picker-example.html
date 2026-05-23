@@ -1,0 +1,10 @@
+<ngs-form-field class="w-1/2">
+  <ngs-label>Enter a date range</ngs-label>
+  <ngs-date-range-input [rangePicker]="picker">
+    <input ngsStartDate placeholder="Start date">
+    <input ngsEndDate placeholder="End date">
+  </ngs-date-range-input>
+  <ngs-hint>MM/DD/YYYY – MM/DD/YYYY</ngs-hint>
+  <ngs-datepicker-toggle ngsIconButtonSuffix [for]="picker"/>
+  <ngs-date-range-picker #picker extended/>
+</ngs-form-field>

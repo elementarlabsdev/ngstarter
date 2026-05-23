@@ -7,6 +7,10 @@
   min-height: calc(var(--ngs-calendar-cell-size) * 5 + --spacing(2));
   padding: --spacing(2);
 
+  &.ngs-calendar-multiple-months {
+    width: auto;
+  }
+
   .ngs-calendar-header {
     display: flex;
     justify-content: space-between;
@@ -24,6 +28,15 @@
 
     &:hover {
       color: var(--ngs-color-primary);
+    }
+  }
+
+  .ngs-calendar-content-multiple {
+    display: flex;
+    gap: --spacing(2);
+
+    ngs-month-view {
+      flex: 0 0 calc(var(--ngs-calendar-cell-size) * 7);
     }
   }
 }

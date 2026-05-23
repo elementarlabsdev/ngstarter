@@ -79,6 +79,18 @@ export class Api {
       description: 'Whether to show the quick presets.',
       type: 'boolean',
       default: 'false'
+    },
+    {
+      name: 'calendarCount',
+      description: 'Number of month calendars displayed side by side in the range picker. Use 2 to show adjacent months.',
+      type: '1 | 2',
+      default: '1'
+    },
+    {
+      name: 'extended',
+      description: 'Boolean alias for calendarCount=2. When true, the range picker shows two adjacent month calendars.',
+      type: 'boolean',
+      default: 'false'
     }
   ];
 

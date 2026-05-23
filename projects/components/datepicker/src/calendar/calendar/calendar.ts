@@ -8,6 +8,7 @@ import {
   inject,
   Type,
   effect,
+  numberAttribute,
 } from '@angular/core';
 import { DateAdapter } from '../../core/datetime/date-adapter';
 import { DatepickerIntl } from '../../datepicker-intl';
@@ -29,6 +30,8 @@ import { NgComponentOutlet } from '@angular/common';
   exportAs: 'ngsCalendar',
   host: {
     'class': 'ngs-calendar',
+    '[class.ngs-calendar-multiple-months]':
+      'currentView() === "month" && visibleCalendars() === 2',
   },
 })
 export class Calendar<D> {
@@ -40,12 +43,16 @@ export class Calendar<D> {
   readonly minDate = input<D | null>(null);
   readonly maxDate = input<D | null>(null);
   readonly headerComponent = input<Type<any> | null>(null);
+  readonly visibleCalendars = input<1 | 2, unknown>(1, {
+    transform: value => numberAttribute(value, 1) === 2 ? 2 : 1,
+  });
 
   readonly selectedChange = output<D>();
   readonly yearSelected = output<D>();
   readonly monthSelected = output<D>();
 
   activeDate = signal<D>(this.startAt() || this._dateAdapter.today());
+  readonly _rangePreviewDate = signal<D | null>(null);
 
   constructor() {
     effect(() => {
@@ -80,12 +87,21 @@ export class Calendar<D> {
 
   readonly periodButtonText = computed(() => {
     const activeDate = this.activeDate();
+    const visibleCalendars = this.visibleCalendars();
 
     if (!activeDate || !this._dateAdapter.isValid(activeDate)) {
       return '';
     }
 
     if (this.currentView() === 'month') {
+      if (visibleCalendars === 2) {
+        const endDate = this._dateAdapter.addCalendarMonths(activeDate, 1);
+        const startLabel = this._dateAdapter.format(activeDate, { month: 'long', year: 'numeric' });
+        const endLabel = this._dateAdapter.format(endDate, { month: 'long', year: 'numeric' });
+
+        return `${startLabel} - ${endLabel}`;
+      }
+
       return this._dateAdapter.format(activeDate, { month: 'long', year: 'numeric' });
     }
     if (this.currentView() === 'year') {
@@ -100,6 +116,15 @@ export class Calendar<D> {
       return `${this._dateAdapter.getYearName(startDate)} - ${this._dateAdapter.getYearName(endDate)}`;
     }
     return '';
+  });
+
+  readonly _monthViewActiveDates = computed(() => {
+    const activeDate = this.activeDate();
+    const count = this.visibleCalendars();
+
+    return Array.from({ length: count }, (_, index) =>
+      this._dateAdapter.addCalendarMonths(activeDate, index)
+    );
   });
 
   prevPage() {
@@ -154,5 +179,9 @@ export class Calendar<D> {
     this.activeDate.set(date);
     this.currentView.set('year');
     this.yearSelected.emit(date);
+  }
+
+  _trackMonth(index: number, date: D) {
+    return `${this._dateAdapter.getYear(date)}-${this._dateAdapter.getMonth(date)}-${index}`;
   }
 }

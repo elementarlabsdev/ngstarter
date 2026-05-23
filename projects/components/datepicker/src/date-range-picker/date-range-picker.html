@@ -14,6 +14,7 @@
       <ngs-calendar [startAt]="startAt()"
         [selected]="_selectedRange()"
         [headerComponent]="calendarHeaderComponent()"
+        [visibleCalendars]="_visibleCalendars()"
         (selectedChange)="_select($event)"
        />
     </div>
