@@ -7,19 +7,23 @@
       </a>
       <div class="hidden items-center gap-1 md:flex">
         <a
-          class="rounded-[var(--ngs-radius-lg)] px-3 py-2 text-sm font-medium text-on-surface-variant no-underline transition-colors hover:bg-state-hover hover:text-on-surface"
-          routerLink="/">Home</a>
+          class="rounded-[var(--ngs-radius-lg)] px-3 py-2 text-sm font-medium text-on-surface-variant no-underline transition-colors hover:bg-state-hover hover:text-on-surface [&.is-active]:bg-state-hover [&.is-active]:text-on-surface"
+          routerLink="/" routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }">Home</a>
         <a
-          class="rounded-[var(--ngs-radius-lg)] px-3 py-2 text-sm font-medium text-on-surface-variant no-underline transition-colors hover:bg-state-hover hover:text-on-surface"
+          class="rounded-[var(--ngs-radius-lg)] px-3 py-2 text-sm font-medium text-on-surface-variant no-underline transition-colors hover:bg-state-hover hover:text-on-surface [&.is-active]:bg-state-hover [&.is-active]:text-on-surface"
           href="https://docs.ngstarter.com" target="_blank">Documentation</a>
         <a
-          class="rounded-[var(--ngs-radius-lg)] px-3 py-2 text-sm font-medium text-on-surface-variant no-underline transition-colors hover:bg-state-hover hover:text-on-surface"
-          routerLink="/templates">Templates</a>
+          class="rounded-[var(--ngs-radius-lg)] px-3 py-2 text-sm font-medium text-on-surface-variant no-underline transition-colors hover:bg-state-hover hover:text-on-surface [&.is-active]:bg-state-hover [&.is-active]:text-on-surface"
+          routerLink="/templates"
+          routerLinkActive="is-active">Templates</a>
         <a
-          class="rounded-[var(--ngs-radius-lg)] px-3 py-2 text-sm font-medium text-on-surface-variant no-underline transition-colors hover:bg-state-hover hover:text-on-surface"
-          routerLink="/pricing">Pricing</a>
+          class="rounded-[var(--ngs-radius-lg)] px-3 py-2 text-sm font-medium text-on-surface-variant no-underline transition-colors hover:bg-state-hover hover:text-on-surface [&.is-active]:bg-state-hover [&.is-active]:text-on-surface"
+          routerLink="/pricing"
+          routerLinkActive="is-active">Pricing</a>
         <a routerLink="/license"
-          class="rounded-[var(--ngs-radius-lg)] px-3 py-2 text-sm font-medium text-on-surface-variant no-underline transition-colors hover:bg-state-hover hover:text-on-surface">
+           routerLinkActive="is-active"
+          class="rounded-[var(--ngs-radius-lg)] px-3 py-2 text-sm font-medium text-on-surface-variant no-underline transition-colors hover:bg-state-hover hover:text-on-surface [&.is-active]:bg-state-hover [&.is-active]:text-on-surface">
           License
         </a>
       </div>
