@@ -1,0 +1,10 @@
+<app-widget-shell [title]="content().title" [subtitle]="content().subtitle" [calendar]="true">
+  <div class="calendar-widget">
+    <ngs-calendar
+      [selected]="selectedDate()"
+      [events]="calendarEvents"
+      [showTodayButton]="false"
+      (selectedChange)="selectedDate.set($event)"
+    />
+  </div>
+</app-widget-shell>

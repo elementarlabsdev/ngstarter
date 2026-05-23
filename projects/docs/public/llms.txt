@@ -13,6 +13,13 @@ AI registry: https://ngstarter.com/ai/component-registry.json
 - Import theme styles once in the app stylesheet.
 - Use `provideNgsTheme` from `@ngstarter-ui/components/core` for runtime theming.
 - Prefer `--ngs-*` CSS custom properties when customizing styles.
+- Use TailwindCSS utility classes for routine layout spacing, including margins and padding; prefer classes like `mt-10` and `p-6` over custom SCSS such as `margin-top: 2.5rem` or `padding: 1.5rem`.
+- Put global component style overrides and global CSS variable overrides only in `styles.scss`; for component-scoped overrides, define them in that component's stylesheet so they apply only there.
+- In component SCSS files, all component-local styling must be nested under the `:host` selector. Do not write top-level component-local selectors outside `:host`.
+- Standalone `ngs-form-field` controls outside forms, such as header, toolbar, or compact filter fields, do not require `ngs-label` when they have clear placeholder text or an `aria-label`/`aria-labelledby` context. Form fields inside actual forms should still use `ngs-label`.
+- When implementing a screenshot or mockup that shows a chart, build the chart with ECharts in a dedicated standalone component instead of drawing it inline or with ad hoc markup.
+- When placing an icon or other leading shape inside `ngs-chip`, project it through `ngsChipShape` (or `ngs-chip-shape`) instead of inserting the icon directly in the chip content.
+- Use `ngs-logo-shape` only for compact square or near-square logo marks/emblems. Do not use it for long wordmark images or full-width brand logos; place those directly inside `ngs-logo` or compose them with `ngs-logo-text`.
 - Do not import from private `src` paths in application code.
 
 ## Setup
@@ -73,6 +80,7 @@ Must use:
 - breadcrumbs: `@ngstarter-ui/components/breadcrumbs` docs: /navigation/breadcrumbs
 - button: `@ngstarter-ui/components/button` docs: /forms/buttons
 - button-toggle: `@ngstarter-ui/components/button-toggle` docs: /forms/button-toggle
+- calendar: `@ngstarter-ui/components/calendar` docs: /components/calendar
 - card: `@ngstarter-ui/components/card` docs: /components/card
 - card-overlay: `@ngstarter-ui/components/card-overlay` docs: /components/card-overlay
 - carousel: `@ngstarter-ui/components/carousel` docs: /components/carousel

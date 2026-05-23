@@ -16,12 +16,17 @@
   </div>
 }
 
-<div class="ngs-calendar-content">
+<div class="ngs-calendar-content" [class.ngs-calendar-content-multiple]="currentView() === 'month' && visibleCalendars() === 2">
   @if (currentView() === 'month') {
-    <ngs-month-view [activeDate]="activeDate()"
-      [selected]="selected()"
-      (selectedChange)="selectedChange.emit($event)"
-     />
+    @for (monthActiveDate of _monthViewActiveDates(); track _trackMonth($index, monthActiveDate)) {
+      <ngs-month-view [activeDate]="monthActiveDate"
+        [selected]="selected()"
+        [rangePreviewDate]="_rangePreviewDate()"
+        [sharedRangePreview]="true"
+        (rangePreviewDateChange)="_rangePreviewDate.set($event)"
+        (selectedChange)="selectedChange.emit($event)"
+       />
+    }
   } @else if (currentView() === 'year') {
     <ngs-year-view [activeDate]="activeDate()"
       [selected]="_selectedDate()"

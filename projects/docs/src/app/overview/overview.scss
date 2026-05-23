@@ -1,0 +1,47 @@
+:host {
+  .docs-landing-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    border: 1px solid var(--ngs-color-outline-variant);
+    border-radius: var(--ngs-radius-xl);
+    background: var(--ngs-color-surface-container-low);
+  }
+
+  .docs-landing-link p {
+    margin: 0 0 0.5rem;
+    color: var(--ngs-color-primary);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .docs-landing-link h2 {
+    margin: 0;
+    color: var(--ngs-color-on-background);
+    font-size: 1.35rem;
+    font-weight: 650;
+  }
+
+  .docs-landing-link span {
+    display: block;
+    margin-top: 0.5rem;
+    color: var(--ngs-color-on-surface-variant);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .docs-landing-link a[ngsButton] {
+    flex: none;
+  }
+
+  @media (max-width: 768px) {
+    .docs-landing-link {
+      align-items: stretch;
+      flex-direction: column;
+    }
+  }
+}

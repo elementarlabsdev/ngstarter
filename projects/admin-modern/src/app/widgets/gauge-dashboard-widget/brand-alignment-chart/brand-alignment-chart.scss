@@ -1,0 +1,17 @@
+@reference 'tailwindcss';
+
+:host {
+  --alignment-chart-primary: #efb7b9;
+  --alignment-chart-track: #e8e8e8;
+  --alignment-chart-text: var(--modern-ink);
+  --alignment-chart-muted: #8b8b88;
+
+  display: block;
+  width: min(100%, 390px);
+  height: 16rem;
+}
+
+.brand-alignment-chart {
+  width: 100%;
+  height: 100%;
+}

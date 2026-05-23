@@ -1,40 +1,122 @@
 :host {
   display: block;
-}
 
-.template-preview-card {
-  --ngs-card-padding: 0.75rem;
-  --ngs-card-bg: var(--ngs-color-surface-container-lowest);
-}
+  .template-actions {
+    --ngs-button-font-size: 0.975rem;
+    --ngs-button-font-weight: 700;
+    --ngs-button-height: 3.5rem;
+    --ngs-button-padding-x: 1.5rem;
+    --ngs-button-radius: var(--ngs-radius-xl);
+    --ngs-control-gap: 0.75rem;
+  }
 
-.template-screenshot {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: var(--ngs-radius-xl);
-}
+  .template-preview-card {
+    --ngs-card-padding: 0.75rem;
+    --ngs-card-bg: var(--ngs-color-surface-container-lowest);
+  }
 
-.template-detail-card {
-  --ngs-card-padding: 1.5rem;
-  --ngs-card-bg: var(--ngs-color-surface-container-lowest);
-}
+  .template-copy {
+    gap: 1rem;
+    align-items: center;
+  }
 
-.template-detail-card h2 {
-  margin: 1rem 0 0.5rem;
-  color: var(--ngs-color-on-background);
-  font-size: 1.125rem;
-  font-weight: 700;
-}
+  .template-copy > ngs-icon {
+    width: 2rem;
+    height: 2rem;
+    color: var(--ngs-color-primary);
+  }
 
-.template-detail-card p {
-  margin: 0;
-  color: var(--ngs-color-on-surface-variant);
-  font-size: 0.95rem;
-  line-height: 1.7;
-}
+  .template-copy h3 {
+    margin: 0 0 0.25rem;
+    color: var(--ngs-color-on-background);
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
 
-.detail-icon {
-  width: 2rem;
-  height: 2rem;
-  color: var(--ngs-color-primary);
+  .template-copy p {
+    margin: 0;
+    color: var(--ngs-color-on-surface-variant);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .template-screenshot {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--ngs-radius-xl);
+  }
+
+  .template-detail-card {
+    --ngs-card-padding: 1.5rem;
+    --ngs-card-bg: var(--ngs-color-surface-container-lowest);
+  }
+
+  .template-component-card {
+    --ngs-card-padding: 0;
+    --ngs-card-bg: var(--ngs-color-surface-container-lowest);
+  }
+
+  .template-component-card a {
+    display: block;
+    min-height: 100%;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .template-detail-card h2,
+  .template-detail-card h3,
+  .template-component-card h3 {
+    margin: 1rem 0 0.5rem;
+    color: var(--ngs-color-on-background);
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+
+  .template-detail-card p,
+  .template-component-card p {
+    margin: 0;
+    color: var(--ngs-color-on-surface-variant);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .detail-icon {
+    width: 2rem;
+    height: 2rem;
+    color: var(--ngs-color-primary);
+  }
+
+  .template-value-card {
+    --ngs-card-padding: 2rem;
+    --ngs-card-bg: var(--ngs-color-surface-container-lowest);
+  }
+
+  .included-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    color: var(--ngs-color-on-surface-variant);
+    font-size: 0.925rem;
+    line-height: 1.6;
+  }
+
+  .included-row ngs-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: none;
+    margin-top: 0.125rem;
+    color: var(--ngs-color-success);
+  }
+
+  @media (max-width: 640px) {
+    .template-copy {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .template-copy a[ngsButton] {
+      grid-column: 1 / -1;
+      justify-self: start;
+    }
+  }
 }

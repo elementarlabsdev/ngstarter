@@ -1,0 +1,100 @@
+@reference 'tailwindcss';
+
+.model-spend-widget {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: --spacing(4);
+  padding: --spacing(2) --spacing(1) 0;
+
+  .spend-summary {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: --spacing(4);
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: --spacing(1);
+    }
+
+    span {
+      color: #8b8b88;
+      font-size: 0.86rem;
+    }
+
+    strong {
+      color: var(--modern-ink);
+      font-size: 3.25rem;
+      font-weight: 500;
+      line-height: 0.95;
+    }
+  }
+
+  .budget-chip {
+    --ngs-chip-bg: #dff4ca;
+    --ngs-chip-color: #416c2b;
+  }
+
+  .spend-lanes {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(3);
+  }
+
+  .spend-lane {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: --spacing(1.5) --spacing(3);
+    align-items: center;
+    padding: --spacing(3);
+    border-radius: --spacing(5);
+    background: rgba(255, 255, 255, 0.54);
+
+    ngs-progress-bar {
+      --ngs-progress-bar-height: --spacing(1.5);
+      --ngs-progress-bar-track-color: #eeeeed;
+      --ngs-progress-bar-indicator-color: #8cc96e;
+
+      grid-column: 1 / -1;
+      border-radius: 999px;
+    }
+  }
+
+  .lane-copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: --spacing(0.5);
+
+    strong {
+      color: var(--modern-ink);
+      font-size: 0.92rem;
+      font-weight: 500;
+    }
+
+    span {
+      overflow: hidden;
+      color: #8b8b88;
+      font-size: 0.78rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .lane-value {
+    color: var(--modern-ink);
+    font-size: 0.92rem;
+    font-weight: 500;
+  }
+
+  .lane-image ngs-progress-bar {
+    --ngs-progress-bar-indicator-color: #91a5dd;
+  }
+
+  .lane-review ngs-progress-bar {
+    --ngs-progress-bar-indicator-color: #e6a7aa;
+  }
+}

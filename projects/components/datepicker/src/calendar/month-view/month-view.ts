@@ -28,10 +28,14 @@ export class MonthView<D> {
   readonly selected = input<D | DateRange<D> | null>(null);
   readonly minDate = input<D | null>(null);
   readonly maxDate = input<D | null>(null);
+  readonly rangePreviewDate = input<D | null>(null);
+  readonly sharedRangePreview = input<boolean>(false);
 
   readonly selectedChange = output<D>();
+  readonly rangePreviewDateChange = output<D | null>();
 
-  readonly hoveredDate = signal<D | null>(null);
+  readonly _hoveredDate = signal<D | null>(null);
+  readonly hoveredDate = this._hoveredDate;
 
   readonly weekdays = computed(() => {
     return this._dateAdapter.getDayOfWeekNames('short');
@@ -39,7 +43,9 @@ export class MonthView<D> {
 
   readonly weeks = computed(() => {
     const activeDate = this.activeDate();
-    const hoveredDate = this.hoveredDate();
+    const hoveredDate = this.sharedRangePreview()
+      ? this.rangePreviewDate()
+      : this._hoveredDate();
     const firstDayOfMonth = this._dateAdapter.createDate(
       this._dateAdapter.getYear(activeDate),
       this._dateAdapter.getMonth(activeDate),
@@ -143,6 +149,7 @@ export class MonthView<D> {
   }
 
   handleHover(date: D | null) {
-    this.hoveredDate.set(date);
+    this._hoveredDate.set(date);
+    this.rangePreviewDateChange.emit(date);
   }
 }

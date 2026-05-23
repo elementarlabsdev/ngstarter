@@ -1,0 +1,32 @@
+<app-widget-shell [title]="content().title" [subtitle]="content().subtitle">
+  <div class="audience-widget">
+    <div class="audience-score">
+      <div>
+        <span>Overall fit</span>
+        <strong>86%</strong>
+      </div>
+      <ngs-chip appearance="filled" class="audience-chip">
+        <ngs-icon name="fluent:sparkle-24-regular" ngsChipShape />
+        Ready for review
+      </ngs-chip>
+    </div>
+
+    <div class="channel-list">
+      @for (channel of channels; track channel.label) {
+        <div
+          class="channel-row"
+          [class.channel-social]="channel.className === 'channel-social'"
+          [class.channel-email]="channel.className === 'channel-email'"
+          [class.channel-landing]="channel.className === 'channel-landing'"
+        >
+          <div class="channel-copy">
+            <strong>{{ channel.label }}</strong>
+            <span>{{ channel.detail }}</span>
+          </div>
+          <span class="channel-value">{{ channel.value }}%</span>
+          <ngs-progress-bar [value]="channel.value" />
+        </div>
+      }
+    </div>
+  </div>
+</app-widget-shell>

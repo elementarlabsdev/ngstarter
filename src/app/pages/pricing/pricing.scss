@@ -1,0 +1,281 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .guide-card,
+  .links-card {
+    --ngs-card-bg: var(--ngs-color-surface-container-lowest);
+  }
+
+  .comparison-card {
+    --ngs-card-bg: transparent;
+    --ngs-card-border-color: transparent;
+    --ngs-card-padding: 0.5rem;
+  }
+
+  .comparison-stage {
+    display: grid;
+    grid-template-columns: minmax(13.5rem, 0.54fr) minmax(0, 1fr);
+    align-items: stretch;
+    gap: 0;
+    max-width: 62rem;
+    margin-inline: auto;
+  }
+
+  .comparison-featured-plan {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+    gap: 2rem;
+    border-radius: theme(--radius-2xl) 0 0 theme(--radius-2xl);
+    background: var(--ngs-color-surface);
+    padding: 1.5rem 1.75rem;
+  }
+
+  .featured-plan-title {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+
+  .featured-plan-title ngs-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--ngs-color-primary);
+  }
+
+  .featured-plan-title h3 {
+    margin: 0;
+    color: var(--ngs-color-on-background);
+    font-size: 1.25rem;
+    font-weight: 650;
+  }
+
+  .comparison-featured-plan p {
+    margin: 0.85rem 0 0;
+    color: var(--ngs-color-on-surface-variant);
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
+  //.comparison-featured-plan ul {
+  //  display: grid;
+  //  flex: 1;
+  //  gap: 0.75rem;
+  //  margin: 0;
+  //  padding: 0;
+  //  list-style: none;
+  //}
+
+  .comparison-featured-plan li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    color: var(--ngs-color-on-surface);
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+
+  .comparison-featured-plan li ngs-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: none;
+    margin-top: 0.125rem;
+    color: var(--ngs-color-success);
+  }
+
+  .featured-plan-price {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    border-top: 1px solid var(--ngs-color-border);
+    padding-top: 1.25rem;
+  }
+
+  .featured-plan-price span {
+    color: var(--ngs-color-on-background);
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+
+  .featured-plan-price strong {
+    color: var(--ngs-color-on-surface-variant);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .featured-plan-button {
+    --ngs-button-radius: var(--ngs-radius-xl);
+    --ngs-button-height: 2.875rem;
+  }
+
+  .comparison-icon {
+    display: inline-flex;
+    width: 2rem;
+    height: 2rem;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--ngs-radius-lg);
+    background: var(--ngs-color-primary-container);
+    color: var(--ngs-color-on-primary-container);
+  }
+
+  .comparison-icon ngs-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .comparison-table-wrap {
+    overflow-x: auto;
+  }
+
+  table[ngs-table].comparison-table {
+    min-width: 36rem;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .comparison-table th[ngs-header-cell] {
+    border: 0;
+    background: transparent;
+    color: var(--ngs-color-on-surface-variant);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 0.875rem 1.25rem 1rem;
+    text-align: left;
+    text-transform: uppercase;
+    vertical-align: bottom;
+  }
+
+  .comparison-table th[ngs-header-cell]:first-child {
+    text-align: left;
+  }
+
+  .comparison-table th[ngs-header-cell].professional-column-heading {
+    color: var(--ngs-color-primary);
+  }
+
+  .comparison-table td[ngs-cell] {
+    border-top: 1px solid var(--ngs-color-border);
+    background: var(--ngs-color-surface-container-low);
+    padding: 0.75rem 1.25rem;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  .comparison-table tr[ngs-row]:last-child td[ngs-cell] {
+    border-bottom: 0;
+  }
+
+  .comparison-table td[ngs-cell]:first-child {
+    text-align: left;
+  }
+
+  .comparison-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    min-width: 0;
+  }
+
+  .comparison-feature strong {
+    color: var(--ngs-color-on-background);
+    font-size: 0.875rem;
+    font-weight: 650;
+    line-height: 1.35;
+  }
+
+  .matrix-value {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    min-height: 1.75rem;
+    color: var(--ngs-color-on-surface);
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.55;
+  }
+
+  .matrix-value ngs-icon {
+    width: 1rem;
+    height: 1rem;
+    flex: none;
+  }
+
+  .matrix-value.is-positive ngs-icon {
+    color: var(--ngs-color-success);
+  }
+
+  .matrix-value.is-limited ngs-icon {
+    color: var(--ngs-color-on-surface-variant);
+  }
+
+  .professional-cell {
+    background: color-mix(
+      in srgb,
+      var(--ngs-color-primary),
+      var(--ngs-color-surface-container-low) 92%
+    );
+  }
+
+  .professional-value {
+    color: var(--ngs-color-primary);
+  }
+
+  .guide-card {
+    --ngs-card-padding: 2rem;
+    --ngs-card-border-radius: theme(--radius-2xl);
+  }
+
+  .links-card {
+    --ngs-card-padding: 2rem;
+  }
+
+  .pricing-faq ngs-expansion-panel {
+    --ngs-expansion-panel-background: transparent;
+  }
+
+  .resource-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid var(--ngs-color-border);
+    border-radius: var(--ngs-radius-lg);
+    color: var(--ngs-color-on-surface);
+    padding: 0.875rem 1rem;
+    text-decoration: none;
+    transition:
+      border-color 160ms ease,
+      color 160ms ease,
+      background 160ms ease;
+  }
+
+  .resource-link:hover {
+    background: var(--ngs-state-hover-bg);
+    border-color: var(--ngs-color-primary);
+    color: var(--ngs-color-primary);
+  }
+
+  .resource-link ngs-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: none;
+  }
+
+  @media (max-width: 640px) {
+    .comparison-stage {
+      grid-template-columns: 1fr;
+    }
+
+    .comparison-featured-plan {
+      border-radius: var(--ngs-radius-xl) var(--ngs-radius-xl) 0 0;
+    }
+  }
+}

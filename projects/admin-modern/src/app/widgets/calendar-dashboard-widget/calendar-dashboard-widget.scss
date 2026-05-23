@@ -1,0 +1,25 @@
+@reference 'tailwindcss';
+
+:host {
+  .calendar-widget {
+    position: relative;
+    display: flex;
+    height: 100%;
+    min-height: 0;
+    padding-top: --spacing(2);
+  }
+
+  ngs-calendar {
+    --ngs-calendar-gap: 2px;
+    --ngs-calendar-header-gap: --spacing(2);
+    --ngs-calendar-day-min-height: --spacing(10);
+    --ngs-calendar-day-radius: var(--ngs-radius-lg);
+    --ngs-calendar-event-green: var(--ngs-color-success);
+    --ngs-calendar-event-rose: var(--ngs-color-danger);
+    --ngs-calendar-event-blue: var(--ngs-color-info);
+    --ngs-calendar-header-margin-bottom: --spacing(2);
+
+    flex: 1;
+    min-height: 0;
+  }
+}

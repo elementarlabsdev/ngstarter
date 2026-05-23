@@ -16,9 +16,17 @@ export interface GridItem {
   id: any;
   type?: string;
   columns: number;
+  columnsSm?: number;
+  columnsMd?: number;
+  columnsLg?: number;
+  columnsXl?: number;
   children?: GridItem[];
   skeletonHeight?: string;
   height?: string;
+  heightSm?: string;
+  heightMd?: string;
+  heightLg?: string;
+  heightXl?: string;
   content?: any; // content data or nothing
 }
 

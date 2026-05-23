@@ -1,0 +1,93 @@
+@reference 'tailwindcss';
+
+:host {
+  .audience-widget {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: --spacing(5);
+    padding: --spacing(3) --spacing(1) 0;
+  }
+
+  .audience-score {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: --spacing(4);
+  }
+
+  .audience-score div {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(1);
+  }
+
+  .audience-score span {
+    color: #8b8b88;
+    font-size: 0.9rem;
+  }
+
+  .audience-score strong {
+    color: var(--modern-ink);
+    font-size: 4rem;
+    font-weight: 500;
+    line-height: 0.95;
+  }
+
+  .audience-chip {
+    --ngs-chip-bg: #dff4ca;
+    --ngs-chip-color: #416c2b;
+  }
+
+  .channel-list {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(3);
+  }
+
+  .channel-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: --spacing(2) --spacing(3);
+    align-items: center;
+    padding: --spacing(4);
+    border-radius: --spacing(6);
+    background: rgba(255, 255, 255, 0.54);
+  }
+
+  .channel-copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: --spacing(1);
+  }
+
+  .channel-copy strong,
+  .channel-value {
+    color: var(--modern-ink);
+    font-weight: 500;
+  }
+
+  .channel-copy span {
+    color: #8b8b88;
+    font-size: 0.85rem;
+  }
+
+  .channel-row ngs-progress-bar {
+    --ngs-progress-bar-height: --spacing(2);
+    --ngs-progress-bar-track-color: #eeeeed;
+    --ngs-progress-bar-indicator-color: #8cc96e;
+
+    grid-column: 1 / -1;
+    border-radius: 999px;
+  }
+
+  .channel-email ngs-progress-bar {
+    --ngs-progress-bar-indicator-color: #e6a7aa;
+  }
+
+  .channel-landing ngs-progress-bar {
+    --ngs-progress-bar-indicator-color: #91a5dd;
+  }
+}

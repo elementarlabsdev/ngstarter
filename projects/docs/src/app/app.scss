@@ -1,0 +1,17 @@
+@reference 'tailwindcss';
+
+:host {
+  .npm-badges {
+    display: flex;
+    align-items: center;
+    gap: --spacing(2);
+    margin-right: --spacing(2);
+
+    img {
+      display: block;
+      height: 20px;
+      width: auto;
+      border-radius: --spacing(1);
+    }
+  }
+}

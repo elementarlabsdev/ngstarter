@@ -16,6 +16,9 @@ import {
   BasicDateRangePickerExample
 } from '../_examples/basic-date-range-picker-example/basic-date-range-picker-example';
 import {
+  ExtendedDateRangePickerExample
+} from '../_examples/extended-date-range-picker-example/extended-date-range-picker-example';
+import {
   DatepickerPresetsExample
 } from '../_examples/datepicker-presets-example/datepicker-presets-example';
 import { provideNativeDateAdapter } from '@ngstarter-ui/components/datepicker';
@@ -29,6 +32,7 @@ import { provideNativeDateAdapter } from '@ngstarter-ui/components/datepicker';
     DatepickerWithCustomHeaderExample,
     DatepickerActionsButtonExample,
     BasicDateRangePickerExample,
+    ExtendedDateRangePickerExample,
     DatepickerPresetsExample,
   ],
   templateUrl: './overview.html',

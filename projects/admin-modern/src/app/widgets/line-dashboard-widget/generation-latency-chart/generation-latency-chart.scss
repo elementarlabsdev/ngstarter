@@ -1,0 +1,19 @@
+@reference 'tailwindcss';
+
+:host {
+  --latency-chart-line: #8cc96e;
+  --latency-chart-area: rgba(140, 201, 110, 0.28);
+  --latency-chart-grid: rgba(137, 146, 166, 0.13);
+  --latency-chart-muted: #8b8b88;
+  --latency-chart-text: var(--modern-ink);
+
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.generation-latency-chart {
+  width: 100%;
+  height: 100%;
+}

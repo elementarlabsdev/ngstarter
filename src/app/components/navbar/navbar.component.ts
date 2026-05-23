@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import {RouterLink, RouterLinkActive} from "@angular/router";
 import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
@@ -8,6 +8,7 @@ import { Button } from '@ngstarter-ui/components/button';
   imports: [
     RouterLink,
     Button,
+    RouterLinkActive,
   ],
   templateUrl: './navbar.component.html'
 })

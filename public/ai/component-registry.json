@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate-ai-metadata.mjs",
   "package": "@ngstarter-ui/components",
   "description": "AI-readable registry for NgStarter UI Angular secondary entry points.",
-  "componentCount": 120,
+  "componentCount": 121,
   "conventions": {
     "importPattern": "@ngstarter-ui/components/<component>",
     "selectorPrefix": "ngs",
@@ -93,7 +93,7 @@
         "Do not make ordinary table rows, labels, descriptions, sidebar items, or status text bold to imitate a screenshot."
       ],
       "styling": {
-        "template": "Use TailwindCSS utility classes for layout, responsive behavior, sizing, spacing, flex, grid, and alignment.",
+        "template": "Use TailwindCSS utility classes for layout, responsive behavior, sizing, spacing, flex, grid, alignment, and routine margins/padding such as mt-10 and p-6 instead of custom margin-top: 2.5rem and padding: 1.5rem in SCSS.",
         "localScss": [
           "Start local SCSS files that use Tailwind tokens with @reference 'tailwindcss';",
           "Use --spacing(N) for spacing values in local SCSS.",
@@ -1064,6 +1064,117 @@
       "example": null
     },
     {
+      "name": "calendar",
+      "title": "Calendar",
+      "overviewName": "Calendar",
+      "category": "components",
+      "package": "@ngstarter-ui/components",
+      "importPath": "@ngstarter-ui/components/calendar",
+      "publicApi": "projects/components/calendar/public-api.ts",
+      "sourceRoot": "projects/components/calendar/src",
+      "docsPath": "/components/calendar",
+      "docsOverviewSource": "projects/docs/src/app/components/calendar/overview/overview.html",
+      "purpose": "The NgStarter Angular Calendar component renders an inline month calendar for dashboards, scheduling widgets, event summaries, availability previews, and date-driven product surfaces.",
+      "useWhen": "Choose Calendar when the workflow matches examples such as Basic Calendar, Calendar With Events, Calendar With Min And Max Dates, Calendar min max.",
+      "exampleTopics": [
+        "Basic Calendar",
+        "Calendar With Events",
+        "Calendar With Min And Max Dates",
+        "Calendar min max"
+      ],
+      "minimalExample": "<div class=\"calendar-example\">\n  <ngs-calendar [selected]=\"selectedDate()\" (selectedChange)=\"selectedDate.set($event)\" />\n</div>",
+      "exampleFiles": [
+        {
+          "name": "basic-calendar-example",
+          "title": "Basic calendar",
+          "file": "projects/docs/src/app/components/calendar/_examples/basic-calendar-example/basic-calendar-example.html",
+          "source": "<div class=\"calendar-example\">\n  <ngs-calendar [selected]=\"selectedDate()\" (selectedChange)=\"selectedDate.set($event)\" />\n</div>"
+        },
+        {
+          "name": "calendar-min-max-example",
+          "title": "Calendar min max",
+          "file": "projects/docs/src/app/components/calendar/_examples/calendar-min-max-example/calendar-min-max-example.html",
+          "source": "<div class=\"calendar-example\">\n  <ngs-calendar\n    [selected]=\"selectedDate()\"\n    [minDate]=\"minDate\"\n    [maxDate]=\"maxDate\"\n    [firstDayOfWeek]=\"1\"\n    [showAdjacentDays]=\"false\"\n    (selectedChange)=\"selectedDate.set($event)\"\n  />\n</div>"
+        },
+        {
+          "name": "calendar-with-events-example",
+          "title": "Calendar with events",
+          "file": "projects/docs/src/app/components/calendar/_examples/calendar-with-events-example/calendar-with-events-example.html",
+          "source": "<div class=\"calendar-example\">\n  <ngs-calendar\n    [selected]=\"selectedDate()\"\n    [events]=\"events\"\n    [showEventTitles]=\"true\"\n    (selectedChange)=\"selectedDate.set($event)\"\n  />\n</div>"
+        }
+      ],
+      "previewAsset": null,
+      "selectors": [
+        "ngs-calendar"
+      ],
+      "exportedSymbols": [
+        "Calendar",
+        "CalendarDateInput",
+        "CalendarEvent",
+        "CalendarEventColor"
+      ],
+      "inputs": [
+        "events",
+        "firstDayOfWeek",
+        "locale",
+        "maxDate",
+        "minDate",
+        "selected",
+        "showAdjacentDays",
+        "showEventTitles",
+        "showTodayButton",
+        "startAt"
+      ],
+      "outputs": [
+        "eventSelected",
+        "monthChange",
+        "selectedChange"
+      ],
+      "cssTokens": [
+        "--ngs-button-bg",
+        "--ngs-button-border-radius",
+        "--ngs-button-height",
+        "--ngs-button-padding",
+        "--ngs-button-padding-x",
+        "--ngs-calendar-day-bg",
+        "--ngs-calendar-day-hover-bg",
+        "--ngs-calendar-day-min-height",
+        "--ngs-calendar-day-muted-color",
+        "--ngs-calendar-day-radius",
+        "--ngs-calendar-day-selected-bg",
+        "--ngs-calendar-day-selected-color",
+        "--ngs-calendar-day-today-outline",
+        "--ngs-calendar-event-blue",
+        "--ngs-calendar-event-danger",
+        "--ngs-calendar-event-green",
+        "--ngs-calendar-event-info",
+        "--ngs-calendar-event-neutral",
+        "--ngs-calendar-event-primary",
+        "--ngs-calendar-event-rose",
+        "--ngs-calendar-event-success",
+        "--ngs-calendar-event-warning",
+        "--ngs-calendar-gap",
+        "--ngs-calendar-header-gap",
+        "--ngs-calendar-header-margin-bottom",
+        "--ngs-calendar-weekday-color",
+        "--ngs-color-danger",
+        "--ngs-color-info",
+        "--ngs-color-on-primary",
+        "--ngs-color-on-surface",
+        "--ngs-color-on-surface-variant",
+        "--ngs-color-outline",
+        "--ngs-color-primary",
+        "--ngs-color-success",
+        "--ngs-color-surface-container",
+        "--ngs-color-warning",
+        "--ngs-font-size-lg",
+        "--ngs-font-size-xs",
+        "--ngs-radius-md",
+        "--ngs-radius-sm"
+      ],
+      "example": null
+    },
+    {
       "name": "card",
       "title": "Card",
       "overviewName": "Card",
@@ -1171,12 +1282,12 @@
       "cssTokens": [
         "--ngs-card-bg",
         "--ngs-card-border-color",
-        "--ngs-card-border-radius",
         "--ngs-card-color",
         "--ngs-card-content-font-size",
         "--ngs-card-content-letter-spacing",
         "--ngs-card-content-line-height",
         "--ngs-card-padding",
+        "--ngs-card-radius",
         "--ngs-card-shadow",
         "--ngs-card-subtitle-color",
         "--ngs-card-subtitle-font-size",
@@ -3087,6 +3198,7 @@
         "Datepicker With Custom Header",
         "Datepicker Action Buttons",
         "Basic Date Range Picker",
+        "Extended Date Range Picker",
         "Date Range Picker With Quick Presets",
         "Datepicker custom icon",
         "Datepicker actions button",
@@ -3160,15 +3272,21 @@
       ],
       "inputs": [
         "activeDate",
+        "calendarCount",
+        "extended",
         "maxDate",
         "minDate",
+        "rangePreviewDate",
         "selected",
         "separator",
+        "sharedRangePreview",
         "showQuickPresets",
-        "startAt"
+        "startAt",
+        "visibleCalendars"
       ],
       "outputs": [
         "monthSelected",
+        "rangePreviewDateChange",
         "selectedChange",
         "yearSelected"
       ],
@@ -4137,7 +4255,7 @@
       "docsPath": "/components/grid",
       "docsOverviewSource": "projects/docs/src/app/components/grid/overview/overview.html",
       "purpose": "Render static dashboard widgets in a predefined 12-column layout.",
-      "useWhen": "Use ngs-grid when the application defines a static dashboard or widget layout and users do not need to rearrange, customize, or save the dashboard order. Provide configs that map item types to components and items with id, type, columns, height, content, skeletonHeight, and children. Widgets can inject GRID and call markItemAsLoaded(id), especially with waitWhenAllItemsLoaded. Use Grid for fixed analytics sections, portal start pages, and nested dashboard sections where the structure is known. Do not use Grid as a normal CSS layout helper for forms, pages, cards, or repeated elements; use TailwindCSS grid/flex classes. Do not use Grid for dashboards users can rearrange or change; use Tiles. Do not use for tables or datasets; use Table or DataView. Do not use for file/media grids; use upload/media components.",
+      "useWhen": "Use ngs-grid when the application defines a static dashboard or widget layout and users do not need to rearrange, customize, or save the dashboard order. Provide configs that map item types to components and items with id, type, columns, optional responsive columnsSm/columnsMd/columnsLg/columnsXl, height, optional responsive heightSm/heightMd/heightLg/heightXl, content, skeletonHeight, and children. Widgets can inject GRID and call markItemAsLoaded(id), especially with waitWhenAllItemsLoaded. Use Grid for fixed analytics sections, portal start pages, and nested dashboard sections where the structure is known. Do not use Grid as a normal CSS layout helper for forms, pages, cards, or repeated elements; use TailwindCSS grid/flex classes. Do not use Grid for dashboards users can rearrange or change; use Tiles. Do not use for tables or datasets; use Table or DataView. Do not use for file/media grids; use upload/media components.",
       "exampleTopics": [],
       "minimalExample": null,
       "exampleFiles": [],
@@ -4163,7 +4281,17 @@
         "--ngs-color-border",
         "--ngs-grid-gap",
         "--ngs-grid-item-colspan",
+        "--ngs-grid-item-colspan-lg",
+        "--ngs-grid-item-colspan-md",
+        "--ngs-grid-item-colspan-sm",
+        "--ngs-grid-item-colspan-xl",
+        "--ngs-grid-item-effective-colspan",
+        "--ngs-grid-item-effective-height",
         "--ngs-grid-item-height",
+        "--ngs-grid-item-height-lg",
+        "--ngs-grid-item-height-md",
+        "--ngs-grid-item-height-sm",
+        "--ngs-grid-item-height-xl",
         "--ngs-grid-item-skeleton-min-height",
         "--ngs-radius-xl"
       ],
@@ -5352,8 +5480,7 @@
         "--ngs-font-size-xs",
         "--ngs-logo-text-color",
         "--ngs-logo-text-font-size",
-        "--ngs-logo-text-font-weight",
-        "--ngs-logo-text-hover-color"
+        "--ngs-logo-text-font-weight"
       ],
       "example": null
     },

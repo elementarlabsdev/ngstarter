@@ -1,0 +1,8 @@
+<div class="calendar-example">
+  <ngs-calendar
+    [selected]="selectedDate()"
+    [events]="events"
+    [showEventTitles]="true"
+    (selectedChange)="selectedDate.set($event)"
+  />
+</div>

@@ -1,128 +1,93 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { Avatar } from '@ngstarter-ui/components/avatar';
-import { Badge } from '@ngstarter-ui/components/badge';
 import { Button } from '@ngstarter-ui/components/button';
-import {
-  Card,
-  CardAside,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from '@ngstarter-ui/components/card';
-import { Chip, ChipSet } from '@ngstarter-ui/components/chips';
-import {
-  FormField,
-  IconButtonSuffix,
-  IconPrefix,
-  Label,
-} from '@ngstarter-ui/components/form-field';
+import { FormField, IconButtonSuffix, IconPrefix } from '@ngstarter-ui/components/form-field';
+import { Grid, GridItem, GridItemConfig } from '@ngstarter-ui/components/grid';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
 import { Layout, LayoutContent } from '@ngstarter-ui/components/layout';
-import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemLine,
-  ListItemMeta,
-  ListItemTitle,
-} from '@ngstarter-ui/components/list';
-import { Menu, MenuHeader, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
-import { Panel, PanelAside, PanelContent, PanelHeader } from '@ngstarter-ui/components/panel';
-import { Popover, PopoverTriggerForDirective } from '@ngstarter-ui/components/popover';
+import { Logo } from '@ngstarter-ui/components/logo';
+import { Menu, MenuDivider, MenuHeading, MenuHeader, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
+import { Panel, PanelContent, PanelHeader } from '@ngstarter-ui/components/panel';
+import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import {
   Sidebar,
   SidebarBody,
   SidebarFooter,
   SidebarHeader,
   SidebarNav,
+  SidebarNavGroup,
+  SidebarNavGroupMenu,
+  SidebarNavGroupToggle,
+  SidebarNavGroupToggleIconDirective,
+  SidebarNavHeading,
   SidebarNavItem,
   SidebarNavItemBadgeDirective,
   SidebarNavItemIconDirective,
 } from '@ngstarter-ui/components/sidebar';
 import { Sidenav, SidenavContainer, SidenavContent } from '@ngstarter-ui/components/sidenav';
-import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
+import { Tooltip } from '@ngstarter-ui/components/tooltip';
+import { Toolbar, ToolbarItem, ToolbarSpacer, ToolbarTitle } from '@ngstarter-ui/components/toolbar';
+import {SplashScreen} from "@ngstarter-ui/components/splash-screen";
 
 interface NavItem {
   readonly key: string;
   readonly label: string;
   readonly icon: string;
-  readonly alert?: boolean;
+  readonly badge?: string;
 }
 
-interface Filter {
-  readonly label: string;
-  readonly count?: number;
-}
-
-interface Vacancy {
-  readonly title: string;
-  readonly company: string;
-  readonly location: string;
-  readonly type: 'Full-time' | 'Contract' | 'Remote';
-  readonly typeTone: 'blue' | 'orange' | 'dark';
-  readonly summary: string;
-  readonly tags: readonly string[];
-  readonly applicants: number;
-  readonly interviews: number;
-}
-
-interface NotificationItem {
-  readonly title: string;
-  readonly meta: string;
-  readonly icon: string;
-  readonly unread?: boolean;
+interface NavSection {
+  readonly label?: string;
+  readonly items: readonly NavItem[];
 }
 
 @Component({
   selector: 'app-root',
   imports: [
     Avatar,
-    Badge,
     Button,
-    Card,
-    CardAside,
-    CardContent,
-    CardHeader,
-    Chip,
-    ChipSet,
     FormField,
+    Grid,
     Icon,
+    IconButtonSuffix,
     IconPrefix,
     Input,
-    Label,
     Layout,
     LayoutContent,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemLine,
-    ListItemMeta,
-    ListItemTitle,
+    Logo,
     Menu,
+    MenuDivider,
+    MenuHeading,
     MenuHeader,
     MenuItem,
     MenuTrigger,
     Panel,
-    PanelAside,
     PanelContent,
     PanelHeader,
-    Popover,
-    PopoverTriggerForDirective,
+    ScrollbarArea,
     Sidebar,
     SidebarBody,
     SidebarFooter,
     SidebarHeader,
     SidebarNav,
+    SidebarNavGroup,
+    SidebarNavGroupMenu,
+    SidebarNavGroupToggle,
+    SidebarNavGroupToggleIconDirective,
+    SidebarNavHeading,
     SidebarNavItem,
     SidebarNavItemBadgeDirective,
     SidebarNavItemIconDirective,
     Sidenav,
     SidenavContainer,
     SidenavContent,
-    ScrollbarArea,
-    IconButtonSuffix,
-    CardFooter,
+    Toolbar,
+    ToolbarItem,
+    ToolbarSpacer,
+    ToolbarTitle,
+    Tooltip,
+    SplashScreen,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -130,132 +95,156 @@ interface NotificationItem {
 })
 export class App {
   protected readonly search = signal('');
+  protected readonly sidenavOpened = signal(true);
 
-  protected readonly navItems = signal<readonly NavItem[]>([
-    { key: 'Home', label: 'Home', icon: 'fluent:home-24-regular' },
-    { key: 'Targets', label: 'Targets', icon: 'fluent:target-arrow-24-regular' },
-    { key: 'Inbox', label: 'Inbox', icon: 'fluent:mail-inbox-24-regular', alert: true },
-    { key: 'Vacancies', label: 'Vacancies', icon: 'fluent:briefcase-24-regular' },
-    { key: 'Deals', label: 'Deals', icon: 'fluent:briefcase-24-regular' },
-    { key: 'Notes', label: 'Notes', icon: 'fluent:document-text-24-regular' },
-    { key: 'Reports', label: 'Reports', icon: 'fluent:chart-multiple-24-regular' },
-  ]);
-
-  protected readonly filters = signal<readonly Filter[]>([
-    { label: 'Type' },
-    { label: 'Department', count: 2 },
-    { label: 'Work mode' },
-    { label: 'Location', count: 4 },
-    { label: 'Hiring status' },
-  ]);
-
-  protected readonly notifications = signal<readonly NotificationItem[]>([
+  protected readonly dashboardSections = signal<readonly NavSection[]>([
     {
-      title: 'New candidate match',
-      meta: 'Maya Lewis applied to Product Designer · 5m',
-      icon: 'fluent:person-add-24-regular',
-      unread: true,
+      label: 'Saved Studios',
+      items: [
+        { key: 'daily-room', label: 'Content Room - Daily', icon: 'fluent:clock-24-regular' },
+        {
+          key: 'realtime',
+          label: 'Launch Room - Live',
+          icon: 'fluent:chart-multiple-24-regular',
+        },
+      ],
     },
     {
-      title: 'Interview scheduled',
-      meta: 'Senior Angular Engineer · tomorrow 10:30',
-      icon: 'fluent:mail-inbox-24-regular',
-    },
-    {
-      title: 'Pipeline update',
-      meta: '3 vacancies moved to final review · 1h',
-      icon: 'fluent:arrow-trending-24-regular',
+      label: 'Creative Workflows',
+      items: [
+        { key: 'prompt-lab', label: 'Prompt experiment board', icon: 'fluent:beaker-24-regular' },
+        { key: 'voice-checks', label: 'Brand voice checks', icon: 'fluent:text-grammar-wand-24-regular' },
+        { key: 'asset-gen', label: 'Asset generation queue', icon: 'fluent:image-multiple-24-regular' },
+        { key: 'editorial', label: 'Editorial review desk', icon: 'fluent:document-edit-24-regular' },
+        { key: 'publishing', label: 'Publishing calendar', icon: 'fluent:calendar-ltr-24-regular' },
+      ],
     },
   ]);
 
-  protected readonly vacancies = signal<readonly Vacancy[]>([
+  protected readonly organizationItems = signal<readonly NavItem[]>([
+    { key: 'brand-kits', label: 'Brand kits', icon: 'fluent:paint-brush-24-regular' },
+    { key: 'channels', label: 'Channel presets', icon: 'fluent:megaphone-24-regular' },
+    { key: 'model-access', label: 'Model access', icon: 'fluent:key-24-regular' },
+  ]);
+
+  protected readonly footerItems = signal<readonly NavItem[]>([
+    { key: 'briefing', label: 'Creative briefing', icon: 'fluent:lightbulb-24-regular' },
+  ]);
+
+  protected readonly dashboardGridConfigs = signal<GridItemConfig[]>([
     {
-      title: 'Senior Product Designer',
-      company: 'Lumin Labs',
-      location: 'San Francisco, CA',
-      type: 'Full-time',
-      typeTone: 'blue',
-      summary: 'Lead product design for AI workflow tools and design systems',
-      tags: ['Product', 'Design systems', 'AI', 'Senior', 'Hybrid'],
-      applicants: 42,
-      interviews: 6,
+      type: 'audience-widget',
+      plain: true,
+      component: () =>
+        import('./widgets/audience-dashboard-widget/audience-dashboard-widget').then((module) => module.AudienceDashboardWidget),
     },
     {
-      title: 'Angular Platform Engineer',
-      company: 'Northstar Cloud',
-      location: 'London, UK',
-      type: 'Remote',
-      typeTone: 'orange',
-      summary: 'Build shared UI infrastructure for data-heavy enterprise products',
-      tags: ['Angular', 'TypeScript', 'Design system', 'Remote'],
-      applicants: 28,
-      interviews: 4,
+      type: 'gauge-widget',
+      plain: true,
+      component: () =>
+        import('./widgets/gauge-dashboard-widget/gauge-dashboard-widget').then((module) => module.GaugeDashboardWidget),
     },
     {
-      title: 'Growth Marketing Lead',
-      company: 'OrbitPay',
-      location: 'Berlin, Germany',
-      type: 'Full-time',
-      typeTone: 'blue',
-      summary: 'Own acquisition experiments and lifecycle campaigns for fintech teams',
-      tags: ['Growth', 'Fintech', 'Lifecycle', 'B2B'],
-      applicants: 35,
-      interviews: 5,
+      type: 'calendar-widget',
+      plain: true,
+      component: () =>
+        import('./widgets/calendar-dashboard-widget/calendar-dashboard-widget').then((module) => module.CalendarDashboardWidget),
     },
     {
-      title: 'Revenue Operations Manager',
-      company: 'HelioWorks',
-      location: 'New York, NY',
-      type: 'Contract',
-      typeTone: 'dark',
-      summary: 'Improve CRM hygiene, forecasting workflows, and sales reporting',
-      tags: ['RevOps', 'CRM', 'Forecasting', 'Contract'],
-      applicants: 19,
-      interviews: 3,
+      type: 'line-widget',
+      plain: true,
+      component: () =>
+        import('./widgets/line-dashboard-widget/line-dashboard-widget').then((module) => module.LineDashboardWidget),
     },
     {
-      title: 'Machine Learning Engineer',
-      company: 'Atlas AI',
-      location: 'Austin, TX',
-      type: 'Remote',
-      typeTone: 'orange',
-      summary: 'Ship retrieval, ranking, and evaluation pipelines for SaaS copilots',
-      tags: ['ML', 'Python', 'RAG', 'Evaluation'],
-      applicants: 51,
-      interviews: 8,
+      type: 'model-spend-widget',
+      plain: true,
+      component: () =>
+        import('./widgets/model-spend-widget/model-spend-widget').then((module) => module.ModelSpendWidget),
     },
     {
-      title: 'Enterprise Account Executive',
-      company: 'Stackline',
-      location: 'London, UK',
-      type: 'Full-time',
-      typeTone: 'blue',
-      summary: 'Run strategic sales cycles for mid-market and enterprise SaaS accounts',
-      tags: ['Sales', 'SaaS', 'Enterprise', 'Pipeline'],
-      applicants: 23,
-      interviews: 4,
+      type: 'events-widget',
+      plain: true,
+      component: () =>
+        import('./widgets/events-dashboard-widget/events-dashboard-widget').then((module) => module.EventsDashboardWidget),
+    },
+  ]);
+
+  protected readonly dashboardGridItems = signal<GridItem[]>([
+    {
+      id: 'audience-pulse',
+      type: 'audience-widget',
+      columns: 12,
+      columnsMd: 6,
+      columnsXl: 4,
+      height: '405px',
+      content: {
+        title: 'Audience pulse',
+        subtitle: 'Predicted response quality by channel',
+      },
     },
     {
-      title: 'Customer Success Strategist',
-      company: 'Meridian Ops',
-      location: 'Toronto, Canada',
-      type: 'Contract',
-      typeTone: 'dark',
-      summary: 'Design onboarding playbooks and expansion motions for key customers',
-      tags: ['Success', 'Onboarding', 'Automation'],
-      applicants: 31,
-      interviews: 2,
+      id: 'conversion-pulse',
+      type: 'gauge-widget',
+      columns: 12,
+      columnsMd: 6,
+      columnsXl: 4,
+      height: '405px',
+      content: {
+        title: 'Brand alignment',
+        subtitle: 'Generated drafts matching voice rules',
+        value: 88,
+      },
     },
     {
-      title: 'Product Analytics Lead',
-      company: 'Cobalt Metrics',
-      location: 'Paris, France',
-      type: 'Remote',
-      typeTone: 'blue',
-      summary: 'Turn product usage signals into roadmap and activation insights',
-      tags: ['Analytics', 'PLG', 'SQL', 'Activation'],
-      applicants: 37,
-      interviews: 6,
+      id: 'campaign-calendar',
+      type: 'calendar-widget',
+      columns: 12,
+      columnsMd: 6,
+      columnsXl: 4,
+      height: '405px',
+      content: {
+        title: 'Publishing calendar',
+        subtitle: 'October, 2026',
+      },
+    },
+    {
+      id: 'left-stack',
+      columns: 12,
+      columnsMd: 6,
+      children: [
+        {
+          id: 'queue-forecast',
+          type: 'line-widget',
+          columns: 12,
+          height: '352px',
+          content: {
+            title: 'Generation latency',
+            subtitle: 'Average render time across model lanes',
+          },
+        },
+        {
+          id: 'model-spend',
+          type: 'model-spend-widget',
+          columns: 12,
+          height: '282px',
+          content: {
+            title: 'Model spend mix',
+            subtitle: 'Token budget by model family',
+          },
+        },
+      ],
+    },
+    {
+      id: 'signal-ledger',
+      type: 'events-widget',
+      columns: 12,
+      columnsMd: 6,
+      height: '658px',
+      content: {
+        title: 'Research signals board',
+        subtitle: 'Audience insights awaiting triage',
+      },
     },
   ]);
 }

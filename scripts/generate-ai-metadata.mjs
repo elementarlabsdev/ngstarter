@@ -86,7 +86,7 @@ const recipes = [
       'Do not make ordinary table rows, labels, descriptions, sidebar items, or status text bold to imitate a screenshot.',
     ],
     styling: {
-      template: 'Use TailwindCSS utility classes for layout, responsive behavior, sizing, spacing, flex, grid, and alignment.',
+      template: 'Use TailwindCSS utility classes for layout, responsive behavior, sizing, spacing, flex, grid, alignment, and routine margins/padding such as mt-10 and p-6 instead of custom margin-top: 2.5rem and padding: 1.5rem in SCSS.',
       localScss: [
         "Start local SCSS files that use Tailwind tokens with @reference 'tailwindcss';",
         'Use --spacing(N) for spacing values in local SCSS.',
@@ -288,7 +288,7 @@ const curatedGuidance = new Map(Object.entries({
   },
   grid: {
     purpose: 'Render static dashboard widgets in a predefined 12-column layout.',
-    useWhen: 'Use ngs-grid when the application defines a static dashboard or widget layout and users do not need to rearrange, customize, or save the dashboard order. Provide configs that map item types to components and items with id, type, columns, height, content, skeletonHeight, and children. Widgets can inject GRID and call markItemAsLoaded(id), especially with waitWhenAllItemsLoaded. Use Grid for fixed analytics sections, portal start pages, and nested dashboard sections where the structure is known. Do not use Grid as a normal CSS layout helper for forms, pages, cards, or repeated elements; use TailwindCSS grid/flex classes. Do not use Grid for dashboards users can rearrange or change; use Tiles. Do not use for tables or datasets; use Table or DataView. Do not use for file/media grids; use upload/media components.',
+    useWhen: 'Use ngs-grid when the application defines a static dashboard or widget layout and users do not need to rearrange, customize, or save the dashboard order. Provide configs that map item types to components and items with id, type, columns, optional responsive columnsSm/columnsMd/columnsLg/columnsXl, height, optional responsive heightSm/heightMd/heightLg/heightXl, content, skeletonHeight, and children. Widgets can inject GRID and call markItemAsLoaded(id), especially with waitWhenAllItemsLoaded. Use Grid for fixed analytics sections, portal start pages, and nested dashboard sections where the structure is known. Do not use Grid as a normal CSS layout helper for forms, pages, cards, or repeated elements; use TailwindCSS grid/flex classes. Do not use Grid for dashboards users can rearrange or change; use Tiles. Do not use for tables or datasets; use Table or DataView. Do not use for file/media grids; use upload/media components.',
   },
   'guided-tour': {
     purpose: 'Guide users through the real UI with ordered steps attached to existing elements.',
@@ -982,6 +982,13 @@ function buildLlms(registry, full = false) {
     '- Import theme styles once in the app stylesheet.',
     '- Use `provideNgsTheme` from `@ngstarter-ui/components/core` for runtime theming.',
     '- Prefer `--ngs-*` CSS custom properties when customizing styles.',
+    '- Use TailwindCSS utility classes for routine layout spacing, including margins and padding; prefer classes like `mt-10` and `p-6` over custom SCSS such as `margin-top: 2.5rem` or `padding: 1.5rem`.',
+    '- Put global component style overrides and global CSS variable overrides only in `styles.scss`; for component-scoped overrides, define them in that component\'s stylesheet so they apply only there.',
+    '- In component SCSS files, all component-local styling must be nested under the `:host` selector. Do not write top-level component-local selectors outside `:host`.',
+    '- Standalone `ngs-form-field` controls outside forms, such as header, toolbar, or compact filter fields, do not require `ngs-label` when they have clear placeholder text or an `aria-label`/`aria-labelledby` context. Form fields inside actual forms should still use `ngs-label`.',
+    '- When implementing a screenshot or mockup that shows a chart, build the chart with ECharts in a dedicated standalone component instead of drawing it inline or with ad hoc markup.',
+    '- When placing an icon or other leading shape inside `ngs-chip`, project it through `ngsChipShape` (or `ngs-chip-shape`) instead of inserting the icon directly in the chip content.',
+    '- Use `ngs-logo-shape` only for compact square or near-square logo marks/emblems. Do not use it for long wordmark images or full-width brand logos; place those directly inside `ngs-logo` or compose them with `ngs-logo-text`.',
     '- Do not import from private `src` paths in application code.',
     '',
     '## Setup',

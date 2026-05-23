@@ -71,6 +71,11 @@ export const routes: Routes = [
     title: 'Chips'
   },
   {
+    path: 'calendar',
+    loadChildren: () => import('./calendar/routes').then(m => m.routes),
+    title: 'Calendar'
+  },
+  {
     path: 'crop',
     loadChildren: () => import('./crop/routes').then(m => m.routes),
     title: 'Crop'

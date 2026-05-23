@@ -11,9 +11,11 @@ import {
   Type,
   contentChild,
   ViewContainerRef,
-  computed
+  computed,
+  booleanAttribute,
+  numberAttribute,
 } from '@angular/core';
-import { Overlay, OverlayRef, OverlayModule, FlexibleConnectedPositionStrategy } from '@angular/cdk/overlay';
+import { Overlay, OverlayRef, OverlayModule } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Calendar } from '../calendar/calendar/calendar';
 import { DateAdapter } from '../core/datetime/date-adapter';
@@ -40,12 +42,18 @@ export class DateRangePicker<D> implements OnDestroy {
   readonly calendarHeaderComponent = input<Type<any> | null>(null);
   readonly quickPresets = input<DatepickerPreset<D>[] | null>(null);
   readonly showQuickPresets = input<boolean>(false);
+  readonly calendarCount = input<1 | 2, unknown>(1, {
+    transform: value => numberAttribute(value, 1) === 2 ? 2 : 1,
+  });
+  readonly extended = input(false, { transform: booleanAttribute });
   readonly _portalTemplate = viewChild.required<TemplateRef<any>>('portal');
   readonly actions = contentChild(DatepickerActions);
 
   _datepickerInput!: any; // Will be DateRangeInput
   _selectedRange = signal<DateRange<D>>(new DateRange<D>(null, null));
   _isAbove = signal(false);
+
+  readonly _visibleCalendars = computed(() => this.extended() ? 2 : this.calendarCount());
 
   readonly _effectivePresets = computed(() => {
     const userPresets = this.quickPresets();

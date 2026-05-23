@@ -1,0 +1,20 @@
+@reference 'tailwindcss';
+
+.gauge-widget {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: --spacing(2);
+
+  app-brand-alignment-chart {
+    align-self: center;
+    justify-self: center;
+  }
+
+  .legend-row {
+    display: flex;
+    align-items: center;
+    gap: --spacing(2);
+  }
+}

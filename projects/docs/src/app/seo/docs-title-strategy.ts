@@ -1,19 +1,33 @@
 import { inject, Injectable } from '@angular/core';
 import { RouterStateSnapshot, TitleStrategy } from '@angular/router';
-import { Title } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
 import { EnvironmentService } from '@ngstarter-ui/components/core';
 
 type SeoTitleConfig = {
   label: string;
   detail: string;
   kind?: string;
+  job?: string;
+  apiDetail?: string;
+  apiJob?: string;
+  apiKind?: string | null;
+};
+
+type SeoMetadata = {
+  title: string;
+  description: string;
 };
 
 const COMPONENT_TITLES: Record<string, SeoTitleConfig> = {
   'action-required': { label: 'Action Required', detail: 'Required User Actions' },
   alert: { label: 'Alert', detail: 'Inline Status Messages' },
   announcement: { label: 'Announcement', detail: 'Product Updates and Notices' },
-  avatar: { label: 'Avatar', detail: 'User Identity UI' },
+  avatar: {
+    label: 'Avatar',
+    detail: 'User Identity UI',
+    job: 'show users, teams, variants, and presence',
+    apiDetail: 'Inputs, Variants and Presence',
+  },
   badge: { label: 'Badge', detail: 'Counters and Status Labels' },
   'block-loader': { label: 'Block Loader', detail: 'Scoped Loading States' },
   'bottom-sheet': { label: 'Bottom Sheet', detail: 'Mobile Action Panels' },
@@ -31,8 +45,12 @@ const COMPONENT_TITLES: Record<string, SeoTitleConfig> = {
   'content-fade': { label: 'Content Fade', detail: 'Scrollable Content Fades' },
   'cookie-popup': { label: 'Cookie Popup', detail: 'Consent Banners' },
   crop: { label: 'Crop', detail: 'Image Cropping' },
-  datepicker: { label: 'Datepicker', detail: 'Date Selection' },
-  dialog: { label: 'Dialog', detail: 'Modal Workflows' },
+  datepicker: {
+    label: 'Datepicker',
+    detail: 'Date and Range Selection',
+    job: 'handle date and range selection',
+  },
+  dialog: { label: 'Dialog', detail: 'Modal Workflows', job: 'open accessible modal workflows' },
   divider: { label: 'Divider', detail: 'Section Separation' },
   drawer: { label: 'Drawer', detail: 'Temporary Side Panels' },
   'emoji-picker': { label: 'Emoji Picker', detail: 'Emoji Selection UI' },
@@ -51,10 +69,18 @@ const COMPONENT_TITLES: Record<string, SeoTitleConfig> = {
   'image-zoom-viewer': { label: 'Image Zoom Viewer', detail: 'Zoomable Image Preview' },
   kbd: { label: 'Kbd', detail: 'Keyboard Shortcut Hints' },
   layout: { label: 'Layout', detail: 'App Shell Layouts' },
-  list: { label: 'List', detail: 'Lists and Selection UI' },
+  list: {
+    label: 'List',
+    detail: 'Lists and Selection UI',
+    job: 'render structured rows, listboxes, and selection lists',
+  },
   marquee: { label: 'Marquee', detail: 'Scrolling Content' },
   menu: { label: 'Menu', detail: 'Action Menus' },
-  notifications: { label: 'Notifications', detail: 'Notification Feeds' },
+  notifications: {
+    label: 'Notifications',
+    detail: 'Notification Feeds',
+    job: 'render notification feeds and activity updates',
+  },
   paginator: { label: 'Paginator', detail: 'Page Navigation' },
   panel: { label: 'Panel', detail: 'Workspace Layouts' },
   popover: { label: 'Popover', detail: 'Click & Hover Overlay' },
@@ -70,13 +96,17 @@ const COMPONENT_TITLES: Record<string, SeoTitleConfig> = {
   'split-pane': { label: 'Split Pane', detail: 'Resizable Split Layouts' },
   stepper: { label: 'Stepper', detail: 'Multi-step Flows' },
   suggestions: { label: 'Suggestions', detail: 'Suggested Actions' },
-  table: { label: 'Table', detail: 'Sorting, Filtering, Pagination' },
+  table: {
+    label: 'Table',
+    detail: 'Data Grids for Admin Dashboards',
+    job: 'build static data grids for admin dashboards',
+  },
   tabs: { label: 'Tabs', detail: 'Tabbed Interfaces' },
   'text-editor': { label: 'Text Editor', detail: 'Rich Text Editing' },
   'thumbnail-maker': { label: 'Thumbnail Maker', detail: 'Media Thumbnails' },
   tiles: { label: 'Tiles', detail: 'Visual Tile Layouts' },
   timeline: { label: 'Timeline', detail: 'Activity History' },
-  timepicker: { label: 'Timepicker', detail: 'Time Selection' },
+  timepicker: { label: 'Timepicker', detail: 'Time Selection', job: 'let users enter and adjust time values' },
   toolbar: { label: 'Toolbar', detail: 'Action Rows and Headers' },
   tooltip: { label: 'Tooltip', detail: 'Contextual Help' },
   tree: { label: 'Tree', detail: 'Hierarchical Data' },
@@ -97,7 +127,11 @@ const FORM_TITLES: Record<string, SeoTitleConfig> = {
   'input-mask': { label: 'Input Mask', detail: 'Masked Form Values' },
   'input-validator': { label: 'Input Validator', detail: 'Validation Rules' },
   'inline-text-edit': { label: 'Inline Text Edit', detail: 'Editable Text UI' },
-  'number-input': { label: 'Number Input', detail: 'Numeric Form Controls' },
+  'number-input': {
+    label: 'Number Input',
+    detail: 'Numeric Form Controls',
+    job: 'handle numeric values with steppers, bounds, and validation',
+  },
   'password-strength': { label: 'Password Strength', detail: 'Password Validation Feedback' },
   'phone-input': { label: 'Phone Input', detail: 'International Phone Fields' },
   'pin-input': { label: 'Pin Input', detail: 'OTP & MFA Forms' },
@@ -118,12 +152,18 @@ const NAVIGATION_TITLES: Record<string, SeoTitleConfig> = {
 };
 
 const LIBRARY_TITLES: Record<string, SeoTitleConfig> = {
-  'content-editor': { label: 'Content Editor', detail: 'Rich Content Editing' },
-  'data-view': { label: 'Data View', detail: 'Data Grids and Operational Tables' },
-  'image-designer': { label: 'Image Designer', detail: 'Visual Image Editing' },
-  'kanban-board': { label: 'Kanban Board', detail: 'Workflow Boards' },
-  'video-player': { label: 'Video Player', detail: 'Media Playback UI' },
-  'visual-builder': { label: 'Visual Builder', detail: 'Drag and Drop UI Building' },
+  'content-editor': { label: 'Content Editor', detail: 'Rich Content Editing', apiKind: null },
+  'data-view': {
+    label: 'Data View',
+    detail: 'Data Grids and Operational Tables',
+    job: 'build sortable, filterable, selectable, paginated, and server-driven Angular data grids',
+    apiDetail: 'Inputs, Types and Server-side Data',
+    apiKind: null,
+  },
+  'image-designer': { label: 'Image Designer', detail: 'Visual Image Editing', apiKind: null },
+  'kanban-board': { label: 'Kanban Board', detail: 'Workflow Boards', apiKind: null },
+  'video-player': { label: 'Video Player', detail: 'Media Playback UI', apiKind: null },
+  'visual-builder': { label: 'Visual Builder', detail: 'Drag and Drop UI Building', apiKind: null },
 };
 
 const DATA_VIEW_EXAMPLE_TITLES: Record<string, SeoTitleConfig> = {
@@ -148,132 +188,285 @@ const DATA_VIEW_EXAMPLE_TITLES: Record<string, SeoTitleConfig> = {
 };
 
 const MICRO_CHART_TITLES: Record<string, SeoTitleConfig> = {
-  'bar-chart': { label: 'Bar Chart', detail: 'Compact Comparisons' },
-  'line-chart': { label: 'Line Chart', detail: 'Sparkline Trends' },
-  'pie-chart': { label: 'Pie Chart', detail: 'Proportional Breakdowns' },
+  'bar-chart': { label: 'Bar Chart', detail: 'Compact Comparisons', apiKind: null },
+  'line-chart': {
+    label: 'Line Chart',
+    detail: 'Sparkline Trends',
+    job: 'render compact trend lines in dashboards and dense admin UIs',
+    apiDetail: 'Inputs, Types and Tooltip Options',
+    apiJob: 'review inputs, types, and tooltip options',
+    apiKind: null,
+  },
+  'pie-chart': { label: 'Pie Chart', detail: 'Proportional Breakdowns', apiKind: null },
 };
 
 @Injectable({ providedIn: 'root' })
 export class DocsTitleStrategy extends TitleStrategy {
   private readonly title = inject(Title);
+  private readonly meta = inject(Meta);
   private readonly environment = inject(EnvironmentService);
   private readonly detailSeparator = ' \u2013 ';
 
   override updateTitle(routerState: RouterStateSnapshot): void {
-    this.title.setTitle(this.resolveTitle(routerState));
+    const metadata = this.resolveMetadata(routerState);
+
+    this.title.setTitle(metadata.title);
+    this.meta.updateTag({ name: 'description', content: metadata.description });
+    this.meta.updateTag({ property: 'og:title', content: metadata.title });
+    this.meta.updateTag({ property: 'og:description', content: metadata.description });
+    this.meta.updateTag({ name: 'twitter:title', content: metadata.title });
+    this.meta.updateTag({ name: 'twitter:description', content: metadata.description });
   }
 
-  private resolveTitle(routerState: RouterStateSnapshot): string {
+  private resolveMetadata(routerState: RouterStateSnapshot): SeoMetadata {
     const segments = this.getPathSegments(routerState.url);
     const routeTitle = this.cleanTitle(this.buildTitle(routerState));
 
     if (segments.length === 0) {
-      return this.withSiteTitle('Documentation', 'AI-Friendly Angular Components Library');
+      return this.metadata(
+        'Documentation',
+        'AI-Friendly Angular Components Library',
+        'Browse NgStarter documentation for standalone Angular UI components, themes, admin templates, examples, and API references.',
+      );
     }
 
     const [section, slug] = segments;
     const isApi = segments.includes('api');
 
     if (section === 'components') {
-      return this.componentTitle(slug, isApi);
+      return this.componentMetadata(slug, isApi);
     }
 
     if (section === 'forms') {
       if (!slug) {
-        return this.withSiteTitle('Angular Form Components', 'Inputs, Validation, and Controls');
+        return this.metadata(
+          'Angular Form Components',
+          'Inputs, Validation, and Controls',
+          'Explore NgStarter Angular form components for inputs, validation, selection controls, masks, and standalone Angular form usage.',
+        );
       }
 
-      return this.catalogTitle(slug, FORM_TITLES, 'Component', isApi);
+      return this.catalogMetadata(slug, FORM_TITLES, 'Component', isApi);
     }
 
     if (section === 'navigation') {
       if (!slug) {
-        return this.withSiteTitle('Angular Navigation Components', 'Sidebars, Tabs, and Breadcrumbs');
+        return this.metadata(
+          'Angular Navigation Components',
+          'Sidebars, Tabs, and Breadcrumbs',
+          'Explore NgStarter Angular navigation components for sidebars, breadcrumbs, tabs, side panels, rails, and admin dashboard wayfinding.',
+        );
       }
 
-      return this.catalogTitle(slug, NAVIGATION_TITLES, 'Component', isApi);
+      return this.catalogMetadata(slug, NAVIGATION_TITLES, 'Component', isApi);
     }
 
     if (section === 'libraries') {
       if (!slug) {
-        return this.withSiteTitle('Angular UI Libraries', 'Data Grids, Editors, and Builders');
+        return this.metadata(
+          'Angular UI Libraries',
+          'Data Grids, Editors, and Builders',
+          'Explore NgStarter Angular UI libraries for data grids, kanban boards, visual builders, content editors, and media players.',
+        );
       }
 
       if (slug === 'data-view' && segments[2] && segments[2] !== 'api') {
-        return this.catalogTitle(segments[2], DATA_VIEW_EXAMPLE_TITLES, 'Example', false);
+        return this.catalogMetadata(segments[2], DATA_VIEW_EXAMPLE_TITLES, 'Example', false);
       }
 
-      return this.catalogTitle(slug, LIBRARY_TITLES, 'Library', isApi);
+      return this.catalogMetadata(slug, LIBRARY_TITLES, 'Library', isApi);
     }
 
     if (section === 'micro-charts') {
       if (!slug) {
-        return this.withSiteTitle('Angular Micro Chart Components', 'Compact Data Visualization');
+        return this.metadata(
+          'Angular Micro Chart Components',
+          'Compact Data Visualization',
+          'Explore NgStarter Angular micro chart components for compact dashboard trends, comparisons, breakdowns, and dense metric displays.',
+        );
       }
 
-      return this.catalogTitle(slug, MICRO_CHART_TITLES, 'Component', isApi);
+      return this.catalogMetadata(slug, MICRO_CHART_TITLES, 'Component', isApi);
     }
 
     if (section === 'theme') {
-      return this.themeTitle(slug);
+      return this.themeMetadata(slug);
     }
 
     if (section === 'installation') {
-      return this.withSiteTitle('Install Angular Components Library', 'AI-Friendly Angular Components Library');
+      return this.metadata(
+        'Install Angular Components Library',
+        'AI-Friendly Angular Components Library',
+        'Install NgStarter Angular components, configure standalone providers, import theme styles, and start building AI-friendly UI.',
+      );
     }
 
-    return this.withSiteTitle(routeTitle || this.toTitleCase(section), 'Angular UI Documentation');
+    return this.metadata(
+      routeTitle || this.toTitleCase(section),
+      'Angular UI Documentation',
+      `Read NgStarter documentation for ${this.toSentenceFragment(routeTitle || section)} with examples, API notes, and standalone Angular usage.`,
+    );
   }
 
-  private componentTitle(slug: string | undefined, isApi: boolean): string {
+  private componentMetadata(slug: string | undefined, isApi: boolean): SeoMetadata {
     if (!slug) {
-      return this.withSiteTitle('Angular Components Documentation', 'AI-Friendly UI Library');
+      return this.metadata(
+        'Angular Components Documentation',
+        'AI-Friendly UI Library',
+        'Explore NgStarter Angular components for admin panels, dashboards, forms, overlays, data tables, navigation, feedback, and media UI.',
+      );
     }
 
-    return this.catalogTitle(slug, COMPONENT_TITLES, 'Component', isApi);
+    return this.catalogMetadata(slug, COMPONENT_TITLES, 'Component', isApi);
   }
 
-  private catalogTitle(
+  private catalogMetadata(
     slug: string | undefined,
     catalog: Record<string, SeoTitleConfig>,
     defaultKind: string,
     isApi: boolean,
-  ): string {
+  ): SeoMetadata {
     const config = slug ? catalog[slug] : undefined;
     const label = config?.label || this.toTitleCase(slug);
     const kind = config?.kind || defaultKind;
-    const detail = config?.detail || 'Angular UI Patterns';
+    const detail = isApi
+      ? config?.apiDetail || this.defaultApiDetail(kind)
+      : config?.detail || 'Angular UI Patterns';
 
-    return this.withSiteTitle(this.angularTitle(label, kind, isApi), detail);
+    return this.metadata(
+      this.angularTitle(label, kind, isApi, config),
+      detail,
+      isApi
+        ? this.apiDescription(label, kind, detail, config)
+        : this.usageDescription(label, kind, config),
+    );
   }
 
-  private themeTitle(slug: string | undefined): string {
+  private themeMetadata(slug: string | undefined): SeoMetadata {
     if (slug === 'customize' || slug === 'customize-theme') {
-      return this.withSiteTitle('Customize Angular Themes', 'Design Tokens and Runtime Theming');
+      return this.metadata(
+        'Customize Angular Themes',
+        'Design Tokens and Runtime Theming',
+        'Customize NgStarter Angular themes with design tokens, runtime providers, color schemes, radius settings, and standalone Angular usage.',
+      );
     }
 
     if (slug === 'colors') {
-      return this.withSiteTitle('Angular Theme Colors', 'Design Tokens and Palettes');
+      return this.metadata(
+        'Angular Theme Colors',
+        'Design Tokens and Palettes',
+        'Use NgStarter Angular theme colors to understand semantic tokens, palettes, surfaces, states, and CSS custom properties.',
+      );
     }
 
     if (slug === 'typography') {
-      return this.withSiteTitle('Angular Typography Theme', 'Type Scales and Text Styles');
+      return this.metadata(
+        'Angular Typography Theme',
+        'Type Scales and Text Styles',
+        'Use NgStarter Angular typography tokens to configure type scales, text styles, headings, body copy, and component typography.',
+      );
     }
 
     if (slug === 'playground') {
-      return this.withSiteTitle('Angular Theme Playground', 'Preview Tokens and Component Styles');
+      return this.metadata(
+        'Angular Theme Playground',
+        'Preview Tokens and Component Styles',
+        'Use the NgStarter Angular theme playground to preview tokens, component styles, colors, density, and runtime theme changes.',
+      );
     }
 
     if (slug === 'generator') {
-      return this.withSiteTitle('Angular Theme Generator', 'Seed Colors and CSS Color Mix');
+      return this.metadata(
+        'Angular Theme Generator',
+        'Seed Colors and CSS Color Mix',
+        'Use the NgStarter Angular theme generator to create tokenized palettes from seed colors and export CSS custom properties.',
+      );
     }
 
-    return this.withSiteTitle('Angular Theme Documentation', 'Tokens and Runtime Theming');
+    return this.metadata(
+      'Angular Theme Documentation',
+      'Tokens and Runtime Theming',
+      'Explore NgStarter Angular theme documentation for design tokens, runtime theming, colors, typography, and component styles.',
+    );
   }
 
-  private angularTitle(label: string, kind: string, isApi: boolean): string {
-    const suffix = isApi ? ' API' : '';
-    return `Angular ${label} ${kind}${suffix}`;
+  private angularTitle(label: string, kind: string, isApi: boolean, config?: SeoTitleConfig): string {
+    if (!isApi) {
+      return `Angular ${label} ${kind}`;
+    }
+
+    const apiKind = config?.apiKind === undefined ? kind : config.apiKind;
+
+    return `Angular ${label}${apiKind ? ` ${apiKind}` : ''} API`;
+  }
+
+  private metadata(title: string, detail: string, description: string): SeoMetadata {
+    return {
+      title: this.withSiteTitle(title, detail),
+      description: this.cleanDescription(description),
+    };
+  }
+
+  private usageDescription(label: string, kind: string, config?: SeoTitleConfig): string {
+    const target = this.targetName(label, kind);
+    const job = config?.job || this.defaultJob(config?.detail);
+
+    return `Use the NgStarter Angular ${target} to ${job}. Includes examples, API, accessibility notes, and standalone Angular usage.`;
+  }
+
+  private apiDescription(label: string, kind: string, detail: string, config?: SeoTitleConfig): string {
+    const target = this.apiTargetName(label, kind, config);
+    const job = config?.apiJob || `review ${this.toSentenceFragment(detail)}`;
+
+    return `Use the NgStarter Angular ${target} to ${job}. Includes examples, accessibility notes, and standalone Angular usage.`;
+  }
+
+  private targetName(label: string, kind: string): string {
+    return `${label} ${kind.toLowerCase()}`;
+  }
+
+  private apiTargetName(label: string, kind: string, config?: SeoTitleConfig): string {
+    const apiKind = config?.apiKind === undefined ? kind : config.apiKind;
+
+    return `${label}${apiKind ? ` ${apiKind}` : ''} API`;
+  }
+
+  private defaultApiDetail(kind: string): string {
+    if (kind === 'Example') {
+      return 'Example Setup and Usage';
+    }
+
+    if (kind === 'Library') {
+      return 'Inputs, Types and Configuration';
+    }
+
+    return 'Inputs, Types and Events';
+  }
+
+  private defaultJob(detail: string | undefined): string {
+    const fragment = this.toSentenceFragment(detail || 'Angular UI patterns');
+
+    if (/\b(selection|controls?|inputs?|pickers?|values?|validation|formats?)\b/.test(fragment)) {
+      return `handle ${fragment}`;
+    }
+
+    if (/\b(messages?|states?|feedback|hints?|notices?|updates?)\b/.test(fragment)) {
+      return `show ${fragment}`;
+    }
+
+    return `build ${fragment}`;
+  }
+
+  private cleanDescription(description: string): string {
+    return description.replace(/\s+/g, ' ').trim();
+  }
+
+  private toSentenceFragment(text: string): string {
+    return text
+      .replace(/\s+-\s+/g, ' ')
+      .replace(/\s*\/\s*/g, ' ')
+      .trim()
+      .replace(/^./, (char) => char.toLowerCase());
   }
 
   private withSiteTitle(title: string, detail?: string): string {

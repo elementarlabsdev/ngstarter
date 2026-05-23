@@ -1,0 +1,45 @@
+<app-widget-shell [title]="content().title" [subtitle]="content().subtitle" [events]="true">
+  <table ngs-table [dataSource]="signals" class="events-table rounded-2xl overflow-hidden">
+    <ng-container ngsColumnDef="signal">
+      <th ngs-header-cell *ngsHeaderCellDef>Signal</th>
+      <td ngs-cell *ngsCellDef="let row">
+        <ngs-chip
+          appearance="filled"
+          class="event-chip"
+          [class.tone-warm]="row.tone === 'warm'"
+          [class.tone-green]="row.tone === 'green'"
+          [class.tone-blue]="row.tone === 'blue'"
+        >
+          {{ row.signal }}
+        </ngs-chip>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="source">
+      <th ngs-header-cell *ngsHeaderCellDef>Source</th>
+      <td ngs-cell *ngsCellDef="let row">{{ row.source }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="priority">
+      <th ngs-header-cell *ngsHeaderCellDef>Priority</th>
+      <td ngs-cell *ngsCellDef="let row">{{ row.priority }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="owner">
+      <th ngs-header-cell *ngsHeaderCellDef>Owner</th>
+      <td ngs-cell *ngsCellDef="let row">{{ row.owner }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="action">
+      <th ngs-header-cell *ngsHeaderCellDef></th>
+      <td ngs-cell *ngsCellDef="let row">
+        <button ngsIconButton type="button" aria-label="Open research signal" ngsTooltip="Open signal">
+          <ngs-icon name="fluent:eye-24-regular" />
+        </button>
+      </td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="signalColumns"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: signalColumns"></tr>
+  </table>
+</app-widget-shell>

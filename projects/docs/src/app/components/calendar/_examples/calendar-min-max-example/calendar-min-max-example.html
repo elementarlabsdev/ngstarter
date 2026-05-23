@@ -1,0 +1,10 @@
+<div class="calendar-example">
+  <ngs-calendar
+    [selected]="selectedDate()"
+    [minDate]="minDate"
+    [maxDate]="maxDate"
+    [firstDayOfWeek]="1"
+    [showAdjacentDays]="false"
+    (selectedChange)="selectedDate.set($event)"
+  />
+</div>

@@ -13,12 +13,48 @@
 
   .ngs-grid-item {
     --ngs-grid-item-colspan: 12;
-    grid-column: span var(--ngs-grid-item-colspan) / span var(--ngs-grid-item-colspan);
+    --ngs-grid-item-effective-colspan: var(--ngs-grid-item-colspan);
+
+    grid-column: span var(--ngs-grid-item-effective-colspan) / span var(--ngs-grid-item-effective-colspan);
+
+    @media (min-width: 640px) {
+      --ngs-grid-item-effective-colspan: var(--ngs-grid-item-colspan-sm, var(--ngs-grid-item-colspan));
+    }
+
+    @media (min-width: 768px) {
+      --ngs-grid-item-effective-colspan: var(--ngs-grid-item-colspan-md, var(--ngs-grid-item-colspan-sm, var(--ngs-grid-item-colspan)));
+    }
+
+    @media (min-width: 1024px) {
+      --ngs-grid-item-effective-colspan: var(--ngs-grid-item-colspan-lg, var(--ngs-grid-item-colspan-md, var(--ngs-grid-item-colspan-sm, var(--ngs-grid-item-colspan))));
+    }
+
+    @media (min-width: 1280px) {
+      --ngs-grid-item-effective-colspan: var(--ngs-grid-item-colspan-xl, var(--ngs-grid-item-colspan-lg, var(--ngs-grid-item-colspan-md, var(--ngs-grid-item-colspan-sm, var(--ngs-grid-item-colspan)))));
+    }
   }
 
   .ngs-grid-item-content {
     --ngs-grid-item-height: 100%;
-    height: var(--ngs-grid-item-height);
+    --ngs-grid-item-effective-height: var(--ngs-grid-item-height);
+
+    height: var(--ngs-grid-item-effective-height);
+
+    @media (min-width: 640px) {
+      --ngs-grid-item-effective-height: var(--ngs-grid-item-height-sm, var(--ngs-grid-item-height));
+    }
+
+    @media (min-width: 768px) {
+      --ngs-grid-item-effective-height: var(--ngs-grid-item-height-md, var(--ngs-grid-item-height-sm, var(--ngs-grid-item-height)));
+    }
+
+    @media (min-width: 1024px) {
+      --ngs-grid-item-effective-height: var(--ngs-grid-item-height-lg, var(--ngs-grid-item-height-md, var(--ngs-grid-item-height-sm, var(--ngs-grid-item-height))));
+    }
+
+    @media (min-width: 1280px) {
+      --ngs-grid-item-effective-height: var(--ngs-grid-item-height-xl, var(--ngs-grid-item-height-lg, var(--ngs-grid-item-height-md, var(--ngs-grid-item-height-sm, var(--ngs-grid-item-height)))));
+    }
   }
 
   .ngs-grid-item-content:not(.plain) {

@@ -7,7 +7,7 @@
                 appearance="outlined">
         <ngs-card-content class="bg-surface-container">
           <a [routerLink]="item.routerLink">
-            <img [src]="item.imageUrl" alt="" class="w-[240px]">
+            <img [src]="item.imageUrl" [alt]="item.imageAlt" [title]="item.imageTitle" class="w-[240px]">
           </a>
         </ngs-card-content>
         <ngs-card-footer>

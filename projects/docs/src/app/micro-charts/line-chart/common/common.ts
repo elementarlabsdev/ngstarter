@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
 import { TabLink, TabNavBar, TabNavPanel } from '@ngstarter-ui/components/tabs';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-line-chart-common',
@@ -21,5 +21,11 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   styleUrl: './common.scss',
 })
 export class Common {
+  private readonly router = inject(Router);
 
+  protected get pageTitle(): string {
+    const path = this.router.url.split(/[?#]/)[0];
+
+    return path.endsWith('/api') ? 'Line Chart API' : 'Line micro chart';
+  }
 }

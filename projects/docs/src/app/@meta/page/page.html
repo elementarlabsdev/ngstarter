@@ -5,6 +5,39 @@
         <ng-content select="[appPageTitle]"/>
       </div>
       <ng-content select="[appPageContent]"/>
+
+      @if (showProductionLinks) {
+        <section class="production-links mt-10 p-6" aria-labelledby="production-links-title">
+          <div>
+            <p class="production-links-eyebrow">Using this component in production?</p>
+            <h2 id="production-links-title">Source code, templates, and commercial support</h2>
+            <p>
+              NgStarter includes source code, admin dashboard templates, and commercial support.
+            </p>
+          </div>
+          <div class="production-links-actions flex flex-col gap-4">
+            <a href="https://ngstarter.com/pricing">View pricing &rarr;</a>
+            <a href="https://ngstarter.com/templates">Explore admin templates</a>
+          </div>
+        </section>
+      }
+
+      @if (relatedLinks.length) {
+        <section class="related-docs mt-10 p-6" aria-labelledby="related-docs-title">
+          <div>
+            <p class="production-links-eyebrow">Related components</p>
+            <h2 id="related-docs-title">Build the surrounding workflow</h2>
+          </div>
+          <div class="related-docs-grid">
+            @for (link of relatedLinks; track link.href) {
+              <a [routerLink]="link.href" class="related-docs-link">
+                <span>{{ link.label }}</span>
+                <small>{{ link.description }}</small>
+              </a>
+            }
+          </div>
+        </section>
+      }
     </div>
   </div>
   <nav class="sticky hidden lg:block top-32 w-72">

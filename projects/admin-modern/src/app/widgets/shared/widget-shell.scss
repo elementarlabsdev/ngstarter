@@ -1,0 +1,65 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+ngs-card.dashboard-widget {
+  height: 100%;
+  overflow: hidden;
+  box-shadow: 0 18px 54px color-mix(in srgb, var(--ngs-color-neutral-500) 8%, transparent);
+}
+
+ngs-card.dashboard-widget.is-calendar {
+  position: relative;
+}
+
+ngs-card.dashboard-widget.is-calendar ngs-card-header {
+  position: absolute;
+  top: --spacing(3);
+  right: --spacing(6);
+  z-index: 2;
+  min-height: 0;
+  padding: 0;
+}
+
+ngs-card.dashboard-widget.is-calendar ngs-card-title,
+ngs-card.dashboard-widget.is-calendar ngs-card-subtitle {
+  display: none;
+}
+
+ngs-card.dashboard-widget.is-calendar ngs-card-content {
+  height: 100%;
+}
+
+ngs-card-header {
+  min-height: --spacing(11);
+  align-items: flex-start;
+}
+
+ngs-card-title {
+  display: flex;
+  align-items: center;
+  gap: --spacing(2);
+  font-size: 1.28rem;
+  font-weight: 600;
+}
+
+ngs-card-title ngs-icon {
+  color: #bbbbbb;
+  font-size: 1.05rem;
+}
+
+ngs-card-subtitle {
+  display: none;
+}
+
+ngs-card-content {
+  min-height: 0;
+  height: calc(100% - --spacing(12));
+}
+
+button[ngsIconButton] {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ngs-color-neutral-300) 38%, transparent);
+}

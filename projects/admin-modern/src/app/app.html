@@ -1,309 +1,200 @@
+<ngs-splash-screen>
+  <ngs-logo aria-label="Modern">
+    <img src="/assets/brand/modern-logo-512.png" alt="Modern" class="h-10" />
+  </ngs-logo>
+</ngs-splash-screen>
 <ngs-layout root class="modern-root">
-  <ngs-layout-content class="modern-layout-content" [autoscrollToTop]="false">
-    <ngs-sidenav-container
-      autosize
-      autoFocus="false"
-      hasBackdrop="false"
-      class="modern-shell grid h-full min-h-0 w-full overflow-hidden"
-    >
-      <ngs-sidenav [opened]="true" mode="side" [fixedWidth]="88" [adaptive]="false">
-        <ngs-sidebar onlyCompact class="modern-sidebar" aria-label="Primary navigation">
-          <ngs-sidebar-header class="justify-center">
-            <img class="brand-logo" src="/modern-logo.png" alt="Talent OS" />
+  <ngs-layout-content>
+    <div class="fixed right-0 top-0 z-5">
+      <button
+        ngsIconButton
+        type="button"
+        [attr.aria-label]="sidenavOpened() ? 'Hide navigation' : 'Show navigation'"
+        [class.is-closed]="!sidenavOpened()"
+        class="floating-collapse"
+        [ngsTooltip]="sidenavOpened() ? 'Hide navigation' : 'Show navigation'"
+        (click)="sidenavOpened.update((opened) => !opened)"
+      >
+        <ngs-icon [name]="sidenavOpened() ? 'fluent:chevron-left-24-regular' : 'fluent:chevron-right-24-regular'" />
+      </button>
+    </div>
+    <ngs-sidenav-container autosize autoFocus="false" hasBackdrop="false" class="modern-shell">
+      <ngs-sidenav
+        [opened]="sidenavOpened()"
+        (openedChange)="sidenavOpened.set($event)"
+        mode="side"
+        [fixedWidth]="292"
+        adaptiveBreakpoint="(max-width: 1180px)"
+        class="modern-sidenav"
+      >
+        <ngs-sidebar class="modern-sidebar" aria-label="Modern analytics navigation">
+          <ngs-sidebar-header class="sidebar-header">
+            <ngs-logo aria-label="Modern">
+              <img src="/assets/brand/modern-logo-512.png" alt="Modern" class="h-7" />
+            </ngs-logo>
           </ngs-sidebar-header>
 
-          <ngs-sidebar-body class="py-7">
-            <ngs-sidebar-nav activeKey="Vacancies" class="rail-nav">
-              @for (item of navItems(); track item.key) {
-                <ngs-sidebar-nav-item [key]="item.key" [attr.aria-label]="item.label">
-                  <ngs-icon
-                    [name]="item.icon"
-                    ngsSidebarNavItemIcon
-                    [ngsBadge]="item.alert ? '1' : null"
-                    ngsBadgeColor="warn"
-                    ngsBadgeSize="small"
-                    [ngsBadgeHidden]="!item.alert"
-                  />
+          <ngs-sidebar-body>
+            <ngs-scrollbar-area>
+              <ngs-sidebar-nav activeKey="realtime" class="modern-nav nav-card">
+                <ngs-sidebar-nav-group>
+                  <ngs-sidebar-nav-group-toggle>
+                    <ngs-icon name="fluent:home-24-regular" ngsSidebarNavItemIcon />
+                    Studio
+                    <ngs-icon name="fluent:chevron-down-24-regular" class="size-5" ngsSidebarNavGroupToggleIcon />
+                  </ngs-sidebar-nav-group-toggle>
+
+                  <ngs-sidebar-nav-group-menu>
+                    @for (section of dashboardSections(); track section.label ?? section.items[0].key) {
+                    @if (section.label) {
+                      <ngs-sidebar-nav-heading>{{ section.label }}</ngs-sidebar-nav-heading>
+                    }
+
+                    @for (item of section.items; track item.key) {
+                      <ngs-sidebar-nav-item [key]="item.key">
+                        <ngs-icon [name]="item.icon" ngsSidebarNavItemIcon />
+                        {{ item.label }}
+                        @if (item.badge) {
+                          <span ngsSidebarNavItemBadge>{{ item.badge }}</span>
+                        }
+                      </ngs-sidebar-nav-item>
+                    }
+                    }
+                  </ngs-sidebar-nav-group-menu>
+                </ngs-sidebar-nav-group>
+
+                <ngs-sidebar-nav-group>
+                  <ngs-sidebar-nav-group-toggle>
+                    <ngs-icon name="fluent:building-24-regular" ngsSidebarNavItemIcon />
+                    Library
+                    <ngs-icon name="fluent:chevron-down-24-regular" class="size-5" ngsSidebarNavGroupToggleIcon />
+                  </ngs-sidebar-nav-group-toggle>
+
+                  <ngs-sidebar-nav-group-menu>
+                    @for (item of organizationItems(); track item.key) {
+                    <ngs-sidebar-nav-item [key]="item.key">
+                      <ngs-icon [name]="item.icon" ngsSidebarNavItemIcon />
+                      {{ item.label }}
+                    </ngs-sidebar-nav-item>
+                    }
+                  </ngs-sidebar-nav-group-menu>
+                </ngs-sidebar-nav-group>
+
+                @for (item of footerItems(); track item.key) {
+                <ngs-sidebar-nav-item [key]="item.key">
+                  <ngs-icon [name]="item.icon" ngsSidebarNavItemIcon />
                   {{ item.label }}
-                  @if (item.alert) {
-                    <span ngsSidebarNavItemBadge>1</span>
-                  }
                 </ngs-sidebar-nav-item>
-              }
-            </ngs-sidebar-nav>
+                }
+              </ngs-sidebar-nav>
+            </ngs-scrollbar-area>
           </ngs-sidebar-body>
 
-          <ngs-sidebar-footer class="justify-center">
-            <button ngsIconButton class="support-button" aria-label="Support">
-              <ngs-icon name="fluent:headphones-24-regular" />
+          <ngs-sidebar-footer>
+            <button ngsButton="filled" type="button" fullWidth>
+              <ngs-icon name="fluent:add-24-regular" />
+              New Brief
             </button>
+
+            <button
+              type="button"
+              ngsButton
+              fullWidth
+              reverse
+              class="user-card"
+              [ngsMenuTriggerFor]="profileMenu"
+            >
+              <ngs-avatar label="EC" />
+              <span class="user-copy">
+                <span class="user-name">Elena Cruz</span>
+                <span class="user-email">elena&#64;musecraft.ai</span>
+              </span>
+              <ngs-icon name="fluent:chevron-down-24-regular" class="size-5" />
+            </button>
+
+            <ngs-menu #profileMenu="ngsMenu" xPosition="after" yPosition="above" classList="modern-user-menu">
+              <ngs-menu-header class="user-menu-header">
+                <ngs-avatar label="EC" class="size-11" />
+                <span class="user-menu-copy">
+                  <span class="user-menu-name">Elena Cruz</span>
+                  <span class="user-menu-meta">Creative systems lead</span>
+                </span>
+              </ngs-menu-header>
+              <ngs-menu-divider />
+              <ngs-menu-heading>Studio</ngs-menu-heading>
+              <button ngs-menu-item type="button">
+                <ngs-icon name="fluent:sparkle-24-regular" />
+                Atlas Campaign
+              </button>
+              <button ngs-menu-item type="button">
+                <ngs-icon name="fluent:shield-checkmark-24-regular" />
+                Brand admin
+              </button>
+              <ngs-menu-divider />
+              <button ngs-menu-item type="button">
+                <ngs-icon name="fluent:settings-24-regular" />
+                Account settings
+              </button>
+              <button ngs-menu-item type="button">
+                <ngs-icon name="fluent:sign-out-24-regular" />
+                Sign out
+              </button>
+            </ngs-menu>
           </ngs-sidebar-footer>
         </ngs-sidebar>
       </ngs-sidenav>
 
-      <ngs-sidenav-content class="min-w-0">
-        <ngs-panel class="h-full">
-          <ngs-panel-header
-            class="flex items-center justify-between gap-5 px-8 max-[760px]:flex-wrap max-[760px]:px-4"
-          >
-            <div class="global-search-block">
-              <ngs-form-field subscriptHiddenIfEmpty class="global-search">
-                <ngs-icon name="fluent:search-24-regular" ngsIconPrefix />
-                <input
-                  ngsInput
-                  type="search"
-                  placeholder="Search..."
-                  [value]="search()"
-                  (input)="search.set($any($event.target).value)"
-                />
-              </ngs-form-field>
-            </div>
-
-            <div class="flex items-center gap-3">
-              <button
-                ngsIconButton
-                class="notification-button"
-                aria-label="Notifications"
-                ngsBadge="1"
-                ngsBadgeColor="warn"
-                ngsBadgeSize="small"
-                [ngsPopoverTriggerFor]="notificationsPopover"
-                position="below-end"
-              >
-                <ngs-icon name="fluent:alert-24-regular" />
-              </button>
-              <ngs-avatar
-                [ngsMenuTriggerFor]="accountMenu"
-                xPosition="before"
-                label="M"
-                class="profile-avatar"
-              />
-            </div>
-
-            <ngs-popover #notificationsPopover="ngsPopover">
-              <div class="notifications-popover">
-                <div class="notifications-popover-header">
-                  <span class="menu-title">Notifications</span>
-                  <button ngsIconButton aria-label="Notification settings">
-                    <ngs-icon name="fluent:settings-24-regular" />
-                  </button>
+      <ngs-sidenav-content>
+        <ngs-panel class="workspace-panel" [class.is-sidenav-closed]="!sidenavOpened()">
+          <ngs-panel-header autoHeight class="workspace-header">
+            <ngs-toolbar>
+              <ngs-toolbar-title>
+                <div class="page-title">
+                  <h1>Creator Studio - Live</h1>
                 </div>
+              </ngs-toolbar-title>
 
-                <ngs-list role="listbox" aria-label="Notifications" class="notifications-listbox">
-                  @for (notification of notifications(); track notification.title) {
-                    <button
-                      ngs-list-item
-                      type="button"
-                      role="option"
-                      [attr.aria-selected]="notification.unread ? 'true' : 'false'"
-                      class="notification-listbox-option"
-                    >
-                      <ngs-icon [name]="notification.icon" ngsListItemIcon />
-                      <span ngsListItemTitle>{{ notification.title }}</span>
-                      <span ngsListItemLine>{{ notification.meta }}</span>
-                      @if (notification.unread) {
-                        <span ngsListItemMeta class="notification-unread-dot"></span>
-                      }
-                    </button>
-                  }
-                </ngs-list>
+              <ngs-toolbar-spacer />
 
-                <div class="notifications-popover-footer">
-                  <button ngsButton="text" type="button" class="mark-read-button">
-                    <ngs-icon name="fluent:checkmark-circle-24-regular" />
-                    Mark all as read
-                  </button>
-                </div>
-              </div>
-            </ngs-popover>
-
-            <ngs-menu
-              #accountMenu="ngsMenu"
-              classList="modern-header-menu account-menu-panel"
-              xPosition="before"
-            >
-              <ngs-menu-header>
-                <div class="account-menu-header">
-                  <ngs-avatar label="M" class="profile-avatar" />
-                  <span class="menu-item-stack">
-                    <span class="menu-item-title">Maya Lewis</span>
-                    <span class="menu-item-meta">Recruiting workspace</span>
-                  </span>
-                </div>
-              </ngs-menu-header>
-
-              <button ngs-menu-item type="button">
-                <ngs-icon name="fluent:person-24-regular" />
-                Profile
-              </button>
-              <button ngs-menu-item type="button">
-                <ngs-icon name="fluent:settings-24-regular" />
-                Settings
-              </button>
-              <button ngs-menu-item type="button">
-                <ngs-icon name="fluent:arrow-exit-20-regular" />
-                Sign out
-              </button>
-            </ngs-menu>
-          </ngs-panel-header>
-
-          <ngs-panel-content>
-            <ngs-scrollbar-area class="workspace-scrollbar" [absolute]="true">
-              <div class="min-w-0 px-8 py-7 max-[760px]:px-4">
-                <h1 class="page-eyebrow mb-4! text-sm font-normal">Vacancies</h1>
-
-                <div class="mb-4 flex flex-wrap items-center gap-3">
-                  @for (filter of filters(); track filter.label) {
-                    <button ngsButton="outlined" class="filter-button" type="button">
-                      {{ filter.label }}
-                      @if (filter.count) {
-                        <span class="filter-count">{{ filter.count }}</span>
-                      }
-                      <ngs-icon name="fluent:chevron-down-24-regular" />
-                    </button>
-                  }
-
-                  <button ngsButton="text" class="clear-button" type="button">Clean all</button>
-                </div>
-
-                <div class="results-count mb-3 text-sm font-normal">25 vacancies found</div>
-
-                <div class="pr-1">
-                  <section
-                    class="grid grid-cols-2 gap-5 pb-8 max-[900px]:grid-cols-1"
-                    aria-label="Vacancies list"
-                  >
-                    @for (vacancy of vacancies(); track vacancy.title) {
-                      <ngs-card appearance="outlined" class="vacancy-card block">
-                        <ngs-card-header>
-                          <div class="min-w-0">
-                            <div class="flex items-center gap-2">
-                              <h2 class="truncate text-lg font-semibold">{{ vacancy.title }}</h2>
-                              <ngs-chip
-                                class="vacancy-type-chip"
-                                [class.is-blue]="vacancy.typeTone === 'blue'"
-                                [class.is-orange]="vacancy.typeTone === 'orange'"
-                                [class.is-dark]="vacancy.typeTone === 'dark'"
-                              >
-                                {{ vacancy.type }}
-                              </ngs-chip>
-                            </div>
-                            <p
-                              class="vacancy-meta mt-1 flex items-center gap-1 text-xs font-normal"
-                            >
-                              <ngs-icon name="fluent:location-24-regular" />
-                              {{ vacancy.company }} · {{ vacancy.location }}
-                            </p>
-                          </div>
-
-                          <ngs-card-aside>
-                            <button
-                              ngsIconButton
-                              class="bookmark-button"
-                              [attr.aria-label]="'Save ' + vacancy.title"
-                            >
-                              <ngs-icon name="fluent:bookmark-24-regular" />
-                            </button>
-                          </ngs-card-aside>
-                        </ngs-card-header>
-
-                        <ngs-card-content withoutPadding>
-                          <p
-                            class="vacancy-summary mt-4 min-h-11 text-base leading-snug font-normal"
-                          >
-                            {{ vacancy.summary }}
-                          </p>
-
-                          <ngs-chip-set class="vacancy-tags mt-5">
-                            @for (tag of vacancy.tags; track tag) {
-                              <ngs-chip class="vacancy-tag-chip">{{ tag }}</ngs-chip>
-                            }
-                          </ngs-chip-set>
-
-                          <footer
-                            class="vacancy-card-footer mt-5 flex items-center gap-4 pt-3 text-xs font-normal"
-                          >
-                            <span class="inline-flex items-center gap-1.5">
-                              <ngs-icon name="fluent:people-team-24-regular" />
-                              {{ vacancy.applicants }} applicants
-                            </span>
-                            <span class="metric-separator">•</span>
-                            <span class="inline-flex items-center gap-1.5">
-                              <ngs-icon name="fluent:calendar-checkmark-24-regular" />
-                              {{ vacancy.interviews }} interviews
-                            </span>
-                          </footer>
-                        </ngs-card-content>
-                      </ngs-card>
-                    }
-                  </section>
-                </div>
-              </div>
-            </ngs-scrollbar-area>
-          </ngs-panel-content>
-
-          <ngs-panel-aside class="ai-column max-[1180px]:hidden ps-3">
-            <ngs-card appearance="filled" class="ai-card flex h-full">
-              <ngs-card-header>
-                <div class="flex h-full items-center gap-2">
-                  <ngs-icon class="assistant-icon text-primary" name="fluent:sparkle-24-filled" />
-                  <h2 class="text-lg font-semibold">AI assistant</h2>
-                </div>
-                <ngs-card-aside>
-                  <button ngsIconButton aria-label="Close assistant">
-                    <ngs-icon name="fluent:dismiss-24-regular" />
-                  </button>
-                </ngs-card-aside>
-              </ngs-card-header>
-              <ngs-card-content withoutPadding>
-                <div class="assistant-messages-shell h-full">
-                  <ngs-scrollbar-area class="assistant-scrollbar" [absolute]="true">
-                    <div class="assistant-messages">
-                      <p class="message-bubble is-user">
-                        I've filtered the vacancies, see which ones fit a senior product candidate
-                        and select three with active hiring pipelines
-                      </p>
-
-                      <div class="message-bubble is-ai">
-                        <p>
-                          Yes, of course! Based on senior product experience and remote preference,
-                          these 3 vacancies are the strongest matches:
-                        </p>
-                        <ul>
-                          <li>
-                            Senior Product Designer
-                            <ngs-icon name="fluent:arrow-up-right-24-regular" />
-                          </li>
-                          <li>
-                            Product Analytics Lead
-                            <ngs-icon name="fluent:arrow-up-right-24-regular" />
-                          </li>
-                          <li>
-                            Angular Platform Engineer
-                            <ngs-icon name="fluent:arrow-up-right-24-regular" />
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </ngs-scrollbar-area>
-                </div>
-              </ngs-card-content>
-              <ngs-card-footer class="ai-column-footer">
-                <ngs-form-field subscriptHiddenIfEmpty class="chat-input">
-                  <ngs-label>Ask anything</ngs-label>
-                  <input ngsInput type="text" />
+              <ngs-toolbar-item>
+                <ngs-form-field subscriptHiddenIfEmpty class="search-field">
+                  <ngs-icon name="fluent:search-24-regular" ngsIconPrefix />
+                  <input
+                    ngsInput
+                    type="search"
+                    placeholder="Search"
+                    [value]="search()"
+                    (input)="search.set($any($event.target).value)"
+                  />
                   <button
                     ngsIconButton
                     ngsIconButtonSuffix
-                    class="send-button"
-                    aria-label="Send message"
+                    type="button"
+                    aria-label="Filter search"
+                    ngsTooltip="Filter search"
                   >
-                    <ngs-icon name="fluent:send-24-filled" />
+                    <ngs-icon name="fluent:filter-24-regular" />
                   </button>
                 </ngs-form-field>
-              </ngs-card-footer>
-            </ngs-card>
-          </ngs-panel-aside>
+              </ngs-toolbar-item>
+            </ngs-toolbar>
+
+<!--            <ngs-toolbar class="filter-toolbar">-->
+<!--            </ngs-toolbar>-->
+          </ngs-panel-header>
+
+          <ngs-panel-content>
+            <ngs-scrollbar-area [absolute]="true" class="workspace-scrollbar">
+              <div class="dashboard-stage">
+                <ngs-grid
+                  [configs]="dashboardGridConfigs()"
+                  [items]="dashboardGridItems()"
+                  plain
+                  class="analytics-grid"
+                />
+              </div>
+            </ngs-scrollbar-area>
+          </ngs-panel-content>
         </ngs-panel>
       </ngs-sidenav-content>
     </ngs-sidenav-container>

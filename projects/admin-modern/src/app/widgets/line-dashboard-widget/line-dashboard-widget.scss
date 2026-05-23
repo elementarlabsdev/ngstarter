@@ -1,0 +1,11 @@
+@reference 'tailwindcss';
+
+.line-widget {
+  display: block;
+  height: 100%;
+  padding-top: --spacing(2);
+
+  app-generation-latency-chart {
+    height: 100%;
+  }
+}

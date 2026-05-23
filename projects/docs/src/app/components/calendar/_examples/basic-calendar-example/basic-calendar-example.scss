@@ -1,0 +1,7 @@
+@reference 'tailwindcss';
+
+:host {
+  .calendar-example {
+    max-width: --spacing(96);
+  }
+}

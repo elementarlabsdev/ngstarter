@@ -1,1 +1,254 @@
 @use '../../components/styles/themes/default';
+@reference 'tailwindcss';
+
+:root {
+  --ngs-dropdown-item-hover-bg: #eeeeed;
+  --ngs-dropdown-item-active-bg: #eeeeed;
+  --ngs-dropdown-item-selected-bg: #eeeeed;
+  --ngs-dropdown-item-selected-color: #171719;
+  --ngs-dropdown-item-radius: 999px;
+  --ngs-menu-item-hover-background: #eeeeed;
+  --ngs-menu-item-active-background: #eeeeed;
+  --ngs-menu-item-radius: 999px;
+  --ngs-option-hover-background: #eeeeed;
+  --ngs-option-active-background: #eeeeed;
+  --ngs-option-selected-background: #eeeeed;
+  --ngs-option-selected-color: #171719;
+  --ngs-option-radius: 999px;
+}
+
+.modern-user-menu {
+  --ngs-menu-min-width: 270px;
+  --ngs-menu-max-width: 270px;
+  --ngs-menu-padding: --spacing(2);
+  --ngs-menu-item-height: --spacing(11);
+
+  .user-menu-header {
+    display: flex;
+    align-items: center;
+    gap: --spacing(3);
+    padding: --spacing(2) --spacing(2) --spacing(3);
+  }
+
+  .user-menu-copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: --spacing(0.5);
+    line-height: 1.2;
+  }
+
+  .user-menu-name {
+    color: #171719;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .user-menu-email,
+  .user-menu-meta {
+    color: #8b8b88;
+    font-size: 0.82rem;
+  }
+
+  ngs-icon {
+    color: #72726f;
+  }
+}
+
+.modern-root {
+  --modern-bg: #f1f1f0;
+  --modern-ink: #171719;
+  --modern-muted: #8f8f8c;
+  --modern-soft: #eeeeed;
+  --modern-sidebar-bg: #ebebea;
+  --modern-blue-muted: #8c989f;
+  --ngs-layout-bg: var(--modern-bg);
+  --ngs-sidenav-width: 292px;
+  --ngs-button-height: --spacing(13);
+  color: var(--modern-ink);
+
+  ngs-sidenav-container.modern-shell,
+  ngs-panel.workspace-panel,
+  ngs-panel-header.workspace-header {
+    background: var(--modern-bg);
+  }
+
+  ngs-sidenav-container.modern-shell {
+    --ngs-sidenav-width: 292px;
+  }
+
+  ngs-sidenav.modern-sidenav {
+    --ngs-sidenav-bg: transparent;
+    --ngs-sidenav-border-width: 0;
+
+    overflow: visible;
+    border-radius: 0 --spacing(9) --spacing(9) 0;
+    --ngs-sidenav-background-color: #f7f7f7;
+  }
+
+  ngs-sidebar.modern-sidebar {
+    --ngs-sidebar-width: var(--ngs-sidenav-width);
+
+    border: 0;
+    border-radius: 0 --spacing(9) --spacing(9) 0;
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  ngs-sidenav-content {
+    position: relative;
+  }
+
+  ngs-logo.splash-logo .brand-logo-image {
+    width: calc(--spacing(15) * 1253 / 257);
+    height: --spacing(15);
+  }
+
+  ngs-sidebar-nav.modern-nav {
+    --ngs-sidebar-nav-padding: --spacing(0) --spacing(2) --spacing(2) --spacing(2);
+    --ngs-sidebar-nav-gap: --spacing(3);
+    --ngs-sidebar-nav-item-height: --spacing(13);
+    --ngs-sidebar-nav-item-radius: 999px;
+    --ngs-sidebar-nav-item-font-weight: 400;
+    --ngs-sidebar-nav-item-active-bg: transparent;
+    --ngs-sidebar-nav-item-active-color: var(--modern-ink);
+    --ngs-sidebar-nav-item-active-icon-color: var(--modern-ink);
+    --ngs-sidebar-nav-item-hover-bg: transparent;
+    --ngs-sidebar-nav-item-hover-color: var(--modern-ink);
+    --ngs-sidebar-nav-item-hover-icon-color: var(--modern-ink);
+    --ngs-sidebar-nav-group-toggle-active-bg: transparent;
+    --ngs-sidebar-nav-group-toggle-active-color: var(--modern-ink);
+    --ngs-sidebar-nav-group-toggle-hover-icon-color: var(--modern-ink);
+    --ngs-sidebar-nav-group-toggle-active-icon-color: var(--modern-ink);
+    --ngs-sidebar-nav-group-arrow-color: #90908c;
+    --ngs-sidebar-nav-nested-item-height: --spacing(11);
+    --ngs-sidebar-nav-nested-item-color: #686865;
+    --ngs-sidebar-nav-nested-item-hover-bg: #eeeeed;
+    --ngs-sidebar-nav-nested-item-active-bg: #eeeeed;
+    --ngs-sidebar-nav-nested-item-active-color: var(--modern-ink);
+    --ngs-sidebar-nav-item-padding: 0 --spacing(4);
+    --ngs-sidebar-nav-nested-item-padding: 0 --spacing(4);
+    --ngs-sidebar-nav-heading-padding: 0 --spacing(5);
+  }
+
+  ngs-form-field.search-field {
+    --ngs-field-bg: white;
+    --ngs-field-border-color: transparent;
+    --ngs-field-border-focus-color: transparent;
+    --ngs-field-border-width: 0;
+    --ngs-field-radius: 999px;
+    --ngs-field-height: --spacing(14);
+  }
+
+  button[ngsButton],
+  button[ngsIconButton],
+  a[ngsButton],
+  a[ngsIconButton] {
+    --ngs-button-radius: 999px;
+  }
+
+  button[ngsIconButton],
+  a[ngsIconButton] {
+    --ngs-button-height: --spacing(14);
+    --ngs-button-bg: rgba(255, 255, 255, 0.72);
+    --ngs-button-color: #5f5f5c;
+  }
+
+  button[ngsIconButton].floating-collapse {
+    --ngs-button-height: --spacing(14);
+    --ngs-button-bg: white;
+    --ngs-button-color: #5b5b58;
+    --ngs-button-hover-bg: white;
+  }
+
+  button[ngsButton].new-board-button {
+    --ngs-button-radius: 999px;
+    --ngs-button-color: var(--modern-ink);
+    --ngs-button-bg: color-mix(in srgb, #e8f6df 72%, white);
+    --ngs-button-height: --spacing(17);
+  }
+
+  .analytics-grid {
+    --ngs-grid-gap: --spacing(2);
+  }
+
+  ngs-card.dashboard-widget {
+    --ngs-card-bg: #f8f8f7;
+    --ngs-card-border-width: 0;
+    --ngs-card-radius: --spacing(8);
+    --ngs-card-padding: --spacing(4);
+  }
+
+  ngs-card-title {
+    color: var(--modern-ink);
+  }
+
+  ngs-card.dashboard-widget button[ngsIconButton] {
+    --ngs-button-radius: 999px;
+    --ngs-button-height: --spacing(11);
+    --ngs-button-bg: rgba(255, 255, 255, 0.62);
+    --ngs-button-color: #5f5f5c;
+  }
+
+  ngs-chip.legend-chip,
+  ngs-chip.event-chip {
+    --ngs-chip-font-weight: 500;
+  }
+
+  .aligned-chip {
+    --ngs-chip-bg: color-mix(in srgb, #efb7b9 30%, white);
+    --ngs-chip-color: #92565a;
+  }
+
+  .avg-chip {
+    --ngs-chip-bg: #eeeeec;
+    --ngs-chip-color: #858581;
+  }
+
+  .calendar-day {
+    --ngs-button-radius: --spacing(4);
+    --ngs-button-bg: white;
+    --ngs-button-color: #333331;
+
+    &.is-active {
+      --ngs-button-bg: #d8efbd;
+      --ngs-button-color: #416c2b;
+    }
+
+    &.is-muted {
+      --ngs-button-bg: #e9e9e8;
+      --ngs-button-color: #b9b9b6;
+    }
+  }
+
+  table.events-table {
+    --ngs-table-row-height: --spacing(15);
+    --ngs-table-header-row-height: --spacing(12);
+    --ngs-table-cell-padding: 0 --spacing(3);
+  }
+
+  .events-table {
+    button[ngsIconButton] {
+      --ngs-button-height: --spacing(8);
+      --ngs-button-width: --spacing(8);
+    }
+  }
+
+  .tone-warm {
+    --ngs-chip-bg: #f8e8cd;
+    --ngs-chip-color: #9a6b2f;
+  }
+
+  .tone-green {
+    --ngs-chip-bg: #dff4ca;
+    --ngs-chip-color: #4c7b31;
+  }
+
+  .tone-blue {
+    --ngs-chip-bg: #dfe7ff;
+    --ngs-chip-color: #536aa5;
+  }
+
+  .view-all-button {
+    --ngs-button-height: --spacing(12);
+  }
+}

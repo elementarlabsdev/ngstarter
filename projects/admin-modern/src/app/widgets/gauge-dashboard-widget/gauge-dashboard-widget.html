@@ -1,0 +1,10 @@
+<app-widget-shell [title]="content().title" [subtitle]="content().subtitle">
+  <div class="gauge-widget">
+    <app-brand-alignment-chart [value]="content().value ?? 0" />
+
+    <div class="legend-row">
+      <ngs-chip appearance="outlined" class="legend-chip aligned-chip">On-brand drafts</ngs-chip>
+      <ngs-chip appearance="outlined" class="legend-chip avg-chip">Needs edit</ngs-chip>
+    </div>
+  </div>
+</app-widget-shell>

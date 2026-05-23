@@ -1,0 +1,78 @@
+<div class="ngs-calendar-header">
+  <button
+    ngsIconButton
+    type="button"
+    class="ngs-calendar-previous-button"
+    aria-label="Previous month"
+    (click)="previousMonth()"
+  >
+    <ngs-icon name="fluent:chevron-left-24-regular" />
+  </button>
+
+  <div class="ngs-calendar-period" aria-live="polite">{{ periodLabel() }}</div>
+
+  <div class="ngs-calendar-actions">
+    @if (showTodayButton()) {
+      <button ngsButton type="button" class="ngs-calendar-today-button" (click)="selectToday()">
+        Today
+      </button>
+    }
+
+    <button
+      ngsIconButton
+      type="button"
+      class="ngs-calendar-next-button"
+      aria-label="Next month"
+      (click)="nextMonth()"
+    >
+      <ngs-icon name="fluent:chevron-right-24-regular" />
+    </button>
+  </div>
+</div>
+
+<div class="ngs-calendar-weekdays" role="row">
+  @for (weekday of weekdayLabels(); track weekday) {
+    <div class="ngs-calendar-weekday" role="columnheader">{{ weekday }}</div>
+  }
+</div>
+
+<div class="ngs-calendar-grid" role="grid" [attr.aria-label]="periodLabel()">
+  @for (cell of calendarCells(); track cell.key) {
+    <button
+      ngsButton
+      type="button"
+      class="ngs-calendar-day"
+      [class.ngs-calendar-day-hidden]="!cell.visible"
+      [class.ngs-calendar-day-muted]="!cell.inCurrentMonth"
+      [class.ngs-calendar-day-today]="cell.today"
+      [class.ngs-calendar-day-selected]="cell.selected"
+      [class.ngs-calendar-day-has-events]="cell.events.length > 0"
+      [disabled]="cell.disabled"
+      [attr.aria-label]="cell.ariaLabel"
+      [attr.aria-selected]="cell.selected"
+      [attr.data-date]="cell.key"
+      role="gridcell"
+      (click)="selectCell(cell)"
+    >
+      <span class="ngs-calendar-day-number">{{ cell.label }}</span>
+
+      @if (cell.markers.length > 0) {
+        <span class="ngs-calendar-event-markers" aria-hidden="true">
+          @for (marker of cell.markers; track marker) {
+            <span class="ngs-calendar-event-marker {{ markerClass(marker) }}"></span>
+          }
+        </span>
+      }
+
+      @if (showEventTitles() && cell.events.length > 0) {
+        <span class="ngs-calendar-event-list">
+          @for (event of cell.events.slice(0, 2); track event.id ?? event.title ?? $index) {
+            <span class="ngs-calendar-event-title" (click)="selectEvent(event, $event)">
+              {{ event.title }}
+            </span>
+          }
+        </span>
+      }
+    </button>
+  }
+</div>

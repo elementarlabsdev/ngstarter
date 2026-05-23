@@ -4,15 +4,10 @@
   --ngs-logo-text-font-size: var(--ngs-font-size-xl);
   --ngs-logo-text-font-weight: 800;
   --ngs-logo-text-color: var(--ngs-color-primary);
-  --ngs-logo-text-hover-color: var(--ngs-color-tertiary);
 
   display: inline-flex;
   align-items: center;
   gap: --spacing(3);
-
-  &:hover {
-    filter: brightness(110%);
-  }
 
   .content {
     display: flex;
