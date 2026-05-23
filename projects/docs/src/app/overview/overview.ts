@@ -1,18 +1,42 @@
 import { Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardContent, CardFooter } from '@ngstarter-ui/components/card';
 import { OrderByPipe } from '@ngstarter-ui/components/core';
-import { Icon } from '@ngstarter-ui/components/icon';
+
+type OverviewItem = {
+  routerLink: string;
+  imageUrl: string;
+  name: string;
+};
+
+type OverviewCard = OverviewItem & {
+  imageAlt: string;
+  imageTitle: string;
+};
+
+const imageAltOverrides: Record<string, string> = {
+  Calendar: 'Angular Calendar component month view with event markers',
+  Datepicker: 'Angular Datepicker component calendar overlay screenshot',
+  Notifications: 'Angular Notification feed component example',
+  Table: 'Angular Table component with filtering and pagination'
+};
+
+function withImageMetadata(item: OverviewItem): OverviewCard {
+  const imageAlt = imageAltOverrides[item.name] ?? `Angular ${item.name} component example screenshot`;
+
+  return {
+    ...item,
+    imageAlt,
+    imageTitle: `${item.name} component documentation preview`
+  };
+}
 
 @Component({
   imports: [
     RouterLink,
-    Button,
     Card,
     CardContent,
     CardFooter,
-    Icon,
     OrderByPipe
   ],
   templateUrl: './overview.html',
@@ -74,6 +98,11 @@ export class Overview {
       routerLink: '/forms/button-toggle',
       imageUrl: 'assets/overview/button-toggle.svg',
       name: 'Button Toggle'
+    },
+    {
+      routerLink: '/components/calendar',
+      imageUrl: 'assets/overview/calendar.svg',
+      name: 'Calendar'
     },
     {
       routerLink: '/components/card',
@@ -550,5 +579,5 @@ export class Overview {
       imageUrl: 'assets/overview/visual-builder.svg',
       name: 'Visual Builder'
     }
-  ]);
+  ].map(withImageMetadata));
 }
