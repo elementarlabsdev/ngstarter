@@ -1,19 +1,5 @@
 <div class="px-20 py-10 prose dark:prose-invert max-w-full">
   <h1 class="mat-headline-1">Overview</h1>
-  <section class="docs-landing-link not-prose" aria-labelledby="docs-landing-link-title">
-    <div>
-      <p>NgStarter UI for production Angular apps</p>
-      <h2 id="docs-landing-link-title">Browse the docs, then see the full product</h2>
-      <span>
-        The commercial NgStarter package includes the component source, admin dashboard templates,
-        and support for product teams building Angular applications.
-      </span>
-    </div>
-    <a ngsButton="filled" href="https://ngstarter.com/">
-      Visit NgStarter
-      <ngs-icon name="fluent:arrow-right-24-regular" />
-    </a>
-  </section>
   <div class="flex flex-wrap gap-8 mt-14">
     @for (item of items() | orderBy:'name'; track item) {
       <ngs-card class="overflow-hidden hover:outline-2 hover:outline-primary cursor-pointer"
