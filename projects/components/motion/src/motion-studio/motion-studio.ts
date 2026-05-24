@@ -251,6 +251,7 @@ export class MotionStudio {
   protected readonly selectedLayerIds = signal<string[]>([]);
   protected readonly selectedKeyframe = signal<SelectedKeyframeRef | null>(null);
   protected readonly selectedKeyframes = signal<SelectedKeyframeRef[]>([]);
+  protected readonly selectedAnimationTrack = signal<SelectedAnimationTrackRef | null>(null);
   protected readonly keyframeSnapGuide = signal<KeyframeSnapGuide | null>(null);
   protected readonly alignmentGuides = signal<MotionAlignmentGuide[]>([]);
   protected readonly selectedSceneId = signal<string | null>(null);
@@ -435,6 +436,36 @@ export class MotionStudio {
     { label: 'Lines mask up', value: 'lines-mask-up' },
     { label: 'Chars scale pop', value: 'chars-scale-pop' },
   ];
+  protected readonly effectTiles = computed<MotionEffectTile[]>(() => {
+    const layer = this.selectedLayer();
+    const textTiles: MotionEffectTile[] =
+      layer?.type === 'text' || layer?.type === 'caption'
+        ? this.textEffectPresets.map((preset) => ({
+            id: `text-${preset.value}`,
+            label: preset.label,
+            type: 'text',
+            value: preset.value,
+          }))
+        : [];
+
+    return [
+      { id: 'fade', label: 'Fade', type: 'property', value: 'opacity' },
+      { id: 'slide-y', label: 'Slide Y', type: 'property', value: 'y' },
+      { id: 'slide-x', label: 'Slide X', type: 'property', value: 'x' },
+      { id: 'scale', label: 'Scale', type: 'property', value: 'scale' },
+      { id: 'pulse', label: 'Pulse', type: 'pulse', value: 'scale' },
+      { id: 'rotate', label: 'Rotate', type: 'property', value: 'rotation' },
+      ...textTiles,
+      ...this.animationProperties
+        .filter((property) => !['opacity', 'x', 'y', 'scale', 'rotation'].includes(property.value))
+        .map((property) => ({
+          id: `property-${property.value}`,
+          label: property.label,
+          type: 'property' as const,
+          value: property.value,
+        })),
+    ];
+  });
   protected readonly selectedAnimationPreset = signal<MotionAnimationPresetType>('fade');
   protected readonly animationPresetApplyMode = signal<MotionAnimationApplyMode>('append');
   protected readonly animationPresetApplyModes: Array<{
@@ -783,6 +814,11 @@ export class MotionStudio {
     }
 
     return this.readSelectedKeyframeDetails(ref);
+  });
+  protected readonly selectedAnimationTrackDetails = computed(() => {
+    const ref = this.selectedAnimationTrack();
+
+    return ref ? this.readSelectedAnimationTrackDetails(ref) : null;
   });
   protected readonly selectedKeyframeDetailsList = computed(() =>
     this.selectedKeyframes()
@@ -1492,6 +1528,7 @@ export class MotionStudio {
     this.selectedLayerId.set(layer.id);
     this.selectedLayerIds.set([layer.id]);
     this.selectedKeyframe.set(null);
+    this.selectedAnimationTrack.set(null);
     this.clearSelectedScenes();
     this.selectedTransition.set(null);
   }
@@ -1519,6 +1556,7 @@ export class MotionStudio {
     this.selectedLayerId.set(null);
     this.selectedLayerIds.set([]);
     this.selectedKeyframe.set(null);
+    this.selectedAnimationTrack.set(null);
     this.selectedTransition.set(null);
     this.seek(scene.start);
   }
@@ -3372,6 +3410,14 @@ export class MotionStudio {
 
         this.upsertLayerTextEffectAnimation(layer, { ...preset });
         this.expandLayerAnimationTracks(layer.id);
+        const animationIndex =
+          layer.animations?.findIndex(
+            (animation) => animation.property === TEXT_EFFECT_ANIMATION_PROPERTY,
+          ) ?? -1;
+
+        if (animationIndex >= 0) {
+          this.selectAnimationTrackRef(layer.id, animationIndex);
+        }
       },
       { historyLabel: `Applied ${preset.label} text effect` },
     );
@@ -3434,6 +3480,7 @@ export class MotionStudio {
       },
       { historyLabel: 'Cleared text effect' },
     );
+    this.selectedAnimationTrack.set(null);
   }
 
   private readLayerTextEffectSettings(layer: MotionLayer): Record<string, MotionValue> | null {
@@ -3526,15 +3573,65 @@ export class MotionStudio {
     return Math.max(0, Math.min(latestStart, localTime));
   }
 
+  private readEffectInsertTime(layer: MotionLayer): number {
+    return Math.max(0, Math.min(layer.duration, this.currentTime() - layer.start));
+  }
+
   private expandLayerAnimationTracks(layerId: string): void {
     this.expandedAnimationLayerIds.update((ids) =>
       ids.includes(layerId) ? ids : [...ids, layerId],
     );
   }
 
+  protected addEffectTrack(tile: MotionEffectTile): void {
+    if (tile.type === 'text') {
+      this.applyTextEffectPreset(tile.value as MotionTextEffectPresetId);
+      return;
+    }
+
+    if (tile.type === 'pulse') {
+      this.addPulseEffectTrack(tile.value);
+      return;
+    }
+
+    this.addLayerAnimation(tile.value);
+  }
+
+  private addPulseEffectTrack(property: string): void {
+    this.updateSelectedLayer((layer) => {
+      const startTime = this.readEffectInsertTime(layer);
+      const duration = Math.min(Math.max(100, layer.duration - startTime), 800);
+      const startValue = readLayerAnimationValue(layer, property);
+
+      if (typeof startValue !== 'number') {
+        return;
+      }
+
+      const animation: MotionAnimation = {
+        id: createMotionLayerId('animation'),
+        property,
+        easing: 'easeOutCubic',
+        keyframes: sortKeyframes([
+          { time: startTime, value: startValue },
+          {
+            time: startTime + duration / 2,
+            value: roundMotionNumber(startValue * 1.08, 2),
+            easing: 'easeOutCubic',
+          },
+          { time: startTime + duration, value: startValue, easing: 'easeOutCubic' },
+        ]),
+      };
+
+      layer.animations = [...(layer.animations ?? []), animation];
+      this.expandLayerAnimationTracks(layer.id);
+      this.selectAnimationTrackRef(layer.id, layer.animations.length - 1);
+    });
+  }
+
   protected addLayerAnimation(property: string): void {
     this.updateSelectedLayer((layer) => {
-      const keyframes = createDefaultKeyframes(layer, property);
+      const startTime = this.readEffectInsertTime(layer);
+      const keyframes = createDefaultKeyframes(layer, property, startTime);
 
       layer.animations = [
         ...(layer.animations ?? []),
@@ -3545,6 +3642,8 @@ export class MotionStudio {
           keyframes,
         },
       ];
+      this.expandLayerAnimationTracks(layer.id);
+      this.selectAnimationTrackRef(layer.id, layer.animations.length - 1);
     });
   }
 
@@ -3646,6 +3745,7 @@ export class MotionStudio {
 
       layer.animations = animations.length ? animations : undefined;
     });
+    this.selectedAnimationTrack.set(null);
     this.clearSelectedKeyframes();
   }
 
@@ -3674,6 +3774,7 @@ export class MotionStudio {
         animations[animationIndex],
       ];
       layer.animations = animations;
+      this.selectAnimationTrackRef(layer.id, nextIndex);
     });
     this.clearSelectedKeyframes();
   }
@@ -3694,6 +3795,7 @@ export class MotionStudio {
         }
       }
     });
+    this.selectedAnimationTrack.set(null);
     this.clearSelectedKeyframes();
   }
 
@@ -3719,6 +3821,7 @@ export class MotionStudio {
         }
       }
     });
+    this.selectedAnimationTrack.set(null);
     this.clearSelectedKeyframes();
   }
 
@@ -4417,6 +4520,30 @@ export class MotionStudio {
     );
   }
 
+  protected isAnimationTrackSelected(layer: MotionLayer, animationIndex: number): boolean {
+    const selected = this.selectedAnimationTrack();
+
+    return selected?.layerId === layer.id && selected.animationIndex === animationIndex;
+  }
+
+  protected selectTimelineAnimationTrack(
+    layer: MotionLayer,
+    animationIndex: number,
+    event?: MouseEvent | PointerEvent,
+  ): void {
+    event?.stopPropagation();
+    this.selectedLayerId.set(layer.id);
+    this.selectedLayerIds.set([layer.id]);
+    this.selectAnimationTrackRef(layer.id, animationIndex);
+    this.clearSelectedKeyframes();
+    this.selectedTransition.set(null);
+    this.clearSelectedScenes();
+  }
+
+  private selectAnimationTrackRef(layerId: string, animationIndex: number): void {
+    this.selectedAnimationTrack.set({ layerId, animationIndex });
+  }
+
   protected toggleLayerAnimationTracks(layer: MotionLayer, event?: Event): void {
     event?.stopPropagation();
 
@@ -4438,24 +4565,34 @@ export class MotionStudio {
       return [];
     }
 
-    return (layer.animations ?? []).map((animation, animationIndex) => ({
-      id: `${layer.id}-${this.animationTrackId(animation, animationIndex)}`,
-      animation,
-      animationIndex,
-      markers: animation.keyframes.map((keyframe, keyframeIndex) => {
-        const absoluteTime = layer.start + keyframe.time;
+    const timelineDuration = Math.max(1, this.duration());
 
-        return {
-          id: `${animation.id ?? animation.property}-${animationIndex}-${keyframeIndex}`,
-          animationIndex,
-          keyframeIndex,
-          property: animation.property,
-          time: absoluteTime,
-          localTime: keyframe.time,
-          left: (absoluteTime / Math.max(1, this.duration())) * 100,
-        };
-      }),
-    }));
+    return (layer.animations ?? []).map((animation, animationIndex) => {
+      const bounds = readMotionAnimationBounds(animation, layer.duration);
+
+      return {
+        id: `${layer.id}-${this.animationTrackId(animation, animationIndex)}`,
+        animation,
+        animationIndex,
+        startTime: bounds.start,
+        duration: bounds.duration,
+        left: ((layer.start + bounds.start) / timelineDuration) * 100,
+        width: (bounds.duration / timelineDuration) * 100,
+        markers: animation.keyframes.map((keyframe, keyframeIndex) => {
+          const absoluteTime = layer.start + keyframe.time;
+
+          return {
+            id: `${animation.id ?? animation.property}-${animationIndex}-${keyframeIndex}`,
+            animationIndex,
+            keyframeIndex,
+            property: animation.property,
+            time: absoluteTime,
+            localTime: keyframe.time,
+            left: (absoluteTime / timelineDuration) * 100,
+          };
+        }),
+      };
+    });
   }
 
   protected layerHasTransitions(layer: MotionLayer): boolean {
@@ -4728,6 +4865,7 @@ export class MotionStudio {
 
     this.selectedLayerId.set(layer.id);
     this.selectedLayerIds.set([layer.id]);
+    this.selectAnimationTrackRef(layer.id, animationIndex);
     this.selectedTransition.set(null);
 
     if (event?.shiftKey || event?.metaKey || event?.ctrlKey) {
@@ -5386,6 +5524,42 @@ export class MotionStudio {
     }
 
     this.startTimelineInteraction(layer, event, edge);
+  }
+
+  protected startTimelineAnimationTrackMove(
+    layer: MotionLayer,
+    animationIndex: number,
+    event: PointerEvent,
+  ): void {
+    event.stopPropagation();
+    this.selectTimelineAnimationTrack(layer, animationIndex, event);
+
+    if (layer.locked) {
+      return;
+    }
+
+    this.startTimelineInteraction(layer, event, 'animation-move', animationIndex);
+  }
+
+  protected startTimelineAnimationTrackTrim(
+    layer: MotionLayer,
+    animationIndex: number,
+    edge: TimelineTrimEdge,
+    event: PointerEvent,
+  ): void {
+    event.stopPropagation();
+    this.selectTimelineAnimationTrack(layer, animationIndex, event);
+
+    if (layer.locked) {
+      return;
+    }
+
+    this.startTimelineInteraction(
+      layer,
+      event,
+      edge === 'start' ? 'animation-start' : 'animation-end',
+      animationIndex,
+    );
   }
 
   protected startSceneTimelineMove(scene: MotionScene, event: PointerEvent): void {
@@ -6603,6 +6777,12 @@ export class MotionStudio {
       return;
     }
 
+    const animationBounds =
+      animationIndex !== undefined
+        ? readMotionAnimationBounds(layer.animations?.[animationIndex], layer.duration)
+        : null;
+    const usesAnimationTiming = isTimelineAnimationTrackMode(mode);
+
     this.playing.set(false);
     this.keyframeSnapGuide.set(null);
     this._interactionHistorySnapshot = cloneMotionDocument(this.draft());
@@ -6631,8 +6811,8 @@ export class MotionStudio {
             ? layer.transitions?.out?.duration
             : undefined,
       startClientX: event.clientX,
-      start: layer.start,
-      duration: layer.duration,
+      start: usesAnimationTiming ? (animationBounds?.start ?? 0) : layer.start,
+      duration: usesAnimationTiming ? (animationBounds?.duration ?? 0) : layer.duration,
       timelineRect: timeline.getBoundingClientRect(),
     };
     this.bindPointerListeners();
@@ -7304,6 +7484,11 @@ export class MotionStudio {
       return;
     }
 
+    if (isTimelineAnimationTrackMode(interaction.mode)) {
+      this.continueTimelineAnimationTrackInteraction(interaction, delta);
+      return;
+    }
+
     if (interaction.mode === 'transition-in' || interaction.mode === 'transition-out') {
       this.updateLayer(
         interaction.layerId,
@@ -7643,6 +7828,85 @@ export class MotionStudio {
     );
 
     this.keyframeSnapGuide.set(nextSnapGuide);
+  }
+
+  private continueTimelineAnimationTrackInteraction(
+    interaction: TimelineInteraction,
+    delta: number,
+  ): void {
+    const animationIndex = interaction.animationIndex;
+
+    if (animationIndex === undefined) {
+      return;
+    }
+
+    const minDuration = 100;
+    const snappedDelta = snapTimelineTime(delta);
+
+    this.updateLayer(
+      interaction.layerId,
+      (layer) => {
+        const animation = layer.animations?.[animationIndex];
+
+        if (!animation) {
+          return;
+        }
+
+        const start = interaction.start;
+        const duration = Math.max(0, interaction.duration);
+        const end = start + duration;
+
+        if (interaction.mode === 'animation-move') {
+          const maxStart = Math.max(0, layer.duration - duration);
+          const nextStart = Math.max(
+            0,
+            Math.min(maxStart, snapTimelineTime(Math.max(0, Math.min(maxStart, start + delta)))),
+          );
+
+          shiftMotionAnimationKeyframeTimes(animation, nextStart - start, layer.duration);
+          return;
+        }
+
+        if (interaction.mode === 'animation-start') {
+          const maxStart = Math.max(0, end - minDuration);
+          const nextStart = Math.max(
+            0,
+            Math.min(maxStart, snapTimelineTime(Math.max(0, Math.min(maxStart, start + snappedDelta)))),
+          );
+
+          scaleMotionAnimationKeyframeTimes(
+            animation,
+            start,
+            duration,
+            nextStart,
+            end - nextStart,
+            layer.duration,
+          );
+          return;
+        }
+
+        const minEnd = Math.min(layer.duration, start + minDuration);
+        const nextEnd = Math.max(
+          minEnd,
+          Math.min(
+            layer.duration,
+            snapTimelineTime(Math.max(minEnd, Math.min(layer.duration, end + snappedDelta))),
+          ),
+        );
+
+        scaleMotionAnimationKeyframeTimes(
+          animation,
+          start,
+          duration,
+          start,
+          nextEnd - start,
+          layer.duration,
+        );
+      },
+      { recordHistory: false, transient: true },
+    );
+
+    this.keyframeSnapGuide.set(null);
   }
 
   private endInteraction(): void {
@@ -8351,6 +8615,36 @@ export class MotionStudio {
     }, options);
   }
 
+  private readSelectedAnimationTrackDetails(
+    ref: SelectedAnimationTrackRef,
+  ): SelectedAnimationTrackDetails | null {
+    const layer = findMotionLayer(this.draft().layers, ref.layerId);
+    const animation = layer?.animations?.[ref.animationIndex];
+
+    if (!layer || !animation) {
+      return null;
+    }
+
+    const times = animation.keyframes.map((keyframe) => keyframe.time);
+
+    if (!times.length) {
+      return null;
+    }
+
+    const startTime = Math.min(...times);
+    const endTime = Math.max(...times);
+
+    return {
+      layerId: ref.layerId,
+      layer,
+      animation,
+      animationIndex: ref.animationIndex,
+      startTime,
+      endTime,
+      duration: Math.max(0, endTime - startTime),
+    };
+  }
+
   private updateSelectedScene(
     mutator: (scene: MotionScene) => void,
     options: MotionDocumentUpdateOptions = {},
@@ -8801,6 +9095,12 @@ export class MotionStudio {
 
     if (selectedKeyframe && !findMotionKeyframe(document.layers, selectedKeyframe)) {
       this.selectedKeyframe.set(validSelectedKeyframes[validSelectedKeyframes.length - 1] ?? null);
+    }
+
+    const selectedAnimationTrack = this.selectedAnimationTrack();
+
+    if (selectedAnimationTrack && !this.readSelectedAnimationTrackDetails(selectedAnimationTrack)) {
+      this.selectedAnimationTrack.set(null);
     }
 
     const selectedTransition = this.selectedTransition();
@@ -10405,6 +10705,26 @@ interface SelectedKeyframeDetails extends SelectedKeyframeRef {
   absoluteTime: number;
 }
 
+interface SelectedAnimationTrackRef {
+  layerId: string;
+  animationIndex: number;
+}
+
+interface SelectedAnimationTrackDetails extends SelectedAnimationTrackRef {
+  layer: MotionLayer;
+  animation: MotionAnimation;
+  startTime: number;
+  endTime: number;
+  duration: number;
+}
+
+interface MotionEffectTile {
+  id: string;
+  label: string;
+  type: 'property' | 'text' | 'pulse';
+  value: string;
+}
+
 interface SelectedTransitionRef {
   kind: 'layer' | 'scene';
   targetId: string;
@@ -10749,6 +11069,72 @@ const readTimelineZoomMode = (zoom: number | undefined): TimelineZoomMode => {
   return '4';
 };
 
+const isTimelineAnimationTrackMode = (
+  mode: TimelineInteraction['mode'],
+): mode is TimelineAnimationTrackMode =>
+  mode === 'animation-move' || mode === 'animation-start' || mode === 'animation-end';
+
+const readMotionAnimationBounds = (
+  animation: MotionAnimation | undefined,
+  layerDuration: number,
+): { start: number; end: number; duration: number } => {
+  const times = animation?.keyframes.map((keyframe) => keyframe.time) ?? [];
+
+  if (!times.length) {
+    const duration = Math.min(100, Math.max(0, layerDuration));
+
+    return { start: 0, end: duration, duration };
+  }
+
+  const start = Math.max(0, Math.min(layerDuration, Math.min(...times)));
+  const rawEnd = Math.max(...times);
+  const fallbackEnd = Math.min(layerDuration, start + 100);
+  const end = Math.max(start, Math.min(layerDuration, rawEnd > start ? rawEnd : fallbackEnd));
+
+  return {
+    start,
+    end,
+    duration: Math.max(0, end - start),
+  };
+};
+
+const shiftMotionAnimationKeyframeTimes = (
+  animation: MotionAnimation,
+  delta: number,
+  layerDuration: number,
+): void => {
+  animation.keyframes = sortKeyframes(
+    animation.keyframes.map((keyframe) => ({
+      ...keyframe,
+      time: snapTimelineTime(Math.max(0, Math.min(layerDuration, keyframe.time + delta))),
+    })),
+  );
+};
+
+const scaleMotionAnimationKeyframeTimes = (
+  animation: MotionAnimation,
+  start: number,
+  duration: number,
+  nextStart: number,
+  nextDuration: number,
+  layerDuration: number,
+): void => {
+  const safeDuration = Math.max(1, duration);
+
+  animation.keyframes = sortKeyframes(
+    animation.keyframes.map((keyframe) => {
+      const progress = Math.max(0, Math.min(1, (keyframe.time - start) / safeDuration));
+
+      return {
+        ...keyframe,
+        time: snapTimelineTime(
+          Math.max(0, Math.min(layerDuration, nextStart + progress * nextDuration)),
+        ),
+      };
+    }),
+  );
+};
+
 const normalizeMotionTextEffectPresetId = (
   value: unknown,
 ): MotionTextEffectPresetId | null => {
@@ -10818,13 +11204,17 @@ const isMotionDocumentShape = (value: unknown): value is MotionDocument => {
   );
 };
 
-const createDefaultKeyframes = (layer: MotionLayer, property: string): MotionKeyframe[] => {
+const createDefaultKeyframes = (
+  layer: MotionLayer,
+  property: string,
+  startTime = 0,
+): MotionKeyframe[] => {
   const startValue = readLayerAnimationValue(layer, property);
-  const endTime = Math.min(layer.duration, 800);
+  const endTime = Math.min(layer.duration, startTime + 800);
   const endValue = createDefaultEndValue(layer, property, startValue);
 
   return sortKeyframes([
-    { time: 0, value: startValue },
+    { time: startTime, value: startValue },
     { time: endTime, value: endValue, easing: 'easeOutCubic' },
   ]);
 };
@@ -11325,6 +11715,10 @@ interface TimelineAnimationTrackRow {
   id: string;
   animation: MotionAnimation;
   animationIndex: number;
+  startTime: number;
+  duration: number;
+  left: number;
+  width: number;
   markers: TimelineKeyframeMarker[];
 }
 
@@ -11405,6 +11799,7 @@ interface CanvasBoxSelectionInteraction {
 }
 
 type TimelineTrimEdge = 'start' | 'end';
+type TimelineAnimationTrackMode = 'animation-move' | 'animation-start' | 'animation-end';
 
 interface TimelineInteraction {
   type: 'timeline';
@@ -11413,6 +11808,7 @@ interface TimelineInteraction {
     | 'move'
     | 'keyframe'
     | TimelineTrimEdge
+    | TimelineAnimationTrackMode
     | 'transition-in'
     | 'transition-out'
     | 'audio-fade-in'
