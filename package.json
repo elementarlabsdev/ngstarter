@@ -112,6 +112,7 @@
     "echarts": "^5.5.0",
     "emojibase-data": "^17.0.0",
     "express": "^5.1.0",
+    "gsap": "^3.15.0",
     "iconify-icon": "^3.0.2",
     "konva": "^10.2.3",
     "libphonenumber-js": "^1.11.15",

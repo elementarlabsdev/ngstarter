@@ -206,14 +206,16 @@ export interface MotionLayerSnapshot {
   transform: string;
 }
 
+export const DEFAULT_MOTION_COMPOSITION_DURATION = 5 * 60 * 1000;
+
 export const createDefaultMotionDocument = (): MotionDocument => ({
   version: '0.1',
   composition: {
     width: 1920,
     height: 1080,
     fps: 30,
-    duration: 8000,
-    background: '#111827',
+    duration: DEFAULT_MOTION_COMPOSITION_DURATION,
+    background: '#ffffff',
   },
   assets: [],
   fonts: [],
@@ -249,7 +251,7 @@ export const createDefaultMotionDocument = (): MotionDocument => ({
     gridVisible: true,
     snapToGrid: false,
     gridSize: 80,
-    zoom: 0,
+    zoom: 4,
     previewScale: 1,
   },
   layers: [
@@ -267,7 +269,7 @@ export const createDefaultMotionDocument = (): MotionDocument => ({
         height: 180,
       },
       style: {
-        color: '#ffffff',
+        color: '#111827',
         fontSize: 92,
         fontWeight: 700,
         lineHeight: 1.05,

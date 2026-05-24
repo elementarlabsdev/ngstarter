@@ -1,16 +1,6 @@
 <ngs-panel class="ngs-motion-studio__panel">
   <ngs-panel-header flex class="ngs-motion-studio__header">
     <ngs-toolbar>
-      <ngs-toolbar-title>
-        <div class="ngs-motion-studio__brand">
-          <span>Motion Studio</span>
-          <small
-            >{{ draft().composition.width }}x{{ draft().composition.height }} ·
-            {{ draft().composition.fps }}fps</small
-          >
-        </div>
-      </ngs-toolbar-title>
-
       <button
         ngsIconButton
         type="button"
@@ -74,6 +64,10 @@
       <button ngsButton="outlined" type="button" (click)="addScene()">
         <ngs-icon name="fluent:video-clip-24-regular" />
         New scene
+      </button>
+      <button ngsButton="outlined" type="button" (click)="clearMotionStudioDocument($event)">
+        <ngs-icon name="fluent:eraser-24-regular" />
+        Clear all
       </button>
       <button
         ngsIconButton
@@ -716,7 +710,7 @@
                     </small>
                   </header>
 
-                  <ngs-list class="ngs-motion-studio__storyboard-list">
+                  <ngs-list #storyboardList class="ngs-motion-studio__storyboard-list">
                     @for (scene of scenes(); track scene.id; let index = $index) {
                       <ngs-list-item
                         lines="2"
@@ -724,13 +718,11 @@
                         [class.is-active]="isSceneSelected(scene)"
                         [class.is-current]="isSceneActive(scene)"
                         [class.is-drop-target]="isSceneStoryboardDropTarget(scene)"
+                        [attr.data-motion-scene-drop-id]="scene.id"
                         draggable="true"
                         (click)="selectScene(scene, $event)"
                         (dragstart)="startSceneStoryboardDrag(scene, $event)"
                         (dragend)="finishSceneStoryboardDrag()"
-                        (dragover)="handleSceneStoryboardDragOver(scene, $event)"
-                        (dragleave)="handleSceneStoryboardDragLeave(scene, $event)"
-                        (drop)="dropSceneBefore(scene, $event)"
                         [ngsContextMenuTriggerFor]="sceneContextMenu"
                         (contextmenu)="selectSceneContext(scene, $event)"
                       >
@@ -817,6 +809,7 @@
                     [class.is-muted]="isLayerTreeNodeMuted(node)"
                     [class.is-nested-in-scene]="node.kind === 'layer' && node.scene"
                     [class.is-layer-drop-target]="isLayerSceneDropTarget(node.scene)"
+                    [attr.data-motion-layer-scene-drop-id]="layerTreeNodeDropTargetId(node)"
                     [attr.draggable]="node.kind === 'layer' ? 'true' : null"
                     [ngsContextMenuTriggerFor]="node.kind === 'group' ? sceneContextMenu : layerContextMenu"
                     [cdkTreeNodeTypeaheadLabel]="layerTreeNodeLabel(node)"
@@ -824,9 +817,6 @@
                     (contextmenu)="selectLayerTreeNodeContext(node, $event)"
                     (dragstart)="startLayerTreeNodeDrag(node, $event)"
                     (dragend)="finishLayerSceneDrag()"
-                    (dragover)="handleLayerSceneDragOver(node.scene, $event)"
-                    (dragleave)="handleLayerSceneDragLeave(node.scene, $event)"
-                    (drop)="dropLayerOnScene(node.scene, $event)"
                   >
                     <button
                       ngsIconButton
@@ -856,6 +846,7 @@
                     [class.is-muted]="isLayerTreeNodeMuted(node)"
                     [class.is-nested-in-scene]="node.kind === 'layer' && node.scene"
                     [class.is-layer-drop-target]="isLayerSceneDropTarget(node.scene)"
+                    [attr.data-motion-layer-scene-drop-id]="layerTreeNodeDropTargetId(node)"
                     [attr.draggable]="node.kind === 'layer' ? 'true' : null"
                     [ngsContextMenuTriggerFor]="node.kind === 'group' ? sceneContextMenu : layerContextMenu"
                     [cdkTreeNodeTypeaheadLabel]="layerTreeNodeLabel(node)"
@@ -863,9 +854,6 @@
                     (contextmenu)="selectLayerTreeNodeContext(node, $event)"
                     (dragstart)="startLayerTreeNodeDrag(node, $event)"
                     (dragend)="finishLayerSceneDrag()"
-                    (dragover)="handleLayerSceneDragOver(node.scene, $event)"
-                    (dragleave)="handleLayerSceneDragLeave(node.scene, $event)"
-                    (drop)="dropLayerOnScene(node.scene, $event)"
                   >
                     <button
                       ngsIconButton
@@ -1299,11 +1287,6 @@
             >
         <section class="ngs-motion-studio__preview-toolbar" aria-label="Preview controls">
           <div class="ngs-motion-studio__preview-controls">
-            <ngs-chip-set>
-              <ngs-chip>
-                {{ draft().composition.width }}x{{ draft().composition.height }}
-              </ngs-chip>
-            </ngs-chip-set>
             <ngs-form-field subscriptHiddenIfEmpty class="ngs-motion-studio__preview-scale">
               <ngs-label>Scale</ngs-label>
               <input
@@ -1379,7 +1362,6 @@
           #previewViewport
           class="ngs-motion-studio__canvas-shell"
           aria-label="Preview canvas"
-          (wheel)="handlePreviewWheel($event)"
           (pointerdown)="startCanvasBoxSelect($event)"
         >
           <div class="ngs-motion-studio__canvas-board">
@@ -1397,13 +1379,11 @@
                 [style.--ngs-motion-studio-preview-inverse-scale]="previewInverseScale()"
               >
                 <div
+                  #stageCanvas
                   class="ngs-motion-studio__stage-canvas"
                   [class.is-grid-visible]="gridVisible()"
                   [class.is-preset-drop-target]="draggedPresetId() || draggedAssetId()"
                   [style.background-size]="canvasGridSize()"
-                  (dragover)="handleCanvasLibraryDragOver($event)"
-                  (dragleave)="handleCanvasPresetDragLeave($event)"
-                  (drop)="dropLibraryItemOnCanvas($event)"
                 >
                   <ngs-motion-player
                     [document]="previewDocument()"
@@ -1564,16 +1544,12 @@
                       }
                     </div>
                   }
-                  @if (canvasSelectionBox(); as selectionBox) {
-                    <div
-                      class="ngs-motion-studio__canvas-selection-box"
-                      [style.left.px]="selectionBox.left"
-                      [style.top.px]="selectionBox.top"
-                      [style.width.px]="selectionBox.width"
-                      [style.height.px]="selectionBox.height"
-                      aria-hidden="true"
-                    ></div>
-                  }
+                  <div
+                    #canvasSelectionOverlay
+                    class="ngs-motion-studio__canvas-selection-box"
+                    hidden
+                    aria-hidden="true"
+                  ></div>
                 </div>
               </div>
               </div>
@@ -1595,47 +1571,30 @@
               <strong>Timeline</strong>
               <small>{{ timelineTrackCount() }} tracks · {{ timelineZoomLabel() }}</small>
             </div>
-
-            <div class="ngs-motion-studio__timeline-zoom" aria-label="Timeline zoom">
-              <button ngsButton="outlined" type="button" (click)="setRenderRangeInToPlayhead($event)">
-                In
-              </button>
-              <button ngsButton="outlined" type="button" (click)="setRenderRangeOutToPlayhead($event)">
-                Out
-              </button>
-              <span>Zoom</span>
-              <ngs-segmented
-                size="sm"
-                [value]="timelineZoomMode()"
-                (valueChange)="setTimelineZoom($event)"
-              >
-                @for (option of timelineZoomOptions; track option.value) {
-                  <button ngs-segmented-button type="button" [value]="option.value">
-                    {{ option.label }}
-                  </button>
-                }
-              </ngs-segmented>
-            </div>
           </div>
 
-          <div class="ngs-motion-studio__timeline-scroll" (wheel)="handleTimelineWheel($event)">
+          <div #timelineScroll class="ngs-motion-studio__timeline-scroll">
             <div
+              #timelineGrid
               class="ngs-motion-studio__timeline-grid"
               [class.is-preset-drop-target]="draggedPresetId() || draggedAssetId()"
               [style.width]="timelineGridWidth()"
               (pointerdown)="startTimelineBoxSelect($event)"
               (click)="seekFromTimeline($event)"
-              (dragover)="handleTimelineLibraryDragOver($event)"
-              (dragleave)="handleTimelinePresetDragLeave($event)"
-              (drop)="dropLibraryItemOnTimeline($event)"
             >
               <div class="ngs-motion-studio__track-label ngs-motion-studio__ruler-label">
                 Tracks
               </div>
               <div class="ngs-motion-studio__ruler" (pointerdown)="startPlayheadDrag($event)">
                 @for (tick of timelineTicks(); track tick.time) {
-                  <span class="ngs-motion-studio__tick" [style.left.%]="tick.left">
-                    {{ tick.label }}
+                  <span
+                    class="ngs-motion-studio__tick"
+                    [class.is-minor]="tick.minor"
+                    [style.left.%]="tick.left"
+                  >
+                    @if (tick.label) {
+                      {{ tick.label }}
+                    }
                   </span>
                 }
                 <span class="ngs-motion-studio__playhead" [style.left.%]="playheadPercent()"></span>
@@ -1663,42 +1622,14 @@
                   <small>{{ formatTime(snapGuide.absoluteTime) }}</small>
                 </span>
               }
-              @if (timelineSelectionBox(); as selectionBox) {
-                <span
-                  class="ngs-motion-studio__timeline-selection-box"
-                  [style.left.px]="selectionBox.left"
-                  [style.top.px]="selectionBox.top"
-                  [style.width.px]="selectionBox.width"
-                  [style.height.px]="selectionBox.height"
-                ></span>
-              }
               <span
-                class="ngs-motion-studio__render-range"
-                [style.left]="renderExportRangeLeftStyle()"
-                [style.width]="renderExportRangeWidthStyle()"
-              >
-                <span class="ngs-motion-studio__render-range-label is-start">
-                  {{ renderExportRange().fromFrame }}
-                </span>
-                <span class="ngs-motion-studio__render-range-label is-end">
-                  {{ renderExportRange().toFrame }}
-                </span>
-                <button
-                  type="button"
-                  class="ngs-motion-studio__render-range-handle is-start"
-                  aria-label="Move export in point"
-                  (pointerdown)="startRenderRangeDrag('start', $event)"
-                ></button>
-                <button
-                  type="button"
-                  class="ngs-motion-studio__render-range-handle is-end"
-                  aria-label="Move export out point"
-                  (pointerdown)="startRenderRangeDrag('end', $event)"
-                ></button>
-              </span>
-
-              @if (scenes().length) {
-                @for (scene of scenes(); track scene.id; let sceneIndex = $index) {
+                #timelineSelectionOverlay
+                class="ngs-motion-studio__timeline-selection-box"
+                hidden
+                aria-hidden="true"
+              ></span>
+              @if (sceneTimelineRows().length) {
+                @for (scene of sceneTimelineRows(); track scene.id; let sceneIndex = $index) {
                   <button
                     type="button"
                     class="ngs-motion-studio__track-label ngs-motion-studio__scene-label"
@@ -1716,56 +1647,15 @@
                       class="ngs-motion-studio__scene-clip"
                       [class.is-selected]="isSceneSelected(scene)"
                       [class.is-current]="isSceneActive(scene)"
+                      [attr.data-motion-scene-id]="scene.id"
                       [style.left.%]="sceneLeft(scene)"
                       [style.width.%]="sceneWidth(scene)"
                       [ngsContextMenuTriggerFor]="sceneContextMenu"
                       (pointerdown)="startSceneTimelineMove(scene, $event)"
-                      (click)="selectScene(scene, $event)"
+                      (click)="$event.stopPropagation()"
                       (contextmenu)="selectSceneContext(scene, $event)"
                     >
-                      <span
-                        class="ngs-motion-studio__clip-handle is-start"
-                        (pointerdown)="startSceneTimelineTrim(scene, 'start', $event)"
-                      ></span>
-                      @if (scene.transitionIn) {
-                        <span
-                          class="ngs-motion-studio__transition-zone ngs-motion-studio__scene-transition-zone is-in"
-                          [class.is-selected]="isSceneTransitionSelected(scene, 'in')"
-                          [style.width.%]="sceneTransitionWidth(scene, 'in')"
-                          [title]="'Scene transition in: ' + sceneTransitionTypeValue(scene, 'in')"
-                          [ngsContextMenuTriggerFor]="transitionContextMenu"
-                          (click)="selectSceneTransition(scene, 'in', $event)"
-                          (contextmenu)="selectSceneTransition(scene, 'in', $event)"
-                        >
-                          In
-                          <span
-                            class="ngs-motion-studio__transition-handle is-in"
-                            (pointerdown)="startSceneTransitionTimelineResize(scene, 'in', $event)"
-                          ></span>
-                        </span>
-                      }
-                      @if (scene.transitionOut) {
-                        <span
-                          class="ngs-motion-studio__transition-zone ngs-motion-studio__scene-transition-zone is-out"
-                          [class.is-selected]="isSceneTransitionSelected(scene, 'out')"
-                          [style.width.%]="sceneTransitionWidth(scene, 'out')"
-                          [title]="'Scene transition out: ' + sceneTransitionTypeValue(scene, 'out')"
-                          [ngsContextMenuTriggerFor]="transitionContextMenu"
-                          (click)="selectSceneTransition(scene, 'out', $event)"
-                          (contextmenu)="selectSceneTransition(scene, 'out', $event)"
-                        >
-                          Out
-                          <span
-                            class="ngs-motion-studio__transition-handle is-out"
-                            (pointerdown)="startSceneTransitionTimelineResize(scene, 'out', $event)"
-                          ></span>
-                        </span>
-                      }
                       <span>{{ scene.name || scene.id }}</span>
-                      <span
-                        class="ngs-motion-studio__clip-handle is-end"
-                        (pointerdown)="startSceneTimelineTrim(scene, 'end', $event)"
-                      ></span>
                     </button>
                   </div>
                 }
@@ -1779,39 +1669,6 @@
                   <span>Scenes</span>
                 </button>
                 <div class="ngs-motion-studio__track ngs-motion-studio__scene-track"></div>
-              }
-
-              @if (sceneTransitionRows().length) {
-                <button
-                  type="button"
-                  class="ngs-motion-studio__track-label ngs-motion-studio__transition-track-label"
-                  (click)="$event.stopPropagation()"
-                >
-                  <ngs-icon name="fluent:arrow-swap-24-regular" />
-                  <span>Scene transitions</span>
-                </button>
-                <div class="ngs-motion-studio__track ngs-motion-studio__transition-track">
-                  @for (scene of sceneTransitionRows(); track scene.id) {
-                    @for (segment of sceneTransitionTrackSegments(scene); track $index) {
-                      <button
-                        type="button"
-                        class="ngs-motion-studio__transition-track-segment"
-                        [class.is-in]="segment.edge === 'in'"
-                        [class.is-out]="segment.edge === 'out'"
-                        [class.is-selected]="isSceneTransitionSelected(scene, segment.edge)"
-                        [style.left.%]="segment.left"
-                        [style.width.%]="segment.width"
-                        [title]="(scene.name || scene.id) + ' · ' + segment.label"
-                        [ngsContextMenuTriggerFor]="transitionContextMenu"
-                        (pointerdown)="startSceneTransitionTimelineResize(scene, segment.edge, $event)"
-                        (click)="selectSceneTransition(scene, segment.edge, $event)"
-                        (contextmenu)="selectSceneTransition(scene, segment.edge, $event)"
-                      >
-                        {{ scene.name || scene.id }} · {{ segment.edge }}
-                      </button>
-                    }
-                  }
-                </div>
               }
 
               @for (item of layerTimelineRows(); track item.layer.id) {
@@ -1847,43 +1704,6 @@
                     <ngs-icon [name]="layerIcon(item.layer)" />
                     <span>{{ item.layer.name || item.layer.id }}</span>
                   </button>
-                  <div class="ngs-motion-studio__audio-track-controls">
-                    <button
-                      ngsIconButton
-                      type="button"
-                      [class.is-active]="item.layer.props?.['muted'] === true"
-                      aria-label="Mute audio layer"
-                      (click)="toggleAudioLayerMuted(item.layer, $event)"
-                    >
-                      <ngs-icon name="fluent:dismiss-24-regular" />
-                    </button>
-                    <button
-                      ngsIconButton
-                      type="button"
-                      [class.is-active]="item.layer.props?.['solo'] === true"
-                      aria-label="Solo audio layer"
-                      (click)="toggleAudioLayerSolo(item.layer, $event)"
-                    >
-                      <ngs-icon name="fluent:checkmark-circle-24-regular" />
-                    </button>
-                    <button
-                      ngsIconButton
-                      type="button"
-                      aria-label="Lower audio volume"
-                      (click)="adjustAudioLayerVolume(item.layer, -0.1, $event)"
-                    >
-                      <ngs-icon name="fluent:arrow-down-24-regular" />
-                    </button>
-                    <span>{{ audioVolumeLabel(item.layer) }}</span>
-                    <button
-                      ngsIconButton
-                      type="button"
-                      aria-label="Raise audio volume"
-                      (click)="adjustAudioLayerVolume(item.layer, 0.1, $event)"
-                    >
-                      <ngs-icon name="fluent:arrow-up-24-regular" />
-                    </button>
-                  </div>
                 </div>
                 <div class="ngs-motion-studio__track">
                   <button
@@ -1902,38 +1722,6 @@
                       class="ngs-motion-studio__clip-handle is-start"
                       (pointerdown)="startTimelineTrim(item.layer, 'start', $event)"
                     ></span>
-                    @if (item.layer.transitions?.in) {
-                      <span
-                        class="ngs-motion-studio__transition-zone is-in"
-                        [class.is-selected]="isLayerTransitionSelected(item.layer, 'in')"
-                        [style.width.%]="transitionWidth(item.layer, 'in')"
-                        [ngsContextMenuTriggerFor]="transitionContextMenu"
-                        (click)="selectLayerTransition(item.layer, 'in', $event)"
-                        (contextmenu)="selectLayerTransition(item.layer, 'in', $event)"
-                      >
-                        In
-                        <span
-                          class="ngs-motion-studio__transition-handle is-in"
-                          (pointerdown)="startLayerTransitionTimelineResize(item.layer, 'in', $event)"
-                        ></span>
-                      </span>
-                    }
-                    @if (item.layer.transitions?.out) {
-                      <span
-                        class="ngs-motion-studio__transition-zone is-out"
-                        [class.is-selected]="isLayerTransitionSelected(item.layer, 'out')"
-                        [style.width.%]="transitionWidth(item.layer, 'out')"
-                        [ngsContextMenuTriggerFor]="transitionContextMenu"
-                        (click)="selectLayerTransition(item.layer, 'out', $event)"
-                        (contextmenu)="selectLayerTransition(item.layer, 'out', $event)"
-                      >
-                        Out
-                        <span
-                          class="ngs-motion-studio__transition-handle is-out"
-                          (pointerdown)="startLayerTransitionTimelineResize(item.layer, 'out', $event)"
-                        ></span>
-                      </span>
-                    }
                     @if (item.layer.type === 'audio') {
                       <span
                         class="ngs-motion-studio__audio-fade is-in"
@@ -2005,38 +1793,6 @@
                     }
                   }
                 </div>
-
-                @if (layerHasTransitions(item.layer)) {
-                  <button
-                    type="button"
-                    class="ngs-motion-studio__track-label ngs-motion-studio__transition-track-label"
-                    [class.is-selected]="isLayerSelected(item.layer)"
-                    (click)="selectLayer(item.layer, $event); $event.stopPropagation()"
-                  >
-                    <ngs-icon name="fluent:arrow-swap-24-regular" />
-                    <span>Transitions</span>
-                  </button>
-                  <div class="ngs-motion-studio__track ngs-motion-studio__transition-track">
-                    @for (segment of layerTransitionTrackSegments(item.layer); track segment.id) {
-                      <button
-                        type="button"
-                        class="ngs-motion-studio__transition-track-segment"
-                        [class.is-in]="segment.edge === 'in'"
-                        [class.is-out]="segment.edge === 'out'"
-                        [class.is-selected]="isLayerTransitionSelected(item.layer, segment.edge)"
-                        [style.left.%]="segment.left"
-                        [style.width.%]="segment.width"
-                        [title]="segment.label"
-                        [ngsContextMenuTriggerFor]="transitionContextMenu"
-                        (pointerdown)="startLayerTransitionTimelineResize(item.layer, segment.edge, $event)"
-                        (click)="selectLayerTransition(item.layer, segment.edge, $event)"
-                        (contextmenu)="selectLayerTransition(item.layer, segment.edge, $event)"
-                      >
-                        {{ segment.edge }}
-                      </button>
-                    }
-                  </div>
-                }
 
                 @for (track of layerAnimationTrackRows(item.layer); track track.id) {
                   <button
@@ -2368,6 +2124,70 @@
                     (input)="setLayerCaptionText($any($event.target).value)"
                   ></textarea>
                 </ngs-form-field>
+              }
+
+              @if (layer.type === 'text' || layer.type === 'caption') {
+                <div class="ngs-motion-studio__field-grid">
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Text effect</ngs-label>
+                    <ngs-select
+                      [value]="selectedTextEffectType(layer)"
+                      (selectionChange)="setLayerTextEffect($event.value)"
+                    >
+                      <ngs-option value="none">None</ngs-option>
+                      @for (preset of textEffectPresets; track preset.value) {
+                        <ngs-option [value]="preset.value">{{ preset.label }}</ngs-option>
+                      }
+                    </ngs-select>
+                  </ngs-form-field>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Effect duration</ngs-label>
+                    <input
+                      ngsInput
+                      type="number"
+                      min="100"
+                      step="50"
+                      [value]="textEffectNumber(layer, 'duration')"
+                      (input)="setLayerTextEffectNumber('duration', $any($event.target).value)"
+                    />
+                  </ngs-form-field>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Stagger</ngs-label>
+                    <input
+                      ngsInput
+                      type="number"
+                      min="0"
+                      step="5"
+                      [value]="textEffectNumber(layer, 'stagger')"
+                      (input)="setLayerTextEffectNumber('stagger', $any($event.target).value)"
+                    />
+                  </ngs-form-field>
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Distance</ngs-label>
+                    <input
+                      ngsInput
+                      type="number"
+                      min="0"
+                      step="4"
+                      [value]="textEffectNumber(layer, 'distance')"
+                      (input)="setLayerTextEffectNumber('distance', $any($event.target).value)"
+                    />
+                  </ngs-form-field>
+                </div>
+                <div class="ngs-motion-studio__animation-presets">
+                  @for (preset of textEffectPresets; track preset.value) {
+                    <button
+                      ngsButton="outlined"
+                      type="button"
+                      (click)="applyTextEffectPreset(preset.value, $event)"
+                    >
+                      {{ preset.label }}
+                    </button>
+                  }
+                  <button ngsButton="outlined" type="button" (click)="clearLayerTextEffect($event)">
+                    Clear effect
+                  </button>
+                </div>
               }
 
               @if (layer.type === 'path' || layer.type === 'svg') {
@@ -3802,29 +3622,15 @@
                 />
               </ngs-form-field>
 
-              <div class="grid grid-cols-2 gap-3">
-                <ngs-form-field subscriptHiddenIfEmpty>
-                  <ngs-label>Start</ngs-label>
-                  <input
-                    ngsInput
-                    type="number"
-                    min="0"
-                    step="100"
-                    [value]="scene.start"
-                    (input)="setSceneNumber('start', $any($event.target).value)"
-                  />
-                </ngs-form-field>
-                <ngs-form-field subscriptHiddenIfEmpty>
-                  <ngs-label>Duration</ngs-label>
-                  <input
-                    ngsInput
-                    type="number"
-                    min="100"
-                    step="100"
-                    [value]="scene.duration"
-                    (input)="setSceneNumber('duration', $any($event.target).value)"
-                  />
-                </ngs-form-field>
+              <div class="ngs-motion-studio__scene-bounds">
+                <span>
+                  <small>Start</small>
+                  <strong>{{ formatTime(scene.start) }}</strong>
+                </span>
+                <span>
+                  <small>Duration</small>
+                  <strong>{{ formatTime(scene.duration) }}</strong>
+                </span>
               </div>
             </section>
               </ngs-expansion-panel>
@@ -4294,7 +4100,6 @@
                 >
                   <ngs-option [value]="'document'">Full document</ngs-option>
                   <ngs-option [value]="'scene'">Selected scene</ngs-option>
-                  <ngs-option [value]="'custom'">Custom</ngs-option>
                 </ngs-select>
               </ngs-form-field>
 
@@ -4309,28 +4114,6 @@
                     <ngs-option [value]="scene.id">{{ scene.name || scene.id }}</ngs-option>
                   }
                 </ngs-select>
-              </ngs-form-field>
-
-              <ngs-form-field subscriptHiddenIfEmpty>
-                <ngs-label>From frame</ngs-label>
-                <input
-                  ngsInput
-                  type="number"
-                  min="0"
-                  [value]="renderExportPlan().options.fromFrame"
-                  (input)="setRenderExportFromFrame($any($event.target).valueAsNumber)"
-                />
-              </ngs-form-field>
-
-              <ngs-form-field subscriptHiddenIfEmpty>
-                <ngs-label>To frame</ngs-label>
-                <input
-                  ngsInput
-                  type="number"
-                  min="0"
-                  [value]="renderExportPlan().options.toFrame"
-                  (input)="setRenderExportToFrame($any($event.target).valueAsNumber)"
-                />
               </ngs-form-field>
 
               <ngs-form-field subscriptHiddenIfEmpty>

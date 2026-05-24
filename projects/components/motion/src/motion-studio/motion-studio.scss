@@ -24,18 +24,6 @@
   background: var(--ngs-color-surface);
 }
 
-.ngs-motion-studio__brand {
-  display: grid;
-  gap: 2px;
-}
-
-.ngs-motion-studio__brand span {
-  color: var(--ngs-color-text);
-  font-size: var(--ngs-font-size-sm);
-  font-weight: 650;
-}
-
-.ngs-motion-studio__brand small,
 .ngs-motion-studio__timeline-toolbar small,
 .ngs-motion-studio__preview-toolbar span,
 .ngs-motion-studio__inspector-section small,
@@ -644,17 +632,6 @@
   font-weight: 650;
 }
 
-.ngs-motion-studio__timeline-zoom {
-  display: flex;
-  align-items: center;
-  gap: --spacing(1.5);
-}
-
-.ngs-motion-studio__timeline-zoom > span {
-  color: var(--ngs-motion-studio-muted);
-  font-size: var(--ngs-font-size-xs);
-}
-
 .ngs-motion-studio__timeline-scroll {
   min-width: 0;
   min-height: 0;
@@ -726,6 +703,12 @@
   background: rgb(15 23 42 / 7%);
 }
 
+.ngs-motion-studio__tick.is-minor::before {
+  top: 22px;
+  height: 10px;
+  background: rgb(15 23 42 / 5%);
+}
+
 .ngs-motion-studio__playhead {
   position: absolute;
   z-index: 24;
@@ -760,69 +743,6 @@
   background: var(--ngs-motion-studio-playhead);
   box-shadow: 0 0 0 1px rgb(239 68 68 / 18%);
   translate: -50% 0;
-}
-
-.ngs-motion-studio__render-range {
-  position: absolute;
-  z-index: 5;
-  top: 34px;
-  bottom: 0;
-  pointer-events: none;
-  background: color-mix(in srgb, var(--ngs-color-primary) 8%, transparent);
-  border-inline: 2px solid var(--ngs-color-primary);
-}
-
-.ngs-motion-studio__render-range-handle {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 12px;
-  padding: 0;
-  pointer-events: auto;
-  cursor: ew-resize;
-  background: transparent;
-  border: 0;
-}
-
-.ngs-motion-studio__render-range-handle::before {
-  position: absolute;
-  top: 6px;
-  left: 50%;
-  width: 10px;
-  height: 10px;
-  content: '';
-  background: var(--ngs-color-primary);
-  border-radius: 999px;
-  translate: -50% 0;
-}
-
-.ngs-motion-studio__render-range-handle.is-start {
-  left: -7px;
-}
-
-.ngs-motion-studio__render-range-handle.is-end {
-  right: -7px;
-}
-
-.ngs-motion-studio__render-range-label {
-  position: absolute;
-  top: 4px;
-  z-index: 1;
-  padding: 1px --spacing(1);
-  color: var(--ngs-color-on-primary);
-  background: var(--ngs-color-primary);
-  border-radius: var(--ngs-radius-sm);
-  font-size: var(--ngs-font-size-xs);
-  line-height: 1.2;
-  pointer-events: none;
-}
-
-.ngs-motion-studio__render-range-label.is-start {
-  left: 4px;
-}
-
-.ngs-motion-studio__render-range-label.is-end {
-  right: 4px;
 }
 
 .ngs-motion-studio__keyframe-snap-guide {
@@ -1060,34 +980,8 @@
 }
 
 .ngs-motion-studio__audio-track-label {
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
   padding-right: --spacing(1);
-}
-
-.ngs-motion-studio__audio-track-controls {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 2px;
-  min-width: 0;
-}
-
-.ngs-motion-studio__audio-track-controls button[ngsIconButton] {
-  width: 22px;
-  min-width: 22px;
-  height: 22px;
-}
-
-.ngs-motion-studio__audio-track-controls button[ngsIconButton].is-active {
-  color: var(--ngs-color-primary);
-  background: color-mix(in srgb, var(--ngs-color-primary) 12%, transparent);
-}
-
-.ngs-motion-studio__audio-track-controls > span {
-  min-width: 34px;
-  color: var(--ngs-motion-studio-muted);
-  font-size: 10px;
-  text-align: center;
 }
 
 .ngs-motion-studio__audio-section-track,
@@ -2264,6 +2158,36 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: --spacing(3);
+}
+
+.ngs-motion-studio__scene-bounds {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: --spacing(2);
+}
+
+.ngs-motion-studio__scene-bounds > span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: --spacing(2);
+  background: color-mix(in srgb, var(--ngs-color-primary) 5%, #fff);
+  border: 1px solid color-mix(in srgb, var(--ngs-color-primary) 16%, transparent);
+  border-radius: var(--ngs-radius-sm);
+}
+
+.ngs-motion-studio__scene-bounds small {
+  font-size: 10px;
+  line-height: 1.1;
+}
+
+.ngs-motion-studio__scene-bounds strong {
+  overflow: hidden;
+  color: var(--ngs-color-text);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-overflow: ellipsis;
 }
 
 .ngs-motion-studio__inline-options {

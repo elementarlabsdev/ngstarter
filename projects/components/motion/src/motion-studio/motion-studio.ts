@@ -5,10 +5,12 @@ import {
   ElementRef,
   effect,
   HostListener,
+  NgZone,
   inject,
   input,
   output,
   signal,
+  untracked,
   viewChild,
 } from '@angular/core';
 import { NgStyle, NgTemplateOutlet } from '@angular/common';
@@ -97,6 +99,7 @@ import {
   MotionStyle,
   MotionTransition,
   MotionValue,
+  DEFAULT_MOTION_COMPOSITION_DURATION,
   createDefaultMotionDocument,
   validateMotionDocument,
 } from '../schema/motion-document';
@@ -109,6 +112,8 @@ import {
 import { MOTION_PRESETS, MotionPreset } from '../presets/motion-presets';
 import { MotionPlayer } from '../motion-player/motion-player';
 import { MotionRenderer } from '../motion-renderer/motion-renderer';
+import { animationFrameScheduler, fromEvent, merge } from 'rxjs';
+import { auditTime, take, takeUntil, tap } from 'rxjs/operators';
 import {
   createMotionRenderCliCommand,
   createMotionRenderDocument,
@@ -208,6 +213,7 @@ import { MOTION_RENDER_RUNNER, MotionRenderRunnerHandle } from '../render/motion
   },
 })
 export class MotionStudio {
+  private readonly _zone = inject(NgZone);
   private readonly _renderRunner = inject(MOTION_RENDER_RUNNER, { optional: true });
   private _renderHandle: MotionRenderRunnerHandle | null = null;
   private _renderBatchCancelled = false;
@@ -216,7 +222,7 @@ export class MotionStudio {
   readonly initialPreviewScale = input<number | null>(null);
   readonly previewScaleMin = input(0.25);
   readonly previewScaleMax = input(2);
-  readonly previewScaleStep = input(0.1);
+  readonly previewScaleStep = input(0.05);
   readonly localStorageKey = input<string | null>(null);
   readonly documentChange = output<MotionDocument>();
   readonly renderRequest = output<MotionRenderRequest>();
@@ -230,9 +236,8 @@ export class MotionStudio {
   protected readonly selectedKeyframes = signal<SelectedKeyframeRef[]>([]);
   protected readonly keyframeSnapGuide = signal<KeyframeSnapGuide | null>(null);
   protected readonly alignmentGuides = signal<MotionAlignmentGuide[]>([]);
-  protected readonly canvasSelectionBox = signal<MotionCanvasSelectionBox | null>(null);
-  protected readonly timelineSelectionBox = signal<TimelineSelectionBox | null>(null);
   protected readonly selectedSceneId = signal<string | null>(null);
+  protected readonly selectedSceneIds = signal<string[]>([]);
   protected readonly selectedTransition = signal<SelectedTransitionRef | null>(null);
   protected readonly layerSearch = signal('');
   protected readonly expandedAnimationLayerIds = signal<string[]>([]);
@@ -383,6 +388,7 @@ export class MotionStudio {
     { label: 'Width', value: 'width' },
     { label: 'Height', value: 'height' },
     { label: 'Font size', value: 'fontSize' },
+    { label: 'Line height', value: 'lineHeight' },
     { label: 'Color', value: 'color' },
     { label: 'Background', value: 'background' },
     { label: 'Fill', value: 'fill' },
@@ -399,6 +405,18 @@ export class MotionStudio {
     { label: 'Pop', value: 'pop', category: 'entrance' },
     { label: 'Pulse', value: 'pulse', category: 'emphasis' },
     { label: 'Count up', value: 'countUp', category: 'text' },
+  ];
+  protected readonly textEffectPresets: Array<{
+    label: string;
+    value: MotionTextEffectPresetId;
+  }> = [
+    { label: 'Chars slide up', value: 'chars-slide-up' },
+    { label: 'Words fade up', value: 'words-fade-up' },
+    { label: 'PrepareText words', value: 'prepare-text-words' },
+    { label: 'Masked letters', value: 'split-text-masked-letters' },
+    { label: 'Chars blur in', value: 'chars-blur-in' },
+    { label: 'Lines mask up', value: 'lines-mask-up' },
+    { label: 'Chars scale pop', value: 'chars-scale-pop' },
   ];
   protected readonly animationPresetGroups: Array<{
     label: string;
@@ -485,25 +503,16 @@ export class MotionStudio {
     { label: 'Blur', value: 'blur' },
   ];
   protected readonly transitionEdges: MotionTransitionEdge[] = ['in', 'out'];
-  protected readonly timelineZoomOptions: Array<{ label: string; value: TimelineZoomMode }> = [
-    { label: 'Fit', value: 'fit' },
-    { label: '1x', value: '1' },
-    { label: '2x', value: '2' },
-    { label: '4x', value: '4' },
-  ];
 
   protected readonly duration = computed(() => this.draft().composition.duration);
-  protected readonly timelineZoomMode = signal<TimelineZoomMode>('fit');
-  protected readonly timelineZoomScale = computed(() =>
-    this.timelineZoomMode() === 'fit' ? 1 : Number(this.timelineZoomMode()),
-  );
-  protected readonly timelineZoomLabel = computed(() =>
-    this.timelineZoomMode() === 'fit' ? 'Fit' : `${this.timelineZoomMode()}x`,
-  );
+  protected readonly timelineZoomMode = signal<TimelineZoomMode>('4');
+  protected readonly timelineZoomScale = computed(() => Number(this.timelineZoomMode()));
+  protected readonly timelineZoomLabel = computed(() => `${this.timelineZoomMode()}x`);
   protected readonly layers = computed(() => flattenMotionLayers(this.draft().layers));
   protected readonly scenes = computed(() =>
     [...(this.draft().scenes ?? [])].sort((a, b) => a.start - b.start),
   );
+  protected readonly sceneTimelineRows = computed(() => this.draft().scenes ?? []);
   protected readonly timelineRows = computed(() =>
     [...this.layers()].sort((a, b) => (b.layer.zIndex ?? 0) - (a.layer.zIndex ?? 0)),
   );
@@ -521,15 +530,11 @@ export class MotionStudio {
       (total, item) => total + this.layerAnimationTrackRows(item.layer).length,
       0,
     );
-    const transitionTracks = this.layerTimelineRows().filter((item) =>
-      this.layerHasTransitions(item.layer),
-    ).length;
-    const sceneTracks = Math.max(1, this.scenes().length) + (this.sceneTransitionRows().length ? 1 : 0);
+    const sceneTracks = Math.max(1, this.scenes().length);
 
     return (
       sceneTracks +
       this.layerTimelineRows().length +
-      transitionTracks +
       animationTracks +
       this.audioTimelineRows().length
     );
@@ -630,20 +635,33 @@ export class MotionStudio {
   );
   protected readonly timelineTicks = computed(() => {
     const duration = Math.max(1, this.duration());
-    const tickCount = Math.min(
-      64,
-      Math.max(4, Math.ceil(duration / (1000 / this.timelineZoomScale())) + 1),
-    );
+    const interval = readTimelineTickInterval(this.timelineZoomScale(), duration);
+    const ticks: Array<{ time: number; label: string; left: number; minor: boolean }> = [];
 
-    return Array.from({ length: tickCount }, (_, index) => {
-      const time = (duration / Math.max(1, tickCount - 1)) * index;
+    for (let time = 0; time < duration; time += interval) {
+      const isWholeSecond = time % 1000 === 0;
+      const minor = interval < 1000 && !isWholeSecond;
 
-      return {
+      ticks.push({
         time,
-        label: this.formatTime(time),
+        label: minor ? '' : this.formatTimelineTime(time),
         left: (time / duration) * 100,
-      };
-    });
+        minor,
+      });
+    }
+
+    const lastTick = ticks[ticks.length - 1];
+
+    if (!lastTick || lastTick.time !== duration) {
+      ticks.push({
+        time: duration,
+        label: this.formatTimelineTime(duration),
+        left: 100,
+        minor: false,
+      });
+    }
+
+    return ticks;
   });
   protected readonly playheadPercent = computed(() => {
     const duration = Math.max(1, this.duration());
@@ -654,34 +672,8 @@ export class MotionStudio {
     () =>
       `calc(${TIMELINE_LABEL_WIDTH}px + (${this.playheadPercent()} * (100% - ${TIMELINE_LABEL_WIDTH}px) / 100))`,
   );
-  protected readonly renderExportRangeLeft = computed(() => {
-    const range = this.renderExportRange();
-    const duration = Math.max(1, this.duration());
-
-    return (range.fromTime / duration) * 100;
-  });
-  protected readonly renderExportRangeWidth = computed(() => {
-    const range = this.renderExportRange();
-    const duration = Math.max(1, this.duration());
-
-    return ((range.toTime - range.fromTime) / duration) * 100;
-  });
-  protected readonly renderExportRangeLeftStyle = computed(
-    () =>
-      `calc(${TIMELINE_LABEL_WIDTH}px + (${this.renderExportRangeLeft()} * (100% - ${TIMELINE_LABEL_WIDTH}px) / 100))`,
-  );
-  protected readonly renderExportRangeWidthStyle = computed(
-    () =>
-      `calc(${this.renderExportRangeWidth()} * (100% - ${TIMELINE_LABEL_WIDTH}px) / 100)`,
-  );
   protected readonly timelineGridWidth = computed(() => {
-    const mode = this.timelineZoomMode();
-
-    if (mode === 'fit') {
-      return '100%';
-    }
-
-    const width = TIMELINE_LABEL_WIDTH + TIMELINE_BODY_MIN_WIDTH * Number(mode);
+    const width = TIMELINE_LABEL_WIDTH + TIMELINE_BODY_MIN_WIDTH * this.timelineZoomScale();
 
     return `max(100%, ${width}px)`;
   });
@@ -903,8 +895,6 @@ export class MotionStudio {
   protected readonly renderExportOutput = signal<MotionStudioRenderOutput>('video');
   protected readonly renderExportFps = signal<number | null>(null);
   protected readonly renderExportRangeMode = signal<MotionRenderRangeMode>('document');
-  protected readonly renderExportFromFrame = signal(0);
-  protected readonly renderExportToFrame = signal<number | null>(null);
   protected readonly renderExportFrameStep = signal(1);
   protected readonly renderExportScale = signal(1);
   protected readonly selectedRenderExportPreset = signal<MotionExportPresetId>('mp4-1080');
@@ -974,8 +964,6 @@ export class MotionStudio {
       mode: this.renderExportRangeMode(),
       sceneId: this.selectedSceneId(),
       fps,
-      fromFrame: this.renderExportFromFrame(),
-      toFrame: this.renderExportToFrame(),
     });
   });
   protected readonly renderExportRequest = computed(() =>
@@ -1064,7 +1052,6 @@ export class MotionStudio {
     | CanvasBoxSelectionInteraction
     | TimelineInteraction
     | SceneTimelineInteraction
-    | RenderRangeInteraction
     | TimelineBoxSelectionInteraction
     | PlayheadInteraction
     | null = null;
@@ -1072,6 +1059,8 @@ export class MotionStudio {
   private _removeInteractionListeners: (() => void) | null = null;
   private _interactionHistorySnapshot: MotionDocument | null = null;
   private _lastEmittedDocumentSignature: string | null = null;
+  private _initialInputDocumentSignature: string | null = null;
+  private _loadedStoredDraftSignature: string | null = null;
   private _hasSyncedExternalDocument = false;
   private _hasLoadedStoredDraft = false;
   private _skipNextKeyframeClick = false;
@@ -1079,11 +1068,42 @@ export class MotionStudio {
   private readonly _previewViewport = viewChild('previewViewport', {
     read: ElementRef<HTMLElement>,
   });
+  private readonly _stageCanvas = viewChild('stageCanvas', {
+    read: ElementRef<HTMLElement>,
+  });
+  private readonly _timelineScroll = viewChild('timelineScroll', {
+    read: ElementRef<HTMLElement>,
+  });
+  private readonly _timelineGrid = viewChild('timelineGrid', {
+    read: ElementRef<HTMLElement>,
+  });
+  private readonly _storyboardList = viewChild('storyboardList', {
+    read: ElementRef<HTMLElement>,
+  });
+  private readonly _layerTree = viewChild('layerTree', {
+    read: ElementRef<HTMLElement>,
+  });
+  private readonly _canvasSelectionOverlay = viewChild('canvasSelectionOverlay', {
+    read: ElementRef<HTMLElement>,
+  });
+  private readonly _timelineSelectionOverlay = viewChild('timelineSelectionOverlay', {
+    read: ElementRef<HTMLElement>,
+  });
 
   private readonly _syncDocument = effect(() => {
-    const document = this.readInitialDraftDocument(this.document() ?? createDefaultMotionDocument());
+    const inputDocument = cloneMotionDocument(this.document() ?? createDefaultMotionDocument());
+    const inputSignature = serializeMotionDocument(inputDocument);
+    this._initialInputDocumentSignature ??= inputSignature;
+
+    const storedDocument = this.readInitialDraftDocument();
+
+    if (!storedDocument && this.shouldKeepLoadedStoredDraft(inputSignature)) {
+      return;
+    }
+
+    const document = storedDocument ?? inputDocument;
     const next = cloneMotionDocument(document);
-    const nextSignature = serializeMotionDocument(next);
+    const nextSignature = storedDocument ? serializeMotionDocument(next) : inputSignature;
     const isLocalEcho = this._lastEmittedDocumentSignature === nextSignature;
 
     if (!isLocalEcho && this._hasSyncedExternalDocument) {
@@ -1094,7 +1114,7 @@ export class MotionStudio {
     }
 
     this._hasSyncedExternalDocument = true;
-    this.syncDraftDocument(next);
+    untracked(() => this.syncDraftDocument(next));
   });
 
   private readonly _observePreviewViewport = effect((onCleanup) => {
@@ -1129,6 +1149,74 @@ export class MotionStudio {
 
     observer.observe(viewport.nativeElement);
     onCleanup(() => observer.disconnect());
+  });
+
+  private readonly _bindPreviewWheel = effect((onCleanup) => {
+    const viewport = this._previewViewport();
+
+    if (!viewport) {
+      return;
+    }
+
+    this.bindWheelListener(
+      viewport.nativeElement,
+      (event) => this.handlePreviewWheel(event),
+      onCleanup,
+    );
+  });
+
+  private readonly _bindTimelineWheel = effect((onCleanup) => {
+    const scroll = this._timelineScroll();
+
+    if (!scroll) {
+      return;
+    }
+
+    this.bindWheelListener(
+      scroll.nativeElement,
+      (event) => this.handleTimelineWheel(event),
+      onCleanup,
+    );
+  });
+
+  private readonly _bindCanvasLibraryDropZone = effect((onCleanup) => {
+    const stage = this._stageCanvas();
+
+    if (!stage) {
+      return;
+    }
+
+    this.bindLibraryDropZone(stage.nativeElement, 'canvas', onCleanup);
+  });
+
+  private readonly _bindTimelineLibraryDropZone = effect((onCleanup) => {
+    const timeline = this._timelineGrid();
+
+    if (!timeline) {
+      return;
+    }
+
+    this.bindLibraryDropZone(timeline.nativeElement, 'timeline', onCleanup);
+  });
+
+  private readonly _bindSceneStoryboardDragSurface = effect((onCleanup) => {
+    const storyboard = this._storyboardList();
+
+    if (!storyboard) {
+      return;
+    }
+
+    this.bindSceneStoryboardDragSurface(storyboard.nativeElement, onCleanup);
+  });
+
+  private readonly _bindLayerSceneDragSurface = effect((onCleanup) => {
+    const tree = this._layerTree();
+
+    if (!tree) {
+      return;
+    }
+
+    this.bindLayerSceneDragSurface(tree.nativeElement, onCleanup);
   });
 
   private readonly _syncAutoPreviewScale = effect(() => {
@@ -1395,7 +1483,7 @@ export class MotionStudio {
     this.selectedLayerId.set(layer.id);
     this.selectedLayerIds.set([layer.id]);
     this.selectedKeyframe.set(null);
-    this.selectedSceneId.set(null);
+    this.clearSelectedScenes();
     this.selectedTransition.set(null);
   }
 
@@ -1411,9 +1499,14 @@ export class MotionStudio {
     return this.selectedLayerIds().includes(layer.id);
   }
 
-  protected selectScene(scene: MotionScene, event?: Event): void {
+  protected selectScene(scene: MotionScene, event?: MouseEvent | PointerEvent): void {
     event?.stopPropagation();
-    this.selectedSceneId.set(scene.id);
+    if (event?.shiftKey || event?.metaKey || event?.ctrlKey) {
+      this.toggleSceneSelection(scene);
+      return;
+    }
+
+    this.setSelectedScenes([scene.id], scene.id);
     this.selectedLayerId.set(null);
     this.selectedLayerIds.set([]);
     this.selectedKeyframe.set(null);
@@ -1422,7 +1515,7 @@ export class MotionStudio {
   }
 
   protected isSceneSelected(scene: MotionScene): boolean {
-    return this.selectedSceneId() === scene.id;
+    return this.selectedSceneIds().includes(scene.id);
   }
 
   protected isSceneActive(scene: MotionScene | null): boolean {
@@ -1467,7 +1560,7 @@ export class MotionStudio {
       },
       { historyLabel: `Assigned ${selectedIds.length} layer${selectedIds.length === 1 ? '' : 's'} to scene` },
     );
-    this.selectedSceneId.set(scene.id);
+    this.setSelectedScenes([scene.id], scene.id);
   }
 
   protected removeSelectedLayersFromScene(scene: MotionScene, event?: Event): void {
@@ -2185,41 +2278,6 @@ export class MotionStudio {
     return this.audioVolumeLabel(layer);
   }
 
-  protected toggleAudioLayerMuted(layer: MotionLayer, event?: Event): void {
-    event?.stopPropagation();
-    this.selectLayer(layer);
-    this.updateLayer(layer.id, (nextLayer) => {
-      nextLayer.props = {
-        ...(nextLayer.props ?? {}),
-        muted: nextLayer.props?.['muted'] !== true,
-      };
-    });
-  }
-
-  protected toggleAudioLayerSolo(layer: MotionLayer, event?: Event): void {
-    event?.stopPropagation();
-    this.selectLayer(layer);
-    this.updateLayer(layer.id, (nextLayer) => {
-      nextLayer.props = {
-        ...(nextLayer.props ?? {}),
-        solo: nextLayer.props?.['solo'] !== true,
-      };
-    });
-  }
-
-  protected adjustAudioLayerVolume(layer: MotionLayer, delta: number, event?: Event): void {
-    event?.stopPropagation();
-    this.selectLayer(layer);
-    this.updateLayer(layer.id, (nextLayer) => {
-      const volume = Math.max(0, Math.min(2, coerceNumber(nextLayer.props?.['volume'] ?? 1) + delta));
-
-      nextLayer.props = {
-        ...(nextLayer.props ?? {}),
-        volume: roundMotionNumber(volume, 2),
-      };
-    });
-  }
-
   protected clearLayerMediaSource(): void {
     this.updateSelectedLayer((layer) => {
       const props = { ...(layer.props ?? {}) };
@@ -2451,11 +2509,45 @@ export class MotionStudio {
         document.composition.duration,
         readSceneSequenceDuration(document.scenes),
       );
-      this.selectedSceneId.set(scene.id);
+      this.setSelectedScenes([scene.id], scene.id);
       this.selectedLayerId.set(null);
       this.selectedLayerIds.set([]);
       this.selectedKeyframe.set(null);
     });
+  }
+
+  protected clearMotionStudioDocument(event?: Event): void {
+    event?.stopPropagation();
+    this.playing.set(false);
+    this.currentTime.set(0);
+    this.playbackRange.set(null);
+    this.selectedLayerId.set(null);
+    this.selectedLayerIds.set([]);
+    this.clearSelectedScenes();
+    this.clearSelectedKeyframes();
+    this.selectedTransition.set(null);
+    this.editingTextLayerId.set(null);
+    this.draggedPresetId.set(null);
+    this.draggedAssetId.set(null);
+    this.draggedSceneId.set(null);
+    this.draggedLayerSceneItem.set(null);
+
+    this.updateDocument(
+      (document) => {
+        const blankDocument = createBlankMotionDocument(document);
+
+        document.version = blankDocument.version;
+        document.composition = blankDocument.composition;
+        document.assets = blankDocument.assets;
+        document.fonts = blankDocument.fonts;
+        document.tracks = blankDocument.tracks;
+        document.scenes = blankDocument.scenes;
+        document.editor = blankDocument.editor;
+        document.layers = blankDocument.layers;
+        delete document.metadata;
+      },
+      { historyLabel: 'Cleared document' },
+    );
   }
 
   protected removeSelectedScene(): void {
@@ -2468,12 +2560,12 @@ export class MotionStudio {
     this.updateDocument((document) => {
       document.scenes = (document.scenes ?? []).filter((scene) => scene.id !== sceneId);
     });
-    this.selectedSceneId.set(null);
+    this.clearSelectedScenes();
   }
 
   protected removeScene(scene: MotionScene, event?: Event): void {
     event?.stopPropagation();
-    this.selectedSceneId.set(scene.id);
+    this.setSelectedScenes([scene.id], scene.id);
     this.removeSelectedScene();
   }
 
@@ -2507,7 +2599,7 @@ export class MotionStudio {
         document.composition.duration,
         readSceneSequenceDuration(document.scenes),
       );
-      this.selectedSceneId.set(nextScene.id);
+      this.setSelectedScenes([nextScene.id], nextScene.id);
       this.selectedLayerId.set(null);
       this.selectedLayerIds.set([]);
       this.selectedKeyframe.set(null);
@@ -2703,6 +2795,10 @@ export class MotionStudio {
     return node.item.layer.name || node.item.layer.id;
   }
 
+  protected layerTreeNodeDropTargetId(node: LayerPanelTreeNode): string {
+    return readLayerSceneDropTargetId(node.scene);
+  }
+
   protected isLayerTreeNodeActive(node: LayerPanelTreeNode): boolean {
     if (node.kind === 'group') {
       return !!node.scene && this.isSceneSelected(node.scene);
@@ -2863,7 +2959,7 @@ export class MotionStudio {
         }
       }
 
-      this.selectedSceneId.set(targetSceneId);
+      this.setSelectedScenes(targetSceneId ? [targetSceneId] : [], targetSceneId);
       this.selectedLayerId.set(layerId);
       this.selectedLayerIds.set([layerId]);
       this.selectedKeyframe.set(null);
@@ -3184,7 +3280,7 @@ export class MotionStudio {
   }
 
   protected setLayerLineHeight(value: unknown): void {
-    const nextValue = Math.max(0.1, coerceNumber(value));
+    const nextValue = roundMotionNumber(Math.max(0.1, coerceNumber(value)), 2);
 
     this.updateSelectedLayer((layer) => {
       layer.style = {
@@ -3212,6 +3308,86 @@ export class MotionStudio {
         textAlign: value,
       };
     });
+  }
+
+  protected selectedTextEffectType(layer: MotionLayer): MotionTextEffectPresetId | 'none' {
+    return normalizeMotionTextEffectPresetId(layer.props?.['textEffect']) ?? 'none';
+  }
+
+  protected textEffectNumber(
+    layer: MotionLayer,
+    property: 'duration' | 'delay' | 'stagger' | 'distance',
+  ): number {
+    const effect = readMotionTextEffectProps(layer.props?.['textEffect']);
+    const preset = normalizeMotionTextEffectPresetId(effect) ?? 'chars-slide-up';
+    const fallback = MOTION_STUDIO_TEXT_EFFECT_PRESETS[preset][property];
+
+    return Math.max(0, coerceNumber(effect?.[property] ?? fallback));
+  }
+
+  protected setLayerTextEffect(value: string): void {
+    const type = normalizeMotionTextEffectPresetId(value);
+
+    if (!type) {
+      this.clearLayerTextEffect();
+      return;
+    }
+
+    this.applyTextEffectPreset(type);
+  }
+
+  protected applyTextEffectPreset(type: MotionTextEffectPresetId, event?: Event): void {
+    event?.stopPropagation();
+    const preset = MOTION_STUDIO_TEXT_EFFECT_PRESETS[type];
+
+    this.updateSelectedLayer(
+      (layer) => {
+        if (layer.type !== 'text' && layer.type !== 'caption') {
+          return;
+        }
+
+        layer.props = {
+          ...(layer.props ?? {}),
+          textEffect: { ...preset },
+        };
+      },
+      { historyLabel: `Applied ${preset.label} text effect` },
+    );
+  }
+
+  protected setLayerTextEffectNumber(
+    property: 'duration' | 'delay' | 'stagger' | 'distance',
+    value: unknown,
+  ): void {
+    const nextValue = Math.max(0, coerceNumber(value));
+
+    this.updateSelectedLayer((layer) => {
+      const type = normalizeMotionTextEffectPresetId(layer.props?.['textEffect']) ?? 'chars-slide-up';
+      const preset = MOTION_STUDIO_TEXT_EFFECT_PRESETS[type];
+
+      layer.props = {
+        ...(layer.props ?? {}),
+        textEffect: {
+          ...preset,
+          ...readMotionTextEffectProps(layer.props?.['textEffect']),
+          type,
+          [property]: nextValue,
+        },
+      };
+    });
+  }
+
+  protected clearLayerTextEffect(event?: Event): void {
+    event?.stopPropagation();
+    this.updateSelectedLayer(
+      (layer) => {
+        const props = { ...(layer.props ?? {}) };
+
+        delete props['textEffect'];
+        layer.props = props;
+      },
+      { historyLabel: 'Cleared text effect' },
+    );
   }
 
   protected addLayerAnimation(property: string): void {
@@ -3404,6 +3580,11 @@ export class MotionStudio {
         if (layer) {
           layer.animations = undefined;
           layer.transitions = undefined;
+          if (layer.props?.['textEffect']) {
+            const props = { ...layer.props };
+            delete props['textEffect'];
+            layer.props = props;
+          }
         }
       }
     });
@@ -3555,7 +3736,7 @@ export class MotionStudio {
     }
 
     this.setSelectedKeyframeRefs(nextRefs);
-    this.selectedSceneId.set(null);
+    this.clearSelectedScenes();
     this.selectedLayerIds.set(uniqueStrings(nextRefs.map((ref) => ref.layerId)));
     this.selectedLayerId.set(nextRefs[nextRefs.length - 1].layerId);
   }
@@ -4175,7 +4356,7 @@ export class MotionStudio {
     event?.stopPropagation();
     this.selectedLayerId.set(layer.id);
     this.selectedLayerIds.set([layer.id]);
-    this.selectedSceneId.set(null);
+    this.clearSelectedScenes();
     this.clearSelectedKeyframes();
     this.selectedTransition.set({ kind: 'layer', targetId: layer.id, edge });
   }
@@ -4186,7 +4367,7 @@ export class MotionStudio {
     event?: Event,
   ): void {
     event?.stopPropagation();
-    this.selectedSceneId.set(scene.id);
+    this.setSelectedScenes([scene.id], scene.id);
     this.selectedLayerId.set(null);
     this.selectedLayerIds.set([]);
     this.clearSelectedKeyframes();
@@ -4207,7 +4388,7 @@ export class MotionStudio {
       return;
     }
 
-    this.selectedSceneId.set(selected.targetId);
+    this.setSelectedScenes([selected.targetId], selected.targetId);
     this.previewSceneTransition(selected.edge);
   }
 
@@ -4418,7 +4599,7 @@ export class MotionStudio {
       this.setSelectedKeyframeRefs([ref]);
     }
 
-    this.selectedSceneId.set(null);
+    this.clearSelectedScenes();
   }
 
   protected startTimelineKeyframeMove(
@@ -4450,7 +4631,7 @@ export class MotionStudio {
       this.setSelectedKeyframeRefs([...refs, ref]);
       this.selectedLayerId.set(layer.id);
       this.selectedLayerIds.set([layer.id]);
-      this.selectedSceneId.set(null);
+      this.clearSelectedScenes();
       this._skipNextKeyframeClick = true;
     } else {
       this.selectTimelineKeyframe(layer, animationIndex, keyframeIndex, event);
@@ -4490,48 +4671,6 @@ export class MotionStudio {
     this.bindPointerListeners();
   }
 
-  protected startRenderRangeDrag(edge: TimelineTrimEdge, event: PointerEvent): void {
-    const timeline = (event.currentTarget as HTMLElement).closest(
-      '.ngs-motion-studio__timeline-grid',
-    ) as HTMLElement | null;
-
-    if (!timeline) {
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-    this.renderExportRangeMode.set('custom');
-    this._interactionMoved = false;
-    this._interaction = {
-      type: 'render-range',
-      edge,
-      timelineElement: timeline,
-      startClientX: event.clientX,
-      startClientY: event.clientY,
-    };
-    this.continueRenderRangeInteraction(this._interaction, event);
-    this.bindPointerListeners();
-  }
-
-  protected setRenderRangeInToPlayhead(event?: Event): void {
-    event?.stopPropagation();
-    const frame = this.timeToFrame(this.currentTime());
-
-    this.renderExportRangeMode.set('custom');
-    this.renderExportFromFrame.set(frame);
-    this.renderExportJob.set(null);
-  }
-
-  protected setRenderRangeOutToPlayhead(event?: Event): void {
-    event?.stopPropagation();
-    const frame = this.timeToFrame(this.currentTime());
-
-    this.renderExportRangeMode.set('custom');
-    this.renderExportToFrame.set(frame);
-    this.renderExportJob.set(null);
-  }
-
   protected startTimelineBoxSelect(event: PointerEvent): void {
     if (event.button !== 0 || isTimelineBoxSelectionBlockedTarget(event.target)) {
       return;
@@ -4549,6 +4688,7 @@ export class MotionStudio {
     this.playing.set(false);
     this.keyframeSnapGuide.set(null);
     this._interactionMoved = false;
+    this.updateTimelineSelectionOverlay(null);
     this._interaction = {
       type: 'timeline-box-select',
       timelineElement: timeline,
@@ -4557,6 +4697,9 @@ export class MotionStudio {
       startClientY: event.clientY,
       additive: event.shiftKey || event.metaKey || event.ctrlKey,
       startRefs: this.selectedKeyframes(),
+      startSceneIds: this.selectedSceneIds(),
+      pendingRefs: [],
+      pendingSceneIds: [],
       hasMoved: false,
     };
     this.bindPointerListeners();
@@ -4622,7 +4765,7 @@ export class MotionStudio {
   protected solidBackgroundColor(): string {
     const background = this.compositionBackground().trim();
 
-    return isSolidCssColor(background) ? background : '#111827';
+    return isSolidCssColor(background) ? background : '#ffffff';
   }
 
   protected setCompositionBackground(value: unknown): void {
@@ -4718,24 +4861,20 @@ export class MotionStudio {
     this.setPreviewScale(this.previewScale() + direction * step);
   }
 
-  protected setTimelineZoom(value: string): void {
-    const mode = normalizeTimelineZoomMode(value);
-
-    this.setEditorSettings({ zoom: mode === 'fit' ? 0 : Number(mode) });
-  }
-
   protected handleTimelineWheel(event: WheelEvent): void {
     if (!event.metaKey && !event.ctrlKey) {
       return;
     }
 
     event.preventDefault();
-    const modes: TimelineZoomMode[] = ['fit', '1', '2', '4'];
-    const currentIndex = Math.max(0, modes.indexOf(this.timelineZoomMode()));
+    const currentIndex = Math.max(0, TIMELINE_ZOOM_MODES.indexOf(this.timelineZoomMode()));
     const direction = event.deltaY < 0 ? 1 : -1;
-    const nextIndex = Math.max(0, Math.min(modes.length - 1, currentIndex + direction));
+    const nextIndex = Math.max(
+      0,
+      Math.min(TIMELINE_ZOOM_MODES.length - 1, currentIndex + direction),
+    );
 
-    this.setTimelineZoom(modes[nextIndex]);
+    this.setEditorSettings({ zoom: Number(TIMELINE_ZOOM_MODES[nextIndex]) });
   }
 
   protected selectLayerContext(layer: MotionLayer, event?: Event): void {
@@ -5015,9 +5154,9 @@ export class MotionStudio {
     this.finishTextEdit();
     this.playing.set(false);
     this.canvasInteractionType.set('canvas-box-select');
-    this.canvasSelectionBox.set(null);
+    this.updateCanvasSelectionOverlay(null);
     this.clearSelectedKeyframes();
-    this.selectedSceneId.set(null);
+    this.clearSelectedScenes();
     this.selectedTransition.set(null);
     this._interactionMoved = false;
     this._interaction = {
@@ -5027,6 +5166,7 @@ export class MotionStudio {
       startClientY: event.clientY,
       additive: event.shiftKey || event.metaKey || event.ctrlKey,
       startLayerIds: this.selectedLayerIds(),
+      pendingLayerIds: [],
       hasMoved: false,
     };
     this.bindPointerListeners();
@@ -5063,7 +5203,7 @@ export class MotionStudio {
       this.selectLayer(layer);
     } else {
       this.selectedLayerId.set(layer.id);
-      this.selectedSceneId.set(null);
+      this.clearSelectedScenes();
       this.clearSelectedKeyframes();
     }
 
@@ -5091,7 +5231,24 @@ export class MotionStudio {
 
   protected startSceneTimelineMove(scene: MotionScene, event: PointerEvent): void {
     event.stopPropagation();
-    this.selectScene(scene, event);
+
+    if (event.shiftKey || event.metaKey || event.ctrlKey) {
+      this.toggleSceneSelection(scene, { seek: false });
+      this._suppressNextTimelineClick = true;
+      event.preventDefault();
+      return;
+    }
+
+    if (!this.isSceneSelected(scene)) {
+      this.selectSceneForTimeline(scene);
+    } else {
+      this.setSelectedScenes(this.selectedSceneIds(), scene.id);
+      this.selectedLayerId.set(null);
+      this.selectedLayerIds.set([]);
+      this.clearSelectedKeyframes();
+      this.selectedTransition.set(null);
+    }
+
     this.startSceneTimelineInteraction(scene, event, 'move');
   }
 
@@ -5220,6 +5377,14 @@ export class MotionStudio {
     return `${minutes}:${seconds.toString().padStart(2, '0')}.${frames.toString().padStart(2, '0')}`;
   }
 
+  protected formatTimelineTime(time: number): string {
+    const totalSeconds = Math.max(0, Math.floor(time / 1000));
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  }
+
   protected removeSelectedLayer(): void {
     this.removeLayers(this.selectedLayerIds());
   }
@@ -5276,7 +5441,6 @@ export class MotionStudio {
 
   protected openRenderExportDrawer(drawer: Drawer): void {
     this.renderExportStatus.set('');
-    this.renderExportToFrame.set(this.renderExportPlan().options.toFrame);
     drawer.open();
   }
 
@@ -5301,7 +5465,7 @@ export class MotionStudio {
     this.renderExportBatchScenes.set(false);
 
     if (preset.rangeMode === 'scene' && !this.selectedSceneId() && this.scenes()[0]) {
-      this.selectedSceneId.set(this.scenes()[0].id);
+      this.setSelectedScenes([this.scenes()[0].id], this.scenes()[0].id);
     }
 
     this.renderExportJob.set(null);
@@ -5310,12 +5474,10 @@ export class MotionStudio {
   protected setRenderExportRangeMode(event: SelectChange): void {
     const value = `${event.value}`;
 
-    this.renderExportRangeMode.set(
-      value === 'scene' || value === 'custom' ? value : 'document',
-    );
+    this.renderExportRangeMode.set(value === 'scene' ? value : 'document');
 
     if (value === 'scene' && !this.selectedSceneId() && this.scenes()[0]) {
-      this.selectedSceneId.set(this.scenes()[0].id);
+      this.setSelectedScenes([this.scenes()[0].id], this.scenes()[0].id);
     }
 
     this.renderExportJob.set(null);
@@ -5328,7 +5490,7 @@ export class MotionStudio {
       return;
     }
 
-    this.selectedSceneId.set(scene.id);
+    this.setSelectedScenes([scene.id], scene.id);
     this.renderExportRangeMode.set('scene');
     this.renderExportJob.set(null);
   }
@@ -5352,7 +5514,7 @@ export class MotionStudio {
       return;
     }
 
-    this.selectedSceneId.set(scene.id);
+    this.setSelectedScenes([scene.id], scene.id);
     this.renderExportRangeMode.set('scene');
     this.renderExportBatchScenes.set(false);
     this.renderExportStatus.set(`${scene.name || scene.id} is selected for export.`);
@@ -5361,18 +5523,6 @@ export class MotionStudio {
 
   protected setRenderExportFps(value: number): void {
     this.renderExportFps.set(Number.isFinite(value) && value > 0 ? value : null);
-    this.renderExportJob.set(null);
-  }
-
-  protected setRenderExportFromFrame(value: number): void {
-    this.renderExportFromFrame.set(Math.max(0, Math.round(value || 0)));
-    this.renderExportRangeMode.set('custom');
-    this.renderExportJob.set(null);
-  }
-
-  protected setRenderExportToFrame(value: number): void {
-    this.renderExportToFrame.set(Number.isFinite(value) ? Math.max(0, Math.round(value)) : null);
-    this.renderExportRangeMode.set('custom');
     this.renderExportJob.set(null);
   }
 
@@ -5898,7 +6048,7 @@ export class MotionStudio {
         document.composition.duration,
         readSceneSequenceDuration(document.scenes),
       );
-      this.selectedSceneId.set(insertedScene.id);
+      this.setSelectedScenes([insertedScene.id], insertedScene.id);
       this.selectedLayerId.set(null);
       this.selectedLayerIds.set([]);
       this.selectedKeyframe.set(null);
@@ -5942,7 +6092,7 @@ export class MotionStudio {
         document.composition.duration,
         readSceneSequenceDuration(document.scenes),
       );
-      this.selectedSceneId.set(targetScene.id);
+      this.setSelectedScenes([targetScene.id], targetScene.id);
       this.selectedLayerId.set(null);
       this.selectedLayerIds.set([]);
       this.selectedKeyframe.set(null);
@@ -6147,6 +6297,7 @@ export class MotionStudio {
   private toggleLayerSelection(layer: MotionLayer): void {
     const selectedIds = this.selectedLayerIds();
     this.selectedKeyframe.set(null);
+    this.clearSelectedScenes();
 
     if (selectedIds.includes(layer.id)) {
       const nextSelectedIds = selectedIds.filter((id) => id !== layer.id);
@@ -6159,6 +6310,54 @@ export class MotionStudio {
     this.selectedLayerIds.set([...selectedIds, layer.id]);
     this.selectedLayerId.set(layer.id);
     this.selectedTransition.set(null);
+  }
+
+  private setSelectedScenes(
+    sceneIds: string[],
+    primarySceneId: string | null = sceneIds[sceneIds.length - 1] ?? null,
+  ): void {
+    const nextIds = uniqueStrings(sceneIds);
+
+    this.selectedSceneIds.set(nextIds);
+    this.selectedSceneId.set(
+      primarySceneId && nextIds.includes(primarySceneId)
+        ? primarySceneId
+        : nextIds[nextIds.length - 1] ?? null,
+    );
+  }
+
+  private clearSelectedScenes(): void {
+    this.selectedSceneIds.set([]);
+    this.selectedSceneId.set(null);
+  }
+
+  private selectSceneForTimeline(scene: MotionScene): void {
+    this.setSelectedScenes([scene.id], scene.id);
+    this.selectedLayerId.set(null);
+    this.selectedLayerIds.set([]);
+    this.clearSelectedKeyframes();
+    this.selectedTransition.set(null);
+  }
+
+  private toggleSceneSelection(scene: MotionScene, options: { seek?: boolean } = {}): void {
+    const selectedIds = this.selectedSceneIds();
+
+    this.selectedLayerId.set(null);
+    this.selectedLayerIds.set([]);
+    this.clearSelectedKeyframes();
+    this.selectedTransition.set(null);
+
+    if (selectedIds.includes(scene.id)) {
+      const nextSelectedIds = selectedIds.filter((id) => id !== scene.id);
+      this.setSelectedScenes(nextSelectedIds);
+      return;
+    }
+
+    this.setSelectedScenes([...selectedIds, scene.id], scene.id);
+
+    if (options.seek !== false) {
+      this.seek(scene.start);
+    }
   }
 
   private startCanvasInteraction(
@@ -6285,6 +6484,7 @@ export class MotionStudio {
     this.keyframeSnapGuide.set(null);
     this._interactionHistorySnapshot = cloneMotionDocument(this.draft());
     this._interactionMoved = false;
+    const sceneGroup = mode === 'move' ? this.createSceneTimelineDragEntries(scene) : undefined;
     this._interaction = {
       type: 'scene-timeline',
       sceneId: scene.id,
@@ -6292,6 +6492,10 @@ export class MotionStudio {
       startClientX: event.clientX,
       start: scene.start,
       duration: scene.duration,
+      sceneGroup,
+      sceneLayerGroup: sceneGroup
+        ? this.createSceneTimelineLayerDragEntries(sceneGroup)
+        : undefined,
       transitionDuration:
         mode === 'transition-in'
           ? scene.transitionIn?.duration
@@ -6352,6 +6556,77 @@ export class MotionStudio {
       }));
   }
 
+  private createSceneTimelineDragEntries(scene: MotionScene): SceneTimelineDragEntry[] {
+    const selectedIds = this.selectedSceneIds();
+    const sceneIds =
+      selectedIds.length > 1 && selectedIds.includes(scene.id) ? selectedIds : [scene.id];
+
+    return sceneIds
+      .map((sceneId) => this.draft().scenes?.find((item) => item.id === sceneId))
+      .filter((item): item is MotionScene => !!item)
+      .map((item) => ({
+        sceneId: item.id,
+        start: item.start,
+        duration: item.duration,
+        lead: item.id === scene.id,
+      }));
+  }
+
+  private createSceneTimelineLayerDragEntries(
+    sceneGroup: SceneTimelineDragEntry[],
+  ): SceneTimelineLayerDragEntry[] {
+    const scenes = this.draft().scenes ?? [];
+    const selectedScenes = sceneGroup
+      .map((entry) => scenes.find((scene) => scene.id === entry.sceneId))
+      .filter((scene): scene is MotionScene => !!scene);
+
+    return uniqueStrings(
+      this.layers()
+        .filter(({ layer }) => selectedScenes.some((scene) => sceneContainsLayer(scene, layer.id)))
+        .map(({ layer }) => layer.id),
+    )
+      .map((layerId) => findMotionLayer(this.draft().layers, layerId))
+      .filter((layer): layer is MotionLayer => !!layer)
+      .map((layer) => ({
+        layerId: layer.id,
+        start: layer.start,
+        duration: layer.duration,
+        lead: false,
+      }));
+  }
+
+  private moveSceneTimelineScenes(
+    document: MotionDocument,
+    entries: SceneTimelineDragEntry[],
+    delta: number,
+  ): void {
+    for (const entry of entries) {
+      const scene = document.scenes?.find((item) => item.id === entry.sceneId);
+
+      if (!scene) {
+        continue;
+      }
+
+      scene.start = snapTimelineTime(entry.start + delta);
+    }
+  }
+
+  private moveSceneTimelineLayers(
+    document: MotionDocument,
+    entries: SceneTimelineLayerDragEntry[],
+    delta: number,
+  ): void {
+    for (const entry of entries) {
+      const layer = findMotionLayer(document.layers, entry.layerId);
+
+      if (!layer) {
+        continue;
+      }
+
+      layer.start = snapTimelineTime(entry.start + delta);
+    }
+  }
+
   private continueInteraction(event: PointerEvent): void {
     const interaction = this._interaction;
 
@@ -6371,8 +6646,6 @@ export class MotionStudio {
       this.continueTimelineInteraction(interaction, event);
     } else if (interaction.type === 'scene-timeline') {
       this.continueSceneTimelineInteraction(interaction, event);
-    } else if (interaction.type === 'render-range') {
-      this.continueRenderRangeInteraction(interaction, event);
     } else {
       this.continueCanvasInteraction(interaction, event);
     }
@@ -6384,7 +6657,6 @@ export class MotionStudio {
       | CanvasBoxSelectionInteraction
       | TimelineInteraction
       | SceneTimelineInteraction
-      | RenderRangeInteraction
       | TimelineBoxSelectionInteraction
       | PlayheadInteraction,
     event: PointerEvent,
@@ -6449,7 +6721,7 @@ export class MotionStudio {
         layer.layout = normalized;
         layer.animations = shiftMotionLayoutAnimations(interaction.startAnimations, layoutDelta);
       },
-      { recordHistory: false },
+      { recordHistory: false, transient: true },
     );
   }
 
@@ -6481,8 +6753,8 @@ export class MotionStudio {
       ? uniqueStrings([...interaction.startLayerIds, ...selectedLayerIds])
       : selectedLayerIds;
 
-    this.canvasSelectionBox.set(box);
-    this.applyCanvasBoxSelection(nextLayerIds);
+    interaction.pendingLayerIds = nextLayerIds;
+    this.updateCanvasSelectionOverlay(box);
   }
 
   private applyCanvasAlignmentGuides(layout: MotionLayout, layerId: string): void {
@@ -6783,25 +7055,6 @@ export class MotionStudio {
     this.seekFromTimelineElement(event.clientX, interaction.timelineElement);
   }
 
-  private continueRenderRangeInteraction(
-    interaction: RenderRangeInteraction,
-    event: PointerEvent,
-  ): void {
-    const time = this.snapRenderExportRangeTime(
-      this.timelineRatioFromElement(event.clientX, interaction.timelineElement) * this.duration(),
-    );
-    const frame = this.timeToFrame(time);
-    const range = this.renderExportRange();
-
-    if (interaction.edge === 'start') {
-      this.renderExportFromFrame.set(Math.min(frame, range.toFrame));
-    } else {
-      this.renderExportToFrame.set(Math.max(frame, range.fromFrame));
-    }
-
-    this.renderExportJob.set(null);
-  }
-
   private continueTimelineBoxSelection(
     interaction: TimelineBoxSelectionInteraction,
     event: PointerEvent,
@@ -6827,12 +7080,20 @@ export class MotionStudio {
       event.clientY,
     );
     const selectedRefs = this.findKeyframesInTimelineSelectionBox(interaction.timelineElement, box);
+    const selectedSceneIds = this.findScenesInTimelineSelectionBox(
+      interaction.timelineElement,
+      box,
+    );
     const nextRefs = interaction.additive
       ? uniqueSelectedKeyframes([...interaction.startRefs, ...selectedRefs])
       : selectedRefs;
+    const nextSceneIds = interaction.additive
+      ? uniqueStrings([...interaction.startSceneIds, ...selectedSceneIds])
+      : selectedSceneIds;
 
-    this.timelineSelectionBox.set(box);
-    this.applyTimelineBoxSelection(nextRefs);
+    interaction.pendingRefs = nextRefs;
+    interaction.pendingSceneIds = nextSceneIds;
+    this.updateTimelineSelectionOverlay(box);
   }
 
   private continueTimelineInteraction(interaction: TimelineInteraction, event: PointerEvent): void {
@@ -6865,7 +7126,7 @@ export class MotionStudio {
             },
           };
         },
-        { recordHistory: false },
+        { recordHistory: false, transient: true },
       );
       this.keyframeSnapGuide.set(null);
       return;
@@ -6890,7 +7151,7 @@ export class MotionStudio {
             Math.min(interaction.duration, snapTimelineTime((interaction.fadeOut ?? 0) - delta)),
           );
         },
-        { recordHistory: false },
+        { recordHistory: false, transient: true },
       );
       this.keyframeSnapGuide.set(null);
       return;
@@ -6931,7 +7192,7 @@ export class MotionStudio {
             layer.start = snapTimelineTime(entry.start + nextDelta);
           }
         },
-        { recordHistory: false },
+        { recordHistory: false, transient: true },
       );
       this.keyframeSnapGuide.set(snapGuide);
       return;
@@ -6943,10 +7204,7 @@ export class MotionStudio {
         if (interaction.mode === 'move') {
           const desiredStart = Math.max(
             0,
-            Math.min(
-              this.duration() - layer.duration,
-              interaction.start + delta,
-            ),
+            Math.min(this.duration() - layer.duration, interaction.start + delta),
           );
           const snapped = this.snapTimelineEdgeTime(desiredStart, {
             ignoredLayerId: interaction.layerId,
@@ -6989,7 +7247,7 @@ export class MotionStudio {
         );
         snapGuide = snappedEnd.guide;
       },
-      { recordHistory: false },
+      { recordHistory: false, transient: true },
     );
 
     this.keyframeSnapGuide.set(snapGuide);
@@ -7029,19 +7287,23 @@ export class MotionStudio {
         }
 
         if (interaction.mode === 'move') {
-          const desiredStart = Math.max(
-            0,
-            Math.min(
-              Math.max(0, document.composition.duration - scene.duration),
-              interaction.start + delta,
-            ),
+          const sceneGroup = interaction.sceneGroup ?? [
+            {
+              sceneId: interaction.sceneId,
+              start: interaction.start,
+              duration: interaction.duration,
+              lead: true,
+            },
+          ];
+          const sceneLayerGroup = interaction.sceneLayerGroup ?? [];
+          const nextDelta = clampTimelineSceneGroupDelta(
+            sceneGroup,
+            document.composition.duration,
+            delta,
           );
-          const snapped = this.snapTimelineEdgeTime(desiredStart, {
-            ignoredSceneId: interaction.sceneId,
-          });
-
-          scene.start = snapped.time;
-          snapGuide = snapped.guide;
+          this.moveSceneTimelineScenes(document, sceneGroup, nextDelta);
+          this.moveSceneTimelineLayers(document, sceneLayerGroup, nextDelta);
+          snapGuide = null;
           return;
         }
 
@@ -7079,7 +7341,7 @@ export class MotionStudio {
         );
         snapGuide = snappedEnd.guide;
       },
-      { recordHistory: false },
+      { recordHistory: false, transient: true },
     );
 
     this.keyframeSnapGuide.set(snapGuide);
@@ -7181,7 +7443,7 @@ export class MotionStudio {
 
         this.setSelectedKeyframeRefs(nextRefs);
       },
-      { recordHistory: false },
+      { recordHistory: false, transient: true },
     );
 
     this.keyframeSnapGuide.set(nextSnapGuide);
@@ -7191,29 +7453,42 @@ export class MotionStudio {
     const interaction = this._interaction;
 
     if (interaction?.type === 'canvas-box-select') {
-      this.canvasSelectionBox.set(null);
+      this.updateCanvasSelectionOverlay(null);
 
-      if (!interaction.hasMoved) {
+      if (interaction.hasMoved) {
+        this.applyCanvasBoxSelection(interaction.pendingLayerIds);
+      } else {
         this.finishTextEditAndClearSelection();
       }
     }
 
     if (interaction?.type === 'timeline-box-select') {
-      this.timelineSelectionBox.set(null);
+      this.updateTimelineSelectionOverlay(null);
       this._suppressNextTimelineClick = interaction.hasMoved;
+
+      if (interaction.hasMoved) {
+        this.applyTimelineBoxSelection(interaction.pendingRefs, interaction.pendingSceneIds);
+      }
     }
 
     if (
       this._interactionMoved &&
       interaction &&
       (interaction.type === 'timeline' ||
-        interaction.type === 'scene-timeline' ||
-        interaction.type === 'render-range')
+        interaction.type === 'scene-timeline')
     ) {
       this._suppressNextTimelineClick = true;
     }
 
+    const shouldEmitInteractionDocument =
+      !!interaction && this._interactionMoved && interactionMutatesDocument(interaction);
+
     this.commitInteractionHistory();
+
+    if (shouldEmitInteractionDocument) {
+      this.emitDraftDocument();
+    }
+
     this._interaction = null;
     this._interactionMoved = false;
     this.canvasInteractionType.set(null);
@@ -7228,17 +7503,277 @@ export class MotionStudio {
       return;
     }
 
-    const move = (event: PointerEvent) => this.continueInteraction(event);
-    const up = () => this.endInteraction();
+    this._zone.runOutsideAngular(() => {
+      const end$ = merge(
+        fromEvent<PointerEvent>(window, 'pointerup'),
+        fromEvent<PointerEvent>(window, 'pointercancel'),
+      ).pipe(take(1));
+      const moveSubscription = fromEvent<PointerEvent>(window, 'pointermove', {
+        passive: false,
+      })
+        .pipe(
+          tap((event) => event.preventDefault()),
+          auditTime(0, animationFrameScheduler),
+          takeUntil(end$),
+        )
+        .subscribe((event) => {
+          this.continueInteraction(event);
+        });
+      const endSubscription = end$.subscribe(() => {
+        this._zone.run(() => this.endInteraction());
+      });
 
-    window.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', up);
-    window.addEventListener('pointercancel', up);
-    this._removeInteractionListeners = () => {
-      window.removeEventListener('pointermove', move);
-      window.removeEventListener('pointerup', up);
-      window.removeEventListener('pointercancel', up);
-    };
+      this._removeInteractionListeners = () => {
+        moveSubscription.unsubscribe();
+        endSubscription.unsubscribe();
+      };
+    });
+  }
+
+  private bindWheelListener(
+    element: HTMLElement,
+    handler: (event: WheelEvent) => void,
+    onCleanup: (cleanupFn: () => void) => void,
+  ): void {
+    this._zone.runOutsideAngular(() => {
+      const subscription = fromEvent<WheelEvent>(element, 'wheel', {
+        passive: false,
+      })
+        .pipe(
+          tap((event) => {
+            if (event.metaKey || event.ctrlKey) {
+              event.preventDefault();
+            }
+          }),
+          auditTime(0, animationFrameScheduler),
+        )
+        .subscribe(handler);
+
+      onCleanup(() => subscription.unsubscribe());
+    });
+  }
+
+  private bindLibraryDropZone(
+    element: HTMLElement,
+    zone: MotionLibraryDropZone,
+    onCleanup: (cleanupFn: () => void) => void,
+  ): void {
+    this._zone.runOutsideAngular(() => {
+      const dragOverSubscription = fromEvent<DragEvent>(element, 'dragover', {
+        passive: false,
+      }).subscribe((event) => {
+        this.handleLibraryDragOverOutsideAngular(event);
+      });
+      const dropSubscription = fromEvent<DragEvent>(element, 'drop').subscribe((event) => {
+        if (!this.hasLibraryDropItem(event)) {
+          return;
+        }
+
+        this._zone.run(() => {
+          if (zone === 'canvas') {
+            this.dropLibraryItemOnCanvas(event);
+          } else {
+            this.dropLibraryItemOnTimeline(event);
+          }
+        });
+      });
+
+      onCleanup(() => {
+        dragOverSubscription.unsubscribe();
+        dropSubscription.unsubscribe();
+      });
+    });
+  }
+
+  private bindSceneStoryboardDragSurface(
+    element: HTMLElement,
+    onCleanup: (cleanupFn: () => void) => void,
+  ): void {
+    this._zone.runOutsideAngular(() => {
+      const dragOverSubscription = fromEvent<DragEvent>(element, 'dragover', {
+        passive: false,
+      }).subscribe((event) => {
+        const sceneId = readMotionDropTargetId(event.target, element, 'data-motion-scene-drop-id');
+        const draggedId = this.draggedSceneId();
+
+        if (!sceneId || !draggedId || draggedId === sceneId) {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        this.updateSceneStoryboardDropTarget(sceneId);
+
+        if (event.dataTransfer) {
+          event.dataTransfer.dropEffect = 'move';
+        }
+      });
+      const dragLeaveSubscription = fromEvent<DragEvent>(element, 'dragleave').subscribe((event) => {
+        const dropTarget = readMotionDropTargetElement(
+          event.target,
+          element,
+          'data-motion-scene-drop-id',
+        );
+
+        if (!dropTarget) {
+          return;
+        }
+
+        const nextTarget = event.relatedTarget;
+
+        if (nextTarget instanceof Node && dropTarget.contains(nextTarget)) {
+          return;
+        }
+
+        const sceneId = dropTarget.getAttribute('data-motion-scene-drop-id');
+
+        if (this.sceneStoryboardDropTargetId() === sceneId) {
+          this.updateSceneStoryboardDropTarget(null);
+        }
+      });
+      const dropSubscription = fromEvent<DragEvent>(element, 'drop').subscribe((event) => {
+        const sceneId = readMotionDropTargetId(event.target, element, 'data-motion-scene-drop-id');
+
+        if (!sceneId) {
+          return;
+        }
+
+        this._zone.run(() => {
+          const scene = this.scenes().find((item) => item.id === sceneId);
+
+          if (scene) {
+            this.dropSceneBefore(scene, event);
+          }
+        });
+      });
+
+      onCleanup(() => {
+        dragOverSubscription.unsubscribe();
+        dragLeaveSubscription.unsubscribe();
+        dropSubscription.unsubscribe();
+      });
+    });
+  }
+
+  private bindLayerSceneDragSurface(
+    element: HTMLElement,
+    onCleanup: (cleanupFn: () => void) => void,
+  ): void {
+    this._zone.runOutsideAngular(() => {
+      const dragOverSubscription = fromEvent<DragEvent>(element, 'dragover', {
+        passive: false,
+      }).subscribe((event) => {
+        const targetId = readMotionDropTargetId(
+          event.target,
+          element,
+          'data-motion-layer-scene-drop-id',
+        );
+
+        if (!targetId || !this.draggedLayerSceneItem()) {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        this.updateLayerSceneDropTarget(targetId);
+
+        if (event.dataTransfer) {
+          event.dataTransfer.dropEffect = 'move';
+        }
+      });
+      const dragLeaveSubscription = fromEvent<DragEvent>(element, 'dragleave').subscribe((event) => {
+        const dropTarget = readMotionDropTargetElement(
+          event.target,
+          element,
+          'data-motion-layer-scene-drop-id',
+        );
+
+        if (!dropTarget) {
+          return;
+        }
+
+        const nextTarget = event.relatedTarget;
+
+        if (nextTarget instanceof Node && dropTarget.contains(nextTarget)) {
+          return;
+        }
+
+        const targetId = dropTarget.getAttribute('data-motion-layer-scene-drop-id');
+
+        if (this.layerSceneDropTargetId() === targetId) {
+          this.updateLayerSceneDropTarget(null);
+        }
+      });
+      const dropSubscription = fromEvent<DragEvent>(element, 'drop').subscribe((event) => {
+        const targetId = readMotionDropTargetId(
+          event.target,
+          element,
+          'data-motion-layer-scene-drop-id',
+        );
+
+        if (!targetId || !this.draggedLayerSceneItem()) {
+          return;
+        }
+
+        this._zone.run(() => {
+          this.dropLayerOnScene(this.readLayerSceneDropTarget(targetId), event);
+        });
+      });
+
+      onCleanup(() => {
+        dragOverSubscription.unsubscribe();
+        dragLeaveSubscription.unsubscribe();
+        dropSubscription.unsubscribe();
+      });
+    });
+  }
+
+  private handleLibraryDragOverOutsideAngular(event: DragEvent): void {
+    if (!this.hasLibraryDropItem(event)) {
+      return;
+    }
+
+    event.preventDefault();
+
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = 'copy';
+    }
+  }
+
+  private hasLibraryDropItem(event: DragEvent): boolean {
+    return !!this.readDraggedPreset(event) || !!this.readDraggedAsset(event);
+  }
+
+  private updateSceneStoryboardDropTarget(sceneId: string | null): void {
+    if (this.sceneStoryboardDropTargetId() === sceneId) {
+      return;
+    }
+
+    this._zone.run(() => this.sceneStoryboardDropTargetId.set(sceneId));
+  }
+
+  private updateLayerSceneDropTarget(targetId: string | null): void {
+    if (this.layerSceneDropTargetId() === targetId) {
+      return;
+    }
+
+    this._zone.run(() => this.layerSceneDropTargetId.set(targetId));
+  }
+
+  private readLayerSceneDropTarget(targetId: string): MotionScene | null {
+    if (targetId === LAYER_SCENE_DROP_UNASSIGNED_ID) {
+      return null;
+    }
+
+    return this.scenes().find((scene) => scene.id === targetId) ?? null;
+  }
+
+  private updateCanvasSelectionOverlay(box: MotionCanvasSelectionBox | null): void {
+    updateSelectionOverlay(this._canvasSelectionOverlay()?.nativeElement ?? null, box);
+  }
+
+  private updateTimelineSelectionOverlay(box: TimelineSelectionBox | null): void {
+    updateSelectionOverlay(this._timelineSelectionOverlay()?.nativeElement ?? null, box);
   }
 
   private focusInlineTextEditor(layerId: string): void {
@@ -7400,64 +7935,14 @@ export class MotionStudio {
     return targets;
   }
 
-  private snapRenderExportRangeTime(time: number): number {
-    const frameDuration = this.frameDuration();
-    const snappedTime = this.snapTimeToFrame(time);
-    const threshold = Math.max(frameDuration * 1.5, KEYFRAME_SNAP_THRESHOLD);
-    const targets: KeyframeSnapTarget[] = [
-      { time: 0, type: 'scene-start' },
-      { time: this.duration(), type: 'scene-end' },
-    ];
-
-    for (const scene of this.draft().scenes ?? []) {
-      targets.push({ time: scene.start, type: 'scene-start' });
-      targets.push({ time: scene.start + scene.duration, type: 'scene-end' });
-    }
-
-    for (const { layer } of flattenMotionLayers(this.draft().layers)) {
-      targets.push({ time: layer.start, type: 'layer-start' });
-      targets.push({ time: layer.start + layer.duration, type: 'layer-end' });
-
-      for (const animation of layer.animations ?? []) {
-        for (const keyframe of animation.keyframes) {
-          targets.push({ time: layer.start + keyframe.time, type: 'keyframe' });
-        }
-      }
-    }
-
-    const nearest = targets.reduce<KeyframeSnapTarget | null>((closest, target) => {
-      const distance = Math.abs(target.time - snappedTime);
-
-      if (distance > threshold) {
-        return closest;
-      }
-
-      if (!closest || distance < Math.abs(closest.time - snappedTime)) {
-        return target;
-      }
-
-      return closest;
-    }, null);
-
-    if (!nearest) {
-      this.keyframeSnapGuide.set(null);
-      return snappedTime;
-    }
-
-    const nextTime = this.snapTimeToFrame(nearest.time);
-
-    this.keyframeSnapGuide.set({
-      absoluteTime: nextTime,
-      type: nearest.type,
-      label: this.formatKeyframeSnapTarget(nearest),
-    });
-
-    return nextTime;
-  }
-
   private snapTimelineEdgeTime(
     time: number,
-    options: { ignoredLayerId?: string; ignoredLayerIds?: string[]; ignoredSceneId?: string } = {},
+    options: {
+      ignoredLayerId?: string;
+      ignoredLayerIds?: string[];
+      ignoredSceneId?: string;
+      ignoredSceneIds?: string[];
+    } = {},
   ): { time: number; guide: KeyframeSnapGuide | null } {
     const snappedTime = this.snapTimeToFrame(time);
     const frameDuration = this.frameDuration();
@@ -7468,8 +7953,13 @@ export class MotionStudio {
       { time: this.currentTime(), type: 'playhead' },
     ];
 
+    const ignoredSceneIds = new Set([
+      ...(options.ignoredSceneIds ?? []),
+      ...(options.ignoredSceneId ? [options.ignoredSceneId] : []),
+    ]);
+
     for (const scene of this.draft().scenes ?? []) {
-      if (scene.id === options.ignoredSceneId) {
+      if (ignoredSceneIds.has(scene.id)) {
         continue;
       }
 
@@ -7704,7 +8194,7 @@ export class MotionStudio {
         document.composition.duration,
         readSceneSequenceDuration(document.scenes),
       );
-      this.selectedSceneId.set(sceneId);
+      this.setSelectedScenes([sceneId], sceneId);
       this.selectedLayerId.set(null);
       this.selectedLayerIds.set([]);
       this.selectedKeyframe.set(null);
@@ -7837,9 +8327,20 @@ export class MotionStudio {
     this.selectedKeyframe.set(primary);
   }
 
-  private applyTimelineBoxSelection(refs: SelectedKeyframeRef[]): void {
+  private applyTimelineBoxSelection(refs: SelectedKeyframeRef[], sceneIds: string[] = []): void {
+    const normalizedSceneIds = uniqueStrings(sceneIds);
+
+    if (normalizedSceneIds.length) {
+      this.setSelectedScenes(normalizedSceneIds);
+      this.clearSelectedKeyframes();
+      this.selectedLayerId.set(null);
+      this.selectedLayerIds.set([]);
+      this.selectedTransition.set(null);
+      return;
+    }
+
     this.setSelectedKeyframeRefs(refs);
-    this.selectedSceneId.set(null);
+    this.clearSelectedScenes();
 
     if (!refs.length) {
       this.selectedLayerId.set(null);
@@ -7855,7 +8356,7 @@ export class MotionStudio {
 
   private applyCanvasBoxSelection(layerIds: string[]): void {
     this.clearSelectedKeyframes();
-    this.selectedSceneId.set(null);
+    this.clearSelectedScenes();
     this.selectedTransition.set(null);
 
     if (!layerIds.length) {
@@ -7917,6 +8418,29 @@ export class MotionStudio {
     );
   }
 
+  private findScenesInTimelineSelectionBox(
+    timeline: HTMLElement,
+    box: TimelineSelectionBox,
+  ): string[] {
+    const timelineRect = timeline.getBoundingClientRect();
+    const selectionRect = {
+      left: timelineRect.left + box.left,
+      right: timelineRect.left + box.left + box.width,
+      top: timelineRect.top + box.top,
+      bottom: timelineRect.top + box.top + box.height,
+    };
+    const clips = Array.from(
+      timeline.querySelectorAll<HTMLElement>('.ngs-motion-studio__scene-clip'),
+    );
+
+    return uniqueStrings(
+      clips
+        .filter((clip) => intersectsViewportRect(clip.getBoundingClientRect(), selectionRect))
+        .map((clip) => clip.dataset['motionSceneId'] ?? '')
+        .filter(Boolean),
+    );
+  }
+
   private clearSelectedKeyframes(): void {
     this.selectedKeyframes.set([]);
     this.selectedKeyframe.set(null);
@@ -7960,25 +8484,37 @@ export class MotionStudio {
     mutator: (document: MotionDocument) => void,
     options: MotionDocumentUpdateOptions = {},
   ): void {
-    const previous = cloneMotionDocument(this.draft());
-    const next = cloneMotionDocument(this.draft());
+    const current = this.draft();
+    const next = cloneMotionDocument(current);
     mutator(next);
+    syncMotionSceneBoundsToLayers(next);
 
-    if (serializeMotionDocument(previous) === serializeMotionDocument(next)) {
+    const nextSignature = serializeMotionDocument(next);
+
+    if (serializeMotionDocument(current) === nextSignature) {
+      return;
+    }
+
+    if (options.transient) {
+      this.applyDocument(next, {
+        emit: false,
+        persist: false,
+        signature: nextSignature,
+      });
       return;
     }
 
     if (options.recordHistory !== false) {
-      const pushed = this.pushUndoSnapshot(previous);
+      const pushed = this.pushUndoSnapshot(current);
 
       if (pushed) {
-        this.pushActionHistory(options.historyLabel ?? inferMotionHistoryLabel(previous, next));
+        this.pushActionHistory(options.historyLabel ?? inferMotionHistoryLabel(current, next));
         this.redoStack.set([]);
         this.redoActionHistory.set([]);
       }
     }
 
-    this.applyDocument(next);
+    this.applyDocument(next, { signature: nextSignature });
   }
 
   private applyAnimationPresetToLayers(
@@ -8020,6 +8556,7 @@ export class MotionStudio {
   }
 
   private syncDraftDocument(document: MotionDocument): void {
+    syncMotionSceneBoundsToLayers(document);
     this.draft.set(document);
     this.syncEditorSettings(document.editor);
 
@@ -8044,10 +8581,17 @@ export class MotionStudio {
       this.selectedLayerId.set(validSelectedIds[validSelectedIds.length - 1] ?? null);
     }
 
+    const sceneIds = new Set((document.scenes ?? []).map((scene) => scene.id));
+    const validSelectedSceneIds = this.selectedSceneIds().filter((id) => sceneIds.has(id));
+
+    if (validSelectedSceneIds.length !== this.selectedSceneIds().length) {
+      this.setSelectedScenes(validSelectedSceneIds, this.selectedSceneId());
+    }
+
     const selectedSceneId = this.selectedSceneId();
 
-    if (selectedSceneId && !document.scenes?.some((scene) => scene.id === selectedSceneId)) {
-      this.selectedSceneId.set(null);
+    if (selectedSceneId && !sceneIds.has(selectedSceneId)) {
+      this.setSelectedScenes(validSelectedSceneIds);
     }
 
     const selectedKeyframe = this.selectedKeyframe();
@@ -8074,34 +8618,78 @@ export class MotionStudio {
     }
   }
 
-  private applyDocument(document: MotionDocument): void {
+  private applyDocument(
+    document: MotionDocument,
+    options: MotionDocumentApplyOptions = {},
+  ): void {
     const next = cloneMotionDocument(document);
     this.syncDraftDocument(next);
-    this._lastEmittedDocumentSignature = serializeMotionDocument(next);
+
+    if (options.persist !== false) {
+      this.persistDraftDocument(next);
+    }
+
+    if (options.emit !== false) {
+      this._lastEmittedDocumentSignature = options.signature ?? serializeMotionDocument(next);
+      this.documentChange.emit(next);
+    }
+  }
+
+  private emitDraftDocument(): void {
+    const next = cloneMotionDocument(this.draft());
+    const signature = serializeMotionDocument(next);
+
+    if (signature === this._lastEmittedDocumentSignature) {
+      return;
+    }
+
+    this._lastEmittedDocumentSignature = signature;
     this.persistDraftDocument(next);
     this.documentChange.emit(next);
   }
 
-  private readInitialDraftDocument(fallback: MotionDocument): MotionDocument {
+  private readInitialDraftDocument(): MotionDocument | null {
     if (this._hasLoadedStoredDraft) {
-      return fallback;
+      return null;
     }
 
-    this._hasLoadedStoredDraft = true;
     const key = this.localStorageKey();
 
     if (!key || typeof localStorage === 'undefined') {
-      return fallback;
+      return null;
     }
+
+    this._hasLoadedStoredDraft = true;
 
     try {
       const stored = localStorage.getItem(key);
       const parsed = stored ? JSON.parse(stored) : null;
 
-      return isMotionDocumentShape(parsed) ? cloneMotionDocument(parsed) : fallback;
+      if (!isMotionDocumentShape(parsed)) {
+        return null;
+      }
+
+      const document = cloneMotionDocument(parsed);
+      this._loadedStoredDraftSignature = serializeMotionDocument(document);
+
+      return document;
     } catch {
-      return fallback;
+      return null;
     }
+  }
+
+  private shouldKeepLoadedStoredDraft(inputSignature: string): boolean {
+    if (
+      !this._loadedStoredDraftSignature ||
+      inputSignature !== this._initialInputDocumentSignature ||
+      this._lastEmittedDocumentSignature === inputSignature
+    ) {
+      return false;
+    }
+
+    return (
+      untracked(() => serializeMotionDocument(this.draft())) === this._loadedStoredDraftSignature
+    );
   }
 
   private persistDraftDocument(document: MotionDocument): void {
@@ -8233,7 +8821,6 @@ const readInteractionHistoryLabel = (
     | CanvasBoxSelectionInteraction
     | TimelineInteraction
     | SceneTimelineInteraction
-    | RenderRangeInteraction
     | TimelineBoxSelectionInteraction
     | PlayheadInteraction
     | null,
@@ -8249,8 +8836,6 @@ const readInteractionHistoryLabel = (
       return 'Edited layer timing';
     case 'scene-timeline':
       return 'Edited scene timing';
-    case 'render-range':
-      return 'Edited render range';
     default:
       return 'Edited motion document';
   }
@@ -8577,6 +9162,22 @@ const clampTimelineKeyframeGroupDelta = (
 
 const clampTimelineLayerGroupDelta = (
   entries: TimelineLayerDragEntry[],
+  duration: number,
+  delta: number,
+): number => {
+  let minDelta = Number.NEGATIVE_INFINITY;
+  let maxDelta = Number.POSITIVE_INFINITY;
+
+  for (const entry of entries) {
+    minDelta = Math.max(minDelta, -entry.start);
+    maxDelta = Math.min(maxDelta, duration - (entry.start + entry.duration));
+  }
+
+  return snapTimelineTime(Math.max(minDelta, Math.min(maxDelta, delta)));
+};
+
+const clampTimelineSceneGroupDelta = (
+  entries: SceneTimelineDragEntry[],
   duration: number,
   delta: number,
 ): number => {
@@ -9433,6 +10034,35 @@ const setMotionSceneTransition = (
 const sceneContainsLayer = (scene: MotionScene, layerId: string): boolean =>
   !scene.layerIds || scene.layerIds.includes(layerId);
 
+const syncMotionSceneBoundsToLayers = (document: MotionDocument): void => {
+  const scenes = document.scenes ?? [];
+  const layers = flattenMotionLayers(document.layers).map((item) => item.layer);
+
+  document.composition.duration = Math.max(
+    DEFAULT_MOTION_COMPOSITION_DURATION,
+    document.composition.duration,
+    ...layers.map((layer) => layer.start + layer.duration),
+  );
+
+  if (!scenes.length) {
+    return;
+  }
+
+  for (const scene of scenes) {
+    const sceneLayers = layers.filter((layer) => sceneContainsLayer(scene, layer.id));
+
+    if (!sceneLayers.length) {
+      continue;
+    }
+
+    const start = Math.max(0, Math.min(...sceneLayers.map((layer) => layer.start)));
+    const end = Math.max(...sceneLayers.map((layer) => layer.start + layer.duration));
+
+    scene.start = snapTimelineTime(start);
+    scene.duration = Math.max(100, snapTimelineTime(end - start));
+  }
+};
+
 const isMotionMediaAsset = (asset: MotionAsset): boolean =>
   asset.type === 'image' || asset.type === 'video';
 
@@ -9551,6 +10181,13 @@ const readLayerSceneDropTargetId = (scene: MotionScene | null): string =>
 interface MotionDocumentUpdateOptions {
   recordHistory?: boolean;
   historyLabel?: string;
+  transient?: boolean;
+}
+
+interface MotionDocumentApplyOptions {
+  emit?: boolean;
+  persist?: boolean;
+  signature?: string;
 }
 
 interface MotionHistoryEntry {
@@ -9628,6 +10265,18 @@ type MotionAnimationApplyMode = 'append' | 'replace' | 'merge';
 
 type MotionAnimationScope = 'active' | 'selection';
 
+type MotionTextEffectPresetId =
+  | 'chars-slide-up'
+  | 'words-fade-up'
+  | 'chars-blur-in'
+  | 'lines-mask-up'
+  | 'chars-scale-pop'
+  | 'prepare-text-words'
+  | 'split-text-masked-letters';
+
+type MotionTextEffectSplit = 'chars' | 'words' | 'lines';
+type MotionTextEffectMask = 'chars' | 'words' | 'lines';
+
 type MotionAssetFilter = 'all' | 'image' | 'video' | 'audio' | 'json' | 'missing';
 
 type MotionAssetViewMode = 'grid' | 'list';
@@ -9666,7 +10315,21 @@ interface MotionAnimationPresetSettings {
   distance: number;
 }
 
-type TimelineZoomMode = 'fit' | '1' | '2' | '4';
+interface MotionStudioTextEffectPreset {
+  label: string;
+  type: MotionTextEffectPresetId;
+  split: MotionTextEffectSplit;
+  duration: number;
+  delay: number;
+  stagger: number;
+  distance: number;
+  ease: string;
+  prepareText?: boolean;
+  useSplitText?: boolean;
+  mask?: MotionTextEffectMask;
+}
+
+type TimelineZoomMode = '4' | '8' | '16' | '32';
 
 type JsonPanelMode = 'export' | 'manifest' | 'import';
 
@@ -9751,21 +10414,164 @@ const EMPTY_MOTION_STUDIO_SCENE_EFFECT: MotionStudioSceneEffect = {
   transform: '',
 };
 
-const readTimelineZoomMode = (zoom: number | undefined): TimelineZoomMode => {
-  if (zoom === 4) {
-    return '4';
-  }
-
-  if (zoom === 2) {
-    return '2';
-  }
-
-  if (zoom === 1) {
-    return '1';
-  }
-
-  return 'fit';
+const MOTION_STUDIO_TEXT_EFFECT_PRESETS: Record<
+  MotionTextEffectPresetId,
+  MotionStudioTextEffectPreset
+> = {
+  'chars-slide-up': {
+    label: 'Chars slide up',
+    type: 'chars-slide-up',
+    split: 'chars',
+    duration: 620,
+    delay: 0,
+    stagger: 24,
+    distance: 44,
+    ease: 'power3.out',
+  },
+  'words-fade-up': {
+    label: 'Words fade up',
+    type: 'words-fade-up',
+    split: 'words',
+    duration: 560,
+    delay: 0,
+    stagger: 70,
+    distance: 42,
+    ease: 'power2.out',
+  },
+  'prepare-text-words': {
+    label: 'PrepareText words',
+    type: 'prepare-text-words',
+    split: 'words',
+    duration: 600,
+    delay: 0,
+    stagger: 100,
+    distance: 50,
+    ease: 'back.out(1.7)',
+    prepareText: true,
+    useSplitText: true,
+  },
+  'split-text-masked-letters': {
+    label: 'Masked letters',
+    type: 'split-text-masked-letters',
+    split: 'chars',
+    duration: 600,
+    delay: 0,
+    stagger: 600,
+    distance: 150,
+    ease: 'power3.out',
+    useSplitText: true,
+    mask: 'words',
+  },
+  'chars-blur-in': {
+    label: 'Chars blur in',
+    type: 'chars-blur-in',
+    split: 'chars',
+    duration: 520,
+    delay: 0,
+    stagger: 18,
+    distance: 0,
+    ease: 'power2.out',
+  },
+  'lines-mask-up': {
+    label: 'Lines mask up',
+    type: 'lines-mask-up',
+    split: 'lines',
+    duration: 720,
+    delay: 0,
+    stagger: 110,
+    distance: 58,
+    ease: 'power4.out',
+  },
+  'chars-scale-pop': {
+    label: 'Chars scale pop',
+    type: 'chars-scale-pop',
+    split: 'chars',
+    duration: 540,
+    delay: 0,
+    stagger: 22,
+    distance: 0,
+    ease: 'back.out(1.7)',
+  },
 };
+
+const TIMELINE_ZOOM_MODES: TimelineZoomMode[] = ['4', '8', '16', '32'];
+
+const createBlankMotionDocument = (source: MotionDocument): MotionDocument => ({
+  version: source.version || '0.1',
+  composition: {
+    width: Number.isFinite(source.composition.width) ? source.composition.width : 1920,
+    height: Number.isFinite(source.composition.height) ? source.composition.height : 1080,
+    fps: Number.isFinite(source.composition.fps) ? source.composition.fps : 30,
+    duration: DEFAULT_MOTION_COMPOSITION_DURATION,
+    background: '#ffffff',
+  },
+  assets: [],
+  fonts: [],
+  tracks: [],
+  scenes: [],
+  editor: {
+    gridVisible: source.editor?.gridVisible ?? true,
+    snapToGrid: source.editor?.snapToGrid ?? false,
+    gridSize: source.editor?.gridSize ?? 80,
+    zoom: source.editor?.zoom ?? 4,
+    previewScale: source.editor?.previewScale ?? 1,
+  },
+  layers: [],
+});
+
+const readTimelineTickInterval = (zoomScale: number, duration: number): number => {
+  let interval = 5000;
+
+  if (zoomScale >= 32) {
+    interval = 500;
+  } else if (zoomScale >= 16) {
+    interval = 1000;
+  } else if (zoomScale >= 8) {
+    interval = 2000;
+  }
+
+  while (Math.ceil(duration / interval) > 1000) {
+    interval *= 2;
+  }
+
+  return interval;
+};
+
+const readTimelineZoomMode = (zoom: number | undefined): TimelineZoomMode => {
+  if (zoom === 32) {
+    return '32';
+  }
+
+  if (zoom === 16) {
+    return '16';
+  }
+
+  if (zoom === 8) {
+    return '8';
+  }
+
+  return '4';
+};
+
+const normalizeMotionTextEffectPresetId = (
+  value: unknown,
+): MotionTextEffectPresetId | null => {
+  const type =
+    typeof value === 'string'
+      ? value
+      : value && typeof value === 'object' && !Array.isArray(value)
+        ? `${(value as Record<string, unknown>)['type'] ?? ''}`
+        : '';
+
+  return type in MOTION_STUDIO_TEXT_EFFECT_PRESETS
+    ? (type as MotionTextEffectPresetId)
+    : null;
+};
+
+const readMotionTextEffectProps = (value: unknown): Record<string, MotionValue> | null =>
+  value && typeof value === 'object' && !Array.isArray(value)
+    ? (value as Record<string, MotionValue>)
+    : null;
 
 const readMotionPreviewScaleBounds = (
   minScale: number,
@@ -9800,14 +10606,6 @@ const readMotionPreviewFitScale = (
   const fittedScale = Math.min(widthScale, heightScale);
 
   return Number.isFinite(fittedScale) && fittedScale > 0 ? fittedScale : 1;
-};
-
-const normalizeTimelineZoomMode = (value: string): TimelineZoomMode => {
-  if (value === '1' || value === '2' || value === '4') {
-    return value;
-  }
-
-  return 'fit';
 };
 
 const isMotionDocumentShape = (value: unknown): value is MotionDocument => {
@@ -10378,6 +11176,7 @@ interface KeyframeSnapOptions {
 }
 
 type CanvasResizeHandle = 'n' | 'e' | 's' | 'w' | 'ne' | 'se' | 'sw' | 'nw';
+type MotionLibraryDropZone = 'canvas' | 'timeline';
 type MotionAlignment = 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom';
 type MotionDistributionAxis = 'horizontal' | 'vertical';
 
@@ -10405,6 +11204,7 @@ interface CanvasBoxSelectionInteraction {
   startClientY: number;
   additive: boolean;
   startLayerIds: string[];
+  pendingLayerIds: string[];
   hasMoved: boolean;
 }
 
@@ -10444,8 +11244,24 @@ interface SceneTimelineInteraction {
   startClientX: number;
   start: number;
   duration: number;
+  sceneGroup?: SceneTimelineDragEntry[];
+  sceneLayerGroup?: SceneTimelineLayerDragEntry[];
   transitionDuration?: number;
   timelineRect: DOMRect;
+}
+
+interface SceneTimelineDragEntry {
+  sceneId: string;
+  start: number;
+  duration: number;
+  lead: boolean;
+}
+
+interface SceneTimelineLayerDragEntry {
+  layerId: string;
+  start: number;
+  duration: number;
+  lead: boolean;
 }
 
 interface TimelineKeyframeDragEntry extends SelectedKeyframeRef {
@@ -10468,6 +11284,9 @@ interface TimelineBoxSelectionInteraction {
   startClientY: number;
   additive: boolean;
   startRefs: SelectedKeyframeRef[];
+  startSceneIds: string[];
+  pendingRefs: SelectedKeyframeRef[];
+  pendingSceneIds: string[];
   hasMoved: boolean;
 }
 
@@ -10500,13 +11319,40 @@ interface PlayheadInteraction {
   startClientY: number;
 }
 
-interface RenderRangeInteraction {
-  type: 'render-range';
-  edge: TimelineTrimEdge;
-  timelineElement: HTMLElement;
-  startClientX: number;
-  startClientY: number;
-}
+const interactionMutatesDocument = (
+  interaction:
+    | CanvasInteraction
+    | CanvasBoxSelectionInteraction
+    | TimelineInteraction
+    | SceneTimelineInteraction
+    | TimelineBoxSelectionInteraction
+    | PlayheadInteraction,
+): boolean =>
+  interaction.type === 'canvas-move' ||
+  interaction.type === 'canvas-resize' ||
+  interaction.type === 'timeline' ||
+  interaction.type === 'scene-timeline';
+
+const readMotionDropTargetElement = (
+  target: EventTarget | null,
+  root: HTMLElement,
+  attribute: string,
+): HTMLElement | null => {
+  if (!(target instanceof Element)) {
+    return null;
+  }
+
+  const element = target.closest<HTMLElement>(`[${attribute}]`);
+
+  return element && root.contains(element) ? element : null;
+};
+
+const readMotionDropTargetId = (
+  target: EventTarget | null,
+  root: HTMLElement,
+  attribute: string,
+): string | null =>
+  readMotionDropTargetElement(target, root, attribute)?.getAttribute(attribute) ?? null;
 
 const TIMELINE_LABEL_WIDTH = 176;
 const TIMELINE_BODY_MIN_WIDTH = 720;
@@ -10610,6 +11456,26 @@ const normalizeMotionLayout = (layout: MotionLayout): MotionLayout => {
     width,
     height,
   };
+};
+
+const updateSelectionOverlay = (
+  element: HTMLElement | null,
+  box: MotionCanvasSelectionBox | TimelineSelectionBox | null,
+): void => {
+  if (!element) {
+    return;
+  }
+
+  if (!box) {
+    element.hidden = true;
+    return;
+  }
+
+  element.hidden = false;
+  element.style.left = `${box.left}px`;
+  element.style.top = `${box.top}px`;
+  element.style.width = `${box.width}px`;
+  element.style.height = `${box.height}px`;
 };
 
 const constrainTextLayoutToContent = (

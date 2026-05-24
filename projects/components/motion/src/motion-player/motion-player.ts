@@ -29,6 +29,8 @@ import {
   resolveMotionLayerSnapshot,
   sortMotionLayers,
 } from '../engine/motion-engine';
+import { gsap } from 'gsap';
+import { SplitText } from 'gsap/SplitText';
 
 @Component({
   selector: 'ngs-motion-player',
@@ -237,6 +239,12 @@ export class MotionPlayer {
       fontWeight: style.fontWeight ?? null,
       lineHeight: style.lineHeight ?? null,
       letterSpacing: style.letterSpacing !== undefined ? `${style.letterSpacing}px` : null,
+      '--ngs-motion-player-font-size':
+        style.fontSize !== undefined ? `${style.fontSize}px` : '16px',
+      '--ngs-motion-player-line-height':
+        style.lineHeight !== undefined ? `${style.lineHeight}` : '1.05',
+      '--ngs-motion-player-letter-spacing':
+        style.letterSpacing !== undefined ? `${style.letterSpacing}px` : '0px',
       textAlign: style.textAlign ?? null,
       padding: style.padding !== undefined ? `${style.padding}px` : null,
       filter: joinStyleFilters(style.filter, sceneEffect.filter),
@@ -275,6 +283,44 @@ export class MotionPlayer {
 
   protected layerText(layer: MotionLayer): string {
     return coerceMotionString(this.layerSnapshot(layer).props['text'], '');
+  }
+
+  protected hasTextEffect(layer: MotionLayer): boolean {
+    return !!this.readLayerTextEffect(layer);
+  }
+
+  protected textEffectSegments(layer: MotionLayer): MotionTextEffectSegment[] {
+    const snapshot = this.layerSnapshot(layer);
+    const text =
+      layer.type === 'caption'
+        ? this.layerCaptionText(layer)
+        : coerceMotionString(snapshot.props['text'], '');
+    const effect = this.readLayerTextEffect(layer);
+
+    if (!effect) {
+      return [];
+    }
+
+    return createMotionTextEffectSegments(text, effect, snapshot.localTime);
+  }
+
+  protected hasMaskedLettersEffect(layer: MotionLayer): boolean {
+    return this.readLayerTextEffect(layer)?.type === 'split-text-masked-letters';
+  }
+
+  protected textEffectWords(layer: MotionLayer): MotionTextEffectWord[] {
+    const snapshot = this.layerSnapshot(layer);
+    const text =
+      layer.type === 'caption'
+        ? this.layerCaptionText(layer)
+        : coerceMotionString(snapshot.props['text'], '');
+    const effect = this.readLayerTextEffect(layer);
+
+    if (!effect) {
+      return [];
+    }
+
+    return createSplitTextMaskedLetterWords(text, effect, snapshot.localTime);
   }
 
   protected layerCaptionText(layer: MotionLayer): string {
@@ -507,6 +553,14 @@ export class MotionPlayer {
   private sceneContainsLayer(scene: MotionScene, layerId: string): boolean {
     return !scene.layerIds || scene.layerIds.includes(layerId);
   }
+
+  private readLayerTextEffect(layer: MotionLayer): MotionTextEffectConfig | null {
+    if (layer.type !== 'text' && layer.type !== 'caption') {
+      return null;
+    }
+
+    return normalizeMotionTextEffect(this.layerSnapshot(layer).props['textEffect']);
+  }
 }
 
 const joinStyleFilters = (
@@ -590,6 +644,506 @@ const readMotionNumberArray = (value: unknown): number[] => {
   return [];
 };
 
+const normalizeMotionTextEffect = (value: MotionValue | undefined): MotionTextEffectConfig | null => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return null;
+  }
+
+  const record = value as Record<string, unknown>;
+  const type = normalizeMotionTextEffectType(record['type']);
+
+  if (!type) {
+    return null;
+  }
+
+  const preset = MOTION_TEXT_EFFECT_PRESETS[type];
+
+  return {
+    ...preset,
+    duration: Math.max(100, readMotionNumber(record['duration'], preset.duration)),
+    delay: Math.max(0, readMotionNumber(record['delay'], preset.delay)),
+    stagger: Math.max(0, readMotionNumber(record['stagger'], preset.stagger)),
+    distance: Math.max(0, readMotionNumber(record['distance'], preset.distance)),
+    ease: coerceMotionString(record['ease'] as MotionValue | undefined, preset.ease),
+    prepareText: record['prepareText'] === true || preset.prepareText === true,
+    useSplitText: record['useSplitText'] === true || preset.useSplitText === true,
+    mask: normalizeMotionTextEffectMask(record['mask']) ?? preset.mask,
+  };
+};
+
+const normalizeMotionTextEffectType = (value: unknown): MotionTextEffectType | null => {
+  return typeof value === 'string' && value in MOTION_TEXT_EFFECT_PRESETS
+    ? (value as MotionTextEffectType)
+    : null;
+};
+
+const normalizeMotionTextEffectMask = (value: unknown): MotionTextEffectMask | undefined =>
+  value === 'chars' || value === 'words' || value === 'lines' ? value : undefined;
+
+const createMotionTextEffectSegments = (
+  text: string,
+  effect: MotionTextEffectConfig,
+  localTime: number,
+): MotionTextEffectSegment[] => {
+  const tokens = splitMotionTextEffectTokens(text || ' ', effect);
+
+  return tokens.map((token, index) => ({
+    id: `${effect.type}-${index}-${token.text}`,
+    text: token.text,
+    line: token.line,
+    masked: effect.mask === 'chars',
+    style: createMotionTextEffectStyle(effect, localTime, index),
+  }));
+};
+
+const splitMotionTextEffectTokens = (
+  text: string,
+  effect: MotionTextEffectConfig,
+): MotionTextEffectToken[] => {
+  if (effect.useSplitText) {
+    return splitMotionTextWithGsapSplitText(text, effect);
+  }
+
+  if (effect.split === 'lines') {
+    return text.split('\n').map((line, index) => ({
+      text: line || ' ',
+      line: true,
+      index,
+    }));
+  }
+
+  if (effect.split === 'words') {
+    if (effect.prepareText) {
+      return splitPreparedMotionTextWords(text);
+    }
+
+    return text.split(/(\s+)/).map((word, index) => ({
+      text: word,
+      line: false,
+      index,
+    }));
+  }
+
+  return Array.from(text).map((char, index) => ({
+    text: char,
+    line: false,
+    index,
+  }));
+};
+
+const splitMotionTextWithGsapSplitText = (
+  text: string,
+  effect: MotionTextEffectConfig,
+): MotionTextEffectToken[] => {
+  const cacheKey = `${effect.split}:${effect.mask ?? 'none'}:${effect.prepareText ? 'prepared' : 'raw'}:${text}`;
+  const cached = splitTextTokenCache.get(cacheKey);
+
+  if (cached) {
+    return cached.map((token) => ({ ...token }));
+  }
+
+  const tokens = createSplitTextTokens(text, effect);
+  splitTextTokenCache.set(cacheKey, tokens);
+
+  if (splitTextTokenCache.size > 120) {
+    const firstKey = splitTextTokenCache.keys().next().value;
+
+    if (firstKey) {
+      splitTextTokenCache.delete(firstKey);
+    }
+  }
+
+  return tokens.map((token) => ({ ...token }));
+};
+
+const createSplitTextTokens = (
+  text: string,
+  effect: MotionTextEffectConfig,
+): MotionTextEffectToken[] => {
+  if (typeof document === 'undefined' || typeof window === 'undefined') {
+    if (effect.split === 'words') {
+      return splitFallbackMotionTextWords(text).map((word, index) => ({
+        text: `${word.text}${word.suffix}`,
+        line: false,
+        index,
+      }));
+    }
+
+    return Array.from(text).map((char, index) => ({
+      text: char,
+      line: false,
+      index,
+    }));
+  }
+
+  gsap.registerPlugin(SplitText);
+
+  const host = document.createElement('span');
+  host.textContent = text;
+
+  const split = SplitText.create(host, {
+    type: effect.type === 'split-text-masked-letters' ? 'chars, words' : effect.split,
+    mask: effect.mask,
+    tag: 'span',
+    aria: 'none',
+    reduceWhiteSpace: false,
+    charsClass: 'ngs-motion-player__split-char',
+    wordsClass: 'ngs-motion-player__split-word',
+    wordDelimiter:
+      effect.type === 'prepare-text-words'
+        ? { delimiter: /\u200c/, replaceWith: ' ' }
+        : undefined,
+    prepareText:
+      effect.type === 'prepare-text-words'
+        ? (value: string) => prepareSplitTextWords(value)
+        : effect.prepareText
+          ? (value: string) => prepareMotionText(value)
+          : undefined,
+  });
+  const source = effect.split === 'chars' ? split.chars : split.words;
+  const words =
+    effect.type === 'prepare-text-words'
+      ? source.map((element) => element.textContent || '').filter((word) => word.trim().length)
+      : [];
+  const tokens =
+    effect.type === 'prepare-text-words'
+      ? words.map((word, index) => ({
+          text: index < words.length - 1 ? `${word} ` : word || ' ',
+          line: false,
+          index,
+        }))
+      : source.map((element, index) => ({
+          text: element.textContent || ' ',
+          line: false,
+          index,
+        }));
+
+  split.revert();
+
+  return tokens.length
+    ? tokens
+    : [
+        {
+          text: ' ',
+          line: false,
+          index: 0,
+        },
+      ];
+};
+
+const createSplitTextMaskedLetterWords = (
+  text: string,
+  effect: MotionTextEffectConfig,
+  localTime: number,
+): MotionTextEffectWord[] => {
+  const words = splitMotionTextWordsWithGsapSplitText(text || ' ', effect);
+  let charIndex = 0;
+
+  return words.map((word, wordIndex) => ({
+    id: `masked-word-${wordIndex}-${word.text}`,
+    suffix: word.suffix,
+    chars: word.chars.map((char) => {
+      const index = charIndex++;
+
+      return {
+        id: `masked-char-${wordIndex}-${index}-${char}`,
+        text: char,
+        style: createMotionTextEffectStyle(effect, localTime, index),
+      };
+    }),
+  }));
+};
+
+const splitMotionTextWordsWithGsapSplitText = (
+  text: string,
+  effect: MotionTextEffectConfig,
+): MotionTextEffectWordToken[] => {
+  const cacheKey = `words:${effect.mask ?? 'none'}:${effect.prepareText ? 'prepared' : 'raw'}:${text}`;
+  const cached = splitTextWordCache.get(cacheKey);
+
+  if (cached) {
+    return cached.map((word) => ({ ...word, chars: [...word.chars] }));
+  }
+
+  const words = createSplitTextWordTokens(text, effect);
+  splitTextWordCache.set(cacheKey, words);
+
+  if (splitTextWordCache.size > 80) {
+    const firstKey = splitTextWordCache.keys().next().value;
+
+    if (firstKey) {
+      splitTextWordCache.delete(firstKey);
+    }
+  }
+
+  return words.map((word) => ({ ...word, chars: [...word.chars] }));
+};
+
+const createSplitTextWordTokens = (
+  text: string,
+  effect: MotionTextEffectConfig,
+): MotionTextEffectWordToken[] => {
+  if (typeof document === 'undefined' || typeof window === 'undefined') {
+    return splitFallbackMotionTextWords(text);
+  }
+
+  gsap.registerPlugin(SplitText);
+
+  const sourceWords = splitFallbackMotionTextWords(text);
+  const host = document.createElement('span');
+  host.textContent = text;
+
+  const split = SplitText.create(host, {
+    type: 'chars, words',
+    mask: effect.mask,
+    tag: 'span',
+    aria: 'none',
+    charsClass: 'char++',
+    wordsClass: 'word++',
+    prepareText: effect.prepareText ? (value: string) => prepareMotionText(value) : undefined,
+  });
+  const words = split.words.map((word, index) => ({
+    text: word.textContent || sourceWords[index]?.text || ' ',
+    chars: Array.from(word.querySelectorAll<HTMLElement>('span'))
+      .map((char) => char.textContent || '')
+      .filter(Boolean),
+    suffix: sourceWords[index]?.suffix ?? (index < split.words.length - 1 ? ' ' : ''),
+  }));
+
+  split.revert();
+
+  return words.length
+    ? words.map((word) => ({
+        ...word,
+        chars: word.chars.length ? word.chars : Array.from(word.text || ' '),
+      }))
+    : splitFallbackMotionTextWords(text);
+};
+
+const splitFallbackMotionTextWords = (text: string): MotionTextEffectWordToken[] => {
+  const matches = text.match(/\S+\s*/g) ?? [text || ' '];
+
+  return matches.map((match) => {
+    const suffix = match.match(/\s+$/)?.[0] ?? '';
+    const word = suffix ? match.slice(0, -suffix.length) : match;
+
+    return {
+      text: word || ' ',
+      chars: Array.from(word || ' '),
+      suffix,
+    };
+  });
+};
+
+const splitPreparedMotionTextWords = (text: string): MotionTextEffectToken[] => {
+  const prepared = prepareMotionText(text);
+  const matches = prepared.match(/\S+\s*/g);
+  const words = matches?.length ? matches : [prepared || ' '];
+
+  return words.map((word, index) => ({
+    text: word,
+    line: false,
+    index,
+  }));
+};
+
+const prepareMotionText = (text: string): string =>
+  text.replace(/\r\n?/g, '\n').replace(/[^\S\n]+/g, ' ');
+
+const prepareSplitTextWords = (text: string): string => {
+  const prepared = prepareMotionText(text);
+
+  if (!MOTION_WORD_SEGMENTER) {
+    return prepared;
+  }
+
+  return Array.from(MOTION_WORD_SEGMENTER.segment(prepared))
+    .map((segment) => segment.segment)
+    .join(SPLIT_TEXT_WORD_DELIMITER);
+};
+
+const createMotionTextEffectStyle = (
+  effect: MotionTextEffectConfig,
+  localTime: number,
+  index: number,
+): Record<string, string | number | null> => {
+  const state = createMotionTextEffectInitialState(effect, index);
+  const staggerDelay =
+    effect.type === 'split-text-masked-letters'
+      ? seededMotionRandom(`masked-order-${index}`) * effect.stagger
+      : index * effect.stagger;
+  const progress = clampUnit((localTime - effect.delay - staggerDelay) / effect.duration);
+  const timeline = gsap.timeline({ paused: true });
+
+  timeline.to(state, {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    xPercent: 0,
+    yPercent: 0,
+    scale: 1,
+    rotate: 0,
+    skewY: 0,
+    blur: 0,
+    duration: 1,
+    ease: effect.ease,
+  });
+  timeline.progress(progress);
+  timeline.kill();
+
+  return {
+    opacity: roundMotionPlayerNumber(state.opacity, 4),
+    transform: [
+      `translate(${roundMotionPlayerNumber(state.xPercent, 3)}%, ${roundMotionPlayerNumber(state.yPercent, 3)}%)`,
+      `translate3d(${roundMotionPlayerNumber(state.x, 3)}px, ${roundMotionPlayerNumber(state.y, 3)}px, 0)`,
+      `rotate(${roundMotionPlayerNumber(state.rotate, 3)}deg)`,
+      `skewY(${roundMotionPlayerNumber(state.skewY, 3)}deg)`,
+      `scale(${roundMotionPlayerNumber(state.scale, 4)})`,
+    ].join(' '),
+    filter: state.blur > 0.01 ? `blur(${roundMotionPlayerNumber(state.blur, 3)}px)` : null,
+  };
+};
+
+const createMotionTextEffectInitialState = (
+  effect: MotionTextEffectConfig,
+  index = 0,
+): MotionTextEffectState => {
+  switch (effect.type) {
+    case 'split-text-masked-letters':
+      const spread = Math.max(0, effect.distance);
+
+      return {
+        opacity: 1,
+        x: 0,
+        y: 0,
+        xPercent: readSeededMotionRange(`masked-x-${index}`, -spread, spread),
+        yPercent: readSeededMotionRange(`masked-y-${index}`, -spread, spread),
+        scale: 1,
+        rotate: 0,
+        skewY: 0,
+        blur: 0,
+      };
+    case 'prepare-text-words':
+      return {
+        opacity: 0,
+        x: 0,
+        y: effect.distance,
+        xPercent: 0,
+        yPercent: 0,
+        scale: 1,
+        rotate: 0,
+        skewY: 0,
+        blur: 0,
+      };
+    case 'words-fade-up':
+      return {
+        opacity: 0,
+        x: 0,
+        y: effect.distance * 0.55,
+        xPercent: 0,
+        yPercent: 0,
+        scale: 1,
+        rotate: 0,
+        skewY: 0,
+        blur: 0,
+      };
+    case 'chars-blur-in':
+      return {
+        opacity: 0,
+        x: 0,
+        y: 0,
+        xPercent: 0,
+        yPercent: 0,
+        scale: 1,
+        rotate: 0,
+        skewY: 0,
+        blur: 14,
+      };
+    case 'lines-mask-up':
+      return {
+        opacity: 0,
+        x: 0,
+        y: effect.distance,
+        xPercent: 0,
+        yPercent: 0,
+        scale: 1,
+        rotate: 0,
+        skewY: 0,
+        blur: 0,
+      };
+    case 'chars-scale-pop':
+      return {
+        opacity: 0,
+        x: 0,
+        y: 0,
+        xPercent: 0,
+        yPercent: 0,
+        scale: 0.42,
+        rotate: -7,
+        skewY: 0,
+        blur: 0,
+      };
+    case 'chars-slide-up':
+    default:
+      return {
+        opacity: 0,
+        x: 0,
+        y: effect.distance,
+        xPercent: 0,
+        yPercent: 0,
+        scale: 1,
+        rotate: 0,
+        skewY: -4,
+        blur: 0,
+      };
+  }
+};
+
+const clampUnit = (value: number): number => {
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+
+  return Math.max(0, Math.min(1, value));
+};
+
+const roundMotionPlayerNumber = (value: number, precision: number): number => {
+  const factor = 10 ** precision;
+
+  return Math.round(value * factor) / factor;
+};
+
+const readSeededMotionRange = (seed: string, min: number, max: number): number =>
+  min + (max - min) * seededMotionRandom(seed);
+
+const seededMotionRandom = (seed: string): number => {
+  let hash = 2166136261;
+
+  for (let index = 0; index < seed.length; index++) {
+    hash ^= seed.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+
+  return (hash >>> 0) / 4294967295;
+};
+
+function createMotionWordSegmenter(): MotionWordSegmenter | null {
+  if (typeof Intl === 'undefined') {
+    return null;
+  }
+
+  const IntlWithSegmenter = Intl as typeof Intl & {
+    Segmenter?: new (
+      locale: string,
+      options: { granularity: 'word' },
+    ) => MotionWordSegmenter;
+  };
+
+  return typeof IntlWithSegmenter.Segmenter === 'function'
+    ? new IntlWithSegmenter.Segmenter('zh', { granularity: 'word' })
+    : null;
+}
+
 const createFallbackWaveformSamples = (seed: string): number[] => {
   const seedValue = seed.split('').reduce((total, char) => total + char.charCodeAt(0), 0);
 
@@ -607,6 +1161,159 @@ interface MotionScaleBounds {
   min: number;
   max: number;
 }
+
+type MotionTextEffectType =
+  | 'chars-slide-up'
+  | 'words-fade-up'
+  | 'chars-blur-in'
+  | 'lines-mask-up'
+  | 'chars-scale-pop'
+  | 'prepare-text-words'
+  | 'split-text-masked-letters';
+
+type MotionTextEffectSplit = 'chars' | 'words' | 'lines';
+type MotionTextEffectMask = 'chars' | 'words' | 'lines';
+
+interface MotionTextEffectConfig {
+  type: MotionTextEffectType;
+  split: MotionTextEffectSplit;
+  duration: number;
+  delay: number;
+  stagger: number;
+  distance: number;
+  ease: string;
+  prepareText?: boolean;
+  useSplitText?: boolean;
+  mask?: MotionTextEffectMask;
+}
+
+interface MotionTextEffectToken {
+  text: string;
+  line: boolean;
+  index: number;
+}
+
+interface MotionTextEffectSegment {
+  id: string;
+  text: string;
+  line: boolean;
+  masked: boolean;
+  style: Record<string, string | number | null>;
+}
+
+interface MotionTextEffectChar {
+  id: string;
+  text: string;
+  style: Record<string, string | number | null>;
+}
+
+interface MotionTextEffectWord {
+  id: string;
+  chars: MotionTextEffectChar[];
+  suffix: string;
+}
+
+interface MotionTextEffectWordToken {
+  text: string;
+  chars: string[];
+  suffix: string;
+}
+
+interface MotionWordSegment {
+  segment: string;
+}
+
+interface MotionWordSegmenter {
+  segment(text: string): Iterable<MotionWordSegment>;
+}
+
+interface MotionTextEffectState {
+  opacity: number;
+  x: number;
+  y: number;
+  xPercent: number;
+  yPercent: number;
+  scale: number;
+  rotate: number;
+  skewY: number;
+  blur: number;
+}
+
+const SPLIT_TEXT_WORD_DELIMITER = String.fromCharCode(8204);
+const MOTION_WORD_SEGMENTER = createMotionWordSegmenter();
+
+const MOTION_TEXT_EFFECT_PRESETS: Record<MotionTextEffectType, MotionTextEffectConfig> = {
+  'chars-slide-up': {
+    type: 'chars-slide-up',
+    split: 'chars',
+    duration: 620,
+    delay: 0,
+    stagger: 24,
+    distance: 44,
+    ease: 'power3.out',
+  },
+  'words-fade-up': {
+    type: 'words-fade-up',
+    split: 'words',
+    duration: 560,
+    delay: 0,
+    stagger: 70,
+    distance: 42,
+    ease: 'power2.out',
+  },
+  'prepare-text-words': {
+    type: 'prepare-text-words',
+    split: 'words',
+    duration: 600,
+    delay: 0,
+    stagger: 100,
+    distance: 50,
+    ease: 'back.out(1.7)',
+    prepareText: true,
+    useSplitText: true,
+  },
+  'split-text-masked-letters': {
+    type: 'split-text-masked-letters',
+    split: 'chars',
+    duration: 600,
+    delay: 0,
+    stagger: 600,
+    distance: 150,
+    ease: 'power3.out',
+    useSplitText: true,
+    mask: 'words',
+  },
+  'chars-blur-in': {
+    type: 'chars-blur-in',
+    split: 'chars',
+    duration: 520,
+    delay: 0,
+    stagger: 18,
+    distance: 0,
+    ease: 'power2.out',
+  },
+  'lines-mask-up': {
+    type: 'lines-mask-up',
+    split: 'lines',
+    duration: 720,
+    delay: 0,
+    stagger: 110,
+    distance: 58,
+    ease: 'power4.out',
+  },
+  'chars-scale-pop': {
+    type: 'chars-scale-pop',
+    split: 'chars',
+    duration: 540,
+    delay: 0,
+    stagger: 22,
+    distance: 0,
+    ease: 'back.out(1.7)',
+  },
+};
+
+const splitTextTokenCache = new Map<string, MotionTextEffectToken[]>();
+const splitTextWordCache = new Map<string, MotionTextEffectWordToken[]>();
 
 interface SceneEffect {
   opacity: number;

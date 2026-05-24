@@ -35,10 +35,102 @@
         >
           @switch (layer.type) {
             @case ('text') {
-              <div class="ngs-motion-player__text">{{ layerText(layer) }}</div>
+              <div
+                class="ngs-motion-player__text"
+                [class.ngs-motion-player__text--effect]="hasTextEffect(layer)"
+              >
+                @if (hasMaskedLettersEffect(layer)) {
+                  @for (word of textEffectWords(layer); track word.id) {
+                    <span class="ngs-motion-player__text-word-mask">
+                      @for (char of word.chars; track char.id) {
+                        <span
+                          class="ngs-motion-player__text-segment-inner"
+                          [ngStyle]="char.style"
+                          [textContent]="char.text"
+                        ></span>
+                      }
+                    </span>
+                    <span
+                      class="ngs-motion-player__text-word-space"
+                      [textContent]="word.suffix"
+                    ></span>
+                  }
+                } @else if (hasTextEffect(layer)) {
+                  @for (segment of textEffectSegments(layer); track segment.id) {
+                    @if (segment.masked) {
+                      <span
+                        class="ngs-motion-player__text-segment is-masked"
+                        [class.is-line]="segment.line"
+                      >
+                        <span
+                          class="ngs-motion-player__text-segment-inner"
+                          [ngStyle]="segment.style"
+                          [textContent]="segment.text"
+                        >
+                        </span>
+                      </span>
+                    } @else {
+                      <span
+                        class="ngs-motion-player__text-segment"
+                        [class.is-line]="segment.line"
+                        [ngStyle]="segment.style"
+                        [textContent]="segment.text"
+                      ></span>
+                    }
+                  }
+                } @else {
+                  {{ layerText(layer) }}
+                }
+              </div>
             }
             @case ('caption') {
-              <div class="ngs-motion-player__caption">{{ layerCaptionText(layer) }}</div>
+              <div
+                class="ngs-motion-player__caption"
+                [class.ngs-motion-player__caption--effect]="hasTextEffect(layer)"
+              >
+                @if (hasMaskedLettersEffect(layer)) {
+                  @for (word of textEffectWords(layer); track word.id) {
+                    <span class="ngs-motion-player__text-word-mask">
+                      @for (char of word.chars; track char.id) {
+                        <span
+                          class="ngs-motion-player__text-segment-inner"
+                          [ngStyle]="char.style"
+                          [textContent]="char.text"
+                        ></span>
+                      }
+                    </span>
+                    <span
+                      class="ngs-motion-player__text-word-space"
+                      [textContent]="word.suffix"
+                    ></span>
+                  }
+                } @else if (hasTextEffect(layer)) {
+                  @for (segment of textEffectSegments(layer); track segment.id) {
+                    @if (segment.masked) {
+                      <span
+                        class="ngs-motion-player__text-segment is-masked"
+                        [class.is-line]="segment.line"
+                      >
+                        <span
+                          class="ngs-motion-player__text-segment-inner"
+                          [ngStyle]="segment.style"
+                          [textContent]="segment.text"
+                        >
+                        </span>
+                      </span>
+                    } @else {
+                      <span
+                        class="ngs-motion-player__text-segment"
+                        [class.is-line]="segment.line"
+                        [ngStyle]="segment.style"
+                        [textContent]="segment.text"
+                      ></span>
+                    }
+                  }
+                } @else {
+                  {{ layerCaptionText(layer) }}
+                }
+              </div>
             }
             @case ('image') {
               @if (layerImageSrc(layer)) {
