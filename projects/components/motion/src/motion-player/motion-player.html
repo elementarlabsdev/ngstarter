@@ -38,6 +38,7 @@
               <div
                 class="ngs-motion-player__text"
                 [class.ngs-motion-player__text--effect]="hasTextEffect(layer)"
+                [class.ngs-motion-player__text--masked-letters]="hasMaskedLettersEffect(layer)"
               >
                 @if (hasMaskedLettersEffect(layer)) {
                   @for (word of textEffectWords(layer); track word.id) {
@@ -87,6 +88,7 @@
               <div
                 class="ngs-motion-player__caption"
                 [class.ngs-motion-player__caption--effect]="hasTextEffect(layer)"
+                [class.ngs-motion-player__caption--masked-letters]="hasMaskedLettersEffect(layer)"
               >
                 @if (hasMaskedLettersEffect(layer)) {
                   @for (word of textEffectWords(layer); track word.id) {

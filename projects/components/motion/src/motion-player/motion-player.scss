@@ -91,6 +91,19 @@
   letter-spacing: 0;
 }
 
+.ngs-motion-player__text--masked-letters,
+.ngs-motion-player__caption--masked-letters {
+  opacity: 1;
+  text-align: center;
+  color: inherit;
+  will-change: transform;
+}
+
+.ngs-motion-player__text--masked-letters *,
+.ngs-motion-player__caption--masked-letters * {
+  will-change: transform;
+}
+
 .ngs-motion-player__text-segment {
   display: inline-block;
   font-size: var(--ngs-motion-player-font-size);
