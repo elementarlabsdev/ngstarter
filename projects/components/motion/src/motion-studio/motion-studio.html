@@ -260,10 +260,6 @@
                 <ngs-icon name="fluent:sparkle-24-regular" ngsTabPanelItemIcon />
                 <ngs-tab-panel-item-text>Presets</ngs-tab-panel-item-text>
               </ngs-tab-panel-item>
-              <ngs-tab-panel-item for="effects">
-                <ngs-icon name="fluent:wand-24-regular" ngsTabPanelItemIcon />
-                <ngs-tab-panel-item-text>Effects</ngs-tab-panel-item-text>
-              </ngs-tab-panel-item>
             </ngs-tab-panel-nav>
           </ngs-tab-panel-content>
 
@@ -1192,79 +1188,6 @@
               </ngs-scrollbar-area>
             </ng-template>
 
-            <ng-template ngsTabPanelAsideContent="effects">
-              <ngs-scrollbar-area [absolute]="false" class="ngs-motion-studio__scroll">
-                <div class="ngs-motion-studio__kit-section">
-                  <section class="ngs-motion-studio__preset-category">
-                    <header class="ngs-motion-studio__mini-header">
-                      <strong>Animations</strong>
-                      <small>{{ selectedLayer() ? 'Layer' : 'None' }}</small>
-                    </header>
-                    @for (group of animationPresetGroups; track group.category) {
-                      <div class="ngs-motion-studio__animation-group">
-                        <div class="ngs-motion-studio__animation-group-header">
-                          <small>{{ group.label }}</small>
-                        </div>
-                        <div class="ngs-motion-studio__animation-presets">
-                          @for (preset of animationPresetsByCategory(group.category); track preset.value) {
-                            <button
-                              ngsButton="outlined"
-                              type="button"
-                              [disabled]="!selectedLayer()"
-                              (click)="applyAnimationPreset(preset.value)"
-                            >
-                              {{ preset.label }}
-                            </button>
-                          }
-                        </div>
-                      </div>
-                    }
-                  </section>
-
-                  <section class="ngs-motion-studio__preset-category">
-                    <header class="ngs-motion-studio__mini-header">
-                      <strong>Transition in</strong>
-                      <small>{{
-                        selectedLayer() ? transitionTypeValue(selectedLayer()!, 'in') : 'None'
-                      }}</small>
-                    </header>
-                    <div class="ngs-motion-studio__animation-presets">
-                      @for (preset of transitionPresetTypes; track preset.value) {
-                        <button
-                          ngsButton="outlined"
-                          type="button"
-                          [disabled]="!selectedLayer()"
-                          (click)="applyTransitionPreset('in', preset.value)"
-                        >
-                          {{ preset.label }}
-                        </button>
-                      }
-                    </div>
-                  </section>
-
-                  <section class="ngs-motion-studio__preset-category">
-                    <header class="ngs-motion-studio__mini-header">
-                      <strong>Transition out</strong>
-                      <small>{{
-                        selectedLayer() ? transitionTypeValue(selectedLayer()!, 'out') : 'None'
-                      }}</small>
-                    </header>
-                    <div class="ngs-motion-studio__animation-presets">
-                      @for (preset of transitionPresetTypes; track preset.value) {
-                        <button
-                          ngsButton="outlined"
-                          type="button"
-                          [disabled]="!selectedLayer()"
-                          (click)="applyTransitionPreset('out', preset.value)"
-                        >
-                          {{ preset.label }}
-                        </button>
-                      }
-                    </div>
-                  </section>
-                </div>
-              </ngs-scrollbar-area>
-            </ng-template>
           </ngs-tab-panel-aside>
         </ngs-tab-panel>
         </div>
@@ -1436,7 +1359,7 @@
                       [attr.aria-label]="'Select ' + (entry.layer.name || entry.layer.id)"
                       [ngsContextMenuTriggerFor]="layerContextMenu"
                       (pointerdown)="startCanvasMove(entry.layer, $event)"
-                      (dblclick)="startTextEdit(entry.layer, $event)"
+                      (dblclick)="ignoreCanvasLayerDoubleClick($event)"
                       (contextmenu)="selectLayerContext(entry.layer, $event)"
                     >
                       @if (entry.layer.type === 'text') {
@@ -1802,7 +1725,7 @@
                     (click)="selectLayer(item.layer, $event); $event.stopPropagation()"
                   >
                     <ngs-icon name="fluent:diamond-24-regular" />
-                    <span>{{ track.animation.property }}</span>
+                    <span>{{ animationTrackLabel(track.animation) }}</span>
                   </button>
                   <div class="ngs-motion-studio__track ngs-motion-studio__animation-track">
                     <span
@@ -2124,70 +2047,6 @@
                     (input)="setLayerCaptionText($any($event.target).value)"
                   ></textarea>
                 </ngs-form-field>
-              }
-
-              @if (layer.type === 'text' || layer.type === 'caption') {
-                <div class="ngs-motion-studio__field-grid">
-                  <ngs-form-field subscriptHiddenIfEmpty>
-                    <ngs-label>Text effect</ngs-label>
-                    <ngs-select
-                      [value]="selectedTextEffectType(layer)"
-                      (selectionChange)="setLayerTextEffect($event.value)"
-                    >
-                      <ngs-option value="none">None</ngs-option>
-                      @for (preset of textEffectPresets; track preset.value) {
-                        <ngs-option [value]="preset.value">{{ preset.label }}</ngs-option>
-                      }
-                    </ngs-select>
-                  </ngs-form-field>
-                  <ngs-form-field subscriptHiddenIfEmpty>
-                    <ngs-label>Effect duration</ngs-label>
-                    <input
-                      ngsInput
-                      type="number"
-                      min="100"
-                      step="50"
-                      [value]="textEffectNumber(layer, 'duration')"
-                      (input)="setLayerTextEffectNumber('duration', $any($event.target).value)"
-                    />
-                  </ngs-form-field>
-                  <ngs-form-field subscriptHiddenIfEmpty>
-                    <ngs-label>Stagger</ngs-label>
-                    <input
-                      ngsInput
-                      type="number"
-                      min="0"
-                      step="5"
-                      [value]="textEffectNumber(layer, 'stagger')"
-                      (input)="setLayerTextEffectNumber('stagger', $any($event.target).value)"
-                    />
-                  </ngs-form-field>
-                  <ngs-form-field subscriptHiddenIfEmpty>
-                    <ngs-label>Distance</ngs-label>
-                    <input
-                      ngsInput
-                      type="number"
-                      min="0"
-                      step="4"
-                      [value]="textEffectNumber(layer, 'distance')"
-                      (input)="setLayerTextEffectNumber('distance', $any($event.target).value)"
-                    />
-                  </ngs-form-field>
-                </div>
-                <div class="ngs-motion-studio__animation-presets">
-                  @for (preset of textEffectPresets; track preset.value) {
-                    <button
-                      ngsButton="outlined"
-                      type="button"
-                      (click)="applyTextEffectPreset(preset.value, $event)"
-                    >
-                      {{ preset.label }}
-                    </button>
-                  }
-                  <button ngsButton="outlined" type="button" (click)="clearLayerTextEffect($event)">
-                    Clear effect
-                  </button>
-                </div>
               }
 
               @if (layer.type === 'path' || layer.type === 'svg') {
@@ -2543,14 +2402,87 @@
             </section>
               </ngs-expansion-panel>
 
-              <ngs-expansion-panel>
+              <ngs-expansion-panel [expanded]="true">
                 <ngs-expansion-panel-header>
-                  <ngs-expansion-panel-title>Motion</ngs-expansion-panel-title>
+                  <ngs-expansion-panel-title>Effects</ngs-expansion-panel-title>
                   <ngs-expansion-panel-description>
                     {{ layer.animations?.length || 0 }} tracks · {{ transitionCount(layer) }}
                     transitions
                   </ngs-expansion-panel-description>
                 </ngs-expansion-panel-header>
+            @if (layer.type === 'text' || layer.type === 'caption') {
+              <section class="ngs-motion-studio__inspector-section">
+                <header class="ngs-motion-studio__section-header">
+                  <h3>Text effect</h3>
+                  <div class="ngs-motion-studio__section-actions">
+                    <button ngsButton="outlined" type="button" (click)="clearLayerTextEffect($event)">
+                      Clear effect
+                    </button>
+                  </div>
+                </header>
+
+                <div class="ngs-motion-studio__field-grid">
+                  <ngs-form-field subscriptHiddenIfEmpty>
+                    <ngs-label>Effect</ngs-label>
+                    <ngs-select
+                      [value]="selectedTextEffectType(layer)"
+                      (selectionChange)="setLayerTextEffect($event.value)"
+                    >
+                      <ngs-option value="none">None</ngs-option>
+                      @for (preset of textEffectPresets; track preset.value) {
+                        <ngs-option [value]="preset.value">{{ preset.label }}</ngs-option>
+                      }
+                    </ngs-select>
+                  </ngs-form-field>
+                </div>
+
+                @switch (selectedTextEffectType(layer)) {
+                  @case ('chars-slide-up') {
+                    <ngs-motion-chars-slide-up-settings
+                      [effect]="selectedTextEffectSettings(layer)"
+                      (settingChange)="setLayerTextEffectSetting($event)"
+                    />
+                  }
+                  @case ('words-fade-up') {
+                    <ngs-motion-words-fade-up-settings
+                      [effect]="selectedTextEffectSettings(layer)"
+                      (settingChange)="setLayerTextEffectSetting($event)"
+                    />
+                  }
+                  @case ('prepare-text-words') {
+                    <ngs-motion-prepare-text-words-settings
+                      [effect]="selectedTextEffectSettings(layer)"
+                      (settingChange)="setLayerTextEffectSetting($event)"
+                    />
+                  }
+                  @case ('split-text-masked-letters') {
+                    <ngs-motion-masked-letters-settings
+                      [effect]="selectedTextEffectSettings(layer)"
+                      (settingChange)="setLayerTextEffectSetting($event)"
+                    />
+                  }
+                  @case ('chars-blur-in') {
+                    <ngs-motion-chars-blur-in-settings
+                      [effect]="selectedTextEffectSettings(layer)"
+                      (settingChange)="setLayerTextEffectSetting($event)"
+                    />
+                  }
+                  @case ('lines-mask-up') {
+                    <ngs-motion-lines-mask-up-settings
+                      [effect]="selectedTextEffectSettings(layer)"
+                      (settingChange)="setLayerTextEffectSetting($event)"
+                    />
+                  }
+                  @case ('chars-scale-pop') {
+                    <ngs-motion-chars-scale-pop-settings
+                      [effect]="selectedTextEffectSettings(layer)"
+                      (settingChange)="setLayerTextEffectSetting($event)"
+                    />
+                  }
+                }
+              </section>
+            }
+
             <section class="ngs-motion-studio__inspector-section">
               <header class="ngs-motion-studio__section-header">
                 <h3>Transitions</h3>
@@ -3131,18 +3063,12 @@
                 </div>
               </div>
 
-              <div class="ngs-motion-studio__animation-presets">
-                @for (preset of animationPresets; track preset.value) {
-                  <button
-                    ngsButton="outlined"
-                    type="button"
-                    (click)="applyAnimationPreset(preset.value)"
-                  >
-                    {{ preset.label }}
-                  </button>
-                }
-              </div>
-
+              <header class="ngs-motion-studio__section-header">
+                <h3>Manual tracks</h3>
+                <ngs-chip-set>
+                  <ngs-chip>{{ animationProperties.length }} properties</ngs-chip>
+                </ngs-chip-set>
+              </header>
               <div class="ngs-motion-studio__animation-presets">
                 @for (property of animationProperties; track property.value) {
                   <button

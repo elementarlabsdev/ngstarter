@@ -53,4 +53,53 @@ describe('motion engine', () => {
       'skew(8deg, -4deg) scale(3, 1)',
     );
   });
+
+  it('resolves text effects from animation tracks only while the track is active', () => {
+    const layer: MotionLayer = {
+      id: 'text',
+      type: 'text',
+      start: 0,
+      duration: 2000,
+      layout: {
+        x: 0,
+        y: 0,
+        width: 400,
+        height: 120,
+      },
+      props: {
+        text: 'Hello',
+      },
+      animations: [
+        {
+          property: 'textEffect',
+          keyframes: [
+            {
+              time: 500,
+              value: {
+                type: 'chars-slide-up',
+                duration: 600,
+                delay: 0,
+                stagger: 20,
+                distance: 24,
+                ease: 'power3.out',
+              },
+            },
+            {
+              time: 1100,
+              value: null,
+            },
+          ],
+        },
+      ],
+    };
+
+    expect(resolveMotionLayerSnapshot(layer, 400).props['textEffect']).toBeUndefined();
+    expect(resolveMotionLayerSnapshot(layer, 500).props['textEffect']).toEqual(
+      expect.objectContaining({
+        type: 'chars-slide-up',
+        startTime: 500,
+      }),
+    );
+    expect(resolveMotionLayerSnapshot(layer, 1100).props['textEffect']).toBeUndefined();
+  });
 });

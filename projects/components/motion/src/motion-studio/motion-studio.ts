@@ -112,6 +112,16 @@ import {
 import { MOTION_PRESETS, MotionPreset } from '../presets/motion-presets';
 import { MotionPlayer } from '../motion-player/motion-player';
 import { MotionRenderer } from '../motion-renderer/motion-renderer';
+import {
+  MotionCharsBlurInSettings,
+  MotionCharsScalePopSettings,
+  MotionCharsSlideUpSettings,
+  MotionLinesMaskUpSettings,
+  MotionMaskedLettersSettings,
+  MotionPrepareTextWordsSettings,
+  MotionWordsFadeUpSettings,
+} from './motion-text-effect-settings';
+import type { MotionTextEffectSettingChange } from './motion-text-effect-settings';
 import { animationFrameScheduler, fromEvent, merge } from 'rxjs';
 import { auditTime, take, takeUntil, tap } from 'rxjs/operators';
 import {
@@ -161,8 +171,15 @@ import { MOTION_RENDER_RUNNER, MotionRenderRunnerHandle } from '../render/motion
     Menu,
     MenuItem,
     MenuTrigger,
+    MotionCharsBlurInSettings,
+    MotionCharsScalePopSettings,
+    MotionCharsSlideUpSettings,
+    MotionLinesMaskUpSettings,
+    MotionMaskedLettersSettings,
     MotionPlayer,
+    MotionPrepareTextWordsSettings,
     MotionRenderer,
+    MotionWordsFadeUpSettings,
     NgStyle,
     NgTemplateOutlet,
     Panel,
@@ -417,14 +434,6 @@ export class MotionStudio {
     { label: 'Chars blur in', value: 'chars-blur-in' },
     { label: 'Lines mask up', value: 'lines-mask-up' },
     { label: 'Chars scale pop', value: 'chars-scale-pop' },
-  ];
-  protected readonly animationPresetGroups: Array<{
-    label: string;
-    category: MotionAnimationPresetCategory;
-  }> = [
-    { label: 'Entrance', category: 'entrance' },
-    { label: 'Emphasis', category: 'emphasis' },
-    { label: 'Text', category: 'text' },
   ];
   protected readonly selectedAnimationPreset = signal<MotionAnimationPresetType>('fade');
   protected readonly animationPresetApplyMode = signal<MotionAnimationApplyMode>('append');
@@ -1932,7 +1941,7 @@ export class MotionStudio {
     this.updateDocument((document) => {
       document.layers.push(layer);
       document.tracks = ensureLayerInTrack(document.tracks, layer.id);
-      this.assignLayerToSelectedScene(document, layer.id);
+      this.assignLayersToActiveOrInitialScene(document, [layer.id]);
       this.selectedLayerId.set(layer.id);
       this.selectedLayerIds.set([layer.id]);
       this.selectedKeyframe.set(null);
@@ -1948,7 +1957,7 @@ export class MotionStudio {
     this.updateDocument((document) => {
       document.layers.push(layer);
       document.tracks = ensureLayerInTrack(document.tracks, layer.id);
-      this.assignLayerToSelectedScene(document, layer.id);
+      this.assignLayersToActiveOrInitialScene(document, [layer.id]);
       this.selectedLayerId.set(layer.id);
       this.selectedLayerIds.set([layer.id]);
       this.selectedKeyframe.set(null);
@@ -3311,14 +3320,29 @@ export class MotionStudio {
   }
 
   protected selectedTextEffectType(layer: MotionLayer): MotionTextEffectPresetId | 'none' {
-    return normalizeMotionTextEffectPresetId(layer.props?.['textEffect']) ?? 'none';
+    return normalizeMotionTextEffectPresetId(this.readLayerTextEffectSettings(layer)) ?? 'none';
+  }
+
+  protected selectedTextEffectSettings(layer: MotionLayer): Record<string, MotionValue> | null {
+    const effect = this.readLayerTextEffectSettings(layer);
+    const type = normalizeMotionTextEffectPresetId(effect);
+
+    if (!type) {
+      return null;
+    }
+
+    return {
+      ...MOTION_STUDIO_TEXT_EFFECT_PRESETS[type],
+      ...(effect ?? {}),
+      type,
+    };
   }
 
   protected textEffectNumber(
     layer: MotionLayer,
     property: 'duration' | 'delay' | 'stagger' | 'distance',
   ): number {
-    const effect = readMotionTextEffectProps(layer.props?.['textEffect']);
+    const effect = this.readLayerTextEffectSettings(layer);
     const preset = normalizeMotionTextEffectPresetId(effect) ?? 'chars-slide-up';
     const fallback = MOTION_STUDIO_TEXT_EFFECT_PRESETS[preset][property];
 
@@ -3346,10 +3370,8 @@ export class MotionStudio {
           return;
         }
 
-        layer.props = {
-          ...(layer.props ?? {}),
-          textEffect: { ...preset },
-        };
+        this.upsertLayerTextEffectAnimation(layer, { ...preset });
+        this.expandLayerAnimationTracks(layer.id);
       },
       { historyLabel: `Applied ${preset.label} text effect` },
     );
@@ -3362,18 +3384,35 @@ export class MotionStudio {
     const nextValue = Math.max(0, coerceNumber(value));
 
     this.updateSelectedLayer((layer) => {
-      const type = normalizeMotionTextEffectPresetId(layer.props?.['textEffect']) ?? 'chars-slide-up';
+      const effect = this.readLayerTextEffectSettings(layer);
+      const type = normalizeMotionTextEffectPresetId(effect) ?? 'chars-slide-up';
       const preset = MOTION_STUDIO_TEXT_EFFECT_PRESETS[type];
 
-      layer.props = {
-        ...(layer.props ?? {}),
-        textEffect: {
-          ...preset,
-          ...readMotionTextEffectProps(layer.props?.['textEffect']),
-          type,
-          [property]: nextValue,
-        },
-      };
+      this.upsertLayerTextEffectAnimation(layer, {
+        ...preset,
+        ...(effect ?? {}),
+        type,
+        [property]: nextValue,
+      });
+    });
+  }
+
+  protected setLayerTextEffectSetting(change: MotionTextEffectSettingChange): void {
+    this.updateSelectedLayer((layer) => {
+      if (layer.type !== 'text' && layer.type !== 'caption') {
+        return;
+      }
+
+      const effect = this.readLayerTextEffectSettings(layer);
+      const type = normalizeMotionTextEffectPresetId(effect) ?? 'chars-slide-up';
+      const preset = MOTION_STUDIO_TEXT_EFFECT_PRESETS[type];
+
+      this.upsertLayerTextEffectAnimation(layer, {
+        ...preset,
+        ...(effect ?? {}),
+        type,
+        [change.property]: change.value,
+      });
     });
   }
 
@@ -3385,8 +3424,111 @@ export class MotionStudio {
 
         delete props['textEffect'];
         layer.props = props;
+        layer.animations = layer.animations?.filter(
+          (animation) => animation.property !== TEXT_EFFECT_ANIMATION_PROPERTY,
+        );
+
+        if (!layer.animations?.length) {
+          layer.animations = undefined;
+        }
       },
       { historyLabel: 'Cleared text effect' },
+    );
+  }
+
+  private readLayerTextEffectSettings(layer: MotionLayer): Record<string, MotionValue> | null {
+    return (
+      this.readLayerTextEffectAnimationSettings(layer) ??
+      readMotionTextEffectProps(layer.props?.['textEffect'])
+    );
+  }
+
+  private readLayerTextEffectAnimationSettings(
+    layer: MotionLayer,
+  ): Record<string, MotionValue> | null {
+    const animation = layer.animations?.find(
+      (item) => item.property === TEXT_EFFECT_ANIMATION_PROPERTY,
+    );
+    const keyframe = animation?.keyframes.find((item) =>
+      normalizeMotionTextEffectPresetId(item.value),
+    );
+
+    return readMotionTextEffectProps(keyframe?.value);
+  }
+
+  private upsertLayerTextEffectAnimation(
+    layer: MotionLayer,
+    effect: Record<string, MotionValue>,
+  ): void {
+    const props = { ...(layer.props ?? {}) };
+    const animations = [...(layer.animations ?? [])];
+    const existingIndex = animations.findIndex(
+      (animation) => animation.property === TEXT_EFFECT_ANIMATION_PROPERTY,
+    );
+    const existing = existingIndex >= 0 ? animations[existingIndex] : null;
+    const duration = this.readTextEffectAnimationDuration(effect);
+    const startTime = existing
+      ? this.readTextEffectAnimationStartTime(existing)
+      : this.readTextEffectAnimationInsertTime(layer, duration);
+    const keyframes: MotionKeyframe[] = [
+      {
+        time: startTime,
+        value: { ...effect },
+        easing: 'linear',
+      },
+      {
+        time: Math.min(layer.duration, startTime + duration),
+        value: null,
+        easing: 'linear',
+      },
+    ];
+    const animation: MotionAnimation = {
+      ...(existing ?? {}),
+      id: existing?.id ?? createMotionLayerId('text-effect'),
+      property: TEXT_EFFECT_ANIMATION_PROPERTY,
+      easing: 'linear',
+      keyframes,
+    };
+
+    delete props['textEffect'];
+    layer.props = props;
+
+    if (existingIndex >= 0) {
+      animations[existingIndex] = animation;
+    } else {
+      animations.push(animation);
+    }
+
+    layer.animations = animations;
+  }
+
+  private readTextEffectAnimationStartTime(animation: MotionAnimation | null): number {
+    const keyframe = animation?.keyframes.find((item) =>
+      normalizeMotionTextEffectPresetId(item.value),
+    );
+
+    return Math.max(0, coerceNumber(keyframe?.time ?? 0));
+  }
+
+  private readTextEffectAnimationDuration(effect: Record<string, MotionValue>): number {
+    const type = normalizeMotionTextEffectPresetId(effect) ?? 'chars-slide-up';
+    const preset = MOTION_STUDIO_TEXT_EFFECT_PRESETS[type];
+    const duration = Math.max(100, coerceNumber(effect['duration'] ?? preset.duration));
+    const delay = Math.max(0, coerceNumber(effect['delay'] ?? preset.delay));
+
+    return Math.max(100, duration + delay);
+  }
+
+  private readTextEffectAnimationInsertTime(layer: MotionLayer, duration: number): number {
+    const localTime = this.currentTime() - layer.start;
+    const latestStart = Math.max(0, layer.duration - duration);
+
+    return Math.max(0, Math.min(latestStart, localTime));
+  }
+
+  private expandLayerAnimationTracks(layerId: string): void {
+    this.expandedAnimationLayerIds.update((ids) =>
+      ids.includes(layerId) ? ids : [...ids, layerId],
     );
   }
 
@@ -3404,17 +3546,6 @@ export class MotionStudio {
         },
       ];
     });
-  }
-
-  protected applyAnimationPreset(type: MotionAnimationPresetType): void {
-    this.selectedAnimationPreset.set(type);
-    this.applyAnimationPresetToLayers(type, 'active');
-  }
-
-  protected animationPresetsByCategory(
-    category: MotionAnimationPresetCategory,
-  ): Array<{ label: string; value: MotionAnimationPresetType; category: MotionAnimationPresetCategory }> {
-    return this.animationPresets.filter((preset) => preset.category === category);
   }
 
   protected applySelectedAnimationPresetToLayer(): void {
@@ -4275,6 +4406,17 @@ export class MotionStudio {
     return animation.id ?? `${animation.property}-${index}`;
   }
 
+  protected animationTrackLabel(animation: MotionAnimation): string {
+    if (animation.property === TEXT_EFFECT_ANIMATION_PROPERTY) {
+      return 'Text effect';
+    }
+
+    return (
+      this.animationProperties.find((property) => property.value === animation.property)?.label ??
+      animation.property
+    );
+  }
+
   protected toggleLayerAnimationTracks(layer: MotionLayer, event?: Event): void {
     event?.stopPropagation();
 
@@ -5026,6 +5168,11 @@ export class MotionStudio {
     return this.editingTextLayerId() === layer.id;
   }
 
+  protected ignoreCanvasLayerDoubleClick(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
   protected startTextEdit(layer: MotionLayer, event: MouseEvent): void {
     event.preventDefault();
     event.stopPropagation();
@@ -5124,7 +5271,15 @@ export class MotionStudio {
     this.startCanvasInteraction('canvas-move', layer, event);
   }
 
+  private isPrimaryPointerButton(event: PointerEvent): boolean {
+    return typeof event.button !== 'number' || event.button === 0;
+  }
+
   protected clearCanvasSelection(event: PointerEvent): void {
+    if (!this.isPrimaryPointerButton(event)) {
+      return;
+    }
+
     const target = event.target as HTMLElement | null;
 
     if (target?.closest('.ngs-motion-studio__canvas-layer, .ngs-motion-studio__resize-handle')) {
@@ -5135,6 +5290,10 @@ export class MotionStudio {
   }
 
   protected startCanvasBoxSelect(event: PointerEvent): void {
+    if (!this.isPrimaryPointerButton(event)) {
+      return;
+    }
+
     const target = event.target as HTMLElement | null;
 
     if (target?.closest('.ngs-motion-studio__canvas-layer, .ngs-motion-studio__resize-handle')) {
@@ -5951,6 +6110,7 @@ export class MotionStudio {
       this.updateDocument((document) => {
         document.layers.push(layer);
         document.tracks = ensureLayerInTrack(document.tracks, layer.id);
+        this.assignLayersToActiveOrInitialScene(document, [layer.id]);
         this.selectedLayerId.set(layer.id);
         this.selectedLayerIds.set([layer.id]);
         this.selectedKeyframe.set(null);
@@ -5973,6 +6133,7 @@ export class MotionStudio {
     this.updateDocument((document) => {
       document.layers.push(layer);
       document.tracks = ensureLayerInTrack(document.tracks, layer.id);
+      this.assignLayersToActiveOrInitialScene(document, [layer.id]);
       this.selectedLayerId.set(layer.id);
       this.selectedLayerIds.set([layer.id]);
       this.selectedKeyframe.set(null);
@@ -6004,6 +6165,10 @@ export class MotionStudio {
       for (const layer of stampedLayers) {
         document.tracks = ensureLayerInTrack(document.tracks, layer.id);
       }
+      this.assignLayersToActiveOrInitialScene(
+        document,
+        stampedLayers.map((layer) => layer.id),
+      );
       this.selectedLayerId.set(
         stampedLayers[stampedLayers.length - 1]?.id ?? this.selectedLayerId(),
       );
@@ -6199,21 +6364,52 @@ export class MotionStudio {
     });
   }
 
-  private assignLayerToSelectedScene(document: MotionDocument, layerId: string): void {
-    const sceneId = this.selectedSceneId();
+  private assignLayersToActiveOrInitialScene(document: MotionDocument, layerIds: string[]): void {
+    const nextLayerIds = uniqueStrings(layerIds);
 
-    if (!sceneId) {
+    if (!nextLayerIds.length) {
       return;
     }
 
-    const scene = document.scenes?.find((item) => item.id === sceneId);
+    const sceneId = this.selectedSceneId();
+    const scenes = document.scenes ?? [];
+    let scene = sceneId ? scenes.find((item) => item.id === sceneId) : undefined;
+
+    if (!scene && !scenes.length) {
+      const initialScene: MotionScene = {
+        id: createMotionLayerId('scene'),
+        name: 'Scene 1',
+        start: 0,
+        duration: this.readInitialSceneDuration(document, nextLayerIds),
+        layerIds: [],
+      };
+
+      document.scenes = [initialScene];
+      scene = initialScene;
+      this.setSelectedScenes([initialScene.id], initialScene.id);
+    }
 
     if (!scene) {
       return;
     }
 
-    const layerIds = scene.layerIds ?? [];
-    scene.layerIds = layerIds.includes(layerId) ? layerIds : [...layerIds, layerId];
+    scene.layerIds = uniqueStrings([...(scene.layerIds ?? []), ...nextLayerIds]);
+    document.composition.duration = Math.max(
+      document.composition.duration,
+      readSceneSequenceDuration(document.scenes ?? []),
+    );
+  }
+
+  private readInitialSceneDuration(document: MotionDocument, layerIds: string[]): number {
+    const targetLayerIds = new Set(layerIds);
+    const layerEnd = flattenMotionLayers(document.layers)
+      .filter((item) => targetLayerIds.has(item.layer.id))
+      .reduce(
+        (duration, item) => Math.max(duration, item.layer.start + item.layer.duration),
+        0,
+      );
+
+    return Math.max(DEFAULT_SCENE_DURATION, layerEnd);
   }
 
   private createMediaLayer(
@@ -9569,7 +9765,7 @@ const createDefaultLayerLayout = (type: MotionLayerType): MotionLayout => {
     case 'text':
       return { x: 160, y: 160, width: 720, height: 120 };
     case 'caption':
-      return { x: 320, y: 820, width: 1280, height: 132 };
+      return { x: 320, y: 820, width: 1280, height: 198 };
     case 'path':
     case 'svg':
       return { x: 220, y: 260, width: 520, height: 320 };
@@ -9590,7 +9786,7 @@ const createDefaultLayerStyle = (type: MotionLayerType): MotionStyle => {
         color: '#ffffff',
         background: '#020617',
         borderRadius: 28,
-        fontSize: 46,
+        fontSize: 69,
         fontWeight: 600,
         lineHeight: 1.18,
       };
@@ -11365,6 +11561,7 @@ const MOTION_HISTORY_LIMIT = 80;
 const LAYER_COPY_OFFSET = 40;
 const DEFAULT_TRANSITION_DURATION = 600;
 const DEFAULT_SCENE_DURATION = 3000;
+const TEXT_EFFECT_ANIMATION_PROPERTY = 'textEffect';
 const LAYER_SCENE_DROP_UNASSIGNED_ID = '__ngs_motion_unassigned_scene__';
 
 const resizeMotionLayout = (

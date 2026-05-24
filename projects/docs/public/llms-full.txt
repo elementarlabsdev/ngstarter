@@ -642,10 +642,10 @@ Typography:
   purpose: The NgStarter Angular Motion library renders JSON-defined animated compositions and provides a visual studio for assembling scenes from layers, presets, keyframes, and low-level motion properties.
   use when: Choose Motion when the workflow matches examples such as Motion, Basic motion, Render export.
   example topics: Motion, Basic motion, Render export
-  selectors: `ngs-motion-player`, `ngs-motion-renderer`, `ngs-motion-studio`
+  selectors: `ngs-motion-chars-blur-in-settings`, `ngs-motion-chars-scale-pop-settings`, `ngs-motion-chars-slide-up-settings`, `ngs-motion-lines-mask-up-settings`, `ngs-motion-masked-letters-settings`, `ngs-motion-player`, `ngs-motion-prepare-text-words-settings`, `ngs-motion-renderer`, `ngs-motion-studio`, `ngs-motion-words-fade-up-settings`
   exports: `applyMotionTransition`, `clampMotionTime`, `coerceMotionNumber`, `coerceMotionPrimitive`, `coerceMotionString`, `createDefaultMotionDocument`, `createMotionRenderCliCommand`, `createMotionRenderDocument`, `createMotionRenderEventRunner`, `createMotionRenderManifest`, `createMotionRenderMockRunner`, `createMotionRenderProgress`
-  inputs: `animateBackground`, `clip`, `controls`, `currentTime`, `document`, `frame`, `initialPreviewScale`, `localStorageKey`, `loop`, `maxScale`, `minScale`, `playing`, `previewScaleMax`, `previewScaleMin`, `previewScaleStep`, `renderTime`, `scale`, `scaleStep`, `time`
-  outputs: `currentTimeChange`, `documentChange`, `ended`, `renderRequest`, `scaleChange`
+  inputs: `animateBackground`, `clip`, `controls`, `currentTime`, `document`, `effect`, `frame`, `initialPreviewScale`, `localStorageKey`, `loop`, `maxScale`, `minScale`, `playing`, `previewScaleMax`, `previewScaleMin`, `previewScaleStep`, `renderTime`, `scale`, `scaleStep`, `time`
+  outputs: `currentTimeChange`, `documentChange`, `ended`, `renderRequest`, `scaleChange`, `settingChange`
   tokens: `--ngs-color-border`, `--ngs-color-danger`, `--ngs-color-danger-container-high`, `--ngs-color-danger-container-low`, `--ngs-color-on-surface`, `--ngs-color-primary`, `--ngs-color-surface`, `--ngs-color-surface-container-low`, `--ngs-color-text`, `--ngs-color-text-secondary`, `--ngs-color-warning`, `--ngs-expansion-panel-content-padding`, `--ngs-expansion-panel-header-expanded-height`, `--ngs-expansion-panel-header-height`, `--ngs-expansion-panel-radius`, `--ngs-field-border-color`
 - navigation: `@ngstarter-ui/components/navigation` docs: /navigation/navigation
   purpose: Render a persistent product navigation structure when ngs-sidebar is not used.

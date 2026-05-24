@@ -28,6 +28,36 @@ describe('MotionStudio', () => {
     expect((component as any).selectedLayerIds()).toEqual([]);
   });
 
+  it('should create an initial scene when adding the first layer without scenes', () => {
+    fixture.detectChanges();
+
+    (component as any).draft.set({
+      version: '0.1',
+      composition: {
+        width: 1920,
+        height: 1080,
+        fps: 30,
+        duration: 5 * 60 * 1000,
+      },
+      layers: [],
+      tracks: [],
+      scenes: [],
+    });
+
+    (component as any).addTextLayer();
+    fixture.detectChanges();
+
+    const document = (component as any).draft();
+    const layer = document.layers[0];
+    const scene = document.scenes[0];
+
+    expect(document.scenes).toHaveLength(1);
+    expect(scene.name).toBe('Scene 1');
+    expect(scene.layerIds).toEqual([layer.id]);
+    expect((component as any).selectedSceneId()).toBe(scene.id);
+    expect((component as any).selectedLayerId()).toBe(layer.id);
+  });
+
   it('should default the timeline duration to five minutes', () => {
     fixture.detectChanges();
 
@@ -83,6 +113,23 @@ describe('MotionStudio', () => {
     expect((component as any).timelineZoomMode()).toBe('4');
   });
 
+  it('should ignore double clicks on canvas text layers', () => {
+    fixture.detectChanges();
+
+    const preventDefault = vi.fn();
+    const stopPropagation = vi.fn();
+
+    (component as any).ignoreCanvasLayerDoubleClick({
+      preventDefault,
+      stopPropagation,
+    });
+    fixture.detectChanges();
+
+    expect(preventDefault).toHaveBeenCalled();
+    expect(stopPropagation).toHaveBeenCalled();
+    expect((component as any).editingTextLayerId()).toBeNull();
+  });
+
   it('should keep selection empty after clicking outside canvas layers', () => {
     fixture.detectChanges();
 
@@ -97,6 +144,30 @@ describe('MotionStudio', () => {
 
     expect((component as any).selectedLayerId()).toBeNull();
     expect((component as any).selectedLayerIds()).toEqual([]);
+  });
+
+  it('should not change canvas selection from a right click on the canvas background', () => {
+    fixture.detectChanges();
+
+    const layer = (component as any).draft().layers[0];
+    (component as any).selectLayer(layer);
+    (component as any).startCanvasBoxSelect({
+      button: 2,
+      target: {
+        closest: () => null,
+      },
+    });
+    (component as any).clearCanvasSelection({
+      button: 2,
+      target: {
+        closest: () => null,
+      },
+    });
+    fixture.detectChanges();
+
+    expect((component as any).selectedLayerId()).toBe(layer.id);
+    expect((component as any).selectedLayerIds()).toEqual([layer.id]);
+    expect((component as any).canvasInteractionType()).toBeNull();
   });
 
   it('should finish text editing and clear selection after clicking outside layers', () => {
@@ -173,6 +244,28 @@ describe('MotionStudio', () => {
     expect((component as any).draft().layers.find((item: any) => item.id === layer.id).style.lineHeight).toBe(
       1.35,
     );
+  });
+
+  it('should add text effects as timeline animation tracks', () => {
+    fixture.detectChanges();
+
+    const layer = (component as any).draft().layers.find((item: any) => item.type === 'text');
+    (component as any).selectLayer(layer);
+
+    (component as any).applyTextEffectPreset('split-text-masked-letters');
+    fixture.detectChanges();
+
+    const nextLayer = (component as any).draft().layers.find((item: any) => item.id === layer.id);
+    const textEffectTrack = nextLayer.animations.find(
+      (animation: any) => animation.property === 'textEffect',
+    );
+
+    expect(nextLayer.props?.textEffect).toBeUndefined();
+    expect(textEffectTrack).toBeTruthy();
+    expect(textEffectTrack.keyframes[0].value.type).toBe('split-text-masked-letters');
+    expect(textEffectTrack.keyframes[textEffectTrack.keyframes.length - 1].value).toBeNull();
+    expect((component as any).selectedTextEffectType(nextLayer)).toBe('split-text-masked-letters');
+    expect((component as any).isLayerAnimationExpanded(nextLayer)).toBe(true);
   });
 
   it('should allow removing scene transitions even when the transition type is normalized as none', () => {

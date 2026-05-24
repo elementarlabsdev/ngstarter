@@ -665,6 +665,7 @@ const normalizeMotionTextEffect = (value: MotionValue | undefined): MotionTextEf
     stagger: Math.max(0, readMotionNumber(record['stagger'], preset.stagger)),
     distance: Math.max(0, readMotionNumber(record['distance'], preset.distance)),
     ease: coerceMotionString(record['ease'] as MotionValue | undefined, preset.ease),
+    startTime: Math.max(0, readMotionNumber(record['startTime'], 0)),
     prepareText: record['prepareText'] === true || preset.prepareText === true,
     useSplitText: record['useSplitText'] === true || preset.useSplitText === true,
     mask: normalizeMotionTextEffectMask(record['mask']) ?? preset.mask,
@@ -972,7 +973,9 @@ const createMotionTextEffectStyle = (
     effect.type === 'split-text-masked-letters'
       ? seededMotionRandom(`masked-order-${index}`) * effect.stagger
       : index * effect.stagger;
-  const progress = clampUnit((localTime - effect.delay - staggerDelay) / effect.duration);
+  const progress = clampUnit(
+    (localTime - (effect.startTime ?? 0) - effect.delay - staggerDelay) / effect.duration,
+  );
   const timeline = gsap.timeline({ paused: true });
 
   timeline.to(state, {
@@ -1182,6 +1185,7 @@ interface MotionTextEffectConfig {
   stagger: number;
   distance: number;
   ease: string;
+  startTime?: number;
   prepareText?: boolean;
   useSplitText?: boolean;
   mask?: MotionTextEffectMask;

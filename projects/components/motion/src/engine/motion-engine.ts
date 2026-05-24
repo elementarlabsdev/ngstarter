@@ -93,7 +93,11 @@ export const resolveMotionLayerSnapshot = (
   const props: Record<string, MotionValue> = { ...(layer.props ?? {}) };
 
   for (const animation of layer.animations ?? []) {
-    const value = resolveMotionAnimation(animation, localTime);
+    const value =
+      animation.property === 'textEffect'
+        ? resolveMotionTextEffectAnimation(animation, localTime)
+        : resolveMotionAnimation(animation, localTime);
+
     applyMotionValue(animation.property, value, layout, style, props, layer);
   }
 
@@ -184,6 +188,27 @@ const resolveMotionAnimationTime = (
   return reversed ? endTime - elapsed : startTime + elapsed;
 };
 
+const resolveMotionTextEffectAnimation = (
+  animation: MotionAnimation,
+  localTime: number,
+): MotionValue => {
+  const keyframes = [...animation.keyframes].sort((a, b) => a.time - b.time);
+  const activeKeyframe = [...keyframes].reverse().find((keyframe) => keyframe.time <= localTime);
+
+  if (!activeKeyframe || activeKeyframe.value === null) {
+    return null;
+  }
+
+  if (isMotionRecord(activeKeyframe.value)) {
+    return {
+      ...activeKeyframe.value,
+      startTime: activeKeyframe.time,
+    };
+  }
+
+  return activeKeyframe.value;
+};
+
 export const interpolateMotionValue = (
   from: MotionValue,
   to: MotionValue,
@@ -203,6 +228,9 @@ export const interpolateMotionValue = (
 
   return progress < 1 ? from : to;
 };
+
+const isMotionRecord = (value: MotionValue): value is { [key: string]: MotionValue } =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
 
 const interpolateMotionString = (from: string, to: string, progress: number): string => {
   const fromParts = parseMotionNumberString(from);
@@ -314,6 +342,10 @@ const applyMotionValue = (
   layer: MotionLayer,
 ): void => {
   if (value === null) {
+    if (property === 'textEffect') {
+      delete props[property];
+    }
+
     return;
   }
 
