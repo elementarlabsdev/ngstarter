@@ -2,7 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  ElementRef,
   PLATFORM_ID,
+  afterRenderEffect,
   computed,
   effect,
   inject,
@@ -46,7 +48,10 @@ import { SplitText } from 'gsap/SplitText';
 export class MotionPlayer {
   private readonly _platformId = inject(PLATFORM_ID);
   private readonly _destroyRef = inject(DestroyRef);
+  private readonly _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly _isBrowser = isPlatformBrowser(this._platformId);
+  private readonly _videoSyncState = new WeakMap<HTMLVideoElement, MotionVideoSyncState>();
+  private readonly _trackedVideos = new Set<HTMLVideoElement>();
 
   readonly document = input<MotionDocument | null>(createDefaultMotionDocument());
   readonly currentTime = input<number | undefined>(undefined);
@@ -170,9 +175,20 @@ export class MotionPlayer {
     onCleanup(() => cancelAnimationFrame(frameId));
   });
 
+  private readonly _videoSync = afterRenderEffect(() => {
+    const playbackMode = this.playing() && this.renderTime() === null;
+
+    if (!playbackMode) {
+      this.displayTime();
+    }
+
+    this.syncVideoElements(playbackMode ? 'playback' : 'scrub');
+  });
+
   constructor() {
     this._destroyRef.onDestroy(() => {
       this.internalTime.set(0);
+      this.pauseTrackedVideos();
     });
   }
 
@@ -242,7 +258,7 @@ export class MotionPlayer {
       '--ngs-motion-player-font-size':
         style.fontSize !== undefined ? `${style.fontSize}px` : '16px',
       '--ngs-motion-player-line-height':
-        style.lineHeight !== undefined ? `${style.lineHeight}` : '1.05',
+        style.lineHeight !== undefined ? `${style.lineHeight}` : '1.35',
       '--ngs-motion-player-letter-spacing':
         style.letterSpacing !== undefined ? `${style.letterSpacing}px` : '0px',
       textAlign: style.textAlign ?? null,
@@ -456,7 +472,135 @@ export class MotionPlayer {
   }
 
   protected layerMediaTime(layer: MotionLayer): number {
-    return Math.max(0, (this.displayTime() - layer.start) / 1000);
+    const snapshot = this.layerSnapshot(layer);
+    const offset = Math.max(0, readMotionNumber(snapshot.props['offset'], 0));
+
+    return Math.max(0, (snapshot.localTime + offset) / 1000);
+  }
+
+  protected syncVideoElements(mode?: MotionVideoSyncMode): void {
+    if (!this._isBrowser) {
+      return;
+    }
+
+    const syncMode = mode ?? (this.playing() && this.renderTime() === null ? 'playback' : 'scrub');
+    const videos = Array.from(
+      this._elementRef.nativeElement.querySelectorAll<HTMLVideoElement>(
+        'video.ngs-motion-player__video',
+      ),
+    );
+    const activeVideos = new Set(videos);
+
+    for (const video of Array.from(this._trackedVideos)) {
+      if (!activeVideos.has(video)) {
+        video.pause();
+        this._trackedVideos.delete(video);
+      }
+    }
+
+    for (const video of videos) {
+      this._trackedVideos.add(video);
+      this.syncVideoElement(video, syncMode);
+    }
+  }
+
+  private syncVideoElement(video: HTMLVideoElement, mode: MotionVideoSyncMode): void {
+    const targetTime = Number(video.dataset['motionVideoTime'] ?? 0);
+    const src = video.currentSrc || video.src || '';
+    const previous = this._videoSyncState.get(video);
+    const sourceChanged = previous?.src !== src;
+    const timelineJumped =
+      previous !== undefined &&
+      Math.abs(targetTime - previous.targetTime) > VIDEO_TIMELINE_JUMP_TOLERANCE;
+    const mediaDuration = Number.isFinite(video.duration) ? video.duration : null;
+    const nextTime =
+      mediaDuration === null
+        ? Math.max(0, targetTime)
+        : Math.max(0, Math.min(targetTime, mediaDuration));
+    const hasMetadata = video.readyState >= HTMLMediaElement.HAVE_METADATA;
+    const atMediaEnd = mediaDuration !== null && targetTime >= mediaDuration;
+    const canPlay = mode === 'playback' && hasMetadata && !atMediaEnd;
+    const shouldSeek =
+      hasMetadata &&
+      this.shouldSeekVideo(video, previous, {
+        canPlay,
+        mode,
+        nextTime,
+        sourceChanged,
+        timelineJumped,
+      });
+
+    if (shouldSeek) {
+      this.seekVideoElement(video, nextTime);
+    }
+
+    if (canPlay) {
+      if (video.paused && previous?.playRequested !== true) {
+        void video.play().catch(() => undefined);
+      }
+    } else if (!video.paused) {
+      video.pause();
+    }
+
+    this._videoSyncState.set(video, {
+      src,
+      time: nextTime,
+      targetTime,
+      playing: canPlay,
+      playRequested: canPlay,
+    });
+  }
+
+  private shouldSeekVideo(
+    video: HTMLVideoElement,
+    previous: MotionVideoSyncState | undefined,
+    options: {
+      canPlay: boolean;
+      mode: MotionVideoSyncMode;
+      nextTime: number;
+      sourceChanged: boolean;
+      timelineJumped: boolean;
+    },
+  ): boolean {
+    const drift = Math.abs(video.currentTime - options.nextTime);
+
+    if (options.sourceChanged || previous === undefined) {
+      return drift > VIDEO_PRECISE_SEEK_TOLERANCE;
+    }
+
+    if (options.mode === 'playback') {
+      if (!options.canPlay) {
+        return drift > VIDEO_PRECISE_SEEK_TOLERANCE;
+      }
+
+      if (previous.playing !== true) {
+        return drift > VIDEO_PRECISE_SEEK_TOLERANCE;
+      }
+
+      return drift > VIDEO_PLAYBACK_DRIFT_TOLERANCE;
+    }
+
+    if (video.seeking) {
+      return false;
+    }
+
+    return options.timelineJumped || drift > VIDEO_SCRUB_SEEK_TOLERANCE;
+  }
+
+  private seekVideoElement(video: HTMLVideoElement, time: number): void {
+    try {
+      video.currentTime = time;
+    } catch {
+      // Some browsers reject seeks before media metadata is fully available.
+    }
+  }
+
+  private pauseTrackedVideos(): void {
+    for (const video of this._trackedVideos) {
+      video.pause();
+    }
+
+    this._trackedVideos.clear();
   }
 
   protected handleScaleWheel(event: WheelEvent): void {
@@ -587,6 +731,11 @@ const clampMotionScale = (scale: number, minScale: number, maxScale: number): nu
   return Math.min(maxScale, Math.max(minScale, Math.round(nextScale * 100) / 100));
 };
 
+const VIDEO_PRECISE_SEEK_TOLERANCE = 0.025;
+const VIDEO_TIMELINE_JUMP_TOLERANCE = 0.2;
+const VIDEO_SCRUB_SEEK_TOLERANCE = 0.08;
+const VIDEO_PLAYBACK_DRIFT_TOLERANCE = 0.75;
+
 const normalizeMotionBackgroundEffectType = (
   effect: MotionBackgroundEffect | null,
 ): 'aurora' | 'spotlight' | 'mesh' | null => {
@@ -693,7 +842,7 @@ const createMotionTextEffectSegments = (
     text: token.text,
     line: token.line,
     masked: effect.mask === 'chars',
-    style: createMotionTextEffectStyle(effect, localTime, index),
+    style: createMotionTextEffectStyle(effect, localTime, token.index),
   }));
 };
 
@@ -718,8 +867,8 @@ const splitMotionTextEffectTokens = (
       return splitPreparedMotionTextWords(text);
     }
 
-    return text.split(/(\s+)/).map((word, index) => ({
-      text: word,
+    return splitFallbackMotionTextWords(text).map((word, index) => ({
+      text: `${word.text}${word.suffix}`,
       line: false,
       index,
     }));
@@ -1333,6 +1482,16 @@ interface MotionWaveformBar {
   width: number;
   height: number;
 }
+
+interface MotionVideoSyncState {
+  src: string;
+  time: number;
+  targetTime: number;
+  playing: boolean;
+  playRequested: boolean;
+}
+
+type MotionVideoSyncMode = 'playback' | 'scrub';
 
 const EMPTY_SCENE_EFFECT: SceneEffect = {
   opacity: 1,

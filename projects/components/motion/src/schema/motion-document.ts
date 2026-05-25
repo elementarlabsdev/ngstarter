@@ -207,6 +207,7 @@ export interface MotionLayerSnapshot {
 }
 
 export const DEFAULT_MOTION_COMPOSITION_DURATION = 5 * 60 * 1000;
+export const DEFAULT_MOTION_COMPOSITION_BACKGROUND = '#111827';
 
 export const createDefaultMotionDocument = (): MotionDocument => ({
   version: '0.1',
@@ -215,7 +216,7 @@ export const createDefaultMotionDocument = (): MotionDocument => ({
     height: 1080,
     fps: 30,
     duration: DEFAULT_MOTION_COMPOSITION_DURATION,
-    background: '#ffffff',
+    background: DEFAULT_MOTION_COMPOSITION_BACKGROUND,
   },
   assets: [],
   fonts: [],
@@ -272,7 +273,7 @@ export const createDefaultMotionDocument = (): MotionDocument => ({
         color: '#111827',
         fontSize: 92,
         fontWeight: 700,
-        lineHeight: 1.05,
+        lineHeight: 1.35,
         textAlign: 'left',
       },
       props: {

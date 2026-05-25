@@ -880,9 +880,9 @@
 }
 
 .ngs-motion-studio__animation-track-label.is-keyframe-selected {
-  color: #0f172a;
-  background: color-mix(in srgb, var(--ngs-color-primary) 12%, white);
-  box-shadow: inset 3px 0 0 var(--ngs-color-primary);
+  color: #064e3b;
+  background: color-mix(in srgb, #ccfbf1 62%, white);
+  box-shadow: inset 3px 0 0 #0d9488;
 }
 
 .ngs-motion-studio__ruler-label {
@@ -910,14 +910,14 @@
 
 .ngs-motion-studio__animation-track-label {
   padding-left: --spacing(8);
-  color: var(--ngs-motion-studio-muted);
-  background: #fbfdff;
+  color: #0f766e;
+  background: color-mix(in srgb, #ecfdf5 78%, white);
 }
 
 .ngs-motion-studio__animation-track {
   background:
     linear-gradient(90deg, rgb(15 23 42 / 5%) 1px, transparent 1px) 0 0 / 64px 100%,
-    #fbfdff;
+    color-mix(in srgb, #ecfdf5 70%, var(--ngs-motion-studio-track));
 }
 
 .ngs-motion-studio__transition-track-label {
@@ -1007,21 +1007,35 @@
   gap: --spacing(1);
   padding: 0 --spacing(2);
   overflow: hidden;
-  color: #1e3a8a;
+  color: #064e3b;
   text-align: left;
-  background: color-mix(in srgb, var(--ngs-color-primary) 14%, #fff);
-  border: 1px solid color-mix(in srgb, var(--ngs-color-primary) 24%, var(--ngs-color-border));
+  background: color-mix(in srgb, #14b8a6 24%, transparent);
+  border: 1px solid color-mix(in srgb, #0d9488 28%, transparent);
   border-radius: 6px;
   cursor: pointer;
   appearance: none;
+  opacity: 0.74;
   touch-action: none;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    opacity 160ms ease;
+}
+
+.ngs-motion-studio__animation-track-span:hover,
+.ngs-motion-studio__animation-track-span:focus-visible {
+  background: color-mix(in srgb, #14b8a6 34%, transparent);
+  border-color: color-mix(in srgb, #0d9488 46%, transparent);
+  opacity: 0.9;
 }
 
 .ngs-motion-studio__animation-track-span.is-selected {
-  color: var(--ngs-color-primary);
-  background: color-mix(in srgb, var(--ngs-color-primary) 20%, #fff);
-  border-color: var(--ngs-color-primary);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ngs-color-primary) 16%, transparent);
+  color: #042f2e;
+  background: color-mix(in srgb, #14b8a6 42%, transparent);
+  border-color: #0d9488;
+  opacity: 1;
+  box-shadow: 0 0 0 2px color-mix(in srgb, #0d9488 18%, transparent);
 }
 
 .ngs-motion-studio__animation-track-span > span:not(.ngs-motion-studio__clip-handle) {
@@ -1121,17 +1135,41 @@
   z-index: 2;
   top: 0;
   bottom: 0;
-  width: 8px;
+  width: 4px;
   padding: 0;
+  opacity: 0;
+  background: color-mix(in srgb, var(--ngs-color-primary) 22%, transparent);
   cursor: ew-resize;
+  transition:
+    background-color 160ms ease,
+    opacity 160ms ease;
 }
 
 .ngs-motion-studio__clip-handle.is-start {
   left: 0;
+  border-right: 1px solid color-mix(in srgb, var(--ngs-color-primary) 30%, transparent);
 }
 
 .ngs-motion-studio__clip-handle.is-end {
   right: 0;
+  border-left: 1px solid color-mix(in srgb, var(--ngs-color-primary) 30%, transparent);
+}
+
+.ngs-motion-studio__clip-handle:hover,
+.ngs-motion-studio__clip-handle:focus-visible {
+  opacity: 1;
+}
+
+.ngs-motion-studio__clip .ngs-motion-studio__clip-handle:hover,
+.ngs-motion-studio__clip .ngs-motion-studio__clip-handle:focus-visible,
+.ngs-motion-studio__scene-clip .ngs-motion-studio__clip-handle:hover,
+.ngs-motion-studio__scene-clip .ngs-motion-studio__clip-handle:focus-visible {
+  background: color-mix(in srgb, var(--ngs-color-primary) 18%, transparent);
+}
+
+.ngs-motion-studio__animation-track-span .ngs-motion-studio__clip-handle:hover,
+.ngs-motion-studio__animation-track-span .ngs-motion-studio__clip-handle:focus-visible {
+  background: color-mix(in srgb, #0d9488 24%, transparent);
 }
 
 .ngs-motion-studio__clip.is-selected {
@@ -1267,44 +1305,6 @@
     color-mix(in srgb, #f97316 38%, transparent)
   );
   border-left: 1px solid color-mix(in srgb, #f97316 42%, transparent);
-}
-
-.ngs-motion-studio__keyframe-marker {
-  position: absolute;
-  z-index: 3;
-  top: 50%;
-  width: 9px;
-  height: 9px;
-  padding: 0;
-  background: #f59e0b;
-  border: 1px solid var(--ngs-color-surface);
-  border-radius: 2px;
-  box-shadow: 0 1px 4px rgb(15 23 42 / 18%);
-  cursor: ew-resize;
-  rotate: 45deg;
-  translate: -50% -50%;
-}
-
-.ngs-motion-studio__keyframe-marker.is-selected {
-  background: var(--ngs-color-primary);
-  box-shadow:
-    0 0 0 2px color-mix(in srgb, var(--ngs-color-primary) 18%, transparent),
-    0 1px 4px rgb(15 23 42 / 18%);
-}
-
-.ngs-motion-studio__keyframe-marker.is-keyframe-selected {
-  background: #0f172a;
-  border-color: #fff;
-  box-shadow:
-    0 0 0 2px var(--ngs-color-primary),
-    0 0 0 5px color-mix(in srgb, var(--ngs-color-primary) 18%, transparent),
-    0 2px 8px rgb(15 23 42 / 22%);
-}
-
-.ngs-motion-studio__keyframe-marker.is-track-keyframe {
-  top: 50%;
-  width: 10px;
-  height: 10px;
 }
 
 .ngs-motion-studio__tab-content,
@@ -2176,6 +2176,13 @@
   display: flex;
   grid-template-columns: none;
   justify-content: space-between;
+}
+
+.ngs-motion-studio__effect-inspector .ngs-motion-studio__section-header > div {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: --spacing(2);
+  align-items: center;
 }
 
 .ngs-motion-studio__section-actions {

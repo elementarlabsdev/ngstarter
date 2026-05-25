@@ -30,6 +30,46 @@ describe('motion engine', () => {
     ).toBe(50);
   });
 
+  it('keeps separate fade in and fade out opacity tracks from overriding each other', () => {
+    const layer: MotionLayer = {
+      id: 'text',
+      type: 'text',
+      start: 0,
+      duration: 3000,
+      layout: {
+        x: 0,
+        y: 0,
+        width: 400,
+        height: 120,
+      },
+      animations: [
+        {
+          id: 'fade-out',
+          property: 'opacity',
+          easing: 'linear',
+          keyframes: [
+            { time: 2200, value: 1 },
+            { time: 3000, value: 0 },
+          ],
+        },
+        {
+          id: 'fade-in',
+          property: 'opacity',
+          easing: 'linear',
+          keyframes: [
+            { time: 0, value: 0 },
+            { time: 800, value: 1 },
+          ],
+        },
+      ],
+    };
+
+    expect(resolveMotionLayerSnapshot(layer, 400).opacity).toBe(0.5);
+    expect(resolveMotionLayerSnapshot(layer, 1200).opacity).toBe(1);
+    expect(resolveMotionLayerSnapshot(layer, 2600).opacity).toBe(0.5);
+    expect(resolveMotionLayerSnapshot(layer, 3000).opacity).toBe(0);
+  });
+
   it('includes independent scale and skew values in layer transforms', () => {
     const layer: MotionLayer = {
       id: 'shape',

@@ -73,16 +73,16 @@ describe('MotionStudio', () => {
     expect(label).not.toContain('.');
   });
 
-  it('should clamp stored timeline zoom to a minimum of 4x', () => {
+  it('should clamp stored timeline zoom to a minimum of 8x', () => {
     fixture.detectChanges();
 
     (component as any).syncEditorSettings({ zoom: 1 });
 
-    expect((component as any).timelineZoomMode()).toBe('4');
-    expect((component as any).timelineZoomScale()).toBe(4);
+    expect((component as any).timelineZoomMode()).toBe('8');
+    expect((component as any).timelineZoomScale()).toBe(8);
   });
 
-  it('should zoom the timeline only with command wheel and not below 4x', () => {
+  it('should zoom the timeline only with command wheel and not below 8x', () => {
     fixture.detectChanges();
 
     const preventDefault = vi.fn();
@@ -95,22 +95,22 @@ describe('MotionStudio', () => {
     });
 
     expect(preventDefault).toHaveBeenCalled();
+    expect((component as any).timelineZoomMode()).toBe('16');
+
+    (component as any).handleTimelineWheel({
+      metaKey: true,
+      ctrlKey: false,
+      deltaY: 1,
+      preventDefault,
+    });
+    (component as any).handleTimelineWheel({
+      metaKey: true,
+      ctrlKey: false,
+      deltaY: 1,
+      preventDefault,
+    });
+
     expect((component as any).timelineZoomMode()).toBe('8');
-
-    (component as any).handleTimelineWheel({
-      metaKey: true,
-      ctrlKey: false,
-      deltaY: 1,
-      preventDefault,
-    });
-    (component as any).handleTimelineWheel({
-      metaKey: true,
-      ctrlKey: false,
-      deltaY: 1,
-      preventDefault,
-    });
-
-    expect((component as any).timelineZoomMode()).toBe('4');
   });
 
   it('should ignore double clicks on canvas text layers', () => {
@@ -246,6 +246,30 @@ describe('MotionStudio', () => {
     );
   });
 
+  it('should create text layers with 1.35 line height by default', () => {
+    fixture.detectChanges();
+
+    (component as any).draft.set({
+      version: '0.1',
+      composition: {
+        width: 1920,
+        height: 1080,
+        fps: 30,
+        duration: 5 * 60 * 1000,
+      },
+      layers: [],
+      tracks: [],
+      scenes: [],
+    });
+
+    (component as any).addTextLayer();
+    fixture.detectChanges();
+
+    const layer = (component as any).draft().layers.find((item: any) => item.type === 'text');
+
+    expect(layer.style.lineHeight).toBe(1.35);
+  });
+
   it('should add text effects as timeline animation tracks', () => {
     fixture.detectChanges();
 
@@ -266,6 +290,138 @@ describe('MotionStudio', () => {
     expect(textEffectTrack.keyframes[textEffectTrack.keyframes.length - 1].value).toBeNull();
     expect((component as any).selectedTextEffectType(nextLayer)).toBe('split-text-masked-letters');
     expect((component as any).isLayerAnimationExpanded(nextLayer)).toBe(true);
+  });
+
+  it('should keep words fade up active until every word has animated', () => {
+    fixture.detectChanges();
+
+    const layer = (component as any).draft().layers.find((item: any) => item.type === 'text');
+    (component as any).selectLayer(layer);
+    (component as any).setLayerText(
+      'A premium, AI optimized Angular component library with high-performance UI components, admin dashboard templates',
+    );
+    (component as any).applyTextEffectPreset('words-fade-up');
+    fixture.detectChanges();
+
+    const nextLayer = (component as any).draft().layers.find((item: any) => item.id === layer.id);
+    const textEffectTrack = nextLayer.animations.find(
+      (animation: any) => animation.property === 'textEffect',
+    );
+
+    expect(textEffectTrack.keyframes[1].time - textEffectTrack.keyframes[0].time).toBe(1470);
+  });
+
+  it('should keep text effect config valid when resizing the effect track', () => {
+    fixture.detectChanges();
+
+    const layer = (component as any).draft().layers.find((item: any) => item.type === 'text');
+    (component as any).selectLayer(layer);
+    (component as any).applyTextEffectPreset('split-text-masked-letters');
+
+    let nextLayer = (component as any).draft().layers.find((item: any) => item.id === layer.id);
+    const animationIndex = nextLayer.animations.findIndex(
+      (animation: any) => animation.property === 'textEffect',
+    );
+
+    (component as any).selectTimelineAnimationTrack(nextLayer, animationIndex);
+    (component as any).setSelectedAnimationTrackDuration(1200);
+    fixture.detectChanges();
+
+    nextLayer = (component as any).draft().layers.find((item: any) => item.id === layer.id);
+    const textEffectTrack = nextLayer.animations[animationIndex];
+
+    expect(textEffectTrack.keyframes).toHaveLength(2);
+    expect(textEffectTrack.keyframes[0].value).toEqual(
+      expect.objectContaining({
+        type: 'split-text-masked-letters',
+        duration: 1200,
+        stagger: 1200,
+      }),
+    );
+    expect(textEffectTrack.keyframes[1].time - textEffectTrack.keyframes[0].time).toBe(1200);
+    expect(textEffectTrack.keyframes[1].value).toBeNull();
+  });
+
+  it('should preserve PrepareText words SplitText flags when resizing the effect track', () => {
+    fixture.detectChanges();
+
+    const layer = (component as any).draft().layers.find((item: any) => item.type === 'text');
+    (component as any).selectLayer(layer);
+    (component as any).applyTextEffectPreset('prepare-text-words');
+
+    let nextLayer = (component as any).draft().layers.find((item: any) => item.id === layer.id);
+    const animationIndex = nextLayer.animations.findIndex(
+      (animation: any) => animation.property === 'textEffect',
+    );
+
+    (component as any).selectTimelineAnimationTrack(nextLayer, animationIndex);
+    (component as any).setSelectedAnimationTrackDuration(1400);
+    fixture.detectChanges();
+
+    nextLayer = (component as any).draft().layers.find((item: any) => item.id === layer.id);
+    const textEffectTrack = nextLayer.animations[animationIndex];
+
+    expect(textEffectTrack.keyframes[0].value).toEqual(
+      expect.objectContaining({
+        type: 'prepare-text-words',
+        duration: 1400,
+        stagger: 233.33,
+        prepareText: true,
+        useSplitText: true,
+      }),
+    );
+    expect(textEffectTrack.keyframes[1].time - textEffectTrack.keyframes[0].time).toBe(1400);
+    expect(textEffectTrack.keyframes[1].value).toBeNull();
+  });
+
+  it('should show concrete effect names for timeline animation tracks', () => {
+    fixture.detectChanges();
+
+    const layer = (component as any).draft().layers.find((item: any) => item.type === 'text');
+    (component as any).selectLayer(layer);
+
+    const fadeInTile = (component as any)
+      .effectTiles()
+      .find((tile: any) => tile.id === 'fade-in');
+    const fadeTile = (component as any).effectTiles().find((tile: any) => tile.id === 'fade');
+
+    expect(fadeTile).toBeUndefined();
+
+    (component as any).addEffectTrack(fadeInTile);
+    (component as any).applyTextEffectPreset('prepare-text-words');
+    fixture.detectChanges();
+
+    const nextLayer = (component as any).draft().layers.find((item: any) => item.id === layer.id);
+    const labels = nextLayer.animations.map((animation: any) =>
+      (component as any).animationTrackLabel(animation),
+    );
+
+    expect(labels).toContain('Fade in');
+    expect(labels).toContain('PrepareText words');
+    expect(labels).not.toContain('Fade');
+    expect(labels).not.toContain('Text effect');
+  });
+
+  it('should make fade out start visibly from the beginning of its timeline track', () => {
+    fixture.detectChanges();
+
+    const layer = (component as any).draft().layers.find((item: any) => item.type === 'text');
+    (component as any).selectLayer(layer);
+
+    const fadeOutTile = (component as any)
+      .effectTiles()
+      .find((tile: any) => tile.id === 'fade-out');
+
+    (component as any).addEffectTrack(fadeOutTile);
+    fixture.detectChanges();
+
+    const nextLayer = (component as any).draft().layers.find((item: any) => item.id === layer.id);
+    const fadeOut = nextLayer.animations.find((animation: any) =>
+      animation.id.startsWith('fade-out'),
+    );
+
+    expect(fadeOut.easing).toBe('easeOutCubic');
+    expect(fadeOut.keyframes[1].easing).toBe('easeOutCubic');
   });
 
   it('should allow removing scene transitions even when the transition type is normalized as none', () => {

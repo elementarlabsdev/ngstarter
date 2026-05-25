@@ -35,12 +35,10 @@
         >
           @switch (layer.type) {
             @case ('text') {
-              <div
-                class="ngs-motion-player__text"
-                [class.ngs-motion-player__text--effect]="hasTextEffect(layer)"
-                [class.ngs-motion-player__text--masked-letters]="hasMaskedLettersEffect(layer)"
-              >
-                @if (hasMaskedLettersEffect(layer)) {
+              @if (hasMaskedLettersEffect(layer)) {
+                <div
+                  class="ngs-motion-player__text ngs-motion-player__text--effect ngs-motion-player__text--masked-letters"
+                >
                   @for (word of textEffectWords(layer); track word.id) {
                     <span class="ngs-motion-player__text-word-mask">
                       @for (char of word.chars; track char.id) {
@@ -56,7 +54,9 @@
                       [textContent]="word.suffix"
                     ></span>
                   }
-                } @else if (hasTextEffect(layer)) {
+                </div>
+              } @else if (hasTextEffect(layer)) {
+                <div class="ngs-motion-player__text ngs-motion-player__text--effect">
                   @for (segment of textEffectSegments(layer); track segment.id) {
                     @if (segment.masked) {
                       <span
@@ -79,18 +79,16 @@
                       ></span>
                     }
                   }
-                } @else {
-                  {{ layerText(layer) }}
-                }
-              </div>
+                </div>
+              } @else {
+                <div class="ngs-motion-player__text" [textContent]="layerText(layer)"></div>
+              }
             }
             @case ('caption') {
-              <div
-                class="ngs-motion-player__caption"
-                [class.ngs-motion-player__caption--effect]="hasTextEffect(layer)"
-                [class.ngs-motion-player__caption--masked-letters]="hasMaskedLettersEffect(layer)"
-              >
-                @if (hasMaskedLettersEffect(layer)) {
+              @if (hasMaskedLettersEffect(layer)) {
+                <div
+                  class="ngs-motion-player__caption ngs-motion-player__caption--effect ngs-motion-player__caption--masked-letters"
+                >
                   @for (word of textEffectWords(layer); track word.id) {
                     <span class="ngs-motion-player__text-word-mask">
                       @for (char of word.chars; track char.id) {
@@ -106,7 +104,9 @@
                       [textContent]="word.suffix"
                     ></span>
                   }
-                } @else if (hasTextEffect(layer)) {
+                </div>
+              } @else if (hasTextEffect(layer)) {
+                <div class="ngs-motion-player__caption ngs-motion-player__caption--effect">
                   @for (segment of textEffectSegments(layer); track segment.id) {
                     @if (segment.masked) {
                       <span
@@ -129,10 +129,13 @@
                       ></span>
                     }
                   }
-                } @else {
-                  {{ layerCaptionText(layer) }}
-                }
-              </div>
+                </div>
+              } @else {
+                <div
+                  class="ngs-motion-player__caption"
+                  [textContent]="layerCaptionText(layer)"
+                ></div>
+              }
             }
             @case ('image') {
               @if (layerImageSrc(layer)) {
@@ -153,9 +156,12 @@
                   [src]="layerImageSrc(layer)"
                   muted
                   playsinline
-                  preload="metadata"
+                  preload="auto"
                   [attr.data-motion-video-time]="layerMediaTime(layer)"
                   [ngStyle]="imageStyle(layer)"
+                  (loadedmetadata)="syncVideoElements()"
+                  (canplay)="syncVideoElements()"
+                  (seeked)="syncVideoElements()"
                 ></video>
               } @else if (isLayerMediaPlaceholder(layer)) {
                 <div class="ngs-motion-player__media-placeholder"></div>

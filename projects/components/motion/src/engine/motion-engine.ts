@@ -92,7 +92,11 @@ export const resolveMotionLayerSnapshot = (
   const style: MotionStyle = { ...(layer.style ?? {}) };
   const props: Record<string, MotionValue> = { ...(layer.props ?? {}) };
 
-  for (const animation of layer.animations ?? []) {
+  for (const animation of sortMotionAnimationsForResolve(layer.animations ?? [])) {
+    if (isMotionAnimationPending(animation, localTime)) {
+      continue;
+    }
+
     const value =
       animation.property === 'textEffect'
         ? resolveMotionTextEffectAnimation(animation, localTime)
@@ -122,6 +126,25 @@ export const resolveMotionLayerSnapshot = (
     transform: buildMotionTransform(layout),
   };
 };
+
+const sortMotionAnimationsForResolve = (animations: MotionAnimation[]): MotionAnimation[] =>
+  animations
+    .map((animation, index) => ({
+      animation,
+      index,
+      start: readMotionAnimationStartTime(animation),
+    }))
+    .sort((a, b) => a.start - b.start || a.index - b.index)
+    .map((item) => item.animation);
+
+const readMotionAnimationStartTime = (animation: MotionAnimation): number => {
+  const times = animation.keyframes.map((keyframe) => keyframe.time);
+
+  return times.length ? Math.min(...times) : 0;
+};
+
+const isMotionAnimationPending = (animation: MotionAnimation, localTime: number): boolean =>
+  animation.property !== 'textEffect' && localTime < readMotionAnimationStartTime(animation);
 
 export const resolveMotionAnimation = (
   animation: MotionAnimation,

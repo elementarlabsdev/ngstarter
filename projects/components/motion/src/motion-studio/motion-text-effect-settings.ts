@@ -59,6 +59,9 @@ const readStringSetting = (
 @Directive()
 abstract class MotionTextEffectSettingsBase {
   readonly effect = input<MotionTextEffectSettings>(null);
+  readonly settingChangeHandler = input<((change: MotionTextEffectSettingChange) => void) | null>(
+    null,
+  );
   readonly settingChange = output<MotionTextEffectSettingChange>();
 
   protected number(property: MotionTextEffectSettingProperty, fallback: number): number {
@@ -72,14 +75,19 @@ abstract class MotionTextEffectSettingsBase {
   protected setNumber(property: MotionTextEffectSettingProperty, value: unknown): void {
     const nextValue = Math.max(0, Number(value));
 
-    this.settingChange.emit({
+    this.emitSettingChange({
       property,
       value: Number.isFinite(nextValue) ? nextValue : 0,
     });
   }
 
   protected setString(property: MotionTextEffectSettingProperty, value: string): void {
-    this.settingChange.emit({ property, value });
+    this.emitSettingChange({ property, value });
+  }
+
+  private emitSettingChange(change: MotionTextEffectSettingChange): void {
+    this.settingChange.emit(change);
+    this.settingChangeHandler()?.(change);
   }
 }
 
