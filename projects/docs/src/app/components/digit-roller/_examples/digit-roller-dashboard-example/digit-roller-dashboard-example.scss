@@ -1,0 +1,44 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .digit-roller-size-example__value {
+    display: block;
+    min-width: 0;
+    color: var(--ngs-color-on-surface);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .digit-roller-size-example__value--tiny {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .digit-roller-size-example__value--small {
+    font-size: 1.125rem;
+    font-weight: 650;
+  }
+
+  .digit-roller-size-example__value--medium {
+    font-size: 1.75rem;
+  }
+
+  .digit-roller-size-example__value--large {
+    font-size: 2.5rem;
+  }
+
+  .digit-roller-size-example__value--display {
+    color: var(--ngs-color-primary);
+    font-size: clamp(2.75rem, 6vw, 3.5rem);
+  }
+
+  .digit-roller-size-example__value--hero {
+    color: var(--ngs-color-primary);
+    font-size: clamp(3.25rem, 8vw, 5rem);
+    font-weight: 750;
+  }
+}

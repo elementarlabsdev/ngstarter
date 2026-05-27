@@ -210,6 +210,11 @@ export class Overview {
       name: 'Datepicker'
     },
     {
+      routerLink: '/components/digit-roller',
+      imageUrl: 'assets/overview/digit-roller.svg',
+      name: 'Digit Roller'
+    },
+    {
       routerLink: '/components/dialog',
       imageUrl: 'assets/overview/dialog.svg',
       name: 'Dialog'

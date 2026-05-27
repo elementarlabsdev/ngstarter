@@ -1,0 +1,44 @@
+<app-page>
+  <h1 appPageTitle>Digit Roller</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Digit Roller animates individual digits when a number changes, using a slot-machine style
+        reel effect powered by the Web Animations API.
+      </p>
+      <div class="my-6">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            <strong>Per-digit animation</strong>: Each digit spins independently while separators,
+            prefixes, suffixes, and currency symbols stay aligned.
+          </li>
+          <li>
+            <strong>Intl formatting</strong>: Pass standard <code>Intl.NumberFormatOptions</code>
+            for compact numbers, currency, percentages, units, and localized numerals.
+          </li>
+          <li>
+            <strong>Dashboard ready</strong>: Use grouped updates to synchronize several KPI values
+            in one animation frame.
+          </li>
+          <li>
+            <strong>Accessible fallback</strong>: Screen readers receive plain formatted text and
+            reduced-motion preferences can disable animation.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Use Digit Roller for live metrics, analytics counters, financial totals, quotas, countdowns,
+        scoreboards, and compact dashboard cards. Do not use it for editable numeric inputs or dense
+        table cells where frequent animation would distract from scanning.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/digit-roller" ngs-tab-link>Overview</a>
+      <a routerLink="/components/digit-roller/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

@@ -1,1 +1,73 @@
-<p>digit-roller works!</p>
+<span class="ngs-digit-roller__number" aria-hidden="true">
+  <span class="ngs-digit-roller__number-inner">
+    @if (data().pre.length) {
+      <span class="ngs-digit-roller__section ngs-digit-roller__section--pre">
+        @for (part of data().pre; track part.key) {
+          <span class="ngs-digit-roller__literal" [attr.data-key]="part.key">{{ part.value }}</span>
+        }
+      </span>
+    }
+
+    <span class="ngs-digit-roller__section ngs-digit-roller__section--integer">
+      @for (part of data().integer; track part.key) {
+        @if (part.type === 'integer') {
+          <span
+            class="ngs-digit-roller__digit"
+            [attr.data-key]="part.key"
+            [style.--_ngs-digit-roller-current]="part.numericValue"
+            [style.--_ngs-digit-roller-len]="digitLengthForKey(part.key)"
+          >
+            @for (digit of digitGlyphsForKey(part.key); track digit.value) {
+              <span
+                class="ngs-digit-roller__digit-number"
+                [style.--_ngs-digit-roller-n]="digit.value"
+                [attr.inert]="digit.value !== part.numericValue ? '' : null"
+              >
+                {{ digit.glyph }}
+              </span>
+            }
+          </span>
+        } @else {
+          <span class="ngs-digit-roller__separator" [attr.data-key]="part.key">{{ part.value }}</span>
+        }
+      }
+    </span>
+
+    @if (data().fraction.length) {
+      <span class="ngs-digit-roller__section ngs-digit-roller__section--fraction">
+        @for (part of data().fraction; track part.key) {
+          @if (part.type === 'fraction') {
+            <span
+              class="ngs-digit-roller__digit"
+              [attr.data-key]="part.key"
+              [style.--_ngs-digit-roller-current]="part.numericValue"
+              [style.--_ngs-digit-roller-len]="digitLengthForKey(part.key)"
+            >
+              @for (digit of digitGlyphsForKey(part.key); track digit.value) {
+                <span
+                  class="ngs-digit-roller__digit-number"
+                  [style.--_ngs-digit-roller-n]="digit.value"
+                  [attr.inert]="digit.value !== part.numericValue ? '' : null"
+                >
+                  {{ digit.glyph }}
+                </span>
+              }
+            </span>
+          } @else {
+            <span class="ngs-digit-roller__separator" [attr.data-key]="part.key">{{ part.value }}</span>
+          }
+        }
+      </span>
+    }
+
+    @if (data().post.length) {
+      <span class="ngs-digit-roller__section ngs-digit-roller__section--post">
+        @for (part of data().post; track part.key) {
+          <span class="ngs-digit-roller__literal" [attr.data-key]="part.key">{{ part.value }}</span>
+        }
+      </span>
+    }
+  </span>
+</span>
+
+<span class="ngs-digit-roller__sr-only">{{ formattedPlainText() }}</span>

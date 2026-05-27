@@ -1,0 +1,13 @@
+<div class="flex flex-wrap gap-3" ngsDigitRollerGroup>
+  @for (action of actions; track action.label) {
+    <button ngsButton="outlined" [attr.aria-label]="action.label">
+      <ngs-icon [name]="action.icon"/>
+      <ngs-digit-roller
+        [value]="action.value()"
+        [format]="action.format"
+        [continuous]="true"
+        [stagger]="10"
+      />
+    </button>
+  }
+</div>

@@ -1,0 +1,27 @@
+<div class="grid gap-4" ngsDigitRollerGroup>
+  @for (example of examples; track example.label) {
+    <div class="grid gap-4 rounded-lg border border-neutral-200 bg-white p-5 md:grid-cols-[160px_minmax(0,1fr)] md:items-center">
+      <div>
+        <p class="font-medium text-neutral-900">{{ example.label }}</p>
+        <p class="mt-1 text-sm leading-6 text-neutral-500">{{ example.description }}</p>
+      </div>
+
+      <div class="flex min-w-0 flex-wrap items-baseline gap-2">
+        <ngs-digit-roller
+          [class]="example.className"
+          [value]="example.value()"
+          [format]="example.format"
+          [prefix]="example.prefix ?? ''"
+          [continuous]="example.continuous ?? false"
+          [duration]="example.duration ?? 900"
+          [stagger]="example.stagger ?? 0"
+          spinEasing="spring"
+        />
+        @if (example.unit) {
+          <span class="text-sm text-neutral-500">{{ example.unit }}</span>
+        }
+      </div>
+
+    </div>
+  }
+</div>

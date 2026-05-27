@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate-ai-metadata.mjs",
   "package": "@ngstarter-ui/components",
   "description": "AI-readable registry for NgStarter UI Angular secondary entry points.",
-  "componentCount": 121,
+  "componentCount": 122,
   "conventions": {
     "importPattern": "@ngstarter-ui/components/<component>",
     "selectorPrefix": "ngs",
@@ -93,10 +93,11 @@
         "Do not make ordinary table rows, labels, descriptions, sidebar items, or status text bold to imitate a screenshot."
       ],
       "styling": {
-        "template": "Use TailwindCSS utility classes for layout, responsive behavior, sizing, spacing, flex, grid, alignment, and routine margins/padding such as mt-10 and p-6 instead of custom margin-top: 2.5rem and padding: 1.5rem in SCSS.",
+        "template": "Treat TailwindCSS utility classes in templates as the primary styling surface for layout, responsive behavior, sizing, spacing, flex, grid, alignment, and routine margins/padding such as mt-10 and p-6 instead of custom margin-top: 2.5rem and padding: 1.5rem in SCSS.",
         "localScss": [
           "Start local SCSS files that use Tailwind tokens with @reference 'tailwindcss';",
           "Use --spacing(N) for spacing values in local SCSS.",
+          "Use local SCSS for CSS custom property/token overrides, especially --ngs-* component variables, and necessary component selector overrides. Do not move routine layout, spacing, sizing, flex/grid, or alignment styling from templates into SCSS.",
           "Override NgStarter components through component or directive selectors such as ngs-card, ngs-navigation, ngs-form-field, table[ngs-table], button[ngsButton], and button[ngsIconButton]."
         ],
         "globalStyles": "Use CSS custom properties and theme tokens, especially --ngs-* variables, for global visual customization."
@@ -3425,6 +3426,109 @@
         "--ngs-dialog-with-content-padding"
       ],
       "example": "inject(Dialog).open(MyDialogComponent, { data })"
+    },
+    {
+      "name": "digit-roller",
+      "title": "Digit Roller",
+      "overviewName": "Digit Roller",
+      "category": "components",
+      "package": "@ngstarter-ui/components",
+      "importPath": "@ngstarter-ui/components/digit-roller",
+      "publicApi": "projects/components/digit-roller/public-api.ts",
+      "sourceRoot": "projects/components/digit-roller/src",
+      "docsPath": "/components/digit-roller",
+      "docsOverviewSource": "projects/docs/src/app/components/digit-roller/overview/overview.html",
+      "purpose": "The NgStarter Angular Digit Roller component animates individual digits in formatted numbers with a slot-machine style reel effect.",
+      "useWhen": "Choose Digit Roller when the workflow matches examples such as Number Sizes, Social Actions, Progress Bar, Gauge, Digit roller dashboard.",
+      "exampleTopics": [
+        "Number Sizes",
+        "Social Actions",
+        "Progress Bar",
+        "Gauge",
+        "Digit roller dashboard",
+        "Digit roller social actions",
+        "Digit roller progress bar",
+        "Digit roller gauge"
+      ],
+      "minimalExample": "<div class=\"grid gap-4\" ngsDigitRollerGroup>\n  @for (example of examples; track example.label) {\n    <div class=\"grid gap-4 rounded-lg border border-neutral-200 bg-white p-5 md:grid-cols-[160px_minmax(0,1fr)] md:items-center\">\n      <div>\n        <p class=\"font-medium text-neutral-900\">{{ example.label }}</p>\n        <p class=\"mt-1 text-sm leading-6 text-neutral-500\">{{ example.description }}</p>\n      </div>\n      <div class=\"flex min-w-0 flex-wrap items-baseline gap-2\">\n        <ngs-digit-roller\n          [class]=\"example.className\"\n          [value]=\"example.value()\"\n          [format]=\"example.format\"\n          [prefix]=\"example.prefix ?? ''\"\n          [continuous]=\"example.continuous ?? false\"\n          [duration]=\"example.duration ?? 900\"\n          [stagger]=\"example.stagger ?? 0\"\n          spinEasing=\"spring\"\n        />\n        @if (example.unit) {\n          <span class=\"text-sm text-neutral-500\">{{ example.unit }}</span>\n        }\n      </div>\n    </div>\n  }\n</div>",
+      "exampleFiles": [
+        {
+          "name": "digit-roller-dashboard-example",
+          "title": "Digit roller dashboard",
+          "file": "projects/docs/src/app/components/digit-roller/_examples/digit-roller-dashboard-example/digit-roller-dashboard-example.html",
+          "source": "<div class=\"grid gap-4\" ngsDigitRollerGroup>\n  @for (example of examples; track example.label) {\n    <div class=\"grid gap-4 rounded-lg border border-neutral-200 bg-white p-5 md:grid-cols-[160px_minmax(0,1fr)] md:items-center\">\n      <div>\n        <p class=\"font-medium text-neutral-900\">{{ example.label }}</p>\n        <p class=\"mt-1 text-sm leading-6 text-neutral-500\">{{ example.description }}</p>\n      </div>\n      <div class=\"flex min-w-0 flex-wrap items-baseline gap-2\">\n        <ngs-digit-roller\n          [class]=\"example.className\"\n          [value]=\"example.value()\"\n          [format]=\"example.format\"\n          [prefix]=\"example.prefix ?? ''\"\n          [continuous]=\"example.continuous ?? false\"\n          [duration]=\"example.duration ?? 900\"\n          [stagger]=\"example.stagger ?? 0\"\n          spinEasing=\"spring\"\n        />\n        @if (example.unit) {\n          <span class=\"text-sm text-neutral-500\">{{ example.unit }}</span>\n        }\n      </div>\n    </div>\n  }\n</div>"
+        },
+        {
+          "name": "digit-roller-gauge-example",
+          "title": "Digit roller gauge",
+          "file": "projects/docs/src/app/components/digit-roller/_examples/digit-roller-gauge-example/digit-roller-gauge-example.html",
+          "source": "<div class=\"grid gap-6 rounded-lg border border-neutral-200 bg-white p-6 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center\" ngsDigitRollerGroup>\n  <ngs-gauge class=\"size-28\" [value]=\"score()\" [radius]=\"50\" [strokeWidth]=\"8\">\n    <ngs-gauge-value>\n      <ngs-digit-roller\n        class=\"text-xl font-bold leading-none text-primary\"\n        [value]=\"score()\"\n        [format]=\"integerFormat\"\n        suffix=\"%\"\n        [continuous]=\"true\"\n        [stagger]=\"12\"\n      />\n    </ngs-gauge-value>\n  </ngs-gauge>\n  <div>\n    <p class=\"text-sm font-medium text-neutral-900\">Health score</p>\n    <p class=\"mt-1 text-sm leading-6 text-neutral-500\">\n      The same value drives the gauge arc and the animated number in the center.\n    </p>\n  </div>\n</div>"
+        },
+        {
+          "name": "digit-roller-progress-bar-example",
+          "title": "Digit roller progress bar",
+          "file": "projects/docs/src/app/components/digit-roller/_examples/digit-roller-progress-bar-example/digit-roller-progress-bar-example.html",
+          "source": "<div class=\"grid gap-4 rounded-lg border border-neutral-200 bg-white p-5\" ngsDigitRollerGroup>\n  <div class=\"flex items-end justify-between gap-4\">\n    <div>\n      <p class=\"text-sm font-medium text-neutral-900\">Deployment progress</p>\n      <p class=\"mt-1 flex flex-wrap items-baseline gap-1 text-sm text-neutral-500\">\n        <ngs-digit-roller [value]=\"remaining()\" [format]=\"integerFormat\"/>\n        <span>steps remaining</span>\n      </p>\n    </div>\n    <ngs-digit-roller\n      class=\"text-2xl font-bold leading-none text-primary\"\n      [value]=\"progress() / 100\"\n      [format]=\"percentFormat\"\n      [continuous]=\"true\"\n      [stagger]=\"14\"\n    />\n  </div>\n  <ngs-progress-bar [value]=\"progress()\"/>\n</div>"
+        }
+      ],
+      "previewAsset": "projects/components/digit-roller/preview.svg",
+      "selectors": [
+        "[ngsDigitRollerGroup]",
+        "ngs-digit-roller"
+      ],
+      "exportedSymbols": [
+        "canAnimateDigitRoller",
+        "DIGIT_ROLLER_EMPTY_FORMATTED",
+        "DIGIT_ROLLER_GROUP",
+        "DigitRoller",
+        "DigitRollerCapabilityOptions",
+        "DigitRollerDigitConfig",
+        "DigitRollerDigits",
+        "DigitRollerEasing",
+        "DigitRollerFormattedNumber",
+        "DigitRollerGlyph",
+        "DigitRollerGroupCoordinator",
+        "DigitRollerGroupDirective",
+        "DigitRollerGroupMember",
+        "DigitRollerNumberPart",
+        "DigitRollerTiming",
+        "DigitRollerTrend",
+        "formatDigitRollerValue",
+        "getDigitRollerGlyphs",
+        "resetDigitRollerCapabilityCache"
+      ],
+      "inputs": [
+        "animated",
+        "colorOnDecrease",
+        "colorOnIncrease",
+        "continuous",
+        "digits",
+        "duration",
+        "flipEasing",
+        "format",
+        "locales",
+        "opacityDuration",
+        "opacityTiming",
+        "prefix",
+        "respectMotionPreference",
+        "spinEasing",
+        "spinTiming",
+        "stagger",
+        "suffix",
+        "transformTiming",
+        "trend",
+        "value"
+      ],
+      "outputs": [
+        "animationsFinish",
+        "animationsStart"
+      ],
+      "cssTokens": [
+        "--ngs-digit-roller-mask-height",
+        "--ngs-digit-roller-mask-width",
+        "--ngs-digit-roller-min-digit-width"
+      ],
+      "example": null
     },
     {
       "name": "divider",

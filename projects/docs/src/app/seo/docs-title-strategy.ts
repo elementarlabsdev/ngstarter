@@ -51,6 +51,12 @@ const COMPONENT_TITLES: Record<string, SeoTitleConfig> = {
     job: 'handle date and range selection',
   },
   dialog: { label: 'Dialog', detail: 'Modal Workflows', job: 'open accessible modal workflows' },
+  'digit-roller': {
+    label: 'Digit Roller',
+    detail: 'Animated Dashboard Numbers',
+    job: 'animate individual digits in formatted dashboard metrics',
+    apiDetail: 'Inputs, Timing, Formatting and Grouping',
+  },
   divider: { label: 'Divider', detail: 'Section Separation' },
   drawer: { label: 'Drawer', detail: 'Temporary Side Panels' },
   'emoji-picker': { label: 'Emoji Picker', detail: 'Emoji Selection UI' },
