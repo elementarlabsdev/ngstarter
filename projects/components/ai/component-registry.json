@@ -1002,6 +1002,7 @@
       "useWhen": "Use for mode switching, view density, filters, or mutually exclusive short choices.",
       "exampleTopics": [
         "Basic Button Toggle",
+        "Icon Only Button Toggle",
         "Selection Mode",
         "Button toggle selection mode"
       ],
@@ -1018,6 +1019,12 @@
           "title": "Button toggle selection mode",
           "file": "projects/docs/src/app/forms/button-toggle/_examples/button-toggle-selection-mode-example/button-toggle-selection-mode-example.html",
           "source": "<div>\n  <p class=\"mt-0\">Single selection:</p>\n  <ngs-button-toggle-group name=\"favoriteColor\" aria-label=\"Favorite Color\">\n    <ngs-button-toggle value=\"red\">Red</ngs-button-toggle>\n    <ngs-button-toggle value=\"green\">Green</ngs-button-toggle>\n    <ngs-button-toggle value=\"blue\">Blue</ngs-button-toggle>\n  </ngs-button-toggle-group>\n</div>\n<div class=\"mt-8\">\n  <p>Single selection (hidden indicator):</p>\n  <ngs-button-toggle-group name=\"favoriteColorHidden\" aria-label=\"Favorite Color Hidden\" hideSelectionIndicator>\n    <ngs-button-toggle value=\"red\">Red</ngs-button-toggle>\n    <ngs-button-toggle value=\"green\">Green</ngs-button-toggle>\n    <ngs-button-toggle value=\"blue\">Blue</ngs-button-toggle>\n  </ngs-button-toggle-group>\n</div>\n<div class=\"mt-8\">\n  <p>Multiple selection:</p>\n  <ngs-button-toggle-group name=\"ingredients\" aria-label=\"Ingredients\" multiple>\n    <ngs-button-toggle value=\"flour\">Flour</ngs-button-toggle>\n    <ngs-button-toggle value=\"eggs\">Eggs</ngs-button-toggle>\n    <ngs-button-toggle value=\"sugar\">Sugar</ngs-button-toggle>\n  </ngs-button-toggle-group>\n</div>"
+        },
+        {
+          "name": "icon-only-button-toggle-example",
+          "title": "Icon only button toggle",
+          "file": "projects/docs/src/app/forms/button-toggle/_examples/icon-only-button-toggle-example/icon-only-button-toggle-example.html",
+          "source": "<ngs-button-toggle-group value=\"grid\" hideSelectionIndicator onlyIcon aria-label=\"View mode\">\n  <ngs-button-toggle value=\"list\">\n    <ngs-icon name=\"fluent:text-bullet-list-ltr-24-regular\" />\n    <span class=\"sr-only\">List</span>\n  </ngs-button-toggle>\n  <ngs-button-toggle value=\"grid\">\n    <ngs-icon name=\"fluent:grid-24-regular\" />\n    <span class=\"sr-only\">Grid</span>\n  </ngs-button-toggle>\n  <ngs-button-toggle value=\"board\">\n    <ngs-icon name=\"fluent:board-24-regular\" />\n    <span class=\"sr-only\">Board</span>\n  </ngs-button-toggle>\n</ngs-button-toggle-group>"
         }
       ],
       "previewAsset": "projects/components/button-toggle/preview.svg",
@@ -1038,6 +1045,7 @@
         "id",
         "multiple",
         "name",
+        "onlyIcon",
         "value",
         "vertical"
       ],
@@ -1047,6 +1055,8 @@
       "cssTokens": [
         "--ngs-button-height",
         "--ngs-button-radius",
+        "--ngs-button-toggle-button-only-icon-padding",
+        "--ngs-button-toggle-button-padding",
         "--ngs-button-toggle-checked-bg-color",
         "--ngs-button-toggle-checked-text-color",
         "--ngs-button-toggle-group-bg",

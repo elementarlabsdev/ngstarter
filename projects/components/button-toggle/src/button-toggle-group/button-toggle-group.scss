@@ -3,6 +3,15 @@
 :host {
   --ngs-button-toggle-group-border-color: var(--ngs-color-surface-container-highest);
   --ngs-button-toggle-group-bg: var(--ngs-color-surface-container);
+  --ngs-button-toggle-text-color: var(--ngs-color-on-surface-variant);
+  --ngs-button-toggle-hover-bg-color: var(--ngs-color-surface-container-high);
+  --ngs-button-toggle-checked-bg-color: var(--ngs-color-surface-container-highest);
+  --ngs-button-toggle-checked-text-color: var(--ngs-color-on-surface);
+  --ngs-button-toggle-selection-indicator-color: var(--ngs-color-primary);
+  --ngs-button-toggle-button-padding: 0 --spacing(4);
+  --ngs-button-toggle-button-only-icon-padding: 0 --spacing(2.5);
+  --ngs-button-toggle-button-font-size: 0.875rem;
+  --ngs-button-toggle-button-font-weight: 500;
 
   display: inline-flex;
   flex-direction: row;
@@ -12,18 +21,20 @@
   background: var(--ngs-button-toggle-group-bg);
   height: var(--ngs-button-height);
 
+  ::ng-deep {
+    .ngs-button-toggle + .ngs-button-toggle {
+      border-left: 1px solid var(--ngs-button-toggle-group-border-color);
+    }
+  }
+
   &.ngs-button-toggle-group-vertical {
     flex-direction: column;
 
-    ::ng-deep .ngs-button-toggle + .ngs-button-toggle {
-      border-top: 1px solid var(--ngs-button-toggle-group-border-color);
-      border-left: none;
+    ::ng-deep {
+      .ngs-button-toggle + .ngs-button-toggle {
+        border-top: 1px solid var(--ngs-button-toggle-group-border-color);
+        border-left: none;
+      }
     }
-  }
-}
-
-::ng-deep {
-  .ngs-button-toggle + .ngs-button-toggle {
-    border-left: 1px solid var(--ngs-button-toggle-group-border-color);
   }
 }

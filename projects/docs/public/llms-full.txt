@@ -173,12 +173,12 @@ Typography:
 - button-toggle: `@ngstarter-ui/components/button-toggle` docs: /forms/button-toggle
   purpose: Let users choose one or more options from a compact segmented button group.
   use when: Use for mode switching, view density, filters, or mutually exclusive short choices.
-  example topics: Basic Button Toggle, Selection Mode, Button toggle selection mode
+  example topics: Basic Button Toggle, Icon Only Button Toggle, Selection Mode, Button toggle selection mode
   selectors: `ngs-button-toggle`, `ngs-button-toggle-group`
   exports: `ButtonToggle`, `ButtonToggleAppearance`, `ButtonToggleGroup`
-  inputs: `appearance`, `checked`, `disabled`, `hideSelectionIndicator`, `id`, `multiple`, `name`, `value`, `vertical`
+  inputs: `appearance`, `checked`, `disabled`, `hideSelectionIndicator`, `id`, `multiple`, `name`, `onlyIcon`, `value`, `vertical`
   outputs: `change`
-  tokens: `--ngs-button-height`, `--ngs-button-radius`, `--ngs-button-toggle-checked-bg-color`, `--ngs-button-toggle-checked-text-color`, `--ngs-button-toggle-group-bg`, `--ngs-button-toggle-group-border-color`, `--ngs-button-toggle-group-border-radius`, `--ngs-button-toggle-hover-bg-color`, `--ngs-button-toggle-selection-indicator-color`, `--ngs-button-toggle-text-color`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary`, `--ngs-color-surface-container`, `--ngs-color-surface-container-high`, `--ngs-color-surface-container-highest`
+  tokens: `--ngs-button-height`, `--ngs-button-radius`, `--ngs-button-toggle-button-only-icon-padding`, `--ngs-button-toggle-button-padding`, `--ngs-button-toggle-checked-bg-color`, `--ngs-button-toggle-checked-text-color`, `--ngs-button-toggle-group-bg`, `--ngs-button-toggle-group-border-color`, `--ngs-button-toggle-group-border-radius`, `--ngs-button-toggle-hover-bg-color`, `--ngs-button-toggle-selection-indicator-color`, `--ngs-button-toggle-text-color`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary`, `--ngs-color-surface-container`
 - calendar: `@ngstarter-ui/components/calendar` docs: /components/calendar
   purpose: The NgStarter Angular Calendar component renders an inline month calendar for dashboards, scheduling widgets, event summaries, availability previews, and date-driven product surfaces.
   use when: Choose Calendar when the workflow matches examples such as Basic Calendar, Calendar With Events, Calendar With Min And Max Dates, Calendar min max.
