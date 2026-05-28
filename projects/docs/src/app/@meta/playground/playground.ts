@@ -172,6 +172,18 @@ export class Playground {
       return '';
     }
 
-    return response.text();
+    const source = await response.text();
+
+    if (this.isDocsFallbackResponse(source)) {
+      return '';
+    }
+
+    return source;
+  }
+
+  private isDocsFallbackResponse(source: string): boolean {
+    const normalizedSource = source.trimStart().toLowerCase();
+
+    return normalizedSource.startsWith('<!doctype html') || normalizedSource.startsWith('<html');
   }
 }

@@ -46,7 +46,7 @@
               <span class="truncate text-sm">{{ currentFileName }}</span>
             </div>
           </ngs-panel-header>
-          <ngs-panel-content class="playground-source-editor">
+          <ngs-panel-content class="playground-source-editor" [ngsScrollContainerFixed]="true">
             <ngs-scrollbar-area [absolute]="true">
               @if (exampleLoading) {
                 <div class="p-5 text-sm text-neutral-500">Loading source...</div>
