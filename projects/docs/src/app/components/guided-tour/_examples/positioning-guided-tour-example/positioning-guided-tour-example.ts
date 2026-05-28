@@ -6,73 +6,7 @@ import { Button } from '@ngstarter-ui/components/button';
   selector: 'app-positioning-guided-tour-example',
   standalone: true,
   imports: [TourAnchorDirective, Button],
-  template: `
-    <div class="flex flex-col gap-8 p-4 border border-outline-variant rounded-xl bg-surface-container-low">
-      <div class="grid grid-cols-3 gap-8">
-        <div ngsTourAnchor="above-start" class="p-4 bg-primary-container text-on-primary-container rounded-lg text-center text-xs w-full">
-          above-start
-        </div>
-        <div ngsTourAnchor="above-center" class="p-4 bg-primary-container text-on-primary-container rounded-lg text-center text-xs w-full">
-          above-center
-        </div>
-        <div ngsTourAnchor="above-end" class="p-4 bg-primary-container text-on-primary-container rounded-lg text-center text-xs w-full">
-          above-end
-        </div>
-      </div>
-
-      <div class="grid grid-cols-3 gap-4">
-        <div ngsTourAnchor="before-start" class="p-4 bg-error-container text-on-error-container rounded-lg text-center text-xs">
-          before-start
-        </div>
-        <div class="p-4 text-center text-xs">
-          -
-        </div>
-        <div ngsTourAnchor="after-start" class="p-4 bg-surface-variant text-on-surface-variant rounded-lg text-center text-xs">
-          after-start
-        </div>
-      </div>
-
-      <div class="grid grid-cols-3 gap-4">
-        <div ngsTourAnchor="before-center" class="p-4 bg-error-container text-on-error-container rounded-lg text-center text-xs">
-          before-center
-        </div>
-        <div class="p-4 text-center text-xs">
-          -
-        </div>
-        <div ngsTourAnchor="after-center" class="p-4 bg-surface-variant text-on-surface-variant rounded-lg text-center text-xs">
-          after-center
-        </div>
-      </div>
-
-      <div class="grid grid-cols-3 gap-4">
-        <div ngsTourAnchor="before-end" class="p-4 bg-error-container text-on-error-container rounded-lg text-center text-xs">
-          before-end
-        </div>
-        <div class="p-4 text-center text-xs">
-          -
-        </div>
-        <div ngsTourAnchor="after-end" class="p-4 bg-surface-variant text-on-surface-variant rounded-lg text-center text-xs">
-          after-end
-        </div>
-      </div>
-
-      <div class="grid grid-cols-3 gap-4">
-        <div ngsTourAnchor="below-start" class="p-4 bg-secondary-container text-on-secondary-container rounded-lg text-center text-xs">
-          below-start
-        </div>
-        <div ngsTourAnchor="below-center" class="p-4 bg-secondary-container text-on-secondary-container rounded-lg text-center text-xs">
-          below-center
-        </div>
-        <div ngsTourAnchor="below-end" class="p-4 bg-secondary-container text-on-secondary-container rounded-lg text-center text-xs">
-          below-end
-        </div>
-      </div>
-
-      <div class="flex justify-center mt-4">
-        <button ngsButton="filled" (click)="startTour()">Start Positioning Tour</button>
-      </div>
-    </div>
-  `,
+  templateUrl: './positioning-guided-tour-example.html',
 })
 export class PositioningGuidedTourExample {
   private readonly tourService = inject(TourService);

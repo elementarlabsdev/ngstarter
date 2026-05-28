@@ -5,18 +5,7 @@ import { Button } from '@ngstarter-ui/components/button';
 @Component({
   selector: 'app-close-on-backdrop-click-example',
   imports: [Button],
-  template: `
-    <div class="flex flex-col gap-4">
-      <div class="flex gap-4">
-        <button ngsButton="filled" (click)="startTour()">Start Tour (Close on Backdrop Click)</button>
-      </div>
-
-      <div class="flex gap-10 mt-10">
-        <div id="close-step1" class="p-4 border rounded">Step 1</div>
-        <div id="close-step2" class="p-4 border rounded">Step 2</div>
-      </div>
-    </div>
-  `,
+  templateUrl: './close-on-backdrop-click-example.html',
 })
 export class CloseOnBackdropClickExample {
   private readonly tourService = inject(TourService);
