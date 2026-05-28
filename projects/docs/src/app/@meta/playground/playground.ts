@@ -1,8 +1,20 @@
-import { Component, input, ViewEncapsulation, booleanAttribute } from '@angular/core';
+import { Component, input, ViewEncapsulation, booleanAttribute, viewChild } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 import { Button } from '@ngstarter-ui/components/button';
-import {Expand} from "@ngstarter-ui/components/expand";
+import { Drawer } from '@ngstarter-ui/components/drawer';
+import { Navigation, NavigationItem, NavigationItemIconDirective } from '@ngstarter-ui/components/navigation';
+import { Panel, PanelContent, PanelHeader, PanelSidebar } from '@ngstarter-ui/components/panel';
+import { ScrollbarArea, ScrollContainerFixed } from '@ngstarter-ui/components/scrollbar-area';
+
+type PlaygroundSourceTab = 'html' | 'ts' | 'scss';
+
+type PlaygroundSourceFile = {
+  tab: PlaygroundSourceTab;
+  extension: string;
+  language: string;
+  icon: string;
+};
 
 @Component({
   selector: 'ngs-playground',
@@ -10,13 +22,23 @@ import {Expand} from "@ngstarter-ui/components/expand";
     Icon,
     CodeHighlighter,
     Button,
-    Expand
+    Drawer,
+    Navigation,
+    NavigationItem,
+    NavigationItemIconDirective,
+    Panel,
+    PanelContent,
+    PanelHeader,
+    PanelSidebar,
+    ScrollbarArea,
+    ScrollContainerFixed
   ],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './playground.html',
   styleUrl: 'playground.scss'
 })
 export class Playground {
+  private readonly sourceDrawer = viewChild<Drawer>('sourceDrawer');
 
   exampleUrl = input<string>();
   exampleName = input<string>();
@@ -24,13 +46,34 @@ export class Playground {
     transform: booleanAttribute
   });
 
+  readonly sourceFiles: PlaygroundSourceFile[] = [
+    {
+      tab: 'html',
+      extension: 'html',
+      language: 'html',
+      icon: 'fluent:code-24-regular'
+    },
+    {
+      tab: 'ts',
+      extension: 'ts',
+      language: 'typescript',
+      icon: 'fluent:braces-24-regular'
+    },
+    {
+      tab: 'scss',
+      extension: 'scss',
+      language: 'scss',
+      icon: 'fluent:paint-brush-24-regular'
+    }
+  ];
+
   htmlSrc: string;
   tsSrc: string;
   cssSrc: string;
   alreadyLoaded = false;
 
   showSource = false;
-  currentTab = 'html';
+  currentTab: PlaygroundSourceTab = 'html';
   exampleLoading = false;
 
   get hasScr(): boolean {
@@ -46,7 +89,7 @@ export class Playground {
       return this.tsSrc;
     }
 
-    if (this.isCurrentTab('css')) {
+    if (this.isCurrentTab('scss')) {
       return this.cssSrc;
     }
 
@@ -62,49 +105,73 @@ export class Playground {
       return 'typescript';
     }
 
-    if (this.isCurrentTab('css')) {
-      return 'css';
-    }
-
-    return 'none';
+    return this.currentSourceFile?.language || 'none';
   }
 
   async toggleSource() {
-    this.showSource = !this.showSource;
-
     if (this.showSource) {
-      if (this.alreadyLoaded) {
-        return;
-      }
+      this.sourceDrawer()?.close();
+      return;
+    }
 
-      const urls = this.compact() ? [
-          fetch(`${this.exampleUrl()}/${this.exampleName()}/${this.exampleName()}.ts`),
-          fetch(`${this.exampleUrl()}/${this.exampleName()}/${this.exampleName()}.scss`),
-          fetch(`${this.exampleUrl()}/${this.exampleName()}/${this.exampleName()}.html`),
-        ] : [
-        fetch(`${this.exampleUrl()}/${this.exampleName()}/${this.exampleName()}.ts`),
-        fetch(`${this.exampleUrl()}/${this.exampleName()}/${this.exampleName()}.scss`),
-        fetch(`${this.exampleUrl()}/${this.exampleName()}/${this.exampleName()}.html`),
-      ]
+    this.showSource = true;
+    this.sourceDrawer()?.open();
 
-      this.exampleLoading = true;
-      const r = await Promise.all(urls)
-      .then(r => r.map(f => f.text()));
-        this.tsSrc = await r[0];
-        this.cssSrc = await r[1];
-        this.htmlSrc = await r[2];
-        this.exampleLoading = false;
-        this.alreadyLoaded = true;
-      } else {
-        this.exampleLoading = false;
-      }
+    if (this.alreadyLoaded) {
+      return;
+    }
+
+    this.exampleLoading = true;
+
+    const [tsSrc, cssSrc, htmlSrc] = await Promise.all([
+      this.fetchExampleFile('ts'),
+      this.fetchExampleFile('scss'),
+      this.fetchExampleFile('html'),
+    ]);
+
+    this.tsSrc = tsSrc;
+    this.cssSrc = cssSrc;
+    this.htmlSrc = htmlSrc;
+    this.exampleLoading = false;
+    this.alreadyLoaded = true;
   }
 
-  isCurrentTab(tabId: string): boolean {
+  isCurrentTab(tabId: PlaygroundSourceTab): boolean {
     return this.currentTab === tabId;
   }
 
-  selectTab(tabId: string): void {
+  selectTab(tabId: PlaygroundSourceTab): void {
     this.currentTab = tabId;
+  }
+
+  selectSourceTab(tabId: unknown): void {
+    this.selectTab(tabId as PlaygroundSourceTab);
+  }
+
+  get currentSourceFile(): PlaygroundSourceFile | undefined {
+    return this.sourceFiles.find(file => file.tab === this.currentTab);
+  }
+
+  get currentFileName(): string {
+    const file = this.currentSourceFile;
+    return file ? `${this.exampleName()}.${file.extension}` : '';
+  }
+
+  fileNameFor(file: PlaygroundSourceFile): string {
+    return `${this.exampleName()}.${file.extension}`;
+  }
+
+  onDrawerClosed(): void {
+    this.showSource = false;
+  }
+
+  private async fetchExampleFile(extension: PlaygroundSourceFile['extension']): Promise<string> {
+    const response = await fetch(`${this.exampleUrl()}/${this.exampleName()}/${this.exampleName()}.${extension}`);
+
+    if (!response.ok) {
+      return '';
+    }
+
+    return response.text();
   }
 }

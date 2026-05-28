@@ -1055,6 +1055,8 @@
       "cssTokens": [
         "--ngs-button-height",
         "--ngs-button-radius",
+        "--ngs-button-toggle-button-font-size",
+        "--ngs-button-toggle-button-font-weight",
         "--ngs-button-toggle-button-only-icon-padding",
         "--ngs-button-toggle-button-padding",
         "--ngs-button-toggle-checked-bg-color",
@@ -7363,14 +7365,19 @@
       "exampleFiles": [],
       "previewAsset": "projects/components/scrollbar-area/preview.svg",
       "selectors": [
+        "[ngsScrollContainerFixed]",
         "ngs-scrollbar-area"
       ],
       "exportedSymbols": [
-        "ScrollbarArea"
+        "ScrollbarArea",
+        "ScrollContainerFixed"
       ],
       "inputs": [
         "absolute",
         "autoHide",
+        "ngsScrollContainerFixed",
+        "ngsScrollContainerFixedBottomOffset",
+        "ngsScrollContainerFixedMinHeight",
         "scrollbarWidth"
       ],
       "outputs": [

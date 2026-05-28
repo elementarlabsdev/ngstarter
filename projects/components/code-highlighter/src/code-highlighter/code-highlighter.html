@@ -1,4 +1,4 @@
-<figure>
+<figure class="h-full">
   @if (title()) {
     <figcaption>
       @if (title()) {
@@ -7,7 +7,7 @@
     </figcaption>
   }
 
-  <div class="content relative">
+  <div class="content relative h-full">
     @if (showLanguage()) {
       <div class="languageName">{{ displayedLanguage() }}</div>
     }
@@ -29,7 +29,7 @@
     <div>
       @if (content()) {
         <div [innerHTML]="content()"></div>
-      } @else {
+      } @else if (isLoading()) {
         <div class="loading">Loading…</div>
       }
     </div>

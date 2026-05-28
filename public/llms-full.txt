@@ -178,7 +178,7 @@ Typography:
   exports: `ButtonToggle`, `ButtonToggleAppearance`, `ButtonToggleGroup`
   inputs: `appearance`, `checked`, `disabled`, `hideSelectionIndicator`, `id`, `multiple`, `name`, `onlyIcon`, `value`, `vertical`
   outputs: `change`
-  tokens: `--ngs-button-height`, `--ngs-button-radius`, `--ngs-button-toggle-button-only-icon-padding`, `--ngs-button-toggle-button-padding`, `--ngs-button-toggle-checked-bg-color`, `--ngs-button-toggle-checked-text-color`, `--ngs-button-toggle-group-bg`, `--ngs-button-toggle-group-border-color`, `--ngs-button-toggle-group-border-radius`, `--ngs-button-toggle-hover-bg-color`, `--ngs-button-toggle-selection-indicator-color`, `--ngs-button-toggle-text-color`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary`, `--ngs-color-surface-container`
+  tokens: `--ngs-button-height`, `--ngs-button-radius`, `--ngs-button-toggle-button-font-size`, `--ngs-button-toggle-button-font-weight`, `--ngs-button-toggle-button-only-icon-padding`, `--ngs-button-toggle-button-padding`, `--ngs-button-toggle-checked-bg-color`, `--ngs-button-toggle-checked-text-color`, `--ngs-button-toggle-group-bg`, `--ngs-button-toggle-group-border-color`, `--ngs-button-toggle-group-border-radius`, `--ngs-button-toggle-hover-bg-color`, `--ngs-button-toggle-selection-indicator-color`, `--ngs-button-toggle-text-color`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`
 - calendar: `@ngstarter-ui/components/calendar` docs: /components/calendar
   purpose: The NgStarter Angular Calendar component renders an inline month calendar for dashboards, scheduling widgets, event summaries, availability previews, and date-driven product surfaces.
   use when: Choose Calendar when the workflow matches examples such as Basic Calendar, Calendar With Events, Calendar With Min And Max Dates, Calendar min max.
@@ -811,9 +811,9 @@ Typography:
 - scrollbar-area: `@ngstarter-ui/components/scrollbar-area`
   purpose: Provide a styled scroll container for bounded UI regions.
   use when: Use ngs-scrollbar-area when a sized panel, grid body, editor sidebar, asset list, menu, or similar surface needs consistent NgStarter scrollbars instead of native browser scrollbars. It hides native scrollbars, renders vertical and horizontal thumbs, supports auto-hide, thumb dragging, resize and mutation tracking, scrollbarWidth, autoHide, absolute fill mode, and scrolled output. Use [absolute]="true" when the scroll area should fill a positioned parent region such as ngs-panel-content or a DataView viewport; make sure the parent already has a stable height and width. Do not use as a generic layout wrapper, spacing helper, page-level replacement for normal browser scrolling, carousel or scroll-snap component, virtualization engine, or a workaround for missing parent sizing.
-  selectors: `ngs-scrollbar-area`
-  exports: `ScrollbarArea`
-  inputs: `absolute`, `autoHide`, `scrollbarWidth`
+  selectors: `[ngsScrollContainerFixed]`, `ngs-scrollbar-area`
+  exports: `ScrollbarArea`, `ScrollContainerFixed`
+  inputs: `absolute`, `autoHide`, `ngsScrollContainerFixed`, `ngsScrollContainerFixedBottomOffset`, `ngsScrollContainerFixedMinHeight`, `scrollbarWidth`
   outputs: `scrolled`
   tokens: `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-radius-sm`, `--ngs-scrollbar-area-scroll-track-bg`, `--ngs-scrollbar-area-thumb-active-bg`, `--ngs-scrollbar-area-thumb-bg`, `--ngs-scrollbar-area-thumb-hover-bg`, `--ngs-scrollbar-area-width`
 - segmented: `@ngstarter-ui/components/segmented` docs: /forms/segmented
