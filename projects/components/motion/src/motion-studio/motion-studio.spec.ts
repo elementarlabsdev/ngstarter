@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
 
 import { MotionStudio } from './motion-studio';
+import { resolveMotionLayerSnapshot } from '../engine/motion-engine';
+import { MOTION_PRESETS } from '../presets/motion-presets';
 
 describe('MotionStudio', () => {
   let component: MotionStudio;
@@ -244,6 +246,254 @@ describe('MotionStudio', () => {
     expect((component as any).draft().layers.find((item: any) => item.id === layer.id).style.lineHeight).toBe(
       1.35,
     );
+  });
+
+  it('should update animated line width when editing transform width', () => {
+    fixture.detectChanges();
+
+    const layer = (component as any).draft().layers.find((item: any) => item.id === 'accent');
+    (component as any).selectLayer(layer);
+
+    (component as any).setLayerLayoutNumber('width', 700);
+    fixture.detectChanges();
+
+    const nextLayer = (component as any).draft().layers.find((item: any) => item.id === layer.id);
+    const widthAnimation = nextLayer.animations.find(
+      (animation: any) => animation.property === 'width',
+    );
+    const snapshot = resolveMotionLayerSnapshot(nextLayer, nextLayer.start + 700);
+
+    expect(nextLayer.layout.width).toBe(700);
+    expect(widthAnimation.keyframes.map((keyframe: any) => keyframe.value)).toEqual([0, 700]);
+    expect(snapshot.layout.width).toBe(700);
+  });
+
+  it('should create line presets without rounded corners', () => {
+    const lineLayer = MOTION_PRESETS.find((preset) => preset.id === 'shape-line')?.layers[0];
+
+    expect(lineLayer?.props?.['kind']).toBe('line');
+    expect(lineLayer?.style?.borderRadius).toBe(0);
+  });
+
+  it('should expose only horizontal resize handles for line layers', () => {
+    fixture.detectChanges();
+
+    expect(
+      (component as any).canvasResizeHandles({
+        type: 'shape',
+        props: { kind: 'line' },
+      }),
+    ).toEqual(['w', 'e']);
+    expect(
+      (component as any).canvasResizeHandles({
+        type: 'group',
+        children: [
+          {
+            type: 'shape',
+            props: { kind: 'line' },
+          },
+        ],
+      }),
+    ).toEqual(['w', 'e']);
+    expect(
+      (component as any).canvasResizeHandles({
+        type: 'shape',
+        props: { kind: 'rectangle' },
+      }),
+    ).toEqual(['nw', 'ne', 'e', 'se', 's', 'sw', 'w', 'n']);
+  });
+
+  it('should insert presets as a single selected group layer', () => {
+    fixture.detectChanges();
+
+    (component as any).draft.set({
+      version: '0.1',
+      composition: {
+        width: 1920,
+        height: 1080,
+        fps: 30,
+        duration: 5 * 60 * 1000,
+      },
+      layers: [],
+      tracks: [],
+      scenes: [],
+    });
+
+    const preset = MOTION_PRESETS.find((item) => item.id === 'product-card')!;
+
+    (component as any).applyPreset(preset);
+    fixture.detectChanges();
+
+    const document = (component as any).draft();
+    const group = document.layers[0];
+    const childIds = group.children.map((layer: any) => layer.id);
+
+    expect(document.layers).toHaveLength(1);
+    expect(group.type).toBe('group');
+    expect(group.name).toBe(preset.name);
+    expect(group.children).toHaveLength(preset.layers.length);
+    expect(Math.min(...group.children.map((layer: any) => layer.layout.x))).toBe(0);
+    expect(Math.min(...group.children.map((layer: any) => layer.layout.y))).toBe(0);
+    expect(document.tracks[0].layerIds).toEqual([group.id]);
+    expect(document.scenes[0].layerIds).toEqual([group.id]);
+    expect(document.tracks[0].layerIds.some((layerId: string) => childIds.includes(layerId))).toBe(
+      false,
+    );
+    expect((component as any).selectedLayerId()).toBe(group.id);
+    expect((component as any).selectedLayerIds()).toEqual([group.id]);
+  });
+
+  it('should resize preset group children proportionally', () => {
+    fixture.detectChanges();
+
+    (component as any).draft.set({
+      version: '0.1',
+      composition: {
+        width: 1920,
+        height: 1080,
+        fps: 30,
+        duration: 5 * 60 * 1000,
+      },
+      layers: [],
+      tracks: [],
+      scenes: [],
+    });
+
+    const preset = MOTION_PRESETS.find((item) => item.id === 'shape-line')!;
+
+    (component as any).applyPreset(preset);
+    fixture.detectChanges();
+
+    const group = (component as any).draft().layers[0];
+    const startWidth = group.layout.width;
+    const childStartWidth = group.children[0].layout.width;
+
+    (component as any).selectLayer(group);
+    (component as any).setLayerLayoutNumber('width', startWidth * 2);
+    fixture.detectChanges();
+
+    const nextGroup = (component as any).draft().layers[0];
+
+    expect(nextGroup.layout.width).toBe(startWidth * 2);
+    expect(nextGroup.children[0].layout.width).toBe(childStartWidth * 2);
+    expect((component as any).canvasResizeHandles(nextGroup)).toEqual(['w', 'e']);
+  });
+
+  it('should scale slide effect distances when resizing a layer', () => {
+    fixture.detectChanges();
+
+    (component as any).draft.set({
+      version: '0.1',
+      composition: {
+        width: 1000,
+        height: 1000,
+        fps: 30,
+        duration: 2000,
+      },
+      layers: [
+        {
+          id: 'slide-layer',
+          type: 'shape',
+          start: 0,
+          duration: 1000,
+          layout: {
+            x: 100,
+            y: 100,
+            width: 200,
+            height: 100,
+          },
+          props: {
+            kind: 'rectangle',
+          },
+          animations: [
+            {
+              property: 'x',
+              keyframes: [
+                { time: 0, value: 50 },
+                { time: 500, value: 100 },
+              ],
+            },
+          ],
+          transitions: {
+            in: {
+              type: 'slide',
+              duration: 400,
+              props: { direction: 'left', distance: 50 },
+            },
+          },
+        },
+      ],
+    });
+    (component as any).selectedLayerId.set('slide-layer');
+    (component as any).selectedLayerIds.set(['slide-layer']);
+
+    (component as any).setLayerLayoutNumber('width', 400);
+    fixture.detectChanges();
+
+    const layer = (component as any).draft().layers[0];
+
+    expect(layer.animations[0].keyframes.map((keyframe: any) => keyframe.value)).toEqual([
+      0,
+      100,
+    ]);
+    expect(layer.transitions.in.props.distance).toBe(100);
+  });
+
+  it('should scale text effect distances when resizing text layer height', () => {
+    fixture.detectChanges();
+
+    (component as any).draft.set({
+      version: '0.1',
+      composition: {
+        width: 1000,
+        height: 1000,
+        fps: 30,
+        duration: 2000,
+      },
+      layers: [
+        {
+          id: 'text-effect-layer',
+          type: 'text',
+          start: 0,
+          duration: 1000,
+          layout: {
+            x: 100,
+            y: 100,
+            width: 300,
+            height: 100,
+          },
+          props: {
+            text: 'Resize me',
+          },
+          animations: [
+            {
+              property: 'textEffect',
+              keyframes: [
+                {
+                  time: 0,
+                  value: {
+                    type: 'chars-slide-up',
+                    duration: 400,
+                    stagger: 20,
+                    distance: 30,
+                  },
+                },
+                { time: 600, value: null },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    (component as any).selectedLayerId.set('text-effect-layer');
+    (component as any).selectedLayerIds.set(['text-effect-layer']);
+
+    (component as any).setLayerLayoutNumber('height', 200);
+    fixture.detectChanges();
+
+    const layer = (component as any).draft().layers[0];
+
+    expect(layer.animations[0].keyframes[0].value.distance).toBe(60);
   });
 
   it('should create text layers with 1.35 line height by default', () => {

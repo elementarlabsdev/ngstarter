@@ -174,6 +174,18 @@ const MOTION_EFFECT_SETTINGS_COMPONENTS: Record<string, Type<unknown>> = {
   property: MotionPropertyEffectSettings,
 };
 
+const DEFAULT_CANVAS_RESIZE_HANDLES: CanvasResizeHandle[] = [
+  'nw',
+  'ne',
+  'e',
+  'se',
+  's',
+  'sw',
+  'w',
+  'n',
+];
+const LINE_CANVAS_RESIZE_HANDLES: CanvasResizeHandle[] = ['w', 'e'];
+
 @Component({
   selector: 'ngs-motion-studio',
   imports: [
@@ -3204,13 +3216,25 @@ export class MotionStudio {
       | 'skewY',
     value: unknown,
   ): void {
-    const nextValue = coerceNumber(value);
-
     this.updateSelectedLayer((layer) => {
-      layer.layout = {
+      const previousLayout = { ...layer.layout };
+      const nextValue = normalizeMotionLayoutPropertyValue(property, coerceNumber(value));
+      const nextLayout = {
         ...layer.layout,
-        [property]: property.startsWith('scale') ? Math.max(0.05, nextValue) : nextValue,
+        [property]: nextValue,
       };
+      const layoutAdjustments = getLayoutAnimationAdjustments(previousLayout, nextLayout);
+
+      layer.layout = {
+        ...nextLayout,
+      };
+      layer.animations = shiftMotionLayoutAnimations(layer.animations, layoutAdjustments);
+      applyMotionLayerEffectLayoutAdjustments(layer, layoutAdjustments);
+      layer.children = scaleMotionGroupChildrenForLayout(
+        layer.children,
+        previousLayout,
+        nextLayout,
+      );
     });
   }
 
@@ -5722,6 +5746,26 @@ export class MotionStudio {
     return this.isUnbrokenTextLayer(layer);
   }
 
+  protected isLineShapeLayer(layer: MotionLayer): boolean {
+    if (layer.type === 'shape') {
+      return coerceMotionString(layer.props?.['kind'], '') === 'line';
+    }
+
+    return layer.type === 'group' && layer.children?.length === 1
+      ? this.isLineShapeLayer(layer.children[0])
+      : false;
+  }
+
+  protected canvasResizeHandles(layer: MotionLayer): CanvasResizeHandle[] {
+    return this.isLineShapeLayer(layer)
+      ? LINE_CANVAS_RESIZE_HANDLES
+      : DEFAULT_CANVAS_RESIZE_HANDLES;
+  }
+
+  protected canvasResizeHandleClass(handle: CanvasResizeHandle): string {
+    return `ngs-motion-studio__resize-handle is-${handle}`;
+  }
+
   protected layerTextMeasureStyle(layer: MotionLayer): Record<string, string | number | null> {
     const snapshot = resolveMotionLayerSnapshot(layer, this.currentTime());
     const style = snapshot.style;
@@ -6837,23 +6881,15 @@ export class MotionStudio {
     topZIndex: number,
     options: MotionPresetInsertOptions = {},
   ): MotionLayer[] {
-    const startOffset = preset.layers.length
-      ? Math.min(...preset.layers.map((layer) => layer.start))
-      : 0;
     const startTime = options.startTime ?? this.currentTime();
-    const stampedLayers = preset.layers.map((layer, index) => ({
-      ...cloneMotionLayer(layer),
-      id: createMotionLayerId(layer.id),
-      name: layer.name,
-      start: startTime + layer.start - startOffset,
-      zIndex: topZIndex + index + 1,
-    }));
+    const stampedLayers = createStampedPresetLayers(preset, startTime, topZIndex);
+    const group = createMotionPresetGroupLayer(preset, stampedLayers, topZIndex + 1);
 
     if (options.placement) {
-      translateMotionLayersToPoint(stampedLayers, options.placement);
+      translateMotionLayersToPoint([group], options.placement);
     }
 
-    return stampedLayers;
+    return [group];
   }
 
   private insertLayerCopies(layers: MotionLayer[], mode: 'duplicate' | 'paste'): void {
@@ -7148,6 +7184,9 @@ export class MotionStudio {
       startClientY: event.clientY,
       startLayout: { ...layer.layout },
       startAnimations: cloneMotionAnimations(layer.animations),
+      startTransitions: cloneMotionLayerTransitions(layer.transitions),
+      startProps: layer.props ? { ...layer.props } : undefined,
+      startChildren: layer.children?.map(cloneMotionLayer),
       stageRect: stage.getBoundingClientRect(),
     };
     this.bindPointerListeners();
@@ -7523,13 +7562,26 @@ export class MotionStudio {
     }
 
     const normalized = normalizeMotionLayout(next);
-    const layoutDelta = getLayoutDelta(interaction.startLayout, normalized);
+    const layoutAdjustments = getLayoutAnimationAdjustments(interaction.startLayout, normalized);
 
     this.updateLayer(
       interaction.layerId,
       (layer) => {
         layer.layout = normalized;
-        layer.animations = shiftMotionLayoutAnimations(interaction.startAnimations, layoutDelta);
+        layer.animations = shiftMotionLayoutAnimations(
+          interaction.startAnimations,
+          layoutAdjustments,
+        );
+        layer.transitions = shiftMotionLayerTransitions(
+          interaction.startTransitions,
+          layoutAdjustments,
+        );
+        layer.props = shiftMotionLayerProps(interaction.startProps, layoutAdjustments);
+        layer.children = scaleMotionGroupChildrenForLayout(
+          interaction.startChildren,
+          interaction.startLayout,
+          normalized,
+        );
       },
       { recordHistory: false, transient: true },
     );
@@ -10503,6 +10555,10 @@ const getLayerBounds = (layers: MotionLayer[]): MotionLayout => {
 const rebaseMotionLayerForGroup = (layer: MotionLayer, bounds: MotionLayout): MotionLayer => {
   const cloned = cloneMotionLayer(layer);
   const delta = { x: -bounds.x, y: -bounds.y };
+  const animationAdjustments = {
+    x: createMotionLayoutAnimationDelta(delta.x),
+    y: createMotionLayoutAnimationDelta(delta.y),
+  };
 
   return {
     ...cloned,
@@ -10511,7 +10567,7 @@ const rebaseMotionLayerForGroup = (layer: MotionLayer, bounds: MotionLayout): Mo
       x: cloned.layout.x + delta.x,
       y: cloned.layout.y + delta.y,
     },
-    animations: shiftMotionLayoutAnimations(cloned.animations, delta),
+    animations: shiftMotionLayoutAnimations(cloned.animations, animationAdjustments),
   };
 };
 
@@ -10686,6 +10742,17 @@ const createSceneTemplateLayers = (
   sceneStart: number,
   topZIndex: number,
 ): MotionLayer[] => {
+  const stampedLayers = createStampedPresetLayers(preset, sceneStart, topZIndex);
+  const group = createMotionPresetGroupLayer(preset, stampedLayers, topZIndex + 1);
+
+  return [group];
+};
+
+const createStampedPresetLayers = (
+  preset: MotionPreset,
+  startTime: number,
+  topZIndex: number,
+): MotionLayer[] => {
   const startOffset = preset.layers.length
     ? Math.min(...preset.layers.map((layer) => layer.start))
     : 0;
@@ -10694,9 +10761,43 @@ const createSceneTemplateLayers = (
     ...cloneMotionLayer(layer),
     id: createMotionLayerId(layer.id),
     name: layer.name,
-    start: sceneStart + layer.start - startOffset,
+    start: startTime + layer.start - startOffset,
     zIndex: topZIndex + index + 1,
   }));
+};
+
+const createMotionPresetGroupLayer = (
+  preset: MotionPreset,
+  layers: MotionLayer[],
+  zIndex: number,
+): MotionLayer => {
+  if (!layers.length) {
+    return {
+      id: createMotionLayerId(preset.id),
+      type: 'group',
+      name: preset.name,
+      start: 0,
+      duration: 100,
+      zIndex,
+      layout: { x: 0, y: 0, width: MIN_LAYER_SIZE, height: MIN_LAYER_SIZE },
+      children: [],
+    };
+  }
+
+  const bounds = getLayerBounds(layers);
+  const start = Math.min(...layers.map((layer) => layer.start));
+  const end = Math.max(...layers.map((layer) => layer.start + layer.duration));
+
+  return {
+    id: createMotionLayerId(preset.id),
+    type: 'group',
+    name: preset.name,
+    start,
+    duration: Math.max(100, end - start),
+    zIndex,
+    layout: bounds,
+    children: layers.map((layer) => rebaseMotionLayerForGroup(layer, bounds)),
+  };
 };
 
 const filterMotionDocumentToScene = (
@@ -10757,6 +10858,16 @@ const cloneMotionAnimations = (
     ...animation,
     keyframes: animation.keyframes.map(cloneMotionKeyframe),
   }));
+
+const cloneMotionLayerTransitions = (
+  transitions: MotionLayer['transitions'] | undefined,
+): MotionLayer['transitions'] | undefined =>
+  transitions
+    ? {
+        in: cloneMotionTransition(transitions.in),
+        out: cloneMotionTransition(transitions.out),
+      }
+    : undefined;
 
 const cloneMotionKeyframe = (keyframe: MotionKeyframe): MotionKeyframe => ({
   ...keyframe,
@@ -12744,6 +12855,10 @@ interface KeyframeSnapOptions {
 }
 
 type CanvasResizeHandle = 'n' | 'e' | 's' | 'w' | 'ne' | 'se' | 'sw' | 'nw';
+type MotionLayoutAnimationAdjustment =
+  | { type: 'delta'; value: number }
+  | { type: 'ratio'; value: number }
+  | { type: 'relative'; origin: number; nextOrigin: number; ratio: number };
 type MotionLibraryDropZone = 'canvas' | 'timeline';
 type MotionAlignment = 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom';
 type MotionDistributionAxis = 'horizontal' | 'vertical';
@@ -12774,6 +12889,9 @@ interface CanvasInteraction {
   startClientY: number;
   startLayout: MotionLayout;
   startAnimations: MotionAnimation[] | undefined;
+  startTransitions: MotionLayer['transitions'] | undefined;
+  startProps: Record<string, MotionValue> | undefined;
+  startChildren: MotionLayer[] | undefined;
   stageRect: DOMRect;
 }
 
@@ -13050,6 +13168,21 @@ const normalizeMotionLayout = (layout: MotionLayout): MotionLayout => {
   };
 };
 
+const normalizeMotionLayoutPropertyValue = (
+  property: keyof MotionLayout,
+  value: number,
+): number => {
+  if (property === 'width' || property === 'height') {
+    return Math.max(MIN_LAYER_SIZE, value);
+  }
+
+  if (property === 'scale' || property === 'scaleX' || property === 'scaleY') {
+    return Math.max(0.05, value);
+  }
+
+  return value;
+};
+
 const updateSelectionOverlay = (
   element: HTMLElement | null,
   box: MotionCanvasSelectionBox | TimelineSelectionBox | null,
@@ -13133,31 +13266,82 @@ const measureTextLayerContentHeight = (
   return Math.max(MIN_LAYER_SIZE, measuredHeight);
 };
 
-const getLayoutDelta = (
+const getLayoutAnimationAdjustments = (
   start: MotionLayout,
   next: MotionLayout,
-): Partial<Record<keyof MotionLayout, number>> => ({
-  x: next.x - start.x,
-  y: next.y - start.y,
-  width: next.width - start.width,
-  height: next.height - start.height,
-  rotation: (next.rotation ?? 0) - (start.rotation ?? 0),
-  scale: (next.scale ?? 1) - (start.scale ?? 1),
+): Partial<Record<keyof MotionLayout, MotionLayoutAnimationAdjustment>> => ({
+  x: createMotionLayoutAnimationRelative(start.x, next.x, start.width, next.width),
+  y: createMotionLayoutAnimationRelative(start.y, next.y, start.height, next.height),
+  width: createMotionLayoutAnimationRatio(start.width, next.width),
+  height: createMotionLayoutAnimationRatio(start.height, next.height),
+  rotation: createMotionLayoutAnimationDelta((next.rotation ?? 0) - (start.rotation ?? 0)),
+  scale: createMotionLayoutAnimationDelta((next.scale ?? 1) - (start.scale ?? 1)),
+  scaleX: createMotionLayoutAnimationDelta((next.scaleX ?? 1) - (start.scaleX ?? 1)),
+  scaleY: createMotionLayoutAnimationDelta((next.scaleY ?? 1) - (start.scaleY ?? 1)),
+  skewX: createMotionLayoutAnimationDelta((next.skewX ?? 0) - (start.skewX ?? 0)),
+  skewY: createMotionLayoutAnimationDelta((next.skewY ?? 0) - (start.skewY ?? 0)),
 });
+
+const createMotionLayoutAnimationDelta = (
+  delta: number,
+): MotionLayoutAnimationAdjustment | undefined =>
+  delta === 0 ? undefined : { type: 'delta', value: delta };
+
+const createMotionLayoutAnimationRatio = (
+  start: number,
+  next: number,
+): MotionLayoutAnimationAdjustment | undefined => {
+  if (start <= 0 || next === start) {
+    return undefined;
+  }
+
+  return { type: 'ratio', value: next / start };
+};
+
+const createMotionLayoutAnimationRelative = (
+  origin: number,
+  nextOrigin: number,
+  size: number,
+  nextSize: number,
+): MotionLayoutAnimationAdjustment | undefined => {
+  const moved = nextOrigin - origin;
+
+  if (size <= 0) {
+    return createMotionLayoutAnimationDelta(moved);
+  }
+
+  const ratio = nextSize / size;
+
+  if (moved === 0 && ratio === 1) {
+    return undefined;
+  }
+
+  return { type: 'relative', origin, nextOrigin, ratio };
+};
 
 const shiftMotionLayoutAnimations = (
   animations: MotionAnimation[] | undefined,
-  delta: Partial<Record<keyof MotionLayout, number>>,
+  adjustments: Partial<Record<keyof MotionLayout, MotionLayoutAnimationAdjustment>>,
 ): MotionAnimation[] | undefined => {
   if (!animations) {
     return undefined;
   }
 
   return animations.map((animation) => {
-    const property = animation.property as keyof MotionLayout;
-    const offset = delta[property];
+    if (animation.property === TEXT_EFFECT_ANIMATION_PROPERTY) {
+      return {
+        ...animation,
+        keyframes: animation.keyframes.map((keyframe) => ({
+          ...keyframe,
+          value: shiftMotionTextEffectValue(keyframe.value, adjustments),
+        })),
+      };
+    }
 
-    if (offset === undefined || offset === 0 || !isMotionLayoutAnimationProperty(property)) {
+    const property = animation.property as keyof MotionLayout;
+    const adjustment = adjustments[property];
+
+    if (!adjustment || !isMotionLayoutAnimationProperty(property)) {
       return {
         ...animation,
         keyframes: animation.keyframes.map((keyframe) => ({ ...keyframe })),
@@ -13168,14 +13352,198 @@ const shiftMotionLayoutAnimations = (
       ...animation,
       keyframes: animation.keyframes.map((keyframe) => ({
         ...keyframe,
-        value: typeof keyframe.value === 'number' ? keyframe.value + offset : keyframe.value,
+        value:
+          typeof keyframe.value === 'number'
+            ? applyMotionLayoutAnimationAdjustment(keyframe.value, adjustment)
+            : keyframe.value,
       })),
     };
   });
 };
 
+const applyMotionLayerEffectLayoutAdjustments = (
+  layer: MotionLayer,
+  adjustments: Partial<Record<keyof MotionLayout, MotionLayoutAnimationAdjustment>>,
+): void => {
+  layer.transitions = shiftMotionLayerTransitions(layer.transitions, adjustments);
+  layer.props = shiftMotionLayerProps(layer.props, adjustments);
+};
+
+const shiftMotionLayerTransitions = (
+  transitions: MotionLayer['transitions'] | undefined,
+  adjustments: Partial<Record<keyof MotionLayout, MotionLayoutAnimationAdjustment>>,
+): MotionLayer['transitions'] | undefined => {
+  if (!transitions) {
+    return undefined;
+  }
+
+  return {
+    in: shiftMotionTransition(transitions.in, 'in', adjustments),
+    out: shiftMotionTransition(transitions.out, 'out', adjustments),
+  };
+};
+
+const shiftMotionTransition = (
+  transition: MotionTransition | undefined,
+  edge: MotionTransitionEdge,
+  adjustments: Partial<Record<keyof MotionLayout, MotionLayoutAnimationAdjustment>>,
+): MotionTransition | undefined => {
+  if (!transition) {
+    return undefined;
+  }
+
+  if (normalizeMotionTransitionType(transition.type) !== 'slide') {
+    return cloneMotionTransition(transition);
+  }
+
+  const direction = readMotionTransitionDirection(transition, edge);
+  const ratio = direction === 'left' || direction === 'right'
+    ? readMotionLayoutEffectRatio(adjustments.width)
+    : readMotionLayoutEffectRatio(adjustments.height);
+
+  if (ratio === 1) {
+    return cloneMotionTransition(transition);
+  }
+
+  return {
+    ...transition,
+    props: {
+      ...(transition.props ?? {}),
+      distance: roundMotionNumber(readMotionTransitionDistance(transition) * ratio, 2),
+    },
+  };
+};
+
+const shiftMotionLayerProps = (
+  props: Record<string, MotionValue> | undefined,
+  adjustments: Partial<Record<keyof MotionLayout, MotionLayoutAnimationAdjustment>>,
+): Record<string, MotionValue> | undefined => {
+  if (!props) {
+    return undefined;
+  }
+
+  const nextProps = { ...props };
+
+  if (Object.prototype.hasOwnProperty.call(nextProps, 'textEffect')) {
+    nextProps['textEffect'] = shiftMotionTextEffectValue(nextProps['textEffect'], adjustments);
+  }
+
+  return nextProps;
+};
+
+const shiftMotionTextEffectValue = (
+  value: MotionValue | undefined,
+  adjustments: Partial<Record<keyof MotionLayout, MotionLayoutAnimationAdjustment>>,
+): MotionValue => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return value ?? null;
+  }
+
+  const effect = { ...value };
+  const distance = effect['distance'];
+
+  if (typeof distance === 'number') {
+    effect['distance'] = roundMotionNumber(
+      distance * readMotionLayoutEffectRatio(adjustments.height),
+      2,
+    );
+  }
+
+  return effect;
+};
+
+const readMotionLayoutEffectRatio = (
+  adjustment: MotionLayoutAnimationAdjustment | undefined,
+): number => {
+  if (!adjustment) {
+    return 1;
+  }
+
+  if (adjustment.type === 'relative') {
+    return adjustment.ratio;
+  }
+
+  if (adjustment.type === 'ratio') {
+    return adjustment.value;
+  }
+
+  return 1;
+};
+
+const scaleMotionGroupChildrenForLayout = (
+  children: MotionLayer[] | undefined,
+  startLayout: MotionLayout,
+  nextLayout: MotionLayout,
+): MotionLayer[] | undefined => {
+  if (!children) {
+    return undefined;
+  }
+
+  const ratioX = startLayout.width > 0 ? nextLayout.width / startLayout.width : 1;
+  const ratioY = startLayout.height > 0 ? nextLayout.height / startLayout.height : 1;
+
+  return children.map((child) => scaleMotionLayerForParentLayout(child, ratioX, ratioY));
+};
+
+const scaleMotionLayerForParentLayout = (
+  layer: MotionLayer,
+  ratioX: number,
+  ratioY: number,
+): MotionLayer => {
+  const startLayer = cloneMotionLayer(layer);
+  const nextLayout: MotionLayout = {
+    ...startLayer.layout,
+    x: roundMotionNumber(startLayer.layout.x * ratioX, 2),
+    y: roundMotionNumber(startLayer.layout.y * ratioY, 2),
+    width: Math.max(MIN_LAYER_SIZE, roundMotionNumber(startLayer.layout.width * ratioX, 2)),
+    height: Math.max(MIN_LAYER_SIZE, roundMotionNumber(startLayer.layout.height * ratioY, 2)),
+  };
+  const adjustments = getLayoutAnimationAdjustments(startLayer.layout, nextLayout);
+  const nextLayer: MotionLayer = {
+    ...startLayer,
+    layout: nextLayout,
+    animations: shiftMotionLayoutAnimations(startLayer.animations, adjustments),
+    transitions: shiftMotionLayerTransitions(startLayer.transitions, adjustments),
+    props: shiftMotionLayerProps(startLayer.props, adjustments),
+  };
+
+  nextLayer.children = scaleMotionGroupChildrenForLayout(
+    startLayer.children,
+    startLayer.layout,
+    nextLayout,
+  );
+
+  return nextLayer;
+};
+
+const applyMotionLayoutAnimationAdjustment = (
+  value: number,
+  adjustment: MotionLayoutAnimationAdjustment,
+): number => {
+  switch (adjustment.type) {
+    case 'relative':
+      return adjustment.nextOrigin + (value - adjustment.origin) * adjustment.ratio;
+    case 'ratio':
+      return value * adjustment.value;
+    case 'delta':
+    default:
+      return value + adjustment.value;
+  }
+};
+
 const isMotionLayoutAnimationProperty = (property: keyof MotionLayout): boolean => {
-  return ['x', 'y', 'width', 'height', 'rotation', 'scale'].includes(property);
+  return [
+    'x',
+    'y',
+    'width',
+    'height',
+    'rotation',
+    'scale',
+    'scaleX',
+    'scaleY',
+    'skewX',
+    'skewY',
+  ].includes(property);
 };
 
 const snapTimelineTime = (time: number): number => Math.round(time / 100) * 100;

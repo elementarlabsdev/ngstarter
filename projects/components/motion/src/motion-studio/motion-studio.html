@@ -1355,74 +1355,22 @@
                             ></span>
                           }
                           @if (isLayerSelected(entry.layer) && !entry.layer.locked) {
-                            <span
-                              class="ngs-motion-studio__resize-handle is-nw"
-                              (pointerdown)="startCanvasResize(entry.layer, 'nw', $event)"
-                            ></span>
-                            <span
-                              class="ngs-motion-studio__resize-handle is-ne"
-                              (pointerdown)="startCanvasResize(entry.layer, 'ne', $event)"
-                            ></span>
-                            <span
-                              class="ngs-motion-studio__resize-handle is-e"
-                              (pointerdown)="startCanvasResize(entry.layer, 'e', $event)"
-                            ></span>
-                            <span
-                              class="ngs-motion-studio__resize-handle is-se"
-                              (pointerdown)="startCanvasResize(entry.layer, 'se', $event)"
-                            ></span>
-                            <span
-                              class="ngs-motion-studio__resize-handle is-s"
-                              (pointerdown)="startCanvasResize(entry.layer, 's', $event)"
-                            ></span>
-                            <span
-                              class="ngs-motion-studio__resize-handle is-sw"
-                              (pointerdown)="startCanvasResize(entry.layer, 'sw', $event)"
-                            ></span>
-                            <span
-                              class="ngs-motion-studio__resize-handle is-w"
-                              (pointerdown)="startCanvasResize(entry.layer, 'w', $event)"
-                            ></span>
-                            <span
-                              class="ngs-motion-studio__resize-handle is-n"
-                              (pointerdown)="startCanvasResize(entry.layer, 'n', $event)"
-                            ></span>
+                            @for (handle of canvasResizeHandles(entry.layer); track handle) {
+                              <span
+                                [class]="canvasResizeHandleClass(handle)"
+                                (pointerdown)="startCanvasResize(entry.layer, handle, $event)"
+                              ></span>
+                            }
                           }
                         </span>
                       } @else {
                         @if (isLayerSelected(entry.layer) && !entry.layer.locked) {
-                          <span
-                            class="ngs-motion-studio__resize-handle is-nw"
-                            (pointerdown)="startCanvasResize(entry.layer, 'nw', $event)"
-                          ></span>
-                          <span
-                            class="ngs-motion-studio__resize-handle is-ne"
-                            (pointerdown)="startCanvasResize(entry.layer, 'ne', $event)"
-                          ></span>
-                          <span
-                            class="ngs-motion-studio__resize-handle is-e"
-                            (pointerdown)="startCanvasResize(entry.layer, 'e', $event)"
-                          ></span>
-                          <span
-                            class="ngs-motion-studio__resize-handle is-se"
-                            (pointerdown)="startCanvasResize(entry.layer, 'se', $event)"
-                          ></span>
-                          <span
-                            class="ngs-motion-studio__resize-handle is-s"
-                            (pointerdown)="startCanvasResize(entry.layer, 's', $event)"
-                          ></span>
-                          <span
-                            class="ngs-motion-studio__resize-handle is-sw"
-                            (pointerdown)="startCanvasResize(entry.layer, 'sw', $event)"
-                          ></span>
-                          <span
-                            class="ngs-motion-studio__resize-handle is-w"
-                            (pointerdown)="startCanvasResize(entry.layer, 'w', $event)"
-                          ></span>
-                          <span
-                            class="ngs-motion-studio__resize-handle is-n"
-                            (pointerdown)="startCanvasResize(entry.layer, 'n', $event)"
-                          ></span>
+                          @for (handle of canvasResizeHandles(entry.layer); track handle) {
+                            <span
+                              [class]="canvasResizeHandleClass(handle)"
+                              (pointerdown)="startCanvasResize(entry.layer, handle, $event)"
+                            ></span>
+                          }
                         }
                       }
                       @if (layerStatusVisible() && (entry.layer.hidden || entry.layer.locked)) {
