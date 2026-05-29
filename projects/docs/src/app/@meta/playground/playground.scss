@@ -1,4 +1,6 @@
-:host {
+@reference 'tailwindcss';
+
+ngs-playground {
   display: block;
   margin-bottom: --spacing(20);
 }
@@ -8,5 +10,59 @@
 
   ngs-code-highlighter {
     --ngs-code-highlighter-margin: 0 !important;
+  }
+}
+
+.playground-source-drawer {
+  background: var(--ngs-color-surface-container-lowest);
+  color: var(--ngs-color-on-surface);
+  flex: 1 1 auto;
+  min-height: 0;
+
+  ngs-panel {
+    height: 100%;
+  }
+}
+
+.playground-source-toolbar,
+.playground-source-tab {
+  background: var(--ngs-color-surface-container);
+}
+
+
+.playground-source-main {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden !important;
+}
+
+.playground-source-editor {
+  position: relative;
+  min-height: 0;
+  overflow: hidden !important;
+  background: var(--ngs-color-surface-container-lowest);
+
+  ngs-scrollbar-area {
+    inset: 0;
+  }
+
+  ngs-code-highlighter {
+    --ngs-code-highlighter-bg: var(--ngs-color-surface-container-lowest);
+    --ngs-code-highlighter-padding: --spacing(4);
+    --ngs-code-highlighter-margin: 0;
+
+    display: block;
+    width: 100%;
+    min-height: 100%;
+  }
+
+  .ngs-code-highlighter figure {
+    min-height: 100%;
+  }
+
+  .ngs-code-highlighter .content {
+    min-height: 100%;
+    overflow: visible;
   }
 }

@@ -13,8 +13,8 @@ import {
   untracked,
   viewChild,
   ChangeDetectionStrategy,
-  Output,
-  EventEmitter
+  booleanAttribute,
+  output
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import {
@@ -62,9 +62,10 @@ export class ScrollbarArea {
   readonly scrollThumbXRef = viewChild.required<ElementRef<HTMLElement>>('scrollThumbX');
 
   readonly scrollbarWidth = input<string>('8px');
-  readonly autoHide = input<boolean>(true);
-  readonly absolute = input<boolean>(true);
-  @Output() readonly scrolled = new EventEmitter<Event>();
+  readonly autoHide = input(true, { transform: booleanAttribute });
+  readonly absolute = input(true, { transform: booleanAttribute });
+
+  readonly scrolled = output<Event>();
 
   readonly isDragging = signal(false);
   readonly isHovering = signal(false);

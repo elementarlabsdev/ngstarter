@@ -60,6 +60,12 @@ export class Api {
       default: 'false'
     },
     {
+      name: 'onlyIcon',
+      description: 'Whether the button toggle group should use icon-only sizing.',
+      type: 'boolean',
+      default: 'false'
+    },
+    {
       name: 'value',
       description: 'The value of the button toggle group.',
       type: 'any',
@@ -102,6 +108,12 @@ export class Api {
     {
       name: 'disabled',
       description: 'Whether the button toggle is disabled.',
+      type: 'boolean',
+      default: 'false'
+    },
+    {
+      name: 'onlyIcon',
+      description: 'Whether the button toggle should use icon-only sizing.',
       type: 'boolean',
       default: 'false'
     }

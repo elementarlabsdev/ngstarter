@@ -304,14 +304,18 @@ export class CodeHighlighter implements OnChanges {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    if (!this.code()) {
-      this.content.set(null);
+    const code = this.code() ?? '';
+
+    if (code.length === 0) {
+      this.isLoading.set(false);
+      this.content.set(this.sanitizer.bypassSecurityTrustHtml('<pre class="shiki"><code></code></pre>'));
       return;
     }
+
     this.isLoading.set(true);
     try {
       const highlighted = await codeToHtml(
-        this.code(),
+        code,
         {
           lang: this.language(),
           theme: this.theme(),
@@ -322,7 +326,7 @@ export class CodeHighlighter implements OnChanges {
       this.content.set(this.sanitizer.bypassSecurityTrustHtml(highlighted));
     } catch (e) {
       // Fallback: raw code escaped inside pre
-      const escaped = this.code()
+      const escaped = code
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');

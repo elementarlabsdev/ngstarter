@@ -1,52 +1,10 @@
-<div class="border border-subtle rounded-xl shadow-xs relative mb-14 mt-6 overflow-hidden bg-surface-container-lowest">
+<div class="border border-subtle rounded-xl shadow-xs relative mb-0 mt-6 overflow-hidden bg-surface-container-lowest">
   <div class="p-7">
     <ng-content/>
   </div>
-  @if (showSource) {
-    @if (exampleLoading) {
-      <div class="border-t border-t-subtle text-sm p-4">Loading...</div>
-    } @else {
-      <div class="border-t border-t-subtle">
-        <ngs-expand showButtonIfExpanded>
-          <ngs-code-highlighter [code]="code!"
-                                [language]="language"
-                                showCopyButton
-                                appearance="none" />
-        </ngs-expand>
-      </div>
-    }
-  }
 
   <div class="border-t border-t-subtle h-12 relative flex items-center justify-center
               gap-1 px-2 text-center bg-surface-container rounded-b-lg">
-    @if (showSource) {
-      <div class="flex items-center gap-2 absolute start-3 top-1/2 -translate-y-1/2">
-        @if (htmlSrc) {
-          <div class="rounded-full hover:bg-neutral-300 border border-muted border-neutral-950 px-2.5 py-1 text-sm cursor-pointer
-                      dark:hover:bg-primary-500
-                      dark:border-neutral-500 dark:text-white
-                      [&.active]:text-white [&.active]:bg-primary-600"
-               [class.active]="isCurrentTab('html')" (click)="selectTab('html')">HTML</div>
-        }
-
-        @if (tsSrc) {
-          <div class="rounded-full hover:bg-neutral-300 border border-muted border-neutral-950 px-2.5 py-1 text-sm cursor-pointer
-                      dark:hover:bg-primary-500
-                      dark:border-neutral-500 dark:text-white
-                      [&.active]:text-white [&.active]:bg-primary-600"
-               [class.active]="isCurrentTab('ts')" (click)="selectTab('ts')">TS</div>
-        }
-
-        @if (cssSrc) {
-          <div class="rounded-full hover:bg-neutral-300 border border-muted border-neutral-950 px-2.5 py-1 text-sm cursor-pointer
-                      dark:hover:bg-primary-500
-                      dark:border-neutral-500 dark:text-white
-                      [&.active]:text-white [&.active]:bg-primary-600"
-               [class.active]="isCurrentTab('css')" (click)="selectTab('css')">CSS</div>
-        }
-      </div>
-    }
-
     <button ngsIconButton (click)="toggleSource()"
             [class.!bg-neutral-300]="showSource"
             [class.dark:!bg-neutral-600]="showSource">
@@ -54,3 +12,55 @@
     </button>
   </div>
 </div>
+
+<ngs-drawer #sourceDrawer (closed)="onDrawerClosed()">
+  <div class="playground-source-drawer h-full w-[90vw] max-w-[1200px] overflow-hidden lg:w-[60vw]">
+    <ngs-panel class="h-full">
+      <ngs-panel-header class="playground-source-toolbar flex h-12 items-center gap-3 border-b border-b-subtle px-4">
+        <div class="flex min-w-0 flex-1 items-center gap-2">
+          <ngs-icon name="fluent:window-dev-tools-24-regular" class="size-5" />
+          <span class="truncate text-sm font-medium">Example source</span>
+        </div>
+        <button ngsIconButton aria-label="Close source drawer" (click)="sourceDrawer.close()" class="-me-2.5">
+          <ngs-icon name="fluent:dismiss-24-regular" />
+        </button>
+      </ngs-panel-header>
+      <ngs-panel-sidebar class="playground-source-sidebar w-72 border-e border-e-subtle p-2">
+        <div class="px-3 pb-2 pt-1 text-xs font-medium uppercase tracking-wide text-neutral-500">
+          Files
+        </div>
+        <ngs-navigation [activeKey]="currentTab" (itemClicked)="selectSourceTab($event)">
+          @for (file of sourceFiles; track file.tab) {
+            <ngs-navigation-item [key]="file.tab">
+              <ngs-icon [name]="file.icon" ngsNavigationItemIcon />
+              <span class="min-w-0 truncate">{{ fileNameFor(file) }}</span>
+            </ngs-navigation-item>
+          }
+        </ngs-navigation>
+      </ngs-panel-sidebar>
+      <ngs-panel-content class="playground-source-main">
+        <ngs-panel absolute>
+          <ngs-panel-header class="border-b border-b-subtle">
+            <div class="flex h-10 shrink-0 items-center gap-2 px-4">
+              <ngs-icon [name]="currentSourceFile?.icon || 'fluent:code-24-regular'" />
+              <span class="truncate text-sm">{{ currentFileName }}</span>
+            </div>
+          </ngs-panel-header>
+          <ngs-panel-content class="playground-source-editor" [ngsScrollContainerFixed]="true">
+            <ngs-scrollbar-area [absolute]="true">
+              @if (exampleLoading) {
+                <div class="p-5 text-sm text-neutral-500">Loading source...</div>
+              } @else {
+                <ngs-code-highlighter [code]="code || ''"
+                                      [language]="language"
+                                      theme="github-light"
+                                      showCopyButton
+                                      appearance="none" class="h-full"/>
+              }
+            </ngs-scrollbar-area>
+          </ngs-panel-content>
+        </ngs-panel>
+      </ngs-panel-content>
+    </ngs-panel>
+  </div>
+</ngs-drawer>

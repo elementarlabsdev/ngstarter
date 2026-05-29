@@ -2,1257 +2,1267 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://docs.ngstarter.com/</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>1.00</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/action-required</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/action-required/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/alert</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/alert/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/announcement</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/announcement/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/avatar</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/avatar/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/badge</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/badge/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/block-loader</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/block-loader/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/bottom-sheet</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/bottom-sheet/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/card</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/card-overlay</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/carousel</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/carousel/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/chips</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/chips/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/code-highlighter</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/code-highlighter/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/color-picker</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/color-picker/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/color-switcher</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/color-switcher/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/command-bar</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/command-bar/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/comment-editor</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/comment-editor/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/comparison-slider</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/comparison-slider/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/confirm</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/confirm/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/content-fade</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/content-fade/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/cookie-popup</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/cookie-popup/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/crop</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/crop/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/datepicker</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/datepicker/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/dialog</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/dialog/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
+    <priority>0.60</priority>
+  </url>
+  <url>
+    <loc>https://docs.ngstarter.com/components/digit-roller</loc>
+    <lastmod>2026-05-27</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://docs.ngstarter.com/components/digit-roller/api</loc>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/divider</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/divider/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/drawer</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/drawer/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/emoji-picker</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/emoji-picker/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/empty-state</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/empty-state/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/expand</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/expand/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/expansion-panel</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/expansion-panel/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/filter-builder</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/filter-builder/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/gauge</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/gauge/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/grid</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/grid/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/guided-tour</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/guided-tour/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/icon</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/icon/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/image-placeholder</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/image-placeholder/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/image-resizer</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/image-resizer/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/image-viewer</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/image-viewer/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/image-zoom-viewer</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/image-zoom-viewer/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/incidents</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/incidents/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/kbd</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/kbd/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/layout</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/layout/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/list</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/list/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/marquee</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/marquee/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/menu</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/menu/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/notifications</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/notifications/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/paginator</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/paginator/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/panel</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/panel/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/popover</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/popover/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/progress-bar</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/progress-bar/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/progress-spinner</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/progress-spinner/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/resizable-container</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/resizable-container/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/screen-loader</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/screen-loader/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/sidenav</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/sidenav/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/signature-pad</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/signature-pad/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/skeleton</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/skeleton/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/slider</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/slider/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/snackbar</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/snackbar/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/split-pane</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/split-pane/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/stepper</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/stepper/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/suggestions</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/suggestions/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/table</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/table/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/tabs</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/tabs/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/text-editor</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/text-editor/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/thumbnail-maker</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/thumbnail-maker/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/tiles</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/tiles/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/timeline</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/timeline/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/timepicker</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/timepicker/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/toolbar</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/toolbar/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/tooltip</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/tooltip/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/tree</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/tree/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/upload</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/upload/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/video-viewer</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/components/video-viewer/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/autocomplete</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/autocomplete/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/button-toggle</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/button-toggle/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/buttons</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/buttons/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/checkbox</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/checkbox/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/country</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/country/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/currency-select</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/currency-select/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/date-format-select</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/date-format-select/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/form-renderer</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/form-renderer/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/inline-text-edit</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/inline-text-edit/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/input</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/input-mask</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/input-mask/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/input-validator</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/input-validator/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/input/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/number-input</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/number-input/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/password-strength</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/password-strength/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/phone-input</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/phone-input/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/pin-input</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/pin-input/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/radio</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/radio/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/segmented</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/segmented/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/select</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/select/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/slide-toggle</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/slide-toggle/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/timezone</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/forms/timezone/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/installation</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/content-editor</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/content-editor/content-builder</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/content-editor/overview</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/basic-dataview</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/column-pinning</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/column-settings</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/custom-cell-renderers</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/custom-empty-state</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/embedded</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/filter-data</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/loading-state</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/pinning-pagination</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/refresh</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/resizable-columns</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/server-side</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/server-side-empty-state</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/sticky-columns</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/with-action-bar</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/with-pagination</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/with-selection</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/with-sorting</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/image-designer</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/image-designer/basic-example</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/image-designer/overview</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/kanban-board</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/kanban-board/basic-example</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/kanban-board/overview</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/video-player</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/video-player/basic-example</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/video-player/carousel-example</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/video-player/minimal-example</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/video-player/overview</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/visual-builder</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/visual-builder/basic-example</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/libraries/visual-builder/overview</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/micro-charts</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/micro-charts/bar-chart</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/micro-charts/bar-chart/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/micro-charts/line-chart</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/micro-charts/line-chart/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/micro-charts/pie-chart</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/micro-charts/pie-chart/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/navigation</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/navigation/breadcrumbs</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/navigation/breadcrumbs/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/navigation/navigation</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/navigation/navigation/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/navigation/rail-nav</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/navigation/rail-nav/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/navigation/side-panel</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/navigation/side-panel/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/navigation/sidebar</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/navigation/sidebar/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/navigation/tab-panel</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/navigation/tab-panel/api</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/theme/colors</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/theme/customize</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/theme/generator</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/theme/playground</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://docs.ngstarter.com/theme/typography</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <priority>0.75</priority>
   </url>
 </urlset>

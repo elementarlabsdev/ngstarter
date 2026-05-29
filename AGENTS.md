@@ -257,6 +257,10 @@ Styling rules for admin UIs:
 
 - Build page layout, responsive behavior, sizing, spacing, flex, grid, and alignment with
   TailwindCSS utility classes in templates.
+- Treat TailwindCSS utility classes in templates as the primary styling surface. Use local SCSS only
+  when TailwindCSS cannot express the styling cleanly, or when overriding CSS custom
+  properties/tokens such as `--ngs-*`; routine layout, spacing, sizing, flex/grid, and alignment
+  must stay in TailwindCSS first.
 - Start local component SCSS files that use Tailwind tokens with `@reference 'tailwindcss';`.
 - In local SCSS, express spacing values with the Tailwind function `--spacing(N)`.
 - In component SCSS files, all component-local styling MUST be nested under the `:host` selector;

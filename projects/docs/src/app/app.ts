@@ -382,7 +382,7 @@ export class App implements OnInit {
       type: 'group',
       icon: 'fluent:grid-24-regular',
       name: 'Components',
-      badge: 69,
+      badge: 70,
       children: [
         {
           key: uuid(),
@@ -413,6 +413,12 @@ export class App implements OnInit {
           type: 'link',
           name: 'Card Overlay',
           link: '/components/card-overlay',
+        },
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Digit Roller',
+          link: '/components/digit-roller'
         },
         {
           key: uuid(),

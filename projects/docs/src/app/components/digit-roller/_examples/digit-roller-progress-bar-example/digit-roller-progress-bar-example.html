@@ -1,0 +1,21 @@
+<div class="grid gap-4 rounded-lg border border-neutral-200 bg-white p-5" ngsDigitRollerGroup>
+  <div class="flex items-end justify-between gap-4">
+    <div>
+      <p class="text-sm font-medium text-neutral-900">Deployment progress</p>
+      <p class="mt-1 flex flex-wrap items-baseline gap-1 text-sm text-neutral-500">
+        <ngs-digit-roller [value]="remaining()" [format]="integerFormat"/>
+        <span>steps remaining</span>
+      </p>
+    </div>
+
+    <ngs-digit-roller
+      class="text-2xl font-bold leading-none text-primary"
+      [value]="progress() / 100"
+      [format]="percentFormat"
+      [continuous]="true"
+      [stagger]="14"
+    />
+  </div>
+
+  <ngs-progress-bar [value]="progress()"/>
+</div>

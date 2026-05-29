@@ -13,7 +13,8 @@ AI registry: https://ngstarter.com/ai/component-registry.json
 - Import theme styles once in the app stylesheet.
 - Use `provideNgsTheme` from `@ngstarter-ui/components/core` for runtime theming.
 - Prefer `--ngs-*` CSS custom properties when customizing styles.
-- Use TailwindCSS utility classes for routine layout spacing, including margins and padding; prefer classes like `mt-10` and `p-6` over custom SCSS such as `margin-top: 2.5rem` or `padding: 1.5rem`.
+- Treat TailwindCSS utility classes in templates as the primary styling surface for layout, spacing, sizing, flex, grid, alignment, and routine visual styling; prefer classes like `mt-10` and `p-6` over custom SCSS such as `margin-top: 2.5rem` or `padding: 1.5rem`.
+- Use local SCSS only when TailwindCSS cannot express the styling cleanly, or when overriding CSS custom properties/tokens such as `--ngs-*` component variables.
 - Put global component style overrides and global CSS variable overrides only in `styles.scss`; for component-scoped overrides, define them in that component's stylesheet so they apply only there.
 - In component SCSS files, all component-local styling must be nested under the `:host` selector. Do not write top-level component-local selectors outside `:host`.
 - Standalone `ngs-form-field` controls outside forms, such as header, toolbar, or compact filter fields, do not require `ngs-label` when they have clear placeholder text or an `aria-label`/`aria-labelledby` context. Form fields inside actual forms should still use `ngs-label`.
@@ -172,12 +173,12 @@ Typography:
 - button-toggle: `@ngstarter-ui/components/button-toggle` docs: /forms/button-toggle
   purpose: Let users choose one or more options from a compact segmented button group.
   use when: Use for mode switching, view density, filters, or mutually exclusive short choices.
-  example topics: Basic Button Toggle, Selection Mode, Button toggle selection mode
+  example topics: Basic Button Toggle, Icon Only Button Toggle, Selection Mode, Button toggle selection mode
   selectors: `ngs-button-toggle`, `ngs-button-toggle-group`
   exports: `ButtonToggle`, `ButtonToggleAppearance`, `ButtonToggleGroup`
-  inputs: `appearance`, `checked`, `disabled`, `hideSelectionIndicator`, `id`, `multiple`, `name`, `value`, `vertical`
+  inputs: `appearance`, `checked`, `disabled`, `hideSelectionIndicator`, `id`, `multiple`, `name`, `onlyIcon`, `value`, `vertical`
   outputs: `change`
-  tokens: `--ngs-button-height`, `--ngs-button-radius`, `--ngs-button-toggle-checked-bg-color`, `--ngs-button-toggle-checked-text-color`, `--ngs-button-toggle-group-bg`, `--ngs-button-toggle-group-border-color`, `--ngs-button-toggle-group-border-radius`, `--ngs-button-toggle-hover-bg-color`, `--ngs-button-toggle-selection-indicator-color`, `--ngs-button-toggle-text-color`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary`, `--ngs-color-surface-container`, `--ngs-color-surface-container-high`, `--ngs-color-surface-container-highest`
+  tokens: `--ngs-button-height`, `--ngs-button-radius`, `--ngs-button-toggle-button-font-size`, `--ngs-button-toggle-button-font-weight`, `--ngs-button-toggle-button-only-icon-padding`, `--ngs-button-toggle-button-padding`, `--ngs-button-toggle-checked-bg-color`, `--ngs-button-toggle-checked-text-color`, `--ngs-button-toggle-group-bg`, `--ngs-button-toggle-group-border-color`, `--ngs-button-toggle-group-border-radius`, `--ngs-button-toggle-hover-bg-color`, `--ngs-button-toggle-selection-indicator-color`, `--ngs-button-toggle-text-color`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`
 - calendar: `@ngstarter-ui/components/calendar` docs: /components/calendar
   purpose: The NgStarter Angular Calendar component renders an inline month calendar for dashboards, scheduling widgets, event summaries, availability previews, and date-driven product surfaces.
   use when: Choose Calendar when the workflow matches examples such as Basic Calendar, Calendar With Events, Calendar With Min And Max Dates, Calendar min max.
@@ -384,6 +385,15 @@ Typography:
   exports: `Dialog`, `DIALOG_DATA`, `DIALOG_DEFAULT_OPTIONS`, `DialogActions`, `DialogClose`, `DialogConfig`, `DialogContainer`, `DialogContent`, `DialogRef`, `DialogTitle`
   inputs: `align`, `ariaLabel`, `id`, `ngs-dialog-close`, `ngsDialogClose`, `type`
   tokens: `--ngs-color-on-surface`, `--ngs-control-height-lg`, `--ngs-dialog-actions-padding`, `--ngs-dialog-background`, `--ngs-dialog-bg`, `--ngs-dialog-border-radius`, `--ngs-dialog-box-shadow`, `--ngs-dialog-color`, `--ngs-dialog-container-max-width`, `--ngs-dialog-container-min-width`, `--ngs-dialog-header-padding`, `--ngs-dialog-headline-padding`, `--ngs-dialog-radius`, `--ngs-dialog-shadow`, `--ngs-dialog-title-font-size`, `--ngs-dialog-title-font-weight`
+- digit-roller: `@ngstarter-ui/components/digit-roller` docs: /components/digit-roller
+  purpose: The NgStarter Angular Digit Roller component animates individual digits in formatted numbers with a slot-machine style reel effect.
+  use when: Choose Digit Roller when the workflow matches examples such as Number Sizes, Social Actions, Progress Bar, Gauge, Digit roller dashboard.
+  example topics: Number Sizes, Social Actions, Progress Bar, Gauge, Digit roller dashboard, Digit roller social actions, Digit roller progress bar, Digit roller gauge
+  selectors: `[ngsDigitRollerGroup]`, `ngs-digit-roller`
+  exports: `canAnimateDigitRoller`, `DIGIT_ROLLER_EMPTY_FORMATTED`, `DIGIT_ROLLER_GROUP`, `DigitRoller`, `DigitRollerCapabilityOptions`, `DigitRollerDigitConfig`, `DigitRollerDigits`, `DigitRollerEasing`, `DigitRollerFormattedNumber`, `DigitRollerGlyph`, `DigitRollerGroupCoordinator`, `DigitRollerGroupDirective`
+  inputs: `animated`, `colorOnDecrease`, `colorOnIncrease`, `continuous`, `digits`, `duration`, `flipEasing`, `format`, `locales`, `opacityDuration`, `opacityTiming`, `prefix`, `respectMotionPreference`, `spinEasing`, `spinTiming`, `stagger`, `suffix`, `transformTiming`, `trend`, `value`
+  outputs: `animationsFinish`, `animationsStart`
+  tokens: `--ngs-digit-roller-mask-height`, `--ngs-digit-roller-mask-width`, `--ngs-digit-roller-min-digit-width`
 - divider: `@ngstarter-ui/components/divider` docs: /components/divider
   purpose: Separate related groups of content or actions with a visual rule.
   use when: Use ngs-divider in lists, forms, panels, cards, toolbars, popovers, settings screens, and dense layouts where a clear boundary between groups helps scanning. Use vertical dividers between inline actions or columns, horizontal dividers between sections, inset when the line should align with content, and fixedHeight for compact vertical dividers. Use ngs-text-divider when the separator needs a short label such as “or”. Do not use Divider to create empty space or layout structure; use Tailwind spacing and layout classes. Prefer specialized divider components inside systems that provide them, such as MenuDivider, NavigationDivider, SidebarDivider, and CommandBarDivider.
@@ -805,9 +815,9 @@ Typography:
 - scrollbar-area: `@ngstarter-ui/components/scrollbar-area`
   purpose: Provide a styled scroll container for bounded UI regions.
   use when: Use ngs-scrollbar-area when a sized panel, grid body, editor sidebar, asset list, menu, or similar surface needs consistent NgStarter scrollbars instead of native browser scrollbars. It hides native scrollbars, renders vertical and horizontal thumbs, supports auto-hide, thumb dragging, resize and mutation tracking, scrollbarWidth, autoHide, absolute fill mode, and scrolled output. Use [absolute]="true" when the scroll area should fill a positioned parent region such as ngs-panel-content or a DataView viewport; make sure the parent already has a stable height and width. Do not use as a generic layout wrapper, spacing helper, page-level replacement for normal browser scrolling, carousel or scroll-snap component, virtualization engine, or a workaround for missing parent sizing.
-  selectors: `ngs-scrollbar-area`
-  exports: `ScrollbarArea`
-  inputs: `absolute`, `autoHide`, `scrollbarWidth`
+  selectors: `[ngsScrollContainerFixed]`, `ngs-scrollbar-area`
+  exports: `ScrollbarArea`, `ScrollContainerFixed`
+  inputs: `absolute`, `autoHide`, `ngsScrollContainerFixed`, `ngsScrollContainerFixedBottomOffset`, `ngsScrollContainerFixedMinHeight`, `scrollbarWidth`
   outputs: `scrolled`
   tokens: `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-radius-sm`, `--ngs-scrollbar-area-scroll-track-bg`, `--ngs-scrollbar-area-thumb-active-bg`, `--ngs-scrollbar-area-thumb-bg`, `--ngs-scrollbar-area-thumb-hover-bg`, `--ngs-scrollbar-area-width`
 - segmented: `@ngstarter-ui/components/segmented` docs: /forms/segmented

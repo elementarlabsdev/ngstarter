@@ -106,6 +106,11 @@ export const routes: Routes = [
     title: 'Dialog'
   },
   {
+    path: 'digit-roller',
+    loadChildren: () => import('./digit-roller/routes').then(m => m.routes),
+    title: 'Digit Roller'
+  },
+  {
     path: 'divider',
     loadChildren: () => import('./divider/routes').then(m => m.routes),
     title: 'Divider'

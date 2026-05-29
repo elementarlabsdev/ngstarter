@@ -6,12 +6,16 @@ import {
 import {
   ButtonToggleSelectionModeExample
 } from '../_examples/button-toggle-selection-mode-example/button-toggle-selection-mode-example';
+import {
+  IconOnlyButtonToggleExample
+} from '../_examples/icon-only-button-toggle-example/icon-only-button-toggle-example';
 
 @Component({
   imports: [
     Playground,
     BasicButtonToggleExample,
     ButtonToggleSelectionModeExample,
+    IconOnlyButtonToggleExample,
   ],
     templateUrl: './overview.html',
     styleUrl: './overview.scss'

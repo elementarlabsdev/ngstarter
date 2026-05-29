@@ -86,10 +86,11 @@ const recipes = [
       'Do not make ordinary table rows, labels, descriptions, sidebar items, or status text bold to imitate a screenshot.',
     ],
     styling: {
-      template: 'Use TailwindCSS utility classes for layout, responsive behavior, sizing, spacing, flex, grid, alignment, and routine margins/padding such as mt-10 and p-6 instead of custom margin-top: 2.5rem and padding: 1.5rem in SCSS.',
+      template: 'Treat TailwindCSS utility classes in templates as the primary styling surface for layout, responsive behavior, sizing, spacing, flex, grid, alignment, and routine margins/padding such as mt-10 and p-6 instead of custom margin-top: 2.5rem and padding: 1.5rem in SCSS.',
       localScss: [
         "Start local SCSS files that use Tailwind tokens with @reference 'tailwindcss';",
         'Use --spacing(N) for spacing values in local SCSS.',
+        'Use local SCSS for CSS custom property/token overrides, especially --ngs-* component variables, and necessary component selector overrides. Do not move routine layout, spacing, sizing, flex/grid, or alignment styling from templates into SCSS.',
         'Override NgStarter components through component or directive selectors such as ngs-card, ngs-navigation, ngs-form-field, table[ngs-table], button[ngsButton], and button[ngsIconButton].',
       ],
       globalStyles: 'Use CSS custom properties and theme tokens, especially --ngs-* variables, for global visual customization.',
@@ -982,7 +983,8 @@ function buildLlms(registry, full = false) {
     '- Import theme styles once in the app stylesheet.',
     '- Use `provideNgsTheme` from `@ngstarter-ui/components/core` for runtime theming.',
     '- Prefer `--ngs-*` CSS custom properties when customizing styles.',
-    '- Use TailwindCSS utility classes for routine layout spacing, including margins and padding; prefer classes like `mt-10` and `p-6` over custom SCSS such as `margin-top: 2.5rem` or `padding: 1.5rem`.',
+    '- Treat TailwindCSS utility classes in templates as the primary styling surface for layout, spacing, sizing, flex, grid, alignment, and routine visual styling; prefer classes like `mt-10` and `p-6` over custom SCSS such as `margin-top: 2.5rem` or `padding: 1.5rem`.',
+    '- Use local SCSS only when TailwindCSS cannot express the styling cleanly, or when overriding CSS custom properties/tokens such as `--ngs-*` component variables.',
     '- Put global component style overrides and global CSS variable overrides only in `styles.scss`; for component-scoped overrides, define them in that component\'s stylesheet so they apply only there.',
     '- In component SCSS files, all component-local styling must be nested under the `:host` selector. Do not write top-level component-local selectors outside `:host`.',
     '- Standalone `ngs-form-field` controls outside forms, such as header, toolbar, or compact filter fields, do not require `ngs-label` when they have clear placeholder text or an `aria-label`/`aria-labelledby` context. Form fields inside actual forms should still use `ngs-label`.',
