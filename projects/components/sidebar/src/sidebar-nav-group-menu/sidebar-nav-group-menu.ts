@@ -29,7 +29,9 @@ import { SidebarNavItemDefDirective } from '../sidebar-nav-item-def.directive';
   ],
   host: {
     'class': 'ngs-sidebar-nav-group-menu',
-    '[class.is-active]': 'active'
+    '[class.is-active]': 'active',
+    '[attr.aria-hidden]': 'active ? null : "true"',
+    '[attr.inert]': 'active ? null : ""',
   }
 })
 export class SidebarNavGroupMenu implements AfterContentInit, OnInit {

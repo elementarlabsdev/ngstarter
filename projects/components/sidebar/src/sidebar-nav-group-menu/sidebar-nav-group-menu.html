@@ -1,11 +1,15 @@
 @if (dataSource(); as data) {
   <div class="inner">
-    @for (item of data; track item) {
-      <ng-container *ngTemplateOutlet="getTemplate(item); context: { $implicit: item }" />
-    }
+    <div class="content">
+      @for (item of data; track item) {
+        <ng-container *ngTemplateOutlet="getTemplate(item); context: { $implicit: item }" />
+      }
+    </div>
   </div>
 } @else {
   <div class="inner">
-    <ng-content/>
+    <div class="content">
+      <ng-content/>
+    </div>
   </div>
 }
