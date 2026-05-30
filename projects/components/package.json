@@ -1,7 +1,7 @@
 {
   "name": "@ngstarter-ui/components",
   "description": "NgStarter - AI-friendly Enterprise Angular UI Components and Admin Panel",
-  "version": "21.0.14",
+  "version": "21.0.15",
   "repository": {
     "type": "git",
     "url": "https://github.com/elementarlabsdev/ngstarter.git"
