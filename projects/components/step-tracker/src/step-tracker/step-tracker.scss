@@ -1,0 +1,45 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-step-tracker-gap: --spacing(3.5);
+  --ngs-step-tracker-item-gap: --spacing(3.5);
+  --ngs-step-tracker-horizontal-indicator-margin-bottom: --spacing(6);
+  --ngs-step-tracker-indicator-size: --spacing(7);
+  --ngs-step-tracker-indicator-font-size: var(--ngs-font-size-sm);
+  --ngs-step-tracker-indicator-font-weight: 600;
+  --ngs-step-tracker-label-font-size: var(--ngs-font-size-base);
+  --ngs-step-tracker-label-font-weight: 600;
+  --ngs-step-tracker-label-color: var(--ngs-color-neutral-800);
+  --ngs-step-tracker-description-font-size: var(--ngs-font-size-sm);
+  --ngs-step-tracker-description-color: var(--ngs-color-neutral-500);
+  --ngs-step-tracker-connector-width: 2px;
+  --ngs-step-tracker-connector-gap: --spacing(2);
+  --ngs-step-tracker-connector-segment: 4px;
+  --ngs-step-tracker-connector-space: 6px;
+  --ngs-step-tracker-connector-color: var(--ngs-color-outline);
+  --ngs-step-tracker-connector-active-color: var(--ngs-color-primary);
+  --ngs-step-tracker-completed-bg: var(--ngs-color-success);
+  --ngs-step-tracker-completed-color: var(--ngs-color-on-success);
+  --ngs-step-tracker-current-bg: var(--ngs-color-surface);
+  --ngs-step-tracker-current-color: var(--ngs-color-neutral-800);
+  --ngs-step-tracker-current-border: var(--ngs-color-primary);
+  --ngs-step-tracker-pending-bg: var(--ngs-color-neutral-400);
+  --ngs-step-tracker-pending-color: var(--ngs-color-surface);
+  --ngs-step-tracker-error-bg: var(--ngs-color-danger);
+  --ngs-step-tracker-error-color: var(--ngs-color-on-danger);
+  --ngs-step-tracker-disabled-bg: var(--ngs-color-surface-container-high);
+  --ngs-step-tracker-disabled-color: var(--ngs-color-neutral-500);
+
+  display: flex;
+  counter-reset: ngs-step-tracker-item;
+}
+
+:host(.ngs-step-tracker-vertical) {
+  flex-direction: column;
+}
+
+:host(.ngs-step-tracker-horizontal) {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--ngs-step-tracker-gap);
+}

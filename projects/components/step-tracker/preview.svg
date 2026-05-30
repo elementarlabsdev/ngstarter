@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="160" viewBox="0 0 240 160" fill="none">
+  <rect width="240" height="160" rx="16" fill="#fff"/>
+  <circle cx="50" cy="34" r="14" fill="#22c55e"/>
+  <path d="M44 34.5L48.5 39L57 29.5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M50 52V74" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 6"/>
+  <circle cx="50" cy="90" r="14" fill="#fff" stroke="#b38a12" stroke-width="2.5"/>
+  <text x="50" y="95" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#111827">2</text>
+  <path d="M50 108V130" stroke="#b38a12" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 6"/>
+  <circle cx="50" cy="146" r="14" fill="#9ca3af"/>
+  <text x="50" y="151" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#fff">3</text>
+  <text x="74" y="40" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#111827">Completed</text>
+  <text x="74" y="96" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#111827">Current</text>
+  <text x="74" y="118" font-family="Arial, sans-serif" font-size="13" fill="#94a3b8">Supporting status text</text>
+  <text x="74" y="152" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#111827">Pending</text>
+</svg>

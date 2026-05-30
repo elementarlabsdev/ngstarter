@@ -201,6 +201,11 @@ export const routes: Routes = [
     title: 'Stepper'
   },
   {
+    path: 'step-tracker',
+    loadChildren: () => import('./step-tracker/routes').then(m => m.routes),
+    title: 'Step Tracker'
+  },
+  {
     path: 'headless-stepper',
     loadChildren: () => import('./headless-stepper/routes').then(m => m.routes),
     title: 'Headless Stepper'

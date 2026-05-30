@@ -1,0 +1,24 @@
+<div class="indicator-column" aria-hidden="true">
+  <div class="indicator">
+    <span class="indicator-number"></span>
+    <span class="indicator-check"></span>
+    <span class="indicator-error"></span>
+  </div>
+  <div class="connector"></div>
+</div>
+
+<div class="content">
+  @if (label()) {
+    <ngs-step-tracker-label>{{ label() }}</ngs-step-tracker-label>
+  } @else {
+    <ng-content select="ngs-step-tracker-label, [ngsStepTrackerLabel]"/>
+  }
+
+  @if (description()) {
+    <ngs-step-tracker-description>{{ description() }}</ngs-step-tracker-description>
+  } @else {
+    <ng-content select="ngs-step-tracker-description, [ngsStepTrackerDescription]"/>
+  }
+
+  <ng-content/>
+</div>

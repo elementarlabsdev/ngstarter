@@ -1,0 +1,19 @@
+<ngs-step-tracker class="max-w-sm" [activeIndex]="activeIndex()">
+  <ngs-step-tracker-item label="Pay period & Employee"/>
+  <ngs-step-tracker-item
+    label="Total Hours"
+    description="Review your employee total working hour"
+  />
+  <ngs-step-tracker-item
+    state="error"
+    label="Time off"
+    description="Missing time off approval"
+  />
+  <ngs-step-tracker-item label="Review payroll"/>
+  <ngs-step-tracker-item label="Success"/>
+</ngs-step-tracker>
+
+<div class="mt-6 flex gap-3">
+  <button ngsButton="outlined" type="button" (click)="previousStep()">Previous step</button>
+  <button ngsButton="filled" type="button" (click)="nextStep()">Next step</button>
+</div>

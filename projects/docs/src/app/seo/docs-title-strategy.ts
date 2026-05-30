@@ -101,6 +101,7 @@ const COMPONENT_TITLES: Record<string, SeoTitleConfig> = {
   snackbar: { label: 'Snackbar', detail: 'Toast Notifications' },
   'split-pane': { label: 'Split Pane', detail: 'Resizable Split Layouts' },
   stepper: { label: 'Stepper', detail: 'Multi-step Flows' },
+  'step-tracker': { label: 'Step Tracker', detail: 'Step Status Display' },
   'headless-stepper': { label: 'Headless Stepper', detail: 'Custom Multi-step Flows' },
   suggestions: { label: 'Suggestions', detail: 'Suggested Actions' },
   table: {

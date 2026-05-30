@@ -1,0 +1,51 @@
+<app-page>
+  <h1 appPageTitle>Step Tracker</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The <code>ngs-step-tracker</code> component displays the status of related steps without
+        owning wizard navigation, validation, or routed content. Use it when users need to see
+        which stages are completed, current, pending, blocked, or disabled.
+      </p>
+      <p class="mt-3">
+        Use Step Tracker for passive process status in cards, sidebars, drawers, setup summaries,
+        payroll review flows, fulfillment states, and approval progress. Use <code>ngs-stepper</code>
+        instead when users need next/previous navigation, linear validation, or step-owned content.
+      </p>
+      <p class="mt-3">
+        Bind <code>activeIndex</code> when the completed, current, and pending states should be
+        derived from application state. Set item <code>state</code> explicitly for fixed statuses
+        such as error or disabled. When <code>activeIndex</code> equals the number of items, all
+        auto-state steps are completed.
+      </p>
+      <div class="my-7">
+        <div>Key Features:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            <strong>Status-first steps</strong>: Mark each item as completed, current, pending,
+            error, or disabled.
+          </li>
+          <li>
+            <strong>Simple composition</strong>: Use label and description inputs for compact
+            status lists, or project label and description elements for richer content.
+          </li>
+          <li>
+            <strong>Vertical or horizontal</strong>: Show process status in a sidebar, card,
+            drawer, or compact page header.
+          </li>
+          <li>
+            <strong>Themeable tokens</strong>: Tune marker size, connector colors, status colors,
+            and typography through <code>--ngs-step-tracker-*</code> variables.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/step-tracker" ngs-tab-link>Overview</a>
+      <a routerLink="/components/step-tracker/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

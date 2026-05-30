@@ -1,0 +1,43 @@
+<p class="docs-seo-intro mb-6 text-base leading-7 text-neutral-600">
+  The NgStarter Angular Step Tracker component shows step statuses for business processes,
+  onboarding checklists, payroll review stages, fulfillment flows, and other workflows where users
+  need passive progress visibility rather than full Stepper navigation.
+</p>
+
+<div>
+  <h3>Basic Step Tracker</h3>
+  <p>
+    Use a basic step tracker to show completed, current, pending, and error stages. Bind
+    <code>activeIndex</code> when the current step should update from application state.
+  </p>
+  <ngs-playground exampleUrl="_docs/components/step-tracker/_examples" exampleName="basic-step-tracker-example">
+    <app-basic-step-tracker-example/>
+  </ngs-playground>
+
+  <h3>Horizontal Step Tracker</h3>
+  <p>
+    Use horizontal orientation when the status belongs in a page header, summary card, or wide
+    review surface.
+  </p>
+  <ngs-playground exampleUrl="_docs/components/step-tracker/_examples" exampleName="horizontal-step-tracker-example">
+    <app-horizontal-step-tracker-example/>
+  </ngs-playground>
+
+  <h3>Step Tracker With Projected Content</h3>
+  <p>
+    Project labels and descriptions when step text needs richer markup or when the item template
+    should stay explicit.
+  </p>
+  <ngs-playground exampleUrl="_docs/components/step-tracker/_examples" exampleName="step-tracker-projected-content-example">
+    <app-step-tracker-projected-content-example/>
+  </ngs-playground>
+
+  <h3>Step Tracker States</h3>
+  <p>
+    Use the state input to communicate normal progress, blocked stages, and unavailable future
+    steps without adding wizard behavior.
+  </p>
+  <ngs-playground exampleUrl="_docs/components/step-tracker/_examples" exampleName="step-tracker-states-example">
+    <app-step-tracker-states-example/>
+  </ngs-playground>
+</div>

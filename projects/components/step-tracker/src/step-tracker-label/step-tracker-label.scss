@@ -1,0 +1,10 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  min-width: 0;
+  color: var(--ngs-step-tracker-label-color);
+  font-size: var(--ngs-step-tracker-label-font-size);
+  font-weight: var(--ngs-step-tracker-label-font-weight);
+  line-height: 1.35;
+}

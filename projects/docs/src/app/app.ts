@@ -682,6 +682,12 @@ export class App implements OnInit {
         {
           key: uuid(),
           type: 'link',
+          name: 'Step Tracker',
+          link: '/components/step-tracker'
+        },
+        {
+          key: uuid(),
+          type: 'link',
           name: 'Headless Stepper',
           link: '/components/headless-stepper'
         },
