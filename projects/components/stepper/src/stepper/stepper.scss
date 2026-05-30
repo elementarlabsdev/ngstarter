@@ -7,7 +7,9 @@
   --ngs-stepper-icon-bg: var(--ngs-color-surface-container-high);
   --ngs-stepper-icon-color: var(--ngs-color-on-surface);
   --ngs-stepper-icon-active-bg: var(--ngs-color-primary);
+  --ngs-stepper-icon-active-color: var(--ngs-color-on-primary);
   --ngs-stepper-icon-completed-bg: var(--ngs-color-success);
+  --ngs-stepper-icon-completed-color: var(--ngs-color-on-success);
   --ngs-stepper-label-color: var(--ngs-color-on-surface-variant);
   --ngs-stepper-label-active-color: var(--ngs-color-on-surface);
   --ngs-stepper-line-color: var(--ngs-color-outline-variant);
@@ -149,6 +151,7 @@
 .ngs-stepper-header-active {
   .ngs-stepper-icon {
     background: var(--ngs-stepper-icon-active-bg);
+    color: var(--ngs-stepper-icon-active-color);
   }
 
   .ngs-stepper-label {
@@ -160,6 +163,7 @@
 .ngs-stepper-header-completed {
   .ngs-stepper-icon {
     background: var(--ngs-stepper-icon-completed-bg);
+    color: var(--ngs-stepper-icon-completed-color);
   }
 }
 

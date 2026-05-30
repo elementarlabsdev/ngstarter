@@ -4461,8 +4461,8 @@
         {
           "name": "close-on-backdrop-click-example",
           "title": "Close on backdrop click",
-          "file": "projects/docs/src/app/components/guided-tour/_examples/close-on-backdrop-click-example/close-on-backdrop-click-example.ts",
-          "source": "import { Component, inject } from '@angular/core';\nimport { TourService } from '@ngstarter-ui/components/guided-tour';\nimport { Button } from '@ngstarter-ui/components/button';\n@Component({\n  selector: 'app-close-on-backdrop-click-example',\n  imports: [Button],\n  template: `\n    <div class=\"flex flex-col gap-4\">\n      <div class=\"flex gap-4\">\n        <button ngsButton=\"filled\" (click)=\"startTour()\">Start Tour (Close on Backdrop Click)</button>\n      </div>\n      <div class=\"flex gap-10 mt-10\">\n        <div id=\"close-step1\" class=\"p-4 border rounded\">Step 1</div>\n        <div id=\"close-step2\" class=\"p-4 border rounded\">Step 2</div>\n      </div>\n    </div>\n  `,\n})\nexport class CloseOnBackdropClickExample {\n  private readonly tourService = inject(TourService);\n  startTour(): void {\n    this.tourService.start([\n      {\n        anchorId: '#close-step1',\n        title: 'Step 1',\n        content: 'Click on the backdrop to close the tour.',\n        withBackdrop: true,\n        closeOnBackdropClick: true\n      },\n      {\n        anchorId: '#close-step2',\n        title: 'Step 2',\n        content: 'This step also can be closed by clicking on the backdrop.',\n        withBackdrop: true,\n        closeOnBackdropClick: true\n      }\n    ]);\n  }\n}"
+          "file": "projects/docs/src/app/components/guided-tour/_examples/close-on-backdrop-click-example/close-on-backdrop-click-example.html",
+          "source": "<div class=\"flex flex-col gap-4\">\n  <div class=\"flex gap-4\">\n    <button ngsButton=\"filled\" (click)=\"startTour()\">Start Tour (Close on Backdrop Click)</button>\n  </div>\n  <div class=\"flex gap-10 mt-10\">\n    <div id=\"close-step1\" class=\"p-4 border rounded\">Step 1</div>\n    <div id=\"close-step2\" class=\"p-4 border rounded\">Step 2</div>\n  </div>\n</div>"
         }
       ],
       "previewAsset": "projects/components/guided-tour/preview.svg",
@@ -4568,9 +4568,8 @@
         "Symbols Icons (Default)",
         "Phosphor Icons",
         "Circle Flags Icons",
-        "Symbols icons",
-        "Circle flags",
-        "Material symbols icons"
+        "Material symbols icons",
+        "Circle flags"
       ],
       "minimalExample": "<div class=\"flex gap-4\">\n  <ngs-icon name=\"circle-flags:us\"/>\n  <ngs-icon name=\"circle-flags:ge\"/>\n  <ngs-icon name=\"circle-flags:de\"/>\n</div>\n<div class=\"mt-8 flex gap-4 items-center\">\n  <ngs-icon name=\"circle-flags:us\" class=\"size-4\"/>\n  <ngs-icon name=\"circle-flags:ge\" class=\"size-10\"/>\n  <ngs-icon name=\"circle-flags:de\" class=\"size-16\"/>\n</div>",
       "exampleFiles": [
@@ -8262,8 +8261,8 @@
         "Basic Snackbar",
         "Snackbar With Custom Component",
         "Configurable Snackbar",
-        "Snackbar",
-        "Snackbar with custom"
+        "Snackbar with custom",
+        "Snackbar"
       ],
       "minimalExample": "<div class=\"flex items-center gap-5\">\n  <ngs-form-field subscriptHiddenIfEmpty>\n    <ngs-label>Message</ngs-label>\n    <input ngsInput value=\"Disco party!\" #message>\n  </ngs-form-field>\n  <ngs-form-field subscriptHiddenIfEmpty>\n    <ngs-label>Action</ngs-label>\n    <input ngsInput value=\"Dance\" #action>\n  </ngs-form-field>\n  <button ngsButton=\"outlined\"\n          (click)=\"openSnackBar(message.value, action.value)\">Show snack-bar</button>\n</div>",
       "exampleFiles": [
@@ -8635,6 +8634,8 @@
       ],
       "outputs": [],
       "cssTokens": [
+        "--ngs-color-on-primary",
+        "--ngs-color-on-success",
         "--ngs-color-on-surface",
         "--ngs-color-on-surface-variant",
         "--ngs-color-outline-variant",
@@ -8646,9 +8647,11 @@
         "--ngs-stepper-header-gap",
         "--ngs-stepper-header-padding",
         "--ngs-stepper-icon-active-bg",
+        "--ngs-stepper-icon-active-color",
         "--ngs-stepper-icon-bg",
         "--ngs-stepper-icon-color",
         "--ngs-stepper-icon-completed-bg",
+        "--ngs-stepper-icon-completed-color",
         "--ngs-stepper-icon-size",
         "--ngs-stepper-label-active-color",
         "--ngs-stepper-label-color",
