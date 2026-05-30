@@ -500,6 +500,11 @@ export class Overview {
       name: 'Stepper'
     },
     {
+      routerLink: '/components/headless-stepper',
+      imageUrl: 'assets/overview/headless-stepper.svg',
+      name: 'Headless Stepper'
+    },
+    {
       routerLink: '/components/suggestions',
       imageUrl: 'assets/overview/suggestions.svg',
       name: 'Suggestions'

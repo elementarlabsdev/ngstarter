@@ -4519,18 +4519,34 @@
       "name": "headless-stepper",
       "title": "Headless Stepper",
       "overviewName": "Headless Stepper",
-      "category": null,
+      "category": "components",
       "package": "@ngstarter-ui/components",
       "importPath": "@ngstarter-ui/components/headless-stepper",
       "publicApi": "projects/components/headless-stepper/public-api.ts",
       "sourceRoot": "projects/components/headless-stepper/src",
-      "docsPath": null,
-      "docsOverviewSource": null,
+      "docsPath": "/components/headless-stepper",
+      "docsOverviewSource": "projects/docs/src/app/components/headless-stepper/overview/overview.html",
       "purpose": "Provide stepper state and validation logic without rendering a fixed visual stepper UI.",
       "useWhen": "Use for custom multi-step workflows where the product needs its own header, progress indicator, buttons, layout, or responsive presentation while keeping standard NgStarter step behavior. Use ngs-headless-stepper with ngs-headless-step when you need selectedIndex, selected step state, progressPercent, canMoveNext, next(), previous(), reset(), linear mode, optional steps, and stepControl validation. Good for custom wizards, onboarding forms, checkout flows, setup flows, and complex forms with a bespoke layout. Do not use when the standard visual Stepper fits; use Stepper. Do not use for guided tours over existing UI; use GuidedTour. Do not use as Tabs, Accordion, or for a simple single-page form without steps.",
-      "exampleTopics": [],
-      "minimalExample": null,
-      "exampleFiles": [],
+      "exampleTopics": [
+        "Basic Headless Stepper",
+        "Linear Headless Stepper"
+      ],
+      "minimalExample": "<ngs-headless-stepper #stepper [(selectedIndex)]=\"selectedIndex\">\n  <div class=\"mb-5 flex flex-col gap-4\">\n    <div class=\"flex flex-col gap-4 md:flex-row md:items-start md:justify-between\">\n      <div>\n        <p class=\"text-sm text-neutral-600\">Step {{ stepper.selectedIndex() + 1 }} of {{ stepper.stepsCount() }}</p>\n        <h4 class=\"mt-1 text-base font-semibold\">{{ steps[selectedIndex()].title }}</h4>\n        <p class=\"mt-1 text-sm text-neutral-600\">{{ steps[selectedIndex()].description }}</p>\n      </div>\n      <div class=\"flex flex-wrap gap-2\">\n        @for (item of steps; track item.title; let index = $index) {\n          <button\n            ngsButton=\"tonal\"\n            type=\"button\"\n            [class.headless-stepper-example-active]=\"selectedIndex() === index\"\n            (click)=\"stepper.selectedIndex.set(index)\">\n            {{ index + 1 }}\n          </button>\n        }\n      </div>\n    </div>\n    <ngs-progress-bar mode=\"determinate\" [value]=\"stepper.progressPercent()\"/>\n  </div>\n  <ngs-headless-step>\n    <ngs-card>\n      <ngs-card-content>\n        <h5 class=\"text-base font-semibold\">Workspace details</h5>\n        <p class=\"mt-2 text-sm text-neutral-600\">\n          Pick a workspace name, region, and owner. This example keeps the content simple while the stepper owns the\n          active step state.\n        </p>\n      </ngs-card-content>\n    </ngs-card>\n  </ngs-headless-step>\n  <ngs-headless-step>\n    <ngs-card>\n      <ngs-card-content>\n        <h5 class=\"text-base font-semibold\">Team access</h5>\n        <p class=\"mt-2 text-sm text-neutral-600\">\n          Show a c\n...",
+      "exampleFiles": [
+        {
+          "name": "basic-headless-stepper-example",
+          "title": "Basic headless stepper",
+          "file": "projects/docs/src/app/components/headless-stepper/_examples/basic-headless-stepper-example/basic-headless-stepper-example.html",
+          "source": "<ngs-headless-stepper #stepper [(selectedIndex)]=\"selectedIndex\">\n  <div class=\"mb-5 flex flex-col gap-4\">\n    <div class=\"flex flex-col gap-4 md:flex-row md:items-start md:justify-between\">\n      <div>\n        <p class=\"text-sm text-neutral-600\">Step {{ stepper.selectedIndex() + 1 }} of {{ stepper.stepsCount() }}</p>\n        <h4 class=\"mt-1 text-base font-semibold\">{{ steps[selectedIndex()].title }}</h4>\n        <p class=\"mt-1 text-sm text-neutral-600\">{{ steps[selectedIndex()].description }}</p>\n      </div>\n      <div class=\"flex flex-wrap gap-2\">\n        @for (item of steps; track item.title; let index = $index) {\n          <button\n            ngsButton=\"tonal\"\n            type=\"button\"\n            [class.headless-stepper-example-active]=\"selectedIndex() === index\"\n            (click)=\"stepper.selectedIndex.set(index)\">\n            {{ index + 1 }}\n          </button>\n        }\n      </div>\n    </div>\n    <ngs-progress-bar mode=\"determinate\" [value]=\"stepper.progressPercent()\"/>\n  </div>\n  <ngs-headless-step>\n    <ngs-card>\n      <ngs-card-content>\n        <h5 class=\"text-base font-semibold\">Workspace details</h5>\n        <p class=\"mt-2 text-sm text-neutral-600\">\n          Pick a workspace name, region, and owner. This example keeps the content simple while the stepper owns the\n          active step state.\n        </p>\n      </ngs-card-content>\n    </ngs-card>\n  </ngs-headless-step>\n  <ngs-headless-step>\n    <ngs-card>\n      <ngs-card-content>\n        <h5 class=\"text-base font-semibold\">Team access</h5>\n        <p class=\"mt-2 text-sm text-neutral-600\">\n          Show a c\n..."
+        },
+        {
+          "name": "linear-headless-stepper-example",
+          "title": "Linear headless stepper",
+          "file": "projects/docs/src/app/components/headless-stepper/_examples/linear-headless-stepper-example/linear-headless-stepper-example.html",
+          "source": "<ngs-headless-stepper #stepper linear>\n  <div class=\"mb-5\">\n    <div class=\"flex items-center justify-between gap-4\">\n      <div>\n        <p class=\"text-sm text-neutral-600\">Linear setup</p>\n        <h4 class=\"mt-1 text-base font-semibold\">Step {{ stepper.selectedIndex() + 1 }} of {{ stepper.stepsCount() }}</h4>\n      </div>\n      <p class=\"text-sm text-neutral-600\">{{ stepper.progressPercent() | number: '1.0-0' }}%</p>\n    </div>\n    <ngs-progress-bar class=\"mt-4\" mode=\"determinate\" [value]=\"stepper.progressPercent()\"/>\n  </div>\n  <ngs-headless-step [stepControl]=\"accountForm\">\n    <form [formGroup]=\"accountForm\" class=\"flex flex-col gap-4\">\n      <ngs-form-field>\n        <ngs-label>Company</ngs-label>\n        <input ngsInput formControlName=\"company\" placeholder=\"Acme Operations\" required>\n      </ngs-form-field>\n      <p class=\"text-sm text-neutral-600\">\n        The next button becomes available when this form group is valid.\n      </p>\n    </form>\n  </ngs-headless-step>\n  <ngs-headless-step [stepControl]=\"billingForm\">\n    <form [formGroup]=\"billingForm\" class=\"flex flex-col gap-4\">\n      <ngs-form-field>\n        <ngs-label>Billing email</ngs-label>\n        <input ngsInput formControlName=\"email\" placeholder=\"billing@example.com\" required>\n      </ngs-form-field>\n      <p class=\"text-sm text-neutral-600\">\n        Headless Stepper tracks the connected control status and uses it for linear navigation.\n      </p>\n    </form>\n  </ngs-headless-step>\n  <ngs-headless-step optional>\n    <div class=\"rounded-lg border border-muted p-5\">\n      <h5 class=\"text-base font-semibold\">O\n..."
+        }
+      ],
       "previewAsset": "projects/components/headless-stepper/preview.svg",
       "selectors": [
         "ngs-headless-step",

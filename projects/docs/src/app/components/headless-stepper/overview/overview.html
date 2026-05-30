@@ -1,0 +1,25 @@
+<p class="docs-seo-intro mb-6 text-base leading-7 text-neutral-600">
+  The NgStarter Angular Headless Stepper component gives custom workflows a shared step model without prescribing the
+  visible stepper UI. Use ngs-headless-stepper with ngs-headless-step when the app needs its own header, progress
+  indicator, navigation controls, or layout.
+</p>
+
+<div>
+  <h3>Basic Headless Stepper</h3>
+  <p>
+    Use a headless stepper when you want to build a custom step header and progress display while relying on NgStarter
+    for selected step state and movement methods.
+  </p>
+  <ngs-playground exampleUrl="_docs/components/headless-stepper/_examples" exampleName="basic-headless-stepper-example">
+    <app-basic-headless-stepper-example/>
+  </ngs-playground>
+
+  <h3>Linear Headless Stepper</h3>
+  <p>
+    Add <code>linear</code> and connect each step to <code>stepControl</code> when a custom form flow must block progress
+    until the active step is valid.
+  </p>
+  <ngs-playground exampleUrl="_docs/components/headless-stepper/_examples" exampleName="linear-headless-stepper-example">
+    <app-linear-headless-stepper-example/>
+  </ngs-playground>
+</div>

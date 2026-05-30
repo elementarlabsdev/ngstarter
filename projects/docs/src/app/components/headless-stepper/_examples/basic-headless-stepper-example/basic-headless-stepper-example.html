@@ -1,0 +1,68 @@
+<ngs-headless-stepper #stepper [(selectedIndex)]="selectedIndex">
+  <div class="mb-5 flex flex-col gap-4">
+    <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+      <div>
+        <p class="text-sm text-neutral-600">Step {{ stepper.selectedIndex() + 1 }} of {{ stepper.stepsCount() }}</p>
+        <h4 class="mt-1 text-base font-semibold">{{ steps[selectedIndex()].title }}</h4>
+        <p class="mt-1 text-sm text-neutral-600">{{ steps[selectedIndex()].description }}</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        @for (item of steps; track item.title; let index = $index) {
+          <button
+            ngsButton="tonal"
+            type="button"
+            [class.headless-stepper-example-active]="selectedIndex() === index"
+            (click)="stepper.selectedIndex.set(index)">
+            {{ index + 1 }}
+          </button>
+        }
+      </div>
+    </div>
+    <ngs-progress-bar mode="determinate" [value]="stepper.progressPercent()"/>
+  </div>
+
+  <ngs-headless-step>
+    <ngs-card>
+      <ngs-card-content>
+        <h5 class="text-base font-semibold">Workspace details</h5>
+        <p class="mt-2 text-sm text-neutral-600">
+          Pick a workspace name, region, and owner. This example keeps the content simple while the stepper owns the
+          active step state.
+        </p>
+      </ngs-card-content>
+    </ngs-card>
+  </ngs-headless-step>
+
+  <ngs-headless-step>
+    <ngs-card>
+      <ngs-card-content>
+        <h5 class="text-base font-semibold">Team access</h5>
+        <p class="mt-2 text-sm text-neutral-600">
+          Show a custom people picker, default role selection, or approval rules here.
+        </p>
+      </ngs-card-content>
+    </ngs-card>
+  </ngs-headless-step>
+
+  <ngs-headless-step>
+    <ngs-card>
+      <ngs-card-content>
+        <h5 class="text-base font-semibold">Ready to create</h5>
+        <p class="mt-2 text-sm text-neutral-600">
+          Summarize the chosen configuration and let the user submit or reset the workflow.
+        </p>
+      </ngs-card-content>
+    </ngs-card>
+  </ngs-headless-step>
+
+  <div class="mt-5 flex justify-between gap-3">
+    <button ngsButton="outlined" type="button" [disabled]="stepper.isFirstStep()" (click)="stepper.previous()">
+      Back
+    </button>
+    @if (stepper.isLastStep()) {
+      <button ngsButton="filled" type="button" (click)="stepper.reset()">Reset</button>
+    } @else {
+      <button ngsButton="filled" type="button" (click)="stepper.next()">Next</button>
+    }
+  </div>
+</ngs-headless-stepper>

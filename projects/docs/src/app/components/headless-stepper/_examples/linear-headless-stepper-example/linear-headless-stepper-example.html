@@ -1,0 +1,58 @@
+<ngs-headless-stepper #stepper linear>
+  <div class="mb-5">
+    <div class="flex items-center justify-between gap-4">
+      <div>
+        <p class="text-sm text-neutral-600">Linear setup</p>
+        <h4 class="mt-1 text-base font-semibold">Step {{ stepper.selectedIndex() + 1 }} of {{ stepper.stepsCount() }}</h4>
+      </div>
+      <p class="text-sm text-neutral-600">{{ stepper.progressPercent() | number: '1.0-0' }}%</p>
+    </div>
+    <ngs-progress-bar class="mt-4" mode="determinate" [value]="stepper.progressPercent()"/>
+  </div>
+
+  <ngs-headless-step [stepControl]="accountForm">
+    <form [formGroup]="accountForm" class="flex flex-col gap-4">
+      <ngs-form-field>
+        <ngs-label>Company</ngs-label>
+        <input ngsInput formControlName="company" placeholder="Acme Operations" required>
+      </ngs-form-field>
+      <p class="text-sm text-neutral-600">
+        The next button becomes available when this form group is valid.
+      </p>
+    </form>
+  </ngs-headless-step>
+
+  <ngs-headless-step [stepControl]="billingForm">
+    <form [formGroup]="billingForm" class="flex flex-col gap-4">
+      <ngs-form-field>
+        <ngs-label>Billing email</ngs-label>
+        <input ngsInput formControlName="email" placeholder="billing@example.com" required>
+      </ngs-form-field>
+      <p class="text-sm text-neutral-600">
+        Headless Stepper tracks the connected control status and uses it for linear navigation.
+      </p>
+    </form>
+  </ngs-headless-step>
+
+  <ngs-headless-step optional>
+    <div class="rounded-lg border border-muted p-5">
+      <h5 class="text-base font-semibold">Optional review</h5>
+      <p class="mt-2 text-sm text-neutral-600">
+        Optional steps can be skipped in a linear flow, while still appearing in progress and selected-step state.
+      </p>
+    </div>
+  </ngs-headless-step>
+
+  <div class="mt-5 flex justify-between gap-3">
+    <button ngsButton="outlined" type="button" [disabled]="stepper.isFirstStep()" (click)="stepper.previous()">
+      Back
+    </button>
+    @if (stepper.isLastStep()) {
+      <button ngsButton="filled" type="button" (click)="stepper.reset()">Reset</button>
+    } @else {
+      <button ngsButton="filled" type="button" [disabled]="!stepper.canMoveNext()" (click)="stepper.next()">
+        Next
+      </button>
+    }
+  </div>
+</ngs-headless-stepper>

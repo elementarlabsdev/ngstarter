@@ -1,0 +1,10 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  button[ngsButton].headless-stepper-example-active {
+    --ngs-button-bg: var(--ngs-color-primary);
+    --ngs-button-color: var(--ngs-color-on-primary);
+  }
+}

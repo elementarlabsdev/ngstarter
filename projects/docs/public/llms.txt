@@ -116,6 +116,7 @@ Must use:
 - gauge: `@ngstarter-ui/components/gauge` docs: /components/gauge
 - grid: `@ngstarter-ui/components/grid` docs: /components/grid
 - guided-tour: `@ngstarter-ui/components/guided-tour` docs: /components/guided-tour
+- headless-stepper: `@ngstarter-ui/components/headless-stepper` docs: /components/headless-stepper
 - icon: `@ngstarter-ui/components/icon` docs: /components/icon
 - image-designer: `@ngstarter-ui/components/image-designer` docs: /libraries/image-designer
 - image-placeholder: `@ngstarter-ui/components/image-placeholder` docs: /components/image-placeholder
