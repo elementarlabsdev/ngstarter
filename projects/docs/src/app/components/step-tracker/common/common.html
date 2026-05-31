@@ -18,20 +18,40 @@
         such as error or disabled. When <code>activeIndex</code> equals the number of items, all
         auto-state steps are completed.
       </p>
+      <p class="mt-3">
+        Step Tracker supports vertical status lists and horizontal progress summaries. Items can use
+        simple <code>label</code> and <code>description</code> inputs, or projected
+        <code>ngs-step-tracker-label</code> and <code>ngs-step-tracker-description</code> elements
+        when the copy needs richer markup. Completed and error indicators use NgStarter icons by
+        default, can be configured globally with <code>provideStepTracker</code>, and can be
+        overridden per tracker with <code>ngsStepTrackerCompletedIcon</code> and
+        <code>ngsStepTrackerErrorIcon</code> templates.
+      </p>
       <div class="my-7">
         <div>Key Features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
             <strong>Status-first steps</strong>: Mark each item as completed, current, pending,
-            error, or disabled.
+            error, or disabled, or leave it as auto so the parent tracker resolves it from
+            <code>activeIndex</code>.
           </li>
           <li>
-            <strong>Simple composition</strong>: Use label and description inputs for compact
-            status lists, or project label and description elements for richer content.
+            <strong>Dynamic progress</strong>: Drive the current step with
+            <code>[(activeIndex)]</code>, <code>setActiveIndex()</code>, <code>next()</code>, and
+            <code>previous()</code>. The final completed state is represented by an
+            <code>activeIndex</code> equal to the item count.
+          </li>
+          <li>
+            <strong>Flexible content</strong>: Use label and description inputs for compact status
+            lists, or project label and description elements for richer templates.
           </li>
           <li>
             <strong>Vertical or horizontal</strong>: Show process status in a sidebar, card,
             drawer, or compact page header.
+          </li>
+          <li>
+            <strong>Configurable indicators</strong>: Override completed and error icons globally
+            with <code>provideStepTracker</code> or locally with icon template directives.
           </li>
           <li>
             <strong>Themeable tokens</strong>: Tune marker size, connector colors, status colors,

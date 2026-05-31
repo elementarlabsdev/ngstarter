@@ -87,79 +87,79 @@ export const appConfig = {
   properties = [
     {
       name: 'ngs-step-tracker',
-      description: 'Container for status-only step tracker items.',
+      description: 'Container for status-only step tracker items. It owns orientation, activeIndex resolution, connector layout, and tracker-level icon template registration.',
       type: 'component',
       default: '-'
     },
     {
       name: 'orientation',
-      description: 'Layout direction for the tracker.',
+      description: 'Layout direction for the tracker. Use vertical for sidebars and compact cards, and horizontal for headers, summaries, and wide review surfaces.',
       type: "'vertical' | 'horizontal'",
       default: 'vertical'
     },
     {
       name: 'activeIndex',
-      description: 'Optional zero-based active step index. Auto-state items before it become completed, the matching item becomes current, and later items become pending. Set it to the item count to mark every auto-state item completed.',
+      description: 'Optional zero-based active step index. Auto-state items before it become completed, the matching item becomes current, and later items become pending. Use null to leave auto items pending, or set it to the item count to mark every auto-state item completed.',
       type: 'number | null',
       default: 'null'
     },
     {
       name: 'ngs-step-tracker-item',
-      description: 'One status step inside a tracker.',
+      description: 'One status step inside a tracker. It renders the indicator, connector, label, description, and resolved visual state.',
       type: 'component',
       default: '-'
     },
     {
       name: 'state',
-      description: 'Visual status for the step item. Use auto to let the parent activeIndex resolve completed/current/pending.',
+      description: 'Visual status for the step item. Use auto to let the parent activeIndex resolve completed/current/pending, or set a fixed status when the item should stay completed, current, pending, error, or disabled.',
       type: "'auto' | 'completed' | 'current' | 'pending' | 'error' | 'disabled'",
       default: 'auto'
     },
     {
       name: 'label',
-      description: 'Optional compact label input for the step item.',
+      description: 'Optional compact label input for the step item. Use projected label content instead when the label needs markup.',
       type: 'string',
       default: "''"
     },
     {
       name: 'description',
-      description: 'Optional supporting text input for the step item.',
+      description: 'Optional supporting text input for the step item. Use projected description content instead when the description needs markup.',
       type: 'string',
       default: "''"
     },
     {
       name: 'ngs-step-tracker-label, [ngsStepTrackerLabel]',
-      description: 'Projected label content for richer step item templates.',
+      description: 'Projected label content for richer step item templates. Used when the label input is empty.',
       type: 'component',
       default: '-'
     },
     {
       name: 'ngs-step-tracker-description, [ngsStepTrackerDescription]',
-      description: 'Projected description content for richer step item templates.',
+      description: 'Projected description content for richer step item templates. Used when the description input is empty.',
       type: 'component',
       default: '-'
     },
     {
       name: '[ngsStepTrackerCompletedIcon]',
-      description: 'Template directive that registers the icon rendered inside completed indicators.',
+      description: 'Template directive that registers the icon rendered inside completed indicators for the current tracker. Overrides globally configured icon names.',
       type: 'directive',
       default: 'fluent:checkmark-16-filled'
     },
     {
       name: '[ngsStepTrackerErrorIcon]',
-      description: 'Template directive that registers the icon rendered inside error indicators.',
+      description: 'Template directive that registers the icon rendered inside error indicators for the current tracker. Overrides globally configured icon names.',
       type: 'directive',
       default: 'fluent:error-circle-16-filled'
     },
     {
       name: 'provideStepTracker(config)',
-      description: 'Environment provider for global default completed and error indicator icon names.',
+      description: 'Environment provider for global default completed and error indicator icon names. Use it in appConfig providers when every tracker should share the same default icons.',
       type: 'provider',
       default: '-'
     },
     {
       name: 'STEP_TRACKER_CONFIG',
-      description: 'Injection token used by the provider to configure global indicator icon names.',
+      description: 'Injection token used by the provider to configure global indicator icon names. Advanced consumers can provide it directly when needed.',
       type: 'InjectionToken<StepTrackerConfig>',
       default: "{ completedIconName: 'fluent:checkmark-16-filled', errorIconName: 'fluent:error-circle-16-filled' }"
     }
@@ -168,14 +168,14 @@ export const appConfig = {
   events = [
     {
       name: 'activeIndexChange',
-      description: 'Emitted by the activeIndex model when StepTracker methods update the active step.'
+      description: 'Emitted by the activeIndex model when the active step changes through two-way binding or StepTracker methods.'
     }
   ];
 
   methods = [
     {
       name: 'setActiveIndex(index: number)',
-      description: 'Sets the active step index programmatically.'
+      description: 'Sets the active step index programmatically. Values are clamped to the valid range by the tracker.'
     },
     {
       name: 'next()',
