@@ -65,8 +65,7 @@
       var(--ngs-step-tracker-connector-color) var(--ngs-step-tracker-connector-segment),
       transparent var(--ngs-step-tracker-connector-segment)
     );
-    background-size: var(--ngs-step-tracker-connector-width)
-      calc(var(--ngs-step-tracker-connector-segment) + var(--ngs-step-tracker-connector-space));
+    background-size: var(--ngs-step-tracker-connector-width) calc(var(--ngs-step-tracker-connector-segment) + var(--ngs-step-tracker-connector-space));
   }
 
   .content {
@@ -74,7 +73,7 @@
     min-width: 0;
     flex-direction: column;
     gap: --spacing(1);
-    padding: 1px 0 --spacing(6);
+    padding: 4px 0 --spacing(6);
   }
 
   &:last-child {
@@ -110,8 +109,7 @@
       background: var(--ngs-step-tracker-current-bg);
       border: 2px solid var(--ngs-step-tracker-current-border);
       color: var(--ngs-step-tracker-current-color);
-      box-shadow: 0 0 0 2px
-        color-mix(in srgb, var(--ngs-step-tracker-current-border), transparent 82%);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--ngs-step-tracker-current-border), transparent 82%);
     }
 
     .connector {
@@ -165,13 +163,15 @@
     position: static;
   }
 
+  .content {
+    padding-bottom: 0;
+  }
+
   .connector {
     position: absolute;
     top: calc(
-      var(
-          --ngs-step-tracker-connector-top,
-          calc(var(--ngs-step-tracker-indicator-size) / 2)
-        ) - var(--ngs-step-tracker-connector-width) / 2
+      var(--ngs-step-tracker-connector-top,
+      calc(var(--ngs-step-tracker-indicator-size) / 2)) - var(--ngs-step-tracker-connector-width) / 2
     );
     left: var(
       --ngs-step-tracker-connector-left,
@@ -183,7 +183,7 @@
       --ngs-step-tracker-connector-right,
       calc(
         -50% - var(--ngs-step-tracker-gap) + var(--ngs-step-tracker-indicator-size) / 2 +
-          var(--ngs-step-tracker-connector-gap)
+        var(--ngs-step-tracker-connector-gap)
       )
     );
     width: var(--ngs-step-tracker-connector-length, auto);
@@ -197,9 +197,8 @@
       transparent var(--ngs-step-tracker-connector-segment)
     );
     background-size: calc(
-        var(--ngs-step-tracker-connector-segment) + var(--ngs-step-tracker-connector-space)
-      )
-      var(--ngs-step-tracker-connector-width);
+      var(--ngs-step-tracker-connector-segment) + var(--ngs-step-tracker-connector-space)
+    ) var(--ngs-step-tracker-connector-width);
   }
 
   &:last-child {

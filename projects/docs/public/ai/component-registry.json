@@ -8626,7 +8626,7 @@
           "name": "step-tracker-icons-example",
           "title": "Step tracker icons",
           "file": "projects/docs/src/app/components/step-tracker/_examples/step-tracker-icons-example/step-tracker-icons-example.html",
-          "source": "<ngs-step-tracker orientation=\"horizontal\">\n  <ng-template ngsStepTrackerCompletedIcon>\n    <ngs-icon name=\"fluent:shield-checkmark-24-regular\"/>\n  </ng-template>\n  <ng-template ngsStepTrackerErrorIcon>\n    <ngs-icon name=\"fluent:warning-24-regular\"/>\n  </ng-template>\n  <ngs-step-tracker-item state=\"completed\" label=\"Created\" description=\"Request opened\"/>\n  <ngs-step-tracker-item state=\"completed\" label=\"Assigned\" description=\"Owner selected\"/>\n  <ngs-step-tracker-item state=\"error\" label=\"Documents\" description=\"Missing approval\"/>\n  <ngs-step-tracker-item state=\"pending\" label=\"Approval\" description=\"Not started\"/>\n</ngs-step-tracker>"
+          "source": "<ngs-step-tracker orientation=\"horizontal\">\n  <ng-template ngsStepTrackerCompletedIcon>\n    <ngs-icon name=\"fluent:shield-checkmark-24-regular\" class=\"size-5\"/>\n  </ng-template>\n  <ng-template ngsStepTrackerErrorIcon>\n    <ngs-icon name=\"fluent:warning-24-regular\" class=\"size-5\"/>\n  </ng-template>\n  <ngs-step-tracker-item state=\"completed\" label=\"Created\" description=\"Request opened\"/>\n  <ngs-step-tracker-item state=\"completed\" label=\"Assigned\" description=\"Owner selected\"/>\n  <ngs-step-tracker-item state=\"error\" label=\"Documents\" description=\"Missing approval\"/>\n  <ngs-step-tracker-item state=\"pending\" label=\"Approval\" description=\"Not started\"/>\n</ngs-step-tracker>"
         }
       ],
       "previewAsset": "projects/components/step-tracker/preview.svg",

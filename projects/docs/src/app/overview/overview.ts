@@ -501,7 +501,7 @@ export class Overview {
     },
     {
       routerLink: '/components/step-tracker',
-      imageUrl: 'assets/overview/stepper.svg',
+      imageUrl: 'assets/overview/step-tracker-preview.svg',
       name: 'Step Tracker'
     },
     {
