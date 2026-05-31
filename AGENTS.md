@@ -265,6 +265,10 @@ Styling rules for admin UIs:
 - In local SCSS, express spacing values with the Tailwind function `--spacing(N)`.
 - In component SCSS files, all component-local styling MUST be nested under the `:host` selector;
   do not write top-level component-local selectors outside `:host`.
+- In component SCSS files, nested element/state styles MUST use nested SCSS blocks instead of flat
+  descendant selectors. For example, write `:host-context(.state) { .child { ... } }`, never
+  `:host-context(.state) .child { ... }`; write `:host(.state) { .child { ... } }`, never
+  `:host(.state) .child { ... }`.
 - Locally override NgStarter components through component or directive selectors such as
   `ngs-card`, `ngs-navigation`, `ngs-form-field`, `table[ngs-table]`, `button[ngsButton]`, and
   `button[ngsIconButton]`.

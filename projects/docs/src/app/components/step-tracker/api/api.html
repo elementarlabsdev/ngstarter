@@ -1,0 +1,113 @@
+<h3>Usage</h3>
+<p>
+  Import the standalone pieces you use from the secondary entry point. Most applications need
+  <code>StepTracker</code> and <code>StepTrackerItem</code>; add the label, description, icon
+  directives, or provider only when the template uses those features.
+</p>
+<ngs-code-highlighter [code]="importExample" language="typescript" showCopyButton/>
+
+<p>
+  Use compact <code>label</code> and <code>description</code> inputs for simple status lists. This
+  keeps templates dense for business processes where each item is plain text and the state is known
+  from application data.
+</p>
+<ngs-code-highlighter [code]="compactExample" language="html" showCopyButton/>
+
+<p>
+  Bind <code>activeIndex</code> to resolve auto items dynamically from application state. Explicit
+  states such as <code>error</code> and <code>disabled</code> stay fixed. Use an
+  <code>activeIndex</code> equal to the item count when every auto-state step is finished. The
+  component also exposes <code>activeIndexChange</code>, <code>setActiveIndex()</code>,
+  <code>next()</code>, and <code>previous()</code> for imperative flows.
+</p>
+<ngs-code-highlighter [code]="dynamicExample" language="html" showCopyButton/>
+
+<p>
+  Project label and description elements when the item content needs a richer template. Projected
+  content is useful for formatted labels, translated fragments, or descriptions that include inline
+  structure instead of plain strings.
+</p>
+<ngs-code-highlighter [code]="projectedExample" language="html" showCopyButton/>
+
+<p>
+  Register completed and error indicator icon templates at the tracker level. These templates have
+  the highest priority and override the default or globally configured icon names for the current
+  tracker only.
+</p>
+<ngs-code-highlighter [code]="iconsExample" language="html" showCopyButton/>
+
+<p>
+  Configure default indicator icon names globally with the Step Tracker environment provider. Use
+  this when the application wants one consistent completed or error symbol across all trackers
+  without repeating templates in every component.
+</p>
+<ngs-code-highlighter [code]="configExample" language="typescript" showCopyButton/>
+
+<p>
+  Step Tracker is a display component. It does not validate forms, render step panels, manage
+  routing, or block progression. Use it for status visibility, and use Stepper or HeadlessStepper
+  when the workflow itself needs navigation and validation.
+</p>
+
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="properties">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <div [innerHTML]="element.name"></div>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="default">
+      <th ngs-header-cell *ngsHeaderCellDef>Default</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
+  </table>
+</div>
+
+@if (events.length) {
+  <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+    <table ngs-table [dataSource]="events">
+      <ng-container ngsColumnDef="name">
+        <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Event</th>
+        <td ngs-cell *ngsCellDef="let element">{{ element.name }}</td>
+      </ng-container>
+
+      <ng-container ngsColumnDef="description">
+        <th ngs-header-cell *ngsHeaderCellDef>Description</th>
+        <td ngs-cell *ngsCellDef="let element">{{ element.description }}</td>
+      </ng-container>
+
+      <tr ngs-header-row *ngsHeaderRowDef="['name', 'description']"></tr>
+      <tr ngs-row *ngsRowDef="let row; columns: ['name', 'description'];"></tr>
+    </table>
+  </div>
+}
+
+@if (methods.length) {
+  <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+    <table ngs-table [dataSource]="methods">
+      <ng-container ngsColumnDef="name">
+        <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Method</th>
+        <td ngs-cell *ngsCellDef="let element">{{ element.name }}</td>
+      </ng-container>
+
+      <ng-container ngsColumnDef="description">
+        <th ngs-header-cell *ngsHeaderCellDef>Description</th>
+        <td ngs-cell *ngsCellDef="let element">{{ element.description }}</td>
+      </ng-container>
+
+      <tr ngs-header-row *ngsHeaderRowDef="['name', 'description']"></tr>
+      <tr ngs-row *ngsRowDef="let row; columns: ['name', 'description'];"></tr>
+    </table>
+  </div>
+}

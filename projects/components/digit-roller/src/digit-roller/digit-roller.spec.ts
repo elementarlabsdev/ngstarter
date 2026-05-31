@@ -13,7 +13,9 @@ describe('DigitRoller', () => {
     .compileComponents();
 
     fixture = TestBed.createComponent(DigitRoller);
+    fixture.componentRef.setInput('value', 1234);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     await fixture.whenStable();
   });
 

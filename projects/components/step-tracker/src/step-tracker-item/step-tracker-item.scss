@@ -1,0 +1,209 @@
+@reference 'tailwindcss';
+
+:host {
+  display: grid;
+  grid-template-columns: var(--ngs-step-tracker-indicator-size) minmax(0, 1fr);
+  column-gap: var(--ngs-step-tracker-item-gap);
+  counter-increment: ngs-step-tracker-item;
+  min-height: calc(var(--ngs-step-tracker-indicator-size) + --spacing(8));
+
+  .indicator-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .indicator {
+    width: var(--ngs-step-tracker-indicator-size);
+    height: var(--ngs-step-tracker-indicator-size);
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    position: relative;
+    background: var(--ngs-step-tracker-pending-bg);
+    color: var(--ngs-step-tracker-pending-color);
+    font-size: var(--ngs-step-tracker-indicator-font-size);
+    font-weight: var(--ngs-step-tracker-indicator-font-weight);
+    line-height: 1;
+  }
+
+  .indicator-number {
+    &::before {
+      content: counter(ngs-step-tracker-item);
+    }
+  }
+
+  .indicator-check,
+  .indicator-error {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+
+    ngs-icon {
+      --ngs-icon-size: calc(var(--ngs-step-tracker-indicator-size) - 6px);
+    }
+  }
+
+  .indicator-check {
+    ngs-icon {
+      --ngs-icon-size: calc(var(--ngs-step-tracker-indicator-size) - 10px);
+    }
+  }
+
+  .connector {
+    width: var(--ngs-step-tracker-connector-width);
+    flex: 1;
+    min-height: --spacing(8);
+    margin-top: var(--ngs-step-tracker-connector-gap);
+    margin-bottom: var(--ngs-step-tracker-connector-gap);
+    background-image: linear-gradient(
+      to bottom,
+      var(--ngs-step-tracker-connector-color) var(--ngs-step-tracker-connector-segment),
+      transparent var(--ngs-step-tracker-connector-segment)
+    );
+    background-size: var(--ngs-step-tracker-connector-width) calc(var(--ngs-step-tracker-connector-segment) + var(--ngs-step-tracker-connector-space));
+  }
+
+  .content {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: --spacing(1);
+    padding: 4px 0 --spacing(6);
+  }
+
+  &:last-child {
+    min-height: var(--ngs-step-tracker-indicator-size);
+
+    .connector {
+      display: none;
+    }
+  }
+
+  &.ngs-step-tracker-item-completed {
+    .indicator {
+      background: var(--ngs-step-tracker-completed-bg);
+      color: var(--ngs-step-tracker-completed-color);
+    }
+
+    .indicator-number {
+      display: none;
+    }
+
+    .indicator-check {
+      display: inline-flex;
+      font-weight: 700;
+    }
+
+    .connector {
+      --ngs-step-tracker-connector-color: var(--ngs-step-tracker-connector-active-color);
+    }
+  }
+
+  &.ngs-step-tracker-item-current {
+    .indicator {
+      background: var(--ngs-step-tracker-current-bg);
+      border: 2px solid var(--ngs-step-tracker-current-border);
+      color: var(--ngs-step-tracker-current-color);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--ngs-step-tracker-current-border), transparent 82%);
+    }
+
+    .connector {
+      --ngs-step-tracker-connector-color: var(--ngs-step-tracker-connector-active-color);
+    }
+  }
+
+  &.ngs-step-tracker-item-error {
+    .indicator {
+      background: var(--ngs-step-tracker-error-bg);
+      color: var(--ngs-step-tracker-error-color);
+    }
+
+    .indicator-number {
+      display: none;
+    }
+
+    .indicator-error {
+      display: inline-flex;
+      font-size: calc(var(--ngs-step-tracker-indicator-size) * 0.48);
+      font-weight: 700;
+    }
+  }
+
+  &.ngs-step-tracker-item-disabled {
+    opacity: 0.7;
+
+    .indicator {
+      background: var(--ngs-step-tracker-disabled-bg);
+      color: var(--ngs-step-tracker-disabled-color);
+    }
+  }
+}
+
+:host-context(.ngs-step-tracker-horizontal) {
+  flex: 1 1 0;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: var(--ngs-step-tracker-indicator-size) auto;
+  justify-items: stretch;
+  min-width: --spacing(32);
+  min-height: 0;
+  position: relative;
+  text-align: center;
+
+  .indicator-column {
+    width: 100%;
+    flex-direction: row;
+    justify-self: stretch;
+    justify-content: center;
+    margin-bottom: var(--ngs-step-tracker-horizontal-indicator-margin-bottom);
+    position: static;
+  }
+
+  .content {
+    padding-bottom: 0;
+  }
+
+  .connector {
+    position: absolute;
+    top: calc(
+      var(--ngs-step-tracker-connector-top,
+      calc(var(--ngs-step-tracker-indicator-size) / 2)) - var(--ngs-step-tracker-connector-width) / 2
+    );
+    left: var(
+      --ngs-step-tracker-connector-left,
+      calc(
+        50% + var(--ngs-step-tracker-indicator-size) / 2 + var(--ngs-step-tracker-connector-gap)
+      )
+    );
+    right: var(
+      --ngs-step-tracker-connector-right,
+      calc(
+        -50% - var(--ngs-step-tracker-gap) + var(--ngs-step-tracker-indicator-size) / 2 +
+        var(--ngs-step-tracker-connector-gap)
+      )
+    );
+    width: var(--ngs-step-tracker-connector-length, auto);
+    height: var(--ngs-step-tracker-connector-width);
+    min-height: 0;
+    flex: none;
+    margin: 0;
+    background-image: linear-gradient(
+      to right,
+      var(--ngs-step-tracker-connector-color) var(--ngs-step-tracker-connector-segment),
+      transparent var(--ngs-step-tracker-connector-segment)
+    );
+    background-size: calc(
+      var(--ngs-step-tracker-connector-segment) + var(--ngs-step-tracker-connector-space)
+    ) var(--ngs-step-tracker-connector-width);
+  }
+
+  &:last-child {
+    .connector {
+      display: none;
+    }
+  }
+}

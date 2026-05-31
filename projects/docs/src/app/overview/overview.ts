@@ -500,6 +500,11 @@ export class Overview {
       name: 'Stepper'
     },
     {
+      routerLink: '/components/step-tracker',
+      imageUrl: 'assets/overview/step-tracker-preview.svg',
+      name: 'Step Tracker'
+    },
+    {
       routerLink: '/components/headless-stepper',
       imageUrl: 'assets/overview/headless-stepper.svg',
       name: 'Headless Stepper'
