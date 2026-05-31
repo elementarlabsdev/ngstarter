@@ -12,6 +12,9 @@ import {
 import {
   HorizontalStepTrackerExample
 } from '../_examples/horizontal-step-tracker-example/horizontal-step-tracker-example';
+import {
+  StepTrackerIconsExample
+} from '../_examples/step-tracker-icons-example/step-tracker-icons-example';
 
 @Component({
   selector: 'app-overview',
@@ -19,6 +22,7 @@ import {
     Playground,
     BasicStepTrackerExample,
     HorizontalStepTrackerExample,
+    StepTrackerIconsExample,
     StepTrackerProjectedContentExample,
     StepTrackerStatesExample,
   ],

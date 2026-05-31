@@ -5,6 +5,7 @@ import {
   ElementRef,
   NgZone,
   afterNextRender,
+  contentChild,
   computed,
   contentChildren,
   effect,
@@ -16,6 +17,8 @@ import {
   StepTrackerItem,
   StepTrackerResolvedItemState
 } from '../step-tracker-item/step-tracker-item';
+import { StepTrackerCompletedIcon } from '../step-tracker-completed-icon/step-tracker-completed-icon';
+import { StepTrackerErrorIcon } from '../step-tracker-error-icon/step-tracker-error-icon';
 
 export type StepTrackerOrientation = 'vertical' | 'horizontal';
 
@@ -37,6 +40,8 @@ export class StepTracker {
   readonly activeIndex = model<number | null>(null);
 
   readonly items = contentChildren(StepTrackerItem);
+  readonly completedIcon = contentChild(StepTrackerCompletedIcon);
+  readonly errorIcon = contentChild(StepTrackerErrorIcon);
   readonly itemsCount = computed(() => this.items().length);
 
   private readonly _destroyRef = inject(DestroyRef);
@@ -53,6 +58,15 @@ export class StepTracker {
 
       this.items().forEach((item, index) => {
         item.setTrackerState(this._stateForIndex(index, activeIndex));
+      });
+    });
+
+    effect(() => {
+      const completedIcon = this.completedIcon()?.templateRef ?? null;
+      const errorIcon = this.errorIcon()?.templateRef ?? null;
+
+      this.items().forEach((item) => {
+        item.setIndicatorIconTemplates(completedIcon, errorIcon);
       });
     });
 

@@ -1,0 +1,14 @@
+<ngs-step-tracker orientation="horizontal">
+  <ng-template ngsStepTrackerCompletedIcon>
+    <ngs-icon name="fluent:shield-checkmark-24-regular"/>
+  </ng-template>
+
+  <ng-template ngsStepTrackerErrorIcon>
+    <ngs-icon name="fluent:warning-24-regular"/>
+  </ng-template>
+
+  <ngs-step-tracker-item state="completed" label="Created" description="Request opened"/>
+  <ngs-step-tracker-item state="completed" label="Assigned" description="Owner selected"/>
+  <ngs-step-tracker-item state="error" label="Documents" description="Missing approval"/>
+  <ngs-step-tracker-item state="pending" label="Approval" description="Not started"/>
+</ngs-step-tracker>

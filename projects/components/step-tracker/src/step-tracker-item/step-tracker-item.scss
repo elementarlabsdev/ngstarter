@@ -39,6 +39,19 @@
   .indicator-check,
   .indicator-error {
     display: none;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+
+    ngs-icon {
+      --ngs-icon-size: calc(var(--ngs-step-tracker-indicator-size) - 6px);
+    }
+  }
+
+  .indicator-check {
+    ngs-icon {
+      --ngs-icon-size: calc(var(--ngs-step-tracker-indicator-size) - 10px);
+    }
   }
 
   .connector {
@@ -83,12 +96,8 @@
     }
 
     .indicator-check {
-      display: block;
-      width: calc(var(--ngs-step-tracker-indicator-size) * 0.34);
-      height: calc(var(--ngs-step-tracker-indicator-size) * 0.18);
-      border-left: 2px solid currentColor;
-      border-bottom: 2px solid currentColor;
-      transform: rotate(-45deg) translate(1px, -1px);
+      display: inline-flex;
+      font-weight: 700;
     }
 
     .connector {
@@ -121,24 +130,9 @@
     }
 
     .indicator-error {
-      display: block;
-      width: 2px;
-      height: calc(var(--ngs-step-tracker-indicator-size) * 0.34);
-      background: currentColor;
-      border-radius: 9999px;
-      position: relative;
-
-      &::after {
-        content: '';
-        position: absolute;
-        left: 50%;
-        bottom: -5px;
-        width: 2px;
-        height: 2px;
-        border-radius: 9999px;
-        background: currentColor;
-        transform: translateX(-50%);
-      }
+      display: inline-flex;
+      font-size: calc(var(--ngs-step-tracker-indicator-size) * 0.48);
+      font-weight: 700;
     }
   }
 

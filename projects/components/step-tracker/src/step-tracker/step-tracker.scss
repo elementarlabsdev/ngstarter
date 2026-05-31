@@ -42,4 +42,5 @@
   flex-direction: row;
   align-items: flex-start;
   gap: var(--ngs-step-tracker-gap);
+  padding-top: calc(var(--ngs-step-tracker-indicator-size) / 2);
 }

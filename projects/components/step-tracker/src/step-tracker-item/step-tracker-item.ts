@@ -2,11 +2,18 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  TemplateRef,
   computed,
   inject,
   input,
   signal
 } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { Icon } from '@ngstarter-ui/components/icon';
+import {
+  STEP_TRACKER_CONFIG,
+  STEP_TRACKER_DEFAULT_CONFIG
+} from '../config';
 import { StepTrackerDescription } from '../step-tracker-description/step-tracker-description';
 import { StepTrackerLabel } from '../step-tracker-label/step-tracker-label';
 
@@ -22,7 +29,7 @@ export type StepTrackerItemState = StepTrackerResolvedItemState | 'auto';
 @Component({
   selector: 'ngs-step-tracker-item',
   exportAs: 'ngsStepTrackerItem',
-  imports: [StepTrackerDescription, StepTrackerLabel],
+  imports: [Icon, NgTemplateOutlet, StepTrackerDescription, StepTrackerLabel],
   templateUrl: './step-tracker-item.html',
   styleUrl: './step-tracker-item.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,8 +50,13 @@ export class StepTrackerItem {
   readonly label = input<string>('');
   readonly description = input<string>('');
 
+  private readonly _config = inject(STEP_TRACKER_CONFIG);
   private readonly _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly _trackerState = signal<StepTrackerResolvedItemState>('pending');
+  readonly completedIconTemplate = signal<TemplateRef<unknown> | null>(null);
+  readonly errorIconTemplate = signal<TemplateRef<unknown> | null>(null);
+  readonly completedIconName = this._config.completedIconName ?? STEP_TRACKER_DEFAULT_CONFIG.completedIconName;
+  readonly errorIconName = this._config.errorIconName ?? STEP_TRACKER_DEFAULT_CONFIG.errorIconName;
 
   readonly resolvedState = computed<StepTrackerResolvedItemState>(() => {
     const state = this.state();
@@ -53,6 +65,14 @@ export class StepTrackerItem {
 
   setTrackerState(state: StepTrackerResolvedItemState): void {
     this._trackerState.set(state);
+  }
+
+  setIndicatorIconTemplates(
+    completedIconTemplate: TemplateRef<unknown> | null,
+    errorIconTemplate: TemplateRef<unknown> | null,
+  ): void {
+    this.completedIconTemplate.set(completedIconTemplate);
+    this.errorIconTemplate.set(errorIconTemplate);
   }
 
   getHostElement(): HTMLElement {

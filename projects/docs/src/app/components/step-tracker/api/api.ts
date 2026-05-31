@@ -32,9 +32,24 @@ import {
 })
 export class Api {
   importExample = `import {
+  provideStepTracker,
+  STEP_TRACKER_CONFIG,
   StepTracker,
+  StepTrackerCompletedIcon,
+  StepTrackerErrorIcon,
   StepTrackerItem
 } from '@ngstarter-ui/components/step-tracker';`;
+
+  configExample = `import { provideStepTracker } from '@ngstarter-ui/components/step-tracker';
+
+export const appConfig = {
+  providers: [
+    provideStepTracker({
+      completedIconName: 'fluent:shield-checkmark-24-regular',
+      errorIconName: 'fluent:warning-24-regular',
+    }),
+  ],
+};`;
 
   compactExample = `<ngs-step-tracker>
   <ngs-step-tracker-item state="completed" label="Pay period & Employee"/>
@@ -55,6 +70,19 @@ export class Api {
     Review working hours before approval.
   </ngs-step-tracker-description>
 </ngs-step-tracker-item>`;
+
+  iconsExample = `<ngs-step-tracker orientation="horizontal">
+  <ng-template ngsStepTrackerCompletedIcon>
+    <ngs-icon name="fluent:shield-checkmark-24-regular"/>
+  </ng-template>
+
+  <ng-template ngsStepTrackerErrorIcon>
+    <ngs-icon name="fluent:warning-24-regular"/>
+  </ng-template>
+
+  <ngs-step-tracker-item state="completed" label="Created"/>
+  <ngs-step-tracker-item state="error" label="Documents"/>
+</ngs-step-tracker>`;
 
   properties = [
     {
@@ -110,6 +138,30 @@ export class Api {
       description: 'Projected description content for richer step item templates.',
       type: 'component',
       default: '-'
+    },
+    {
+      name: '[ngsStepTrackerCompletedIcon]',
+      description: 'Template directive that registers the icon rendered inside completed indicators.',
+      type: 'directive',
+      default: 'fluent:checkmark-16-filled'
+    },
+    {
+      name: '[ngsStepTrackerErrorIcon]',
+      description: 'Template directive that registers the icon rendered inside error indicators.',
+      type: 'directive',
+      default: 'fluent:error-circle-16-filled'
+    },
+    {
+      name: 'provideStepTracker(config)',
+      description: 'Environment provider for global default completed and error indicator icon names.',
+      type: 'provider',
+      default: '-'
+    },
+    {
+      name: 'STEP_TRACKER_CONFIG',
+      description: 'Injection token used by the provider to configure global indicator icon names.',
+      type: 'InjectionToken<StepTrackerConfig>',
+      default: "{ completedIconName: 'fluent:checkmark-16-filled', errorIconName: 'fluent:error-circle-16-filled' }"
     }
   ];
 

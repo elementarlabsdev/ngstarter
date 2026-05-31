@@ -1,8 +1,20 @@
 <div class="indicator-column" aria-hidden="true">
   <div class="indicator">
     <span class="indicator-number"></span>
-    <span class="indicator-check"></span>
-    <span class="indicator-error"></span>
+    <span class="indicator-check">
+      @if (completedIconTemplate()) {
+        <ng-container [ngTemplateOutlet]="completedIconTemplate()"/>
+      } @else {
+        <ngs-icon [name]="completedIconName"/>
+      }
+    </span>
+    <span class="indicator-error">
+      @if (errorIconTemplate()) {
+        <ng-container [ngTemplateOutlet]="errorIconTemplate()"/>
+      } @else {
+        <ngs-icon [name]="errorIconName"/>
+      }
+    </span>
   </div>
   <div class="connector"></div>
 </div>
