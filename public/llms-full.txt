@@ -833,7 +833,7 @@ Typography:
   example topics: Basic Select, Getting and setting the select value, Form Field Features, Disabled, Resetting the select value, Groups of Options, Multiple Selection, Customizing the trigger label
   selectors: `ng-template[ngsFilterTriggerValue]`, `ngs-filter-trigger`, `ngs-select`, `ngs-select-body`, `ngs-select-footer`, `ngs-select-header`, `ngs-select-trigger`
   exports: `_Select`, `FilterTrigger`, `FilterTriggerValueDirective`, `Select`, `SELECT`, `SelectBody`, `SelectChange`, `SelectFooter`, `SelectHeader`, `SelectTrigger`
-  inputs: `aria-describedby`, `ariaLabel`, `disabled`, `hideCheckIcon`, `id`, `maxCount`, `multiple`, `placeholder`, `required`, `showZero`, `tabIndex`, `value`
+  inputs: `aria-describedby`, `aria-label`, `disabled`, `hideCheckIcon`, `id`, `maxCount`, `multiple`, `placeholder`, `required`, `showZero`, `tabIndex`, `value`
   outputs: `closed`, `opened`, `selectionChange`
   tokens: `--ngs-color-on-primary`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-outline`, `--ngs-color-primary`, `--ngs-dropdown-bg`, `--ngs-dropdown-border`, `--ngs-dropdown-item-gap`, `--ngs-dropdown-max-height`, `--ngs-dropdown-padding`, `--ngs-dropdown-radius`, `--ngs-dropdown-shadow`, `--ngs-field-border-color`, `--ngs-field-font-size`, `--ngs-field-label-color`, `--ngs-field-line-height`
 - side-panel: `@ngstarter-ui/components/side-panel` docs: /navigation/side-panel

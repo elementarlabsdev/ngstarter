@@ -7591,7 +7591,7 @@
       ],
       "inputs": [
         "aria-describedby",
-        "ariaLabel",
+        "aria-label",
         "disabled",
         "hideCheckIcon",
         "id",

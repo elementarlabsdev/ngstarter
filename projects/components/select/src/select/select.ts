@@ -115,7 +115,7 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
   get required(): boolean { return this._required(); }
   multiple = input(false, { transform: booleanAttribute });
   hideCheckIcon = input(false, { transform: booleanAttribute });
-  ariaLabel = input<string>();
+  ariaLabel = input<string | null>(null, { alias: 'aria-label' });
   tabIndex = input<number, any>(0, {
     transform: (value: number | string | null) => value == null ? 0 : parseInt(value + '', 10)
   });
