@@ -56,6 +56,11 @@ export const routes: Routes = [
     title: 'Select'
   },
   {
+    path: 'filter-select',
+    loadChildren: () => import('./filter-select/routes').then(m => m.routes),
+    title: 'Filter Select'
+  },
+  {
     path: 'segmented',
     loadChildren: () => import('./segmented/routes').then(m => m.routes),
     title: 'Segmented'

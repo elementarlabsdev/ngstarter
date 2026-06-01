@@ -2,6 +2,7 @@ import { InjectionToken, Signal, ElementRef, OutputEmitterRef, WritableSignal } 
 
 export abstract class _Option {
   abstract value: Signal<any>;
+  abstract data?: Signal<any>;
   abstract elementRef: ElementRef<HTMLElement>;
   abstract select(): void;
   abstract deselect(): void;

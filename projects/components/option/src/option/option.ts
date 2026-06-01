@@ -47,6 +47,7 @@ export class Option implements AfterViewInit, OnDestroy, _Option, Highlightable 
   private _cdr = inject(ChangeDetectorRef);
 
   value = input<any>();
+  data = input<any>();
   disabledSignal = input(false, { alias: 'disabled', transform: booleanAttribute });
   selectedInput = input(false, { alias: 'selected', transform: booleanAttribute });
 

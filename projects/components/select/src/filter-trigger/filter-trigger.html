@@ -1,0 +1,19 @@
+<span class="ngs-filter-trigger-label">
+  <ng-content/>
+</span>
+
+@if (hasSelectedData() && customValue(); as valueTpl) {
+  <span class="ngs-filter-trigger-value ngs-filter-trigger-custom-value">
+    <ng-container
+      [ngTemplateOutlet]="valueTpl.templateRef"
+      [ngTemplateOutletContext]="valueContext()"/>
+  </span>
+} @else if (displayCount() !== null) {
+  <span class="ngs-filter-trigger-badge">
+    {{ displayCount() }}
+  </span>
+} @else if (!isMultiple() && selectedText()) {
+  <span class="ngs-filter-trigger-value">
+    {{ selectedText() }}
+  </span>
+}

@@ -816,6 +816,16 @@
     <priority>0.60</priority>
   </url>
   <url>
+    <loc>https://docs.ngstarter.com/forms/filter-select</loc>
+    <lastmod>2026-06-01</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://docs.ngstarter.com/forms/filter-select/api</loc>
+    <lastmod>2026-06-01</lastmod>
+    <priority>0.60</priority>
+  </url>
+  <url>
     <loc>https://docs.ngstarter.com/forms/form-renderer</loc>
     <lastmod>2026-05-30</lastmod>
     <priority>0.70</priority>

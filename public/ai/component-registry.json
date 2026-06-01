@@ -6373,6 +6373,7 @@
         "OPTION_PARENT"
       ],
       "inputs": [
+        "data",
         "disabled",
         "label",
         "selected",
@@ -7541,7 +7542,9 @@
         "Get set value",
         "Resetting value",
         "Custom trigger",
-        "Select search"
+        "Select search",
+        "Filter trigger count options",
+        "Filter trigger"
       ],
       "minimalExample": "<p>Basic mat-select</p>\n<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite food</ngs-label>\n  <ngs-select>\n    @for (food of foods; track food) {\n      <ngs-option [value]=\"food.value\">{{food.viewValue}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>",
       "exampleFiles": [
@@ -7566,6 +7569,8 @@
       ],
       "previewAsset": "projects/components/select/preview.svg",
       "selectors": [
+        "ng-template[ngsFilterTriggerValue]",
+        "ngs-filter-trigger",
         "ngs-select",
         "ngs-select-body",
         "ngs-select-footer",
@@ -7574,6 +7579,8 @@
       ],
       "exportedSymbols": [
         "_Select",
+        "FilterTrigger",
+        "FilterTriggerValueDirective",
         "Select",
         "SELECT",
         "SelectBody",
@@ -7588,9 +7595,11 @@
         "disabled",
         "hideCheckIcon",
         "id",
+        "maxCount",
         "multiple",
         "placeholder",
         "required",
+        "showZero",
         "tabIndex",
         "value"
       ],
@@ -7600,8 +7609,11 @@
         "selectionChange"
       ],
       "cssTokens": [
+        "--ngs-color-on-primary",
+        "--ngs-color-on-surface",
         "--ngs-color-on-surface-variant",
         "--ngs-color-outline",
+        "--ngs-color-primary",
         "--ngs-dropdown-bg",
         "--ngs-dropdown-border",
         "--ngs-dropdown-item-gap",
@@ -7613,6 +7625,19 @@
         "--ngs-field-font-size",
         "--ngs-field-label-color",
         "--ngs-field-line-height",
+        "--ngs-filter-trigger-badge-background",
+        "--ngs-filter-trigger-badge-color",
+        "--ngs-filter-trigger-badge-font-size",
+        "--ngs-filter-trigger-badge-font-weight",
+        "--ngs-filter-trigger-badge-padding-inline",
+        "--ngs-filter-trigger-badge-radius",
+        "--ngs-filter-trigger-badge-size",
+        "--ngs-filter-trigger-color",
+        "--ngs-filter-trigger-font-size",
+        "--ngs-filter-trigger-font-weight",
+        "--ngs-filter-trigger-gap",
+        "--ngs-filter-trigger-value-color",
+        "--ngs-filter-trigger-value-font-weight",
         "--ngs-select-arrow-color",
         "--ngs-select-arrow-container-width",
         "--ngs-select-arrow-size",

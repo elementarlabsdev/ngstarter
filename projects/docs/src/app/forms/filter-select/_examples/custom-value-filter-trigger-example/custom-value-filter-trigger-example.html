@@ -1,0 +1,31 @@
+<ngs-select [formControl]="status()" aria-label="Status filter">
+  <ngs-filter-trigger>
+    Status
+
+    <ng-template ngsFilterTriggerValue let-status>
+      <span class="inline-flex min-w-0 items-center gap-2">
+        <span
+          class="status-dot size-2 flex-none rounded-full"
+          [class.bg-positive]="status.tone === 'success'"
+          [class.bg-notice]="status.tone === 'warning'"
+          [class.bg-negative]="status.tone === 'danger'"
+          [class.bg-neutral-400]="status.tone === 'neutral'"></span>
+        {{ status.label }}
+      </span>
+    </ng-template>
+  </ngs-filter-trigger>
+
+  @for (statusOption of statuses(); track statusOption.id) {
+    <ngs-option [value]="statusOption.id" [data]="statusOption">
+      <span class="inline-flex min-w-0 items-center gap-2">
+        <span
+          class="status-dot size-2 flex-none rounded-full"
+          [class.bg-positive]="statusOption.tone === 'success'"
+          [class.bg-notice]="statusOption.tone === 'warning'"
+          [class.bg-negative]="statusOption.tone === 'danger'"
+          [class.bg-neutral-400]="statusOption.tone === 'neutral'"></span>
+        {{ statusOption.label }}
+      </span>
+    </ngs-option>
+  }
+</ngs-select>

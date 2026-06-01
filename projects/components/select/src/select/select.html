@@ -1,10 +1,11 @@
 <div class="ngs-select-trigger" cdkOverlayOrigin #origin="cdkOverlayOrigin">
   <div class="ngs-select-value">
-    @if (empty) {
-      <span class="ngs-select-placeholder">{{ placeholder }}</span>
+    @if (customTrigger().length > 0 || filterTrigger().length > 0) {
+      <ng-content select="ngs-select-trigger"/>
+      <ng-content select="ngs-filter-trigger"/>
     } @else {
-      @if (customTrigger().length > 0) {
-        <ng-content select="ngs-select-trigger"/>
+      @if (empty) {
+        <span class="ngs-select-placeholder">{{ placeholder }}</span>
       } @else {
         <span class="ngs-select-value-text">{{ triggerValue() }}</span>
       }
@@ -50,5 +51,4 @@
     <ng-content select="ngs-select-footer"/>
   </div>
 </ng-template>
-
 

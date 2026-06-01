@@ -247,6 +247,12 @@ export class App implements OnInit {
         {
           key: uuid(),
           type: 'link',
+          name: 'Filter Select',
+          link: '/forms/filter-select'
+        },
+        {
+          key: uuid(),
+          type: 'link',
           name: 'Select',
           link: '/forms/select'
         },
@@ -377,7 +383,7 @@ export class App implements OnInit {
       type: 'group',
       icon: 'fluent:grid-24-regular',
       name: 'Components',
-      badge: 70,
+      badge: 76,
       children: [
         {
           key: uuid(),

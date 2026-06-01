@@ -16,6 +16,19 @@
   min-width: var(--ngs-select-min-width);
   padding-right: var(--ngs-select-arrow-container-width);
 
+  &:has(ngs-filter-trigger) {
+    --ngs-select-min-width: 0;
+    --ngs-select-arrow-container-width: --spacing(7);
+
+    position: relative;
+  }
+
+  &.ngs-select-panel-open.ngs-select-has-filter-trigger {
+    .ngs-select-arrow-wrapper {
+      transform: rotate(-180deg);
+    }
+  }
+
   &.ngs-select-disabled {
     cursor: default;
     pointer-events: none;
