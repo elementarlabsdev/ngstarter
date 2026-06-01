@@ -1,0 +1,17 @@
+<div class="flex flex-wrap gap-3">
+  <ngs-select [formControl]="teams()" multiple aria-label="Team filter">
+    <ngs-filter-trigger [maxCount]="3">Team</ngs-filter-trigger>
+
+    @for (team of teamOptions(); track team) {
+      <ngs-option [value]="team">{{ team }}</ngs-option>
+    }
+  </ngs-select>
+
+  <ngs-select [formControl]="emptyTeams()" multiple aria-label="Empty team filter">
+    <ngs-filter-trigger showZero>Empty team</ngs-filter-trigger>
+
+    @for (team of teamOptions(); track team) {
+      <ngs-option [value]="team">{{ team }}</ngs-option>
+    }
+  </ngs-select>
+</div>

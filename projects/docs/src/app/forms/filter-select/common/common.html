@@ -1,0 +1,26 @@
+<app-page>
+  <h1 appPageTitle>Filter Select</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Filter Select is the compact filtering pattern for Select. It uses the standard
+        <code class="code">ngs-select</code> dropdown behavior and replaces the closed value display with
+        <code class="code">ngs-filter-trigger</code>.
+      </p>
+      <p class="mt-3">
+        Use it in toolbars, table headers, dashboards, and admin list pages when the filter name should stay visible
+        and the selected state should be summarized inline. Multiple Select controls show a selected-value count badge;
+        single Select controls show the selected option text. This summary is read automatically from the parent Select.
+        Use option <code class="code">data</code> with <code class="code">ngsFilterTriggerValue</code> when the summary
+        needs richer rendering from the full selected object.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/forms/filter-select" ngs-tab-link>Overview</a>
+      <a routerLink="/forms/filter-select/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

@@ -22,6 +22,7 @@ import {
 import { outputToObservable } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { SelectTrigger } from '../select-trigger/select-trigger';
+import { FilterTrigger } from '../filter-trigger/filter-trigger';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CdkConnectedOverlay, OverlayModule, CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { SelectBody } from '../select-body/select-body';
@@ -81,6 +82,8 @@ export class SelectChange {
     '[class.ngs-select-invalid]': 'errorState',
     '[class.ngs-select-required]': 'required',
     '[class.ngs-select-empty]': 'empty',
+    '[class.ngs-select-panel-open]': 'panelOpen()',
+    '[class.ngs-select-has-filter-trigger]': 'filterTrigger().length > 0',
     '(click)': 'toggle()',
     '(keydown)': '_handleKeydown($event)',
     '(focus)': '_onFocus()',
@@ -112,7 +115,7 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
   get required(): boolean { return this._required(); }
   multiple = input(false, { transform: booleanAttribute });
   hideCheckIcon = input(false, { transform: booleanAttribute });
-  ariaLabel = input<string>();
+  ariaLabel = input<string | null>(null, { alias: 'aria-label' });
   tabIndex = input<number, any>(0, {
     transform: (value: number | string | null) => value == null ? 0 : parseInt(value + '', 10)
   });
@@ -128,6 +131,7 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
   options = contentChildren<_Option>(OPTION, { descendants: true });
   optionGroups = contentChildren(Optgroup, { descendants: true });
   customTrigger = contentChildren(SelectTrigger, { descendants: true });
+  filterTrigger = contentChildren(FilterTrigger, { descendants: true });
   overlayDir = viewChild(CdkConnectedOverlay);
   panel = viewChild<ElementRef<HTMLElement>>('panel');
   origin = viewChild<CdkOverlayOrigin>('origin');
@@ -250,6 +254,35 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
     }
 
     return this._selectionModel.selected[0]?.viewValue || '';
+  });
+
+  selectedCount = computed(() => {
+    this._selectionChanges();
+    const selectedLength = this._selectionModel?.selected.length ?? 0;
+
+    if (selectedLength > 0) {
+      return selectedLength;
+    }
+
+    const value = this.value();
+
+    if (Array.isArray(value)) {
+      return value.filter(v => v !== null && v !== undefined && v !== '').length;
+    }
+
+    return value === null || value === undefined || value === '' ? 0 : 1;
+  });
+
+  selectedData = computed(() => {
+    this._selectionChanges();
+
+    if (this.multiple()) {
+      return this._selectionModel.selected.map(option => this._getOptionData(option));
+    }
+
+    const selectedOption = this._selectionModel.selected[0];
+
+    return selectedOption ? this._getOptionData(selectedOption) : null;
   });
 
   ngAfterContentInit() {
@@ -494,6 +527,12 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
 
   private _getOptionIndex(option: _Option): number {
     return this.options().indexOf(option);
+  }
+
+  private _getOptionData(option: _Option): any {
+    const data = option.data?.();
+
+    return data === undefined ? option.value() : data;
   }
 
   private _selectValue(value: any): void {

@@ -1,0 +1,48 @@
+@reference 'tailwindcss';
+
+:host {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  height: 100%;
+  gap: var(--ngs-filter-trigger-gap, --spacing(2));
+  color: var(--ngs-filter-trigger-color, var(--ngs-color-on-surface));
+  font-size: var(--ngs-filter-trigger-font-size, var(--ngs-field-font-size));
+  font-weight: var(--ngs-filter-trigger-font-weight, 500);
+  line-height: var(--ngs-field-line-height);
+  white-space: nowrap;
+
+  .ngs-filter-trigger-label {
+    flex: none;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ngs-filter-trigger-value {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--ngs-filter-trigger-value-color, var(--ngs-color-on-surface-variant));
+    font-weight: var(--ngs-filter-trigger-value-font-weight, 400);
+  }
+
+  .ngs-filter-trigger-badge {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--ngs-filter-trigger-badge-size, 18px);
+    height: var(--ngs-filter-trigger-badge-size, 18px);
+    padding-inline: var(--ngs-filter-trigger-badge-padding-inline, --spacing(1));
+    border-radius: var(--ngs-filter-trigger-badge-radius, 999px);
+    background: var(--ngs-filter-trigger-badge-background, var(--ngs-color-primary));
+    color: var(--ngs-filter-trigger-badge-color, var(--ngs-color-on-primary));
+    font-size: var(--ngs-filter-trigger-badge-font-size, 11px);
+    font-weight: var(--ngs-filter-trigger-badge-font-weight, 600);
+    line-height: 1;
+  }
+}

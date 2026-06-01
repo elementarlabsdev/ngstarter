@@ -1,0 +1,63 @@
+<h3>Filter Trigger API</h3>
+
+<p>
+  <code class="code">ngs-filter-trigger</code> is projected inside <code class="code">ngs-select</code>.
+  Its text content is the visible filter name. For multiple Select controls it renders an automatic selected-count badge;
+  for single Select controls it renders the selected option text.
+</p>
+<p>
+  Add <code class="code">[data]</code> to <code class="code">ngs-option</code> when the trigger value template needs the
+  full selected object instead of only the option value or text.
+</p>
+
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="properties">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <div>{{ element.name }}</div>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="default">
+      <th ngs-header-cell *ngsHeaderCellDef>Default</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
+  </table>
+</div>
+
+<h3>Custom Value Template</h3>
+
+<p>
+  Place <code class="code">ng-template[ngsFilterTriggerValue]</code> inside
+  <code class="code">ngs-filter-trigger</code> to render the selected value from option data.
+</p>
+
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="templateContext">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Context</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <div>{{ element.name }}</div>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'type']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type'];"></tr>
+  </table>
+</div>
