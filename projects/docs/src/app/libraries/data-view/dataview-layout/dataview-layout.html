@@ -16,15 +16,14 @@
       </div>
     </div>
   </ngs-panel-header>
-  <ngs-panel-subheader autoHeight class="py-3 px-5">
-    <ngs-toolbar>
+  <ngs-panel-subheader autoHeight class="px-5">
+    <ngs-toolbar class="py-3">
       <ngs-select
         #staffTypeSelect
         [formControl]="staffType()"
         hideCheckIcon
         clearable
         aria-label="Staff type filter"
-        class="layout-filter-select"
         (selectionChange)="resetPage()">
         <ngs-filter-trigger>All Staff</ngs-filter-trigger>
 
@@ -38,7 +37,6 @@
         hideCheckIcon
         clearable
         aria-label="Position filter"
-        class="layout-filter-select"
         (selectionChange)="resetPage()">
         <ngs-filter-trigger>All Position</ngs-filter-trigger>
 
@@ -52,7 +50,6 @@
         multiple
         clearable
         aria-label="Status filter"
-        class="layout-filter-select"
         (selectionChange)="resetPage()">
         <ngs-filter-trigger>Status
           <ng-template ngsFilterTriggerValue let-statuses let-count="count">
@@ -86,7 +83,7 @@
       <ngs-toolbar-spacer/>
 
       <div class="w-[300px]">
-        <ngs-form-field subscriptHiddenIfEmpty>
+        <ngs-form-field subscriptHiddenIfEmpty sameHeightAsButton>
           <ngs-icon name="fluent:search-24-regular" ngsIconPrefix/>
           <input
             ngsInput

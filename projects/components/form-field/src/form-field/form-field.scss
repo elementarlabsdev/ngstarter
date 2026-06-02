@@ -352,4 +352,9 @@
     justify-content: space-between;
     color: var(--ngs-form-field-label-color);
   }
+
+  &.same-height-as-button {
+    --ngs-form-field-input-height: var(--ngs-button-height);
+    --ngs-form-field-container-min-height: var(--ngs-button-height);
+  }
 }

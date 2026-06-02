@@ -4150,6 +4150,7 @@
       ],
       "inputs": [
         "align",
+        "sameHeightAsButton",
         "subscriptHiddenIfEmpty"
       ],
       "outputs": [],
