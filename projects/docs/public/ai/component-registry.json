@@ -1603,7 +1603,7 @@
           "name": "chips-autocomplete-example",
           "title": "Chips autocomplete",
           "file": "projects/docs/src/app/components/chips/_examples/chips-autocomplete-example/chips-autocomplete-example.html",
-          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite Fruits</ngs-label>\n  <ngs-chip-grid #chipGrid aria-label=\"Fruit selection\">\n    @for (fruit of fruits; track fruit) {\n      <ngs-chip-row (removed)=\"remove(fruit)\">\n        {{fruit}}\n        <button ngsChipRemove>\n          <ngs-icon name=\"fluent:dismiss-20-regular\"/>\n        </button>\n      </ngs-chip-row>\n    }\n  </ngs-chip-grid>\n  <input ngsInput\n         placeholder=\"New Fruit...\" #fruitInput\n         [formControl]=\"fruitCtrl\"\n         [ngsChipInputFor]=\"chipGrid\"\n         [ngsAutocomplete]=\"auto\"\n         [ngsChipInputSeparatorKeyCodes]=\"separatorKeysCodes\"\n         (chipInputTokenEnd)=\"add($event)\">\n  <ngs-autocomplete #auto=\"ngsAutocomplete\" (optionSelected)=\"selected($event)\">\n    @for (fruit of filteredFruits | async; track fruit) {\n      <ngs-option [value]=\"fruit\">{{ fruit }}</ngs-option>\n    }\n  </ngs-autocomplete>\n</ngs-form-field>"
+          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite Fruits</ngs-label>\n  <ngs-chip-grid #chipGrid aria-label=\"Fruit selection\">\n    @for (fruit of fruits; track fruit) {\n      <ngs-chip-row (removed)=\"remove(fruit)\">\n        {{fruit}}\n        <button ngsChipRemove>\n          <ngs-icon name=\"fluent:dismiss-20-regular\"/>\n        </button>\n      </ngs-chip-row>\n    }\n    <input ngsInput\n           placeholder=\"New Fruit...\" #fruitInput\n           [formControl]=\"fruitCtrl\"\n           [ngsChipInputFor]=\"chipGrid\"\n           [ngsAutocomplete]=\"auto\"\n           [ngsChipInputSeparatorKeyCodes]=\"separatorKeysCodes\"\n           (chipInputTokenEnd)=\"add($event)\">\n  </ngs-chip-grid>\n  <ngs-autocomplete #auto=\"ngsAutocomplete\" (optionSelected)=\"selected($event)\">\n    @for (fruit of filteredFruits | async; track fruit) {\n      <ngs-option [value]=\"fruit\">{{ fruit }}</ngs-option>\n    }\n  </ngs-autocomplete>\n</ngs-form-field>"
         }
       ],
       "previewAsset": "projects/components/chips/preview.svg",
@@ -1670,6 +1670,7 @@
         "--ngs-chip-font-size",
         "--ngs-chip-font-weight",
         "--ngs-chip-height",
+        "--ngs-chip-input-height",
         "--ngs-chip-outline-color",
         "--ngs-chip-padding",
         "--ngs-chip-radius",
@@ -1683,7 +1684,9 @@
         "--ngs-color-outline-variant",
         "--ngs-color-primary",
         "--ngs-color-surface-container-high",
+        "--ngs-field-input-height",
         "--ngs-font-size-xs",
+        "--ngs-form-field-input-height",
         "--ngs-icon-size",
         "--ngs-radius-xl"
       ],

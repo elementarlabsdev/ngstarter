@@ -10,15 +10,15 @@
           </button>
         </ngs-chip-row>
       }
+      <input [placeholder]="config().placeholder"
+             #input
+             maxlength="30"
+             [formControl]="chipsCtrl"
+             [ngsChipInputFor]="chipGrid"
+             [ngsAutocomplete]="autocomplete"
+             [ngsChipInputSeparatorKeyCodes]="separatorKeysCodes"
+             (chipInputTokenEnd)="add($event)">
     </ngs-chip-grid>
-    <input [placeholder]="config().placeholder"
-           #input
-           maxlength="30"
-           [formControl]="chipsCtrl"
-           [ngsChipInputFor]="chipGrid"
-           [ngsAutocomplete]="autocomplete"
-           [ngsChipInputSeparatorKeyCodes]="separatorKeysCodes"
-           (chipInputTokenEnd)="add($event)">
     @if (isLoading) {
       <div class="loader">
         <ngs-progress-spinner

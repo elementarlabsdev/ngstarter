@@ -27,12 +27,14 @@
   overflow: hidden;
   cursor: pointer;
 
-  &[appearance="filled"] {
+  &[appearance="filled"],
+  &.ngs-chip-filled {
     background: var(--ngs-chip-background);
     color: var(--ngs-chip-color);
   }
 
-  &[appearance="outlined"] {
+  &[appearance="outlined"],
+  &.ngs-chip-outlined {
     --ngs-chip-background: transparent;
     color: var(--ngs-chip-color);
     border: 1px solid var(--ngs-chip-border-color);
@@ -113,10 +115,46 @@
   .controls {
     display: flex;
     align-items: center;
-    gap: --spacing(1);
+    gap: --spacing(.5);
 
     &:empty {
       display: none;
+    }
+
+    ::ng-deep {
+      .ngs-chip-edit,
+      .ngs-chip-remove {
+        --ngs-icon-size: --spacing(4);
+
+        appearance: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+        width: --spacing(5);
+        height: --spacing(5);
+        padding: 0;
+        margin: 0;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+        line-height: 1;
+        vertical-align: middle;
+        cursor: pointer;
+        opacity: 0.65;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      .ngs-chip-remove {
+        &:hover {
+          color: var(--ngs-color-danger);
+        }
+      }
     }
   }
 
@@ -138,24 +176,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  .ngs-chip-edit,
-  .ngs-chip-remove {
-    line-height: 0;
-    --ngs-icon-size: --spacing(5);
-    cursor: pointer;
-    opacity: 0.55;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-
-  .ngs-chip-remove {
-    &:hover {
-      color: var(--ngs-color-danger);
-    }
   }
 
   &.ngs-chip-editing {

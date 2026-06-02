@@ -16,13 +16,14 @@
         </button>
       </ngs-chip-row>
     }
+
+    <input
+      ngsInput
+      placeholder="New fruit..."
+      [ngsChipInputFor]="chipGrid"
+      [ngsChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      [ngsChipInputAddOnBlur]="addOnBlur"
+      (chipInputTokenEnd)="add($event)"
+    />
   </ngs-chip-grid>
-  <input
-    ngsInput
-    placeholder="New fruit..."
-    [ngsChipInputFor]="chipGrid"
-    [ngsChipInputSeparatorKeyCodes]="separatorKeysCodes"
-    [ngsChipInputAddOnBlur]="addOnBlur"
-    (chipInputTokenEnd)="add($event)"
-  />
 </ngs-form-field>

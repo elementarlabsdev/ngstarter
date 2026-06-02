@@ -256,11 +256,9 @@
 
   ::ng-deep {
     ngs-chip-grid {
-      &:empty {
-        display: none;
+      &:has(ngs-chip-row) {
+        margin-top: --spacing(1.5);
       }
-
-      margin: --spacing(1) 0;
     }
 
     .ngs-date-range-input {

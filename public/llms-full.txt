@@ -230,7 +230,7 @@ Typography:
   exports: `Chip`, `ChipAvatar`, `ChipControl`, `ChipEdit`, `ChipEditedEvent`, `ChipGrid`, `ChipInput`, `ChipInputEvent`, `ChipListbox`, `ChipOption`, `ChipRemove`, `ChipRow`
   inputs: `appearance`, `disabled`, `editable`, `id`, `multiple`, `ngsChipInputAddOnBlur`, `ngsChipInputFor`, `placeholder`, `required`, `selected`, `value`
   outputs: `chipInputTokenEnd`, `destroyed`, `edited`, `removed`, `selectionChange`, `valueChange`
-  tokens: `--ngs-avatar-size`, `--ngs-chip-background`, `--ngs-chip-border-color`, `--ngs-chip-color`, `--ngs-chip-font-size`, `--ngs-chip-font-weight`, `--ngs-chip-height`, `--ngs-chip-outline-color`, `--ngs-chip-padding`, `--ngs-chip-radius`, `--ngs-chip-selected-background`, `--ngs-chip-selected-color`, `--ngs-chip-set-gap`, `--ngs-chip-set-spacing`, `--ngs-color-danger`, `--ngs-color-on-primary`
+  tokens: `--ngs-avatar-size`, `--ngs-chip-background`, `--ngs-chip-border-color`, `--ngs-chip-color`, `--ngs-chip-font-size`, `--ngs-chip-font-weight`, `--ngs-chip-height`, `--ngs-chip-input-height`, `--ngs-chip-outline-color`, `--ngs-chip-padding`, `--ngs-chip-radius`, `--ngs-chip-selected-background`, `--ngs-chip-selected-color`, `--ngs-chip-set-gap`, `--ngs-chip-set-spacing`, `--ngs-color-danger`
 - code-highlighter: `@ngstarter-ui/components/code-highlighter` docs: /components/code-highlighter
   purpose: Render formatted source code snippets with syntax highlighting.
   use when: Use in docs, developer tools, examples, and configuration previews.

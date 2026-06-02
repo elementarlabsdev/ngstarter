@@ -46,7 +46,7 @@ export class ChipInput implements DoCheck {
 
   chipInputAddOnBlur = input(false, { alias: 'ngsChipInputAddOnBlur', transform: booleanAttribute });
 
-  readonly chipInputTokenEnd = output<any>();
+  readonly chipInputTokenEnd = output<ChipInputEvent>();
 
   protected readonly _value = signal('');
   protected readonly _focused = signal(false);
@@ -72,7 +72,12 @@ export class ChipInput implements DoCheck {
     if (event.defaultPrevented) {
       return;
     }
-    if (this.chipInputSeparatorKeyCodes() && (this.chipInputSeparatorKeyCodes() as any).includes(event.keyCode)) {
+    const separatorKeyCodes = this.chipInputSeparatorKeyCodes();
+    const isSeparatorKey = Array.isArray(separatorKeyCodes)
+      ? separatorKeyCodes.includes(event.keyCode)
+      : !!separatorKeyCodes && 'has' in separatorKeyCodes && separatorKeyCodes.has(event.keyCode);
+
+    if (isSeparatorKey) {
       this.chipInputTokenEnd.emit({
         chipInput: this,
         value: this._elementRef.nativeElement.value,

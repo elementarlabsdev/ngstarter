@@ -1,7 +1,6 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  ViewEncapsulation,
   input,
   booleanAttribute,
   forwardRef,
@@ -42,7 +41,6 @@ export interface ChipEditedEvent {
   },
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   imports: [
     AutoFocusDirective
   ],
