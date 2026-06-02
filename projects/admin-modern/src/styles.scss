@@ -195,12 +195,12 @@
   }
 
   .aligned-chip {
-    --ngs-chip-bg: color-mix(in srgb, #efb7b9 30%, white);
+    --ngs-chip-background: color-mix(in srgb, #efb7b9 30%, white);
     --ngs-chip-color: #92565a;
   }
 
   .avg-chip {
-    --ngs-chip-bg: #eeeeec;
+    --ngs-chip-background: #eeeeec;
     --ngs-chip-color: #858581;
   }
 
@@ -234,17 +234,17 @@
   }
 
   .tone-warm {
-    --ngs-chip-bg: #f8e8cd;
+    --ngs-chip-background: #f8e8cd;
     --ngs-chip-color: #9a6b2f;
   }
 
   .tone-green {
-    --ngs-chip-bg: #dff4ca;
+    --ngs-chip-background: #dff4ca;
     --ngs-chip-color: #4c7b31;
   }
 
   .tone-blue {
-    --ngs-chip-bg: #dfe7ff;
+    --ngs-chip-background: #dfe7ff;
     --ngs-chip-color: #536aa5;
   }
 

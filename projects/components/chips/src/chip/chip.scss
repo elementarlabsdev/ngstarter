@@ -2,13 +2,16 @@
 @reference '../../../styles/_common.scss';
 
 :host {
-  --ngs-chip-bg: var(--ngs-color-surface-container-high);
+  --ngs-chip-background: var(--ngs-color-surface-container-high);
   --ngs-chip-color: var(--ngs-color-on-surface);
   --ngs-chip-radius: var(--ngs-radius-xl);
   --ngs-chip-padding: 0 --spacing(3);
   --ngs-chip-font-size: var(--ngs-font-size-xs);
   --ngs-chip-font-weight: 500;
   --ngs-chip-height: --spacing(8);
+  --ngs-chip-border-color: var(--ngs-chip-outline-color, var(--ngs-color-outline-variant));
+  --ngs-chip-selected-background: var(--ngs-color-primary);
+  --ngs-chip-selected-color: var(--ngs-color-on-primary);
 
   display: inline-flex;
   align-items: center;
@@ -25,17 +28,17 @@
   cursor: pointer;
 
   &[appearance="filled"] {
-    background: var(--ngs-chip-bg);
+    background: var(--ngs-chip-background);
     color: var(--ngs-chip-color);
   }
 
   &[appearance="outlined"] {
-    background: transparent;
+    --ngs-chip-background: transparent;
     color: var(--ngs-chip-color);
-    border: 1px solid var(--ngs-chip-outline-color, var(--ngs-color-outline-variant));
+    border: 1px solid var(--ngs-chip-border-color);
 
     &.ngs-chip-selected {
-      border-color: var(--ngs-chip-selected-bg, var(--ngs-color-primary));
+      border-color: var(--ngs-chip-selected-background);
     }
   }
 
@@ -163,7 +166,7 @@
   }
 
   &.ngs-chip-selected {
-    --ngs-chip-bg: var(--ngs-chip-selected-bg, var(--ngs-color-primary));
-    --ngs-chip-color: var(--ngs-chip-selected-color, var(--ngs-color-on-primary));
+    --ngs-chip-background: var(--ngs-chip-selected-background);
+    --ngs-chip-color: var(--ngs-chip-selected-color);
   }
 }

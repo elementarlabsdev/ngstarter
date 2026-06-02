@@ -54,27 +54,27 @@
         <ngs-filter-trigger>Status
           <ng-template ngsFilterTriggerValue let-statuses let-count="count">
             @if (count === 1) {
-              <span class="filter-trigger-status-value">
-                        <span
-                          class="status-dot"
-                          [class.is-active]="statuses[0].tone === 'active'"
-                          [class.is-pending]="statuses[0].tone === 'pending'"
-                          [class.is-inactive]="statuses[0].tone === 'inactive'"></span>
+              <div class="inline-flex min-w-0 items-center gap-2">
+                <span
+                  class="size-2 flex-none rounded-full"
+                  [class.bg-positive]="statuses[0].tone === 'active'"
+                  [class.bg-notice]="statuses[0].tone === 'pending'"
+                  [class.bg-negative]="statuses[0].tone === 'inactive'"></span>
                 {{ statuses[0].label }}
-                      </span>
+              </div>
             } @else {
-              <span>{{ count }}</span>
+              {{ count }}
             }
           </ng-template>
         </ngs-filter-trigger>
 
         @for (statusOption of statuses(); track statusOption.id) {
           <ngs-option [value]="statusOption.id" [data]="statusOption">
-                    <span
-                      class="status-dot"
-                      [class.is-active]="statusOption.tone === 'active'"
-                      [class.is-pending]="statusOption.tone === 'pending'"
-                      [class.is-inactive]="statusOption.tone === 'inactive'"></span>
+            <span
+              class="size-2 flex-none rounded-full"
+              [class.bg-positive]="statusOption.tone === 'active'"
+              [class.bg-notice]="statusOption.tone === 'pending'"
+              [class.bg-negative]="statusOption.tone === 'inactive'"></span>
             {{ statusOption.label }}
           </ngs-option>
         }

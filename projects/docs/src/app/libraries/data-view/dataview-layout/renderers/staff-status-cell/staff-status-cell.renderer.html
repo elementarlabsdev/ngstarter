@@ -1,7 +1,6 @@
 @if (fieldData(); as status) {
   <ngs-chip
     appearance="outlined"
-    class="staff-status-chip"
     [class.is-active]="status.tone === 'active'"
     [class.is-pending]="status.tone === 'pending'"
     [class.is-inactive]="status.tone === 'inactive'">

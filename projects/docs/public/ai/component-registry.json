@@ -1664,7 +1664,8 @@
       ],
       "cssTokens": [
         "--ngs-avatar-size",
-        "--ngs-chip-bg",
+        "--ngs-chip-background",
+        "--ngs-chip-border-color",
         "--ngs-chip-color",
         "--ngs-chip-font-size",
         "--ngs-chip-font-weight",
@@ -1672,7 +1673,7 @@
         "--ngs-chip-outline-color",
         "--ngs-chip-padding",
         "--ngs-chip-radius",
-        "--ngs-chip-selected-bg",
+        "--ngs-chip-selected-background",
         "--ngs-chip-selected-color",
         "--ngs-chip-set-gap",
         "--ngs-chip-set-spacing",

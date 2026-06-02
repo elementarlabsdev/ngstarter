@@ -145,8 +145,6 @@ export class DataViewLayout {
       sortable: false,
       resizable: false,
       withColumnSettings: false,
-      pinned: true,
-      pinAlign: 'end'
     }
   ]);
 
