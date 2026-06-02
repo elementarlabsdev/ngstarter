@@ -14,7 +14,13 @@ import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
 import { PageEvent, Paginator } from '@ngstarter-ui/components/paginator';
 import { Panel, PanelContent, PanelFooter, PanelHeader } from '@ngstarter-ui/components/panel';
-import { FilterTrigger, FilterTriggerValueDirective, Option, Select } from '@ngstarter-ui/components/select';
+import {
+  FilterTrigger,
+  FilterTriggerValueDirective,
+  Option,
+  Select,
+  SelectFooter
+} from '@ngstarter-ui/components/select';
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
@@ -43,7 +49,8 @@ import {Toolbar, ToolbarSpacer} from "@ngstarter-ui/components/toolbar";
     Select,
     PanelSubheader,
     Toolbar,
-    ToolbarSpacer
+    ToolbarSpacer,
+    SelectFooter
   ],
   templateUrl: './dataview-layout.html',
   styleUrl: './dataview-layout.scss'
@@ -125,7 +132,7 @@ export class DataViewLayout {
       name: 'Status',
       field: 'status',
       cellRenderer: 'staffStatus',
-      width: '150px',
+      width: '160px',
       sortable: true,
       valueGetter: (status: StaffStatus) => status.label
     },
@@ -133,7 +140,7 @@ export class DataViewLayout {
       name: '',
       field: 'actions',
       cellRenderer: 'staffActions',
-      width: '66px',
+      width: '80px',
       sortable: false,
       resizable: false,
       withColumnSettings: false,
@@ -143,9 +150,9 @@ export class DataViewLayout {
   ]);
 
   readonly cellRenderers = signal<DataViewCellRendererDef[]>([
-    cellRenderer('staffName', () => import('./renderers/staff-name-cell.renderer').then(c => c.StaffNameCellRenderer)),
-    cellRenderer('staffStatus', () => import('./renderers/staff-status-cell.renderer').then(c => c.StaffStatusCellRenderer)),
-    cellRenderer('staffActions', () => import('./renderers/staff-actions-cell.renderer').then(c => c.StaffActionsCellRenderer))
+    cellRenderer('staffName', () => import('./renderers/staff-name-cell/staff-name-cell.renderer').then(c => c.StaffNameCellRenderer)),
+    cellRenderer('staffStatus', () => import('./renderers/staff-status-cell/staff-status-cell.renderer').then(c => c.StaffStatusCellRenderer)),
+    cellRenderer('staffActions', () => import('./renderers/staff-actions-cell/staff-actions-cell.renderer').then(c => c.StaffActionsCellRenderer))
   ]);
 
   readonly staffMembers = signal<StaffMember[]>(STAFF_MEMBERS);

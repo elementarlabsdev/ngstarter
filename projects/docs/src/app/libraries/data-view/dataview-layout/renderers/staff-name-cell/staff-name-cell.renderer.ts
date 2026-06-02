@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { Dicebear } from '@ngstarter-ui/components/avatar';
 import { DataViewCellRenderer, DataViewColumnDef } from '@ngstarter-ui/components/data-view';
-import { StaffMember } from '../staff-data';
+import { StaffMember } from '../../staff-data';
 import {Chip} from "@ngstarter-ui/components/chips";
 
 @Component({

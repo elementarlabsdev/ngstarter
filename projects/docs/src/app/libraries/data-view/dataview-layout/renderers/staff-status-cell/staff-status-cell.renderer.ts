@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { Chip } from '@ngstarter-ui/components/chips';
 import { DataViewCellRenderer, DataViewColumnDef } from '@ngstarter-ui/components/data-view';
-import { StaffStatus } from '../staff-data';
+import { StaffStatus } from '../../staff-data';
 
 @Component({
   selector: 'app-dataview-layout-staff-status-cell',
