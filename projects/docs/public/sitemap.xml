@@ -1006,6 +1006,11 @@
     <priority>0.55</priority>
   </url>
   <url>
+    <loc>https://docs.ngstarter.com/libraries/data-view/dataview-layout</loc>
+    <lastmod>2026-06-02</lastmod>
+    <priority>0.55</priority>
+  </url>
+  <url>
     <loc>https://docs.ngstarter.com/libraries/data-view/column-pinning</loc>
     <lastmod>2026-05-30</lastmod>
     <priority>0.55</priority>

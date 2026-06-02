@@ -9,4 +9,12 @@
   &:not([class*="h-"]):not(.is-auto-height) {
     height: var(--ngs-panel-subheader-height);
   }
+
+  &:not([class*="h-"]):not(.is-auto-height) {
+    height: var(--ngs-panel-header-height);
+  }
+
+  &.as-block {
+    display: block;
+  }
 }

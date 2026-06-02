@@ -1,7 +1,6 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  ViewEncapsulation,
   input,
   booleanAttribute,
   forwardRef,
@@ -13,8 +12,19 @@ import { Chip } from '../chip/chip';
 
 @Component({
   selector: 'ngs-chip-option',
+  exportAs: 'ngsChipOption',
+  imports: [
+    AutoFocusDirective
+  ],
   templateUrl: '../chip/chip.html',
   styleUrl: '../chip/chip.scss',
+  providers: [
+    {
+      provide: Chip,
+      useExisting: forwardRef(() => ChipOption)
+    }
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-chip ngs-chip-option',
     '[class.ngs-chip-selected]': 'isSelected',
@@ -25,18 +35,6 @@ import { Chip } from '../chip/chip';
     '[attr.aria-disabled]': 'disabled()',
     '(click)': 'toggleSelected()',
   },
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  imports: [
-    AutoFocusDirective
-  ],
-  providers: [
-    {
-      provide: Chip,
-      useExisting: forwardRef(() => ChipOption)
-    }
-  ]
 })
 export class ChipOption extends Chip {
   selected = input(false, { transform: booleanAttribute });
@@ -59,7 +57,7 @@ export class ChipOption extends Chip {
   readonly selectionChange = output<{
     source: ChipOption;
     selected: boolean;
-}>();
+  }>();
 
   toggleSelected(): void {
     if (!this.disabled()) {

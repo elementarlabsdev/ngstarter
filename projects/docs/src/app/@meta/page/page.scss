@@ -1,6 +1,18 @@
 :host {
   display: block;
 
+  .page-container {
+    @media (min-width: 1024px) {
+      width: 876px;
+    }
+  }
+
+  .page-container.is-wide {
+    @media (min-width: 1024px) {
+      width: min(100%, 1280px);
+    }
+  }
+
   .title {
     &:empty {
       display: none;

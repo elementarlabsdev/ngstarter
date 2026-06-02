@@ -1,0 +1,31 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .staff-status-chip {
+    --ngs-chip-height: --spacing(9);
+    --ngs-chip-padding: 0 --spacing(4);
+    --ngs-chip-radius: 999px;
+    --ngs-chip-font-size: var(--ngs-font-size-sm);
+    --ngs-chip-font-weight: 500;
+  }
+
+  .staff-status-chip.is-active {
+    --ngs-chip-background: color-mix(in srgb, var(--ngs-color-success) 10%, transparent);
+    --ngs-chip-border-color: color-mix(in srgb, var(--ngs-color-success) 24%, transparent);
+    --ngs-chip-color: var(--ngs-color-success);
+  }
+
+  .staff-status-chip.is-pending {
+    --ngs-chip-background: color-mix(in srgb, var(--ngs-color-warning) 12%, transparent);
+    --ngs-chip-border-color: color-mix(in srgb, var(--ngs-color-warning) 26%, transparent);
+    --ngs-chip-color: var(--ngs-color-warning);
+  }
+
+  .staff-status-chip.is-inactive {
+    --ngs-chip-background: color-mix(in srgb, var(--ngs-color-danger) 10%, transparent);
+    --ngs-chip-border-color: color-mix(in srgb, var(--ngs-color-danger) 24%, transparent);
+    --ngs-chip-color: var(--ngs-color-danger);
+  }
+}

@@ -1005,6 +1005,12 @@ export class App implements OnInit {
         {
           key: uuid(),
           type: 'link',
+          name: 'DataView Layout',
+          link: '/libraries/data-view/dataview-layout'
+        },
+        {
+          key: uuid(),
+          type: 'link',
           name: 'With selection',
           link: '/libraries/data-view/with-selection'
         },
@@ -1111,23 +1117,11 @@ export class App implements OnInit {
   activeKey: null | string = null;
 
   private _activateLink() {
-    const activeLink = this.navItemLinks.find(
-      navItem => {
-        if (this.location.path() === '' && navItem.link === '/') {
-          return true;
-        }
-
-        if (navItem.link === this.location.path()) {
-          return true;
-        }
-
-        if (navItem.link !== '/') {
-          return this.location.path().includes(navItem.link);
-        }
-
-        return false;
-      }
-    );
+    const currentPath = this.location.path() || '/';
+    const exactActiveLink = this.navItemLinks.find(navItem => navItem.link === currentPath);
+    const activeLink = exactActiveLink ?? this.navItemLinks
+      .filter(navItem => navItem.link !== '/' && currentPath.startsWith(`${navItem.link}/`))
+      .sort((a, b) => b.link.length - a.link.length)[0];
 
     if (activeLink) {
       this.activeKey = activeLink.key;

@@ -7,6 +7,11 @@ export const routes: Routes = [
     title: 'Data View / Basic Dataview'
   },
   {
+    path: 'dataview-layout',
+    loadComponent: () => import('./dataview-layout/dataview-layout').then(c => c.DataViewLayout),
+    title: 'Data View / DataView Layout'
+  },
+  {
     path: 'column-pinning',
     loadComponent: () => import('./column-pinning/column-pinning').then(c => c.DataViewColumnPinning),
     title: 'Data View / Column Pinning'

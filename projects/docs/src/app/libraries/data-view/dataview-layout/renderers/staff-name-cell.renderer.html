@@ -1,0 +1,9 @@
+<!--<span class="staff-name-cell">-->
+<!--  <ngs-dicebear [key]="element()?.name" preset="initials" class="staff-name-avatar"/>-->
+<!--  <span class="staff-name-text">{{ element()?.name }}</span>-->
+<!--</span>-->
+
+<ngs-chip>
+  <ngs-dicebear [key]="element()?.name" preset="initials" ngsChipAvatar class="size-7"/>
+  {{ element()?.name }}
+</ngs-chip>
