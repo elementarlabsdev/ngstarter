@@ -33,7 +33,7 @@ export class Api {
   readonly properties = [
     {
       name: 'maxCount',
-      description: 'Maximum selected count before the multiple-selection badge renders the value with a plus suffix.',
+      description: 'Maximum selected count before the multiple-selection badge renders a plus suffix, for example 3+.',
       type: 'number',
       default: '99'
     },
@@ -48,12 +48,12 @@ export class Api {
   readonly templateContext = [
     {
       name: '$implicit / data',
-      description: 'Selected option data. For multiple Select controls this is an array; for single Select controls this is one value.',
+      description: 'Selected ngs-option[data] payload. For multiple Select controls this is an array; for single Select controls this is one value.',
       type: 'unknown | unknown[]'
     },
     {
       name: 'text',
-      description: 'Selected option display text from the parent Select, available as let-text="text" in the custom value template.',
+      description: 'Fallback selected option display text from the parent Select, available as let-text="text" when the template needs plain text alongside data.',
       type: 'string'
     },
     {

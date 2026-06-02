@@ -62,6 +62,29 @@ export class Api {
     }
   ];
 
+  chipCssTokens = [
+    {
+      name: '--ngs-chip-background',
+      description: 'Background color used by filled chips and selected chip state. Use this token instead of the previous --ngs-chip-bg name.'
+    },
+    {
+      name: '--ngs-chip-color',
+      description: 'Text and icon color used by the chip.'
+    },
+    {
+      name: '--ngs-chip-border-color',
+      description: 'Border color used by outlined chips.'
+    },
+    {
+      name: '--ngs-chip-selected-background',
+      description: 'Background color applied when a chip option is selected.'
+    },
+    {
+      name: '--ngs-chip-selected-color',
+      description: 'Text and icon color applied when a chip option is selected.'
+    }
+  ];
+
   chipListboxProperties = [
     {
       name: 'multiple',

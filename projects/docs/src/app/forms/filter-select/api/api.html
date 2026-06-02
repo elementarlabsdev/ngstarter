@@ -9,6 +9,10 @@
   Add <code class="code">[data]</code> to <code class="code">ngs-option</code> when the trigger value template needs the
   full selected object instead of only the option value or text.
 </p>
+<p>
+  If no custom value template is provided, the trigger falls back to the selected option text from the parent
+  <code class="code">ngs-select</code>.
+</p>
 
 <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
   <table ngs-table [dataSource]="properties">
@@ -39,7 +43,8 @@
 
 <p>
   Place <code class="code">ng-template[ngsFilterTriggerValue]</code> inside
-  <code class="code">ngs-filter-trigger</code> to render the selected value from option data.
+  <code class="code">ngs-filter-trigger</code> to render the selected value from option data. The template receives
+  the selected <code class="code">ngs-option[data]</code> payload as its implicit value.
 </p>
 
 <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">

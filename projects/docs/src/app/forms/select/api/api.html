@@ -81,3 +81,47 @@
     </tr>
   </tbody>
 </table>
+
+<h4>Public Properties</h4>
+<table class="w-full border-collapse border border-slate-400 my-4">
+  <thead>
+    <tr class="bg-slate-100">
+      <th class="border border-slate-300 p-2 text-left">Name</th>
+      <th class="border border-slate-300 p-2 text-left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>hasValue</code></td>
+      <td class="border border-slate-300 p-2">Computed signal that returns <code>true</code> when the select currently has a selected value. It is <code>false</code> for <code>null</code>, <code>undefined</code>, an empty string, or an empty array.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>ngs-option Inputs</h4>
+<table class="w-full border-collapse border border-slate-400 my-4">
+  <thead>
+    <tr class="bg-slate-100">
+      <th class="border border-slate-300 p-2 text-left">Name</th>
+      <th class="border border-slate-300 p-2 text-left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>value</code></td>
+      <td class="border border-slate-300 p-2">Value written to the parent select control when this option is selected.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>data</code></td>
+      <td class="border border-slate-300 p-2">Optional full option payload, such as an object or typed status. The select value still uses <code>value</code>, while filter trigger custom value templates receive <code>data</code> for rendering richer selected values.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>disabled</code></td>
+      <td class="border border-slate-300 p-2">Whether the option is disabled.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>selected</code></td>
+      <td class="border border-slate-300 p-2">Whether the option starts selected.</td>
+    </tr>
+  </tbody>
+</table>
