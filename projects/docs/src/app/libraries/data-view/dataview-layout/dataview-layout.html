@@ -22,6 +22,7 @@
         #staffTypeSelect
         [formControl]="staffType()"
         hideCheckIcon
+        clearable
         aria-label="Staff type filter"
         class="layout-filter-select"
         (selectionChange)="resetPage()">
@@ -35,6 +36,7 @@
       <ngs-select
         [formControl]="position()"
         hideCheckIcon
+        clearable
         aria-label="Position filter"
         class="layout-filter-select"
         (selectionChange)="resetPage()">
@@ -48,6 +50,7 @@
       <ngs-select
         [formControl]="status()"
         multiple
+        clearable
         aria-label="Status filter"
         class="layout-filter-select"
         (selectionChange)="resetPage()">
@@ -80,10 +83,6 @@
         }
       </ngs-select>
 
-      <button type="button" ngsIconButton aria-label="Open advanced filters" class="layout-filter-button">
-        <ngs-icon name="fluent:filter-24-regular"/>
-      </button>
-
       <ngs-toolbar-spacer/>
 
       <div class="w-[300px]">
@@ -99,15 +98,22 @@
         </ngs-form-field>
       </div>
 
-      <button type="button" ngsButton="filled">
-        <ngs-icon name="fluent:document-pdf-24-regular"/>
-        Export PDF
+      <button type="button" ngsButton="filled" [ngsMenuTriggerFor]="exportMenu">
+        <ngs-icon name="fluent:arrow-download-24-regular"/>
+        Export
       </button>
 
-      <button type="button" ngsButton="filled">
-        <ngs-icon name="fluent:data-bar-vertical-24-regular"/>
-        Export Excel
-      </button>
+      <ngs-menu #exportMenu="ngsMenu">
+        <button type="button" ngs-menu-item>
+          <ngs-icon name="fluent:document-pdf-24-regular"/>
+          Export PDF
+        </button>
+
+        <button type="button" ngs-menu-item>
+          <ngs-icon name="fluent:data-bar-vertical-24-regular"/>
+          Export Excel
+        </button>
+      </ngs-menu>
     </ngs-toolbar>
   </ngs-panel-subheader>
 

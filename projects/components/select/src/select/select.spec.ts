@@ -69,6 +69,47 @@ class MultipleSelectHost {
 
 @Component({
   standalone: true,
+  imports: [ReactiveFormsModule, Select, Option],
+  template: `
+    <ngs-select
+      [formControl]="status()"
+      clearable
+      aria-label="Clearable status"
+      (selectionChange)="changes.set([...changes(), $event])">
+      <ngs-option value="active">Active</ngs-option>
+      <ngs-option value="pending">Pending</ngs-option>
+    </ngs-select>
+  `
+})
+class ClearableSingleSelectHost {
+  readonly status = signal(new FormControl<string | null>('active'));
+  readonly changes = signal<SelectChange[]>([]);
+}
+
+@Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, Select, Option],
+  template: `
+    <ngs-select
+      [formControl]="teams()"
+      multiple
+      clearable
+      aria-label="Clearable teams"
+      (selectionChange)="changes.set([...changes(), $event])">
+      @for (team of teamOptions(); track team) {
+        <ngs-option [value]="team">{{ team }}</ngs-option>
+      }
+    </ngs-select>
+  `
+})
+class ClearableMultipleSelectHost {
+  readonly teams = signal(new FormControl<string[]>(['Design', 'Support']));
+  readonly teamOptions = signal(['Design', 'Engineering', 'Product', 'Support']);
+  readonly changes = signal<SelectChange[]>([]);
+}
+
+@Component({
+  standalone: true,
   imports: [Select, Option],
   template: `
     <ngs-select [disabled]="disabled()" aria-label="Disabled input">
@@ -285,6 +326,7 @@ describe('Select', () => {
 
   it('renders combobox accessibility attributes, placeholder, and empty state', async () => {
     const fixture = await createHost(SingleSelectHost);
+    const select = getSelect(fixture);
     const host = getSelectHost(fixture);
 
     expect(host.getAttribute('role')).toBe('combobox');
@@ -295,6 +337,7 @@ describe('Select', () => {
     expect(host.getAttribute('tabindex')).toBe('5');
     expect(host.getAttribute('aria-expanded')).toBe('false');
     expect(host.classList.contains('ngs-select-empty')).toBe(true);
+    expect(select.hasValue()).toBe(false);
     expect(host.textContent).toContain('Choose status');
   });
 
@@ -375,6 +418,7 @@ describe('Select', () => {
     expect(select.triggerValue()).toBe('Active');
     expect(select.selectedCount()).toBe(1);
     expect(select.selectedData()).toBe('active');
+    expect(select.hasValue()).toBe(true);
     expect(select.panelOpen()).toBe(false);
     expect(component.changes().length).toBe(1);
     expect(component.changes()[0].source).toBe(select);
@@ -481,6 +525,7 @@ describe('Select', () => {
     expect(select.selectedCount()).toBe(2);
     expect(select.selectedData()).toEqual(['Design', 'Support']);
     expect(select.triggerValue()).toBe('Design, Support');
+    expect(select.hasValue()).toBe(true);
 
     openSelect(fixture);
     const options = getOverlayOptions();
@@ -515,6 +560,62 @@ describe('Select', () => {
     expect(select.selectedCount()).toBe(1);
     expect(select.triggerValue()).toBe('Product');
     expect(select.selectedData()).toEqual(['Product']);
+  });
+
+  it('shows a clear button only when clearable select has a value', async () => {
+    const fixture = await createHost(ClearableSingleSelectHost);
+    const component = fixture.componentInstance;
+    const host = getSelectHost(fixture);
+
+    expect(host.classList.contains('ngs-select-clearable')).toBe(true);
+    expect(host.classList.contains('ngs-select-has-clear')).toBe(true);
+    expect(host.querySelector('.ngs-select-clear-button')).toBeTruthy();
+
+    component.status().setValue(null);
+    fixture.detectChanges();
+
+    expect(host.classList.contains('ngs-select-has-clear')).toBe(false);
+    expect(host.querySelector('.ngs-select-clear-button')).toBeNull();
+  });
+
+  it('clears a single select value without opening the panel', async () => {
+    const fixture = await createHost(ClearableSingleSelectHost);
+    const component = fixture.componentInstance;
+    const select = getSelect(fixture);
+    const host = getSelectHost(fixture);
+    const clearButton = host.querySelector('.ngs-select-clear-button') as HTMLButtonElement;
+
+    clearButton.click();
+    fixture.detectChanges();
+
+    expect(component.status().value).toBeNull();
+    expect(select.value()).toBeNull();
+    expect(select.empty).toBe(true);
+    expect(select.hasValue()).toBe(false);
+    expect(select.panelOpen()).toBe(false);
+    expect(component.changes().length).toBe(1);
+    expect(component.changes()[0].value).toBeNull();
+    expect(host.querySelector('.ngs-select-clear-button')).toBeNull();
+  });
+
+  it('clears a multiple select value to an empty array without opening the panel', async () => {
+    const fixture = await createHost(ClearableMultipleSelectHost);
+    const component = fixture.componentInstance;
+    const select = getSelect(fixture);
+    const host = getSelectHost(fixture);
+    const clearButton = host.querySelector('.ngs-select-clear-button') as HTMLButtonElement;
+
+    clearButton.click();
+    fixture.detectChanges();
+
+    expect(component.teams().value).toEqual([]);
+    expect(select.value()).toEqual([]);
+    expect(select.selectedCount()).toBe(0);
+    expect(select.empty).toBe(true);
+    expect(select.hasValue()).toBe(false);
+    expect(select.panelOpen()).toBe(false);
+    expect(component.changes().length).toBe(1);
+    expect(component.changes()[0].value).toEqual([]);
   });
 
   it('updates option display text when projected option content changes', async () => {

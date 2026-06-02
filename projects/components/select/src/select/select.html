@@ -12,6 +12,19 @@
     }
   </div>
 </div>
+@if (showClearButton()) {
+  <button
+    type="button"
+    class="ngs-select-clear-button"
+    aria-label="Clear selection"
+    (click)="clear($event)">
+    <svg viewBox="0 0 24 24" class="ngs-select-clear-icon" aria-hidden="true">
+      <path
+        fill="currentColor"
+        d="M6.22 6.22a.75.75 0 0 1 1.06 0L12 10.94l4.72-4.72a.75.75 0 1 1 1.06 1.06L13.06 12l4.72 4.72a.75.75 0 1 1-1.06 1.06L12 13.06l-4.72 4.72a.75.75 0 0 1-1.06-1.06L10.94 12 6.22 7.28a.75.75 0 0 1 0-1.06Z"/>
+    </svg>
+  </button>
+}
 <div class="ngs-select-arrow-wrapper">
   <svg viewBox="0 0 24 24" class="ngs-select-arrow">
     <path fill="currentColor"
@@ -51,4 +64,3 @@
     <ng-content select="ngs-select-footer"/>
   </div>
 </ng-template>
-

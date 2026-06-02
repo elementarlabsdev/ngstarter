@@ -1,5 +1,11 @@
 <h3>Select API</h3>
 
+<h4>Clearable usage</h4>
+<pre><code class="code">&lt;ngs-select clearable [formControl]="status"&gt;
+  &lt;ngs-option value="active"&gt;Active&lt;/ngs-option&gt;
+  &lt;ngs-option value="pending"&gt;Pending&lt;/ngs-option&gt;
+&lt;/ngs-select&gt;</code></pre>
+
 <h4>Inputs</h4>
 <table class="w-full border-collapse border border-slate-400 my-4">
   <thead>
@@ -32,6 +38,10 @@
     <tr>
       <td class="border border-slate-300 p-2"><code>hideCheckIcon</code></td>
       <td class="border border-slate-300 p-2">Whether to hide the check icon for selected options.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>clearable</code></td>
+      <td class="border border-slate-300 p-2">Whether to show a clear button next to the arrow when a value is selected. Clearing emits <code>selectionChange</code> and writes <code>null</code> for single select or an empty array for multiple select.</td>
     </tr>
     <tr>
       <td class="border border-slate-300 p-2"><code>ariaLabel</code></td>

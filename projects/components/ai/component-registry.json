@@ -1663,6 +1663,7 @@
         "valueChange"
       ],
       "cssTokens": [
+        "--ngs-avatar-size",
         "--ngs-chip-bg",
         "--ngs-chip-color",
         "--ngs-chip-font-size",
@@ -7531,6 +7532,7 @@
       "useWhen": "Use ngs-select inside one ngs-form-field when a form, filter, setting, table filter, DataView filter, or admin configuration field should choose from predefined options. Use ngs-option for options, ngs-optgroup for visible grouping, multiple for array values, placeholder, required, disabled, Angular forms, value, and selectionChange for state. Use ngs-select-trigger to customize the closed label, and ngs-select-header, ngs-select-body, or ngs-select-footer when the dropdown panel needs search, custom scrolling, or supporting controls. Do not use Select as a command menu or action list; use Menu. Do not use for route or page navigation; use Navigation, Tabs, Sidebar, Sidenav, or RailNav. Do not use for compact visible mode switching; use Segmented. Do not use for simple visible choices or rich card choices; use Radio or RadioCard. Do not use for arbitrary free text or large remote search suggestion flows; use Autocomplete or a dedicated async picker. Do not use generic Select when a domain-specific control exists, such as CountrySelect, CurrencySelect, DateFormatSelect, or TimezoneSelect.",
       "exampleTopics": [
         "Basic Select",
+        "Clearable Select",
         "Getting and setting the select value",
         "Form Field Features",
         "Disabled",
@@ -7546,25 +7548,25 @@
         "Filter trigger count options",
         "Filter trigger"
       ],
-      "minimalExample": "<p>Basic mat-select</p>\n<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite food</ngs-label>\n  <ngs-select>\n    @for (food of foods; track food) {\n      <ngs-option [value]=\"food.value\">{{food.viewValue}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>",
+      "minimalExample": "<p>Basic ngs-select</p>\n<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite food</ngs-label>\n  <ngs-select>\n    @for (food of foods; track food) {\n      <ngs-option [value]=\"food.value\">{{food.viewValue}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>",
       "exampleFiles": [
         {
           "name": "basic-select-example",
           "title": "Basic select",
           "file": "projects/docs/src/app/forms/select/_examples/basic-select-example/basic-select-example.html",
-          "source": "<p>Basic mat-select</p>\n<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite food</ngs-label>\n  <ngs-select>\n    @for (food of foods; track food) {\n      <ngs-option [value]=\"food.value\">{{food.viewValue}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
+          "source": "<p>Basic ngs-select</p>\n<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite food</ngs-label>\n  <ngs-select>\n    @for (food of foods; track food) {\n      <ngs-option [value]=\"food.value\">{{food.viewValue}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
+        },
+        {
+          "name": "clearable-select-example",
+          "title": "Clearable select",
+          "file": "projects/docs/src/app/forms/select/_examples/clearable-select-example/clearable-select-example.html",
+          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Status</ngs-label>\n  <ngs-select [formControl]=\"status()\" clearable>\n    @for (statusOption of statuses(); track statusOption.value) {\n      <ngs-option [value]=\"statusOption.value\">{{ statusOption.label }}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
         },
         {
           "name": "custom-trigger-example",
           "title": "Custom trigger",
           "file": "projects/docs/src/app/forms/select/_examples/custom-trigger-example/custom-trigger-example.html",
           "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Toppings</ngs-label>\n  <ngs-select [formControl]=\"toppings\" multiple>\n    <ngs-select-trigger>\n      {{ toppings.value?.[0] || '' }}\n      @if ((toppings.value?.length || 0) > 1) {\n        <span class=\"opacity-75 text-sm\">\n          (+{{ (toppings.value?.length || 0) - 1 }} {{ toppings.value?.length === 2 ? 'other' : 'others' }})\n        </span>\n      }\n    </ngs-select-trigger>\n    @for (topping of toppingList; track topping) {\n      <ngs-option [value]=\"topping\">{{topping}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
-        },
-        {
-          "name": "disabled-example",
-          "title": "Disabled",
-          "file": "projects/docs/src/app/forms/select/_examples/disabled-example/disabled-example.html",
-          "source": "<p>\n  <ngs-checkbox [formControl]=\"disableSelect\">Disable select</ngs-checkbox>\n</p>\n<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Choose an option</ngs-label>\n  <ngs-select [disabled]=\"disableSelect.value\">\n    <ngs-option value=\"option1\">Option 1</ngs-option>\n    <ngs-option value=\"option2\" disabled>Option 2 (disabled)</ngs-option>\n    <ngs-option value=\"option3\">Option 3</ngs-option>\n  </ngs-select>\n</ngs-form-field>"
         }
       ],
       "previewAsset": "projects/components/select/preview.svg",
@@ -7592,6 +7594,7 @@
       "inputs": [
         "aria-describedby",
         "aria-label",
+        "clearable",
         "disabled",
         "hideCheckIcon",
         "id",
@@ -7609,6 +7612,7 @@
         "selectionChange"
       ],
       "cssTokens": [
+        "--ngs-color-danger",
         "--ngs-color-on-primary",
         "--ngs-color-on-surface",
         "--ngs-color-on-surface-variant",
@@ -7642,6 +7646,11 @@
         "--ngs-select-arrow-container-width",
         "--ngs-select-arrow-size",
         "--ngs-select-border-color",
+        "--ngs-select-clear-color",
+        "--ngs-select-clear-container-width",
+        "--ngs-select-clear-hover-color",
+        "--ngs-select-clear-icon-size",
+        "--ngs-select-clear-overlap",
         "--ngs-select-content-padding",
         "--ngs-select-font-size",
         "--ngs-select-min-width",

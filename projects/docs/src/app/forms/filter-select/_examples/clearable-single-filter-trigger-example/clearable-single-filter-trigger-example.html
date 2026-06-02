@@ -1,0 +1,7 @@
+<ngs-select [formControl]="priority()" clearable aria-label="Clearable priority filter">
+  <ngs-filter-trigger>Priority</ngs-filter-trigger>
+
+  @for (priorityOption of priorities(); track priorityOption) {
+    <ngs-option [value]="priorityOption">{{ priorityOption }}</ngs-option>
+  }
+</ngs-select>

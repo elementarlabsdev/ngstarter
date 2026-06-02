@@ -84,6 +84,8 @@ export class SelectChange {
     '[class.ngs-select-empty]': 'empty',
     '[class.ngs-select-panel-open]': 'panelOpen()',
     '[class.ngs-select-has-filter-trigger]': 'filterTrigger().length > 0',
+    '[class.ngs-select-clearable]': 'clearable()',
+    '[class.ngs-select-has-clear]': 'showClearButton()',
     '(click)': 'toggle()',
     '(keydown)': '_handleKeydown($event)',
     '(focus)': '_onFocus()',
@@ -115,6 +117,7 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
   get required(): boolean { return this._required(); }
   multiple = input(false, { transform: booleanAttribute });
   hideCheckIcon = input(false, { transform: booleanAttribute });
+  clearable = input(false, { transform: booleanAttribute });
   ariaLabel = input<string | null>(null, { alias: 'aria-label' });
   tabIndex = input<number, any>(0, {
     transform: (value: number | string | null) => value == null ? 0 : parseInt(value + '', 10)
@@ -173,6 +176,8 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
     return isEmpty;
   });
   get empty(): boolean { return this._empty(); }
+  readonly hasValue = computed(() => !this._empty());
+  protected readonly showClearButton = computed(() => this.clearable() && this.hasValue() && !this.disabled);
 
   private _shouldLabelFloat = computed(() => {
     return this.panelOpen() || !this.empty || this.focused;
@@ -353,6 +358,19 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
       this.closed.emit();
       this._onTouched();
     }
+  }
+
+  clear(event?: MouseEvent): void {
+    event?.preventDefault();
+    event?.stopPropagation();
+
+    if (this.disabled || this.empty) {
+      return;
+    }
+
+    this._selectionModel.clear();
+    this._propagateChanges();
+    this.stateChanges.set(undefined);
   }
 
   _onPositionChange(event: any) {

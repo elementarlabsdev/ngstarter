@@ -1,0 +1,8 @@
+<ngs-form-field class="w-1/2">
+  <ngs-label>Status</ngs-label>
+  <ngs-select [formControl]="status()" clearable>
+    @for (statusOption of statuses(); track statusOption.value) {
+      <ngs-option [value]="statusOption.value">{{ statusOption.label }}</ngs-option>
+    }
+  </ngs-select>
+</ngs-form-field>

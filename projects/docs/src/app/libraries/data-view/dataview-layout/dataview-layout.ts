@@ -12,14 +12,14 @@ import {
 import { FormField, IconPrefix } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
+import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
 import { PageEvent, Paginator } from '@ngstarter-ui/components/paginator';
 import { Panel, PanelContent, PanelFooter, PanelHeader } from '@ngstarter-ui/components/panel';
 import {
   FilterTrigger,
   FilterTriggerValueDirective,
   Option,
-  Select,
-  SelectFooter
+  Select
 } from '@ngstarter-ui/components/select';
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
@@ -39,6 +39,9 @@ import {Toolbar, ToolbarSpacer} from "@ngstarter-ui/components/toolbar";
     Icon,
     IconPrefix,
     Input,
+    Menu,
+    MenuItem,
+    MenuTrigger,
     Option,
     Paginator,
     Panel,
@@ -49,8 +52,7 @@ import {Toolbar, ToolbarSpacer} from "@ngstarter-ui/components/toolbar";
     Select,
     PanelSubheader,
     Toolbar,
-    ToolbarSpacer,
-    SelectFooter
+    ToolbarSpacer
   ],
   templateUrl: './dataview-layout.html',
   styleUrl: './dataview-layout.scss'
@@ -95,7 +97,6 @@ export class DataViewLayout {
       name: 'Staff Name',
       field: 'name',
       cellRenderer: 'staffName',
-      width: '190px',
       sortable: true
     },
     {

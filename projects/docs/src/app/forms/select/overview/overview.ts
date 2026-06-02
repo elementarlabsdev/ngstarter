@@ -15,6 +15,9 @@ import {
 } from '../_examples/multiple-selection-example/multiple-selection-example';
 import { CustomTriggerExample } from '../_examples/custom-trigger-example/custom-trigger-example';
 import { SelectSearchExample } from '../_examples/select-search-example/select-search-example';
+import {
+  ClearableSelectExample
+} from '../_examples/clearable-select-example/clearable-select-example';
 
 @Component({
     selector: 'app-overview',
@@ -25,6 +28,7 @@ import { SelectSearchExample } from '../_examples/select-search-example/select-s
     FormFieldFeaturesExample,
     DisabledExample,
     ResettingValueExample,
+    ClearableSelectExample,
     GroupsOfOptionsExample,
     MultipleSelectionExample,
     CustomTriggerExample,
