@@ -6,7 +6,10 @@ import {
   forwardRef,
   booleanAttribute,
   AfterContentInit,
-  contentChildren
+  contentChildren,
+  computed,
+  signal,
+  OnDestroy
 } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
@@ -20,7 +23,7 @@ import { ChipOption } from '../chip-option/chip-option';
     'class': 'ngs-chip-listbox ngs-chip-set',
     'role': 'listbox',
     '[attr.aria-multiselectable]': 'multiple()',
-    '[attr.aria-disabled]': 'disabled()',
+    '[attr.aria-disabled]': 'isDisabled()',
   },
   standalone: true,
   providers: [
@@ -33,12 +36,16 @@ import { ChipOption } from '../chip-option/chip-option';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
-export class ChipListbox implements ControlValueAccessor, AfterContentInit {
+export class ChipListbox implements ControlValueAccessor, AfterContentInit, OnDestroy {
   multiple = input(false, { transform: booleanAttribute });
   disabled = input(false, { transform: booleanAttribute });
+  private readonly _disabledByControl = signal(false);
+  readonly isDisabled = computed(() => this.disabled() || this._disabledByControl());
 
   readonly _chips = contentChildren(ChipOption, { descendants: true });
   private readonly _chips$ = toObservable(this._chips);
+  private _chipSelectionSubscriptions: Array<{ unsubscribe(): void }> = [];
+  private _syncTimeout: ReturnType<typeof setTimeout> | null = null;
 
   private _value: any;
   onChange: (value: any) => void = () => {};
@@ -50,12 +57,12 @@ export class ChipListbox implements ControlValueAccessor, AfterContentInit {
 
   set value(value: any) {
     this._value = value;
-    this._updateChips();
+    this._syncChipsAsync();
   }
 
   writeValue(value: any): void {
     this._value = value;
-    this._updateChips();
+    this._syncChipsAsync();
   }
 
   registerOnChange(fn: any): void {
@@ -67,11 +74,12 @@ export class ChipListbox implements ControlValueAccessor, AfterContentInit {
   }
 
   setDisabledState(isDisabled: boolean): void {
+    this._disabledByControl.set(isDisabled);
   }
 
   ngAfterContentInit() {
     this._chips$.subscribe(() => {
-      this._updateChips();
+      this._syncChipsAsync();
     });
 
     if (this._value === undefined) {
@@ -85,18 +93,24 @@ export class ChipListbox implements ControlValueAccessor, AfterContentInit {
       }
     }
 
-    Promise.resolve().then(() => {
-      this._updateChips();
-    });
+    this._syncChipsAsync();
+  }
 
-    this._chips().forEach(chip => {
-      chip.selectionChange.subscribe(() => {
-        this._onSelectionChange(chip);
-      });
-    });
+  ngOnDestroy(): void {
+    if (this._syncTimeout !== null) {
+      clearTimeout(this._syncTimeout);
+      this._syncTimeout = null;
+    }
+
+    this._clearChipSelectionSubscriptions();
   }
 
   private _onSelectionChange(chip: ChipOption): void {
+    if (this.isDisabled()) {
+      this._updateChips();
+      return;
+    }
+
     const value = chip.value() !== undefined ? chip.value() : chip;
 
     if (this.multiple()) {
@@ -124,6 +138,33 @@ export class ChipListbox implements ControlValueAccessor, AfterContentInit {
     }
     this.onChange(this._value);
     this.onTouched();
+  }
+
+  private _watchChips(): void {
+    this._clearChipSelectionSubscriptions();
+
+    this._chipSelectionSubscriptions = this._chips().map(chip =>
+      chip.selectionChange.subscribe(() => {
+        this._onSelectionChange(chip);
+      })
+    );
+  }
+
+  private _clearChipSelectionSubscriptions(): void {
+    this._chipSelectionSubscriptions.forEach(subscription => subscription.unsubscribe());
+    this._chipSelectionSubscriptions = [];
+  }
+
+  private _syncChipsAsync(): void {
+    if (this._syncTimeout !== null) {
+      clearTimeout(this._syncTimeout);
+    }
+
+    this._syncTimeout = setTimeout(() => {
+      this._syncTimeout = null;
+      this._watchChips();
+      this._updateChips();
+    });
   }
 
   private _updateChips(): void {

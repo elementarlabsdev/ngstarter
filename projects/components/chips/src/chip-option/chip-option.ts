@@ -5,7 +5,8 @@ import {
   booleanAttribute,
   forwardRef,
   output,
-  effect
+  effect,
+  signal
 } from '@angular/core';
 import { AutoFocusDirective } from '@ngstarter-ui/components/core';
 import { Chip } from '../chip/chip';
@@ -38,7 +39,7 @@ import { Chip } from '../chip/chip';
 })
 export class ChipOption extends Chip {
   selected = input(false, { transform: booleanAttribute });
-  private _internalSelected = false;
+  private readonly _internalSelected = signal(false);
 
   constructor() {
     super();
@@ -48,10 +49,10 @@ export class ChipOption extends Chip {
   }
 
   get isSelected(): boolean {
-    return this._internalSelected;
+    return this._internalSelected();
   }
   _setSelected(value: boolean) {
-    this._internalSelected = value;
+    this._internalSelected.set(value);
   }
 
   readonly selectionChange = output<{

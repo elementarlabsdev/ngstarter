@@ -1,6 +1,7 @@
 import '@angular/compiler';
 import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { ENTER } from '@angular/cdk/keycodes';
 import { describe, expect, it, beforeEach } from 'vitest';
 
@@ -19,7 +20,13 @@ import { ChipGrid } from './chip-grid';
   template: `
     <ngs-form-field>
       <ngs-label>Favorite Fruits</ngs-label>
-      <ngs-chip-grid #chipGrid>
+      <ngs-chip-grid
+        #chipGrid
+        [id]="gridId()"
+        placeholder="Add fruit"
+        [required]="required()"
+        [disabled]="disabled()"
+      >
         @for (fruit of fruits(); track fruit) {
           <ngs-chip-row editable>
             {{ fruit }}
@@ -31,7 +38,8 @@ import { ChipGrid } from './chip-grid';
         <input
           ngsInput
           [ngsChipInputFor]="chipGrid"
-          [ngsChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [ngsChipInputSeparatorKeyCodes]="separatorKeysCodes()"
+          [ngsChipInputAddOnBlur]="addOnBlur()"
           (chipInputTokenEnd)="add($event)"
         />
       </ngs-chip-grid>
@@ -40,7 +48,11 @@ import { ChipGrid } from './chip-grid';
 })
 class ChipGridFormFieldHost {
   readonly fruits = signal(['Lemon']);
-  readonly separatorKeysCodes = new Set([ENTER]);
+  readonly gridId = signal('fruits-grid');
+  readonly required = signal(false);
+  readonly disabled = signal(false);
+  readonly addOnBlur = signal(false);
+  readonly separatorKeysCodes = signal<readonly number[] | ReadonlySet<number>>(new Set([ENTER]));
 
   add(event: ChipInputEvent): void {
     const value = event.value.trim();
@@ -65,6 +77,18 @@ describe('ChipGrid', () => {
     fixture.detectChanges();
   });
 
+  function grid(): ChipGrid {
+    return fixture.debugElement.query(By.directive(ChipGrid)).componentInstance as ChipGrid;
+  }
+
+  function gridElement(): HTMLElement {
+    return fixture.nativeElement.querySelector('ngs-chip-grid') as HTMLElement;
+  }
+
+  function input(): HTMLInputElement {
+    return fixture.nativeElement.querySelector('input') as HTMLInputElement;
+  }
+
   it('keeps the parent form field single-line when it has no chips', () => {
     fixture.componentInstance.fruits.set([]);
     fixture.detectChanges();
@@ -72,6 +96,18 @@ describe('ChipGrid', () => {
     const formField = fixture.nativeElement.querySelector('ngs-form-field') as HTMLElement;
 
     expect(formField.classList.contains('ngs-form-field-multiline')).toBe(false);
+  });
+
+  it('reflects id, required, placeholder, and disabled inputs', () => {
+    fixture.componentInstance.required.set(true);
+    fixture.componentInstance.disabled.set(true);
+    fixture.detectChanges();
+
+    expect(gridElement().id).toBe('fruits-grid');
+    expect(gridElement().getAttribute('aria-disabled')).toBe('true');
+    expect(grid().required).toBe(true);
+    expect(grid().placeholder).toBe('Add fruit');
+    expect(grid().disabled).toBe(true);
   });
 
   it('marks the parent form field as multiline when it has chips', () => {
@@ -111,17 +147,111 @@ describe('ChipGrid', () => {
   });
 
   it('adds a chip from input separator keys', () => {
-    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
-
-    input.value = 'Apple';
-    input.dispatchEvent(new Event('input', { bubbles: true }));
-    const keydown = new KeyboardEvent('keydown', { bubbles: true });
+    input().value = 'Apple';
+    input().dispatchEvent(new Event('input', { bubbles: true }));
+    const keydown = new KeyboardEvent('keydown', { bubbles: true, cancelable: true });
     Object.defineProperty(keydown, 'keyCode', { value: ENTER });
-    input.dispatchEvent(keydown);
+    input().dispatchEvent(keydown);
     fixture.detectChanges();
 
     const chips = fixture.nativeElement.querySelectorAll('ngs-chip-row');
     expect(chips.length).toBe(2);
-    expect(input.value).toBe('');
+    expect(input().value).toBe('');
+  });
+
+  it('supports array separator key codes', () => {
+    fixture.componentInstance.separatorKeysCodes.set([ENTER]);
+    fixture.detectChanges();
+
+    input().value = 'Pear';
+    input().dispatchEvent(new Event('input', { bubbles: true }));
+    const keydown = new KeyboardEvent('keydown', { bubbles: true, cancelable: true });
+    Object.defineProperty(keydown, 'keyCode', { value: ENTER });
+    input().dispatchEvent(keydown);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelectorAll('ngs-chip-row').length).toBe(2);
+  });
+
+  it('does not emit chip input tokens for default-prevented keydown events', () => {
+    input().value = 'Pear';
+    input().dispatchEvent(new Event('input', { bubbles: true }));
+    const keydown = new KeyboardEvent('keydown', { bubbles: true, cancelable: true });
+    Object.defineProperty(keydown, 'keyCode', { value: ENTER });
+    keydown.preventDefault();
+    input().dispatchEvent(keydown);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelectorAll('ngs-chip-row').length).toBe(1);
+    expect(input().value).toBe('Pear');
+  });
+
+  it('adds a chip on blur when configured', () => {
+    fixture.componentInstance.addOnBlur.set(true);
+    fixture.detectChanges();
+
+    input().value = 'Orange';
+    input().dispatchEvent(new Event('input', { bubbles: true }));
+    input().dispatchEvent(new FocusEvent('blur'));
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelectorAll('ngs-chip-row').length).toBe(2);
+    expect(input().value).toBe('');
+  });
+
+  it('updates empty, focused, and floating label states from the chip input', () => {
+    fixture.componentInstance.fruits.set([]);
+    fixture.detectChanges();
+
+    expect(grid().empty).toBe(true);
+    expect(grid().shouldLabelFloat).toBe(false);
+
+    input().dispatchEvent(new FocusEvent('focus'));
+    fixture.detectChanges();
+
+    expect(grid().focused).toBe(true);
+    expect(grid().empty).toBe(false);
+    expect(grid().shouldLabelFloat).toBe(true);
+
+    input().dispatchEvent(new FocusEvent('blur'));
+    fixture.detectChanges();
+
+    expect(grid().focused).toBe(false);
+  });
+
+  it('implements ControlValueAccessor value writing and change registration', () => {
+    const changes: any[] = [];
+    grid().registerOnChange((value: any[]) => changes.push(value));
+
+    grid().writeValue(['Lemon']);
+    expect(grid().value).toEqual(['Lemon']);
+
+    grid().writeValue(null);
+    expect(grid().value).toEqual([]);
+
+    grid().value = ['Lime'];
+    expect(changes).toEqual([['Lime']]);
+  });
+
+  it('updates disabled state from ControlValueAccessor', () => {
+    grid().setDisabledState(true);
+    fixture.detectChanges();
+
+    expect(grid().disabled).toBe(true);
+    expect(gridElement().getAttribute('aria-disabled')).toBe('true');
+  });
+
+  it('focuses the registered chip input unless disabled', () => {
+    let focusCalls = 0;
+    input().focus = () => {
+      focusCalls += 1;
+    };
+
+    grid().focus();
+    expect(focusCalls).toBe(1);
+
+    grid().setDisabledState(true);
+    grid().focus();
+    expect(focusCalls).toBe(1);
   });
 });
