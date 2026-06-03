@@ -25,13 +25,11 @@ type PlaygroundSourceFile = {
     Drawer,
     Navigation,
     NavigationItem,
-    NavigationItemIconDirective,
     Panel,
     PanelContent,
     PanelHeader,
     PanelSidebar,
     ScrollbarArea,
-    ScrollContainerFixed
   ],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './playground.html',

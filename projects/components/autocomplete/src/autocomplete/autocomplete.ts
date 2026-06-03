@@ -8,9 +8,6 @@ import {
   ElementRef,
   input,
   booleanAttribute,
-  EventEmitter,
-  Output,
-  Input,
   signal,
   forwardRef,
   contentChildren
@@ -45,7 +42,7 @@ export interface AutocompleteSelectedEvent {
       provide: OPTION_PARENT,
       useExisting: forwardRef(() => Autocomplete)
     }
-  ]
+  ],
 })
 export class Autocomplete implements _OptionParent {
   readonly options = contentChildren(Option, { descendants: true });

@@ -1,14 +1,11 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  ViewEncapsulation,
   input,
   ElementRef,
   inject,
   booleanAttribute,
-  signal,
   output,
-  computed
 } from '@angular/core';
 import { AutoFocusDirective } from '@ngstarter-ui/components/core';
 
