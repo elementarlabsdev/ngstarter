@@ -40,12 +40,7 @@ ngs-playground {
 .playground-source-editor {
   position: relative;
   min-height: 0;
-  overflow: hidden !important;
   background: var(--ngs-color-surface-container-lowest);
-
-  ngs-scrollbar-area {
-    inset: 0;
-  }
 
   ngs-code-highlighter {
     --ngs-code-highlighter-bg: var(--ngs-color-surface-container-lowest);
@@ -53,16 +48,6 @@ ngs-playground {
     --ngs-code-highlighter-margin: 0;
 
     display: block;
-    width: 100%;
     min-height: 100%;
-  }
-
-  .ngs-code-highlighter figure {
-    min-height: 100%;
-  }
-
-  .ngs-code-highlighter .content {
-    min-height: 100%;
-    overflow: visible;
   }
 }

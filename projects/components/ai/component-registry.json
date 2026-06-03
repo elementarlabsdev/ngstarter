@@ -1748,6 +1748,7 @@
         "appearance",
         "code",
         "diff",
+        "disableOverflow",
         "highlightLines",
         "language",
         "showCopyButton",
@@ -5495,7 +5496,7 @@
           "name": "list-with-sections-example",
           "title": "List with sections",
           "file": "projects/docs/src/app/components/list/_examples/list-with-sections-example/list-with-sections-example.html",
-          "source": "<ngs-list>\n  <div ngsSubheader>Folders</div>\n  @for (folder of folders; track folder) {\n    <ngs-list-item>\n      <ngs-icon name=\"fluent:folder-24-regular\" ngsListItemIcon/>\n      <div ngsListItemTitle>{{ folder.name }}</div>\n      <div ngsListItemLine>{{ folder.updated | date }}</div>\n    </ngs-list-item>\n  }\n  <ngs-divider class=\"my-5\"/>\n  <div ngsSubheader>Notes</div>\n  @for (note of notes; track note) {\n    <ngs-list-item>\n      <ngs-icon name=\"fluent:note-24-regular\" ngsListItemIcon/>\n      <div ngsListItemTitle>{{ note.name }}</div>\n      <div ngsListItemLine>{{ note.updated | date }}</div>\n    </ngs-list-item>\n  }\n</ngs-list>"
+          "source": "<ngs-list>\n  <div ngsSubheader>Folders</div>\n  @for (folder of folders(); track folder) {\n    <ngs-list-item>\n      <ngs-icon name=\"fluent:folder-24-regular\" ngsListItemIcon/>\n      <div ngsListItemTitle>{{ folder.name }}</div>\n      <div ngsListItemLine>{{ folder.updated | date }}</div>\n    </ngs-list-item>\n  }\n  <ngs-divider class=\"my-5\"/>\n  <div ngsSubheader>Notes</div>\n  @for (note of notes(); track note) {\n    <ngs-list-item>\n      <ngs-icon name=\"fluent:note-24-regular\" ngsListItemIcon/>\n      <div ngsListItemTitle>{{ note.name }}</div>\n      <div ngsListItemLine>{{ note.updated | date }}</div>\n    </ngs-list-item>\n  }\n</ngs-list>"
         }
       ],
       "previewAsset": "projects/components/list/preview.svg",

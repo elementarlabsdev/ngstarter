@@ -237,7 +237,7 @@ Typography:
   example topics: Basic Code Highlighter, With Title, Diff, Highlight Lines, With Language and Copy, Code highlighter with title, Code highlighter diff, Code highlighter highlight lines
   selectors: `ngs-code-highlighter`
   exports: `CodeHighlighter`
-  inputs: `appearance`, `code`, `diff`, `highlightLines`, `language`, `showCopyButton`, `showLanguage`, `theme`, `title`
+  inputs: `appearance`, `code`, `diff`, `disableOverflow`, `highlightLines`, `language`, `showCopyButton`, `showLanguage`, `theme`, `title`
   tokens: `--ngs-code-highlighter-bg`, `--ngs-code-highlighter-border`, `--ngs-code-highlighter-margin`, `--ngs-code-highlighter-padding`, `--ngs-code-highlighter-radius`, `--ngs-code-highlighter-title-color`, `--ngs-code-highlighter-title-padding`, `--ngs-color-background`, `--ngs-color-border`, `--ngs-color-danger`, `--ngs-color-neutral-500`, `--ngs-color-primary`, `--ngs-color-success`, `--ngs-font-size-sm`, `--ngs-font-size-xs`, `--ngs-radius-xl`
 - color-picker: `@ngstarter-ui/components/color-picker` docs: /components/color-picker
   purpose: Let users choose or edit a color value.
