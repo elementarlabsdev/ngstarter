@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, signal} from '@angular/core';
 import { Divider } from '@ngstarter-ui/components/divider';
 import { ListOption, SelectionList } from '@ngstarter-ui/components/list';
 
@@ -13,5 +13,5 @@ import { ListOption, SelectionList } from '@ngstarter-ui/components/list';
   styleUrl: './list-with-selection-example.scss'
 })
 export class ListWithSelectionExample {
-  typesOfShoes: string[] = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
+  typesOfShoes = signal<string[]>(['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers']);
 }

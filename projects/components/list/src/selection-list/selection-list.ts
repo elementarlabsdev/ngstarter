@@ -5,7 +5,6 @@ import {
   booleanAttribute,
   ChangeDetectionStrategy,
   forwardRef,
-  inject,
   OnInit,
   contentChildren
 } from '@angular/core';
@@ -17,27 +16,29 @@ import { ListOption } from '../list-option/list-option';
   selector: 'ngs-selection-list',
   exportAs: 'ngsSelectionList',
   templateUrl: './selection-list.html',
-  styleUrls: ['../list/list.scss', './selection-list.scss'],
+  styleUrls: [
+    '../list/list.scss',
+    './selection-list.scss'
+  ],
+  providers: [
+    { provide: List, useExisting: SelectionList }
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-selection-list ngs-list',
     '[attr.aria-disabled]': 'disabled()',
     'role': 'listbox',
     '[attr.aria-multiselectable]': 'multiple()',
   },
-  providers: [
-    { provide: List, useExisting: SelectionList }
-  ],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectionList extends List implements OnInit {
+  readonly options = contentChildren(forwardRef(() => ListOption), { descendants: true });
+
   multiple = input(false, {
     transform: booleanAttribute
   });
 
   readonly selectionChange = output<any>();
-
-  readonly options = contentChildren(forwardRef(() => ListOption), { descendants: true });
 
   selectedOptions!: SelectionModel<ListOption>;
 

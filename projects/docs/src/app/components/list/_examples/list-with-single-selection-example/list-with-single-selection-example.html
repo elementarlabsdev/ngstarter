@@ -1,9 +1,9 @@
 <ngs-selection-list #shoes [multiple]="false">
-  @for (shoe of typesOfShoes; track shoe) {
+  @for (shoe of typesOfShoes(); track shoe) {
     <ngs-list-option [value]="shoe">{{ shoe }}</ngs-list-option>
   }
 </ngs-selection-list>
 <ngs-divider/>
 <p>
-  Option selected: {{ shoes.selectedOptions.hasValue() ? shoes.selectedOptions.selected[0].value : 'None' }}
+  Option selected: {{ shoes.selectedOptions.hasValue() ? shoes.selectedOptions.selected[0].value() : 'None' }}
 </p>

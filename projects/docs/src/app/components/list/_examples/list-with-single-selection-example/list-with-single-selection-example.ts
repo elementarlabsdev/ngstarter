@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, signal} from '@angular/core';
 import { ListOption, SelectionList } from '@ngstarter-ui/components/list';
 import { Divider } from '@ngstarter-ui/components/divider';
 
@@ -13,5 +13,5 @@ import { Divider } from '@ngstarter-ui/components/divider';
   styleUrl: './list-with-single-selection-example.scss'
 })
 export class ListWithSingleSelectionExample {
-  typesOfShoes: string[] = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
+  typesOfShoes = signal<string[]>(['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers']);
 }
