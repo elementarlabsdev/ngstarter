@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CdkTextColumn } from '@angular/cdk/table';
 import { ColumnDef } from '../column-def';
 import { CellDef } from '../cell-def';
@@ -22,10 +22,19 @@ import { Cell } from '../cell/cell';
  */
 @Component({
   selector: 'ngs-text-column',
+  exportAs: 'ngsTextColumn',
+  imports: [
+    ColumnDef,
+    HeaderCellDef,
+    HeaderCell,
+    CellDef,
+    Cell
+  ],
   templateUrl: './text-column.html',
   styleUrl: './text-column.scss',
-  changeDetection: ChangeDetectionStrategy.Default,
-  standalone: true,
-  imports: [ColumnDef, HeaderCellDef, HeaderCell, CellDef, Cell],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    'class': 'ngs-text-column',
+  }
 })
 export class TextColumn<T> extends CdkTextColumn<T> {}
