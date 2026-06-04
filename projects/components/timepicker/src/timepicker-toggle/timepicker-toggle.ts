@@ -14,8 +14,9 @@ import { Button } from '@ngstarter-ui/components/button';
 @Component({
   selector: 'ngs-timepicker-toggle',
   exportAs: 'ngsTimepickerToggle',
-  standalone: true,
-  imports: [Button],
+  imports: [
+    Button
+  ],
   templateUrl: './timepicker-toggle.html',
   styleUrl: './timepicker-toggle.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

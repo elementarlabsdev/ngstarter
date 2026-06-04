@@ -25,7 +25,6 @@ import {
   Validator
 } from '@angular/forms';
 import { formatDate } from '@angular/common';
-import { Subject, takeUntil } from 'rxjs';
 import { Timepicker } from '../timepicker/timepicker';
 import { FormField } from '@ngstarter-ui/components/form-field';
 
@@ -82,8 +81,8 @@ export class TimepickerInput<D = any> implements ControlValueAccessor, OnDestroy
   private _validatorOnChange: () => void = () => {};
 
   private _modelValue: string = '';
-  private _destroyed = new Subject<void>();
-  private _timepickerDestroyed = new Subject<void>();
+  private _timepickerOpenedSubscription?: { unsubscribe(): void };
+  private _timepickerClosedSubscription?: { unsubscribe(): void };
   private _isTimepickerOpen = false;
   private _lastExternalDate: Date | null = null;
 
@@ -103,28 +102,30 @@ export class TimepickerInput<D = any> implements ControlValueAccessor, OnDestroy
   }
 
   ngOnDestroy() {
-    this._destroyed.next();
-    this._destroyed.complete();
+    this._unsubscribeTimepicker();
   }
 
   private _registerTimepicker(value: Timepicker) {
     if (value && value !== this._timepicker) {
-      this._timepickerDestroyed.next();
+      this._unsubscribeTimepicker();
       this._timepicker = value;
       this._timepicker._registerInput(this);
-      this._timepicker.opened
-        .pipe(takeUntil(this._timepickerDestroyed), takeUntil(this._destroyed))
-        .subscribe(() => {
-          this._isTimepickerOpen = true;
-        });
-      this._timepicker.closed
-        .pipe(takeUntil(this._timepickerDestroyed), takeUntil(this._destroyed))
-        .subscribe(() => {
-          this._isTimepickerOpen = false;
-          this._validatorOnChange();
-          this._updateNativeValidity(this._doValidate(this._modelValue));
-        });
+      this._timepickerOpenedSubscription = this._timepicker.opened.subscribe(() => {
+        this._isTimepickerOpen = true;
+      });
+      this._timepickerClosedSubscription = this._timepicker.closed.subscribe(() => {
+        this._isTimepickerOpen = false;
+        this._validatorOnChange();
+        this._updateNativeValidity(this._doValidate(this._modelValue));
+      });
     }
+  }
+
+  private _unsubscribeTimepicker() {
+    this._timepickerOpenedSubscription?.unsubscribe();
+    this._timepickerClosedSubscription?.unsubscribe();
+    this._timepickerOpenedSubscription = undefined;
+    this._timepickerClosedSubscription = undefined;
   }
 
   writeValue(value: any): void {
