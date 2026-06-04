@@ -1,0 +1,34 @@
+<div class="border border-muted rounded-xl overflow-hidden">
+  <table ngs-table [dataSource]="dataSource" ngsSort (ngsSortChange)="announceSortChange($event)">
+    <ng-container ngsColumnDef="invoice">
+      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header="invoice" sortActionDescription="Sort by invoice">
+        Invoice
+      </th>
+      <td ngs-cell *ngsCellDef="let invoice">{{ invoice.invoice }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="customer">
+      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header="customer" sortActionDescription="Sort by customer">
+        Customer
+      </th>
+      <td ngs-cell *ngsCellDef="let invoice">{{ invoice.customer }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="total">
+      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header="total" sortActionDescription="Sort by total">
+        Total
+      </th>
+      <td ngs-cell *ngsCellDef="let invoice">${{ invoice.total }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="status">
+      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header="status" sortActionDescription="Sort by status">
+        Status
+      </th>
+      <td ngs-cell *ngsCellDef="let invoice">{{ invoice.status }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

@@ -196,6 +196,11 @@ export const routes: Routes = [
     title: 'Table'
   },
   {
+    path: 'sort',
+    loadChildren: () => import('./sort/routes').then(m => m.routes),
+    title: 'Sort'
+  },
+  {
     path: 'stepper',
     loadChildren: () => import('./stepper/routes').then(m => m.routes),
     title: 'Stepper'

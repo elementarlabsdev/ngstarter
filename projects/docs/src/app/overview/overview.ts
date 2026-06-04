@@ -525,6 +525,11 @@ export class Overview {
       name: 'Table'
     },
     {
+      routerLink: '/components/sort',
+      imageUrl: 'assets/overview/sort.svg',
+      name: 'Sort'
+    },
+    {
       routerLink: '/components/tabs',
       imageUrl: 'assets/overview/tabs.svg',
       name: 'Tabs'

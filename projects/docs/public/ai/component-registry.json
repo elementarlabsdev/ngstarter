@@ -8372,25 +8372,34 @@
       "name": "sort",
       "title": "Sort",
       "overviewName": "Sort",
-      "category": null,
+      "category": "components",
       "package": "@ngstarter-ui/components",
       "importPath": "@ngstarter-ui/components/sort",
       "publicApi": "projects/components/sort/public-api.ts",
       "sourceRoot": "projects/components/sort/src",
-      "docsPath": null,
-      "docsOverviewSource": null,
+      "docsPath": "/components/sort",
+      "docsOverviewSource": "projects/docs/src/app/components/sort/overview/overview.html",
       "purpose": "Provide sortable header behavior and sort state for table-like data.",
       "useWhen": "Use ngsSort on a sortable table/list/data container and ngs-sort-header=\"fieldName\" on header cells that should cycle through sort states. Sort tracks active column and direction (asc, desc, or cleared), supports ngsSortActive, ngsSortDirection, ngsSortStart, ngsSortDisableClear, ngsSortDisabled, per-header disabled state, sortActionDescription, and emits ngsSortChange with { active, direction }. Use it with Table sortable column headers, custom table-like data surfaces, and when wiring sort state into a local TableDataSource or server/API query. For DataView, usually prefer its built-in sortable column config and sortChange instead of manually adding ngs-sort-header. Do not use Sort as a visual sort icon only, filter builder, search, grouping, drag reorder, tab sorting, or generic “sort these cards” button. Sort only manages header state and emits the selected sort; the app/data source still applies local sorting or sends the sort state to the backend.",
-      "exampleTopics": [],
-      "minimalExample": null,
-      "exampleFiles": [],
+      "exampleTopics": [
+        "Basic Sort"
+      ],
+      "minimalExample": "<div class=\"border border-muted rounded-xl overflow-hidden\">\n  <table ngs-table [dataSource]=\"dataSource\" ngsSort (ngsSortChange)=\"announceSortChange($event)\">\n    <ng-container ngsColumnDef=\"invoice\">\n      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header=\"invoice\" sortActionDescription=\"Sort by invoice\">\n        Invoice\n      </th>\n      <td ngs-cell *ngsCellDef=\"let invoice\">{{ invoice.invoice }}</td>\n    </ng-container>\n    <ng-container ngsColumnDef=\"customer\">\n      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header=\"customer\" sortActionDescription=\"Sort by customer\">\n        Customer\n      </th>\n      <td ngs-cell *ngsCellDef=\"let invoice\">{{ invoice.customer }}</td>\n    </ng-container>\n    <ng-container ngsColumnDef=\"total\">\n      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header=\"total\" sortActionDescription=\"Sort by total\">\n        Total\n      </th>\n      <td ngs-cell *ngsCellDef=\"let invoice\">${{ invoice.total }}</td>\n    </ng-container>\n    <ng-container ngsColumnDef=\"status\">\n      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header=\"status\" sortActionDescription=\"Sort by status\">\n        Status\n      </th>\n      <td ngs-cell *ngsCellDef=\"let invoice\">{{ invoice.status }}</td>\n    </ng-container>\n    <tr ngs-header-row *ngsHeaderRowDef=\"displayedColumns\"></tr>\n    <tr ngs-row *ngsRowDef=\"let row; columns: displayedColumns;\"></tr>\n  </table>\n</div>",
+      "exampleFiles": [
+        {
+          "name": "basic-sort-example",
+          "title": "Basic sort",
+          "file": "projects/docs/src/app/components/sort/_examples/basic-sort-example/basic-sort-example.html",
+          "source": "<div class=\"border border-muted rounded-xl overflow-hidden\">\n  <table ngs-table [dataSource]=\"dataSource\" ngsSort (ngsSortChange)=\"announceSortChange($event)\">\n    <ng-container ngsColumnDef=\"invoice\">\n      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header=\"invoice\" sortActionDescription=\"Sort by invoice\">\n        Invoice\n      </th>\n      <td ngs-cell *ngsCellDef=\"let invoice\">{{ invoice.invoice }}</td>\n    </ng-container>\n    <ng-container ngsColumnDef=\"customer\">\n      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header=\"customer\" sortActionDescription=\"Sort by customer\">\n        Customer\n      </th>\n      <td ngs-cell *ngsCellDef=\"let invoice\">{{ invoice.customer }}</td>\n    </ng-container>\n    <ng-container ngsColumnDef=\"total\">\n      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header=\"total\" sortActionDescription=\"Sort by total\">\n        Total\n      </th>\n      <td ngs-cell *ngsCellDef=\"let invoice\">${{ invoice.total }}</td>\n    </ng-container>\n    <ng-container ngsColumnDef=\"status\">\n      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header=\"status\" sortActionDescription=\"Sort by status\">\n        Status\n      </th>\n      <td ngs-cell *ngsCellDef=\"let invoice\">{{ invoice.status }}</td>\n    </ng-container>\n    <tr ngs-header-row *ngsHeaderRowDef=\"displayedColumns\"></tr>\n    <tr ngs-row *ngsRowDef=\"let row; columns: displayedColumns;\"></tr>\n  </table>\n</div>"
+        }
+      ],
       "previewAsset": "projects/components/sort/preview.svg",
       "selectors": [
         "[ngs-sort-header]",
         "[ngsSort]"
       ],
       "exportedSymbols": [
-        "EmrSort",
+        "NgsSort",
         "Sort",
         "SORT",
         "SortDirection",

@@ -99,6 +99,11 @@ const COMPONENT_TITLES: Record<string, SeoTitleConfig> = {
   skeleton: { label: 'Skeleton', detail: 'Loading Placeholders' },
   slider: { label: 'Slider', detail: 'Range Inputs' },
   snackbar: { label: 'Snackbar', detail: 'Toast Notifications' },
+  sort: {
+    label: 'Sort',
+    detail: 'Sortable Table Headers',
+    job: 'add sortable headers to Angular tables and emit active sort state',
+  },
   'split-pane': { label: 'Split Pane', detail: 'Resizable Split Layouts' },
   stepper: { label: 'Stepper', detail: 'Multi-step Flows' },
   'step-tracker': { label: 'Step Tracker', detail: 'Step Status Display' },

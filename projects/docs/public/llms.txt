@@ -160,6 +160,7 @@ Must use:
 - slide-toggle: `@ngstarter-ui/components/slide-toggle` docs: /forms/slide-toggle
 - slider: `@ngstarter-ui/components/slider` docs: /components/slider
 - snack-bar: `@ngstarter-ui/components/snack-bar` docs: /components/snackbar
+- sort: `@ngstarter-ui/components/sort` docs: /components/sort
 - spinner: `@ngstarter-ui/components/spinner` docs: /components/progress-spinner
 - split: `@ngstarter-ui/components/split` docs: /components/split-pane
 - step-tracker: `@ngstarter-ui/components/step-tracker` docs: /components/step-tracker

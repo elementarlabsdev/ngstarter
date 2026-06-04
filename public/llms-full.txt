@@ -905,11 +905,12 @@ Typography:
   selectors: `ngs-simple-snack-bar`, `ngs-snack-bar-container`
   exports: `provideSnackBarConfig`, `SimpleSnackBar`, `SNACK_BAR_CONFIG`, `SNACK_BAR_DATA`, `SnackBar`, `SnackBarConfig`, `SnackBarContainer`, `SnackBarHorizontalPosition`, `SnackBarRef`, `SnackBarVerticalPosition`
   tokens: `--ngs-color-neutral-100`, `--ngs-color-neutral-950`, `--ngs-font-size-sm`, `--ngs-radius-xl`
-- sort: `@ngstarter-ui/components/sort`
+- sort: `@ngstarter-ui/components/sort` docs: /components/sort
   purpose: Provide sortable header behavior and sort state for table-like data.
   use when: Use ngsSort on a sortable table/list/data container and ngs-sort-header="fieldName" on header cells that should cycle through sort states. Sort tracks active column and direction (asc, desc, or cleared), supports ngsSortActive, ngsSortDirection, ngsSortStart, ngsSortDisableClear, ngsSortDisabled, per-header disabled state, sortActionDescription, and emits ngsSortChange with { active, direction }. Use it with Table sortable column headers, custom table-like data surfaces, and when wiring sort state into a local TableDataSource or server/API query. For DataView, usually prefer its built-in sortable column config and sortChange instead of manually adding ngs-sort-header. Do not use Sort as a visual sort icon only, filter builder, search, grouping, drag reorder, tab sorting, or generic “sort these cards” button. Sort only manages header state and emits the selected sort; the app/data source still applies local sorting or sends the sort state to the backend.
+  example topics: Basic Sort
   selectors: `[ngs-sort-header]`, `[ngsSort]`
-  exports: `EmrSort`, `Sort`, `SORT`, `SortDirection`, `SortDirective`, `SortHeader`, `SortModule`
+  exports: `NgsSort`, `Sort`, `SORT`, `SortDirection`, `SortDirective`, `SortHeader`, `SortModule`
   inputs: `disabled`, `ngs-sort-header`, `ngsSortActive`, `ngsSortDirection`, `ngsSortDisableClear`, `ngsSortDisabled`, `ngsSortStart`, `sortActionDescription`
   outputs: `ngsSortChange`
 - spinner: `@ngstarter-ui/components/spinner` docs: /components/progress-spinner

@@ -586,6 +586,12 @@ export class App implements OnInit {
         {
           key: uuid(),
           type: 'link',
+          name: 'Sort',
+          link: '/components/sort'
+        },
+        {
+          key: uuid(),
+          type: 'link',
           name: 'Timeline',
           link: '/components/timeline'
         },

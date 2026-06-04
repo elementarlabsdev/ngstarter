@@ -10,11 +10,8 @@ import {
   afterNextRender,
   signal,
   output,
-  PLATFORM_ID,
-  ViewEncapsulation
 } from '@angular/core';
 import { Sidenav } from '../sidenav/sidenav';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 
 export type AutoFocusTarget = 'dialog' | 'first-tabbable' | 'first-heading';
 
@@ -33,8 +30,6 @@ export type AutoFocusTarget = 'dialog' | 'first-tabbable' | 'first-heading';
 })
 export class SidenavContainer {
   private _ngZone = inject(NgZone);
-  private _document = inject(DOCUMENT);
-  private _platformId = inject(PLATFORM_ID);
   protected _isSettled = signal(false);
 
   _sidenavs = contentChildren(Sidenav, {descendants: true});
