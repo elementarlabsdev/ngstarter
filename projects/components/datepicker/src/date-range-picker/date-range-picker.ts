@@ -1,7 +1,6 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  ViewEncapsulation,
   input,
   signal,
   inject,
@@ -25,13 +24,17 @@ import { DatepickerPreset } from '../core/datetime/datepicker-preset';
 
 @Component({
   selector: 'ngs-date-range-picker',
-  templateUrl: './date-range-picker.html',
-  styleUrl: '../datepicker/datepicker.scss',
-  standalone: true,
-  imports: [OverlayModule, Calendar],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   exportAs: 'ngsDateRangePicker',
+  imports: [
+    OverlayModule,
+    Calendar
+  ],
+  templateUrl: './date-range-picker.html',
+  styleUrl: './date-range-picker.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    'class': 'ngs-date-range-picker',
+  }
 })
 export class DateRangePicker<D> implements OnDestroy {
   private _overlay = inject(Overlay);

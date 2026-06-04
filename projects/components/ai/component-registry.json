@@ -1671,6 +1671,7 @@
         "--ngs-chip-font-weight",
         "--ngs-chip-height",
         "--ngs-chip-input-height",
+        "--ngs-chip-listbox-gap",
         "--ngs-chip-outline-color",
         "--ngs-chip-padding",
         "--ngs-chip-radius",
