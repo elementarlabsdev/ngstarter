@@ -1,7 +1,6 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  ViewEncapsulation,
   input,
   computed,
   AfterViewInit,
@@ -18,9 +17,10 @@ export type ProgressBarMode = 'determinate' | 'indeterminate' | 'buffer' | 'quer
 
 @Component({
   selector: 'ngs-progress-bar',
+  exportAs: 'ngsProgressBar',
   templateUrl: './progress-bar.html',
   styleUrl: './progress-bar.scss',
-  exportAs: 'ngsProgressBar',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'role': 'progressbar',
     'aria-valuemin': '0',
@@ -33,8 +33,6 @@ export type ProgressBarMode = 'determinate' | 'indeterminate' | 'buffer' | 'quer
     '[style.--ngs-progress-bar-value]': 'value()',
     '[style.--ngs-progress-bar-buffer-value]': 'bufferValue()',
   },
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
 })
 export class ProgressBar implements AfterViewInit, OnDestroy {
   private readonly _elementRef = inject(ElementRef);
@@ -48,7 +46,7 @@ export class ProgressBar implements AfterViewInit, OnDestroy {
 
   readonly animationEnd = output<{
     value: number;
-}>();
+  }>();
 
   private _cleanupTransitionEnd?: () => void;
 
