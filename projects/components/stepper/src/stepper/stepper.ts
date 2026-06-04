@@ -1,19 +1,27 @@
-import { Component, input, ViewEncapsulation, contentChildren } from '@angular/core';
+import { Component, input, contentChildren } from '@angular/core';
 import { CdkStepper, StepperOrientation } from '@angular/cdk/stepper';
 import { Step } from '../step/step';
 import { StepLabel } from '../step-label';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'ngs-stepper',
   exportAs: 'ngsStepper',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule
+  ],
   templateUrl: './stepper.html',
   styleUrl: './stepper.scss',
-  encapsulation: ViewEncapsulation.None,
-  providers: [{ provide: CdkStepper, useExisting: Stepper }],
+  providers: [
+    {
+      provide: CdkStepper,
+      useExisting: Stepper
+    }
+  ],
+  host: {
+    'class': 'ngs-stepper',
+  }
 })
 export class Stepper extends CdkStepper {
   headerPosition = input<'top' | 'bottom'>('top');
