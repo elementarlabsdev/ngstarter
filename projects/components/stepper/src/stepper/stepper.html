@@ -23,8 +23,8 @@
             }
           </div>
           <div class="ngs-stepper-label">
-            @if (step.stepLabel) {
-              <ng-container [ngTemplateOutlet]="step.stepLabel.template" />
+            @if (step.ngsStepLabel(); as stepLabel) {
+              <ng-container [ngTemplateOutlet]="stepLabel.template" />
             } @else {
               {{ step.label }}
             }
@@ -66,8 +66,8 @@
           }
         </div>
         <div class="ngs-stepper-label">
-          @if (step.stepLabel) {
-            <ng-container [ngTemplateOutlet]="step.stepLabel.template" />
+          @if (step.ngsStepLabel(); as stepLabel) {
+            <ng-container [ngTemplateOutlet]="stepLabel.template" />
           } @else {
             {{ step.label }}
           }

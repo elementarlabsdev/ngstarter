@@ -1,8 +1,6 @@
-import { Component, ContentChild, Input, ViewEncapsulation, forwardRef, Inject } from '@angular/core';
-import { CdkStep, CdkStepper } from '@angular/cdk/stepper';
+import { Component, contentChild, forwardRef, Inject } from '@angular/core';
+import { CdkStep } from '@angular/cdk/stepper';
 import { StepLabel } from '../step-label';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
-
 import { Stepper } from '../stepper/stepper';
 
 @Component({
@@ -21,7 +19,7 @@ import { Stepper } from '../stepper/stepper';
   }
 })
 export class Step extends CdkStep {
-  @ContentChild(StepLabel) override stepLabel: StepLabel = undefined!;
+  readonly ngsStepLabel = contentChild(StepLabel);
 
   constructor(@Inject(forwardRef(() => Stepper)) stepper: Stepper) {
     super(stepper);
