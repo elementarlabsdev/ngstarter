@@ -8,12 +8,17 @@ import { Stepper } from '../stepper/stepper';
 @Component({
   selector: 'ngs-step',
   exportAs: 'ngsStep',
-  standalone: true,
-  imports: [],
   templateUrl: './step.html',
   styleUrl: './step.scss',
-  encapsulation: ViewEncapsulation.None,
-  providers: [{ provide: CdkStep, useExisting: Step }],
+  providers: [
+    {
+      provide: CdkStep,
+      useExisting: Step
+    }
+  ],
+  host: {
+    'class': 'ngs-step'
+  }
 })
 export class Step extends CdkStep {
   @ContentChild(StepLabel) override stepLabel: StepLabel = undefined!;

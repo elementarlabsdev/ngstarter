@@ -3,10 +3,7 @@ import {
   Component,
   Directive,
   inject,
-  OnDestroy,
-  OnInit,
   ViewContainerRef,
-  ViewEncapsulation,
   viewChild
 } from '@angular/core';
 import { CDK_TREE_NODE_OUTLET_NODE, CdkTree, CdkTreeNodeOutlet } from '@angular/cdk/tree';
@@ -29,15 +26,16 @@ export class TreeNodeOutlet implements CdkTreeNodeOutlet {
 @Component({
   selector: 'ngs-tree',
   exportAs: 'ngsTree',
+  imports: [
+    TreeNodeOutlet
+  ],
   template: `<ng-container ngsTreeNodeOutlet />`,
+  styleUrl: './tree.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [{ provide: CdkTree, useExisting: Tree }],
   host: {
     'class': 'ngs-tree',
   },
-  changeDetection: ChangeDetectionStrategy.Default,
-  providers: [{ provide: CdkTree, useExisting: Tree }],
-  imports: [TreeNodeOutlet],
-  styleUrl: './tree.scss',
-  standalone: true
 })
 export class Tree<T, K = T> extends CdkTree<T, K> {
   // Outlets within the tree's template where the dataNodes will be inserted.
