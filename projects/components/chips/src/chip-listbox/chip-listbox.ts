@@ -1,7 +1,6 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  ViewEncapsulation,
   input,
   forwardRef,
   booleanAttribute,
@@ -19,13 +18,6 @@ import { ChipOption } from '../chip-option/chip-option';
   selector: 'ngs-chip-listbox',
   templateUrl: './chip-listbox.html',
   styleUrl: './chip-listbox.scss',
-  host: {
-    'class': 'ngs-chip-listbox ngs-chip-set',
-    'role': 'listbox',
-    '[attr.aria-multiselectable]': 'multiple()',
-    '[attr.aria-disabled]': 'isDisabled()',
-  },
-  standalone: true,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -34,7 +26,12 @@ import { ChipOption } from '../chip-option/chip-option';
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+  host: {
+    'class': 'ngs-chip-listbox ngs-chip-set',
+    'role': 'listbox',
+    '[attr.aria-multiselectable]': 'multiple()',
+    '[attr.aria-disabled]': 'isDisabled()',
+  },
 })
 export class ChipListbox implements ControlValueAccessor, AfterContentInit, OnDestroy {
   multiple = input(false, { transform: booleanAttribute });
@@ -48,6 +45,7 @@ export class ChipListbox implements ControlValueAccessor, AfterContentInit, OnDe
   private _syncTimeout: ReturnType<typeof setTimeout> | null = null;
 
   private _value: any;
+
   onChange: (value: any) => void = () => {};
   onTouched: () => void = () => {};
 
