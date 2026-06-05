@@ -10,7 +10,6 @@ import { Chip } from '../chip/chip';
 import { ChipSet } from './chip-set';
 
 @Component({
-  standalone: true,
   imports: [Chip, ChipAvatar, ChipControl, ChipSet, ChipShape],
   template: `
     <ngs-chip-set>

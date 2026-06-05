@@ -49,7 +49,6 @@ interface CalendarCell {
 @Component({
   selector: 'ngs-calendar',
   exportAs: 'ngsCalendar',
-  standalone: true,
   imports: [Button, Icon],
   templateUrl: './calendar.html',
   styleUrl: './calendar.scss',

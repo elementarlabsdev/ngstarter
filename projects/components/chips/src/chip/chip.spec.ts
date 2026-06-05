@@ -10,7 +10,6 @@ import { ChipShape } from '../chip-shape';
 import { Chip } from './chip';
 
 @Component({
-  standalone: true,
   imports: [Chip, ChipAvatar, ChipControl, ChipRemove, ChipShape],
   template: `
     @if (visible()) {

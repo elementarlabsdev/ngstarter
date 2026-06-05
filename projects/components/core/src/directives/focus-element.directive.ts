@@ -13,7 +13,6 @@ import { FocusMonitor, FocusOrigin } from '@angular/cdk/a11y';
 @Directive({
   selector: '[ngsFocusElement]',
   exportAs: 'ngsFocusElement',
-  standalone: true
 })
 export class FocusElementDirective implements AfterViewInit, OnDestroy {
   private _elementRef = inject(ElementRef);

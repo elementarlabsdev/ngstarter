@@ -42,9 +42,11 @@ const diffTransformer: ShikiTransformer = {
 
 @Component({
   selector: 'ngs-code-highlighter',
-  standalone: true,
-  imports: [Button, Icon],
   exportAs: 'ngsCodeHighlighter',
+  imports: [
+    Button,
+    Icon
+  ],
   templateUrl: './code-highlighter.html',
   styleUrl: './code-highlighter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

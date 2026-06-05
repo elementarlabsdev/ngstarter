@@ -3,7 +3,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 @Pipe({
   name: 'safeResourceUrl',
-  standalone: true
 })
 export class SafeResourceUrlPipe implements PipeTransform {
   private _domSanitizer = inject(DomSanitizer);

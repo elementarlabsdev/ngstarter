@@ -15,7 +15,6 @@ import { ChipRow } from '../chip-row/chip-row';
 import { ChipGrid } from './chip-grid';
 
 @Component({
-  standalone: true,
   imports: [FormField, Label, Input, ChipEdit, ChipGrid, ChipInput, ChipRemove, ChipRow],
   template: `
     <ngs-form-field>

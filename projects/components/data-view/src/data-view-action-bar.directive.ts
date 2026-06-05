@@ -1,8 +1,7 @@
-import { booleanAttribute, Directive, inject, input, numberAttribute, TemplateRef } from '@angular/core';
+import { Directive, inject, input, numberAttribute, TemplateRef } from '@angular/core';
 
 @Directive({
   selector: '[ngsDataViewActionBar]',
-  standalone: true
 })
 export class DataViewActionBarDirective {
   readonly templateRef = inject(TemplateRef);

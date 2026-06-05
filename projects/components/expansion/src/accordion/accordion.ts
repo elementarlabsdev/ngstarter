@@ -16,7 +16,6 @@ import { merge, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 @Component({
   selector: 'ngs-accordion',
   exportAs: 'ngsAccordion',
-  standalone: true,
   templateUrl: './accordion.html',
   styleUrl: './accordion.scss',
   host: {

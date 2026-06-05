@@ -3,7 +3,6 @@ import { COMMENT_EDITOR, CommentEditorInterface } from '../types';
 
 @Directive({
   selector: '[ngsCommentEditorCommandUnsetLink]',
-  standalone: true,
   host: {
     '[class.button]': 'true',
     '(click)': `onClick()`

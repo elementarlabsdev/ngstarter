@@ -9,7 +9,6 @@ import { ChipOption } from '../chip-option/chip-option';
 import { ChipListbox } from './chip-listbox';
 
 @Component({
-  standalone: true,
   imports: [ChipListbox, ChipOption, ReactiveFormsModule],
   template: `
     <ngs-chip-listbox [formControl]="control()" [multiple]="multiple()">
@@ -32,7 +31,6 @@ class ChipListboxFormHost {
 }
 
 @Component({
-  standalone: true,
   imports: [ChipListbox, ChipOption],
   template: `
     <ngs-chip-listbox [multiple]="multiple()">
@@ -46,7 +44,6 @@ class ChipListboxSelectedHost {
 }
 
 @Component({
-  standalone: true,
   imports: [ChipListbox, ChipOption],
   template: `
     <ngs-chip-listbox [disabled]="disabled()">
@@ -60,7 +57,6 @@ class ChipListboxDisabledInputHost {
 }
 
 @Component({
-  standalone: true,
   imports: [ChipListbox, ChipOption],
   template: `
     <ngs-chip-listbox>

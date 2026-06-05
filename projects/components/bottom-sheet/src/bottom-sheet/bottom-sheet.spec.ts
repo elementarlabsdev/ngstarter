@@ -10,7 +10,6 @@ import { BottomSheetContainer } from './bottom-sheet-container';
 import { BottomSheetRef } from './bottom-sheet-ref';
 
 @Component({
-  standalone: true,
   template: '<p class="sheet-message">{{ data?.message }}</p>',
 })
 class TestSheetContent {
@@ -19,7 +18,6 @@ class TestSheetContent {
 }
 
 @Component({
-  standalone: true,
   template: `
     <ng-template #sheet let-bottomSheetRef="bottomSheetRef">
       <span class="template-message">Template {{ bottomSheetRef ? 'ready' : 'missing' }}</span>

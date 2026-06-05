@@ -25,8 +25,19 @@ export interface ChipEditedEvent {
 
 @Component({
   selector: 'ngs-chip-row',
+  exportAs: 'ngsChipRow',
+  imports: [
+    AutoFocusDirective
+  ],
   templateUrl: '../chip/chip.html',
   styleUrl: '../chip/chip.scss',
+  providers: [
+    {
+      provide: Chip,
+      useExisting: forwardRef(() => ChipRow)
+    }
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-chip ngs-chip-row',
     '[class.ngs-chip-disabled]': 'disabled()',
@@ -39,17 +50,6 @@ export interface ChipEditedEvent {
     '(keydown)': '_handleKeydown($event)',
     '(click)': '_handleClick($event)',
   },
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    AutoFocusDirective
-  ],
-  providers: [
-    {
-      provide: Chip,
-      useExisting: forwardRef(() => ChipRow)
-    }
-  ]
 })
 export class ChipRow extends Chip {
   private _changeDetectorRef = inject(ChangeDetectorRef);

@@ -108,7 +108,7 @@ export class EndDate<D> {
 
 @Component({
   selector: 'ngs-date-range-input',
-  standalone: true,
+  exportAs: 'ngsDateRangeInput',
   templateUrl: './date-range-input.html',
   styleUrl: './date-range-input.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

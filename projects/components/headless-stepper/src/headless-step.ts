@@ -16,7 +16,6 @@ import { startWith } from 'rxjs/operators';
 @Component({
   selector: 'ngs-headless-step',
   exportAs: 'ngsHeadlessStep',
-  standalone: true,
   template: `<ng-content/>`,
   styles: [`
     :host {

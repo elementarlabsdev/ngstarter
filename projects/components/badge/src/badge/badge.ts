@@ -32,7 +32,6 @@ export type BadgeSize = 'small' | 'medium' | 'large';
 
 @Directive({
   selector: '[ngsBadge]',
-  standalone: true,
   host: {
     'class': 'ngs-badge',
     '[class.ngs-badge-small]': 'size() === "small"',

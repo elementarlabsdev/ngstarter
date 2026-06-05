@@ -13,7 +13,7 @@ import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-tour-step',
-  standalone: true,
+  exportAs: 'ngsTourStep',
   imports: [
     NgTemplateOutlet,
     NgClass,

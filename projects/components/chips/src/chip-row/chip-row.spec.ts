@@ -8,7 +8,6 @@ import { ChipRemove } from '../chip-remove';
 import { ChipEditedEvent, ChipRow } from './chip-row';
 
 @Component({
-  standalone: true,
   imports: [ChipEdit, ChipRemove, ChipRow],
   template: `
     <ngs-chip-row

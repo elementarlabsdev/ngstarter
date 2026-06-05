@@ -3,7 +3,6 @@ import { COMMENT_EDITOR, CommentEditorInterface } from '../types';
 
 @Directive({
   selector: '[ngsCommentEditorCommandCode]',
-  standalone: true,
   host: {
     '[attr.disabled]': `(commentEditor && commentEditor.api.isCommandDisabled('toggleCode')) ? '' : null`,
     '[class.active]': `commentEditor && commentEditor.api.isActive('code')`,

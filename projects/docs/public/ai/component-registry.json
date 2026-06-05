@@ -5679,7 +5679,9 @@
       "cssTokens": [
         "--ngs-marquee-animation-duration",
         "--ngs-marquee-gap",
+        "--ngs-marquee-item-width",
         "--ngs-marquee-pause",
+        "--ngs-marquee-repeat-gap",
         "--ngs-marquee-reverse"
       ],
       "example": null

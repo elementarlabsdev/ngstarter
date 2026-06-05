@@ -10,7 +10,7 @@ import { DateAdapter } from '../../core/datetime/date-adapter';
 
 @Component({
   selector: 'ngs-year-view',
-  standalone: true,
+  exportAs: 'ngsYearView',
   templateUrl: './year-view.html',
   styleUrl: './year-view.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

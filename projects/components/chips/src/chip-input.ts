@@ -18,7 +18,6 @@ export interface ChipInputEvent {
 
 @Directive({
   selector: 'input[ngsChipInputFor]',
-  standalone: true,
   host: {
     'class': 'ngs-chip-input',
     '(input)': '_onInput()',

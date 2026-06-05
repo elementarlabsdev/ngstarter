@@ -6,7 +6,6 @@ import { describe, expect, it } from 'vitest';
 import { DigitRoller } from './digit-roller';
 
 @Component({
-  standalone: true,
   imports: [DigitRoller],
   template: `
     <ngs-digit-roller

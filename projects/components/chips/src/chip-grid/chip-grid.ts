@@ -21,6 +21,7 @@ let nextId = 0;
 
 @Component({
   selector: 'ngs-chip-grid',
+  exportAs: 'ngsChipGrid',
   templateUrl: './chip-grid.html',
   styleUrl: './chip-grid.scss',
   host: {
@@ -29,7 +30,6 @@ let nextId = 0;
     '[attr.aria-disabled]': 'disabled',
     '[id]': 'id',
   },
-  standalone: true,
   providers: [
     {
       provide: FormFieldControl,

@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'ngs-action-row',
-  standalone: true,
-  imports: [],
+  exportAs: 'ngsActionRow',
   templateUrl: './action-row.html',
   styleUrl: './action-row.scss',
   host: {

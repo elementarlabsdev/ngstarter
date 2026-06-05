@@ -28,6 +28,7 @@ import MicrophoneRecorder, {
 
 @Component({
   selector: 'ngs-audio-recorder',
+  exportAs: 'ngsAudioRecorder',
   standalone: true,
   imports: [
     CommonModule,

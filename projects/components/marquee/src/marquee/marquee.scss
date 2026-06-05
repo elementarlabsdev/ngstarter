@@ -3,6 +3,8 @@
 :host {
   --ngs-marquee-animation-duration: 20s;
   --ngs-marquee-gap: --spacing(6);
+  --ngs-marquee-repeat-gap: var(--ngs-marquee-gap);
+  --ngs-marquee-item-width: 0px;
   --ngs-marquee-reverse: ;
   --ngs-marquee-pause: running;
 
@@ -12,32 +14,32 @@
   .content {
     width: 100%;
     height: 100%;
-    display: flex;
-    gap: var(--ngs-marquee-gap);
     overflow: hidden;
     padding: 0.5rem;
-    flex-direction: row;
 
-    .item {
-      flex-direction: row;
+    .track {
+      display: flex;
+      gap: var(--ngs-marquee-repeat-gap);
+      width: max-content;
       animation: ngs-marquee-animation var(--ngs-marquee-animation-duration) infinite linear var(--ngs-marquee-reverse);
+      will-change: transform;
     }
 
     .item {
       display: flex;
-      gap: var(--ngs-marquee-gap);
       flex-shrink: 0;
+      white-space: nowrap;
     }
   }
 
   .content:hover {
-    & > .item {
+    .track {
       animation-play-state: var(--ngs-marquee-pause);
     }
   }
 
   .content.out-of-view {
-    & > .item {
+    .track {
       animation-play-state: paused;
     }
   }
@@ -54,7 +56,7 @@
       transform: translateX(0);
     }
     100% {
-      transform: translateX(calc(-100% - var(--ngs-marquee-gap)));
+      transform: translateX(calc((var(--ngs-marquee-item-width) + var(--ngs-marquee-repeat-gap)) * -1));
     }
   }
 }

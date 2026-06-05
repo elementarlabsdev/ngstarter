@@ -634,7 +634,7 @@ Typography:
   selectors: `[ngsMarqueeItem]`, `ngs-marquee`
   exports: `Marquee`, `MarqueeItemDirective`
   inputs: `pauseOnHover`, `reverse`
-  tokens: `--ngs-marquee-animation-duration`, `--ngs-marquee-gap`, `--ngs-marquee-pause`, `--ngs-marquee-reverse`
+  tokens: `--ngs-marquee-animation-duration`, `--ngs-marquee-gap`, `--ngs-marquee-item-width`, `--ngs-marquee-pause`, `--ngs-marquee-repeat-gap`, `--ngs-marquee-reverse`
 - menu: `@ngstarter-ui/components/menu` docs: /components/menu
   purpose: Show a short contextual set of commands in an overlay opened from a trigger or right-click area.
   use when: Use ngs-menu for row actions, overflow more actions, user menus, context menus, toolbar actions, and nested command groups. Put ngsMenuTriggerFor on a button ngsButton, button ngsIconButton, row action, or toolbar control. Use ngsContextMenuTriggerFor for right-click menus. Use button ngs-menu-item for commands, and ngs-menu-divider, ngs-menu-heading, ngs-menu-header, and ngs-menu-footer for structure. Use nested menus when a command opens a secondary command group. Use ngsMenuContent with ngsMenuTriggerData when the same menu template must render lazily for a specific row, user, or item. Do not use Menu for selecting form values; use Select, Autocomplete, ColorSwitcher, Datepicker, or another dedicated form control. Do not use for persistent navigation; use Navigation, Sidebar, Sidenav, or NavList. Do not use for long lists, tables, filters, forms, modal workflows, command palettes, or bulk action bars; use List, Table/DataView, Dialog, CommandBar, or Overlay/Popover as appropriate.

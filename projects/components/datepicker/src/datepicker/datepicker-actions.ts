@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'ngs-datepicker-actions',
-  standalone: true,
+  exportAs: 'ngsDatepickerActions',
   template: `
     <div class="ngs-datepicker-actions">
       <ng-content />

@@ -4,7 +4,6 @@ import { FilterBuilderOperationIconDirective } from './filter-builder-operation-
 
 @Directive({
   selector: '[ngsFilterBuilderOperationDef]',
-  standalone: true
 })
 export class FilterBuilderOperationDefDirective {
   id = input('', {

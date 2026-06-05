@@ -3,7 +3,6 @@ import { Component, input, booleanAttribute } from '@angular/core';
 @Component({
   selector: 'ngs-optgroup',
   exportAs: 'ngsOptgroup',
-  standalone: true,
   template: `
     <span class="ngs-optgroup-label">{{ label() }}</span>
     <ng-content select="ngs-option"></ng-content>

@@ -2,7 +2,7 @@ import { Component, ElementRef, inject, signal, HostListener, computed, output, 
 
 @Component({
   selector: 'ngs-tour-backdrop',
-  standalone: true,
+  exportAs: 'ngsTourBackdrop',
   templateUrl: './tour-backdrop.html',
   styleUrl: './tour-backdrop.scss',
   host: {

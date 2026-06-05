@@ -462,7 +462,6 @@ export const RIPPLE_GLOBAL_OPTIONS = new InjectionToken<RippleGlobalOptions>(
 
 @Directive({
   selector: '[ngsRipple]',
-  standalone: true,
   exportAs: 'ngsRipple',
   host: {
     'class': 'ngs-ripple',

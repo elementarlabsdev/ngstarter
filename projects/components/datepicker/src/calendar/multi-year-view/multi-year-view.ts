@@ -13,7 +13,7 @@ const YEARS_PER_PAGE = 24;
 
 @Component({
   selector: 'ngs-multi-year-view',
-  standalone: true,
+  exportAs: 'ngsMultiYearView',
   templateUrl: './multi-year-view.html',
   styleUrl: './multi-year-view.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

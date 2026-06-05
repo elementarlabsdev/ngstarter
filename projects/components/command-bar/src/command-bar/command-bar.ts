@@ -12,7 +12,6 @@ import { CommandBarPosition } from '../types';
 @Component({
   selector: 'ngs-command-bar',
   exportAs: 'ngsCommandBar',
-  standalone: true,
   templateUrl: './command-bar.html',
   styleUrl: './command-bar.scss',
   host: {

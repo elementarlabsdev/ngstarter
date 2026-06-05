@@ -17,7 +17,6 @@ let nextId = 0;
 @Component({
   selector: 'ngs-expansion-panel',
   exportAs: 'ngsExpansionPanel',
-  standalone: true,
   templateUrl: './expansion-panel.html',
   styleUrl: './expansion-panel.scss',
   host: {

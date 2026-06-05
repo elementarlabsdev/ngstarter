@@ -14,7 +14,6 @@ import { DatepickerToggle } from '../datepicker-toggle/datepicker-toggle';
 import { Datepicker } from './datepicker';
 
 @Component({
-  standalone: true,
   imports: [ReactiveFormsModule, Datepicker, DatepickerInput, DatepickerToggle],
   template: `
     <input class="date-input" [formControl]="date" [ngsDatepicker]="picker" />
@@ -40,7 +39,6 @@ class DatepickerHost {
 }
 
 @Component({
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     Datepicker,

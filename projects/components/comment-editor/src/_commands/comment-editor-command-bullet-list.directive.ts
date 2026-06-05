@@ -3,7 +3,6 @@ import { COMMENT_EDITOR, CommentEditorInterface } from '../types';
 
 @Directive({
   selector: '[ngsCommentEditorCommandBulletList]',
-  standalone: true,
   host: {
     '[attr.disabled]': `(commentEditor && commentEditor.api.isCommandDisabled('toggleBulletList')) ? '' : null`,
     '[class.active]': `commentEditor && commentEditor.api.isActive('bulletList')`,

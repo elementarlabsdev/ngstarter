@@ -4,7 +4,6 @@ import { UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter-ui/c
 
 @Directive({
   selector: '[ngsCommentEditorCommandImage]',
-  standalone: true,
   hostDirectives: [
     {
       directive: UploadTriggerDirective,

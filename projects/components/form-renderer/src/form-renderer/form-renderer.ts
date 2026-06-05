@@ -22,7 +22,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'ngs-form-renderer',
   exportAs: 'ngsFormRenderer',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
