@@ -27,32 +27,18 @@
   &:not(.open) {
     transition: transform 0.2s var(--ngs-drawer-transition), visibility 0s linear 0.2s;
   }
-}
 
-.ngs-drawer-content {
-  background: var(--ngs-color-surface-container-lowest);
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  outline: var(--ngs-dropdown-border);
-  margin: 1.75rem;
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-  border-radius: 1rem;
-  border: 1px solid transparent;
-}
-
-.drawer-backdrop {
-  background: var(--ngs-overlay-backdrop-bg);
-  opacity: 0;
-  transition: opacity 150ms cubic-bezier(.4, 0, .2, 1);
-
-  &.cdk-overlay-backdrop-showing {
-    opacity: 1;
+  .ngs-drawer-content {
+    background: var(--ngs-color-surface-container-lowest);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    outline: var(--ngs-dropdown-border);
+    margin: 1.75rem;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    border-radius: 1rem;
+    border: 1px solid transparent;
   }
-}
-
-.cdk-overlay-pane.pointer-events-none {
-  pointer-events: none !important;
 }

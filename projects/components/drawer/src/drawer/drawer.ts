@@ -13,7 +13,7 @@ import {
   Signal,
   TemplateRef,
   viewChild,
-  ViewContainerRef,
+  ViewContainerRef, 
   ViewEncapsulation,
   WritableSignal,
 } from '@angular/core';
@@ -28,7 +28,6 @@ import { timer } from 'rxjs';
   exportAs: 'ngsDrawer',
   templateUrl: './drawer.html',
   styleUrl: './drawer.scss',
-  standalone: true,
   providers: [
     {
       provide: DRAWER,
@@ -37,6 +36,9 @@ import { timer } from 'rxjs';
   ],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    'class': 'ngs-drawer'
+  }
 })
 export class Drawer implements OnDestroy {
   private overlay = inject(Overlay);
@@ -85,25 +87,31 @@ export class Drawer implements OnDestroy {
         scrollStrategy: this.overlay.scrollStrategies.block()
       });
 
-      this.overlayRef.backdropClick().subscribe(() => {
-        this.close();
-      });
-
-      this.overlayRef.outsidePointerEvents().subscribe((event: MouseEvent) => {
-        const target = event.target as HTMLElement;
-
-        if (target.closest('.ngs-drawer-ignore-outside-click')) {
-          return;
-        }
-
-        this.close();
-      });
-
-      this.overlayRef.keydownEvents().subscribe(event => {
-        if (event.key === 'Escape') {
+      this.overlayRef.backdropClick()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => {
           this.close();
-        }
-      });
+        });
+
+      this.overlayRef.outsidePointerEvents()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((event: MouseEvent) => {
+          const target = event.target as HTMLElement;
+
+          if (target.closest('.ngs-drawer-ignore-outside-click')) {
+            return;
+          }
+
+          this.close();
+        });
+
+      this.overlayRef.keydownEvents()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(event => {
+          if (event.key === 'Escape') {
+            this.close();
+          }
+        });
     }
 
     const portal = new TemplatePortal(this.portal(), this.viewContainerRef);
