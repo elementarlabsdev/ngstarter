@@ -992,6 +992,7 @@ function buildLlms(registry, full = false) {
     '- Put global component style overrides and global CSS variable overrides only in `styles.scss`; for component-scoped overrides, define them in that component\'s stylesheet so they apply only there.',
     '- In component SCSS files, all component-local styling must be nested under the `:host` selector. Do not write top-level component-local selectors outside `:host`.',
     '- In component SCSS files, nested element/state styles must use nested SCSS blocks instead of flat descendant selectors. Write `:host-context(.state) { .child { ... } }`, never `:host-context(.state) .child { ... }`; write `:host(.state) { .child { ... } }`, never `:host(.state) .child { ... }`.',
+    '- Do not set `encapsulation: ViewEncapsulation.None` when creating components unless the user explicitly requests global style encapsulation behavior.',
     '- Standalone `ngs-form-field` controls outside forms, such as header, toolbar, or compact filter fields, do not require `ngs-label` when they have clear placeholder text or an `aria-label`/`aria-labelledby` context. Form fields inside actual forms should still use `ngs-label`.',
     '- When implementing a screenshot or mockup that shows a chart, build the chart with ECharts in a dedicated standalone component instead of drawing it inline or with ad hoc markup.',
     '- When placing an icon or other leading shape inside `ngs-chip`, project it through `ngsChipShape` (or `ngs-chip-shape`) instead of inserting the icon directly in the chip content.',

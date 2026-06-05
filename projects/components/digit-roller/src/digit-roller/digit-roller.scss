@@ -24,7 +24,7 @@
   initial-value: 0px;
 }
 
-ngs-digit-roller {
+:host {
   --ngs-digit-roller-mask-height: 0.25em;
   --ngs-digit-roller-mask-width: 0.5em;
   --ngs-digit-roller-min-digit-width: 0.6em;
@@ -168,14 +168,14 @@ ngs-digit-roller {
     white-space: nowrap;
     border: 0;
   }
-}
 
-ngs-digit-roller[data-animated='false'] {
-  .ngs-digit-roller__digit-number,
-  .ngs-digit-roller__digit,
-  .ngs-digit-roller__separator,
-  .ngs-digit-roller__literal {
-    transition: none !important;
-    animation: none !important;
+  &[data-animated='false'] {
+    .ngs-digit-roller__digit-number,
+    .ngs-digit-roller__digit,
+    .ngs-digit-roller__separator,
+    .ngs-digit-roller__literal {
+      transition: none !important;
+      animation: none !important;
+    }
   }
 }
