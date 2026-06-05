@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'ngs-notification-time,[ngs-notification-time]',
@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './notification-time.html',
   styleUrl: './notification-time.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-notification-time'
   }

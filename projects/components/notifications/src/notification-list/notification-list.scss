@@ -9,6 +9,16 @@
 
   .notification {
     position: relative;
+
+    &.is-interactive {
+      outline: none;
+
+      &:focus-visible {
+        outline: 2px solid var(--ngs-color-primary);
+        outline-offset: --spacing(1);
+        border-radius: var(--ngs-notification-radius, var(--ngs-radius-xl));
+      }
+    }
   }
 
   .controls {
@@ -17,4 +27,3 @@
     top: --spacing(1);
   }
 }
-

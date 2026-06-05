@@ -6225,6 +6225,7 @@
       "exportedSymbols": [
         "Notification",
         "NotificationActor",
+        "NotificationActorLike",
         "NotificationAvatarDirective",
         "NotificationContent",
         "NotificationControlsDefDirective",
@@ -6242,12 +6243,15 @@
         "notifications",
         "static"
       ],
-      "outputs": [],
+      "outputs": [
+        "notificationClick"
+      ],
       "cssTokens": [
         "--ngs-color-neutral-900",
         "--ngs-color-neutral-950",
         "--ngs-color-on-surface",
         "--ngs-color-on-surface-variant",
+        "--ngs-color-primary",
         "--ngs-color-surface-container",
         "--ngs-color-surface-container-low",
         "--ngs-color-surface-container-lowest",
@@ -6261,7 +6265,8 @@
         "--ngs-notification-is-unread-hover-bg",
         "--ngs-notification-list-gap",
         "--ngs-notification-padding",
-        "--ngs-notification-radius"
+        "--ngs-notification-radius",
+        "--ngs-radius-xl"
       ],
       "example": null
     },

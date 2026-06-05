@@ -7,6 +7,7 @@ import { NotificationAvatarDirective } from '../notification-avatar.directive';
 import { NotificationActor } from '../notification-actor/notification-actor';
 import { NotificationContent } from '../notification-content/notification-content';
 import { NotificationMessage } from '../notification-message/notification-message';
+import { NotificationPropsDirective } from '../notification-props.directive';
 import { NotificationTime } from '../notification-time/notification-time';
 import { Notification } from './notification';
 
@@ -39,6 +40,18 @@ class NotificationHost {
   readonly isUnread = signal(false);
 }
 
+@Component({
+  imports: [
+    NotificationPropsDirective
+  ],
+  template: `
+    <div class="props" ngsNotificationProps [isUnread]="isUnread()"></div>
+  `
+})
+class NotificationPropsHost {
+  readonly isUnread = signal(false);
+}
+
 describe('Notification', () => {
   let fixture: ComponentFixture<NotificationHost>;
 
@@ -57,6 +70,7 @@ describe('Notification', () => {
     expect(notification.classList.contains('ngs-notification')).toBe(true);
     expect(notification.classList.contains('is-unread')).toBe(false);
     expect(notification.querySelector('.avatar .projected-avatar')?.textContent?.trim()).toBe('A');
+    expect(notification.querySelector('.projected-avatar')?.classList.contains('ngs-notification-avatar')).toBe(true);
     expect(notification.querySelector('.message ngs-notification-message')?.textContent).toContain('mentioned you');
     expect(notification.querySelector('.content .projected-content')?.textContent?.trim()).toBe('Launch planning');
     expect(notification.querySelector('ngs-notification-time .projected-time')?.textContent?.trim()).toBe('Just now');
@@ -76,5 +90,30 @@ describe('Notification', () => {
 
     expect(actor.classList.contains('ngs-notification-actor')).toBe(true);
     expect(actor.classList.contains('as-link')).toBe(true);
+  });
+});
+
+describe('NotificationPropsDirective', () => {
+  let fixture: ComponentFixture<NotificationPropsHost>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [NotificationPropsHost]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(NotificationPropsHost);
+    fixture.detectChanges();
+  });
+
+  it('renders props host class and unread state', () => {
+    const props = fixture.nativeElement.querySelector('.props') as HTMLElement;
+
+    expect(props.classList.contains('ngs-notification-props')).toBe(true);
+    expect(props.classList.contains('is-unread')).toBe(false);
+
+    fixture.componentInstance.isUnread.set(true);
+    fixture.detectChanges();
+
+    expect(props.classList.contains('is-unread')).toBe(true);
   });
 });

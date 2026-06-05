@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, input } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'ngs-notification,[ngs-notification]',
@@ -6,6 +6,7 @@ import { booleanAttribute, Component, input } from '@angular/core';
   imports: [],
   templateUrl: './notification.html',
   styleUrl: './notification.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-notification',
     '[class.is-unread]': 'isUnread()'
