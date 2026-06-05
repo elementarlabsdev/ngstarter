@@ -42,6 +42,12 @@ export class Api {
       default: '–'
     },
     {
+      name: 'checkable',
+      description: 'Whether the tree should render hierarchical checkboxes before each node.',
+      type: 'boolean',
+      default: 'false'
+    },
+    {
       name: 'trackBy',
       description: 'Tracking function that will be used to check the differences in data changes.',
       type: 'TrackByFunction<T>',

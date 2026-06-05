@@ -22,6 +22,22 @@
       box-sizing: border-box;
     }
 
+    .ngs-tree-node-checkbox {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+      margin-inline-end: var(--ngs-tree-node-checkbox-gap, --spacing(2));
+
+      ngs-checkbox {
+        --ngs-checkbox-gap: 0;
+      }
+
+      .ngs-checkbox-label {
+        display: none;
+      }
+    }
+
     .ngs-nested-tree-node {
       border-bottom-width: 0;
     }
