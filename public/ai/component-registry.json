@@ -3657,8 +3657,7 @@
         "--ngs-color-surface-container-lowest",
         "--ngs-drawer-transition",
         "--ngs-drawer-transition-duration",
-        "--ngs-dropdown-border",
-        "--ngs-overlay-backdrop-bg"
+        "--ngs-dropdown-border"
       ],
       "example": null
     },
@@ -8364,8 +8363,7 @@
       "cssTokens": [
         "--ngs-color-neutral-100",
         "--ngs-color-neutral-950",
-        "--ngs-font-size-sm",
-        "--ngs-radius-xl"
+        "--ngs-font-size-sm"
       ],
       "example": null
     },

@@ -412,7 +412,7 @@ Typography:
   exports: `Drawer`, `DRAWER`, `DrawerIgnoreOutsideClickDirective`
   inputs: `isOpen`, `showBackdrop`
   outputs: `closed`, `opened`
-  tokens: `--ngs-color-surface-container-lowest`, `--ngs-drawer-transition`, `--ngs-drawer-transition-duration`, `--ngs-dropdown-border`, `--ngs-overlay-backdrop-bg`
+  tokens: `--ngs-color-surface-container-lowest`, `--ngs-drawer-transition`, `--ngs-drawer-transition-duration`, `--ngs-dropdown-border`
 - emoji-picker: `@ngstarter-ui/components/emoji-picker` docs: /components/emoji-picker
   purpose: Let users choose one Unicode emoji from an overlay picker.
   use when: Use in comments, chats, quick messages, reactions, comment/editor toolbars, social features, and any text entry flow where users need to insert or choose an emoji. Open from a button or toolbar action with [ngsEmojiPickerTriggerFor], then handle emojiSelected as the selected emoji string. It supports categorized emoji data, language from LOCALE_ID or the language input, hover preview, and loading skeletons. Do not use for interface icons; use Icon. Do not use for normal action menus; use Menu. Do not use as a full editor; use CommentEditor or TextEditor. Do not use for custom stickers, GIFs, or media pickers unless the value is a Unicode emoji.
@@ -905,7 +905,7 @@ Typography:
   example topics: Basic Snackbar, Snackbar With Custom Component, Configurable Snackbar, Snackbar with custom, Snackbar
   selectors: `ngs-simple-snack-bar`, `ngs-snack-bar-container`
   exports: `provideSnackBarConfig`, `SimpleSnackBar`, `SNACK_BAR_CONFIG`, `SNACK_BAR_DATA`, `SnackBar`, `SnackBarConfig`, `SnackBarContainer`, `SnackBarHorizontalPosition`, `SnackBarRef`, `SnackBarVerticalPosition`
-  tokens: `--ngs-color-neutral-100`, `--ngs-color-neutral-950`, `--ngs-font-size-sm`, `--ngs-radius-xl`
+  tokens: `--ngs-color-neutral-100`, `--ngs-color-neutral-950`, `--ngs-font-size-sm`
 - sort: `@ngstarter-ui/components/sort` docs: /components/sort
   purpose: Provide sortable header behavior and sort state for table-like data.
   use when: Use ngsSort on a sortable table/list/data container and ngs-sort-header="fieldName" on header cells that should cycle through sort states. Sort tracks active column and direction (asc, desc, or cleared), supports ngsSortActive, ngsSortDirection, ngsSortStart, ngsSortDisableClear, ngsSortDisabled, per-header disabled state, sortActionDescription, and emits ngsSortChange with { active, direction }. Use it with Table sortable column headers, custom table-like data surfaces, and when wiring sort state into a local TableDataSource or server/API query. For DataView, usually prefer its built-in sortable column config and sortChange instead of manually adding ngs-sort-header. Do not use Sort as a visual sort icon only, filter builder, search, grouping, drag reorder, tab sorting, or generic “sort these cards” button. Sort only manages header state and emits the selected sort; the app/data source still applies local sorting or sends the sort state to the backend.

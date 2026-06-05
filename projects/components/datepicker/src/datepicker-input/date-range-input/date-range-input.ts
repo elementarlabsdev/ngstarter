@@ -10,7 +10,6 @@ import {
   OnInit,
   contentChild,
   ChangeDetectionStrategy,
-  ViewEncapsulation,
   forwardRef,
   signal,
   computed,
@@ -25,7 +24,6 @@ import { FormFieldControl } from '@ngstarter-ui/components/form-field';
 
 @Directive({
   selector: 'input[ngsStartDate]',
-  standalone: true,
   host: {
     'class': 'ngs-date-range-input-start',
     '(input)': '_onInput($any($event).target.value)',
@@ -68,7 +66,6 @@ export class StartDate<D> {
 
 @Directive({
   selector: 'input[ngsEndDate]',
-  standalone: true,
   host: {
     'class': 'ngs-date-range-input-end',
     '(input)': '_onInput($any($event).target.value)',
@@ -113,9 +110,8 @@ export class EndDate<D> {
   selector: 'ngs-date-range-input',
   standalone: true,
   templateUrl: './date-range-input.html',
-  styleUrls: ['./date-range-input.scss', '../../datepicker/datepicker.scss'],
+  styleUrl: './date-range-input.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   host: {
     'class': 'ngs-date-range-input',
     '[attr.id]': 'id',

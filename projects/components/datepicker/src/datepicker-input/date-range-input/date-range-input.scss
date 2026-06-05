@@ -1,3 +1,44 @@
+@reference 'tailwindcss';
+
 :host {
-  display: block;
+  display: flex;
+  width: 100%;
+
+  &.ngs-date-range-input-floating {
+    .ngs-date-range-input-container {
+      opacity: 1;
+    }
+  }
+
+  &:not(.ngs-date-range-input-floating) {
+    .ngs-date-range-input-container {
+      opacity: 0;
+    }
+  }
+
+  .ngs-date-range-input-container {
+    display: flex;
+    align-items: center;
+    gap: --spacing(2);
+    width: 100%;
+    transition: opacity 200ms, visibility 200ms;
+  }
+
+  .ngs-date-range-input-separator {
+    flex-shrink: 0;
+  }
+
+  ::ng-deep {
+    .ngs-date-range-input-start,
+    .ngs-date-range-input-end {
+      background: transparent;
+      border: none;
+      outline: none;
+      width: 86px;
+
+      &::placeholder {
+        color: var(--ngs-field-label-color);
+      }
+    }
+  }
 }
