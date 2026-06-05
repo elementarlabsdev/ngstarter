@@ -14,6 +14,7 @@ import {
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Dicebear } from '@ngstarter-ui/components/avatar';
 import { RouterLink } from '@angular/router';
+import {Button} from "@ngstarter-ui/components/button";
 
 @Component({
   selector: 'app-notification-list-example',
@@ -33,7 +34,8 @@ import { RouterLink } from '@angular/router';
     NotificationMessage,
     NotificationTime,
     RouterLink,
-    NotificationContent
+    NotificationContent,
+    Button
   ],
   templateUrl: './notification-list-example.html',
   styleUrl: './notification-list-example.scss'

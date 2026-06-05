@@ -1,6 +1,8 @@
 @reference 'tailwindcss';
 
 :host {
+  --ngs-notification-content-margin: --spacing(1.5) 0 --spacing(1.5) 0;
+  
   display: block;
-  margin: --spacing(1) 0 --spacing(1) 0;
+  margin: var(--ngs-notification-content-margin);
 }

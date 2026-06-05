@@ -1,0 +1,104 @@
+<div class="flex flex-col gap-5">
+  <ngs-notification class="border border-muted">
+    <ngs-dicebear key="mila-ray" image="assets/avatars/1.svg" ngsNotificationAvatar/>
+    <ngs-notification-message>
+      <a routerLink="/" ngs-notification-actor>Mila Ray</a>
+      mentioned you in <a routerLink="/" class="link">Launch planning</a>
+    </ngs-notification-message>
+    <ngs-notification-content class="notification-preview">
+      Can you confirm the rollout window before we lock the customer email?
+    </ngs-notification-content>
+    <ngs-notification-time>Just now</ngs-notification-time>
+  </ngs-notification>
+
+  <ngs-notification isUnread class="border border-muted">
+    <ngs-dicebear key="nolan-kim" image="assets/avatars/2.svg" ngsNotificationAvatar/>
+    <ngs-notification-message>
+      <a routerLink="/" ngs-notification-actor>Nolan Kim</a>
+      requested access to <a routerLink="/" class="link">Q3 Pipeline</a>
+    </ngs-notification-message>
+    <ngs-notification-content>
+      <div class="notification-preview">
+        Workspace role: Editor
+      </div>
+      <div class="mt-3 flex flex-wrap gap-2">
+        <button ngsButton="filled">Approve</button>
+        <button ngsButton="outlined">Decline</button>
+      </div>
+    </ngs-notification-content>
+    <ngs-notification-time>8 minutes ago</ngs-notification-time>
+  </ngs-notification>
+
+  <ngs-notification class="border border-muted">
+    <ngs-icon
+      name="fluent:checkmark-circle-24-regular"
+      class="notification-icon-avatar notification-icon-avatar--success"
+      ngsNotificationAvatar/>
+    <ngs-notification-message>
+      Import finished for <a routerLink="/" class="link">Enterprise accounts.csv</a>
+    </ngs-notification-message>
+    <ngs-notification-content>
+      <div class="notification-preview">
+        2,418 rows imported, 12 duplicates skipped, and 3 rows need review.
+      </div>
+      <div class="mt-3 flex flex-wrap gap-2">
+        <ngs-chip appearance="success">Complete</ngs-chip>
+        <ngs-chip appearance="outlined">3 warnings</ngs-chip>
+      </div>
+    </ngs-notification-content>
+    <ngs-notification-time>32 minutes ago</ngs-notification-time>
+  </ngs-notification>
+
+  <ngs-notification class="border border-muted">
+    <ngs-dicebear key="sofia-chen" image="assets/avatars/3.svg" ngsNotificationAvatar/>
+    <ngs-notification-message>
+      <a routerLink="/" ngs-notification-actor>Sofia Chen</a>
+      assigned you <a routerLink="/" class="link">Review renewal risks</a>
+    </ngs-notification-message>
+    <ngs-notification-content>
+      <div class="notification-task">
+        <div>
+          <div class="text-sm font-medium text-on-surface">Review renewal risks</div>
+          <div class="text-xs text-on-surface-variant">Customer success board</div>
+        </div>
+        <ngs-chip appearance="warning">Due today</ngs-chip>
+      </div>
+    </ngs-notification-content>
+    <ngs-notification-time>1 hour ago</ngs-notification-time>
+  </ngs-notification>
+
+  <ngs-notification class="border border-muted">
+    <ngs-icon
+      name="fluent:credit-card-clock-24-regular"
+      class="notification-icon-avatar notification-icon-avatar--warning"
+      ngsNotificationAvatar/>
+    <ngs-notification-message>
+      Billing retry is scheduled for <a routerLink="/" class="link">Acme Workspace</a>
+    </ngs-notification-message>
+    <ngs-notification-content>
+      <div class="notification-preview">
+        The last payment attempt failed. Update the payment method before Friday to keep exports enabled.
+      </div>
+      <div class="mt-3">
+        <button ngsButton="tonal">Update payment method</button>
+      </div>
+    </ngs-notification-content>
+    <ngs-notification-time>Yesterday</ngs-notification-time>
+  </ngs-notification>
+
+  <ngs-notification class="border border-muted">
+    <ngs-icon
+      name="fluent:shield-keyhole-24-regular"
+      class="notification-icon-avatar notification-icon-avatar--info"
+      ngsNotificationAvatar/>
+    <ngs-notification-message>
+      Your security policy was updated by <a routerLink="/" ngs-notification-actor>Admin Team</a>
+    </ngs-notification-message>
+    <ngs-notification-content>
+      <div class="notification-preview">
+        Session timeout changed to 30 minutes and device approval is now required for new sign-ins.
+      </div>
+    </ngs-notification-content>
+    <ngs-notification-time>2 days ago</ngs-notification-time>
+  </ngs-notification>
+</div>
