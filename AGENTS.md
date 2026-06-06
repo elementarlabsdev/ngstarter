@@ -39,7 +39,11 @@ Prefer the narrowest command that verifies the change. For component library cha
 - Secondary entry points have their own `index.ts` and `ng-package.json`.
 - Keep imports from public entry points when writing docs or consumer-facing examples:
   `@ngstarter-ui/components/<component>`.
-- Use Angular signal APIs such as `input()` where the surrounding component already uses them.
+- Always use the latest Angular APIs supported by the current project version in new components,
+  docs, and examples. Prefer standalone components, `inject()`, `signal()`, `computed()`,
+  `input()`, `output()`, `model()`, and Angular control flow such as `@if`, `@for`, and `@switch`
+  instead of older class-field state, constructor injection, decorators, or structural directives
+  unless existing local patterns or interoperability require the older API.
 - Keep `ChangeDetectionStrategy.OnPush` for UI components unless there is a specific reason not to.
 - Keep styles component-scoped unless a value belongs in shared theme tokens.
 

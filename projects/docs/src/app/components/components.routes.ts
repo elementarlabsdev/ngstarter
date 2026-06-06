@@ -261,6 +261,11 @@ export const routes: Routes = [
     title: 'Upload'
   },
   {
+    path: 'file-type',
+    loadChildren: () => import('./file-type/routes').then(m => m.routes),
+    title: 'File Type'
+  },
+  {
     path: 'command-bar',
     loadChildren: () => import('./command-bar/routes').then(m => m.routes),
     title: 'Command Bar'

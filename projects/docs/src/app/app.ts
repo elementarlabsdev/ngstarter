@@ -383,7 +383,7 @@ export class App implements OnInit {
       type: 'group',
       icon: 'fluent:grid-24-regular',
       name: 'Components',
-      badge: 76,
+      badge: 77,
       children: [
         {
           key: uuid(),
@@ -606,6 +606,12 @@ export class App implements OnInit {
           type: 'link',
           name: 'Upload',
           link: '/components/upload'
+        },
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'File Type',
+          link: '/components/file-type'
         },
         {
           key: uuid(),

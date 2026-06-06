@@ -1,0 +1,27 @@
+<app-page>
+  <h1 appPageTitle>File Type</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        File Type renders a compact SVG icon for a file based on a MIME type, extension, or file name.
+        Use it in file lists, upload previews, attachment cards, media libraries, document pickers, and
+        activity feeds where a file needs a clear visual type indicator.
+      </p>
+      <p class="mt-3">
+        The component resolves explicit extensions first, then file name extensions, then MIME types. Unknown
+        files fall back to TXT by default, or to the fallback type you provide.
+      </p>
+      <p class="mt-3">
+        File Type only renders the icon. Pair it with Upload, List, Card, DataView, or Table when users need
+        selection, progress, actions, metadata, or records around the file.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/file-type" ngs-tab-link>Overview</a>
+      <a routerLink="/components/file-type/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

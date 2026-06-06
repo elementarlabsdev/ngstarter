@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate-ai-metadata.mjs",
   "package": "@ngstarter-ui/components",
   "description": "AI-readable registry for NgStarter UI Angular secondary entry points.",
-  "componentCount": 123,
+  "componentCount": 124,
   "conventions": {
     "importPattern": "@ngstarter-ui/components/<component>",
     "selectorPrefix": "ngs",
@@ -3966,6 +3966,70 @@
         "--ngs-expansion-panel-header-height",
         "--ngs-expansion-panel-radius",
         "--ngs-radius-xl"
+      ],
+      "example": null
+    },
+    {
+      "name": "file-type",
+      "title": "File Type",
+      "overviewName": "File Type",
+      "category": "components",
+      "package": "@ngstarter-ui/components",
+      "importPath": "@ngstarter-ui/components/file-type",
+      "publicApi": "projects/components/file-type/public-api.ts",
+      "sourceRoot": "projects/components/file-type/src",
+      "docsPath": "/components/file-type",
+      "docsOverviewSource": "projects/docs/src/app/components/file-type/overview/overview.html",
+      "purpose": "The NgStarter Angular File Type component renders built-in SVG file icons from a MIME type, extension, or file name.",
+      "useWhen": "Choose File Type when the workflow matches examples such as Basic File Type, Icon Sizes, MIME Type Detection, File Type Gallery, File type sizes.",
+      "exampleTopics": [
+        "Basic File Type",
+        "Icon Sizes",
+        "MIME Type Detection",
+        "File Type Gallery",
+        "File type sizes",
+        "File type mime"
+      ],
+      "minimalExample": "<div class=\"flex items-center gap-4\">\n  <ngs-file-type fileName=\"contract.pdf\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">contract.pdf</div>\n    <div class=\"text-xs text-secondary\">Resolved from fileName</div>\n  </div>\n</div>\n<div class=\"flex items-center gap-4 mt-5\">\n  <ngs-file-type extension=\"xlsx\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">Financial model</div>\n    <div class=\"text-xs text-secondary\">Resolved from extension</div>\n  </div>\n</div>",
+      "exampleFiles": [
+        {
+          "name": "basic-file-type-example",
+          "title": "Basic file type",
+          "file": "projects/docs/src/app/components/file-type/_examples/basic-file-type-example/basic-file-type-example.html",
+          "source": "<div class=\"flex items-center gap-4\">\n  <ngs-file-type fileName=\"contract.pdf\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">contract.pdf</div>\n    <div class=\"text-xs text-secondary\">Resolved from fileName</div>\n  </div>\n</div>\n<div class=\"flex items-center gap-4 mt-5\">\n  <ngs-file-type extension=\"xlsx\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">Financial model</div>\n    <div class=\"text-xs text-secondary\">Resolved from extension</div>\n  </div>\n</div>"
+        },
+        {
+          "name": "file-type-gallery-example",
+          "title": "File type gallery",
+          "file": "projects/docs/src/app/components/file-type/_examples/file-type-gallery-example/file-type-gallery-example.html",
+          "source": "<div class=\"grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5\">\n  @for (type of types(); track type) {\n    <div class=\"flex flex-col items-center gap-2 rounded-lg border border-subtle p-4\">\n      <ngs-file-type [extension]=\"type\" class=\"size-16\"/>\n      <div class=\"text-xs uppercase text-secondary\">{{ type }}</div>\n    </div>\n  }\n</div>"
+        },
+        {
+          "name": "file-type-mime-example",
+          "title": "File type mime",
+          "file": "projects/docs/src/app/components/file-type/_examples/file-type-mime-example/file-type-mime-example.html",
+          "source": "<div class=\"grid gap-4 sm:grid-cols-2\">\n  @for (file of files(); track file.name) {\n    <div class=\"flex items-center gap-4 rounded-lg border border-subtle p-4\">\n      <ngs-file-type [mimeType]=\"file.mimeType\" [fallback]=\"file.fallback\" class=\"size-12\"/>\n      <div class=\"min-w-0\">\n        <div class=\"truncate text-sm\">{{ file.name }}</div>\n        <div class=\"truncate text-xs text-secondary\">{{ file.mimeType }}</div>\n      </div>\n    </div>\n  }\n</div>"
+        }
+      ],
+      "previewAsset": "projects/components/file-type/preview.svg",
+      "selectors": [
+        "ngs-file-type"
+      ],
+      "exportedSymbols": [
+        "FileType",
+        "FileTypeName"
+      ],
+      "inputs": [
+        "decorative",
+        "extension",
+        "fallback",
+        "fileName",
+        "label",
+        "mimeType"
+      ],
+      "outputs": [],
+      "cssTokens": [
+        "--ngs-file-type-size"
       ],
       "example": null
     },
@@ -9272,8 +9336,8 @@
         "selectedTabChange"
       ],
       "cssTokens": [
+        "--ngs-color-border",
         "--ngs-color-on-surface-variant",
-        "--ngs-color-outline-variant",
         "--ngs-color-primary",
         "--ngs-color-subtle",
         "--ngs-color-surface-container-high",
@@ -9945,7 +10009,7 @@
           "name": "tooltip-disabled-example",
           "title": "Tooltip disabled",
           "file": "projects/docs/src/app/components/tooltip/_examples/tooltip-disabled-example/tooltip-disabled-example.html",
-          "source": "<button ngsButton=\"filled\"\n        ngsTooltip=\"Info about the action\"\n        [ngsTooltipDisabled]=\"disabled.value\">\n  Action\n</button>\n<ngs-checkbox [formControl]=\"disabled\">\n  Tooltip disabled\n</ngs-checkbox>"
+          "source": "<button ngsButton=\"filled\"\n        ngsTooltip=\"Info about the action\"\n        [ngsTooltipDisabled]=\"disabled.value\">\n  Action\n</button>\n<ngs-checkbox [formControl]=\"disabled\" class=\"ms-5\">\n  Tooltip disabled\n</ngs-checkbox>"
         },
         {
           "name": "tooltip-manually-show-hide-example",

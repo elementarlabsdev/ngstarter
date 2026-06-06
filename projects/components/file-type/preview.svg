@@ -1,0 +1,30 @@
+<svg width="240" height="160" viewBox="0 0 240 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="240" height="160" rx="18" fill="#F6F8FB"/>
+  <rect x="54" y="26" width="54" height="68" rx="8" fill="url(#pdf)"/>
+  <rect x="62" y="78" width="38" height="16" rx="4" fill="white" fill-opacity=".95"/>
+  <text x="81" y="89" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#D82432">PDF</text>
+  <path d="M67 47H91M67 55H94M67 63H86" stroke="white" stroke-opacity=".4" stroke-width="4" stroke-linecap="round"/>
+  <rect x="96" y="52" width="54" height="68" rx="8" fill="url(#xls)"/>
+  <rect x="104" y="104" width="38" height="16" rx="4" fill="white" fill-opacity=".95"/>
+  <text x="123" y="115" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#168F58">XLS</text>
+  <path d="M112 75H136M112 83H136M112 91H136M120 67V96M128 67V96" stroke="white" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/>
+  <rect x="138" y="32" width="54" height="68" rx="8" fill="url(#mp4)"/>
+  <rect x="146" y="84" width="38" height="16" rx="4" fill="white" fill-opacity=".95"/>
+  <text x="165" y="95" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#2745C8">MP4</text>
+  <rect x="151" y="52" width="28" height="18" rx="4" stroke="white" stroke-opacity=".42" stroke-width="4"/>
+  <path d="M162 57V66L171 61.5L162 57Z" fill="white" fill-opacity=".5"/>
+  <defs>
+    <linearGradient id="pdf" x1="56" y1="26" x2="108" y2="94" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF6A5F"/>
+      <stop offset="1" stop-color="#D82432"/>
+    </linearGradient>
+    <linearGradient id="xls" x1="98" y1="52" x2="150" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4AD991"/>
+      <stop offset="1" stop-color="#168F58"/>
+    </linearGradient>
+    <linearGradient id="mp4" x1="140" y1="32" x2="192" y2="100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5E9BFF"/>
+      <stop offset="1" stop-color="#2745C8"/>
+    </linearGradient>
+  </defs>
+</svg>

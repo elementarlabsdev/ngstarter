@@ -70,6 +70,7 @@ const COMPONENT_TITLES: Record<string, SeoTitleConfig> = {
   icon: { label: 'Icon', detail: 'Icon Rendering' },
   incidents: { label: 'Incidents', detail: 'Incident Status UI' },
   'image-placeholder': { label: 'Image Placeholder', detail: 'Media Placeholders' },
+  'file-type': { label: 'File Type', detail: 'File Format Icons' },
   'image-resizer': { label: 'Image Resizer', detail: 'Image Resizing' },
   'image-viewer': { label: 'Image Viewer', detail: 'Image Preview UI' },
   'image-zoom-viewer': { label: 'Image Zoom Viewer', detail: 'Zoomable Image Preview' },

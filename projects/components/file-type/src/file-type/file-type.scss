@@ -1,0 +1,28 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-file-type-size: --spacing(10);
+
+  display: inline-flex;
+  flex: none;
+  line-height: 0;
+
+  &:not([class*='w-']):not([class*='size-']) {
+    width: var(--ngs-file-type-size);
+  }
+
+  &:not([class*='h-']):not([class*='size-']) {
+    height: var(--ngs-file-type-size);
+  }
+
+  .icon {
+    display: contents;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    flex: none;
+  }
+}

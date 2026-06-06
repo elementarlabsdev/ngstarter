@@ -255,6 +255,11 @@ export class Overview {
       name: 'Filter Builder'
     },
     {
+      routerLink: '/components/file-type',
+      imageUrl: 'assets/overview/file-type.svg',
+      name: 'File Type'
+    },
+    {
       routerLink: '/forms/form-renderer',
       imageUrl: 'assets/overview/form-renderer.svg',
       name: 'Form Renderer'

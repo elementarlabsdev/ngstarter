@@ -113,6 +113,7 @@ Must use:
 - empty-state: `@ngstarter-ui/components/empty-state` docs: /components/empty-state
 - expand: `@ngstarter-ui/components/expand` docs: /components/expand
 - expansion: `@ngstarter-ui/components/expansion` docs: /components/expansion-panel
+- file-type: `@ngstarter-ui/components/file-type` docs: /components/file-type
 - filter-builder: `@ngstarter-ui/components/filter-builder` docs: /components/filter-builder
 - form-renderer: `@ngstarter-ui/components/form-renderer` docs: /forms/form-renderer
 - gauge: `@ngstarter-ui/components/gauge` docs: /components/gauge

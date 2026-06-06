@@ -1,0 +1,8 @@
+<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-6">
+  @for (size of sizes(); track size.label) {
+    <div class="flex flex-col items-center gap-2 rounded-lg border border-subtle p-4">
+      <ngs-file-type fileName="report.pdf" [class]="size.className"/>
+      <div class="text-xs text-secondary">{{ size.label }}</div>
+    </div>
+  }
+</div>
