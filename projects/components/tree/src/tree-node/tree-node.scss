@@ -1,16 +1,18 @@
 @reference 'tailwindcss';
 
 :host {
-  color: var(--ngs-list-item-color, inherit);
-  font-size: var(--ngs-list-item-font-size, inherit);
+  color: var(--ngs-tree-node-color);
+  font-size: var(--ngs-tree-node-font-size);
   position: relative;
 
   &.ngs-tree-node {
     display: flex;
     align-items: center;
     flex: 1;
+    gap: var(--ngs-tree-node-gap);
+    padding: var(--ngs-tree-node-padding);
     word-wrap: break-word;
-    min-height: var(--ngs-tree-node-min-height, 48px);
+    min-height: var(--ngs-tree-node-min-height);
     box-sizing: border-box;
   }
 
@@ -19,12 +21,12 @@
   }
 
   &.ngs-tree-node-selectable {
-    border-radius: var(--ngs-tree-node-radius, var(--ngs-list-item-radius, var(--ngs-nav-item-radius)));
+    border-radius: var(--ngs-tree-node-radius);
     cursor: pointer;
   }
 
   &.ngs-tree-node-disabled {
-    color: var(--ngs-tree-node-disabled-color, var(--ngs-list-item-disabled-color, var(--ngs-state-disabled-color)));
+    opacity: var(--ngs-tree-node-disabled-opacity);
     cursor: default;
   }
 
@@ -37,8 +39,8 @@
   }
 
   &.ngs-tree-node-drop-inside {
-    color: var(--ngs-tree-node-drop-target-color, var(--ngs-tree-node-active-color, var(--ngs-list-item-active-color, var(--ngs-nav-item-active-color))));
-    background: var(--ngs-tree-node-drop-target-bg, var(--ngs-tree-node-active-bg, var(--ngs-list-item-active-bg, var(--ngs-nav-item-active-bg))));
+    color: var(--ngs-tree-node-drop-target-color, var(--ngs-tree-node-active-color));
+    background: var(--ngs-tree-node-drop-target-bg, var(--ngs-tree-node-active-bg));
     outline: var(--ngs-tree-node-drop-target-outline, 1px solid var(--ngs-color-primary));
     outline-offset: var(--ngs-tree-node-drop-target-outline-offset, -1px);
   }
@@ -64,13 +66,13 @@
   }
 
   &.ngs-tree-node-selectable:not(.ngs-tree-node-selected, .ngs-tree-node-disabled):hover {
-    color: var(--ngs-tree-node-hover-color, var(--ngs-list-item-hover-color, var(--ngs-nav-item-hover-color)));
-    background: var(--ngs-tree-node-hover-bg, var(--ngs-list-item-hover-bg, var(--ngs-nav-item-hover-bg)));
+    color: var(--ngs-tree-node-hover-color);
+    background: var(--ngs-tree-node-hover-bg);
   }
 
   &.ngs-tree-node-selected:not(.ngs-tree-node-disabled) {
-    color: var(--ngs-tree-node-active-color, var(--ngs-list-item-active-color, var(--ngs-nav-item-active-color)));
-    background: var(--ngs-tree-node-active-bg, var(--ngs-list-item-active-bg, var(--ngs-nav-item-active-bg)));
+    color: var(--ngs-tree-node-active-color);
+    background: var(--ngs-tree-node-active-bg);
   }
 
   &.ngs-tree-node-selectable {
