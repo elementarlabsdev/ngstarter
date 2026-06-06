@@ -54,6 +54,18 @@ export class Api {
       default: 'false'
     },
     {
+      name: 'draggable',
+      description: 'Whether tree nodes can be dragged before, after, or into another node.',
+      type: 'boolean',
+      default: 'false'
+    },
+    {
+      name: 'childrenKey',
+      description: 'Property name used when a dragged node is dropped into a leaf node and the tree needs to create a children array.',
+      type: 'string',
+      default: 'children'
+    },
+    {
       name: 'trackBy',
       description: 'Tracking function that will be used to check the differences in data changes.',
       type: 'TrackByFunction<T>',
@@ -90,6 +102,10 @@ export class Api {
     {
       name: 'selectedChange',
       description: 'Event emitted by ngs-tree when the selected node value changes.'
+    },
+    {
+      name: 'nodeDrop',
+      description: 'Event emitted by ngs-tree after a node is dropped before, after, or into another node.'
     },
     {
       name: 'activation',

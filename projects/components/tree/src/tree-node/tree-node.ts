@@ -182,13 +182,25 @@ class TreeNodeCheckbox<T, K = T> {
     '[class.ngs-tree-node-selectable]': '_isSelectable()',
     '[class.ngs-tree-node-selected]': '_isSelected()',
     '[class.ngs-tree-node-disabled]': 'disabled()',
+    '[class.ngs-tree-node-draggable]': '_isDraggable()',
+    '[class.ngs-tree-node-drop-target]': '_isDropTarget()',
+    '[class.ngs-tree-node-drop-before]': '_isDropTargetPosition("before")',
+    '[class.ngs-tree-node-drop-inside]': '_isDropTargetPosition("inside")',
+    '[class.ngs-tree-node-drop-after]': '_isDropTargetPosition("after")',
+    '[attr.draggable]': '_getDraggableAttribute()',
     '[attr.aria-expanded]': '_getAriaExpanded()',
     '[attr.aria-level]': 'level + 1',
     '[attr.aria-posinset]': '_getPositionInSet()',
     '[attr.aria-setsize]': '_getSetSize()',
     '[attr.aria-selected]': '_getAriaSelected()',
     '[attr.aria-disabled]': 'disabled()',
+    '[attr.aria-grabbed]': '_getAriaGrabbed()',
     '(click)': '_handleNodeClick($event)',
+    '(dragstart)': '_handleDragStart($event)',
+    '(dragover)': '_handleDragOver($event)',
+    '(dragleave)': '_handleDragLeave($event)',
+    '(drop)': '_handleDrop($event)',
+    '(dragend)': '_handleDragEnd()',
     '[tabindex]': '_getTabindexAttribute()',
   },
   standalone: true
@@ -276,6 +288,46 @@ export class TreeNode<T, K = T> extends CdkTreeNode<T, K> implements OnInit, OnD
     return (this._tree as Tree<T, K>).selectable() ? this._isSelected() : null;
   }
 
+  _isDraggable(): boolean {
+    return (this._tree as Tree<T, K>)._canDragNode(this.data);
+  }
+
+  _isDropTarget(): boolean {
+    return (this._tree as Tree<T, K>)._isNodeDropTarget(this.data);
+  }
+
+  _isDropTargetPosition(position: 'before' | 'inside' | 'after'): boolean {
+    return (this._tree as Tree<T, K>)._isNodeDropTargetPosition(this.data, position);
+  }
+
+  _getDraggableAttribute(): true | null {
+    return this._isDraggable() ? true : null;
+  }
+
+  _getAriaGrabbed(): boolean | null {
+    return (this._tree as Tree<T, K>).draggable() ? false : null;
+  }
+
+  _handleDragStart(event: DragEvent) {
+    (this._tree as Tree<T, K>)._startNodeDrag(this.data, event);
+  }
+
+  _handleDragOver(event: DragEvent) {
+    (this._tree as Tree<T, K>)._dragNodeOver(this.data, event);
+  }
+
+  _handleDragLeave(event: DragEvent) {
+    (this._tree as Tree<T, K>)._dragNodeLeave(this.data, event);
+  }
+
+  _handleDrop(event: DragEvent) {
+    (this._tree as Tree<T, K>)._dropNodeInto(this.data, event);
+  }
+
+  _handleDragEnd() {
+    (this._tree as Tree<T, K>)._endNodeDrag();
+  }
+
   private _selectNodeFromEvent(event: MouseEvent) {
     if (!this._isSelectable() || this._isTreeControlClick(event)) {
       return;
@@ -355,9 +407,21 @@ export class TreeNode<T, K = T> extends CdkTreeNode<T, K> implements OnInit, OnD
     '[class.ngs-tree-node-selectable]': '_isSelectable()',
     '[class.ngs-tree-node-selected]': '_isSelected()',
     '[class.ngs-tree-node-disabled]': 'disabled()',
+    '[class.ngs-tree-node-draggable]': '_isDraggable()',
+    '[class.ngs-tree-node-drop-target]': '_isDropTarget()',
+    '[class.ngs-tree-node-drop-before]': '_isDropTargetPosition("before")',
+    '[class.ngs-tree-node-drop-inside]': '_isDropTargetPosition("inside")',
+    '[class.ngs-tree-node-drop-after]': '_isDropTargetPosition("after")',
+    '[attr.draggable]': '_getDraggableAttribute()',
     '[attr.aria-selected]': '_getAriaSelected()',
     '[attr.aria-disabled]': 'disabled()',
+    '[attr.aria-grabbed]': '_getAriaGrabbed()',
     '(click)': '_handleNodeClick($event)',
+    '(dragstart)': '_handleDragStart($event)',
+    '(dragover)': '_handleDragOver($event)',
+    '(dragleave)': '_handleDragLeave($event)',
+    '(drop)': '_handleDrop($event)',
+    '(dragend)': '_handleDragEnd()',
   },
   standalone: true
 })
@@ -439,6 +503,46 @@ export class NestedTreeNode<T, K = T> extends CdkNestedTreeNode<T, K> implements
 
   _getAriaSelected(): boolean | null {
     return (this._tree as Tree<T, K>).selectable() ? this._isSelected() : null;
+  }
+
+  _isDraggable(): boolean {
+    return (this._tree as Tree<T, K>)._canDragNode(this.data);
+  }
+
+  _isDropTarget(): boolean {
+    return (this._tree as Tree<T, K>)._isNodeDropTarget(this.data);
+  }
+
+  _isDropTargetPosition(position: 'before' | 'inside' | 'after'): boolean {
+    return (this._tree as Tree<T, K>)._isNodeDropTargetPosition(this.data, position);
+  }
+
+  _getDraggableAttribute(): true | null {
+    return this._isDraggable() ? true : null;
+  }
+
+  _getAriaGrabbed(): boolean | null {
+    return (this._tree as Tree<T, K>).draggable() ? false : null;
+  }
+
+  _handleDragStart(event: DragEvent) {
+    (this._tree as Tree<T, K>)._startNodeDrag(this.data, event);
+  }
+
+  _handleDragOver(event: DragEvent) {
+    (this._tree as Tree<T, K>)._dragNodeOver(this.data, event);
+  }
+
+  _handleDragLeave(event: DragEvent) {
+    (this._tree as Tree<T, K>)._dragNodeLeave(this.data, event);
+  }
+
+  _handleDrop(event: DragEvent) {
+    (this._tree as Tree<T, K>)._dropNodeInto(this.data, event);
+  }
+
+  _handleDragEnd() {
+    (this._tree as Tree<T, K>)._endNodeDrag();
   }
 
   private _selectNodeFromEvent(event: MouseEvent) {

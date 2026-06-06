@@ -10010,6 +10010,7 @@
         "Basic tree",
         "Selectable tree",
         "Checkable tree",
+        "Draggable tree",
         "Tree with dynamic data"
       ],
       "minimalExample": "<ngs-tree #tree [dataSource]=\"dataSource\" [childrenAccessor]=\"childrenAccessor\">\n  <!-- This is the tree node template for leaf nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\" ngsTreeNodePadding>\n    <!-- use a disabled button to provide padding for tree leaf -->\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <!-- This is the tree node template for expandable nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node;when: hasChild\"\n                 ngsTreeNodePadding\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>",
@@ -10027,10 +10028,10 @@
           "source": "<ngs-tree #tree\n          [dataSource]=\"dataSource\"\n          [childrenAccessor]=\"childrenAccessor\"\n          [trackBy]=\"trackByName\"\n          (checkedChange)=\"checkedValues = $event\"\n          checkable>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\"\n                 ngsTreeNodePadding\n                 [value]=\"node.name\"\n                 [disabled]=\"!!node.disabled\">\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node; when: hasChild\"\n                 ngsTreeNodePadding\n                 [value]=\"node.name\"\n                 [disabled]=\"!!node.disabled\"\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>\n<p class=\"tree-example-state\">\n  Checked: {{checkedValues.length ? checkedValues.join(', ') : 'None'}}\n</p>"
         },
         {
-          "name": "selectable-tree-example",
-          "title": "Selectable tree",
-          "file": "projects/docs/src/app/components/tree/_examples/selectable-tree-example/selectable-tree-example.html",
-          "source": "<ngs-tree #tree\n          [dataSource]=\"dataSource\"\n          [childrenAccessor]=\"childrenAccessor\"\n          [trackBy]=\"trackByName\"\n          (selectedChange)=\"selectedValue = $event\"\n          selectable>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\"\n                 ngsTreeNodePadding\n                 [value]=\"node.name\"\n                 [disabled]=\"!!node.disabled\">\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node; when: hasChild\"\n                 ngsTreeNodePadding\n                 [value]=\"node.name\"\n                 [disabled]=\"!!node.disabled\"\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>\n<p class=\"tree-example-state\">\n  Selected: {{selectedValue ?? 'None'}}\n</p>"
+          "name": "draggable-tree-example",
+          "title": "Draggable tree",
+          "file": "projects/docs/src/app/components/tree/_examples/draggable-tree-example/draggable-tree-example.html",
+          "source": "<ngs-tree #tree\n          [dataSource]=\"dataSource\"\n          [childrenAccessor]=\"childrenAccessor\"\n          [trackBy]=\"trackByName\"\n          (nodeDrop)=\"onNodeDrop($event)\"\n          draggable>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\" ngsTreeNodePadding [value]=\"node.name\">\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node; when: hasChild\"\n                 ngsTreeNodePadding\n                 [value]=\"node.name\"\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>\n<p class=\"tree-example-state\">\n  {{dropMessage}}\n</p>"
         }
       ],
       "previewAsset": "projects/components/tree/preview.svg",
@@ -10048,13 +10049,17 @@
         "Tree",
         "TreeNode",
         "TreeNodeDef",
+        "TreeNodeDrop",
+        "TreeNodeDropPosition",
         "TreeNodeOutlet",
         "TreeNodePadding",
         "TreeNodeToggle"
       ],
       "inputs": [
         "checkable",
+        "childrenKey",
         "disabled",
+        "draggable",
         "ngsNestedTreeNode",
         "ngsTreeNode",
         "ngsTreeNodeDefWhen",
@@ -10075,6 +10080,7 @@
       ],
       "cssTokens": [
         "--ngs-checkbox-gap",
+        "--ngs-color-primary",
         "--ngs-list-item-active-bg",
         "--ngs-list-item-active-color",
         "--ngs-list-item-disabled-color",
@@ -10092,6 +10098,13 @@
         "--ngs-tree-node-active-color",
         "--ngs-tree-node-checkbox-gap",
         "--ngs-tree-node-disabled-color",
+        "--ngs-tree-node-drop-line-color",
+        "--ngs-tree-node-drop-line-radius",
+        "--ngs-tree-node-drop-line-size",
+        "--ngs-tree-node-drop-target-bg",
+        "--ngs-tree-node-drop-target-color",
+        "--ngs-tree-node-drop-target-outline",
+        "--ngs-tree-node-drop-target-outline-offset",
         "--ngs-tree-node-hover-bg",
         "--ngs-tree-node-hover-color",
         "--ngs-tree-node-min-height",
