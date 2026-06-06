@@ -9281,6 +9281,8 @@
         "--ngs-tab-group-animation-duration",
         "--ngs-tab-group-header-border-bottom",
         "--ngs-tab-group-header-border-top",
+        "--ngs-tab-group-pagination-control-after-border-left",
+        "--ngs-tab-group-pagination-control-before-border-right",
         "--ngs-tab-label-active-border-bottom",
         "--ngs-tab-label-active-border-top",
         "--ngs-tab-label-active-color",

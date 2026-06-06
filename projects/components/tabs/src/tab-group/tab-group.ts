@@ -183,7 +183,7 @@ export class TabGroup implements AfterViewInit, OnDestroy {
     const listEl = this._tabList()?.nativeElement;
 
     if (containerEl && listEl) {
-      const showPaginationControls = listEl.scrollWidth > containerEl.clientWidth;
+      const showPaginationControls = listEl.scrollWidth > containerEl.clientWidth + 1;
 
       if (showPaginationControls !== this._showPaginationControls()) {
         this._showPaginationControls.set(showPaginationControls);
@@ -202,9 +202,10 @@ export class TabGroup implements AfterViewInit, OnDestroy {
     const containerEl = this._tabListContainer()?.nativeElement;
 
     if (containerEl) {
+      const maxScroll = containerEl.scrollWidth - containerEl.clientWidth;
       const scrollLeft = containerEl.scrollLeft;
       const disableScrollBefore = scrollLeft <= 0;
-      const disableScrollAfter = Math.ceil(scrollLeft + containerEl.clientWidth) >= containerEl.scrollWidth;
+      const disableScrollAfter = scrollLeft >= maxScroll - 1;
 
       if (disableScrollBefore !== this._disableScrollBefore() || disableScrollAfter !== this._disableScrollAfter()) {
         this._disableScrollBefore.set(disableScrollBefore);
