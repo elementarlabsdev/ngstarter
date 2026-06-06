@@ -10008,28 +10008,29 @@
       "useWhen": "Use ngs-tree when users need to inspect or navigate hierarchical data where parent and child levels matter: folders and files, categories, permissions, taxonomies, organization structures, nested settings, product/entity hierarchies, and other expandable trees. Use dataSource with childrenAccessor for nested/static data, or treeControl with a custom DataSource for flat trees and dynamic loading. Define node templates with *ngsTreeNodeDef and use when for different node types. Use ngsTreeNodePadding for indentation and ngsTreeNodeToggle for expand/collapse controls. Use ProgressBar or Skeleton inside node templates when children load on demand. Do not use Tree for a simple vertical collection; use List. Do not use it for primary application navigation; use Sidebar, Sidenav, Navigation, or RailNav. Do not use it for FAQ or settings sections; use ExpansionPanel. Do not use it for dense row data with columns, sorting, filters, or bulk actions; use Table or DataView. Do not use it for step-by-step workflows; use Stepper.",
       "exampleTopics": [
         "Basic tree",
+        "Selectable tree",
         "Checkable tree",
         "Tree with dynamic data"
       ],
-      "minimalExample": "<ngs-tree #tree [dataSource]=\"dataSource\" [childrenAccessor]=\"childrenAccessor\">\n  <!-- This is the tree node template for leaf nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\" ngsTreeNodePadding>\n    <!-- use a disabled button to provide padding for tree leaf -->\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <!-- This is the tree node template for expandable nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node;when: hasChild\"\n                 ngsTreeNodePadding ngsTreeNodeToggle\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>",
+      "minimalExample": "<ngs-tree #tree [dataSource]=\"dataSource\" [childrenAccessor]=\"childrenAccessor\">\n  <!-- This is the tree node template for leaf nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\" ngsTreeNodePadding>\n    <!-- use a disabled button to provide padding for tree leaf -->\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <!-- This is the tree node template for expandable nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node;when: hasChild\"\n                 ngsTreeNodePadding\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>",
       "exampleFiles": [
         {
           "name": "basic-tree-example",
           "title": "Basic tree",
           "file": "projects/docs/src/app/components/tree/_examples/basic-tree-example/basic-tree-example.html",
-          "source": "<ngs-tree #tree [dataSource]=\"dataSource\" [childrenAccessor]=\"childrenAccessor\">\n  <!-- This is the tree node template for leaf nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\" ngsTreeNodePadding>\n    <!-- use a disabled button to provide padding for tree leaf -->\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <!-- This is the tree node template for expandable nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node;when: hasChild\"\n                 ngsTreeNodePadding ngsTreeNodeToggle\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>"
+          "source": "<ngs-tree #tree [dataSource]=\"dataSource\" [childrenAccessor]=\"childrenAccessor\">\n  <!-- This is the tree node template for leaf nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\" ngsTreeNodePadding>\n    <!-- use a disabled button to provide padding for tree leaf -->\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <!-- This is the tree node template for expandable nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node;when: hasChild\"\n                 ngsTreeNodePadding\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>"
         },
         {
           "name": "checkable-tree-example",
           "title": "Checkable tree",
           "file": "projects/docs/src/app/components/tree/_examples/checkable-tree-example/checkable-tree-example.html",
-          "source": "<ngs-tree #tree\n          [dataSource]=\"dataSource\"\n          [childrenAccessor]=\"childrenAccessor\"\n          [trackBy]=\"trackByName\"\n          checkable>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\" ngsTreeNodePadding>\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node; when: hasChild\"\n                 ngsTreeNodePadding\n                 ngsTreeNodeToggle\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>"
+          "source": "<ngs-tree #tree\n          [dataSource]=\"dataSource\"\n          [childrenAccessor]=\"childrenAccessor\"\n          [trackBy]=\"trackByName\"\n          (checkedChange)=\"checkedValues = $event\"\n          checkable>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\"\n                 ngsTreeNodePadding\n                 [value]=\"node.name\"\n                 [disabled]=\"!!node.disabled\">\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node; when: hasChild\"\n                 ngsTreeNodePadding\n                 [value]=\"node.name\"\n                 [disabled]=\"!!node.disabled\"\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>\n<p class=\"tree-example-state\">\n  Checked: {{checkedValues.length ? checkedValues.join(', ') : 'None'}}\n</p>"
         },
         {
-          "name": "tree-with-dynamic-data-example",
-          "title": "Tree with dynamic data",
-          "file": "projects/docs/src/app/components/tree/_examples/tree-with-dynamic-data-example/tree-with-dynamic-data-example.html",
-          "source": "<ngs-tree [dataSource]=\"dataSource\" [treeControl]=\"treeControl\">\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\" ngsTreeNodePadding>\n    <button ngsIconButton disabled></button>\n    {{node.item}}\n  </ngs-tree-node>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node; when: hasChild\" ngsTreeNodePadding ngsTreeNodeToggle\n                 [cdkTreeNodeTypeaheadLabel]=\"node.item\">\n    <button ngsIconButton\n            [attr.aria-label]=\"'Toggle ' + node.item\" ngsTreeNodeToggle>\n      @if (treeControl.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.item}}\n    @if (node.isLoading()) {\n      <ngs-progress-bar mode=\"indeterminate\" class=\"ms-3\"/>\n    }\n  </ngs-tree-node>\n</ngs-tree>"
+          "name": "selectable-tree-example",
+          "title": "Selectable tree",
+          "file": "projects/docs/src/app/components/tree/_examples/selectable-tree-example/selectable-tree-example.html",
+          "source": "<ngs-tree #tree\n          [dataSource]=\"dataSource\"\n          [childrenAccessor]=\"childrenAccessor\"\n          [trackBy]=\"trackByName\"\n          (selectedChange)=\"selectedValue = $event\"\n          selectable>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\"\n                 ngsTreeNodePadding\n                 [value]=\"node.name\"\n                 [disabled]=\"!!node.disabled\">\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node; when: hasChild\"\n                 ngsTreeNodePadding\n                 [value]=\"node.name\"\n                 [disabled]=\"!!node.disabled\"\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>\n<p class=\"tree-example-state\">\n  Selected: {{selectedValue ?? 'None'}}\n</p>"
         }
       ],
       "previewAsset": "projects/components/tree/preview.svg",
@@ -10061,18 +10062,40 @@
         "ngsTreeNodePaddingIndent",
         "ngsTreeNodeToggleRecursive",
         "recursive",
+        "selectable",
         "tabIndex",
+        "value",
         "when"
       ],
       "outputs": [
         "activation",
-        "expandedChange"
+        "checkedChange",
+        "expandedChange",
+        "selectedChange"
       ],
       "cssTokens": [
         "--ngs-checkbox-gap",
+        "--ngs-list-item-active-bg",
+        "--ngs-list-item-active-color",
+        "--ngs-list-item-disabled-color",
+        "--ngs-list-item-hover-bg",
+        "--ngs-list-item-hover-color",
+        "--ngs-list-item-radius",
+        "--ngs-nav-item-active-bg",
+        "--ngs-nav-item-active-color",
+        "--ngs-nav-item-hover-bg",
+        "--ngs-nav-item-hover-color",
+        "--ngs-nav-item-radius",
+        "--ngs-state-disabled-color",
         "--ngs-tree-container-background-color",
+        "--ngs-tree-node-active-bg",
+        "--ngs-tree-node-active-color",
         "--ngs-tree-node-checkbox-gap",
+        "--ngs-tree-node-disabled-color",
+        "--ngs-tree-node-hover-bg",
+        "--ngs-tree-node-hover-color",
         "--ngs-tree-node-min-height",
+        "--ngs-tree-node-radius",
         "--ngs-tree-node-text-color",
         "--ngs-tree-node-text-font",
         "--ngs-tree-node-text-size",

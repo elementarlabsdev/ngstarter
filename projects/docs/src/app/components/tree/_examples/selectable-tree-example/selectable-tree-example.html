@@ -2,8 +2,8 @@
           [dataSource]="dataSource"
           [childrenAccessor]="childrenAccessor"
           [trackBy]="trackByName"
-          (checkedChange)="checkedValues = $event"
-          checkable>
+          (selectedChange)="selectedValue = $event"
+          selectable>
   <ngs-tree-node *ngsTreeNodeDef="let node"
                  ngsTreeNodePadding
                  [value]="node.name"
@@ -28,5 +28,5 @@
 </ngs-tree>
 
 <p class="tree-example-state">
-  Checked: {{checkedValues.length ? checkedValues.join(', ') : 'None'}}
+  Selected: {{selectedValue ?? 'None'}}
 </p>

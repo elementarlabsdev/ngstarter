@@ -5,6 +5,7 @@ import { Tree, TreeNode, TreeNodeDef, TreeNodePadding, TreeNodeToggle } from '@n
 
 interface PermissionNode {
   name: string;
+  disabled?: boolean;
   children?: PermissionNode[];
 }
 
@@ -14,7 +15,7 @@ const EXAMPLE_DATA: PermissionNode[] = [
     children: [
       { name: 'Read projects' },
       { name: 'Create projects' },
-      { name: 'Archive projects' },
+      { name: 'Archive projects', disabled: true },
     ],
   },
   {
@@ -54,6 +55,7 @@ const EXAMPLE_DATA: PermissionNode[] = [
 })
 export class CheckableTreeExample {
   dataSource = EXAMPLE_DATA;
+  checkedValues: unknown[] = [];
   childrenAccessor = (node: PermissionNode) => node.children ?? [];
   hasChild = (_: number, node: PermissionNode) => !!node.children && node.children.length > 0;
   trackByName = (_: number, node: PermissionNode) => node.name;

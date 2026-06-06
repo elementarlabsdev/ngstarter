@@ -24,8 +24,23 @@ import { isPlatformBrowser } from '@angular/common';
 import { Checkbox, CheckboxChange } from '@ngstarter-ui/components/checkbox';
 import { Tree } from '../tree/tree';
 
+const NGS_TREE_NODE_VALUE_UNSET = Symbol('ngs-tree-node-value-unset');
+
 function isNoopTreeKeyManager(keyManager: any) {
   return !!keyManager._isNoopTreeKeyManager;
+}
+
+function isTreeNodeControlClick(event: MouseEvent, host: HTMLElement): boolean {
+  const target = event.target;
+  if (!(target instanceof Element)) {
+    return false;
+  }
+
+  const control = target.closest(
+    '.ngs-tree-node-checkbox, [ngsTreeNodeToggle], [ngstreenodetoggle]',
+  );
+
+  return !!control && control !== host;
 }
 
 class TreeNodeCheckbox<T, K = T> {
@@ -164,11 +179,16 @@ class TreeNodeCheckbox<T, K = T> {
   providers: [{ provide: CdkTreeNode, useExisting: TreeNode }],
   host: {
     'class': 'ngs-tree-node',
+    '[class.ngs-tree-node-selectable]': '_isSelectable()',
+    '[class.ngs-tree-node-selected]': '_isSelected()',
+    '[class.ngs-tree-node-disabled]': 'disabled()',
     '[attr.aria-expanded]': '_getAriaExpanded()',
     '[attr.aria-level]': 'level + 1',
     '[attr.aria-posinset]': '_getPositionInSet()',
     '[attr.aria-setsize]': '_getSetSize()',
-    '(click)': '_focusItem()',
+    '[attr.aria-selected]': '_getAriaSelected()',
+    '[attr.aria-disabled]': 'disabled()',
+    '(click)': '_handleNodeClick($event)',
     '[tabindex]': '_getTabindexAttribute()',
   },
   standalone: true
@@ -182,11 +202,14 @@ export class TreeNode<T, K = T> extends CdkTreeNode<T, K> implements OnInit, OnD
   private _checkbox: TreeNodeCheckbox<T, K>;
   private _dataChangesSubscription?: { unsubscribe: () => void };
   private _checkboxEnableHandle?: ReturnType<typeof setTimeout>;
+  private _registeredDataKey: unknown = NGS_TREE_NODE_VALUE_UNSET;
 
   tabIndexInputBinding = input<number, any>(0, {
     transform: (value: unknown) => (value == null ? 0 : numberAttribute(value)),
     alias: 'tabIndex',
   });
+
+  value = input<unknown>(NGS_TREE_NODE_VALUE_UNSET);
 
   disabled = input(false, {
     transform: booleanAttribute
@@ -206,7 +229,7 @@ export class TreeNode<T, K = T> extends CdkTreeNode<T, K> implements OnInit, OnD
       this._environmentInjector,
       () => this.disabled(),
     );
-    this._dataChangesSubscription = this._dataChanges.subscribe(() => this._checkbox.sync());
+    this._dataChangesSubscription = this._dataChanges.subscribe(() => this._syncNodeState());
     if (isPlatformBrowser(this._platformId)) {
       this._checkboxEnableHandle = setTimeout(() => this._checkbox.enable());
     }
@@ -219,7 +242,12 @@ export class TreeNode<T, K = T> extends CdkTreeNode<T, K> implements OnInit, OnD
       tree.checkable();
       tree._checkStateVersion();
       this.disabled();
+      this._syncNodeDisabledRegistration();
       this._checkbox.sync();
+    });
+    effect(() => {
+      this.value();
+      this._syncNodeState();
     });
   }
 
@@ -230,8 +258,73 @@ export class TreeNode<T, K = T> extends CdkTreeNode<T, K> implements OnInit, OnD
     return (this as any)._tabindex;
   }
 
+  _handleNodeClick(event: MouseEvent) {
+    this._focusItem();
+    this._selectNodeFromEvent(event);
+  }
+
+  _isSelectable(): boolean {
+    return (this._tree as Tree<T, K>).selectable() && !this.disabled();
+  }
+
+  _isSelected(): boolean {
+    const tree = this._tree as Tree<T, K>;
+    return tree.selectable() && tree._isNodeSelected(this.data);
+  }
+
+  _getAriaSelected(): boolean | null {
+    return (this._tree as Tree<T, K>).selectable() ? this._isSelected() : null;
+  }
+
+  private _selectNodeFromEvent(event: MouseEvent) {
+    if (!this._isSelectable() || this._isTreeControlClick(event)) {
+      return;
+    }
+
+    (this._tree as Tree<T, K>)._selectNode(this.data);
+  }
+
+  private _isTreeControlClick(event: MouseEvent): boolean {
+    return isTreeNodeControlClick(event, this._hostElementRef.nativeElement);
+  }
+
+  private _syncNodeState() {
+    this._syncNodeValueRegistration();
+    this._syncNodeDisabledRegistration();
+    this._checkbox.sync();
+  }
+
+  private _syncNodeValueRegistration() {
+    if (this.data === undefined) {
+      return;
+    }
+
+    const tree = this._tree as Tree<T, K>;
+    const key = tree._getTreeNodeDataKey(this.data);
+    if (this._registeredDataKey !== NGS_TREE_NODE_VALUE_UNSET && !Object.is(this._registeredDataKey, key)) {
+      tree._unregisterNodeValueByDataKey(this._registeredDataKey);
+      tree._unregisterNodeDisabledByDataKey(this._registeredDataKey);
+    }
+
+    this._registeredDataKey = key;
+    if (this.value() === NGS_TREE_NODE_VALUE_UNSET) {
+      tree._unregisterNodeValueByDataKey(key);
+    } else {
+      tree._registerNodeValue(this.data, this.value());
+    }
+  }
+
+  private _syncNodeDisabledRegistration() {
+    if (this.data === undefined) {
+      return;
+    }
+
+    (this._tree as Tree<T, K>)._registerNodeDisabled(this.data, this.disabled());
+  }
+
   override ngOnInit() {
     super.ngOnInit();
+    this._syncNodeState();
   }
 
   override ngOnDestroy() {
@@ -239,6 +332,10 @@ export class TreeNode<T, K = T> extends CdkTreeNode<T, K> implements OnInit, OnD
       clearTimeout(this._checkboxEnableHandle);
     }
     this._dataChangesSubscription?.unsubscribe();
+    if (this._registeredDataKey !== NGS_TREE_NODE_VALUE_UNSET) {
+      (this._tree as Tree<T, K>)._unregisterNodeValueByDataKey(this._registeredDataKey);
+      (this._tree as Tree<T, K>)._unregisterNodeDisabledByDataKey(this._registeredDataKey);
+    }
     this._checkbox.destroy();
     super.ngOnDestroy();
   }
@@ -255,6 +352,12 @@ export class TreeNode<T, K = T> extends CdkTreeNode<T, K> implements OnInit, OnD
   ],
   host: {
     'class': 'ngs-nested-tree-node',
+    '[class.ngs-tree-node-selectable]': '_isSelectable()',
+    '[class.ngs-tree-node-selected]': '_isSelected()',
+    '[class.ngs-tree-node-disabled]': 'disabled()',
+    '[attr.aria-selected]': '_getAriaSelected()',
+    '[attr.aria-disabled]': 'disabled()',
+    '(click)': '_handleNodeClick($event)',
   },
   standalone: true
 })
@@ -267,10 +370,13 @@ export class NestedTreeNode<T, K = T> extends CdkNestedTreeNode<T, K> implements
   private _checkbox: TreeNodeCheckbox<T, K>;
   private _dataChangesSubscription?: { unsubscribe: () => void };
   private _checkboxEnableHandle?: ReturnType<typeof setTimeout>;
+  private _registeredDataKey: unknown = NGS_TREE_NODE_VALUE_UNSET;
 
   node = input<T>(undefined!, {
     alias: 'ngsNestedTreeNode'
   });
+
+  value = input<unknown>(NGS_TREE_NODE_VALUE_UNSET);
 
   disabled = input(false, {
     transform: booleanAttribute
@@ -293,7 +399,7 @@ export class NestedTreeNode<T, K = T> extends CdkNestedTreeNode<T, K> implements
       this._environmentInjector,
       () => this.disabled(),
     );
-    this._dataChangesSubscription = this._dataChanges.subscribe(() => this._checkbox.sync());
+    this._dataChangesSubscription = this._dataChanges.subscribe(() => this._syncNodeState());
     if (isPlatformBrowser(this._platformId)) {
       this._checkboxEnableHandle = setTimeout(() => this._checkbox.enable());
     }
@@ -304,7 +410,12 @@ export class NestedTreeNode<T, K = T> extends CdkNestedTreeNode<T, K> implements
       tree.checkable();
       tree._checkStateVersion();
       this.disabled();
+      this._syncNodeDisabledRegistration();
       this._checkbox.sync();
+    });
+    effect(() => {
+      this.value();
+      this._syncNodeState();
     });
   }
 
@@ -312,8 +423,73 @@ export class NestedTreeNode<T, K = T> extends CdkNestedTreeNode<T, K> implements
     return this.isDisabled ? -1 : this.tabIndexInput();
   }
 
+  _handleNodeClick(event: MouseEvent) {
+    (this as any)._focusItem?.();
+    this._selectNodeFromEvent(event);
+  }
+
+  _isSelectable(): boolean {
+    return (this._tree as Tree<T, K>).selectable() && !this.disabled();
+  }
+
+  _isSelected(): boolean {
+    const tree = this._tree as Tree<T, K>;
+    return tree.selectable() && tree._isNodeSelected(this.data);
+  }
+
+  _getAriaSelected(): boolean | null {
+    return (this._tree as Tree<T, K>).selectable() ? this._isSelected() : null;
+  }
+
+  private _selectNodeFromEvent(event: MouseEvent) {
+    if (!this._isSelectable() || this._isTreeControlClick(event)) {
+      return;
+    }
+
+    (this._tree as Tree<T, K>)._selectNode(this.data);
+  }
+
+  private _isTreeControlClick(event: MouseEvent): boolean {
+    return isTreeNodeControlClick(event, this._hostElementRef.nativeElement);
+  }
+
+  private _syncNodeState() {
+    this._syncNodeValueRegistration();
+    this._syncNodeDisabledRegistration();
+    this._checkbox.sync();
+  }
+
+  private _syncNodeValueRegistration() {
+    if (this.data === undefined) {
+      return;
+    }
+
+    const tree = this._tree as Tree<T, K>;
+    const key = tree._getTreeNodeDataKey(this.data);
+    if (this._registeredDataKey !== NGS_TREE_NODE_VALUE_UNSET && !Object.is(this._registeredDataKey, key)) {
+      tree._unregisterNodeValueByDataKey(this._registeredDataKey);
+      tree._unregisterNodeDisabledByDataKey(this._registeredDataKey);
+    }
+
+    this._registeredDataKey = key;
+    if (this.value() === NGS_TREE_NODE_VALUE_UNSET) {
+      tree._unregisterNodeValueByDataKey(key);
+    } else {
+      tree._registerNodeValue(this.data, this.value());
+    }
+  }
+
+  private _syncNodeDisabledRegistration() {
+    if (this.data === undefined) {
+      return;
+    }
+
+    (this._tree as Tree<T, K>)._registerNodeDisabled(this.data, this.disabled());
+  }
+
   override ngOnInit() {
     super.ngOnInit();
+    this._syncNodeState();
   }
 
   override ngAfterContentInit() {
@@ -325,6 +501,10 @@ export class NestedTreeNode<T, K = T> extends CdkNestedTreeNode<T, K> implements
       clearTimeout(this._checkboxEnableHandle);
     }
     this._dataChangesSubscription?.unsubscribe();
+    if (this._registeredDataKey !== NGS_TREE_NODE_VALUE_UNSET) {
+      (this._tree as Tree<T, K>)._unregisterNodeValueByDataKey(this._registeredDataKey);
+      (this._tree as Tree<T, K>)._unregisterNodeDisabledByDataKey(this._registeredDataKey);
+    }
     this._checkbox.destroy();
     super.ngOnDestroy();
   }

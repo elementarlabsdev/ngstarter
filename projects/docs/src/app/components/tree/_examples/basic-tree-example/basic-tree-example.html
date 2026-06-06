@@ -7,7 +7,7 @@
   </ngs-tree-node>
   <!-- This is the tree node template for expandable nodes -->
   <ngs-tree-node *ngsTreeNodeDef="let node;when: hasChild"
-                 ngsTreeNodePadding ngsTreeNodeToggle
+                 ngsTreeNodePadding
                  [cdkTreeNodeTypeaheadLabel]="node.name">
     <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
       @if (tree.isExpanded(node)) {
