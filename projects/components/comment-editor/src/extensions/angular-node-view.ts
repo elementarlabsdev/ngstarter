@@ -1,7 +1,10 @@
 import { Component, input } from '@angular/core';
 import type { NodeViewProps } from '@tiptap/core';
 
-@Component({standalone: true, template: ''})
+@Component({
+  standalone: true,
+  template: ''
+})
 export class AngularNodeView {
   editor = input.required<NodeViewProps['editor']>();
   node = input.required<NodeViewProps['node']>();

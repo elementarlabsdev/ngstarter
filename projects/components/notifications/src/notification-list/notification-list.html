@@ -1,10 +1,17 @@
 @if (_initialized) {
-  @for (notification of notifications(); track notification) {
-    <div class="notification">
+  @for (notification of notifications(); track $index) {
+    <div class="notification"
+         role="listitem"
+         [class.is-interactive]="!static()"
+         [attr.tabindex]="static() ? null : 0"
+         (click)="handleNotificationClick(notification, $event)"
+         (keydown)="handleNotificationKeydown(notification, $event)">
       <ng-container [ngTemplateOutlet]="getNotificationTemplate(notification.type)"
                     [ngTemplateOutletContext]="{ $implicit: notification }" />
       @if (controlsDef()) {
-        <div class="controls">
+        <div class="controls"
+             (click)="stopControlsEvent($event)"
+             (keydown)="stopControlsEvent($event)">
           <ng-container [ngTemplateOutlet]="controlsTpl"
                         [ngTemplateOutletContext]="{ $implicit: notification }" />
         </div>

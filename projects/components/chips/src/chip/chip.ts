@@ -1,33 +1,29 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  ViewEncapsulation,
   input,
   ElementRef,
   inject,
   booleanAttribute,
-  signal,
   output,
-  computed
 } from '@angular/core';
 import { AutoFocusDirective } from '@ngstarter-ui/components/core';
 
 @Component({
   selector: 'ngs-chip',
+  exportAs: 'ngsChip',
+  imports: [
+    AutoFocusDirective
+  ],
   templateUrl: './chip.html',
   styleUrl: './chip.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-chip',
     '[class.ngs-chip-disabled]': 'disabled()',
     '[attr.appearance]': 'appearance()',
     '[attr.aria-disabled]': 'disabled()',
   },
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  imports: [
-    AutoFocusDirective
-  ]
 })
 export class Chip {
   readonly _elementRef = inject(ElementRef);

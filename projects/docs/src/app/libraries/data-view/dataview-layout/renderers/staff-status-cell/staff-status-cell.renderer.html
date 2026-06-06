@@ -1,0 +1,9 @@
+@if (fieldData(); as status) {
+  <ngs-chip
+    appearance="outlined"
+    [class.is-active]="status.tone === 'active'"
+    [class.is-pending]="status.tone === 'pending'"
+    [class.is-inactive]="status.tone === 'inactive'">
+    {{ status.label }}
+  </ngs-chip>
+}

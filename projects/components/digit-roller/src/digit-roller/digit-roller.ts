@@ -13,7 +13,6 @@ import {
   PLATFORM_ID,
   signal,
   untracked,
-  ViewEncapsulation,
 } from '@angular/core';
 import { canAnimateDigitRoller } from '../digit-roller-capabilities';
 import { getDigitRollerGlyphs, formatDigitRollerValue } from '../digit-roller-formatter';
@@ -46,7 +45,6 @@ const EASING_PRESETS: Record<string, string> = {
   exportAs: 'ngsDigitRoller',
   templateUrl: './digit-roller.html',
   styleUrl: './digit-roller.scss',
-  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'ngs-digit-roller',

@@ -1,0 +1,54 @@
+<p class="docs-seo-intro mb-6 text-base leading-7 text-neutral-600">
+  The NgStarter Angular Filter Select pattern uses <code class="code">ngs-filter-trigger</code> inside
+  <code class="code">ngs-select</code> to show a compact filter label with an automatic selected-value badge.
+</p>
+
+<h3 id="basic-filter-select">Basic Filter Select</h3>
+<p>
+  Use <code class="code">ngs-filter-trigger</code> inside a multiple Select when a toolbar or table filter should stay compact.
+</p>
+<ngs-playground exampleUrl="_docs/forms/filter-select/_examples" exampleName="filter-trigger-example">
+  <app-filter-trigger-example/>
+</ngs-playground>
+
+<h3 id="clearable-filter-select">Clearable Filter Select</h3>
+<p>
+  Add <code class="code">clearable</code> to let users remove all selected filter values directly from the trigger.
+</p>
+<ngs-playground exampleUrl="_docs/forms/filter-select/_examples" exampleName="clearable-filter-trigger-example">
+  <app-clearable-filter-trigger-example/>
+</ngs-playground>
+
+<h3 id="single-filter-select">Single Filter Select</h3>
+<p>
+  In single selection mode, the filter trigger shows the selected option text instead of a count badge.
+</p>
+<ngs-playground exampleUrl="_docs/forms/filter-select/_examples" exampleName="single-filter-trigger-example">
+  <app-single-filter-trigger-example/>
+</ngs-playground>
+
+<h3 id="clearable-single-filter-select">Clearable Single Filter Select</h3>
+<p>
+  Use <code class="code">clearable</code> on a single filter select when the selected option should be removable without opening the panel.
+</p>
+<ngs-playground exampleUrl="_docs/forms/filter-select/_examples" exampleName="clearable-single-filter-trigger-example">
+  <app-clearable-single-filter-trigger-example/>
+</ngs-playground>
+
+<h3 id="custom-value">Custom Value</h3>
+<p>
+  Add <code class="code">data</code> to each option and project
+  <code class="code">ng-template[ngsFilterTriggerValue]</code> inside the trigger when the selected value needs custom rendering.
+</p>
+<ngs-playground exampleUrl="_docs/forms/filter-select/_examples" exampleName="custom-value-filter-trigger-example">
+  <app-custom-value-filter-trigger-example/>
+</ngs-playground>
+
+<h3 id="count-options">Count Options</h3>
+<p>
+  Use <code class="code">maxCount</code> to cap large selected counts and <code class="code">showZero</code>
+  when an empty filter should still render its badge.
+</p>
+<ngs-playground exampleUrl="_docs/forms/filter-select/_examples" exampleName="filter-trigger-count-options-example">
+  <app-filter-trigger-count-options-example/>
+</ngs-playground>

@@ -4,7 +4,6 @@ export type CardActionsPosition = 'start' | 'center' | 'end' | 'between';
 
 @Component({
   selector: 'ngs-card-actions, [ngs-card-actions], [ngsCardActions]',
-  standalone: true,
   templateUrl: './card-actions.html',
   styleUrl: './card-actions.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

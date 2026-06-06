@@ -22,12 +22,18 @@ import { NgComponentOutlet } from '@angular/common';
 
 @Component({
   selector: 'ngs-calendar',
-  standalone: true,
-  imports: [MonthView, YearView, MultiYearView, Button, Icon, NgComponentOutlet],
+  exportAs: 'ngsCalendar',
+  imports: [
+    MonthView,
+    YearView,
+    MultiYearView,
+    Button,
+    Icon,
+    NgComponentOutlet
+  ],
   templateUrl: './calendar.html',
   styleUrl: './calendar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  exportAs: 'ngsCalendar',
   host: {
     'class': 'ngs-calendar',
     '[class.ngs-calendar-multiple-months]':

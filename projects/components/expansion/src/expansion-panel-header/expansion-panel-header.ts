@@ -11,7 +11,7 @@ import { ExpansionPanel } from '../expansion-panel/expansion-panel';
 
 @Component({
   selector: 'ngs-expansion-panel-header',
-  standalone: true,
+  exportAs: 'ngsExpansionPanelHeader',
   templateUrl: './expansion-panel-header.html',
   styleUrl: './expansion-panel-header.scss',
   host: {

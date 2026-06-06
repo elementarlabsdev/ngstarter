@@ -1,1 +1,77 @@
+@reference 'tailwindcss';
 
+:host {
+  .ngs-datepicker-content {
+    --ngs-datepicker-bg: var(--ngs-dropdown-bg);
+    --ngs-datepicker-color: var(--ngs-color-on-surface);
+    --ngs-datepicker-shadow: var(--ngs-dropdown-shadow);
+    --ngs-datepicker-radius: var(--ngs-dropdown-radius);
+    --ngs-datepicker-border: var(--ngs-dropdown-border);
+    --ngs-calendar-padding: --spacing(2);
+    --ngs-calendar-cell-size: --spacing(9);
+    --ngs-calendar-cell-radius: var(--ngs-radius-lg);
+    --ngs-calendar-cell-hover-bg: var(--ngs-color-surface-container-high);
+    --ngs-calendar-cell-selected-bg: var(--ngs-color-primary);
+    --ngs-calendar-cell-selected-color: var(--ngs-color-on-primary);
+    --ngs-calendar-cell-today-border: 1px solid var(--ngs-color-outline);
+    --ngs-calendar-header-padding: 8px;
+    --ngs-calendar-cell-in-range-bg: var(--ngs-color-primary-container);
+
+    --ngs-datepicker-preset-hover-bg: var(--ngs-color-surface-container-high);
+    --ngs-datepicker-preset-padding: 8px 16px;
+    --ngs-datepicker-presets-border: 1px solid var(--ngs-color-border);
+
+    background: var(--ngs-datepicker-bg);
+    color: var(--ngs-datepicker-color);
+    box-shadow: var(--ngs-datepicker-shadow);
+    border-radius: var(--ngs-datepicker-radius);
+    border: var(--ngs-datepicker-border);
+    animation: ngs-date-range-picker-panel-showing 150ms cubic-bezier(0, 0, 0.2, 1);
+
+    &.ngs-datepicker-below {
+      transform-origin: top;
+    }
+
+    &.ngs-datepicker-above {
+      transform-origin: bottom;
+    }
+  }
+
+  .ngs-datepicker-inner-container {
+    display: flex;
+  }
+
+  .ngs-datepicker-presets {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 0;
+    border-inline-end: var(--ngs-datepicker-presets-border);
+    min-width: 120px;
+  }
+
+  .ngs-datepicker-preset {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: var(--ngs-datepicker-preset-padding);
+    text-align: start;
+    font-size: var(--ngs-font-size-sm);
+    white-space: nowrap;
+
+    &:hover {
+      background: var(--ngs-datepicker-preset-hover-bg);
+    }
+  }
+
+  @keyframes ngs-date-range-picker-panel-showing {
+    from {
+      opacity: 0;
+      transform: scaleY(0.8);
+    }
+
+    to {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+  }
+}

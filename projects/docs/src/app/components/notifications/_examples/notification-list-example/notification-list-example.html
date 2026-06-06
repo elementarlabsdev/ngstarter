@@ -15,10 +15,21 @@
     </ngs-notification>
   </ng-template>
   <ng-template ngsNotificationDef="inviteToEditFilesInFolder" let-notification>
-    <ngs-notification>
-      <ngs-notification-content>
-        invites
+    <ngs-notification [isUnread]="notification.isUnread">
+      <ngs-dicebear [key]="notification.actor.id"
+                    [image]="notification.actor.avatarUrl"
+                    ngsNotificationAvatar/>
+      <ngs-notification-message>
+        <a routerLink="/" ngs-notification-actor>{{ notification.actor.name }}</a>
+        invited you to edit <a routerLink="/" class="link">{{ notification.payload.folderName }}</a>
+      </ngs-notification-message>
+      <ngs-notification-content class="border border-muted rounded-lg p-2.5 text-sm">
+        <div class="flex items-center gap-2">
+          <ngs-icon name="fluent:folder-24-regular" class="text-on-surface-variant"/>
+          <span>{{ notification.payload.folderName }}</span>
+        </div>
       </ngs-notification-content>
+      <ngs-notification-time>{{ notification.createdAt }}</ngs-notification-time>
     </ngs-notification>
   </ng-template>
   <ng-template ngsNotificationControlsDef let-notification>

@@ -20,7 +20,6 @@ export type ButtonToggleAppearance = 'standard' | 'legacy';
   exportAs: 'ngsButtonToggleGroup',
   templateUrl: './button-toggle-group.html',
   styleUrl: './button-toggle-group.scss',
-  standalone: true,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

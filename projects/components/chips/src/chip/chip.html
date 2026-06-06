@@ -6,6 +6,7 @@
     <ng-content select="ngs-chip-shape, [ngsChipShape]"/>
   </span>
   <span
+    #editInput
     class="ngs-chip-label"
     [attr.contenteditable]="_editing || null"
     (blur)="_handleBlur()"

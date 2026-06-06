@@ -13,7 +13,6 @@ import { v7 as uuid } from 'uuid';
 
 @Component({
   selector: 'ngs-icon',
-  standalone: true,
   exportAs: 'ngsIcon',
   template: '<span [innerHTML]="_iconHtml()" style="display: contents"></span>',
   styleUrl: './icon.scss',

@@ -184,7 +184,7 @@
 
       <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         @for (component of dashboardComponents; track component.href) {
-          <ngs-card appearance="outlined" class="template-component-card">
+          <ngs-card appearance="outlined">
             <a ngs-card-content [href]="component.href">
               <ngs-icon [name]="component.icon" class="detail-icon" />
               <h3>{{ component.title }}</h3>

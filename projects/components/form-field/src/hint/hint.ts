@@ -2,7 +2,7 @@ import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'ngs-hint',
-  standalone: true,
+  exportAs: 'ngsHint',
   templateUrl: './hint.html',
   styleUrl: './hint.scss',
   host: {

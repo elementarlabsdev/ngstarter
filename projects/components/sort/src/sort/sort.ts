@@ -8,7 +8,7 @@ import {
   output
 } from '@angular/core';
 import { SortDirection } from './sort-direction';
-import { Sort, EmrSort, SORT } from './sort-interface';
+import { Sort, NgsSort, SORT } from './sort-interface';
 import { Subject } from 'rxjs';
 
 @Directive({
@@ -17,7 +17,7 @@ import { Subject } from 'rxjs';
   providers: [{ provide: SORT, useExisting: SortDirective }],
   standalone: true,
 })
-export class SortDirective implements OnInit, OnChanges, OnDestroy, EmrSort {
+export class SortDirective implements OnInit, OnChanges, OnDestroy, NgsSort {
   active = model('', { alias: 'ngsSortActive' });
 
   start = input<SortDirection>('asc', { alias: 'ngsSortStart' });

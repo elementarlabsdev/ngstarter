@@ -3,7 +3,6 @@ import { Directive, ElementRef, inject, OnInit, Renderer2 } from '@angular/core'
 @Directive({
   selector: '[ngsCardOverlayContainer]',
   exportAs: 'ngsCardOverlayContainer',
-  standalone: true,
   host: {
     'class': 'ngs-card-overlay-container',
   }

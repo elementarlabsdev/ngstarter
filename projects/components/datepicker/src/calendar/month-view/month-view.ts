@@ -12,9 +12,9 @@ import { DateRange } from '../../core/datetime/date-range';
 
 @Component({
   selector: 'ngs-month-view',
+  exportAs: 'ngsMonthView',
   templateUrl: './month-view.html',
   styleUrl: './month-view.scss',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-month-view',

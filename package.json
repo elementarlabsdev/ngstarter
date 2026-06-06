@@ -1,7 +1,7 @@
 {
   "name": "ngstarter",
   "description": "NgStarter - AI-friendly Enterprise Angular UI Components and Admin Panel",
-  "version": "1.0.94",
+  "version": "1.0.109",
   "bugs": {
     "url": "https://github.com/elementarlabsdev/ngstarter/issues"
   },
@@ -24,7 +24,13 @@
     "start:admin:modern": "ng cache clean && ng serve admin-modern --hmr",
     "start:admin:classic": "ng cache clean && ng serve admin-classic --hmr",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+    "test": "npm run test:ngstarter && npm run test:components && npm run test:docs && npm run test:admin-corporate && npm run test:admin-modern && npm run test:admin-classic",
+    "test:ngstarter": "ng test ngstarter --watch=false",
+    "test:components": "ng test components --watch=false",
+    "test:docs": "ng test docs --watch=false",
+    "test:admin-corporate": "ng test admin-corporate --watch=false",
+    "test:admin-modern": "ng test admin-modern --watch=false",
+    "test:admin-classic": "ng test admin-classic --watch=false",
     "build": "ng build",
     "build:components:prod": "npm run generate:ai && ng build components --configuration production && npm run build:components:schematics",
     "build:components:schematics": "tsc -p projects/components/tsconfig.schematics.json && copyfiles -u 3 \"projects/components/schematics/**/*.json\" dist/components/schematics",

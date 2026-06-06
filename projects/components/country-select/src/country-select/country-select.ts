@@ -31,8 +31,17 @@ import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-country-select',
-  standalone: true,
   exportAs: 'ngsCountrySelect',
+  imports: [
+    Option,
+    Icon,
+    Select,
+    SelectTrigger,
+    ReactiveFormsModule,
+    Button,
+    SelectHeader,
+    FormsModule
+  ],
   templateUrl: './country-select.html',
   styleUrl: './country-select.scss',
   providers: [
@@ -49,17 +58,6 @@ import { Button } from '@ngstarter-ui/components/button';
     '(focus)': 'onFocusIn()',
     '(blur)': 'onFocusOut($event)',
   },
-  imports: [
-    Option,
-    Icon,
-
-    Select,
-    SelectTrigger,
-    ReactiveFormsModule,
-    Button,
-    SelectHeader,
-    FormsModule
-  ]
 })
 export class CountrySelect
   implements

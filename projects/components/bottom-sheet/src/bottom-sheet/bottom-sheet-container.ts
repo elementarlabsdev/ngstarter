@@ -1,14 +1,10 @@
 import {
   Component,
-  ViewEncapsulation,
   ChangeDetectionStrategy,
   OnDestroy,
-  inject,
   EventEmitter,
 } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CdkPortalOutlet } from '@angular/cdk/portal';
-import { Subscription } from 'rxjs';
 import { CdkDialogContainer } from '@angular/cdk/dialog';
 
 /**
@@ -17,11 +13,13 @@ import { CdkDialogContainer } from '@angular/cdk/dialog';
  */
 @Component({
   selector: 'ngs-bottom-sheet-container',
+  exportAs: 'ngsBottomSheetContainer',
+  imports: [
+    CdkPortalOutlet
+  ],
   template: '<ng-template cdkPortalOutlet />',
   styleUrl: 'bottom-sheet-container.scss',
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.Default,
-  imports: [CdkPortalOutlet],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-bottom-sheet-container',
     'tabindex': '-1',
@@ -34,8 +32,6 @@ import { CdkDialogContainer } from '@angular/cdk/dialog';
   },
 })
 export class BottomSheetContainer extends CdkDialogContainer implements OnDestroy {
-  private _breakpointSubscription: Subscription;
-
   /** The state of the bottom sheet animations. */
   _animationState: 'void' | 'visible' | 'hidden' = 'void';
 
@@ -44,28 +40,6 @@ export class BottomSheetContainer extends CdkDialogContainer implements OnDestro
 
   /** Whether the component has been destroyed. */
   private _destroyed = false;
-
-  constructor() {
-    super();
-    const breakpointObserver = inject(BreakpointObserver);
-    this._breakpointSubscription = breakpointObserver
-      .observe([Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-      .subscribe(() => {
-        const classList = this._elementRef.nativeElement.classList;
-        classList.toggle(
-          'ngs-bottom-sheet-container-medium',
-          breakpointObserver.isMatched(Breakpoints.Medium)
-        );
-        classList.toggle(
-          'ngs-bottom-sheet-container-large',
-          breakpointObserver.isMatched(Breakpoints.Large)
-        );
-        classList.toggle(
-          'ngs-bottom-sheet-container-xlarge',
-          breakpointObserver.isMatched(Breakpoints.XLarge)
-        );
-      });
-  }
 
   /** Begin animation of bottom sheet entrance into view. */
   enter() {
@@ -85,7 +59,6 @@ export class BottomSheetContainer extends CdkDialogContainer implements OnDestro
 
   override ngOnDestroy() {
     super.ngOnDestroy();
-    this._breakpointSubscription.unsubscribe();
     this._destroyed = true;
   }
 

@@ -8,7 +8,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   host: {
     'class': 'ngs-empty-state-image'
   },
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmptyStateImage {}

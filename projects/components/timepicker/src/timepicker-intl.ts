@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-@Injectable({providedIn: 'root'})
+@Injectable({
+  providedIn: 'root'
+})
 export class TimepickerIntl {
   readonly changes = new Subject<void>();
   openTimepickerLabel = 'Open timepicker';

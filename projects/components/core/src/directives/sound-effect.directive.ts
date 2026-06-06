@@ -4,7 +4,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Directive({
   selector: '[ngsSoundEffect]',
-  standalone: true
 })
 export class SoundEffectDirective {
   soundSrc = input('assets/sound-effects/mouse-click.ogg');

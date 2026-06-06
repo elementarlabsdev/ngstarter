@@ -5,7 +5,6 @@ import { Dialog } from './dialog.service';
 @Directive({
   selector: '[ngs-dialog-close], [ngsDialogClose]',
   exportAs: 'ngsDialogClose',
-  standalone: true,
   host: {
     '[attr.aria-label]': 'ariaLabel() || null',
     '[attr.type]': 'type()',

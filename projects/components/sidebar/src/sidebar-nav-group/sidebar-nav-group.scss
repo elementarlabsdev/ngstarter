@@ -4,7 +4,7 @@
   display: block;
   border-radius: var(--ngs-sidebar-nav-group-border-radius);
 
-  &:has(.ngs-sidebar-nav-group-toggle.is-active) {
+  &.is-active {
     background: var(--ngs-sidebar-nav-group-active-bg);
   }
 }

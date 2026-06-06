@@ -2,7 +2,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'formatFileSize',
-  standalone: true
 })
 export class FormatFileSizePipe implements PipeTransform {
   transform(bytes: number, decimalPoint = 2): string {

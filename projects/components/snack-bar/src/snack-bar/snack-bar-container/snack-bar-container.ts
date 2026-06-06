@@ -7,8 +7,7 @@ import {
   OnDestroy,
   signal,
   PLATFORM_ID,
-  viewChild,
-  ViewEncapsulation
+  viewChild
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
@@ -22,7 +21,6 @@ import { SnackBarConfig } from '../snack-bar-config';
   standalone: true,
   imports: [CdkPortalOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   host: {
     'class': 'snack-bar-container-host'
   }

@@ -9,14 +9,15 @@
         </button>
       </ngs-chip-row>
     }
+
+    <input ngsInput
+           placeholder="New Fruit..." #fruitInput
+           [formControl]="fruitCtrl"
+           [ngsChipInputFor]="chipGrid"
+           [ngsAutocomplete]="auto"
+           [ngsChipInputSeparatorKeyCodes]="separatorKeysCodes"
+           (chipInputTokenEnd)="add($event)">
   </ngs-chip-grid>
-  <input ngsInput
-         placeholder="New Fruit..." #fruitInput
-         [formControl]="fruitCtrl"
-         [ngsChipInputFor]="chipGrid"
-         [ngsAutocomplete]="auto"
-         [ngsChipInputSeparatorKeyCodes]="separatorKeysCodes"
-         (chipInputTokenEnd)="add($event)">
   <ngs-autocomplete #auto="ngsAutocomplete" (optionSelected)="selected($event)">
     @for (fruit of filteredFruits | async; track fruit) {
       <ngs-option [value]="fruit">{{ fruit }}</ngs-option>

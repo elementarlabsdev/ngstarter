@@ -6,7 +6,6 @@ import { LinkDialog } from '../link/link.dialog';
 
 @Directive({
   selector: '[ngsCommentEditorCommandEditLink]',
-  standalone: true,
   host: {
     '[class.button]': 'true',
     '(click)': `onClick()`

@@ -33,7 +33,6 @@ const POPUP_VERTICAL_OFFSET = 8;
 
 @Directive({
   selector: '[ngsTextSelectionPopup]',
-  standalone: true,
 })
 export class TextSelectionPopupDirective implements OnDestroy {
 

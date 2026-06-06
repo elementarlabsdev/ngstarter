@@ -17,7 +17,6 @@ import { Highlightable } from '@angular/cdk/a11y';
 @Component({
   selector: 'ngs-option',
   exportAs: 'ngsOption',
-  standalone: true,
   imports: [
     Checkbox,
     Icon

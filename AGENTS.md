@@ -33,6 +33,8 @@ Prefer the narrowest command that verifies the change. For component library cha
 
 - Components are standalone Angular components.
 - Library selectors use the `ngs` prefix.
+- Every Angular component should live in its own folder, with its `.ts`, `.html`, `.scss`, tests,
+  and related local files grouped together under that component folder.
 - Public component APIs are exported from `projects/components/<component>/public-api.ts`.
 - Secondary entry points have their own `index.ts` and `ng-package.json`.
 - Keep imports from public entry points when writing docs or consumer-facing examples:
@@ -265,6 +267,10 @@ Styling rules for admin UIs:
 - In local SCSS, express spacing values with the Tailwind function `--spacing(N)`.
 - In component SCSS files, all component-local styling MUST be nested under the `:host` selector;
   do not write top-level component-local selectors outside `:host`.
+- In component SCSS files, nested element/state styles MUST use nested SCSS blocks instead of flat
+  descendant selectors. For example, write `:host-context(.state) { .child { ... } }`, never
+  `:host-context(.state) .child { ... }`; write `:host(.state) { .child { ... } }`, never
+  `:host(.state) .child { ... }`.
 - Locally override NgStarter components through component or directive selectors such as
   `ngs-card`, `ngs-navigation`, `ngs-form-field`, `table[ngs-table]`, `button[ngsButton]`, and
   `button[ngsIconButton]`.

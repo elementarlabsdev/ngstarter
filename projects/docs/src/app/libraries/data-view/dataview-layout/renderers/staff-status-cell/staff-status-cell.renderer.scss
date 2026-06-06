@@ -1,0 +1,20 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  ngs-chip[appearance="outlined"].is-active {
+    --ngs-chip-border-color: var(--ngs-color-success);
+    --ngs-chip-color: var(--ngs-color-success);
+  }
+
+  ngs-chip[appearance="outlined"].is-pending {
+    --ngs-chip-border-color: var(--ngs-color-warning);
+    --ngs-chip-color: var(--ngs-color-warning);
+  }
+
+  ngs-chip[appearance="outlined"].is-inactive {
+    --ngs-chip-border-color: var(--ngs-color-danger);
+    --ngs-chip-color: var(--ngs-color-danger);
+  }
+}

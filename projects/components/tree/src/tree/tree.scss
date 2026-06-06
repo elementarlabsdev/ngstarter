@@ -1,29 +1,25 @@
 @reference 'tailwindcss';
 
 :host {
-  display: block;
+  --ngs-tree-padding: --spacing(3) 0;
+  --ngs-tree-node-padding: var(--ngs-nav-item-padding);
+  --ngs-tree-node-min-height: var(--ngs-nav-item-height);
+  --ngs-tree-node-hover-bg: var(--ngs-nav-item-hover-bg);
+  --ngs-tree-node-active-bg: var(--ngs-nav-item-active-bg);
+  --ngs-tree-node-active-color: var(--ngs-nav-item-active-color);
+  --ngs-tree-node-disabled-opacity: 0.38;
+  --ngs-tree-node-title-font-size: 1rem;
+  --ngs-tree-node-font-size: var(--ngs-nav-item-font-size);
+  --ngs-tree-node-gap: var(--ngs-nav-item-gap);
+  --ngs-tree-node-radius: var(--ngs-nav-item-radius);
+  --ngs-tree-node-color: var(--ngs-nav-item-color);
+  --ngs-tree-node-hover-color: var(--ngs-nav-item-hover-color);
+  --ngs-tree-gap: --spacing(1);
+  --ngs-tree-node-line-color: var(--ngs-color-neutral);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--ngs-tree-gap);
+  padding: var(--ngs-tree-padding);
   background: var(--ngs-tree-container-background-color, transparent);
-
-  ::ng-deep {
-    .ngs-tree-node,
-    .ngs-nested-tree-node {
-      color: var(--ngs-tree-node-text-color, inherit);
-      font-family: var(--ngs-tree-node-text-font, inherit);
-      font-size: var(--ngs-tree-node-text-size, inherit);
-      font-weight: var(--ngs-tree-node-text-weight, inherit);
-    }
-
-    .ngs-tree-node {
-      display: flex;
-      align-items: center;
-      flex: 1;
-      word-wrap: break-word;
-      min-height: var(--ngs-tree-node-min-height, 48px);
-      box-sizing: border-box;
-    }
-
-    .ngs-nested-tree-node {
-      border-bottom-width: 0;
-    }
-  }
 }

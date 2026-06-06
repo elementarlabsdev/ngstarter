@@ -4,7 +4,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Calendar, CalendarEvent } from './calendar';
 
 @Component({
-  standalone: true,
   imports: [Calendar],
   template: `
     <ngs-calendar

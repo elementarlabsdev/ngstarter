@@ -22,15 +22,17 @@ import { DateRange } from '../core/datetime/date-range';
 @Component({
   selector: 'ngs-datepicker',
   exportAs: 'ngsDatepicker',
-  templateUrl: './datepicker.html',
-  standalone: true,
   imports: [
     OverlayModule,
     Calendar
   ],
+  templateUrl: './datepicker.html',
   styleUrl: './datepicker.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    'class': 'ngs-datepicker'
+  }
 })
 export class Datepicker<D> implements OnDestroy {
   private _overlay = inject(Overlay);

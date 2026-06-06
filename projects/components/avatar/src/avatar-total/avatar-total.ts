@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'ngs-avatar-total,[ngs-avatar-total]',
   exportAs: 'ngsAvatarTotal',
-  standalone: true,
   templateUrl: './avatar-total.html',
   styleUrl: './avatar-total.scss',
   host: {

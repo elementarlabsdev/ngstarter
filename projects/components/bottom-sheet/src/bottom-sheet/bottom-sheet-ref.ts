@@ -49,7 +49,7 @@ export class BottomSheetRef<T = any, R = any> {
     // Emit when opening animation completes
     containerInstance._animationStateChanged
       .pipe(
-        filter((event: any) => event.phase === 'done' && event.toState === 'visible'),
+        filter((event: any) => (event.phaseName ?? event.phase) === 'done' && event.toState === 'visible'),
         take(1)
       )
       .subscribe(() => {
@@ -60,7 +60,7 @@ export class BottomSheetRef<T = any, R = any> {
     // Dispose overlay when closing animation is complete
     containerInstance._animationStateChanged
       .pipe(
-        filter((event: any) => event.phase === 'done' && (event.toState === 'hidden' || event.toState === 'void')),
+        filter((event: any) => (event.phaseName ?? event.phase) === 'done' && (event.toState === 'hidden' || event.toState === 'void')),
         take(1)
       )
       .subscribe(() => {

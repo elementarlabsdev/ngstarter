@@ -494,6 +494,16 @@ export class Overview {
       name: 'Stepper',
     },
     {
+      routerLink: '/components/step-tracker',
+      imageUrl: 'assets/overview/step-tracker-preview.svg',
+      name: 'Step Tracker'
+    },
+    {
+      routerLink: '/components/headless-stepper',
+      imageUrl: 'assets/overview/headless-stepper.svg',
+      name: 'Headless Stepper'
+    },
+    {
       routerLink: '/components/suggestions',
       imageUrl: 'assets/overview/suggestions.svg',
       name: 'Suggestions',
@@ -507,6 +517,11 @@ export class Overview {
       routerLink: '/components/table',
       imageUrl: 'assets/overview/table.svg',
       name: 'Table',
+    },
+    {
+      routerLink: '/components/sort',
+      imageUrl: 'assets/overview/sort.svg',
+      name: 'Sort'
     },
     {
       routerLink: '/components/tabs',

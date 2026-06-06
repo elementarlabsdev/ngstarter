@@ -1,0 +1,27 @@
+<ngs-form-field class="tree-search-field">
+  <ngs-label>Search</ngs-label>
+  <input ngsInput [(ngModel)]="search" placeholder="Try broccoli or orange">
+</ngs-form-field>
+
+<ngs-tree #tree
+          [dataSource]="dataSource"
+          [childrenAccessor]="childrenAccessor"
+          [filterValue]="search"
+          [filterPredicate]="filterPredicate">
+  <ngs-tree-node *ngsTreeNodeDef="let node" ngsTreeNodePadding>
+    <button ngsIconButton disabled></button>
+    {{node.name}}
+  </ngs-tree-node>
+  <ngs-tree-node *ngsTreeNodeDef="let node; when: hasChild"
+                 ngsTreeNodePadding
+                 [cdkTreeNodeTypeaheadLabel]="node.name">
+    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+      @if (tree.isExpanded(node)) {
+        <ngs-icon name="fluent:chevron-down-24-regular" class="size-4"/>
+      } @else {
+        <ngs-icon name="fluent:chevron-right-24-regular" class="size-4"/>
+      }
+    </button>
+    {{node.name}}
+  </ngs-tree-node>
+</ngs-tree>

@@ -1,8 +1,10 @@
 @reference 'tailwindcss';
 
-.ngs-chip-listbox {
+:host {
+  --ngs-chip-listbox-gap: --spacing(2);
+
   display: flex;
   flex-wrap: wrap;
   outline: none;
-  gap: --spacing(2);
+  gap: var(--ngs-chip-listbox-gap);
 }

@@ -5,7 +5,6 @@ import { isPlatformBrowser } from '@angular/common';
 @Directive({
   selector: '[ngsAutoFocus]',
   exportAs: 'ngsAutoFocus',
-  standalone: true
 })
 export class AutoFocusDirective implements AfterViewInit, OnChanges {
   private platformId = inject(PLATFORM_ID);

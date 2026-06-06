@@ -1,0 +1,32 @@
+<ngs-tree #tree
+          [dataSource]="dataSource"
+          [childrenAccessor]="childrenAccessor"
+          [trackBy]="trackByName"
+          (selectedChange)="selectedValue = $event"
+          selectable>
+  <ngs-tree-node *ngsTreeNodeDef="let node"
+                 ngsTreeNodePadding
+                 [value]="node.name"
+                 [disabled]="!!node.disabled">
+    <button ngsIconButton disabled></button>
+    {{node.name}}
+  </ngs-tree-node>
+  <ngs-tree-node *ngsTreeNodeDef="let node; when: hasChild"
+                 ngsTreeNodePadding
+                 [value]="node.name"
+                 [disabled]="!!node.disabled"
+                 [cdkTreeNodeTypeaheadLabel]="node.name">
+    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+      @if (tree.isExpanded(node)) {
+        <ngs-icon name="fluent:chevron-down-24-regular" class="size-4"/>
+      } @else {
+        <ngs-icon name="fluent:chevron-right-24-regular" class="size-4"/>
+      }
+    </button>
+    {{node.name}}
+  </ngs-tree-node>
+</ngs-tree>
+
+<p class="tree-example-state">
+  Selected: {{selectedValue ?? 'None'}}
+</p>

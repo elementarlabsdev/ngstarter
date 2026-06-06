@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicTreeExample } from '../_examples/basic-tree-example/basic-tree-example';
+import { CheckableTreeExample } from '../_examples/checkable-tree-example/checkable-tree-example';
+import { DraggableTreeExample } from '../_examples/draggable-tree-example/draggable-tree-example';
+import { SearchableTreeExample } from '../_examples/searchable-tree-example/searchable-tree-example';
+import { SelectableTreeExample } from '../_examples/selectable-tree-example/selectable-tree-example';
 import {
   TreeWithDynamicDataExample
 } from '../_examples/tree-with-dynamic-data-example/tree-with-dynamic-data-example';
@@ -10,6 +14,10 @@ import {
   imports: [
     Playground,
     BasicTreeExample,
+    SelectableTreeExample,
+    CheckableTreeExample,
+    DraggableTreeExample,
+    SearchableTreeExample,
     TreeWithDynamicDataExample
   ],
   templateUrl: './overview.html',

@@ -4,10 +4,12 @@ import {
   Component,
   contentChild,
   forwardRef,
+  inject,
 } from '@angular/core';
 import { SidebarNavGroupToggle } from '../sidebar-nav-group-toggle/sidebar-nav-group-toggle';
 import { SIDEBAR_NAVIGATION_GROUP } from '../types';
 import { SidebarNavGroupMenu } from '../sidebar-nav-group-menu/sidebar-nav-group-menu';
+import { SidebarNavStore } from '../sidebar.store';
 
 let nextId = 0;
 
@@ -21,9 +23,14 @@ let nextId = 0;
       provide: SIDEBAR_NAVIGATION_GROUP,
       useExisting: forwardRef(() => SidebarNavGroup),
     }
-  ]
+  ],
+  host: {
+    'class': 'ngs-sidebar-nav-group',
+    '[class.is-active]': 'active',
+  }
 })
 export class SidebarNavGroup implements AfterContentInit {
+  private _navStore = inject(SidebarNavStore);
   private _toggle = contentChild.required(SidebarNavGroupToggle, {
     descendants: false,
   });
@@ -38,5 +45,9 @@ export class SidebarNavGroup implements AfterContentInit {
 
   hasActiveItem(): boolean {
     return this._menu().hasActiveItem();
+  }
+
+  get active(): boolean {
+    return this._navStore.isGroupActive(this._groupId);
   }
 }

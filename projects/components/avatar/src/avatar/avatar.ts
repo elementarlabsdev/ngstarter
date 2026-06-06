@@ -17,7 +17,6 @@ const alreadyLoadedImages: string[] = [];
 @Component({
   selector: 'ngs-avatar,[ngs-avatar]',
   exportAs: 'ngsAvatar',
-  standalone: true,
   templateUrl: './avatar.html',
   styleUrl: './avatar.scss',
   providers: [

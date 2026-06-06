@@ -41,7 +41,7 @@ export class BottomSheet implements OnDestroy {
     const _config = { ...(this._defaultOptions || new BottomSheetConfig()), ...config };
     let ref: BottomSheetRef<T, R>;
 
-    this._dialog.open<R, T>(componentOrTemplateRef, {
+    const cdkRef = this._dialog.open<R, D, T>(componentOrTemplateRef, {
       ...(_config as any),
       // Disable closing since we need to sync it up to the animation ourselves.
       disableClose: true,
@@ -63,6 +63,8 @@ export class BottomSheet implements OnDestroy {
         ];
       },
     });
+    ref!._refInstance = (cdkRef.componentInstance ?? null) as T | null;
+    ref!._refRef = (cdkRef as any).componentRef ?? null;
 
     ref!.afterDismissed().subscribe(() => {
       // Clear the bottom sheet ref if it hasn't already been replaced by a newer one.

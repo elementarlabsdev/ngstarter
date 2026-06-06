@@ -2,15 +2,24 @@
 
 :host {
   --ngs-chip-set-gap: var(--ngs-chip-set-spacing, --spacing(2));
+  --ngs-chip-input-height: var(--ngs-form-field-input-height, var(--ngs-field-input-height, 1.25rem));
 
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--ngs-chip-set-gap);
+  width: 100%;
 
   ::ng-deep {
     .ngs-chip-input {
       outline: none;
-      width: 100%;
+      flex: 1 0 100%;
+      min-width: 0;
+      max-width: 100%;
+      width: 100% !important;
+      height: var(--ngs-chip-input-height);
+      min-height: var(--ngs-chip-input-height);
+      box-sizing: border-box;
     }
   }
 }

@@ -1,0 +1,23 @@
+<app-page>
+  <h1 appPageTitle>Headless Stepper</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The <code>ngs-headless-stepper</code> component provides step state, validation, progress, and navigation methods
+        without rendering a fixed stepper header. Use it when a product workflow needs a custom visual layout while still
+        sharing NgStarter step behavior.
+      </p>
+      <p>
+        Use the visual Stepper when the default wizard UI fits. Use Headless Stepper for custom onboarding, checkout,
+        setup, and form flows with app-specific progress indicators, headers, or responsive layouts.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/headless-stepper" ngs-tab-link>Overview</a>
+      <a routerLink="/components/headless-stepper/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

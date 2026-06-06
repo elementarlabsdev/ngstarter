@@ -3,15 +3,16 @@
 :host {
   --ngs-notification-padding: --spacing(5);
   --ngs-notification-gap: --spacing(4);
-  --ngs-notification-bg: var(--ngs-color-surface-container-low);
-  --ngs-notification-hover-bg: var(--ngs-color-surface-container);
-  --ngs-notification-is-unread-bg: var(--ngs-color-primary-200);
-  --ngs-notification-is-unread-hover-bg: var(--ngs-color-primary-300);
+  --ngs-notification-bg: var(--ngs-color-surface-container-lowest);
+  --ngs-notification-hover-bg: var(--ngs-color-surface-container-low);
+  --ngs-notification-is-unread-bg: var(--ngs-color-surface-container-low);
+  --ngs-notification-is-unread-hover-bg: var(--ngs-color-surface-container);
+  --ngs-notification-radius: theme(--radius-xl);
 
   display: flex;
   width: 100%;
   position: relative;
-  border-radius: var(--ngs-radius-xl);
+  border-radius: var(--ngs-notification-radius);
   gap: var(--ngs-notification-gap);
   padding: var(--ngs-notification-padding);
 

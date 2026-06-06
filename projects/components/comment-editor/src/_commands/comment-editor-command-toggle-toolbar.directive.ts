@@ -3,7 +3,6 @@ import { COMMENT_EDITOR, CommentEditorInterface } from '../types';
 
 @Directive({
   selector: '[ngsCommentEditorCommandToggleToolbar]',
-  standalone: true,
   host: {
     '[class.active]': `commentEditor && commentEditor.api.isToolbarActive()`,
     '(click)': `onClick()`

@@ -42,9 +42,11 @@ const diffTransformer: ShikiTransformer = {
 
 @Component({
   selector: 'ngs-code-highlighter',
-  standalone: true,
-  imports: [Button, Icon],
   exportAs: 'ngsCodeHighlighter',
+  imports: [
+    Button,
+    Icon
+  ],
   templateUrl: './code-highlighter.html',
   styleUrl: './code-highlighter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,6 +54,7 @@ const diffTransformer: ShikiTransformer = {
     'class': 'ngs-code-highlighter not-prose',
     '[class.appearance-bordered]': 'appearance() === "bordered"',
     '[class.appearance-none]': 'appearance() === "none"',
+    '[class.overflow-disabled]': 'disableOverflow()',
   }
 })
 export class CodeHighlighter implements OnChanges {
@@ -66,6 +69,7 @@ export class CodeHighlighter implements OnChanges {
   highlightLines = input<number[] | number[][]>([]);
   showLanguage = input(false, { transform: booleanAttribute });
   showCopyButton = input(false, { transform: booleanAttribute });
+  disableOverflow = input(false, { transform: booleanAttribute });
 
   readonly content = signal<SafeHtml | null>(null);
   readonly isLoading = signal<boolean>(false);

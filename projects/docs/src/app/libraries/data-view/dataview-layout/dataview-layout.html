@@ -1,0 +1,145 @@
+<ngs-panel>
+  <ngs-panel-header autoHeight class="pt-6 pb-2 px-6">
+    <div class="flex min-w-0 items-center gap-4">
+      <div class="bg-primary-container rounded-xl p-2 size-16 flex items-center justify-center">
+        <ngs-icon name="fluent:people-team-24-filled" class="text-primary"/>
+      </div>
+
+      <div class="min-w-0">
+        <div class="flex min-w-0 items-center gap-2">
+          <h2 class="truncate text-2xl font-semibold">Staff List</h2>
+          <button type="button" ngsIconButton aria-label="Add Staff List to favorites" class="staff-star-button">
+            <ngs-icon name="fluent:star-24-regular"/>
+          </button>
+        </div>
+        <p class="mt-1 text-sm text-neutral-500">Auto-updates in 2 min</p>
+      </div>
+    </div>
+  </ngs-panel-header>
+  <ngs-panel-subheader autoHeight class="px-6">
+    <ngs-toolbar class="py-4">
+      <ngs-select
+        #staffTypeSelect
+        [formControl]="staffType()"
+        hideCheckIcon
+        clearable
+        aria-label="Staff type filter"
+        (selectionChange)="resetPage()">
+        <ngs-filter-trigger>All Staff</ngs-filter-trigger>
+
+        @for (staffTypeOption of staffTypes(); track staffTypeOption) {
+          <ngs-option [value]="staffTypeOption">{{ staffTypeOption }}</ngs-option>
+        }
+      </ngs-select>
+
+      <ngs-select
+        [formControl]="position()"
+        hideCheckIcon
+        clearable
+        aria-label="Position filter"
+        (selectionChange)="resetPage()">
+        <ngs-filter-trigger>All Position</ngs-filter-trigger>
+
+        @for (positionOption of positions(); track positionOption) {
+          <ngs-option [value]="positionOption">{{ positionOption }}</ngs-option>
+        }
+      </ngs-select>
+
+      <ngs-select
+        [formControl]="status()"
+        multiple
+        clearable
+        aria-label="Status filter"
+        (selectionChange)="resetPage()">
+        <ngs-filter-trigger>Status
+          <ng-template ngsFilterTriggerValue let-statuses let-count="count">
+            @if (count === 1) {
+              <div class="inline-flex min-w-0 items-center gap-2">
+                <span
+                  class="size-2 flex-none rounded-full"
+                  [class.bg-positive]="statuses[0].tone === 'active'"
+                  [class.bg-notice]="statuses[0].tone === 'pending'"
+                  [class.bg-negative]="statuses[0].tone === 'inactive'"></span>
+                {{ statuses[0].label }}
+              </div>
+            } @else {
+              {{ count }}
+            }
+          </ng-template>
+        </ngs-filter-trigger>
+
+        @for (statusOption of statuses(); track statusOption.id) {
+          <ngs-option [value]="statusOption.id" [data]="statusOption">
+            <span
+              class="size-2 flex-none rounded-full"
+              [class.bg-positive]="statusOption.tone === 'active'"
+              [class.bg-notice]="statusOption.tone === 'pending'"
+              [class.bg-negative]="statusOption.tone === 'inactive'"></span>
+            {{ statusOption.label }}
+          </ngs-option>
+        }
+      </ngs-select>
+
+      <ngs-toolbar-spacer/>
+
+      <div class="w-[300px]">
+        <ngs-form-field subscriptHiddenIfEmpty sameHeightAsButton>
+          <ngs-icon name="fluent:search-24-regular" ngsIconPrefix/>
+          <input
+            ngsInput
+            type="search"
+            placeholder="Search..."
+            [formControl]="search()"
+            (input)="resetPage()"
+            aria-label="Search staff">
+        </ngs-form-field>
+      </div>
+
+      <button type="button" ngsButton="filled" [ngsMenuTriggerFor]="exportMenu">
+        <ngs-icon name="fluent:arrow-download-24-regular"/>
+        Export
+      </button>
+
+      <ngs-menu #exportMenu="ngsMenu">
+        <button type="button" ngs-menu-item>
+          <ngs-icon name="fluent:document-pdf-24-regular"/>
+          Export PDF
+        </button>
+
+        <button type="button" ngs-menu-item>
+          <ngs-icon name="fluent:data-bar-vertical-24-regular"/>
+          Export Excel
+        </button>
+      </ngs-menu>
+    </ngs-toolbar>
+  </ngs-panel-subheader>
+
+  <ngs-panel-content>
+    <ngs-data-view
+      [columnDefs]="columnDefs()"
+      [data]="filteredStaff()"
+      [cellRenderers]="cellRenderers()"
+      [paginator]="staffPaginator"
+      [pageSize]="pageSize()"
+      [pageIndex]="pageIndex()"
+      rowHeight="64"
+      headerHeight="56"
+      withSelection
+      withPagination
+      hoverRows
+      embedded
+      autoHeight
+      class="absolute inset-y-0 inset-x-6 border border-border rounded-2xl overflow-hidden"/>
+  </ngs-panel-content>
+
+  <ngs-panel-footer flex class="justify-center py-4">
+    <ngs-paginator
+      #staffPaginator="ngsPaginator"
+      hidePageSize
+      [length]="filteredStaff().length"
+      [pageSize]="pageSize()"
+      [pageIndex]="pageIndex()"
+      (page)="onPageChange($event)"
+      aria-label="Staff list pages"/>
+  </ngs-panel-footer>
+</ngs-panel>

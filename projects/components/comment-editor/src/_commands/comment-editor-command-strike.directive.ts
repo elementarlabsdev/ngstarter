@@ -3,7 +3,6 @@ import { COMMENT_EDITOR, CommentEditorInterface } from '../types';
 
 @Directive({
   selector: '[ngsCommentEditorCommandStrike]',
-  standalone: true,
   host: {
     '[attr.disabled]': `(commentEditor && commentEditor.api.isCommandDisabled('toggleStrike')) ? '' : null`,
     '[class.active]': `commentEditor && commentEditor.api.isActive('strike')`,

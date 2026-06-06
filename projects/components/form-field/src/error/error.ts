@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'ngs-error',
-  standalone: true,
+  exportAs: 'ngsError',
   templateUrl: './error.html',
   styleUrl: './error.scss',
   host: {

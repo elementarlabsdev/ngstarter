@@ -7,7 +7,6 @@ import { ChipRow } from './chip-row/chip-row';
     'class': 'ngs-chip-edit',
     '(click)': '_handleClick($event)',
   },
-  standalone: true,
 })
 export class ChipEdit {
   protected _parentChip = inject(ChipRow);

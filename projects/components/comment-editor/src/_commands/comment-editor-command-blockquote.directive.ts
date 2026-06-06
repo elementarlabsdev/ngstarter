@@ -3,7 +3,6 @@ import { COMMENT_EDITOR, CommentEditorInterface } from '../types';
 
 @Directive({
   selector: '[ngsCommentEditorCommandBlockquote]',
-  standalone: true,
   host: {
     '[attr.disabled]': `(commentEditor && commentEditor.api.isCommandDisabled('toggleBlockquote')) ? '' : null`,
     '[class.active]': `commentEditor && commentEditor.api.isActive('blockquote')`,

@@ -8,18 +8,18 @@
   height: 100%;
 
   .pipeline-chip {
-    --ngs-chip-bg: color-mix(in srgb, var(--pipeline-primary) 12%, transparent);
+    --ngs-chip-background: color-mix(in srgb, var(--pipeline-primary) 12%, transparent);
     --ngs-chip-color: #2e4f9d;
     --ngs-chip-font-weight: 500;
   }
 
   .pipeline-chip-accent {
-    --ngs-chip-bg: color-mix(in srgb, var(--pipeline-accent) 18%, transparent);
+    --ngs-chip-background: color-mix(in srgb, var(--pipeline-accent) 18%, transparent);
     --ngs-chip-color: #72511d;
   }
 
   .pipeline-chip-success {
-    --ngs-chip-bg: color-mix(in srgb, var(--pipeline-success) 18%, transparent);
+    --ngs-chip-background: color-mix(in srgb, var(--pipeline-success) 18%, transparent);
     --ngs-chip-color: #28604c;
   }
 

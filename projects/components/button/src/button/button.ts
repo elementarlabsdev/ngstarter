@@ -16,7 +16,7 @@ export type ButtonVariant = 'filled' | 'outlined' | 'text' | 'tonal' | '';
     button[ngsButton], button[ngsIconButton],
     a[ngsButton], a[ngsIconButton]
   `,
-  standalone: true,
+  exportAs: 'ngsButton',
   imports: [
     Ripple
   ],
@@ -39,7 +39,6 @@ export type ButtonVariant = 'filled' | 'outlined' | 'text' | 'tonal' | '';
     '(click)': '_haltDisabledEvents($event)',
     '[attr.tabindex]': '(disabled() || loading()) && disabledInteractive() ? 0 : null',
   },
-  exportAs: 'ngsButton',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Button {

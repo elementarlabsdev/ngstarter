@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Icon } from '@ngstarter-ui/components/icon';
-import { FabButton } from '@ngstarter-ui/components/button';
+import { Button } from '@ngstarter-ui/components/button';
 
 import MicrophoneRecorder, {
   MicrophoneRecorderOptions,
@@ -28,11 +28,12 @@ import MicrophoneRecorder, {
 
 @Component({
   selector: 'ngs-audio-recorder',
+  exportAs: 'ngsAudioRecorder',
   standalone: true,
   imports: [
     CommonModule,
     Icon,
-    FabButton
+    Button
   ],
   templateUrl: './audio-recorder.component.html',
   styleUrl: './audio-recorder.component.scss'

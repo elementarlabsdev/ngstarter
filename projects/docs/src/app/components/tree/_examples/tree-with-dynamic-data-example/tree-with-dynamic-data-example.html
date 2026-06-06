@@ -3,7 +3,7 @@
     <button ngsIconButton disabled></button>
     {{node.item}}
   </ngs-tree-node>
-  <ngs-tree-node *ngsTreeNodeDef="let node; when: hasChild" ngsTreeNodePadding ngsTreeNodeToggle
+  <ngs-tree-node *ngsTreeNodeDef="let node; when: hasChild" ngsTreeNodePadding
                  [cdkTreeNodeTypeaheadLabel]="node.item">
     <button ngsIconButton
             [attr.aria-label]="'Toggle ' + node.item" ngsTreeNodeToggle>

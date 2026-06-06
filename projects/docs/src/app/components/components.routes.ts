@@ -196,9 +196,24 @@ export const routes: Routes = [
     title: 'Table'
   },
   {
+    path: 'sort',
+    loadChildren: () => import('./sort/routes').then(m => m.routes),
+    title: 'Sort'
+  },
+  {
     path: 'stepper',
     loadChildren: () => import('./stepper/routes').then(m => m.routes),
     title: 'Stepper'
+  },
+  {
+    path: 'step-tracker',
+    loadChildren: () => import('./step-tracker/routes').then(m => m.routes),
+    title: 'Step Tracker'
+  },
+  {
+    path: 'headless-stepper',
+    loadChildren: () => import('./headless-stepper/routes').then(m => m.routes),
+    title: 'Headless Stepper'
   },
   {
     path: 'tabs',

@@ -6,7 +6,6 @@ import { ComponentRegistryService } from '../services/component-registry.service
 @Component({
   selector: 'ngs-component-loader',
   exportAs: 'ngsComponentLoader',
-  standalone: true,
   templateUrl: './component-loader.html',
   host: {
     '[style.grid-column]': 'gridColumnStyle()',

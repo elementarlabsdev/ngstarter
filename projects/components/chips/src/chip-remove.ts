@@ -7,7 +7,6 @@ import { Chip } from './chip/chip';
     'class': 'ngs-chip-remove',
     '(click)': '_handleClick($event)',
   },
-  standalone: true,
 })
 export class ChipRemove {
   protected _parentChip = inject(Chip);

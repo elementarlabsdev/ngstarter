@@ -80,6 +80,12 @@ export class Api {
       description: 'Whether to show the copy to clipboard button.',
       type: 'boolean',
       default: 'false'
+    },
+    {
+      name: 'disableOverflow',
+      description: 'Whether to disable the internal overflow container so a parent scroll area can own scrolling.',
+      type: 'boolean',
+      default: 'false'
     }
   ];
 }

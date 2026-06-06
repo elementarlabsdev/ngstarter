@@ -74,4 +74,19 @@ export class Api {
       default: '""'
     }
   ];
+
+  formFieldProperties = [
+    {
+      name: 'subscriptHiddenIfEmpty',
+      description: 'Hides the subscript area when there are no hints or errors. Useful for compact toolbar and filter fields.',
+      type: 'boolean',
+      default: 'false'
+    },
+    {
+      name: 'sameHeightAsButton',
+      description: 'Aligns the form field height with NgStarter button height for dense action rows, toolbar filters, and DataView headers.',
+      type: 'boolean',
+      default: 'false'
+    }
+  ];
 }

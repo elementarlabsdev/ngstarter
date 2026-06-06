@@ -6,7 +6,6 @@ import {
   input,
   OnDestroy,
   OnInit,
-  ViewEncapsulation,
 } from '@angular/core';
 import { SORT } from './sort-interface';
 import { Subscription } from 'rxjs';
@@ -15,15 +14,12 @@ import { Subscription } from 'rxjs';
   selector: '[ngs-sort-header]',
   exportAs: 'ngsSortHeader',
   templateUrl: './sort-header.html',
-  styleUrls: ['./sort-header.scss'],
+  styleUrl: './sort-header.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-sort-header',
     '[class.ngs-sort-header-disabled]': '_isDisabled()',
   },
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [],
 })
 export class SortHeader implements OnInit, OnDestroy {
   private _rerenderSubscription: Subscription | undefined;

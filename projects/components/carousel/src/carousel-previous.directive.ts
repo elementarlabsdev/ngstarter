@@ -4,7 +4,6 @@ import { CAROUSEL, CarouselInterface } from './types';
 @Directive({
   selector: '[ngsCarouselPrevious]',
   exportAs: 'ngsCarouselPrevious',
-  standalone: true,
   host: {
     'class': 'ngs-carousel-previous',
     '[attr.disabled]': '_carousel?.api?.isPreviousDisabled() ? true : null',

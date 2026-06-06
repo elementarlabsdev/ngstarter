@@ -13,8 +13,7 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 @Component({
   selector: 'ngs-headless-stepper',
   exportAs: 'ngsHeadlessStepper',
-  standalone: true,
-  template: `<ng-content select="ngs-step"/>`,
+  template: `<ng-content/>`,
   styles: [`
     :host {
       display: block;

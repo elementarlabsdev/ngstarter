@@ -1,5 +1,5 @@
 <p class="docs-seo-intro mb-6 text-base leading-7 text-neutral-600">
-  The NgStarter Angular Tree component lets you display hierarchical data with expandable parent and child nodes. Use ngs-tree when users need to inspect or navigate hierarchical data where parent and child levels matter: folders and files, categories, permissions, taxonomies, organization structures, nested settings, product/entity hierarchies, and other expandable trees. It includes examples for Basic tree, and Tree with dynamic data.
+  The NgStarter Angular Tree component lets you display hierarchical data with expandable parent and child nodes. Use ngs-tree when users need to inspect or navigate hierarchical data where parent and child levels matter: folders and files, categories, permissions, taxonomies, organization structures, nested settings, product/entity hierarchies, and other expandable trees. It includes examples for Basic tree, Selectable tree, Checkable tree, Draggable tree, Searchable tree, and Tree with dynamic data.
 </p>
 
 <h3>Basic tree</h3>
@@ -8,6 +8,39 @@
 </p>
 <ngs-playground exampleUrl="_docs/components/tree/_examples" exampleName="basic-tree-example">
   <app-basic-tree-example/>
+</ngs-playground>
+
+<h3>Selectable tree</h3>
+<p>
+  Use a selectable tree when users need to highlight the current item while browsing a hierarchy.
+</p>
+<ngs-playground exampleUrl="_docs/components/tree/_examples" exampleName="selectable-tree-example">
+  <app-selectable-tree-example/>
+</ngs-playground>
+
+<h3>Checkable tree</h3>
+<p>
+  Use a checkable tree when parent and child nodes should be selected together with partial selection
+  shown on parent nodes.
+</p>
+<ngs-playground exampleUrl="_docs/components/tree/_examples" exampleName="checkable-tree-example">
+  <app-checkable-tree-example/>
+</ngs-playground>
+
+<h3>Draggable tree</h3>
+<p>
+  Use a draggable tree when users need to reorder a node or move it, including its nested children, into another node.
+</p>
+<ngs-playground exampleUrl="_docs/components/tree/_examples" exampleName="draggable-tree-example">
+  <app-draggable-tree-example/>
+</ngs-playground>
+
+<h3>Searchable tree</h3>
+<p>
+  Use a searchable tree when users need to filter an existing hierarchy while keeping matching child nodes connected to their parent path.
+</p>
+<ngs-playground exampleUrl="_docs/components/tree/_examples" exampleName="searchable-tree-example">
+  <app-searchable-tree-example/>
 </ngs-playground>
 
 <h3>Tree with dynamic data</h3>

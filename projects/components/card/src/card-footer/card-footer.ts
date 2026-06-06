@@ -4,7 +4,6 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   selector: 'ngs-card-footer, [ngs-card-footer], [ngsCardFooter]',
   templateUrl: './card-footer.html',
   styleUrl: './card-footer.scss',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-card-footer'

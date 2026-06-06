@@ -1,0 +1,9 @@
+<button type="button" ngsIconButton aria-label="Open staff actions" [ngsMenuTriggerFor]="staffActionsMenu">
+  <ngs-icon name="fluent:more-horizontal-24-regular"/>
+</button>
+
+<ngs-menu #staffActionsMenu="ngsMenu">
+  <button type="button" ngs-menu-item>View profile</button>
+  <button type="button" ngs-menu-item>Edit staff</button>
+  <button type="button" ngs-menu-item>Archive</button>
+</ngs-menu>

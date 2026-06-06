@@ -40,6 +40,26 @@
   </table>
 </div>
 
+<h3>ngs-chip CSS Tokens</h3>
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="chipCssTokens">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Token</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <code>{{ element.name }}</code>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="description">
+      <th ngs-header-cell *ngsHeaderCellDef>Description</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.description }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'description']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'description'];"></tr>
+  </table>
+</div>
+
 <h3>ngs-chip-listbox</h3>
 <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
   <table ngs-table [dataSource]="chipListboxProperties">

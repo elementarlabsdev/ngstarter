@@ -1,5 +1,5 @@
 <ngs-selection-list multiple #shoes>
-  @for (shoe of typesOfShoes; track shoe) {
+  @for (shoe of typesOfShoes(); track shoe) {
     <ngs-list-option>{{ shoe }}</ngs-list-option>
   }
 </ngs-selection-list>

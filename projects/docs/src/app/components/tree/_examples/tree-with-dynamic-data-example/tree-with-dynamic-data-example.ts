@@ -48,6 +48,7 @@ export class DynamicDatabase {
 
 export class DynamicDataSource implements DataSource<DynamicFlatNode> {
   dataChange = new BehaviorSubject<DynamicFlatNode[]>([]);
+  private _loadSequence = new WeakMap<DynamicFlatNode, number>();
 
   get data(): DynamicFlatNode[] {
     return this.dataChange.value;
@@ -101,23 +102,44 @@ export class DynamicDataSource implements DataSource<DynamicFlatNode> {
       return;
     }
 
+    if (!expand) {
+      this._loadSequence.set(node, (this._loadSequence.get(node) ?? 0) + 1);
+      node.isLoading.set(false);
+      let count = 0;
+      for (
+        let i = index + 1;
+        i < this.data.length && this.data[i].level > node.level;
+        i++, count++
+      ) {}
+      this.data.splice(index + 1, count);
+      this.dataChange.next(this.data);
+      return;
+    }
+
+    const loadId = (this._loadSequence.get(node) ?? 0) + 1;
+    this._loadSequence.set(node, loadId);
     node.isLoading.set(true);
 
     setTimeout(() => {
-      if (expand) {
-        const nodes = children.map(
-          name => new DynamicFlatNode(name, node.level + 1, this._database.isExpandable(name)),
-        );
-        this.data.splice(index + 1, 0, ...nodes);
-      } else {
-        let count = 0;
-        for (
-          let i = index + 1;
-          i < this.data.length && this.data[i].level > node.level;
-          i++, count++
-        ) {}
-        this.data.splice(index + 1, count);
+      if (this._loadSequence.get(node) !== loadId) {
+        return;
       }
+
+      if (!this._treeControl.isExpanded(node)) {
+        node.isLoading.set(false);
+        return;
+      }
+
+      const currentIndex = this.data.indexOf(node);
+      if (currentIndex < 0) {
+        node.isLoading.set(false);
+        return;
+      }
+
+      const nodes = children.map(
+        name => new DynamicFlatNode(name, node.level + 1, this._database.isExpandable(name)),
+      );
+      this.data.splice(currentIndex + 1, 0, ...nodes);
 
       // notify the change
       this.dataChange.next(this.data);

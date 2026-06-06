@@ -4,7 +4,6 @@ import { CAROUSEL, CarouselInterface } from './types';
 @Directive({
   selector: '[ngsCarouselNext]',
   exportAs: 'ngsCarouselNext',
-  standalone: true,
   host: {
     'class': 'ngs-carousel-next',
     '[attr.disabled]': '_carousel?.api?.isNextDisabled() ? true : null',

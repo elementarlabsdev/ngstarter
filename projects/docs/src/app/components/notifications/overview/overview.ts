@@ -6,12 +6,16 @@ import {
 import {
   NotificationListExample
 } from '../_examples/notification-list-example/notification-list-example';
+import {
+  NotificationVariantsExample
+} from '../_examples/notification-variants-example/notification-variants-example';
 
 @Component({
   imports: [
     Playground,
     BasicNotificationsExample,
-    NotificationListExample
+    NotificationListExample,
+    NotificationVariantsExample
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'

@@ -111,6 +111,20 @@
     }
   }
 
+  &.overflow-disabled {
+    .content {
+      overflow: visible;
+    }
+
+    ::ng-deep {
+      pre,
+      code {
+        width: max-content;
+        min-width: 100%;
+      }
+    }
+  }
+
   &.appearance-bordered {
     figcaption {
       border: var(--ngs-code-highlighter-border);

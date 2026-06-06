@@ -1,20 +1,31 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  ViewEncapsulation,
   input,
   booleanAttribute,
   forwardRef,
   output,
-  effect
+  effect,
+  signal
 } from '@angular/core';
 import { AutoFocusDirective } from '@ngstarter-ui/components/core';
 import { Chip } from '../chip/chip';
 
 @Component({
   selector: 'ngs-chip-option',
+  exportAs: 'ngsChipOption',
+  imports: [
+    AutoFocusDirective
+  ],
   templateUrl: '../chip/chip.html',
   styleUrl: '../chip/chip.scss',
+  providers: [
+    {
+      provide: Chip,
+      useExisting: forwardRef(() => ChipOption)
+    }
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-chip ngs-chip-option',
     '[class.ngs-chip-selected]': 'isSelected',
@@ -25,22 +36,10 @@ import { Chip } from '../chip/chip';
     '[attr.aria-disabled]': 'disabled()',
     '(click)': 'toggleSelected()',
   },
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  imports: [
-    AutoFocusDirective
-  ],
-  providers: [
-    {
-      provide: Chip,
-      useExisting: forwardRef(() => ChipOption)
-    }
-  ]
 })
 export class ChipOption extends Chip {
   selected = input(false, { transform: booleanAttribute });
-  private _internalSelected = false;
+  private readonly _internalSelected = signal(false);
 
   constructor() {
     super();
@@ -50,16 +49,16 @@ export class ChipOption extends Chip {
   }
 
   get isSelected(): boolean {
-    return this._internalSelected;
+    return this._internalSelected();
   }
   _setSelected(value: boolean) {
-    this._internalSelected = value;
+    this._internalSelected.set(value);
   }
 
   readonly selectionChange = output<{
     source: ChipOption;
     selected: boolean;
-}>();
+  }>();
 
   toggleSelected(): void {
     if (!this.disabled()) {

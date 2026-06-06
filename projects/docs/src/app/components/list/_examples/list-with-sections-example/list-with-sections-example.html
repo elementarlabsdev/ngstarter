@@ -1,6 +1,6 @@
 <ngs-list>
   <div ngsSubheader>Folders</div>
-  @for (folder of folders; track folder) {
+  @for (folder of folders(); track folder) {
     <ngs-list-item>
       <ngs-icon name="fluent:folder-24-regular" ngsListItemIcon/>
       <div ngsListItemTitle>{{ folder.name }}</div>
@@ -9,7 +9,7 @@
   }
   <ngs-divider class="my-5"/>
   <div ngsSubheader>Notes</div>
-  @for (note of notes; track note) {
+  @for (note of notes(); track note) {
     <ngs-list-item>
       <ngs-icon name="fluent:note-24-regular" ngsListItemIcon/>
       <div ngsListItemTitle>{{ note.name }}</div>

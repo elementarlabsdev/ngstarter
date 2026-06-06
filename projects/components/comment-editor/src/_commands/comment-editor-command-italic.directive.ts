@@ -3,7 +3,6 @@ import { COMMENT_EDITOR, CommentEditorInterface } from '../types';
 
 @Directive({
   selector: '[ngsCommentEditorCommandItalic]',
-  standalone: true,
   host: {
     '[attr.disabled]': `(commentEditor && commentEditor.api.isCommandDisabled('toggleItalic')) ? '' : null`,
     '[class.active]': `commentEditor && commentEditor.api.isActive('italic')`,

@@ -9,6 +9,7 @@ import {
   DestroyRef
 } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { startWith } from 'rxjs/operators';
 
@@ -31,7 +32,9 @@ export class HeadlessStep {
   /** Form control associated with this step */
   stepControl = input<AbstractControl | undefined>(undefined);
   /** Whether the step is optional */
-  optional = input(false);
+  optional = input(false, {
+    transform: coerceBooleanProperty
+  });
 
   /** Whether the user has interacted with this step (writable signal) */
   readonly interacted = signal(false);

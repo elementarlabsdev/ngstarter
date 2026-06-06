@@ -540,17 +540,17 @@ ngs-form-field.search-field.ngs-form-field-focused .ngs-form-field-container {
 
 .status-overdue {
   --ngs-chip-color: #6c2525;
-  --ngs-chip-bg: #ffdada;
+  --ngs-chip-background: #ffdada;
 }
 
 .status-todo {
   --ngs-chip-color: #373945;
-  --ngs-chip-bg: #eeeef4;
+  --ngs-chip-background: #eeeef4;
 }
 
 .status-doing {
   --ngs-chip-color: #224a72;
-  --ngs-chip-bg: #dff0ff;
+  --ngs-chip-background: #dff0ff;
 }
 
 .add-task {
@@ -788,17 +788,17 @@ ngs-form-field.search-field.ngs-form-field-focused .ngs-form-field-container {
 }
 
 .health-strong {
-  --ngs-chip-bg: #dff7e8;
+  --ngs-chip-background: #dff7e8;
   --ngs-chip-color: #24603c;
 }
 
 .health-watch {
-  --ngs-chip-bg: #fff2cc;
+  --ngs-chip-background: #fff2cc;
   --ngs-chip-color: #69501d;
 }
 
 .health-risk {
-  --ngs-chip-bg: #ffdada;
+  --ngs-chip-background: #ffdada;
   --ngs-chip-color: #6c2525;
 }
 
@@ -1095,7 +1095,7 @@ ngs-card.metric-card .metric-card-footer {
   --ngs-chip-height: 1.85rem;
   --ngs-chip-radius: 999px;
   --ngs-chip-padding: 0 0.82rem;
-  --ngs-chip-bg: #d8f8df;
+  --ngs-chip-background: #d8f8df;
   --ngs-chip-color: #14a045;
   --ngs-chip-font-size: 0.92rem;
   --ngs-chip-font-weight: 700;
@@ -1103,7 +1103,7 @@ ngs-card.metric-card .metric-card-footer {
 }
 
 .metric-chip-muted {
-  --ngs-chip-bg: #f2f3f5;
+  --ngs-chip-background: #f2f3f5;
   --ngs-chip-color: #444a58;
 }
 

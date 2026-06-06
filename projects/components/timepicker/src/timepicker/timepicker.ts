@@ -2,16 +2,14 @@ import {
   Component,
   viewChild,
   TemplateRef,
-  EventEmitter,
-  Output,
   ViewContainerRef,
   inject,
   signal,
   ChangeDetectionStrategy,
-  ViewEncapsulation,
   ElementRef,
   LOCALE_ID,
   input,
+  output,
   booleanAttribute,
   computed
 } from '@angular/core';
@@ -23,25 +21,30 @@ import { TIMEPICKER_CONFIG } from '../timepicker-config';
 
 @Component({
   selector: 'ngs-timepicker',
-  standalone: true,
-  imports: [OverlayModule, Option],
+  exportAs: 'ngsTimepicker',
+  imports: [
+    OverlayModule,
+    Option
+  ],
   templateUrl: './timepicker.html',
   styleUrl: './timepicker.scss',
-  exportAs: 'ngsTimepicker',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  host: {
+    'class': 'ngs-timepicker'
+  }
 })
 export class Timepicker {
   private _overlay = inject(Overlay);
   private _viewContainerRef = inject(ViewContainerRef);
+  private _elementRef = inject(ElementRef<HTMLElement>);
   private _localeId = inject(LOCALE_ID);
   private _config = inject(TIMEPICKER_CONFIG, { optional: true });
 
   readonly _template = viewChild.required<TemplateRef<any>>('timepickerTemplate');
   readonly _panel = viewChild<ElementRef<HTMLElement>>('panel');
 
-  @Output() readonly opened = new EventEmitter<void>();
-  @Output() readonly closed = new EventEmitter<void>();
+  readonly opened = output<void>();
+  readonly closed = output<void>();
 
   private _overlayRef: OverlayRef | null = null;
   private _input: any = null;
@@ -132,6 +135,7 @@ export class Timepicker {
       scrollStrategy: this._overlay.scrollStrategies.reposition(),
       width: input.getOverlayWidth()
     });
+    this._copyHostScopeToOverlay(this._overlayRef.overlayElement);
 
     this._overlayRef.backdropClick().subscribe(() => this.close());
     const portal = new TemplatePortal(this._template(), this._viewContainerRef);
@@ -191,5 +195,18 @@ export class Timepicker {
 
   isOpen() {
     return !!this._overlayRef;
+  }
+
+  private _copyHostScopeToOverlay(overlayElement: HTMLElement) {
+    const hostAttributes = this._elementRef.nativeElement.attributes;
+
+    for (let i = 0; i < hostAttributes.length; i++) {
+      const attribute = hostAttributes.item(i);
+
+      if (attribute?.name.startsWith('_nghost-')) {
+        overlayElement.setAttribute(attribute.name, '');
+        return;
+      }
+    }
   }
 }

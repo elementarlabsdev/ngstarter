@@ -3,7 +3,6 @@ import { Datepicker } from './datepicker';
 
 @Directive({
   selector: '[ngsDatepickerApply]',
-  standalone: true,
   host: {
     '(click)': '_datepicker.apply()'
   }
@@ -14,7 +13,6 @@ export class DatepickerApply {
 
 @Directive({
   selector: '[ngsDatepickerCancel]',
-  standalone: true,
   host: {
     '(click)': '_datepicker.close()'
   }

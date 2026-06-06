@@ -12,15 +12,13 @@ import {
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { TourService } from '../tour.service';
-import { TourStepConfig, TOUR_STEP_COMPONENT, TOUR_CONFIG, TourStepPosition } from '../tour.types';
+import { TourStepConfig, TOUR_STEP_COMPONENT, TOUR_CONFIG } from '../tour.types';
 import { TourStep } from '../tour-step/tour-step';
-import { TourBackdrop } from '../tour-backdrop/tour-backdrop';
 import { PositionManager, OverlayPosition } from '@ngstarter-ui/components/overlay';
 import { ConnectedPosition, FlexibleConnectedPositionStrategy, ConnectedOverlayPositionChange } from '@angular/cdk/overlay';
 
 @Directive({
   selector: '[ngsTourAnchor]',
-  standalone: true
 })
 export class TourAnchorDirective implements OnInit, OnDestroy {
   anchorId = input.required<string>({ alias: 'ngsTourAnchor' });

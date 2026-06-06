@@ -21,6 +21,7 @@ let nextId = 0;
 
 @Component({
   selector: 'ngs-chip-grid',
+  exportAs: 'ngsChipGrid',
   templateUrl: './chip-grid.html',
   styleUrl: './chip-grid.scss',
   host: {
@@ -29,7 +30,6 @@ let nextId = 0;
     '[attr.aria-disabled]': 'disabled',
     '[id]': 'id',
   },
-  standalone: true,
   providers: [
     {
       provide: FormFieldControl,
@@ -65,6 +65,7 @@ export class ChipGrid implements ControlValueAccessor, AfterContentInit, FormFie
   readonly stateChanges = signal<void>(undefined);
   private _focused = signal(false);
   get focused(): boolean { return this._focused(); }
+  get multiline(): boolean { return this._chipsLength() > 0; }
   private _errorState = signal(false);
   get errorState(): boolean { return this._errorState(); }
 

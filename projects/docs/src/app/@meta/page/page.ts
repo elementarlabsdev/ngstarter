@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { booleanAttribute, Component, input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { DocsNavigationService, DocsRelatedLink } from '../../navigation/docs-navigation.service';
 
@@ -10,6 +10,8 @@ import { DocsNavigationService, DocsRelatedLink } from '../../navigation/docs-na
   standalone: true
 })
 export class Page {
+  readonly wide = input(false, { transform: booleanAttribute });
+
   private readonly productionDocsSections = new Set([
     'components',
     'forms',

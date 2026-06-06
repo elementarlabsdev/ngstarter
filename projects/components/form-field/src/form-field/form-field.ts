@@ -4,7 +4,6 @@ import {
   contentChild,
   contentChildren,
   ElementRef,
-  HostListener,
   inject,
   input,
   viewChild,
@@ -43,13 +42,19 @@ import { Error } from '../error/error';
     '[class.ngs-form-field-has-icon-button-prefix]': 'iconButtonPrefixChildren().length > 0',
     '[class.ngs-form-field-has-icon-suffix]': 'iconSuffixChildren().length > 0',
     '[class.ngs-form-field-has-icon-button-suffix]': 'iconButtonSuffixChildren().length > 0',
+    '[class.same-height-as-button]': 'sameHeightAsButton()',
+    '(click)': '_onClick($event)'
   }
 })
 export class FormField {
+  readonly elementRef = inject(ElementRef);
+
   subscriptHiddenIfEmpty = input(false, {
     transform: booleanAttribute
   });
-  elementRef = inject(ElementRef);
+  sameHeightAsButton = input(false, {
+    transform: booleanAttribute
+  });
   wrapper = viewChild.required<ElementRef>('wrapper');
   container = viewChild.required<ElementRef>('container');
   control = contentChild(FormFieldControl);
@@ -89,7 +94,6 @@ export class FormField {
     return !!this.control()?.shouldLabelFloat;
   }
 
-  @HostListener('click', ['$event'])
   protected _onClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
     const wrapper = this.wrapper().nativeElement;

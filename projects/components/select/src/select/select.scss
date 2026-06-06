@@ -8,6 +8,11 @@
   --ngs-select-min-width: 120px;
   --ngs-select-arrow-container-width: --spacing(5);
   --ngs-select-arrow-size: 18px;
+  --ngs-select-clear-container-width: --spacing(6);
+  --ngs-select-clear-icon-size: 20px;
+  --ngs-select-clear-overlap: 0px;
+  --ngs-select-clear-color: var(--ngs-color-on-surface-variant);
+  --ngs-select-clear-hover-color: var(--ngs-color-danger);
 
   display: inline-block;
   outline: none;
@@ -15,6 +20,31 @@
   font-size: var(--ngs-select-font-size);
   min-width: var(--ngs-select-min-width);
   padding-right: var(--ngs-select-arrow-container-width);
+
+  &:has(ngs-filter-trigger) {
+    --ngs-select-min-width: 0;
+    --ngs-select-arrow-container-width: --spacing(7);
+
+    position: relative;
+  }
+
+  &.ngs-select-has-clear {
+    padding-right: calc(
+      var(--ngs-select-arrow-container-width) +
+      var(--ngs-select-clear-container-width) -
+      var(--ngs-select-clear-overlap)
+    );
+  }
+
+  &.ngs-select-has-filter-trigger.ngs-select-has-clear {
+    --ngs-select-clear-overlap: --spacing(2);
+  }
+
+  &.ngs-select-panel-open.ngs-select-has-filter-trigger {
+    .ngs-select-arrow-wrapper {
+      transform: rotate(-180deg);
+    }
+  }
 
   &.ngs-select-disabled {
     cursor: default;
@@ -66,6 +96,44 @@
     height: var(--ngs-select-arrow-size);
     display: flex;
     color: var(--ngs-select-arrow-color);
+  }
+
+  .ngs-select-clear-button {
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    display: inline-flex;
+    position: absolute;
+    right: calc(var(--ngs-select-arrow-container-width) - var(--ngs-select-clear-overlap));
+    top: 0;
+    bottom: 0;
+    width: var(--ngs-select-clear-container-width);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ngs-select-clear-color);
+    cursor: pointer;
+    outline: none;
+    transition: color 150ms ease;
+
+    &:hover {
+      color: var(--ngs-select-clear-hover-color);
+    }
+
+    &:focus-visible {
+      color: var(--ngs-select-clear-hover-color);
+    }
+
+    .ngs-form-field:not(.ngs-form-field-has-label) &,
+    .ngs-paginator & {
+      top: 0;
+    }
+  }
+
+  .ngs-select-clear-icon {
+    width: var(--ngs-select-clear-icon-size);
+    height: var(--ngs-select-clear-icon-size);
+    display: flex;
   }
 
   .ngs-select-arrow-wrapper {

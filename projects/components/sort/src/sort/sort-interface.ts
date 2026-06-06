@@ -7,11 +7,11 @@ export interface Sort {
   readonly direction: SortDirection;
 }
 
-export interface EmrSort {
+export interface NgsSort {
   readonly active: string | (() => string);
   readonly direction: SortDirection | (() => SortDirection);
   readonly sortChange: Observable<Sort> | OutputEmitterRef<Sort>;
   readonly initialized?: Observable<void>;
 }
 
-export const SORT = new InjectionToken<EmrSort>('SORT');
+export const SORT = new InjectionToken<NgsSort>('SORT');

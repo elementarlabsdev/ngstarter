@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'ngs-notification-content,[ngs-notification-content]',
@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './notification-content.html',
   styleUrl: './notification-content.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-notification-content'
   }

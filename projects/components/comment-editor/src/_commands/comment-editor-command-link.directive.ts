@@ -6,7 +6,6 @@ import { LinkDialog } from '../link/link.dialog';
 
 @Directive({
   selector: '[ngsCommentEditorCommandLink]',
-  standalone: true,
   host: {
     '[attr.disabled]': `(commentEditor && commentEditor.api.isCommandDisabled('toggleLink')) ? '' : null`,
     '[class.active]': `commentEditor && commentEditor.api.isActive('link')`,

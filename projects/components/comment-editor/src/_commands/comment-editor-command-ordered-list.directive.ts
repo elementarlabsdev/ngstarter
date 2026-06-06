@@ -3,7 +3,6 @@ import { COMMENT_EDITOR, CommentEditorInterface } from '../types';
 
 @Directive({
   selector: '[ngsCommentEditorCommandOrderedList]',
-  standalone: true,
   host: {
     '[attr.disabled]': `(commentEditor && commentEditor.api.isCommandDisabled('toggleOrderedList')) ? '' : null`,
     '[class.active]': `commentEditor && commentEditor.api.isActive('orderedList')`,

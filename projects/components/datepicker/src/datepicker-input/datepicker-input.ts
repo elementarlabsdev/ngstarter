@@ -17,7 +17,7 @@ import { FormField } from '@ngstarter-ui/components/form-field';
 
 @Directive({
   selector: 'input[ngsDatepicker]',
-  standalone: true,
+  exportAs: 'ngsDatepickerInput',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

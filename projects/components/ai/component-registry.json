@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate-ai-metadata.mjs",
   "package": "@ngstarter-ui/components",
   "description": "AI-readable registry for NgStarter UI Angular secondary entry points.",
-  "componentCount": 122,
+  "componentCount": 123,
   "conventions": {
     "importPattern": "@ngstarter-ui/components/<component>",
     "selectorPrefix": "ngs",
@@ -1603,7 +1603,7 @@
           "name": "chips-autocomplete-example",
           "title": "Chips autocomplete",
           "file": "projects/docs/src/app/components/chips/_examples/chips-autocomplete-example/chips-autocomplete-example.html",
-          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite Fruits</ngs-label>\n  <ngs-chip-grid #chipGrid aria-label=\"Fruit selection\">\n    @for (fruit of fruits; track fruit) {\n      <ngs-chip-row (removed)=\"remove(fruit)\">\n        {{fruit}}\n        <button ngsChipRemove>\n          <ngs-icon name=\"fluent:dismiss-20-regular\"/>\n        </button>\n      </ngs-chip-row>\n    }\n  </ngs-chip-grid>\n  <input ngsInput\n         placeholder=\"New Fruit...\" #fruitInput\n         [formControl]=\"fruitCtrl\"\n         [ngsChipInputFor]=\"chipGrid\"\n         [ngsAutocomplete]=\"auto\"\n         [ngsChipInputSeparatorKeyCodes]=\"separatorKeysCodes\"\n         (chipInputTokenEnd)=\"add($event)\">\n  <ngs-autocomplete #auto=\"ngsAutocomplete\" (optionSelected)=\"selected($event)\">\n    @for (fruit of filteredFruits | async; track fruit) {\n      <ngs-option [value]=\"fruit\">{{ fruit }}</ngs-option>\n    }\n  </ngs-autocomplete>\n</ngs-form-field>"
+          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite Fruits</ngs-label>\n  <ngs-chip-grid #chipGrid aria-label=\"Fruit selection\">\n    @for (fruit of fruits; track fruit) {\n      <ngs-chip-row (removed)=\"remove(fruit)\">\n        {{fruit}}\n        <button ngsChipRemove>\n          <ngs-icon name=\"fluent:dismiss-20-regular\"/>\n        </button>\n      </ngs-chip-row>\n    }\n    <input ngsInput\n           placeholder=\"New Fruit...\" #fruitInput\n           [formControl]=\"fruitCtrl\"\n           [ngsChipInputFor]=\"chipGrid\"\n           [ngsAutocomplete]=\"auto\"\n           [ngsChipInputSeparatorKeyCodes]=\"separatorKeysCodes\"\n           (chipInputTokenEnd)=\"add($event)\">\n  </ngs-chip-grid>\n  <ngs-autocomplete #auto=\"ngsAutocomplete\" (optionSelected)=\"selected($event)\">\n    @for (fruit of filteredFruits | async; track fruit) {\n      <ngs-option [value]=\"fruit\">{{ fruit }}</ngs-option>\n    }\n  </ngs-autocomplete>\n</ngs-form-field>"
         }
       ],
       "previewAsset": "projects/components/chips/preview.svg",
@@ -1663,15 +1663,19 @@
         "valueChange"
       ],
       "cssTokens": [
-        "--ngs-chip-bg",
+        "--ngs-avatar-size",
+        "--ngs-chip-background",
+        "--ngs-chip-border-color",
         "--ngs-chip-color",
         "--ngs-chip-font-size",
         "--ngs-chip-font-weight",
         "--ngs-chip-height",
+        "--ngs-chip-input-height",
+        "--ngs-chip-listbox-gap",
         "--ngs-chip-outline-color",
         "--ngs-chip-padding",
         "--ngs-chip-radius",
-        "--ngs-chip-selected-bg",
+        "--ngs-chip-selected-background",
         "--ngs-chip-selected-color",
         "--ngs-chip-set-gap",
         "--ngs-chip-set-spacing",
@@ -1681,7 +1685,9 @@
         "--ngs-color-outline-variant",
         "--ngs-color-primary",
         "--ngs-color-surface-container-high",
+        "--ngs-field-input-height",
         "--ngs-font-size-xs",
+        "--ngs-form-field-input-height",
         "--ngs-icon-size",
         "--ngs-radius-xl"
       ],
@@ -1743,6 +1749,7 @@
         "appearance",
         "code",
         "diff",
+        "disableOverflow",
         "highlightLines",
         "language",
         "showCopyButton",
@@ -3650,8 +3657,7 @@
         "--ngs-color-surface-container-lowest",
         "--ngs-drawer-transition",
         "--ngs-drawer-transition-duration",
-        "--ngs-dropdown-border",
-        "--ngs-overlay-backdrop-bg"
+        "--ngs-dropdown-border"
       ],
       "example": null
     },
@@ -4149,6 +4155,7 @@
       ],
       "inputs": [
         "align",
+        "sameHeightAsButton",
         "subscriptHiddenIfEmpty"
       ],
       "outputs": [],
@@ -4461,8 +4468,8 @@
         {
           "name": "close-on-backdrop-click-example",
           "title": "Close on backdrop click",
-          "file": "projects/docs/src/app/components/guided-tour/_examples/close-on-backdrop-click-example/close-on-backdrop-click-example.ts",
-          "source": "import { Component, inject } from '@angular/core';\nimport { TourService } from '@ngstarter-ui/components/guided-tour';\nimport { Button } from '@ngstarter-ui/components/button';\n@Component({\n  selector: 'app-close-on-backdrop-click-example',\n  imports: [Button],\n  template: `\n    <div class=\"flex flex-col gap-4\">\n      <div class=\"flex gap-4\">\n        <button ngsButton=\"filled\" (click)=\"startTour()\">Start Tour (Close on Backdrop Click)</button>\n      </div>\n      <div class=\"flex gap-10 mt-10\">\n        <div id=\"close-step1\" class=\"p-4 border rounded\">Step 1</div>\n        <div id=\"close-step2\" class=\"p-4 border rounded\">Step 2</div>\n      </div>\n    </div>\n  `,\n})\nexport class CloseOnBackdropClickExample {\n  private readonly tourService = inject(TourService);\n  startTour(): void {\n    this.tourService.start([\n      {\n        anchorId: '#close-step1',\n        title: 'Step 1',\n        content: 'Click on the backdrop to close the tour.',\n        withBackdrop: true,\n        closeOnBackdropClick: true\n      },\n      {\n        anchorId: '#close-step2',\n        title: 'Step 2',\n        content: 'This step also can be closed by clicking on the backdrop.',\n        withBackdrop: true,\n        closeOnBackdropClick: true\n      }\n    ]);\n  }\n}"
+          "file": "projects/docs/src/app/components/guided-tour/_examples/close-on-backdrop-click-example/close-on-backdrop-click-example.html",
+          "source": "<div class=\"flex flex-col gap-4\">\n  <div class=\"flex gap-4\">\n    <button ngsButton=\"filled\" (click)=\"startTour()\">Start Tour (Close on Backdrop Click)</button>\n  </div>\n  <div class=\"flex gap-10 mt-10\">\n    <div id=\"close-step1\" class=\"p-4 border rounded\">Step 1</div>\n    <div id=\"close-step2\" class=\"p-4 border rounded\">Step 2</div>\n  </div>\n</div>"
         }
       ],
       "previewAsset": "projects/components/guided-tour/preview.svg",
@@ -4519,18 +4526,34 @@
       "name": "headless-stepper",
       "title": "Headless Stepper",
       "overviewName": "Headless Stepper",
-      "category": null,
+      "category": "components",
       "package": "@ngstarter-ui/components",
       "importPath": "@ngstarter-ui/components/headless-stepper",
       "publicApi": "projects/components/headless-stepper/public-api.ts",
       "sourceRoot": "projects/components/headless-stepper/src",
-      "docsPath": null,
-      "docsOverviewSource": null,
+      "docsPath": "/components/headless-stepper",
+      "docsOverviewSource": "projects/docs/src/app/components/headless-stepper/overview/overview.html",
       "purpose": "Provide stepper state and validation logic without rendering a fixed visual stepper UI.",
       "useWhen": "Use for custom multi-step workflows where the product needs its own header, progress indicator, buttons, layout, or responsive presentation while keeping standard NgStarter step behavior. Use ngs-headless-stepper with ngs-headless-step when you need selectedIndex, selected step state, progressPercent, canMoveNext, next(), previous(), reset(), linear mode, optional steps, and stepControl validation. Good for custom wizards, onboarding forms, checkout flows, setup flows, and complex forms with a bespoke layout. Do not use when the standard visual Stepper fits; use Stepper. Do not use for guided tours over existing UI; use GuidedTour. Do not use as Tabs, Accordion, or for a simple single-page form without steps.",
-      "exampleTopics": [],
-      "minimalExample": null,
-      "exampleFiles": [],
+      "exampleTopics": [
+        "Basic Headless Stepper",
+        "Linear Headless Stepper"
+      ],
+      "minimalExample": "<ngs-headless-stepper #stepper [(selectedIndex)]=\"selectedIndex\">\n  <div class=\"mb-5 flex flex-col gap-4\">\n    <div class=\"flex flex-col gap-4 md:flex-row md:items-start md:justify-between\">\n      <div>\n        <p class=\"text-sm text-neutral-600\">Step {{ stepper.selectedIndex() + 1 }} of {{ stepper.stepsCount() }}</p>\n        <h4 class=\"mt-1 text-base font-semibold\">{{ steps[selectedIndex()].title }}</h4>\n        <p class=\"mt-1 text-sm text-neutral-600\">{{ steps[selectedIndex()].description }}</p>\n      </div>\n      <div class=\"flex flex-wrap gap-2\">\n        @for (item of steps; track item.title; let index = $index) {\n          <button\n            ngsButton=\"tonal\"\n            type=\"button\"\n            [class.headless-stepper-example-active]=\"selectedIndex() === index\"\n            (click)=\"stepper.selectedIndex.set(index)\">\n            {{ index + 1 }}\n          </button>\n        }\n      </div>\n    </div>\n    <ngs-progress-bar mode=\"determinate\" [value]=\"stepper.progressPercent()\"/>\n  </div>\n  <ngs-headless-step>\n    <ngs-card>\n      <ngs-card-content>\n        <h5 class=\"text-base font-semibold\">Workspace details</h5>\n        <p class=\"mt-2 text-sm text-neutral-600\">\n          Pick a workspace name, region, and owner. This example keeps the content simple while the stepper owns the\n          active step state.\n        </p>\n      </ngs-card-content>\n    </ngs-card>\n  </ngs-headless-step>\n  <ngs-headless-step>\n    <ngs-card>\n      <ngs-card-content>\n        <h5 class=\"text-base font-semibold\">Team access</h5>\n        <p class=\"mt-2 text-sm text-neutral-600\">\n          Show a c\n...",
+      "exampleFiles": [
+        {
+          "name": "basic-headless-stepper-example",
+          "title": "Basic headless stepper",
+          "file": "projects/docs/src/app/components/headless-stepper/_examples/basic-headless-stepper-example/basic-headless-stepper-example.html",
+          "source": "<ngs-headless-stepper #stepper [(selectedIndex)]=\"selectedIndex\">\n  <div class=\"mb-5 flex flex-col gap-4\">\n    <div class=\"flex flex-col gap-4 md:flex-row md:items-start md:justify-between\">\n      <div>\n        <p class=\"text-sm text-neutral-600\">Step {{ stepper.selectedIndex() + 1 }} of {{ stepper.stepsCount() }}</p>\n        <h4 class=\"mt-1 text-base font-semibold\">{{ steps[selectedIndex()].title }}</h4>\n        <p class=\"mt-1 text-sm text-neutral-600\">{{ steps[selectedIndex()].description }}</p>\n      </div>\n      <div class=\"flex flex-wrap gap-2\">\n        @for (item of steps; track item.title; let index = $index) {\n          <button\n            ngsButton=\"tonal\"\n            type=\"button\"\n            [class.headless-stepper-example-active]=\"selectedIndex() === index\"\n            (click)=\"stepper.selectedIndex.set(index)\">\n            {{ index + 1 }}\n          </button>\n        }\n      </div>\n    </div>\n    <ngs-progress-bar mode=\"determinate\" [value]=\"stepper.progressPercent()\"/>\n  </div>\n  <ngs-headless-step>\n    <ngs-card>\n      <ngs-card-content>\n        <h5 class=\"text-base font-semibold\">Workspace details</h5>\n        <p class=\"mt-2 text-sm text-neutral-600\">\n          Pick a workspace name, region, and owner. This example keeps the content simple while the stepper owns the\n          active step state.\n        </p>\n      </ngs-card-content>\n    </ngs-card>\n  </ngs-headless-step>\n  <ngs-headless-step>\n    <ngs-card>\n      <ngs-card-content>\n        <h5 class=\"text-base font-semibold\">Team access</h5>\n        <p class=\"mt-2 text-sm text-neutral-600\">\n          Show a c\n..."
+        },
+        {
+          "name": "linear-headless-stepper-example",
+          "title": "Linear headless stepper",
+          "file": "projects/docs/src/app/components/headless-stepper/_examples/linear-headless-stepper-example/linear-headless-stepper-example.html",
+          "source": "<ngs-headless-stepper #stepper linear>\n  <div class=\"mb-5\">\n    <div class=\"flex items-center justify-between gap-4\">\n      <div>\n        <p class=\"text-sm text-neutral-600\">Linear setup</p>\n        <h4 class=\"mt-1 text-base font-semibold\">Step {{ stepper.selectedIndex() + 1 }} of {{ stepper.stepsCount() }}</h4>\n      </div>\n      <p class=\"text-sm text-neutral-600\">{{ stepper.progressPercent() | number: '1.0-0' }}%</p>\n    </div>\n    <ngs-progress-bar class=\"mt-4\" mode=\"determinate\" [value]=\"stepper.progressPercent()\"/>\n  </div>\n  <ngs-headless-step [stepControl]=\"accountForm\">\n    <form [formGroup]=\"accountForm\" class=\"flex flex-col gap-4\">\n      <ngs-form-field>\n        <ngs-label>Company</ngs-label>\n        <input ngsInput formControlName=\"company\" placeholder=\"Acme Operations\" required>\n      </ngs-form-field>\n      <p class=\"text-sm text-neutral-600\">\n        The next button becomes available when this form group is valid.\n      </p>\n    </form>\n  </ngs-headless-step>\n  <ngs-headless-step [stepControl]=\"billingForm\">\n    <form [formGroup]=\"billingForm\" class=\"flex flex-col gap-4\">\n      <ngs-form-field>\n        <ngs-label>Billing email</ngs-label>\n        <input ngsInput formControlName=\"email\" placeholder=\"billing@example.com\" required>\n      </ngs-form-field>\n      <p class=\"text-sm text-neutral-600\">\n        Headless Stepper tracks the connected control status and uses it for linear navigation.\n      </p>\n    </form>\n  </ngs-headless-step>\n  <ngs-headless-step optional>\n    <div class=\"rounded-lg border border-muted p-5\">\n      <h5 class=\"text-base font-semibold\">O\n..."
+        }
+      ],
       "previewAsset": "projects/components/headless-stepper/preview.svg",
       "selectors": [
         "ngs-headless-step",
@@ -4568,9 +4591,8 @@
         "Symbols Icons (Default)",
         "Phosphor Icons",
         "Circle Flags Icons",
-        "Symbols icons",
-        "Circle flags",
-        "Material symbols icons"
+        "Material symbols icons",
+        "Circle flags"
       ],
       "minimalExample": "<div class=\"flex gap-4\">\n  <ngs-icon name=\"circle-flags:us\"/>\n  <ngs-icon name=\"circle-flags:ge\"/>\n  <ngs-icon name=\"circle-flags:de\"/>\n</div>\n<div class=\"mt-8 flex gap-4 items-center\">\n  <ngs-icon name=\"circle-flags:us\" class=\"size-4\"/>\n  <ngs-icon name=\"circle-flags:ge\" class=\"size-10\"/>\n  <ngs-icon name=\"circle-flags:de\" class=\"size-16\"/>\n</div>",
       "exampleFiles": [
@@ -5474,7 +5496,7 @@
           "name": "list-with-sections-example",
           "title": "List with sections",
           "file": "projects/docs/src/app/components/list/_examples/list-with-sections-example/list-with-sections-example.html",
-          "source": "<ngs-list>\n  <div ngsSubheader>Folders</div>\n  @for (folder of folders; track folder) {\n    <ngs-list-item>\n      <ngs-icon name=\"fluent:folder-24-regular\" ngsListItemIcon/>\n      <div ngsListItemTitle>{{ folder.name }}</div>\n      <div ngsListItemLine>{{ folder.updated | date }}</div>\n    </ngs-list-item>\n  }\n  <ngs-divider class=\"my-5\"/>\n  <div ngsSubheader>Notes</div>\n  @for (note of notes; track note) {\n    <ngs-list-item>\n      <ngs-icon name=\"fluent:note-24-regular\" ngsListItemIcon/>\n      <div ngsListItemTitle>{{ note.name }}</div>\n      <div ngsListItemLine>{{ note.updated | date }}</div>\n    </ngs-list-item>\n  }\n</ngs-list>"
+          "source": "<ngs-list>\n  <div ngsSubheader>Folders</div>\n  @for (folder of folders(); track folder) {\n    <ngs-list-item>\n      <ngs-icon name=\"fluent:folder-24-regular\" ngsListItemIcon/>\n      <div ngsListItemTitle>{{ folder.name }}</div>\n      <div ngsListItemLine>{{ folder.updated | date }}</div>\n    </ngs-list-item>\n  }\n  <ngs-divider class=\"my-5\"/>\n  <div ngsSubheader>Notes</div>\n  @for (note of notes(); track note) {\n    <ngs-list-item>\n      <ngs-icon name=\"fluent:note-24-regular\" ngsListItemIcon/>\n      <div ngsListItemTitle>{{ note.name }}</div>\n      <div ngsListItemLine>{{ note.updated | date }}</div>\n    </ngs-list-item>\n  }\n</ngs-list>"
         }
       ],
       "previewAsset": "projects/components/list/preview.svg",
@@ -5657,7 +5679,9 @@
       "cssTokens": [
         "--ngs-marquee-animation-duration",
         "--ngs-marquee-gap",
+        "--ngs-marquee-item-width",
         "--ngs-marquee-pause",
+        "--ngs-marquee-repeat-gap",
         "--ngs-marquee-reverse"
       ],
       "example": null
@@ -6393,6 +6417,7 @@
       "useWhen": "Use Notifications for events addressed to the current user: comments, mentions, invitations, assignments, access requests, status changes, completed processes, and user-specific updates. Use ngs-notification for one event, ngsNotificationAvatar for the source avatar or icon, ngs-notification-message for the main sentence, ngs-notification-actor for the actor, ngs-notification-content for nested context such as a comment, file, quote, card, or preview, and ngs-notification-time for time. Use isUnread for unread state. Use ngs-notification-list with ngsNotificationDef when notifications come from an array and each type needs its own template. Use ngsNotificationControlsDef for per-notification controls such as mute, delete, or mark as read, often with Menu. Do not use Notifications for page-level system messages; use Alert or Announcement. Do not use for critical required actions; use ActionRequired. Do not use for service health; use Incidents. Do not use for generic activity feeds that are not user notifications; use List. Do not use for transient toast/snackbar messages.",
       "exampleTopics": [
         "Basic notifications",
+        "Notification variants",
         "Notification list"
       ],
       "minimalExample": "<ngs-notification class=\"w-2/3 p-4\">\n  <ngs-dicebear ngsNotificationAvatar/>\n  <ngs-notification-message>\n    <a routerLink=\"/\" ngs-notification-actor>Sam Anderson</a>\n    commented your post <a routerLink=\"/\" class=\"link\">Super article</a>\n  </ngs-notification-message>\n  <ngs-notification-content class=\"border border-muted rounded-lg p-2.5 text-sm\">\n    This is a comment.\n  </ngs-notification-content>\n  <ngs-notification-time>1 day ago</ngs-notification-time>\n</ngs-notification>\n<ngs-notification class=\"w-2/3 border border-muted rounded-xl p-4 mt-7\">\n  <ngs-dicebear ngsNotificationAvatar/>\n  <ngs-notification-message>\n    <a routerLink=\"/\" ngs-notification-actor>Sam Anderson</a>\n    commented your post <a routerLink=\"/\" class=\"link\">Super article</a>\n  </ngs-notification-message>\n  <ngs-notification-content class=\"border border-muted rounded-lg p-2.5 text-sm\">\n    This is a comment.\n  </ngs-notification-content>\n  <ngs-notification-time>1 day ago</ngs-notification-time>\n</ngs-notification>\n<ngs-notification class=\"w-2/3 bg-surface-container-low rounded-xl p-4 mt-7\">\n  <ngs-dicebear ngsNotificationAvatar/>\n  <ngs-notification-message>\n    <a routerLink=\"/\" ngs-notification-actor>Sam Anderson</a>\n    commented your post <a routerLink=\"/\" class=\"link\">Super article</a>\n  </ngs-notification-message>\n  <ngs-notification-content class=\"border border-muted rounded-lg p-2.5 text-sm\">\n    This is a comment.\n  </ngs-notification-content>\n  <ngs-notification-time>1 day ago</ngs-notification-time>\n</ngs-notification>\n<ngs-notification class=\"w-2/3 bg-red-100 dark:bg-red-900 dark:text-\n...",
@@ -6407,7 +6432,13 @@
           "name": "notification-list-example",
           "title": "Notification list",
           "file": "projects/docs/src/app/components/notifications/_examples/notification-list-example/notification-list-example.html",
-          "source": "<ngs-notification-list [notifications]=\"notifications\" [static]=\"false\">\n  <ng-template ngsNotificationDef=\"mentionedInComment\" let-notification>\n    <ngs-notification [isUnread]=\"notification.isUnread\">\n      <ngs-dicebear [key]=\"notification.actor.id\"\n                    [image]=\"notification.actor.avatarUrl\"\n                    ngsNotificationAvatar/>\n      <ngs-notification-message>\n        <a routerLink=\"/\" ngs-notification-actor>{{ notification.actor.name }}</a>\n        {{ notification.message }}\n      </ngs-notification-message>\n      <ngs-notification-content class=\"border border-muted rounded-lg p-2.5 text-sm\">\n       This is a comment.\n      </ngs-notification-content>\n      <ngs-notification-time>{{ notification.createdAt }}</ngs-notification-time>\n    </ngs-notification>\n  </ng-template>\n  <ng-template ngsNotificationDef=\"inviteToEditFilesInFolder\" let-notification>\n    <ngs-notification>\n      <ngs-notification-content>\n        invites\n      </ngs-notification-content>\n    </ngs-notification>\n  </ng-template>\n  <ng-template ngsNotificationControlsDef let-notification>\n    <button ngsIconButton [ngsMenuTriggerFor]=\"settings\">\n      <ngs-icon name=\"fluent:more-vertical-24-regular\"/>\n    </button>\n    <ngs-menu #settings=\"ngsMenu\">\n      <button ngs-menu-item>\n        <ngs-icon name=\"fluent:alert-off-24-regular\"/>\n        <span>Disable this type of notification</span>\n      </button>\n      <button ngs-menu-item>\n        <ngs-icon name=\"fluent:delete-24-regular\"/>\n        <span>Delete notification</span>\n      </button>\n    </ngs-menu>\n  </ng-template>\n</ngs-notifi\n..."
+          "source": "<ngs-notification-list [notifications]=\"notifications\" [static]=\"false\">\n  <ng-template ngsNotificationDef=\"mentionedInComment\" let-notification>\n    <ngs-notification [isUnread]=\"notification.isUnread\">\n      <ngs-dicebear [key]=\"notification.actor.id\"\n                    [image]=\"notification.actor.avatarUrl\"\n                    ngsNotificationAvatar/>\n      <ngs-notification-message>\n        <a routerLink=\"/\" ngs-notification-actor>{{ notification.actor.name }}</a>\n        {{ notification.message }}\n      </ngs-notification-message>\n      <ngs-notification-content class=\"border border-muted rounded-lg p-2.5 text-sm\">\n       This is a comment.\n      </ngs-notification-content>\n      <ngs-notification-time>{{ notification.createdAt }}</ngs-notification-time>\n    </ngs-notification>\n  </ng-template>\n  <ng-template ngsNotificationDef=\"inviteToEditFilesInFolder\" let-notification>\n    <ngs-notification [isUnread]=\"notification.isUnread\">\n      <ngs-dicebear [key]=\"notification.actor.id\"\n                    [image]=\"notification.actor.avatarUrl\"\n                    ngsNotificationAvatar/>\n      <ngs-notification-message>\n        <a routerLink=\"/\" ngs-notification-actor>{{ notification.actor.name }}</a>\n        invited you to edit <a routerLink=\"/\" class=\"link\">{{ notification.payload.folderName }}</a>\n      </ngs-notification-message>\n      <ngs-notification-content class=\"border border-muted rounded-lg p-2.5 text-sm\">\n        <div class=\"flex items-center gap-2\">\n          <ngs-icon name=\"fluent:folder-24-regular\" class=\"text-on-surface-variant\"/>\n          <span>{{ notificati\n..."
+        },
+        {
+          "name": "notification-variants-example",
+          "title": "Notification variants",
+          "file": "projects/docs/src/app/components/notifications/_examples/notification-variants-example/notification-variants-example.html",
+          "source": "<div class=\"flex flex-col gap-5\">\n  <ngs-notification class=\"border border-muted\">\n    <ngs-dicebear key=\"mila-ray\" image=\"assets/avatars/1.svg\" ngsNotificationAvatar/>\n    <ngs-notification-message>\n      <a routerLink=\"/\" ngs-notification-actor>Mila Ray</a>\n      mentioned you in <a routerLink=\"/\" class=\"link\">Launch planning</a>\n    </ngs-notification-message>\n    <ngs-notification-content class=\"notification-preview\">\n      Can you confirm the rollout window before we lock the customer email?\n    </ngs-notification-content>\n    <ngs-notification-time>Just now</ngs-notification-time>\n  </ngs-notification>\n  <ngs-notification isUnread class=\"border border-muted\">\n    <ngs-dicebear key=\"nolan-kim\" image=\"assets/avatars/2.svg\" ngsNotificationAvatar/>\n    <ngs-notification-message>\n      <a routerLink=\"/\" ngs-notification-actor>Nolan Kim</a>\n      requested access to <a routerLink=\"/\" class=\"link\">Q3 Pipeline</a>\n    </ngs-notification-message>\n    <ngs-notification-content>\n      <div class=\"notification-preview\">\n        Workspace role: Editor\n      </div>\n      <div class=\"mt-3 flex flex-wrap gap-2\">\n        <button ngsButton=\"filled\">Approve</button>\n        <button ngsButton=\"outlined\">Decline</button>\n      </div>\n    </ngs-notification-content>\n    <ngs-notification-time>8 minutes ago</ngs-notification-time>\n  </ngs-notification>\n  <ngs-notification class=\"border border-muted\">\n    <ngs-icon\n      name=\"fluent:checkmark-circle-24-regular\"\n      class=\"notification-icon-avatar notification-icon-avatar--success\"\n      ngsNotificationAvatar/>\n    <ngs-notification-messag\n..."
         }
       ],
       "previewAsset": "projects/components/notifications/preview.svg",
@@ -6431,6 +6462,7 @@
       "exportedSymbols": [
         "Notification",
         "NotificationActor",
+        "NotificationActorLike",
         "NotificationAvatarDirective",
         "NotificationContent",
         "NotificationControlsDefDirective",
@@ -6448,25 +6480,29 @@
         "notifications",
         "static"
       ],
-      "outputs": [],
+      "outputs": [
+        "notificationClick"
+      ],
       "cssTokens": [
         "--ngs-color-neutral-900",
         "--ngs-color-neutral-950",
         "--ngs-color-on-surface",
         "--ngs-color-on-surface-variant",
-        "--ngs-color-primary-200",
-        "--ngs-color-primary-300",
+        "--ngs-color-primary",
         "--ngs-color-surface-container",
         "--ngs-color-surface-container-low",
+        "--ngs-color-surface-container-lowest",
         "--ngs-font-size-sm",
         "--ngs-font-size-xs",
         "--ngs-notification-bg",
+        "--ngs-notification-content-margin",
         "--ngs-notification-gap",
         "--ngs-notification-hover-bg",
         "--ngs-notification-is-unread-bg",
         "--ngs-notification-is-unread-hover-bg",
         "--ngs-notification-list-gap",
         "--ngs-notification-padding",
+        "--ngs-notification-radius",
         "--ngs-radius-xl"
       ],
       "example": null
@@ -6595,6 +6631,7 @@
         "OPTION_PARENT"
       ],
       "inputs": [
+        "data",
         "disabled",
         "label",
         "selected",
@@ -7752,6 +7789,7 @@
       "useWhen": "Use ngs-select inside one ngs-form-field when a form, filter, setting, table filter, DataView filter, or admin configuration field should choose from predefined options. Use ngs-option for options, ngs-optgroup for visible grouping, multiple for array values, placeholder, required, disabled, Angular forms, value, and selectionChange for state. Use ngs-select-trigger to customize the closed label, and ngs-select-header, ngs-select-body, or ngs-select-footer when the dropdown panel needs search, custom scrolling, or supporting controls. Do not use Select as a command menu or action list; use Menu. Do not use for route or page navigation; use Navigation, Tabs, Sidebar, Sidenav, or RailNav. Do not use for compact visible mode switching; use Segmented. Do not use for simple visible choices or rich card choices; use Radio or RadioCard. Do not use for arbitrary free text or large remote search suggestion flows; use Autocomplete or a dedicated async picker. Do not use generic Select when a domain-specific control exists, such as CountrySelect, CurrencySelect, DateFormatSelect, or TimezoneSelect.",
       "exampleTopics": [
         "Basic Select",
+        "Clearable Select",
         "Getting and setting the select value",
         "Form Field Features",
         "Disabled",
@@ -7763,31 +7801,35 @@
         "Get set value",
         "Resetting value",
         "Custom trigger",
-        "Select search"
+        "Select search",
+        "Filter trigger count options",
+        "Filter trigger"
       ],
-      "minimalExample": "<p>Basic mat-select</p>\n<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite food</ngs-label>\n  <ngs-select>\n    @for (food of foods; track food) {\n      <ngs-option [value]=\"food.value\">{{food.viewValue}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>",
+      "minimalExample": "<p>Basic ngs-select</p>\n<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite food</ngs-label>\n  <ngs-select>\n    @for (food of foods; track food) {\n      <ngs-option [value]=\"food.value\">{{food.viewValue}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>",
       "exampleFiles": [
         {
           "name": "basic-select-example",
           "title": "Basic select",
           "file": "projects/docs/src/app/forms/select/_examples/basic-select-example/basic-select-example.html",
-          "source": "<p>Basic mat-select</p>\n<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite food</ngs-label>\n  <ngs-select>\n    @for (food of foods; track food) {\n      <ngs-option [value]=\"food.value\">{{food.viewValue}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
+          "source": "<p>Basic ngs-select</p>\n<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite food</ngs-label>\n  <ngs-select>\n    @for (food of foods; track food) {\n      <ngs-option [value]=\"food.value\">{{food.viewValue}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
+        },
+        {
+          "name": "clearable-select-example",
+          "title": "Clearable select",
+          "file": "projects/docs/src/app/forms/select/_examples/clearable-select-example/clearable-select-example.html",
+          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Status</ngs-label>\n  <ngs-select [formControl]=\"status()\" clearable>\n    @for (statusOption of statuses(); track statusOption.value) {\n      <ngs-option [value]=\"statusOption.value\">{{ statusOption.label }}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
         },
         {
           "name": "custom-trigger-example",
           "title": "Custom trigger",
           "file": "projects/docs/src/app/forms/select/_examples/custom-trigger-example/custom-trigger-example.html",
           "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Toppings</ngs-label>\n  <ngs-select [formControl]=\"toppings\" multiple>\n    <ngs-select-trigger>\n      {{ toppings.value?.[0] || '' }}\n      @if ((toppings.value?.length || 0) > 1) {\n        <span class=\"opacity-75 text-sm\">\n          (+{{ (toppings.value?.length || 0) - 1 }} {{ toppings.value?.length === 2 ? 'other' : 'others' }})\n        </span>\n      }\n    </ngs-select-trigger>\n    @for (topping of toppingList; track topping) {\n      <ngs-option [value]=\"topping\">{{topping}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
-        },
-        {
-          "name": "disabled-example",
-          "title": "Disabled",
-          "file": "projects/docs/src/app/forms/select/_examples/disabled-example/disabled-example.html",
-          "source": "<p>\n  <ngs-checkbox [formControl]=\"disableSelect\">Disable select</ngs-checkbox>\n</p>\n<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Choose an option</ngs-label>\n  <ngs-select [disabled]=\"disableSelect.value\">\n    <ngs-option value=\"option1\">Option 1</ngs-option>\n    <ngs-option value=\"option2\" disabled>Option 2 (disabled)</ngs-option>\n    <ngs-option value=\"option3\">Option 3</ngs-option>\n  </ngs-select>\n</ngs-form-field>"
         }
       ],
       "previewAsset": "projects/components/select/preview.svg",
       "selectors": [
+        "ng-template[ngsFilterTriggerValue]",
+        "ngs-filter-trigger",
         "ngs-select",
         "ngs-select-body",
         "ngs-select-footer",
@@ -7796,6 +7838,8 @@
       ],
       "exportedSymbols": [
         "_Select",
+        "FilterTrigger",
+        "FilterTriggerValueDirective",
         "Select",
         "SELECT",
         "SelectBody",
@@ -7806,13 +7850,16 @@
       ],
       "inputs": [
         "aria-describedby",
-        "ariaLabel",
+        "aria-label",
+        "clearable",
         "disabled",
         "hideCheckIcon",
         "id",
+        "maxCount",
         "multiple",
         "placeholder",
         "required",
+        "showZero",
         "tabIndex",
         "value"
       ],
@@ -7822,8 +7869,12 @@
         "selectionChange"
       ],
       "cssTokens": [
+        "--ngs-color-danger",
+        "--ngs-color-on-primary",
+        "--ngs-color-on-surface",
         "--ngs-color-on-surface-variant",
         "--ngs-color-outline",
+        "--ngs-color-primary",
         "--ngs-dropdown-bg",
         "--ngs-dropdown-border",
         "--ngs-dropdown-item-gap",
@@ -7835,10 +7886,28 @@
         "--ngs-field-font-size",
         "--ngs-field-label-color",
         "--ngs-field-line-height",
+        "--ngs-filter-trigger-badge-background",
+        "--ngs-filter-trigger-badge-color",
+        "--ngs-filter-trigger-badge-font-size",
+        "--ngs-filter-trigger-badge-font-weight",
+        "--ngs-filter-trigger-badge-padding-inline",
+        "--ngs-filter-trigger-badge-radius",
+        "--ngs-filter-trigger-badge-size",
+        "--ngs-filter-trigger-color",
+        "--ngs-filter-trigger-font-size",
+        "--ngs-filter-trigger-font-weight",
+        "--ngs-filter-trigger-gap",
+        "--ngs-filter-trigger-value-color",
+        "--ngs-filter-trigger-value-font-weight",
         "--ngs-select-arrow-color",
         "--ngs-select-arrow-container-width",
         "--ngs-select-arrow-size",
         "--ngs-select-border-color",
+        "--ngs-select-clear-color",
+        "--ngs-select-clear-container-width",
+        "--ngs-select-clear-hover-color",
+        "--ngs-select-clear-icon-size",
+        "--ngs-select-clear-overlap",
         "--ngs-select-content-padding",
         "--ngs-select-font-size",
         "--ngs-select-min-width",
@@ -8110,7 +8179,6 @@
         "--ngs-sidebar-nav-item-icon-width",
         "--ngs-sidebar-nav-item-padding",
         "--ngs-sidebar-nav-item-radius",
-        "--ngs-sidebar-nav-item-space-y",
         "--ngs-sidebar-nav-item-width",
         "--ngs-sidebar-nav-items-gap",
         "--ngs-sidebar-nav-nested-item-active-bg",
@@ -8500,8 +8568,8 @@
         "Basic Snackbar",
         "Snackbar With Custom Component",
         "Configurable Snackbar",
-        "Snackbar",
-        "Snackbar with custom"
+        "Snackbar with custom",
+        "Snackbar"
       ],
       "minimalExample": "<div class=\"flex items-center gap-5\">\n  <ngs-form-field subscriptHiddenIfEmpty>\n    <ngs-label>Message</ngs-label>\n    <input ngsInput value=\"Disco party!\" #message>\n  </ngs-form-field>\n  <ngs-form-field subscriptHiddenIfEmpty>\n    <ngs-label>Action</ngs-label>\n    <input ngsInput value=\"Dance\" #action>\n  </ngs-form-field>\n  <button ngsButton=\"outlined\"\n          (click)=\"openSnackBar(message.value, action.value)\">Show snack-bar</button>\n</div>",
       "exampleFiles": [
@@ -8546,8 +8614,7 @@
       "cssTokens": [
         "--ngs-color-neutral-100",
         "--ngs-color-neutral-950",
-        "--ngs-font-size-sm",
-        "--ngs-radius-xl"
+        "--ngs-font-size-sm"
       ],
       "example": null
     },
@@ -8555,25 +8622,34 @@
       "name": "sort",
       "title": "Sort",
       "overviewName": "Sort",
-      "category": null,
+      "category": "components",
       "package": "@ngstarter-ui/components",
       "importPath": "@ngstarter-ui/components/sort",
       "publicApi": "projects/components/sort/public-api.ts",
       "sourceRoot": "projects/components/sort/src",
-      "docsPath": null,
-      "docsOverviewSource": null,
+      "docsPath": "/components/sort",
+      "docsOverviewSource": "projects/docs/src/app/components/sort/overview/overview.html",
       "purpose": "Provide sortable header behavior and sort state for table-like data.",
       "useWhen": "Use ngsSort on a sortable table/list/data container and ngs-sort-header=\"fieldName\" on header cells that should cycle through sort states. Sort tracks active column and direction (asc, desc, or cleared), supports ngsSortActive, ngsSortDirection, ngsSortStart, ngsSortDisableClear, ngsSortDisabled, per-header disabled state, sortActionDescription, and emits ngsSortChange with { active, direction }. Use it with Table sortable column headers, custom table-like data surfaces, and when wiring sort state into a local TableDataSource or server/API query. For DataView, usually prefer its built-in sortable column config and sortChange instead of manually adding ngs-sort-header. Do not use Sort as a visual sort icon only, filter builder, search, grouping, drag reorder, tab sorting, or generic “sort these cards” button. Sort only manages header state and emits the selected sort; the app/data source still applies local sorting or sends the sort state to the backend.",
-      "exampleTopics": [],
-      "minimalExample": null,
-      "exampleFiles": [],
+      "exampleTopics": [
+        "Basic Sort"
+      ],
+      "minimalExample": "<div class=\"border border-muted rounded-xl overflow-hidden\">\n  <table ngs-table [dataSource]=\"dataSource\" ngsSort (ngsSortChange)=\"announceSortChange($event)\">\n    <ng-container ngsColumnDef=\"invoice\">\n      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header=\"invoice\" sortActionDescription=\"Sort by invoice\">\n        Invoice\n      </th>\n      <td ngs-cell *ngsCellDef=\"let invoice\">{{ invoice.invoice }}</td>\n    </ng-container>\n    <ng-container ngsColumnDef=\"customer\">\n      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header=\"customer\" sortActionDescription=\"Sort by customer\">\n        Customer\n      </th>\n      <td ngs-cell *ngsCellDef=\"let invoice\">{{ invoice.customer }}</td>\n    </ng-container>\n    <ng-container ngsColumnDef=\"total\">\n      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header=\"total\" sortActionDescription=\"Sort by total\">\n        Total\n      </th>\n      <td ngs-cell *ngsCellDef=\"let invoice\">${{ invoice.total }}</td>\n    </ng-container>\n    <ng-container ngsColumnDef=\"status\">\n      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header=\"status\" sortActionDescription=\"Sort by status\">\n        Status\n      </th>\n      <td ngs-cell *ngsCellDef=\"let invoice\">{{ invoice.status }}</td>\n    </ng-container>\n    <tr ngs-header-row *ngsHeaderRowDef=\"displayedColumns\"></tr>\n    <tr ngs-row *ngsRowDef=\"let row; columns: displayedColumns;\"></tr>\n  </table>\n</div>",
+      "exampleFiles": [
+        {
+          "name": "basic-sort-example",
+          "title": "Basic sort",
+          "file": "projects/docs/src/app/components/sort/_examples/basic-sort-example/basic-sort-example.html",
+          "source": "<div class=\"border border-muted rounded-xl overflow-hidden\">\n  <table ngs-table [dataSource]=\"dataSource\" ngsSort (ngsSortChange)=\"announceSortChange($event)\">\n    <ng-container ngsColumnDef=\"invoice\">\n      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header=\"invoice\" sortActionDescription=\"Sort by invoice\">\n        Invoice\n      </th>\n      <td ngs-cell *ngsCellDef=\"let invoice\">{{ invoice.invoice }}</td>\n    </ng-container>\n    <ng-container ngsColumnDef=\"customer\">\n      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header=\"customer\" sortActionDescription=\"Sort by customer\">\n        Customer\n      </th>\n      <td ngs-cell *ngsCellDef=\"let invoice\">{{ invoice.customer }}</td>\n    </ng-container>\n    <ng-container ngsColumnDef=\"total\">\n      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header=\"total\" sortActionDescription=\"Sort by total\">\n        Total\n      </th>\n      <td ngs-cell *ngsCellDef=\"let invoice\">${{ invoice.total }}</td>\n    </ng-container>\n    <ng-container ngsColumnDef=\"status\">\n      <th ngs-header-cell *ngsHeaderCellDef ngs-sort-header=\"status\" sortActionDescription=\"Sort by status\">\n        Status\n      </th>\n      <td ngs-cell *ngsCellDef=\"let invoice\">{{ invoice.status }}</td>\n    </ng-container>\n    <tr ngs-header-row *ngsHeaderRowDef=\"displayedColumns\"></tr>\n    <tr ngs-row *ngsRowDef=\"let row; columns: displayedColumns;\"></tr>\n  </table>\n</div>"
+        }
+      ],
       "previewAsset": "projects/components/sort/preview.svg",
       "selectors": [
         "[ngs-sort-header]",
         "[ngsSort]"
       ],
       "exportedSymbols": [
-        "EmrSort",
+        "NgsSort",
         "Sort",
         "SORT",
         "SortDirection",
@@ -8810,6 +8886,133 @@
       "example": null
     },
     {
+      "name": "step-tracker",
+      "title": "Step Tracker",
+      "overviewName": "Step Tracker",
+      "category": "components",
+      "package": "@ngstarter-ui/components",
+      "importPath": "@ngstarter-ui/components/step-tracker",
+      "publicApi": "projects/components/step-tracker/public-api.ts",
+      "sourceRoot": "projects/components/step-tracker/src",
+      "docsPath": "/components/step-tracker",
+      "docsOverviewSource": "projects/docs/src/app/components/step-tracker/overview/overview.html",
+      "purpose": "Show the status of related steps without owning wizard navigation, validation, or routed content.",
+      "useWhen": "Use ngs-step-tracker with ngs-step-tracker-item when users need passive visibility into process stages such as completed, current, pending, error, or disabled. Good for payroll review stages, onboarding checklists, fulfillment status, setup status, approval flows, and compact progress summaries in cards, sidebars, drawers, and page headers. Use StepTracker when steps are status display only. Configure global completed/error indicator icon names with provideStepTracker or STEP_TRACKER_CONFIG; use ngsStepTrackerCompletedIcon and ngsStepTrackerErrorIcon templates for per-tracker overrides. Do not use it for wizard navigation, next/previous buttons, linear validation, or projected step content; use Stepper or HeadlessStepper for those workflows. Do not use it for chronological audit/event history; use Timeline. Do not use it for a single percentage; use ProgressBar.",
+      "exampleTopics": [
+        "Basic Step Tracker",
+        "Horizontal Step Tracker",
+        "Step Tracker With Custom Icons",
+        "Step Tracker With Projected Content",
+        "Step Tracker States",
+        "Step tracker icons",
+        "Step tracker projected content"
+      ],
+      "minimalExample": "<ngs-step-tracker class=\"max-w-sm\" [activeIndex]=\"activeIndex()\">\n  <ngs-step-tracker-item label=\"Pay period & Employee\"/>\n  <ngs-step-tracker-item\n    label=\"Total Hours\"\n    description=\"Review your employee total working hour\"\n  />\n  <ngs-step-tracker-item\n    state=\"error\"\n    label=\"Time off\"\n    description=\"Missing time off approval\"\n  />\n  <ngs-step-tracker-item label=\"Review payroll\"/>\n  <ngs-step-tracker-item label=\"Success\"/>\n</ngs-step-tracker>\n<div class=\"mt-6 flex gap-3\">\n  <button ngsButton=\"outlined\" type=\"button\" (click)=\"previousStep()\">Previous step</button>\n  <button ngsButton=\"filled\" type=\"button\" (click)=\"nextStep()\">Next step</button>\n</div>",
+      "exampleFiles": [
+        {
+          "name": "basic-step-tracker-example",
+          "title": "Basic step tracker",
+          "file": "projects/docs/src/app/components/step-tracker/_examples/basic-step-tracker-example/basic-step-tracker-example.html",
+          "source": "<ngs-step-tracker class=\"max-w-sm\" [activeIndex]=\"activeIndex()\">\n  <ngs-step-tracker-item label=\"Pay period & Employee\"/>\n  <ngs-step-tracker-item\n    label=\"Total Hours\"\n    description=\"Review your employee total working hour\"\n  />\n  <ngs-step-tracker-item\n    state=\"error\"\n    label=\"Time off\"\n    description=\"Missing time off approval\"\n  />\n  <ngs-step-tracker-item label=\"Review payroll\"/>\n  <ngs-step-tracker-item label=\"Success\"/>\n</ngs-step-tracker>\n<div class=\"mt-6 flex gap-3\">\n  <button ngsButton=\"outlined\" type=\"button\" (click)=\"previousStep()\">Previous step</button>\n  <button ngsButton=\"filled\" type=\"button\" (click)=\"nextStep()\">Next step</button>\n</div>"
+        },
+        {
+          "name": "horizontal-step-tracker-example",
+          "title": "Horizontal step tracker",
+          "file": "projects/docs/src/app/components/step-tracker/_examples/horizontal-step-tracker-example/horizontal-step-tracker-example.html",
+          "source": "<ngs-step-tracker orientation=\"horizontal\">\n  <ngs-step-tracker-item state=\"completed\" label=\"Created\" description=\"Request opened\"/>\n  <ngs-step-tracker-item state=\"completed\" label=\"Assigned\" description=\"Owner selected\"/>\n  <ngs-step-tracker-item state=\"current\" label=\"Review\" description=\"Waiting on finance\"/>\n  <ngs-step-tracker-item state=\"pending\" label=\"Approval\" description=\"Not started\"/>\n</ngs-step-tracker>"
+        },
+        {
+          "name": "step-tracker-icons-example",
+          "title": "Step tracker icons",
+          "file": "projects/docs/src/app/components/step-tracker/_examples/step-tracker-icons-example/step-tracker-icons-example.html",
+          "source": "<ngs-step-tracker orientation=\"horizontal\">\n  <ng-template ngsStepTrackerCompletedIcon>\n    <ngs-icon name=\"fluent:shield-checkmark-24-regular\" class=\"size-5\"/>\n  </ng-template>\n  <ng-template ngsStepTrackerErrorIcon>\n    <ngs-icon name=\"fluent:warning-24-regular\" class=\"size-5\"/>\n  </ng-template>\n  <ngs-step-tracker-item state=\"completed\" label=\"Created\" description=\"Request opened\"/>\n  <ngs-step-tracker-item state=\"completed\" label=\"Assigned\" description=\"Owner selected\"/>\n  <ngs-step-tracker-item state=\"error\" label=\"Documents\" description=\"Missing approval\"/>\n  <ngs-step-tracker-item state=\"pending\" label=\"Approval\" description=\"Not started\"/>\n</ngs-step-tracker>"
+        }
+      ],
+      "previewAsset": "projects/components/step-tracker/preview.svg",
+      "selectors": [
+        "[ngsStepTrackerCompletedIcon]",
+        "[ngsStepTrackerDescription]",
+        "[ngsStepTrackerErrorIcon]",
+        "[ngsStepTrackerLabel]",
+        "ngs-step-tracker",
+        "ngs-step-tracker-description",
+        "ngs-step-tracker-item",
+        "ngs-step-tracker-label"
+      ],
+      "exportedSymbols": [
+        "provideStepTracker",
+        "STEP_TRACKER_CONFIG",
+        "STEP_TRACKER_DEFAULT_CONFIG",
+        "StepTracker",
+        "StepTrackerCompletedIcon",
+        "StepTrackerConfig",
+        "StepTrackerDescription",
+        "StepTrackerErrorIcon",
+        "StepTrackerItem",
+        "StepTrackerItemState",
+        "StepTrackerLabel",
+        "StepTrackerOrientation",
+        "StepTrackerResolvedItemState"
+      ],
+      "inputs": [
+        "activeIndex",
+        "description",
+        "label",
+        "orientation",
+        "state"
+      ],
+      "outputs": [],
+      "cssTokens": [
+        "--ngs-color-danger",
+        "--ngs-color-neutral-400",
+        "--ngs-color-neutral-500",
+        "--ngs-color-neutral-800",
+        "--ngs-color-on-danger",
+        "--ngs-color-on-success",
+        "--ngs-color-outline",
+        "--ngs-color-primary",
+        "--ngs-color-success",
+        "--ngs-color-surface",
+        "--ngs-color-surface-container-high",
+        "--ngs-font-size-base",
+        "--ngs-font-size-sm",
+        "--ngs-icon-size",
+        "--ngs-step-tracker-completed-bg",
+        "--ngs-step-tracker-completed-color",
+        "--ngs-step-tracker-connector-active-color",
+        "--ngs-step-tracker-connector-color",
+        "--ngs-step-tracker-connector-gap",
+        "--ngs-step-tracker-connector-left",
+        "--ngs-step-tracker-connector-length",
+        "--ngs-step-tracker-connector-right",
+        "--ngs-step-tracker-connector-segment",
+        "--ngs-step-tracker-connector-space",
+        "--ngs-step-tracker-connector-top",
+        "--ngs-step-tracker-connector-width",
+        "--ngs-step-tracker-current-bg",
+        "--ngs-step-tracker-current-border",
+        "--ngs-step-tracker-current-color",
+        "--ngs-step-tracker-description-color",
+        "--ngs-step-tracker-description-font-size",
+        "--ngs-step-tracker-disabled-bg",
+        "--ngs-step-tracker-disabled-color",
+        "--ngs-step-tracker-error-bg",
+        "--ngs-step-tracker-error-color",
+        "--ngs-step-tracker-gap",
+        "--ngs-step-tracker-horizontal-indicator-margin-bottom",
+        "--ngs-step-tracker-indicator-font-size",
+        "--ngs-step-tracker-indicator-font-weight",
+        "--ngs-step-tracker-indicator-size",
+        "--ngs-step-tracker-item-gap",
+        "--ngs-step-tracker-label-color",
+        "--ngs-step-tracker-label-font-size",
+        "--ngs-step-tracker-label-font-weight",
+        "--ngs-step-tracker-pending-bg",
+        "--ngs-step-tracker-pending-color"
+      ],
+      "example": null
+    },
+    {
       "name": "stepper",
       "title": "Stepper",
       "overviewName": "Stepper",
@@ -8873,6 +9076,8 @@
       ],
       "outputs": [],
       "cssTokens": [
+        "--ngs-color-on-primary",
+        "--ngs-color-on-success",
         "--ngs-color-on-surface",
         "--ngs-color-on-surface-variant",
         "--ngs-color-outline-variant",
@@ -8884,9 +9089,11 @@
         "--ngs-stepper-header-gap",
         "--ngs-stepper-header-padding",
         "--ngs-stepper-icon-active-bg",
+        "--ngs-stepper-icon-active-color",
         "--ngs-stepper-icon-bg",
         "--ngs-stepper-icon-color",
         "--ngs-stepper-icon-completed-bg",
+        "--ngs-stepper-icon-completed-color",
         "--ngs-stepper-icon-size",
         "--ngs-stepper-label-active-color",
         "--ngs-stepper-label-color",
@@ -9311,6 +9518,8 @@
         "--ngs-tab-group-animation-duration",
         "--ngs-tab-group-header-border-bottom",
         "--ngs-tab-group-header-border-top",
+        "--ngs-tab-group-pagination-control-after-border-left",
+        "--ngs-tab-group-pagination-control-before-border-right",
         "--ngs-tab-label-active-border-bottom",
         "--ngs-tab-label-active-border-top",
         "--ngs-tab-label-active-color",
@@ -10038,21 +10247,31 @@
       "useWhen": "Use ngs-tree when users need to inspect or navigate hierarchical data where parent and child levels matter: folders and files, categories, permissions, taxonomies, organization structures, nested settings, product/entity hierarchies, and other expandable trees. Use dataSource with childrenAccessor for nested/static data, or treeControl with a custom DataSource for flat trees and dynamic loading. Define node templates with *ngsTreeNodeDef and use when for different node types. Use ngsTreeNodePadding for indentation and ngsTreeNodeToggle for expand/collapse controls. Use ProgressBar or Skeleton inside node templates when children load on demand. Do not use Tree for a simple vertical collection; use List. Do not use it for primary application navigation; use Sidebar, Sidenav, Navigation, or RailNav. Do not use it for FAQ or settings sections; use ExpansionPanel. Do not use it for dense row data with columns, sorting, filters, or bulk actions; use Table or DataView. Do not use it for step-by-step workflows; use Stepper.",
       "exampleTopics": [
         "Basic tree",
+        "Selectable tree",
+        "Checkable tree",
+        "Draggable tree",
+        "Searchable tree",
         "Tree with dynamic data"
       ],
-      "minimalExample": "<ngs-tree #tree [dataSource]=\"dataSource\" [childrenAccessor]=\"childrenAccessor\">\n  <!-- This is the tree node template for leaf nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\" ngsTreeNodePadding>\n    <!-- use a disabled button to provide padding for tree leaf -->\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <!-- This is the tree node template for expandable nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node;when: hasChild\"\n                 ngsTreeNodePadding ngsTreeNodeToggle\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>",
+      "minimalExample": "<ngs-tree #tree [dataSource]=\"dataSource\" [childrenAccessor]=\"childrenAccessor\">\n  <!-- This is the tree node template for leaf nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\" ngsTreeNodePadding>\n    <!-- use a disabled button to provide padding for tree leaf -->\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <!-- This is the tree node template for expandable nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node;when: hasChild\"\n                 ngsTreeNodePadding\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>",
       "exampleFiles": [
         {
           "name": "basic-tree-example",
           "title": "Basic tree",
           "file": "projects/docs/src/app/components/tree/_examples/basic-tree-example/basic-tree-example.html",
-          "source": "<ngs-tree #tree [dataSource]=\"dataSource\" [childrenAccessor]=\"childrenAccessor\">\n  <!-- This is the tree node template for leaf nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\" ngsTreeNodePadding>\n    <!-- use a disabled button to provide padding for tree leaf -->\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <!-- This is the tree node template for expandable nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node;when: hasChild\"\n                 ngsTreeNodePadding ngsTreeNodeToggle\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>"
+          "source": "<ngs-tree #tree [dataSource]=\"dataSource\" [childrenAccessor]=\"childrenAccessor\">\n  <!-- This is the tree node template for leaf nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\" ngsTreeNodePadding>\n    <!-- use a disabled button to provide padding for tree leaf -->\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <!-- This is the tree node template for expandable nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node;when: hasChild\"\n                 ngsTreeNodePadding\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>"
         },
         {
-          "name": "tree-with-dynamic-data-example",
-          "title": "Tree with dynamic data",
-          "file": "projects/docs/src/app/components/tree/_examples/tree-with-dynamic-data-example/tree-with-dynamic-data-example.html",
-          "source": "<ngs-tree [dataSource]=\"dataSource\" [treeControl]=\"treeControl\">\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\" ngsTreeNodePadding>\n    <button ngsIconButton disabled></button>\n    {{node.item}}\n  </ngs-tree-node>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node; when: hasChild\" ngsTreeNodePadding ngsTreeNodeToggle\n                 [cdkTreeNodeTypeaheadLabel]=\"node.item\">\n    <button ngsIconButton\n            [attr.aria-label]=\"'Toggle ' + node.item\" ngsTreeNodeToggle>\n      @if (treeControl.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.item}}\n    @if (node.isLoading()) {\n      <ngs-progress-bar mode=\"indeterminate\" class=\"ms-3\"/>\n    }\n  </ngs-tree-node>\n</ngs-tree>"
+          "name": "checkable-tree-example",
+          "title": "Checkable tree",
+          "file": "projects/docs/src/app/components/tree/_examples/checkable-tree-example/checkable-tree-example.html",
+          "source": "<ngs-tree #tree\n          [dataSource]=\"dataSource\"\n          [childrenAccessor]=\"childrenAccessor\"\n          [trackBy]=\"trackByName\"\n          (checkedChange)=\"checkedValues = $event\"\n          checkable>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\"\n                 ngsTreeNodePadding\n                 [value]=\"node.name\"\n                 [disabled]=\"!!node.disabled\">\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node; when: hasChild\"\n                 ngsTreeNodePadding\n                 [value]=\"node.name\"\n                 [disabled]=\"!!node.disabled\"\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>\n<p class=\"tree-example-state\">\n  Checked: {{checkedValues.length ? checkedValues.join(', ') : 'None'}}\n</p>"
+        },
+        {
+          "name": "draggable-tree-example",
+          "title": "Draggable tree",
+          "file": "projects/docs/src/app/components/tree/_examples/draggable-tree-example/draggable-tree-example.html",
+          "source": "<ngs-tree #tree\n          [dataSource]=\"dataSource\"\n          [childrenAccessor]=\"childrenAccessor\"\n          [trackBy]=\"trackByName\"\n          (nodeDrop)=\"onNodeDrop($event)\"\n          draggable>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\" ngsTreeNodePadding [value]=\"node.name\">\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <ngs-tree-node *ngsTreeNodeDef=\"let node; when: hasChild\"\n                 ngsTreeNodePadding\n                 [value]=\"node.name\"\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>\n<p class=\"tree-example-state\">\n  {{dropMessage}}\n</p>"
         }
       ],
       "previewAsset": "projects/components/tree/preview.svg",
@@ -10068,14 +10287,23 @@
       "exportedSymbols": [
         "NestedTreeNode",
         "Tree",
+        "TreeFilterMode",
+        "TreeFilterPredicate",
         "TreeNode",
         "TreeNodeDef",
+        "TreeNodeDrop",
+        "TreeNodeDropPosition",
         "TreeNodeOutlet",
         "TreeNodePadding",
         "TreeNodeToggle"
       ],
       "inputs": [
+        "checkable",
+        "childrenKey",
         "disabled",
+        "draggable",
+        "filterMode",
+        "filterValue",
         "ngsNestedTreeNode",
         "ngsTreeNode",
         "ngsTreeNodeDefWhen",
@@ -10083,20 +10311,55 @@
         "ngsTreeNodePaddingIndent",
         "ngsTreeNodeToggleRecursive",
         "recursive",
+        "selectable",
         "tabIndex",
+        "value",
         "when"
       ],
       "outputs": [
         "activation",
-        "expandedChange"
+        "checkedChange",
+        "expandedChange",
+        "selectedChange"
       ],
       "cssTokens": [
+        "--ngs-checkbox-gap",
+        "--ngs-color-neutral",
+        "--ngs-color-primary",
+        "--ngs-nav-item-active-bg",
+        "--ngs-nav-item-active-color",
+        "--ngs-nav-item-color",
+        "--ngs-nav-item-font-size",
+        "--ngs-nav-item-gap",
+        "--ngs-nav-item-height",
+        "--ngs-nav-item-hover-bg",
+        "--ngs-nav-item-hover-color",
+        "--ngs-nav-item-padding",
+        "--ngs-nav-item-radius",
         "--ngs-tree-container-background-color",
+        "--ngs-tree-gap",
+        "--ngs-tree-node-active-bg",
+        "--ngs-tree-node-active-color",
+        "--ngs-tree-node-checkbox-gap",
+        "--ngs-tree-node-color",
+        "--ngs-tree-node-disabled-opacity",
+        "--ngs-tree-node-drop-line-color",
+        "--ngs-tree-node-drop-line-radius",
+        "--ngs-tree-node-drop-line-size",
+        "--ngs-tree-node-drop-target-bg",
+        "--ngs-tree-node-drop-target-color",
+        "--ngs-tree-node-drop-target-outline",
+        "--ngs-tree-node-drop-target-outline-offset",
+        "--ngs-tree-node-font-size",
+        "--ngs-tree-node-gap",
+        "--ngs-tree-node-hover-bg",
+        "--ngs-tree-node-hover-color",
+        "--ngs-tree-node-line-color",
         "--ngs-tree-node-min-height",
-        "--ngs-tree-node-text-color",
-        "--ngs-tree-node-text-font",
-        "--ngs-tree-node-text-size",
-        "--ngs-tree-node-text-weight"
+        "--ngs-tree-node-padding",
+        "--ngs-tree-node-radius",
+        "--ngs-tree-node-title-font-size",
+        "--ngs-tree-padding"
       ],
       "example": null
     },
