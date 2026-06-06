@@ -1,5 +1,97 @@
 @reference 'tailwindcss';
 
 :host {
-  display: flex;
+  color: var(--ngs-list-item-color, inherit);
+  font-size: var(--ngs-list-item-font-size, inherit);
+  position: relative;
+
+  &.ngs-tree-node {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    word-wrap: break-word;
+    min-height: var(--ngs-tree-node-min-height, 48px);
+    box-sizing: border-box;
+  }
+
+  &.ngs-nested-tree-node {
+    border-bottom-width: 0;
+  }
+
+  &.ngs-tree-node-selectable {
+    border-radius: var(--ngs-tree-node-radius, var(--ngs-list-item-radius, var(--ngs-nav-item-radius)));
+    cursor: pointer;
+  }
+
+  &.ngs-tree-node-disabled {
+    color: var(--ngs-tree-node-disabled-color, var(--ngs-list-item-disabled-color, var(--ngs-state-disabled-color)));
+    cursor: default;
+  }
+
+  &.ngs-tree-node-draggable {
+    cursor: grab;
+  }
+
+  &.ngs-tree-node-draggable:active {
+    cursor: grabbing;
+  }
+
+  &.ngs-tree-node-drop-inside {
+    color: var(--ngs-tree-node-drop-target-color, var(--ngs-tree-node-active-color, var(--ngs-list-item-active-color, var(--ngs-nav-item-active-color))));
+    background: var(--ngs-tree-node-drop-target-bg, var(--ngs-tree-node-active-bg, var(--ngs-list-item-active-bg, var(--ngs-nav-item-active-bg))));
+    outline: var(--ngs-tree-node-drop-target-outline, 1px solid var(--ngs-color-primary));
+    outline-offset: var(--ngs-tree-node-drop-target-outline-offset, -1px);
+  }
+
+  &.ngs-tree-node-drop-before::before,
+  &.ngs-tree-node-drop-after::after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    inset-inline: 0;
+    height: var(--ngs-tree-node-drop-line-size, 2px);
+    background: var(--ngs-tree-node-drop-line-color, var(--ngs-color-primary));
+    border-radius: var(--ngs-tree-node-drop-line-radius, 999px);
+    pointer-events: none;
+  }
+
+  &.ngs-tree-node-drop-before::before {
+    top: 0;
+  }
+
+  &.ngs-tree-node-drop-after::after {
+    bottom: 0;
+  }
+
+  &.ngs-tree-node-selectable:not(.ngs-tree-node-selected, .ngs-tree-node-disabled):hover {
+    color: var(--ngs-tree-node-hover-color, var(--ngs-list-item-hover-color, var(--ngs-nav-item-hover-color)));
+    background: var(--ngs-tree-node-hover-bg, var(--ngs-list-item-hover-bg, var(--ngs-nav-item-hover-bg)));
+  }
+
+  &.ngs-tree-node-selected:not(.ngs-tree-node-disabled) {
+    color: var(--ngs-tree-node-active-color, var(--ngs-list-item-active-color, var(--ngs-nav-item-active-color)));
+    background: var(--ngs-tree-node-active-bg, var(--ngs-list-item-active-bg, var(--ngs-nav-item-active-bg)));
+  }
+
+  &.ngs-tree-node-selectable {
+    > button:disabled {
+      pointer-events: none;
+    }
+  }
+
+  .ngs-tree-node-checkbox {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    margin-inline-end: var(--ngs-tree-node-checkbox-gap, --spacing(2));
+
+    ngs-checkbox {
+      --ngs-checkbox-gap: 0;
+    }
+
+    .ngs-checkbox-label {
+      display: none;
+    }
+  }
 }

@@ -5,9 +5,10 @@ import {
 import {
   ApplicationRef,
   booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
   ComponentRef,
   createComponent,
-  Directive,
   ElementRef,
   EnvironmentInjector,
   HostAttributeToken,
@@ -172,11 +173,15 @@ class TreeNodeCheckbox<T, K = T> {
   }
 }
 
-@Directive({
+@Component({
   selector: 'ngs-tree-node',
   exportAs: 'ngsTreeNode',
+  template: '<ng-content />',
+  styleUrl: './tree-node.scss',
+  standalone: true,
   outputs: ['activation', 'expandedChange'],
   providers: [{ provide: CdkTreeNode, useExisting: TreeNode }],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-tree-node',
     '[class.ngs-tree-node-selectable]': '_isSelectable()',
@@ -203,7 +208,6 @@ class TreeNodeCheckbox<T, K = T> {
     '(dragend)': '_handleDragEnd()',
     '[tabindex]': '_getTabindexAttribute()',
   },
-  standalone: true
 })
 export class TreeNode<T, K = T> extends CdkTreeNode<T, K> implements OnInit, OnDestroy {
   private _hostElementRef = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -393,9 +397,13 @@ export class TreeNode<T, K = T> extends CdkTreeNode<T, K> implements OnInit, OnD
   }
 }
 
-@Directive({
+@Component({
   selector: 'ngs-nested-tree-node',
   exportAs: 'ngsNestedTreeNode',
+  template: '<ng-content />',
+  styleUrl: './tree-node.scss',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   outputs: ['activation', 'expandedChange'],
   providers: [
     { provide: CdkNestedTreeNode, useExisting: NestedTreeNode },
@@ -423,7 +431,6 @@ export class TreeNode<T, K = T> extends CdkTreeNode<T, K> implements OnInit, OnD
     '(drop)': '_handleDrop($event)',
     '(dragend)': '_handleDragEnd()',
   },
-  standalone: true
 })
 export class NestedTreeNode<T, K = T> extends CdkNestedTreeNode<T, K> implements OnInit, OnDestroy {
   private _hostElementRef = inject<ElementRef<HTMLElement>>(ElementRef);

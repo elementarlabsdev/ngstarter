@@ -10083,7 +10083,9 @@
         "--ngs-color-primary",
         "--ngs-list-item-active-bg",
         "--ngs-list-item-active-color",
+        "--ngs-list-item-color",
         "--ngs-list-item-disabled-color",
+        "--ngs-list-item-font-size",
         "--ngs-list-item-hover-bg",
         "--ngs-list-item-hover-color",
         "--ngs-list-item-radius",
@@ -10108,11 +10110,7 @@
         "--ngs-tree-node-hover-bg",
         "--ngs-tree-node-hover-color",
         "--ngs-tree-node-min-height",
-        "--ngs-tree-node-radius",
-        "--ngs-tree-node-text-color",
-        "--ngs-tree-node-text-font",
-        "--ngs-tree-node-text-size",
-        "--ngs-tree-node-text-weight"
+        "--ngs-tree-node-radius"
       ],
       "example": null
     },
