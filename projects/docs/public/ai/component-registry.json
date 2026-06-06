@@ -10011,6 +10011,7 @@
         "Selectable tree",
         "Checkable tree",
         "Draggable tree",
+        "Searchable tree",
         "Tree with dynamic data"
       ],
       "minimalExample": "<ngs-tree #tree [dataSource]=\"dataSource\" [childrenAccessor]=\"childrenAccessor\">\n  <!-- This is the tree node template for leaf nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node\" ngsTreeNodePadding>\n    <!-- use a disabled button to provide padding for tree leaf -->\n    <button ngsIconButton disabled></button>\n    {{node.name}}\n  </ngs-tree-node>\n  <!-- This is the tree node template for expandable nodes -->\n  <ngs-tree-node *ngsTreeNodeDef=\"let node;when: hasChild\"\n                 ngsTreeNodePadding\n                 [cdkTreeNodeTypeaheadLabel]=\"node.name\">\n    <button ngsIconButton ngsTreeNodeToggle [attr.aria-label]=\"'Toggle ' + node.name\">\n      @if (tree.isExpanded(node)) {\n        <ngs-icon name=\"fluent:chevron-down-24-regular\" class=\"size-4\"/>\n      } @else {\n        <ngs-icon name=\"fluent:chevron-right-24-regular\" class=\"size-4\"/>\n      }\n    </button>\n    {{node.name}}\n  </ngs-tree-node>\n</ngs-tree>",
@@ -10047,6 +10048,8 @@
       "exportedSymbols": [
         "NestedTreeNode",
         "Tree",
+        "TreeFilterMode",
+        "TreeFilterPredicate",
         "TreeNode",
         "TreeNodeDef",
         "TreeNodeDrop",
@@ -10060,6 +10063,8 @@
         "childrenKey",
         "disabled",
         "draggable",
+        "filterMode",
+        "filterValue",
         "ngsNestedTreeNode",
         "ngsTreeNode",
         "ngsTreeNodeDefWhen",

@@ -66,6 +66,24 @@ export class Api {
       default: 'children'
     },
     {
+      name: 'filterValue',
+      description: 'Current text value used to filter array-backed tree data without mutating the original dataSource.',
+      type: 'string',
+      default: '\'\''
+    },
+    {
+      name: 'filterPredicate',
+      description: 'Function that decides whether a node matches the current filter value.',
+      type: '(node: T, filterValue: string) => boolean',
+      default: 'name / label / title / value text match'
+    },
+    {
+      name: 'filterMode',
+      description: 'Controls whether matching children keep their ancestors or matching parents include their full descendants.',
+      type: '\'includeAncestors\' | \'includeDescendants\'',
+      default: '\'includeAncestors\''
+    },
+    {
       name: 'trackBy',
       description: 'Tracking function that will be used to check the differences in data changes.',
       type: 'TrackByFunction<T>',

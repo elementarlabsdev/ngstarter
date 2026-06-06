@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   Directive,
+  effect,
   inject,
   input,
   output,
@@ -10,7 +11,9 @@ import {
   ViewContainerRef,
   ViewChild
 } from '@angular/core';
+import { DataSource } from '@angular/cdk/collections';
 import { CDK_TREE_NODE_OUTLET_NODE, CdkTree, CdkTreeNodeOutlet } from '@angular/cdk/tree';
+import { Observable } from 'rxjs';
 
 @Directive({
   selector: '[ngsTreeNodeOutlet]',
@@ -37,6 +40,26 @@ export interface TreeNodeDrop<T> {
 }
 
 export type TreeNodeDropPosition = 'before' | 'inside' | 'after';
+export type TreeFilterMode = 'includeAncestors' | 'includeDescendants';
+export type TreeFilterPredicate<T> = (node: T, filterValue: string) => boolean;
+
+const NGS_TREE_DEFAULT_FILTER_PREDICATE = <T,>(node: T, filterValue: string): boolean => {
+  const query = filterValue.trim().toLowerCase();
+  if (!query) {
+    return true;
+  }
+
+  const candidates = node && typeof node === 'object'
+    ? [
+        (node as Record<string, unknown>)['name'],
+        (node as Record<string, unknown>)['label'],
+        (node as Record<string, unknown>)['title'],
+        (node as Record<string, unknown>)['value'],
+      ]
+    : [node];
+
+  return candidates.some(value => value != null && String(value).toLowerCase().includes(query));
+};
 
 @Component({
   selector: 'ngs-tree',
@@ -53,6 +76,17 @@ export type TreeNodeDropPosition = 'before' | 'inside' | 'after';
   },
 })
 export class Tree<T, K = T> extends CdkTree<T, K> {
+  override get dataSource(): DataSource<T> | Observable<T[]> | T[] {
+    return this._sourceDataSource ?? [];
+  }
+
+  override set dataSource(dataSource: DataSource<T> | Observable<T[]> | T[]) {
+    if (this._sourceDataSource !== dataSource) {
+      this._sourceDataSource = dataSource;
+      this._applyFilteredDataSource();
+    }
+  }
+
   checkable = input(false, {
     transform: booleanAttribute
   });
@@ -67,6 +101,14 @@ export class Tree<T, K = T> extends CdkTree<T, K> {
 
   childrenKey = input('children');
 
+  filterValue = input('', {
+    transform: (value: unknown) => value == null ? '' : String(value)
+  });
+
+  filterPredicate = input<TreeFilterPredicate<T>>(NGS_TREE_DEFAULT_FILTER_PREDICATE);
+
+  filterMode = input<TreeFilterMode>('includeAncestors');
+
   readonly checkedChange = output<unknown[]>();
   readonly selectedChange = output<unknown>();
   readonly nodeDrop = output<TreeNodeDrop<T>>();
@@ -80,9 +122,21 @@ export class Tree<T, K = T> extends CdkTree<T, K> {
   private _disabledDataKeys = new Set<unknown>();
   private _enabledDataKeys = new Set<unknown>();
   private _draggedNode?: T;
+  private _sourceDataSource?: DataSource<T> | Observable<T[]> | T[];
+  private _filteredNodeOriginals = new WeakMap<object, T>();
 
   @ViewChild(TreeNodeOutlet, { static: true })
   override _nodeOutlet: TreeNodeOutlet = undefined!;
+
+  constructor() {
+    super();
+    effect(() => {
+      this.filterValue();
+      this.filterPredicate();
+      this.filterMode();
+      this._applyFilteredDataSource();
+    });
+  }
 
   _toggleNodeChecked(node: T, checked: boolean) {
     if (this._isNodeDisabled(node)) {
@@ -424,6 +478,83 @@ export class Tree<T, K = T> extends CdkTree<T, K> {
     this.renderNodeChanges(rootNodes);
   }
 
+  private _applyFilteredDataSource() {
+    const source = this._sourceDataSource;
+    if (!source) {
+      super.dataSource = [];
+      return;
+    }
+
+    super.dataSource = this._getFilteredDataSource(source);
+  }
+
+  private _getFilteredDataSource(dataSource: DataSource<T> | Observable<T[]> | T[]): DataSource<T> | Observable<T[]> | T[] {
+    this._filteredNodeOriginals = new WeakMap<object, T>();
+    if (!Array.isArray(dataSource) || !this._isFilterActive()) {
+      return dataSource;
+    }
+
+    const filteredData = dataSource
+      .map(node => this._filterNode(node))
+      .filter((node): node is T => node !== undefined);
+    this._expandFilteredNodes(filteredData);
+    return filteredData;
+  }
+
+  private _filterNode(node: T): T | undefined {
+    const filterValue = this.filterValue().trim();
+    const children = this._getDataNodeChildren(node) ?? [];
+    const matches = this.filterPredicate()(node, filterValue);
+
+    if (matches && this.filterMode() === 'includeDescendants') {
+      return node;
+    }
+
+    const filteredChildren = children
+      .map(child => this._filterNode(child))
+      .filter((child): child is T => child !== undefined);
+    if (!matches && !filteredChildren.length) {
+      return undefined;
+    }
+
+    if (filteredChildren.length === children.length) {
+      return node;
+    }
+
+    return this._cloneNodeWithChildren(node, filteredChildren);
+  }
+
+  private _cloneNodeWithChildren(node: T, children: T[]): T {
+    const nodeRecord = node as Record<string, unknown> | null | undefined;
+    if (!nodeRecord || typeof nodeRecord !== 'object') {
+      return node;
+    }
+
+    const clone = {
+      ...nodeRecord,
+      [this.childrenKey()]: children,
+    } as T;
+    this._filteredNodeOriginals.set(clone as object, node);
+    return clone;
+  }
+
+  private _expandFilteredNodes(nodes: T[]) {
+    (this as any)._getExpansionModel?.();
+    for (const node of nodes) {
+      const children = this._getDataNodeChildren(node);
+      if (!children?.length) {
+        continue;
+      }
+
+      this.expand(node);
+      this._expandFilteredNodes(children);
+    }
+  }
+
+  private _isFilterActive(): boolean {
+    return this.filterValue().trim().length > 0;
+  }
+
   private _isNodeDescendantOf(node: T, maybeAncestor: T): boolean {
     return this._getCheckableDescendants(maybeAncestor).some(item => this._isSameNode(item, node));
   }
@@ -584,17 +715,26 @@ export class Tree<T, K = T> extends CdkTree<T, K> {
   }
 
   private _getTreeNodeKey(node: T): unknown {
+    const originalNode = this._getOriginalFilterNode(node);
     const treeControl = this.treeControl as { trackBy?: (node: T) => K } | undefined;
     if (treeControl?.trackBy) {
-      return treeControl.trackBy(node);
+      return treeControl.trackBy(originalNode);
     }
 
     if (this.expansionKey) {
-      return this.expansionKey(node);
+      return this.expansionKey(originalNode);
     }
 
     if (this.trackBy) {
-      return this.trackBy(-1, node);
+      return this.trackBy(-1, originalNode);
+    }
+
+    return originalNode;
+  }
+
+  private _getOriginalFilterNode(node: T): T {
+    if (node && typeof node === 'object') {
+      return this._filteredNodeOriginals.get(node as object) ?? node;
     }
 
     return node;
