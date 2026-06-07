@@ -46,6 +46,17 @@ export class Api {
     { name: 'closed', description: 'Event emitted when the menu is closed.' },
   ];
 
+  readonly slots = [
+    {
+      selector: 'ngs-menu-header, [ngs-menu-header]',
+      description: 'Projected header content rendered above the scrollable menu items.'
+    },
+    {
+      selector: 'ngs-menu-footer, [ngs-menu-footer]',
+      description: 'Projected footer content rendered below the scrollable menu items.'
+    },
+  ];
+
   readonly triggerEvents = [
     { name: 'menuOpened', description: 'Event emitted when the associated menu is opened.' },
     { name: 'menuClosed', description: 'Event emitted when the associated menu is closed.' },
