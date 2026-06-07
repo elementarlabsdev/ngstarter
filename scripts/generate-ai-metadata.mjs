@@ -205,7 +205,7 @@ const curatedGuidance = new Map(Object.entries({
   },
   'content-editor': {
     purpose: 'Provide a block-based builder for structured long-form content.',
-    useWhen: 'Use ngs-content-builder for articles, pages, documentation, knowledge base entries, rich notes, editable descriptions, landing content, and CMS-like editing workflows built from blocks such as paragraph, heading, list, quote, code, divider, table, image, video, and embed. Do not use for quick messages, comments, threads, or reply composers; use CommentEditor for that. Do not use for a simple text field or small rich text input; use TextEditor, Input, or Textarea depending on the task.',
+    useWhen: 'Use ngs-content-editor-builder for articles, pages, documentation, knowledge base entries, rich notes, editable descriptions, landing content, and CMS-like editing workflows built from blocks such as paragraph, heading, list, quote, code, divider, table, image, video, and embed. Use ngs-content-editor-renderer for saved block previews and display-only content. Do not use for quick messages, comments, threads, or reply composers; use CommentEditor for that. Do not use for a simple text field or small rich text input; use TextEditor, Input, or Textarea depending on the task.',
   },
   'content-fade': {
     purpose: 'Add a visual gradient fade at the edge of clipped or scrollable content.',

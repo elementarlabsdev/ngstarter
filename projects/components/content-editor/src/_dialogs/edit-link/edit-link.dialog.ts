@@ -3,7 +3,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { Button } from '@ngstarter-ui/components/button';
 import {
   DIALOG_DATA,
-  DialogActions, DialogClose,
+  DialogActions,
   DialogContent,
   DialogRef,
   DialogTitle
@@ -25,7 +25,6 @@ import { FormField, Hint, Label } from '@ngstarter-ui/components/form-field';
     Label,
     SlideToggle,
     ReactiveFormsModule,
-    DialogClose,
     Hint
   ],
   templateUrl: './edit-link.dialog.html',

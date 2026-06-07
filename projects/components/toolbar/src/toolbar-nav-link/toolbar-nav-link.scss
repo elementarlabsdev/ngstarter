@@ -24,6 +24,8 @@
   &:hover {
     color: var(--ngs-toolbar-nav-link-hover-color);
     text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
   }
 
   &.ngs-toolbar-nav-link-active {

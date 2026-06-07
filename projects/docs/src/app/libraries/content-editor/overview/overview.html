@@ -2,12 +2,12 @@
   <h1 appPageTitle>Content Editor</h1>
   <div appPageContent>
     <p class="docs-seo-intro mb-6 text-base leading-7 text-neutral-600">
-      The NgStarter Angular Content Editor component lets you provide a block-based builder for structured long-form content. Use ngs-content-builder for articles, pages, documentation, knowledge base entries, rich notes, editable descriptions, landing content, and CMS-like editing workflows built from blocks such as paragraph, heading, list, quote, code, divider, table, image, video, and embed. It includes examples for Content Editor.
+      The NgStarter Angular Content Editor library lets you build and render structured long-form content from JSON blocks. Use ngs-content-editor-builder for editing articles, pages, documentation, knowledge base entries, rich notes, editable descriptions, landing content, and CMS-like content. Use ngs-content-editor-renderer to render saved blocks for previews and display-only content.
     </p>
     <section>
       <p class="mb-4 text-neutral-600">
         Content Editor is a block-based builder for structured long-form content.
-        Use it for articles, pages, documentation, knowledge base entries, rich notes,
+        Use <code class="code">ngs-content-editor-builder</code> for articles, pages, documentation, knowledge base entries, rich notes,
         editable descriptions, landing content, and CMS-like editing workflows.
       </p>
       <div class="my-7">
@@ -26,12 +26,16 @@
           <li>
             Passing block options such as image and video upload functions.
           </li>
+          <li>
+            Rendering saved blocks with <code class="code">ngs-content-editor-renderer</code>
+            in preview dialogs, read-only pages, and CMS display surfaces.
+          </li>
         </ul>
       </div>
       <p class="mb-4 text-neutral-600">
         Do not use Content Editor for quick messages, comments, threads, or reply composers; use Comment Editor for that.
         Do not use it for a simple text field or a small rich text input; use Text Editor, Input, or Textarea depending on the task.
-        Do not use <code class="code">ngs-content-viewer</code> for production display-only content until its viewer behavior is completed.
+        For display-only content, render the saved block JSON with <code class="code">ngs-content-editor-renderer</code>.
       </p>
     </section>
   </div>

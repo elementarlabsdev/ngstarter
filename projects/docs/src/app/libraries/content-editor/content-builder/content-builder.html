@@ -1,12 +1,13 @@
 <div class="py-12">
   <div class="mb-4 px-12 flex flex-col items-center gap-4 md:flex-row md:justify-center">
     <p class="text-center prose max-w-full md:mb-0">
-      Use <code>ngs-content-builder</code> when users need to compose structured long-form content from editable blocks.
+      Use <code>ngs-content-editor-builder</code> to compose editable block JSON, then preview or display it with
+      <code>ngs-content-editor-renderer</code>.
     </p>
     <button ngsButton="filled" type="button" (click)="openPreview(contentBuilder.getData())">
       <ngs-icon name="fluent:eye-24-regular"/>
       Preview
     </button>
   </div>
-  <ngs-content-builder #contentBuilder="ngsContentBuilder" [options]="options"/>
+  <ngs-content-editor-builder #contentBuilder="ngsContentEditorBuilder" [options]="options"/>
 </div>

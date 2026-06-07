@@ -2366,7 +2366,7 @@
       "docsPath": "/libraries/content-editor",
       "docsOverviewSource": "projects/docs/src/app/libraries/content-editor/overview/overview.html",
       "purpose": "Provide a block-based builder for structured long-form content.",
-      "useWhen": "Use ngs-content-builder for articles, pages, documentation, knowledge base entries, rich notes, editable descriptions, landing content, and CMS-like editing workflows built from blocks such as paragraph, heading, list, quote, code, divider, table, image, video, and embed. Do not use for quick messages, comments, threads, or reply composers; use CommentEditor for that. Do not use for a simple text field or small rich text input; use TextEditor, Input, or Textarea depending on the task.",
+      "useWhen": "Use ngs-content-editor-builder for articles, pages, documentation, knowledge base entries, rich notes, editable descriptions, landing content, and CMS-like editing workflows built from blocks such as paragraph, heading, list, quote, code, divider, table, image, video, and embed. Use ngs-content-editor-renderer for saved block previews and display-only content. Do not use for quick messages, comments, threads, or reply composers; use CommentEditor for that. Do not use for a simple text field or small rich text input; use TextEditor, Input, or Textarea depending on the task.",
       "exampleTopics": [
         "Content Editor"
       ],
@@ -2387,7 +2387,7 @@
         "ngs-audio-recorder",
         "ngs-code-block",
         "ngs-command-bar",
-        "ngs-content-builder",
+        "ngs-content-editor-builder",
         "ngs-content-editor-code-renderer",
         "ngs-content-editor-divider-renderer",
         "ngs-content-editor-embed-renderer",
@@ -2600,7 +2600,7 @@
         "--ngs-color-surface-container-high",
         "--ngs-color-surface-container-highest",
         "--ngs-color-surface-container-low",
-        "--ngs-content-builder-content-width",
+        "--ngs-content-editor-builder-content-width",
         "--ngs-content-editor-renderer-block-gap",
         "--ngs-font-size-sm",
         "--ngs-list-list-item-one-line-container-height",

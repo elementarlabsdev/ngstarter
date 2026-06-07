@@ -1,7 +1,7 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-content-builder-content-width: 704px;
+  --ngs-content-editor-builder-content-width: 704px;
   outline: none;
 
   ::ng-deep {
@@ -28,7 +28,7 @@
 
   .content {
     flex-grow: 1;
-    width: calc(var(--ngs-content-builder-content-width) + --spacing(10));
+    width: calc(var(--ngs-content-editor-builder-content-width) + --spacing(10));
   }
 
   .block {

@@ -1005,8 +1005,14 @@ export class App implements OnInit {
         {
           key: uuid(),
           type: 'link',
-          name: 'Content Builder',
+          name: 'Content Editor Builder',
           link: '/libraries/content-editor/content-builder'
+        },
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Content Editor Renderer API',
+          link: '/libraries/content-editor/content-editor-renderer-api'
         },
       ]
     },

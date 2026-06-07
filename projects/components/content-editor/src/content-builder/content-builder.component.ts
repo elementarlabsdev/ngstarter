@@ -45,8 +45,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { List, ListItem, ListItemIcon, ListItemTitle } from '@ngstarter-ui/components/list';
 
 @Component({
-  selector: 'ngs-content-builder',
-  exportAs: 'ngsContentBuilder',
+  selector: 'ngs-content-editor-builder',
+  exportAs: 'ngsContentEditorBuilder',
   imports: [
     Icon,
     NgComponentOutlet,
@@ -87,7 +87,7 @@ import { List, ListItem, ListItemIcon, ListItemTitle } from '@ngstarter-ui/compo
   templateUrl: './content-builder.component.html',
   styleUrl: './content-builder.component.scss',
   host: {
-    'class': 'ngs-content-builder',
+    'class': 'ngs-content-editor-builder',
     '[class.is-block-dragging]': '_blockDragging()',
     '[class.is-selection-of-blocks-active]': 'isSelectionOfBlocksActive()',
     '[class.select-none]': 'isSelectionOfBlocksActive()',
@@ -98,7 +98,7 @@ import { List, ListItem, ListItemIcon, ListItemTitle } from '@ngstarter-ui/compo
   }
 })
 export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy {
-  private static readonly DRAFT_STORAGE_PREFIX = 'ngs-content-builder:draft';
+  private static readonly DRAFT_STORAGE_PREFIX = 'ngs-content-editor-builder:draft';
 
   private _platformId = inject(PLATFORM_ID);
   private _store = inject(ContentBuilderStore);
@@ -1075,14 +1075,14 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     return !isPlatformServer(this._platformId) && this.persistDraft();
   }
 
-  private _getDraftStorageKey(): string {
+  private _getDraftStorageKey(prefix = ContentBuilderComponent.DRAFT_STORAGE_PREFIX): string {
     const elementId = this.elRef.nativeElement.id;
     const locationKey = typeof window === 'undefined'
       ? 'server'
       : `${window.location.pathname}${window.location.search}`;
     const instanceKey = elementId ? `:${elementId}` : '';
 
-    return `${ContentBuilderComponent.DRAFT_STORAGE_PREFIX}:${locationKey}${instanceKey}`;
+    return `${prefix}:${locationKey}${instanceKey}`;
   }
 
   onSettingsPopoverClose() {

@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import {
   DialogActions,
-  DialogClose,
   DialogContent,
   DialogRef,
   DialogTitle
@@ -21,7 +20,6 @@ import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
     DialogTitle,
     DialogActions,
     Button,
-    DialogClose,
     ReactiveFormsModule,
     Label,
     SlideToggle
