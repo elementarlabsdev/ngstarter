@@ -8,6 +8,7 @@ interface SetupOptions {
   project?: string;
   skipInstall: boolean;
   updateExistingDependencies: boolean;
+  updateExistingPeerDependencies: boolean;
 }
 
 interface PackageJson {
@@ -76,39 +77,50 @@ export function setupNgStarterComponents(
   context: SchematicContext,
   options: SetupOptions
 ): void {
-  validateAngularVersion(tree);
-  updatePackageJson(tree, options.updateExistingDependencies);
+  syncNgStarterComponentDependencies(tree, context, options);
   setupTailwindFiles(tree, context, options.project);
+}
 
+export function syncNgStarterComponentDependencies(
+  tree: Tree,
+  context: SchematicContext,
+  options: Omit<SetupOptions, 'project'>
+): void {
+  validateAngularVersion(tree);
+  updatePackageJson(
+    tree,
+    options.updateExistingDependencies,
+    options.updateExistingPeerDependencies
+  );
   if (!options.skipInstall) {
     context.addTask(new NodePackageInstallTask());
     context.logger.info('Installing @ngstarter-ui/components dependencies...');
   }
 }
 
-function updatePackageJson(tree: Tree, updateExistingDependencies: boolean): void {
+function updatePackageJson(
+  tree: Tree,
+  updateExistingDependencies: boolean,
+  updateExistingPeerDependencies: boolean
+): void {
   const projectPackageJson = readJson<JsonObject>(tree, PACKAGE_JSON_PATH);
-  const dependencies = collectPackageDependencies(packageJson.dependencies, packageJson.peerDependencies);
-  const runtimeDependencies = filterDependencies(dependencies, false);
+  const runtimeDependencies = filterDependencies(packageJson.dependencies ?? {}, false);
+  const peerDependencies = filterDependencies(packageJson.peerDependencies ?? {}, false);
   const devDependencies = {
-    ...filterDependencies(dependencies, true),
+    ...filterDependencies(packageJson.dependencies ?? {}, true),
     ...(packageJson.devDependencies ?? {}),
   };
 
+  addDependencies(
+    projectPackageJson,
+    peerDependencies,
+    'dependencies',
+    updateExistingPeerDependencies
+  );
   addDependencies(projectPackageJson, runtimeDependencies, 'dependencies', updateExistingDependencies);
   addDependencies(projectPackageJson, devDependencies, 'devDependencies', updateExistingDependencies);
 
   writeJson(tree, PACKAGE_JSON_PATH, projectPackageJson);
-}
-
-function collectPackageDependencies(
-  dependencies: Record<string, string> | undefined,
-  peerDependencies: Record<string, string> | undefined
-): Record<string, string> {
-  return {
-    ...(peerDependencies ?? {}),
-    ...(dependencies ?? {}),
-  };
 }
 
 function filterDependencies(

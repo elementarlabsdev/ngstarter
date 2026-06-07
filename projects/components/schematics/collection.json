@@ -5,6 +5,11 @@
       "description": "Install @ngstarter-ui/components and configure Tailwind CSS.",
       "factory": "./ng-add/index#ngAdd",
       "schema": "./ng-add/schema.json"
+    },
+    "sync-dependencies": {
+      "description": "Synchronize @ngstarter-ui/components runtime dependencies and install packages.",
+      "factory": "./sync-dependencies/index#syncDependencies",
+      "schema": "./sync-dependencies/schema.json"
     }
   }
 }

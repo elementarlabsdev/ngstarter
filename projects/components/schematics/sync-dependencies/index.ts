@@ -1,15 +1,13 @@
 import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
-import { setupNgStarterComponents } from '../utils';
+import { syncNgStarterComponentDependencies } from '../utils';
 
-export interface NgAddSchema {
-  project?: string;
+export interface SyncDependenciesSchema {
   skipInstall?: boolean;
 }
 
-export function ngAdd(options: NgAddSchema = {}): Rule {
+export function syncDependencies(options: SyncDependenciesSchema = {}): Rule {
   return (tree: Tree, context: SchematicContext) => {
-    setupNgStarterComponents(tree, context, {
-      project: options.project,
+    syncNgStarterComponentDependencies(tree, context, {
       skipInstall: options.skipInstall === true,
       updateExistingDependencies: true,
       updateExistingPeerDependencies: false,

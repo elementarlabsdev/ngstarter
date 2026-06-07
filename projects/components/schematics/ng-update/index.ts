@@ -12,6 +12,7 @@ export function ngUpdate(options: NgUpdateSchema = {}): Rule {
       project: options.project,
       skipInstall: options.skipInstall === true,
       updateExistingDependencies: true,
+      updateExistingPeerDependencies: true,
     });
   };
 }

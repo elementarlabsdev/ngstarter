@@ -12,6 +12,8 @@ const requiredFiles = [
   'schematics/migrations.json',
   'schematics/ng-add/index.js',
   'schematics/ng-add/schema.json',
+  'schematics/sync-dependencies/index.js',
+  'schematics/sync-dependencies/schema.json',
   'schematics/ng-update/index.js',
   'schematics/ng-update/schema.json',
 ];
