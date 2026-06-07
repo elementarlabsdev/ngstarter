@@ -3,7 +3,7 @@ import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router
 import { filter } from 'rxjs';
 import { PageLoadingBar } from '@ngstarter-ui/components/page-loading-bar';
 import {
-  AnalyticsService, EnvironmentService, OrderByPipe,
+  AnalyticsService, EnvironmentService,
   SeoService, SoundEffectDirective,
 } from '@ngstarter-ui/components/core';
 import { AnnouncementGlobal } from '@ngstarter-ui/components/announcement';
@@ -50,6 +50,69 @@ import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import {Toolbar, ToolbarItem, ToolbarNav, ToolbarNavLink, ToolbarSpacer} from '@ngstarter-ui/components/toolbar';
 import { DocsNavigationService } from './navigation/docs-navigation.service';
 
+interface DocsNavItem {
+  type: 'heading' | 'link' | 'group';
+  name: string;
+  key?: string;
+  icon?: string;
+  link?: string;
+  badge?: number;
+  children?: DocsNavItem[];
+}
+
+const navItemNameCollator = new Intl.Collator(undefined, { sensitivity: 'base' });
+
+function compareDocsNavItemsByName(a: DocsNavItem, b: DocsNavItem): number {
+  if (a.name === 'Overview' && b.name !== 'Overview') {
+    return -1;
+  }
+
+  if (b.name === 'Overview' && a.name !== 'Overview') {
+    return 1;
+  }
+
+  return navItemNameCollator.compare(a.name, b.name);
+}
+
+function sortDocsNavItem(item: DocsNavItem): DocsNavItem {
+  if (!item.children?.length) {
+    return item;
+  }
+
+  return {
+    ...item,
+    children: sortDocsNavItems(item.children)
+  };
+}
+
+function sortDocsNavItems(items: readonly DocsNavItem[], preserveSections = false): DocsNavItem[] {
+  if (!preserveSections) {
+    return items.map(sortDocsNavItem).sort(compareDocsNavItemsByName);
+  }
+
+  const sortedItems: DocsNavItem[] = [];
+  let sectionItems: DocsNavItem[] = [];
+
+  const flushSection = () => {
+    sortedItems.push(...sectionItems.map(sortDocsNavItem).sort(compareDocsNavItemsByName));
+    sectionItems = [];
+  };
+
+  for (const item of items) {
+    if (item.type === 'heading') {
+      flushSection();
+      sortedItems.push(item);
+      continue;
+    }
+
+    sectionItems.push(item);
+  }
+
+  flushSection();
+
+  return sortedItems;
+}
+
 @Component({
   selector: 'app-root',
   imports: [
@@ -77,7 +140,6 @@ import { DocsNavigationService } from './navigation/docs-navigation.service';
     PanelContent,
     PanelHeader,
     Panel,
-    OrderByPipe,
     SidebarBody,
     Sidebar,
     SidebarHeader,
@@ -124,7 +186,7 @@ export class App implements OnInit {
   sidebarExpanded = model(true);
   opened = model(true);
 
-  navItems: any[] = [
+  navItems: DocsNavItem[] = sortDocsNavItems([
     {
       type: 'heading',
       name: 'Getting Started'
@@ -1144,7 +1206,7 @@ export class App implements OnInit {
         },
       ]
     },
-  ];
+  ], true);
   navItemLinks: any[] = [];
   activeKey: null | string = null;
 

@@ -69,7 +69,7 @@
                       {{ navItem.name }}
                       <ngs-icon name="fluent:chevron-down-24-regular" class="size-4" ngsSidebarNavGroupToggleIcon/>
                     </ngs-sidebar-nav-group-toggle>
-                    <ngs-sidebar-nav-group-menu [dataSource]="navItem.children | orderBy:'name'">
+                    <ngs-sidebar-nav-group-menu [dataSource]="navItem.children">
                       <ng-container *ngsSidebarNavItemDef="let child">
                         <a ngs-sidebar-nav-item
                            [routerLink]="child.link"
