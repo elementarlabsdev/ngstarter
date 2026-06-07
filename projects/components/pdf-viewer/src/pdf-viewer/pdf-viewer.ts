@@ -17,6 +17,7 @@ import {
   viewChild,
 } from '@angular/core';
 import type { PdfDocumentObject, PdfEngine, PdfPageObject } from '@embedpdf/models';
+import { BlockLoader } from '@ngstarter-ui/components/block-loader';
 import { Button } from '@ngstarter-ui/components/button';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
@@ -25,7 +26,6 @@ import {
   PanelHeader,
   PanelSidebar,
 } from '@ngstarter-ui/components/panel';
-import { ProgressSpinner } from '@ngstarter-ui/components/spinner';
 import { PdfViewerEngineService } from './pdf-viewer-engine.service';
 import {
   PdfViewerLoadedEvent,
@@ -64,13 +64,13 @@ interface PdfViewerTextLineView {
   exportAs: 'ngsPdfViewer',
   standalone: true,
   imports: [
+    BlockLoader,
     Button,
     Icon,
     Panel,
     PanelContent,
     PanelHeader,
     PanelSidebar,
-    ProgressSpinner,
   ],
   templateUrl: './pdf-viewer.html',
   styleUrl: './pdf-viewer.scss',
@@ -79,7 +79,7 @@ interface PdfViewerTextLineView {
     class: 'ngs-pdf-viewer not-prose',
     '[class.is-loading]': 'isLoading()',
     '[class.has-toolbar]': 'showToolbar()',
-    '[class.has-page-list]': 'showPageList()',
+    '[class.has-page-list]': 'isPageListVisible()',
     '[class.has-error]': 'errorState()',
   },
 })
@@ -120,8 +120,14 @@ export class PdfViewer {
   protected readonly pageCount = signal(0);
   protected readonly activePage = signal(1);
   protected readonly zoom = signal(1);
+  protected readonly uploadedSource = signal<Blob | null>(null);
+  protected readonly pageListVisible = signal(true);
   protected readonly selectionRects = signal<PdfViewerSelectionRectView[]>([]);
   protected readonly hasDocument = computed(() => this.pageCount() > 0);
+  protected readonly effectiveSource = computed(() => this.uploadedSource() ?? this.src());
+  protected readonly isPageListVisible = computed(() =>
+    this.showPageList() && this.hasDocument() && this.pageListVisible(),
+  );
   protected readonly thumbnailPageMap = computed(() =>
     new Map(this.thumbnailPages().map((thumbnail) => [thumbnail.pageNumber, thumbnail])),
   );
@@ -170,7 +176,7 @@ export class PdfViewer {
     });
 
     effect(() => {
-      const source = this.src();
+      const source = this.effectiveSource();
       const wasmUrl = this.wasmUrl();
 
       if (!this.isViewInitialized || !this.isBrowser) {
@@ -233,7 +239,7 @@ export class PdfViewer {
     this.isViewInitialized = true;
 
     if (this.isBrowser) {
-      void this.loadDocument(this.src(), this.wasmUrl());
+      void this.loadDocument(this.effectiveSource(), this.wasmUrl());
     }
   }
 
@@ -259,6 +265,23 @@ export class PdfViewer {
 
   zoomOut(): void {
     this.zoom.set(this.roundZoom(this.zoom() - this.sanitizeZoomStep()));
+  }
+
+  togglePageList(): void {
+    this.pageListVisible.update((isVisible) => !isVisible);
+  }
+
+  protected onPdfFileSelected(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    const file = inputElement.files?.item(0);
+    inputElement.value = '';
+
+    if (!file) {
+      return;
+    }
+
+    this.activePage.set(1);
+    this.uploadedSource.set(file);
   }
 
   setPage(pageNumber: number): void {

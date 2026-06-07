@@ -2,6 +2,26 @@
   @if (showToolbar()) {
     <ngs-panel-header flex>
       <div class="pdf-viewer-toolbar" aria-label="PDF viewer controls">
+        @if (showPageList()) {
+          <button
+            ngsIconButton
+            type="button"
+            [attr.aria-label]="pageListVisible() ? 'Hide pages panel' : 'Show pages panel'"
+            [attr.aria-pressed]="pageListVisible()"
+            (click)="togglePageList()">
+            <ngs-icon
+              [name]="pageListVisible() ? 'fluent:panel-left-contract-24-regular' : 'fluent:panel-left-expand-24-regular'" />
+          </button>
+        }
+        <input
+          #pdfFileInput
+          class="pdf-viewer-toolbar__file-input"
+          type="file"
+          accept="application/pdf,.pdf"
+          (change)="onPdfFileSelected($event)" />
+        <button ngsIconButton type="button" aria-label="Upload PDF" (click)="pdfFileInput.click()">
+          <ngs-icon name="fluent:arrow-upload-24-regular" />
+        </button>
         <button ngsIconButton type="button" aria-label="Previous page" [disabled]="!canGoPrevious()" (click)="previousPage()">
           <ngs-icon name="fluent:chevron-up-24-regular" />
         </button>
@@ -21,7 +41,7 @@
     </ngs-panel-header>
   }
 
-  @if (showPageList() && hasDocument()) {
+  @if (isPageListVisible()) {
     <ngs-panel-sidebar>
       <div class="pdf-viewer-sidebar" #pageList>
         <div class="pdf-viewer-sidebar__title">Pages</div>
@@ -57,16 +77,13 @@
 
   <ngs-panel-content>
     <div class="pdf-viewer-body" #viewerBody (scroll)="onViewerScroll()">
-      @if (isLoading()) {
-        <div class="pdf-viewer-state">
-          <ngs-progress-spinner mode="indeterminate" [diameter]="40" />
-        </div>
-      } @else if (errorState()) {
+      <ngs-block-loader [loading]="isLoading()">Loading PDF...</ngs-block-loader>
+      @if (errorState()) {
         <div class="pdf-viewer-state pdf-viewer-state--error">
           <ngs-icon name="fluent:error-circle-24-regular" />
           <span>PDF could not be loaded.</span>
         </div>
-      } @else if (!src()) {
+      } @else if (!effectiveSource()) {
         <div class="pdf-viewer-state">
           <ngs-icon name="fluent:document-pdf-24-regular" />
           <span>No PDF selected.</span>
