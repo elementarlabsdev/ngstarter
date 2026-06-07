@@ -24,17 +24,30 @@
     align-items: center;
   }
 
-  input {
-    border: none;
-    background: none;
-    outline: none;
-    font: inherit;
-    width: max-content;
-    box-sizing: border-box;
-    padding-right: 6px;
-    padding-left: 4px;
-    position: relative;
-    z-index: 0;
+  .country-empty,
+  .country-loading {
+    padding: --spacing(3);
+    color: var(--ngs-color-on-surface-variant);
+    font-size: var(--ngs-font-size-sm);
+  }
+
+  .country-loading {
+    padding-block: --spacing(2);
+  }
+
+  .phone-input-container {
+    input {
+      border: none;
+      background: none;
+      outline: none;
+      font: inherit;
+      width: max-content;
+      box-sizing: border-box;
+      padding-right: 6px;
+      padding-left: 4px;
+      position: relative;
+      z-index: 0;
+    }
   }
 
   .icon-wrapper {

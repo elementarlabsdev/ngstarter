@@ -3,9 +3,8 @@
 :host {
   display: block;
 
-  .ngs-select-trigger-icon,
-  .select-option-icon {
-    font-size: 1.25rem;
+  .flag-icon {
+    --ngs-icon-size: 18px !important;
   }
 
   .select-option-content {
@@ -22,6 +21,7 @@
   .select-option-icon {
     flex: none;
     line-height: 0;
+    --ngs-icon-size: 18px !important;
   }
 
   .select-option-text {
@@ -39,5 +39,11 @@
     color: var(--ngs-color-neutral-500);
     display: inline-block;
     margin-inline-start: 0.125rem;
+  }
+
+  .select-loading {
+    padding: --spacing(2) --spacing(4);
+    color: var(--ngs-color-on-surface-variant);
+    font-size: var(--ngs-font-size-sm);
   }
 }

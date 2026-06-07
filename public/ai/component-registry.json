@@ -6911,6 +6911,10 @@
       "cssTokens": [
         "--ngs-color-neutral-500",
         "--ngs-color-neutral-600",
+        "--ngs-color-on-surface-variant",
+        "--ngs-color-surface-container-low",
+        "--ngs-control-radius",
+        "--ngs-font-size-sm",
         "--ngs-icon-size",
         "--ngs-phone-input-color",
         "--ngs-phone-input-flag-display",

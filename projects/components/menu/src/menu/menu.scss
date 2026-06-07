@@ -14,14 +14,15 @@
     max-height: var(--ngs-menu-max-height, 65vh);
   }
 
+  display: flex;
+  flex-direction: column;
   min-width: var(--ngs-menu-min-width, 112px);
   max-width: var(--ngs-menu-max-width, 280px);
   outline: var(--ngs-menu-border, var(--ngs-dropdown-border));
-  overflow: auto;
+  overflow: hidden;
   animation-name: ngs-menu-panel-showing;
   animation-duration: 150ms;
   animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-  padding: var(--ngs-menu-padding, var(--ngs-dropdown-padding, --spacing(2)));
 
   &.ngs-menu-below {
     transform-origin: top;
@@ -60,5 +61,15 @@
 }
 
 .ngs-menu-content {
-  padding: 0;
+  overflow: auto;
+  max-height: inherit;
+  padding: var(--ngs-menu-padding, var(--ngs-dropdown-padding, --spacing(2)));
+}
+
+ngs-menu-header,
+ngs-menu-footer,
+[ngs-menu-header],
+[ngs-menu-footer] {
+  flex: none;
+  z-index: 1;
 }

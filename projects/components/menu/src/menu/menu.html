@@ -9,7 +9,7 @@
     tabindex="-1"
     role="menu"
   >
-    <ng-content select="[ngs-menu-header]"/>
+    <ng-content select="ngs-menu-header,[ngs-menu-header]"/>
     <div class="ngs-menu-content">
       @if (content()) {
         <ng-container [ngTemplateOutlet]="content()!.templateRef" [ngTemplateOutletContext]="_context()" />
@@ -17,6 +17,6 @@
         <ng-content />
       }
     </div>
-    <ng-content select="[ngs-menu-footer]"/>
+    <ng-content select="ngs-menu-footer,[ngs-menu-footer]"/>
   </div>
 </ng-template>

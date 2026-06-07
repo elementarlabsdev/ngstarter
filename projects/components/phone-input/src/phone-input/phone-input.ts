@@ -16,7 +16,7 @@ import {
 import { FormGroupDirective, NG_VALIDATORS, NgControl, NgForm, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ErrorStateMatcher, Ripple } from '@ngstarter-ui/components/core';
 import { FormFieldControl } from '@ngstarter-ui/components/form-field';
-import { Menu, MenuTrigger, MenuItem } from '@ngstarter-ui/components/menu';
+import { Menu, MenuDivider, MenuHeader, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
 import {
   AsYouType,
   CountryCode as CC,
@@ -30,9 +30,8 @@ import { PhoneNumberFormat } from '../model/phone-number-format.model';
 import { phoneValidator } from '../phone.validator';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
-import { SearchPipe } from '../search.pipe';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Divider } from '@ngstarter-ui/components/divider';
+import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'ngs-phone-input',
@@ -46,10 +45,11 @@ import { Divider } from '@ngstarter-ui/components/divider';
     Menu,
     ReactiveFormsModule,
     FormsModule,
+    MenuHeader,
     MenuItem,
+    MenuDivider,
     Input,
-    SearchPipe,
-    Divider,
+    Button,
   ],
   providers: [
     CountryCode,
@@ -69,6 +69,9 @@ import { Divider } from '@ngstarter-ui/components/divider';
   }
 })
 export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, FormFieldControl<any> {
+  private static readonly COUNTRY_RENDER_CHUNK_SIZE = 32;
+  private static readonly COUNTRY_RENDER_CHUNK_DELAY = 50;
+
   private _destroyRef = inject(DestroyRef);
   private _changeDetectorRef = inject(ChangeDetectorRef);
   private countryCodeData = inject(CountryCode);
@@ -79,7 +82,7 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
 
   static nextId = 0;
 
-  readonly menuSearchInput = viewChild<ElementRef<HTMLInputElement>>('menuSearchInput');
+  readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
   readonly focusable = viewChild.required<ElementRef>('focusable');
 
   private _focused = signal(false);
@@ -98,9 +101,28 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
   selectedCountry = signal<Country | null>(null);
   numberInstance?: PhoneNumber;
   private _value: any;
-  searchCriteria?: string;
+  searchTerm = signal('');
+  visibleCountryCount = signal(PhoneInput.COUNTRY_RENDER_CHUNK_SIZE);
+  filteredCountries = computed(() => {
+    const searchTerm = this.searchTerm().trim().toLowerCase();
+
+    if (!searchTerm) {
+      return this.allCountries;
+    }
+
+    return this.allCountries.filter((country) => {
+      return `${country.name}${country.phoneCode}`
+        .toLowerCase()
+        .includes(searchTerm);
+    });
+  });
+  visibleCountries = computed(() => {
+    return this.filteredCountries().slice(0, this.visibleCountryCount());
+  });
 
   private _previousFormattedNumber?: string;
+  private _countryRenderTimeout: ReturnType<typeof setTimeout> | undefined;
+  private _countrySearchFocusTimeout: ReturnType<typeof setTimeout> | undefined;
 
   onTouched = () => {}
   propagateChange = (_: any) => {}
@@ -258,6 +280,7 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
   }
 
   ngOnDestroy() {
+    this.clearCountryMenuTimeouts();
     this.stateChanges.complete();
     this._focusMonitor.stopMonitoring(this._elementRef);
   }
@@ -315,6 +338,76 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
     this.countryChanged.emit(this.selectedCountry() as Country);
     this.onPhoneNumberChange();
     el.focus();
+  }
+
+  protected focusSearchInput(): void {
+    this.searchInput()?.nativeElement.focus();
+  }
+
+  protected openCountryMenu(): void {
+    this.visibleCountryCount.set(PhoneInput.COUNTRY_RENDER_CHUNK_SIZE);
+    this.scheduleCountryRendering();
+    this._countrySearchFocusTimeout = setTimeout(() => this.focusSearchInput());
+  }
+
+  protected closeCountryMenu(): void {
+    this.clearCountryMenuTimeouts();
+    this.searchTerm.set('');
+    this.visibleCountryCount.set(PhoneInput.COUNTRY_RENDER_CHUNK_SIZE);
+  }
+
+  protected onCountrySearch(searchTerm: string): void {
+    this.searchTerm.set(searchTerm);
+    this.visibleCountryCount.set(PhoneInput.COUNTRY_RENDER_CHUNK_SIZE);
+    this.scheduleCountryRendering();
+  }
+
+  protected clearSearch(event: MouseEvent): void {
+    event.stopPropagation();
+    this.onCountrySearch('');
+    this.focusSearchInput();
+  }
+
+  private scheduleCountryRendering(): void {
+    this.clearCountryRenderTimeout();
+
+    if (this.visibleCountryCount() >= this.filteredCountries().length) {
+      return;
+    }
+
+    this._countryRenderTimeout = setTimeout(() => {
+      this.visibleCountryCount.update((count) => {
+        return Math.min(
+          count + PhoneInput.COUNTRY_RENDER_CHUNK_SIZE,
+          this.filteredCountries().length
+        );
+      });
+      this.scheduleCountryRendering();
+      this._changeDetectorRef.markForCheck();
+    }, PhoneInput.COUNTRY_RENDER_CHUNK_DELAY);
+  }
+
+  private clearCountryMenuTimeouts(): void {
+    this.clearCountryRenderTimeout();
+    this.clearCountrySearchFocusTimeout();
+  }
+
+  private clearCountryRenderTimeout(): void {
+    if (!this._countryRenderTimeout) {
+      return;
+    }
+
+    clearTimeout(this._countryRenderTimeout);
+    this._countryRenderTimeout = undefined;
+  }
+
+  private clearCountrySearchFocusTimeout(): void {
+    if (!this._countrySearchFocusTimeout) {
+      return;
+    }
+
+    clearTimeout(this._countrySearchFocusTimeout);
+    this._countrySearchFocusTimeout = undefined;
   }
 
   public getCountry(shortCode: CC): Country {

@@ -66,6 +66,9 @@ export class CountrySelect
     ControlValueAccessor,
     FormFieldControl<string | null>
 {
+  private static readonly COUNTRY_RENDER_CHUNK_SIZE = 32;
+  private static readonly COUNTRY_RENDER_CHUNK_DELAY = 50;
+
   private _elementRef = inject(ElementRef);
   private _renderer = inject(Renderer2);
   private _formField = inject(FORM_FIELD, { optional: true });
@@ -76,6 +79,7 @@ export class CountrySelect
   readonly stateChanges = new Subject<void>();
 
   protected searchTerm = model('');
+  protected visibleCountryCount = signal(CountrySelect.COUNTRY_RENDER_CHUNK_SIZE);
   private readonly _valueSignal = signal<string | null>(null);
   private readonly _focusedSignal = signal(false);
   private _touched = false;
@@ -103,6 +107,10 @@ export class CountrySelect
     );
   });
 
+  readonly visibleCountries = computed(() => {
+    return this.filteredCountries().slice(0, this.visibleCountryCount());
+  });
+
   readonly selectedCountryDisplay = computed(() => {
     return this.internalCountries.find(c => c.code === this._valueSignal());
   });
@@ -120,6 +128,8 @@ export class CountrySelect
 
   private onChangeFn: (value: string | null) => void = () => {};
   private onTouchedFn: () => void = () => {};
+  private _countryRenderTimeout: ReturnType<typeof setTimeout> | undefined;
+  private _countrySearchFocusTimeout: ReturnType<typeof setTimeout> | undefined;
 
   constructor() {
     if (this.ngControl) {
@@ -127,6 +137,7 @@ export class CountrySelect
     }
 
     this.destroyRef.onDestroy(() => {
+      this.clearCountrySelectTimeouts();
       this.fm.stopMonitoring(this.elRef.nativeElement);
       this.stateChanges.complete();
     });
@@ -166,6 +177,7 @@ export class CountrySelect
   }
 
   ngOnDestroy(): void {
+    this.clearCountrySelectTimeouts();
   }
 
   get value(): string | null {
@@ -276,20 +288,30 @@ export class CountrySelect
 
   clearSearch(event: MouseEvent): void {
     event.stopPropagation();
-    this.searchTerm.set('');
+    this.onCountrySearch('');
     this.searchInput().nativeElement.focus();
   }
 
+  onCountrySearch(searchTerm: string): void {
+    this.searchTerm.set(searchTerm);
+    this.visibleCountryCount.set(CountrySelect.COUNTRY_RENDER_CHUNK_SIZE);
+    this.scheduleCountryRendering();
+  }
+
   onSelectOpened(): void {
-    setTimeout(() => {
+    this.visibleCountryCount.set(CountrySelect.COUNTRY_RENDER_CHUNK_SIZE);
+    this.scheduleCountryRendering();
+    this._countrySearchFocusTimeout = setTimeout(() => {
       this.searchInput().nativeElement.focus();
     });
     this.opened.emit();
   }
 
   onSelectClosed(): void {
+    this.clearCountrySelectTimeouts();
     this._focusedSignal.set(false);
     this.searchTerm.set('');
+    this.visibleCountryCount.set(CountrySelect.COUNTRY_RENDER_CHUNK_SIZE);
 
     if (!this._touched) {
       this.onTouchedFn();
@@ -299,5 +321,46 @@ export class CountrySelect
 
   focus(): void {
     this.ngsSelect()?.focus();
+  }
+
+  private scheduleCountryRendering(): void {
+    this.clearCountryRenderTimeout();
+
+    if (this.visibleCountryCount() >= this.filteredCountries().length) {
+      return;
+    }
+
+    this._countryRenderTimeout = setTimeout(() => {
+      this.visibleCountryCount.update((count) => {
+        return Math.min(
+          count + CountrySelect.COUNTRY_RENDER_CHUNK_SIZE,
+          this.filteredCountries().length
+        );
+      });
+      this.scheduleCountryRendering();
+    }, CountrySelect.COUNTRY_RENDER_CHUNK_DELAY);
+  }
+
+  private clearCountrySelectTimeouts(): void {
+    this.clearCountryRenderTimeout();
+    this.clearCountrySearchFocusTimeout();
+  }
+
+  private clearCountryRenderTimeout(): void {
+    if (!this._countryRenderTimeout) {
+      return;
+    }
+
+    clearTimeout(this._countryRenderTimeout);
+    this._countryRenderTimeout = undefined;
+  }
+
+  private clearCountrySearchFocusTimeout(): void {
+    if (!this._countrySearchFocusTimeout) {
+      return;
+    }
+
+    clearTimeout(this._countrySearchFocusTimeout);
+    this._countrySearchFocusTimeout = undefined;
   }
 }

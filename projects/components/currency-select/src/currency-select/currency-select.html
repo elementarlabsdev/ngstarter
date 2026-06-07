@@ -11,7 +11,9 @@
     @let selectedCurrency = selectedCurrencyDisplay();
     @if (selectedCurrency) {
       <span class="ngs-select-trigger-content">
-        <span class="ngs-select-trigger-icon">{{ selectedCurrency.flag }}</span>
+        <ngs-icon
+          [name]="'circle-flags:' + selectedCurrency.countryCode.toLowerCase()"
+          class="flag-icon"/>
         <span class="ngs-select-trigger-text">
           <span class="currency-code">
             {{ selectedCurrency.code }}
@@ -37,7 +39,8 @@
              type="text"
              placeholder="Search..."
              autocomplete="off"
-             [(ngModel)]="searchTerm"
+             [ngModel]="searchTerm()"
+             (ngModelChange)="onCurrencySearch($event)"
              class="w-full text-sm focus:outline-none border-b border-surface-container-high focus:border-b-primary h-14 px-3">
       @if (searchTerm().trim()) {
         <div class="absolute end-1 top-1/2 -translate-y-1/2">
@@ -54,10 +57,12 @@
     </div>
   </ngs-select-header>
 
-  @for (currency of filteredCurrencies(); track currency.code) {
+  @for (currency of visibleCurrencies(); track currency.code) {
     <ngs-option [value]="currency.code">
-      <span class="select-option-content">
-        <span class="select-option-icon">{{ currency.flag }}</span>
+      <div class="flex items-center gap-2">
+        <ngs-icon
+          [name]="'circle-flags:' + currency.countryCode.toLowerCase()"
+          class="select-option-icon"/>
         <span class="select-option-text">
           <span class="currency-code">
             {{ currency.code }}
@@ -67,7 +72,7 @@
             &ndash; {{ currency.name }}
           }
         </span>
-      </span>
+      </div>
     </ngs-option>
   } @empty {
     @if (searchTerm()) {
@@ -75,5 +80,11 @@
         <span i18n>Currency not found</span>.
       </div>
     }
+  }
+
+  @if (visibleCurrencyCount() < filteredCurrencies().length) {
+    <div class="select-loading">
+      Loading more currencies...
+    </div>
   }
 </ngs-select>

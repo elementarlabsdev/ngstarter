@@ -64,6 +64,9 @@ export class CurrencySelect
     ControlValueAccessor,
     FormFieldControl<string | null>
 {
+  private static readonly CURRENCY_RENDER_CHUNK_SIZE = 32;
+  private static readonly CURRENCY_RENDER_CHUNK_DELAY = 50;
+
   private _elementRef = inject(ElementRef);
   private _renderer = inject(Renderer2);
   private _formField = inject(FORM_FIELD, { optional: true });
@@ -76,6 +79,7 @@ export class CurrencySelect
   autofilled?: boolean;
 
   protected searchTerm = model('');
+  protected visibleCurrencyCount = signal(CurrencySelect.CURRENCY_RENDER_CHUNK_SIZE);
   private readonly _valueSignal = signal<string | null>(null);
   private readonly _focusedSignal = signal(false);
   private _touched = false;
@@ -102,6 +106,10 @@ export class CurrencySelect
       currency.code.toLowerCase().includes(filterValue)
     );
   });
+  readonly visibleCurrencies = computed(() => {
+    return this.filteredCurrencies().slice(0, this.visibleCurrencyCount());
+  });
+
   readonly selectedCurrencyDisplay = computed(() => {
     return this.internalCurrencies.find(c => c.code === this._valueSignal());
   });
@@ -119,6 +127,8 @@ export class CurrencySelect
 
   private onChangeFn: (value: string | null) => void = () => {};
   private onTouchedFn: () => void = () => {};
+  private _currencyRenderTimeout: ReturnType<typeof setTimeout> | undefined;
+  private _currencySearchFocusTimeout: ReturnType<typeof setTimeout> | undefined;
 
   constructor() {
     if (this.ngControl) {
@@ -126,6 +136,7 @@ export class CurrencySelect
     }
 
     this.destroyRef.onDestroy(() => {
+      this.clearCurrencySelectTimeouts();
       this.fm.stopMonitoring(this.elRef.nativeElement);
       this.stateChanges.complete();
     });
@@ -165,6 +176,7 @@ export class CurrencySelect
   }
 
   ngOnDestroy(): void {
+    this.clearCurrencySelectTimeouts();
   }
 
   get value(): string | null {
@@ -275,20 +287,30 @@ export class CurrencySelect
 
   clearSearch(event: MouseEvent): void {
     event.stopPropagation();
-    this.searchTerm.set('');
+    this.onCurrencySearch('');
     this.searchInput()?.nativeElement.focus();
   }
 
+  onCurrencySearch(searchTerm: string): void {
+    this.searchTerm.set(searchTerm);
+    this.visibleCurrencyCount.set(CurrencySelect.CURRENCY_RENDER_CHUNK_SIZE);
+    this.scheduleCurrencyRendering();
+  }
+
   onSelectOpened(): void {
-    setTimeout(() => {
+    this.visibleCurrencyCount.set(CurrencySelect.CURRENCY_RENDER_CHUNK_SIZE);
+    this.scheduleCurrencyRendering();
+    this._currencySearchFocusTimeout = setTimeout(() => {
       this.searchInput()?.nativeElement.focus();
     });
     this.opened.emit();
   }
 
   onSelectClosed(): void {
+    this.clearCurrencySelectTimeouts();
     this._focusedSignal.set(false);
     this.searchTerm.set('');
+    this.visibleCurrencyCount.set(CurrencySelect.CURRENCY_RENDER_CHUNK_SIZE);
 
     if (!this._touched) {
       this.onTouchedFn();
@@ -298,5 +320,46 @@ export class CurrencySelect
 
   focus(): void {
     this.ngsSelect()?.focus();
+  }
+
+  private scheduleCurrencyRendering(): void {
+    this.clearCurrencyRenderTimeout();
+
+    if (this.visibleCurrencyCount() >= this.filteredCurrencies().length) {
+      return;
+    }
+
+    this._currencyRenderTimeout = setTimeout(() => {
+      this.visibleCurrencyCount.update((count) => {
+        return Math.min(
+          count + CurrencySelect.CURRENCY_RENDER_CHUNK_SIZE,
+          this.filteredCurrencies().length
+        );
+      });
+      this.scheduleCurrencyRendering();
+    }, CurrencySelect.CURRENCY_RENDER_CHUNK_DELAY);
+  }
+
+  private clearCurrencySelectTimeouts(): void {
+    this.clearCurrencyRenderTimeout();
+    this.clearCurrencySearchFocusTimeout();
+  }
+
+  private clearCurrencyRenderTimeout(): void {
+    if (!this._currencyRenderTimeout) {
+      return;
+    }
+
+    clearTimeout(this._currencyRenderTimeout);
+    this._currencyRenderTimeout = undefined;
+  }
+
+  private clearCurrencySearchFocusTimeout(): void {
+    if (!this._currencySearchFocusTimeout) {
+      return;
+    }
+
+    clearTimeout(this._currencySearchFocusTimeout);
+    this._currencySearchFocusTimeout = undefined;
   }
 }

@@ -5,7 +5,8 @@
     [ngsMenuTriggerFor]="menu"
     class="country-selector pe-1.5"
     [disabled]="disabled"
-    (menuOpened)="menuSearchInput()?.nativeElement?.focus()">
+    (menuOpened)="openCountryMenu()"
+    (menuClosed)="closeCountryMenu()">
     @if (selectedCountry()) {
       <ngs-icon [name]="'circle-flags:' + selectedCountry()?.shortCode" class="flag-icon" />
 
@@ -15,6 +16,7 @@
     }
     <ngs-icon name="fluent:chevron-down-24-regular" class="text-neutral-500 size-4 relative ms-0.5"/>
   </button>
+
   <input
     ngsInput
     type="tel"
@@ -30,32 +32,65 @@
     class="grow"
     #focusable>
 </div>
+
 <ngs-menu #menu="ngsMenu">
-  @for (country of preferredCountriesInDropDown; track country) {
+  <ngs-menu-header>
+    <div class="sticky top-0 z-1 bg-surface-container-lowest">
+      <input #searchInput
+             type="text"
+             placeholder="Search..."
+             autocomplete="off"
+             [ngModel]="searchTerm()"
+             (ngModelChange)="onCountrySearch($event)"
+             class="w-full text-sm focus:outline-none border-b border-border focus:border-b-primary h-14 px-3">
+      @if (searchTerm().trim()) {
+        <div class="absolute end-1 top-1/2 -translate-y-1/2">
+          <button
+            ngsIconButton
+            (click)="clearSearch($event)"
+            class="clear-button"
+            type="button"
+            aria-label="Clear search">
+            <ngs-icon name="fluent:dismiss-24-regular"/>
+          </button>
+        </div>
+      }
+    </div>
+  </ngs-menu-header>
+
+  @for (country of preferredCountriesInDropDown; track country.shortCode) {
     <button type="button" ngs-menu-item (click)="onCountrySelect(country, focusable)">
       <div class="flex items-center gap-2">
         <ngs-icon [name]="'circle-flags:' + country.shortCode" class="flag-icon" />
         <div class="label-wrapper">
           {{ country.name }}
-          <span [class.whitespace-nowrap]="!searchCriteria" class="text-neutral-500">{{ country.phoneCode }}</span>
+          <span [class.whitespace-nowrap]="!searchTerm()" class="text-neutral-500">{{ country.phoneCode }}</span>
         </div>
       </div>
     </button>
   }
 
   @if (preferredCountriesInDropDown.length) {
-    <ngs-divider/>
+    <ngs-menu-divider/>
   }
 
-  @for (country of allCountries | search : searchCriteria; track country) {
+  @for (country of visibleCountries(); track country.shortCode) {
     <button type="button" ngs-menu-item (click)="onCountrySelect(country, focusable)">
       <div class="flex items-center gap-2">
         <ngs-icon [name]="'circle-flags:' + country.shortCode" class="flag-icon" />
         <div>
           {{ country.name }}
-          <span [class.whitespace-nowrap]="!searchCriteria" class="text-neutral-500">{{ country.phoneCode }}</span>
+          <span [class.whitespace-nowrap]="!searchTerm()" class="text-neutral-500">{{ country.phoneCode }}</span>
         </div>
       </div>
     </button>
+  } @empty {
+    <div class="country-empty text-sm">No countries found.</div>
+  }
+
+  @if (visibleCountryCount() < filteredCountries().length) {
+    <div class="country-loading">
+      Loading more countries...
+    </div>
   }
 </ngs-menu>

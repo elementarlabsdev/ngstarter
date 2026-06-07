@@ -11,7 +11,9 @@
     @let selectedCountry = selectedCountryDisplay();
     @if (selectedCountry) {
       <span class="ngs-select-trigger-content">
-        <span class="ngs-select-trigger-icon">{{ selectedCountry.flag }}</span>
+        <ngs-icon
+          [name]="'circle-flags:' + selectedCountry.code.toLowerCase()"
+          class="flag-icon"/>
         <span class="ngs-select-trigger-text">
           {{ selectedCountry.name }}
           @if (showCountryCode()) {
@@ -34,7 +36,8 @@
              type="text"
              placeholder="Search..."
              autocomplete="off"
-             [(ngModel)]="searchTerm"
+             [ngModel]="searchTerm()"
+             (ngModelChange)="onCountrySearch($event)"
              class="w-full text-sm focus:outline-none border-b border-surface-container-high focus:border-b-primary h-14 px-3">
       @if (searchTerm().trim()) {
         <div class="absolute end-1 top-1/2 -translate-y-1/2">
@@ -51,17 +54,19 @@
     </div>
   </ngs-select-header>
 
-  @for (country of filteredCountries(); track country.code) {
+  @for (country of visibleCountries(); track country.code) {
     <ngs-option [value]="country.code">
-      <span class="select-option-content">
-        <span class="select-option-icon">{{ country.flag }}</span>
+      <div class="flex items-center gap-2">
+        <ngs-icon
+          [name]="'circle-flags:' + country.code.toLowerCase()"
+          class="select-option-icon"/>
         <span class="select-option-text">
-          {{ country.name }}
+        {{ country.name }}
           @if (showCountryCode()) {
             <span class="code">({{ country.code }})</span>
           }
-        </span>
       </span>
+      </div>
     </ngs-option>
   } @empty {
     @if (searchTerm()) {
@@ -69,5 +74,11 @@
         <span i18n>Country not found</span>.
       </div>
     }
+  }
+
+  @if (visibleCountryCount() < filteredCountries().length) {
+    <div class="select-loading">
+      Loading more countries...
+    </div>
   }
 </ngs-select>
