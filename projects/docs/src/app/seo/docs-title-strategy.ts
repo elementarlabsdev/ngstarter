@@ -176,6 +176,13 @@ const LIBRARY_TITLES: Record<string, SeoTitleConfig> = {
   'form-renderer': { label: 'Form Renderer', detail: 'Schema-driven Forms', apiKind: null },
   'image-designer': { label: 'Image Designer', detail: 'Visual Image Editing', apiKind: null },
   'kanban-board': { label: 'Kanban Board', detail: 'Workflow Boards', apiKind: null },
+  'pdf-viewer': {
+    label: 'PDF Viewer',
+    detail: 'Inline PDF Documents',
+    job: 'render PDF documents inline with EmbedPDF Core and PDFium',
+    apiDetail: 'Inputs, Events and PDFium Asset Setup',
+    apiKind: null,
+  },
   'video-player': { label: 'Video Player', detail: 'Media Playback UI', apiKind: null },
   'visual-builder': { label: 'Visual Builder', detail: 'Drag and Drop UI Building', apiKind: null },
 };
@@ -280,7 +287,7 @@ export class DocsTitleStrategy extends TitleStrategy {
         return this.metadata(
           'Angular UI Libraries',
           'Data Grids, Editors, and Builders',
-          'Explore NgStarter Angular UI libraries for data grids, schema-driven forms, kanban boards, visual builders, content editors, and media players.',
+          'Explore NgStarter Angular UI libraries for data grids, schema-driven forms, kanban boards, visual builders, content editors, PDF viewers, and media players.',
         );
       }
 

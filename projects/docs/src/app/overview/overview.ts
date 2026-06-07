@@ -410,6 +410,11 @@ export class Overview {
       name: 'Pin Input'
     },
     {
+      routerLink: '/libraries/pdf-viewer',
+      imageUrl: 'assets/overview/pdf-viewer.svg',
+      name: 'PDF Viewer'
+    },
+    {
       routerLink: '/components/popover',
       imageUrl: 'assets/overview/popover.svg',
       name: 'Popover'

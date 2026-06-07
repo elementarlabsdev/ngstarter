@@ -1,0 +1,28 @@
+<app-page>
+  <h1 appPageTitle>PDF Viewer</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p class="docs-seo-intro mb-6 text-base leading-7 text-neutral-600">
+        The NgStarter Angular PDF Viewer component renders PDF documents inline with EmbedPDF Core and PDFium. Use it for contracts, invoices, reports, statements, manuals, policy documents, attachments, and document review surfaces where a PDF should stay inside the current Angular layout.
+      </p>
+
+      <p>
+        PDF Viewer accepts a URL, Blob, ArrayBuffer, or Uint8Array source, initializes the EmbedPDF engine through
+        <code>&#64;embedpdf/core</code>, renders pages as browser-safe object URLs, and exposes loading, error,
+        loaded, page changed, and page rendered states. Its built-in shell uses <code>ngs-panel</code> regions
+        with a left page preview list for quick navigation. Configure <code>wasmUrl</code> to point at the copied
+        <code>pdfium.wasm</code> asset in your application.
+      </p>
+    </main>
+
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/libraries/pdf-viewer" ngs-tab-link>Overview</a>
+      <a routerLink="/libraries/pdf-viewer/api" ngs-tab-link>Api</a>
+      <a routerLink="/libraries/pdf-viewer/basic-example" ngs-tab-link>Basic Example</a>
+    </nav>
+
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

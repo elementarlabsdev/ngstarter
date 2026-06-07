@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate-ai-metadata.mjs",
   "package": "@ngstarter-ui/components",
   "description": "AI-readable registry for NgStarter UI Angular secondary entry points.",
-  "componentCount": 124,
+  "componentCount": 125,
   "conventions": {
     "importPattern": "@ngstarter-ui/components/<component>",
     "selectorPrefix": "ngs",
@@ -2925,7 +2925,9 @@
       ],
       "cssTokens": [
         "--ngs-color-neutral-500",
-        "--ngs-dropdown-item-gap"
+        "--ngs-color-on-surface-variant",
+        "--ngs-dropdown-item-gap",
+        "--ngs-font-size-sm"
       ],
       "example": null
     },
@@ -3028,7 +3030,9 @@
       ],
       "cssTokens": [
         "--ngs-color-neutral-500",
-        "--ngs-dropdown-item-gap"
+        "--ngs-color-on-surface-variant",
+        "--ngs-dropdown-item-gap",
+        "--ngs-font-size-sm"
       ],
       "example": null
     },
@@ -5916,7 +5920,6 @@
         "--ngs-menu-border",
         "--ngs-menu-divider-color",
         "--ngs-menu-divider-margin",
-        "--ngs-menu-footer-padding",
         "--ngs-menu-item-active-background",
         "--ngs-menu-item-color",
         "--ngs-menu-item-disabled-color",
@@ -5931,6 +5934,7 @@
         "--ngs-menu-max-width",
         "--ngs-menu-min-width",
         "--ngs-menu-padding",
+        "--ngs-menu-panel-bg",
         "--ngs-menu-shadow"
       ],
       "example": null
@@ -6843,6 +6847,97 @@
       "example": null
     },
     {
+      "name": "pdf-viewer",
+      "title": "Pdf Viewer",
+      "overviewName": "PDF Viewer",
+      "category": "libraries",
+      "package": "@ngstarter-ui/components",
+      "importPath": "@ngstarter-ui/components/pdf-viewer",
+      "publicApi": "projects/components/pdf-viewer/public-api.ts",
+      "sourceRoot": "projects/components/pdf-viewer/src",
+      "docsPath": "/libraries/pdf-viewer",
+      "docsOverviewSource": "projects/docs/src/app/libraries/pdf-viewer/overview/overview.html",
+      "purpose": "Import PDF Viewer from &#64;ngstarter-ui/components/pdf-viewer .",
+      "useWhen": "Choose Pdf Viewer when the workflow matches examples such as Basic pdf viewer.",
+      "exampleTopics": [
+        "Basic pdf viewer"
+      ],
+      "minimalExample": "<ngs-pdf-viewer\n  [src]=\"src\"\n  [wasmUrl]=\"wasmUrl\"\n  class=\"pdf-viewer-example\" />",
+      "exampleFiles": [
+        {
+          "name": "basic-pdf-viewer-example",
+          "title": "Basic pdf viewer",
+          "file": "projects/docs/src/app/libraries/pdf-viewer/_examples/basic-pdf-viewer-example/basic-pdf-viewer-example.html",
+          "source": "<ngs-pdf-viewer\n  [src]=\"src\"\n  [wasmUrl]=\"wasmUrl\"\n  class=\"pdf-viewer-example\" />"
+        }
+      ],
+      "previewAsset": "projects/components/pdf-viewer/preview.svg",
+      "selectors": [
+        "ngs-pdf-viewer"
+      ],
+      "exportedSymbols": [
+        "PdfViewer",
+        "PdfViewerEngineService",
+        "PdfViewerLoadedEvent",
+        "PdfViewerPageRenderedEvent",
+        "PdfViewerPageView",
+        "PdfViewerSelectionRectView",
+        "PdfViewerSource",
+        "PdfViewerTextGlyphView",
+        "PdfViewerTextRectView",
+        "PdfViewerThumbnailView"
+      ],
+      "inputs": [
+        "maxScale",
+        "minScale",
+        "page",
+        "renderAll",
+        "scale",
+        "showPageList",
+        "showPageNumbers",
+        "showToolbar",
+        "src",
+        "wasmUrl",
+        "withAnnotations",
+        "withForms",
+        "zoomStep"
+      ],
+      "outputs": [
+        "error",
+        "loaded",
+        "pageChanged",
+        "pageRendered"
+      ],
+      "cssTokens": [
+        "--ngs-color-danger",
+        "--ngs-color-on-surface",
+        "--ngs-color-on-surface-variant",
+        "--ngs-color-outline-variant",
+        "--ngs-color-primary",
+        "--ngs-color-primary-container",
+        "--ngs-color-surface",
+        "--ngs-color-surface-container-low",
+        "--ngs-font-size-sm",
+        "--ngs-font-size-xs",
+        "--ngs-pdf-viewer-background",
+        "--ngs-pdf-viewer-border-color",
+        "--ngs-pdf-viewer-height",
+        "--ngs-pdf-viewer-page-background",
+        "--ngs-pdf-viewer-page-shadow",
+        "--ngs-pdf-viewer-radius",
+        "--ngs-pdf-viewer-selection-background",
+        "--ngs-pdf-viewer-sidebar-width",
+        "--ngs-radius-md",
+        "--ngs-shadow-md",
+        "--ngs-shadow-xs",
+        "--ngs-spacing-1",
+        "--ngs-spacing-2",
+        "--ngs-spacing-3",
+        "--ngs-spacing-6"
+      ],
+      "example": null
+    },
+    {
       "name": "phone-input",
       "title": "Phone Input",
       "overviewName": "Phone Input",
@@ -6912,10 +7007,7 @@
         "--ngs-color-neutral-500",
         "--ngs-color-neutral-600",
         "--ngs-color-on-surface-variant",
-        "--ngs-color-surface-container-low",
-        "--ngs-control-radius",
         "--ngs-font-size-sm",
-        "--ngs-icon-size",
         "--ngs-phone-input-color",
         "--ngs-phone-input-flag-display",
         "--ngs-phone-input-opacity"

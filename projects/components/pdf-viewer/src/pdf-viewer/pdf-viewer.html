@@ -1,0 +1,122 @@
+<ngs-panel class="pdf-viewer-panel">
+  @if (showToolbar()) {
+    <ngs-panel-header flex>
+      <div class="pdf-viewer-toolbar" aria-label="PDF viewer controls">
+        <button ngsIconButton type="button" aria-label="Previous page" [disabled]="!canGoPrevious()" (click)="previousPage()">
+          <ngs-icon name="fluent:chevron-up-24-regular" />
+        </button>
+        <span class="pdf-viewer-toolbar__page">{{ activePage() }} / {{ pageCount() || 1 }}</span>
+        <button ngsIconButton type="button" aria-label="Next page" [disabled]="!canGoNext()" (click)="nextPage()">
+          <ngs-icon name="fluent:chevron-down-24-regular" />
+        </button>
+        <span class="pdf-viewer-toolbar__spacer"></span>
+        <button ngsIconButton type="button" aria-label="Zoom out" [disabled]="!canZoomOut()" (click)="zoomOut()">
+          <ngs-icon name="fluent:zoom-out-24-regular" />
+        </button>
+        <span class="pdf-viewer-toolbar__zoom">{{ zoomLabel() }}</span>
+        <button ngsIconButton type="button" aria-label="Zoom in" [disabled]="!canZoomIn()" (click)="zoomIn()">
+          <ngs-icon name="fluent:zoom-in-24-regular" />
+        </button>
+      </div>
+    </ngs-panel-header>
+  }
+
+  @if (showPageList() && hasDocument()) {
+    <ngs-panel-sidebar>
+      <div class="pdf-viewer-sidebar" #pageList>
+        <div class="pdf-viewer-sidebar__title">Pages</div>
+        <div class="pdf-viewer-sidebar__pages" aria-label="PDF pages">
+          @for (pageItem of pageItems(); track pageItem.pageNumber) {
+            <button
+              class="pdf-viewer-sidebar__page"
+              type="button"
+              [class.is-active]="pageItem.pageNumber === activePage()"
+              [attr.aria-current]="pageItem.pageNumber === activePage() ? 'page' : null"
+              [attr.aria-label]="'Open page ' + pageItem.pageNumber"
+              [attr.data-ngs-pdf-page-button]="pageItem.pageNumber"
+              (click)="setPage(pageItem.pageNumber)">
+              <span class="pdf-viewer-sidebar__thumb" aria-hidden="true">
+                @if (pageItem.thumbnail; as thumbnail) {
+                  <img
+                    [src]="thumbnail.url"
+                    [attr.width]="thumbnail.width"
+                    [attr.height]="thumbnail.height"
+                    alt=""
+                    draggable="false" />
+                } @else {
+                  <ngs-icon name="fluent:document-24-regular" />
+                }
+              </span>
+              <span class="pdf-viewer-sidebar__label">Page {{ pageItem.pageNumber }}</span>
+            </button>
+          }
+        </div>
+      </div>
+    </ngs-panel-sidebar>
+  }
+
+  <ngs-panel-content>
+    <div class="pdf-viewer-body" #viewerBody (scroll)="onViewerScroll()">
+      @if (isLoading()) {
+        <div class="pdf-viewer-state">
+          <ngs-progress-spinner mode="indeterminate" [diameter]="40" />
+        </div>
+      } @else if (errorState()) {
+        <div class="pdf-viewer-state pdf-viewer-state--error">
+          <ngs-icon name="fluent:error-circle-24-regular" />
+          <span>PDF could not be loaded.</span>
+        </div>
+      } @else if (!src()) {
+        <div class="pdf-viewer-state">
+          <ngs-icon name="fluent:document-pdf-24-regular" />
+          <span>No PDF selected.</span>
+        </div>
+      } @else {
+        <div class="pdf-viewer-pages">
+          @for (pdfPage of renderedPages(); track pdfPage.pageNumber) {
+            <article
+              class="pdf-viewer-page"
+              [attr.aria-label]="'PDF page ' + pdfPage.pageNumber"
+              [attr.data-ngs-pdf-page]="pdfPage.pageNumber">
+              @if (showPageNumbers()) {
+                <div class="pdf-viewer-page__number">Page {{ pdfPage.pageNumber }}</div>
+              }
+              <div
+                class="pdf-viewer-page__surface"
+                [style.width.px]="pdfPage.width"
+                [style.height.px]="pdfPage.height"
+                (pointerdown)="startTextSelection($event, pdfPage)"
+                (pointermove)="updateTextSelection($event, pdfPage)"
+                (pointerup)="finishTextSelection($event, pdfPage)"
+                (pointercancel)="cancelTextSelection()"
+                (mousedown)="startTextSelection($event, pdfPage)"
+                (mousemove)="updateTextSelection($event, pdfPage)"
+                (mouseup)="finishTextSelection($event, pdfPage)">
+                <img
+                  [src]="pdfPage.url"
+                  [alt]="'PDF page ' + pdfPage.pageNumber"
+                  [attr.width]="pdfPage.width"
+                  [attr.height]="pdfPage.height"
+                  draggable="false" />
+                @if (selectionRectsForPage(pdfPage.pageNumber); as selectionRects) {
+                  @if (selectionRects.length > 0) {
+                    <div class="pdf-viewer-page__selection-layer" aria-hidden="true">
+                      @for (selectionRect of selectionRects; track selectionRect.left + '-' + selectionRect.top + '-' + $index) {
+                        <div
+                          class="pdf-viewer-page__selection-rect"
+                          [style.left.px]="selectionRect.left"
+                          [style.top.px]="selectionRect.top"
+                          [style.width.px]="selectionRect.width"
+                          [style.height.px]="selectionRect.height"></div>
+                      }
+                    </div>
+                  }
+                }
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </div>
+  </ngs-panel-content>
+</ngs-panel>

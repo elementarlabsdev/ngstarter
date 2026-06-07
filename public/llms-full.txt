@@ -336,7 +336,7 @@ Typography:
   exports: `countries`, `Country`, `CountrySelect`
   inputs: `disabled`, `placeholder`, `required`, `searchTerm`, `showCountryCode`
   outputs: `closed`, `opened`
-  tokens: `--ngs-color-neutral-500`, `--ngs-dropdown-item-gap`
+  tokens: `--ngs-color-neutral-500`, `--ngs-color-on-surface-variant`, `--ngs-dropdown-item-gap`, `--ngs-font-size-sm`
 - crop: `@ngstarter-ui/components/crop` docs: /components/crop
   purpose: Let users choose a rectangle or circle crop area on top of an existing image or visual preview.
   use when: Use for avatar dialogs, cover image forms, thumbnail preparation, media management screens, and content editor flows where the user chooses the visible crop area. Crop emits selectionApplied with pixel coordinates, percentages, and container size. It does not upload files, save images, zoom the image, open a gallery, compare images, or process the final bitmap; handle those steps outside the component.
@@ -353,7 +353,7 @@ Typography:
   exports: `currencies`, `Currency`, `CurrencySelect`
   inputs: `disabled`, `placeholder`, `required`, `searchTerm`, `showCountryName`
   outputs: `closed`, `opened`
-  tokens: `--ngs-color-neutral-500`, `--ngs-dropdown-item-gap`
+  tokens: `--ngs-color-neutral-500`, `--ngs-color-on-surface-variant`, `--ngs-dropdown-item-gap`, `--ngs-font-size-sm`
 - data-view: `@ngstarter-ui/components/data-view` docs: /libraries/data-view
   purpose: Build operational data grids for records that users need to inspect, organize, select, and act on.
   use when: Use for datatables and working data surfaces in admin screens, CRM and ERP records, users, orders, invoices, logs, tasks, assets, and any dataset where the table is the main interactive work surface. Choose DataView when users need row actions, selection, sorting, search/filter state, pagination, loading or empty states, column resizing, column visibility/order, pinned or sticky columns, custom cell renderers, refresh, snapshots, server-side data, or ngsDataViewActionBar. DataView is configured with columnDefs plus local data or a server-side datasource. Do not use for small static tables or simple read-only tabular content; use Table. Do not use as a card list, layout grid, chart widget, report summary, or form editor.
@@ -736,6 +736,15 @@ Typography:
   inputs: `accentThreshold`, `customCharsCriteriaMessage`, `customValidator`, `digitsCriteriaMessage`, `enableDigitRule`, `enableLengthRule`, `enableLowerCaseLetterRule`, `enableScoreInfo`, `enableSpecialCharRule`, `enableUpperCaseLetterRule`, `externalError`, `lowerCaseCriteriaMessage`, `max`, `min`, `minCharsCriteriaMessage`, `ngsIconDone`, `ngsIconError`, `password`, `passwordComponent`, `specialCharsCriteriaMessage`, `tabindex`, `upperCaseCriteriaMessage`, `visible`, `warnThreshold`
   outputs: `strengthChanged`
   tokens: `--ngs-color-danger`, `--ngs-color-green-500`, `--ngs-color-warning`, `--ngs-progress-bar-active-indicator-color`, `--ngs-progress-bar-active-indicator-height`, `--ngs-progress-bar-track-height`
+- pdf-viewer: `@ngstarter-ui/components/pdf-viewer` docs: /libraries/pdf-viewer
+  purpose: Import PDF Viewer from &#64;ngstarter-ui/components/pdf-viewer .
+  use when: Choose Pdf Viewer when the workflow matches examples such as Basic pdf viewer.
+  example topics: Basic pdf viewer
+  selectors: `ngs-pdf-viewer`
+  exports: `PdfViewer`, `PdfViewerEngineService`, `PdfViewerLoadedEvent`, `PdfViewerPageRenderedEvent`, `PdfViewerPageView`, `PdfViewerSelectionRectView`, `PdfViewerSource`, `PdfViewerTextGlyphView`, `PdfViewerTextRectView`, `PdfViewerThumbnailView`
+  inputs: `maxScale`, `minScale`, `page`, `renderAll`, `scale`, `showPageList`, `showPageNumbers`, `showToolbar`, `src`, `wasmUrl`, `withAnnotations`, `withForms`, `zoomStep`
+  outputs: `error`, `loaded`, `pageChanged`, `pageRendered`
+  tokens: `--ngs-color-danger`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-outline-variant`, `--ngs-color-primary`, `--ngs-color-primary-container`, `--ngs-color-surface`, `--ngs-color-surface-container-low`, `--ngs-font-size-sm`, `--ngs-font-size-xs`, `--ngs-pdf-viewer-background`, `--ngs-pdf-viewer-border-color`, `--ngs-pdf-viewer-height`, `--ngs-pdf-viewer-page-background`, `--ngs-pdf-viewer-page-shadow`, `--ngs-pdf-viewer-radius`
 - phone-input: `@ngstarter-ui/components/phone-input` docs: /forms/phone-input
   purpose: Capture real phone numbers with country selection, flag, dial code, formatting, and libphonenumber-js validation.
   use when: Use ngs-phone-input inside one ngs-form-field for profile, contact, billing, onboarding, checkout, support, invite, and contact forms when the value must be a real phone number. Use formControlName or ngModel, show invalidPhone with ngs-error, set defaultSelectedCountryCode when the initial country should not be us, use onlyCountries to restrict available countries, preferredCountries to pin common countries to the top, format="default | national | international" for display formatting, and countryChanged when the screen needs to react to country changes. Do not use plain ngsInput, NumberInput, or InputMask for country-aware phone numbers. Do not use CountrySelect instead of PhoneInput; CountrySelect chooses a country but does not capture a phone number. Do not use for OTP, MFA, passcodes, or invite codes; use PinInput.
@@ -744,7 +753,7 @@ Typography:
   exports: `Country`, `CountryCode`, `PhoneInput`, `PhoneNumberFormat`, `phoneValidator`, `SearchPipe`
   inputs: `autocomplete`, `defaultSelectedCountryCode`, `disabled`, `errorStateMatcher`, `format`, `onlyCountries`, `placeholder`, `preferredCountries`
   outputs: `countryChanged`
-  tokens: `--ngs-color-neutral-500`, `--ngs-color-neutral-600`, `--ngs-color-on-surface-variant`, `--ngs-color-surface-container-low`, `--ngs-control-radius`, `--ngs-font-size-sm`, `--ngs-icon-size`, `--ngs-phone-input-color`, `--ngs-phone-input-flag-display`, `--ngs-phone-input-opacity`
+  tokens: `--ngs-color-neutral-500`, `--ngs-color-neutral-600`, `--ngs-color-on-surface-variant`, `--ngs-font-size-sm`, `--ngs-phone-input-color`, `--ngs-phone-input-flag-display`, `--ngs-phone-input-opacity`
 - pin-input: `@ngstarter-ui/components/pin-input` docs: /forms/pin-input
   purpose: Capture short one-character-per-cell codes for verification and secure access flows.
   use when: Use ngs-pin-input as a standalone form control for OTP, MFA, SMS or email verification codes, invite codes, passcodes, payment verification, and secure access codes. Use ngModel or formControlName, length for the number of cells, placeholder for the empty-cell hint, acceptOnly for allowed symbols with digits as the default, and disabled for disabled state. The component manages one-character cells and focus movement between them. Do not use PinInput for phone numbers; use PhoneInput. Do not use for creating or changing passwords; use ngsInput with PasswordStrength. Do not use for numeric settings or quantities; use NumberInput. Do not use for long codes, serial numbers, coupons, or arbitrary text; use a normal ngsInput. Do not wrap it in ngs-form-field as if it were a single text input; the component renders its own internal form fields.
