@@ -298,7 +298,7 @@ export class CurrencySelect
   }
 
   onSelectOpened(): void {
-    this.visibleCurrencyCount.set(CurrencySelect.CURRENCY_RENDER_CHUNK_SIZE);
+    this.visibleCurrencyCount.set(this.getInitialVisibleCurrencyCount());
     this.scheduleCurrencyRendering();
     this._currencySearchFocusTimeout = setTimeout(() => {
       this.searchInput()?.nativeElement.focus();
@@ -320,6 +320,26 @@ export class CurrencySelect
 
   focus(): void {
     this.ngsSelect()?.focus();
+  }
+
+  private getInitialVisibleCurrencyCount(): number {
+    const currencies = this.filteredCurrencies();
+    const selectedCurrencyCode = this._valueSignal();
+
+    if (!selectedCurrencyCode) {
+      return CurrencySelect.CURRENCY_RENDER_CHUNK_SIZE;
+    }
+
+    const selectedCurrencyIndex = currencies.findIndex((currency) => currency.code === selectedCurrencyCode);
+
+    if (selectedCurrencyIndex === -1) {
+      return CurrencySelect.CURRENCY_RENDER_CHUNK_SIZE;
+    }
+
+    return Math.min(
+      Math.max(selectedCurrencyIndex + 1, CurrencySelect.CURRENCY_RENDER_CHUNK_SIZE),
+      currencies.length
+    );
   }
 
   private scheduleCurrencyRendering(): void {

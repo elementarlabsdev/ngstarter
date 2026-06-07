@@ -11,9 +11,7 @@
     @let selectedCurrency = selectedCurrencyDisplay();
     @if (selectedCurrency) {
       <span class="ngs-select-trigger-content">
-        <ngs-icon
-          [name]="'circle-flags:' + selectedCurrency.countryCode.toLowerCase()"
-          class="flag-icon"/>
+        <span class="flag-icon" aria-hidden="true">{{ selectedCurrency.flag }}</span>
         <span class="ngs-select-trigger-text">
           <span class="currency-code">
             {{ selectedCurrency.code }}
@@ -60,9 +58,7 @@
   @for (currency of visibleCurrencies(); track currency.code) {
     <ngs-option [value]="currency.code">
       <div class="flex items-center gap-2">
-        <ngs-icon
-          [name]="'circle-flags:' + currency.countryCode.toLowerCase()"
-          class="select-option-icon"/>
+        <span class="select-option-icon text-2xl" aria-hidden="true">{{ currency.flag }}</span>
         <span class="select-option-text">
           <span class="currency-code">
             {{ currency.code }}

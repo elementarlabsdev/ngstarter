@@ -4,7 +4,12 @@
   display: block;
 
   .flag-icon {
-    --ngs-icon-size: 18px !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    font-size: 22px;
+    line-height: 1;
   }
 
   .select-option-content {
@@ -16,12 +21,6 @@
     height: 100%;
     overflow: hidden;
     white-space: nowrap;
-  }
-
-  .select-option-icon {
-    flex: none;
-    line-height: 0;
-    --ngs-icon-size: 18px !important;
   }
 
   .select-option-text {

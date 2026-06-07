@@ -368,6 +368,18 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
     this.focusSearchInput();
   }
 
+  protected countryFlagEmoji(shortCode: string | undefined | null): string {
+    if (!shortCode || shortCode.length !== 2) {
+      return '';
+    }
+
+    const upperShortCode = shortCode.toUpperCase();
+
+    return Array.from(upperShortCode)
+      .map((letter) => String.fromCodePoint(0x1F1E6 + letter.charCodeAt(0) - 65))
+      .join('');
+  }
+
   private scheduleCountryRendering(): void {
     this.clearCountryRenderTimeout();
 

@@ -299,7 +299,7 @@ export class CountrySelect
   }
 
   onSelectOpened(): void {
-    this.visibleCountryCount.set(CountrySelect.COUNTRY_RENDER_CHUNK_SIZE);
+    this.visibleCountryCount.set(this.getInitialVisibleCountryCount());
     this.scheduleCountryRendering();
     this._countrySearchFocusTimeout = setTimeout(() => {
       this.searchInput().nativeElement.focus();
@@ -321,6 +321,26 @@ export class CountrySelect
 
   focus(): void {
     this.ngsSelect()?.focus();
+  }
+
+  private getInitialVisibleCountryCount(): number {
+    const countries = this.filteredCountries();
+    const selectedCountryCode = this._valueSignal();
+
+    if (!selectedCountryCode) {
+      return CountrySelect.COUNTRY_RENDER_CHUNK_SIZE;
+    }
+
+    const selectedCountryIndex = countries.findIndex((country) => country.code === selectedCountryCode);
+
+    if (selectedCountryIndex === -1) {
+      return CountrySelect.COUNTRY_RENDER_CHUNK_SIZE;
+    }
+
+    return Math.min(
+      Math.max(selectedCountryIndex + 1, CountrySelect.COUNTRY_RENDER_CHUNK_SIZE),
+      countries.length
+    );
   }
 
   private scheduleCountryRendering(): void {

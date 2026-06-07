@@ -9,8 +9,13 @@
   }
 
   .flag-icon {
+    display: var(--ngs-phone-input-flag-display, inline-flex);
+    align-items: center;
+    justify-content: center;
+    width: 22px;
     margin-inline-end: --spacing(1);
-    --ngs-icon-size: 18px;
+    font-size: 22px;
+    line-height: 1;
   }
 
   &.is-floating {

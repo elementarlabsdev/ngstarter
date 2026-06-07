@@ -11,9 +11,7 @@
     @let selectedCountry = selectedCountryDisplay();
     @if (selectedCountry) {
       <span class="ngs-select-trigger-content">
-        <ngs-icon
-          [name]="'circle-flags:' + selectedCountry.code.toLowerCase()"
-          class="flag-icon"/>
+        <span class="flag-icon" aria-hidden="true">{{ selectedCountry.flag }}</span>
         <span class="ngs-select-trigger-text">
           {{ selectedCountry.name }}
           @if (showCountryCode()) {
@@ -57,9 +55,7 @@
   @for (country of visibleCountries(); track country.code) {
     <ngs-option [value]="country.code">
       <div class="flex items-center gap-2">
-        <ngs-icon
-          [name]="'circle-flags:' + country.code.toLowerCase()"
-          class="select-option-icon"/>
+        <span class="select-option-icon text-2xl" aria-hidden="true">{{ country.flag }}</span>
         <span class="select-option-text">
         {{ country.name }}
           @if (showCountryCode()) {
