@@ -37,6 +37,8 @@ export class CommandBarComponent implements OnInit, OnDestroy {
 
   @Input() observedElement: HTMLElement | null = null;
 
+  private _linkDialogOpen = false;
+
   props = signal<ContentEditorItemProperty[]>([]);
 
   alignment = computed(() => {
@@ -103,12 +105,14 @@ export class CommandBarComponent implements OnInit, OnDestroy {
 
   addLink() {
     this._textHighlightService.toggleWrapSelection('span', undefined, ['link-selection']);
+    this._linkDialogOpen = true;
     const dialogRef = this._dialog.open(AddLinkDialog, {
       width: '500px',
       disableClose: true,
       hasBackdrop: true
     });
     dialogRef.afterClosed().subscribe((res: any) => {
+      this._linkDialogOpen = false;
       this._textHighlightService.unwrapElementByClassAndSelectContents('link-selection');
 
       if (res && res.href) {
@@ -128,6 +132,7 @@ export class CommandBarComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this._linkDialogOpen = true;
     const dialogRef = this._dialog.open(EditLinkDialog, {
       data: {
         href: link.getAttribute('href'),
@@ -138,6 +143,7 @@ export class CommandBarComponent implements OnInit, OnDestroy {
       hasBackdrop: true
     });
     dialogRef.afterClosed().subscribe((res: any) => {
+      this._linkDialogOpen = false;
       this._textHighlightService.unwrapElementByClassAndSelectContents('link-selection');
 
       if (res) {
@@ -217,7 +223,9 @@ export class CommandBarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._textHighlightService.unwrapElementByClassAndSelectContents('link-selection');
+    if (!this._linkDialogOpen) {
+      this._textHighlightService.unwrapElementByClassAndSelectContents('link-selection');
+    }
     this._unwrapTextSelection();
   }
 

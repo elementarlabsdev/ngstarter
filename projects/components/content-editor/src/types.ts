@@ -1,4 +1,4 @@
-import { InjectionToken, Signal, Type } from '@angular/core';
+import { InjectionToken, InputSignal, Signal, Type } from '@angular/core';
 
 export const CONTENT_BUILDER = new InjectionToken('CONTENT_BUILDER');
 export const CONTENT_EDITOR_BLOCK = new InjectionToken<ReadonlyArray<ContentEditorDataBlock>>('CONTENT_EDITOR_BLOCK');
@@ -119,4 +119,24 @@ export interface ContentEditorOptions {
 export interface ContentEditorBlockRendererDef {
   type: string;
   component: Type<unknown>;
+}
+
+export interface ContentEditorBlockRendererInputs<TContent = unknown, TSettings = unknown> extends Record<string, unknown> {
+  block: ContentEditorBlock | null;
+  id: string;
+  type: string;
+  content: TContent;
+  props: ContentEditorItemProperty[];
+  settings: TSettings;
+  index: number;
+}
+
+export interface ContentEditorBlockRendererInputSignals<TContent = unknown, TSettings = unknown> {
+  block: InputSignal<ContentEditorBlock | null>;
+  id: InputSignal<string>;
+  type: InputSignal<string>;
+  content: InputSignal<TContent>;
+  props: InputSignal<ContentEditorItemProperty[]>;
+  settings: InputSignal<TSettings>;
+  index: InputSignal<number>;
 }

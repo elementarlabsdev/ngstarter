@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Divider } from '@ngstarter-ui/components/divider';
-import { ContentEditorBlock } from '../../types';
+import { ContentEditorBlock, ContentEditorBlockRendererInputSignals, ContentEditorItemProperty } from '../../types';
 
 @Component({
   selector: 'ngs-content-editor-divider-renderer',
@@ -14,6 +14,12 @@ import { ContentEditorBlock } from '../../types';
     'class': 'ngs-content-editor-divider-renderer',
   },
 })
-export class ContentEditorDividerRenderer {
+export class ContentEditorDividerRenderer implements ContentEditorBlockRendererInputSignals<unknown, Record<string, unknown>> {
   block = input<ContentEditorBlock | null>(null);
+  id = input<string>('');
+  type = input<string>('');
+  content = input<unknown>(null);
+  props = input<ContentEditorItemProperty[]>([]);
+  settings = input<Record<string, unknown>>({});
+  index = input<number>(0);
 }

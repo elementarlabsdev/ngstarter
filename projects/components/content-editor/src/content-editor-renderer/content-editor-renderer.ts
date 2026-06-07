@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, Type, computed, inject, input } fro
 import { NgComponentOutlet } from '@angular/common';
 import { CONTENT_EDITOR_BLOCK_RENDERERS } from '../_renderer/content-editor-renderer.config';
 import { CONTENT_EDITOR_DEFAULT_RENDERERS } from '../_renderer/default-renderers';
-import { ContentEditorBlock, ContentEditorBlockRendererDef } from '../types';
+import { ContentEditorBlock, ContentEditorBlockRendererDef, ContentEditorBlockRendererInputs } from '../types';
 
 interface ContentEditorRenderItem {
   block: ContentEditorBlock;
   component: Type<unknown> | null;
-  inputs: Record<string, unknown>;
+  inputs: ContentEditorBlockRendererInputs;
 }
 
 @Component({

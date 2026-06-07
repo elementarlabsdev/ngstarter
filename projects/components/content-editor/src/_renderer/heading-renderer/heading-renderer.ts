@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { SafeHtmlPipe } from '@ngstarter-ui/components/core';
 import {
   ContentEditorBlock,
+  ContentEditorBlockRendererInputSignals,
   ContentEditorHeadingBlockSettings,
   ContentEditorItemProperty,
 } from '../../types';
@@ -22,11 +23,17 @@ import { getHtmlContent, getTextAlignment } from '../renderer-utils';
     '[class.level-3]': 'level() === 3',
   },
 })
-export class ContentEditorHeadingRenderer {
+export class ContentEditorHeadingRenderer implements ContentEditorBlockRendererInputSignals<
+  unknown,
+  Partial<ContentEditorHeadingBlockSettings>
+> {
   block = input<ContentEditorBlock | null>(null);
+  id = input<string>('');
+  type = input<string>('');
   content = input<unknown>('');
   settings = input<Partial<ContentEditorHeadingBlockSettings>>({});
   props = input<ContentEditorItemProperty[]>([]);
+  index = input<number>(0);
 
   protected readonly html = computed(() => getHtmlContent(this.content()));
   protected readonly level = computed(() => {

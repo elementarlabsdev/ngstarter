@@ -27,6 +27,17 @@ html {
   }
 }
 
+.link {
+  color: var(--color-primary);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+}
+
 .input {
   border: 1px solid var(--ngs-field-border-color);
   border-radius: var(--ngs-field-radius);

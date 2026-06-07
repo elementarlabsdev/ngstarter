@@ -2434,6 +2434,8 @@
         "ContentEditorBlockDef",
         "ContentEditorBlockEmpty",
         "ContentEditorBlockRendererDef",
+        "ContentEditorBlockRendererInputs",
+        "ContentEditorBlockRendererInputSignals",
         "ContentEditorCodeBlockSettings",
         "ContentEditorCodeLanguage",
         "ContentEditorCodeRenderer",
@@ -2553,7 +2555,8 @@
         "stopTimeout",
         "suggestions",
         "targetComponent",
-        "textColors"
+        "textColors",
+        "type"
       ],
       "outputs": [
         "backgroundColorChanged",

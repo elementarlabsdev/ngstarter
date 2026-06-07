@@ -1,7 +1,7 @@
 @if (url()) {
   <figure>
     <iframe
-      [attr.title]="type() || 'Embedded content'"
+      [attr.title]="embedType() || 'Embedded content'"
       [src]="url() | safeResourceUrl"
       [attr.width]="width()"
       [attr.height]="height()"

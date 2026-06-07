@@ -3,6 +3,8 @@ import { NgTemplateOutlet } from '@angular/common';
 import { SafeHtmlPipe } from '@ngstarter-ui/components/core';
 import {
   ContentEditorBlock,
+  ContentEditorBlockRendererInputSignals,
+  ContentEditorItemProperty,
   ContentEditorListItem,
   ContentEditorListSettings,
 } from '../../types';
@@ -22,10 +24,17 @@ import {
     '[class.list-ordered]': "listStyle() === 'ordered'",
   },
 })
-export class ContentEditorListRenderer {
+export class ContentEditorListRenderer implements ContentEditorBlockRendererInputSignals<
+  ContentEditorListItem[],
+  Partial<ContentEditorListSettings>
+> {
   block = input<ContentEditorBlock | null>(null);
+  id = input<string>('');
+  type = input<string>('');
   content = input<ContentEditorListItem[]>([]);
+  props = input<ContentEditorItemProperty[]>([]);
   settings = input<Partial<ContentEditorListSettings>>({});
+  index = input<number>(0);
 
   protected readonly items = computed(() => this.content() || []);
   protected readonly listStyle = computed(() => this.settings()?.listStyle || 'bullet');

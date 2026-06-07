@@ -1,7 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { NativeTable } from '@ngstarter-ui/components/table';
 import { SafeHtmlPipe } from '@ngstarter-ui/components/core';
-import { ContentEditorBlock, ContentEditorTableBlockSettings } from '../../types';
+import {
+  ContentEditorBlock,
+  ContentEditorBlockRendererInputSignals,
+  ContentEditorItemProperty,
+  ContentEditorTableBlockSettings,
+} from '../../types';
 import { getDimensionAttribute } from '../renderer-utils';
 
 export interface ContentEditorTableCell {
@@ -28,10 +33,17 @@ export interface ContentEditorTableCell {
     'class': 'ngs-content-editor-table-renderer',
   },
 })
-export class ContentEditorTableRenderer {
+export class ContentEditorTableRenderer implements ContentEditorBlockRendererInputSignals<
+  ContentEditorTableCell[][],
+  ContentEditorTableBlockSettings
+> {
   block = input<ContentEditorBlock | null>(null);
+  id = input<string>('');
+  type = input<string>('');
   content = input<ContentEditorTableCell[][]>([]);
+  props = input<ContentEditorItemProperty[]>([]);
   settings = input<ContentEditorTableBlockSettings>({});
+  index = input<number>(0);
 
   protected readonly rows = computed(() => this.content() || []);
   protected readonly firstRow = computed(() => this.rows()[0] || []);
