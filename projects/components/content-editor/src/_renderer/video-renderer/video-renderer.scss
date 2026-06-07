@@ -1,0 +1,22 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  figure {
+    margin: 0;
+  }
+
+  video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  figcaption {
+    margin-top: --spacing(2);
+    color: var(--ngs-color-neutral-600);
+    font-size: var(--ngs-font-size-sm);
+    text-align: center;
+  }
+}

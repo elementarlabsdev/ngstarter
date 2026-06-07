@@ -1,0 +1,15 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  figure {
+    margin: 0;
+  }
+
+  iframe {
+    background: var(--ngs-color-surface-container-low);
+    display: block;
+    max-width: 100%;
+  }
+}

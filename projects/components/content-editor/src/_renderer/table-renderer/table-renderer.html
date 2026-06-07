@@ -1,0 +1,24 @@
+@if (rows().length > 0) {
+  <div class="table-overflow">
+    <table ngs-native-table>
+      <colgroup>
+        @for (cell of firstRow(); track $index) {
+          <col [attr.width]="width(cell)">
+        }
+      </colgroup>
+      <tbody>
+        @for (row of rows(); track $index) {
+          <tr>
+            @for (cell of row; track $index) {
+              <td
+                [attr.colspan]="colSpan(cell)"
+                [attr.rowspan]="rowSpan(cell)"
+                [innerHTML]="(cell.content || '') | safeHtml"
+              ></td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

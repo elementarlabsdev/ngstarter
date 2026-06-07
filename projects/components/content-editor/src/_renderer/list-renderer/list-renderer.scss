@@ -1,0 +1,30 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .list {
+    margin: 0;
+    padding-inline-start: --spacing(4);
+
+    .list {
+      margin-top: --spacing(2);
+    }
+  }
+
+  li {
+    margin: --spacing(1) 0;
+  }
+
+  &.list-bullet {
+    .list {
+      list-style-type: disc;
+    }
+  }
+
+  &.list-ordered {
+    .list {
+      list-style-type: decimal;
+    }
+  }
+}

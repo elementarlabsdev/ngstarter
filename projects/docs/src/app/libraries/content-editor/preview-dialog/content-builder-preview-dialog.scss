@@ -1,0 +1,8 @@
+@reference 'tailwindcss';
+
+:host {
+  .preview-content {
+    min-height: --spacing(40);
+    width: min(760px, calc(100vw - --spacing(16)));
+  }
+}

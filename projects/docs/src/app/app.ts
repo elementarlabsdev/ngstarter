@@ -314,12 +314,6 @@ export class App implements OnInit {
         {
           key: uuid(),
           type: 'link',
-          name: 'Form Renderer',
-          link: '/forms/form-renderer'
-        },
-        {
-          key: uuid(),
-          type: 'link',
           name: 'Inline Text Edit',
           link: '/forms/inline-text-edit'
         },
@@ -921,6 +915,26 @@ export class App implements OnInit {
           type: 'link',
           name: 'Basic Example',
           link: '/libraries/image-designer/basic-example'
+        },
+      ]
+    },
+    {
+      key: 'form-renderer',
+      type: 'group',
+      name: 'Form Renderer',
+      icon: 'fluent:form-24-regular',
+      children: [
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Overview',
+          link: '/libraries/form-renderer'
+        },
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Api',
+          link: '/libraries/form-renderer/api'
         },
       ]
     },

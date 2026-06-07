@@ -1,0 +1,16 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .table-overflow {
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
+  }
+
+  table {
+    min-width: 100%;
+    word-break: break-word;
+  }
+}

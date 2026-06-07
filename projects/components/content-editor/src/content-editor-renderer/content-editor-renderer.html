@@ -1,0 +1,10 @@
+@for (item of items(); track item.block.id || $index) {
+  @if (item.component) {
+    <div class="block" [attr.data-block-id]="item.block.id" [attr.data-block-type]="item.block.type">
+      <ng-container
+        [ngComponentOutlet]="item.component"
+        [ngComponentOutletInputs]="item.inputs"
+      />
+    </div>
+  }
+}

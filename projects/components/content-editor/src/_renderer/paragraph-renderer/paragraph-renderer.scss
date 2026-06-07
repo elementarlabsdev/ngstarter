@@ -1,0 +1,26 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .content-html {
+    margin: 0;
+    line-height: var(--leading-normal);
+  }
+
+  .align-left {
+    text-align: left;
+  }
+
+  .align-center {
+    text-align: center;
+  }
+
+  .align-right {
+    text-align: right;
+  }
+
+  .align-justify {
+    text-align: justify;
+  }
+}

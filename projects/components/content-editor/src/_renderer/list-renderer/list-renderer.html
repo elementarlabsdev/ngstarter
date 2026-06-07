@@ -1,0 +1,40 @@
+@if (listStyle() === 'ordered') {
+  <ol class="list">
+    <ng-container
+      [ngTemplateOutlet]="listTpl"
+      [ngTemplateOutletContext]="{ $implicit: items(), ordered: true }"
+    />
+  </ol>
+} @else {
+  <ul class="list">
+    <ng-container
+      [ngTemplateOutlet]="listTpl"
+      [ngTemplateOutletContext]="{ $implicit: items(), ordered: false }"
+    />
+  </ul>
+}
+
+<ng-template #listTpl let-list let-ordered="ordered">
+  @for (item of list; track $index) {
+    <li>
+      <span class="content-html" [innerHTML]="item.content | safeHtml"></span>
+      @if (childItems(item).length > 0) {
+        @if (ordered) {
+          <ol class="list">
+            <ng-container
+              [ngTemplateOutlet]="listTpl"
+              [ngTemplateOutletContext]="{ $implicit: childItems(item), ordered: ordered }"
+            />
+          </ol>
+        } @else {
+          <ul class="list">
+            <ng-container
+              [ngTemplateOutlet]="listTpl"
+              [ngTemplateOutletContext]="{ $implicit: childItems(item), ordered: ordered }"
+            />
+          </ul>
+        }
+      }
+    </li>
+  }
+</ng-template>

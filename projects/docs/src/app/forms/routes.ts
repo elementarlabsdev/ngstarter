@@ -7,7 +7,7 @@ export const routes: Routes = [
     loadComponent: () => import('../@meta/category-overview/category-overview').then(c => c.CategoryOverview),
     title: 'Angular Form Components',
     data: {
-      seoIntro: 'The NgStarter Angular form components documentation covers inputs, selects, autocomplete, checkboxes, radio controls, toggles, validation, masking, OTP and MFA pin input, number fields, phone fields, timezone fields, and schema-driven forms.'
+      seoIntro: 'The NgStarter Angular form components documentation covers inputs, selects, autocomplete, checkboxes, radio controls, toggles, validation, masking, OTP and MFA pin input, number fields, phone fields, and timezone fields.'
     }
   },
   {
@@ -89,11 +89,6 @@ export const routes: Routes = [
     path: 'timezone',
     loadChildren: () => import('./timezone/routes').then(m => m.routes),
     title: 'Timezone'
-  },
-  {
-    path: 'form-renderer',
-    loadChildren: () => import('./form-renderer/routes').then(m => m.routes),
-    title: 'Form Renderer'
   },
   {
     path: 'inline-text-edit',

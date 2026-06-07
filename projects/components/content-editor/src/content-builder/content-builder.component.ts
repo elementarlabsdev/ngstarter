@@ -4,7 +4,7 @@ import {
   EventEmitter,
   forwardRef,
   inject,
-  input, numberAttribute,
+  input, numberAttribute, booleanAttribute,
   OnInit, OnDestroy, output, PLATFORM_ID,
   signal,
   ElementRef,
@@ -98,6 +98,8 @@ import { List, ListItem, ListItemIcon, ListItemTitle } from '@ngstarter-ui/compo
   }
 })
 export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy {
+  private static readonly DRAFT_STORAGE_PREFIX = 'ngs-content-builder:draft';
+
   private _platformId = inject(PLATFORM_ID);
   private _store = inject(ContentBuilderStore);
   private elRef = inject(ElementRef<HTMLElement>);
@@ -358,6 +360,9 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   contentChangedDelay = input(500, {
     transform: numberAttribute
   });
+  persistDraft = input(true, {
+    transform: booleanAttribute
+  });
   suggestions = input<any>([
     {
       type: 'heading',
@@ -548,7 +553,8 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   ngOnInit() {
-    const content = this.content();
+    const draftContent = this._getDraftContent();
+    const content = draftContent || this.content();
 
     if (content.length > 0) {
       const lastItem = content[content.length - 1];
@@ -891,7 +897,9 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   emitContentChangeEvent() {
-    this.contentChanged.emit(this.getData());
+    const data = this.getData();
+    this._saveDraft(data);
+    this.contentChanged.emit(data);
   }
 
   selectBlock(blockId: string, multiple = false) {
@@ -1031,6 +1039,50 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     this._scroll$ = null;
+  }
+
+  private _getDraftContent(): ContentEditorBlock[] | null {
+    if (!this._canUseDraftStorage()) {
+      return null;
+    }
+
+    try {
+      const draft = localStorage.getItem(this._getDraftStorageKey());
+
+      if (!draft) {
+        return null;
+      }
+
+      const content = JSON.parse(draft) as ContentEditorBlock[];
+      return Array.isArray(content) ? content : null;
+    } catch {
+      return null;
+    }
+  }
+
+  private _saveDraft(content: ContentEditorBlock[]) {
+    if (!this._canUseDraftStorage()) {
+      return;
+    }
+
+    try {
+      localStorage.setItem(this._getDraftStorageKey(), JSON.stringify(content));
+    } catch {
+    }
+  }
+
+  private _canUseDraftStorage(): boolean {
+    return !isPlatformServer(this._platformId) && this.persistDraft();
+  }
+
+  private _getDraftStorageKey(): string {
+    const elementId = this.elRef.nativeElement.id;
+    const locationKey = typeof window === 'undefined'
+      ? 'server'
+      : `${window.location.pathname}${window.location.search}`;
+    const instanceKey = elementId ? `:${elementId}` : '';
+
+    return `${ContentBuilderComponent.DRAFT_STORAGE_PREFIX}:${locationKey}${instanceKey}`;
   }
 
   onSettingsPopoverClose() {

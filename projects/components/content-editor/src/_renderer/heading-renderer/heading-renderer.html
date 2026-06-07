@@ -1,0 +1,32 @@
+@switch (level()) {
+  @case (1) {
+    <h1
+      class="content-html"
+      [class.align-left]="alignment() === 'left'"
+      [class.align-center]="alignment() === 'center'"
+      [class.align-right]="alignment() === 'right'"
+      [class.align-justify]="alignment() === 'justify'"
+      [innerHTML]="html() | safeHtml"
+    ></h1>
+  }
+  @case (3) {
+    <h3
+      class="content-html"
+      [class.align-left]="alignment() === 'left'"
+      [class.align-center]="alignment() === 'center'"
+      [class.align-right]="alignment() === 'right'"
+      [class.align-justify]="alignment() === 'justify'"
+      [innerHTML]="html() | safeHtml"
+    ></h3>
+  }
+  @default {
+    <h2
+      class="content-html"
+      [class.align-left]="alignment() === 'left'"
+      [class.align-center]="alignment() === 'center'"
+      [class.align-right]="alignment() === 'right'"
+      [class.align-justify]="alignment() === 'justify'"
+      [innerHTML]="html() | safeHtml"
+    ></h2>
+  }
+}

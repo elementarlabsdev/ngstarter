@@ -1,0 +1,18 @@
+<blockquote
+  class="content-html"
+  [class.align-left]="quoteAlignment() === 'left'"
+  [class.align-center]="quoteAlignment() === 'center'"
+  [class.align-right]="quoteAlignment() === 'right'"
+  [class.align-justify]="quoteAlignment() === 'justify'"
+  [innerHTML]="quoteHtml() | safeHtml"
+></blockquote>
+@if (captionHtml()) {
+  <figcaption
+    class="caption-html"
+    [class.align-left]="captionAlignment() === 'left'"
+    [class.align-center]="captionAlignment() === 'center'"
+    [class.align-right]="captionAlignment() === 'right'"
+    [class.align-justify]="captionAlignment() === 'justify'"
+    [innerHTML]="captionHtml() | safeHtml"
+  ></figcaption>
+}

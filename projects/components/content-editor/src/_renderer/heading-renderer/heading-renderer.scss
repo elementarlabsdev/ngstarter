@@ -1,0 +1,45 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .content-html {
+    margin: 0;
+    font-weight: 700;
+    line-height: 1.12;
+  }
+
+  &.level-1 {
+    .content-html {
+      font-size: 3rem;
+    }
+  }
+
+  &.level-2 {
+    .content-html {
+      font-size: 2.25rem;
+    }
+  }
+
+  &.level-3 {
+    .content-html {
+      font-size: 1.875rem;
+    }
+  }
+
+  .align-left {
+    text-align: left;
+  }
+
+  .align-center {
+    text-align: center;
+  }
+
+  .align-right {
+    text-align: right;
+  }
+
+  .align-justify {
+    text-align: justify;
+  }
+}

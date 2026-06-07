@@ -1,0 +1,13 @@
+@if (src()) {
+  <figure>
+    <video
+      [src]="src()"
+      [attr.width]="width()"
+      [attr.height]="height()"
+      controls
+    ></video>
+    @if (caption()) {
+      <figcaption>{{ caption() }}</figcaption>
+    }
+  </figure>
+}

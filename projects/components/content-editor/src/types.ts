@@ -1,4 +1,4 @@
-import { InjectionToken, Signal } from '@angular/core';
+import { InjectionToken, Signal, Type } from '@angular/core';
 
 export const CONTENT_BUILDER = new InjectionToken('CONTENT_BUILDER');
 export const CONTENT_EDITOR_BLOCK = new InjectionToken<ReadonlyArray<ContentEditorDataBlock>>('CONTENT_EDITOR_BLOCK');
@@ -114,4 +114,9 @@ export interface ContentEditorTableBlockSettings {
 
 export interface ContentEditorOptions {
   [prop: string]: any;
+}
+
+export interface ContentEditorBlockRendererDef {
+  type: string;
+  component: Type<unknown>;
 }

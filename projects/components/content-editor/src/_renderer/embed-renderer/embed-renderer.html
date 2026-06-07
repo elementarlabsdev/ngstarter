@@ -1,0 +1,12 @@
+@if (url()) {
+  <figure>
+    <iframe
+      [attr.title]="type() || 'Embedded content'"
+      [src]="url() | safeResourceUrl"
+      [attr.width]="width()"
+      [attr.height]="height()"
+      frameborder="0"
+      allowfullscreen
+    ></iframe>
+  </figure>
+}

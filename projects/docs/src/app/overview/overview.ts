@@ -260,7 +260,7 @@ export class Overview {
       name: 'File Type'
     },
     {
-      routerLink: '/forms/form-renderer',
+      routerLink: '/libraries/form-renderer',
       imageUrl: 'assets/overview/form-renderer.svg',
       name: 'Form Renderer'
     },

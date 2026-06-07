@@ -1,0 +1,8 @@
+<p
+  class="content-html"
+  [class.align-left]="alignment() === 'left'"
+  [class.align-center]="alignment() === 'center'"
+  [class.align-right]="alignment() === 'right'"
+  [class.align-justify]="alignment() === 'justify'"
+  [innerHTML]="html() | safeHtml"
+></p>

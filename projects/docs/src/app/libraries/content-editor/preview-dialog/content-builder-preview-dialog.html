@@ -1,0 +1,13 @@
+<h3 ngs-dialog-title>Preview</h3>
+<ngs-dialog-content>
+  <div class="preview-content">
+    @if (data.blocks.length > 0) {
+      <ngs-content-editor-renderer [content]="data.blocks"/>
+    } @else {
+      <ngs-empty-state>Nothing to preview</ngs-empty-state>
+    }
+  </div>
+</ngs-dialog-content>
+<ngs-dialog-actions align="end">
+  <button ngsButton ngs-dialog-close>Close</button>
+</ngs-dialog-actions>

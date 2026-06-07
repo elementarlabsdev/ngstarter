@@ -1,15 +1,23 @@
-import { Component } from '@angular/core';
-import { ContentBuilderComponent } from '@ngstarter-ui/components/content-editor';
+import { Component, inject } from '@angular/core';
+import { ContentBuilderComponent, ContentEditorBlock } from '@ngstarter-ui/components/content-editor';
+import { Button } from '@ngstarter-ui/components/button';
+import { Dialog } from '@ngstarter-ui/components/dialog';
+import { Icon } from '@ngstarter-ui/components/icon';
+import { ContentBuilderPreviewDialog } from '../preview-dialog/content-builder-preview-dialog';
 
 @Component({
   selector: 'app-content-builder',
   imports: [
-    ContentBuilderComponent
+    Button,
+    ContentBuilderComponent,
+    Icon
   ],
   templateUrl: './content-builder.html',
   styleUrl: './content-builder.scss',
 })
 export class ContentBuilder {
+  private readonly dialog = inject(Dialog);
+
   options = {
     image: {
       uploadFn: (file: File, base64: string) => {
@@ -30,4 +38,30 @@ export class ContentBuilder {
       }
     }
   };
+
+  openPreview(blocks: ContentEditorBlock[]) {
+    this.dialog.open(ContentBuilderPreviewDialog, {
+      width: '840px',
+      maxWidth: 'calc(100vw - 32px)',
+      maxHeight: 'calc(100vh - 32px)',
+      data: {
+        blocks: this.getPreviewBlocks(blocks)
+      }
+    });
+  }
+
+  private getPreviewBlocks(blocks: ContentEditorBlock[]): ContentEditorBlock[] {
+    return blocks
+      .filter(block => !(block.type === 'paragraph' && block.isEmpty))
+      .map(block => ({
+        ...block,
+        content: this.cloneBlockValue(block.content),
+        props: this.cloneBlockValue(block.props),
+        settings: this.cloneBlockValue(block.settings),
+      }));
+  }
+
+  private cloneBlockValue<T>(value: T): T {
+    return value == null ? value : JSON.parse(JSON.stringify(value));
+  }
 }
