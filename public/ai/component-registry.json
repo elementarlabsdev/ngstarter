@@ -6862,13 +6862,13 @@
       "exampleTopics": [
         "Basic pdf viewer"
       ],
-      "minimalExample": "<ngs-pdf-viewer\n  [src]=\"src\"\n  [wasmUrl]=\"wasmUrl\"\n  class=\"pdf-viewer-example\" />",
+      "minimalExample": "<div class=\"pdf-viewer-example-toolbar\">\n  <input\n    #pdfFileInput\n    class=\"pdf-viewer-example-file-input\"\n    type=\"file\"\n    accept=\"application/pdf,.pdf\"\n    (change)=\"onPdfSelected($event)\" />\n  <button ngsButton=\"tonal\" type=\"button\" (click)=\"pdfFileInput.click()\">\n    <ngs-icon name=\"fluent:arrow-upload-24-regular\" />\n    Upload PDF\n  </button>\n</div>\n<ngs-pdf-viewer\n  [src]=\"src()\"\n  [wasmUrl]=\"wasmUrl\"\n  class=\"pdf-viewer-example\" />",
       "exampleFiles": [
         {
           "name": "basic-pdf-viewer-example",
           "title": "Basic pdf viewer",
           "file": "projects/docs/src/app/libraries/pdf-viewer/_examples/basic-pdf-viewer-example/basic-pdf-viewer-example.html",
-          "source": "<ngs-pdf-viewer\n  [src]=\"src\"\n  [wasmUrl]=\"wasmUrl\"\n  class=\"pdf-viewer-example\" />"
+          "source": "<div class=\"pdf-viewer-example-toolbar\">\n  <input\n    #pdfFileInput\n    class=\"pdf-viewer-example-file-input\"\n    type=\"file\"\n    accept=\"application/pdf,.pdf\"\n    (change)=\"onPdfSelected($event)\" />\n  <button ngsButton=\"tonal\" type=\"button\" (click)=\"pdfFileInput.click()\">\n    <ngs-icon name=\"fluent:arrow-upload-24-regular\" />\n    Upload PDF\n  </button>\n</div>\n<ngs-pdf-viewer\n  [src]=\"src()\"\n  [wasmUrl]=\"wasmUrl\"\n  class=\"pdf-viewer-example\" />"
         }
       ],
       "previewAsset": "projects/components/pdf-viewer/preview.svg",
@@ -6894,7 +6894,6 @@
         "renderAll",
         "scale",
         "showPageList",
-        "showPageNumbers",
         "showToolbar",
         "src",
         "wasmUrl",
@@ -6912,6 +6911,7 @@
         "--ngs-color-danger",
         "--ngs-color-on-surface",
         "--ngs-color-on-surface-variant",
+        "--ngs-color-outline",
         "--ngs-color-outline-variant",
         "--ngs-color-primary",
         "--ngs-color-primary-container",

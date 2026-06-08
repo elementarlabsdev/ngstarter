@@ -13,15 +13,6 @@
               [name]="pageListVisible() ? 'fluent:panel-left-contract-24-regular' : 'fluent:panel-left-expand-24-regular'" />
           </button>
         }
-        <input
-          #pdfFileInput
-          class="pdf-viewer-toolbar__file-input"
-          type="file"
-          accept="application/pdf,.pdf"
-          (change)="onPdfFileSelected($event)" />
-        <button ngsIconButton type="button" aria-label="Upload PDF" (click)="pdfFileInput.click()">
-          <ngs-icon name="fluent:arrow-upload-24-regular" />
-        </button>
         <button ngsIconButton type="button" aria-label="Previous page" [disabled]="!canGoPrevious()" (click)="previousPage()">
           <ngs-icon name="fluent:chevron-up-24-regular" />
         </button>
@@ -37,7 +28,74 @@
         <button ngsIconButton type="button" aria-label="Zoom in" [disabled]="!canZoomIn()" (click)="zoomIn()">
           <ngs-icon name="fluent:zoom-in-24-regular" />
         </button>
+        <button ngsIconButton type="button" aria-label="PDF viewer settings" [ngsMenuTriggerFor]="settingsMenu">
+          <ngs-icon name="fluent:settings-24-regular" />
+        </button>
       </div>
+
+      <ngs-menu #settingsMenu="ngsMenu" xPosition="before">
+        <ngs-menu-heading>SPREAD MODE</ngs-menu-heading>
+        <button
+          ngs-menu-item
+          type="button"
+          [selected]="spreadMode() === 'single'"
+          (click)="setSpreadMode('single')">
+          <ngs-icon name="fluent:document-24-regular" />
+          <span>Single Page</span>
+        </button>
+        <button
+          ngs-menu-item
+          type="button"
+          [selected]="spreadMode() === 'two-odd'"
+          (click)="setSpreadMode('two-odd')">
+          <ngs-icon name="fluent:book-open-24-regular" />
+          <span>Two Page (Odd)</span>
+        </button>
+        <button
+          ngs-menu-item
+          type="button"
+          [selected]="spreadMode() === 'two-even'"
+          (click)="setSpreadMode('two-even')">
+          <ngs-icon name="fluent:document-text-24-regular" />
+          <span>Two Page (Even)</span>
+        </button>
+
+        <ngs-menu-divider />
+        <ngs-menu-heading>SCROLL LAYOUT</ngs-menu-heading>
+        <button
+          ngs-menu-item
+          type="button"
+          [selected]="scrollLayout() === 'vertical'"
+          (click)="setScrollLayout('vertical')">
+          <ngs-icon name="fluent:arrow-sort-24-regular" />
+          <span>Vertical</span>
+        </button>
+        <button
+          ngs-menu-item
+          type="button"
+          [selected]="scrollLayout() === 'horizontal'"
+          (click)="setScrollLayout('horizontal')">
+          <ngs-icon name="fluent:arrow-swap-24-regular" />
+          <span>Horizontal</span>
+        </button>
+
+        <ngs-menu-divider />
+        <ngs-menu-heading>PAGE ROTATION</ngs-menu-heading>
+        <button ngs-menu-item type="button" (click)="rotateClockwise()">
+          <ngs-icon name="fluent:arrow-clockwise-24-regular" />
+          <span>Rotate Clockwise</span>
+        </button>
+        <button ngs-menu-item type="button" (click)="rotateCounterClockwise()">
+          <ngs-icon name="fluent:arrow-counterclockwise-24-regular" />
+          <span>Rotate Counter-Clockwise</span>
+        </button>
+
+        <ngs-menu-divider />
+        <button ngs-menu-item type="button" (click)="toggleFullscreen()">
+          <ngs-icon name="fluent:arrow-maximize-24-regular" />
+          <span>Fullscreen</span>
+        </button>
+      </ngs-menu>
     </ngs-panel-header>
   }
 
@@ -64,7 +122,7 @@
                     alt=""
                     draggable="false" />
                 } @else {
-                  <ngs-icon name="fluent:document-24-regular" />
+                  <ngs-image-placeholder />
                 }
               </span>
               <span class="pdf-viewer-sidebar__label">Page {{ pageItem.pageNumber }}</span>
@@ -83,7 +141,7 @@
           <ngs-icon name="fluent:error-circle-24-regular" />
           <span>PDF could not be loaded.</span>
         </div>
-      } @else if (!effectiveSource()) {
+      } @else if (!src()) {
         <div class="pdf-viewer-state">
           <ngs-icon name="fluent:document-pdf-24-regular" />
           <span>No PDF selected.</span>
@@ -95,9 +153,6 @@
               class="pdf-viewer-page"
               [attr.aria-label]="'PDF page ' + pdfPage.pageNumber"
               [attr.data-ngs-pdf-page]="pdfPage.pageNumber">
-              @if (showPageNumbers()) {
-                <div class="pdf-viewer-page__number">Page {{ pdfPage.pageNumber }}</div>
-              }
               <div
                 class="pdf-viewer-page__surface"
                 [style.width.px]="pdfPage.width"
@@ -109,12 +164,20 @@
                 (mousedown)="startTextSelection($event, pdfPage)"
                 (mousemove)="updateTextSelection($event, pdfPage)"
                 (mouseup)="finishTextSelection($event, pdfPage)">
-                <img
-                  [src]="pdfPage.url"
-                  [alt]="'PDF page ' + pdfPage.pageNumber"
-                  [attr.width]="pdfPage.width"
-                  [attr.height]="pdfPage.height"
-                  draggable="false" />
+                @if (isPageImageFresh(pdfPage) && pdfPage.url; as pageUrl) {
+                  <img
+                    [src]="pageUrl"
+                    [alt]="'PDF page ' + pdfPage.pageNumber"
+                    [attr.width]="pdfPage.width"
+                    [attr.height]="pdfPage.height"
+                    draggable="false" />
+                } @else {
+                  <div class="pdf-viewer-page__placeholder" aria-hidden="true">
+                    @if (pdfPage.isRendering) {
+                      <span></span>
+                    }
+                  </div>
+                }
                 @if (selectionRectsForPage(pdfPage.pageNumber); as selectionRects) {
                   @if (selectionRects.length > 0) {
                     <div class="pdf-viewer-page__selection-layer" aria-hidden="true">

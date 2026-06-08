@@ -13,9 +13,12 @@ export interface PdfViewerPageRenderedEvent {
 
 export interface PdfViewerPageView {
   pageNumber: number;
-  url: string;
+  url: string | null;
+  scale: number;
+  renderedScale: number | null;
   width: number;
   height: number;
+  isRendering: boolean;
   textGlyphs: PdfViewerTextGlyphView[];
 }
 

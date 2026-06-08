@@ -92,12 +92,6 @@ export class Api {
       default: 'true'
     },
     {
-      name: 'showPageNumbers',
-      description: 'Show a small page label above each rendered page.',
-      type: 'boolean',
-      default: 'true'
-    },
-    {
       name: 'withAnnotations',
       description: 'Render PDF annotations when supported by the document.',
       type: 'boolean',

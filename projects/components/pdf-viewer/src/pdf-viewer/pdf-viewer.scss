@@ -64,14 +64,6 @@
       flex: 1 1 auto;
     }
 
-    &__file-input {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip: rect(0 0 0 0);
-      white-space: nowrap;
-    }
   }
 
   .pdf-viewer-sidebar {
@@ -112,7 +104,9 @@
       text-align: left;
 
       &:hover {
-        background: var(--ngs-color-surface-container-low, #f5f6f8);
+        .pdf-viewer-sidebar__thumb {
+          border-color: var(--ngs-color-outline, rgba(15, 23, 42, 0.24));
+        }
       }
 
       &:focus-visible {
@@ -121,9 +115,15 @@
       }
 
       &.is-active {
-        border-color: var(--ngs-color-primary, #155eef);
-        background: var(--ngs-color-primary-container, rgba(21, 94, 239, 0.08));
         color: var(--ngs-color-on-surface, #111827);
+
+        .pdf-viewer-sidebar__thumb {
+          border-color: var(--ngs-color-primary, #155eef);
+          background: var(--ngs-color-primary-container, rgba(21, 94, 239, 0.08));
+          box-shadow:
+            0 0 0 2px var(--ngs-color-primary-container, rgba(21, 94, 239, 0.14)),
+            var(--ngs-shadow-xs, 0 1px 2px rgba(15, 23, 42, 0.08));
+        }
       }
     }
 
@@ -145,6 +145,18 @@
         height: 100%;
         object-fit: contain;
         user-select: none;
+      }
+
+      ngs-image-placeholder {
+        width: 100%;
+        height: 100%;
+
+        ::ng-deep {
+          svg {
+            width: 64%;
+            min-width: 0;
+          }
+        }
       }
 
       ngs-icon {
@@ -184,13 +196,6 @@
     width: max-content;
     max-width: none;
 
-    &__number {
-      margin-bottom: var(--ngs-spacing-2, 0.5rem);
-      font-size: var(--ngs-font-size-xs, 0.75rem);
-      color: var(--ngs-color-on-surface-variant, #6b7280);
-      text-align: center;
-    }
-
     &__surface {
       position: relative;
       overflow: hidden;
@@ -210,6 +215,25 @@
         -webkit-user-select: none;
         user-select: none;
         pointer-events: none;
+      }
+    }
+
+    &__placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--ngs-pdf-viewer-page-background);
+      pointer-events: none;
+
+      span {
+        width: 32px;
+        height: 32px;
+        border: 2px solid var(--ngs-color-outline-variant, rgba(15, 23, 42, 0.12));
+        border-top-color: var(--ngs-color-primary, #155eef);
+        border-radius: 999px;
+        animation: ngs-pdf-viewer-page-spin 0.8s linear infinite;
       }
     }
 
@@ -250,5 +274,11 @@
     &--error {
       color: var(--ngs-color-danger, #dc2626);
     }
+  }
+}
+
+@keyframes ngs-pdf-viewer-page-spin {
+  to {
+    transform: rotate(360deg);
   }
 }

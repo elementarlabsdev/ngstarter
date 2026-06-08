@@ -20,6 +20,14 @@ import type { PdfDocumentObject, PdfEngine, PdfPageObject } from '@embedpdf/mode
 import { BlockLoader } from '@ngstarter-ui/components/block-loader';
 import { Button } from '@ngstarter-ui/components/button';
 import { Icon } from '@ngstarter-ui/components/icon';
+import { ImagePlaceholder } from '@ngstarter-ui/components/image-placeholder';
+import {
+  Menu,
+  MenuDivider,
+  MenuHeading,
+  MenuItem,
+  MenuTrigger,
+} from '@ngstarter-ui/components/menu';
 import {
   Panel,
   PanelContent,
@@ -41,6 +49,9 @@ interface PdfViewerPageListItem {
   pageNumber: number;
   thumbnail: PdfViewerThumbnailView | null;
 }
+
+type PdfViewerSpreadMode = 'single' | 'two-odd' | 'two-even';
+type PdfViewerScrollLayout = 'vertical' | 'horizontal';
 
 interface PdfViewerSelectionPoint {
   pageNumber: number;
@@ -67,6 +78,12 @@ interface PdfViewerTextLineView {
     BlockLoader,
     Button,
     Icon,
+    ImagePlaceholder,
+    Menu,
+    MenuDivider,
+    MenuHeading,
+    MenuItem,
+    MenuTrigger,
     Panel,
     PanelContent,
     PanelHeader,
@@ -89,6 +106,7 @@ export class PdfViewer {
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
   private readonly engineService = inject(PdfViewerEngineService);
+  private readonly hostElement = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly viewerBody = viewChild<ElementRef<HTMLElement>>('viewerBody');
@@ -104,7 +122,6 @@ export class PdfViewer {
   renderAll = input(true, { transform: booleanAttribute });
   showToolbar = input(true, { transform: booleanAttribute });
   showPageList = input(true, { transform: booleanAttribute });
-  showPageNumbers = input(true, { transform: booleanAttribute });
   withAnnotations = input(true, { transform: booleanAttribute });
   withForms = input(true, { transform: booleanAttribute });
 
@@ -120,11 +137,11 @@ export class PdfViewer {
   protected readonly pageCount = signal(0);
   protected readonly activePage = signal(1);
   protected readonly zoom = signal(1);
-  protected readonly uploadedSource = signal<Blob | null>(null);
   protected readonly pageListVisible = signal(true);
+  protected readonly spreadMode = signal<PdfViewerSpreadMode>('single');
+  protected readonly scrollLayout = signal<PdfViewerScrollLayout>('horizontal');
   protected readonly selectionRects = signal<PdfViewerSelectionRectView[]>([]);
   protected readonly hasDocument = computed(() => this.pageCount() > 0);
-  protected readonly effectiveSource = computed(() => this.uploadedSource() ?? this.src());
   protected readonly isPageListVisible = computed(() =>
     this.showPageList() && this.hasDocument() && this.pageListVisible(),
   );
@@ -153,21 +170,27 @@ export class PdfViewer {
   private pageIntersectionObserver: IntersectionObserver | null = null;
   private visiblePageRatios = new Map<number, number>();
   private loadToken = 0;
+  private renderToken = 0;
   private scrollSyncFrame: number | null = null;
   private programmaticScrollTargetPage: number | null = null;
   private programmaticScrollTimeout: number | null = null;
   private pageObserverFrame: number | null = null;
   private pageObserverTimeout: number | null = null;
+  private visiblePageRenderFrame: number | null = null;
   private pageObserverRefreshAttempts = 0;
   private selectionStart: PdfViewerSelectionPoint | null = null;
   private isViewInitialized = false;
+  private readonly programmaticScrollMinDuration = 900;
+  private readonly programmaticScrollMaxDuration = 6000;
 
   constructor() {
     this.destroyRef.onDestroy(() => {
       this.loadToken++;
+      this.renderToken++;
       this.cancelScrollSyncFrame();
       this.clearProgrammaticScrollLock();
       this.cancelPageObserverFrame();
+      this.cancelVisiblePageRenderFrame();
       this.disconnectPageObserver();
       this.revokeRenderedPages();
       this.revokeThumbnailPages();
@@ -176,7 +199,7 @@ export class PdfViewer {
     });
 
     effect(() => {
-      const source = this.effectiveSource();
+      const source = this.src();
       const wasmUrl = this.wasmUrl();
 
       if (!this.isViewInitialized || !this.isBrowser) {
@@ -192,7 +215,7 @@ export class PdfViewer {
       const scale = this.sanitizeScale(this.scale());
 
       if (untracked(() => this.zoom()) !== scale) {
-        this.zoom.set(scale);
+        untracked(() => this.setZoom(scale));
       }
     });
 
@@ -216,7 +239,8 @@ export class PdfViewer {
       }
 
       untracked(() => {
-        void this.renderPages(this.loadToken, { zoom, activePage, renderAll, withAnnotations, withForms });
+        this.applyInstantZoom(zoom);
+        this.scheduleVisiblePagesRender({ zoom, activePage, renderAll, withAnnotations, withForms });
       });
     });
 
@@ -239,7 +263,7 @@ export class PdfViewer {
     this.isViewInitialized = true;
 
     if (this.isBrowser) {
-      void this.loadDocument(this.effectiveSource(), this.wasmUrl());
+      void this.loadDocument(this.src(), this.wasmUrl());
     }
   }
 
@@ -260,28 +284,47 @@ export class PdfViewer {
   }
 
   zoomIn(): void {
-    this.zoom.set(this.roundZoom(this.zoom() + this.sanitizeZoomStep()));
+    this.setZoom(this.roundZoom(this.zoom() + this.sanitizeZoomStep()));
   }
 
   zoomOut(): void {
-    this.zoom.set(this.roundZoom(this.zoom() - this.sanitizeZoomStep()));
+    this.setZoom(this.roundZoom(this.zoom() - this.sanitizeZoomStep()));
   }
 
   togglePageList(): void {
     this.pageListVisible.update((isVisible) => !isVisible);
   }
 
-  protected onPdfFileSelected(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-    const file = inputElement.files?.item(0);
-    inputElement.value = '';
+  protected setSpreadMode(mode: PdfViewerSpreadMode): void {
+    this.spreadMode.set(mode);
+  }
 
-    if (!file) {
+  protected setScrollLayout(layout: PdfViewerScrollLayout): void {
+    this.scrollLayout.set(layout);
+  }
+
+  protected rotateClockwise(): void {
+    this.renderedPages.update((pages) => [...pages]);
+  }
+
+  protected rotateCounterClockwise(): void {
+    this.renderedPages.update((pages) => [...pages]);
+  }
+
+  protected toggleFullscreen(): void {
+    if (!this.isBrowser) {
       return;
     }
 
-    this.activePage.set(1);
-    this.uploadedSource.set(file);
+    const target = this.hostElement.nativeElement;
+    const currentFullscreenElement = this.document.fullscreenElement;
+
+    if (currentFullscreenElement) {
+      void this.document.exitFullscreen?.();
+      return;
+    }
+
+    void target.requestFullscreen?.();
   }
 
   setPage(pageNumber: number): void {
@@ -318,11 +361,16 @@ export class PdfViewer {
       }
 
       this.syncActivePageFromViewport();
+      this.scheduleCurrentVisiblePagesRender();
     }) ?? null;
   }
 
   protected selectionRectsForPage(pageNumber: number): PdfViewerSelectionRectView[] {
     return this.selectionRects().filter((rect) => rect.pageNumber === pageNumber);
+  }
+
+  protected isPageImageFresh(page: PdfViewerPageView): boolean {
+    return !!page.url && Math.abs((page.renderedScale ?? 0) - page.scale) < 0.0001;
   }
 
   protected startTextSelection(event: PointerEvent | MouseEvent, page: PdfViewerPageView): void {
@@ -379,6 +427,7 @@ export class PdfViewer {
 
   private async loadDocument(source: PdfViewerSource, wasmUrl: string): Promise<void> {
     const token = ++this.loadToken;
+    this.renderToken++;
     this.isLoading.set(true);
     this.errorState.set(null);
     this.pageCount.set(0);
@@ -422,8 +471,9 @@ export class PdfViewer {
       this.pageCount.set(pdfDocument.pageCount);
       this.activePage.set(this.clamp(this.activePage(), 1, Math.max(pdfDocument.pageCount, 1)));
       this.loaded.emit({ pageCount: pdfDocument.pageCount });
-
-      await this.renderPages(token, {
+      this.initializePageShells(pdfDocument, this.zoom(), this.renderAll(), this.activePage());
+      this.schedulePageObserverRefresh();
+      await this.renderVisiblePages(token, ++this.renderToken, {
         zoom: this.zoom(),
         activePage: this.activePage(),
         renderAll: this.renderAll(),
@@ -442,8 +492,97 @@ export class PdfViewer {
     }
   }
 
-  private async renderPages(
+  private initializePageShells(
+    pdfDocument: PdfDocumentObject,
+    scale: number,
+    renderAll: boolean,
+    activePage: number,
+  ): void {
+    const previousPages = this.renderedPages();
+    const previousPageMap = new Map(previousPages.map((page) => [page.pageNumber, page]));
+    const pageNumbers = this.getPageNumbersToDisplay(pdfDocument, renderAll, activePage);
+    const nextScale = this.sanitizeScale(scale);
+    const nextPages = pageNumbers.map((pageNumber) => {
+      const pdfPage = pdfDocument.pages[pageNumber - 1];
+      const previousPage = previousPageMap.get(pageNumber);
+      const displaySize = this.getPageDisplaySize(pdfPage, nextScale);
+      const isFresh = previousPage?.url && Math.abs((previousPage.renderedScale ?? 0) - nextScale) < 0.0001;
+
+      return {
+        pageNumber,
+        url: isFresh ? previousPage.url : null,
+        scale: nextScale,
+        renderedScale: isFresh ? previousPage.renderedScale : null,
+        width: displaySize.width,
+        height: displaySize.height,
+        isRendering: false,
+        textGlyphs: isFresh ? previousPage.textGlyphs : [],
+      };
+    });
+    const nextUrlSet = new Set(nextPages.map((page) => page.url).filter((url): url is string => !!url));
+
+    for (const page of previousPages) {
+      if (page.url && !nextUrlSet.has(page.url)) {
+        this.revokeObjectUrl(page.url);
+      }
+    }
+
+    this.selectionStart = null;
+    this.selectionRects.set([]);
+    this.disconnectPageObserver();
+    this.renderedPages.set(nextPages);
+  }
+
+  private getPageNumbersToDisplay(
+    pdfDocument: PdfDocumentObject,
+    renderAll: boolean,
+    activePage: number,
+  ): number[] {
+    if (!renderAll) {
+      return [this.clamp(activePage, 1, pdfDocument.pageCount)];
+    }
+
+    return Array.from({ length: pdfDocument.pageCount }, (_, index) => index + 1);
+  }
+
+  private scheduleVisiblePagesRender(
+    options: {
+      zoom: number;
+      activePage: number;
+      renderAll: boolean;
+      withAnnotations: boolean;
+      withForms: boolean;
+    },
+  ): void {
+    const targetWindow = this.document.defaultView;
+
+    if (!targetWindow) {
+      return;
+    }
+
+    this.cancelVisiblePageRenderFrame();
+    const token = this.loadToken;
+    const renderToken = ++this.renderToken;
+
+    this.visiblePageRenderFrame = targetWindow.requestAnimationFrame(() => {
+      this.visiblePageRenderFrame = null;
+      void this.renderVisiblePages(token, renderToken, options);
+    });
+  }
+
+  private scheduleCurrentVisiblePagesRender(): void {
+    this.scheduleVisiblePagesRender({
+      zoom: this.zoom(),
+      activePage: this.activePage(),
+      renderAll: this.renderAll(),
+      withAnnotations: this.withAnnotations(),
+      withForms: this.withForms(),
+    });
+  }
+
+  private async renderVisiblePages(
     token: number,
+    renderToken: number,
     options: {
       zoom: number;
       activePage: number;
@@ -457,17 +596,26 @@ export class PdfViewer {
     }
 
     const pdfDocument = this.pdfDocument;
-    const pages = options.renderAll
-      ? pdfDocument.pages
-      : [pdfDocument.pages[this.clamp(options.activePage, 1, pdfDocument.pageCount) - 1]].filter(Boolean);
-    const nextPages: PdfViewerPageView[] = [];
-    const previousPages = this.renderedPages();
-
     const renderScale = this.sanitizeScale(options.zoom);
-    this.selectionStart = null;
-    this.selectionRects.set([]);
+    const pageNumbers = this.getPriorityPageNumbers(options.activePage, options.renderAll);
 
-    for (const page of pages) {
+    for (const pageNumber of pageNumbers) {
+      if (!this.isRenderCurrent(token, renderToken)) {
+        return;
+      }
+
+      const currentPage = this.renderedPages().find((page) => page.pageNumber === pageNumber);
+
+      if (!currentPage || Math.abs(currentPage.scale - renderScale) > 0.0001) {
+        continue;
+      }
+
+      if (currentPage.url && Math.abs((currentPage.renderedScale ?? 0) - renderScale) < 0.0001) {
+        continue;
+      }
+
+      this.patchRenderedPage(pageNumber, { isRendering: true });
+      const page = pdfDocument.pages[pageNumber - 1];
       const blob = await this.engine.renderPage(pdfDocument, page, {
         scaleFactor: renderScale,
         dpr: this.getDevicePixelRatio(),
@@ -475,33 +623,155 @@ export class PdfViewer {
         withForms: options.withForms,
       }).toPromise();
 
-      if (token !== this.loadToken) {
-        this.document.defaultView?.URL.revokeObjectURL(this.document.defaultView.URL.createObjectURL(blob));
+      if (!this.isRenderCurrent(token, renderToken)) {
+        return;
+      }
+
+      const displaySize = this.getPageDisplaySize(page, renderScale);
+      const textGlyphs = await this.getPageTextGlyphs(pdfDocument, page, renderScale);
+
+      if (!this.isRenderCurrent(token, renderToken)) {
         return;
       }
 
       const url = this.document.defaultView?.URL.createObjectURL(blob) ?? URL.createObjectURL(blob);
-      const pageNumber = page.index + 1;
-      const displaySize = this.getPageDisplaySize(page, renderScale);
-      const textGlyphs = await this.getPageTextGlyphs(pdfDocument, page, renderScale);
-      nextPages.push({ pageNumber, url, width: displaySize.width, height: displaySize.height, textGlyphs });
+      const previousUrl = this.renderedPages().find((renderedPage) => renderedPage.pageNumber === pageNumber)?.url;
+
+      this.patchRenderedPage(pageNumber, {
+        url,
+        scale: renderScale,
+        renderedScale: renderScale,
+        width: displaySize.width,
+        height: displaySize.height,
+        isRendering: false,
+        textGlyphs,
+      });
+
+      if (previousUrl && previousUrl !== url) {
+        this.revokeObjectUrl(previousUrl);
+      }
+
       this.pageRendered.emit({ pageNumber, url, width: displaySize.width, height: displaySize.height });
     }
+  }
 
-    if (token !== this.loadToken) {
-      for (const page of nextPages) {
-        this.revokeObjectUrl(page.url);
-      }
+  private setZoom(scale: number): void {
+    const nextZoom = this.sanitizeScale(scale);
+
+    if (this.zoom() !== nextZoom) {
+      this.zoom.set(nextZoom);
+    }
+
+    this.applyInstantZoom(nextZoom);
+  }
+
+  private applyInstantZoom(scale: number): void {
+    const nextScale = this.sanitizeScale(scale);
+    const pdfDocument = this.pdfDocument;
+    const pages = this.renderedPages();
+
+    if (!pdfDocument || pages.length === 0) {
       return;
     }
 
-    this.disconnectPageObserver();
+    let hasChanges = false;
+    const nextPages = pages.map((page) => {
+      if (Math.abs(page.scale - nextScale) < 0.0001) {
+        return page;
+      }
+
+      hasChanges = true;
+      const pdfPage = pdfDocument.pages[page.pageNumber - 1];
+      const displaySize = this.getPageDisplaySize(pdfPage, nextScale);
+
+      return {
+        ...page,
+        url: null,
+        scale: nextScale,
+        renderedScale: null,
+        width: displaySize.width,
+        height: displaySize.height,
+        isRendering: false,
+        textGlyphs: [],
+      };
+    });
+
+    if (!hasChanges) {
+      return;
+    }
+
+    for (const page of pages) {
+      if (page.url) {
+        this.revokeObjectUrl(page.url);
+      }
+    }
+
+    this.selectionStart = null;
+    this.selectionRects.set([]);
     this.renderedPages.set(nextPages);
     this.schedulePageObserverRefresh();
+  }
 
-    for (const page of previousPages) {
-      this.revokeObjectUrl(page.url);
+  private getPriorityPageNumbers(activePage: number, renderAll: boolean): number[] {
+    if (!this.pdfDocument) {
+      return [];
     }
+
+    const pageCount = this.pdfDocument.pageCount;
+    const visiblePageNumbers = renderAll
+      ? this.getVisiblePageNumbers()
+      : [this.clamp(activePage, 1, pageCount)];
+    const priorityPageNumbers = new Set<number>();
+
+    for (const pageNumber of visiblePageNumbers.length > 0 ? visiblePageNumbers : [activePage]) {
+      for (let candidate = pageNumber - 1; candidate <= pageNumber + 1; candidate++) {
+        if (candidate >= 1 && candidate <= pageCount) {
+          priorityPageNumbers.add(candidate);
+        }
+      }
+    }
+
+    priorityPageNumbers.add(this.clamp(activePage, 1, pageCount));
+
+    return [...priorityPageNumbers].sort((a, b) => {
+      const activeDistance = Math.abs(a - activePage) - Math.abs(b - activePage);
+
+      return activeDistance || a - b;
+    });
+  }
+
+  private getVisiblePageNumbers(): number[] {
+    const container = this.viewerBody()?.nativeElement;
+
+    if (!container) {
+      return [];
+    }
+
+    const containerRect = container.getBoundingClientRect();
+    const prefetchMargin = containerRect.height;
+    const pages = Array.from(container.querySelectorAll<HTMLElement>('[data-ngs-pdf-page]'));
+    const visiblePageNumbers: number[] = [];
+
+    for (const page of pages) {
+      const rect = page.getBoundingClientRect();
+      const pageNumber = Number(page.dataset['ngsPdfPage']);
+
+      if (
+        Number.isFinite(pageNumber) &&
+        rect.bottom >= containerRect.top - prefetchMargin &&
+        rect.top <= containerRect.bottom + prefetchMargin
+      ) {
+        visiblePageNumbers.push(pageNumber);
+      }
+    }
+
+    return visiblePageNumbers;
+  }
+
+  private patchRenderedPage(pageNumber: number, patch: Partial<PdfViewerPageView>): void {
+    this.renderedPages.update((pages) =>
+      pages.map((page) => page.pageNumber === pageNumber ? { ...page, ...patch } : page),
+    );
   }
 
   private async renderThumbnails(
@@ -800,9 +1070,12 @@ export class PdfViewer {
 
   private revokeRenderedPages(): void {
     this.disconnectPageObserver();
+    this.cancelVisiblePageRenderFrame();
 
     for (const page of this.renderedPages()) {
-      this.revokeObjectUrl(page.url);
+      if (page.url) {
+        this.revokeObjectUrl(page.url);
+      }
     }
 
     this.renderedPages.set([]);
@@ -856,6 +1129,10 @@ export class PdfViewer {
     return `ngs-pdf-${Date.now()}-${Math.random().toString(36).slice(2)}`;
   }
 
+  private isRenderCurrent(loadToken: number, renderToken: number): boolean {
+    return loadToken === this.loadToken && renderToken === this.renderToken;
+  }
+
   private cancelScrollSyncFrame(): void {
     if (this.scrollSyncFrame === null) {
       return;
@@ -877,6 +1154,15 @@ export class PdfViewer {
 
     this.document.defaultView?.cancelAnimationFrame(this.pageObserverFrame);
     this.pageObserverFrame = null;
+  }
+
+  private cancelVisiblePageRenderFrame(): void {
+    if (this.visiblePageRenderFrame === null) {
+      return;
+    }
+
+    this.document.defaultView?.cancelAnimationFrame(this.visiblePageRenderFrame);
+    this.visiblePageRenderFrame = null;
   }
 
   private disconnectPageObserver(): void {
@@ -940,6 +1226,7 @@ export class PdfViewer {
     this.visiblePageRatios.clear();
     this.pageIntersectionObserver = new targetWindow.IntersectionObserver((entries) => {
       if (this.isProgrammaticScrollActive()) {
+        this.scheduleCurrentVisiblePagesRender();
         return;
       }
 
@@ -954,6 +1241,7 @@ export class PdfViewer {
       }
 
       this.syncActivePageFromIntersections();
+      this.scheduleCurrentVisiblePagesRender();
     }, {
       root: container,
       threshold: [0, 0.1, 0.25, 0.5, 0.75, 1],
@@ -1004,9 +1292,12 @@ export class PdfViewer {
       return;
     }
 
-    this.startProgrammaticScrollLock(pageNumber);
+    const nextScrollTop = this.getPageScrollTop(container, target);
+    const scrollDistance = Math.abs(container.scrollTop - nextScrollTop);
+
+    this.startProgrammaticScrollLock(pageNumber, scrollDistance);
     container.scrollTo({
-      top: target.offsetTop,
+      top: nextScrollTop,
       behavior: 'smooth',
     });
   }
@@ -1047,6 +1338,7 @@ export class PdfViewer {
     this.activePage.set(pageNumber);
     this.pageChanged.emit(pageNumber);
     this.scrollPageListToPage(pageNumber);
+    this.scheduleCurrentVisiblePagesRender();
   }
 
   private findActivePageInViewport(): number | null {
@@ -1113,12 +1405,35 @@ export class PdfViewer {
     }
 
     container.scrollTo({
-      top: target.offsetTop - container.clientHeight / 2 + target.clientHeight / 2,
+      top: this.getElementScrollTop(container, target, 'center'),
       behavior: 'smooth',
     });
   }
 
-  private startProgrammaticScrollLock(pageNumber: number): void {
+  private getPageScrollTop(container: HTMLElement, target: HTMLElement): number {
+    return this.getElementScrollTop(container, target, 'start');
+  }
+
+  private getElementScrollTop(container: HTMLElement, target: HTMLElement, align: 'start' | 'center'): number {
+    const containerRect = container.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const targetTop = container.scrollTop + targetRect.top - containerRect.top;
+    const alignedTop = align === 'center'
+      ? targetTop - container.clientHeight / 2 + targetRect.height / 2
+      : targetTop;
+
+    return this.clamp(alignedTop, 0, Math.max(0, container.scrollHeight - container.clientHeight));
+  }
+
+  private getProgrammaticScrollTimeout(distance: number): number {
+    return this.clamp(
+      this.programmaticScrollMinDuration + distance * 0.45,
+      this.programmaticScrollMinDuration,
+      this.programmaticScrollMaxDuration,
+    );
+  }
+
+  private startProgrammaticScrollLock(pageNumber: number, distance: number): void {
     const targetWindow = this.document.defaultView;
 
     if (!targetWindow) {
@@ -1130,7 +1445,7 @@ export class PdfViewer {
     this.programmaticScrollTimeout = targetWindow.setTimeout(() => {
       this.programmaticScrollTimeout = null;
       this.completeProgrammaticScroll();
-    }, 900);
+    }, this.getProgrammaticScrollTimeout(distance));
   }
 
   private isProgrammaticScrollActive(): boolean {
@@ -1152,7 +1467,7 @@ export class PdfViewer {
       return;
     }
 
-    if (Math.abs(container.scrollTop - target.offsetTop) <= 2) {
+    if (Math.abs(container.scrollTop - this.getPageScrollTop(container, target)) <= 2) {
       this.completeProgrammaticScroll();
     }
   }
