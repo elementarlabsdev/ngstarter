@@ -150,11 +150,6 @@
     }
 
     .ngs-form-field-affix {
-      --ngs-button-height: calc(
-        var(--ngs-form-field-container-min-height) -
-        var(--ngs-form-field-no-label-padding-y) -
-        var(--ngs-form-field-no-label-padding-y)
-      );
       height: 100%;
     }
 

@@ -1,37 +1,150 @@
-<ngs-panel class="pdf-viewer-panel">
+<ngs-panel class="pdf-viewer-panel h-full overflow-hidden rounded-lg border border-border bg-surface-container-low text-on-surface">
   @if (showToolbar()) {
-    <ngs-panel-header flex>
-      <div class="pdf-viewer-toolbar" aria-label="PDF viewer controls">
-        @if (showPageList()) {
+    <ngs-panel-header class="min-w-0 border-b border-border bg-surface" flex>
+      <ngs-toolbar class="pdf-viewer-toolbar flex h-14 w-full min-w-0 items-center gap-4 overflow-visible px-2 text-on-surface-variant" aria-label="PDF viewer controls">
+        <ngs-toolbar-item class="pdf-viewer-toolbar__start flex min-w-0 flex-none items-center gap-2">
+          @if (showPageList()) {
+            <button
+              class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+              ngsIconButton
+              type="button"
+              [attr.aria-label]="pageListVisible() ? 'Hide pages panel' : 'Show pages panel'"
+              [attr.aria-pressed]="pageListVisible()"
+              (click)="togglePageList()">
+              <ngs-icon
+                class="text-2xl"
+                [name]="pageListVisible() ? 'fluent:panel-left-contract-24-regular' : 'fluent:panel-left-expand-24-regular'" />
+            </button>
+          }
+          <ngs-divider vertical />
+        </ngs-toolbar-item>
+        <ngs-toolbar-title class="min-w-0 flex-1 truncate text-sm! font-semibold! text-on-surface-variant" [title]="displayDocumentName()">
+          {{ displayDocumentName() }}
+        </ngs-toolbar-title>
+
+        <ngs-toolbar-item class="pdf-viewer-toolbar__center flex flex-none items-center gap-5">
+          <div class="pdf-viewer-toolbar__cluster flex min-w-0 items-center gap-2" aria-label="Zoom controls">
+            <button
+              class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+              ngsIconButton
+              type="button"
+              aria-label="Zoom out"
+              [disabled]="!canZoomOut()"
+              (click)="zoomOut()">
+              <ngs-icon class="text-2xl" name="fluent:zoom-out-24-regular" />
+            </button>
+            <button
+              class="pdf-viewer-toolbar__zoom min-w-16 cursor-pointer border-0 bg-transparent p-0 text-center text-sm font-bold text-on-surface hover:text-primary"
+              type="button"
+              aria-label="Zoom presets"
+              [ngsMenuTriggerFor]="zoomMenu">
+              {{ zoomLabel() }}
+            </button>
+            <button
+              class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+              ngsIconButton
+              type="button"
+              aria-label="Zoom in"
+              [disabled]="!canZoomIn()"
+              (click)="zoomIn()">
+              <ngs-icon class="text-2xl" name="fluent:zoom-in-24-regular" />
+            </button>
+          </div>
+
+          <ngs-divider vertical />
+
+          <div class="pdf-viewer-toolbar__cluster flex min-w-0 items-center gap-2" aria-label="Page navigation">
+            <button
+              class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+              ngsIconButton
+              type="button"
+              aria-label="Previous page"
+              [disabled]="!canGoPrevious()"
+              (click)="previousPage()">
+              <ngs-icon class="text-2xl" name="fluent:chevron-left-24-regular" />
+            </button>
+            <span class="pdf-viewer-toolbar__page inline-flex h-9 min-w-24 items-center justify-center gap-2 rounded bg-surface-container-low text-sm font-bold text-on-surface">
+              <span>{{ activePage() }}</span>
+              <span>/</span>
+              <span>{{ pageCount() || 1 }}</span>
+            </span>
+            <button
+              class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+              ngsIconButton
+              type="button"
+              aria-label="Next page"
+              [disabled]="!canGoNext()"
+              (click)="nextPage()">
+              <ngs-icon class="text-2xl" name="fluent:chevron-right-24-regular" />
+            </button>
+          </div>
+        </ngs-toolbar-item>
+
+        <ngs-toolbar-spacer />
+
+        <ngs-toolbar-item class="pdf-viewer-toolbar__end flex min-w-0 flex-1 items-center justify-end gap-2" aria-label="PDF tools">
+          @if (showSearchPanel()) {
+            <button
+              class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+              ngsIconButton
+              type="button"
+              [attr.aria-pressed]="isSearchPanelVisible()"
+              aria-label="Search"
+              (click)="toggleSearchPanel()">
+              <ngs-icon class="text-2xl" name="fluent:search-24-regular" />
+            </button>
+          }
           <button
+            class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
             ngsIconButton
             type="button"
-            [attr.aria-label]="pageListVisible() ? 'Hide pages panel' : 'Show pages panel'"
-            [attr.aria-pressed]="pageListVisible()"
-            (click)="togglePageList()">
-            <ngs-icon
-              [name]="pageListVisible() ? 'fluent:panel-left-contract-24-regular' : 'fluent:panel-left-expand-24-regular'" />
+            aria-label="PDF viewer settings"
+            [ngsMenuTriggerFor]="settingsMenu">
+            <ngs-icon class="text-2xl" name="fluent:settings-24-regular" />
+          </button>
+          @if (showAnnotationsPanel()) {
+            <button
+              class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+              ngsIconButton
+              type="button"
+              [attr.aria-pressed]="isAnnotationsPanelVisible()"
+              aria-label="Toggle annotations panel"
+              (click)="toggleAnnotationsPanel()">
+              <ngs-icon class="text-2xl" name="fluent:text-bullet-list-square-edit-24-regular" />
+            </button>
+          }
+        </ngs-toolbar-item>
+      </ngs-toolbar>
+
+      <ngs-menu #zoomMenu="ngsMenu">
+        @for (zoomPreset of zoomPresets; track zoomPreset) {
+          <button
+            ngs-menu-item
+            type="button"
+            [selected]="isZoomPresetSelected(zoomPreset)"
+            (click)="setZoomPreset(zoomPreset)">
+            <span>{{ zoomPreset * 100 }}%</span>
           </button>
         }
-        <button ngsIconButton type="button" aria-label="Previous page" [disabled]="!canGoPrevious()" (click)="previousPage()">
-          <ngs-icon name="fluent:chevron-up-24-regular" />
+
+        <ngs-menu-divider />
+        <button
+          ngs-menu-item
+          type="button"
+          [selected]="zoomMode() === 'fit-page'"
+          (click)="fitToPage()">
+          <ngs-icon name="fluent:resize-large-24-regular" />
+          <span>Fit to Page</span>
         </button>
-        <span class="pdf-viewer-toolbar__page">{{ activePage() }} / {{ pageCount() || 1 }}</span>
-        <button ngsIconButton type="button" aria-label="Next page" [disabled]="!canGoNext()" (click)="nextPage()">
-          <ngs-icon name="fluent:chevron-down-24-regular" />
+        <button
+          ngs-menu-item
+          type="button"
+          [selected]="zoomMode() === 'fit-width'"
+          (click)="fitToWidth()">
+          <ngs-icon name="fluent:resize-24-regular" />
+          <span>Fit to Width</span>
         </button>
-        <span class="pdf-viewer-toolbar__spacer"></span>
-        <button ngsIconButton type="button" aria-label="Zoom out" [disabled]="!canZoomOut()" (click)="zoomOut()">
-          <ngs-icon name="fluent:zoom-out-24-regular" />
-        </button>
-        <span class="pdf-viewer-toolbar__zoom">{{ zoomLabel() }}</span>
-        <button ngsIconButton type="button" aria-label="Zoom in" [disabled]="!canZoomIn()" (click)="zoomIn()">
-          <ngs-icon name="fluent:zoom-in-24-regular" />
-        </button>
-        <button ngsIconButton type="button" aria-label="PDF viewer settings" [ngsMenuTriggerFor]="settingsMenu">
-          <ngs-icon name="fluent:settings-24-regular" />
-        </button>
-      </div>
+      </ngs-menu>
 
       <ngs-menu #settingsMenu="ngsMenu" xPosition="before">
         <ngs-menu-heading>SPREAD MODE</ngs-menu-heading>
@@ -100,32 +213,33 @@
   }
 
   @if (isPageListVisible()) {
-    <ngs-panel-sidebar>
-      <div class="pdf-viewer-sidebar" #pageList>
-        <div class="pdf-viewer-sidebar__title">Pages</div>
-        <div class="pdf-viewer-sidebar__pages" aria-label="PDF pages">
+    <ngs-panel-sidebar class="w-[var(--ngs-pdf-viewer-sidebar-width)] min-w-[var(--ngs-pdf-viewer-sidebar-width)] border-r border-border bg-surface">
+      <div class="pdf-viewer-sidebar flex h-full min-h-0 flex-col gap-2 overflow-auto p-3" #pageList>
+        <div class="pdf-viewer-sidebar__title px-1 text-xs font-semibold text-on-surface-variant">Pages</div>
+        <div class="pdf-viewer-sidebar__pages flex min-h-0 flex-col gap-2" aria-label="PDF pages">
           @for (pageItem of pageItems(); track pageItem.pageNumber) {
             <button
-              class="pdf-viewer-sidebar__page"
+              class="pdf-viewer-sidebar__page group flex w-full cursor-pointer flex-col items-stretch gap-1 rounded border border-transparent bg-transparent p-1 text-left text-on-surface-variant focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&.is-active]:text-on-surface"
               type="button"
               [class.is-active]="pageItem.pageNumber === activePage()"
               [attr.aria-current]="pageItem.pageNumber === activePage() ? 'page' : null"
               [attr.aria-label]="'Open page ' + pageItem.pageNumber"
               [attr.data-ngs-pdf-page-button]="pageItem.pageNumber"
               (click)="setPage(pageItem.pageNumber)">
-              <span class="pdf-viewer-sidebar__thumb" aria-hidden="true">
+              <span class="pdf-viewer-sidebar__thumb flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded border border-border bg-surface shadow-xs group-hover:border-border group-[.is-active]:border-border group-[.is-active]:bg-primary-container group-[.is-active]:shadow-xs group-[.is-active]:ring-2 group-[.is-active]:ring-primary-container" aria-hidden="true">
                 @if (pageItem.thumbnail; as thumbnail) {
                   <img
+                    class="block h-full w-full select-none object-contain"
                     [src]="thumbnail.url"
                     [attr.width]="thumbnail.width"
                     [attr.height]="thumbnail.height"
                     alt=""
                     draggable="false" />
                 } @else {
-                  <ngs-image-placeholder />
+                  <ngs-image-placeholder class="h-full w-full" />
                 }
               </span>
-              <span class="pdf-viewer-sidebar__label">Page {{ pageItem.pageNumber }}</span>
+              <span class="pdf-viewer-sidebar__label block truncate text-center text-xs font-medium leading-tight">Page {{ pageItem.pageNumber }}</span>
             </button>
           }
         </div>
@@ -133,28 +247,28 @@
     </ngs-panel-sidebar>
   }
 
-  <ngs-panel-content>
-    <div class="pdf-viewer-body" #viewerBody (scroll)="onViewerScroll()">
+  <ngs-panel-content class="min-h-0 min-w-0 overflow-hidden bg-surface-container-low">
+    <div class="pdf-viewer-body absolute inset-0 overflow-auto" #viewerBody (scroll)="onViewerScroll()" (wheel)="onViewerWheel($event)">
       <ngs-block-loader [loading]="isLoading()">Loading PDF...</ngs-block-loader>
       @if (errorState()) {
-        <div class="pdf-viewer-state pdf-viewer-state--error">
-          <ngs-icon name="fluent:error-circle-24-regular" />
+        <div class="pdf-viewer-state pdf-viewer-state--error absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center text-danger">
+          <ngs-icon class="text-3xl" name="fluent:error-circle-24-regular" />
           <span>PDF could not be loaded.</span>
         </div>
       } @else if (!src()) {
-        <div class="pdf-viewer-state">
-          <ngs-icon name="fluent:document-pdf-24-regular" />
+        <div class="pdf-viewer-state absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center text-on-surface-variant">
+          <ngs-icon class="text-3xl" name="fluent:document-pdf-24-regular" />
           <span>No PDF selected.</span>
         </div>
       } @else {
-        <div class="pdf-viewer-pages">
+        <div class="pdf-viewer-pages grid min-h-full min-w-full w-max content-start grid-flow-row box-border justify-items-center gap-6 p-6">
           @for (pdfPage of renderedPages(); track pdfPage.pageNumber) {
             <article
-              class="pdf-viewer-page"
+              class="pdf-viewer-page w-max max-w-none"
               [attr.aria-label]="'PDF page ' + pdfPage.pageNumber"
               [attr.data-ngs-pdf-page]="pdfPage.pageNumber">
               <div
-                class="pdf-viewer-page__surface"
+                class="pdf-viewer-page__surface relative cursor-text overflow-hidden rounded bg-surface shadow-md select-none touch-none"
                 [style.width.px]="pdfPage.width"
                 [style.height.px]="pdfPage.height"
                 (pointerdown)="startTextSelection($event, pdfPage)"
@@ -164,26 +278,27 @@
                 (mousedown)="startTextSelection($event, pdfPage)"
                 (mousemove)="updateTextSelection($event, pdfPage)"
                 (mouseup)="finishTextSelection($event, pdfPage)">
-                @if (isPageImageFresh(pdfPage) && pdfPage.url; as pageUrl) {
+                @if (pdfPage.url; as pageUrl) {
                   <img
+                    class="block h-full w-full max-w-none select-none pointer-events-none"
                     [src]="pageUrl"
                     [alt]="'PDF page ' + pdfPage.pageNumber"
                     [attr.width]="pdfPage.width"
                     [attr.height]="pdfPage.height"
                     draggable="false" />
                 } @else {
-                  <div class="pdf-viewer-page__placeholder" aria-hidden="true">
+                  <div class="pdf-viewer-page__placeholder pointer-events-none absolute inset-0 flex items-center justify-center bg-surface" aria-hidden="true">
                     @if (pdfPage.isRendering) {
-                      <span></span>
+                      <span class="size-8 animate-spin rounded-full border-2 border-border border-t-primary"></span>
                     }
                   </div>
                 }
                 @if (selectionRectsForPage(pdfPage.pageNumber); as selectionRects) {
                   @if (selectionRects.length > 0) {
-                    <div class="pdf-viewer-page__selection-layer" aria-hidden="true">
+                    <div class="pdf-viewer-page__selection-layer pointer-events-none absolute inset-0 z-[1] isolate overflow-hidden mix-blend-multiply" aria-hidden="true">
                       @for (selectionRect of selectionRects; track selectionRect.left + '-' + selectionRect.top + '-' + $index) {
                         <div
-                          class="pdf-viewer-page__selection-rect"
+                          class="pdf-viewer-page__selection-rect pointer-events-none absolute bg-primary/30"
                           [style.left.px]="selectionRect.left"
                           [style.top.px]="selectionRect.top"
                           [style.width.px]="selectionRect.width"
@@ -199,4 +314,24 @@
       }
     </div>
   </ngs-panel-content>
+
+  @if (isSearchPanelVisible() || isAnnotationsPanelVisible()) {
+    <ngs-panel-aside class="w-[var(--ngs-pdf-viewer-aside-width)] min-w-[var(--ngs-pdf-viewer-aside-width)] border-l border-border bg-surface">
+      @if (isSearchPanelVisible()) {
+        <ngs-pdf-viewer-search
+          [query]="activeSearchQuery()"
+          [results]="pdfSearchResults()"
+          (closed)="closeAsidePanel()"
+          (searchChanged)="updatePdfSearch($event)"
+          (resultSelected)="selectSearchResult($event)" />
+      } @else {
+        <ngs-pdf-viewer-annotations
+          [annotations]="annotationItems()"
+          [annotationDefs]="annotationDefs()"
+          [annotationTypeProperty]="annotationTypeProperty()"
+          (closed)="closeAsidePanel()"
+          (pageSelected)="setPage($event)" />
+      }
+    </ngs-panel-aside>
+  }
 </ngs-panel>

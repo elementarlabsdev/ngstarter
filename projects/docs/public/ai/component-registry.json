@@ -4727,7 +4727,9 @@
         "ngs-icon"
       ],
       "exportedSymbols": [
-        "Icon"
+        "Icon",
+        "IconData",
+        "IconRegistry"
       ],
       "inputs": [
         "name"
@@ -6862,38 +6864,71 @@
       "exampleTopics": [
         "Basic pdf viewer"
       ],
-      "minimalExample": "<div class=\"pdf-viewer-example-toolbar\">\n  <input\n    #pdfFileInput\n    class=\"pdf-viewer-example-file-input\"\n    type=\"file\"\n    accept=\"application/pdf,.pdf\"\n    (change)=\"onPdfSelected($event)\" />\n  <button ngsButton=\"tonal\" type=\"button\" (click)=\"pdfFileInput.click()\">\n    <ngs-icon name=\"fluent:arrow-upload-24-regular\" />\n    Upload PDF\n  </button>\n</div>\n<ngs-pdf-viewer\n  [src]=\"src()\"\n  [wasmUrl]=\"wasmUrl\"\n  class=\"pdf-viewer-example\" />",
+      "minimalExample": "<ngs-pdf-viewer\n  [src]=\"src()\"\n  [documentName]=\"documentName()\"\n  [wasmUrl]=\"wasmUrl\"\n  [showAnnotationsPanel]=\"true\"\n  [annotationsDataSource]=\"annotationsDataSource\"\n  class=\"pdf-viewer-example\" />",
       "exampleFiles": [
         {
           "name": "basic-pdf-viewer-example",
           "title": "Basic pdf viewer",
           "file": "projects/docs/src/app/libraries/pdf-viewer/_examples/basic-pdf-viewer-example/basic-pdf-viewer-example.html",
-          "source": "<div class=\"pdf-viewer-example-toolbar\">\n  <input\n    #pdfFileInput\n    class=\"pdf-viewer-example-file-input\"\n    type=\"file\"\n    accept=\"application/pdf,.pdf\"\n    (change)=\"onPdfSelected($event)\" />\n  <button ngsButton=\"tonal\" type=\"button\" (click)=\"pdfFileInput.click()\">\n    <ngs-icon name=\"fluent:arrow-upload-24-regular\" />\n    Upload PDF\n  </button>\n</div>\n<ngs-pdf-viewer\n  [src]=\"src()\"\n  [wasmUrl]=\"wasmUrl\"\n  class=\"pdf-viewer-example\" />"
+          "source": "<ngs-pdf-viewer\n  [src]=\"src()\"\n  [documentName]=\"documentName()\"\n  [wasmUrl]=\"wasmUrl\"\n  [showAnnotationsPanel]=\"true\"\n  [annotationsDataSource]=\"annotationsDataSource\"\n  class=\"pdf-viewer-example\" />"
         }
       ],
       "previewAsset": "projects/components/pdf-viewer/preview.svg",
       "selectors": [
-        "ngs-pdf-viewer"
+        "[ngsPdfViewerAnnotation]",
+        "[ngsPdfViewerAnnotationDef]",
+        "ngs-pdf-viewer",
+        "ngs-pdf-viewer-annotation-test-host",
+        "ngs-pdf-viewer-annotations",
+        "ngs-pdf-viewer-search"
       ],
       "exportedSymbols": [
         "PdfViewer",
+        "PdfViewerAnnotationDataSource",
+        "PdfViewerAnnotationDataSourceContext",
+        "PdfViewerAnnotationDataSourceParams",
+        "PdfViewerAnnotationDataSourceResult",
+        "PdfViewerAnnotationDef",
+        "PdfViewerAnnotations",
+        "PdfViewerAnnotationTemplateContext",
+        "PdfViewerAnnotationView",
+        "PdfViewerAnnotationWhen",
         "PdfViewerEngineService",
         "PdfViewerLoadedEvent",
         "PdfViewerPageRenderedEvent",
         "PdfViewerPageView",
+        "PdfViewerSearch",
+        "PdfViewerSearchOptions",
+        "PdfViewerSearchResultView",
         "PdfViewerSelectionRectView",
+        "PdfViewerServerAnnotationDataSource",
         "PdfViewerSource",
         "PdfViewerTextGlyphView",
         "PdfViewerTextRectView",
         "PdfViewerThumbnailView"
       ],
       "inputs": [
+        "annotationDefs",
+        "annotations",
+        "annotationsDataSource",
+        "annotationTypeProperty",
+        "documentName",
+        "maxRenderDimension",
+        "maxRenderPixels",
         "maxScale",
         "minScale",
+        "ngsPdfViewerAnnotation",
+        "ngsPdfViewerAnnotationDef",
+        "ngsPdfViewerAnnotationWhen",
         "page",
+        "query",
         "renderAll",
+        "results",
         "scale",
+        "searchQuery",
+        "showAnnotationsPanel",
         "showPageList",
+        "showSearchPanel",
         "showToolbar",
         "src",
         "wasmUrl",
@@ -6902,38 +6937,31 @@
         "zoomStep"
       ],
       "outputs": [
+        "closed",
         "error",
         "loaded",
         "pageChanged",
-        "pageRendered"
+        "pageRendered",
+        "pageSelected",
+        "resultSelected",
+        "searchChanged"
       ],
       "cssTokens": [
-        "--ngs-color-danger",
+        "--ngs-card-bg",
+        "--ngs-card-padding",
+        "--ngs-card-radius",
+        "--ngs-color-border",
         "--ngs-color-on-surface",
         "--ngs-color-on-surface-variant",
-        "--ngs-color-outline",
-        "--ngs-color-outline-variant",
-        "--ngs-color-primary",
-        "--ngs-color-primary-container",
         "--ngs-color-surface",
-        "--ngs-color-surface-container-low",
+        "--ngs-color-surface-container-lowest",
+        "--ngs-font-size-base",
         "--ngs-font-size-sm",
-        "--ngs-font-size-xs",
-        "--ngs-pdf-viewer-background",
-        "--ngs-pdf-viewer-border-color",
+        "--ngs-pdf-viewer-aside-width",
         "--ngs-pdf-viewer-height",
-        "--ngs-pdf-viewer-page-background",
-        "--ngs-pdf-viewer-page-shadow",
-        "--ngs-pdf-viewer-radius",
-        "--ngs-pdf-viewer-selection-background",
+        "--ngs-pdf-viewer-min-height",
         "--ngs-pdf-viewer-sidebar-width",
-        "--ngs-radius-md",
-        "--ngs-shadow-md",
-        "--ngs-shadow-xs",
-        "--ngs-spacing-1",
-        "--ngs-spacing-2",
-        "--ngs-spacing-3",
-        "--ngs-spacing-6"
+        "--ngs-radius-md"
       ],
       "example": null
     },

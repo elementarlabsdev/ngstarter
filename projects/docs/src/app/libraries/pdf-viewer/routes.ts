@@ -2,6 +2,11 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: 'basic-example',
+    loadComponent: () => import('./_examples/basic-pdf-viewer-example/basic-pdf-viewer-example').then(m => m.BasicPdfViewerExample),
+    title: 'PDF Viewer / Basic Example'
+  },
+  {
     path: '',
     loadComponent: () => import('./common/common').then(m => m.Common),
     title: 'PDF Viewer',
@@ -16,11 +21,6 @@ export const routes: Routes = [
         path: 'api',
         loadComponent: () => import('./api/api').then(m => m.Api),
         title: 'PDF Viewer / Api'
-      },
-      {
-        path: 'basic-example',
-        loadComponent: () => import('./_examples/basic-pdf-viewer-example/basic-pdf-viewer-example').then(m => m.BasicPdfViewerExample),
-        title: 'PDF Viewer / Basic Example'
       }
     ]
   }

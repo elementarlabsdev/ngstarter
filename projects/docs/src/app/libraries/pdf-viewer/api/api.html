@@ -42,3 +42,23 @@
     <tr ngs-row *ngsRowDef="let row; columns: ['name', 'description'];"></tr>
   </table>
 </div>
+
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="directives">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Directive</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="description">
+      <th ngs-header-cell *ngsHeaderCellDef>Description</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <div>{{ element.description }}</div>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.type }}</div>
+      </td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'description']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'description'];"></tr>
+  </table>
+</div>

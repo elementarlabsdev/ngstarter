@@ -1,22 +1,7 @@
 :host {
   display: block;
 
-  .pdf-viewer-example-toolbar {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: var(--ngs-spacing-3, 0.75rem);
-  }
-
-  .pdf-viewer-example-file-input {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-  }
-
   .pdf-viewer-example {
-    --ngs-pdf-viewer-height: 620px;
+    // --ngs-pdf-viewer-height: 100%;
   }
 }

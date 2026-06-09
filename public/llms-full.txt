@@ -516,7 +516,7 @@ Typography:
   use when: Use ngs-icon with a full Iconify name such as fluent:grid-24-regular or circle-flags:us for icons in NgStarter buttons, navigation, menus, form field prefixes and suffixes, statuses, metadata, empty states, alerts, announcements, table actions, toolbar actions, and compact flag markers. Size icons with Tailwind classes such as size-4, w-5, or h-5, or use the default --ngs-icon-size. Color icons with text color classes or --ngs-icon-color. Do not use ngs-icon as a clickable action by itself; wrap it in an NgStarter button such as button[ngsIconButton]. Do not use Icon for people or entities; use Avatar. Do not use Icon for counters or small labels; use Badge. Do not use Icon for large artwork, product illustrations, screenshots, or logos. Do not hand-roll inline SVG when an approved Iconify icon exists.
   example topics: Symbols Icons (Default), Phosphor Icons, Circle Flags Icons, Material symbols icons, Circle flags
   selectors: `ngs-icon`
-  exports: `Icon`
+  exports: `Icon`, `IconData`, `IconRegistry`
   inputs: `name`
   tokens: `--ngs-icon-color`, `--ngs-icon-size`
 - image-designer: `@ngstarter-ui/components/image-designer` docs: /libraries/image-designer
@@ -740,11 +740,11 @@ Typography:
   purpose: Import PDF Viewer from &#64;ngstarter-ui/components/pdf-viewer .
   use when: Choose Pdf Viewer when the workflow matches examples such as Basic pdf viewer.
   example topics: Basic pdf viewer
-  selectors: `ngs-pdf-viewer`
-  exports: `PdfViewer`, `PdfViewerEngineService`, `PdfViewerLoadedEvent`, `PdfViewerPageRenderedEvent`, `PdfViewerPageView`, `PdfViewerSelectionRectView`, `PdfViewerSource`, `PdfViewerTextGlyphView`, `PdfViewerTextRectView`, `PdfViewerThumbnailView`
-  inputs: `maxScale`, `minScale`, `page`, `renderAll`, `scale`, `showPageList`, `showToolbar`, `src`, `wasmUrl`, `withAnnotations`, `withForms`, `zoomStep`
-  outputs: `error`, `loaded`, `pageChanged`, `pageRendered`
-  tokens: `--ngs-color-danger`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-outline`, `--ngs-color-outline-variant`, `--ngs-color-primary`, `--ngs-color-primary-container`, `--ngs-color-surface`, `--ngs-color-surface-container-low`, `--ngs-font-size-sm`, `--ngs-font-size-xs`, `--ngs-pdf-viewer-background`, `--ngs-pdf-viewer-border-color`, `--ngs-pdf-viewer-height`, `--ngs-pdf-viewer-page-background`, `--ngs-pdf-viewer-page-shadow`
+  selectors: `[ngsPdfViewerAnnotation]`, `[ngsPdfViewerAnnotationDef]`, `ngs-pdf-viewer`, `ngs-pdf-viewer-annotation-test-host`, `ngs-pdf-viewer-annotations`, `ngs-pdf-viewer-search`
+  exports: `PdfViewer`, `PdfViewerAnnotationDataSource`, `PdfViewerAnnotationDataSourceContext`, `PdfViewerAnnotationDataSourceParams`, `PdfViewerAnnotationDataSourceResult`, `PdfViewerAnnotationDef`, `PdfViewerAnnotations`, `PdfViewerAnnotationTemplateContext`, `PdfViewerAnnotationView`, `PdfViewerAnnotationWhen`, `PdfViewerEngineService`, `PdfViewerLoadedEvent`
+  inputs: `annotationDefs`, `annotations`, `annotationsDataSource`, `annotationTypeProperty`, `documentName`, `maxRenderDimension`, `maxRenderPixels`, `maxScale`, `minScale`, `ngsPdfViewerAnnotation`, `ngsPdfViewerAnnotationDef`, `ngsPdfViewerAnnotationWhen`, `page`, `query`, `renderAll`, `results`, `scale`, `searchQuery`, `showAnnotationsPanel`, `showPageList`, `showSearchPanel`, `showToolbar`, `src`, `wasmUrl`
+  outputs: `closed`, `error`, `loaded`, `pageChanged`, `pageRendered`, `pageSelected`, `resultSelected`, `searchChanged`
+  tokens: `--ngs-card-bg`, `--ngs-card-padding`, `--ngs-card-radius`, `--ngs-color-border`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-surface`, `--ngs-color-surface-container-lowest`, `--ngs-font-size-base`, `--ngs-font-size-sm`, `--ngs-pdf-viewer-aside-width`, `--ngs-pdf-viewer-height`, `--ngs-pdf-viewer-min-height`, `--ngs-pdf-viewer-sidebar-width`, `--ngs-radius-md`
 - phone-input: `@ngstarter-ui/components/phone-input` docs: /forms/phone-input
   purpose: Capture real phone numbers with country selection, flag, dial code, formatting, and libphonenumber-js validation.
   use when: Use ngs-phone-input inside one ngs-form-field for profile, contact, billing, onboarding, checkout, support, invite, and contact forms when the value must be a real phone number. Use formControlName or ngModel, show invalidPhone with ngs-error, set defaultSelectedCountryCode when the initial country should not be us, use onlyCountries to restrict available countries, preferredCountries to pin common countries to the top, format="default | national | international" for display formatting, and countryChanged when the screen needs to react to country changes. Do not use plain ngsInput, NumberInput, or InputMask for country-aware phone numbers. Do not use CountrySelect instead of PhoneInput; CountrySelect chooses a country but does not capture a phone number. Do not use for OTP, MFA, passcodes, or invite codes; use PinInput.

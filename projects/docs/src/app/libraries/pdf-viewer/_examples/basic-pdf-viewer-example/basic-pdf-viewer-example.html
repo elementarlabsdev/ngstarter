@@ -1,17 +1,7 @@
-<div class="pdf-viewer-example-toolbar">
-  <input
-    #pdfFileInput
-    class="pdf-viewer-example-file-input"
-    type="file"
-    accept="application/pdf,.pdf"
-    (change)="onPdfSelected($event)" />
-  <button ngsButton="tonal" type="button" (click)="pdfFileInput.click()">
-    <ngs-icon name="fluent:arrow-upload-24-regular" />
-    Upload PDF
-  </button>
-</div>
-
 <ngs-pdf-viewer
   [src]="src()"
+  [documentName]="documentName()"
   [wasmUrl]="wasmUrl"
+  [showAnnotationsPanel]="true"
+  [annotationsDataSource]="annotationsDataSource"
   class="pdf-viewer-example" />

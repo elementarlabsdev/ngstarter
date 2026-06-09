@@ -38,6 +38,12 @@ export class Api {
       default: 'null'
     },
     {
+      name: 'documentName',
+      description: 'Document name shown in the built-in toolbar. Falls back to the source filename when omitted.',
+      type: 'string | null',
+      default: 'null'
+    },
+    {
       name: 'wasmUrl',
       description: 'URL for the PDFium WebAssembly file used by EmbedPDF.',
       type: 'string',
@@ -74,6 +80,18 @@ export class Api {
       default: '0.1'
     },
     {
+      name: 'maxRenderPixels',
+      description: 'Maximum bitmap pixel budget for a rendered page. Keeps high zoom levels responsive by capping PDFium raster output.',
+      type: 'number',
+      default: '128000000'
+    },
+    {
+      name: 'maxRenderDimension',
+      description: 'Maximum bitmap width or height for a rendered page. The layout can keep zooming while raster output is capped.',
+      type: 'number',
+      default: '12000'
+    },
+    {
       name: 'renderAll',
       description: 'Render every page when true. Render only the active page when false.',
       type: 'boolean',
@@ -90,6 +108,42 @@ export class Api {
       description: 'Show the left page list inside the viewer panel.',
       type: 'boolean',
       default: 'true'
+    },
+    {
+      name: 'showSearchPanel',
+      description: 'Enable the right search panel opened from the toolbar search button.',
+      type: 'boolean',
+      default: 'true'
+    },
+    {
+      name: 'showAnnotationsPanel',
+      description: 'Enable the right annotations panel built with ngs-panel-aside.',
+      type: 'boolean',
+      default: 'false'
+    },
+    {
+      name: 'annotations',
+      description: 'Client-side annotation items rendered in the right annotations panel. Prefer annotationsDataSource for configurable sources.',
+      type: 'PdfViewerAnnotationView[]',
+      default: '[]'
+    },
+    {
+      name: 'annotationsDataSource',
+      description: 'Annotation source for client or server data. Accepts an array, Promise, Observable, loader function, or object with getAnnotations.',
+      type: 'PdfViewerAnnotationDataSource | null',
+      default: 'null'
+    },
+    {
+      name: 'annotationTypeProperty',
+      description: 'Annotation field used when ngsPdfViewerAnnotationWhen is a string.',
+      type: 'string',
+      default: 'type'
+    },
+    {
+      name: 'searchQuery',
+      description: 'Initial query shown when the search panel opens.',
+      type: 'string',
+      default: '\'\''
     },
     {
       name: 'withAnnotations',
@@ -125,6 +179,19 @@ export class Api {
       name: 'error',
       description: 'Emitted when the PDF engine, document load, or render operation fails.',
       type: 'unknown'
+    }
+  ];
+
+  directives = [
+    {
+      name: 'ngsPdfViewerAnnotation',
+      description: 'Projects a custom annotation template inside ngs-pdf-viewer.',
+      type: 'Template directive'
+    },
+    {
+      name: 'ngsPdfViewerAnnotationWhen',
+      description: 'Optional string or predicate that decides when the projected annotation template should be used.',
+      type: 'string | (annotation, index) => boolean'
     }
   ];
 }

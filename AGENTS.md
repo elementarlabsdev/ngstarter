@@ -35,6 +35,10 @@ Prefer the narrowest command that verifies the change. For component library cha
 - Library selectors use the `ngs` prefix.
 - Every Angular component should live in its own folder, with its `.ts`, `.html`, `.scss`, tests,
   and related local files grouped together under that component folder.
+- A component folder must contain only files that belong to that exact component. Do not generate
+  sibling components, shared directives, services, models, or unrelated helpers inside another
+  component's folder; put each component in its own folder and keep shared files at the nearest
+  appropriate parent scope.
 - Public component APIs are exported from `projects/components/<component>/public-api.ts`.
 - Secondary entry points have their own `index.ts` and `ng-package.json`.
 - Keep imports from public entry points when writing docs or consumer-facing examples:

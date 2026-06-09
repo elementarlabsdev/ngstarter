@@ -1,5 +1,42 @@
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { PdfViewerAnnotationDef } from '../pdf-viewer-annotation-def.directive';
 import { PdfViewer } from './pdf-viewer';
+
+@Component({
+  selector: 'ngs-pdf-viewer-annotation-test-host',
+  standalone: true,
+  imports: [PdfViewer, PdfViewerAnnotationDef],
+  template: `
+    <ngs-pdf-viewer [showAnnotationsPanel]="true" [annotationsDataSource]="annotations">
+      <ng-template ngsPdfViewerAnnotation="risk" let-annotation>
+        <strong class="risk-template">{{ annotation.text }}</strong>
+      </ng-template>
+      <ng-template ngsPdfViewerAnnotation let-annotation>
+        <span class="default-template">{{ annotation.text }}</span>
+      </ng-template>
+    </ngs-pdf-viewer>
+  `,
+})
+class PdfViewerAnnotationTestHost {
+  annotations = [
+    {
+      id: 'risk',
+      type: 'risk',
+      author: 'Alex',
+      text: 'Risk note',
+      pageNumber: 1,
+    },
+    {
+      id: 'comment',
+      type: 'comment',
+      author: 'Maya',
+      text: 'Comment note',
+      pageNumber: 2,
+    },
+  ];
+}
 
 describe('PdfViewer', () => {
   let fixture: ComponentFixture<PdfViewer>;
@@ -36,7 +73,7 @@ describe('PdfViewer', () => {
     expect(component.activePage()).toBe(1);
   });
 
-  it('should resize page shells immediately on zoom and drop stale images', () => {
+  it('should resize page shells immediately on zoom and keep stale images as previews', () => {
     const component = fixture.componentInstance as unknown as {
       pdfDocument: unknown;
       renderedPages: {
@@ -86,9 +123,278 @@ describe('PdfViewer', () => {
     component.setZoom(2);
 
     expect(component.renderedPages()[0].scale).toBe(2);
-    expect(component.renderedPages()[0].url).toBeNull();
+    expect(component.renderedPages()[0].url).toBe('blob:page-1');
     expect(component.renderedPages()[0].width).toBe(200);
     expect(component.renderedPages()[0].height).toBe(400);
     expect(component.renderedPages()[0].textGlyphs).toEqual([]);
+  });
+
+  it('should cap raster render scale for high zoom levels', () => {
+    const component = fixture.componentInstance as unknown as {
+      getPageRasterRenderOptions(page: unknown, scale: number): { scaleFactor: number; dpr: number };
+    };
+    fixture.componentRef.setInput('maxRenderPixels', 16_000_000);
+    fixture.componentRef.setInput('maxRenderDimension', 4096);
+    fixture.detectChanges();
+
+    const options = component.getPageRasterRenderOptions({
+      index: 0,
+      rotation: 0,
+      size: {
+        width: 1000,
+        height: 1000,
+      },
+    }, 16);
+
+    expect(options.scaleFactor).toBeLessThanOrEqual(4);
+    expect(options.dpr).toBe(1);
+  });
+
+  it('should delay quality page rendering while zoom is still changing', async () => {
+    const component = fixture.componentInstance as unknown as {
+      getCurrentTime(): number;
+      lastZoomChangeTime: number;
+      renderVisiblePages(): Promise<void>;
+      scheduleVisiblePagesRender(options: {
+        zoom: number;
+        activePage: number;
+        renderAll: boolean;
+        withAnnotations: boolean;
+        withForms: boolean;
+      }): void;
+    };
+    let renderCount = 0;
+
+    component.renderVisiblePages = () => {
+      renderCount++;
+      return Promise.resolve();
+    };
+    component.lastZoomChangeTime = component.getCurrentTime();
+    component.scheduleVisiblePagesRender({
+      zoom: 2,
+      activePage: 1,
+      renderAll: true,
+      withAnnotations: true,
+      withForms: true,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    expect(renderCount).toBe(0);
+
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    expect(renderCount).toBe(1);
+  });
+
+  it('should zoom with command wheel gestures', () => {
+    const component = fixture.componentInstance as unknown as {
+      pdfDocument: unknown;
+      zoom: { (): number };
+      onViewerWheel(event: WheelEvent): void;
+    };
+    let prevented = false;
+    let stopped = false;
+
+    component.pdfDocument = { pageCount: 1, pages: [] };
+    component.onViewerWheel({
+      metaKey: true,
+      ctrlKey: false,
+      deltaY: -100,
+      deltaX: 0,
+      clientX: 0,
+      clientY: 0,
+      preventDefault: () => {
+        prevented = true;
+      },
+      stopPropagation: () => {
+        stopped = true;
+      },
+    } as WheelEvent);
+
+    expect(prevented).toBe(true);
+    expect(stopped).toBe(true);
+    expect(component.zoom()).toBeGreaterThan(1);
+  });
+
+  it('should floor fit zoom values so fit-to-width does not overflow horizontally', () => {
+    const component = fixture.componentInstance as unknown as {
+      floorFitZoom(value: number): number;
+    };
+
+    expect(component.floorFitZoom(1.309)).toBe(1.3);
+  });
+
+  it('should render annotations from the configured data source', () => {
+    fixture.componentRef.setInput('showAnnotationsPanel', true);
+    fixture.componentRef.setInput('annotationsDataSource', [
+      {
+        id: 'review',
+        author: 'Alex',
+        text: 'Review this section',
+        pageNumber: 1,
+      },
+    ]);
+
+    const component = fixture.componentInstance as unknown as {
+      annotationsPanelVisible: { set(value: boolean): void };
+    };
+    component.annotationsPanelVisible.set(true);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Review this section');
+  });
+
+  it('should keep user-opened panels visible while the document is resetting during load', () => {
+    fixture.componentRef.setInput('showAnnotationsPanel', true);
+    fixture.detectChanges();
+
+    const component = fixture.componentInstance as unknown as {
+      annotationsPanelVisible: { set(value: boolean): void };
+      isAnnotationsPanelVisible: { (): boolean };
+      isPageListVisible: { (): boolean };
+      isSearchPanelVisible: { (): boolean };
+      pageCount: { set(value: number): void };
+      pageListVisible: { set(value: boolean): void };
+      searchPanelVisible: { set(value: boolean): void };
+    };
+
+    component.pageCount.set(3);
+    component.pageListVisible.set(true);
+    fixture.detectChanges();
+
+    expect(component.isPageListVisible()).toBe(true);
+    expect(fixture.nativeElement.querySelector('ngs-panel-sidebar')).not.toBeNull();
+
+    component.searchPanelVisible.set(true);
+    fixture.detectChanges();
+
+    expect(component.isSearchPanelVisible()).toBe(true);
+    expect(fixture.nativeElement.querySelector('ngs-panel-aside')).not.toBeNull();
+
+    component.searchPanelVisible.set(false);
+    component.annotationsPanelVisible.set(true);
+    fixture.detectChanges();
+
+    expect(component.isAnnotationsPanelVisible()).toBe(true);
+    expect(fixture.nativeElement.querySelector('ngs-panel-aside')).not.toBeNull();
+
+    component.pageCount.set(0);
+    fixture.detectChanges();
+
+    expect(component.isPageListVisible()).toBe(true);
+    expect(component.isAnnotationsPanelVisible()).toBe(true);
+    expect(fixture.nativeElement.querySelector('ngs-panel-sidebar')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('ngs-panel-aside')).not.toBeNull();
+  });
+
+  it('should render search results returned by the PDF engine', async () => {
+    const component = fixture.componentInstance as unknown as {
+      engine: unknown;
+      pdfDocument: unknown;
+      searchPanelVisible: { set(value: boolean): void };
+      updatePdfSearch(event: { query: string; options: { caseSensitive: boolean; wholeWord: boolean } }): Promise<void> | void;
+    };
+
+    component.engine = {
+      searchAllPages: () => ({
+        toPromise: () => Promise.resolve({
+          results: [
+            {
+              pageIndex: 0,
+              charIndex: 12,
+              charCount: 2,
+              rects: [],
+              context: {
+                before: 'We need to',
+                match: 'review',
+                after: 'this section',
+                truncatedLeft: false,
+                truncatedRight: false,
+              },
+            },
+          ],
+        }),
+      }),
+    };
+    component.pdfDocument = { pageCount: 1 };
+    component.searchPanelVisible.set(true);
+
+    await component.updatePdfSearch({
+      query: 'review',
+      options: {
+        caseSensitive: false,
+        wholeWord: false,
+      },
+    });
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('1 result found');
+    expect(fixture.nativeElement.textContent).toContain('We need to');
+    expect(fixture.nativeElement.textContent).toContain('review');
+    expect(fixture.nativeElement.textContent).toContain('this section');
+  });
+
+  it('should open search with an empty query when searchQuery input is empty', () => {
+    const component = fixture.componentInstance as unknown as {
+      activeSearchQuery: { set(value: string): void; (): string };
+      pdfSearchResults: { set(value: unknown[]): void; (): unknown[] };
+      searchPanelVisible: { (): boolean };
+      toggleSearchPanel(): void;
+    };
+
+    component.activeSearchQuery.set('we');
+    component.pdfSearchResults.set([{ pageNumber: 1, excerpt: 'we found text' }]);
+    component.toggleSearchPanel();
+    fixture.detectChanges();
+
+    const searchInput = fixture.nativeElement.querySelector('ngs-pdf-viewer-search input') as HTMLInputElement;
+
+    expect(component.searchPanelVisible()).toBe(true);
+    expect(component.activeSearchQuery()).toBe('');
+    expect(component.pdfSearchResults()).toEqual([]);
+    expect(searchInput.value).toBe('');
+    expect(fixture.nativeElement.textContent).not.toContain('0 results found');
+    expect(fixture.nativeElement.textContent).not.toContain('No results.');
+  });
+
+  it('should clear a typed search query after closing and reopening search', () => {
+    const component = fixture.componentInstance as unknown as {
+      activeSearchQuery: { (): string };
+      closeAsidePanel(): void;
+      toggleSearchPanel(): void;
+    };
+
+    component.toggleSearchPanel();
+    fixture.detectChanges();
+
+    const searchInput = fixture.nativeElement.querySelector('ngs-pdf-viewer-search input') as HTMLInputElement;
+    searchInput.value = 'we';
+    searchInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    expect(component.activeSearchQuery()).toBe('we');
+
+    component.closeAsidePanel();
+    fixture.detectChanges();
+    component.toggleSearchPanel();
+    fixture.detectChanges();
+
+    const reopenedSearchInput = fixture.nativeElement.querySelector('ngs-pdf-viewer-search input') as HTMLInputElement;
+    expect(component.activeSearchQuery()).toBe('');
+    expect(reopenedSearchInput.value).toBe('');
+  });
+
+  it('should select annotation templates with when and fall back to the default annotation template', () => {
+    const hostFixture = TestBed.createComponent(PdfViewerAnnotationTestHost);
+    hostFixture.detectChanges();
+
+    const viewer = hostFixture.debugElement.query(By.directive(PdfViewer)).componentInstance as unknown as {
+      annotationsPanelVisible: { set(value: boolean): void };
+    };
+    viewer.annotationsPanelVisible.set(true);
+    hostFixture.detectChanges();
+
+    expect(hostFixture.nativeElement.querySelector('.risk-template')?.textContent).toContain('Risk note');
+    expect(hostFixture.nativeElement.querySelector('.default-template')?.textContent).toContain('Comment note');
   });
 });
