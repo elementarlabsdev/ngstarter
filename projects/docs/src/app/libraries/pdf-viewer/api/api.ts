@@ -89,7 +89,7 @@ export class Api {
       name: 'maxRenderDimension',
       description: 'Maximum bitmap width or height for a rendered page. The layout can keep zooming while raster output is capped.',
       type: 'number',
-      default: '12000'
+      default: '13000'
     },
     {
       name: 'renderAll',

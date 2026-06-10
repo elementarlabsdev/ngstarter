@@ -15,7 +15,10 @@ export class PdfViewerEngineService {
       return cachedEngine;
     }
 
-    const engine = this.createEngine(wasmUrl);
+    const engine = this.createEngine(wasmUrl).catch((error: unknown) => {
+      this.engines.delete(wasmUrl);
+      throw error;
+    });
     this.engines.set(wasmUrl, engine);
     return engine;
   }

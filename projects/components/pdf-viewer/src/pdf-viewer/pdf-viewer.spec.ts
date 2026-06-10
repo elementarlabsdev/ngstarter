@@ -54,6 +54,14 @@ describe('PdfViewer', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
+  it('should render every page by default', () => {
+    const component = fixture.componentInstance as unknown as {
+      renderAll: { (): boolean };
+    };
+
+    expect(component.renderAll()).toBe(true);
+  });
+
   it('should keep selected page active during programmatic scroll', () => {
     const component = fixture.componentInstance as unknown as {
       activePage: { set(value: number): void; (): number };
@@ -129,25 +137,22 @@ describe('PdfViewer', () => {
     expect(component.renderedPages()[0].textGlyphs).toEqual([]);
   });
 
-  it('should cap raster render scale for high zoom levels', () => {
+  it('should keep default raster render scale sharp at 1600 percent for document pages', () => {
     const component = fixture.componentInstance as unknown as {
       getPageRasterRenderOptions(page: unknown, scale: number): { scaleFactor: number; dpr: number };
     };
-    fixture.componentRef.setInput('maxRenderPixels', 16_000_000);
-    fixture.componentRef.setInput('maxRenderDimension', 4096);
-    fixture.detectChanges();
 
     const options = component.getPageRasterRenderOptions({
       index: 0,
       rotation: 0,
       size: {
-        width: 1000,
-        height: 1000,
+        width: 612,
+        height: 792,
       },
     }, 16);
 
-    expect(options.scaleFactor).toBeLessThanOrEqual(4);
-    expect(options.dpr).toBe(1);
+    expect(options.scaleFactor).toBe(16);
+    expect(options.scaleFactor * options.dpr).toBeGreaterThanOrEqual(16);
   });
 
   it('should delay quality page rendering while zoom is still changing', async () => {

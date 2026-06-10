@@ -161,7 +161,7 @@ export class PdfViewer {
   maxScale = input(60, { transform: numberAttribute });
   zoomStep = input(0.1, { transform: numberAttribute });
   maxRenderPixels = input(128_000_000, { transform: numberAttribute });
-  maxRenderDimension = input(12_000, { transform: numberAttribute });
+  maxRenderDimension = input(13_000, { transform: numberAttribute });
   renderAll = input(true, { transform: booleanAttribute });
   showToolbar = input(true, { transform: booleanAttribute });
   showPageList = input(true, { transform: booleanAttribute });
@@ -251,6 +251,7 @@ export class PdfViewer {
   private readonly programmaticScrollMinDuration = 900;
   private readonly programmaticScrollMaxDuration = 6000;
   private readonly qualityRenderZoomIdleDelay = 160;
+  private readonly documentOpenTimeoutMs = 15000;
 
   constructor() {
     this.destroyRef.onDestroy(() => {
@@ -1439,19 +1440,59 @@ export class PdfViewer {
     source: Exclude<PdfViewerSource, null | undefined>,
   ): Promise<PdfDocumentObject> {
     if (typeof source === 'string') {
-      return engine.openDocumentUrl({ id: documentId, url: source }).toPromise();
+      const content = await this.fetchPdfSource(source);
+      return this.openDocumentBuffer(engine, documentId, content);
     }
 
     if (source instanceof Blob) {
-      return engine.openDocumentBuffer({ id: documentId, content: await source.arrayBuffer() }).toPromise();
+      return this.openDocumentBuffer(engine, documentId, await source.arrayBuffer());
     }
 
     if (source instanceof Uint8Array) {
       const content = new Uint8Array(source).buffer;
-      return engine.openDocumentBuffer({ id: documentId, content }).toPromise();
+      return this.openDocumentBuffer(engine, documentId, content);
     }
 
-    return engine.openDocumentBuffer({ id: documentId, content: source }).toPromise();
+    return this.openDocumentBuffer(engine, documentId, source);
+  }
+
+  private async fetchPdfSource(source: string): Promise<ArrayBuffer> {
+    const response = await fetch(source);
+
+    if (!response.ok) {
+      throw new Error(`PDF request failed with status ${response.status}`);
+    }
+
+    return response.arrayBuffer();
+  }
+
+  private openDocumentBuffer(
+    engine: PdfEngine<Blob>,
+    documentId: string,
+    content: ArrayBuffer,
+  ): Promise<PdfDocumentObject> {
+    return this.withTimeout(
+      engine.openDocumentBuffer({ id: documentId, content }).toPromise(),
+      this.documentOpenTimeoutMs,
+      'PDF document opening timed out',
+    );
+  }
+
+  private withTimeout<T>(promise: Promise<T>, timeoutMs: number, message: string): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      const timeoutId = setTimeout(() => reject(new Error(message)), timeoutMs);
+
+      promise.then(
+        (value) => {
+          clearTimeout(timeoutId);
+          resolve(value);
+        },
+        (error: unknown) => {
+          clearTimeout(timeoutId);
+          reject(error);
+        }
+      );
+    });
   }
 
   private async closeDocument(): Promise<void> {
@@ -1562,7 +1603,7 @@ export class PdfViewer {
     const devicePixelRatio = Math.max(1, this.getDevicePixelRatio());
     const pageSize = this.getPageBaseSize(page);
     const maxRenderPixels = this.sanitizePositiveNumber(this.maxRenderPixels(), 128_000_000);
-    const maxRenderDimension = this.sanitizePositiveNumber(this.maxRenderDimension(), 12_000);
+    const maxRenderDimension = this.sanitizePositiveNumber(this.maxRenderDimension(), 13_000);
     const targetEffectiveScale = scale * devicePixelRatio;
     const dimensionEffectiveScale = maxRenderDimension / Math.max(pageSize.width, pageSize.height);
     const pixelEffectiveScale = Math.sqrt(maxRenderPixels / (pageSize.width * pageSize.height));
