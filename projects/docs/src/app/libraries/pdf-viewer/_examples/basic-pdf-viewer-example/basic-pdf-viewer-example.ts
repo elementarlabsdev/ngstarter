@@ -1,6 +1,8 @@
 import { Component, signal } from '@angular/core';
+import { Button } from '@ngstarter-ui/components/button';
 import {
   PdfViewer,
+  PdfViewerAnnotationDef,
   type PdfViewerAnnotationDataSource,
   type PdfViewerAnnotationView,
 } from '@ngstarter-ui/components/pdf-viewer';
@@ -8,7 +10,9 @@ import {
 @Component({
   selector: 'app-basic-pdf-viewer-example',
   imports: [
-    PdfViewer
+    Button,
+    PdfViewer,
+    PdfViewerAnnotationDef,
   ],
   templateUrl: './basic-pdf-viewer-example.html',
   styleUrl: './basic-pdf-viewer-example.scss'

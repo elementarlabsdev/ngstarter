@@ -17,7 +17,7 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
-import { MatchFlag } from '@embedpdf/models';
+import { MatchFlag, Rotation } from '@embedpdf/models';
 import type { PdfDocumentObject, PdfEngine, PdfPageObject, SearchResult } from '@embedpdf/models';
 import { BlockLoader } from '@ngstarter-ui/components/block-loader';
 import { Button } from '@ngstarter-ui/components/button';
@@ -70,6 +70,13 @@ import {
 interface PdfViewerPageListItem {
   pageNumber: number;
   thumbnail: PdfViewerThumbnailView | null;
+}
+
+interface PdfViewerPageSpread {
+  id: string;
+  leadingPlaceholder: boolean;
+  leadingPlaceholderPage: PdfViewerPageView | null;
+  pages: PdfViewerPageView[];
 }
 
 type PdfViewerSpreadMode = 'single' | 'two-odd' | 'two-even';
@@ -190,7 +197,8 @@ export class PdfViewer {
   protected readonly searchPanelVisible = signal(false);
   protected readonly annotationsPanelVisible = signal(false);
   protected readonly spreadMode = signal<PdfViewerSpreadMode>('single');
-  protected readonly scrollLayout = signal<PdfViewerScrollLayout>('horizontal');
+  protected readonly scrollLayout = signal<PdfViewerScrollLayout>('vertical');
+  protected readonly pageRotation = signal<Rotation>(Rotation.Degree0);
   protected readonly zoomMode = signal<PdfViewerZoomMode>('custom');
   protected readonly annotationItems = signal<PdfViewerAnnotationView[]>([]);
   protected readonly activeSearchQuery = signal('');
@@ -225,6 +233,9 @@ export class PdfViewer {
   protected readonly canZoomIn = computed(() => this.zoom() < this.getScaleBounds().max);
   protected readonly zoomLabel = computed(() => `${Math.round(this.zoom() * 100)}%`);
   protected readonly displayDocumentName = computed(() => this.documentName() || this.getSourceName(this.src()));
+  protected readonly pageSpreads = computed<PdfViewerPageSpread[]>(() =>
+    this.groupPagesIntoSpreads(this.renderedPages(), this.spreadMode()),
+  );
   protected readonly zoomPresets = [0.25, 0.5, 1, 1.25, 1.5, 2, 4, 8, 16];
 
   private engine: PdfEngine<Blob> | null = null;
@@ -344,6 +355,9 @@ export class PdfViewer {
       const activePage = renderAll ? untracked(() => this.activePage()) : this.activePage();
       const withAnnotations = this.withAnnotations();
       const withForms = this.withForms();
+      this.pageRotation();
+      this.spreadMode();
+      this.scrollLayout();
 
       if (!this.pdfDocument || !this.engine || this.isLoading()) {
         return;
@@ -351,6 +365,7 @@ export class PdfViewer {
 
       untracked(() => {
         this.applyInstantZoom(zoom);
+        this.schedulePageObserverRefresh();
         this.scheduleVisiblePagesRender({ zoom, activePage, renderAll, withAnnotations, withForms });
       });
     });
@@ -359,6 +374,7 @@ export class PdfViewer {
       const withAnnotations = this.withAnnotations();
       const isLoading = this.isLoading();
       const pageCount = this.pageCount();
+      this.pageRotation();
 
       if (isLoading || pageCount === 0 || !this.pdfDocument || !this.engine) {
         return;
@@ -484,18 +500,85 @@ export class PdfViewer {
 
   protected setSpreadMode(mode: PdfViewerSpreadMode): void {
     this.spreadMode.set(mode);
+    this.refreshLayoutAfterModeChange();
   }
 
   protected setScrollLayout(layout: PdfViewerScrollLayout): void {
     this.scrollLayout.set(layout);
+    this.refreshLayoutAfterModeChange();
   }
 
   protected rotateClockwise(): void {
-    this.renderedPages.update((pages) => [...pages]);
+    this.setPageRotation(this.rotatePageBy(1));
   }
 
   protected rotateCounterClockwise(): void {
-    this.renderedPages.update((pages) => [...pages]);
+    this.setPageRotation(this.rotatePageBy(-1));
+  }
+
+  private groupPagesIntoSpreads(
+    pages: PdfViewerPageView[],
+    mode: PdfViewerSpreadMode,
+  ): PdfViewerPageSpread[] {
+    if (mode === 'single') {
+      return pages.map((page) => ({
+        id: `single-${page.pageNumber}`,
+        leadingPlaceholder: false,
+        leadingPlaceholderPage: null,
+        pages: [page],
+      }));
+    }
+
+    const spreads: PdfViewerPageSpread[] = [];
+    let pageIndex = 0;
+
+    if (mode === 'two-even' && pages.length > 0) {
+      spreads.push({
+        id: 'two-even-cover',
+        leadingPlaceholder: true,
+        leadingPlaceholderPage: pages[0],
+        pages: [pages[0]],
+      });
+      pageIndex = 1;
+    }
+
+    while (pageIndex < pages.length) {
+      const spreadPages = pages.slice(pageIndex, pageIndex + 2);
+      spreads.push({
+        id: `${mode}-${spreadPages.map((page) => page.pageNumber).join('-')}`,
+        leadingPlaceholder: false,
+        leadingPlaceholderPage: null,
+        pages: spreadPages,
+      });
+      pageIndex += 2;
+    }
+
+    return spreads;
+  }
+
+  private setPageRotation(rotation: Rotation): void {
+    this.pageRotation.set(rotation);
+    this.applyInstantZoom(this.zoom());
+    this.refreshLayoutAfterModeChange();
+  }
+
+  private rotatePageBy(delta: 1 | -1): Rotation {
+    return this.normalizeRotation(this.pageRotation() + delta);
+  }
+
+  private refreshLayoutAfterModeChange(): void {
+    this.selectionStart = null;
+    this.selectionRects.set([]);
+    this.schedulePageObserverRefresh();
+
+    const targetWindow = this.document.defaultView;
+
+    if (!targetWindow) {
+      this.scrollToPage(this.activePage());
+      return;
+    }
+
+    targetWindow.requestAnimationFrame(() => this.scrollToPage(this.activePage()));
   }
 
   protected toggleFullscreen(): void {
@@ -886,13 +969,18 @@ export class PdfViewer {
       const pdfPage = pdfDocument.pages[pageNumber - 1];
       const previousPage = previousPageMap.get(pageNumber);
       const displaySize = this.getPageDisplaySize(pdfPage, nextScale);
-      const isFresh = previousPage?.url && Math.abs((previousPage.renderedScale ?? 0) - nextScale) < 0.0001;
+      const displayRotation = this.getPageDisplayRotation(pdfPage);
+      const isFresh = previousPage?.url
+        && Math.abs((previousPage.renderedScale ?? 0) - nextScale) < 0.0001
+        && previousPage.renderedRotation === displayRotation;
 
       return {
         pageNumber,
         url: isFresh ? previousPage.url : null,
         scale: nextScale,
         renderedScale: isFresh ? previousPage.renderedScale : null,
+        rotation: displayRotation,
+        renderedRotation: isFresh ? previousPage.renderedRotation : null,
         width: displaySize.width,
         height: displaySize.height,
         isRendering: false,
@@ -1014,20 +1102,26 @@ export class PdfViewer {
       }
 
       const currentPage = this.renderedPages().find((page) => page.pageNumber === pageNumber);
+      const page = pdfDocument.pages[pageNumber - 1];
+      const renderRotation = this.getPageDisplayRotation(page);
 
       if (!currentPage || Math.abs(currentPage.scale - renderScale) > 0.0001) {
         continue;
       }
 
-      if (currentPage.url && Math.abs((currentPage.renderedScale ?? 0) - renderScale) < 0.0001) {
+      if (
+        currentPage.url
+        && Math.abs((currentPage.renderedScale ?? 0) - renderScale) < 0.0001
+        && currentPage.renderedRotation === renderRotation
+      ) {
         continue;
       }
 
       this.patchRenderedPage(pageNumber, { isRendering: !currentPage.url });
-      const page = pdfDocument.pages[pageNumber - 1];
       const rasterOptions = this.getPageRasterRenderOptions(page, renderScale);
       const blob = await this.engine.renderPage(pdfDocument, page, {
         scaleFactor: rasterOptions.scaleFactor,
+        rotation: renderRotation,
         dpr: rasterOptions.dpr,
         withAnnotations: options.withAnnotations,
         withForms: options.withForms,
@@ -1038,7 +1132,9 @@ export class PdfViewer {
       }
 
       const displaySize = this.getPageDisplaySize(page, renderScale);
-      const textGlyphs = await this.getPageTextGlyphs(pdfDocument, page, renderScale);
+      const textGlyphs = this.pageRotation() === Rotation.Degree0
+        ? await this.getPageTextGlyphs(pdfDocument, page, renderScale)
+        : [];
 
       if (!this.isRenderCurrent(token, renderToken)) {
         return;
@@ -1051,6 +1147,8 @@ export class PdfViewer {
         url,
         scale: renderScale,
         renderedScale: renderScale,
+        rotation: renderRotation,
+        renderedRotation: renderRotation,
         width: displaySize.width,
         height: displaySize.height,
         isRendering: false,
@@ -1086,18 +1184,31 @@ export class PdfViewer {
     }
 
     let hasChanges = false;
+    const urlsToRevoke: string[] = [];
     const nextPages = pages.map((page) => {
-      if (Math.abs(page.scale - nextScale) < 0.0001) {
+      const pdfPage = pdfDocument.pages[page.pageNumber - 1];
+      const displaySize = this.getPageDisplaySize(pdfPage, nextScale);
+      const displayRotation = this.getPageDisplayRotation(pdfPage);
+      const scaleChanged = Math.abs(page.scale - nextScale) >= 0.0001;
+      const rotationChanged = page.rotation !== displayRotation || page.renderedRotation !== displayRotation;
+
+      if (!scaleChanged && !rotationChanged && page.width === displaySize.width && page.height === displaySize.height) {
         return page;
       }
 
       hasChanges = true;
-      const pdfPage = pdfDocument.pages[page.pageNumber - 1];
-      const displaySize = this.getPageDisplaySize(pdfPage, nextScale);
+
+      if (rotationChanged && page.url) {
+        urlsToRevoke.push(page.url);
+      }
 
       return {
         ...page,
+        url: rotationChanged ? null : page.url,
         scale: nextScale,
+        renderedScale: rotationChanged ? null : page.renderedScale,
+        rotation: displayRotation,
+        renderedRotation: rotationChanged ? null : page.renderedRotation,
         width: displaySize.width,
         height: displaySize.height,
         isRendering: false,
@@ -1112,6 +1223,9 @@ export class PdfViewer {
     this.selectionStart = null;
     this.selectionRects.set([]);
     this.renderedPages.set(nextPages);
+    for (const url of urlsToRevoke) {
+      this.revokeObjectUrl(url);
+    }
     this.schedulePageObserverRefresh();
   }
 
@@ -1151,7 +1265,8 @@ export class PdfViewer {
     }
 
     const containerRect = container.getBoundingClientRect();
-    const prefetchMargin = containerRect.height;
+    const verticalPrefetchMargin = containerRect.height;
+    const horizontalPrefetchMargin = containerRect.width;
     const pages = Array.from(container.querySelectorAll<HTMLElement>('[data-ngs-pdf-page]'));
     const visiblePageNumbers: number[] = [];
 
@@ -1161,8 +1276,10 @@ export class PdfViewer {
 
       if (
         Number.isFinite(pageNumber) &&
-        rect.bottom >= containerRect.top - prefetchMargin &&
-        rect.top <= containerRect.bottom + prefetchMargin
+        rect.bottom >= containerRect.top - verticalPrefetchMargin &&
+        rect.top <= containerRect.bottom + verticalPrefetchMargin &&
+        rect.right >= containerRect.left - horizontalPrefetchMargin &&
+        rect.left <= containerRect.right + horizontalPrefetchMargin
       ) {
         visiblePageNumbers.push(pageNumber);
       }
@@ -1195,6 +1312,7 @@ export class PdfViewer {
     for (const page of pdfDocument.pages) {
       const blob = await this.engine.renderThumbnail(pdfDocument, page, {
         scaleFactor: thumbnailScale,
+        rotation: this.getPageDisplayRotation(page),
         dpr: this.getDevicePixelRatio(),
         withAnnotations: options.withAnnotations,
       }).toPromise();
@@ -1902,7 +2020,8 @@ export class PdfViewer {
   }
 
   private getPageBaseSize(page: PdfPageObject): { width: number; height: number } {
-    const isRotatedSideways = page.rotation === 1 || page.rotation === 3;
+    const rotation = this.getPageDisplayRotation(page);
+    const isRotatedSideways = rotation === Rotation.Degree90 || rotation === Rotation.Degree270;
     const width = isRotatedSideways ? page.size.height : page.size.width;
     const height = isRotatedSideways ? page.size.width : page.size.height;
 
@@ -1910,6 +2029,14 @@ export class PdfViewer {
       width: Math.max(1, width),
       height: Math.max(1, height),
     };
+  }
+
+  private getPageDisplayRotation(page: PdfPageObject): Rotation {
+    return this.normalizeRotation(page.rotation + this.pageRotation());
+  }
+
+  private normalizeRotation(rotation: number): Rotation {
+    return (((rotation % 4) + 4) % 4) as Rotation;
   }
 
   private scrollToPage(pageNumber: number): void {
@@ -1925,12 +2052,16 @@ export class PdfViewer {
     }
 
     const nextScrollTop = this.getPageScrollTop(container, target);
-    const scrollDistance = Math.abs(container.scrollTop - nextScrollTop);
+    const nextScrollLeft = this.getPageScrollLeft(container, target);
+    const scrollDistance = Math.hypot(
+      container.scrollTop - nextScrollTop,
+      container.scrollLeft - nextScrollLeft,
+    );
 
     this.startProgrammaticScrollLock(pageNumber, scrollDistance);
     container.scrollTo({
       top: nextScrollTop,
-      left: this.getPageScrollLeft(container, target),
+      left: nextScrollLeft,
       behavior: 'smooth',
     });
   }
@@ -1982,13 +2113,14 @@ export class PdfViewer {
     }
 
     const containerRect = container.getBoundingClientRect();
-    const viewportCenter = containerRect.top + containerRect.height / 2;
+    const viewportCenterX = containerRect.left + containerRect.width / 2;
+    const viewportCenterY = containerRect.top + containerRect.height / 2;
     const pages = Array.from(container.querySelectorAll<HTMLElement>('[data-ngs-pdf-page]'));
 
     let closestPage: number | null = null;
     let closestDistance = Number.POSITIVE_INFINITY;
     let mostVisiblePage: number | null = null;
-    let mostVisibleHeight = 0;
+    let mostVisibleArea = 0;
 
     for (const page of pages) {
       const rect = page.getBoundingClientRect();
@@ -1998,18 +2130,27 @@ export class PdfViewer {
         continue;
       }
 
-      if (rect.top <= viewportCenter && rect.bottom >= viewportCenter) {
+      if (
+        rect.left <= viewportCenterX &&
+        rect.right >= viewportCenterX &&
+        rect.top <= viewportCenterY &&
+        rect.bottom >= viewportCenterY
+      ) {
         return pageNumber;
       }
 
+      const visibleWidth = Math.max(0, Math.min(rect.right, containerRect.right) - Math.max(rect.left, containerRect.left));
       const visibleHeight = Math.max(0, Math.min(rect.bottom, containerRect.bottom) - Math.max(rect.top, containerRect.top));
+      const visibleArea = visibleWidth * visibleHeight;
 
-      if (visibleHeight > mostVisibleHeight) {
-        mostVisibleHeight = visibleHeight;
+      if (visibleArea > mostVisibleArea) {
+        mostVisibleArea = visibleArea;
         mostVisiblePage = pageNumber;
       }
 
-      const distance = Math.min(Math.abs(rect.top - viewportCenter), Math.abs(rect.bottom - viewportCenter));
+      const pageCenterX = rect.left + rect.width / 2;
+      const pageCenterY = rect.top + rect.height / 2;
+      const distance = Math.hypot(pageCenterX - viewportCenterX, pageCenterY - viewportCenterY);
 
       if (distance < closestDistance) {
         closestDistance = distance;
@@ -2108,7 +2249,10 @@ export class PdfViewer {
       return;
     }
 
-    if (Math.abs(container.scrollTop - this.getPageScrollTop(container, target)) <= 2) {
+    if (
+      Math.abs(container.scrollTop - this.getPageScrollTop(container, target)) <= 2 &&
+      Math.abs(container.scrollLeft - this.getPageScrollLeft(container, target)) <= 2
+    ) {
       this.completeProgrammaticScroll();
     }
   }

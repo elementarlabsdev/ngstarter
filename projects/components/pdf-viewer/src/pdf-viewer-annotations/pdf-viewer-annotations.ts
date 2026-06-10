@@ -1,22 +1,16 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input, output, signal, TemplateRef } from '@angular/core';
-import { Avatar } from '@ngstarter-ui/components/avatar';
 import { Button } from '@ngstarter-ui/components/button';
-import {
-  Card,
-  CardActions,
-  CardAside,
-  CardAvatar,
-  CardContent,
-  CardHeader,
-  CardSubtitle,
-  CardTitle,
-} from '@ngstarter-ui/components/card';
-import { Chip } from '@ngstarter-ui/components/chips';
 import { FormField, IconButtonSuffix, IconPrefix } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input as NgsInput } from '@ngstarter-ui/components/input';
-import { Panel, PanelContent, PanelHeader } from '@ngstarter-ui/components/panel';
+import { Panel, PanelContent, PanelHeader, PanelSubheader } from '@ngstarter-ui/components/panel';
+import {
+  Toolbar,
+  ToolbarItem,
+  ToolbarSpacer,
+  ToolbarTitle,
+} from '@ngstarter-ui/components/toolbar';
 import { PdfViewerAnnotationDef } from '../pdf-viewer-annotation-def.directive';
 import type {
   PdfViewerAnnotationTemplateContext,
@@ -27,17 +21,7 @@ import type {
   selector: 'ngs-pdf-viewer-annotations',
   standalone: true,
   imports: [
-    Avatar,
     Button,
-    Card,
-    CardActions,
-    CardAside,
-    CardAvatar,
-    CardContent,
-    CardHeader,
-    CardSubtitle,
-    CardTitle,
-    Chip,
     FormField,
     Icon,
     IconButtonSuffix,
@@ -47,6 +31,11 @@ import type {
     Panel,
     PanelContent,
     PanelHeader,
+    Toolbar,
+    ToolbarItem,
+    ToolbarSpacer,
+    ToolbarTitle,
+    PanelSubheader,
   ],
   templateUrl: './pdf-viewer-annotations.html',
   styleUrl: './pdf-viewer-annotations.scss',

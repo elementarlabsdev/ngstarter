@@ -16,13 +16,13 @@
                 [name]="pageListVisible() ? 'fluent:panel-left-contract-24-regular' : 'fluent:panel-left-expand-24-regular'" />
             </button>
           }
-          <ngs-divider vertical />
+          <ngs-divider vertical fixedHeight />
         </ngs-toolbar-item>
-        <ngs-toolbar-title class="min-w-0 flex-1 truncate text-sm! font-semibold! text-on-surface-variant" [title]="displayDocumentName()">
+        <ngs-toolbar-title class="min-w-0 flex-1 truncate text-sm! max-w-[20%] font-semibold! text-on-surface-variant" [title]="displayDocumentName()">
           {{ displayDocumentName() }}
         </ngs-toolbar-title>
 
-        <ngs-toolbar-item class="pdf-viewer-toolbar__center flex flex-none items-center gap-5">
+        <ngs-toolbar-item class="pdf-viewer-toolbar__center flex flex-none items-center gap-3">
           <div class="pdf-viewer-toolbar__cluster flex min-w-0 items-center gap-2" aria-label="Zoom controls">
             <button
               class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
@@ -34,7 +34,7 @@
               <ngs-icon class="text-2xl" name="fluent:zoom-out-24-regular" />
             </button>
             <button
-              class="pdf-viewer-toolbar__zoom min-w-16 cursor-pointer border-0 bg-transparent p-0 text-center text-sm font-bold text-on-surface hover:text-primary"
+              class="pdf-viewer-toolbar__zoom min-w-12 cursor-pointer border-0 bg-transparent p-0 text-center text-sm text-on-surface hover:text-primary"
               type="button"
               aria-label="Zoom presets"
               [ngsMenuTriggerFor]="zoomMenu">
@@ -51,7 +51,7 @@
             </button>
           </div>
 
-          <ngs-divider vertical />
+          <ngs-divider vertical fixedHeight />
 
           <div class="pdf-viewer-toolbar__cluster flex min-w-0 items-center gap-2" aria-label="Page navigation">
             <button
@@ -63,7 +63,7 @@
               (click)="previousPage()">
               <ngs-icon class="text-2xl" name="fluent:chevron-left-24-regular" />
             </button>
-            <span class="pdf-viewer-toolbar__page inline-flex h-9 min-w-24 items-center justify-center gap-2 rounded bg-surface-container-low text-sm font-bold text-on-surface">
+            <span class="pdf-viewer-toolbar__page inline-flex h-9 min-w-16 items-center justify-center gap-2 rounded bg-surface-container-low text-sm font-bold text-on-surface">
               <span>{{ activePage() }}</span>
               <span>/</span>
               <span>{{ pageCount() || 1 }}</span>
@@ -226,7 +226,7 @@
               [attr.aria-label]="'Open page ' + pageItem.pageNumber"
               [attr.data-ngs-pdf-page-button]="pageItem.pageNumber"
               (click)="setPage(pageItem.pageNumber)">
-              <span class="pdf-viewer-sidebar__thumb flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded border border-border bg-surface shadow-xs group-hover:border-border group-[.is-active]:border-border group-[.is-active]:bg-primary-container group-[.is-active]:shadow-xs group-[.is-active]:ring-2 group-[.is-active]:ring-primary-container" aria-hidden="true">
+              <span class="pdf-viewer-sidebar__thumb flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded border border-border bg-surface shadow-xs group-hover:border-border" aria-hidden="true">
                 @if (pageItem.thumbnail; as thumbnail) {
                   <img
                     class="block h-full w-full select-none object-contain"
@@ -261,54 +261,71 @@
           <span>No PDF selected.</span>
         </div>
       } @else {
-        <div class="pdf-viewer-pages grid min-h-full min-w-full w-max content-start grid-flow-row box-border justify-items-center gap-6 p-6">
-          @for (pdfPage of renderedPages(); track pdfPage.pageNumber) {
-            <article
-              class="pdf-viewer-page w-max max-w-none"
-              [attr.aria-label]="'PDF page ' + pdfPage.pageNumber"
-              [attr.data-ngs-pdf-page]="pdfPage.pageNumber">
-              <div
-                class="pdf-viewer-page__surface relative cursor-text overflow-hidden rounded bg-surface shadow-md select-none touch-none"
-                [style.width.px]="pdfPage.width"
-                [style.height.px]="pdfPage.height"
-                (pointerdown)="startTextSelection($event, pdfPage)"
-                (pointermove)="updateTextSelection($event, pdfPage)"
-                (pointerup)="finishTextSelection($event, pdfPage)"
-                (pointercancel)="cancelTextSelection()"
-                (mousedown)="startTextSelection($event, pdfPage)"
-                (mousemove)="updateTextSelection($event, pdfPage)"
-                (mouseup)="finishTextSelection($event, pdfPage)">
-                @if (pdfPage.url; as pageUrl) {
-                  <img
-                    class="block h-full w-full max-w-none select-none pointer-events-none"
-                    [src]="pageUrl"
-                    [alt]="'PDF page ' + pdfPage.pageNumber"
-                    [attr.width]="pdfPage.width"
-                    [attr.height]="pdfPage.height"
-                    draggable="false" />
-                } @else {
-                  <div class="pdf-viewer-page__placeholder pointer-events-none absolute inset-0 flex items-center justify-center bg-surface" aria-hidden="true">
-                    @if (pdfPage.isRendering) {
-                      <span class="size-8 animate-spin rounded-full border-2 border-border border-t-primary"></span>
+        <div
+          class="pdf-viewer-pages"
+          [class.is-horizontal]="scrollLayout() === 'horizontal'"
+          [class.is-vertical]="scrollLayout() === 'vertical'"
+          [class.is-spread]="spreadMode() !== 'single'">
+          @for (spread of pageSpreads(); track spread.id) {
+            <div class="pdf-viewer-spread" [attr.data-ngs-pdf-spread]="spread.id">
+              @if (spread.leadingPlaceholder) {
+                @if (spread.leadingPlaceholderPage; as placeholderPage) {
+                  <div
+                    class="pdf-viewer-spread__placeholder"
+                    [style.width.px]="placeholderPage.width"
+                    [style.height.px]="placeholderPage.height"
+                    aria-hidden="true"></div>
+                }
+              }
+              @for (pdfPage of spread.pages; track pdfPage.pageNumber) {
+                <article
+                  class="pdf-viewer-page w-max max-w-none"
+                  [attr.aria-label]="'PDF page ' + pdfPage.pageNumber"
+                  [attr.data-ngs-pdf-page]="pdfPage.pageNumber">
+                  <div
+                    class="pdf-viewer-page__surface relative cursor-text overflow-hidden rounded bg-surface shadow-md select-none touch-none"
+                    [style.width.px]="pdfPage.width"
+                    [style.height.px]="pdfPage.height"
+                    (pointerdown)="startTextSelection($event, pdfPage)"
+                    (pointermove)="updateTextSelection($event, pdfPage)"
+                    (pointerup)="finishTextSelection($event, pdfPage)"
+                    (pointercancel)="cancelTextSelection()"
+                    (mousedown)="startTextSelection($event, pdfPage)"
+                    (mousemove)="updateTextSelection($event, pdfPage)"
+                    (mouseup)="finishTextSelection($event, pdfPage)">
+                    @if (pdfPage.url; as pageUrl) {
+                      <img
+                        class="block h-full w-full max-w-none select-none pointer-events-none"
+                        [src]="pageUrl"
+                        [alt]="'PDF page ' + pdfPage.pageNumber"
+                        [attr.width]="pdfPage.width"
+                        [attr.height]="pdfPage.height"
+                        draggable="false" />
+                    } @else {
+                      <div class="pdf-viewer-page__placeholder pointer-events-none absolute inset-0 flex items-center justify-center bg-surface" aria-hidden="true">
+                        @if (pdfPage.isRendering) {
+                          <span class="size-8 animate-spin rounded-full border-2 border-border border-t-primary"></span>
+                        }
+                      </div>
+                    }
+                    @if (selectionRectsForPage(pdfPage.pageNumber); as selectionRects) {
+                      @if (selectionRects.length > 0) {
+                        <div class="pdf-viewer-page__selection-layer pointer-events-none absolute inset-0 z-[1] isolate overflow-hidden mix-blend-multiply" aria-hidden="true">
+                          @for (selectionRect of selectionRects; track selectionRect.left + '-' + selectionRect.top + '-' + $index) {
+                            <div
+                              class="pdf-viewer-page__selection-rect pointer-events-none absolute bg-primary/30"
+                              [style.left.px]="selectionRect.left"
+                              [style.top.px]="selectionRect.top"
+                              [style.width.px]="selectionRect.width"
+                              [style.height.px]="selectionRect.height"></div>
+                          }
+                        </div>
+                      }
                     }
                   </div>
-                }
-                @if (selectionRectsForPage(pdfPage.pageNumber); as selectionRects) {
-                  @if (selectionRects.length > 0) {
-                    <div class="pdf-viewer-page__selection-layer pointer-events-none absolute inset-0 z-[1] isolate overflow-hidden mix-blend-multiply" aria-hidden="true">
-                      @for (selectionRect of selectionRects; track selectionRect.left + '-' + selectionRect.top + '-' + $index) {
-                        <div
-                          class="pdf-viewer-page__selection-rect pointer-events-none absolute bg-primary/30"
-                          [style.left.px]="selectionRect.left"
-                          [style.top.px]="selectionRect.top"
-                          [style.width.px]="selectionRect.width"
-                          [style.height.px]="selectionRect.height"></div>
-                      }
-                    </div>
-                  }
-                }
-              </div>
-            </article>
+                </article>
+              }
+            </div>
           }
         </div>
       }

@@ -1,84 +1,90 @@
-<ngs-panel class="pdf-viewer-annotations" aria-label="PDF annotations">
-  <ngs-panel-header class="pdf-viewer-annotations__toolbar">
-    <h3>Annotations</h3>
-    <button
-      class="pdf-viewer-annotations__close"
-      ngsIconButton
-      type="button"
-      aria-label="Close annotations panel"
-      (click)="closed.emit()">
-      <ngs-icon name="fluent:dismiss-24-regular" />
-    </button>
-  </ngs-panel-header>
-
-  <ngs-panel-content>
-    <div class="pdf-viewer-annotations__content">
-      <div class="pdf-viewer-annotations__filters">
-        <ngs-form-field subscriptHiddenIfEmpty>
-          <ngs-icon ngsIconPrefix name="fluent:search-24-regular" />
-          <input
-            ngsInput
-            type="text"
-            aria-label="Filter annotations"
-            placeholder="Filter annotations..."
-            [value]="filterQuery()"
-            (input)="setFilterQuery($event)" />
-          @if (filterQuery()) {
-            <button
-              ngsIconButton
-              ngsIconButtonSuffix
-              type="button"
-              aria-label="Clear annotation filter"
-              (click)="clearFilterQuery()">
-              <ngs-icon name="fluent:dismiss-24-regular" />
-            </button>
-          }
-        </ngs-form-field>
-
+<ngs-panel class="pdf-viewer-annotations bg-surface" aria-label="PDF annotations">
+  <ngs-panel-header class="p-0">
+    <ngs-toolbar class="w-full py-0 pr-2 ps-4" aria-label="PDF annotations toolbar">
+      <ngs-toolbar-title>
+        Annotations
+      </ngs-toolbar-title>
+      <ngs-toolbar-spacer />
+      <ngs-toolbar-item>
         <button
+          class="pdf-viewer-annotations__close"
           ngsIconButton
           type="button"
-          aria-label="Annotation filters">
-          <ngs-icon name="fluent:filter-24-regular" />
+          aria-label="Close annotations panel"
+          (click)="closed.emit()">
+          <ngs-icon name="fluent:dismiss-24-regular" />
         </button>
-      </div>
+      </ngs-toolbar-item>
+    </ngs-toolbar>
+  </ngs-panel-header>
 
-      <div class="pdf-viewer-annotations__list">
+  <ngs-panel-subheader autoHeight class="px-4 pb-4">
+    <ngs-form-field subscriptHiddenIfEmpty>
+      <ngs-icon ngsIconPrefix name="fluent:search-24-regular" />
+      <input
+        ngsInput
+        type="text"
+        aria-label="Filter annotations"
+        placeholder="Filter annotations..."
+        [value]="filterQuery()"
+        (input)="setFilterQuery($event)" />
+      @if (filterQuery()) {
+        <button
+          ngsIconButton
+          ngsIconButtonSuffix
+          type="button"
+          aria-label="Clear annotation filter"
+          (click)="clearFilterQuery()">
+          <ngs-icon name="fluent:dismiss-24-regular" />
+        </button>
+      }
+    </ngs-form-field>
+  </ngs-panel-subheader>
+
+  <ngs-panel-content>
+    <div class="flex min-h-full flex-col">
+      <div class="flex flex-1 flex-col gap-4 pb-4 px-4">
         <ng-template #defaultAnnotationTemplate let-annotation let-goToPage="goToPage">
-          <ngs-card class="pdf-viewer-annotation-card">
-            <ngs-card-header>
-              <ngs-avatar
-                ngsCardAvatar
-                variant="tonal"
-                [image]="getAvatarImage(annotation)"
-                [label]="getAvatarLabel(annotation)"
-                [alt]="annotation.author" />
+          <article class="rounded-2xl border border-border bg-surface p-4 shadow-xs">
+            <header class="flex items-start gap-3">
+              <span class="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary-container text-xs font-semibold text-on-primary-container">
+                @if (getAvatarImage(annotation); as avatarImage) {
+                  <img
+                    class="h-full w-full object-cover"
+                    [src]="avatarImage"
+                    [alt]="annotation.author" />
+                } @else {
+                  {{ getAvatarLabel(annotation) }}
+                }
+              </span>
 
-              <ngs-card-title>{{ annotation.author }}</ngs-card-title>
-              @if (annotation.time) {
-                <ngs-card-subtitle>{{ annotation.time }}</ngs-card-subtitle>
-              }
+              <span class="min-w-0 flex-1">
+                <span class="block truncate text-sm font-semibold text-on-surface">{{ annotation.author }}</span>
+                @if (annotation.time) {
+                  <span class="block truncate text-xs text-on-surface-variant">{{ annotation.time }}</span>
+                }
+              </span>
 
-              <ngs-card-aside>
-                <ngs-chip appearance="tonal">{{ getAnnotationTypeLabel(annotation) }}</ngs-chip>
-              </ngs-card-aside>
-            </ngs-card-header>
+              <span class="rounded-full bg-surface-container-high px-2 py-1 text-xs font-medium tracking-normal text-on-surface-variant uppercase">
+                {{ getAnnotationTypeLabel(annotation) }}
+              </span>
+            </header>
 
-            <ngs-card-content>
-              <p>{{ annotation.text }}</p>
-            </ngs-card-content>
+            <p class="mt-3 mb-0 text-base leading-relaxed text-on-surface">{{ annotation.text }}</p>
 
-            <ngs-card-actions align="between">
-              <button ngsButton="tonal" type="button" (click)="goToPage(annotation.pageNumber)">
+            <footer class="mt-4 flex items-center justify-between gap-2">
+              <button
+                ngsButton="tonal"
+                type="button"
+                (click)="goToPage(annotation.pageNumber)">
                 Page {{ annotation.pageNumber }}
               </button>
 
               <button ngsButton="text" type="button">
-                <ngs-icon name="fluent:arrow-reply-24-regular" />
                 {{ getReplyLabel(annotation) }}
               </button>
-            </ngs-card-actions>
-          </ngs-card>
+            </footer>
+          </article>
         </ng-template>
 
         @for (annotation of filteredAnnotations(); track annotation.id ?? annotation.pageNumber + '-' + $index) {
@@ -86,7 +92,7 @@
             [ngTemplateOutlet]="getAnnotationTemplate(annotation, $index) ?? defaultAnnotationTemplate"
             [ngTemplateOutletContext]="getAnnotationTemplateContext(annotation, $index)" />
         } @empty {
-          <div class="pdf-viewer-annotations__empty">No annotations found.</div>
+          <div class="p-4 text-center text-sm text-on-surface-variant">No annotations found.</div>
         }
       </div>
     </div>

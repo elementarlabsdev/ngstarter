@@ -1,5 +1,5 @@
 <ngs-panel class="pdf-viewer-search" aria-label="PDF search">
-  <ngs-panel-header class="ps-5 pe-3">
+  <ngs-panel-header class="ps-4 pe-3">
     <ngs-toolbar>
       <ngs-toolbar-title>Search</ngs-toolbar-title>
       <ngs-toolbar-spacer />
@@ -9,67 +9,69 @@
     </ngs-toolbar>
   </ngs-panel-header>
 
-  <ngs-panel-content>
-    <div class="pdf-viewer-search__content flex min-h-full flex-col gap-5 p-6">
-      <ngs-form-field class="pdf-viewer-search__field" subscriptHiddenIfEmpty>
-        <ngs-icon name="fluent:search-24-regular" ngsIconPrefix />
-        <input
-          ngsInput
-          type="text"
-          aria-label="Search PDF"
-          placeholder="Search"
-          [value]="queryValue()"
-          (input)="setQuery($event)" />
-        @if (queryValue()) {
-          <button ngsIconButtonSuffix ngsIconButton type="button" aria-label="Clear search" (click)="clearQuery()">
-            <ngs-icon name="fluent:dismiss-24-regular" />
+  <ngs-panel-subheader autoHeight class="px-4 pb-4">
+    <ngs-form-field class="pdf-viewer-search__field" subscriptHiddenIfEmpty>
+      <ngs-icon name="fluent:search-24-regular" ngsIconPrefix />
+      <input
+        ngsInput
+        type="text"
+        aria-label="Search PDF"
+        placeholder="Search"
+        [value]="queryValue()"
+        (input)="setQuery($event)" />
+      @if (queryValue()) {
+        <button ngsIconButtonSuffix ngsIconButton type="button" aria-label="Clear search" (click)="clearQuery()">
+          <ngs-icon name="fluent:dismiss-24-regular" />
+        </button>
+      }
+    </ngs-form-field>
+
+    <div class="pdf-viewer-search__options mt-4 grid gap-3 text-base text-on-surface">
+      <ngs-checkbox [checked]="caseSensitive()" (checkedChange)="setCaseSensitive($event)">
+        Case sensitive
+      </ngs-checkbox>
+      <ngs-checkbox [checked]="wholeWord()" (checkedChange)="setWholeWord($event)">
+        Whole word
+      </ngs-checkbox>
+    </div>
+
+    @if (hasQuery()) {
+      <div class="pdf-viewer-search__summary mt-4 flex items-center justify-between gap-4 text-base text-on-surface-variant">
+        <span>{{ resultCountLabel() }}</span>
+        <div class="pdf-viewer-search__nav flex items-center gap-3">
+          <button
+            class="text-on-surface"
+            ngsIconButton
+            type="button"
+            aria-label="Previous search result"
+            [disabled]="results().length === 0"
+            (click)="previousResult()">
+            <ngs-icon name="fluent:chevron-left-24-regular" />
           </button>
-        }
-      </ngs-form-field>
-
-      <div class="pdf-viewer-search__options grid gap-3 text-base text-on-surface">
-        <ngs-checkbox [checked]="caseSensitive()" (checkedChange)="setCaseSensitive($event)">
-          Case sensitive
-        </ngs-checkbox>
-        <ngs-checkbox [checked]="wholeWord()" (checkedChange)="setWholeWord($event)">
-          Whole word
-        </ngs-checkbox>
-      </div>
-
-      @if (hasQuery()) {
-        <ngs-divider />
-
-        <div class="pdf-viewer-search__summary flex items-center justify-between gap-4 text-base text-on-surface-variant">
-          <span>{{ resultCountLabel() }}</span>
-          <div class="pdf-viewer-search__nav flex items-center gap-3">
-            <button
-              class="text-on-surface"
-              ngsIconButton
-              type="button"
-              aria-label="Previous search result"
-              [disabled]="results().length === 0"
-              (click)="previousResult()">
-              <ngs-icon name="fluent:chevron-left-24-regular" />
-            </button>
-            <button
-              class="text-on-surface"
-              ngsIconButton
-              type="button"
-              aria-label="Next search result"
-              [disabled]="results().length === 0"
-              (click)="nextResult()">
-              <ngs-icon name="fluent:chevron-right-24-regular" />
-            </button>
-          </div>
+          <button
+            class="text-on-surface"
+            ngsIconButton
+            type="button"
+            aria-label="Next search result"
+            [disabled]="results().length === 0"
+            (click)="nextResult()">
+            <ngs-icon name="fluent:chevron-right-24-regular" />
+          </button>
         </div>
+      </div>
+    }
+  </ngs-panel-subheader>
 
+  <ngs-panel-content>
+    <div class="pdf-viewer-search__content flex min-h-full flex-col gap-4 px-4 pb-4">
+      @if (hasQuery()) {
         <div class="pdf-viewer-search__results grid min-h-0 gap-4">
           @for (group of visibleResultGroups(); track group.pageNumber) {
-            <section class="pdf-viewer-search__page-group grid gap-3">
+            <section class="pdf-viewer-search__page-group grid gap-3  bg-surface">
               <h3 class="m-0 text-base font-medium text-on-surface-variant">Page {{ group.pageNumber }}</h3>
               @for (item of group.results; track item.result.id ?? item.result.pageNumber + '-' + item.index) {
                 <button
-                  class="pdf-viewer-search__result w-full cursor-pointer rounded border border-border p-4 text-left text-base leading-snug text-on-surface"
+                  class="pdf-viewer-search__result w-full cursor-pointer rounded-2xl border border-border p-4 text-left text-base leading-snug text-on-surface"
                   type="button"
                   [class.bg-primary-container]="item.index === activeResultIndex()"
                   [class.bg-surface]="item.index !== activeResultIndex()"

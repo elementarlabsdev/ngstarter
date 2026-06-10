@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal, untracked } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Checkbox } from '@ngstarter-ui/components/checkbox';
-import { Divider } from '@ngstarter-ui/components/divider';
 import { FormField, IconButtonSuffix, IconPrefix } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input as NgsInput } from '@ngstarter-ui/components/input';
-import { Panel, PanelContent, PanelHeader } from '@ngstarter-ui/components/panel';
+import { Panel, PanelContent, PanelHeader, PanelSubheader } from '@ngstarter-ui/components/panel';
 import { Toolbar, ToolbarSpacer, ToolbarTitle } from '@ngstarter-ui/components/toolbar';
 import type { PdfViewerSearchOptions, PdfViewerSearchResultView } from '../types';
 
@@ -28,7 +27,6 @@ interface PdfViewerSearchResultGroup {
   imports: [
     Button,
     Checkbox,
-    Divider,
     FormField,
     Icon,
     IconButtonSuffix,
@@ -40,6 +38,7 @@ interface PdfViewerSearchResultGroup {
     Toolbar,
     ToolbarSpacer,
     ToolbarTitle,
+    PanelSubheader,
   ],
   templateUrl: './pdf-viewer-search.html',
   styleUrl: './pdf-viewer-search.scss',

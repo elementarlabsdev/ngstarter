@@ -6864,13 +6864,13 @@
       "exampleTopics": [
         "Basic pdf viewer"
       ],
-      "minimalExample": "<ngs-pdf-viewer\n  [src]=\"src()\"\n  [documentName]=\"documentName()\"\n  [wasmUrl]=\"wasmUrl\"\n  [showAnnotationsPanel]=\"true\"\n  [annotationsDataSource]=\"annotationsDataSource\"\n  class=\"pdf-viewer-example\" />",
+      "minimalExample": "<ngs-pdf-viewer\n  [src]=\"src()\"\n  [documentName]=\"documentName()\"\n  [wasmUrl]=\"wasmUrl\"\n  [showAnnotationsPanel]=\"true\"\n  [annotationsDataSource]=\"annotationsDataSource\"\n  class=\"pdf-viewer-example\">\n  <ng-template ngsPdfViewerAnnotation=\"risk\" let-annotation let-goToPage=\"goToPage\">\n    <article class=\"rounded-md border border-border bg-surface p-4 shadow-xs\">\n      <header class=\"flex items-start gap-3\">\n        <span class=\"flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary-container text-xs font-semibold text-on-primary-container\">\n          {{ annotation.avatarLabel || annotation.author.charAt(0) }}\n        </span>\n        <span class=\"min-w-0 flex-1\">\n          <span class=\"block truncate text-sm font-semibold text-on-surface\">{{ annotation.author }}</span>\n          @if (annotation.time) {\n            <span class=\"block truncate text-xs text-on-surface-variant\">{{ annotation.time }}</span>\n          }\n        </span>\n        <span class=\"rounded-full bg-surface-container-high px-2 py-1 text-xs font-medium tracking-normal text-on-surface-variant uppercase\">\n          Risk\n        </span>\n      </header>\n      <p class=\"mt-3 mb-0 text-base leading-relaxed text-on-surface\">{{ annotation.text }}</p>\n      <footer class=\"mt-4 flex items-center justify-between gap-2\">\n        <button\n          ngsButton=\"tonal\"\n          type=\"button\"\n          (click)=\"goToPage(annotation.pageNumber)\">\n          Page {{ annotation.pageNumber }}\n        </button>\n        <button ngsButton=\"text\" type=\"button\">\n          Reply\n        </button>\n      </\n...",
       "exampleFiles": [
         {
           "name": "basic-pdf-viewer-example",
           "title": "Basic pdf viewer",
           "file": "projects/docs/src/app/libraries/pdf-viewer/_examples/basic-pdf-viewer-example/basic-pdf-viewer-example.html",
-          "source": "<ngs-pdf-viewer\n  [src]=\"src()\"\n  [documentName]=\"documentName()\"\n  [wasmUrl]=\"wasmUrl\"\n  [showAnnotationsPanel]=\"true\"\n  [annotationsDataSource]=\"annotationsDataSource\"\n  class=\"pdf-viewer-example\" />"
+          "source": "<ngs-pdf-viewer\n  [src]=\"src()\"\n  [documentName]=\"documentName()\"\n  [wasmUrl]=\"wasmUrl\"\n  [showAnnotationsPanel]=\"true\"\n  [annotationsDataSource]=\"annotationsDataSource\"\n  class=\"pdf-viewer-example\">\n  <ng-template ngsPdfViewerAnnotation=\"risk\" let-annotation let-goToPage=\"goToPage\">\n    <article class=\"rounded-md border border-border bg-surface p-4 shadow-xs\">\n      <header class=\"flex items-start gap-3\">\n        <span class=\"flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary-container text-xs font-semibold text-on-primary-container\">\n          {{ annotation.avatarLabel || annotation.author.charAt(0) }}\n        </span>\n        <span class=\"min-w-0 flex-1\">\n          <span class=\"block truncate text-sm font-semibold text-on-surface\">{{ annotation.author }}</span>\n          @if (annotation.time) {\n            <span class=\"block truncate text-xs text-on-surface-variant\">{{ annotation.time }}</span>\n          }\n        </span>\n        <span class=\"rounded-full bg-surface-container-high px-2 py-1 text-xs font-medium tracking-normal text-on-surface-variant uppercase\">\n          Risk\n        </span>\n      </header>\n      <p class=\"mt-3 mb-0 text-base leading-relaxed text-on-surface\">{{ annotation.text }}</p>\n      <footer class=\"mt-4 flex items-center justify-between gap-2\">\n        <button\n          ngsButton=\"tonal\"\n          type=\"button\"\n          (click)=\"goToPage(annotation.pageNumber)\">\n          Page {{ annotation.pageNumber }}\n        </button>\n        <button ngsButton=\"text\" type=\"button\">\n          Reply\n        </button>\n      </\n..."
         }
       ],
       "previewAsset": "projects/components/pdf-viewer/preview.svg",
@@ -6947,21 +6947,14 @@
         "searchChanged"
       ],
       "cssTokens": [
-        "--ngs-card-bg",
-        "--ngs-card-padding",
-        "--ngs-card-radius",
-        "--ngs-color-border",
-        "--ngs-color-on-surface",
-        "--ngs-color-on-surface-variant",
-        "--ngs-color-surface",
-        "--ngs-color-surface-container-lowest",
-        "--ngs-font-size-base",
-        "--ngs-font-size-sm",
+        "--ngs-color-primary",
         "--ngs-pdf-viewer-aside-width",
         "--ngs-pdf-viewer-height",
         "--ngs-pdf-viewer-min-height",
+        "--ngs-pdf-viewer-page-gap",
+        "--ngs-pdf-viewer-page-padding",
         "--ngs-pdf-viewer-sidebar-width",
-        "--ngs-radius-md"
+        "--ngs-pdf-viewer-spread-gap"
       ],
       "example": null
     },

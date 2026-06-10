@@ -54,6 +54,8 @@ export interface PdfViewerPageView {
   url: string | null;
   scale: number;
   renderedScale: number | null;
+  rotation?: number;
+  renderedRotation?: number | null;
   width: number;
   height: number;
   isRendering: boolean;

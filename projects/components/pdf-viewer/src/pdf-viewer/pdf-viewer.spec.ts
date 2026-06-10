@@ -86,7 +86,15 @@ describe('PdfViewer', () => {
       pdfDocument: unknown;
       renderedPages: {
         set(value: unknown[]): void;
-        (): Array<{ scale: number; url: string | null; width: number; height: number; textGlyphs: unknown[] }>;
+        (): Array<{
+          scale: number;
+          url: string | null;
+          rotation?: number;
+          renderedRotation?: number | null;
+          width: number;
+          height: number;
+          textGlyphs: unknown[];
+        }>;
       };
       setZoom(scale: number): void;
     };
@@ -110,6 +118,8 @@ describe('PdfViewer', () => {
         url: 'blob:page-1',
         scale: 1,
         renderedScale: 1,
+        rotation: 0,
+        renderedRotation: 0,
         width: 100,
         height: 200,
         isRendering: false,
@@ -132,9 +142,111 @@ describe('PdfViewer', () => {
 
     expect(component.renderedPages()[0].scale).toBe(2);
     expect(component.renderedPages()[0].url).toBe('blob:page-1');
+    expect(component.renderedPages()[0].rotation).toBe(0);
+    expect(component.renderedPages()[0].renderedRotation).toBe(0);
     expect(component.renderedPages()[0].width).toBe(200);
     expect(component.renderedPages()[0].height).toBe(400);
     expect(component.renderedPages()[0].textGlyphs).toEqual([]);
+  });
+
+  it('should group rendered pages into the selected spread mode', () => {
+    const component = fixture.componentInstance as unknown as {
+      pageSpreads: {
+        (): Array<{
+          leadingPlaceholder: boolean;
+          pages: Array<{ pageNumber: number }>;
+        }>;
+      };
+      renderedPages: { set(value: unknown[]): void };
+      setSpreadMode(mode: 'single' | 'two-odd' | 'two-even'): void;
+    };
+    const pages = [1, 2, 3, 4].map((pageNumber) => ({
+      pageNumber,
+      url: null,
+      scale: 1,
+      renderedScale: null,
+      rotation: 0,
+      renderedRotation: null,
+      width: 100,
+      height: 200,
+      isRendering: false,
+      textGlyphs: [],
+    }));
+
+    component.renderedPages.set(pages);
+
+    expect(component.pageSpreads().map((spread) => spread.pages.map((page) => page.pageNumber))).toEqual([[1], [2], [3], [4]]);
+
+    component.setSpreadMode('two-odd');
+    expect(component.pageSpreads().map((spread) => spread.pages.map((page) => page.pageNumber))).toEqual([[1, 2], [3, 4]]);
+
+    component.setSpreadMode('two-even');
+    expect(component.pageSpreads().map((spread) => spread.pages.map((page) => page.pageNumber))).toEqual([[1], [2, 3], [4]]);
+    expect(component.pageSpreads()[0].leadingPlaceholder).toBe(true);
+  });
+
+  it('should rotate pages by invalidating stale page renders and swapping display size', () => {
+    const component = fixture.componentInstance as unknown as {
+      pdfDocument: unknown;
+      pageRotation: { (): number };
+      renderedPages: {
+        set(value: unknown[]): void;
+        (): Array<{
+          url: string | null;
+          width: number;
+          height: number;
+          rotation?: number;
+          renderedRotation?: number | null;
+        }>;
+      };
+      rotateClockwise(): void;
+      rotateCounterClockwise(): void;
+    };
+    component.pdfDocument = {
+      pageCount: 1,
+      pages: [
+        {
+          index: 0,
+          rotation: 0,
+          size: {
+            width: 100,
+            height: 200,
+          },
+        },
+      ],
+    };
+    component.renderedPages.set([
+      {
+        pageNumber: 1,
+        url: 'blob:page-1',
+        scale: 1,
+        renderedScale: 1,
+        rotation: 0,
+        renderedRotation: 0,
+        width: 100,
+        height: 200,
+        isRendering: false,
+        textGlyphs: [],
+      },
+    ]);
+
+    component.rotateClockwise();
+    fixture.detectChanges();
+
+    expect(component.pageRotation()).toBe(1);
+    expect(component.renderedPages()[0].url).toBeNull();
+    expect(component.renderedPages()[0].rotation).toBe(1);
+    expect(component.renderedPages()[0].renderedRotation).toBeNull();
+    expect(component.renderedPages()[0].width).toBe(200);
+    expect(component.renderedPages()[0].height).toBe(100);
+
+    component.rotateCounterClockwise();
+    fixture.detectChanges();
+
+    expect(component.pageRotation()).toBe(0);
+    expect(component.renderedPages()[0].rotation).toBe(0);
+    expect(component.renderedPages()[0].width).toBe(100);
+    expect(component.renderedPages()[0].height).toBe(200);
   });
 
   it('should keep default raster render scale sharp at 1600 percent for document pages', () => {
