@@ -404,6 +404,29 @@ describe('PdfViewer', () => {
     expect(fixture.nativeElement.querySelector('ngs-panel-aside')).not.toBeNull();
   });
 
+  it('should wait until the aside controls are interactive before opening panels', () => {
+    fixture.componentRef.setInput('showAnnotationsPanel', true);
+    fixture.detectChanges();
+
+    const component = fixture.componentInstance as unknown as {
+      asidePanelInteractive: { set(value: boolean): void };
+    };
+    const getButton = (label: string) =>
+      fixture.nativeElement.querySelector(`button[aria-label="${label}"]`) as HTMLButtonElement;
+
+    component.asidePanelInteractive.set(false);
+    fixture.detectChanges();
+
+    expect(getButton('Search').disabled).toBe(true);
+    expect(getButton('Toggle annotations panel').disabled).toBe(true);
+
+    component.asidePanelInteractive.set(true);
+    fixture.detectChanges();
+
+    expect(getButton('Search').disabled).toBe(false);
+    expect(getButton('Toggle annotations panel').disabled).toBe(false);
+  });
+
   it('should render search results returned by the PDF engine', async () => {
     const component = fixture.componentInstance as unknown as {
       engine: unknown;

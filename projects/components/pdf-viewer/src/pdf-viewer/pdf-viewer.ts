@@ -1,5 +1,6 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
+  afterNextRender,
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
@@ -196,6 +197,7 @@ export class PdfViewer {
   protected readonly pageListVisible = signal(false);
   protected readonly searchPanelVisible = signal(false);
   protected readonly annotationsPanelVisible = signal(false);
+  protected readonly asidePanelInteractive = signal(false);
   protected readonly spreadMode = signal<PdfViewerSpreadMode>('single');
   protected readonly scrollLayout = signal<PdfViewerScrollLayout>('vertical');
   protected readonly pageRotation = signal<Rotation>(Rotation.Degree0);
@@ -265,6 +267,12 @@ export class PdfViewer {
   private readonly documentOpenTimeoutMs = 15000;
 
   constructor() {
+    afterNextRender(() => {
+      if (this.isBrowser) {
+        this.asidePanelInteractive.set(true);
+      }
+    });
+
     this.destroyRef.onDestroy(() => {
       this.loadToken++;
       this.renderToken++;

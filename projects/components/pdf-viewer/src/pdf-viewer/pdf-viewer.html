@@ -90,6 +90,7 @@
               type="button"
               [attr.aria-pressed]="isSearchPanelVisible()"
               aria-label="Search"
+              [disabled]="!asidePanelInteractive()"
               (click)="toggleSearchPanel()">
               <ngs-icon class="text-2xl" name="fluent:search-24-regular" />
             </button>
@@ -109,6 +110,7 @@
               type="button"
               [attr.aria-pressed]="isAnnotationsPanelVisible()"
               aria-label="Toggle annotations panel"
+              [disabled]="!asidePanelInteractive()"
               (click)="toggleAnnotationsPanel()">
               <ngs-icon class="text-2xl" name="fluent:text-bullet-list-square-edit-24-regular" />
             </button>
