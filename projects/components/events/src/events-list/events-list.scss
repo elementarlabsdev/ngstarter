@@ -1,0 +1,10 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-events-list-gap: --spacing(7);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--ngs-events-list-gap);
+  width: 100%;
+}

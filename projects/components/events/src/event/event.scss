@@ -1,0 +1,64 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-event-bg: transparent;
+  --ngs-event-border-color: var(--ngs-color-border);
+  --ngs-event-radius: theme(--radius-2xl);
+  --ngs-event-padding: --spacing(2);
+  --ngs-event-gap: --spacing(4.5);
+  --ngs-event-min-height: --spacing(20);
+  --ngs-event-shadow: var(--ngs-shadow-xs);
+  --ngs-event-meta-gap: --spacing(3);
+
+  display: flex;
+  align-items: center;
+  gap: var(--ngs-event-gap);
+  min-height: var(--ngs-event-min-height);
+  padding: var(--ngs-event-padding);
+  padding-inline-start: 0;
+  padding-inline-end: --spacing(4);
+  background: var(--ngs-event-bg);
+  border: 1px solid;
+  border-color: var(--ngs-event-border-color);
+  border-radius: var(--ngs-event-radius);
+  box-shadow: var(--ngs-event-shadow);
+
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ngs-event-gap);
+    min-width: 0;
+    flex: 1;
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    gap: --spacing(1);
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: var(--ngs-event-meta-gap);
+    min-width: 0;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: none;
+
+    &:empty {
+      display: none;
+    }
+  }
+}

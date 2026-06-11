@@ -111,6 +111,7 @@ Must use:
 - drawer: `@ngstarter-ui/components/drawer` docs: /components/drawer
 - emoji-picker: `@ngstarter-ui/components/emoji-picker` docs: /components/emoji-picker
 - empty-state: `@ngstarter-ui/components/empty-state` docs: /components/empty-state
+- events: `@ngstarter-ui/components/events` docs: /components/events
 - expand: `@ngstarter-ui/components/expand` docs: /components/expand
 - expansion: `@ngstarter-ui/components/expansion` docs: /components/expansion-panel
 - file-type: `@ngstarter-ui/components/file-type` docs: /components/file-type

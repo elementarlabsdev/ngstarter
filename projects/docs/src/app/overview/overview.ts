@@ -245,6 +245,11 @@ export class Overview {
       name: 'Expand'
     },
     {
+      routerLink: '/components/events',
+      imageUrl: 'assets/overview/events.svg',
+      name: 'Events'
+    },
+    {
       routerLink: '/components/expansion-panel',
       imageUrl: 'assets/overview/expansion.svg',
       name: 'Expansion Panel'

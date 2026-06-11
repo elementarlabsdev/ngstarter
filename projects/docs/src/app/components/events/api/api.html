@@ -1,0 +1,121 @@
+<h3 class="text-xl font-bold mt-8 mb-4">ngs-events-list</h3>
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="eventsListProperties">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <div [innerHTML]="element.name"></div>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="default">
+      <th ngs-header-cell *ngsHeaderCellDef>Default</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
+  </table>
+</div>
+
+<h3 class="text-xl font-bold mt-8 mb-4">ngs-events-section</h3>
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="eventsSectionProperties">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <div [innerHTML]="element.name"></div>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="default">
+      <th ngs-header-cell *ngsHeaderCellDef>Default</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
+  </table>
+</div>
+
+<h3 class="text-xl font-bold mt-8 mb-4">ngs-event-date</h3>
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="eventDateProperties">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <div [innerHTML]="element.name"></div>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="default">
+      <th ngs-header-cell *ngsHeaderCellDef>Default</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
+  </table>
+</div>
+
+<h3 class="text-xl font-bold mt-8 mb-4">ngs-event-status</h3>
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="eventStatusProperties">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
+      <td ngs-cell *ngsCellDef="let element">
+        <div [innerHTML]="element.name"></div>
+        <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="default">
+      <th ngs-header-cell *ngsHeaderCellDef>Default</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
+  </table>
+</div>
+
+<h3 class="text-xl font-bold mt-8 mb-4">Slots</h3>
+<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <table ngs-table [dataSource]="slots">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Slot</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="description">
+      <th ngs-header-cell *ngsHeaderCellDef>Description</th>
+      <td ngs-cell *ngsCellDef="let element">{{ element.description }}</td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'description']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'description'];"></tr>
+  </table>
+</div>

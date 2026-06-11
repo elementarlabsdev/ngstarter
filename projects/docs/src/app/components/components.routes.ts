@@ -36,6 +36,11 @@ export const routes: Routes = [
     title: 'Timeline'
   },
   {
+    path: 'events',
+    loadChildren: () => import('./events/routes').then(m => m.routes),
+    title: 'Events'
+  },
+  {
     path: 'badge',
     loadChildren: () => import('./badge/routes').then(m => m.routes),
     title: 'Badge'

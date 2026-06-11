@@ -1,0 +1,22 @@
+<svg width="480" height="320" viewBox="0 0 480 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="480" height="320" rx="24" fill="#F8FAFC"/>
+  <text x="48" y="54" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="600">This week</text>
+  <rect x="48" y="78" width="384" height="72" rx="24" fill="white" stroke="#E2E8F0"/>
+  <rect x="64" y="94" width="46" height="40" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <path d="M64 112H110" stroke="#CBD5E1" stroke-dasharray="3 3"/>
+  <text x="78" y="108" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">Thu</text>
+  <text x="77" y="131" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="600">19</text>
+  <rect x="126" y="100" width="4" height="28" rx="2" fill="#22C55E"/>
+  <text x="146" y="110" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="600">Octolane Check-in</text>
+  <text x="146" y="134" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="15">9:00 - 9:30 AM</text>
+  <circle cx="374" cy="114" r="13" fill="#94A3B8"/>
+  <circle cx="392" cy="114" r="13" fill="#CBD5E1" stroke="white" stroke-width="2"/>
+  <rect x="48" y="166" width="384" height="72" rx="24" fill="white" stroke="#E2E8F0"/>
+  <rect x="64" y="182" width="46" height="40" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <path d="M64 200H110" stroke="#CBD5E1" stroke-dasharray="3 3"/>
+  <text x="81" y="196" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">Fri</text>
+  <text x="77" y="219" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="600">20</text>
+  <rect x="126" y="188" width="4" height="28" rx="2" fill="#CBD5E1"/>
+  <text x="146" y="198" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="600">POC Progress</text>
+  <text x="146" y="222" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="15">9:00 - 9:15 AM</text>
+</svg>

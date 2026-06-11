@@ -1,0 +1,27 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-events-section-gap: --spacing(4);
+  --ngs-events-section-item-gap: --spacing(3);
+  --ngs-events-section-label-color: var(--ngs-color-on-surface-variant);
+  --ngs-events-section-label-font-size: .875rem;
+  --ngs-events-section-label-font-weight: 400;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--ngs-events-section-gap);
+
+  .label {
+    color: var(--ngs-events-section-label-color);
+    font-size: var(--ngs-events-section-label-font-size);
+    font-weight: var(--ngs-events-section-label-font-weight);
+    line-height: 1.35;
+    margin: 0;
+  }
+
+  .items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ngs-events-section-item-gap);
+  }
+}

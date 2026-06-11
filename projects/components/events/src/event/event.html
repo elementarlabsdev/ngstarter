@@ -1,0 +1,15 @@
+<ng-content select="ngs-event-date,[ngs-event-date]" />
+<div class="content">
+  <div class="details">
+    <ng-content select="ngs-event-title,[ngs-event-title]" />
+    <div class="meta">
+      <ng-content select="ngs-event-status,[ngs-event-status]" />
+      <ng-content select="ngs-event-time,[ngs-event-time]" />
+    </div>
+    <ng-content select="ngs-event-description,[ngs-event-description]" />
+    <ng-content />
+  </div>
+  <div class="actions">
+    <ng-content select="[ngsEventActions]" />
+  </div>
+</div>

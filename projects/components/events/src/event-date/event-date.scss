@@ -1,0 +1,53 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-event-date-width: --spacing(16);
+  --ngs-event-date-height: --spacing(12);
+  --ngs-event-date-border-color: var(--ngs-color-border);
+  --ngs-event-date-weekday-color: var(--ngs-color-on-surface-variant);
+  --ngs-event-date-weekday-font-size: .75rem;
+  --ngs-event-date-weekday-font-weight: 500;
+  --ngs-event-date-day-color: var(--ngs-color-on-surface);
+  --ngs-event-date-day-font-size: 1.25rem;
+  --ngs-event-date-day-font-weight: 500;
+  --ngs-event-date-divider-height: --spacing(11);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: --spacing(1);
+  width: var(--ngs-event-date-width);
+  height: var(--ngs-event-date-height);
+  flex: none;
+  position: relative;
+  text-align: center;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    inset-inline-end: 0;
+    width: 1px;
+    height: var(--ngs-event-date-divider-height);
+    background: var(--ngs-event-date-border-color);
+    transform: translateY(-50%);
+  }
+
+  .weekday {
+    display: block;
+    color: var(--ngs-event-date-weekday-color);
+    font-size: var(--ngs-event-date-weekday-font-size);
+    font-weight: var(--ngs-event-date-weekday-font-weight);
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .day {
+    display: block;
+    color: var(--ngs-event-date-day-color);
+    font-size: var(--ngs-event-date-day-font-size);
+    font-weight: var(--ngs-event-date-day-font-weight);
+    line-height: 1;
+  }
+}

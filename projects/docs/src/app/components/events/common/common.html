@@ -1,0 +1,36 @@
+<app-page>
+  <h1 appPageTitle>Events</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        The Events components show upcoming meetings, appointments, releases, and reminders in a grouped list. Use
+        <code>ngs-events-list</code> for the full schedule, <code>ngs-events-section</code> for day or week groups, and
+        <code>ngs-event</code> for each dated row.
+      </p>
+      <div class="my-7">
+        <div>Use it for:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            <strong>Schedule lists</strong>: Show events by Tomorrow, This week, Next week, or any app-defined period.
+          </li>
+          <li>
+            <strong>Calendar-adjacent cards</strong>: Pair a compact date tile with title, time, attendees, and actions.
+          </li>
+          <li>
+            <strong>Status hints</strong>: Use the status tone to show active, tentative, blocked, or neutral events.
+          </li>
+          <li>
+            <strong>Inline status</strong>: Place an event status directly before the time when the schedule line needs confirmation state.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/events" ngs-tab-link>Overview</a>
+      <a routerLink="/components/events/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

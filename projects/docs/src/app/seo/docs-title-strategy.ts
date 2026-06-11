@@ -61,6 +61,7 @@ const COMPONENT_TITLES: Record<string, SeoTitleConfig> = {
   drawer: { label: 'Drawer', detail: 'Temporary Side Panels' },
   'emoji-picker': { label: 'Emoji Picker', detail: 'Emoji Selection UI' },
   'empty-state': { label: 'Empty State', detail: 'Placeholder and Recovery States' },
+  events: { label: 'Events', detail: 'Grouped Schedule Lists' },
   expand: { label: 'Expand', detail: 'Collapsible Content' },
   'expansion-panel': { label: 'Expansion Panel', detail: 'Disclosure UI' },
   'filter-builder': { label: 'Filter Builder', detail: 'Query Builder UI' },

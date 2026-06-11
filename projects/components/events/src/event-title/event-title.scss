@@ -1,0 +1,17 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-event-title-color: var(--ngs-color-on-surface);
+  --ngs-event-title-font-size: 1rem;
+  --ngs-event-title-font-weight: 600;
+
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ngs-event-title-color);
+  font-size: var(--ngs-event-title-font-size);
+  font-weight: var(--ngs-event-title-font-weight);
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

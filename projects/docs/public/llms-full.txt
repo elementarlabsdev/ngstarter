@@ -429,6 +429,14 @@ Typography:
   selectors: `[ngs-empty-state-title]`, `ngs-empty-state`, `ngs-empty-state-actions`, `ngs-empty-state-content`, `ngs-empty-state-icon`, `ngs-empty-state-image`, `ngs-empty-state-title`
   exports: `EmptyState`, `EmptyStateActions`, `EmptyStateContent`, `EmptyStateIcon`, `EmptyStateImage`, `EmptyStateTitle`
   tokens: `--ngs-color-neutral-500`, `--ngs-color-neutral-600`, `--ngs-color-surface-container`, `--ngs-empty-state-padding`, `--ngs-font-size-sm`, `--ngs-icon-size`
+- events: `@ngstarter-ui/components/events` docs: /components/events
+  purpose: The NgStarter Angular Events components let you build grouped schedule lists with day markers, event cards, inline statuses, time ranges, status tones, and attendee actions.
+  use when: Choose Events when the workflow matches examples such as Basic Events, Weekly Grouping, Weekly events, Empty events.
+  example topics: Basic Events, Weekly Grouping, Weekly events, Empty events
+  selectors: `[ngs-event-date]`, `[ngs-event-description]`, `[ngs-event-status]`, `[ngs-event-time]`, `[ngs-event-title]`, `[ngsEventActions]`, `ngs-event`, `ngs-event-date`, `ngs-event-description`, `ngs-event-status`, `ngs-event-time`, `ngs-event-title`, `ngs-events-list`, `ngs-events-section`
+  exports: `Event`, `EventActionsDirective`, `EventDate`, `EventDescription`, `EventsList`, `EventsListGroupBy`, `EventsSection`, `EventStatus`, `EventTime`, `EventTitle`, `EventTone`
+  inputs: `day`, `groupBy`, `label`, `tone`, `weekday`
+  tokens: `--ngs-color-danger`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-outline-variant`, `--ngs-color-primary`, `--ngs-color-success`, `--ngs-color-warning`, `--ngs-event-bg`, `--ngs-event-border-color`, `--ngs-event-date-border-color`, `--ngs-event-date-day-color`, `--ngs-event-date-day-font-size`, `--ngs-event-date-day-font-weight`, `--ngs-event-date-divider-height`, `--ngs-event-date-height`, `--ngs-event-date-weekday-color`
 - expand: `@ngstarter-ui/components/expand` docs: /components/expand
   purpose: Collapse one long content block to a limited-height preview with a fade and show-more control.
   use when: Use for long descriptions, comments, changelog entries, release notes, activity text, terms snippets, card descriptions, and compact summaries where the page should stay scannable but users can reveal the full content inline. Supports expanded, expandedChange, height, color, expandLabel, collapseLabel, and showButtonIfExpanded. Do not use for independent collapsible sections; use ExpansionPanel or accordion. Do not use for hierarchical expandable nodes; use Tree. Do not use for read-more navigation to another page, tabs, steppers, form disclosure logic, or as a generic container/card.

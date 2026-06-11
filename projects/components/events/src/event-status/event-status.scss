@@ -1,0 +1,48 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-event-status-color: var(--ngs-color-on-surface-variant);
+  --ngs-event-status-font-size: .875rem;
+  --ngs-event-status-font-weight: 500;
+  --ngs-event-status-gap: --spacing(1.5);
+  --ngs-event-status-dot-size: --spacing(1.5);
+  --ngs-event-status-dot-color: currentColor;
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ngs-event-status-gap);
+  color: var(--ngs-event-status-color);
+  font-size: var(--ngs-event-status-font-size);
+  font-weight: var(--ngs-event-status-font-weight);
+  line-height: 1.25;
+  white-space: nowrap;
+
+  &::before {
+    content: '';
+    width: var(--ngs-event-status-dot-size);
+    height: var(--ngs-event-status-dot-size);
+    flex: none;
+    border-radius: calc(infinity * 1px);
+    background: var(--ngs-event-status-dot-color);
+  }
+
+  &.tone-primary {
+    --ngs-event-status-color: var(--ngs-color-primary);
+  }
+
+  &.tone-success {
+    --ngs-event-status-color: var(--ngs-color-success);
+  }
+
+  &.tone-warning {
+    --ngs-event-status-color: var(--ngs-color-warning);
+  }
+
+  &.tone-danger {
+    --ngs-event-status-color: var(--ngs-color-danger);
+  }
+
+  &.tone-neutral {
+    --ngs-event-status-color: var(--ngs-color-on-surface-variant);
+  }
+}
