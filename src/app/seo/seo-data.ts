@@ -156,7 +156,7 @@ export const pricingFaqItems = [
   {
     question: 'What support is included?',
     answer:
-      'Standard includes GitHub ticket support. Professional includes priority GitHub ticket support for teams and multi-project usage.',
+      'Standard includes GitHub ticket support. Professional includes priority GitHub ticket support for multi-project usage.',
   },
   {
     question: 'How long does trial mode last?',
@@ -166,12 +166,12 @@ export const pricingFaqItems = [
   {
     question: 'What is included in Standard and Professional?',
     answer:
-      'Standard includes one developer, one project, and one domain. Professional includes unlimited developers, unlimited projects, and unlimited domains.',
+      'Standard includes unlimited developers, one project, and one domain. Professional includes unlimited developers, unlimited projects, and unlimited domains.',
   },
   {
     question: 'Can I use one license for multiple client projects?',
     answer:
-      'Use Professional when you need unlimited projects, domains, developers, or agency client work. Standard is limited to one project and one domain.',
+      'Use Professional when you need unlimited projects, domains, or agency client work. Standard is limited to one project and one domain.',
   },
 ];
 
@@ -186,7 +186,7 @@ export const templatesFaqItems = [
   {
     question: 'Are the templates included in the NgStarter license?',
     answer:
-      'Yes. Standard and Professional both include the Angular admin dashboard templates. Choose Professional for unlimited projects, domains, and developers.',
+      'Yes. Standard and Professional both include the Angular admin dashboard templates. Choose Professional for unlimited projects and domains.',
   },
   {
     question: 'Do the templates include source code?',

@@ -1,6 +1,6 @@
 # COMMERCIAL LICENSE AGREEMENT (EULA)
 
-**Last updated:** May 3, 2026
+**Last updated:** June 11, 2026
 
 This End User License Agreement ("Agreement") is a legal agreement between you ("Licensee", "you") and **ElementarLabs** ("Licensor", "we", "us") for the use of the software product: **NgStarter** (the "Software").
 
@@ -18,7 +18,7 @@ The license is granted according to the limits included in the purchased plan.
 
 ### 2.1 Standard License
 
-A Standard License allows use of the Software by **one (1) developer** for **one (1) project** and **one (1) domain**, including subdomains.
+A Standard License allows use of the Software by **unlimited developers**, including solo developers and teams, for **one (1) project** and **one (1) domain**, including subdomains.
 
 A developer is defined as any individual who directly or indirectly works with the Software’s source code.
 
