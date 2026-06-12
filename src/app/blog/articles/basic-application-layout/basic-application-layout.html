@@ -1,0 +1,205 @@
+<article class="bg-background px-6 pb-16 pt-8 sm:px-8 lg:px-10">
+  <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
+    <div class="min-w-0">
+      <a ngsButton="text" routerLink="/blog">
+        <ngs-icon name="fluent:arrow-left-24-regular" />
+        All articles
+      </a>
+
+      <header class="mt-8 max-w-4xl">
+        <ngs-chip-set>
+          <ngs-chip appearance="outlined">Angular Admin</ngs-chip>
+          <ngs-chip appearance="outlined">Angular</ngs-chip>
+          <ngs-chip appearance="outlined">NgStarter UI</ngs-chip>
+        </ngs-chip-set>
+        <h1 class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl">
+          Angular Admin Layout: Build a Basic Application Shell with NgStarter UI
+        </h1>
+        <p class="mt-6 text-lg leading-8 text-on-surface-variant">
+          In this angular admin tutorial, we will build a minimal but production-ready application
+          shell: root layout, side navigation, workspace, header, and scrollable content. You can
+          use this structure as the foundation for an admin panel, CRM, SaaS dashboard, or internal
+          Angular product.
+        </p>
+        <div class="mt-6 flex flex-wrap items-center gap-3 text-sm text-on-surface-variant">
+          <span>June 12, 2026</span>
+          <span>8 min read</span>
+        </div>
+      </header>
+
+      <div class="article-content mt-14 max-w-4xl">
+        <section id="what-belongs">
+          <h2>What belongs in a basic angular admin layout</h2>
+          <p>
+            A basic angular admin layout should be composed from structural UI components instead
+            of ad hoc wrappers. The outer viewport is handled by <code>ngs-layout</code>, the app
+            navigation sits inside <code>ngs-sidenav-container</code>, and the main workspace lives
+            in <code>ngs-panel</code>. This gives the application stable viewport height, clear
+            regions, and scroll behavior only where it belongs.
+          </p>
+        </section>
+
+        <section id="related-component-docs">
+          <h2>Related component docs</h2>
+          <p>
+            This tutorial uses the same building blocks documented in the NgStarter component
+            guides. Keep these references open while you adapt the shell to your own angular admin
+            application.
+          </p>
+          <div class="related-links-grid">
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/components/layout">
+                  <ngs-icon name="fluent:layout-column-two-24-regular" />
+                  <span>Layout component</span>
+                </a>
+              </div>
+            </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/components/panel">
+                  <ngs-icon name="fluent:panel-right-24-regular" />
+                  <span>Panel component</span>
+                </a>
+              </div>
+            </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/components/sidenav">
+                  <ngs-icon name="fluent:panel-left-24-regular" />
+                  <span>Sidenav component</span>
+                </a>
+              </div>
+            </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/navigation/sidebar">
+                  <ngs-icon name="fluent:navigation-24-regular" />
+                  <span>Sidebar component</span>
+                </a>
+              </div>
+            </ngs-card>
+          </div>
+        </section>
+
+        <section id="import-theme">
+          <h2>Step 1. Import the theme</h2>
+          <p>
+            Import a theme once in the global <code>styles.scss</code>. Do not duplicate reset or
+            base application styles: the NgStarter theme already includes the required foundation
+            styles for an angular admin interface.
+          </p>
+          <ngs-code-highlighter [code]="themeCode" language="scss" title="src/styles.scss" showCopyButton />
+        </section>
+
+        <section id="configure-theme">
+          <h2>Step 2. Configure the theme provider</h2>
+          <p>
+            Add <code>provideNgsTheme</code> to the application configuration. This is where you set
+            the theme, density, radius, and primary color instead of scattering visual values across
+            individual components.
+          </p>
+          <ngs-code-highlighter
+            [code]="appConfigCode"
+            language="typescript"
+            title="src/app/app.config.ts"
+            showCopyButton
+          />
+        </section>
+
+        <section id="create-shell">
+          <h2>Step 3. Create the angular admin shell component</h2>
+          <p>
+            The shell component owns the persistent parts of the angular admin experience:
+            navigation rail, header, workspace, and the outlet for child routes. For new Angular
+            code, use standalone components, <code>ChangeDetectionStrategy.OnPush</code>, and public
+            secondary entry point imports.
+          </p>
+          <ngs-code-highlighter
+            [code]="shellTsCode"
+            language="typescript"
+            title="src/app/app-shell.ts"
+            showCopyButton
+          />
+        </section>
+
+        <section id="compose-layout">
+          <h2>Step 4. Compose the layout template</h2>
+          <p>
+            The important order is <code>ngs-layout</code>, then <code>ngs-layout-content</code>,
+            then <code>ngs-sidenav-container</code>. Inside the container, place
+            <code>ngs-sidenav</code> and <code>ngs-sidenav-content</code>, with the workspace inside
+            <code>ngs-panel</code>. Page content scrolls through <code>ngs-scrollbar-area</code>.
+          </p>
+          <ngs-code-highlighter
+            [code]="shellHtmlCode"
+            language="html"
+            title="src/app/app-shell.html"
+            showCopyButton
+          />
+        </section>
+
+        <section id="global-styles">
+          <h2>Step 5. Add global styles</h2>
+          <p>
+            Keep the shell component focused on structure. Put shared shell styling in the global
+            <code>src/styles.scss</code> file so the application owns these layout rules in one
+            place.
+          </p>
+          <ngs-code-highlighter
+            [code]="globalStylesCode"
+            language="scss"
+            title="src/styles.scss"
+            showCopyButton
+          />
+        </section>
+
+        <section id="connect-routes">
+          <h2>Step 6. Connect child routes</h2>
+          <p>
+            Make the shell a parent route. Then every working screen renders inside the
+            <code>router-outlet</code>, while the side navigation and header stay mounted across
+            route changes.
+          </p>
+          <ngs-code-highlighter
+            [code]="routeCode"
+            language="typescript"
+            title="src/app/app.routes.ts"
+            showCopyButton
+          />
+        </section>
+
+        <section id="build-checklist">
+          <h2>What to check after building</h2>
+          <ul>
+            <li>The root shell fills the viewport and does not create a second document scroll.</li>
+            <li>Only the content inside <code>ngs-panel-content</code> is scrollable.</li>
+            <li>Primary navigation is composed with <code>ngs-sidebar</code> inside <code>ngs-sidenav</code>.</li>
+            <li>Buttons, icons, cards, forms, and tables are added with NgStarter UI components.</li>
+          </ul>
+          <p>
+            From here, you can add angular admin dashboard widgets, DataView tables, settings
+            forms, notification popovers, and other working screens without changing the base
+            application structure.
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <aside class="article-aside hidden lg:block">
+      <nav ngs-scroll-spy-nav>
+        <ngs-scroll-spy-title>On this page</ngs-scroll-spy-title>
+        <a ngs-scroll-spy-on targetId="what-belongs">Basic layout</a>
+        <a ngs-scroll-spy-on targetId="related-component-docs">Component docs</a>
+        <a ngs-scroll-spy-on targetId="import-theme">Import theme</a>
+        <a ngs-scroll-spy-on targetId="configure-theme">Theme provider</a>
+        <a ngs-scroll-spy-on targetId="create-shell">Shell component</a>
+        <a ngs-scroll-spy-on targetId="compose-layout">Layout template</a>
+        <a ngs-scroll-spy-on targetId="global-styles">Global styles</a>
+        <a ngs-scroll-spy-on targetId="connect-routes">Child routes</a>
+        <a ngs-scroll-spy-on targetId="build-checklist">Build checklist</a>
+        <button ngs-scroll-spy-back-to-top>Back to top</button>
+      </nav>
+    </aside>
+  </div>
+</article>

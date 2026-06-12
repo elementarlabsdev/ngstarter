@@ -275,6 +275,12 @@ const privacyDescription =
   'Read the NgStarter privacy policy for data collection, payments, analytics, and contact information.';
 const termsDescription =
   'Read the NgStarter terms of service for purchases, product access, acceptable use, and support.';
+const blogDescription =
+  'Read practical NgStarter tutorials for building angular admin applications, product dashboards, app layouts, and reusable UI foundations.';
+const basicLayoutArticleDescription =
+  'Angular admin tutorial: create a basic application layout with NgStarter UI using Layout, Sidenav, Sidebar, Panel, and ScrollbarArea.';
+const panelLayoutArticleDescription =
+  'Angular panel layout tutorial: create practical admin workspace layouts with ngs-panel, PanelHeader, PanelContent, PanelSidebar, PanelAside, and PanelFooter.';
 
 export const HOME_SEO: SeoData = {
   title: 'NgStarter - AI-Friendly Angular Components Library for Admin Apps',
@@ -396,5 +402,111 @@ export const TERMS_SEO: SeoData = {
     organizationSchema,
     websiteSchema,
     webPageSchema('/terms', 'Terms of Service | NgStarter', termsDescription),
+  ],
+};
+
+export const BLOG_SEO: SeoData = {
+  title: 'Angular Admin Blog | NgStarter UI Tutorials',
+  description: blogDescription,
+  canonicalPath: '/blog',
+  structuredData: [
+    organizationSchema,
+    websiteSchema,
+    webPageSchema('/blog', 'NgStarter Blog', blogDescription),
+    {
+      '@type': 'Blog',
+      '@id': `${SITE_URL}/blog#blog`,
+      name: 'NgStarter Blog',
+      description: blogDescription,
+      url: `${SITE_URL}/blog`,
+      publisher: {
+        '@id': `${SITE_URL}/#organization`,
+      },
+      inLanguage: 'en',
+    },
+  ],
+};
+
+export const BASIC_LAYOUT_ARTICLE_SEO: SeoData = {
+  title: 'Angular Admin Layout: Build a Basic Application Shell',
+  description: basicLayoutArticleDescription,
+  canonicalPath: '/blog/basic-application-layout',
+  ogType: 'article',
+  structuredData: [
+    organizationSchema,
+    websiteSchema,
+    webPageSchema(
+      '/blog/basic-application-layout',
+      'Angular Admin Layout: Build a Basic Application Shell',
+      basicLayoutArticleDescription,
+    ),
+    {
+      '@type': 'BlogPosting',
+      '@id': `${SITE_URL}/blog/basic-application-layout#article`,
+      headline: 'Angular Admin Layout: Build a Basic Application Shell',
+      description: basicLayoutArticleDescription,
+      url: `${SITE_URL}/blog/basic-application-layout`,
+      datePublished: '2026-06-12',
+      dateModified: '2026-06-12',
+      author: {
+        '@type': 'Organization',
+        name: 'NgStarter',
+        url: SITE_URL,
+      },
+      publisher: {
+        '@id': `${SITE_URL}/#organization`,
+      },
+      image: DEFAULT_OG_IMAGE,
+      inLanguage: 'en',
+      keywords: ['angular admin', 'angular admin layout', 'angular dashboard', 'NgStarter UI'],
+      isPartOf: {
+        '@id': `${SITE_URL}/blog#blog`,
+      },
+    },
+  ],
+};
+
+export const PANEL_LAYOUT_ARTICLE_SEO: SeoData = {
+  title: 'Angular Panel Layout: Create Admin Workspaces with ngs-panel',
+  description: panelLayoutArticleDescription,
+  canonicalPath: '/blog/angular-panel-layout',
+  ogType: 'article',
+  structuredData: [
+    organizationSchema,
+    websiteSchema,
+    webPageSchema(
+      '/blog/angular-panel-layout',
+      'Angular Panel Layout: Create Admin Workspaces with ngs-panel',
+      panelLayoutArticleDescription,
+    ),
+    {
+      '@type': 'BlogPosting',
+      '@id': `${SITE_URL}/blog/angular-panel-layout#article`,
+      headline: 'Angular Panel Layout: Create Admin Workspaces with ngs-panel',
+      description: panelLayoutArticleDescription,
+      url: `${SITE_URL}/blog/angular-panel-layout`,
+      datePublished: '2026-06-12',
+      dateModified: '2026-06-12',
+      author: {
+        '@type': 'Organization',
+        name: 'NgStarter',
+        url: SITE_URL,
+      },
+      publisher: {
+        '@id': `${SITE_URL}/#organization`,
+      },
+      image: DEFAULT_OG_IMAGE,
+      inLanguage: 'en',
+      keywords: [
+        'angular panel layout',
+        'ngs-panel',
+        'angular admin panel',
+        'angular workspace layout',
+        'NgStarter UI',
+      ],
+      isPartOf: {
+        '@id': `${SITE_URL}/blog#blog`,
+      },
+    },
   ],
 };

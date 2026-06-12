@@ -1,0 +1,45 @@
+<section class="bg-background px-6 pb-16 pt-8 sm:px-8 lg:px-10">
+  <div class="mx-auto max-w-7xl">
+    <div class="max-w-3xl">
+      <div
+        class="inline-flex items-center gap-2 rounded-full border border-border bg-surface-container px-4 py-2 text-sm font-medium text-on-surface-variant"
+      >
+        <ngs-icon name="fluent:book-open-24-regular" class="size-4 text-primary" />
+        NgStarter Blog
+      </div>
+      <h1 class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl">
+        Angular Admin articles, layout guides, and dashboard UI
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg leading-8 text-on-surface-variant">
+        Practical guides for building angular admin interfaces, dashboard shells, and production
+        workspaces with Angular and NgStarter UI components.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      @for (article of articles; track article.href) {
+        <ngs-card appearance="outlined" class="blog-article-card">
+          <div ngs-card-content>
+            <a [routerLink]="article.href">
+              <div class="flex items-center justify-between gap-4">
+                <ngs-icon [name]="article.icon" class="article-card-icon" />
+                <ngs-chip-set>
+                  <ngs-chip appearance="outlined">{{ article.category }}</ngs-chip>
+                </ngs-chip-set>
+              </div>
+              <h2>{{ article.title }}</h2>
+              <p>{{ article.description }}</p>
+              <div class="mt-8 flex items-center justify-between gap-4">
+                <span class="text-sm text-on-surface-variant">{{ article.date }} · {{ article.readTime }}</span>
+                <span class="article-read-link">
+                  Read
+                  <ngs-icon name="fluent:arrow-right-24-regular" />
+                </span>
+              </div>
+            </a>
+          </div>
+        </ngs-card>
+      }
+    </div>
+  </div>
+</section>

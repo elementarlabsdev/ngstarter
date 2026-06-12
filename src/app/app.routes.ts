@@ -1,5 +1,15 @@
 import { Routes } from '@angular/router';
-import { HOME_SEO, LICENSE_SEO, PRICING_SEO, PRIVACY_SEO, TEMPLATES_SEO, TERMS_SEO } from './seo/seo-data';
+import {
+  BASIC_LAYOUT_ARTICLE_SEO,
+  BLOG_SEO,
+  HOME_SEO,
+  LICENSE_SEO,
+  PANEL_LAYOUT_ARTICLE_SEO,
+  PRICING_SEO,
+  PRIVACY_SEO,
+  TEMPLATES_SEO,
+  TERMS_SEO,
+} from './seo/seo-data';
 
 export const routes: Routes = [
   {
@@ -26,6 +36,36 @@ export const routes: Routes = [
       seo: TEMPLATES_SEO,
     },
     loadComponent: () => import('./pages/templates/templates').then(c => c.Templates),
+  },
+  {
+    path: 'blog',
+    title: BLOG_SEO.title,
+    data: {
+      seo: BLOG_SEO,
+    },
+    loadComponent: () => import('./blog/blog/blog').then(c => c.Blog),
+  },
+  {
+    path: 'blog/basic-application-layout',
+    title: BASIC_LAYOUT_ARTICLE_SEO.title,
+    data: {
+      seo: BASIC_LAYOUT_ARTICLE_SEO,
+    },
+    loadComponent: () =>
+      import('./blog/articles/basic-application-layout/basic-application-layout').then(
+        c => c.BasicApplicationLayout,
+      ),
+  },
+  {
+    path: 'blog/angular-panel-layout',
+    title: PANEL_LAYOUT_ARTICLE_SEO.title,
+    data: {
+      seo: PANEL_LAYOUT_ARTICLE_SEO,
+    },
+    loadComponent: () =>
+      import('./blog/articles/angular-panel-layout/angular-panel-layout').then(
+        c => c.AngularPanelLayout,
+      ),
   },
   {
     path: 'license',

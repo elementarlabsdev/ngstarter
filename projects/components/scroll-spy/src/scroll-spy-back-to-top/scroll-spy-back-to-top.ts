@@ -34,7 +34,10 @@ export class ScrollSpyBackToTop {
     } else if (this.layoutBody) {
       this.scrollContainer = this.layoutBody.scrollContainer();
     } else {
-      this.scrollContainer = this.document.body;
+      this.scrollContainer = (this.document.scrollingElement as HTMLElement | null) ??
+        this.document.documentElement ??
+        this.document.body
+      ;
     }
 
     if (this.scrollContainer) {

@@ -3920,10 +3920,10 @@
       ],
       "outputs": [],
       "cssTokens": [
+        "--ngs-color-border",
         "--ngs-color-danger",
         "--ngs-color-on-surface",
         "--ngs-color-on-surface-variant",
-        "--ngs-color-outline-variant",
         "--ngs-color-primary",
         "--ngs-color-success",
         "--ngs-color-warning",
@@ -6828,19 +6828,19 @@
         "Basic with extra columns (sidebar and aside)",
         "Panel with extra columns"
       ],
-      "minimalExample": "<div class=\"h-[500px]\">\n  <ngs-panel class=\"border border-muted\">\n    <ngs-panel-header class=\"bg-surface-container flex items-center px-6\">Header</ngs-panel-header>\n    <ngs-panel-content>\n      <ngs-scrollbar-area [absolute]=\"true\">\n        <div class=\"p-6 h-[1000px]\">Body</div>\n      </ngs-scrollbar-area>\n    </ngs-panel-content>\n    <ngs-panel-footer class=\"bg-surface-container-low flex items-center px-6\">Footer</ngs-panel-footer>\n  </ngs-panel>\n</div>",
+      "minimalExample": "<div class=\"h-[500px]\">\n  <ngs-panel class=\"border border-muted\">\n    <ngs-panel-header class=\"bg-surface-container flex items-center px-6\">Header</ngs-panel-header>\n    <ngs-panel-content>\n      <ngs-scrollbar-area>\n        <div class=\"p-6 h-[1000px]\">Body</div>\n      </ngs-scrollbar-area>\n    </ngs-panel-content>\n    <ngs-panel-footer class=\"bg-surface-container-low flex items-center px-6\">Footer</ngs-panel-footer>\n  </ngs-panel>\n</div>",
       "exampleFiles": [
         {
           "name": "basic-panel-example",
           "title": "Basic panel",
           "file": "projects/docs/src/app/components/panel/_examples/basic-panel-example/basic-panel-example.html",
-          "source": "<div class=\"h-[500px]\">\n  <ngs-panel class=\"border border-muted\">\n    <ngs-panel-header class=\"bg-surface-container flex items-center px-6\">Header</ngs-panel-header>\n    <ngs-panel-content>\n      <ngs-scrollbar-area [absolute]=\"true\">\n        <div class=\"p-6 h-[1000px]\">Body</div>\n      </ngs-scrollbar-area>\n    </ngs-panel-content>\n    <ngs-panel-footer class=\"bg-surface-container-low flex items-center px-6\">Footer</ngs-panel-footer>\n  </ngs-panel>\n</div>"
+          "source": "<div class=\"h-[500px]\">\n  <ngs-panel class=\"border border-muted\">\n    <ngs-panel-header class=\"bg-surface-container flex items-center px-6\">Header</ngs-panel-header>\n    <ngs-panel-content>\n      <ngs-scrollbar-area>\n        <div class=\"p-6 h-[1000px]\">Body</div>\n      </ngs-scrollbar-area>\n    </ngs-panel-content>\n    <ngs-panel-footer class=\"bg-surface-container-low flex items-center px-6\">Footer</ngs-panel-footer>\n  </ngs-panel>\n</div>"
         },
         {
           "name": "panel-with-extra-columns-example",
           "title": "Panel with extra columns",
           "file": "projects/docs/src/app/components/panel/_examples/panel-with-extra-columns-example/panel-with-extra-columns-example.html",
-          "source": "<div class=\"h-[500px]\">\n  <ngs-panel class=\"border border-muted\">\n    <ngs-panel-header class=\"bg-surface-container flex items-center px-6\">Header</ngs-panel-header>\n    <ngs-panel-sidebar class=\"border-r border-e-muted w-[200px]\">\n      <ngs-scrollbar-area [absolute]=\"true\">\n        <div class=\"p-6 h-[1000px]\" [style.width.px]=\"width()\" (click)=\"setSidebarLongWidth()\">Sidebar</div>\n      </ngs-scrollbar-area>\n    </ngs-panel-sidebar>\n    <ngs-panel-content>\n      <ngs-scrollbar-area [absolute]=\"true\">\n        <div class=\"p-6 h-[1000px] w-[1000px]\">Body</div>\n      </ngs-scrollbar-area>\n    </ngs-panel-content>\n    <ngs-panel-aside class=\"border-s border-s-muted w-[120px]\">\n      <div class=\"p-6\">Aside</div>\n    </ngs-panel-aside>\n    <ngs-panel-footer class=\"bg-surface-container-low flex items-center px-6\">Footer</ngs-panel-footer>\n  </ngs-panel>\n</div>"
+          "source": "<div class=\"h-[500px]\">\n  <ngs-panel class=\"border border-muted\">\n    <ngs-panel-header class=\"bg-surface-container flex items-center px-6\">Header</ngs-panel-header>\n    <ngs-panel-sidebar class=\"border-r border-e-muted w-[200px]\">\n      <ngs-scrollbar-area>\n        <div class=\"p-6 h-[1000px]\" [style.width.px]=\"width()\" (click)=\"setSidebarLongWidth()\">Sidebar</div>\n      </ngs-scrollbar-area>\n    </ngs-panel-sidebar>\n    <ngs-panel-content>\n      <ngs-scrollbar-area>\n        <div class=\"p-6 h-[1000px] w-[1000px]\">Body</div>\n      </ngs-scrollbar-area>\n    </ngs-panel-content>\n    <ngs-panel-aside class=\"border-s border-s-muted w-[120px]\">\n      <div class=\"p-6\">Aside</div>\n    </ngs-panel-aside>\n    <ngs-panel-footer class=\"bg-surface-container-low flex items-center px-6\">Footer</ngs-panel-footer>\n  </ngs-panel>\n</div>"
         }
       ],
       "previewAsset": "projects/components/panel/preview.svg",

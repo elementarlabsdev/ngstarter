@@ -46,23 +46,19 @@ export class ScrollSpyNav implements AfterContentInit {
   private threshold = 10;
   protected _activeId: string;
   private scrollContainer: HTMLElement;
+  private isDocumentScrollContainer = false;
 
   ngAfterContentInit() {
     if (isPlatformServer(this.platformId)) {
       return;
     }
 
-    if (this.panelBody) {
-      this.scrollContainer = this.panelBody.scrollContainer();
-    } else if (this.layoutBody) {
-      this.scrollContainer = this.layoutBody.scrollContainer();
-    } else {
-      this.scrollContainer = this.document.body;
-    }
+    this.scrollContainer = this._getScrollContainer();
+    const scrollEventTarget = this._getScrollEventTarget();
 
     if (this.scrollContainer) {
       this.zone.runOutsideAngular(() => {
-        fromEvent(this.scrollContainer, 'scroll')
+        fromEvent(scrollEventTarget, 'scroll')
           .pipe(
             debounceTime(35),
             takeUntilDestroyed(this.destroyRef)
@@ -87,48 +83,104 @@ export class ScrollSpyNav implements AfterContentInit {
       return;
     }
 
-    this._activeId = targetId;
     const targetElement = this.document.querySelector('#' + targetId) as HTMLElement;
-    const offsetTopFix = parseInt(getComputedStyle(targetElement).marginTop) +
-      parseInt(getComputedStyle(targetElement).height) + this.threshold
-    ;
+
+    if (!targetElement) {
+      return;
+    }
+
+    this._activeId = targetId;
+    const targetTop = this._getTargetScrollTop(targetElement);
+
     this.cdr.detectChanges();
     this.scrollContainer.scroll({
-      top: targetElement.offsetTop - offsetTopFix,
+      top: targetTop,
       left: 0,
       behavior: 'smooth'
     });
   }
 
   private _findActiveItem() {
+    let activeId: string | undefined;
+    let nextId: string | undefined;
+    let nextDistance = Number.POSITIVE_INFINITY;
+
     for (let item of this._items()) {
       const targetElement = this.document.querySelector('#' + item.targetId()) as HTMLElement;
 
       if (targetElement) {
-        if (this._elementIsVisibleInViewport(this.scrollContainer, targetElement)) {
-          if (this._activeId === item.targetId()) {
-            return;
-          }
+        const bounds = this._getTargetBounds(targetElement);
 
-          this.zone.run(() => {
-            this._activeId = item.targetId();
-            this.cdr.detectChanges();
-          });
-          break;
+        if (bounds.top <= this.threshold && bounds.bottom > this.threshold) {
+          activeId = item.targetId();
+          continue;
+        }
+
+        if (!activeId && bounds.top > this.threshold && bounds.top < nextDistance) {
+          nextId = item.targetId();
+          nextDistance = bounds.top;
         }
       }
     }
+
+    const nextActiveId = activeId ?? nextId;
+
+    if (!nextActiveId || this._activeId === nextActiveId) {
+      return;
+    }
+
+    this.zone.run(() => {
+      this._activeId = nextActiveId;
+      this.cdr.detectChanges();
+    });
   }
 
-  private _elementIsVisibleInViewport(container: HTMLElement, targetEl: HTMLElement, partiallyVisible = false) {
-    const { top, left, bottom, right } = targetEl.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    const innerWidth = containerRect.width;
-    const innerHeight = containerRect.height;
-    return partiallyVisible
-      ? ((top > 0 && top < innerHeight) ||
-        (bottom > 0 && bottom < innerHeight)) &&
-      ((left > 0 && left < innerWidth) || (right > 0 && right < innerWidth))
-      : top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
+  private _getScrollContainer(): HTMLElement {
+    if (this.panelBody) {
+      this.isDocumentScrollContainer = false;
+      return this.panelBody.scrollContainer();
+    }
+
+    if (this.layoutBody) {
+      this.isDocumentScrollContainer = false;
+      return this.layoutBody.scrollContainer();
+    }
+
+    this.isDocumentScrollContainer = true;
+    return (this.document.scrollingElement as HTMLElement | null) ??
+      this.document.documentElement ??
+      this.document.body
+    ;
+  }
+
+  private _getScrollEventTarget(): EventTarget {
+    if (this.isDocumentScrollContainer) {
+      return this.document.defaultView ?? this.document;
+    }
+
+    return this.scrollContainer;
+  }
+
+  private _getTargetScrollTop(targetElement: HTMLElement): number {
+    const targetBounds = this._getTargetBounds(targetElement);
+    return this.scrollContainer.scrollTop + targetBounds.top - this.threshold;
+  }
+
+  private _getTargetBounds(targetElement: HTMLElement): Pick<DOMRect, 'top' | 'bottom'> {
+    const targetRect = targetElement.getBoundingClientRect();
+
+    if (this.isDocumentScrollContainer) {
+      return {
+        top: targetRect.top,
+        bottom: targetRect.bottom
+      };
+    }
+
+    const containerRect = this.scrollContainer.getBoundingClientRect();
+
+    return {
+      top: targetRect.top - containerRect.top,
+      bottom: targetRect.bottom - containerRect.top
+    };
   }
 }
