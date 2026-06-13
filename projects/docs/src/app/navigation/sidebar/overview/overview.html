@@ -1,5 +1,5 @@
 <p class="docs-seo-intro mb-6 text-base leading-7 text-neutral-600">
-  The NgStarter Angular Sidebar component lets you provide a complete vertical app or workspace sidebar with its own navigation system. Use ngs-sidebar as the content inside a shell sidebar region, usually inside Sidenav or LayoutSidebar, when an admin app or workspace needs persistent sidebar navigation and supporting sidebar content. It includes examples for Basic sidebar, Dynamic compact sidebar, Only compact sidebar, and Sidebar with custom icons.
+  The NgStarter Angular Sidebar component lets you provide a complete vertical app or workspace sidebar with its own navigation system. Use ngs-sidebar as the content inside a shell sidebar region, usually inside Sidenav or LayoutSidebar, when an admin app or workspace needs persistent sidebar navigation and supporting sidebar content. It includes examples for Basic sidebar, Sidebar structure helpers, Dynamic compact sidebar, Only compact sidebar, and Sidebar with custom icons.
 </p>
 
 <h3 id="basic-sidebar">Basic sidebar</h3>
@@ -8,6 +8,16 @@
 </p>
 <ngs-playground exampleUrl="_docs/navigation/sidebar/_examples" exampleName="basic-sidebar-example">
   <app-basic-sidebar-example/>
+</ngs-playground>
+
+<h3 id="sidebar-structure-helpers">Sidebar structure helpers</h3>
+<p>
+  Use <code class="code">ngs-sidebar-divider</code> to separate navigation groups and
+  <code class="code">ngs-sidebar-spacer</code> to push lower-priority groups toward the bottom of a
+  fixed-height sidebar nav.
+</p>
+<ngs-playground exampleUrl="_docs/navigation/sidebar/_examples" exampleName="sidebar-structure-helpers-example">
+  <app-sidebar-structure-helpers-example/>
 </ngs-playground>
 
 <h3 id="dynamic-compact-sidebar">Dynamic compact sidebar</h3>

@@ -29,16 +29,17 @@
   --ngs-sidebar-nav-item-icon-size: var(--ngs-nav-item-icon-size);
   --ngs-sidebar-nav-item-gap: var(--ngs-nav-item-gap);
   --ngs-sidebar-nav-item-has-icon-padding-start: var(--ngs-nav-item-gap);
-  --ngs-sidebar-nav-heading-color: var(--ngs-color-emphasis);
-  --ngs-sidebar-nav-heading-font-size: var(--ngs-font-size-xs);
-  --ngs-sidebar-nav-heading-font-weight: var(--ngs-nav-heading-font-weight);
-  --ngs-sidebar-nav-heading-padding: var(--ngs-nav-heading-padding);
-  --ngs-sidebar-nav-heading-margin-top: var(--ngs-nav-heading-margin-top);
-  --ngs-sidebar-nav-heading-margin-bottom: var(--ngs-nav-heading-margin-bottom);
-  --ngs-sidebar-nav-heading-after-margin: var(--ngs-nav-heading-after-margin);
-  --ngs-sidebar-nav-heading-text-transform: var(--ngs-nav-heading-text-transform);
+  --ngs-sidebar-heading-color: var(--ngs-sidebar-nav-heading-color, var(--ngs-color-emphasis));
+  --ngs-sidebar-heading-font-size: var(--ngs-sidebar-nav-heading-font-size, var(--ngs-font-size-xs));
+  --ngs-sidebar-heading-font-weight: var(--ngs-sidebar-nav-heading-font-weight, var(--ngs-nav-heading-font-weight));
+  --ngs-sidebar-heading-padding: var(--ngs-sidebar-nav-heading-padding, var(--ngs-nav-heading-padding));
+  --ngs-sidebar-heading-margin-top: var(--ngs-sidebar-nav-heading-margin-top, var(--ngs-nav-heading-margin-top));
+  --ngs-sidebar-heading-margin-bottom: var(--ngs-sidebar-nav-heading-margin-bottom, var(--ngs-nav-heading-margin-bottom));
+  --ngs-sidebar-heading-after-margin: var(--ngs-sidebar-nav-heading-after-margin, var(--ngs-nav-heading-after-margin));
+  --ngs-sidebar-heading-text-transform: var(--ngs-sidebar-nav-heading-text-transform, var(--ngs-nav-heading-text-transform));
+  --ngs-sidebar-heading-height: var(--ngs-sidebar-nav-heading-height, var(--ngs-nav-heading-height, --spacing(6)));
   --ngs-sidebar-nav-divider-height: var(--ngs-nav-divider-height);
-  --ngs-sidebar-nav-divider-bg: var(--ngs-color-outline-variant);
+  --ngs-sidebar-nav-divider-bg: var(--ngs-color-border);
   --ngs-sidebar-nav-divider-margin: var(--ngs-nav-divider-margin);
   --ngs-sidebar-nav-group-toggle-has-icon-padding-end: var(--ngs-nav-group-toggle-padding-end);
   --ngs-sidebar-nav-group-toggle-icon-color: var(--ngs-color-on-surface-variant);
@@ -67,7 +68,7 @@
   --ngs-sidebar-nav-group-active-bg: transparent;
   --ngs-sidebar-nav-group-border-radius: 0;
   --ngs-sidebar-nav-group-tree-lines-color: var(--ngs-color-subtle);
-  --ngs-sidebar-nav-heading-text-align: var(--ngs-nav-heading-text-align);
+  --ngs-sidebar-heading-text-align: var(--ngs-sidebar-nav-heading-text-align, var(--ngs-nav-heading-text-align));
   --ngs-sidebar-header-compact-padding: --spacing(4) 0;
 
   display: flex;

@@ -33,7 +33,13 @@
               </ngs-sidebar-nav-group>
             }
             @case ('heading') {
-              <ngs-sidebar-nav-heading>{{ navItem.label }}</ngs-sidebar-nav-heading>
+              <ngs-sidebar-heading>{{ navItem.label }}</ngs-sidebar-heading>
+            }
+            @case ('divider') {
+              <ngs-sidebar-divider/>
+            }
+            @case ('spacer') {
+              <ngs-sidebar-spacer/>
             }
             @default {
               <ngs-sidebar-nav-item [key]="navItem.key">

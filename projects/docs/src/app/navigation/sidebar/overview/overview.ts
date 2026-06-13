@@ -10,10 +10,14 @@ import {
 import {
   DynamicCompactSidebarExample
 } from '../_examples/dynamic-compact-sidebar-example/dynamic-compact-sidebar-example';
+import {
+  SidebarStructureHelpersExample
+} from '../_examples/sidebar-structure-helpers-example/sidebar-structure-helpers-example';
 
 @Component({
   imports: [
     BasicSidebarExample,
+    SidebarStructureHelpersExample,
     DynamicCompactSidebarExample,
     Playground,
     OnlyCompactSidebarExample,

@@ -10,7 +10,7 @@ import {
   SidebarNavGroupMenu,
   SidebarNavGroupToggle,
   SidebarNavGroupToggleIconDirective,
-  SidebarNavHeading, SidebarNavItem,
+  SidebarHeading, SidebarNavItem,
   SidebarNavItemIconDirective
 } from '@ngstarter-ui/components/sidebar';
 import { Icon } from '@ngstarter-ui/components/icon';
@@ -29,7 +29,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     SidebarNavGroupMenu,
     SidebarNavGroupToggle,
     SidebarNavGroupToggleIconDirective,
-    SidebarNavHeading,
+    SidebarHeading,
     SidebarNavItem,
     SidebarDivider
   ],

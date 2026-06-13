@@ -100,14 +100,14 @@ ngs-sidebar.sidebar-panel.ngs-sidebar {
 
 .nav-heading {
   --ngs-nav-heading-height: auto;
-  --ngs-sidebar-nav-heading-color: var(--corporate-muted);
-  --ngs-sidebar-nav-heading-font-size: 0.75rem;
-  --ngs-sidebar-nav-heading-font-weight: 500;
-  --ngs-sidebar-nav-heading-padding: 0.35rem 0.75rem 0.25rem;
-  --ngs-sidebar-nav-heading-margin-top: 0.95rem;
-  --ngs-sidebar-nav-heading-margin-bottom: 0.2rem;
-  --ngs-sidebar-nav-heading-text-align: start;
-  --ngs-sidebar-nav-heading-text-transform: uppercase;
+  --ngs-sidebar-heading-color: var(--corporate-muted);
+  --ngs-sidebar-heading-font-size: 0.75rem;
+  --ngs-sidebar-heading-font-weight: 500;
+  --ngs-sidebar-heading-padding: 0.35rem 0.75rem 0.25rem;
+  --ngs-sidebar-heading-margin-top: 0.95rem;
+  --ngs-sidebar-heading-margin-bottom: 0.2rem;
+  --ngs-sidebar-heading-text-align: start;
+  --ngs-sidebar-heading-text-transform: uppercase;
   line-height: 1.3;
 }
 

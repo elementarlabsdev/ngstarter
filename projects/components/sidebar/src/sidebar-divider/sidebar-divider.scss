@@ -2,7 +2,13 @@
 
 :host {
   display: block;
-  height: var(--ngs-sidebar-divider-height);
-  background: var(--ngs-sidebar-divider-bg);
-  margin: var(--ngs-sidebar-divider-margin);
+  flex: none;
+  width: 100%;
+  height: var(--ngs-sidebar-divider-height, var(--ngs-sidebar-nav-divider-height, var(--ngs-nav-divider-height, 1px)));
+  background: var(--ngs-sidebar-divider-bg, var(--ngs-sidebar-nav-divider-bg, var(--ngs-color-border)));
+  margin: var(--ngs-sidebar-divider-margin, var(--ngs-sidebar-nav-divider-margin, var(--ngs-nav-divider-margin, --spacing(6) 0)));
+
+  &:has(+ ngs-sidebar-heading) {
+    margin-bottom: 0;
+  }
 }

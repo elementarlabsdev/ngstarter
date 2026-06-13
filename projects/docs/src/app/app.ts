@@ -39,7 +39,7 @@ import {
   Sidebar,
   SidebarHeader,
   SidebarNav, SidebarNavGroup, SidebarNavGroupMenu, SidebarNavGroupToggle,
-  SidebarNavGroupToggleIconDirective, SidebarNavHeading, SidebarNavItemBadgeDirective, SidebarNavItem,
+  SidebarNavGroupToggleIconDirective, SidebarHeading, SidebarNavItemBadgeDirective, SidebarNavItem,
   SidebarNavItemDefDirective,
   SidebarNavItemIconDirective
 } from '@ngstarter-ui/components/sidebar';
@@ -148,7 +148,7 @@ function sortDocsNavItems(items: readonly DocsNavItem[], preserveSections = fals
     SidebarNavGroupMenu,
     SidebarNavGroupToggle,
     SidebarNavGroupToggleIconDirective,
-    SidebarNavHeading,
+    SidebarHeading,
     SidebarNavItemBadgeDirective,
     SidebarNavItem,
     SidebarNavItemDefDirective,

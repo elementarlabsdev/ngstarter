@@ -28,9 +28,9 @@
                   @for (section of navSections(); track section.label ?? section.items[0].key) {
                     @if (!section.stickToBottom) {
                       @if (section.label) {
-                        <ngs-sidebar-nav-heading class="nav-heading">
+                        <ngs-sidebar-heading class="nav-heading">
                           {{ section.label }}
-                        </ngs-sidebar-nav-heading>
+                        </ngs-sidebar-heading>
                       }
 
                       @for (item of section.items; track item.key) {

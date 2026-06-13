@@ -2,16 +2,18 @@ import { Component } from '@angular/core';
 import {
   SidebarBody,
   Sidebar,
+  SidebarDivider,
   SidebarFooter,
   SidebarHeader,
   SidebarNav,
   SidebarNavGroup,
   SidebarNavGroupMenu,
   SidebarNavGroupToggle,
-  SidebarNavHeading,
+  SidebarHeading,
   SidebarNavItem,
   SidebarNavItemIconDirective,
-  SidebarNavGroupToggleIconDirective
+  SidebarNavGroupToggleIconDirective,
+  SidebarSpacer
 } from '@ngstarter-ui/components/sidebar';
 import { v7 as uuid } from 'uuid';
 import { Icon } from '@ngstarter-ui/components/icon';
@@ -31,7 +33,9 @@ import { Icon } from '@ngstarter-ui/components/icon';
     SidebarNavGroupMenu,
     SidebarNavGroupToggle,
     SidebarNavGroupToggleIconDirective,
-    SidebarNavHeading,
+    SidebarHeading,
+    SidebarDivider,
+    SidebarSpacer,
   ],
   templateUrl: './basic-sidebar-example.html',
   styleUrl: './basic-sidebar-example.scss'
@@ -49,6 +53,9 @@ export class BasicSidebarExample {
       label: 'Account'
     },
     {
+      type: 'divider',
+    },
+    {
       type: 'group',
       label: 'Nested Menu',
       icon: 'options-24-regular',
@@ -64,6 +71,9 @@ export class BasicSidebarExample {
           label: 'Nested Item 2'
         }
       ]
+    },
+    {
+      type: 'spacer',
     },
     {
       type: 'heading',

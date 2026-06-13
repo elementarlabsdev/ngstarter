@@ -47,7 +47,7 @@
                   <ngs-sidebar-nav-group-menu>
                     @for (section of dashboardSections(); track section.label ?? section.items[0].key) {
                     @if (section.label) {
-                      <ngs-sidebar-nav-heading>{{ section.label }}</ngs-sidebar-nav-heading>
+                      <ngs-sidebar-heading>{{ section.label }}</ngs-sidebar-heading>
                     }
 
                     @for (item of section.items; track item.key) {
