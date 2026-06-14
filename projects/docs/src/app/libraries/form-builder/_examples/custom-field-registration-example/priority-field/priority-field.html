@@ -1,0 +1,8 @@
+<div class="priority-field">
+  <label>{{ field().label }}</label>
+  <ngs-button-toggle-group [formControl]="control()">
+    <ngs-button-toggle value="low">{{ field().settings?.['lowLabel'] || 'Low' }}</ngs-button-toggle>
+    <ngs-button-toggle value="medium">{{ field().settings?.['mediumLabel'] || 'Medium' }}</ngs-button-toggle>
+    <ngs-button-toggle value="high">{{ field().settings?.['highLabel'] || 'High' }}</ngs-button-toggle>
+  </ngs-button-toggle-group>
+</div>

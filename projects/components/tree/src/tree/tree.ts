@@ -1,6 +1,7 @@
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
+  ContentChild,
   Component,
   Directive,
   effect,
@@ -8,6 +9,7 @@ import {
   input,
   output,
   signal,
+  TemplateRef,
   ViewContainerRef,
   ViewChild
 } from '@angular/core';
@@ -39,7 +41,23 @@ export interface TreeNodeDrop<T> {
   dataSource: T[];
 }
 
+export interface TreeNodeDropContext<T> {
+  source: T;
+  target: T;
+  position: TreeNodeDropPosition;
+}
+
+export interface TreeNodeDragPlaceholderContext<T> {
+  $implicit: T;
+  source: T;
+  target?: T;
+  position?: TreeNodeDropPosition;
+}
+
 export type TreeNodeDropPosition = 'before' | 'inside' | 'after';
+export type TreeNodeDragPredicate<T> = (node: T) => boolean;
+export type TreeNodeDropPredicate<T> = (source: T, target: T, position: TreeNodeDropPosition) => boolean;
+export type TreeDragPreview = 'node' | 'none';
 export type TreeFilterMode = 'includeAncestors' | 'includeDescendants';
 export type TreeFilterPredicate<T> = (node: T, filterValue: string) => boolean;
 
@@ -60,6 +78,21 @@ const NGS_TREE_DEFAULT_FILTER_PREDICATE = <T,>(node: T, filterValue: string): bo
 
   return candidates.some(value => value != null && String(value).toLowerCase().includes(query));
 };
+
+@Directive({
+  selector: 'ng-template[ngsTreeDragPlaceholder]',
+  standalone: true
+})
+export class TreeDragPlaceholder<T> {
+  readonly templateRef = inject<TemplateRef<TreeNodeDragPlaceholderContext<T>>>(TemplateRef);
+
+  static ngTemplateContextGuard<T>(
+    _directive: TreeDragPlaceholder<T>,
+    _context: unknown,
+  ): _context is TreeNodeDragPlaceholderContext<T> {
+    return true;
+  }
+}
 
 @Component({
   selector: 'ngs-tree',
@@ -99,6 +132,16 @@ export class Tree<T, K = T> extends CdkTree<T, K> {
     transform: booleanAttribute
   });
 
+  draggablePredicate = input<TreeNodeDragPredicate<T>>(() => true);
+
+  dropPredicate = input<TreeNodeDropPredicate<T>>(() => true);
+
+  reorderOnDrop = input(true, {
+    transform: booleanAttribute
+  });
+
+  dragPreview = input<TreeDragPreview>('node');
+
   childrenKey = input('children');
 
   filterValue = input('', {
@@ -117,6 +160,7 @@ export class Tree<T, K = T> extends CdkTree<T, K> {
   readonly _selectedKey = signal<unknown>(undefined);
   readonly _dropTargetKey = signal<unknown>(undefined);
   readonly _dropTargetPosition = signal<TreeNodeDropPosition | undefined>(undefined);
+  readonly _draggedNodeKey = signal<unknown>(undefined);
   private _checkedKeys = new Set<unknown>();
   private _nodeValueByDataKey = new Map<unknown, unknown>();
   private _disabledDataKeys = new Set<unknown>();
@@ -124,6 +168,9 @@ export class Tree<T, K = T> extends CdkTree<T, K> {
   private _draggedNode?: T;
   private _sourceDataSource?: DataSource<T> | Observable<T[]> | T[];
   private _filteredNodeOriginals = new WeakMap<object, T>();
+
+  @ContentChild(TreeDragPlaceholder)
+  private _dragPlaceholder?: TreeDragPlaceholder<T>;
 
   @ViewChild(TreeNodeOutlet, { static: true })
   override _nodeOutlet: TreeNodeOutlet = undefined!;
@@ -203,7 +250,10 @@ export class Tree<T, K = T> extends CdkTree<T, K> {
   }
 
   _canDragNode(node: T): boolean {
-    return node !== undefined && this.draggable() && !this._isNodeDisabled(node);
+    return node !== undefined
+      && this.draggable()
+      && !this._isNodeDisabled(node)
+      && this.draggablePredicate()(node);
   }
 
   _isNodeDropTarget(node: T): boolean {
@@ -214,6 +264,10 @@ export class Tree<T, K = T> extends CdkTree<T, K> {
     return this._isNodeDropTarget(node) && this._dropTargetPosition() === position;
   }
 
+  _isNodeDraggingSource(node: T): boolean {
+    return node !== undefined && Object.is(this._draggedNodeKey(), this._getTreeNodeDataKey(node));
+  }
+
   _startNodeDrag(node: T, event: DragEvent) {
     if (!this._canDragNode(node)) {
       event.preventDefault();
@@ -221,6 +275,7 @@ export class Tree<T, K = T> extends CdkTree<T, K> {
     }
 
     this._draggedNode = node;
+    this._draggedNodeKey.set(this._getTreeNodeDataKey(node));
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = 'move';
       event.dataTransfer.setData('text/plain', String(this._getTreeNodeValue(node) ?? ''));
@@ -259,7 +314,7 @@ export class Tree<T, K = T> extends CdkTree<T, K> {
     event.preventDefault();
     event.stopPropagation();
     const source = this._draggedNode!;
-    const moved = this._moveNode(source, node, position);
+    const moved = this.reorderOnDrop() ? this._moveNode(source, node, position) : true;
     this._clearNodeDrag();
 
     if (moved) {
@@ -276,6 +331,53 @@ export class Tree<T, K = T> extends CdkTree<T, K> {
 
   _endNodeDrag() {
     this._clearNodeDrag();
+  }
+
+  _getDragPreview(): TreeDragPreview {
+    return this.dragPreview();
+  }
+
+  _hasDragPlaceholder(): boolean {
+    return !!this._dragPlaceholder;
+  }
+
+  _setDragPlaceholderImage(node: T, event: DragEvent, host: HTMLElement): boolean {
+    const template = this._dragPlaceholder?.templateRef;
+    const dataTransfer = event.dataTransfer;
+    const body = host.ownerDocument.body;
+
+    if (!template || !dataTransfer || !body) {
+      return false;
+    }
+
+    const viewRef = template.createEmbeddedView({
+      $implicit: node,
+      source: node,
+    });
+    viewRef.detectChanges();
+
+    const dragImage = host.ownerDocument.createElement('div');
+    dragImage.classList.add('ngs-tree-drag-placeholder-image');
+    dragImage.style.position = 'fixed';
+    dragImage.style.insetBlockStart = '0';
+    dragImage.style.insetInlineStart = '0';
+    dragImage.style.zIndex = '-1';
+    dragImage.style.pointerEvents = 'none';
+    dragImage.style.transform = 'translate(-200vw, -200vh)';
+
+    for (const rootNode of viewRef.rootNodes) {
+      if (rootNode instanceof Node) {
+        dragImage.appendChild(rootNode);
+      }
+    }
+
+    body.appendChild(dragImage);
+    dataTransfer.setDragImage(dragImage, 12, 12);
+    window.setTimeout(() => {
+      viewRef.destroy();
+      dragImage.remove();
+    });
+    return true;
   }
 
   _registerNodeValue(node: T, value: unknown) {
@@ -339,7 +441,8 @@ export class Tree<T, K = T> extends CdkTree<T, K> {
       && this.draggable()
       && !this._isNodeDisabled(target)
       && !this._isSameNode(source, target)
-      && !this._isNodeDescendantOf(target, source);
+      && !this._isNodeDescendantOf(target, source)
+      && this.dropPredicate()(source, target, position);
   }
 
   private _moveNode(source: T, target: T, position: TreeNodeDropPosition): boolean {
@@ -588,6 +691,7 @@ export class Tree<T, K = T> extends CdkTree<T, K> {
 
   private _clearNodeDrag() {
     this._draggedNode = undefined;
+    this._draggedNodeKey.set(undefined);
     this._dropTargetKey.set(undefined);
     this._dropTargetPosition.set(undefined);
   }

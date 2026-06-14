@@ -26,6 +26,11 @@ export const routes: Routes = [
     title: 'Form Renderer'
   },
   {
+    path: 'form-builder',
+    loadChildren: () => import('./form-builder/routes').then(m => m.routes),
+    title: 'Form Builder'
+  },
+  {
     path: 'pdf-viewer',
     loadChildren: () => import('./pdf-viewer/routes').then(m => m.routes),
     title: 'PDF Viewer'

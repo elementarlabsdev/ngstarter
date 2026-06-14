@@ -1,0 +1,19 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .settings-section {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(3);
+    border-top: 1px solid var(--ngs-color-outline-variant);
+    padding-top: --spacing(4);
+
+    h4 {
+      color: var(--ngs-color-on-surface);
+      font-size: var(--ngs-font-size-sm);
+      font-weight: 600;
+    }
+  }
+}

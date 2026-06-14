@@ -1007,6 +1007,32 @@ export class App implements OnInit {
       ]
     },
     {
+      key: 'form-builder',
+      type: 'group',
+      name: 'Form Builder',
+      icon: 'fluent:form-new-24-regular',
+      children: [
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Overview',
+          link: '/libraries/form-builder'
+        },
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Examples',
+          link: '/libraries/form-builder/examples'
+        },
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Api',
+          link: '/libraries/form-builder/api'
+        },
+      ]
+    },
+    {
       key: 'pdf-viewer',
       type: 'group',
       name: 'PDF Viewer',

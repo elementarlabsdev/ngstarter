@@ -1,0 +1,500 @@
+<ng-template #fieldCard let-field let-section="section" let-dragData="dragData">
+  <div
+    class="ngs-form-builder-field"
+    cdkDrag
+    [cdkDragData]="dragData || field"
+    [class.is-width-1]="(field.width ?? 12) === 1"
+    [class.is-width-2]="field.width === 2"
+    [class.is-width-3]="field.width === 3"
+    [class.is-width-4]="field.width === 4"
+    [class.is-width-5]="field.width === 5"
+    [class.is-width-6]="field.width === 6"
+    [class.is-width-7]="field.width === 7"
+    [class.is-width-8]="field.width === 8"
+    [class.is-width-9]="field.width === 9"
+    [class.is-width-10]="field.width === 10"
+    [class.is-width-11]="field.width === 11"
+    [class.is-width-12]="(field.width ?? 12) === 12"
+    [class.is-container]="isContainerField(field)"
+    [class.is-selected]="selectedFieldId() === field.id"
+    [attr.data-form-builder-field-id]="field.id"
+    (dragover)="nativeContainerFieldDragOver($event, field)"
+    (dragleave)="nativeContainerFieldDragLeave($event, field)"
+    (drop)="nativeContainerFieldDrop($event, field)"
+    (click)="$event.stopPropagation(); selectField(field, section)">
+    <div class="ngs-form-builder-field-header">
+      <div class="ngs-form-builder-field-label">
+        <ngs-icon [name]="fieldIcon(field)"/>
+        <span>{{ field.label }}</span>
+      </div>
+
+      <button ngsIconButton type="button" class="ngs-form-builder-field-handle" cdkDragHandle aria-label="Move field">
+        <ngs-icon name="fluent:re-order-dots-vertical-24-regular"/>
+      </button>
+    </div>
+
+    @if (isContainerField(field)) {
+      <div class="ngs-form-builder-grid-field">
+        <ng-container
+          [ngTemplateOutlet]="fieldList"
+          [ngTemplateOutletContext]="{
+            $implicit: field.children ?? [],
+            containerId: fieldDropListId(field),
+            section
+          }"/>
+      </div>
+    } @else {
+      <ngs-form-builder-field-host
+        [field]="field"
+        [control]="previewControl(field)"
+        [definitions]="definitions()"
+        [readonly]="true"
+        [editableCanvas]="true"/>
+    }
+
+    <ng-template cdkDragPlaceholder>
+      <div
+        class="ngs-form-builder-field ngs-form-builder-field-line-placeholder"
+        [class.is-width-1]="(field.width ?? 12) === 1"
+        [class.is-width-2]="field.width === 2"
+        [class.is-width-3]="field.width === 3"
+        [class.is-width-4]="field.width === 4"
+        [class.is-width-5]="field.width === 5"
+        [class.is-width-6]="field.width === 6"
+        [class.is-width-7]="field.width === 7"
+        [class.is-width-8]="field.width === 8"
+        [class.is-width-9]="field.width === 9"
+        [class.is-width-10]="field.width === 10"
+        [class.is-width-11]="field.width === 11"
+        [class.is-width-12]="(field.width ?? 12) === 12">
+      </div>
+    </ng-template>
+
+    <ng-template cdkDragPreview>
+      <div
+        class="ngs-form-builder-field ngs-form-builder-field-drag-preview"
+        [class.is-width-1]="(field.width ?? 12) === 1"
+        [class.is-width-2]="field.width === 2"
+        [class.is-width-3]="field.width === 3"
+        [class.is-width-4]="field.width === 4"
+        [class.is-width-5]="field.width === 5"
+        [class.is-width-6]="field.width === 6"
+        [class.is-width-7]="field.width === 7"
+        [class.is-width-8]="field.width === 8"
+        [class.is-width-9]="field.width === 9"
+        [class.is-width-10]="field.width === 10"
+        [class.is-width-11]="field.width === 11"
+        [class.is-width-12]="(field.width ?? 12) === 12">
+        <div class="ngs-form-builder-field-header">
+          <div class="ngs-form-builder-field-label">
+            <ngs-icon [name]="fieldIcon(field)"/>
+            <span>{{ field.label }}</span>
+          </div>
+          <span class="ngs-form-builder-drag-icon">
+            <ngs-icon name="fluent:re-order-dots-vertical-24-regular"/>
+          </span>
+        </div>
+        <div class="ngs-form-builder-ghost-control"></div>
+      </div>
+    </ng-template>
+  </div>
+</ng-template>
+
+<ng-template #nativeFieldGhost>
+  @if (nativeDragFieldDefinition(); as definition) {
+    <div
+      class="ngs-form-builder-field ngs-form-builder-field-placeholder ngs-form-builder-native-ghost-field"
+      [class.is-width-1]="definitionWidth(definition) === 1"
+      [class.is-width-2]="definitionWidth(definition) === 2"
+      [class.is-width-3]="definitionWidth(definition) === 3"
+      [class.is-width-4]="definitionWidth(definition) === 4"
+      [class.is-width-5]="definitionWidth(definition) === 5"
+      [class.is-width-6]="definitionWidth(definition) === 6"
+      [class.is-width-7]="definitionWidth(definition) === 7"
+      [class.is-width-8]="definitionWidth(definition) === 8"
+      [class.is-width-9]="definitionWidth(definition) === 9"
+      [class.is-width-10]="definitionWidth(definition) === 10"
+      [class.is-width-11]="definitionWidth(definition) === 11"
+      [class.is-width-12]="definitionWidth(definition) === 12">
+      <div class="ngs-form-builder-field-header">
+        <div class="ngs-form-builder-field-label">
+          <ngs-icon [name]="definition.icon || 'fluent:form-24-regular'"/>
+          <span>{{ definition.defaults?.label || definition.label }}</span>
+        </div>
+        <span class="ngs-form-builder-drag-icon">
+          <ngs-icon name="fluent:arrow-move-24-regular"/>
+        </span>
+      </div>
+      <div class="ngs-form-builder-ghost-control"></div>
+    </div>
+  }
+</ng-template>
+
+<ng-template #nativeSectionGhost>
+  <ngs-card class="ngs-form-builder-section ngs-form-builder-native-ghost-section">
+    <ngs-card-header>
+      <div class="ngs-form-builder-section-heading">
+        <span class="ngs-form-builder-drag-icon">
+          <ngs-icon name="fluent:folder-add-24-regular"/>
+        </span>
+        <span class="ngs-form-builder-section-title">Section</span>
+      </div>
+    </ngs-card-header>
+  </ngs-card>
+</ng-template>
+
+<ng-template #fieldList let-fields let-containerId="containerId" let-section="section">
+  <div
+    cdkDropList
+    class="ngs-form-builder-drop-list ngs-form-builder-canvas-drop-list"
+    [id]="containerId"
+    [cdkDropListData]="fields"
+    cdkDropListOrientation="mixed"
+    [cdkDropListConnectedTo]="fieldContainerDropListIds()"
+    [cdkDropListEnterPredicate]="fieldDropListEnterPredicate"
+    (dragover)="nativeFieldDragOver($event, containerId)"
+    (dragleave)="nativeDragLeave($event, containerId)"
+    (drop)="nativeFieldDrop($event, containerId)"
+    (cdkDropListDropped)="dropField($event)">
+    @for (field of fields; track field.id; let fieldIndex = $index) {
+      @if (isNativeDropTarget(containerId, fieldIndex)) {
+        <ng-container [ngTemplateOutlet]="nativeFieldGhost"/>
+      }
+      <ng-container
+        [ngTemplateOutlet]="fieldCard"
+        [ngTemplateOutletContext]="{
+          $implicit: field,
+          section
+        }"/>
+    }
+
+    @if (isNativeDropTarget(containerId, fields.length)) {
+      <ng-container [ngTemplateOutlet]="nativeFieldGhost"/>
+    }
+  </div>
+</ng-template>
+
+<ngs-panel class="ngs-form-builder-shell" cdkDropListGroup>
+  <ngs-panel-header autoHeight class="flex items-center justify-between gap-4 border-b border-b-subtle px-5 py-3">
+    <div class="min-w-0">
+      <p class="text-sm text-secondary">Form builder</p>
+      <h2 class="truncate text-lg font-semibold">{{ schema().title || 'Untitled form' }}</h2>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button ngsButton="outlined" type="button" (click)="openPreview(previewDialog)">
+        <ngs-icon name="fluent:eye-24-regular"/>
+        Preview
+      </button>
+
+    </div>
+  </ngs-panel-header>
+
+  <ngs-panel-sidebar class="ngs-form-builder-palette w-80 border-e border-e-subtle">
+    <ngs-scrollbar-area [absolute]="true">
+      <div class="flex flex-col gap-4 p-4">
+        <h3 class="text-base font-semibold">{{ paletteTitle() }}</h3>
+
+        <ngs-tab-group animationDuration="0ms" ngs-stretch-tabs="false">
+          <ngs-tab label="Placeholders">
+            <div class="flex flex-col gap-4 pt-4">
+              <ngs-form-field>
+                <ngs-label>Search placeholder</ngs-label>
+                <input ngsInput
+                       [ngModel]="search()"
+                       [ngModelOptions]="{standalone: true}"
+                       (ngModelChange)="search.set($event)">
+              </ngs-form-field>
+
+              <div class="flex flex-col gap-5">
+                <section class="flex flex-col gap-2">
+                  <h4 class="text-xs font-semibold uppercase tracking-normal text-secondary">Layout</h4>
+                  <button
+                    type="button"
+                    class="ngs-form-builder-palette-item"
+                    draggable="true"
+                    (dragstart)="sectionPaletteDragStarted($event)"
+                    (dragend)="paletteDragEnded()">
+                    <span class="ngs-form-builder-palette-item-content">
+                      <span class="ngs-form-builder-palette-item-label">
+                        <ngs-icon name="fluent:folder-add-24-regular"/>
+                        <span>Section</span>
+                      </span>
+                    </span>
+                  </button>
+
+                  @for (definition of layoutDefinitions(); track definition.type) {
+                    <button
+                      type="button"
+                      class="ngs-form-builder-palette-item"
+                      draggable="true"
+                      (dragstart)="paletteDragStarted($event, definition)"
+                      (dragend)="paletteDragEnded()"
+                      (click)="paletteClicked(definition)">
+                      <span class="ngs-form-builder-palette-item-content">
+                        <span class="ngs-form-builder-palette-item-label">
+                          <ngs-icon [name]="definition.icon || 'fluent:form-24-regular'"/>
+                          <span>{{ definition.label }}</span>
+                        </span>
+                      </span>
+                    </button>
+                  }
+                </section>
+
+                @for (group of paletteGroups(); track group.name) {
+                  <section class="flex flex-col gap-2">
+                    <h4 class="text-xs font-semibold uppercase tracking-normal text-secondary">{{ group.name }}</h4>
+                    <div class="flex flex-col gap-2">
+                      @for (definition of group.fields; track definition.type) {
+                        <button
+                          type="button"
+                          class="ngs-form-builder-palette-item"
+                          draggable="true"
+                          (dragstart)="paletteDragStarted($event, definition)"
+                          (dragend)="paletteDragEnded()"
+                          (click)="paletteClicked(definition)">
+                          <span class="ngs-form-builder-palette-item-content">
+                            <span class="ngs-form-builder-palette-item-label">
+                              <ngs-icon [name]="definition.icon || 'fluent:form-24-regular'"/>
+                              <span>{{ definition.label }}</span>
+                            </span>
+                          </span>
+                        </button>
+                      }
+                    </div>
+                  </section>
+                }
+              </div>
+            </div>
+          </ngs-tab>
+
+          <ngs-tab label="Actual fields">
+            <div class="pt-4">
+              <ngs-tree
+                #actualFieldsTree="ngsTree"
+                [dataSource]="fieldTree()"
+                [childrenAccessor]="fieldTreeChildrenAccessor"
+                [trackBy]="trackFieldTreeNode"
+                [draggablePredicate]="fieldTreeDraggablePredicate"
+                [dropPredicate]="fieldTreeDropPredicate"
+                [reorderOnDrop]="false"
+                (nodeDrop)="fieldTreeNodeDropped($event)"
+                draggable>
+                <ng-template ngsTreeDragPlaceholder let-source="source">
+                  <div class="ngs-form-builder-tree-drag-placeholder">
+                    <ngs-icon [name]="fieldTreePlaceholderIcon(source)"/>
+                    <span>{{ source.label }}</span>
+                  </div>
+                </ng-template>
+
+                <ngs-tree-node *ngsTreeNodeDef="let node" ngsTreeNodePadding [value]="node.id">
+                  <button
+                    ngsButton="text"
+                    type="button"
+                    class="ngs-form-builder-tree-item"
+                    [class.is-selected]="selectedFieldId() === node.id"
+                    (click)="selectFieldTreeNode(node)">
+                    <ngs-icon [name]="node.icon"/>
+                    <span>{{ node.label }}</span>
+                    @if (node.name) {
+                      <small>{{ node.name }}</small>
+                    }
+                  </button>
+                </ngs-tree-node>
+
+                <ngs-tree-node *ngsTreeNodeDef="let node; when: hasFieldTreeChildren"
+                               ngsTreeNodePadding
+                               [value]="node.id"
+                               [cdkTreeNodeTypeaheadLabel]="node.label">
+                  <button
+                    ngsIconButton
+                    class="ngs-form-builder-tree-toggle"
+                    [attr.aria-label]="'Toggle ' + node.label"
+                    (click)="toggleFieldTreeNode(actualFieldsTree, node, $event)">
+                    <ngs-icon [name]="isFieldTreeNodeExpanded(actualFieldsTree, node) ? 'fluent:chevron-down-24-regular' : 'fluent:chevron-right-24-regular'" class="size-4"/>
+                  </button>
+                  <button
+                    ngsButton="text"
+                    type="button"
+                    class="ngs-form-builder-tree-item"
+                    [class.is-selected]="selectedFieldId() === node.id"
+                    (click)="selectFieldTreeNode(node)">
+                    <ngs-icon [name]="node.icon"/>
+                    <span>{{ node.label }}</span>
+                    @if (node.name) {
+                      <small>{{ node.name }}</small>
+                    }
+                  </button>
+                </ngs-tree-node>
+              </ngs-tree>
+            </div>
+          </ngs-tab>
+        </ngs-tab-group>
+      </div>
+    </ngs-scrollbar-area>
+  </ngs-panel-sidebar>
+
+  <ngs-panel-content>
+    <ngs-scrollbar-area [absolute]="true">
+      <div class="ngs-form-builder-canvas flex flex-col gap-4 p-5">
+        <div
+          cdkDropList
+          class="ngs-form-builder-canvas-list"
+          [id]="rootDropListId()"
+          [cdkDropListData]="canvasItems()"
+          [cdkDropListConnectedTo]="fieldContainerDropListIds()"
+          (dragover)="nativeCanvasDragOver($event)"
+          (dragleave)="nativeDragLeave($event, rootDropListId())"
+          (drop)="nativeFieldDrop($event, rootDropListId())"
+          (cdkDropListDropped)="dropCanvasItem($event)">
+          @for (item of canvasItems(); track item.kind + ':' + item.id; let itemIndex = $index) {
+            @if (isNativeDropTarget(rootDropListId(), itemIndex)) {
+              <ng-container [ngTemplateOutlet]="nativeDragSection() ? nativeSectionGhost : nativeFieldGhost"/>
+            }
+            @if (item.field; as field) {
+              <ng-container
+                [ngTemplateOutlet]="fieldCard"
+                [ngTemplateOutletContext]="{
+                  $implicit: field,
+                  dragData: item
+                }"/>
+            } @else if (item.section; as section) {
+            <ngs-card class="ngs-form-builder-section"
+                      cdkDrag
+                      cdkDragLockAxis="y"
+                      [cdkDragData]="item"
+                      (cdkDragStarted)="sectionDragStarted(section)"
+                      (cdkDragEnded)="sectionDragEnded(section)"
+                      (dragover)="nativeSectionDragOver($event, section)"
+                      (dragleave)="nativeDragLeave($event, sectionDropListId(section))"
+                      (drop)="nativeSectionDrop($event, section)">
+              <ngs-card-header>
+                <div class="ngs-form-builder-section-heading">
+                  <button ngsIconButton type="button" class="ngs-form-builder-section-handle" cdkDragHandle aria-label="Move section">
+                    <ngs-icon name="fluent:re-order-dots-vertical-24-regular"/>
+                  </button>
+                  <input ngsInput
+                         class="ngs-form-builder-section-title"
+                         [ngModel]="section.title"
+                         [ngModelOptions]="{standalone: true}"
+                         (ngModelChange)="updateSection(section, { title: $event })"
+                         aria-label="Section title">
+                </div>
+                @if (section.description) {
+                  <p class="truncate text-sm text-secondary">{{ section.description }}</p>
+                }
+
+                <ngs-card-aside>
+                  <div class="ngs-form-builder-section-actions">
+                    <button ngsIconButton type="button" aria-label="Collapse section" (click)="updateSection(section, { collapsed: !section.collapsed })">
+                      <ngs-icon [name]="isSectionCollapsed(section) ? 'fluent:chevron-down-24-regular' : 'fluent:chevron-up-24-regular'"/>
+                    </button>
+                    <button ngsIconButton type="button" aria-label="Delete section" (click)="removeSection(section)">
+                      <ngs-icon name="fluent:delete-24-regular"/>
+                    </button>
+                  </div>
+                </ngs-card-aside>
+              </ngs-card-header>
+
+              @if (!isSectionCollapsed(section)) {
+                <ngs-card-content>
+                  <ng-container
+                    [ngTemplateOutlet]="fieldList"
+                    [ngTemplateOutletContext]="{
+                      $implicit: section.fields,
+                      containerId: sectionDropListId(section),
+                      section
+                    }"/>
+                </ngs-card-content>
+              } @else if (isNativeDropTarget(sectionDropListId(section), section.fields.length)) {
+                <ngs-card-content>
+                  <div class="ngs-form-builder-drop-list ngs-form-builder-canvas-drop-list">
+                    <ng-container [ngTemplateOutlet]="nativeFieldGhost"/>
+                  </div>
+                </ngs-card-content>
+              }
+
+              <ng-template cdkDragPlaceholder>
+                <div class="ngs-form-builder-section-line-placeholder"></div>
+              </ng-template>
+
+              <ng-template cdkDragPreview>
+                <ngs-card class="ngs-form-builder-section ngs-form-builder-section-drag-preview">
+                  <ngs-card-header>
+                    <div class="ngs-form-builder-section-heading">
+                      <span class="ngs-form-builder-section-handle">
+                        <ngs-icon name="fluent:re-order-dots-vertical-24-regular"/>
+                      </span>
+                      <span class="ngs-form-builder-section-preview-title">{{ section.title }}</span>
+                    </div>
+                    <ngs-card-aside>
+                      <ngs-icon name="fluent:chevron-down-24-regular" class="size-5"/>
+                    </ngs-card-aside>
+                  </ngs-card-header>
+                </ngs-card>
+              </ng-template>
+            </ngs-card>
+            }
+          }
+
+          @if (isNativeDropTarget(rootDropListId(), canvasItems().length)) {
+            <ng-container [ngTemplateOutlet]="nativeDragSection() ? nativeSectionGhost : nativeFieldGhost"/>
+          }
+
+        </div>
+      </div>
+    </ngs-scrollbar-area>
+  </ngs-panel-content>
+
+  <ngs-panel-aside class="ngs-form-builder-inspector w-88 border-s border-s-subtle">
+    <ngs-scrollbar-area [absolute]="true">
+      <div class="flex flex-col gap-4 p-5">
+        <div class="flex items-start justify-between gap-3">
+          <div class="min-w-0">
+            <h3 class="text-base font-semibold">{{ inspectorTitle() }}</h3>
+            @if (selectedField()) {
+              <p class="truncate text-sm text-secondary">{{ selectedField()?.label }}</p>
+            }
+          </div>
+          <button ngsIconButton type="button" aria-label="Clear selection" (click)="selectedFieldId.set(null)">
+            <ngs-icon name="fluent:dismiss-24-regular"/>
+          </button>
+        </div>
+
+        @if (selectedField(); as field) {
+          <ngs-basic-form-builder-field-settings
+            [field]="field"
+            [update]="updateSelectedField"/>
+
+          <ngs-form-builder-settings-host
+            [field]="field"
+            [schema]="schema()"
+            [definitions]="definitions()"
+            [settingsDefinitions]="settingsDefinitions()"
+            [update]="updateSelectedField"/>
+
+          <button ngsButton="text" type="button" class="ngs-form-builder-delete-button" (click)="confirmRemoveField(field)">
+            <ngs-icon name="fluent:delete-24-regular"/>
+            Delete field
+          </button>
+        } @else {
+          <div class="ngs-form-builder-empty-inspector">
+            Select a field on the canvas or in the fields tree to edit its settings.
+          </div>
+        }
+      </div>
+    </ngs-scrollbar-area>
+  </ngs-panel-aside>
+</ngs-panel>
+
+<ng-template #previewDialog>
+  <h3 ngs-dialog-title>{{ schema().title || 'Form preview' }}</h3>
+  <ngs-dialog-content class="ngs-form-builder-preview-dialog-content">
+    <ngs-form-builder-renderer
+      [schema]="schema()"
+      [showSubmit]="false"/>
+  </ngs-dialog-content>
+  <ngs-dialog-actions align="end">
+    <button ngsButton="outlined" type="button" ngs-dialog-close>Close</button>
+  </ngs-dialog-actions>
+</ng-template>

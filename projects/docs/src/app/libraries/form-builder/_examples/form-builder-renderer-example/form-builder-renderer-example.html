@@ -1,0 +1,16 @@
+<div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+  <ngs-form-builder-renderer
+    [schema]="schema"
+    [(value)]="value"
+    submitLabel="Save profile"
+    (formSubmit)="submittedValue.set($event)"/>
+
+  <ngs-card>
+    <ngs-card-header>
+      <ngs-card-title>Submitted value</ngs-card-title>
+    </ngs-card-header>
+    <ngs-card-content>
+      <pre>{{ submittedValue() || value() | json }}</pre>
+    </ngs-card-content>
+  </ngs-card>
+</div>

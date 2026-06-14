@@ -1,0 +1,76 @@
+<div class="flex flex-col gap-4">
+  <ngs-form-field>
+    <ngs-label>Label</ngs-label>
+    <input ngsInput
+           [ngModel]="field().label"
+           [ngModelOptions]="{standalone: true}"
+           (ngModelChange)="patch({ label: $event })">
+  </ngs-form-field>
+
+  <ngs-form-field>
+    <ngs-label>Field ID</ngs-label>
+    <input ngsInput
+           [ngModel]="field().name"
+           [ngModelOptions]="{standalone: true}"
+           (ngModelChange)="patch({ name: $event })">
+  </ngs-form-field>
+
+  <ngs-form-field>
+    <ngs-label>Placeholder</ngs-label>
+    <input ngsInput
+           [ngModel]="field().placeholder || ''"
+           [ngModelOptions]="{standalone: true}"
+           (ngModelChange)="patch({ placeholder: $event })">
+  </ngs-form-field>
+
+  <ngs-form-field>
+    <ngs-label>Hint</ngs-label>
+    <input ngsInput
+           [ngModel]="field().hint || ''"
+           [ngModelOptions]="{standalone: true}"
+           (ngModelChange)="patch({ hint: $event })">
+  </ngs-form-field>
+
+  <ngs-form-field>
+    <ngs-label>Width</ngs-label>
+    <ngs-select [ngModel]="field().width ?? 12"
+                [ngModelOptions]="{standalone: true}"
+                (ngModelChange)="patch({ width: $event })">
+      @for (width of fieldWidthOptions; track width) {
+        <ngs-option [value]="width">{{ width }}/12</ngs-option>
+      }
+    </ngs-select>
+  </ngs-form-field>
+
+  <div class="flex flex-col gap-3 py-1">
+    <ngs-slide-toggle [ngModel]="field().required ?? false"
+                      [ngModelOptions]="{standalone: true}"
+                      (ngModelChange)="patch({ required: $event })">
+      Required field
+    </ngs-slide-toggle>
+
+    <ngs-slide-toggle [ngModel]="field().readonly ?? false"
+                      [ngModelOptions]="{standalone: true}"
+                      (ngModelChange)="patch({ readonly: $event })">
+      Readonly
+    </ngs-slide-toggle>
+
+    <ngs-slide-toggle [ngModel]="field().disabled ?? false"
+                      [ngModelOptions]="{standalone: true}"
+                      (ngModelChange)="patch({ disabled: $event })">
+      Disabled
+    </ngs-slide-toggle>
+  </div>
+
+  @if (hasOptions()) {
+    <ngs-form-field>
+      <ngs-label>Options</ngs-label>
+      <textarea ngsInput
+                rows="4"
+                [ngModel]="optionsText()"
+                [ngModelOptions]="{standalone: true}"
+                (ngModelChange)="patchOptions($event)"></textarea>
+      <ngs-hint>One option per line. Use Label:value to set explicit values.</ngs-hint>
+    </ngs-form-field>
+  }
+</div>

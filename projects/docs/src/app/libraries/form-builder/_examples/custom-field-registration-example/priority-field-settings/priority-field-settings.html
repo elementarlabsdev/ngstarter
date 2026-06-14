@@ -1,0 +1,27 @@
+<div class="priority-settings">
+  <h4>Priority labels</h4>
+
+  <ngs-form-field>
+    <ngs-label>Low label</ngs-label>
+    <input ngsInput
+           [ngModel]="field().settings?.['lowLabel'] || 'Low'"
+           [ngModelOptions]="{standalone: true}"
+           (ngModelChange)="patchSetting('lowLabel', $event)">
+  </ngs-form-field>
+
+  <ngs-form-field>
+    <ngs-label>Medium label</ngs-label>
+    <input ngsInput
+           [ngModel]="field().settings?.['mediumLabel'] || 'Medium'"
+           [ngModelOptions]="{standalone: true}"
+           (ngModelChange)="patchSetting('mediumLabel', $event)">
+  </ngs-form-field>
+
+  <ngs-form-field>
+    <ngs-label>High label</ngs-label>
+    <input ngsInput
+           [ngModel]="field().settings?.['highLabel'] || 'High'"
+           [ngModelOptions]="{standalone: true}"
+           (ngModelChange)="patchSetting('highLabel', $event)">
+  </ngs-form-field>
+</div>

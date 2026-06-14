@@ -1,0 +1,14 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  pre {
+    overflow: auto;
+    border-radius: var(--ngs-radius-md);
+    background: var(--ngs-color-surface-container);
+    padding: --spacing(4);
+    color: var(--ngs-color-on-surface);
+    font-size: var(--ngs-font-size-sm);
+  }
+}

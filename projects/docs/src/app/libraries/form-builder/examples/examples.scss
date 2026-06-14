@@ -1,0 +1,13 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  width: 100%;
+  height: calc(100vh - 96px);
+  min-height: 720px;
+
+  ngs-form-builder {
+    width: 100%;
+    height: 100%;
+  }
+}

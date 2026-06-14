@@ -1,0 +1,67 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  min-width: 0;
+
+  &.is-width-1 {
+    grid-column: span 1;
+  }
+
+  &.is-width-2 {
+    grid-column: span 2;
+  }
+
+  &.is-width-3 {
+    grid-column: span 3;
+  }
+
+  &.is-width-4 {
+    grid-column: span 4;
+  }
+
+  &.is-width-5 {
+    grid-column: span 5;
+  }
+
+  &.is-width-6 {
+    grid-column: span 6;
+  }
+
+  &.is-width-7 {
+    grid-column: span 7;
+  }
+
+  &.is-width-8 {
+    grid-column: span 8;
+  }
+
+  &.is-width-9 {
+    grid-column: span 9;
+  }
+
+  &.is-width-10 {
+    grid-column: span 10;
+  }
+
+  &.is-width-11 {
+    grid-column: span 11;
+  }
+
+  &.is-width-12 {
+    grid-column: span 12;
+  }
+
+  .ngs-form-builder-check-field {
+    display: flex;
+    min-height: --spacing(11);
+    flex-direction: column;
+    justify-content: center;
+    gap: --spacing(1);
+
+    span {
+      color: var(--ngs-color-on-surface-variant);
+      font-size: var(--ngs-font-size-xs);
+    }
+  }
+}

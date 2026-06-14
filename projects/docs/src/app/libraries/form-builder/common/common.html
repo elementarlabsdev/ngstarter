@@ -1,0 +1,24 @@
+<app-page>
+  <h1 appPageTitle>Form Builder</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Form Builder creates schema-driven forms with a drag-and-drop builder, a runtime renderer,
+        and provider-based registration for field types and field-specific settings panels.
+      </p>
+      <p>
+        Use it for admin-configurable forms, document templates, onboarding builders, tenant-specific
+        field layouts, surveys, intake flows, and other places where product teams need to compose
+        fields without changing Angular templates.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/libraries/form-builder" ngs-tab-link>Overview</a>
+      <a routerLink="/libraries/form-builder/examples" ngs-tab-link>Examples</a>
+      <a routerLink="/libraries/form-builder/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

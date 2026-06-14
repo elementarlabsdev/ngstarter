@@ -1,0 +1,100 @@
+<ng-container #anchor/>
+
+@if (!customLoaded()) {
+  @switch (field().type) {
+    @case ('textarea') {
+      <ngs-form-field>
+        <ngs-label>{{ field().label }}</ngs-label>
+        <textarea ngsInput
+                  rows="3"
+                  [formControl]="control()"
+                  [placeholder]="field().placeholder || ''"
+                  [readonly]="readonly() || field().readonly"></textarea>
+        @if (field().hint) {
+          <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+      </ngs-form-field>
+    }
+
+    @case ('select') {
+      <ngs-form-field>
+        <ngs-label>{{ field().label }}</ngs-label>
+        <ngs-select [formControl]="control()" [placeholder]="field().placeholder || ''">
+          @for (option of field().options ?? []; track option.value) {
+            <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
+          }
+        </ngs-select>
+        @if (field().hint) {
+          <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+      </ngs-form-field>
+    }
+
+    @case ('checkbox') {
+      <div class="ngs-form-builder-check-field">
+        <ngs-checkbox [formControl]="control()" [disabled]="readonly() || (field().disabled ?? false)">
+          {{ field().label }}
+        </ngs-checkbox>
+        @if (field().hint) {
+          <span>{{ field().hint }}</span>
+        }
+      </div>
+    }
+
+    @case ('toggle') {
+      <div class="ngs-form-builder-check-field">
+        <ngs-slide-toggle [formControl]="control()" [disabled]="readonly() || (field().disabled ?? false)">
+          {{ field().label }}
+        </ngs-slide-toggle>
+        @if (field().hint) {
+          <span>{{ field().hint }}</span>
+        }
+      </div>
+    }
+
+    @case ('date') {
+      <ngs-form-field>
+        <ngs-label>{{ field().label }}</ngs-label>
+        <input ngsInput
+               [ngsDatepicker]="picker"
+               [formControl]="control()"
+               [placeholder]="field().placeholder || ''"
+               [readonly]="readonly() || field().readonly">
+        <ngs-datepicker-toggle ngsIconButtonSuffix [for]="picker"/>
+        <ngs-datepicker #picker/>
+        @if (field().hint) {
+          <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+      </ngs-form-field>
+    }
+
+    @case ('currency') {
+      <ngs-form-field>
+        <ngs-label>{{ field().label }}</ngs-label>
+        <input ngsInput
+               type="number"
+               inputmode="decimal"
+               [formControl]="control()"
+               [placeholder]="field().placeholder || ''"
+               [readonly]="readonly() || field().readonly">
+        @if (field().hint) {
+          <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+      </ngs-form-field>
+    }
+
+    @default {
+      <ngs-form-field>
+        <ngs-label>{{ field().label }}</ngs-label>
+        <input ngsInput
+               [type]="textInputType()"
+               [formControl]="control()"
+               [placeholder]="field().placeholder || ''"
+               [readonly]="readonly() || field().readonly">
+        @if (field().hint) {
+          <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+      </ngs-form-field>
+    }
+  }
+}

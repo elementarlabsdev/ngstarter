@@ -1,0 +1,57 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .ngs-form-builder-renderer-section {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(4);
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: --spacing(1);
+
+      h3 {
+        color: var(--ngs-color-on-surface);
+        font-size: var(--ngs-font-size-lg);
+        font-weight: 600;
+      }
+
+      p {
+        color: var(--ngs-color-on-surface-variant);
+        font-size: var(--ngs-font-size-sm);
+      }
+    }
+  }
+
+  .ngs-form-builder-renderer-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: --spacing(4);
+  }
+
+  .ngs-form-builder-renderer-grid-field {
+    display: flex;
+    grid-column: 1 / -1;
+    flex-direction: column;
+    gap: --spacing(4);
+    border: 1px solid var(--ngs-color-outline-variant);
+    border-radius: var(--ngs-radius-lg);
+    padding: --spacing(4);
+
+    > header {
+      h4 {
+        color: var(--ngs-color-on-surface);
+        font-size: var(--ngs-font-size-base);
+        font-weight: 600;
+      }
+
+      p {
+        color: var(--ngs-color-on-surface-variant);
+        font-size: var(--ngs-font-size-sm);
+      }
+    }
+  }
+}

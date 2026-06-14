@@ -44,6 +44,44 @@ function isTreeNodeControlClick(event: MouseEvent, host: HTMLElement): boolean {
   return !!control && control !== host;
 }
 
+function setTreeNodeDragImage(event: DragEvent, host: HTMLElement): void {
+  const dataTransfer = event.dataTransfer;
+  const body = host.ownerDocument.body;
+
+  if (!dataTransfer || !body) {
+    return;
+  }
+
+  const rect = host.getBoundingClientRect();
+  const clone = host.cloneNode(true);
+
+  if (!(clone instanceof HTMLElement)) {
+    return;
+  }
+
+  clone.classList.add('ngs-tree-node-drag-image');
+  clone.style.width = `${rect.width}px`;
+  body.appendChild(clone);
+  dataTransfer.setDragImage(
+    clone,
+    Math.max(0, Math.min(event.clientX - rect.left, rect.width)),
+    Math.max(0, Math.min(event.clientY - rect.top, rect.height)),
+  );
+  window.setTimeout(() => clone.remove());
+}
+
+function setEmptyTreeNodeDragImage(event: DragEvent): void {
+  const dataTransfer = event.dataTransfer;
+
+  if (!dataTransfer) {
+    return;
+  }
+
+  const image = new Image();
+  image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+  dataTransfer.setDragImage(image, 0, 0);
+}
+
 class TreeNodeCheckbox<T, K = T> {
   private _isReady = false;
   private _wrapperElement?: HTMLElement;
@@ -176,7 +214,7 @@ class TreeNodeCheckbox<T, K = T> {
 @Component({
   selector: 'ngs-tree-node',
   exportAs: 'ngsTreeNode',
-  template: '<ng-content />',
+  template: `<ng-content />`,
   styleUrl: './tree-node.scss',
   standalone: true,
   outputs: ['activation', 'expandedChange'],
@@ -188,6 +226,7 @@ class TreeNodeCheckbox<T, K = T> {
     '[class.ngs-tree-node-selected]': '_isSelected()',
     '[class.ngs-tree-node-disabled]': 'disabled()',
     '[class.ngs-tree-node-draggable]': '_isDraggable()',
+    '[class.ngs-tree-node-dragging-source]': '_isDraggingSource()',
     '[class.ngs-tree-node-drop-target]': '_isDropTarget()',
     '[class.ngs-tree-node-drop-before]': '_isDropTargetPosition("before")',
     '[class.ngs-tree-node-drop-inside]': '_isDropTargetPosition("inside")',
@@ -304,6 +343,10 @@ export class TreeNode<T, K = T> extends CdkTreeNode<T, K> implements OnInit, OnD
     return (this._tree as Tree<T, K>)._isNodeDropTargetPosition(this.data, position);
   }
 
+  _isDraggingSource(): boolean {
+    return (this._tree as Tree<T, K>)._isNodeDraggingSource(this.data);
+  }
+
   _getDraggableAttribute(): true | null {
     return this._isDraggable() ? true : null;
   }
@@ -314,6 +357,9 @@ export class TreeNode<T, K = T> extends CdkTreeNode<T, K> implements OnInit, OnD
 
   _handleDragStart(event: DragEvent) {
     (this._tree as Tree<T, K>)._startNodeDrag(this.data, event);
+    if (!event.defaultPrevented) {
+      this._setDragImage(event);
+    }
   }
 
   _handleDragOver(event: DragEvent) {
@@ -330,6 +376,19 @@ export class TreeNode<T, K = T> extends CdkTreeNode<T, K> implements OnInit, OnD
 
   _handleDragEnd() {
     (this._tree as Tree<T, K>)._endNodeDrag();
+  }
+
+  private _setDragImage(event: DragEvent) {
+    if ((this._tree as Tree<T, K>)._getDragPreview() === 'none') {
+      setEmptyTreeNodeDragImage(event);
+      return;
+    }
+
+    if ((this._tree as Tree<T, K>)._setDragPlaceholderImage(this.data, event, this._hostElementRef.nativeElement)) {
+      return;
+    }
+
+    setTreeNodeDragImage(event, this._hostElementRef.nativeElement);
   }
 
   private _selectNodeFromEvent(event: MouseEvent) {
@@ -400,7 +459,7 @@ export class TreeNode<T, K = T> extends CdkTreeNode<T, K> implements OnInit, OnD
 @Component({
   selector: 'ngs-nested-tree-node',
   exportAs: 'ngsNestedTreeNode',
-  template: '<ng-content />',
+  template: `<ng-content />`,
   styleUrl: './tree-node.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -416,6 +475,7 @@ export class TreeNode<T, K = T> extends CdkTreeNode<T, K> implements OnInit, OnD
     '[class.ngs-tree-node-selected]': '_isSelected()',
     '[class.ngs-tree-node-disabled]': 'disabled()',
     '[class.ngs-tree-node-draggable]': '_isDraggable()',
+    '[class.ngs-tree-node-dragging-source]': '_isDraggingSource()',
     '[class.ngs-tree-node-drop-target]': '_isDropTarget()',
     '[class.ngs-tree-node-drop-before]': '_isDropTargetPosition("before")',
     '[class.ngs-tree-node-drop-inside]': '_isDropTargetPosition("inside")',
@@ -524,6 +584,10 @@ export class NestedTreeNode<T, K = T> extends CdkNestedTreeNode<T, K> implements
     return (this._tree as Tree<T, K>)._isNodeDropTargetPosition(this.data, position);
   }
 
+  _isDraggingSource(): boolean {
+    return (this._tree as Tree<T, K>)._isNodeDraggingSource(this.data);
+  }
+
   _getDraggableAttribute(): true | null {
     return this._isDraggable() ? true : null;
   }
@@ -534,6 +598,9 @@ export class NestedTreeNode<T, K = T> extends CdkNestedTreeNode<T, K> implements
 
   _handleDragStart(event: DragEvent) {
     (this._tree as Tree<T, K>)._startNodeDrag(this.data, event);
+    if (!event.defaultPrevented) {
+      this._setDragImage(event);
+    }
   }
 
   _handleDragOver(event: DragEvent) {
@@ -550,6 +617,19 @@ export class NestedTreeNode<T, K = T> extends CdkNestedTreeNode<T, K> implements
 
   _handleDragEnd() {
     (this._tree as Tree<T, K>)._endNodeDrag();
+  }
+
+  private _setDragImage(event: DragEvent) {
+    if ((this._tree as Tree<T, K>)._getDragPreview() === 'none') {
+      setEmptyTreeNodeDragImage(event);
+      return;
+    }
+
+    if ((this._tree as Tree<T, K>)._setDragPlaceholderImage(this.data, event, this._hostElementRef.nativeElement)) {
+      return;
+    }
+
+    setTreeNodeDragImage(event, this._hostElementRef.nativeElement);
   }
 
   private _selectNodeFromEvent(event: MouseEvent) {

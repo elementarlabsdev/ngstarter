@@ -38,6 +38,24 @@
     cursor: grabbing;
   }
 
+  &.ngs-tree-node-dragging-source {
+    opacity: var(--ngs-tree-node-dragging-source-opacity, 0.45);
+  }
+
+  &.ngs-tree-node-drag-image {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    z-index: -1;
+    box-sizing: border-box;
+    border-radius: var(--ngs-tree-node-radius);
+    background: var(--ngs-tree-node-drag-image-bg, var(--ngs-color-surface));
+    box-shadow: var(--ngs-tree-node-drag-image-shadow, var(--ngs-shadow-md));
+    opacity: var(--ngs-tree-node-drag-image-opacity, 0.96);
+    pointer-events: none;
+    transform: translate(-200vw, -200vh);
+  }
+
   &.ngs-tree-node-drop-inside {
     color: var(--ngs-tree-node-drop-target-color, var(--ngs-tree-node-active-color));
     background: var(--ngs-tree-node-drop-target-bg, var(--ngs-tree-node-active-bg));

@@ -1,0 +1,61 @@
+<ng-template #renderFields let-fields>
+  <div class="ngs-form-builder-renderer-grid">
+    @for (field of fields; track field.id) {
+      @if (isContainerField(field)) {
+        <section class="ngs-form-builder-renderer-grid-field">
+          <header>
+            <h4>{{ field.label }}</h4>
+            @if (field.hint) {
+              <p>{{ field.hint }}</p>
+            }
+          </header>
+
+          <ng-container
+            [ngTemplateOutlet]="renderFields"
+            [ngTemplateOutletContext]="{ $implicit: visibleChildren(field) }"/>
+        </section>
+      } @else {
+        <ngs-form-builder-field-host
+          [field]="field"
+          [control]="getControl(field)"
+          [definitions]="definitions()"
+          [readonly]="readonly()"/>
+      }
+    }
+  </div>
+</ng-template>
+
+<form [formGroup]="formGroup()" (ngSubmit)="submit()">
+  <div class="flex flex-col gap-6">
+    @for (item of visibleCanvasItems(); track item.kind + ':' + item.id) {
+      @if (item.field) {
+        <ng-container
+          [ngTemplateOutlet]="renderFields"
+          [ngTemplateOutletContext]="{ $implicit: [item.field] }"/>
+      } @else if (item.section; as section) {
+        <section class="ngs-form-builder-renderer-section">
+          @if (section.title || section.description) {
+            <header>
+              @if (section.title) {
+                <h3>{{ section.title }}</h3>
+              }
+              @if (section.description) {
+                <p>{{ section.description }}</p>
+              }
+            </header>
+          }
+
+          <ng-container
+            [ngTemplateOutlet]="renderFields"
+            [ngTemplateOutletContext]="{ $implicit: section.fields }"/>
+        </section>
+      }
+    }
+
+    @if (showSubmit() && !readonly()) {
+      <div class="flex justify-end">
+        <button ngsButton="filled" type="submit">{{ submitLabel() }}</button>
+      </div>
+    }
+  </div>
+</form>
