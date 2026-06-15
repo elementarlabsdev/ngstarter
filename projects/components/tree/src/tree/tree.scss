@@ -2,7 +2,7 @@
 
 :host {
   --ngs-tree-padding: --spacing(3) 0;
-  --ngs-tree-node-padding: var(--ngs-nav-item-padding);
+  --ngs-tree-node-padding: 0;
   --ngs-tree-node-min-height: var(--ngs-nav-item-height);
   --ngs-tree-node-hover-bg: var(--ngs-nav-item-hover-bg);
   --ngs-tree-node-active-bg: var(--ngs-nav-item-active-bg);

@@ -83,13 +83,13 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     }
   },
   {
-    type: 'grid',
-    label: 'Grid',
+    type: 'group',
+    label: 'Group',
     group: 'Layout',
-    icon: 'fluent:grid-24-regular',
+    icon: 'fluent:group-24-regular',
     description: 'Container for nested fields.',
     defaults: {
-      label: 'Grid',
+      label: 'Group',
       width: 12,
       children: []
     }

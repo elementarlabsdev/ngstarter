@@ -90,7 +90,7 @@ export class FormBuilderRenderer {
   }
 
   protected isContainerField(field: FormBuilderField): boolean {
-    return field.type === 'grid';
+    return field.type === 'group' || field.type === 'grid';
   }
 
   protected visibleChildren(field: FormBuilderField): FormBuilderField[] {

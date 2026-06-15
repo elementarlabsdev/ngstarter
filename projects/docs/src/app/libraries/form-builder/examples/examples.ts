@@ -97,7 +97,7 @@ export class Examples {
           {
             id: 'invoice_items',
             name: 'invoice_items',
-            type: 'grid',
+            type: 'group',
             label: 'Invoice items',
             width: 12,
             visibility: {

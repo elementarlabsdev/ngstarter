@@ -99,9 +99,9 @@
 
   ngs-tree {
     --ngs-tree-node-gap: --spacing(1);
-    --ngs-tree-node-drop-line-color: var(--ngs-color-primary);
-    --ngs-tree-node-drop-target-outline: 0;
-    --ngs-tree-node-drop-target-bg: var(--ngs-color-primary-container);
+    //--ngs-tree-node-drop-line-color: var(--ngs-color-primary);
+    //--ngs-tree-node-drop-target-outline: 0;
+    //--ngs-tree-node-drop-target-bg: var(--ngs-color-primary-container);
 
     ngs-tree-node {
       cursor: grab;
@@ -110,10 +110,6 @@
         cursor: grabbing;
       }
     }
-  }
-
-  .ngs-form-builder-tree-toggle {
-    --ngs-button-height: --spacing(6);
   }
 
   .ngs-form-builder-tree-item {
@@ -189,11 +185,6 @@
     --ngs-card-padding: --spacing(4);
   }
 
-  .ngs-form-builder-section-drag-preview {
-    width: min(100%, 900px);
-    background: var(--ngs-color-surface);
-  }
-
   .ngs-form-builder-native-ghost-section {
     border-color: var(--ngs-color-primary);
     background: color-mix(in srgb, var(--ngs-color-primary), var(--ngs-color-surface) 94%);
@@ -214,16 +205,6 @@
     flex: 1;
     align-items: center;
     gap: --spacing(3);
-  }
-
-  .ngs-form-builder-section-handle {
-    flex: none;
-    color: var(--ngs-color-on-surface-variant);
-    cursor: grab;
-
-    &:active {
-      cursor: grabbing;
-    }
   }
 
   .ngs-form-builder-section-actions {
@@ -376,11 +357,6 @@
     }
   }
 
-  .ngs-form-builder-field-handle {
-    flex: none;
-    color: var(--ngs-color-on-surface-variant);
-  }
-
   .ngs-form-builder-field-host {
     min-width: 0;
     width: 100%;
@@ -451,47 +427,12 @@
     width: min(100%, 760px);
   }
 
-  .cdk-drag-preview {
-    box-sizing: border-box;
-    border-radius: var(--ngs-radius-lg);
-    box-shadow: var(--ngs-shadow-lg);
-  }
-
   .ngs-form-builder-field-placeholder {
+    border-style: dashed;
     border-color: var(--ngs-color-primary);
     background: color-mix(in srgb, var(--ngs-color-primary), var(--ngs-color-surface) 92%);
     box-shadow: none;
     opacity: 1;
-    pointer-events: none;
-  }
-
-  .ngs-form-builder-field-line-placeholder {
-    min-height: --spacing(6);
-    justify-content: center;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-    opacity: 1;
-    pointer-events: none;
-
-    &::before {
-      content: '';
-      display: block;
-      width: 100%;
-      height: 2px;
-      border-radius: var(--ngs-radius-full);
-      background: var(--ngs-color-primary);
-    }
-  }
-
-  .ngs-form-builder-field-drag-preview {
-    width: min(360px, calc(100vw - --spacing(8)));
-    min-height: --spacing(20);
-    border-color: var(--ngs-color-primary);
-    background: var(--ngs-color-surface);
-    box-shadow: var(--ngs-shadow-lg);
-    opacity: 0.94;
     pointer-events: none;
   }
 
@@ -502,77 +443,4 @@
     background: var(--ngs-color-surface);
   }
 
-  .ngs-form-builder-canvas-drop-list {
-    .cdk-drag-placeholder {
-      min-height: --spacing(18);
-      border: 1px dashed var(--ngs-color-primary);
-      background: color-mix(in srgb, var(--ngs-color-primary), var(--ngs-color-surface) 94%);
-      box-shadow: none;
-      opacity: 1;
-      pointer-events: none;
-    }
-
-    .ngs-form-builder-field-line-placeholder.cdk-drag-placeholder {
-      min-height: --spacing(6);
-      border: 0;
-      background: transparent;
-    }
-  }
-
-  .ngs-form-builder-section-line-placeholder {
-    display: flex;
-    min-height: --spacing(5);
-    align-items: center;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-    opacity: 1;
-    pointer-events: none;
-
-    &::before {
-      content: '';
-      display: block;
-      width: 100%;
-      height: 2px;
-      border-radius: var(--ngs-radius-full);
-      background: var(--ngs-color-primary);
-    }
-  }
-
-  .cdk-drag-placeholder {
-    opacity: 0;
-  }
-
-  .ngs-form-builder-canvas-drop-list {
-    .cdk-drag-placeholder,
-    .ngs-form-builder-field-line-placeholder.cdk-drag-placeholder {
-      opacity: 1;
-    }
-  }
-
-  .ngs-form-builder-canvas-list {
-    .ngs-form-builder-field-line-placeholder.cdk-drag-placeholder,
-    .ngs-form-builder-section-line-placeholder.cdk-drag-placeholder {
-      opacity: 1;
-    }
-  }
-
-  .ngs-form-builder-palette {
-    .cdk-drag-placeholder {
-      opacity: 1;
-    }
-  }
-
-  .ngs-form-builder-canvas-drop-list.cdk-drop-list-dragging {
-    .ngs-form-builder-field:not(.cdk-drag-placeholder) {
-      transition: transform 160ms cubic-bezier(0, 0, 0.2, 1);
-    }
-  }
-
-  .ngs-form-builder-canvas-list.cdk-drop-list-dragging {
-    .ngs-form-builder-section:not(.cdk-drag-placeholder) {
-      transition: transform 160ms cubic-bezier(0, 0, 0.2, 1);
-    }
-  }
 }

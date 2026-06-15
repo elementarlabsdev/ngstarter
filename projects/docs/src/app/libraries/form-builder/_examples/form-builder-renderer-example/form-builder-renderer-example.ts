@@ -86,7 +86,7 @@ export class FormBuilderRendererExample {
           {
             id: 'contacts',
             name: 'contacts',
-            type: 'grid',
+            type: 'group',
             label: 'Billing contacts',
             width: 12,
             visibility: {

@@ -1,14 +1,3 @@
-import {
-  CdkDrag,
-  CdkDragDrop,
-  CdkDragHandle,
-  CdkDragPlaceholder,
-  CdkDragPreview,
-  CdkDropList,
-  CdkDropListGroup,
-  moveItemInArray,
-  transferArrayItem
-} from '@angular/cdk/drag-drop';
 import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, TemplateRef, computed, inject, input, model, output, signal, viewChild } from '@angular/core';
 import { FormsModule, FormControl } from '@angular/forms';
@@ -92,6 +81,7 @@ type FormBuilderNativeDragItem =
 const ROOT_DROP_LIST_ID = 'ngs-form-builder-root-fields';
 const PALETTE_DRAG_TYPE = 'application/x-ngstarter-form-builder-field';
 const PALETTE_DRAG_ITEM = 'application/x-ngstarter-form-builder-item';
+const ACTUAL_FIELDS_TAB_INDEX = 1;
 
 @Component({
   selector: 'ngs-form-builder',
@@ -99,12 +89,6 @@ const PALETTE_DRAG_ITEM = 'application/x-ngstarter-form-builder-item';
   imports: [
     NgTemplateOutlet,
     FormsModule,
-    CdkDrag,
-    CdkDragHandle,
-    CdkDragPlaceholder,
-    CdkDragPreview,
-    CdkDropList,
-    CdkDropListGroup,
     Button,
     Card,
     CardAside,
@@ -150,7 +134,11 @@ export class FormBuilder {
   private readonly providedFields = inject(FORM_BUILDER_FIELDS, { optional: true }) ?? [];
   private readonly providedSettings = inject(FORM_BUILDER_SETTINGS, { optional: true }) ?? [];
   private readonly previewControls = new Map<string, FormControl>();
+  private readonly fieldTreeNodeCache = new Map<string, FormBuilderFieldTreeNode>();
+  private readonly canvasAnimationTimers = new WeakMap<HTMLElement, number>();
   private readonly actualFieldsTree = viewChild<Tree<FormBuilderFieldTreeNode>>('actualFieldsTree');
+  private fieldTreeRootNodes: FormBuilderFieldTreeNode[] = [];
+  private fieldTreeStructureKey = '';
   private suppressPaletteClick = false;
 
   readonly schema = model<FormBuilderSchema>(createDefaultFormBuilderSchema());
@@ -162,6 +150,7 @@ export class FormBuilder {
   readonly fieldRemoved = output<FormBuilderFieldChange>();
 
   protected readonly search = signal('');
+  protected readonly fieldsTabIndex = signal(0);
   protected readonly selectedFieldId = signal<string | null>(null);
   protected readonly nativeDragItem = signal<FormBuilderNativeDragItem | null>(null);
   protected readonly nativeDragFieldDefinition = computed(() => {
@@ -170,14 +159,12 @@ export class FormBuilder {
   });
   protected readonly nativeDragSection = computed(() => this.nativeDragItem()?.kind === 'section');
   protected readonly nativeDropTarget = signal<{ containerId: string; index: number } | null>(null);
-  protected readonly dragCollapsedSectionIds = signal<ReadonlySet<string>>(new Set());
   protected readonly expandedFieldTreeNodeIds = signal<ReadonlySet<string>>(new Set());
   protected readonly definitions = computed<FormBuilderFieldDefinition[]>(() => [
     ...DEFAULT_FORM_BUILDER_FIELDS,
     ...this.providedFields
   ]);
   protected readonly settingsDefinitions = computed<FormBuilderSettingsDefinition[]>(() => this.providedSettings);
-  protected readonly fieldContainerDropListIds = computed(() => this.collectFieldContainerDropListIds(this.schema()));
   protected readonly canvasItems = computed<FormBuilderCanvasItem[]>(() => this.resolveCanvasItems(this.schema()));
   protected readonly layoutDefinitions = computed<FormBuilderFieldDefinition[]>(() => {
     const query = this.search().trim().toLowerCase();
@@ -210,26 +197,22 @@ export class FormBuilder {
     const selectedId = this.selectedFieldId();
     return selectedId ? this.findFieldLocation(this.schema(), selectedId)?.field ?? null : null;
   });
-  protected readonly selectedSection = computed(() => {
-    const selectedId = this.selectedFieldId();
-    return selectedId ? this.findFieldLocation(this.schema(), selectedId)?.section ?? null : null;
-  });
   protected readonly fieldTree = computed<FormBuilderFieldTreeNode[]>(() => {
-    return this.resolveCanvasItems(this.schema()).map(item => {
-      if (item.field) {
-        return this.createFieldTreeNode(item.field);
-      }
-
-      return {
-        id: item.section!.id,
-        label: item.section!.title,
-        type: 'section',
-        icon: 'fluent:folder-24-regular',
-        kind: 'section' as const,
-        section: item.section!,
-        children: item.section!.fields.map(field => this.createFieldTreeNode(field, item.section))
-      };
+    const nodes = this.resolveCanvasItems(this.schema()).map(item => {
+      return item.field
+        ? this.upsertFieldTreeNode(item.field)
+        : this.upsertSectionTreeNode(item.section!);
     });
+    const structureKey = this.resolveFieldTreeStructureKey(nodes);
+
+    if (structureKey !== this.fieldTreeStructureKey) {
+      this.fieldTreeStructureKey = structureKey;
+      this.fieldTreeRootNodes = nodes;
+      return this.fieldTreeRootNodes;
+    }
+
+    replaceArrayContents(this.fieldTreeRootNodes, nodes);
+    return this.fieldTreeRootNodes;
   });
   protected readonly fieldTreeChildrenAccessor = (node: FormBuilderFieldTreeNode) => node.children ?? [];
   protected readonly hasFieldTreeChildren = (_: number, node: FormBuilderFieldTreeNode) =>
@@ -244,10 +227,6 @@ export class FormBuilder {
 
   protected readonly updateSelectedField = (changes: Partial<FormBuilderField>) => {
     this.patchSelectedField(changes);
-  };
-  protected readonly fieldDropListEnterPredicate = (drag: CdkDrag<unknown>) => {
-    const data = drag.data;
-    return !(isFormBuilderLayoutItem(data) && data.kind === 'section');
   };
 
   protected paletteDragStarted(event: DragEvent, definition: FormBuilderFieldDefinition): void {
@@ -273,7 +252,7 @@ export class FormBuilder {
 
   protected paletteDragEnded(): void {
     this.nativeDragItem.set(null);
-    this.nativeDropTarget.set(null);
+    this.setNativeDropTarget(null);
     window.setTimeout(() => {
       this.suppressPaletteClick = false;
     });
@@ -369,7 +348,7 @@ export class FormBuilder {
     }
 
     if (this.nativeDropTarget()?.containerId === containerId) {
-      this.nativeDropTarget.set(null);
+      this.setNativeDropTarget(null);
     }
   }
 
@@ -396,7 +375,7 @@ export class FormBuilder {
     }
 
     this.nativeDragItem.set(null);
-    this.nativeDropTarget.set(null);
+    this.setNativeDropTarget(null);
   }
 
   protected isNativeDropTarget(containerId: string, index: number): boolean {
@@ -477,166 +456,21 @@ export class FormBuilder {
 
     Object.assign(nextSection, changes);
     this.schema.set(schema);
-  }
-
-  protected sectionDragStarted(section: FormBuilderSection): void {
-    if (section.collapsed) {
-      return;
-    }
-
-    this.dragCollapsedSectionIds.update(ids => new Set(ids).add(section.id));
-  }
-
-  protected sectionDragEnded(section: FormBuilderSection): void {
-    if (!this.dragCollapsedSectionIds().has(section.id)) {
-      return;
-    }
-
-    this.dragCollapsedSectionIds.update(ids => {
-      const next = new Set(ids);
-      next.delete(section.id);
-      return next;
-    });
+    this.restoreFieldTreeExpansion();
   }
 
   protected isSectionCollapsed(section: FormBuilderSection): boolean {
-    return section.collapsed === true || this.dragCollapsedSectionIds().has(section.id);
+    return section.collapsed === true;
   }
 
-  protected dropField(event: CdkDragDrop<FormBuilderField[], any, any>): void {
-    const schema = cloneSchema(this.schema());
-    const targetContainer = this.findContainerLocation(schema, event.container.id);
-
-    if (!targetContainer) {
-      return;
-    }
-
-    if (event.previousContainer.id === 'ngs-form-builder-palette') {
-      const definition = event.item.data as FormBuilderFieldDefinition;
-      const field = this.createField(definition, schema);
-      targetContainer.fields.splice(event.currentIndex, 0, field);
-      this.schema.set(schema);
-      this.selectField(field, targetContainer.section);
-      this.fieldAdded.emit({ field, section: targetContainer.section });
-      return;
-    }
-
-    if (event.previousContainer.id === ROOT_DROP_LIST_ID) {
-      const layout = this.normalizedLayout(schema);
-      const movingItem = this.resolveCanvasDragItem(event.item.data, layout);
-
-      if (!movingItem || movingItem.kind !== 'field') {
-        return;
-      }
-
-      const sourceIndex = (schema.fields ?? []).findIndex(field => field.id === movingItem.id);
-      const movingField = (schema.fields ?? [])[sourceIndex];
-      const layoutIndex = layout.findIndex(item => item.kind === 'field' && item.id === movingItem.id);
-
-      if (!movingField) {
-        return;
-      }
-
-      if (
-        targetContainer.owner &&
-        (targetContainer.owner.id === movingField.id || containsField(movingField, targetContainer.owner.id))
-      ) {
-        return;
-      }
-
-      schema.fields?.splice(sourceIndex, 1);
-      if (layoutIndex > -1) {
-        layout.splice(layoutIndex, 1);
-      }
-      targetContainer.fields.splice(event.currentIndex, 0, movingField);
-      schema.layout = layout;
-      this.schema.set(schema);
-      return;
-    }
-
-    const sourceContainer = this.findContainerLocation(schema, event.previousContainer.id);
-
-    if (!sourceContainer) {
-      return;
-    }
-
-    const movingField = sourceContainer.fields[event.previousIndex];
-
-    if (
-      movingField &&
-      targetContainer.owner &&
-      (targetContainer.owner.id === movingField.id || containsField(movingField, targetContainer.owner.id))
-    ) {
-      return;
-    }
-
-    if (sourceContainer.id === targetContainer.id) {
-      moveItemInArray(targetContainer.fields, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(sourceContainer.fields, targetContainer.fields, event.previousIndex, event.currentIndex);
-    }
-
-    this.schema.set(schema);
-  }
-
-  protected dropCanvasItem(event: CdkDragDrop<FormBuilderCanvasItem[], any, any>): void {
-    const schema = cloneSchema(this.schema());
-    const layout = this.normalizedLayout(schema);
-
-    if (event.previousContainer.id === 'ngs-form-builder-palette') {
-      const definition = event.item.data as FormBuilderFieldDefinition;
-      const field = this.createField(definition, schema);
-      schema.fields ??= [];
-      schema.fields.push(field);
-      layout.splice(event.currentIndex, 0, { kind: 'field', id: field.id });
-      schema.layout = layout;
-      this.schema.set(schema);
-      this.selectField(field);
-      this.fieldAdded.emit({ field });
-      return;
-    }
-
-    if (event.previousContainer.id === ROOT_DROP_LIST_ID) {
-      const movingItem = this.resolveCanvasDragItem(event.item.data, layout);
-      const previousIndex = movingItem
-        ? layout.findIndex(item => item.kind === movingItem.kind && item.id === movingItem.id)
-        : event.previousIndex;
-
-      if (previousIndex < 0) {
-        return;
-      }
-
-      moveItemInArray(layout, previousIndex, event.currentIndex);
-      schema.layout = layout;
-      this.schema.set(schema);
-      this.clearSectionDragCollapse();
-      return;
-    }
-
-    const sourceContainer = this.findContainerLocation(schema, event.previousContainer.id);
-
-    if (!sourceContainer) {
-      return;
-    }
-
-    const movingField = sourceContainer.fields[event.previousIndex];
-
-    if (!movingField) {
-      return;
-    }
-
-    sourceContainer.fields.splice(event.previousIndex, 1);
-    schema.fields ??= [];
-    schema.fields.push(movingField);
-    layout.splice(event.currentIndex, 0, { kind: 'field', id: movingField.id });
-    schema.layout = layout;
-    this.schema.set(schema);
-    this.clearSectionDragCollapse();
-  }
-
-  protected selectField(field: FormBuilderField, section = this.selectedSection()): void {
+  protected selectField(field: FormBuilderField, section?: FormBuilderSection): void {
     this.selectedFieldId.set(field.id);
     this.fieldSelected.emit({ field, section: section ?? undefined });
+  }
+
+  protected selectCanvasField(field: FormBuilderField, section?: FormBuilderSection): void {
+    this.selectField(field, section);
+    this.openActualFieldsTreeForField(field.id);
   }
 
   protected selectFieldTreeNode(node: FormBuilderFieldTreeNode): void {
@@ -825,7 +659,7 @@ export class FormBuilder {
       ...changes
     };
 
-    if (changes.type === 'grid' && !nextField.children) {
+    if (this.isContainerField(nextField) && !nextField.children) {
       nextField.children = [];
     }
 
@@ -834,7 +668,7 @@ export class FormBuilder {
   }
 
   protected isContainerField(field: FormBuilderField): boolean {
-    return field.type === 'grid';
+    return field.type === 'group' || field.type === 'grid';
   }
 
   protected fieldIcon(field: FormBuilderField): string {
@@ -864,7 +698,7 @@ export class FormBuilder {
       event.dataTransfer.dropEffect = 'copy';
     }
 
-    this.nativeDropTarget.set({
+    this.setNativeDropTarget({
       containerId,
       index: this.resolveNativeDropIndex(event, itemSelector)
     });
@@ -882,7 +716,89 @@ export class FormBuilder {
       event.dataTransfer.dropEffect = 'copy';
     }
 
-    this.nativeDropTarget.set({ containerId, index });
+    this.setNativeDropTarget({ containerId, index });
+  }
+
+  private setNativeDropTarget(target: { containerId: string; index: number } | null): void {
+    const current = this.nativeDropTarget();
+
+    if (current?.containerId === target?.containerId && current?.index === target?.index) {
+      return;
+    }
+
+    const previousRects = this.captureCanvasItemRects();
+    this.nativeDropTarget.set(target);
+    this.afterNextPaint(() => this.animateCanvasItemMoves(previousRects));
+  }
+
+  private captureCanvasItemRects(): Map<string, DOMRect> {
+    const rects = new Map<string, DOMRect>();
+
+    for (const element of this.getCanvasAnimatedItems()) {
+      const key = this.getCanvasAnimatedItemKey(element);
+
+      if (key) {
+        rects.set(key, element.getBoundingClientRect());
+      }
+    }
+
+    return rects;
+  }
+
+  private animateCanvasItemMoves(previousRects: Map<string, DOMRect>): void {
+    if (!previousRects.size) {
+      return;
+    }
+
+    for (const element of this.getCanvasAnimatedItems()) {
+      const key = this.getCanvasAnimatedItemKey(element);
+      const previousRect = key ? previousRects.get(key) : undefined;
+
+      if (!previousRect) {
+        continue;
+      }
+
+      const nextRect = element.getBoundingClientRect();
+      const deltaX = previousRect.left - nextRect.left;
+      const deltaY = previousRect.top - nextRect.top;
+
+      if (Math.abs(deltaX) < 0.5 && Math.abs(deltaY) < 0.5) {
+        continue;
+      }
+
+      const animationTimer = this.canvasAnimationTimers.get(element);
+
+      if (animationTimer) {
+        window.clearTimeout(animationTimer);
+      }
+
+      element.style.transition = 'none';
+      element.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+      element.getBoundingClientRect();
+      element.style.transition = 'transform 160ms cubic-bezier(0, 0, 0.2, 1)';
+      element.style.transform = '';
+      this.canvasAnimationTimers.set(element, window.setTimeout(() => {
+        element.style.transition = '';
+        element.style.transform = '';
+      }, 180));
+    }
+  }
+
+  private getCanvasAnimatedItems(): HTMLElement[] {
+    return Array.from(this.elementRef.nativeElement.querySelectorAll<HTMLElement>(
+      '.ngs-form-builder-canvas [data-form-builder-field-id], .ngs-form-builder-canvas [data-form-builder-section-id]'
+    ));
+  }
+
+  private getCanvasAnimatedItemKey(element: HTMLElement): string | null {
+    const fieldId = element.dataset['formBuilderFieldId'];
+
+    if (fieldId) {
+      return `field:${fieldId}`;
+    }
+
+    const sectionId = element.dataset['formBuilderSectionId'];
+    return sectionId ? `section:${sectionId}` : null;
   }
 
   private insertNativeField(definition: FormBuilderFieldDefinition, containerId: string, index: number): void {
@@ -1078,35 +994,6 @@ export class FormBuilder {
     return layout;
   }
 
-  private collectFieldContainerDropListIds(schema: FormBuilderSchema): string[] {
-    return [
-      ...(schema.fields ?? []).flatMap(field => this.collectFieldDropListIds(field)),
-      ...schema.sections.flatMap(section => [
-        this.sectionDropListId(section),
-        ...section.fields.flatMap(field => this.collectFieldDropListIds(field))
-      ])
-    ];
-  }
-
-  private collectFieldDropListIds(field: FormBuilderField): string[] {
-    return [
-      ...(this.isContainerField(field) ? [this.fieldDropListId(field)] : []),
-      ...(field.children ?? []).flatMap(child => this.collectFieldDropListIds(child))
-    ];
-  }
-
-  private resolveCanvasDragItem(data: unknown, layout: FormBuilderLayoutItem[]): FormBuilderLayoutItem | null {
-    if (isFormBuilderLayoutItem(data)) {
-      return data;
-    }
-
-    if (isFormBuilderField(data)) {
-      return layout.find(item => item.kind === 'field' && item.id === data.id) ?? null;
-    }
-
-    return null;
-  }
-
   private detachFieldFromLocation(schema: FormBuilderSchema, location: FormBuilderFieldLocation): void {
     location.siblings.splice(location.index, 1);
 
@@ -1219,12 +1106,6 @@ export class FormBuilder {
     schema.layout = layout;
   }
 
-  private clearSectionDragCollapse(): void {
-    if (this.dragCollapsedSectionIds().size) {
-      this.dragCollapsedSectionIds.set(new Set());
-    }
-  }
-
   private resetFieldTreeAfterRejectedDrop(): void {
     this.schema.set(cloneSchema(this.schema()));
     this.restoreFieldTreeExpansion();
@@ -1311,6 +1192,98 @@ export class FormBuilder {
     return nodes.flatMap(node => [node, ...this.flattenFieldTree(node.children ?? [])]);
   }
 
+  private openActualFieldsTreeForField(fieldId: string): void {
+    const path = this.findFieldTreeNodePath(this.fieldTree(), fieldId);
+
+    this.fieldsTabIndex.set(ACTUAL_FIELDS_TAB_INDEX);
+
+    if (!path.length) {
+      return;
+    }
+
+    const expandableIds = path
+      .slice(0, -1)
+      .filter(node => !!node.children?.length)
+      .map(node => node.id);
+
+    if (expandableIds.length) {
+      this.expandedFieldTreeNodeIds.update(ids => {
+        const next = new Set(ids);
+
+        for (const id of expandableIds) {
+          next.add(id);
+        }
+
+        return next;
+      });
+    }
+
+    this.afterNextPaint(() => {
+      this.afterNextPaint(() => {
+        const tree = this.actualFieldsTree();
+
+        if (tree) {
+          for (const node of path.slice(0, -1)) {
+            if (node.children?.length) {
+              tree.expand(node);
+            }
+          }
+        }
+
+        this.scrollFieldTreeNodeIntoView(fieldId);
+      });
+    });
+  }
+
+  private findFieldTreeNodePath(
+    nodes: FormBuilderFieldTreeNode[],
+    fieldId: string,
+    path: FormBuilderFieldTreeNode[] = []
+  ): FormBuilderFieldTreeNode[] {
+    for (const node of nodes) {
+      const nextPath = [...path, node];
+
+      if (node.id === fieldId) {
+        return nextPath;
+      }
+
+      const childPath = this.findFieldTreeNodePath(node.children ?? [], fieldId, nextPath);
+
+      if (childPath.length) {
+        return childPath;
+      }
+    }
+
+    return [];
+  }
+
+  private scrollFieldTreeNodeIntoView(fieldId: string): void {
+    const target = this.findFieldTreeNodeElement(fieldId);
+
+    if (!target) {
+      return;
+    }
+
+    const scrollableContent = target
+      .closest('ngs-scrollbar-area')
+      ?.querySelector<HTMLElement>('.scrollable-content');
+
+    if (!scrollableContent) {
+      target.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+      return;
+    }
+
+    this.scrollElementFullyIntoView(target, scrollableContent);
+  }
+
+  private findFieldTreeNodeElement(fieldId: string): HTMLElement | null {
+    const nodes = this.elementRef.nativeElement.querySelectorAll<HTMLElement>(
+      '.ngs-form-builder-palette [data-form-builder-tree-node-id]'
+    );
+
+    return Array.from(nodes).find(node => node.dataset['formBuilderTreeNodeId'] === fieldId) ?? null;
+  }
+
   private scrollCanvasFieldIntoView(fieldId: string): void {
     this.afterNextPaint(() => {
       this.afterNextPaint(() => {
@@ -1379,20 +1352,68 @@ export class FormBuilder {
     window.setTimeout(callback);
   }
 
-  private createFieldTreeNode(field: FormBuilderField, section?: FormBuilderSection): FormBuilderFieldTreeNode {
-    const definition = this.definitions().find(item => item.type === field.type);
+  private upsertSectionTreeNode(section: FormBuilderSection): FormBuilderFieldTreeNode {
+    const node = this.getCachedFieldTreeNode(section.id);
+    const children = section.fields.map(field => this.upsertFieldTreeNode(field, section));
 
-    return {
-      id: field.id,
-      label: field.label,
-      name: field.name,
-      type: field.type,
-      icon: definition?.icon || 'fluent:form-24-regular',
-      kind: 'field',
-      field,
-      section,
-      children: field.children?.map(child => this.createFieldTreeNode(child, section))
+    node.label = section.title;
+    node.name = undefined;
+    node.type = 'section';
+    node.icon = 'fluent:folder-24-regular';
+    node.kind = 'section';
+    node.field = undefined;
+    node.section = section;
+    node.children ??= [];
+    replaceArrayContents(node.children, children);
+    return node;
+  }
+
+  private upsertFieldTreeNode(field: FormBuilderField, section?: FormBuilderSection): FormBuilderFieldTreeNode {
+    const definition = this.definitions().find(item => item.type === field.type);
+    const node = this.getCachedFieldTreeNode(field.id);
+    const children = field.children?.map(child => this.upsertFieldTreeNode(child, section));
+
+    node.label = field.label;
+    node.name = field.name;
+    node.type = field.type;
+    node.icon = definition?.icon || 'fluent:form-24-regular';
+    node.kind = 'field';
+    node.field = field;
+    node.section = section;
+
+    if (children?.length) {
+      node.children ??= [];
+      replaceArrayContents(node.children, children);
+    } else {
+      node.children = undefined;
+    }
+
+    return node;
+  }
+
+  private getCachedFieldTreeNode(id: string): FormBuilderFieldTreeNode {
+    const cached = this.fieldTreeNodeCache.get(id);
+
+    if (cached) {
+      return cached;
+    }
+
+    const node: FormBuilderFieldTreeNode = {
+      id,
+      label: '',
+      type: '',
+      icon: 'fluent:form-24-regular',
+      kind: 'field'
     };
+
+    this.fieldTreeNodeCache.set(id, node);
+    return node;
+  }
+
+  private resolveFieldTreeStructureKey(nodes: FormBuilderFieldTreeNode[]): string {
+    return nodes
+      .map(node => `${node.kind}:${node.id}[${this.resolveFieldTreeStructureKey(node.children ?? [])}]`)
+      .join('|');
   }
 
   private findContainerLocation(schema: FormBuilderSchema, containerId: string): FormBuilderContainerLocation | null {
@@ -1526,26 +1547,12 @@ function cloneField(field: FormBuilderField): FormBuilderField {
   };
 }
 
-function isFormBuilderLayoutItem(value: unknown): value is FormBuilderLayoutItem {
-  if (!value || typeof value !== 'object') {
-    return false;
-  }
-
-  const item = value as Partial<FormBuilderLayoutItem>;
-  return (item.kind === 'field' || item.kind === 'section') && typeof item.id === 'string';
-}
-
-function isFormBuilderField(value: unknown): value is FormBuilderField {
-  if (!value || typeof value !== 'object') {
-    return false;
-  }
-
-  const field = value as Partial<FormBuilderField>;
-  return typeof field.id === 'string' && typeof field.type === 'string';
-}
-
 function clampIndex(index: number, length: number): number {
   return Math.max(0, Math.min(index, length));
+}
+
+function replaceArrayContents<T>(target: T[], source: T[]): void {
+  target.splice(0, target.length, ...source);
 }
 
 function toFieldName(label: string): string {
