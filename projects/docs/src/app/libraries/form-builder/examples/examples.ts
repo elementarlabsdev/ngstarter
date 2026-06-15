@@ -9,7 +9,7 @@ import { FormBuilder, FormBuilderSchema } from '@ngstarter-ui/components/form-bu
   styleUrl: './examples.scss'
 })
 export class Examples {
-  readonly schema = signal<FormBuilderSchema>({
+  schema = signal<FormBuilderSchema>({
     title: 'Invoice form',
     sections: [
       {
