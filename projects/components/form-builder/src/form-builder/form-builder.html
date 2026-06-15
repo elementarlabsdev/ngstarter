@@ -216,7 +216,7 @@
       </ngs-tab>
       <ngs-tab label="Actual fields" class="relative">
         <ngs-scrollbar-area>
-          <div class="p-4">
+          <div class="ps-1 pe-4 py-4">
             <ngs-tree
               #actualFieldsTree="ngsTree"
               [dataSource]="fieldTree()"
@@ -224,6 +224,7 @@
               [trackBy]="trackFieldTreeNode"
               [draggablePredicate]="fieldTreeDraggablePredicate"
               [dropPredicate]="fieldTreeDropPredicate"
+              [nodePaddingIndent]="80"
               [reorderOnDrop]="false"
               (nodeDrop)="fieldTreeNodeDropped($event)"
               draggable>
@@ -242,11 +243,14 @@
                   [class.is-selected]="selectedFieldId() === node.id"
                   [attr.data-form-builder-tree-node-id]="node.id"
                   (click)="selectFieldTreeNode(node)">
-                  <ngs-icon [name]="node.icon"/>
-                  <span>{{ node.label }}</span>
-                  @if (node.name) {
-                    <small>{{ node.name }}</small>
-                  }
+                    <ngs-icon [name]="node.icon"/>
+                    {{ node.label }}
+<!--                  <span class="inline-flex flex-col">-->
+<!--                    -->
+<!--                    @if (node.name) {-->
+<!--                      <small>{{ node.name }}</small>-->
+<!--                    }-->
+<!--                  </span>-->
                 </button>
               </ngs-tree-node>
 
@@ -280,14 +284,6 @@
         </ngs-scrollbar-area>
       </ngs-tab>
     </ngs-tab-group>
-
-<!--    <ngs-scrollbar-area [absolute]="true">-->
-<!--      <div class="flex flex-col gap-4 p-4">-->
-<!--        <h3 class="text-base font-semibold">{{ paletteTitle() }}</h3>-->
-
-<!--        -->
-<!--      </div>-->
-<!--    </ngs-scrollbar-area>-->
   </ngs-panel-sidebar>
 
   <ngs-panel-content>

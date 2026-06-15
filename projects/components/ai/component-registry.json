@@ -4430,7 +4430,6 @@
         "formReady"
       ],
       "cssTokens": [
-        "--ngs-button-height",
         "--ngs-card-padding",
         "--ngs-color-danger",
         "--ngs-color-on-primary-container",
@@ -10563,6 +10562,7 @@
         "ngsTreeNodePadding",
         "ngsTreeNodePaddingIndent",
         "ngsTreeNodeToggleRecursive",
+        "nodePaddingIndent",
         "recursive",
         "reorderOnDrop",
         "selectable",
@@ -10589,7 +10589,6 @@
         "--ngs-nav-item-height",
         "--ngs-nav-item-hover-bg",
         "--ngs-nav-item-hover-color",
-        "--ngs-nav-item-padding",
         "--ngs-nav-item-radius",
         "--ngs-shadow-md",
         "--ngs-tree-container-background-color",

@@ -142,6 +142,8 @@ export class Tree<T, K = T> extends CdkTree<T, K> {
 
   dragPreview = input<TreeDragPreview>('node');
 
+  nodePaddingIndent = input<number | string>(48);
+
   childrenKey = input('children');
 
   filterValue = input('', {

@@ -18,7 +18,7 @@
     border: 1px solid var(--ngs-color-outline-variant);
     border-radius: var(--ngs-radius-lg);
     background: var(--ngs-color-surface);
-    color: var(--ngs-color-primary);
+    color: var(--ngs-color-on-surface);
     cursor: grab;
     font-size: var(--ngs-font-size-sm);
     font-weight: 500;
@@ -31,8 +31,8 @@
 
     &:hover {
       border-color: var(--ngs-color-primary);
-      background: var(--ngs-color-primary-container);
-      color: var(--ngs-color-on-primary-container);
+      background: color-mix(in srgb, var(--ngs-color-primary), var(--ngs-color-surface) 96%);
+      color: var(--ngs-color-primary);
     }
 
     &:focus-visible {
