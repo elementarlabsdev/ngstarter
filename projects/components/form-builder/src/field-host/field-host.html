@@ -32,7 +32,7 @@
 
     @case ('checkbox') {
       <div class="ngs-form-builder-check-field">
-        <ngs-checkbox [formControl]="control()" [disabled]="readonly() || (field().disabled ?? false)">
+        <ngs-checkbox [formControl]="control()">
           {{ field().label }}
         </ngs-checkbox>
         @if (field().hint) {
@@ -43,7 +43,7 @@
 
     @case ('toggle') {
       <div class="ngs-form-builder-check-field">
-        <ngs-slide-toggle [formControl]="control()" [disabled]="readonly() || (field().disabled ?? false)">
+        <ngs-slide-toggle [formControl]="control()">
           {{ field().label }}
         </ngs-slide-toggle>
         @if (field().hint) {

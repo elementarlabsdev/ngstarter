@@ -32,6 +32,8 @@ export class BasicFormBuilderFieldSettings {
   readonly update = input.required<(changes: Partial<FormBuilderField>) => void>();
 
   protected readonly fieldWidthOptions: FormBuilderFieldWidth[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  protected readonly hasCheckedState = computed(() => ['checkbox', 'toggle'].includes(this.field().type));
+  protected readonly hasPlaceholder = computed(() => !['checkbox', 'toggle'].includes(this.field().type));
   protected readonly hasOptions = computed(() => ['select', 'radio', 'checkbox-list'].includes(this.field().type));
   protected readonly optionsText = computed(() =>
     (this.field().options ?? [])

@@ -1,1 +1,17 @@
+@if (section(); as sectionItem) {
+  <ngs-basic-form-builder-section-settings
+    [section]="sectionItem"
+    [update]="updateSection()!"/>
+} @else if (field(); as fieldItem) {
+  @if (isLayoutField()) {
+    <ngs-basic-form-builder-layout-settings
+      [field]="fieldItem"
+      [update]="update()!"/>
+  } @else {
+    <ngs-basic-form-builder-field-settings
+      [field]="fieldItem"
+      [update]="update()!"/>
+  }
+}
+
 <ng-container #anchor/>

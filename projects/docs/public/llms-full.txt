@@ -476,9 +476,9 @@ Typography:
   purpose: The NgStarter Angular Form Builder library provides a drag-and-drop form designer, schema model, runtime renderer, and provider registration API for custom field types and field-specific settings.
   use when: Choose Form Builder when the workflow matches examples such as Basic form builder, Custom field registration, Form builder renderer.
   example topics: Basic form builder, Custom field registration, Form builder renderer
-  selectors: `ngs-basic-form-builder-field-settings`, `ngs-form-builder`, `ngs-form-builder-field-host`, `ngs-form-builder-renderer`, `ngs-form-builder-settings-host`
-  exports: `BasicFormBuilderFieldSettings`, `createDefaultFormBuilderSchema`, `DEFAULT_FORM_BUILDER_FIELDS`, `FORM_BUILDER_FIELDS`, `FORM_BUILDER_SETTINGS`, `FormBuilder`, `FormBuilderComponentImporter`, `formBuilderField`, `FormBuilderField`, `FormBuilderFieldChange`, `FormBuilderFieldDefinition`, `FormBuilderFieldHost`
-  inputs: `control`, `definitions`, `editableCanvas`, `field`, `inspectorTitle`, `paletteTitle`, `readonly`, `schema`, `settingsDefinitions`, `showSubmit`, `submitLabel`
+  selectors: `ngs-basic-form-builder-field-settings`, `ngs-basic-form-builder-layout-settings`, `ngs-basic-form-builder-section-settings`, `ngs-form-builder`, `ngs-form-builder-field-host`, `ngs-form-builder-renderer`, `ngs-form-builder-settings-host`
+  exports: `BasicFormBuilderFieldSettings`, `BasicFormBuilderLayoutSettings`, `BasicFormBuilderSectionSettings`, `createDefaultFormBuilderSchema`, `DEFAULT_FORM_BUILDER_FIELDS`, `DEFAULT_FORM_BUILDER_ITEMS`, `FORM_BUILDER_FIELDS`, `FORM_BUILDER_ITEMS`, `FORM_BUILDER_SETTINGS`, `FormBuilder`, `FormBuilderComponentImporter`, `formBuilderField`
+  inputs: `control`, `definitions`, `editableCanvas`, `field`, `inspectorTitle`, `paletteTitle`, `readonly`, `schema`, `section`, `settingsDefinitions`, `showSubmit`, `submitLabel`
   outputs: `fieldAdded`, `fieldRemoved`, `fieldSelected`, `formReady`
   tokens: `--ngs-card-padding`, `--ngs-color-danger`, `--ngs-color-on-primary-container`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-outline-variant`, `--ngs-color-primary`, `--ngs-color-primary-container`, `--ngs-color-surface`, `--ngs-color-surface-container-low`, `--ngs-color-surface-container-lowest`, `--ngs-font-size-base`, `--ngs-font-size-lg`, `--ngs-font-size-sm`, `--ngs-font-size-xs`, `--ngs-line-height-base`
 - form-field: `@ngstarter-ui/components/form-field`

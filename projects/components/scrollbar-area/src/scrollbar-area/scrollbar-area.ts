@@ -85,7 +85,9 @@ export class ScrollbarArea {
 
   readonly minThumbHeight = 20;
   readonly thumbHeight = computed(() => {
-    if (!this.hasScrollY()) return 0;
+    if (!this.hasScrollY()) {
+      return 0;
+    }
     const trackHeight = this.trackClientHeight();
     const ratio = this.scrollRatioY();
     const calculated = trackHeight * ratio;

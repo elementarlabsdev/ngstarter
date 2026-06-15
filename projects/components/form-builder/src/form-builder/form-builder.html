@@ -272,11 +272,11 @@
                   [class.is-selected]="selectedFieldId() === node.id"
                   [attr.data-form-builder-tree-node-id]="node.id"
                   (click)="selectFieldTreeNode(node)">
-                  <ngs-icon [name]="node.icon"/>
-                  <span>{{ node.label }}</span>
-                  @if (node.name) {
-                    <small>{{ node.name }}</small>
-                  }
+                    <ngs-icon [name]="node.icon"/>
+                    <span>{{ node.label }}</span>
+  <!--                  @if (node.name) {-->
+  <!--                    <small>{{ node.name }}</small>-->
+  <!--                  }-->
                 </button>
               </ngs-tree-node>
             </ngs-tree>
@@ -375,7 +375,8 @@
                         [attr.data-form-builder-section-id]="section.id"
                         (dragover)="nativeSectionDragOver($event, section)"
                         (dragleave)="nativeDragLeave($event, sectionDropListId(section))"
-                        (drop)="nativeSectionDrop($event, section)">
+                        (drop)="nativeSectionDrop($event, section)"
+                        (click)="selectSection(section)">
                 <ngs-card-header>
                   <div class="ngs-form-builder-section-heading">
                     <input ngsInput
@@ -437,8 +438,8 @@
         <div class="flex items-start justify-between gap-3">
           <div class="min-w-0">
             <h3 class="text-base font-semibold">{{ inspectorTitle() }}</h3>
-            @if (selectedField()) {
-              <p class="truncate text-sm text-secondary">{{ selectedField()?.label }}</p>
+            @if (selectedField() || selectedSection()) {
+              <p class="truncate text-sm text-secondary">{{ selectedField()?.label || selectedSection()?.title }}</p>
             }
           </div>
           <button ngsIconButton type="button" aria-label="Clear selection" (click)="selectedFieldId.set(null)">
@@ -446,22 +447,22 @@
           </button>
         </div>
 
-        @if (selectedField(); as field) {
-          <ngs-basic-form-builder-field-settings
-            [field]="field"
-            [update]="updateSelectedField"/>
-
+        @if (selectedField() || selectedSection()) {
           <ngs-form-builder-settings-host
-            [field]="field"
+            [field]="selectedField()"
+            [section]="selectedSection()"
             [schema]="schema()"
             [definitions]="definitions()"
             [settingsDefinitions]="settingsDefinitions()"
-            [update]="updateSelectedField"/>
+            [update]="updateSelectedField"
+            [updateSection]="updateSelectedSection"/>
 
-          <button ngsButton="text" type="button" class="ngs-form-builder-delete-button" (click)="confirmRemoveField(field)">
-            <ngs-icon name="fluent:delete-24-regular"/>
-            Delete field
-          </button>
+          @if (selectedField(); as field) {
+            <button ngsButton="text" type="button" class="ngs-form-builder-delete-button" (click)="confirmRemoveField(field)">
+              <ngs-icon name="fluent:delete-24-regular"/>
+              Delete field
+            </button>
+          }
         } @else {
           <div class="ngs-form-builder-empty-inspector">
             Select a field on the canvas or in the fields tree to edit its settings.

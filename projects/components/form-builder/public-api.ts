@@ -6,3 +6,5 @@ export { FormBuilderRenderer as FormRenderer } from './src/form-builder-renderer
 export * from './src/field-host/field-host';
 export * from './src/settings-host/settings-host';
 export * from './src/settings/basic-field-settings/basic-field-settings';
+export * from './src/settings/basic-layout-settings/basic-layout-settings';
+export * from './src/settings/basic-section-settings/basic-section-settings';

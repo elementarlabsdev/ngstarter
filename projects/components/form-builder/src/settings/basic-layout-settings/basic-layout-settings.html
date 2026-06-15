@@ -1,0 +1,29 @@
+<div class="flex flex-col gap-4">
+  <ngs-form-field>
+    <ngs-label>Label</ngs-label>
+    <input ngsInput
+           [ngModel]="field().label"
+           [ngModelOptions]="{standalone: true}"
+           (ngModelChange)="patch({ label: $event })">
+  </ngs-form-field>
+
+  <ngs-form-field>
+    <ngs-label>Hint</ngs-label>
+    <input ngsInput
+           [ngModel]="field().hint || ''"
+           [ngModelOptions]="{standalone: true}"
+           (ngModelChange)="patch({ hint: $event })">
+    <ngs-hint>Shown below the layout title in preview and renderer.</ngs-hint>
+  </ngs-form-field>
+
+  <ngs-form-field>
+    <ngs-label>Width</ngs-label>
+    <ngs-select [ngModel]="field().width ?? 12"
+                [ngModelOptions]="{standalone: true}"
+                (ngModelChange)="patch({ width: $event })">
+      @for (width of fieldWidthOptions; track width) {
+        <ngs-option [value]="width">{{ width }}/12</ngs-option>
+      }
+    </ngs-select>
+  </ngs-form-field>
+</div>

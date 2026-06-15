@@ -5,7 +5,6 @@ import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardAside, CardContent, CardHeader } from '@ngstarter-ui/components/card';
 import { ConfirmManager } from '@ngstarter-ui/components/confirm';
 import { Dialog, DialogActions, DialogClose, DialogContent, DialogTitle } from '@ngstarter-ui/components/dialog';
-import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
 import { Panel, PanelAside, PanelContent, PanelHeader, PanelSidebar } from '@ngstarter-ui/components/panel';
@@ -13,14 +12,16 @@ import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import { Tree, TreeDragPlaceholder, TreeNode, TreeNodeDef, TreeNodeDrop, TreeNodeDropPosition, TreeNodePadding } from '@ngstarter-ui/components/tree';
 import {
-  DEFAULT_FORM_BUILDER_FIELDS,
+  DEFAULT_FORM_BUILDER_ITEMS,
   FORM_BUILDER_FIELDS,
+  FORM_BUILDER_ITEMS,
   FORM_BUILDER_SETTINGS
 } from '../config';
 import {
   FormBuilderField,
   FormBuilderFieldChange,
   FormBuilderFieldDefinition,
+  FormBuilderItemDefinition,
   FormBuilderLayoutItem,
   FormBuilderFieldWidth,
   FormBuilderSchema,
@@ -30,7 +31,6 @@ import {
 import { FormBuilderFieldHost } from '../field-host/field-host';
 import { FormBuilderRenderer } from '../form-builder-renderer/form-builder-renderer';
 import { FormBuilderSettingsHost } from '../settings-host/settings-host';
-import { BasicFormBuilderFieldSettings } from '../settings/basic-field-settings/basic-field-settings';
 
 interface FormBuilderPaletteGroup {
   name: string;
@@ -98,10 +98,8 @@ const ACTUAL_FIELDS_TAB_INDEX = 1;
     DialogClose,
     DialogContent,
     DialogTitle,
-    FormField,
     Icon,
     Input,
-    Label,
     Panel,
     PanelAside,
     PanelContent,
@@ -117,8 +115,7 @@ const ACTUAL_FIELDS_TAB_INDEX = 1;
     TreeNodePadding,
     FormBuilderFieldHost,
     FormBuilderRenderer,
-    FormBuilderSettingsHost,
-    BasicFormBuilderFieldSettings
+    FormBuilderSettingsHost
   ],
   templateUrl: './form-builder.html',
   styleUrl: './form-builder.scss',
@@ -131,6 +128,7 @@ export class FormBuilder {
   private readonly dialog = inject(Dialog);
   private readonly confirmManager = inject(ConfirmManager);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly providedItems = inject(FORM_BUILDER_ITEMS, { optional: true }) ?? [];
   private readonly providedFields = inject(FORM_BUILDER_FIELDS, { optional: true }) ?? [];
   private readonly providedSettings = inject(FORM_BUILDER_SETTINGS, { optional: true }) ?? [];
   private readonly previewControls = new Map<string, FormControl>();
@@ -161,16 +159,35 @@ export class FormBuilder {
   protected readonly nativeDropTarget = signal<{ containerId: string; index: number } | null>(null);
   protected readonly expandedFieldTreeNodeIds = signal<ReadonlySet<string>>(new Set());
   protected readonly definitions = computed<FormBuilderFieldDefinition[]>(() => [
-    ...DEFAULT_FORM_BUILDER_FIELDS,
-    ...this.providedFields
-  ]);
+    ...DEFAULT_FORM_BUILDER_ITEMS,
+    ...this.providedFields,
+    ...this.providedItems
+  ].reduce<FormBuilderFieldDefinition[]>((definitions, definition) => {
+    const normalized = normalizeFieldDefinition(definition);
+    const index = definitions.findIndex(item => item.type === normalized.type);
+
+    if (index === -1) {
+      definitions.push(normalized);
+    } else {
+      definitions[index] = {
+        ...definitions[index],
+        ...normalized,
+        defaults: {
+          ...definitions[index].defaults,
+          ...normalized.defaults
+        }
+      };
+    }
+
+    return definitions;
+  }, []));
   protected readonly settingsDefinitions = computed<FormBuilderSettingsDefinition[]>(() => this.providedSettings);
   protected readonly canvasItems = computed<FormBuilderCanvasItem[]>(() => this.resolveCanvasItems(this.schema()));
   protected readonly layoutDefinitions = computed<FormBuilderFieldDefinition[]>(() => {
     const query = this.search().trim().toLowerCase();
 
     return this.definitions().filter(definition => {
-      if ((definition.group || 'Other') !== 'Layout') {
+      if (definition.type === 'section' || (definition.group || 'Other') !== 'Layout') {
         return false;
       }
 
@@ -196,6 +213,10 @@ export class FormBuilder {
   protected readonly selectedField = computed(() => {
     const selectedId = this.selectedFieldId();
     return selectedId ? this.findFieldLocation(this.schema(), selectedId)?.field ?? null : null;
+  });
+  protected readonly selectedSection = computed(() => {
+    const selectedId = this.selectedFieldId();
+    return selectedId ? this.schema().sections.find(section => section.id === selectedId) ?? null : null;
   });
   protected readonly fieldTree = computed<FormBuilderFieldTreeNode[]>(() => {
     const nodes = this.resolveCanvasItems(this.schema()).map(item => {
@@ -227,6 +248,13 @@ export class FormBuilder {
 
   protected readonly updateSelectedField = (changes: Partial<FormBuilderField>) => {
     this.patchSelectedField(changes);
+  };
+  protected readonly updateSelectedSection = (changes: Partial<FormBuilderSection>) => {
+    const section = this.selectedSection();
+
+    if (section) {
+      this.updateSection(section, changes);
+    }
   };
 
   protected paletteDragStarted(event: DragEvent, definition: FormBuilderFieldDefinition): void {
@@ -439,7 +467,10 @@ export class FormBuilder {
       schema.layout = this.normalizedLayout(schema);
     }
 
-    if (section.fields.some(field => field.id === this.selectedFieldId() || containsField(field, this.selectedFieldId()))) {
+    if (
+      this.selectedFieldId() === section.id ||
+      section.fields.some(field => field.id === this.selectedFieldId() || containsField(field, this.selectedFieldId()))
+    ) {
       this.selectedFieldId.set(null);
     }
 
@@ -468,12 +499,22 @@ export class FormBuilder {
     this.fieldSelected.emit({ field, section: section ?? undefined });
   }
 
+  protected selectSection(section: FormBuilderSection): void {
+    this.selectedFieldId.set(section.id);
+  }
+
   protected selectCanvasField(field: FormBuilderField, section?: FormBuilderSection): void {
     this.selectField(field, section);
     this.openActualFieldsTreeForField(field.id);
   }
 
   protected selectFieldTreeNode(node: FormBuilderFieldTreeNode): void {
+    if (node.section && !node.field) {
+      this.selectSection(node.section);
+      this.scrollCanvasSectionIntoView(node.section.id);
+      return;
+    }
+
     if (node.field) {
       if (node.section?.collapsed) {
         this.updateSection(node.section, { collapsed: false });
@@ -665,10 +706,17 @@ export class FormBuilder {
 
     location.siblings[location.index] = nextField;
     this.schema.set(schema);
+    this.syncPreviewControl(nextField);
   }
 
   protected isContainerField(field: FormBuilderField): boolean {
-    return field.type === 'group' || field.type === 'grid';
+    const definition = this.definitions().find(item => item.type === field.type);
+
+    return definition?.acceptsChildren === true ||
+      definition?.kind === 'layout' ||
+      field.kind === 'layout' ||
+      field.type === 'group' ||
+      field.type === 'grid';
   }
 
   protected fieldIcon(field: FormBuilderField): string {
@@ -908,11 +956,13 @@ export class FormBuilder {
   private createField(definition: FormBuilderFieldDefinition, schema: FormBuilderSchema): FormBuilderField {
     const baseLabel = definition.defaults?.label || definition.label;
     const name = uniqueFieldName(toFieldName(baseLabel), schema);
+    const kind = definition.defaults?.kind ?? definition.kind ?? 'field';
 
     return {
       id: uniqueId('field'),
       name,
       type: definition.type,
+      kind,
       label: baseLabel,
       width: definition.defaults?.width ?? this.defaultWidth(definition.type),
       visibility: {
@@ -1285,9 +1335,17 @@ export class FormBuilder {
   }
 
   private scrollCanvasFieldIntoView(fieldId: string): void {
+    this.scrollCanvasItemIntoView(() => this.findCanvasFieldElement(fieldId));
+  }
+
+  private scrollCanvasSectionIntoView(sectionId: string): void {
+    this.scrollCanvasItemIntoView(() => this.findCanvasSectionElement(sectionId));
+  }
+
+  private scrollCanvasItemIntoView(resolveTarget: () => HTMLElement | null): void {
     this.afterNextPaint(() => {
       this.afterNextPaint(() => {
-        const target = this.findCanvasFieldElement(fieldId);
+        const target = resolveTarget();
 
         if (!target) {
           return;
@@ -1313,6 +1371,34 @@ export class FormBuilder {
     );
 
     return Array.from(fields).find(field => field.dataset['formBuilderFieldId'] === fieldId) ?? null;
+  }
+
+  private findCanvasSectionElement(sectionId: string): HTMLElement | null {
+    const sections = this.elementRef.nativeElement.querySelectorAll<HTMLElement>(
+      '.ngs-form-builder-canvas [data-form-builder-section-id]'
+    );
+
+    return Array.from(sections).find(section => section.dataset['formBuilderSectionId'] === sectionId) ?? null;
+  }
+
+  private syncPreviewControl(field: FormBuilderField): void {
+    const control = this.previewControls.get(field.id);
+
+    if (!control) {
+      return;
+    }
+
+    queueMicrotask(() => {
+      const value = field.defaultValue ?? null;
+
+      if (control.value !== value) {
+        control.setValue(value, { emitEvent: false });
+      }
+
+      if (control.enabled) {
+        control.disable({ emitEvent: false });
+      }
+    });
   }
 
   private scrollElementFullyIntoView(target: HTMLElement, scrollableContent: HTMLElement): void {
@@ -1553,6 +1639,13 @@ function clampIndex(index: number, length: number): number {
 
 function replaceArrayContents<T>(target: T[], source: T[]): void {
   target.splice(0, target.length, ...source);
+}
+
+function normalizeFieldDefinition(definition: FormBuilderItemDefinition): FormBuilderFieldDefinition {
+  return {
+    ...definition,
+    kind: definition.kind ?? 'field'
+  } as FormBuilderFieldDefinition;
 }
 
 function toFieldName(label: string): string {

@@ -3,9 +3,13 @@ import { Validators } from '@angular/forms';
 import {
   FormBuilderField,
   FormBuilderFieldDefinition,
+  FormBuilderItemDefinition,
   FormBuilderSettingsDefinition,
   FormBuilderValidationRule
 } from './types';
+
+export const FORM_BUILDER_ITEMS =
+  new InjectionToken<FormBuilderItemDefinition[]>('FORM_BUILDER_ITEMS');
 
 export const FORM_BUILDER_FIELDS =
   new InjectionToken<FormBuilderFieldDefinition[]>('FORM_BUILDER_FIELDS');
@@ -17,15 +21,25 @@ export function formBuilderField(definition: FormBuilderFieldDefinition): FormBu
   return definition;
 }
 
+export function formBuilderItem(definition: FormBuilderItemDefinition): FormBuilderItemDefinition {
+  return definition;
+}
+
 export function formBuilderSettings(definition: FormBuilderSettingsDefinition): FormBuilderSettingsDefinition {
   return definition;
 }
 
 export function provideFormBuilder(config: {
+  items?: FormBuilderItemDefinition[];
   fields?: FormBuilderFieldDefinition[];
   settings?: FormBuilderSettingsDefinition[];
 } = {}): EnvironmentProviders {
   return makeEnvironmentProviders([
+    ...(config.items ?? []).map(item => ({
+      provide: FORM_BUILDER_ITEMS,
+      useValue: item,
+      multi: true
+    })),
     ...(config.fields ?? []).map(field => ({
       provide: FORM_BUILDER_FIELDS,
       useValue: field,
@@ -85,10 +99,13 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
   {
     type: 'group',
     label: 'Group',
+    kind: 'layout',
     group: 'Layout',
     icon: 'fluent:group-24-regular',
     description: 'Container for nested fields.',
+    acceptsChildren: true,
     defaults: {
+      kind: 'layout',
       label: 'Group',
       width: 12,
       children: []
@@ -148,6 +165,19 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
       placeholder: '0.00'
     }
   }
+];
+
+export const DEFAULT_FORM_BUILDER_ITEMS: FormBuilderItemDefinition[] = [
+  {
+    type: 'section',
+    label: 'Section',
+    kind: 'layout',
+    group: 'Layout',
+    icon: 'fluent:folder-24-regular',
+    description: 'Top-level layout container.',
+    acceptsChildren: true
+  },
+  ...DEFAULT_FORM_BUILDER_FIELDS
 ];
 
 export function validatorsFromRules(rules: FormBuilderValidationRule[] = [], field?: FormBuilderField) {

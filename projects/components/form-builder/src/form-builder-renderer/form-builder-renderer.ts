@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
-import { DEFAULT_FORM_BUILDER_FIELDS, FORM_BUILDER_FIELDS, validatorsFromRules } from '../config';
-import { FormBuilderField, FormBuilderFieldDefinition, FormBuilderLayoutItem, FormBuilderSchema, FormBuilderSection } from '../types';
+import { DEFAULT_FORM_BUILDER_ITEMS, FORM_BUILDER_FIELDS, FORM_BUILDER_ITEMS, validatorsFromRules } from '../config';
+import { FormBuilderField, FormBuilderFieldDefinition, FormBuilderItemDefinition, FormBuilderLayoutItem, FormBuilderSchema, FormBuilderSection } from '../types';
 import { FormBuilderFieldHost } from '../field-host/field-host';
 
 interface FormBuilderRendererCanvasItem extends FormBuilderLayoutItem {
@@ -37,7 +37,9 @@ interface FormBuilderRendererCanvasItem extends FormBuilderLayoutItem {
   }
 })
 export class FormBuilderRenderer {
+  private readonly providedItems = inject(FORM_BUILDER_ITEMS, { optional: true }) ?? [];
   private readonly providedFields = inject(FORM_BUILDER_FIELDS, { optional: true }) ?? [];
+  private readonly orphanControls = new Map<string, FormControl>();
 
   readonly schema = input.required<FormBuilderSchema>();
   readonly readonly = input(false);
@@ -48,9 +50,28 @@ export class FormBuilderRenderer {
   readonly formReady = output<FormGroup>();
 
   protected readonly definitions = computed<FormBuilderFieldDefinition[]>(() => [
-    ...DEFAULT_FORM_BUILDER_FIELDS,
-    ...this.providedFields
-  ]);
+    ...DEFAULT_FORM_BUILDER_ITEMS,
+    ...this.providedFields,
+    ...this.providedItems
+  ].reduce<FormBuilderFieldDefinition[]>((definitions, definition) => {
+    const normalized = normalizeFieldDefinition(definition);
+    const index = definitions.findIndex(item => item.type === normalized.type);
+
+    if (index === -1) {
+      definitions.push(normalized);
+    } else {
+      definitions[index] = {
+        ...definitions[index],
+        ...normalized,
+        defaults: {
+          ...definitions[index].defaults,
+          ...normalized.defaults
+        }
+      };
+    }
+
+    return definitions;
+  }, []));
   protected readonly visibleCanvasItems = computed<FormBuilderRendererCanvasItem[]>(() =>
     this.resolveCanvasItems(this.schema())
       .map(item => {
@@ -86,11 +107,34 @@ export class FormBuilderRenderer {
   }
 
   protected getControl(field: FormBuilderField): FormControl {
-    return this.formGroup().get(field.name) as FormControl;
+    const control = this.formGroup().get(field.name);
+
+    if (control instanceof FormControl) {
+      return control;
+    }
+
+    const existing = this.orphanControls.get(field.id);
+
+    if (existing) {
+      return existing;
+    }
+
+    const nextControl = new FormControl({
+      value: field.defaultValue ?? null,
+      disabled: true
+    });
+    this.orphanControls.set(field.id, nextControl);
+    return nextControl;
   }
 
   protected isContainerField(field: FormBuilderField): boolean {
-    return field.type === 'group' || field.type === 'grid';
+    const definition = this.definitions().find(item => item.type === field.type);
+
+    return definition?.acceptsChildren === true ||
+      definition?.kind === 'layout' ||
+      field.kind === 'layout' ||
+      field.type === 'group' ||
+      field.type === 'grid';
   }
 
   protected visibleChildren(field: FormBuilderField): FormBuilderField[] {
@@ -118,11 +162,12 @@ export class FormBuilderRenderer {
     ];
 
     for (const field of fields) {
-      if (this.isContainerField(field)) {
+      const definition = this.definitions().find(item => item.type === field.type);
+
+      if (this.isContainerField(field) || definition?.kind === 'static' || field.kind === 'static') {
         continue;
       }
 
-      const definition = this.definitions().find(item => item.type === field.type);
       const validators = definition?.validators?.(field) ?? validatorsFromRules(field.validation, field);
       const control = new FormControl(
         {
@@ -172,6 +217,13 @@ export class FormBuilderRenderer {
 
     return items;
   }
+}
+
+function normalizeFieldDefinition(definition: FormBuilderItemDefinition): FormBuilderFieldDefinition {
+  return {
+    ...definition,
+    kind: definition.kind ?? 'field'
+  } as FormBuilderFieldDefinition;
 }
 
 function flattenFields(fields: FormBuilderField[]): FormBuilderField[] {

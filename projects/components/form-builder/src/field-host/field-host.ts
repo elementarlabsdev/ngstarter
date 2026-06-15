@@ -94,6 +94,7 @@ export class FormBuilderFieldHost {
       componentRef.setInput('field', field);
       componentRef.setInput('control', control);
       componentRef.setInput('readonly', this.readonly());
+      componentRef.setInput('definition', definitions.find(definition => definition.type === field.type));
       this.customLoaded.set(true);
     });
   }

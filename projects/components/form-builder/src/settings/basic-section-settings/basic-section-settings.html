@@ -1,0 +1,25 @@
+<div class="flex flex-col gap-4">
+  <ngs-form-field>
+    <ngs-label>Title</ngs-label>
+    <input ngsInput
+           [ngModel]="section().title"
+           [ngModelOptions]="{standalone: true}"
+           (ngModelChange)="patch({ title: $event })">
+  </ngs-form-field>
+
+  <ngs-form-field>
+    <ngs-label>Description</ngs-label>
+    <textarea ngsInput
+              rows="3"
+              [ngModel]="section().description || ''"
+              [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="patch({ description: $event })"></textarea>
+    <ngs-hint>Optional helper text rendered under the section title.</ngs-hint>
+  </ngs-form-field>
+
+  <ngs-slide-toggle [ngModel]="section().collapsed ?? false"
+                    [ngModelOptions]="{standalone: true}"
+                    (ngModelChange)="patch({ collapsed: $event })">
+    Collapsed
+  </ngs-slide-toggle>
+</div>
