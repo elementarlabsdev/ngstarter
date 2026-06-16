@@ -19,7 +19,9 @@
     @case ('select') {
       <ngs-form-field>
         <ngs-label>{{ field().label }}</ngs-label>
-        <ngs-select [formControl]="control()" [placeholder]="field().placeholder || ''">
+        <ngs-select [formControl]="control()"
+                    [placeholder]="field().placeholder || ''"
+                    [multiple]="field().multiple ?? false">
           @for (option of field().options ?? []; track option.value) {
             <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
           }

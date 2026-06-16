@@ -120,7 +120,7 @@ export class FormBuilderRenderer {
     }
 
     const nextControl = new FormControl({
-      value: field.defaultValue ?? null,
+      value: this.fieldInitialValue(field),
       disabled: true
     });
     this.orphanControls.set(field.id, nextControl);
@@ -171,7 +171,7 @@ export class FormBuilderRenderer {
       const validators = definition?.validators?.(field) ?? validatorsFromRules(field.validation, field);
       const control = new FormControl(
         {
-          value: value[field.name] ?? field.defaultValue ?? null,
+          value: value[field.name] ?? this.fieldInitialValue(field),
           disabled: field.disabled || this.readonly()
         },
         validators
@@ -190,6 +190,22 @@ export class FormBuilderRenderer {
         ...field,
         children: field.children ? this.visibleFields(field.children) : undefined
       }));
+  }
+
+  private fieldInitialValue(field: FormBuilderField): any {
+    if (field.defaultValue !== undefined) {
+      return field.defaultValue;
+    }
+
+    const selectedValues = (field.options ?? [])
+      .filter(option => option.selected)
+      .map(option => option.value);
+
+    if (field.type === 'checkbox-list' || field.multiple) {
+      return selectedValues;
+    }
+
+    return selectedValues[0] ?? null;
   }
 
   private resolveCanvasItems(schema: FormBuilderSchema): FormBuilderRendererCanvasItem[] {

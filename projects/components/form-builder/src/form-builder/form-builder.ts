@@ -674,7 +674,7 @@ export class FormBuilder {
     }
 
     const control = new FormControl({
-      value: field.defaultValue ?? null,
+      value: this.fieldInitialValue(field),
       disabled: true
     });
     this.previewControls.set(field.id, control);
@@ -958,7 +958,7 @@ export class FormBuilder {
     const name = uniqueFieldName(toFieldName(baseLabel), schema);
     const kind = definition.defaults?.kind ?? definition.kind ?? 'field';
 
-    return {
+    const field: FormBuilderField = {
       id: uniqueId('field'),
       name,
       type: definition.type,
@@ -972,6 +972,12 @@ export class FormBuilder {
       },
       ...definition.defaults
     };
+
+    if (field.defaultValue === undefined) {
+      field.defaultValue = this.fieldInitialValue(field);
+    }
+
+    return field;
   }
 
   private defaultWidth(type: string): FormBuilderFieldWidth {
@@ -1389,7 +1395,7 @@ export class FormBuilder {
     }
 
     queueMicrotask(() => {
-      const value = field.defaultValue ?? null;
+      const value = this.fieldInitialValue(field);
 
       if (control.value !== value) {
         control.setValue(value, { emitEvent: false });
@@ -1399,6 +1405,22 @@ export class FormBuilder {
         control.disable({ emitEvent: false });
       }
     });
+  }
+
+  private fieldInitialValue(field: FormBuilderField): any {
+    if (field.defaultValue !== undefined) {
+      return field.defaultValue;
+    }
+
+    const selectedValues = (field.options ?? [])
+      .filter(option => option.selected)
+      .map(option => option.value);
+
+    if (field.type === 'checkbox-list' || field.multiple) {
+      return selectedValues;
+    }
+
+    return selectedValues[0] ?? null;
   }
 
   private scrollElementFullyIntoView(target: HTMLElement, scrollableContent: HTMLElement): void {

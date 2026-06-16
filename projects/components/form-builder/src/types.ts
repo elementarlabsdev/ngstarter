@@ -7,6 +7,7 @@ export type FormBuilderItemKind = 'field' | 'layout' | 'static';
 export interface FormBuilderOption {
   label: string;
   value: any;
+  selected?: boolean;
 }
 
 export interface FormBuilderValidationRule {
@@ -31,6 +32,7 @@ export interface FormBuilderField {
   placeholder?: string;
   hint?: string;
   defaultValue?: any;
+  multiple?: boolean;
   required?: boolean;
   disabled?: boolean;
   readonly?: boolean;

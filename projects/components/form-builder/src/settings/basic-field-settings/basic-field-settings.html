@@ -70,6 +70,14 @@
         Checked
       </ngs-slide-toggle>
     }
+
+    @if (isSelect()) {
+      <ngs-slide-toggle [ngModel]="field().multiple ?? false"
+                        [ngModelOptions]="{standalone: true}"
+                        (ngModelChange)="patchSelectMultiple($event)">
+        Multiple
+      </ngs-slide-toggle>
+    }
   </div>
 
   @if (hasOptions()) {
@@ -77,10 +85,11 @@
       <ngs-label>Options</ngs-label>
       <textarea ngsInput
                 rows="4"
-                [ngModel]="optionsText()"
-                [ngModelOptions]="{standalone: true}"
-                (ngModelChange)="patchOptions($event)"></textarea>
-      <ngs-hint>One option per line. Use Label:value to set explicit values.</ngs-hint>
+                [formControl]="optionsControl"></textarea>
+      @if (optionsControl.hasError('formBuilderOptionsFormat')) {
+        <ngs-error>Use Label:value or Label:value:selected.</ngs-error>
+      }
+      <ngs-hint>One option per line. Use Label:value or Label:value:selected.</ngs-hint>
     </ngs-form-field>
   }
 </div>
