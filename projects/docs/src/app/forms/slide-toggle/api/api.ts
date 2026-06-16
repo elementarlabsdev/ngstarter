@@ -28,6 +28,33 @@ import {
   styleUrl: './api.scss',
 })
 export class Api {
+  groupProperties = [
+    {
+      name: 'selector',
+      description: 'Groups projected slide toggles with consistent vertical spacing.',
+      type: 'ngs-slide-toggle-group',
+      default: '–'
+    },
+    {
+      name: 'exportAs',
+      description: 'Template export name for the group component.',
+      type: 'ngsSlideToggleGroup',
+      default: '–'
+    },
+    {
+      name: 'content',
+      description: 'Accepts projected ngs-slide-toggle children.',
+      type: 'ngs-slide-toggle',
+      default: '–'
+    },
+    {
+      name: '--ngs-slide-toggle-group-gap',
+      description: 'CSS custom property controlling spacing between toggles.',
+      type: 'CSS length',
+      default: '--spacing(5)'
+    }
+  ];
+
   properties = [
     {
       name: 'id',

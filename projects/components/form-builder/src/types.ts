@@ -33,6 +33,7 @@ export interface FormBuilderField {
   hint?: string;
   defaultValue?: any;
   multiple?: boolean;
+  clearable?: boolean;
   required?: boolean;
   disabled?: boolean;
   readonly?: boolean;

@@ -30,10 +30,22 @@ import {
 export class Api {
   properties = [
     {
+      name: 'id',
+      description: 'Unique identifier for the country select component.',
+      type: 'string',
+      default: 'auto-generated'
+    },
+    {
       name: 'placeholder',
       description: 'The placeholder text for the input.',
       type: 'string',
       default: "''"
+    },
+    {
+      name: 'value',
+      description: 'Selected country code, or an array of country codes in multiple mode.',
+      type: 'string | string[] | null',
+      default: 'null'
     },
     {
       name: 'required',
@@ -48,19 +60,53 @@ export class Api {
       default: 'false'
     },
     {
-      name: 'showCountryCode',
-      description: 'Whether to show the country code in the trigger.',
+      name: 'multiple',
+      description: 'Whether the user can select multiple countries. The value is an array in multiple mode.',
       type: 'boolean',
       default: 'false'
     },
     {
-      name: 'searchTerm',
-      description: 'The search term for filtering countries.',
-      type: 'string',
-      default: "''"
+      name: 'hideCheckIcon',
+      description: 'Whether to hide the check icon for selected options.',
+      type: 'boolean',
+      default: 'false'
+    },
+    {
+      name: 'clearable',
+      description: 'Whether to show a clear button when a value is selected.',
+      type: 'boolean',
+      default: 'false'
+    },
+    {
+      name: 'aria-label',
+      description: 'Accessible label for the inner select.',
+      type: 'string | null',
+      default: 'null'
+    },
+    {
+      name: 'tabIndex',
+      description: 'Tab index for the country select.',
+      type: 'number',
+      default: '0'
+    },
+    {
+      name: 'aria-describedby',
+      description: 'Accessible description id for the inner select.',
+      type: 'string | null',
+      default: 'null'
+    },
+    {
+      name: 'showCountryCode',
+      description: 'Whether to show the country code in the trigger.',
+      type: 'boolean',
+      default: 'false'
     }
   ];
   events = [
+    {
+      name: 'selectionChange',
+      description: 'Event emitted when the selected value changes.'
+    },
     {
       name: 'opened',
       description: 'Event emitted when the select panel is opened.'

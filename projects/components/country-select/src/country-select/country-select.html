@@ -4,12 +4,20 @@
   (selectionChange)="onSelectionChange($event)"
   (opened)="onSelectOpened()"
   (closed)="onSelectClosed()"
+  [id]="id + '-select'"
   [placeholder]="placeholder"
   [required]="isRequiredSignal()"
-  [disabled]="isDisabledSignal()">
+  [disabled]="isDisabledSignal()"
+  [multiple]="multiple()"
+  [hideCheckIcon]="hideCheckIcon()"
+  [clearable]="clearable()"
+  [aria-label]="ariaLabel()"
+  [tabIndex]="tabIndex()"
+  [aria-describedby]="ariaDescribedby()">
   <ngs-select-trigger class="select-trigger">
-    @let selectedCountry = selectedCountryDisplay();
-    @if (selectedCountry) {
+    @let selectedCountries = selectedCountryDisplays();
+    @if (selectedCountries.length === 1) {
+      @let selectedCountry = selectedCountries[0];
       <span class="ngs-select-trigger-content">
         <span class="flag-icon" aria-hidden="true">{{ selectedCountry.flag }}</span>
         <span class="ngs-select-trigger-text">
@@ -19,13 +27,14 @@
           }
         </span>
       </span>
-    }
-
-    @if (!selectedCountryDisplay() && placeholder) {
-      <span class="ngs-select-trigger-text placeholder-text">
-        {{ placeholder }}
+    } @else if (selectedCountries.length > 1) {
+      <span class="ngs-select-trigger-content">
+        <span class="ngs-select-trigger-text">
+          {{ selectedCountriesText() }}
+        </span>
       </span>
     }
+
   </ngs-select-trigger>
 
   <ngs-select-header>

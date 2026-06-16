@@ -1,0 +1,10 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-slide-toggle-group-gap: --spacing(5);
+
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: var(--ngs-slide-toggle-group-gap);
+}

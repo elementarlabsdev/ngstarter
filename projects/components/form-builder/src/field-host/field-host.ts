@@ -16,6 +16,10 @@ import { Select } from '@ngstarter-ui/components/select';
 import { Option } from '@ngstarter-ui/components/option';
 import { Checkbox } from '@ngstarter-ui/components/checkbox';
 import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
+import { RadioButton, RadioGroup, RadioGroupOrientation } from '@ngstarter-ui/components/radio';
+import { CountrySelect } from '@ngstarter-ui/components/country-select';
+import { CurrencySelect } from '@ngstarter-ui/components/currency-select';
+import { TimezoneSelect } from '@ngstarter-ui/components/timezone-select';
 import { FormBuilderField, FormBuilderFieldDefinition } from '../types';
 
 @Component({
@@ -34,7 +38,12 @@ import { FormBuilderField, FormBuilderFieldDefinition } from '../types';
     Select,
     Option,
     Checkbox,
-    SlideToggle
+    SlideToggle,
+    RadioButton,
+    RadioGroup,
+    CountrySelect,
+    CurrencySelect,
+    TimezoneSelect
   ],
   templateUrl: './field-host.html',
   styleUrl: './field-host.scss',
@@ -71,6 +80,9 @@ export class FormBuilderFieldHost {
     const type = this.field().type;
     return type === 'number' || type === 'email' ? type : 'text';
   });
+  protected readonly radioOrientation = computed<RadioGroupOrientation>(() =>
+    this.field().settings?.['orientation'] === 'horizontal' ? 'horizontal' : 'vertical'
+  );
 
   private readonly anchor = viewChild.required('anchor', { read: ViewContainerRef });
 

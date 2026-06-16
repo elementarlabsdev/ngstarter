@@ -5,8 +5,10 @@ import { Error as FormFieldError, FormField, Hint, Label } from '@ngstarter-ui/c
 import { Input } from '@ngstarter-ui/components/input';
 import { Select } from '@ngstarter-ui/components/select';
 import { Option } from '@ngstarter-ui/components/option';
-import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
+import { SlideToggle, SlideToggleGroup } from '@ngstarter-ui/components/slide-toggle';
 import { FormBuilderField, FormBuilderFieldWidth, FormBuilderOption } from '../../types';
+
+type RadioOrientation = 'vertical' | 'horizontal';
 
 @Component({
   selector: 'ngs-basic-form-builder-field-settings',
@@ -21,7 +23,8 @@ import { FormBuilderField, FormBuilderFieldWidth, FormBuilderOption } from '../.
     Input,
     Select,
     Option,
-    SlideToggle
+    SlideToggle,
+    SlideToggleGroup
   ],
   templateUrl: './basic-field-settings.html',
   styleUrl: './basic-field-settings.scss',
@@ -41,10 +44,16 @@ export class BasicFormBuilderFieldSettings {
     validators: optionsTextValidator
   });
   protected readonly fieldWidthOptions: FormBuilderFieldWidth[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  protected readonly radioOrientationOptions: RadioOrientation[] = ['vertical', 'horizontal'];
   protected readonly hasCheckedState = computed(() => ['checkbox', 'toggle'].includes(this.field().type));
-  protected readonly hasPlaceholder = computed(() => !['checkbox', 'toggle'].includes(this.field().type));
+  protected readonly hasPlaceholder = computed(() => !['checkbox', 'toggle', 'radio'].includes(this.field().type));
   protected readonly hasOptions = computed(() => ['select', 'radio', 'checkbox-list'].includes(this.field().type));
+  protected readonly hasClearable = computed(() => ['select', 'country-select'].includes(this.field().type));
   protected readonly isSelect = computed(() => this.field().type === 'select');
+  protected readonly isRadio = computed(() => this.field().type === 'radio');
+  protected readonly radioOrientation = computed<RadioOrientation>(() =>
+    this.field().settings?.['orientation'] === 'horizontal' ? 'horizontal' : 'vertical'
+  );
   protected readonly optionsText = computed(() =>
     (this.field().options ?? [])
       .map(option => `${option.label}:${option.value}${this.isOptionSelected(option) ? ':selected' : ''}`)
@@ -94,6 +103,15 @@ export class BasicFormBuilderFieldSettings {
     }
 
     this.patch({ multiple, options, defaultValue });
+  }
+
+  protected patchRadioOrientation(orientation: RadioOrientation): void {
+    this.patch({
+      settings: {
+        ...this.field().settings,
+        orientation
+      }
+    });
   }
 
   protected patchOptions(value: string): void {

@@ -119,6 +119,23 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     defaults: {
       label: 'Select',
       placeholder: 'Choose an option',
+      clearable: true,
+      options: [
+        { label: 'Option 1', value: 'option_1' },
+        { label: 'Option 2', value: 'option_2' }
+      ]
+    }
+  },
+  {
+    type: 'radio',
+    label: 'Radio',
+    group: 'Choices',
+    icon: 'fluent:radio-button-24-regular',
+    defaults: {
+      label: 'Radio',
+      settings: {
+        orientation: 'vertical'
+      },
       options: [
         { label: 'Option 1', value: 'option_1' },
         { label: 'Option 2', value: 'option_2' }
@@ -156,6 +173,16 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     }
   },
   {
+    type: 'timezone-select',
+    label: 'Timezone select',
+    group: 'Date and time',
+    icon: 'fluent:globe-clock-24-regular',
+    defaults: {
+      label: 'Timezone',
+      placeholder: 'Select timezone'
+    }
+  },
+  {
     type: 'currency',
     label: 'Currency',
     group: 'Finance',
@@ -163,6 +190,27 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     defaults: {
       label: 'Amount',
       placeholder: '0.00'
+    }
+  },
+  {
+    type: 'currency-select',
+    label: 'Currency select',
+    group: 'Finance',
+    icon: 'fluent:money-hand-24-regular',
+    defaults: {
+      label: 'Currency',
+      placeholder: 'Select currency'
+    }
+  },
+  {
+    type: 'country-select',
+    label: 'Country select',
+    group: 'Location',
+    icon: 'fluent:globe-location-24-regular',
+    defaults: {
+      label: 'Country',
+      placeholder: 'Select country',
+      clearable: true
     }
   }
 ];

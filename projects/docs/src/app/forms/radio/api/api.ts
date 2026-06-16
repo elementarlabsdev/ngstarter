@@ -48,6 +48,12 @@ export class Api {
       description: 'Whether the radio group is disabled',
       type: 'boolean',
       default: 'false'
+    },
+    {
+      name: 'orientation',
+      description: 'Radio button layout direction. Use vertical for stacked options and horizontal for inline choices.',
+      type: "'horizontal' | 'vertical'",
+      default: "'horizontal'"
     }
   ];
 

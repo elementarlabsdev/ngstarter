@@ -331,11 +331,11 @@ Typography:
 - country-select: `@ngstarter-ui/components/country-select` docs: /forms/country
   purpose: Let users choose a country from the built-in country list and store its ISO country code.
   use when: Use in addresses, user profiles, billing, shipping, legal forms, tax forms, tenant settings, and locale settings where the form value should be a country code such as US, PL, or DE. The component shows country flags and names, supports search by name or ISO code, and integrates with FormField. Do not use for phone dialing codes; use PhoneInput. Do not use for currency selection; use CurrencySelect. Do not use for custom region, city, office, or location lists; use Select or Autocomplete.
-  example topics: Basic country select
+  example topics: Unselected country, Basic country select, Unselected country select
   selectors: `ngs-country-select`
-  exports: `countries`, `Country`, `CountrySelect`
-  inputs: `disabled`, `placeholder`, `required`, `searchTerm`, `showCountryCode`
-  outputs: `closed`, `opened`
+  exports: `countries`, `Country`, `CountrySelect`, `CountrySelectValue`
+  inputs: `aria-describedby`, `aria-label`, `clearable`, `disabled`, `hideCheckIcon`, `id`, `multiple`, `placeholder`, `required`, `searchTerm`, `showCountryCode`, `tabIndex`, `value`
+  outputs: `closed`, `opened`, `selectionChange`
   tokens: `--ngs-color-neutral-500`, `--ngs-color-on-surface-variant`, `--ngs-dropdown-item-gap`, `--ngs-font-size-sm`
 - crop: `@ngstarter-ui/components/crop` docs: /components/crop
   purpose: Let users choose a rectangle or circle crop area on top of an existing image or visual preview.
@@ -801,12 +801,12 @@ Typography:
 - radio: `@ngstarter-ui/components/radio` docs: /forms/radio
   purpose: Let users choose exactly one option from a small visible set of mutually exclusive choices.
   use when: Use ngs-radio-group with ngs-radio-button for simple text options in forms, settings, filters, and preference screens where all options should be visible and the user can choose only one. Put value on each radio button and bind the group value with value, ngModel, or formControlName. Use name when native form grouping matters, disabled on the group or individual radio button when needed, and change when the screen must react to selection changes. Do not use Radio for multiple selection; use Checkbox. Do not use for long option lists; use Select or Autocomplete. Do not use for rich options with descriptions, icons, or large clickable blocks; use RadioCard. Do not use as a segmented view switcher; use Segmented or ButtonToggle. Do not use for yes/no boolean settings when SlideToggle or Checkbox better matches the meaning.
-  example topics: Basic Radios, Radio Card, Basic radio
+  example topics: Basic Radios, Radio Orientation, Radio Card, Basic radio
   selectors: `ngs-radio-button`, `ngs-radio-group`
-  exports: `RadioButton`, `RadioGroup`
-  inputs: `checked`, `disabled`, `id`, `name`, `value`
+  exports: `RadioButton`, `RadioGroup`, `RadioGroupOrientation`
+  inputs: `checked`, `disabled`, `id`, `name`, `orientation`, `value`
   outputs: `change`
-  tokens: `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary`, `--ngs-field-border-color`, `--ngs-radio-button-border-width`, `--ngs-radio-button-checked-color`, `--ngs-radio-button-disabled-color`, `--ngs-radio-button-disabled-label-color`, `--ngs-radio-button-gap`, `--ngs-radio-button-inner-circle-size`, `--ngs-radio-button-label-color`, `--ngs-radio-button-size`, `--ngs-radio-button-unchecked-color`
+  tokens: `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary`, `--ngs-field-border-color`, `--ngs-radio-button-border-width`, `--ngs-radio-button-checked-color`, `--ngs-radio-button-disabled-color`, `--ngs-radio-button-disabled-label-color`, `--ngs-radio-button-gap`, `--ngs-radio-button-inner-circle-size`, `--ngs-radio-button-label-color`, `--ngs-radio-button-size`, `--ngs-radio-button-unchecked-color`, `--ngs-radio-group-gap`
 - radio-card: `@ngstarter-ui/components/radio-card`
   purpose: Let users choose exactly one option from a small set of rich card-like choices.
   use when: Use ngs-radio-card-group as a form control group and ngs-radio-card for each option when every option needs a large clickable card with title, icon, description, or supporting content. Use ngs-radio-card-title for the option name and optional icon, ngs-radio-card-content for details, value on each card, and formControlName or ngModel on the group. Use TailwindCSS grid or flex around the group to lay cards out in columns or rows. Good for plan selection, privacy modes, template choices, payment methods, layout options, delivery methods, onboarding choices, and settings choices with explanation. Do not use for simple short text options; use Radio. Do not use for multiple selection; use Checkbox or a dedicated checkbox-card pattern when available. Do not use for long lists; use Select or Autocomplete. Do not use as a normal content card without selection; use Card. Do not use as a segmented mode switch; use Segmented or ButtonToggle.
@@ -920,11 +920,11 @@ Typography:
   purpose: Capture a boolean on/off setting where checked means enabled.
   use when: Use ngs-slide-toggle for settings and preferences where checked=true means the feature or state is enabled. Good for live updates, notifications, dark mode option, visibility, sidebar expanded or collapsed, animation on/off, table options, enable Wi-Fi, show archived, and allow comments. It is an Angular form control with checked, disabled, required, ngModel, formControlName, change, and toggleChange, and has its own label pattern, so do not wrap it in ngs-form-field. Do not use SlideToggle for choosing one value from many; use Radio, Segmented, or Select. Do not use for multiple independent selections in a list; use Checkbox. Do not use for button-like mode groups; use ButtonToggle. Do not use for actions, commands, navigation, or rich option cards; use Button, Navigation, or RadioCard. For “I agree” or “accept terms” confirmations, prefer Checkbox because the user is confirming, not enabling a setting.
   example topics: Basic Slide Toggle, Disabled Slide Toggle, Slide Toggle with Forms, Slide toggle disabled
-  selectors: `ngs-slide-toggle`
-  exports: `SlideToggle`, `SlideToggleChange`
+  selectors: `ngs-slide-toggle`, `ngs-slide-toggle-group`
+  exports: `SlideToggle`, `SlideToggleChange`, `SlideToggleGroup`
   inputs: `aria-describedby`, `aria-label`, `aria-labelledby`, `checked`, `color`, `disabled`, `disableRipple`, `hideIcon`, `id`, `labelPosition`, `name`, `required`, `tabIndex`
   outputs: `change`, `toggleChange`
-  tokens: `--ngs-color-on-primary`, `--ngs-color-primary`, `--ngs-color-surface`, `--ngs-color-surface-container-highest`, `--ngs-slide-toggle-bar-checked-color`, `--ngs-slide-toggle-bar-color`, `--ngs-slide-toggle-height`, `--ngs-slide-toggle-thumb-checked-color`, `--ngs-slide-toggle-thumb-color`, `--ngs-slide-toggle-thumb-size`, `--ngs-slide-toggle-transition-duration`, `--ngs-slide-toggle-width`
+  tokens: `--ngs-color-on-primary`, `--ngs-color-primary`, `--ngs-color-surface`, `--ngs-color-surface-container-highest`, `--ngs-slide-toggle-bar-checked-color`, `--ngs-slide-toggle-bar-color`, `--ngs-slide-toggle-group-gap`, `--ngs-slide-toggle-height`, `--ngs-slide-toggle-thumb-checked-color`, `--ngs-slide-toggle-thumb-color`, `--ngs-slide-toggle-thumb-size`, `--ngs-slide-toggle-transition-duration`, `--ngs-slide-toggle-width`
 - slider: `@ngstarter-ui/components/slider` docs: /components/slider
   purpose: Let users choose one numeric value or a start/end range by dragging thumb controls.
   use when: Use ngs-slider when approximate visual numeric adjustment is better than typing. Good for volume, opacity, zoom, size, threshold, percentage, rating or score, price range, numeric date or age range, chart settings, visual tuning, and filter ranges. Use input ngsSliderThumb for one value, or input ngsSliderStartThumb plus input ngsSliderEndThumb for a range. Configure min, max, step, disabled, discrete, showTickMarks, displayWith, Angular forms, and valueChange on thumbs. Do not use Slider to show progress or status; use ProgressBar or Gauge. Do not use when exact numeric entry is primary; use NumberInput or pair NumberInput with Slider. Do not use for named categories; use Select, Radio, or Segmented. Do not use for before/after image comparison; use ComparisonSlider. Do not use for pagination or table sorting/filter builder logic; use Paginator, Sort, or FilterBuilder.

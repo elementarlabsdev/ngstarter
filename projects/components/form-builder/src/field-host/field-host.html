@@ -21,7 +21,8 @@
         <ngs-label>{{ field().label }}</ngs-label>
         <ngs-select [formControl]="control()"
                     [placeholder]="field().placeholder || ''"
-                    [multiple]="field().multiple ?? false">
+                    [multiple]="field().multiple ?? false"
+                    [clearable]="field().clearable ?? false">
           @for (option of field().options ?? []; track option.value) {
             <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
           }
@@ -30,6 +31,22 @@
           <ngs-hint>{{ field().hint }}</ngs-hint>
         }
       </ngs-form-field>
+    }
+
+    @case ('radio') {
+      <div class="ngs-form-builder-choice-field">
+        <span class="ngs-form-builder-choice-label">{{ field().label }}</span>
+        <ngs-radio-group [formControl]="control()"
+                         [name]="field().name"
+                         [orientation]="radioOrientation()">
+          @for (option of field().options ?? []; track option.value) {
+            <ngs-radio-button [value]="option.value">{{ option.label }}</ngs-radio-button>
+          }
+        </ngs-radio-group>
+        @if (field().hint) {
+          <span class="ngs-form-builder-choice-hint">{{ field().hint }}</span>
+        }
+      </div>
     }
 
     @case ('checkbox') {
@@ -70,6 +87,18 @@
       </ngs-form-field>
     }
 
+    @case ('timezone-select') {
+      <ngs-form-field>
+        <ngs-label>{{ field().label }}</ngs-label>
+        <ngs-timezone-select [formControl]="control()"
+                             [placeholder]="field().placeholder || ''"
+                             [required]="field().required ?? false"/>
+        @if (field().hint) {
+          <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+      </ngs-form-field>
+    }
+
     @case ('currency') {
       <ngs-form-field>
         <ngs-label>{{ field().label }}</ngs-label>
@@ -79,6 +108,31 @@
                [formControl]="control()"
                [placeholder]="field().placeholder || ''"
                [readonly]="readonly() || field().readonly">
+        @if (field().hint) {
+          <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+      </ngs-form-field>
+    }
+
+    @case ('currency-select') {
+      <ngs-form-field>
+        <ngs-label>{{ field().label }}</ngs-label>
+        <ngs-currency-select [formControl]="control()"
+                             [placeholder]="field().placeholder || ''"
+                             [required]="field().required ?? false"/>
+        @if (field().hint) {
+          <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+      </ngs-form-field>
+    }
+
+    @case ('country-select') {
+      <ngs-form-field>
+        <ngs-label>{{ field().label }}</ngs-label>
+        <ngs-country-select [formControl]="control()"
+                            [placeholder]="field().placeholder || ''"
+                            [clearable]="field().clearable ?? false"
+                            [required]="field().required ?? false"/>
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
         }

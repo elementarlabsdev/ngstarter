@@ -44,7 +44,7 @@
     </ngs-select>
   </ngs-form-field>
 
-  <div class="flex flex-col gap-5 py-1">
+  <ngs-slide-toggle-group class="mb-4">
     <ngs-slide-toggle [ngModel]="field().required ?? false"
                       [ngModelOptions]="{standalone: true}"
                       (ngModelChange)="patch({ required: $event })">
@@ -78,7 +78,28 @@
         Multiple
       </ngs-slide-toggle>
     }
-  </div>
+
+    @if (hasClearable()) {
+      <ngs-slide-toggle [ngModel]="field().clearable ?? false"
+                        [ngModelOptions]="{standalone: true}"
+                        (ngModelChange)="patch({ clearable: $event })">
+        Clearable
+      </ngs-slide-toggle>
+    }
+  </ngs-slide-toggle-group>
+
+  @if (isRadio()) {
+    <ngs-form-field>
+      <ngs-label>Orientation</ngs-label>
+      <ngs-select [ngModel]="radioOrientation()"
+                  [ngModelOptions]="{standalone: true}"
+                  (ngModelChange)="patchRadioOrientation($event)">
+        @for (orientation of radioOrientationOptions; track orientation) {
+          <ngs-option [value]="orientation">{{ orientation }}</ngs-option>
+        }
+      </ngs-select>
+    </ngs-form-field>
+  }
 
   @if (hasOptions()) {
     <ngs-form-field>

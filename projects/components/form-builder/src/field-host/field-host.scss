@@ -64,4 +64,22 @@
       font-size: var(--ngs-font-size-xs);
     }
   }
+
+  .ngs-form-builder-choice-field {
+    display: flex;
+    min-height: --spacing(11);
+    flex-direction: column;
+    gap: --spacing(2);
+  }
+
+  .ngs-form-builder-choice-label {
+    color: var(--ngs-color-on-surface);
+    font-size: var(--ngs-font-size-sm);
+    font-weight: 500;
+  }
+
+  .ngs-form-builder-choice-hint {
+    color: var(--ngs-color-on-surface-variant);
+    font-size: var(--ngs-font-size-xs);
+  }
 }

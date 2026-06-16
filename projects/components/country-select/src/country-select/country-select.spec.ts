@@ -5,7 +5,8 @@ import { OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { CountrySelect } from './country-select';
+import { CountrySelect, CountrySelectValue } from './country-select';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
 
 vi.mock('uuid', () => ({ v7: () => 'test-icon-id' }));
 
@@ -35,6 +36,84 @@ class CountrySelectHost {
   readonly showCountryCode = signal(false);
   readonly opened = signal(0);
   readonly closed = signal(0);
+}
+
+@Component({
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    FormField,
+    Label,
+    CountrySelect
+  ],
+  template: `
+    <ngs-form-field>
+      <ngs-label>Country</ngs-label>
+      <ngs-country-select [formControl]="country" placeholder="Select country" />
+    </ngs-form-field>
+  `
+})
+class CountrySelectFormFieldHost {
+  readonly country = new FormControl<string | null>(null);
+}
+
+@Component({
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    CountrySelect
+  ],
+  template: `
+    <ngs-country-select
+      id="shipping-country"
+      [formControl]="country"
+      placeholder="Select shipping country"
+      clearable
+      hideCheckIcon
+      aria-label="Shipping country"
+      aria-describedby="country-help"
+      [tabIndex]="7" />
+  `
+})
+class CountrySelectInputsHost {
+  readonly country = new FormControl<string | null>('PL');
+}
+
+@Component({
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    CountrySelect
+  ],
+  template: `
+    <ngs-country-select
+      [formControl]="countries"
+      placeholder="Select countries"
+      multiple
+      clearable
+      (selectionChange)="changes.set(changes() + 1)" />
+  `
+})
+class MultipleCountrySelectHost {
+  readonly countries = new FormControl<string[]>(['PL', 'DE']);
+  readonly changes = signal(0);
+}
+
+@Component({
+  standalone: true,
+  imports: [
+    CountrySelect
+  ],
+  template: `
+    <ngs-country-select
+      [value]="country()"
+      (valueChange)="country.set($event)"
+      placeholder="Select country"
+      clearable />
+  `
+})
+class CountrySelectValueHost {
+  readonly country = signal<CountrySelectValue>('PL');
 }
 
 let overlayContainer: OverlayContainer | undefined;
@@ -102,14 +181,14 @@ describe('CountrySelect', () => {
     vi.useRealTimers();
   });
 
-  it('renders placeholder, host state, and selected country with emoji flag', async () => {
+  it('renders host state and selected country with emoji flag', async () => {
     const fixture = await createHost(CountrySelectHost);
     const component = fixture.componentInstance;
     const host = getHost(fixture);
 
     expect(host.classList.contains('ngs-country-select')).toBe(true);
     expect(host.getAttribute('tabindex')).toBe('0');
-    expect(getSelect(fixture).textContent).toContain('Select country');
+    expect(getSelect(fixture).textContent).not.toContain('Select country');
     expect(getCountrySelect(fixture).empty).toBe(true);
 
     component.showCountryCode.set(true);
@@ -121,6 +200,60 @@ describe('CountrySelect', () => {
     expect(getSelect(fixture).textContent).toContain('🇵🇱');
     expect(getSelect(fixture).textContent).toContain('Poland');
     expect(getSelect(fixture).textContent).toContain('(PL)');
+  });
+
+  it('keeps the form field label resting when empty and a placeholder is configured', async () => {
+    const fixture = await createHost(CountrySelectFormFieldHost);
+    const formField = fixture.nativeElement.querySelector('ngs-form-field') as HTMLElement;
+
+    expect(formField.classList.contains('ngs-form-field-empty')).toBe(true);
+    expect(formField.classList.contains('ngs-form-field-should-float')).toBe(false);
+    expect(formField.textContent).toContain('Country');
+    expect(formField.textContent).not.toContain('Select country');
+  });
+
+  it('passes the select inputs through to the inner select', async () => {
+    const fixture = await createHost(CountrySelectInputsHost);
+    const host = getHost(fixture);
+    const select = getSelect(fixture);
+
+    expect(host.id).toBe('shipping-country');
+    expect(host.getAttribute('tabindex')).toBe('7');
+    expect(select.id).toBe('shipping-country-select');
+    expect(select.getAttribute('tabindex')).toBe('7');
+    expect(select.getAttribute('aria-label')).toBe('Shipping country');
+    expect(select.classList.contains('ngs-select-clearable')).toBe(true);
+    expect(select.querySelector('.ngs-select-clear-button')).toBeTruthy();
+  });
+
+  it('supports multiple country selection values like select', async () => {
+    const fixture = await createHost(MultipleCountrySelectHost);
+    const component = fixture.componentInstance;
+
+    expect(getCountrySelect(fixture).value).toEqual(['PL', 'DE']);
+    expect(getSelect(fixture).textContent).toContain('Poland');
+    expect(getSelect(fixture).textContent).toContain('Germany');
+
+    (getSelect(fixture).querySelector('.ngs-select-clear-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    expect(component.countries.value).toEqual([]);
+    expect(getCountrySelect(fixture).empty).toBe(true);
+    expect(component.changes()).toBe(1);
+  });
+
+  it('supports the value input model like select', async () => {
+    const fixture = await createHost(CountrySelectValueHost);
+    const component = fixture.componentInstance;
+
+    expect(getCountrySelect(fixture).value).toBe('PL');
+    expect(getSelect(fixture).textContent).toContain('Poland');
+
+    (getSelect(fixture).querySelector('.ngs-select-clear-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    expect(component.country()).toBeNull();
+    expect(getCountrySelect(fixture).empty).toBe(true);
   });
 
   it('renders the selected country before the select scrolls on open', async () => {

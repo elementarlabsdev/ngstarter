@@ -29,6 +29,8 @@ import { Icon } from '@ngstarter-ui/components/icon';
 import { countries } from '../countries';
 import { Button } from '@ngstarter-ui/components/button';
 
+export type CountrySelectValue = string | string[] | null;
+
 @Component({
   selector: 'ngs-country-select',
   exportAs: 'ngsCountrySelect',
@@ -54,7 +56,7 @@ import { Button } from '@ngstarter-ui/components/button';
     'class': 'ngs-country-select',
     '[class.floating]': 'shouldLabelFloat',
     '[id]': 'id',
-    '[attr.tabindex]': 'disabled ? -1 : 0',
+    '[attr.tabindex]': 'disabled ? -1 : tabIndex()',
     '(focus)': 'onFocusIn()',
     '(blur)': 'onFocusOut($event)',
   },
@@ -64,7 +66,7 @@ export class CountrySelect
     OnInit,
     OnDestroy,
     ControlValueAccessor,
-    FormFieldControl<string | null>
+    FormFieldControl<CountrySelectValue>
 {
   private static readonly COUNTRY_RENDER_CHUNK_SIZE = 32;
   private static readonly COUNTRY_RENDER_CHUNK_DELAY = 50;
@@ -74,19 +76,27 @@ export class CountrySelect
   private _formField = inject(FORM_FIELD, { optional: true });
 
   static nextId = 0;
-  id = `ngs-country-select-${CountrySelect.nextId++}`;
 
   readonly stateChanges = new Subject<void>();
 
   protected searchTerm = model('');
   protected visibleCountryCount = signal(CountrySelect.COUNTRY_RENDER_CHUNK_SIZE);
-  private readonly _valueSignal = signal<string | null>(null);
+  readonly valueSignal = model<CountrySelectValue>(null, { alias: 'value' });
   private readonly _focusedSignal = signal(false);
   private _touched = false;
 
+  readonly idSignal = input(`ngs-country-select-${CountrySelect.nextId++}`, { alias: 'id' });
   placeholderInputSignal = input<string>('', { alias: 'placeholder' });
   isRequiredSignal = model<boolean>(false, { alias: 'required' });
   isDisabledSignal = model<boolean>(false, { alias: 'disabled' });
+  readonly multiple = input(false, { transform: booleanAttribute });
+  readonly hideCheckIcon = input(false, { transform: booleanAttribute });
+  readonly clearable = input(false, { transform: booleanAttribute });
+  readonly ariaLabel = input<string | null>(null, { alias: 'aria-label' });
+  readonly tabIndex = input<number, any>(0, {
+    transform: (value: number | string | null) => value == null ? 0 : parseInt(value + '', 10)
+  });
+  readonly ariaDescribedby = input<string | null>(null, { alias: 'aria-describedby' });
 
   readonly showCountryCode = input(false, {
     transform: booleanAttribute
@@ -111,8 +121,33 @@ export class CountrySelect
     return this.filteredCountries().slice(0, this.visibleCountryCount());
   });
 
+  readonly selectedCountryDisplays = computed(() => {
+    const value = this.valueSignal();
+    const selectedCodes = Array.isArray(value)
+      ? value
+      : value
+        ? [value]
+        : [];
+
+    return selectedCodes
+      .map((code) => this.internalCountries.find((country) => country.code === code))
+      .filter((country): country is Country => !!country);
+  });
+
   readonly selectedCountryDisplay = computed(() => {
-    return this.internalCountries.find(c => c.code === this._valueSignal());
+    return this.selectedCountryDisplays()[0] ?? null;
+  });
+
+  readonly selectedCountriesText = computed(() => {
+    return this.selectedCountryDisplays()
+      .map((country) => {
+        if (this.showCountryCode()) {
+          return `${country.name} (${country.code})`;
+        }
+
+        return country.name;
+      })
+      .join(', ');
   });
 
   readonly ngsSelect = viewChild.required<Select>('ngsSelect');
@@ -125,8 +160,9 @@ export class CountrySelect
 
   readonly opened = output<void>();
   readonly closed = output<void>();
+  readonly selectionChange = output<SelectChange>();
 
-  private onChangeFn: (value: string | null) => void = () => {};
+  private onChangeFn: (value: CountrySelectValue) => void = () => {};
   private onTouchedFn: () => void = () => {};
   private _countryRenderTimeout: ReturnType<typeof setTimeout> | undefined;
   private _countrySearchFocusTimeout: ReturnType<typeof setTimeout> | undefined;
@@ -143,15 +179,21 @@ export class CountrySelect
     });
 
     effect(() => {
-      this.onChangeFn(this._valueSignal());
+      this.onChangeFn(this.valueSignal());
     });
 
     effect(() => {
-      this._valueSignal();
+      this.valueSignal();
       this._focusedSignal();
       this.isRequiredSignal();
       this.isDisabledSignal();
       this.placeholderInputSignal();
+      this.multiple();
+      this.hideCheckIcon();
+      this.clearable();
+      this.ariaLabel();
+      this.tabIndex();
+      this.ariaDescribedby();
       this.ngControl?.control?.status;
       this.stateChanges.next();
     });
@@ -180,11 +222,15 @@ export class CountrySelect
     this.clearCountrySelectTimeouts();
   }
 
-  get value(): string | null {
-    return this._valueSignal();
+  get id(): string {
+    return this.idSignal();
   }
-  set value(val: string | null) {
-    this._valueSignal.set(val);
+
+  get value(): CountrySelectValue {
+    return this.valueSignal();
+  }
+  set value(val: CountrySelectValue) {
+    this.valueSignal.set(val);
   }
 
   get focused(): boolean {
@@ -229,11 +275,17 @@ export class CountrySelect
   }
 
   get empty(): boolean {
-    return !this._valueSignal();
+    const value = this.valueSignal();
+
+    if (Array.isArray(value)) {
+      return value.length === 0;
+    }
+
+    return !value;
   }
 
   get shouldLabelFloat(): boolean {
-    return this._focusedSignal() || !this.empty;
+    return this.focused || !this.empty;
   }
 
   get errorState(): boolean {
@@ -261,8 +313,8 @@ export class CountrySelect
     this.ngsSelect().open();
   }
 
-  writeValue(value: string | null): void {
-    this._valueSignal.set(value);
+  writeValue(value: CountrySelectValue): void {
+    this.valueSignal.set(value);
   }
 
   registerOnChange(fn: any): void {
@@ -284,6 +336,7 @@ export class CountrySelect
   onSelectionChange(event: SelectChange): void {
     this.value = event.value;
     this.onTouchedFn();
+    this.selectionChange.emit(event);
   }
 
   clearSearch(event: MouseEvent): void {
@@ -325,7 +378,8 @@ export class CountrySelect
 
   private getInitialVisibleCountryCount(): number {
     const countries = this.filteredCountries();
-    const selectedCountryCode = this._valueSignal();
+    const value = this.valueSignal();
+    const selectedCountryCode = Array.isArray(value) ? value[0] : value;
 
     if (!selectedCountryCode) {
       return CountrySelect.COUNTRY_RENDER_CHUNK_SIZE;

@@ -13,8 +13,11 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { RadioButton } from '../radio-button/radio-button';
 
+export type RadioGroupOrientation = 'horizontal' | 'vertical';
+
 @Component({
   selector: 'ngs-radio-group',
+  exportAs: 'ngsRadioGroup',
   templateUrl: './radio-group.html',
   styleUrl: './radio-group.scss',
   providers: [
@@ -28,6 +31,8 @@ import { RadioButton } from '../radio-button/radio-button';
     'class': 'ngs-radio-group',
     '[attr.role]': '"radiogroup"',
     '[attr.aria-disabled]': 'disabled()',
+    '[class.ngs-radio-group-horizontal]': 'orientation() === "horizontal"',
+    '[class.ngs-radio-group-vertical]': 'orientation() === "vertical"',
   },
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,6 +43,7 @@ export class RadioGroup implements ControlValueAccessor, AfterContentInit {
   disabled = model(false);
 
   name = input<string>();
+  orientation = input<RadioGroupOrientation>('horizontal');
   value = model<any>();
 
   readonly change = output<any>();
