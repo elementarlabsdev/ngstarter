@@ -174,7 +174,6 @@ const LIBRARY_TITLES: Record<string, SeoTitleConfig> = {
     apiDetail: 'Inputs, Types and Server-side Data',
     apiKind: null,
   },
-  'form-renderer': { label: 'Form Renderer', detail: 'Schema-driven Forms', apiKind: null },
   'form-builder': { label: 'Form Builder', detail: 'Drag and Drop Schema Forms', apiKind: null },
   'image-designer': { label: 'Image Designer', detail: 'Visual Image Editing', apiKind: null },
   'kanban-board': { label: 'Kanban Board', detail: 'Workflow Boards', apiKind: null },
@@ -289,7 +288,7 @@ export class DocsTitleStrategy extends TitleStrategy {
         return this.metadata(
           'Angular UI Libraries',
           'Data Grids, Editors, and Builders',
-          'Explore NgStarter Angular UI libraries for data grids, schema-driven forms, kanban boards, visual builders, content editors, PDF viewers, and media players.',
+          'Explore NgStarter Angular UI libraries for data grids, form builders, kanban boards, visual builders, content editors, PDF viewers, and media players.',
         );
       }
 

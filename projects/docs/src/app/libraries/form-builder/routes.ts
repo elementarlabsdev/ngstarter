@@ -21,6 +21,11 @@ export const routes: Routes = [
         path: 'api',
         loadComponent: () => import('./api/api').then(m => m.Api),
         title: 'Form Builder / Api'
+      },
+      {
+        path: 'form-renderer',
+        loadComponent: () => import('./form-renderer/renderer').then(m => m.Renderer),
+        title: 'Form Builder / Form Renderer'
       }
     ]
   }

@@ -87,6 +87,83 @@
       </ngs-form-field>
     }
 
+    @case ('time') {
+      <ngs-form-field>
+        <ngs-label>{{ field().label }}</ngs-label>
+        <input ngsInput
+               [ngsTimepicker]="timePicker"
+               [formControl]="control()"
+               [placeholder]="field().placeholder || ''"
+               [readonly]="readonly() || field().readonly">
+        <ngs-timepicker-toggle ngsIconButtonSuffix [for]="timePicker"/>
+        <ngs-timepicker #timePicker/>
+        @if (field().hint) {
+          <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+      </ngs-form-field>
+    }
+
+    @case ('date-range') {
+      <ngs-form-field>
+        <ngs-label>{{ field().label }}</ngs-label>
+        <ngs-date-range-input #rangeInput [rangePicker]="rangePicker">
+          <input ngsStartDate
+                 [value]="dateRangeStartValue()"
+                 [placeholder]="field().placeholder || 'Start date'"
+                 [readonly]="readonly() || field().readonly"
+                 [disabled]="dateRangeDisabled()"
+                 (input)="onDateRangeChanged(rangeInput)">
+          <input ngsEndDate
+                 [value]="dateRangeEndValue()"
+                 placeholder="End date"
+                 [readonly]="readonly() || field().readonly"
+                 [disabled]="dateRangeDisabled()"
+                 (input)="onDateRangeChanged(rangeInput)">
+        </ngs-date-range-input>
+        <ngs-datepicker-toggle ngsIconButtonSuffix [for]="rangePicker"/>
+        <ngs-date-range-picker #rangePicker/>
+        @if (field().hint) {
+          <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+      </ngs-form-field>
+    }
+
+    @case ('upload') {
+      <div class="ngs-form-builder-upload-field"
+           [class.is-disabled]="uploadDisabled()">
+        <span class="ngs-form-builder-choice-label">{{ field().label }}</span>
+        <ngs-upload-area ngsUploadTrigger
+                         [accept]="uploadAccept()"
+                         [multiple]="field().multiple ?? false"
+                         (fileSelected)="onUploadFilesSelected($event)">
+          <ngs-icon name="fluent:arrow-upload-24-regular" ngsUploadAreaIcon/>
+          <ng-container ngsUploadAreaMainState>
+            {{ uploadSelectedText() }}
+          </ng-container>
+          <ng-container ngsUploadAreaDropState>
+            Drop files here
+          </ng-container>
+          <ng-container ngsUploadAreaInvalidState>
+            Invalid file type
+          </ng-container>
+        </ngs-upload-area>
+        @if (field().hint) {
+          <span class="ngs-form-builder-choice-hint">{{ field().hint }}</span>
+        }
+      </div>
+    }
+
+    @case ('spacer') {
+      <div class="ngs-form-builder-spacer"
+           [class.is-height-8]="spacerHeight() === 8"
+           [class.is-height-16]="spacerHeight() === 16"
+           [class.is-height-24]="spacerHeight() === 24"
+           [class.is-height-32]="spacerHeight() === 32"
+           [class.is-height-48]="spacerHeight() === 48"
+           [class.is-height-64]="spacerHeight() === 64"
+           aria-hidden="true"></div>
+    }
+
     @case ('timezone-select') {
       <ngs-form-field>
         <ngs-label>{{ field().label }}</ngs-label>

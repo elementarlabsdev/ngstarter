@@ -9,6 +9,7 @@ import { SlideToggle, SlideToggleGroup } from '@ngstarter-ui/components/slide-to
 import { FormBuilderField, FormBuilderFieldWidth, FormBuilderOption } from '../../types';
 
 type RadioOrientation = 'vertical' | 'horizontal';
+type SpacerHeight = 8 | 16 | 24 | 32 | 48 | 64;
 
 @Component({
   selector: 'ngs-basic-form-builder-field-settings',
@@ -45,12 +46,17 @@ export class BasicFormBuilderFieldSettings {
   });
   protected readonly fieldWidthOptions: FormBuilderFieldWidth[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   protected readonly radioOrientationOptions: RadioOrientation[] = ['vertical', 'horizontal'];
+  protected readonly spacerHeightOptions: SpacerHeight[] = [8, 16, 24, 32, 48, 64];
   protected readonly hasCheckedState = computed(() => ['checkbox', 'toggle'].includes(this.field().type));
-  protected readonly hasPlaceholder = computed(() => !['checkbox', 'toggle', 'radio'].includes(this.field().type));
+  protected readonly hasPlaceholder = computed(() => !['checkbox', 'toggle', 'radio', 'spacer'].includes(this.field().type));
   protected readonly hasOptions = computed(() => ['select', 'radio', 'checkbox-list'].includes(this.field().type));
   protected readonly hasClearable = computed(() => ['select', 'country-select'].includes(this.field().type));
+  protected readonly hasMultiple = computed(() => ['select', 'upload'].includes(this.field().type));
   protected readonly isSelect = computed(() => this.field().type === 'select');
+  protected readonly isUpload = computed(() => this.field().type === 'upload');
   protected readonly isRadio = computed(() => this.field().type === 'radio');
+  protected readonly isSpacer = computed(() => this.field().type === 'spacer');
+  protected readonly hasBehaviorToggles = computed(() => !this.isSpacer());
   protected readonly radioOrientation = computed<RadioOrientation>(() =>
     this.field().settings?.['orientation'] === 'horizontal' ? 'horizontal' : 'vertical'
   );
@@ -82,6 +88,27 @@ export class BasicFormBuilderFieldSettings {
 
   protected patch(changes: Partial<FormBuilderField>): void {
     this.update()(changes);
+  }
+
+  protected patchSettings(changes: Record<string, any>): void {
+    this.patch({
+      settings: {
+        ...this.field().settings,
+        ...changes
+      }
+    });
+  }
+
+  protected patchMultiple(multiple: boolean): void {
+    if (this.field().type === 'select') {
+      this.patchSelectMultiple(multiple);
+      return;
+    }
+
+    this.patch({
+      multiple,
+      defaultValue: multiple ? [] : null
+    });
   }
 
   protected patchSelectMultiple(multiple: boolean): void {

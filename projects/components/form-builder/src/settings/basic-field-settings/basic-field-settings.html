@@ -7,13 +7,15 @@
            (ngModelChange)="patch({ label: $event })">
   </ngs-form-field>
 
-  <ngs-form-field>
-    <ngs-label>Field ID</ngs-label>
-    <input ngsInput
-           [ngModel]="field().name"
-           [ngModelOptions]="{standalone: true}"
-           (ngModelChange)="patch({ name: $event })">
-  </ngs-form-field>
+  @if (!isSpacer()) {
+    <ngs-form-field>
+      <ngs-label>Field ID</ngs-label>
+      <input ngsInput
+             [ngModel]="field().name"
+             [ngModelOptions]="{standalone: true}"
+             (ngModelChange)="patch({ name: $event })">
+    </ngs-form-field>
+  }
 
   @if (hasPlaceholder()) {
     <ngs-form-field>
@@ -25,13 +27,15 @@
     </ngs-form-field>
   }
 
-  <ngs-form-field>
-    <ngs-label>Hint</ngs-label>
-    <input ngsInput
-           [ngModel]="field().hint || ''"
-           [ngModelOptions]="{standalone: true}"
-           (ngModelChange)="patch({ hint: $event })">
-  </ngs-form-field>
+  @if (!isSpacer()) {
+    <ngs-form-field>
+      <ngs-label>Hint</ngs-label>
+      <input ngsInput
+             [ngModel]="field().hint || ''"
+             [ngModelOptions]="{standalone: true}"
+             (ngModelChange)="patch({ hint: $event })">
+    </ngs-form-field>
+  }
 
   <ngs-form-field>
     <ngs-label>Width</ngs-label>
@@ -44,49 +48,75 @@
     </ngs-select>
   </ngs-form-field>
 
-  <ngs-slide-toggle-group class="mb-4">
-    <ngs-slide-toggle [ngModel]="field().required ?? false"
-                      [ngModelOptions]="{standalone: true}"
-                      (ngModelChange)="patch({ required: $event })">
-      Required field
-    </ngs-slide-toggle>
-
-    <ngs-slide-toggle [ngModel]="field().readonly ?? false"
-                      [ngModelOptions]="{standalone: true}"
-                      (ngModelChange)="patch({ readonly: $event })">
-      Readonly
-    </ngs-slide-toggle>
-
-    <ngs-slide-toggle [ngModel]="field().disabled ?? false"
-                      [ngModelOptions]="{standalone: true}"
-                      (ngModelChange)="patch({ disabled: $event })">
-      Disabled
-    </ngs-slide-toggle>
-
-    @if (hasCheckedState()) {
-      <ngs-slide-toggle [ngModel]="field().defaultValue === true"
+  @if (hasBehaviorToggles()) {
+    <ngs-slide-toggle-group class="mb-4">
+      <ngs-slide-toggle [ngModel]="field().required ?? false"
                         [ngModelOptions]="{standalone: true}"
-                        (ngModelChange)="patch({ defaultValue: $event })">
-        Checked
+                        (ngModelChange)="patch({ required: $event })">
+        Required field
       </ngs-slide-toggle>
-    }
 
-    @if (isSelect()) {
-      <ngs-slide-toggle [ngModel]="field().multiple ?? false"
+      <ngs-slide-toggle [ngModel]="field().readonly ?? false"
                         [ngModelOptions]="{standalone: true}"
-                        (ngModelChange)="patchSelectMultiple($event)">
-        Multiple
+                        (ngModelChange)="patch({ readonly: $event })">
+        Readonly
       </ngs-slide-toggle>
-    }
 
-    @if (hasClearable()) {
-      <ngs-slide-toggle [ngModel]="field().clearable ?? false"
+      <ngs-slide-toggle [ngModel]="field().disabled ?? false"
                         [ngModelOptions]="{standalone: true}"
-                        (ngModelChange)="patch({ clearable: $event })">
-        Clearable
+                        (ngModelChange)="patch({ disabled: $event })">
+        Disabled
       </ngs-slide-toggle>
-    }
-  </ngs-slide-toggle-group>
+
+      @if (hasCheckedState()) {
+        <ngs-slide-toggle [ngModel]="field().defaultValue === true"
+                          [ngModelOptions]="{standalone: true}"
+                          (ngModelChange)="patch({ defaultValue: $event })">
+          Checked
+        </ngs-slide-toggle>
+      }
+
+      @if (hasMultiple()) {
+        <ngs-slide-toggle [ngModel]="field().multiple ?? false"
+                          [ngModelOptions]="{standalone: true}"
+                          (ngModelChange)="patchMultiple($event)">
+          Multiple
+        </ngs-slide-toggle>
+      }
+
+      @if (hasClearable()) {
+        <ngs-slide-toggle [ngModel]="field().clearable ?? false"
+                          [ngModelOptions]="{standalone: true}"
+                          (ngModelChange)="patch({ clearable: $event })">
+          Clearable
+        </ngs-slide-toggle>
+      }
+    </ngs-slide-toggle-group>
+  }
+
+  @if (isUpload()) {
+    <ngs-form-field>
+      <ngs-label>Accepted file types</ngs-label>
+      <input ngsInput
+             [ngModel]="field().settings?.['accept'] || ''"
+             [ngModelOptions]="{standalone: true}"
+             (ngModelChange)="patchSettings({ accept: $event })">
+      <ngs-hint>Use MIME types separated by commas, for example image/*,application/pdf.</ngs-hint>
+    </ngs-form-field>
+  }
+
+  @if (isSpacer()) {
+    <ngs-form-field>
+      <ngs-label>Height</ngs-label>
+      <ngs-select [ngModel]="field().settings?.['height'] ?? 24"
+                  [ngModelOptions]="{standalone: true}"
+                  (ngModelChange)="patchSettings({ height: $event })">
+        @for (height of spacerHeightOptions; track height) {
+          <ngs-option [value]="height">{{ height }}px</ngs-option>
+        }
+      </ngs-select>
+    </ngs-form-field>
+  }
 
   @if (isRadio()) {
     <ngs-form-field>

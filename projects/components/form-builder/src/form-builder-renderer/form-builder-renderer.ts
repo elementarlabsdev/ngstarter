@@ -12,7 +12,7 @@ import {
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
 import { DEFAULT_FORM_BUILDER_ITEMS, FORM_BUILDER_FIELDS, FORM_BUILDER_ITEMS, validatorsFromRules } from '../config';
-import { FormBuilderField, FormBuilderFieldDefinition, FormBuilderItemDefinition, FormBuilderLayoutItem, FormBuilderSchema, FormBuilderSection } from '../types';
+import { FormBuilderField, FormBuilderFieldDefinition, FormBuilderItemDefinition, FormBuilderLayoutItem, FormBuilderSchema, FormBuilderSection, FormBuilderUploadCallback } from '../types';
 import { FormBuilderFieldHost } from '../field-host/field-host';
 
 interface FormBuilderRendererCanvasItem extends FormBuilderLayoutItem {
@@ -21,8 +21,8 @@ interface FormBuilderRendererCanvasItem extends FormBuilderLayoutItem {
 }
 
 @Component({
-  selector: 'ngs-form-builder-renderer',
-  exportAs: 'ngsFormBuilderRenderer',
+  selector: 'ngs-form-renderer',
+  exportAs: 'ngsFormRenderer',
   imports: [
     NgTemplateOutlet,
     ReactiveFormsModule,
@@ -33,7 +33,7 @@ interface FormBuilderRendererCanvasItem extends FormBuilderLayoutItem {
   styleUrl: './form-builder-renderer.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    'class': 'ngs-form-builder-renderer'
+    'class': 'ngs-form-renderer'
   }
 })
 export class FormBuilderRenderer {
@@ -45,6 +45,7 @@ export class FormBuilderRenderer {
   readonly readonly = input(false);
   readonly showSubmit = input(true);
   readonly submitLabel = input('Submit');
+  readonly uploadCallback = input<FormBuilderUploadCallback | null | undefined>(undefined);
   readonly value = model<Record<string, any>>({});
   readonly formSubmit = output<Record<string, any>>();
   readonly formReady = output<FormGroup>();
@@ -195,6 +196,10 @@ export class FormBuilderRenderer {
   private fieldInitialValue(field: FormBuilderField): any {
     if (field.defaultValue !== undefined) {
       return field.defaultValue;
+    }
+
+    if (field.type === 'upload') {
+      return field.multiple ? [] : null;
     }
 
     const selectedValues = (field.options ?? [])

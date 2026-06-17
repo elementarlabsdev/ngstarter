@@ -265,11 +265,6 @@ export class Overview {
       name: 'File Type'
     },
     {
-      routerLink: '/libraries/form-renderer',
-      imageUrl: 'assets/overview/form-renderer.svg',
-      name: 'Form Renderer'
-    },
-    {
       routerLink: '/components/gauge',
       imageUrl: 'assets/overview/gauge.svg',
       name: 'Gauge'

@@ -21,9 +21,6 @@ import {
 } from '@ngstarter-ui/components/core';
 import { LayoutSidebarStore } from '@ngstarter-ui/components/layout';
 import { ColorSchemeStore } from '@ngstarter-ui/components/color-scheme';
-import {
-  FORM_RENDERER_FIELD_REGISTRY,
-} from '@ngstarter-ui/components/form-renderer';
 import { DocsTitleStrategy } from './seo/docs-title-strategy';
 
 export const appConfig: ApplicationConfig = {
@@ -65,15 +62,6 @@ export const appConfig: ApplicationConfig = {
       useValue: {
         pageTitle: 'NgStarter',
         siteUrl: 'https://docs.ngstarter.com',
-      }
-    },
-    {
-      provide: FORM_RENDERER_FIELD_REGISTRY,
-      useValue: {
-        // some field and import, for example
-        // myAutocomplete: () =>
-        //   import('./my-autocomplete-field/my-autocomplete-field')
-        //     .then(c => c.MyAutocompleteField)
       }
     },
     {

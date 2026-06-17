@@ -119,6 +119,7 @@
             [field]="field"
             [control]="previewControl(field)"
             [definitions]="definitions()"
+            [uploadCallback]="uploadCallback()"
             [readonly]="true"
             [editableCanvas]="true"/>
         </div>
@@ -366,6 +367,7 @@
                     [field]="field"
                     [control]="previewControl(field)"
                     [definitions]="definitions()"
+                    [uploadCallback]="uploadCallback()"
                     [readonly]="true"
                     [editableCanvas]="true"/>
                 </div>
@@ -478,8 +480,9 @@
 <ng-template #previewDialog>
   <h3 ngs-dialog-title>{{ schema().title || 'Form preview' }}</h3>
   <ngs-dialog-content class="ngs-form-builder-preview-dialog-content">
-    <ngs-form-builder-renderer
+    <ngs-form-renderer
       [schema]="schema()"
+      [uploadCallback]="uploadCallback()"
       [showSubmit]="false"/>
   </ngs-dialog-content>
   <ngs-dialog-actions align="end">

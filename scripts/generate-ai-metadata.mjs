@@ -279,9 +279,19 @@ const curatedGuidance = new Map(Object.entries({
     purpose: 'Wrap one form control with the standard NgStarter field layout, label, hint, error, and prefix/suffix slots.',
     useWhen: 'Use one ngs-form-field around one form control: input ngsInput, textarea ngsInput, ngs-select, ngs-autocomplete input, datepicker input, CountrySelect, CurrencySelect, DateFormatSelect, PhoneInput, NumberInput, and custom controls that implement FormFieldControl. Use ngs-label for labels, ngs-hint for helper text, ngs-error for validation messages, and ngsIconPrefix/ngsIconButtonPrefix/ngsTextPrefix/ngsIconSuffix/ngsIconButtonSuffix/ngsTextSuffix for field adornments. For groups of fields, use TailwindCSS grid/flex/layout classes around multiple form fields; each individual control still gets its own ngs-form-field. Do not use ngs-form-field as a layout container, card, spacing wrapper, or wrapper around non-form UI. Do not wrap checkbox, radio, button, or toggle controls when they have their own label pattern.',
   },
-  'form-renderer': {
-    purpose: 'Render backend-driven or config-driven forms from a FormConfig.',
-    useWhen: 'Use when the backend or an admin configuration defines the form structure: dynamic settings, surveys, onboarding schemas, profile or config forms, CMS forms, tenant-specific forms, and feature-specific forms where fields can change without editing the Angular template. FormRenderer creates a FormGroup, renders fields from elements, places them through layout, applies validators and crossValidators, handles initialValue, visibleWhen, disabled state, content blocks, and emits valueChanges, formSubmit, and initialized. Do not use for ordinary static forms where fields are known in Angular code; build those manually with TailwindCSS grid/flex layout and one ngs-form-field per control. Do not use as a replacement for FormField, a wizard/stepper workflow, or an arbitrary page builder.',
+  'form-builder': {
+    schemaFormat: [
+      'FormBuilderSchema shape: { title?: string; fields?: FormBuilderField[]; layout?: FormBuilderLayoutItem[]; sections: FormBuilderSection[] }.',
+      'Root-level fields live in schema.fields and can be placed outside sections. Sections live in schema.sections and contain section.fields. The optional schema.layout array controls top-level canvas order with items like { kind: "field" | "section", id }.',
+      'FormBuilderSection shape: { id: string; title: string; description?: string; collapsed?: boolean; fields: FormBuilderField[] }.',
+      'FormBuilderField shape: { id: string; name: string; type: string; kind?: "field" | "layout" | "static"; label: string; placeholder?: string; hint?: string; defaultValue?: any; width?: 1..12; multiple?: boolean; clearable?: boolean; required?: boolean; disabled?: boolean; readonly?: boolean; options?: FormBuilderOption[]; validation?: FormBuilderValidationRule[]; visibility?: { form?: boolean; email?: boolean; pdf?: boolean; condition?: string }; settings?: Record<string, any>; children?: FormBuilderField[] }.',
+      'Layout blocks are represented as fields with kind: "layout". The built-in group block uses type: "group", width: 12, and children: FormBuilderField[]. Section is a top-level FormBuilderSection, not a child field, and should not be nested inside another section/group.',
+      'Static blocks are represented as fields with kind: "static". The built-in spacer block uses type: "spacer", width: 12, and settings.height with one of 8, 16, 24, 32, 48, or 64.',
+      'Use width as a 12-column span. Default fields are 12 columns unless a narrower width is set. Nested children in group are sorted and rendered inside that group container.',
+      'Option fields use options entries { label: string; value: any; selected?: boolean }. For select, multiple controls array values; clearable enables the clear action. For radio, settings.orientation is "vertical" by default and can be "horizontal". Date and time fields include type: "date" for a single date, type: "time" for HH:mm time values, and type: "date-range" for a DateRange-like value with start/end dates. Upload fields use type: "upload", multiple for File[] values, and settings.accept for comma-separated MIME types such as "*/*" or "image/*,application/pdf". Upload handling can be provided with [uploadCallback] on ngs-form-builder/ngs-form-renderer or globally through provideFormBuilder({ uploadCallback }). The callback receives { field, control, event, files, fileList, multiple } and may return sync/async value stored in the form control.',
+      'Use <ngs-form-renderer> from @ngstarter-ui/components/form-builder to render a saved FormBuilderSchema as a runtime form. The Angular class export is FormBuilderRenderer.',
+      'Register custom placeholders through provideFormBuilder({ fields/items/settings }) using formBuilderField(), formBuilderItem(), and formBuilderSettings(). Custom field definitions can provide defaults, renderer, settings, validators, acceptsChildren, group, icon, and kind.',
+    ],
   },
   gauge: {
     purpose: 'Visualize one compact 0–100 percentage-like value as a circular radial metric.',
@@ -585,7 +595,7 @@ const curatedGuidance = new Map(Object.entries({
   },
   'visual-builder': {
     purpose: 'Experimental scaffold for a future no-code or low-code visual workspace.',
-    useWhen: 'Do not use ngs-visual-builder for production admin screens, dashboards, visual editors, page builders, or real no-code/low-code workflows yet. The current component is only a placeholder: it has no inputs, outputs, layout regions, canvas, drag and drop, inspector, persistence, or editable block model. Mention it only as an experimental scaffold for future visual builder work. Use ContentEditor for block-based CMS/page content, ImageDesigner for creative image composition, Tiles for editable dashboard widgets or config-driven dashboard renderers, Grid for static dashboard layouts, FormRenderer for backend-driven forms, KanbanBoard for workflow columns, and normal NgStarter layout/components for admin screens.',
+    useWhen: 'Do not use ngs-visual-builder for production admin screens, dashboards, visual editors, page builders, or real no-code/low-code workflows yet. The current component is only a placeholder: it has no inputs, outputs, layout regions, canvas, drag and drop, inspector, persistence, or editable block model. Mention it only as an experimental scaffold for future visual builder work. Use ContentEditor for block-based CMS/page content, ImageDesigner for creative image composition, Tiles for editable dashboard widgets or config-driven dashboard renderers, Grid for static dashboard layouts, Form Builder for schema-driven forms, KanbanBoard for workflow columns, and normal NgStarter layout/components for admin screens.',
   },
 }));
 
@@ -940,6 +950,7 @@ async function buildRegistry() {
       docsOverviewSource: overview?.source || null,
       purpose,
       useWhen,
+      ...(guidance.schemaFormat ? { schemaFormat: guidance.schemaFormat } : {}),
       exampleTopics: overview?.exampleTopics || [],
       minimalExample: overview?.examples?.[0]?.source || priorityExamples.get(name) || null,
       exampleFiles: overview?.examples || [],
@@ -1087,6 +1098,12 @@ function buildLlms(registry, full = false) {
       }
       if (component.cssTokens.length) {
         lines.push(`  tokens: ${component.cssTokens.slice(0, 16).map(token => `\`${token}\``).join(', ')}`);
+      }
+      if (component.schemaFormat?.length) {
+        lines.push('  schema format:');
+        for (const item of component.schemaFormat) {
+          lines.push(`  - ${item}`);
+        }
       }
     }
   }

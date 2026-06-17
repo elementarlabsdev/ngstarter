@@ -48,6 +48,12 @@ export class Api {
       description: 'Title shown above the field settings inspector.',
       type: 'string',
       default: 'Field properties'
+    },
+    {
+      name: 'uploadCallback',
+      description: 'Optional upload handler used by upload fields. Overrides the global provider callback.',
+      type: 'FormBuilderUploadCallback | null',
+      default: 'undefined'
     }
   ];
 
@@ -99,6 +105,12 @@ export class Api {
       description: 'Text for the built-in submit button.',
       type: 'string',
       default: 'Submit'
+    },
+    {
+      name: 'uploadCallback',
+      description: 'Optional upload handler used by upload fields. Overrides the global provider callback.',
+      type: 'FormBuilderUploadCallback | null',
+      default: 'undefined'
     }
   ];
 
@@ -118,7 +130,7 @@ export class Api {
   readonly providers = [
     {
       name: 'provideFormBuilder',
-      description: 'Environment provider for custom field definitions and settings definitions.',
+      description: 'Environment provider for custom field definitions, settings definitions, and a global uploadCallback.',
       type: 'EnvironmentProviders'
     },
     {

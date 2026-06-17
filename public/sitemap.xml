@@ -2,47 +2,47 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://ngstarter.com/</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <priority>1.00</priority>
   </url>
   <url>
     <loc>https://ngstarter.com/pricing</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://ngstarter.com/templates</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://ngstarter.com/blog</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://ngstarter.com/blog/basic-application-layout</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://ngstarter.com/blog/angular-panel-layout</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://ngstarter.com/license</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <priority>0.30</priority>
   </url>
   <url>
     <loc>https://ngstarter.com/terms</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <priority>0.30</priority>
   </url>
   <url>
     <loc>https://ngstarter.com/privacy</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <priority>0.30</priority>
   </url>
 </urlset>

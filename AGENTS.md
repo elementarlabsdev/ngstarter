@@ -113,8 +113,8 @@ Required admin mappings:
   `@ngstarter-ui/components/color-picker`.
 - Input validation helpers: validators and validator options from
   `@ngstarter-ui/components/input-validator`.
-- Generated or schema-driven forms: `FormRenderer` and related field/layout configs from
-  `@ngstarter-ui/components/form-renderer`.
+- Generated or schema-driven forms: `FormBuilderRenderer` and related schema configs from
+  `@ngstarter-ui/components/form-builder`.
 - Pagination: `Paginator`.
 - Actions: `Button` and `Icon`.
 - Action menus, command menus, and contextual action lists: `Menu`, `MenuItem`, `MenuHeader`,

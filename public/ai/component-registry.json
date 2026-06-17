@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate-ai-metadata.mjs",
   "package": "@ngstarter-ui/components",
   "description": "AI-readable registry for NgStarter UI Angular secondary entry points.",
-  "componentCount": 127,
+  "componentCount": 126,
   "conventions": {
     "importPattern": "@ngstarter-ui/components/<component>",
     "selectorPrefix": "ngs",
@@ -4365,6 +4365,18 @@
       "docsOverviewSource": "projects/docs/src/app/libraries/form-builder/overview/overview.html",
       "purpose": "The NgStarter Angular Form Builder library provides a drag-and-drop form designer, schema model, runtime renderer, and provider registration API for custom field types and field-specific settings.",
       "useWhen": "Choose Form Builder when the workflow matches examples such as Basic form builder, Custom field registration, Form builder renderer.",
+      "schemaFormat": [
+        "FormBuilderSchema shape: { title?: string; fields?: FormBuilderField[]; layout?: FormBuilderLayoutItem[]; sections: FormBuilderSection[] }.",
+        "Root-level fields live in schema.fields and can be placed outside sections. Sections live in schema.sections and contain section.fields. The optional schema.layout array controls top-level canvas order with items like { kind: \"field\" | \"section\", id }.",
+        "FormBuilderSection shape: { id: string; title: string; description?: string; collapsed?: boolean; fields: FormBuilderField[] }.",
+        "FormBuilderField shape: { id: string; name: string; type: string; kind?: \"field\" | \"layout\" | \"static\"; label: string; placeholder?: string; hint?: string; defaultValue?: any; width?: 1..12; multiple?: boolean; clearable?: boolean; required?: boolean; disabled?: boolean; readonly?: boolean; options?: FormBuilderOption[]; validation?: FormBuilderValidationRule[]; visibility?: { form?: boolean; email?: boolean; pdf?: boolean; condition?: string }; settings?: Record<string, any>; children?: FormBuilderField[] }.",
+        "Layout blocks are represented as fields with kind: \"layout\". The built-in group block uses type: \"group\", width: 12, and children: FormBuilderField[]. Section is a top-level FormBuilderSection, not a child field, and should not be nested inside another section/group.",
+        "Static blocks are represented as fields with kind: \"static\". The built-in spacer block uses type: \"spacer\", width: 12, and settings.height with one of 8, 16, 24, 32, 48, or 64.",
+        "Use width as a 12-column span. Default fields are 12 columns unless a narrower width is set. Nested children in group are sorted and rendered inside that group container.",
+        "Option fields use options entries { label: string; value: any; selected?: boolean }. For select, multiple controls array values; clearable enables the clear action. For radio, settings.orientation is \"vertical\" by default and can be \"horizontal\". Date and time fields include type: \"date\" for a single date, type: \"time\" for HH:mm time values, and type: \"date-range\" for a DateRange-like value with start/end dates. Upload fields use type: \"upload\", multiple for File[] values, and settings.accept for comma-separated MIME types such as \"*/*\" or \"image/*,application/pdf\". Upload handling can be provided with [uploadCallback] on ngs-form-builder/ngs-form-renderer or globally through provideFormBuilder({ uploadCallback }). The callback receives { field, control, event, files, fileList, multiple } and may return sync/async value stored in the form control.",
+        "Use <ngs-form-renderer> from @ngstarter-ui/components/form-builder to render a saved FormBuilderSchema as a runtime form. The Angular class export is FormBuilderRenderer.",
+        "Register custom placeholders through provideFormBuilder({ fields/items/settings }) using formBuilderField(), formBuilderItem(), and formBuilderSettings(). Custom field definitions can provide defaults, renderer, settings, validators, acceptsChildren, group, icon, and kind."
+      ],
       "exampleTopics": [
         "Basic form builder",
         "Custom field registration",
@@ -4388,7 +4400,7 @@
           "name": "form-builder-renderer-example",
           "title": "Form builder renderer",
           "file": "projects/docs/src/app/libraries/form-builder/_examples/form-builder-renderer-example/form-builder-renderer-example.html",
-          "source": "<div class=\"grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]\">\n  <ngs-form-builder-renderer\n    [schema]=\"schema\"\n    [(value)]=\"value\"\n    submitLabel=\"Save profile\"\n    (formSubmit)=\"submittedValue.set($event)\"/>\n  <ngs-card>\n    <ngs-card-header>\n      <ngs-card-title>Submitted value</ngs-card-title>\n    </ngs-card-header>\n    <ngs-card-content>\n      <pre>{{ submittedValue() || value() | json }}</pre>\n    </ngs-card-content>\n  </ngs-card>\n</div>"
+          "source": "<div class=\"grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]\">\n  <ngs-form-renderer\n    [schema]=\"schema\"\n    [(value)]=\"value\"\n    submitLabel=\"Save profile\"\n    (formSubmit)=\"submittedValue.set($event)\"/>\n  <ngs-card>\n    <ngs-card-header>\n      <ngs-card-title>Submitted value</ngs-card-title>\n    </ngs-card-header>\n    <ngs-card-content>\n      <pre>{{ submittedValue() || value() | json }}</pre>\n    </ngs-card-content>\n  </ngs-card>\n</div>"
         }
       ],
       "previewAsset": null,
@@ -4398,8 +4410,8 @@
         "ngs-basic-form-builder-section-settings",
         "ngs-form-builder",
         "ngs-form-builder-field-host",
-        "ngs-form-builder-renderer",
-        "ngs-form-builder-settings-host"
+        "ngs-form-builder-settings-host",
+        "ngs-form-renderer"
       ],
       "exportedSymbols": [
         "BasicFormBuilderFieldSettings",
@@ -4411,6 +4423,7 @@
         "FORM_BUILDER_FIELDS",
         "FORM_BUILDER_ITEMS",
         "FORM_BUILDER_SETTINGS",
+        "FORM_BUILDER_UPLOAD_CALLBACK",
         "FormBuilder",
         "FormBuilderComponentImporter",
         "formBuilderField",
@@ -4434,6 +4447,8 @@
         "FormBuilderSettingsContext",
         "FormBuilderSettingsDefinition",
         "FormBuilderSettingsHost",
+        "FormBuilderUploadCallback",
+        "FormBuilderUploadContext",
         "FormBuilderValidationRule",
         "FormBuilderVisibility",
         "provideFormBuilder",
@@ -4451,7 +4466,8 @@
         "section",
         "settingsDefinitions",
         "showSubmit",
-        "submitLabel"
+        "submitLabel",
+        "uploadCallback"
       ],
       "outputs": [
         "fieldAdded",
@@ -4471,6 +4487,7 @@
         "--ngs-color-surface",
         "--ngs-color-surface-container-low",
         "--ngs-color-surface-container-lowest",
+        "--ngs-field-radius",
         "--ngs-font-size-base",
         "--ngs-font-size-lg",
         "--ngs-font-size-sm",
@@ -4484,7 +4501,9 @@
         "--ngs-tree-node-drop-line-color",
         "--ngs-tree-node-drop-target-bg",
         "--ngs-tree-node-drop-target-outline",
-        "--ngs-tree-node-gap"
+        "--ngs-tree-node-gap",
+        "--ngs-upload-area-border-radius",
+        "--ngs-upload-area-padding"
       ],
       "example": null
     },
@@ -4586,100 +4605,6 @@
         "--ngs-state-disabled-bg",
         "--ngs-state-disabled-border",
         "--ngs-state-disabled-color"
-      ],
-      "example": null
-    },
-    {
-      "name": "form-renderer",
-      "title": "Form Renderer",
-      "overviewName": "Form Renderer",
-      "category": "libraries",
-      "package": "@ngstarter-ui/components",
-      "importPath": "@ngstarter-ui/components/form-renderer",
-      "publicApi": "projects/components/form-renderer/public-api.ts",
-      "sourceRoot": "projects/components/form-renderer/src",
-      "docsPath": "/libraries/form-renderer",
-      "docsOverviewSource": "projects/docs/src/app/libraries/form-renderer/overview/overview.html",
-      "purpose": "Render backend-driven or config-driven forms from a FormConfig.",
-      "useWhen": "Use when the backend or an admin configuration defines the form structure: dynamic settings, surveys, onboarding schemas, profile or config forms, CMS forms, tenant-specific forms, and feature-specific forms where fields can change without editing the Angular template. FormRenderer creates a FormGroup, renders fields from elements, places them through layout, applies validators and crossValidators, handles initialValue, visibleWhen, disabled state, content blocks, and emits valueChanges, formSubmit, and initialized. Do not use for ordinary static forms where fields are known in Angular code; build those manually with TailwindCSS grid/flex layout and one ngs-form-field per control. Do not use as a replacement for FormField, a wizard/stepper workflow, or an arbitrary page builder.",
-      "exampleTopics": [
-        "Basic form renderer"
-      ],
-      "minimalExample": "<ngs-form-renderer #formRenderer\n  [config]=\"formConfig()\"\n  [initialValue]=\"initialValue()\"\n  (valueChanges)=\"onValueChanges($event)\"\n  (formSubmit)=\"onFormSubmit($event)\" />\n<div class=\"mt-3\">\n  <button ngsButton=\"filled\" (click)=\"formRenderer.submit()\">Submit</button>\n</div>\n@if(submittedData()) {\n  <div class=\"font-bold mb-3 mt-6\">Submitted data:</div>\n  <pre>{{ submittedData() | json }}</pre>\n}",
-      "exampleFiles": [
-        {
-          "name": "basic-form-renderer-example",
-          "title": "Basic form renderer",
-          "file": "projects/docs/src/app/libraries/form-renderer/_examples/basic-form-renderer-example/basic-form-renderer-example.html",
-          "source": "<ngs-form-renderer #formRenderer\n  [config]=\"formConfig()\"\n  [initialValue]=\"initialValue()\"\n  (valueChanges)=\"onValueChanges($event)\"\n  (formSubmit)=\"onFormSubmit($event)\" />\n<div class=\"mt-3\">\n  <button ngsButton=\"filled\" (click)=\"formRenderer.submit()\">Submit</button>\n</div>\n@if(submittedData()) {\n  <div class=\"font-bold mb-3 mt-6\">Submitted data:</div>\n  <pre>{{ submittedData() | json }}</pre>\n}"
-        }
-      ],
-      "previewAsset": "projects/components/form-renderer/preview.svg",
-      "selectors": [
-        "ngs-autocomplete-many-field",
-        "ngs-checkbox-field",
-        "ngs-component-loader",
-        "ngs-datepicker-field",
-        "ngs-divider-content",
-        "ngs-form-renderer",
-        "ngs-image-content",
-        "ngs-input-field",
-        "ngs-radio-group-field",
-        "ngs-select-field",
-        "ngs-text-content",
-        "ngs-textarea-field",
-        "ngs-timezone-field",
-        "ngs-toggle-field"
-      ],
-      "exportedSymbols": [
-        "AutocompleteManyField",
-        "CheckboxField",
-        "ComponentConfig",
-        "ComponentImporter",
-        "ComponentLoader",
-        "ComponentNode",
-        "ComponentRegistryService",
-        "ContentConfig",
-        "CrossValidatorFn",
-        "DatepickerField",
-        "DividerContent",
-        "FORM_RENDERER_FIELD_REGISTRY",
-        "FormConfig",
-        "FormFieldConfig",
-        "FormGeneratorService",
-        "FormRenderer",
-        "GridNode",
-        "ImageContent",
-        "InputField",
-        "LayoutNode",
-        "RadioGroupField",
-        "SelectField",
-        "TextareaField",
-        "TextContent",
-        "TimezoneField",
-        "ToggleField",
-        "ValidatorConfig",
-        "ValidatorRegistryService"
-      ],
-      "inputs": [
-        "colspan",
-        "componentConfig",
-        "config",
-        "control"
-      ],
-      "outputs": [
-        "formSubmit",
-        "initialized",
-        "valueChanges"
-      ],
-      "cssTokens": [
-        "--ngs-color-outline-variant",
-        "--ngs-font-size-xs",
-        "--ngs-form-field-outlined-label-text-color",
-        "--ngs-form-field-outlined-label-text-size",
-        "--ngs-form-field-subscript-text-size",
-        "--ngs-form-field-subscript-text-tracking",
-        "--ngs-form-field-subscript-text-weight"
       ],
       "example": null
     },
@@ -10957,7 +10882,7 @@
       "docsPath": "/libraries/visual-builder",
       "docsOverviewSource": "projects/docs/src/app/libraries/visual-builder/overview/overview.html",
       "purpose": "Experimental scaffold for a future no-code or low-code visual workspace.",
-      "useWhen": "Do not use ngs-visual-builder for production admin screens, dashboards, visual editors, page builders, or real no-code/low-code workflows yet. The current component is only a placeholder: it has no inputs, outputs, layout regions, canvas, drag and drop, inspector, persistence, or editable block model. Mention it only as an experimental scaffold for future visual builder work. Use ContentEditor for block-based CMS/page content, ImageDesigner for creative image composition, Tiles for editable dashboard widgets or config-driven dashboard renderers, Grid for static dashboard layouts, FormRenderer for backend-driven forms, KanbanBoard for workflow columns, and normal NgStarter layout/components for admin screens.",
+      "useWhen": "Do not use ngs-visual-builder for production admin screens, dashboards, visual editors, page builders, or real no-code/low-code workflows yet. The current component is only a placeholder: it has no inputs, outputs, layout regions, canvas, drag and drop, inspector, persistence, or editable block model. Mention it only as an experimental scaffold for future visual builder work. Use ContentEditor for block-based CMS/page content, ImageDesigner for creative image composition, Tiles for editable dashboard widgets or config-driven dashboard renderers, Grid for static dashboard layouts, Form Builder for schema-driven forms, KanbanBoard for workflow columns, and normal NgStarter layout/components for admin screens.",
       "exampleTopics": [
         "Visual Builder"
       ],

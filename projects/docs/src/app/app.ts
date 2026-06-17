@@ -987,26 +987,6 @@ export class App implements OnInit {
       ]
     },
     {
-      key: 'form-renderer',
-      type: 'group',
-      name: 'Form Renderer',
-      icon: 'fluent:form-24-regular',
-      children: [
-        {
-          key: uuid(),
-          type: 'link',
-          name: 'Overview',
-          link: '/libraries/form-renderer'
-        },
-        {
-          key: uuid(),
-          type: 'link',
-          name: 'Api',
-          link: '/libraries/form-renderer/api'
-        },
-      ]
-    },
-    {
       key: 'form-builder',
       type: 'group',
       name: 'Form Builder',
@@ -1023,6 +1003,12 @@ export class App implements OnInit {
           type: 'link',
           name: 'Examples',
           link: '/libraries/form-builder/examples'
+        },
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Renderer',
+          link: '/libraries/form-builder/form-renderer'
         },
         {
           key: uuid(),

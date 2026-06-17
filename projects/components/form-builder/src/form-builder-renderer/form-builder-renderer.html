@@ -1,8 +1,8 @@
 <ng-template #renderFields let-fields>
-  <div class="ngs-form-builder-renderer-grid">
+  <div class="ngs-form-renderer-grid">
     @for (field of fields; track field.id) {
       @if (isContainerField(field)) {
-        <section class="ngs-form-builder-renderer-grid-field">
+        <section class="ngs-form-renderer-grid-field">
           <header>
             <h4>{{ field.label }}</h4>
             @if (field.hint) {
@@ -19,6 +19,7 @@
           [field]="field"
           [control]="getControl(field)"
           [definitions]="definitions()"
+          [uploadCallback]="uploadCallback()"
           [readonly]="readonly()"/>
       }
     }
@@ -33,7 +34,7 @@
           [ngTemplateOutlet]="renderFields"
           [ngTemplateOutletContext]="{ $implicit: [item.field] }"/>
       } @else if (item.section; as section) {
-        <section class="ngs-form-builder-renderer-section">
+        <section class="ngs-form-renderer-section">
           @if (section.title || section.description) {
             <header>
               @if (section.title) {

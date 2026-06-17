@@ -117,7 +117,6 @@ Must use:
 - file-type: `@ngstarter-ui/components/file-type` docs: /components/file-type
 - filter-builder: `@ngstarter-ui/components/filter-builder` docs: /components/filter-builder
 - form-builder: `@ngstarter-ui/components/form-builder` docs: /libraries/form-builder
-- form-renderer: `@ngstarter-ui/components/form-renderer` docs: /libraries/form-renderer
 - gauge: `@ngstarter-ui/components/gauge` docs: /components/gauge
 - grid: `@ngstarter-ui/components/grid` docs: /components/grid
 - guided-tour: `@ngstarter-ui/components/guided-tour` docs: /components/guided-tour

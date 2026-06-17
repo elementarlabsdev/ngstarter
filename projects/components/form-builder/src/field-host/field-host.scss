@@ -72,6 +72,22 @@
     gap: --spacing(2);
   }
 
+  .ngs-form-builder-upload-field {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(2);
+
+    &.is-disabled {
+      pointer-events: none;
+      opacity: .7;
+    }
+
+    ngs-upload-area {
+      --ngs-upload-area-padding: --spacing(6);
+      --ngs-upload-area-border-radius: var(--ngs-field-radius);
+    }
+  }
+
   .ngs-form-builder-choice-label {
     color: var(--ngs-color-on-surface);
     font-size: var(--ngs-font-size-sm);
@@ -81,5 +97,33 @@
   .ngs-form-builder-choice-hint {
     color: var(--ngs-color-on-surface-variant);
     font-size: var(--ngs-font-size-xs);
+  }
+
+  .ngs-form-builder-spacer {
+    min-height: --spacing(6);
+
+    &.is-height-8 {
+      min-height: --spacing(2);
+    }
+
+    &.is-height-16 {
+      min-height: --spacing(4);
+    }
+
+    &.is-height-24 {
+      min-height: --spacing(6);
+    }
+
+    &.is-height-32 {
+      min-height: --spacing(8);
+    }
+
+    &.is-height-48 {
+      min-height: --spacing(12);
+    }
+
+    &.is-height-64 {
+      min-height: --spacing(16);
+    }
   }
 }

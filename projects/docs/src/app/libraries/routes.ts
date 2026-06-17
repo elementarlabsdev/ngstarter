@@ -7,7 +7,7 @@ export const routes: Routes = [
     loadComponent: () => import('../@meta/category-overview/category-overview').then(c => c.CategoryOverview),
     title: 'Angular UI Libraries',
     data: {
-      seoIntro: 'The NgStarter Angular UI libraries documentation covers advanced components for data grids, schema-driven forms, Kanban boards, visual builders, content editors, image design, PDF viewing, and video playback in complex admin and product workflows.'
+      seoIntro: 'The NgStarter Angular UI libraries documentation covers advanced components for data grids, form builders, Kanban boards, visual builders, content editors, image design, PDF viewing, and video playback in complex admin and product workflows.'
     }
   },
   {
@@ -19,11 +19,6 @@ export const routes: Routes = [
     path: 'data-view',
     loadChildren: () => import('./data-view/routes').then(m => m.routes),
     title: 'Data View'
-  },
-  {
-    path: 'form-renderer',
-    loadChildren: () => import('./form-renderer/routes').then(m => m.routes),
-    title: 'Form Renderer'
   },
   {
     path: 'form-builder',

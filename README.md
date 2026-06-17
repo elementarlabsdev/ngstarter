@@ -103,7 +103,6 @@ The documentation site includes live demos and API examples for each component:
 - [Currency Select](https://docs.ngstarter.com/forms/currency-select)
 - [Date Format Select](https://docs.ngstarter.com/forms/date-format-select)
 - [Filter Select](https://docs.ngstarter.com/forms/filter-select)
-- [Form Renderer](https://docs.ngstarter.com/forms/form-renderer)
 - [Inline Text Edit](https://docs.ngstarter.com/forms/inline-text-edit)
 - [Input](https://docs.ngstarter.com/forms/input)
 - [Input Mask](https://docs.ngstarter.com/forms/input-mask)
@@ -131,6 +130,7 @@ The documentation site includes live demos and API examples for each component:
 
 - [Content Editor](https://docs.ngstarter.com/libraries/content-editor)
 - [Data View](https://docs.ngstarter.com/libraries/data-view)
+- [Form Builder](https://docs.ngstarter.com/libraries/form-builder)
 - [Image Designer](https://docs.ngstarter.com/libraries/image-designer)
 - [Kanban Board](https://docs.ngstarter.com/libraries/kanban-board)
 - [Micro Charts](https://docs.ngstarter.com/micro-charts)

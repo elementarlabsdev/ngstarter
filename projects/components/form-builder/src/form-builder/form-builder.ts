@@ -26,7 +26,8 @@ import {
   FormBuilderFieldWidth,
   FormBuilderSchema,
   FormBuilderSection,
-  FormBuilderSettingsDefinition
+  FormBuilderSettingsDefinition,
+  FormBuilderUploadCallback
 } from '../types';
 import { FormBuilderFieldHost } from '../field-host/field-host';
 import { FormBuilderRenderer } from '../form-builder-renderer/form-builder-renderer';
@@ -142,6 +143,7 @@ export class FormBuilder {
   readonly schema = model<FormBuilderSchema>(createDefaultFormBuilderSchema());
   readonly paletteTitle = input('Fields');
   readonly inspectorTitle = input('Field properties');
+  readonly uploadCallback = input<FormBuilderUploadCallback | null | undefined>(undefined);
 
   readonly fieldSelected = output<FormBuilderFieldChange>();
   readonly fieldAdded = output<FormBuilderFieldChange>();
@@ -1410,6 +1412,10 @@ export class FormBuilder {
   private fieldInitialValue(field: FormBuilderField): any {
     if (field.defaultValue !== undefined) {
       return field.defaultValue;
+    }
+
+    if (field.type === 'upload') {
+      return field.multiple ? [] : null;
     }
 
     const selectedValues = (field.options ?? [])

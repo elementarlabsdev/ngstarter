@@ -5,6 +5,7 @@ import {
   FormBuilderFieldDefinition,
   FormBuilderItemDefinition,
   FormBuilderSettingsDefinition,
+  FormBuilderUploadCallback,
   FormBuilderValidationRule
 } from './types';
 
@@ -16,6 +17,9 @@ export const FORM_BUILDER_FIELDS =
 
 export const FORM_BUILDER_SETTINGS =
   new InjectionToken<FormBuilderSettingsDefinition[]>('FORM_BUILDER_SETTINGS');
+
+export const FORM_BUILDER_UPLOAD_CALLBACK =
+  new InjectionToken<FormBuilderUploadCallback>('FORM_BUILDER_UPLOAD_CALLBACK');
 
 export function formBuilderField(definition: FormBuilderFieldDefinition): FormBuilderFieldDefinition {
   return definition;
@@ -33,8 +37,13 @@ export function provideFormBuilder(config: {
   items?: FormBuilderItemDefinition[];
   fields?: FormBuilderFieldDefinition[];
   settings?: FormBuilderSettingsDefinition[];
+  uploadCallback?: FormBuilderUploadCallback;
 } = {}): EnvironmentProviders {
   return makeEnvironmentProviders([
+    ...(config.uploadCallback ? [{
+      provide: FORM_BUILDER_UPLOAD_CALLBACK,
+      useValue: config.uploadCallback
+    }] : []),
     ...(config.items ?? []).map(item => ({
       provide: FORM_BUILDER_ITEMS,
       useValue: item,
@@ -112,6 +121,22 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     }
   },
   {
+    type: 'spacer',
+    label: 'Spacer',
+    kind: 'static',
+    group: 'Layout',
+    icon: 'fluent:resize-large-24-regular',
+    description: 'Static vertical space between form elements.',
+    defaults: {
+      kind: 'static',
+      label: 'Spacer',
+      width: 12,
+      settings: {
+        height: 24
+      }
+    }
+  },
+  {
     type: 'select',
     label: 'Select',
     group: 'Choices',
@@ -170,6 +195,42 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     defaults: {
       label: 'Date',
       placeholder: 'Select date'
+    }
+  },
+  {
+    type: 'time',
+    label: 'Time',
+    group: 'Date and time',
+    icon: 'fluent:clock-24-regular',
+    defaults: {
+      label: 'Time',
+      placeholder: 'Select time'
+    }
+  },
+  {
+    type: 'date-range',
+    label: 'Date range',
+    group: 'Date and time',
+    icon: 'fluent:calendar-date-24-regular',
+    defaults: {
+      label: 'Date range',
+      placeholder: 'Start date',
+      width: 12
+    }
+  },
+  {
+    type: 'upload',
+    label: 'Upload',
+    group: 'Files',
+    icon: 'fluent:arrow-upload-24-regular',
+    defaults: {
+      label: 'Upload',
+      placeholder: 'Drop files or click to upload',
+      width: 12,
+      multiple: false,
+      settings: {
+        accept: '*/*'
+      }
     }
   },
   {

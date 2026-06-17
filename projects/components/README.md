@@ -102,7 +102,6 @@ The documentation site includes live demos and API examples for each component:
 - [Country Select](https://docs.ngstarter.com/forms/country)
 - [Currency Select](https://docs.ngstarter.com/forms/currency-select)
 - [Date Format Select](https://docs.ngstarter.com/forms/date-format-select)
-- [Form Renderer](https://docs.ngstarter.com/forms/form-renderer)
 - [Inline Text Edit](https://docs.ngstarter.com/forms/inline-text-edit)
 - [Input](https://docs.ngstarter.com/forms/input)
 - [Input Mask](https://docs.ngstarter.com/forms/input-mask)

@@ -3,7 +3,7 @@
 :host {
   display: block;
 
-  .ngs-form-builder-renderer-section {
+  .ngs-form-renderer-section {
     display: flex;
     flex-direction: column;
     gap: --spacing(4);
@@ -26,13 +26,13 @@
     }
   }
 
-  .ngs-form-builder-renderer-grid {
+  .ngs-form-renderer-grid {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: --spacing(4);
   }
 
-  .ngs-form-builder-renderer-grid-field {
+  .ngs-form-renderer-grid-field {
     display: flex;
     grid-column: 1 / -1;
     flex-direction: column;

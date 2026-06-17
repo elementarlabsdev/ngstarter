@@ -71,6 +71,17 @@ export interface FormBuilderFieldRenderContext {
   readonly: boolean;
 }
 
+export interface FormBuilderUploadContext {
+  field: FormBuilderField;
+  control: FormControl;
+  event: any;
+  files: File[];
+  fileList: FileList | null;
+  multiple: boolean;
+}
+
+export type FormBuilderUploadCallback = (context: FormBuilderUploadContext) => any | Promise<any>;
+
 export interface FormBuilderSettingsContext {
   field: FormBuilderField;
   schema: FormBuilderSchema;
