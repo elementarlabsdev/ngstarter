@@ -4,6 +4,7 @@ import { setupNgStarterComponents } from '../utils';
 export interface NgAddSchema {
   project?: string;
   skipInstall?: boolean;
+  codexSkill?: boolean;
 }
 
 export function ngAdd(options: NgAddSchema = {}): Rule {
@@ -11,6 +12,7 @@ export function ngAdd(options: NgAddSchema = {}): Rule {
     setupNgStarterComponents(tree, context, {
       project: options.project,
       skipInstall: options.skipInstall === true,
+      codexSkill: options.codexSkill !== false,
       updateExistingDependencies: true,
       updateExistingPeerDependencies: false,
     });

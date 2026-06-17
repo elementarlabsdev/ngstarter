@@ -2,7 +2,7 @@
   "$schema": "../../../node_modules/@angular-devkit/schematics/collection-schema.json",
   "schematics": {
     "ng-add": {
-      "description": "Install @ngstarter-ui/components and configure Tailwind CSS.",
+      "description": "Install @ngstarter-ui/components, configure Tailwind CSS, and add AGENTS.md/Codex skill guidance.",
       "factory": "./ng-add/index#ngAdd",
       "schema": "./ng-add/schema.json"
     },

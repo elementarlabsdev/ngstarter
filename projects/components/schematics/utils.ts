@@ -7,6 +7,7 @@ type DependencySection = 'dependencies' | 'devDependencies' | 'peerDependencies'
 interface SetupOptions {
   project?: string;
   skipInstall: boolean;
+  codexSkill: boolean;
   updateExistingDependencies: boolean;
   updateExistingPeerDependencies: boolean;
 }
@@ -35,6 +36,8 @@ const packageJson = require('../package.json') as PackageJson;
 
 const PACKAGE_JSON_PATH = '/package.json';
 const ANGULAR_JSON_PATH = '/angular.json';
+const AGENTS_PATH = '/AGENTS.md';
+const CODEX_SKILL_ROOT = '/.codex/skills/ngstarter-ui';
 const POSTCSS_CONFIG_PATH = '/.postcssrc.json';
 const POSTCSS_CONFIGS = [
   '/.postcssrc',
@@ -71,6 +74,152 @@ const NGS_THEME_PROVIDER = `provideNgsTheme({
   colorScheme: 'auto',
   radius: 'medium',
 }),`;
+const AGENTS_START_MARKER = '<!-- ngstarter-ui:start -->';
+const AGENTS_END_MARKER = '<!-- ngstarter-ui:end -->';
+const NGS_AGENTS_SECTION = [
+  AGENTS_START_MARKER,
+  '## NgStarter UI',
+  '',
+  'This project uses `@ngstarter-ui/components`. When building Angular UI, prefer NgStarter',
+  'components from secondary entry points before creating custom HTML primitives.',
+  '',
+  '- Import public APIs from `@ngstarter-ui/components/<component>`, for example',
+  '  `@ngstarter-ui/components/button`, `@ngstarter-ui/components/form-field`,',
+  '  `@ngstarter-ui/components/table`, and `@ngstarter-ui/components/data-view`.',
+  '- Use standalone Angular APIs and keep UI components `ChangeDetectionStrategy.OnPush` where',
+  '  applicable.',
+  '- Admin shells should be composed with `ngs-layout[root]` > `ngs-layout-content` >',
+  '  `ngs-sidenav-container` > `ngs-sidenav` + `ngs-sidenav-content` > `ngs-panel`.',
+  '- Put app navigation in `ngs-sidebar` inside `ngs-sidenav`; use `ngs-panel-header`,',
+  '  `ngs-panel-content`, and `ngs-panel-aside` for workspace structure.',
+  '- Use `ngs-scrollbar-area` for scrollable panel, sidebar, inspector, and message regions.',
+  '- Use `DataView` for operational datasets and rich data grids. Use `ngs-table` only for static,',
+  '  read-only template tables.',
+  '- Use `ngs-form-field` with `ngsInput` or the matching NgStarter form control for text, search,',
+  '  select, autocomplete, date/time, number, slider, color, and masked inputs.',
+  '- Use NgStarter `Button`, `Icon`, `Menu`, `Popover`, `Tooltip`, `Dialog`/`Confirm`, `Card`,',
+  '  `List`, `Avatar`, `Badge`, `Chip`, `Paginator`, loading, empty-state, and feedback components',
+  '  instead of hand-rolled equivalents when available.',
+  '- Keep Tailwind utility classes focused on layout, spacing, sizing, flex/grid, and responsive',
+  '  behavior. Put reusable visual overrides and `--ngs-*` token customizations in SCSS.',
+  '- Do not add inline visual styles, `[ngStyle]`, arbitrary color utilities, custom pills/chips,',
+  '  plain inputs, plain tables, or manual ARIA data grids when NgStarter provides a component.',
+  '- For exact component names, selectors, imports, inputs, outputs, and docs paths, inspect',
+  '  `node_modules/@ngstarter-ui/components/ai/component-registry.json` after dependencies are',
+  '  installed.',
+  '- A full Codex skill is installed at `.codex/skills/ngstarter-ui`; use `$ngstarter-ui` when',
+  '  asking Codex to build or refactor NgStarter UI.',
+  '',
+  AGENTS_END_MARKER,
+].join('\n');
+const CODEX_SKILL_MD = [
+  '---',
+  'name: ngstarter-ui',
+  'description: Use when building Angular UI with NgStarter UI, @ngstarter-ui/components, admin dashboards, admin panels, forms, tables, data views, layouts, sidebars, panels, dialogs, menus, popovers, or when converting screenshots and mockups into Angular UI composed from NgStarter components.',
+  '---',
+  '',
+  '# NgStarter UI',
+  '',
+  'Use NgStarter UI components before custom HTML primitives when a matching component exists.',
+  '',
+  '## Workflow',
+  '',
+  '1. Read the workspace `AGENTS.md` if it exists.',
+  '2. For admin pages, dashboards, screenshots, or app shells, read `references/admin-ui-rules.md`.',
+  '3. For component selection, imports, selectors, and examples, read `references/component-map.md`.',
+  '4. If available, inspect `node_modules/@ngstarter-ui/components/ai/component-registry.json` for exact generated metadata.',
+  '5. Import public APIs only from secondary entry points: `@ngstarter-ui/components/<component>`.',
+  '6. Prefer standalone Angular APIs: `inject()`, `signal()`, `computed()`, `input()`, `output()`, `model()`, Angular control flow, and `ChangeDetectionStrategy.OnPush`.',
+  '',
+  '## Core Rules',
+  '',
+  '- Compose UI from NgStarter components before writing custom primitives.',
+  '- Use `DataView` for operational datasets, rich grids, records with actions, sorting, selection, search, pagination, column sizing, or server-driven data.',
+  '- Use `Table` only for static, read-only template tables.',
+  '- Use one `ngs-form-field` per form control; do not use it as a generic layout wrapper.',
+  '- Use `ngs-scrollbar-area` for scrollable admin regions inside panels, sidebars, inspectors, and chat/message areas.',
+  '- Keep layout, spacing, sizing, flex/grid, and responsive behavior in Tailwind utility classes.',
+  '- Keep reusable visual styling, component token overrides, and `--ngs-*` customizations in SCSS.',
+  '- Do not use inline visual styles, `[ngStyle]`, arbitrary color utilities, custom pills/chips, plain inputs, plain tables, or manual ARIA data grids when NgStarter has a component.',
+].join('\n');
+const CODEX_SKILL_ADMIN_RULES = [
+  '# Admin UI Rules',
+  '',
+  '## Shell',
+  '',
+  '- Build admin viewport shells as `ngs-layout[root]` > `ngs-layout-content` > `ngs-sidenav-container` > `ngs-sidenav` + `ngs-sidenav-content` > `ngs-panel`.',
+  '- Direct children of `ngs-layout` must be layout region components only.',
+  '- Put compact primary app navigation inside `ngs-sidenav` with `ngs-sidebar` and `ngs-sidebar-nav`.',
+  '- Do not use `ngs-navigation` for the primary admin app rail.',
+  '- Do not nest another `Layout` inside sidenav, sidenav content, sidebar, or panel.',
+  '- Put workspace headers in `ngs-panel-header`, scrollable bodies in `ngs-panel-content`, and persistent right columns in `ngs-panel-aside`.',
+  '',
+  '## Scroll Regions',
+  '',
+  '- Let `ngs-panel-content` own the workspace scroll region.',
+  '- Put `<ngs-scrollbar-area [absolute]="true">` inside sized `ngs-panel-content` regions and move padding to an inner element.',
+  '- For flex children such as chat messages, wrap the scrollbar area in a relative `min-height: 0; flex: 1` shell.',
+  '',
+  '## Forms',
+  '',
+  '- Use one `ngs-form-field` for one form control.',
+  '- Use `input[ngsInput]`, `textarea[ngsInput]`, `ngs-select`, autocomplete, date/time, phone, number, slider, color, masked, or other NgStarter controls instead of plain inputs.',
+  '- Do not wrap checkbox, radio, button, or toggle controls in `ngs-form-field` when they have their own label pattern.',
+  '- Header, toolbar, and compact filter fields may omit visible `ngs-label` when placeholder text or aria context is clear.',
+  '',
+  '## Styling',
+  '',
+  '- Use Tailwind utility classes in templates for layout, responsive behavior, sizing, spacing, flex, grid, and alignment.',
+  '- Start local SCSS files that use Tailwind tokens with `@reference "tailwindcss";`.',
+  '- In component SCSS, put component-local styling under `:host`.',
+  '- Override NgStarter components through selectors such as `ngs-card`, `ngs-form-field`, `table[ngs-table]`, `button[ngsButton]`, and `button[ngsIconButton]`.',
+  '- Do not restyle NgStarter components through wrapper-only classes when a component selector or token fits.',
+  '- Do not put visual styling in templates with `[style.*]`, `[attr.style]`, `[ngStyle]`, or inline `style`.',
+  '- Do not use reusable arbitrary color utilities such as `bg-[var(...)]`, `text-[var(...)]`, `border-[var(...)]`, or `text-[#...]` in admin templates.',
+  '',
+  '## Verification',
+  '',
+  '- Before finishing admin UI changes, run `npm run verify:admin:components` when that script exists.',
+  '- Scan changed templates for plain inputs, plain tables, manual role grids, custom pills/chips/avatars/menus/popovers, inline styles, arbitrary color utilities, and scrollable regions without `ngs-scrollbar-area`.',
+].join('\n');
+const CODEX_SKILL_COMPONENT_MAP = [
+  '# Component Map',
+  '',
+  '- Root viewport shell: `Layout`, `LayoutContent` from `@ngstarter-ui/components/layout`.',
+  '- App shell: `Sidenav`, `SidenavContainer`, `SidenavContent` from `@ngstarter-ui/components/sidenav`.',
+  '- Primary app navigation: `Sidebar`, `SidebarHeader`, `SidebarBody`, `SidebarFooter`, `SidebarNav`, `SidebarNavItem` from `@ngstarter-ui/components/sidebar`.',
+  '- Workspaces: `Panel`, `PanelHeader`, `PanelContent`, `PanelAside`, `PanelSidebar`, `PanelFooter` from `@ngstarter-ui/components/panel`.',
+  '- Tabbed work surfaces: `TabPanel` parts from `@ngstarter-ui/components/tab-panel`; persistent inspectors from `@ngstarter-ui/components/side-panel`.',
+  '- Secondary navigation: `Navigation` from `@ngstarter-ui/components/navigation`; compact rail navigation from `@ngstarter-ui/components/rail-nav`.',
+  '- Toolbars: `Toolbar`, `ToolbarRow`, `ToolbarItem`, `ToolbarNav`, `ToolbarSpacer`, `ToolbarTitle` from `@ngstarter-ui/components/toolbar`.',
+  '- Cards and KPIs: `Card`, `CardContent`, `CardFooter` from `@ngstarter-ui/components/card`.',
+  '- Rich data surfaces: `DataView` from `@ngstarter-ui/components/data-view`.',
+  '- Static tables: `Table`, `ColumnDef`, `HeaderCell`, `Cell`, `HeaderRow`, `Row` and defs from `@ngstarter-ui/components/table`.',
+  '- Text fields: `FormField`, `Label` from `@ngstarter-ui/components/form-field`; `Input` from `@ngstarter-ui/components/input`.',
+  '- Specialized inputs: autocomplete, select, date/time, timezone, number, mask, pin, slider, color, phone, and validators from their matching secondary entry points.',
+  '- Actions: `Button` from `@ngstarter-ui/components/button`; `Icon` from `@ngstarter-ui/components/icon`.',
+  '- Menus and overlays: `Menu` for action lists, `Popover` for non-menu overlay content, `Tooltip` for icon help, `Dialog`/`Confirm`/`Drawer`/`BottomSheet` for temporary surfaces.',
+  '- Selection: `Checkbox`, `RadioButton`, `RadioGroup`, `RadioCard`, `ButtonToggle`, `Segmented`, and `SlideToggle`.',
+  '- Tags and statuses: `Chip`, `ChipSet`, `ChipListbox`, `ChipOption`, `Badge`, `Avatar`, and `AvatarGroup`.',
+  '- Lists and notifications: `List`, `SelectionList`, `NotificationList`, and notification primitives.',
+  '- Loading and states: `ProgressBar`, `ProgressSpinner`, `Skeleton`, `BlockLoader`, `ScreenLoader`, `PageLoadingBar`, `EmptyState`, `ActionRequired`, `Alert`, `Announcement`, and `Incidents`.',
+  '- Structure and workflows: breadcrumbs, divider, expansion, accordion, stepper, tree, timeline, kanban board, filter builder, form builder, command bar, and guided tour components.',
+  '- Charts and metrics: `Gauge` and micro chart components.',
+  '- Rich content and media: text/comment editors, inline text edit, emoji picker, code highlighter, image/video viewers, image tools, carousel, crop, comparison slider, thumbnail maker, and video player.',
+  '- Spatial tools: `Split`, `SplitArea`, `SplitPane`, `VisualBuilder`, `Tiles`, and `ResizableContainer`.',
+  '- Scrollable admin surfaces: `ScrollbarArea` from `@ngstarter-ui/components/scrollbar-area`.',
+  '',
+  'For exact exports and selectors, prefer the generated registry at `node_modules/@ngstarter-ui/components/ai/component-registry.json`.',
+].join('\n');
+const CODEX_SKILL_OPENAI_YAML = [
+  'interface:',
+  '  display_name: "NgStarter UI"',
+  '  short_description: "Build Angular admin UI with NgStarter components"',
+  '  default_prompt: "Use $ngstarter-ui to build an Angular admin screen with NgStarter UI components."',
+  '',
+  'policy:',
+  '  allow_implicit_invocation: true',
+].join('\n');
 
 export function setupNgStarterComponents(
   tree: Tree,
@@ -79,12 +228,16 @@ export function setupNgStarterComponents(
 ): void {
   syncNgStarterComponentDependencies(tree, context, options);
   setupTailwindFiles(tree, context, options.project);
+  ensureAgentsGuide(tree, context);
+  if (options.codexSkill) {
+    ensureCodexSkill(tree, context);
+  }
 }
 
 export function syncNgStarterComponentDependencies(
   tree: Tree,
   context: SchematicContext,
-  options: Omit<SetupOptions, 'project'>
+  options: Omit<SetupOptions, 'project' | 'codexSkill'>
 ): void {
   validateAngularVersion(tree);
   updatePackageJson(
@@ -515,6 +668,49 @@ function ensureProjectStyleEntry(buildOptions: JsonObject, stylePath: string): v
   buildOptions['styles'] = styles;
 }
 
+function ensureAgentsGuide(tree: Tree, context: SchematicContext): void {
+  if (!tree.exists(AGENTS_PATH)) {
+    tree.create(AGENTS_PATH, `# Project Agent Instructions\n\n${NGS_AGENTS_SECTION}\n`);
+    context.logger.info('Created AGENTS.md with NgStarter UI agent instructions.');
+    return;
+  }
+
+  const content = readText(tree, AGENTS_PATH);
+  const sectionPattern = new RegExp(
+    `${escapeRegExp(AGENTS_START_MARKER)}[\\s\\S]*?${escapeRegExp(AGENTS_END_MARKER)}`
+  );
+
+  if (sectionPattern.test(content)) {
+    const nextContent = content.replace(sectionPattern, NGS_AGENTS_SECTION);
+
+    if (nextContent !== content) {
+      tree.overwrite(AGENTS_PATH, nextContent);
+      context.logger.info('Updated NgStarter UI agent instructions in AGENTS.md.');
+    }
+
+    return;
+  }
+
+  tree.overwrite(AGENTS_PATH, `${content.trimEnd()}\n\n${NGS_AGENTS_SECTION}\n`);
+  context.logger.info('Added NgStarter UI agent instructions to AGENTS.md.');
+}
+
+function ensureCodexSkill(tree: Tree, context: SchematicContext): void {
+  writeText(tree, `${CODEX_SKILL_ROOT}/SKILL.md`, `${CODEX_SKILL_MD}\n`);
+  writeText(
+    tree,
+    `${CODEX_SKILL_ROOT}/references/admin-ui-rules.md`,
+    `${CODEX_SKILL_ADMIN_RULES}\n`
+  );
+  writeText(
+    tree,
+    `${CODEX_SKILL_ROOT}/references/component-map.md`,
+    `${CODEX_SKILL_COMPONENT_MAP}\n`
+  );
+  writeText(tree, `${CODEX_SKILL_ROOT}/agents/openai.yaml`, `${CODEX_SKILL_OPENAI_YAML}\n`);
+  context.logger.info('Created or updated the NgStarter UI Codex skill in .codex/skills/ngstarter-ui.');
+}
+
 function readJson<T>(tree: Tree, path: string): T {
   if (!tree.exists(path)) {
     throw new SchematicsException(`Required file "${path}" was not found.`);
@@ -530,10 +726,16 @@ function readJson<T>(tree: Tree, path: string): T {
 function writeJson(tree: Tree, path: string, value: JsonObject): void {
   const content = `${JSON.stringify(value, null, 2)}\n`;
 
+  writeText(tree, path, content);
+}
+
+function writeText(tree: Tree, path: string, content: string): void {
+  const nextContent = content.endsWith('\n') ? content : `${content}\n`;
+
   if (tree.exists(path)) {
-    tree.overwrite(path, content);
+    tree.overwrite(path, nextContent);
   } else {
-    tree.create(path, content);
+    tree.create(path, nextContent);
   }
 }
 
@@ -557,4 +759,8 @@ function joinWorkspacePath(...parts: string[]): string {
     .join('/')
     .replace(/\/+/g, '/')
     .replace(/^\/+/, '');
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }

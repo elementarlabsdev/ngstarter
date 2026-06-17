@@ -12,6 +12,15 @@
       "type": "boolean",
       "description": "Skip running the package manager install task.",
       "default": false
+    },
+    "codexSkill": {
+      "type": "boolean",
+      "description": "Create or update a local Codex skill for NgStarter UI in .codex/skills/ngstarter-ui.",
+      "default": true,
+      "x-prompt": {
+        "message": "Create a local Codex skill for NgStarter UI?",
+        "type": "confirmation"
+      }
     }
   }
 }

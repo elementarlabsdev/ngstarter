@@ -4,6 +4,7 @@ import { setupNgStarterComponents } from '../utils';
 export interface NgUpdateSchema {
   project?: string;
   skipInstall?: boolean;
+  codexSkill?: boolean;
 }
 
 export function ngUpdate(options: NgUpdateSchema = {}): Rule {
@@ -11,6 +12,7 @@ export function ngUpdate(options: NgUpdateSchema = {}): Rule {
     setupNgStarterComponents(tree, context, {
       project: options.project,
       skipInstall: options.skipInstall === true,
+      codexSkill: options.codexSkill !== false,
       updateExistingDependencies: true,
       updateExistingPeerDependencies: true,
     });
