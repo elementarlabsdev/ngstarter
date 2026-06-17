@@ -13,4 +13,6 @@ import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 export class Installation {
   installProjectCommand = signal('npx @angular/cli@21 new project-name --style=scss');
   addProjectSchematics = signal('cd project-name\nnpx ng add @ngstarter-ui/components');
+  skipCodexSkillCommand = signal('npx ng add @ngstarter-ui/components --codex-skill=false');
+  updateCodexSkillCommand = signal('npx ng generate @ngstarter-ui/components:codex-skill');
 }

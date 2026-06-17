@@ -14,5 +14,20 @@
     <p>
       The components will be installed and configured, then copy what you need from the demo layouts projects.
     </p>
+
+    <h2>Codex skill setup</h2>
+
+    <p>
+      The ng-add schematic creates NgStarter guidance in AGENTS.md and installs a local Codex skill
+      at .codex/skills/ngstarter-ui by default.
+    </p>
+
+    <p>To skip the Codex skill during installation:</p>
+
+    <ngs-code-highlighter [code]="skipCodexSkillCommand()" language="bash"/>
+
+    <p>If NgStarter UI is already installed, add or refresh only the Codex skill:</p>
+
+    <ngs-code-highlighter [code]="updateCodexSkillCommand()" language="bash"/>
   </main>
 </div>

@@ -21,6 +21,19 @@ For an existing Angular 21 app, run the same schematic from your project root:
 npx ng add @ngstarter-ui/components
 ```
 
+The `ng add` schematic also creates NgStarter Codex guidance in `AGENTS.md` and installs a local
+Codex skill at `.codex/skills/ngstarter-ui` by default. To skip that setup, run:
+
+```bash
+npx ng add @ngstarter-ui/components --codex-skill=false
+```
+
+If NgStarter UI is already installed and you only want to add or refresh the Codex skill, run:
+
+```bash
+npx ng generate @ngstarter-ui/components:codex-skill
+```
+
 NgStarter components are standalone Angular components. Import each component from its
 secondary entry point:
 

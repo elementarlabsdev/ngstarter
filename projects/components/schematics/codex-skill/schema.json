@@ -1,0 +1,7 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "NgStarterComponentsCodexSkill",
+  "title": "NgStarter Components Codex Skill Options",
+  "type": "object",
+  "properties": {}
+}

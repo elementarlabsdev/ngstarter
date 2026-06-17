@@ -10,6 +10,11 @@
       "description": "Synchronize @ngstarter-ui/components runtime dependencies and install packages.",
       "factory": "./sync-dependencies/index#syncDependencies",
       "schema": "./sync-dependencies/schema.json"
+    },
+    "codex-skill": {
+      "description": "Create or update the local Codex skill and AGENTS.md guidance for NgStarter UI.",
+      "factory": "./codex-skill/index#codexSkill",
+      "schema": "./codex-skill/schema.json"
     }
   }
 }

@@ -234,6 +234,11 @@ export function setupNgStarterComponents(
   }
 }
 
+export function setupNgStarterCodexSkill(tree: Tree, context: SchematicContext): void {
+  ensureAgentsGuide(tree, context);
+  ensureCodexSkill(tree, context);
+}
+
 export function syncNgStarterComponentDependencies(
   tree: Tree,
   context: SchematicContext,
