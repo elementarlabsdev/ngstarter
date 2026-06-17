@@ -10,6 +10,7 @@ import { Input } from '@ngstarter-ui/components/input';
 import { Panel, PanelAside, PanelContent, PanelHeader, PanelSidebar } from '@ngstarter-ui/components/panel';
 import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
+import {Toolbar, ToolbarItem, ToolbarSpacer, ToolbarSubtitle, ToolbarTitle} from '@ngstarter-ui/components/toolbar';
 import { Tree, TreeDragPlaceholder, TreeNode, TreeNodeDef, TreeNodeDrop, TreeNodeDropPosition, TreeNodePadding } from '@ngstarter-ui/components/tree';
 import {
   DEFAULT_FORM_BUILDER_ITEMS,
@@ -61,6 +62,7 @@ interface FormBuilderTreeInsertTarget {
   fields: FormBuilderField[];
   index: number;
   section?: FormBuilderSection;
+  owner?: FormBuilderField;
 }
 
 interface FormBuilderContainerLocation {
@@ -109,6 +111,10 @@ const ACTUAL_FIELDS_TAB_INDEX = 1;
     ScrollbarArea,
     Tab,
     TabGroup,
+    Toolbar,
+    ToolbarItem,
+    ToolbarSpacer,
+    ToolbarTitle,
     Tree,
     TreeDragPlaceholder,
     TreeNode,
@@ -116,7 +122,8 @@ const ACTUAL_FIELDS_TAB_INDEX = 1;
     TreeNodePadding,
     FormBuilderFieldHost,
     FormBuilderRenderer,
-    FormBuilderSettingsHost
+    FormBuilderSettingsHost,
+    ToolbarSubtitle
   ],
   templateUrl: './form-builder.html',
   styleUrl: './form-builder.scss',
@@ -459,16 +466,6 @@ export class FormBuilder {
     schema.sections = schema.sections.filter(item => item.id !== section.id);
     schema.layout = this.normalizedLayout(schema).filter(item => !(item.kind === 'section' && item.id === section.id));
 
-    if (schema.sections.length === 0) {
-      const nextSection = {
-        id: uniqueId('section'),
-        title: 'Section',
-        fields: []
-      };
-      schema.sections.push(nextSection);
-      schema.layout = this.normalizedLayout(schema);
-    }
-
     if (
       this.selectedFieldId() === section.id ||
       section.fields.some(field => field.id === this.selectedFieldId() || containsField(field, this.selectedFieldId()))
@@ -615,6 +612,7 @@ export class FormBuilder {
         if (target.fields === (schema.fields ?? [])) {
           this.insertRootFieldIntoLayout(schema, movingField, event.target.id, event.position);
         }
+        this.expandFieldTreeOwner(target.owner);
         this.schema.set(schema);
         this.restoreFieldTreeExpansion();
         this.selectField(movingField, target.section);
@@ -874,6 +872,7 @@ export class FormBuilder {
     }
 
     targetContainer.fields.splice(clampIndex(index, targetContainer.fields.length), 0, field);
+    this.expandFieldTreeOwner(targetContainer.owner);
     this.schema.set(schema);
     this.selectField(field, targetContainer.section);
     this.fieldAdded.emit({ field, section: targetContainer.section });
@@ -1131,7 +1130,8 @@ export class FormBuilder {
       return {
         fields: targetLocation.field.children,
         index: targetLocation.field.children.length,
-        section: targetLocation.section
+        section: targetLocation.section,
+        owner: targetLocation.field
       };
     }
 
@@ -1244,6 +1244,14 @@ export class FormBuilder {
         }
       });
     });
+  }
+
+  private expandFieldTreeOwner(owner: FormBuilderField | undefined): void {
+    if (!owner) {
+      return;
+    }
+
+    this.expandedFieldTreeNodeIds.update(ids => new Set(ids).add(owner.id));
   }
 
   private flattenFieldTree(nodes: FormBuilderFieldTreeNode[]): FormBuilderFieldTreeNode[] {
@@ -1618,19 +1626,11 @@ export class FormBuilder {
 }
 
 export function createDefaultFormBuilderSchema(): FormBuilderSchema {
-  const sectionId = uniqueId('section');
-
   return {
     title: 'New form',
     fields: [],
-    layout: [{ kind: 'section', id: sectionId }],
-    sections: [
-      {
-        id: sectionId,
-        title: 'General information',
-        fields: []
-      }
-    ]
+    layout: [],
+    sections: []
   };
 }
 

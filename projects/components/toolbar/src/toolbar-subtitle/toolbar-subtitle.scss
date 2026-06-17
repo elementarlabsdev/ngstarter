@@ -1,0 +1,12 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-toolbar-subtitle-font-size: var(--ngs-font-size-sm);
+  --ngs-toolbar-subtitle-color: var(--ngs-color-secondary);
+  --ngs-toolbar-subtitle-weight: 400;
+
+  display: block;
+  font-size: var(--ngs-toolbar-subtitle-font-size);
+  color: var(--ngs-toolbar-subtitle-color);
+  font-weight: var(--ngs-toolbar-subtitle-weight);
+}

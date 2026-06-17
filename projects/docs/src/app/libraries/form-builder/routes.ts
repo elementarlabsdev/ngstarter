@@ -2,9 +2,9 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'examples',
+    path: 'form-builder',
     loadComponent: () => import('./examples/examples').then(m => m.Examples),
-    title: 'Form Builder / Examples'
+    title: 'Form Builder / Example'
   },
   {
     path: '',

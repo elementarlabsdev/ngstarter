@@ -121,6 +121,11 @@
   --text-3xs: 0.563rem;
   --text-tiny: 0.75rem;
   --text-md: 0.825rem;
+
+  /* --- RADII --- */
+  --radius-small: var(--ngs-radius-sm);
+  --radius-medium: var(--ngs-radius-md);
+  --radius-large: var(--ngs-radius-lg);
 }
 
 /* ========================================================================

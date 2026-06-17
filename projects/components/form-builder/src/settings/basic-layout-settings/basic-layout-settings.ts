@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FormField, Hint, Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
@@ -30,6 +30,7 @@ export class BasicFormBuilderLayoutSettings {
   readonly update = input.required<(changes: Partial<FormBuilderField>) => void>();
 
   protected readonly fieldWidthOptions: FormBuilderFieldWidth[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  protected readonly showHintSetting = computed(() => this.field().type !== 'group');
 
   protected patch(changes: Partial<FormBuilderField>): void {
     this.update()(changes);

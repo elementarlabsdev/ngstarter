@@ -10323,6 +10323,7 @@
         "ngs-toolbar-nav-link",
         "ngs-toolbar-row",
         "ngs-toolbar-spacer",
+        "ngs-toolbar-subtitle",
         "ngs-toolbar-title"
       ],
       "exportedSymbols": [
@@ -10333,6 +10334,7 @@
         "ToolbarNavLink",
         "ToolbarRow",
         "ToolbarSpacer",
+        "ToolbarSubtitle",
         "ToolbarTitle"
       ],
       "inputs": [
@@ -10341,7 +10343,9 @@
       ],
       "outputs": [],
       "cssTokens": [
+        "--ngs-color-secondary",
         "--ngs-font-size-lg",
+        "--ngs-font-size-sm",
         "--ngs-nav-item-active-color",
         "--ngs-nav-item-color",
         "--ngs-nav-item-font-size",
@@ -10355,7 +10359,10 @@
         "--ngs-toolbar-nav-link-hover-color",
         "--ngs-toolbar-nav-link-overflow-height",
         "--ngs-toolbar-nav-link-padding",
-        "--ngs-toolbar-nav-link-radius"
+        "--ngs-toolbar-nav-link-radius",
+        "--ngs-toolbar-subtitle-color",
+        "--ngs-toolbar-subtitle-font-size",
+        "--ngs-toolbar-subtitle-weight"
       ],
       "example": null
     },

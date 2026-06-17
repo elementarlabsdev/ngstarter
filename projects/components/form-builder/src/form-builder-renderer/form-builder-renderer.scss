@@ -37,7 +37,8 @@
     grid-column: 1 / -1;
     flex-direction: column;
     gap: --spacing(4);
-    border: 1px solid var(--ngs-color-outline-variant);
+    border: 1px solid;
+    border-color: var(--ngs-color-outline-variant);
     border-radius: var(--ngs-radius-lg);
     padding: --spacing(4);
 

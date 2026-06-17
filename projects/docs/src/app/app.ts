@@ -1001,13 +1001,13 @@ export class App implements OnInit {
         {
           key: uuid(),
           type: 'link',
-          name: 'Examples',
-          link: '/libraries/form-builder/examples'
+          name: 'Form Builder',
+          link: '/libraries/form-builder/form-builder'
         },
         {
           key: uuid(),
           type: 'link',
-          name: 'Renderer',
+          name: 'Form Renderer',
           link: '/libraries/form-builder/form-renderer'
         },
         {

@@ -7,14 +7,16 @@
            (ngModelChange)="patch({ label: $event })">
   </ngs-form-field>
 
-  <ngs-form-field>
-    <ngs-label>Hint</ngs-label>
-    <input ngsInput
-           [ngModel]="field().hint || ''"
-           [ngModelOptions]="{standalone: true}"
-           (ngModelChange)="patch({ hint: $event })">
-    <ngs-hint>Shown below the layout title in preview and renderer.</ngs-hint>
-  </ngs-form-field>
+  @if (showHintSetting()) {
+    <ngs-form-field>
+      <ngs-label>Hint</ngs-label>
+      <input ngsInput
+             [ngModel]="field().hint || ''"
+             [ngModelOptions]="{standalone: true}"
+             (ngModelChange)="patch({ hint: $event })">
+      <ngs-hint>Shown below the layout title in preview and renderer.</ngs-hint>
+    </ngs-form-field>
+  }
 
   <ngs-form-field>
     <ngs-label>Width</ngs-label>
