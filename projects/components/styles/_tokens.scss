@@ -673,10 +673,37 @@
   --ngs-nav-item-active-icon-color: var(--ngs-color-secondary);
 }
 
-[data-ngs-radius='none'] { --ngs-control-radius: var(--ngs-radius-none); --ngs-dialog-radius: var(--ngs-radius-none); --ngs-nav-item-radius: var(--ngs-radius-none); --ngs-menu-item-radius: var(--ngs-radius-none); }
-[data-ngs-radius='small'] { --ngs-control-radius: var(--ngs-radius-sm); --ngs-dialog-radius: var(--ngs-radius-md); --ngs-nav-item-radius: var(--ngs-radius-sm); --ngs-menu-item-radius: var(--ngs-radius-sm); }
-[data-ngs-radius='medium'] { --ngs-control-radius: var(--ngs-radius-lg); --ngs-dialog-radius: var(--ngs-radius-xl); --ngs-nav-item-radius: var(--ngs-radius-lg); --ngs-menu-item-radius: var(--ngs-radius-lg); }
-[data-ngs-radius='large'] { --ngs-control-radius: var(--ngs-radius-xl); --ngs-dialog-radius: 1.25rem; --ngs-nav-item-radius: var(--ngs-radius-xl); --ngs-menu-item-radius: var(--ngs-radius-xl); }
+[data-ngs-radius='none'] {
+  --ngs-control-radius: var(--ngs-radius-none);
+  --ngs-dropdown-radius: var(--ngs-radius-none);
+  --ngs-dialog-radius: var(--ngs-radius-none);
+  --ngs-nav-item-radius: var(--ngs-radius-none);
+  --ngs-menu-item-radius: var(--ngs-radius-none);
+}
+
+[data-ngs-radius='small'] {
+  --ngs-control-radius: var(--ngs-radius-sm);
+  --ngs-dropdown-radius: var(--ngs-radius-md);
+  --ngs-dialog-radius: var(--ngs-radius-md);
+  --ngs-nav-item-radius: var(--ngs-radius-sm);
+  --ngs-menu-item-radius: var(--ngs-radius-sm);
+}
+
+[data-ngs-radius='medium'] {
+  --ngs-control-radius: var(--ngs-radius-lg);
+  --ngs-dropdown-radius: var(--ngs-radius-xl);
+  --ngs-dialog-radius: var(--ngs-radius-xl);
+  --ngs-nav-item-radius: var(--ngs-radius-lg);
+  --ngs-menu-item-radius: var(--ngs-radius-lg);
+}
+
+[data-ngs-radius='large'] {
+  --ngs-control-radius: var(--ngs-radius-xl);
+  --ngs-dropdown-radius: 1.25rem;
+  --ngs-dialog-radius: 1.25rem;
+  --ngs-nav-item-radius: var(--ngs-radius-xl);
+  --ngs-menu-item-radius: var(--ngs-radius-xl);
+}
 
 :root,
 .dark,
