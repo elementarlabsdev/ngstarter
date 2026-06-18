@@ -4490,6 +4490,7 @@
       ],
       "cssTokens": [
         "--ngs-card-padding",
+        "--ngs-color-border",
         "--ngs-color-danger",
         "--ngs-color-on-primary-container",
         "--ngs-color-on-surface",
@@ -4506,6 +4507,7 @@
         "--ngs-font-size-sm",
         "--ngs-font-size-xs",
         "--ngs-line-height-base",
+        "--ngs-radius-current",
         "--ngs-radius-lg",
         "--ngs-radius-md",
         "--ngs-radius-sm",

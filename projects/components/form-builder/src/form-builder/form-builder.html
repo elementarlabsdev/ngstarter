@@ -13,18 +13,7 @@
       [class.is-width-9]="definitionWidth(definition) === 9"
       [class.is-width-10]="definitionWidth(definition) === 10"
       [class.is-width-11]="definitionWidth(definition) === 11"
-      [class.is-width-12]="definitionWidth(definition) === 12">
-      <div class="ngs-form-builder-field-header">
-        <div class="ngs-form-builder-field-label">
-          <ngs-icon [name]="definition.icon || 'fluent:form-24-regular'"/>
-          <span>{{ definition.defaults?.label || definition.label }}</span>
-        </div>
-        <span class="ngs-form-builder-drag-icon">
-          <ngs-icon name="fluent:arrow-move-24-regular"/>
-        </span>
-      </div>
-      <div class="ngs-form-builder-ghost-control"></div>
-    </div>
+      [class.is-width-12]="definitionWidth(definition) === 12"></div>
   }
 </ng-template>
 
@@ -289,7 +278,7 @@
 
   <ngs-panel-content>
     <ngs-scrollbar-area [absolute]="true">
-      <div class="ngs-form-builder-canvas flex flex-col gap-4 p-5">
+      <div class="ngs-form-builder-canvas flex flex-col gap-5 p-6">
         <div
           class="ngs-form-builder-canvas-list"
           [id]="rootDropListId()"

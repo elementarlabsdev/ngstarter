@@ -127,6 +127,7 @@
   --ngs-control-padding-x: --spacing(4);
   --ngs-control-gap: --spacing(2);
   --ngs-control-radius: var(--ngs-radius-lg);
+  --ngs-radius-current: var(--ngs-control-radius);
   --ngs-icon-size: --spacing(6);
   --ngs-icon-color: inherit;
 
@@ -524,6 +525,7 @@
   --ngs-control-height-lg: calc(3.5rem + var(--ngs-density-scale) * 1px);
   --ngs-control-gap: --spacing(2.5);
   --ngs-control-radius: var(--ngs-radius-xl);
+  --ngs-radius-current: var(--ngs-control-radius);
   --ngs-icon-size: --spacing(6);
   --ngs-button-font-size: 0.9375rem;
   --ngs-button-tonal-bg: linear-gradient(135deg, var(--ngs-color-primary-container), var(--ngs-color-secondary-container));
@@ -675,6 +677,7 @@
 
 [data-ngs-radius='none'] {
   --ngs-control-radius: var(--ngs-radius-none);
+  --ngs-radius-current: var(--ngs-radius-none);
   --ngs-dropdown-radius: var(--ngs-radius-none);
   --ngs-dialog-radius: var(--ngs-radius-none);
   --ngs-nav-item-radius: var(--ngs-radius-none);
@@ -683,6 +686,7 @@
 
 [data-ngs-radius='small'] {
   --ngs-control-radius: var(--ngs-radius-sm);
+  --ngs-radius-current: var(--ngs-radius-sm);
   --ngs-dropdown-radius: var(--ngs-radius-md);
   --ngs-dialog-radius: var(--ngs-radius-md);
   --ngs-nav-item-radius: var(--ngs-radius-sm);
@@ -691,6 +695,7 @@
 
 [data-ngs-radius='medium'] {
   --ngs-control-radius: var(--ngs-radius-lg);
+  --ngs-radius-current: var(--ngs-radius-lg);
   --ngs-dropdown-radius: var(--ngs-radius-xl);
   --ngs-dialog-radius: var(--ngs-radius-xl);
   --ngs-nav-item-radius: var(--ngs-radius-lg);
@@ -699,6 +704,7 @@
 
 [data-ngs-radius='large'] {
   --ngs-control-radius: var(--ngs-radius-xl);
+  --ngs-radius-current: var(--ngs-radius-xl);
   --ngs-dropdown-radius: 1.25rem;
   --ngs-dialog-radius: 1.25rem;
   --ngs-nav-item-radius: var(--ngs-radius-xl);

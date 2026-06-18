@@ -16,10 +16,10 @@
     min-height: --spacing(12);
     align-items: center;
     border: 1px solid;
-    border-color: var(--ngs-color-outline-variant);
-    border-radius: var(--ngs-radius-lg);
-    background: var(--ngs-color-surface);
+    border-color: var(--ngs-color-border);
+    background: var(--ngs-color-surface-container-lowest);
     color: var(--ngs-color-on-surface);
+    border-radius: var(--ngs-radius-current);
     cursor: grab;
     font-size: var(--ngs-font-size-sm);
     font-weight: 500;
@@ -65,10 +65,6 @@
     box-shadow: none;
     opacity: 1;
     pointer-events: none;
-  }
-
-  .ngs-form-builder-palette {
-    background: var(--ngs-color-surface-container-low);
   }
 
   .ngs-form-builder-palette-item-content {
@@ -454,16 +450,8 @@
     border-color: transparent;
     background: color-mix(in srgb, var(--ngs-color-primary), var(--ngs-color-surface) 97%);
     box-shadow: none;
+    min-height: --spacing(16);
     opacity: 1;
     pointer-events: none;
   }
-
-  .ngs-form-builder-ghost-control {
-    height: --spacing(10);
-    border: 1px solid;
-    border-color: var(--ngs-color-outline-variant);
-    border-radius: var(--ngs-radius-md);
-    background: var(--ngs-color-surface);
-  }
-
 }
