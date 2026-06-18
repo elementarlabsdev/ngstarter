@@ -2,7 +2,10 @@
 
 :host {
   display: block;
-  font-size: var(--ngs-font-size-lg);
-  font-weight: 700;
   white-space: nowrap;
+  font-weight: var(--ngs-toolbar-title-font-weight, 700);
+
+  &.appearance-large {
+    font-size: var(--ngs-toolbar-title-font-size, var(--ngs-font-size-lg));
+  }
 }

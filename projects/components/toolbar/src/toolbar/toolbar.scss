@@ -1,9 +1,11 @@
 @reference 'tailwindcss';
 
 :host {
+  --ngs-toolbar-gap: --spacing(4);
+
   display: flex;
   align-items: center;
-  gap: --spacing(4);
+  gap: var(--ngs-toolbar-gap);
   overflow: hidden;
   flex-wrap: nowrap;
   width: 100%;

@@ -1,9 +1,9 @@
-<div class="border border-subtle rounded-xl shadow-xs relative mb-0 mt-6 overflow-hidden bg-surface-container-lowest">
+<div class="border border-border rounded-xl shadow-xs relative mb-0 mt-6 overflow-hidden bg-surface-container-lowest">
   <div class="p-7">
     <ng-content/>
   </div>
 
-  <div class="border-t border-t-subtle h-12 relative flex items-center justify-center
+  <div class="border-t border-t-border h-12 relative flex items-center justify-center
               gap-1 px-2 text-center bg-surface-container rounded-b-lg">
     <button ngsIconButton (click)="toggleSource()"
             [class.!bg-neutral-300]="showSource"
@@ -16,7 +16,7 @@
 <ngs-drawer #sourceDrawer (closed)="onDrawerClosed()">
   <div class="playground-source-drawer h-full w-[90vw] max-w-[1200px] overflow-hidden lg:w-[60vw]">
     <ngs-panel class="h-full">
-      <ngs-panel-header class="playground-source-toolbar flex h-12 items-center gap-3 border-b border-b-subtle px-4">
+      <ngs-panel-header class="playground-source-toolbar flex h-12 items-center gap-3 border-b border-b-border px-4">
         <div class="flex min-w-0 flex-1 items-center gap-2">
           <ngs-icon name="fluent:window-dev-tools-24-regular" class="size-5" />
           <span class="truncate text-sm font-medium">Example source</span>
@@ -25,7 +25,7 @@
           <ngs-icon name="fluent:dismiss-24-regular" />
         </button>
       </ngs-panel-header>
-      <ngs-panel-sidebar class="playground-source-sidebar w-72 border-e border-e-subtle p-2">
+      <ngs-panel-sidebar class="playground-source-sidebar w-72 border-e border-e-border p-2">
         <div class="px-3 pb-2 pt-1 text-xs font-medium uppercase tracking-wide text-neutral-500">
           Files
         </div>
@@ -40,7 +40,7 @@
       </ngs-panel-sidebar>
       <ngs-panel-content class="playground-source-main">
         <ngs-panel absolute>
-          <ngs-panel-header class="border-b border-b-subtle">
+          <ngs-panel-header class="border-b border-b-border">
             <div class="flex h-10 shrink-0 items-center gap-2 px-4">
               <ngs-icon [name]="currentSourceFile?.icon || 'fluent:code-24-regular'" />
               <span class="truncate text-sm">{{ currentFileName }}</span>

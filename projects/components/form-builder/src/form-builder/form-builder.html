@@ -122,18 +122,22 @@
 </ng-template>
 
 <ngs-panel class="ngs-form-builder-shell">
-  <ngs-panel-header autoHeight class="flex items-center justify-between gap-4 border-b border-border px-5 py-3">
-    <div class="min-w-0">
-      <p class="text-sm text-secondary">Form builder</p>
-      <h2 class="truncate text-lg font-semibold">{{ schema().title || 'Untitled form' }}</h2>
-    </div>
+  <ngs-panel-header autoHeight class="border-b border-border px-5 py-3">
+    <ngs-toolbar>
+      <div class="min-w-0">
+        <ngs-toolbar-subtitle>Form builder</ngs-toolbar-subtitle>
+        <ngs-toolbar-title appearance="large" class="truncate">{{ schema().title || 'Untitled form' }}</ngs-toolbar-title>
+      </div>
 
-    <div class="flex items-center gap-2">
-      <button ngsButton="outlined" type="button" (click)="openPreview(previewDialog)">
-        <ngs-icon name="fluent:eye-24-regular"/>
-        Preview
-      </button>
-    </div>
+      <ngs-toolbar-spacer/>
+
+      <ngs-toolbar-item>
+        <button ngsButton="outlined" type="button" (click)="openPreview(previewDialog)">
+          <ngs-icon name="fluent:eye-24-regular"/>
+          Preview
+        </button>
+      </ngs-toolbar-item>
+    </ngs-toolbar>
   </ngs-panel-header>
 
   <ngs-panel-sidebar class="ngs-form-builder-palette w-80 border-e border-border">

@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, TemplateRef, computed, inject, input, model, output, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, TemplateRef, computed, inject, input, model, numberAttribute, output, signal, viewChild } from '@angular/core';
 import { FormsModule, FormControl } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardAside, CardContent, CardHeader } from '@ngstarter-ui/components/card';
@@ -81,6 +81,17 @@ type FormBuilderNativeDragItem =
   | { kind: 'field'; definition: FormBuilderFieldDefinition }
   | { kind: 'section' };
 
+interface FormBuilderNativeDropTarget {
+  containerId: string;
+  index: number;
+}
+
+interface FormBuilderPendingNativeDropTarget {
+  target: FormBuilderNativeDropTarget;
+  clientX: number;
+  clientY: number;
+}
+
 const ROOT_DROP_LIST_ID = 'ngs-form-builder-root-fields';
 const PALETTE_DRAG_TYPE = 'application/x-ngstarter-form-builder-field';
 const PALETTE_DRAG_ITEM = 'application/x-ngstarter-form-builder-item';
@@ -132,7 +143,7 @@ const ACTUAL_FIELDS_TAB_INDEX = 1;
     'class': 'ngs-form-builder'
   }
 })
-export class FormBuilder {
+export class FormBuilder implements OnDestroy {
   private readonly dialog = inject(Dialog);
   private readonly confirmManager = inject(ConfirmManager);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -146,10 +157,13 @@ export class FormBuilder {
   private fieldTreeRootNodes: FormBuilderFieldTreeNode[] = [];
   private fieldTreeStructureKey = '';
   private suppressPaletteClick = false;
+  private pendingNativeDropTarget: FormBuilderPendingNativeDropTarget | null = null;
+  private nativeDropTargetDelayTimer: number | null = null;
 
   readonly schema = model<FormBuilderSchema>(createDefaultFormBuilderSchema());
   readonly paletteTitle = input('Fields');
   readonly inspectorTitle = input('Field properties');
+  readonly canvasDropPlaceholderDelay = input(200, { transform: numberAttribute });
   readonly uploadCallback = input<FormBuilderUploadCallback | null | undefined>(undefined);
 
   readonly fieldSelected = output<FormBuilderFieldChange>();
@@ -165,7 +179,7 @@ export class FormBuilder {
     return item?.kind === 'field' ? item.definition : null;
   });
   protected readonly nativeDragSection = computed(() => this.nativeDragItem()?.kind === 'section');
-  protected readonly nativeDropTarget = signal<{ containerId: string; index: number } | null>(null);
+  protected readonly nativeDropTarget = signal<FormBuilderNativeDropTarget | null>(null);
   protected readonly expandedFieldTreeNodeIds = signal<ReadonlySet<string>>(new Set());
   protected readonly definitions = computed<FormBuilderFieldDefinition[]>(() => [
     ...DEFAULT_FORM_BUILDER_ITEMS,
@@ -266,6 +280,10 @@ export class FormBuilder {
     }
   };
 
+  ngOnDestroy(): void {
+    this.clearPendingNativeDropTarget();
+  }
+
   protected paletteDragStarted(event: DragEvent, definition: FormBuilderFieldDefinition): void {
     this.suppressPaletteClick = true;
     this.nativeDragItem.set({ kind: 'field', definition });
@@ -289,7 +307,7 @@ export class FormBuilder {
 
   protected paletteDragEnded(): void {
     this.nativeDragItem.set(null);
-    this.setNativeDropTarget(null);
+    this.clearNativeDropTarget();
     window.setTimeout(() => {
       this.suppressPaletteClick = false;
     });
@@ -384,9 +402,7 @@ export class FormBuilder {
       return;
     }
 
-    if (this.nativeDropTarget()?.containerId === containerId) {
-      this.setNativeDropTarget(null);
-    }
+    this.clearNativeDropTarget(containerId);
   }
 
   protected nativeFieldDrop(event: DragEvent, containerId: string): void {
@@ -398,7 +414,7 @@ export class FormBuilder {
 
     event.preventDefault();
     event.stopPropagation();
-    const target = this.nativeDropTarget();
+    const target = this.nativeDropTarget() ?? this.pendingNativeDropTarget?.target ?? null;
     const index = target?.containerId === containerId ? target.index : 0;
 
     if (item.kind === 'section') {
@@ -412,7 +428,7 @@ export class FormBuilder {
     }
 
     this.nativeDragItem.set(null);
-    this.setNativeDropTarget(null);
+    this.clearNativeDropTarget();
   }
 
   protected isNativeDropTarget(containerId: string, index: number): boolean {
@@ -746,7 +762,7 @@ export class FormBuilder {
       event.dataTransfer.dropEffect = 'copy';
     }
 
-    this.setNativeDropTarget({
+    this.scheduleNativeDropTarget(event, {
       containerId,
       index: this.resolveNativeDropIndex(event, itemSelector)
     });
@@ -764,19 +780,91 @@ export class FormBuilder {
       event.dataTransfer.dropEffect = 'copy';
     }
 
-    this.setNativeDropTarget({ containerId, index });
+    this.scheduleNativeDropTarget(event, { containerId, index });
   }
 
-  private setNativeDropTarget(target: { containerId: string; index: number } | null): void {
+  private scheduleNativeDropTarget(event: DragEvent, target: FormBuilderNativeDropTarget): void {
     const current = this.nativeDropTarget();
 
-    if (current?.containerId === target?.containerId && current?.index === target?.index) {
+    if (this.isSameNativeDropTarget(current, target)) {
+      this.clearPendingNativeDropTarget();
+      return;
+    }
+
+    const delay = Math.max(0, this.canvasDropPlaceholderDelay() || 0);
+
+    if (delay === 0) {
+      this.clearPendingNativeDropTarget();
+      this.setNativeDropTarget(target);
+      return;
+    }
+
+    if (
+      this.pendingNativeDropTarget &&
+      this.isSameNativeDropTarget(this.pendingNativeDropTarget.target, target) &&
+      this.pendingNativeDropTarget.clientX === event.clientX &&
+      this.pendingNativeDropTarget.clientY === event.clientY
+    ) {
+      return;
+    }
+
+    this.clearPendingNativeDropTarget();
+    this.setNativeDropTarget(null);
+
+    const pending: FormBuilderPendingNativeDropTarget = {
+      target,
+      clientX: event.clientX,
+      clientY: event.clientY
+    };
+
+    this.pendingNativeDropTarget = pending;
+    this.nativeDropTargetDelayTimer = window.setTimeout(() => {
+      if (this.pendingNativeDropTarget !== pending) {
+        return;
+      }
+
+      this.pendingNativeDropTarget = null;
+      this.nativeDropTargetDelayTimer = null;
+      this.setNativeDropTarget(target);
+    }, delay);
+  }
+
+  private clearNativeDropTarget(containerId?: string): void {
+    if (!containerId || this.pendingNativeDropTarget?.target.containerId === containerId) {
+      this.clearPendingNativeDropTarget();
+    }
+
+    if (!containerId || this.nativeDropTarget()?.containerId === containerId) {
+      this.setNativeDropTarget(null);
+    }
+  }
+
+  private clearPendingNativeDropTarget(): void {
+    if (this.nativeDropTargetDelayTimer !== null) {
+      window.clearTimeout(this.nativeDropTargetDelayTimer);
+      this.nativeDropTargetDelayTimer = null;
+    }
+
+    this.pendingNativeDropTarget = null;
+  }
+
+  private setNativeDropTarget(target: FormBuilderNativeDropTarget | null): void {
+    const current = this.nativeDropTarget();
+
+    if (this.isSameNativeDropTarget(current, target)) {
       return;
     }
 
     const previousRects = this.captureCanvasItemRects();
     this.nativeDropTarget.set(target);
     this.afterNextPaint(() => this.animateCanvasItemMoves(previousRects));
+  }
+
+  private isSameNativeDropTarget(
+    first: FormBuilderNativeDropTarget | null | undefined,
+    second: FormBuilderNativeDropTarget | null | undefined
+  ): boolean {
+    return first?.containerId === second?.containerId && first?.index === second?.index;
   }
 
   private captureCanvasItemRects(): Map<string, DOMRect> {

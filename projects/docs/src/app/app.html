@@ -16,9 +16,9 @@
                    [mode]="sidebarExpanded() ? 'side' : 'over'"
                    [collapsed]="!sidebarExpanded()"
                    (openedChange)="onSidebarOpenedChange($event)"
-                   class="border-e border-e-subtle">
+                   class="border-e border-e-border">
         <ngs-sidebar>
-          <ngs-sidebar-header block class="h-18 border-b border-b-subtle">
+          <ngs-sidebar-header block class="h-18 border-b border-b-border">
             <div class="h-full flex items-center justify-center" *ngsSidenavCollapsed>
               <a routerLink="/" ngs-logo>
                 <ngs-logo-shape/>
@@ -88,7 +88,7 @@
       </ngs-sidenav>
       <ngs-sidenav-content>
         <ngs-panel>
-          <ngs-panel-header class="h-18 border-b border-b-subtle">
+          <ngs-panel-header class="h-18 border-b border-b-border">
             <ngs-toolbar class="h-full ps-4 pe-4 md:pe-6">
               <button ngsIconButton (click)="sidenav.toggle()">
                 <ngs-icon name="fluent:navigation-24-regular"/>

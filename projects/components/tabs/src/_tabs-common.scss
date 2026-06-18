@@ -3,7 +3,7 @@
 @mixin ngs-tabs-common-header {
   --ngs-tab-group-header-border-bottom: 1px solid var(--ngs-color-border);
   --ngs-tab-group-header-border-top: none;
-  --ngs-tab-label-padding: 12px 16px;
+  --ngs-tab-label-padding: 0 16px;
   --ngs-tab-label-cursor: pointer;
   --ngs-tab-label-color: var(--ngs-color-on-surface-variant);
   --ngs-tab-label-active-color: var(--ngs-color-primary);
@@ -14,6 +14,7 @@
   --ngs-tab-label-transition: color var(--ngs-tab-group-animation-duration, 200ms) cubic-bezier(0.35, 0, 0.25, 1);
   --ngs-tab-group-pagination-control-before-border-right: 1px solid var(--ngs-color-border);
   --ngs-tab-group-pagination-control-after-border-left: 1px solid var(--ngs-color-border);
+  --ngs-tab-group-header-height: --spacing(14);
 
   display: flex;
   flex-direction: column;
@@ -21,7 +22,7 @@
   &.ngs-tab-group-inverted {
     flex-direction: column-reverse;
     --ngs-tab-group-header-border-bottom: none;
-    --ngs-tab-group-header-border-top: 1px solid var(--ngs-color-subtle);
+    --ngs-tab-group-header-border-top: 1px solid var(--ngs-color-border);
   }
 
   .ngs-tab-group-header-container {
@@ -30,6 +31,7 @@
     position: relative;
     overflow: hidden;
     flex: none;
+    height: var(--ngs-tab-group-header-height);
 
     &::before,
     &::after {

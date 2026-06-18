@@ -1,6 +1,6 @@
 <div class="grid gap-4 sm:grid-cols-2">
   @for (file of files(); track file.name) {
-    <div class="flex items-center gap-4 rounded-lg border border-subtle p-4">
+    <div class="flex items-center gap-4 rounded-lg border border-border p-4">
       <ngs-file-type [mimeType]="file.mimeType" [fallback]="file.fallback" class="size-12"/>
       <div class="min-w-0">
         <div class="truncate text-sm">{{ file.name }}</div>

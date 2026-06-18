@@ -4189,13 +4189,13 @@
           "name": "file-type-gallery-example",
           "title": "File type gallery",
           "file": "projects/docs/src/app/components/file-type/_examples/file-type-gallery-example/file-type-gallery-example.html",
-          "source": "<div class=\"grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5\">\n  @for (type of types(); track type) {\n    <div class=\"flex flex-col items-center gap-2 rounded-lg border border-subtle p-4\">\n      <ngs-file-type [extension]=\"type\" class=\"size-16\"/>\n      <div class=\"text-xs uppercase text-secondary\">{{ type }}</div>\n    </div>\n  }\n</div>"
+          "source": "<div class=\"grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5\">\n  @for (type of types(); track type) {\n    <div class=\"flex flex-col items-center gap-2 rounded-lg border border-border p-4\">\n      <ngs-file-type [extension]=\"type\" class=\"size-16\"/>\n      <div class=\"text-xs uppercase text-secondary\">{{ type }}</div>\n    </div>\n  }\n</div>"
         },
         {
           "name": "file-type-mime-example",
           "title": "File type mime",
           "file": "projects/docs/src/app/components/file-type/_examples/file-type-mime-example/file-type-mime-example.html",
-          "source": "<div class=\"grid gap-4 sm:grid-cols-2\">\n  @for (file of files(); track file.name) {\n    <div class=\"flex items-center gap-4 rounded-lg border border-subtle p-4\">\n      <ngs-file-type [mimeType]=\"file.mimeType\" [fallback]=\"file.fallback\" class=\"size-12\"/>\n      <div class=\"min-w-0\">\n        <div class=\"truncate text-sm\">{{ file.name }}</div>\n        <div class=\"truncate text-xs text-secondary\">{{ file.mimeType }}</div>\n      </div>\n    </div>\n  }\n</div>"
+          "source": "<div class=\"grid gap-4 sm:grid-cols-2\">\n  @for (file of files(); track file.name) {\n    <div class=\"flex items-center gap-4 rounded-lg border border-border p-4\">\n      <ngs-file-type [mimeType]=\"file.mimeType\" [fallback]=\"file.fallback\" class=\"size-12\"/>\n      <div class=\"min-w-0\">\n        <div class=\"truncate text-sm\">{{ file.name }}</div>\n        <div class=\"truncate text-xs text-secondary\">{{ file.mimeType }}</div>\n      </div>\n    </div>\n  }\n</div>"
         }
       ],
       "previewAsset": "projects/components/file-type/preview.svg",
@@ -4468,6 +4468,7 @@
         "validatorsFromRules"
       ],
       "inputs": [
+        "canvasDropPlaceholderDelay",
         "control",
         "definitions",
         "editableCanvas",
@@ -4499,7 +4500,6 @@
         "--ngs-color-primary",
         "--ngs-color-primary-container",
         "--ngs-color-surface",
-        "--ngs-color-surface-container-low",
         "--ngs-color-surface-container-lowest",
         "--ngs-field-radius",
         "--ngs-font-size-base",
@@ -5726,13 +5726,13 @@
         "Layout with nested layouts example",
         "Layout with nested layouts"
       ],
-      "minimalExample": "<div class=\"h-[300px] border border-muted\">\n  <ngs-layout>\n    <ngs-layout-sidebar>\n      <div class=\"p-6 border-r border-e-muted h-full w-[240px]\">Sidebar</div>\n    </ngs-layout-sidebar>\n    <ngs-layout-content class=\"p-6\">\n      Body\n    </ngs-layout-content>\n    <ngs-layout-aside>\n      <div class=\"p-6 border-l border-s-muted h-full w-[200px]\">Aside</div>\n    </ngs-layout-aside>\n  </ngs-layout>\n</div>",
+      "minimalExample": "<div class=\"h-[300px] border border-muted\">\n  <ngs-layout>\n    <ngs-layout-sidebar>\n      <div class=\"p-6 border-r border-e-muted h-full w-[240px]\">Sidebar</div>\n    </ngs-layout-sidebar>\n    <ngs-layout-content class=\"p-6\">\n      Body\n    </ngs-layout-content>\n    <ngs-layout-aside>\n      <div class=\"p-6 border-s border-s-muted h-full w-[200px]\">Aside</div>\n    </ngs-layout-aside>\n  </ngs-layout>\n</div>",
       "exampleFiles": [
         {
           "name": "layout-aside-example",
           "title": "Layout aside",
           "file": "projects/docs/src/app/components/layout/_examples/layout-aside-example/layout-aside-example.html",
-          "source": "<div class=\"h-[300px] border border-muted\">\n  <ngs-layout>\n    <ngs-layout-sidebar>\n      <div class=\"p-6 border-r border-e-muted h-full w-[240px]\">Sidebar</div>\n    </ngs-layout-sidebar>\n    <ngs-layout-content class=\"p-6\">\n      Body\n    </ngs-layout-content>\n    <ngs-layout-aside>\n      <div class=\"p-6 border-l border-s-muted h-full w-[200px]\">Aside</div>\n    </ngs-layout-aside>\n  </ngs-layout>\n</div>"
+          "source": "<div class=\"h-[300px] border border-muted\">\n  <ngs-layout>\n    <ngs-layout-sidebar>\n      <div class=\"p-6 border-r border-e-muted h-full w-[240px]\">Sidebar</div>\n    </ngs-layout-sidebar>\n    <ngs-layout-content class=\"p-6\">\n      Body\n    </ngs-layout-content>\n    <ngs-layout-aside>\n      <div class=\"p-6 border-s border-s-muted h-full w-[200px]\">Aside</div>\n    </ngs-layout-aside>\n  </ngs-layout>\n</div>"
         },
         {
           "name": "layout-footer-example",
@@ -9434,7 +9434,7 @@
           "name": "tab-panel-with-panels-inside-example",
           "title": "Tab panel with panels inside",
           "file": "projects/docs/src/app/navigation/tab-panel/_examples/tab-panel-with-panels-inside-example/tab-panel-with-panels-inside-example.html",
-          "source": "<div class=\"flex gap-10\">\n  <ngs-tab-panel activeItemId=\"home\" class=\"h-[500px]\">\n    <ngs-tab-panel-content>\n      <ngs-tab-panel-nav>\n        <ngs-tab-panel-item for=\"home\">\n          <ngs-icon name=\"fluent:home-24-regular\" ngsTabPanelItemIcon/>\n          <ngs-tab-panel-item-text>Home</ngs-tab-panel-item-text>\n        </ngs-tab-panel-item>\n        <ngs-tab-panel-item for=\"code\">\n          <ngs-icon name=\"fluent:code-24-regular\" ngsTabPanelItemIcon/>\n          <ngs-tab-panel-item-text>Code</ngs-tab-panel-item-text>\n        </ngs-tab-panel-item>\n      </ngs-tab-panel-nav>\n    </ngs-tab-panel-content>\n    <ngs-tab-panel-aside class=\"bg-surface-container-low rounded-xl\">\n      <ng-template ngsTabPanelAsideContent=\"home\">\n        <ngs-panel>\n          <ngs-panel-header class=\"border-b border-b-subtle flex items-center px-4\">Home Header</ngs-panel-header>\n          <ngs-panel-content class=\"p-4\">\n            <div class=\"h-[1000px]\">Home Content</div>\n          </ngs-panel-content>\n          <ngs-panel-footer class=\"border-t border-t-subtle flex items-center px-4\">Footer</ngs-panel-footer>\n        </ngs-panel>\n      </ng-template>\n      <ng-template ngsTabPanelAsideContent=\"code\">\n        <ngs-panel>\n          <ngs-panel-header class=\"border-b border-b-subtle flex items-center px-4\">Code Header</ngs-panel-header>\n          <ngs-panel-content class=\"p-4\">\n            <div class=\"h-[1000px]\">Code Content</div>\n          </ngs-panel-content>\n          <ngs-panel-footer class=\"border-t border-t-subtle flex items-center px-4\">Footer</ngs-panel-footer>\n        </ngs-panel>\n      </ng-\n..."
+          "source": "<div class=\"flex gap-10\">\n  <ngs-tab-panel activeItemId=\"home\" class=\"h-[500px]\">\n    <ngs-tab-panel-content>\n      <ngs-tab-panel-nav>\n        <ngs-tab-panel-item for=\"home\">\n          <ngs-icon name=\"fluent:home-24-regular\" ngsTabPanelItemIcon/>\n          <ngs-tab-panel-item-text>Home</ngs-tab-panel-item-text>\n        </ngs-tab-panel-item>\n        <ngs-tab-panel-item for=\"code\">\n          <ngs-icon name=\"fluent:code-24-regular\" ngsTabPanelItemIcon/>\n          <ngs-tab-panel-item-text>Code</ngs-tab-panel-item-text>\n        </ngs-tab-panel-item>\n      </ngs-tab-panel-nav>\n    </ngs-tab-panel-content>\n    <ngs-tab-panel-aside class=\"bg-surface-container-low rounded-xl\">\n      <ng-template ngsTabPanelAsideContent=\"home\">\n        <ngs-panel>\n          <ngs-panel-header class=\"border-b border-b-border flex items-center px-4\">Home Header</ngs-panel-header>\n          <ngs-panel-content class=\"p-4\">\n            <div class=\"h-[1000px]\">Home Content</div>\n          </ngs-panel-content>\n          <ngs-panel-footer class=\"border-t border-t-border flex items-center px-4\">Footer</ngs-panel-footer>\n        </ngs-panel>\n      </ng-template>\n      <ng-template ngsTabPanelAsideContent=\"code\">\n        <ngs-panel>\n          <ngs-panel-header class=\"border-b border-b-border flex items-center px-4\">Code Header</ngs-panel-header>\n          <ngs-panel-content class=\"p-4\">\n            <div class=\"h-[1000px]\">Code Content</div>\n          </ngs-panel-content>\n          <ngs-panel-footer class=\"border-t border-t-border flex items-center px-4\">Footer</ngs-panel-footer>\n        </ngs-panel>\n      </ng-\n..."
         }
       ],
       "previewAsset": "projects/components/tab-panel/preview.svg",
@@ -9739,12 +9739,12 @@
         "--ngs-color-border",
         "--ngs-color-on-surface-variant",
         "--ngs-color-primary",
-        "--ngs-color-subtle",
         "--ngs-color-surface-container-high",
         "--ngs-tab-content-padding",
         "--ngs-tab-group-animation-duration",
         "--ngs-tab-group-header-border-bottom",
         "--ngs-tab-group-header-border-top",
+        "--ngs-tab-group-header-height",
         "--ngs-tab-group-pagination-control-after-border-left",
         "--ngs-tab-group-pagination-control-before-border-right",
         "--ngs-tab-label-active-border-bottom",
@@ -10308,25 +10308,25 @@
         "Toolbar overflow",
         "Toolbar nav"
       ],
-      "minimalExample": "<ngs-toolbar>\n  <ngs-toolbar-title>My App</ngs-toolbar-title>\n  <ngs-toolbar-spacer/>\n  <button>Login</button>\n</ngs-toolbar>",
+      "minimalExample": "<ngs-toolbar>\n  <ngs-toolbar-title appearance=\"large\">My App</ngs-toolbar-title>\n  <ngs-toolbar-spacer/>\n  <button>Login</button>\n</ngs-toolbar>",
       "exampleFiles": [
         {
           "name": "basic-toolbar-example",
           "title": "Basic toolbar",
           "file": "projects/docs/src/app/components/toolbar/_examples/basic-toolbar-example/basic-toolbar-example.html",
-          "source": "<ngs-toolbar>\n  <ngs-toolbar-title>My App</ngs-toolbar-title>\n  <ngs-toolbar-spacer/>\n  <button>Login</button>\n</ngs-toolbar>"
+          "source": "<ngs-toolbar>\n  <ngs-toolbar-title appearance=\"large\">My App</ngs-toolbar-title>\n  <ngs-toolbar-spacer/>\n  <button>Login</button>\n</ngs-toolbar>"
         },
         {
           "name": "multi-row-toolbar-example",
           "title": "Multi row toolbar",
           "file": "projects/docs/src/app/components/toolbar/_examples/multi-row-toolbar-example/multi-row-toolbar-example.html",
-          "source": "<ngs-toolbar>\n  <ngs-toolbar-row>\n    <ngs-toolbar-title>Multi-row Toolbar</ngs-toolbar-title>\n    <ngs-toolbar-spacer></ngs-toolbar-spacer>\n    <ngs-toolbar-item>Menu</ngs-toolbar-item>\n  </ngs-toolbar-row>\n  <ngs-toolbar-row>\n    <ngs-toolbar-item>Second row content</ngs-toolbar-item>\n  </ngs-toolbar-row>\n</ngs-toolbar>"
+          "source": "<ngs-toolbar>\n  <ngs-toolbar-row>\n    <ngs-toolbar-title appearance=\"large\">Multi-row Toolbar</ngs-toolbar-title>\n    <ngs-toolbar-spacer></ngs-toolbar-spacer>\n    <ngs-toolbar-item>Menu</ngs-toolbar-item>\n  </ngs-toolbar-row>\n  <ngs-toolbar-row>\n    <ngs-toolbar-item>Second row content</ngs-toolbar-item>\n  </ngs-toolbar-row>\n</ngs-toolbar>"
         },
         {
           "name": "toolbar-nav-example",
           "title": "Toolbar nav",
           "file": "projects/docs/src/app/components/toolbar/_examples/toolbar-nav-example/toolbar-nav-example.html",
-          "source": "<ngs-toolbar>\n  <ngs-toolbar-title>Nav Example</ngs-toolbar-title>\n  <ngs-toolbar-nav>\n    <ngs-toolbar-nav-link [active]=\"true\">Home</ngs-toolbar-nav-link>\n    <ngs-toolbar-nav-link>About</ngs-toolbar-nav-link>\n    <ngs-toolbar-nav-link>Contact</ngs-toolbar-nav-link>\n  </ngs-toolbar-nav>\n  <ngs-toolbar-spacer />\n  <ngs-toolbar-nav>\n    <a ngs-toolbar-nav-link [routerLink]=\"['/dashboard']\">Dashboard</a>\n  </ngs-toolbar-nav>\n</ngs-toolbar>"
+          "source": "<ngs-toolbar>\n  <ngs-toolbar-title appearance=\"large\">Nav Example</ngs-toolbar-title>\n  <ngs-toolbar-nav>\n    <ngs-toolbar-nav-link [active]=\"true\">Home</ngs-toolbar-nav-link>\n    <ngs-toolbar-nav-link>About</ngs-toolbar-nav-link>\n    <ngs-toolbar-nav-link>Contact</ngs-toolbar-nav-link>\n  </ngs-toolbar-nav>\n  <ngs-toolbar-spacer />\n  <ngs-toolbar-nav>\n    <a ngs-toolbar-nav-link [routerLink]=\"['/dashboard']\">Dashboard</a>\n  </ngs-toolbar-nav>\n</ngs-toolbar>"
         }
       ],
       "previewAsset": "projects/components/toolbar/preview.svg",
@@ -10350,10 +10350,12 @@
         "ToolbarRow",
         "ToolbarSpacer",
         "ToolbarSubtitle",
-        "ToolbarTitle"
+        "ToolbarTitle",
+        "ToolbarTitleAppearance"
       ],
       "inputs": [
         "active",
+        "appearance",
         "hidden"
       ],
       "outputs": [],
@@ -10368,6 +10370,7 @@
         "--ngs-nav-item-hover-color",
         "--ngs-nav-item-padding",
         "--ngs-nav-item-radius",
+        "--ngs-toolbar-gap",
         "--ngs-toolbar-nav-link-active-color",
         "--ngs-toolbar-nav-link-color",
         "--ngs-toolbar-nav-link-font-size",
@@ -10377,7 +10380,9 @@
         "--ngs-toolbar-nav-link-radius",
         "--ngs-toolbar-subtitle-color",
         "--ngs-toolbar-subtitle-font-size",
-        "--ngs-toolbar-subtitle-weight"
+        "--ngs-toolbar-subtitle-weight",
+        "--ngs-toolbar-title-font-size",
+        "--ngs-toolbar-title-font-weight"
       ],
       "example": null
     },
