@@ -9,6 +9,7 @@ export interface DataViewConfig {
   pageSizeOptions?: number[];
   pageSize?: number;
   rowSelection?: 'single' | 'multiple';
+  allowSingleRowSelectionByClick?: boolean;
   selectionWidth?: number;
   stickyHeader?: boolean;
   withPagination?: boolean;

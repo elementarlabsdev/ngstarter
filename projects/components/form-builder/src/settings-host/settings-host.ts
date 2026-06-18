@@ -28,13 +28,13 @@ import {
   FormBuilderSettingsDefinition,
   FormBuilderSettingsInheritance
 } from '../types';
-import { FormBuilderRenderer } from '../form-builder-renderer/form-builder-renderer';
+import { FormRenderer } from '../form-renderer/form-renderer';
 
 @Component({
   selector: 'ngs-form-builder-settings-host',
   exportAs: 'ngsFormBuilderSettingsHost',
   imports: [
-    FormBuilderRenderer
+    FormRenderer
   ],
   templateUrl: './settings-host.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -27,6 +27,11 @@ export class Overview {
       description: 'Allow users to select rows for further actions.'
     },
     {
+      routerLink: 'row-click-selection',
+      title: 'Data view row click selection',
+      description: 'Select one active row by clicking the row body.'
+    },
+    {
       routerLink: 'with-pagination',
       title: 'Data view with pagination',
       description: 'Navigate through large datasets with ease.'

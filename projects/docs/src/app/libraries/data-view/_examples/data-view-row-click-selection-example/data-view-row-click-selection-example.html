@@ -1,0 +1,18 @@
+<div class="mb-4 flex justify-end">
+  <button ngsButton="outlined" type="button" (click)="dataView.unselectAll()">Unselect</button>
+</div>
+
+<ngs-data-view #dataView="ngsDataView"
+               [columnDefs]="columnDefs"
+               [data]="data"
+               allowSingleRowSelectionByClick
+               hoverRows
+               class="h-[300px]"
+               (rowSelectionChanged)="rowSelectionChanged($event)"
+               (selectionChanged)="selectionChanged($event)" />
+
+<div class="mt-8">
+  <div class="text-sm">Selection source: {{ lastSelectionSource }}</div>
+  <div class="mt-4 text-sm">Selected row:</div>
+  <pre class="mt-2">{{ selectedRows | json }}</pre>
+</div>

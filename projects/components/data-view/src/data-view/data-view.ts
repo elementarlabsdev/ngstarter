@@ -94,12 +94,13 @@ import { fromEvent, takeUntil, finalize, take, timer, Subject, merge } from 'rxj
     '[class.embedded]': 'embedded()',
     '[class.has-horizontal-scroll]': 'hasHorizontalScroll()',
     '[class.is-browser]': 'isBrowser()',
+    '[class.allow-row-click-selection]': 'allowSingleRowSelectionByClick()',
     '[style.--ngs-data-view-header-height.px]': 'headerHeight()',
     '[style.--ngs-data-view-selection-column-width.px]': 'selectionWidth()',
     '[class.is-auto-height]': 'autoHeight()',
   }
 })
-export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
+export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> {
   private _cdr = inject(ChangeDetectorRef);
   private _destroyRef = inject(DestroyRef);
   private _platformId = inject(PLATFORM_ID);
@@ -180,6 +181,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
   withColumnSettings = input(false, { transform: booleanAttribute });
   embedded = input(this._config?.embedded ?? false, { transform: booleanAttribute });
   rowSelection = input<'single' | 'multiple'>(this._config?.rowSelection ?? 'multiple');
+  allowSingleRowSelectionByClick = input(this._config?.allowSingleRowSelectionByClick ?? false, { transform: booleanAttribute });
   selectionWidth = input(this._config?.selectionWidth ?? 52, { transform: (v: any) => parseInt(v, 10) || this._config?.selectionWidth || 52 });
   minColumnWidth = input(this._config?.minColumnWidth ?? 50, { transform: (v: any) => parseInt(v, 10) || this._config?.minColumnWidth || 40 });
 
@@ -885,16 +887,25 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
   readonly loadEnd = output<void>();
   readonly refreshEnd = output<void>();
 
-  get api(): DataViewAPI {
+  get api(): DataViewAPI<T> {
     return {
       search: (value: string): void => {
         this.dataSource().filter = value.trim().toLowerCase();
       },
       selectAll: (): void => {
-        this._selectAll();
+        this.selectAll();
       },
       unselectAll: (): void => {
-        this._unselectAll();
+        this.unselectAll();
+      },
+      selectOne: (row: T): void => {
+        this.selectOne(row);
+      },
+      isSelected: (row: T): boolean => {
+        return this.isSelected(row);
+      },
+      hasSelected: (): boolean => {
+        return this.hasSelected();
       },
       refresh: (): void => {
         this.refresh();
@@ -1311,9 +1322,9 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
 
   toggleAllRows(): void {
     if (this.isAllSelected()) {
-      this._unselectAll();
+      this.unselectAll();
     } else {
-      this._selectAll();
+      this.selectAll();
     }
   }
 
@@ -1325,12 +1336,47 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
     }
 
     this.rowSelectionChanged.emit({
+      source: 'checkbox',
       checkboxChange: event,
       row,
       checked: event.checked
     });
 
     this.selectionChanged.emit(this.selection.selected);
+  }
+
+  protected selectRowByClick(event: MouseEvent, row: T): void {
+    if (!this.allowSingleRowSelectionByClick() || this._isInteractiveRowClick(event)) {
+      return;
+    }
+
+    this.selectOne(row);
+  }
+
+  private _isInteractiveRowClick(event: MouseEvent): boolean {
+    if (event.defaultPrevented) {
+      return true;
+    }
+
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) {
+      return false;
+    }
+
+    return !!target.closest([
+      'a',
+      'button',
+      'input',
+      'select',
+      'textarea',
+      '[contenteditable="true"]',
+      '[role="button"]',
+      '[role="checkbox"]',
+      '[role="menuitem"]',
+      'ngs-checkbox',
+      'ngs-menu',
+      'ngs-data-view-action-bar',
+    ].join(','));
   }
 
   onPageChange(event: PageEvent): void {
@@ -1526,16 +1572,40 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface {
     this.sortChange.emit(event);
   }
 
-  private _selectAll(): void {
+  selectAll(): void {
     const data = this.rowModelType() === 'serverSide' ? this.dataSource().data : this.data();
     this.selection.select(...data);
     this.selectionChanged.emit(data);
     this.allRowsSelectionChanged.emit(true);
   }
 
-  private _unselectAll(): void {
+  unselectAll(): void {
     this.selection.clear();
     this.selectionChanged.emit([]);
     this.allRowsSelectionChanged.emit(false);
+  }
+
+  selectOne(row: T): void {
+    if (this.selection.selected.length === 1 && this.selection.isSelected(row)) {
+      return;
+    }
+
+    this.selection.clear();
+    this.selection.select(row);
+
+    this.rowSelectionChanged.emit({
+      source: 'row',
+      row,
+      checked: true
+    });
+    this.selectionChanged.emit(this.selection.selected);
+  }
+
+  isSelected(row: T): boolean {
+    return this.selection.isSelected(row);
+  }
+
+  hasSelected(): boolean {
+    return this.selection.hasValue();
   }
 }

@@ -15,7 +15,7 @@ import { DEFAULT_FORM_BUILDER_ITEMS, FORM_BUILDER_FIELDS, FORM_BUILDER_ITEMS, va
 import { FormBuilderField, FormBuilderFieldDefinition, FormBuilderItemDefinition, FormBuilderLayoutItem, FormBuilderSchema, FormBuilderSection, FormBuilderUploadCallback } from '../types';
 import { FormBuilderFieldHost } from '../field-host/field-host';
 
-interface FormBuilderRendererCanvasItem extends FormBuilderLayoutItem {
+interface FormRendererCanvasItem extends FormBuilderLayoutItem {
   field?: FormBuilderField;
   section?: FormBuilderSection;
 }
@@ -29,14 +29,14 @@ interface FormBuilderRendererCanvasItem extends FormBuilderLayoutItem {
     Button,
     FormBuilderFieldHost
   ],
-  templateUrl: './form-builder-renderer.html',
-  styleUrl: './form-builder-renderer.scss',
+  templateUrl: './form-renderer.html',
+  styleUrl: './form-renderer.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-form-renderer'
   }
 })
-export class FormBuilderRenderer {
+export class FormRenderer {
   private readonly providedItems = inject(FORM_BUILDER_ITEMS, { optional: true }) ?? [];
   private readonly providedFields = inject(FORM_BUILDER_FIELDS, { optional: true }) ?? [];
   private readonly orphanControls = new Map<string, FormControl>();
@@ -73,7 +73,7 @@ export class FormBuilderRenderer {
 
     return definitions;
   }, []));
-  protected readonly visibleCanvasItems = computed<FormBuilderRendererCanvasItem[]>(() =>
+  protected readonly visibleCanvasItems = computed<FormRendererCanvasItem[]>(() =>
     this.resolveCanvasItems(this.schema()).filter(item => !!item.field || !!item.section?.fields.length)
   );
   protected readonly formGroup = computed(() => this.createFormGroup());
@@ -297,10 +297,10 @@ export class FormBuilderRenderer {
     return field.settings?.['allowNullValue'] === true;
   }
 
-  private resolveCanvasItems(schema: FormBuilderSchema): FormBuilderRendererCanvasItem[] {
+  private resolveCanvasItems(schema: FormBuilderSchema): FormRendererCanvasItem[] {
     const fieldsById = new Map((schema.fields ?? []).map(field => [field.id, field]));
     const sectionsById = new Map(schema.sections.map(section => [section.id, section]));
-    const items: FormBuilderRendererCanvasItem[] = [];
+    const items: FormRendererCanvasItem[] = [];
 
     for (const item of normalizedLayout(schema)) {
       if (item.kind === 'field') {

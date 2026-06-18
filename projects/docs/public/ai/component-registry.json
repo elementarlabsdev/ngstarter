@@ -3080,6 +3080,7 @@
         "Data view pinning pagination",
         "Data view refresh",
         "Data view resizable columns",
+        "Data view row click selection",
         "Data view server side empty state",
         "Data view server side",
         "Data view sticky columns",
@@ -3142,10 +3143,12 @@
         "DataViewPinAlign",
         "DataViewRowModelType",
         "DataViewRowSelectionEvent",
+        "DataViewRowSelectionEventSource",
         "DataViewState",
         "provideDataView"
       ],
       "inputs": [
+        "allowSingleRowSelectionByClick",
         "autoHeight",
         "bodyScroll",
         "bufferRows",
@@ -4374,7 +4377,7 @@
         "Static blocks are represented as fields with kind: \"static\". The built-in spacer block uses type: \"spacer\", width: 12, and settings.height with one of 8, 16, 24, 32, 48, or 64.",
         "Use width as a 12-column span. Default fields are 12 columns unless a narrower width is set. Nested children in group are sorted and rendered inside that group container.",
         "Option fields use options entries { label: string; value: any; selected?: boolean }. For select, multiple controls array values; clearable enables the clear action. For radio, settings.orientation is \"vertical\" by default and can be \"horizontal\". Hidden fields use type: \"hidden\" and render as native <input type=\"hidden\"> controls included in raw form values. Date and time fields include type: \"date\" for a single date, type: \"time\" for HH:mm time values, and type: \"date-range\" for a DateRange-like value with start/end dates. Upload fields use type: \"upload\", multiple for File[] values, and settings.accept for comma-separated MIME types such as \"*/*\" or \"image/*,application/pdf\". Upload handling can be provided with [uploadCallback] on ngs-form-builder/ngs-form-renderer or globally through provideFormBuilder({ uploadCallback }). The callback receives { field, control, event, files, fileList, multiple } and may return sync/async value stored in the form control.",
-        "Use <ngs-form-renderer> from @ngstarter-ui/components/form-builder to render a saved FormBuilderSchema as a runtime form. The Angular class export is FormBuilderRenderer.",
+        "Use <ngs-form-renderer> from @ngstarter-ui/components/form-builder to render a saved FormBuilderSchema as a runtime form. The Angular class export is FormRenderer.",
         "Register custom placeholders through provideFormBuilder({ fields/items/settings }) using formBuilderField(), formBuilderItem(), and formBuilderSettings(). Custom field definitions can provide defaults, renderer, settings, validators, acceptsChildren, group, icon, and kind."
       ],
       "exampleTopics": [
@@ -4445,7 +4448,6 @@
         "FormBuilderItemKind",
         "FormBuilderLayoutItem",
         "FormBuilderOption",
-        "FormBuilderRenderer",
         "FormBuilderSchema",
         "FormBuilderSection",
         "FormBuilderSectionSettingsContext",
@@ -4459,6 +4461,7 @@
         "FormBuilderUploadCallback",
         "FormBuilderUploadContext",
         "FormBuilderValidationRule",
+        "FormRenderer",
         "provideFormBuilder",
         "provideFormBuilderField",
         "provideFormBuilderFields",

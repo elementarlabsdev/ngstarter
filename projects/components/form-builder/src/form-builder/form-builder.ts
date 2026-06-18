@@ -31,7 +31,7 @@ import {
   FormBuilderUploadCallback
 } from '../types';
 import { FormBuilderFieldHost } from '../field-host/field-host';
-import { FormBuilderRenderer } from '../form-builder-renderer/form-builder-renderer';
+import { FormRenderer } from '../form-renderer/form-renderer';
 import { FormBuilderSettingsHost } from '../settings-host/settings-host';
 
 interface FormBuilderPaletteGroup {
@@ -121,7 +121,7 @@ const ACTUAL_FIELDS_TAB_INDEX = 1;
     TreeNodeDef,
     TreeNodePadding,
     FormBuilderFieldHost,
-    FormBuilderRenderer,
+    FormRenderer,
     FormBuilderSettingsHost,
     ToolbarSubtitle
   ],

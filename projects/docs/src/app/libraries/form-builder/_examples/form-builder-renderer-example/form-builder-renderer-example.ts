@@ -1,6 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
-import { FormBuilderRenderer, FormBuilderSchema } from '@ngstarter-ui/components/form-builder';
+import { FormRenderer, FormBuilderSchema } from '@ngstarter-ui/components/form-builder';
 import { Card, CardContent, CardHeader, CardTitle } from '@ngstarter-ui/components/card';
 
 @Component({
@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@ngstarter-ui/componen
     CardContent,
     CardHeader,
     CardTitle,
-    FormBuilderRenderer
+    FormRenderer
   ],
   templateUrl: './form-builder-renderer-example.html',
   styleUrl: './form-builder-renderer-example.scss'

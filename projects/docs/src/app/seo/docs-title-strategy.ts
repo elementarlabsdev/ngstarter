@@ -200,6 +200,7 @@ const DATA_VIEW_EXAMPLE_TITLES: Record<string, SeoTitleConfig> = {
   'pinning-pagination': { label: 'Data View Pinning and Pagination', detail: 'Wide Paginated Tables' },
   refresh: { label: 'Data View Refresh', detail: 'Client and Server Data Reloading' },
   'resizable-columns': { label: 'Data View Resizable Columns', detail: 'Adjustable Grid Column Widths' },
+  'row-click-selection': { label: 'Data View Row Click Selection', detail: 'Single Active Row Selection' },
   'server-side-empty-state': { label: 'Data View Server-side Empty State', detail: 'Empty API Responses' },
   'server-side': { label: 'Data View Server-side', detail: 'Backend Pagination, Sorting, and Filtering' },
   'sticky-columns': { label: 'Data View Sticky Columns', detail: 'Horizontal Scrolling Tables' },

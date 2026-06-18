@@ -19,6 +19,12 @@
   --ngs-data-view-root-border: 1px solid var(--ngs-data-view-border-color);
   --ngs-data-view-cell-padding: 0 --spacing(4);
 
+  &.allow-row-click-selection {
+    .grid-row {
+      cursor: pointer;
+    }
+  }
+
   .ngs-data-view-resize-line {
     position: absolute;
     top: 0;

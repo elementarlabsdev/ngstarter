@@ -83,6 +83,12 @@ export class Api {
       default: '\'multiple\''
     },
     {
+      name: 'allowSingleRowSelectionByClick',
+      description: 'Selects exactly one row when users click a non-interactive row area and emits row selection outputs.',
+      type: 'boolean',
+      default: 'false'
+    },
+    {
       name: 'withPagination',
       description: 'Shows the paginator and slices client-side rows or requests server-side pages.',
       type: 'boolean',
@@ -237,7 +243,7 @@ export class Api {
   readonly outputs: ApiProperty[] = [
     {
       name: 'rowSelectionChanged',
-      description: 'Emits when a row checkbox changes.',
+      description: 'Emits when a row checkbox changes or a row is selected by click.',
       type: 'DataViewRowSelectionEvent<T>',
       default: 'Row select or unselect'
     },
@@ -419,9 +425,9 @@ export class Api {
       default: 'Template reference API'
     },
     {
-      name: 'api.selectAll() / api.unselectAll()',
-      description: 'Selects or clears all rendered rows.',
-      type: '() => void',
+      name: 'api.selectAll() / api.unselectAll() / api.selectOne(row) / api.isSelected(row) / api.hasSelected()',
+      description: 'Selects all rendered rows, clears selection, selects one row, checks a row, or checks whether any row is selected.',
+      type: '() => void / (row: T) => void / (row: T) => boolean / () => boolean',
       default: 'Template reference API'
     },
     {
@@ -440,6 +446,12 @@ export class Api {
       name: 'getSnapshot() / applyState(state)',
       description: 'Component instance methods for saving and restoring column state.',
       type: 'DataViewState[]',
+      default: 'Use through a component reference'
+    },
+    {
+      name: 'selectAll() / unselectAll() / selectOne(row) / isSelected(row) / hasSelected()',
+      description: 'Component instance methods for selecting all rows, clearing selection, selecting one row, checking a row, or checking any selection.',
+      type: '() => void / (row: T) => void / (row: T) => boolean / () => boolean',
       default: 'Use through a component reference'
     },
     {
@@ -504,6 +516,12 @@ export class Api {
       description: 'Default row selection mode.',
       type: '\'single\' | \'multiple\'',
       default: '\'multiple\''
+    },
+    {
+      name: 'allowSingleRowSelectionByClick',
+      description: 'Default row click single-selection behavior.',
+      type: 'boolean',
+      default: 'false'
     },
     {
       name: 'selectionWidth',

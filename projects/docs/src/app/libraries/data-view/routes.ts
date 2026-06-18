@@ -87,6 +87,11 @@ export const routes: Routes = [
     title: 'Data View / With Pagination'
   },
   {
+    path: 'row-click-selection',
+    loadComponent: () => import('./row-click-selection/row-click-selection').then(c => c.DataViewRowClickSelection),
+    title: 'Data View / Row Click Selection'
+  },
+  {
     path: 'with-sorting',
     loadComponent: () => import('./with-sorting/with-sorting').then(c => c.DataViewWithSorting),
     title: 'Data View / With Sorting'

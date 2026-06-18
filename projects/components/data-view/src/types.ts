@@ -1,14 +1,17 @@
 import { CheckboxChange } from '@ngstarter-ui/components/checkbox';
 import { InjectionToken } from '@angular/core';
 
-export interface DataViewInterface {
-  api: DataViewAPI;
+export interface DataViewInterface<T = any> {
+  api: DataViewAPI<T>;
 }
 
-export interface DataViewAPI {
+export interface DataViewAPI<T = any> {
   search(value: string): void;
   selectAll(): void;
   unselectAll(): void;
+  selectOne(row: T): void;
+  isSelected(row: T): boolean;
+  hasSelected(): boolean;
   refresh(): void;
   getSnapshot(): DataViewState[];
 }
@@ -34,8 +37,11 @@ export interface DataViewColumnDef {
   }
 }
 
+export type DataViewRowSelectionEventSource = 'checkbox' | 'row';
+
 export interface DataViewRowSelectionEvent<T> {
-  checkboxChange: CheckboxChange;
+  source: DataViewRowSelectionEventSource;
+  checkboxChange?: CheckboxChange;
   row: T;
   checked: boolean;
 }

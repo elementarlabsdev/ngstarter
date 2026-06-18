@@ -1155,6 +1155,12 @@ export class App implements OnInit {
         {
           key: uuid(),
           type: 'link',
+          name: 'Row click selection',
+          link: '/libraries/data-view/row-click-selection'
+        },
+        {
+          key: uuid(),
+          type: 'link',
           name: 'With pagination',
           link: '/libraries/data-view/with-pagination'
         },
