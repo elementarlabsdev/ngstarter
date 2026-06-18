@@ -130,17 +130,27 @@ export class Api {
   readonly providers = [
     {
       name: 'provideFormBuilder',
-      description: 'Environment provider for custom field definitions, settings definitions, and a global uploadCallback.',
+      description: 'Environment provider for custom field definitions, legacy settings components, and a global uploadCallback.',
       type: 'EnvironmentProviders'
     },
     {
+      name: 'provideFormBuilderField',
+      description: 'Provider helper for registering one custom field definition with FORM_BUILDER_FIELDS.',
+      type: 'Provider'
+    },
+    {
+      name: 'provideFormBuilderFields',
+      description: 'Provider helper for registering multiple custom field definitions with FORM_BUILDER_FIELDS.',
+      type: 'Provider[]'
+    },
+    {
       name: 'formBuilderField',
-      description: 'Helper for defining a field type with defaults, lazy renderer, lazy settings, and validators.',
+      description: 'Helper for defining a field type with defaults, lazy renderer, renderer-driven settings schema, inheritance, and validators.',
       type: 'FormBuilderFieldDefinition'
     },
     {
       name: 'formBuilderSettings',
-      description: 'Helper for registering a settings component for an existing field type.',
+      description: 'Legacy helper for registering a settings component for an existing field type. Prefer settings.schema on the field definition.',
       type: 'FormBuilderSettingsDefinition'
     }
   ];

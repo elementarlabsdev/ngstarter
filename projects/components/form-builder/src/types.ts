@@ -3,6 +3,7 @@ import { FormControl, ValidatorFn } from '@angular/forms';
 
 export type FormBuilderFieldWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export type FormBuilderItemKind = 'field' | 'layout' | 'static';
+export type FormBuilderSettingsInheritance = 'field' | 'input-field' | 'layout' | 'layout-container' | 'static' | 'none';
 
 export interface FormBuilderOption {
   label: string;
@@ -81,14 +82,13 @@ export interface FormBuilderUploadContext {
 }
 
 export type FormBuilderUploadCallback = (context: FormBuilderUploadContext) => any | Promise<any>;
+export type FormBuilderComponentImporter<T = any> = () => Promise<Type<T>>;
 
 export interface FormBuilderSettingsContext {
   field: FormBuilderField;
   schema: FormBuilderSchema;
   update: (changes: Partial<FormBuilderField>) => void;
 }
-
-export type FormBuilderComponentImporter<T = any> = () => Promise<Type<T>>;
 
 export interface FormBuilderFieldSettingsContext {
   item: FormBuilderField;
@@ -108,6 +108,14 @@ export interface FormBuilderSectionSettingsContext {
   updateSection: (changes: Partial<FormBuilderSection>) => void;
 }
 
+export type FormBuilderSettingsSchemaFactory =
+  (context: FormBuilderFieldSettingsContext | FormBuilderSectionSettingsContext) => FormBuilderSchema;
+
+export interface FormBuilderSettingsConfig {
+  extends?: FormBuilderSettingsInheritance;
+  schema?: FormBuilderSchema | FormBuilderSettingsSchemaFactory;
+}
+
 export interface FormBuilderItemDefinition {
   type: string;
   label: string;
@@ -117,7 +125,7 @@ export interface FormBuilderItemDefinition {
   description?: string;
   defaults?: Partial<FormBuilderField>;
   renderer?: FormBuilderComponentImporter;
-  settings?: FormBuilderComponentImporter;
+  settings?: FormBuilderComponentImporter | FormBuilderSettingsConfig;
   acceptsChildren?: boolean;
 }
 

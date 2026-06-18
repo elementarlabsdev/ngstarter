@@ -1,9 +1,10 @@
-import { EnvironmentProviders, InjectionToken, makeEnvironmentProviders } from '@angular/core';
+import { EnvironmentProviders, InjectionToken, Provider, makeEnvironmentProviders } from '@angular/core';
 import { Validators } from '@angular/forms';
 import {
   FormBuilderField,
   FormBuilderFieldDefinition,
   FormBuilderItemDefinition,
+  FormBuilderSchema,
   FormBuilderSettingsDefinition,
   FormBuilderUploadCallback,
   FormBuilderValidationRule
@@ -31,6 +32,18 @@ export function formBuilderItem(definition: FormBuilderItemDefinition): FormBuil
 
 export function formBuilderSettings(definition: FormBuilderSettingsDefinition): FormBuilderSettingsDefinition {
   return definition;
+}
+
+export function provideFormBuilderField(definition: FormBuilderFieldDefinition): Provider {
+  return {
+    provide: FORM_BUILDER_FIELDS,
+    useValue: definition,
+    multi: true
+  };
+}
+
+export function provideFormBuilderFields(definitions: FormBuilderFieldDefinition[]): Provider[] {
+  return definitions.map(definition => provideFormBuilderField(definition));
 }
 
 export function provideFormBuilder(config: {
@@ -62,6 +75,141 @@ export function provideFormBuilder(config: {
   ]);
 }
 
+const FIELD_WIDTH_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+  .map(width => ({ label: `${width}/12`, value: width }));
+
+const SPACER_HEIGHT_OPTIONS = [8, 16, 24, 32, 48, 64]
+  .map(height => ({ label: `${height}px`, value: height }));
+
+const ORIENTATION_OPTIONS = [
+  { label: 'Vertical', value: 'vertical' },
+  { label: 'Horizontal', value: 'horizontal' }
+];
+
+export const FORM_BUILDER_FIELD_BASE_SETTINGS_SCHEMA: FormBuilderSchema = {
+  sections: [
+    {
+      id: 'field-base-settings',
+      title: 'Field',
+      fields: [
+        { id: 'field-label', name: 'label', type: 'text', label: 'Label' },
+        { id: 'field-name', name: 'name', type: 'text', label: 'Field ID' },
+        { id: 'field-hint', name: 'hint', type: 'text', label: 'Hint' },
+        { id: 'field-width', name: 'width', type: 'select', label: 'Width', defaultValue: 12, options: FIELD_WIDTH_OPTIONS },
+        { id: 'field-required', name: 'required', type: 'toggle', label: 'Required field', defaultValue: false },
+        { id: 'field-readonly', name: 'readonly', type: 'toggle', label: 'Readonly', defaultValue: false },
+        { id: 'field-disabled', name: 'disabled', type: 'toggle', label: 'Disabled', defaultValue: false }
+      ]
+    }
+  ]
+};
+
+export const FORM_BUILDER_INPUT_FIELD_BASE_SETTINGS_SCHEMA: FormBuilderSchema = {
+  sections: [
+    {
+      id: 'input-field-base-settings',
+      title: 'Field',
+      fields: [
+        { id: 'input-field-label', name: 'label', type: 'text', label: 'Label' },
+        { id: 'input-field-name', name: 'name', type: 'text', label: 'Field ID' },
+        { id: 'input-field-placeholder', name: 'placeholder', type: 'text', label: 'Placeholder' },
+        { id: 'input-field-hint', name: 'hint', type: 'text', label: 'Hint' },
+        { id: 'input-field-width', name: 'width', type: 'select', label: 'Width', defaultValue: 12, options: FIELD_WIDTH_OPTIONS },
+        { id: 'input-field-required', name: 'required', type: 'toggle', label: 'Required field', defaultValue: false },
+        { id: 'input-field-readonly', name: 'readonly', type: 'toggle', label: 'Readonly', defaultValue: false },
+        { id: 'input-field-disabled', name: 'disabled', type: 'toggle', label: 'Disabled', defaultValue: false }
+      ]
+    }
+  ]
+};
+
+export const FORM_BUILDER_LAYOUT_BASE_SETTINGS_SCHEMA: FormBuilderSchema = {
+  sections: [
+    {
+      id: 'layout-base-settings',
+      title: 'Layout',
+      fields: [
+        { id: 'layout-label', name: 'label', type: 'text', label: 'Label' },
+        { id: 'layout-hint', name: 'hint', type: 'text', label: 'Hint' },
+        { id: 'layout-width', name: 'width', type: 'select', label: 'Width', defaultValue: 12, options: FIELD_WIDTH_OPTIONS }
+      ]
+    }
+  ]
+};
+
+export const FORM_BUILDER_LAYOUT_CONTAINER_BASE_SETTINGS_SCHEMA: FormBuilderSchema = {
+  sections: [
+    {
+      id: 'layout-container-base-settings',
+      title: 'Layout',
+      fields: [
+        { id: 'layout-container-label', name: 'label', type: 'text', label: 'Label' },
+        { id: 'layout-container-width', name: 'width', type: 'select', label: 'Width', defaultValue: 12, options: FIELD_WIDTH_OPTIONS }
+      ]
+    }
+  ]
+};
+
+export const FORM_BUILDER_STATIC_BASE_SETTINGS_SCHEMA: FormBuilderSchema = {
+  sections: [
+    {
+      id: 'static-base-settings',
+      title: 'Static block',
+      fields: [
+        { id: 'static-label', name: 'label', type: 'text', label: 'Label' },
+        { id: 'static-width', name: 'width', type: 'select', label: 'Width', defaultValue: 12, options: FIELD_WIDTH_OPTIONS }
+      ]
+    }
+  ]
+};
+
+export const FORM_BUILDER_SECTION_BASE_SETTINGS_SCHEMA: FormBuilderSchema = {
+  sections: [
+    {
+      id: 'section-base-settings',
+      title: 'Section',
+      fields: [
+        { id: 'section-title', name: 'title', type: 'text', label: 'Title' },
+        { id: 'section-description', name: 'description', type: 'textarea', label: 'Description', hint: 'Optional helper text rendered under the section title.' },
+        { id: 'section-collapsed', name: 'collapsed', type: 'toggle', label: 'Collapsed', defaultValue: false }
+      ]
+    }
+  ]
+};
+
+const CHECKED_SETTINGS_SCHEMA: FormBuilderSchema = {
+  sections: [
+    {
+      id: 'checked-settings',
+      title: 'Default state',
+      fields: [
+        { id: 'default-checked', name: 'defaultValue', type: 'toggle', label: 'Checked', defaultValue: false }
+      ]
+    }
+  ]
+};
+
+const OPTIONS_SETTINGS_SCHEMA: FormBuilderSchema = {
+  sections: [
+    {
+      id: 'options-settings',
+      title: 'Options',
+      fields: [
+        {
+          id: 'options',
+          name: 'options',
+          type: 'textarea',
+          label: 'Options',
+          hint: 'One option per line. Use Label:value or Label:value:selected.',
+          settings: {
+            valueAdapter: 'optionsText'
+          }
+        }
+      ]
+    }
+  ]
+};
+
 export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
   {
     type: 'text',
@@ -71,6 +219,9 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     defaults: {
       label: 'Text field',
       placeholder: 'Enter text'
+    },
+    settings: {
+      extends: 'input-field'
     }
   },
   {
@@ -81,6 +232,9 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     defaults: {
       label: 'Number',
       placeholder: '0'
+    },
+    settings: {
+      extends: 'input-field'
     }
   },
   {
@@ -91,6 +245,9 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     defaults: {
       label: 'Email',
       placeholder: 'name@example.com'
+    },
+    settings: {
+      extends: 'input-field'
     },
     validators: field => field.required ? [Validators.required, Validators.email] : [Validators.email]
   },
@@ -103,6 +260,9 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
       label: 'Description',
       placeholder: 'Enter description',
       width: 12
+    },
+    settings: {
+      extends: 'input-field'
     }
   },
   {
@@ -118,6 +278,9 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
       label: 'Group',
       width: 12,
       children: []
+    },
+    settings: {
+      extends: 'layout-container'
     }
   },
   {
@@ -134,6 +297,20 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
       settings: {
         height: 24
       }
+    },
+    settings: {
+      extends: 'static',
+      schema: {
+        sections: [
+          {
+            id: 'spacer-settings',
+            title: 'Spacer',
+            fields: [
+              { id: 'spacer-height', name: 'settings.height', type: 'select', label: 'Height', defaultValue: 24, options: SPACER_HEIGHT_OPTIONS }
+            ]
+          }
+        ]
+      }
     }
   },
   {
@@ -149,6 +326,31 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
         { label: 'Option 1', value: 'option_1' },
         { label: 'Option 2', value: 'option_2' }
       ]
+    },
+    settings: {
+      extends: 'input-field',
+      schema: {
+        sections: [
+          {
+            id: 'select-behavior-settings',
+            title: 'Select',
+            fields: [
+              {
+                id: 'select-multiple',
+                name: 'multiple',
+                type: 'toggle',
+                label: 'Multiple',
+                defaultValue: false,
+                settings: {
+                  valueAdapter: 'selectMultiple'
+                }
+              },
+              { id: 'select-clearable', name: 'clearable', type: 'toggle', label: 'Clearable', defaultValue: true }
+            ]
+          },
+          ...OPTIONS_SETTINGS_SCHEMA.sections
+        ]
+      }
     }
   },
   {
@@ -165,6 +367,21 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
         { label: 'Option 1', value: 'option_1' },
         { label: 'Option 2', value: 'option_2' }
       ]
+    },
+    settings: {
+      extends: 'field',
+      schema: {
+        sections: [
+          {
+            id: 'radio-settings',
+            title: 'Radio',
+            fields: [
+              { id: 'radio-orientation', name: 'settings.orientation', type: 'select', label: 'Orientation', defaultValue: 'vertical', options: ORIENTATION_OPTIONS }
+            ]
+          },
+          ...OPTIONS_SETTINGS_SCHEMA.sections
+        ]
+      }
     }
   },
   {
@@ -175,6 +392,10 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     defaults: {
       label: 'Checkbox',
       defaultValue: false
+    },
+    settings: {
+      extends: 'field',
+      schema: CHECKED_SETTINGS_SCHEMA
     }
   },
   {
@@ -185,6 +406,10 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     defaults: {
       label: 'Toggle',
       defaultValue: false
+    },
+    settings: {
+      extends: 'field',
+      schema: CHECKED_SETTINGS_SCHEMA
     }
   },
   {
@@ -195,6 +420,9 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     defaults: {
       label: 'Date',
       placeholder: 'Select date'
+    },
+    settings: {
+      extends: 'input-field'
     }
   },
   {
@@ -205,6 +433,9 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     defaults: {
       label: 'Time',
       placeholder: 'Select time'
+    },
+    settings: {
+      extends: 'input-field'
     }
   },
   {
@@ -216,6 +447,9 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
       label: 'Date range',
       placeholder: 'Start date',
       width: 12
+    },
+    settings: {
+      extends: 'input-field'
     }
   },
   {
@@ -231,6 +465,37 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
       settings: {
         accept: '*/*'
       }
+    },
+    settings: {
+      extends: 'input-field',
+      schema: {
+        sections: [
+          {
+            id: 'upload-settings',
+            title: 'Upload',
+            fields: [
+              {
+                id: 'upload-multiple',
+                name: 'multiple',
+                type: 'toggle',
+                label: 'Multiple',
+                defaultValue: false,
+                settings: {
+                  valueAdapter: 'multipleDefaultValue'
+                }
+              },
+              {
+                id: 'upload-accept',
+                name: 'settings.accept',
+                type: 'text',
+                label: 'Accepted file types',
+                defaultValue: '*/*',
+                hint: 'Use MIME types separated by commas, for example image/*,application/pdf.'
+              }
+            ]
+          }
+        ]
+      }
     }
   },
   {
@@ -241,6 +506,9 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     defaults: {
       label: 'Timezone',
       placeholder: 'Select timezone'
+    },
+    settings: {
+      extends: 'input-field'
     }
   },
   {
@@ -251,6 +519,9 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     defaults: {
       label: 'Amount',
       placeholder: '0.00'
+    },
+    settings: {
+      extends: 'input-field'
     }
   },
   {
@@ -261,6 +532,9 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     defaults: {
       label: 'Currency',
       placeholder: 'Select currency'
+    },
+    settings: {
+      extends: 'input-field'
     }
   },
   {
@@ -272,6 +546,20 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
       label: 'Country',
       placeholder: 'Select country',
       clearable: true
+    },
+    settings: {
+      extends: 'input-field',
+      schema: {
+        sections: [
+          {
+            id: 'country-select-settings',
+            title: 'Country select',
+            fields: [
+              { id: 'country-clearable', name: 'clearable', type: 'toggle', label: 'Clearable', defaultValue: true }
+            ]
+          }
+        ]
+      }
     }
   }
 ];
@@ -284,7 +572,11 @@ export const DEFAULT_FORM_BUILDER_ITEMS: FormBuilderItemDefinition[] = [
     group: 'Layout',
     icon: 'fluent:folder-24-regular',
     description: 'Top-level layout container.',
-    acceptsChildren: true
+    acceptsChildren: true,
+    settings: {
+      extends: 'none',
+      schema: FORM_BUILDER_SECTION_BASE_SETTINGS_SCHEMA
+    }
   },
   ...DEFAULT_FORM_BUILDER_FIELDS
 ];

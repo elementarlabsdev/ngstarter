@@ -1,9 +1,8 @@
 import { Component, signal } from '@angular/core';
 import {
-  FORM_BUILDER_FIELDS,
   FormBuilder,
   FormBuilderSchema,
-  formBuilderField
+  provideFormBuilderField
 } from '@ngstarter-ui/components/form-builder';
 
 @Component({
@@ -12,29 +11,39 @@ import {
     FormBuilder
   ],
   providers: [
-    {
-      provide: FORM_BUILDER_FIELDS,
-      multi: true,
-      useValue: formBuilderField({
-        type: 'priority',
+    provideFormBuilderField({
+      type: 'priority',
+      label: 'Priority',
+      group: 'Workflow',
+      icon: 'fluent:flag-24-regular',
+      defaults: {
         label: 'Priority',
-        group: 'Workflow',
-        icon: 'fluent:flag-24-regular',
-        defaults: {
-          label: 'Priority',
-          width: 6,
-          settings: {
-            lowLabel: 'Low',
-            mediumLabel: 'Medium',
-            highLabel: 'High'
-          }
-        },
-        renderer: () =>
-          import('./priority-field/priority-field').then(c => c.PriorityField),
-        settings: () =>
-          import('./priority-field-settings/priority-field-settings').then(c => c.PriorityFieldSettings)
-      })
-    }
+        width: 6,
+        settings: {
+          lowLabel: 'Low',
+          mediumLabel: 'Medium',
+          highLabel: 'High'
+        }
+      },
+      renderer: () =>
+        import('./priority-field/priority-field').then(c => c.PriorityField),
+      settings: {
+        extends: 'field',
+        schema: {
+          sections: [
+            {
+              id: 'priority-settings',
+              title: 'Priority labels',
+              fields: [
+                { id: 'priority-low-label', name: 'settings.lowLabel', type: 'text', label: 'Low label', defaultValue: 'Low' },
+                { id: 'priority-medium-label', name: 'settings.mediumLabel', type: 'text', label: 'Medium label', defaultValue: 'Medium' },
+                { id: 'priority-high-label', name: 'settings.highLabel', type: 'text', label: 'High label', defaultValue: 'High' }
+              ]
+            }
+          ]
+        }
+      }
+    })
   ],
   templateUrl: './custom-field-registration-example.html',
   styleUrl: './custom-field-registration-example.scss'

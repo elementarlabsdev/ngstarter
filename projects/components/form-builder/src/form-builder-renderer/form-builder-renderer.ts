@@ -108,7 +108,7 @@ export class FormBuilderRenderer {
   }
 
   protected getControl(field: FormBuilderField): FormControl {
-    const control = this.formGroup().get(field.name);
+    const control = this.formGroup().controls[field.name];
 
     if (control instanceof FormControl) {
       return control;
