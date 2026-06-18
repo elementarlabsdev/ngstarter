@@ -1,0 +1,169 @@
+<article class="bg-background px-6 pb-16 pt-8 sm:px-8 lg:px-10">
+  <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
+    <div class="min-w-0">
+      <a ngsButton="text" routerLink="/blog">
+        <ngs-icon name="fluent:arrow-left-24-regular" />
+        All articles
+      </a>
+
+      <header class="mt-8 max-w-4xl">
+        <ngs-chip-set>
+          <ngs-chip appearance="outlined">Form Builder</ngs-chip>
+          <ngs-chip appearance="outlined">Schema</ngs-chip>
+          <ngs-chip appearance="outlined">JSON forms</ngs-chip>
+        </ngs-chip-set>
+        <h1 class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl">
+          Form Builder schema explained
+        </h1>
+        <p class="mt-6 text-lg leading-8 text-on-surface-variant">
+          A practical reference for <code>FormBuilderSchema</code>: what each top-level property
+          does, how sections and fields are ordered, where validation lives, and how custom settings
+          are stored for renderers.
+        </p>
+        <div class="mt-6 flex flex-wrap items-center gap-3 text-sm text-on-surface-variant">
+          <span>June 18, 2026</span>
+          <span>9 min read</span>
+        </div>
+      </header>
+
+      <div class="article-content mt-14 max-w-4xl">
+        <section id="schema-shape">
+          <h2>The schema shape</h2>
+          <p>
+            <code>FormBuilderSchema</code> is the JSON contract between the visual builder, your
+            backend, and <code>ngs-form-renderer</code>. The required property is
+            <code>sections</code>; top-level <code>fields</code> and <code>layout</code> are
+            optional, but useful when a form mixes standalone fields and sections.
+          </p>
+          <ngs-code-highlighter [code]="schemaCode" language="typescript" title="form-builder-schema.ts" showCopyButton />
+        </section>
+
+        <section id="top-level">
+          <h2>Top-level properties</h2>
+          <ul>
+            <li><code>title</code> is optional metadata for your app, storage, or surrounding page UI.</li>
+            <li><code>fields</code> stores top-level fields that are not inside a section.</li>
+            <li><code>sections</code> stores named groups of fields and is always present.</li>
+            <li><code>layout</code> stores the visual order of top-level fields and sections.</li>
+          </ul>
+          <p>
+            If <code>layout</code> is missing, the renderer appends top-level fields first and then
+            sections. If <code>layout</code> contains stale ids, they are ignored.
+          </p>
+        </section>
+
+        <section id="sections">
+          <h2>Sections</h2>
+          <p>
+            A section has an <code>id</code>, <code>title</code>, optional
+            <code>description</code>, optional <code>collapsed</code> state, and a
+            <code>fields</code> array. Use sections for visible form groups such as Contact,
+            Billing, Security, or Approval details.
+          </p>
+        </section>
+
+        <section id="fields">
+          <h2>Fields</h2>
+          <p>
+            A field's <code>id</code> is for builder layout and selection. Its <code>name</code> is
+            the Angular form control key and the value key emitted by the renderer. The
+            <code>type</code> must match a registered field definition, either one of the built-in
+            fields or a custom field registered with <code>provideFormBuilderField</code>.
+          </p>
+          <ngs-code-highlighter [code]="fieldCode" language="typescript" title="field.ts" showCopyButton />
+        </section>
+
+        <section id="layout">
+          <h2>Layout ordering</h2>
+          <p>
+            The <code>layout</code> array controls only top-level ordering. Section field order is
+            stored inside each section's <code>fields</code> array, and nested container order is
+            stored inside <code>children</code>.
+          </p>
+          <ngs-code-highlighter [code]="layoutCode" language="typescript" title="layout.ts" showCopyButton />
+        </section>
+
+        <section id="options">
+          <h2>Options and defaults</h2>
+          <p>
+            Choice fields use <code>options</code>. The renderer uses <code>defaultValue</code> when
+            it exists; otherwise selected options become the initial value for select, radio, and
+            multiple-choice fields.
+          </p>
+          <ngs-code-highlighter [code]="optionCode" language="typescript" title="options.ts" showCopyButton />
+        </section>
+
+        <section id="validation">
+          <h2>Validation</h2>
+          <p>
+            <code>required</code> adds required validation. The <code>validation</code> array adds
+            declarative rules such as <code>email</code>, <code>minLength</code>,
+            <code>maxLength</code>, <code>min</code>, and <code>max</code>. A custom field
+            definition can override this with its own <code>validators</code> factory.
+          </p>
+        </section>
+
+        <section id="visibility">
+          <h2>Visibility</h2>
+          <p>
+            <code>visibility.form</code> controls whether the renderer includes the field in the
+            visible form. <code>visibility.email</code>, <code>visibility.pdf</code>, and
+            <code>visibility.condition</code> are available for apps that reuse the same schema in
+            email, PDF, approval, or conditional rendering workflows.
+          </p>
+        </section>
+
+        <section id="settings">
+          <h2>Settings</h2>
+          <p>
+            <code>settings</code> is the extensibility bag. Built-in fields use it for values such as
+            upload accept types, repeater empty text, radio orientation, and static spacer height.
+            Custom fields should store renderer-specific configuration there too.
+          </p>
+        </section>
+
+        <section id="nested">
+          <h2>Nested fields</h2>
+          <p>
+            Layout fields such as <code>group</code> and <code>repeater</code> use
+            <code>children</code>. Groups flatten child controls into the current form group.
+            Repeaters create a <code>FormArray</code> of row groups from their child fields.
+          </p>
+          <ngs-code-highlighter [code]="nestedCode" language="typescript" title="nested-fields.ts" showCopyButton />
+        </section>
+
+        <section id="storage">
+          <h2>Storage checklist</h2>
+          <ul>
+            <li>Persist the whole <code>FormBuilderSchema</code> as JSON.</li>
+            <li>Keep field <code>id</code> values stable so layout references remain valid.</li>
+            <li>Keep field <code>name</code> values stable when submitted data already exists.</li>
+            <li>Store custom renderer options under <code>settings</code>.</li>
+            <li>Version schemas in your backend when production forms change over time.</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <aside class="article-aside hidden lg:block">
+      <nav ngs-scroll-spy-nav>
+        <ngs-scroll-spy-title>On this page</ngs-scroll-spy-title>
+        <a ngs-scroll-spy-on targetId="schema-shape">Schema shape</a>
+        <a ngs-scroll-spy-on targetId="top-level">Top level</a>
+        <a ngs-scroll-spy-on targetId="sections">Sections</a>
+        <a ngs-scroll-spy-on targetId="fields">Fields</a>
+        <a ngs-scroll-spy-on targetId="layout">Layout</a>
+        <a ngs-scroll-spy-on targetId="options">Options</a>
+        <a ngs-scroll-spy-on targetId="validation">Validation</a>
+        <a ngs-scroll-spy-on targetId="visibility">Visibility</a>
+        <a ngs-scroll-spy-on targetId="settings">Settings</a>
+        <a ngs-scroll-spy-on targetId="nested">Nested fields</a>
+        <a ngs-scroll-spy-on targetId="storage">Storage</a>
+      </nav>
+    </aside>
+  </div>
+  <button ngs-scroll-spy-back-to-top ngsButton="outlined">
+    <ngs-icon name="fluent:arrow-up-24-regular" />
+    Back to top
+  </button>
+</article>

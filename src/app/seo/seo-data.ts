@@ -281,6 +281,10 @@ const basicLayoutArticleDescription =
   'Angular admin tutorial: create a basic application layout with NgStarter UI using Layout, Sidenav, Sidebar, Panel, and ScrollbarArea.';
 const panelLayoutArticleDescription =
   'Angular panel layout tutorial: create practical admin workspace layouts with ngs-panel, PanelHeader, PanelContent, PanelSidebar, PanelAside, and PanelFooter.';
+const formBuilderCustomFieldArticleDescription =
+  'NgStarter Form Builder tutorial: add a custom Angular field, register it with provideFormBuilderField, and configure schema-driven inspector settings.';
+const formBuilderSchemaArticleDescription =
+  'NgStarter Form Builder schema reference: understand sections, fields, layout ordering, validation, visibility, settings, and nested field structures.';
 
 export const HOME_SEO: SeoData = {
   title: 'NgStarter - AI-Friendly Angular Components Library for Admin Apps',
@@ -459,6 +463,96 @@ export const BASIC_LAYOUT_ARTICLE_SEO: SeoData = {
       image: DEFAULT_OG_IMAGE,
       inLanguage: 'en',
       keywords: ['angular admin', 'angular admin layout', 'angular dashboard', 'NgStarter UI'],
+      isPartOf: {
+        '@id': `${SITE_URL}/blog#blog`,
+      },
+    },
+  ],
+};
+
+export const FORM_BUILDER_CUSTOM_FIELD_ARTICLE_SEO: SeoData = {
+  title: 'How to Add a Custom Field in Form Builder | NgStarter UI',
+  description: formBuilderCustomFieldArticleDescription,
+  canonicalPath: '/blog/form-builder-custom-field',
+  ogType: 'article',
+  structuredData: [
+    organizationSchema,
+    websiteSchema,
+    webPageSchema(
+      '/blog/form-builder-custom-field',
+      'How to Add and Configure a Custom Field in Form Builder',
+      formBuilderCustomFieldArticleDescription,
+    ),
+    {
+      '@type': 'BlogPosting',
+      '@id': `${SITE_URL}/blog/form-builder-custom-field#article`,
+      headline: 'How to Add and Configure a Custom Field in Form Builder',
+      description: formBuilderCustomFieldArticleDescription,
+      url: `${SITE_URL}/blog/form-builder-custom-field`,
+      datePublished: '2026-06-18',
+      dateModified: '2026-06-18',
+      author: {
+        '@type': 'Organization',
+        name: 'NgStarter',
+        url: SITE_URL,
+      },
+      publisher: {
+        '@id': `${SITE_URL}/#organization`,
+      },
+      image: DEFAULT_OG_IMAGE,
+      inLanguage: 'en',
+      keywords: [
+        'form builder',
+        'angular form builder',
+        'custom angular field',
+        'NgStarter UI',
+        'schema driven forms',
+      ],
+      isPartOf: {
+        '@id': `${SITE_URL}/blog#blog`,
+      },
+    },
+  ],
+};
+
+export const FORM_BUILDER_SCHEMA_ARTICLE_SEO: SeoData = {
+  title: 'Form Builder Schema Explained | NgStarter UI',
+  description: formBuilderSchemaArticleDescription,
+  canonicalPath: '/blog/form-builder-schema',
+  ogType: 'article',
+  structuredData: [
+    organizationSchema,
+    websiteSchema,
+    webPageSchema(
+      '/blog/form-builder-schema',
+      'Form Builder Schema Explained',
+      formBuilderSchemaArticleDescription,
+    ),
+    {
+      '@type': 'BlogPosting',
+      '@id': `${SITE_URL}/blog/form-builder-schema#article`,
+      headline: 'Form Builder Schema Explained',
+      description: formBuilderSchemaArticleDescription,
+      url: `${SITE_URL}/blog/form-builder-schema`,
+      datePublished: '2026-06-18',
+      dateModified: '2026-06-18',
+      author: {
+        '@type': 'Organization',
+        name: 'NgStarter',
+        url: SITE_URL,
+      },
+      publisher: {
+        '@id': `${SITE_URL}/#organization`,
+      },
+      image: DEFAULT_OG_IMAGE,
+      inLanguage: 'en',
+      keywords: [
+        'FormBuilderSchema',
+        'angular json forms',
+        'schema driven forms',
+        'angular form schema',
+        'NgStarter UI',
+      ],
       isPartOf: {
         '@id': `${SITE_URL}/blog#blog`,
       },

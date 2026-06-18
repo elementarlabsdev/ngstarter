@@ -1,0 +1,157 @@
+<article class="bg-background px-6 pb-16 pt-8 sm:px-8 lg:px-10">
+  <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
+    <div class="min-w-0">
+      <a ngsButton="text" routerLink="/blog">
+        <ngs-icon name="fluent:arrow-left-24-regular" />
+        All articles
+      </a>
+
+      <header class="mt-8 max-w-4xl">
+        <ngs-chip-set>
+          <ngs-chip appearance="outlined">Form Builder</ngs-chip>
+          <ngs-chip appearance="outlined">Custom fields</ngs-chip>
+          <ngs-chip appearance="outlined">Angular forms</ngs-chip>
+        </ngs-chip-set>
+        <h1 class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl">
+          How to add and configure a custom field in Form Builder
+        </h1>
+        <p class="mt-6 text-lg leading-8 text-on-surface-variant">
+          Learn how to add a custom field to NgStarter Form Builder, render it inside saved forms,
+          and expose configuration controls in the builder inspector with a schema-driven settings
+          panel.
+        </p>
+        <div class="mt-6 flex flex-wrap items-center gap-3 text-sm text-on-surface-variant">
+          <span>June 18, 2026</span>
+          <span>10 min read</span>
+        </div>
+      </header>
+
+      <div class="article-content mt-14 max-w-4xl">
+        <section id="what-you-build">
+          <h2>What you build</h2>
+          <p>
+            A Form Builder field has two parts: a field definition that appears in the palette and a
+            renderer component that receives a <code>FormBuilderField</code> and an Angular
+            <code>FormControl</code>. The definition can also include a settings schema, so admin
+            users can configure labels, defaults, and renderer-specific options from the inspector.
+          </p>
+        </section>
+
+        <section id="related-docs">
+          <h2>Related component docs</h2>
+          <p>
+            Use the Form Builder docs when you need API tables, examples, and the renderer page for
+            saved schemas.
+          </p>
+          <div class="related-links-grid">
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/libraries/form-builder">
+                  <ngs-icon name="fluent:form-24-regular" />
+                  <span>Form Builder overview</span>
+                </a>
+              </div>
+            </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/libraries/form-builder/api">
+                  <ngs-icon name="fluent:document-bullet-list-24-regular" />
+                  <span>Form Builder API</span>
+                </a>
+              </div>
+            </ngs-card>
+          </div>
+        </section>
+
+        <section id="imports">
+          <h2>Import the public API</h2>
+          <p>
+            Consumer code should import from the secondary entry point. The builder, schema types,
+            field types, and provider helpers are exported from
+            <code>@ngstarter-ui/components/form-builder</code>.
+          </p>
+          <ngs-code-highlighter [code]="importCode" language="typescript" title="imports.ts" showCopyButton />
+        </section>
+
+        <section id="renderer">
+          <h2>Create the field renderer</h2>
+          <p>
+            A renderer is a standalone Angular component. It reads display data from
+            <code>field()</code> and binds the provided <code>control()</code> to NgStarter form
+            components. In this example the custom priority field uses <code>ButtonToggle</code>.
+          </p>
+          <ngs-code-highlighter [code]="rendererCode" language="typescript" title="priority-field.ts" showCopyButton />
+        </section>
+
+        <section id="register">
+          <h2>Register the field</h2>
+          <p>
+            Register one field with <code>provideFormBuilderField</code>, or use
+            <code>provideFormBuilder</code> when you want to register multiple fields, layout items,
+            settings components, or a global upload callback in one place.
+          </p>
+          <ngs-code-highlighter [code]="providerCode" language="typescript" title="field-provider.ts" showCopyButton />
+        </section>
+
+        <section id="settings">
+          <h2>Add settings for the inspector</h2>
+          <p>
+            The <code>settings</code> config can inherit a built-in settings group and append a
+            schema for custom options. Use dotted names such as <code>settings.lowLabel</code> when
+            the value belongs in the field's custom settings bag.
+          </p>
+          <ngs-code-highlighter [code]="settingsCode" language="typescript" title="field-settings.ts" showCopyButton />
+        </section>
+
+        <section id="schema">
+          <h2>Use the custom field in a schema</h2>
+          <p>
+            Saved schemas only need a field whose <code>type</code> matches the registered
+            definition. The renderer and builder both resolve the definition at runtime, so the JSON
+            remains compact and backend-friendly.
+          </p>
+          <ngs-code-highlighter [code]="schemaCode" language="typescript" title="schema.ts" showCopyButton />
+        </section>
+
+        <section id="template">
+          <h2>Render the builder</h2>
+          <p>
+            Bind the schema with two-way model syntax. When users drag the custom field or edit its
+            settings, the schema signal receives the updated JSON.
+          </p>
+          <ngs-code-highlighter [code]="builderCode" language="html" title="builder.html" showCopyButton />
+        </section>
+
+        <section id="checklist">
+          <h2>Custom field checklist</h2>
+          <ul>
+            <li>Give every field type a unique <code>type</code>.</li>
+            <li>Set <code>defaults</code> for label, width, default value, and custom settings.</li>
+            <li>Use NgStarter controls inside renderer components where a matching component exists.</li>
+            <li>Use <code>settings.schema</code> for inspector controls instead of custom settings UI.</li>
+            <li>Keep saved form data in <code>FormBuilderSchema</code>, not in component-only state.</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <aside class="article-aside hidden lg:block">
+      <nav ngs-scroll-spy-nav>
+        <ngs-scroll-spy-title>On this page</ngs-scroll-spy-title>
+        <a ngs-scroll-spy-on targetId="what-you-build">What you build</a>
+        <a ngs-scroll-spy-on targetId="related-docs">Docs</a>
+        <a ngs-scroll-spy-on targetId="imports">Imports</a>
+        <a ngs-scroll-spy-on targetId="renderer">Renderer</a>
+        <a ngs-scroll-spy-on targetId="register">Register</a>
+        <a ngs-scroll-spy-on targetId="settings">Settings</a>
+        <a ngs-scroll-spy-on targetId="schema">Schema</a>
+        <a ngs-scroll-spy-on targetId="template">Template</a>
+        <a ngs-scroll-spy-on targetId="checklist">Checklist</a>
+      </nav>
+    </aside>
+  </div>
+  <button ngs-scroll-spy-back-to-top ngsButton="outlined">
+    <ngs-icon name="fluent:arrow-up-24-regular" />
+    Back to top
+  </button>
+</article>

@@ -13,6 +13,26 @@ import { Icon } from '@ngstarter-ui/components/icon';
 export class Blog {
   readonly articles = [
     {
+      title: 'How to add and configure a custom field in Form Builder',
+      description:
+        'Register a custom field, render it with Angular reactive forms, and expose schema-driven settings in the NgStarter Form Builder inspector.',
+      href: '/blog/form-builder-custom-field',
+      date: 'June 18, 2026',
+      readTime: '10 min',
+      category: 'Form Builder',
+      icon: 'fluent:form-new-24-regular',
+    },
+    {
+      title: 'Form Builder schema explained',
+      description:
+        'Understand FormBuilderSchema, sections, fields, layout ordering, validation, visibility, custom settings, and nested form structures.',
+      href: '/blog/form-builder-schema',
+      date: 'June 18, 2026',
+      readTime: '9 min',
+      category: 'Form Builder',
+      icon: 'fluent:document-data-24-regular',
+    },
+    {
       title: 'Angular Panel Layout: Create Admin Workspaces with ngs-panel',
       description:
         'Learn angular panel layout patterns for admin screens: single workspaces, master-detail pages, side inspectors, and footer actions with ngs-panel.',

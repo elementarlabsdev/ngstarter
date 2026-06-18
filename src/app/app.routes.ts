@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import {
   BASIC_LAYOUT_ARTICLE_SEO,
   BLOG_SEO,
+  FORM_BUILDER_CUSTOM_FIELD_ARTICLE_SEO,
+  FORM_BUILDER_SCHEMA_ARTICLE_SEO,
   HOME_SEO,
   LICENSE_SEO,
   PANEL_LAYOUT_ARTICLE_SEO,
@@ -44,6 +46,28 @@ export const routes: Routes = [
       seo: BLOG_SEO,
     },
     loadComponent: () => import('./blog/blog/blog').then(c => c.Blog),
+  },
+  {
+    path: 'blog/form-builder-custom-field',
+    title: FORM_BUILDER_CUSTOM_FIELD_ARTICLE_SEO.title,
+    data: {
+      seo: FORM_BUILDER_CUSTOM_FIELD_ARTICLE_SEO,
+    },
+    loadComponent: () =>
+      import('./blog/articles/form-builder-custom-field/form-builder-custom-field').then(
+        c => c.FormBuilderCustomField,
+      ),
+  },
+  {
+    path: 'blog/form-builder-schema',
+    title: FORM_BUILDER_SCHEMA_ARTICLE_SEO.title,
+    data: {
+      seo: FORM_BUILDER_SCHEMA_ARTICLE_SEO,
+    },
+    loadComponent: () =>
+      import('./blog/articles/form-builder-schema/form-builder-schema').then(
+        c => c.FormBuilderSchemaArticle,
+      ),
   },
   {
     path: 'blog/basic-application-layout',
