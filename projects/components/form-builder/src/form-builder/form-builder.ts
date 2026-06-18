@@ -246,7 +246,7 @@ export class FormBuilder {
   });
   protected readonly fieldTreeChildrenAccessor = (node: FormBuilderFieldTreeNode) => node.children ?? [];
   protected readonly hasFieldTreeChildren = (_: number, node: FormBuilderFieldTreeNode) =>
-    !!node.children?.length;
+    !!node.children;
   protected readonly trackFieldTreeNode = (_: number, node: FormBuilderFieldTreeNode) => node.id;
   protected readonly fieldTreeDraggablePredicate = (_node: FormBuilderFieldTreeNode) => true;
   protected readonly fieldTreeDropPredicate = (
@@ -531,7 +531,7 @@ export class FormBuilder {
   ): void {
     event.stopPropagation();
 
-    if (!node.children?.length) {
+    if (!node.children) {
       return;
     }
 
@@ -1238,7 +1238,7 @@ export class FormBuilder {
         }
 
         for (const node of this.flattenFieldTree(this.fieldTree())) {
-          if (node.children?.length && expandedIds.has(node.id)) {
+          if (node.children && expandedIds.has(node.id)) {
             tree.expand(node);
           }
         }
@@ -1269,7 +1269,7 @@ export class FormBuilder {
 
     const expandableIds = path
       .slice(0, -1)
-      .filter(node => !!node.children?.length)
+      .filter(node => !!node.children)
       .map(node => node.id);
 
     if (expandableIds.length) {
@@ -1290,7 +1290,7 @@ export class FormBuilder {
 
         if (tree) {
           for (const node of path.slice(0, -1)) {
-            if (node.children?.length) {
+            if (node.children) {
               tree.expand(node);
             }
           }
@@ -1503,9 +1503,9 @@ export class FormBuilder {
     node.field = field;
     node.section = section;
 
-    if (children?.length) {
+    if (children?.length || this.isContainerField(field)) {
       node.children ??= [];
-      replaceArrayContents(node.children, children);
+      replaceArrayContents(node.children, children ?? []);
     } else {
       node.children = undefined;
     }

@@ -43,6 +43,11 @@
     padding: --spacing(4);
 
     > header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: --spacing(3);
+
       h4 {
         color: var(--ngs-color-on-surface);
         font-size: var(--ngs-font-size-base);
@@ -54,5 +59,39 @@
         font-size: var(--ngs-font-size-sm);
       }
     }
+  }
+
+  .ngs-form-renderer-repeater-items {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(4);
+  }
+
+  .ngs-form-renderer-repeater-item {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(4);
+    border: 1px dashed var(--ngs-color-outline-variant);
+    border-radius: var(--ngs-radius-md);
+    padding: --spacing(4);
+  }
+
+  .ngs-form-renderer-repeater-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: --spacing(3);
+
+    span {
+      color: var(--ngs-color-on-surface-variant);
+      font-size: var(--ngs-font-size-sm);
+      font-weight: 500;
+    }
+  }
+
+  .ngs-form-renderer-repeater-empty {
+    color: var(--ngs-color-on-surface-variant);
+    font-size: var(--ngs-font-size-sm);
+    margin: 0;
   }
 }

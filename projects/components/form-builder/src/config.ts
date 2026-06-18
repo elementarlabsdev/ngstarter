@@ -284,6 +284,53 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     }
   },
   {
+    type: 'repeater',
+    label: 'Repeater',
+    kind: 'layout',
+    group: 'Layout',
+    icon: 'fluent:copy-add-24-regular',
+    description: 'Repeat a group of nested fields as a FormArray.',
+    acceptsChildren: true,
+    defaults: {
+      kind: 'layout',
+      label: 'Repeater',
+      name: 'items',
+      width: 12,
+      settings: {
+        allowNullValue: false,
+        emptyText: 'No items added yet.'
+      },
+      children: []
+    },
+    settings: {
+      extends: 'layout-container',
+      schema: {
+        sections: [
+          {
+            id: 'repeater-settings',
+            title: 'Repeater',
+            fields: [
+              {
+                id: 'repeater-allow-null-value',
+                name: 'settings.allowNullValue',
+                type: 'toggle',
+                label: 'Allow null value',
+                defaultValue: false
+              },
+              {
+                id: 'repeater-empty-text',
+                name: 'settings.emptyText',
+                type: 'textarea',
+                label: 'Empty text',
+                defaultValue: 'No items added yet.'
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     type: 'spacer',
     label: 'Spacer',
     kind: 'static',

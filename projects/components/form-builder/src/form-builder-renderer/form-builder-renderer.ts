@@ -9,7 +9,7 @@ import {
   model,
   output
 } from '@angular/core';
-import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, ReactiveFormsModule, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
 import { DEFAULT_FORM_BUILDER_ITEMS, FORM_BUILDER_FIELDS, FORM_BUILDER_ITEMS, validatorsFromRules } from '../config';
 import { FormBuilderField, FormBuilderFieldDefinition, FormBuilderItemDefinition, FormBuilderLayoutItem, FormBuilderSchema, FormBuilderSection, FormBuilderUploadCallback } from '../types';
@@ -107,8 +107,8 @@ export class FormBuilderRenderer {
     });
   }
 
-  protected getControl(field: FormBuilderField): FormControl {
-    const control = this.formGroup().controls[field.name];
+  protected getControl(field: FormBuilderField, formGroup = this.formGroup()): FormControl {
+    const control = formGroup.controls[field.name];
 
     if (control instanceof FormControl) {
       return control;
@@ -142,6 +142,58 @@ export class FormBuilderRenderer {
     return this.visibleFields(field.children ?? []);
   }
 
+  protected isRepeaterField(field: FormBuilderField): boolean {
+    return field.type === 'repeater';
+  }
+
+  protected repeaterArray(field: FormBuilderField, formGroup = this.formGroup()): FormArray<FormGroup> {
+    const control = formGroup.controls[field.name];
+
+    return control instanceof FormArray
+      ? control as FormArray<FormGroup>
+      : new FormArray<FormGroup>([]);
+  }
+
+  protected repeaterGroups(field: FormBuilderField, formGroup = this.formGroup()): FormGroup[] {
+    return this.repeaterArray(field, formGroup).controls;
+  }
+
+  protected repeaterEmptyText(field: FormBuilderField): string {
+    const emptyText = field.settings?.['emptyText'];
+
+    return typeof emptyText === 'string' ? emptyText.trim() : '';
+  }
+
+  protected addRepeaterItem(field: FormBuilderField, formGroup = this.formGroup()): void {
+    if (this.readonly()) {
+      return;
+    }
+
+    const array = this.repeaterArray(field, formGroup);
+
+    array.push(this.createRepeaterGroup(field));
+    array.updateValueAndValidity();
+  }
+
+  protected removeRepeaterItem(field: FormBuilderField, index: number, formGroup = this.formGroup()): void {
+    if (this.readonly()) {
+      return;
+    }
+
+    if (!this.canRemoveRepeaterItem(field, formGroup)) {
+      return;
+    }
+
+    const array = this.repeaterArray(field, formGroup);
+
+    array.removeAt(index);
+    array.updateValueAndValidity();
+  }
+
+  protected canRemoveRepeaterItem(field: FormBuilderField, formGroup = this.formGroup()): boolean {
+    return this.allowsNullValue(field) || this.repeaterArray(field, formGroup).length > 1;
+  }
+
   protected submit(): void {
     const form = this.formGroup();
 
@@ -154,18 +206,38 @@ export class FormBuilderRenderer {
   }
 
   private createFormGroup(): FormGroup {
-    const controls: Record<string, FormControl> = {};
+    const controls: Record<string, AbstractControl> = {};
     const value = this.value();
 
     const fields = [
-      ...flattenFields(this.schema().fields ?? []),
-      ...this.schema().sections.flatMap(section => flattenFields(section.fields))
+      ...(this.schema().fields ?? []),
+      ...this.schema().sections.flatMap(section => section.fields)
     ];
 
+    this.addFieldsToControls(controls, fields, value);
+
+    return new FormGroup(controls);
+  }
+
+  private addFieldsToControls(
+    controls: Record<string, AbstractControl>,
+    fields: FormBuilderField[],
+    value: Record<string, any>
+  ): void {
     for (const field of fields) {
       const definition = this.definitions().find(item => item.type === field.type);
 
-      if (this.isContainerField(field) || definition?.kind === 'static' || field.kind === 'static') {
+      if (this.isRepeaterField(field)) {
+        controls[field.name] = this.createRepeaterArray(field, value[field.name]);
+        continue;
+      }
+
+      if (this.isContainerField(field)) {
+        this.addFieldsToControls(controls, field.children ?? [], value);
+        continue;
+      }
+
+      if (definition?.kind === 'static' || field.kind === 'static') {
         continue;
       }
 
@@ -179,6 +251,40 @@ export class FormBuilderRenderer {
       );
 
       controls[field.name] = control;
+    }
+  }
+
+  private createRepeaterArray(field: FormBuilderField, value: unknown): FormArray<FormGroup> {
+    const allowNullValue = this.allowsNullValue(field);
+    const rows = Array.isArray(value) && (allowNullValue || value.length > 0)
+      ? value
+      : allowNullValue
+        ? []
+        : [{}];
+    const validators = allowNullValue ? [] : [repeaterRequiredValidator];
+
+    return new FormArray(rows.map(row => this.createRepeaterGroup(field, row)), validators);
+  }
+
+  private createRepeaterGroup(field: FormBuilderField, value: unknown = {}): FormGroup {
+    const controls: Record<string, AbstractControl> = {};
+    const rowValue = isRecord(value) ? value : {};
+
+    for (const child of flattenFields(field.children ?? [])) {
+      const definition = this.definitions().find(item => item.type === child.type);
+
+      if (this.isContainerField(child) || definition?.kind === 'static' || child.kind === 'static') {
+        continue;
+      }
+
+      const validators = definition?.validators?.(child) ?? validatorsFromRules(child.validation, child);
+      controls[child.name] = new FormControl(
+        {
+          value: rowValue[child.name] ?? this.fieldInitialValue(child),
+          disabled: child.disabled || this.readonly()
+        },
+        validators
+      );
     }
 
     return new FormGroup(controls);
@@ -211,6 +317,10 @@ export class FormBuilderRenderer {
     }
 
     return selectedValues[0] ?? null;
+  }
+
+  private allowsNullValue(field: FormBuilderField): boolean {
+    return field.settings?.['allowNullValue'] === true;
   }
 
   private resolveCanvasItems(schema: FormBuilderSchema): FormBuilderRendererCanvasItem[] {
@@ -249,6 +359,16 @@ function normalizeFieldDefinition(definition: FormBuilderItemDefinition): FormBu
 
 function flattenFields(fields: FormBuilderField[]): FormBuilderField[] {
   return fields.flatMap(field => [field, ...flattenFields(field.children ?? [])]);
+}
+
+function isRecord(value: unknown): value is Record<string, any> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function repeaterRequiredValidator(control: AbstractControl): ValidationErrors | null {
+  return control instanceof FormArray && control.length === 0
+    ? { repeaterRequired: true }
+    : null;
 }
 
 function normalizedLayout(schema: FormBuilderSchema): FormBuilderLayoutItem[] {
