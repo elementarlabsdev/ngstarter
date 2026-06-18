@@ -17,13 +17,6 @@ export interface FormBuilderValidationRule {
   message?: string;
 }
 
-export interface FormBuilderVisibility {
-  form?: boolean;
-  email?: boolean;
-  pdf?: boolean;
-  condition?: string;
-}
-
 export interface FormBuilderField {
   id: string;
   name: string;
@@ -41,7 +34,6 @@ export interface FormBuilderField {
   width?: FormBuilderFieldWidth;
   options?: FormBuilderOption[];
   validation?: FormBuilderValidationRule[];
-  visibility?: FormBuilderVisibility;
   settings?: Record<string, any>;
   children?: FormBuilderField[];
 }

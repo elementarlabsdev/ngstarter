@@ -61,10 +61,7 @@ export class CustomFieldRegistrationExample {
             name: 'subject',
             type: 'text',
             label: 'Subject',
-            width: 6,
-            visibility: {
-              form: true
-            }
+            width: 6
           },
           {
             id: 'priority',
@@ -77,9 +74,6 @@ export class CustomFieldRegistrationExample {
               lowLabel: 'Low',
               mediumLabel: 'Medium',
               highLabel: 'High'
-            },
-            visibility: {
-              form: true
             }
           }
         ]

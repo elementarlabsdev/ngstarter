@@ -284,7 +284,7 @@ const panelLayoutArticleDescription =
 const formBuilderCustomFieldArticleDescription =
   'NgStarter Form Builder tutorial: add a custom Angular field, register it with provideFormBuilderField, and configure schema-driven inspector settings.';
 const formBuilderSchemaArticleDescription =
-  'NgStarter Form Builder schema reference: understand sections, fields, layout ordering, validation, visibility, settings, and nested field structures.';
+  'NgStarter Form Builder schema reference: understand sections, fields, layout ordering, validation, settings, and nested field structures.';
 
 export const HOME_SEO: SeoData = {
   title: 'NgStarter - AI-Friendly Angular Components Library for Admin Apps',

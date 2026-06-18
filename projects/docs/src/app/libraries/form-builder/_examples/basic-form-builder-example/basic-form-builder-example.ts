@@ -31,12 +31,7 @@ export class BasicFormBuilderExample {
             label: 'Invoice number',
             placeholder: 'INV-2026-001',
             required: true,
-            width: 4,
-            visibility: {
-              form: true,
-              email: true,
-              pdf: true
-            }
+            width: 4
           },
           {
             id: 'invoice_date',
@@ -44,12 +39,7 @@ export class BasicFormBuilderExample {
             type: 'date',
             label: 'Invoice date',
             required: true,
-            width: 4,
-            visibility: {
-              form: true,
-              email: true,
-              pdf: true
-            }
+            width: 4
           },
           {
             id: 'due_date',
@@ -57,12 +47,7 @@ export class BasicFormBuilderExample {
             type: 'date',
             label: 'Due date',
             required: true,
-            width: 4,
-            visibility: {
-              form: true,
-              email: true,
-              pdf: true
-            }
+            width: 4
           }
         ]
       },
@@ -76,12 +61,7 @@ export class BasicFormBuilderExample {
             type: 'text',
             label: 'Client',
             placeholder: 'Acme LLC',
-            width: 6,
-            visibility: {
-              form: true,
-              email: true,
-              pdf: true
-            }
+            width: 6
           },
           {
             id: 'client_email',
@@ -89,12 +69,7 @@ export class BasicFormBuilderExample {
             type: 'email',
             label: 'Email',
             placeholder: 'billing@acme.test',
-            width: 6,
-            visibility: {
-              form: true,
-              email: true,
-              pdf: false
-            }
+            width: 6
           }
         ]
       },
@@ -108,11 +83,6 @@ export class BasicFormBuilderExample {
             type: 'group',
             label: 'Invoice items',
             width: 12,
-            visibility: {
-              form: true,
-              email: true,
-              pdf: true
-            },
             children: [
               {
                 id: 'item_description',
@@ -120,12 +90,7 @@ export class BasicFormBuilderExample {
                 type: 'textarea',
                 label: 'Description',
                 placeholder: 'Service description',
-                width: 12,
-                visibility: {
-                  form: true,
-                  email: true,
-                  pdf: true
-                }
+                width: 12
               },
               {
                 id: 'item_quantity',
@@ -133,24 +98,14 @@ export class BasicFormBuilderExample {
                 type: 'number',
                 label: 'Quantity',
                 width: 3,
-                defaultValue: 1,
-                visibility: {
-                  form: true,
-                  email: true,
-                  pdf: true
-                }
+                defaultValue: 1
               },
               {
                 id: 'item_price',
                 name: 'item_price',
                 type: 'currency',
                 label: 'Price',
-                width: 3,
-                visibility: {
-                  form: true,
-                  email: true,
-                  pdf: true
-                }
+                width: 3
               }
             ]
           }

@@ -81,11 +81,6 @@ export class FormBuilderSchemaArticle {
   validation: [
     { type: 'email', message: 'Use a valid email address.' },
   ],
-  visibility: {
-    form: true,
-    email: true,
-    pdf: true,
-  },
 }`;
 
   readonly layoutCode = `layout: [

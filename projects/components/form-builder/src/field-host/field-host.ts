@@ -102,7 +102,8 @@ import { FormBuilderField, FormBuilderFieldDefinition, FormBuilderUploadCallback
     '[class.is-width-9]': '!editableCanvas() && field().width === 9',
     '[class.is-width-10]': '!editableCanvas() && field().width === 10',
     '[class.is-width-11]': '!editableCanvas() && field().width === 11',
-    '[class.is-width-12]': '!editableCanvas() && (field().width ?? 12) === 12'
+    '[class.is-width-12]': '!editableCanvas() && (field().width ?? 12) === 12',
+    '[class.is-hidden-field]': '!editableCanvas() && field().type === "hidden"'
   }
 })
 export class FormBuilderFieldHost {

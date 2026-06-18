@@ -210,6 +210,21 @@ const OPTIONS_SETTINGS_SCHEMA: FormBuilderSchema = {
   ]
 };
 
+const HIDDEN_SETTINGS_SCHEMA: FormBuilderSchema = {
+  sections: [
+    {
+      id: 'hidden-settings',
+      title: 'Hidden field',
+      fields: [
+        { id: 'hidden-label', name: 'label', type: 'text', label: 'Label' },
+        { id: 'hidden-name', name: 'name', type: 'text', label: 'Field ID' },
+        { id: 'hidden-default-value', name: 'defaultValue', type: 'text', label: 'Value' },
+        { id: 'hidden-disabled', name: 'disabled', type: 'toggle', label: 'Disabled', defaultValue: false }
+      ]
+    }
+  ]
+};
+
 export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
   {
     type: 'text',
@@ -250,6 +265,21 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
       extends: 'input-field'
     },
     validators: field => field.required ? [Validators.required, Validators.email] : [Validators.email]
+  },
+  {
+    type: 'hidden',
+    label: 'Hidden',
+    group: 'Basic',
+    icon: 'fluent:eye-off-24-regular',
+    description: 'Native hidden input included in submitted form values.',
+    defaults: {
+      label: 'Hidden field',
+      defaultValue: ''
+    },
+    settings: {
+      extends: 'none',
+      schema: HIDDEN_SETTINGS_SCHEMA
+    }
   },
   {
     type: 'textarea',

@@ -16,6 +16,10 @@
       </ngs-form-field>
     }
 
+    @case ('hidden') {
+      <input type="hidden" [formControl]="control()">
+    }
+
     @case ('select') {
       <ngs-form-field>
         <ngs-label>{{ field().label }}</ngs-label>

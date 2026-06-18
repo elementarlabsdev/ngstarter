@@ -223,9 +223,31 @@ export class Api {
     { name: 'width', description: 'Grid width from 1 to 12 columns.', type: 'FormBuilderFieldWidth' },
     { name: 'options', description: 'Choice options for select, radio, and other option-based renderers.', type: 'FormBuilderOption[]' },
     { name: 'validation', description: 'Declarative validation rules used when no custom validators factory is supplied.', type: 'FormBuilderValidationRule[]' },
-    { name: 'visibility', description: 'Visibility hints for form, email, PDF, and conditional rendering workflows.', type: 'FormBuilderVisibility' },
     { name: 'settings', description: 'Custom configuration bag for renderer-specific and settings-schema values.', type: 'Record<string, any>' },
     { name: 'children', description: 'Nested child fields for layout containers such as group and repeater.', type: 'FormBuilderField[]' }
+  ];
+
+  readonly builtInFields = [
+    { name: 'text', description: 'Single-line text input.', type: 'Basic' },
+    { name: 'number', description: 'Native numeric input rendered with NgStarter field styling.', type: 'Basic' },
+    { name: 'email', description: 'Email input with built-in email validator support.', type: 'Basic' },
+    { name: 'hidden', description: 'Native input type="hidden" included in raw submitted values.', type: 'Basic' },
+    { name: 'textarea', description: 'Multi-line text input.', type: 'Basic' },
+    { name: 'select', description: 'Single or multiple option selection.', type: 'Choices' },
+    { name: 'radio', description: 'Radio group backed by field options.', type: 'Choices' },
+    { name: 'checkbox', description: 'Boolean checkbox field.', type: 'Choices' },
+    { name: 'toggle', description: 'Boolean slide toggle field.', type: 'Choices' },
+    { name: 'date', description: 'Single date input.', type: 'Date and time' },
+    { name: 'time', description: 'Time input.', type: 'Date and time' },
+    { name: 'date-range', description: 'Start and end date input.', type: 'Date and time' },
+    { name: 'timezone-select', description: 'Timezone selector.', type: 'Date and time' },
+    { name: 'upload', description: 'File upload control with optional upload callback.', type: 'Files' },
+    { name: 'currency', description: 'Numeric currency amount input.', type: 'Finance' },
+    { name: 'currency-select', description: 'Currency selector.', type: 'Finance' },
+    { name: 'country-select', description: 'Country selector.', type: 'Location' },
+    { name: 'group', description: 'Layout container for nested child fields.', type: 'Layout' },
+    { name: 'repeater', description: 'Layout container that renders child fields as a FormArray.', type: 'Layout' },
+    { name: 'spacer', description: 'Static vertical spacing block.', type: 'Layout' }
   ];
 
   readonly definitionProperties = [

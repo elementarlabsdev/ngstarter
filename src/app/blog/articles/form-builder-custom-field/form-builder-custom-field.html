@@ -68,7 +68,7 @@
           <p>
             Consumer code should import from the secondary entry point. The builder, schema types,
             field types, and provider helpers are exported from
-            <code>@ngstarter-ui/components/form-builder</code>.
+            <code>&#64;ngstarter-ui/components/form-builder</code>.
           </p>
           <ngs-code-highlighter [code]="importCode" language="typescript" title="imports.ts" showCopyButton />
         </section>
@@ -147,11 +147,10 @@
         <a ngs-scroll-spy-on targetId="schema">Schema</a>
         <a ngs-scroll-spy-on targetId="template">Template</a>
         <a ngs-scroll-spy-on targetId="checklist">Checklist</a>
+        <button ngs-scroll-spy-back-to-top>
+          Back to top
+        </button>
       </nav>
     </aside>
   </div>
-  <button ngs-scroll-spy-back-to-top ngsButton="outlined">
-    <ngs-icon name="fluent:arrow-up-24-regular" />
-    Back to top
-  </button>
 </article>

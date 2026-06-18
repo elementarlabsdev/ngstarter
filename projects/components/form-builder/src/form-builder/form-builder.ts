@@ -966,11 +966,6 @@ export class FormBuilder {
       kind,
       label: baseLabel,
       width: definition.defaults?.width ?? this.defaultWidth(definition.type),
-      visibility: {
-        form: true,
-        email: true,
-        pdf: true
-      },
       ...definition.defaults
     };
 
@@ -1655,7 +1650,6 @@ function cloneField(field: FormBuilderField): FormBuilderField {
     ...field,
     options: field.options?.map(option => ({ ...option })),
     validation: field.validation?.map(rule => ({ ...rule })),
-    visibility: field.visibility ? { ...field.visibility } : undefined,
     settings: field.settings ? { ...field.settings } : undefined,
     children: field.children?.map(cloneField)
   };

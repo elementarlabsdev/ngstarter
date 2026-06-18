@@ -4,6 +4,10 @@
   display: block;
   min-width: 0;
 
+  &.is-hidden-field {
+    display: none;
+  }
+
   &.is-width-1 {
     grid-column: span 1;
   }

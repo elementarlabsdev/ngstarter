@@ -25,7 +25,7 @@ export class Blog {
     {
       title: 'Form Builder schema explained',
       description:
-        'Understand FormBuilderSchema, sections, fields, layout ordering, validation, visibility, custom settings, and nested form structures.',
+        'Understand FormBuilderSchema, sections, fields, layout ordering, validation, custom settings, and nested form structures.',
       href: '/blog/form-builder-schema',
       date: 'June 18, 2026',
       readTime: '9 min',

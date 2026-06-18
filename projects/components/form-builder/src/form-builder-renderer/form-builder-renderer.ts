@@ -74,24 +74,7 @@ export class FormBuilderRenderer {
     return definitions;
   }, []));
   protected readonly visibleCanvasItems = computed<FormBuilderRendererCanvasItem[]>(() =>
-    this.resolveCanvasItems(this.schema())
-      .map(item => {
-        if (item.field) {
-          return {
-            ...item,
-            field: this.visibleFields([item.field])[0]
-          };
-        }
-
-        return {
-          ...item,
-          section: {
-            ...item.section!,
-            fields: this.visibleFields(item.section!.fields)
-          }
-        };
-      })
-      .filter(item => !!item.field || !!item.section?.fields.length)
+    this.resolveCanvasItems(this.schema()).filter(item => !!item.field || !!item.section?.fields.length)
   );
   protected readonly formGroup = computed(() => this.createFormGroup());
 
@@ -139,7 +122,7 @@ export class FormBuilderRenderer {
   }
 
   protected visibleChildren(field: FormBuilderField): FormBuilderField[] {
-    return this.visibleFields(field.children ?? []);
+    return field.children ?? [];
   }
 
   protected isRepeaterField(field: FormBuilderField): boolean {
@@ -288,15 +271,6 @@ export class FormBuilderRenderer {
     }
 
     return new FormGroup(controls);
-  }
-
-  private visibleFields(fields: FormBuilderField[]): FormBuilderField[] {
-    return fields
-      .filter(field => field.visibility?.form !== false)
-      .map(field => ({
-        ...field,
-        children: field.children ? this.visibleFields(field.children) : undefined
-      }));
   }
 
   private fieldInitialValue(field: FormBuilderField): any {

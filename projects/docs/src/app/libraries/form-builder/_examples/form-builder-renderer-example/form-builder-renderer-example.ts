@@ -40,10 +40,14 @@ export class FormBuilderRendererExample {
             label: 'Company',
             placeholder: 'Company name',
             required: true,
-            width: 6,
-            visibility: {
-              form: true
-            }
+            width: 6
+          },
+          {
+            id: 'account_id',
+            name: 'account_id',
+            type: 'hidden',
+            label: 'Account ID',
+            defaultValue: 'acct_1024'
           },
           {
             id: 'billing_email',
@@ -52,10 +56,7 @@ export class FormBuilderRendererExample {
             label: 'Billing email',
             placeholder: 'finance@example.com',
             required: true,
-            width: 6,
-            visibility: {
-              form: true
-            }
+            width: 6
           },
           {
             id: 'currency',
@@ -67,10 +68,7 @@ export class FormBuilderRendererExample {
               { label: 'US Dollar', value: 'usd' },
               { label: 'Euro', value: 'eur' },
               { label: 'Polish Zloty', value: 'pln' }
-            ],
-            visibility: {
-              form: true
-            }
+            ]
           },
           {
             id: 'notes',
@@ -78,10 +76,7 @@ export class FormBuilderRendererExample {
             type: 'textarea',
             label: 'Internal notes',
             placeholder: 'Add context for finance team',
-            width: 12,
-            visibility: {
-              form: true
-            }
+            width: 12
           },
           {
             id: 'contacts',
@@ -89,9 +84,6 @@ export class FormBuilderRendererExample {
             type: 'group',
             label: 'Billing contacts',
             width: 12,
-            visibility: {
-              form: true
-            },
             children: [
               {
                 id: 'contact_name',
@@ -99,10 +91,7 @@ export class FormBuilderRendererExample {
                 type: 'text',
                 label: 'Contact name',
                 placeholder: 'Full name',
-                width: 6,
-                visibility: {
-                  form: true
-                }
+                width: 6
               },
               {
                 id: 'contact_email',
@@ -110,10 +99,7 @@ export class FormBuilderRendererExample {
                 type: 'email',
                 label: 'Contact email',
                 placeholder: 'name@example.com',
-                width: 6,
-                visibility: {
-                  form: true
-                }
+                width: 6
               }
             ]
           }
