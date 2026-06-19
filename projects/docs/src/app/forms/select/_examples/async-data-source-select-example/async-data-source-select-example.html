@@ -1,0 +1,22 @@
+<ngs-form-field class="w-full max-w-md">
+  <ngs-label>Owner</ngs-label>
+  <ngs-select
+    [formControl]="owner"
+    [dataSource]="usersDataSource"
+    placeholder="Assign owner"
+    searchable
+    clearable
+    [pageSize]="20"
+    [searchDebounce]="150">
+    <ng-template ngsOptionContentDef let-user let-label="label">
+      <span class="flex min-w-0 flex-col">
+        <span class="truncate">{{ user.name }}</span>
+        <span class="truncate text-xs text-neutral-500">{{ user.team }} - {{ label }}</span>
+      </span>
+    </ng-template>
+
+    <ng-template ngsSelectValueDef let-user>
+      {{ user.name }} - {{ user.team }}
+    </ng-template>
+  </ngs-select>
+</ngs-form-field>

@@ -3,8 +3,8 @@
 :host {
   display: flex;
   align-items: center;
-  height: var(--ngs-option-height, var(--ngs-dropdown-height, var(--option-height, 48px)));
-  padding: var(--ngs-option-padding, var(--ngs-dropdown-item-padding, 0 --spacing(3)));
+  min-height: var(--ngs-option-height, var(--ngs-dropdown-height, var(--option-height, 48px)));
+  padding: var(--ngs-option-padding, var(--ngs-dropdown-item-padding, --spacing(2) --spacing(3)));
   border-radius: var(--ngs-option-radius, var(--ngs-dropdown-item-radius, var(--ngs-control-radius)));
   font-size: var(--ngs-option-font-size, var(--ngs-dropdown-item-font-size, var(--ngs-font-size-sm)));
   color: var(--ngs-option-color, var(--ngs-dropdown-item-color, var(--ngs-color-on-surface)));

@@ -2,11 +2,25 @@
   <ngs-label>Favorite food</ngs-label>
   <ngs-select>
     <ngs-select-header>
-      <div class="px-3 py-2 border-b border-b-border">Custom Header</div>
+      <div class="ngs-select-search sticky top-0 z-1 bg-surface-container-lowest">
+        <input
+          class="ngs-select-search-input w-full text-sm focus:outline-none border-b
+                 border-surface-container-high focus:border-b-primary h-14 px-3"
+          type="text"
+          [value]="search()"
+          placeholder="Search..."
+          aria-label="Search options"
+          autocomplete="off"
+          (click)="$event.stopPropagation()"
+          (keydown)="$event.stopPropagation()"
+          (input)="updateSearch($any($event.target).value)">
+      </div>
     </ngs-select-header>
     <ngs-select-body>
-      @for (food of foods(); track food) {
-        <ngs-option [value]="food.value">{{food.viewValue}}</ngs-option>
+      @for (food of filteredFoods(); track food.value) {
+        <ngs-option [value]="food.value">{{ food.viewValue }}</ngs-option>
+      } @empty {
+        <ngs-option disabled>No options</ngs-option>
       }
     </ngs-select-body>
   </ngs-select>

@@ -18,6 +18,9 @@ import { SelectSearchExample } from '../_examples/select-search-example/select-s
 import {
   ClearableSelectExample
 } from '../_examples/clearable-select-example/clearable-select-example';
+import {
+  AsyncDataSourceSelectExample
+} from '../_examples/async-data-source-select-example/async-data-source-select-example';
 
 @Component({
     selector: 'app-overview',
@@ -32,7 +35,8 @@ import {
     GroupsOfOptionsExample,
     MultipleSelectionExample,
     CustomTriggerExample,
-    SelectSearchExample
+    SelectSearchExample,
+    AsyncDataSourceSelectExample
   ],
     templateUrl: './overview.html',
     styleUrl: './overview.scss'

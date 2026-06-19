@@ -44,6 +44,30 @@
       <td class="border border-slate-300 p-2">Whether to show a clear button next to the arrow when a value is selected. Clearing emits <code>selectionChange</code> and writes <code>null</code> for single select or an empty array for multiple select.</td>
     </tr>
     <tr>
+      <td class="border border-slate-300 p-2"><code>dataSource</code></td>
+      <td class="border border-slate-300 p-2">Async option source for server-backed select values. Receives paging, search, selected values, request reason, and an optional abort signal.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>pageSize</code></td>
+      <td class="border border-slate-300 p-2">Number of async options requested per page. Defaults to <code>25</code>.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>searchable</code></td>
+      <td class="border border-slate-300 p-2">Shows the async search input in the panel. Search requests are sent to <code>dataSource</code>.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>searchDebounce</code></td>
+      <td class="border border-slate-300 p-2">Debounce in milliseconds before sending a search request. Defaults to <code>250</code>.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>minSearchLength</code></td>
+      <td class="border border-slate-300 p-2">Minimum number of typed characters before remote search runs. Defaults to <code>0</code>.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>loadOnOpen</code></td>
+      <td class="border border-slate-300 p-2">Loads async options when the select panel opens. Defaults to <code>true</code>.</td>
+    </tr>
+    <tr>
       <td class="border border-slate-300 p-2"><code>ariaLabel</code></td>
       <td class="border border-slate-300 p-2">Aria-label for the select.</td>
     </tr>
@@ -57,6 +81,92 @@
     </tr>
   </tbody>
 </table>
+
+<h4>Async data source</h4>
+<p>
+  Use <code>dataSource</code> when options come from an API. The function must return the selected
+  option during the first request when <code>selectedValues</code> contains the current form value,
+  so the trigger can render the selected label before the option page is opened.
+</p>
+<pre><code class="code">import &#123; SelectDataSource &#125; from '@ngstarter-ui/components/select';
+
+readonly usersDataSource: SelectDataSource&lt;User&gt; = async request =&gt; &#123;
+  const response = await usersApi.search(&#123;
+    search: request.search,
+    page: request.page,
+    pageSize: request.pageSize,
+    selectedValues: request.selectedValues,
+  &#125;);
+
+  return &#123;
+    items: response.users.map(user =&gt; (&#123;
+      label: user.name,
+      value: user.id,
+      data: user,
+    &#125;)),
+    hasMore: response.hasMore,
+    nextCursor: response.nextPage,
+  &#125;;
+&#125;;</code></pre>
+
+<pre><code class="code">&lt;ngs-select
+  [formControl]="owner"
+  [dataSource]="usersDataSource"
+  [pageSize]="20"
+  searchable
+  [minSearchLength]="1"&gt;
+&lt;/ngs-select&gt;</code></pre>
+
+<h4>SelectDataSourceRequest</h4>
+<table class="w-full border-collapse border border-slate-400 my-4">
+  <thead>
+    <tr class="bg-slate-100">
+      <th class="border border-slate-300 p-2 text-left">Name</th>
+      <th class="border border-slate-300 p-2 text-left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>search</code></td>
+      <td class="border border-slate-300 p-2">Current search text. Empty for initial and open requests.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>page</code></td>
+      <td class="border border-slate-300 p-2">One-based page number requested by the select.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>pageSize</code></td>
+      <td class="border border-slate-300 p-2">Configured page size passed from the select.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>selectedValues</code></td>
+      <td class="border border-slate-300 p-2">Current selected value or values. Return matching options on the first request.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>reason</code></td>
+      <td class="border border-slate-300 p-2">Why the request was made: <code>initial</code>, <code>open</code>, <code>search</code>, or <code>page</code>.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>signal</code></td>
+      <td class="border border-slate-300 p-2">Optional abort signal for cancelling stale remote requests.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>Async templates</h4>
+<p>
+  Use <code>ngsOptionContentDef</code> to customize async option rows and
+  <code>ngsSelectValueDef</code> to customize the selected value display. Both templates receive
+  the option <code>data</code> payload.
+</p>
+<pre><code class="code">&lt;ng-template ngsOptionContentDef let-user let-label="label"&gt;
+  &lt;strong&gt;{{ '{' }}{{ '{' }} user.name {{ '}' }}{{ '}' }}&lt;/strong&gt;
+  &lt;span&gt;{{ '{' }}{{ '{' }} user.team {{ '}' }}{{ '}' }}&lt;/span&gt;
+&lt;/ng-template&gt;
+
+&lt;ng-template ngsSelectValueDef let-user let-label="label"&gt;
+  {{ '{' }}{{ '{' }} user?.name || label {{ '}' }}{{ '}' }}
+&lt;/ng-template&gt;</code></pre>
 
 <h4>Outputs</h4>
 <table class="w-full border-collapse border border-slate-400 my-4">

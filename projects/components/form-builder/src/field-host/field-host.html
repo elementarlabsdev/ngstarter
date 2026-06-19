@@ -26,9 +26,47 @@
         <ngs-select [formControl]="control()"
                     [placeholder]="field().placeholder || ''"
                     [multiple]="field().multiple ?? false"
-                    [clearable]="field().clearable ?? false">
-          @for (option of field().options ?? []; track option.value) {
-            <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
+                    [clearable]="field().clearable ?? false"
+                    [dataSource]="selectDataSource()"
+                    [pageSize]="selectPageSize()"
+                    [searchable]="selectSearchable()"
+                    [searchDebounce]="selectSearchDebounce()"
+                    [minSearchLength]="selectMinSearchLength()"
+                    [loadOnOpen]="selectLoadOnOpen()">
+          @if (selectOptionContentComponent(); as optionComponent) {
+            <ng-template ngsOptionContentDef
+                         let-data
+                         let-option="option"
+                         let-value="value"
+                         let-label="label"
+                         let-selected="selected"
+                         let-disabled="disabled"
+                         let-multiple="multiple">
+              <ng-container
+                [ngComponentOutlet]="optionComponent"
+                [ngComponentOutletInputs]="selectOptionContentInputs(data, option, value, label, selected, disabled, multiple)"/>
+            </ng-template>
+          }
+
+          @if (selectValueComponent(); as valueComponent) {
+            <ng-template ngsSelectValueDef
+                         let-data
+                         let-option="option"
+                         let-value="value"
+                         let-label="label"
+                         let-labels="labels"
+                         let-count="count"
+                         let-multiple="multiple">
+              <ng-container
+                [ngComponentOutlet]="valueComponent"
+                [ngComponentOutletInputs]="selectValueInputs(data, option, value, label, labels, count, multiple)"/>
+            </ng-template>
+          }
+
+          @if (!selectUsesDataSource()) {
+            @for (option of field().options ?? []; track option.value) {
+              <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
+            }
           }
         </ngs-select>
         @if (field().hint) {
@@ -47,6 +85,21 @@
             <ngs-radio-button [value]="option.value">{{ option.label }}</ngs-radio-button>
           }
         </ngs-radio-group>
+        @if (field().hint) {
+          <span class="ngs-form-builder-choice-hint">{{ field().hint }}</span>
+        }
+      </div>
+    }
+
+    @case ('segmented') {
+      <div class="ngs-form-builder-choice-field">
+        <span class="ngs-form-builder-choice-label">{{ field().label }}</span>
+        <ngs-segmented [formControl]="control()"
+                       [disabled]="readonly() || !!field().readonly || !!field().disabled">
+          @for (option of field().options ?? []; track option.value) {
+            <button ngs-segmented-button type="button" [value]="option.value">{{ option.label }}</button>
+          }
+        </ngs-segmented>
         @if (field().hint) {
           <span class="ngs-form-builder-choice-hint">{{ field().hint }}</span>
         }

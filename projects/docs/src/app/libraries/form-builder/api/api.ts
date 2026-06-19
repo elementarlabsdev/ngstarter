@@ -130,8 +130,18 @@ export class Api {
   readonly providers = [
     {
       name: 'provideFormBuilder',
-      description: 'Environment provider for custom items, custom fields, settings components, and a global uploadCallback.',
+      description: 'Environment provider for custom items, custom fields, settings components, select data sources, and a global uploadCallback.',
       type: 'EnvironmentProviders'
+    },
+    {
+      name: 'provideFormBuilderSelectDataSource',
+      description: 'Provider helper for registering one named select data source that can be selected in the built-in select field inspector.',
+      type: 'Provider'
+    },
+    {
+      name: 'provideFormBuilderSelectDataSources',
+      description: 'Provider helper for registering multiple named select data sources.',
+      type: 'Provider[]'
     },
     {
       name: 'formBuilderItem',
@@ -180,6 +190,11 @@ export class Api {
       name: 'FORM_BUILDER_UPLOAD_CALLBACK',
       description: 'Global upload handler used when no component-level uploadCallback input is supplied.',
       type: 'InjectionToken<FormBuilderUploadCallback>'
+    },
+    {
+      name: 'FORM_BUILDER_SELECT_DATA_SOURCES',
+      description: 'Multi provider token containing registered select data source definitions.',
+      type: 'InjectionToken<FormBuilderSelectDataSourceDefinition[]>'
     }
   ];
 
@@ -222,9 +237,28 @@ export class Api {
     { name: 'readonly', description: 'Marks the field readonly for renderers that support readonly display.', type: 'boolean' },
     { name: 'width', description: 'Grid width from 1 to 12 columns.', type: 'FormBuilderFieldWidth' },
     { name: 'options', description: 'Choice options for select, radio, and other option-based renderers.', type: 'FormBuilderOption[]' },
+    { name: 'optionsSource', description: 'Select field source mode. Use static for textarea-defined options or dataSource for registered async data sources.', type: "'static' | 'dataSource'" },
+    { name: 'dataSource', description: 'Registered select data source id used when optionsSource is dataSource.', type: 'string' },
+    { name: 'dataSourceOptions', description: 'Optional runtime options for a select data source such as page size, search debounce, and minimum search length.', type: 'FormBuilderSelectDataSourceOptions' },
     { name: 'validation', description: 'Declarative validation rules used when no custom validators factory is supplied.', type: 'FormBuilderValidationRule[]' },
     { name: 'settings', description: 'Custom configuration bag for renderer-specific and settings-schema values.', type: 'Record<string, any>' },
     { name: 'children', description: 'Nested child fields for layout containers such as group and repeater.', type: 'FormBuilderField[]' }
+  ];
+
+  readonly selectDataSourceDefinitionProperties = [
+    { name: 'id', description: 'Stable id saved on FormBuilderField.dataSource.', type: 'string' },
+    { name: 'name', description: 'Human-readable name shown in the select field inspector.', type: 'string' },
+    { name: 'dataSource', description: 'Async SelectDataSource function used by the runtime select renderer.', type: 'SelectDataSource' },
+    { name: 'optionContentComponent', description: 'Optional Angular component used to render async option rows in form-builder select fields.', type: 'Type<any>' },
+    { name: 'valueComponent', description: 'Optional Angular component used to render selected async values in form-builder select fields.', type: 'Type<any>' }
+  ];
+
+  readonly selectDataSourceOptionsProperties = [
+    { name: 'pageSize', description: 'Async page size passed to the select data source. Form Builder select defaults to 20.', type: 'number' },
+    { name: 'searchable', description: 'Whether the runtime select search input is enabled. Form Builder data source selects enable search by default.', type: 'boolean' },
+    { name: 'searchDebounce', description: 'Debounce in milliseconds before remote search requests. Defaults to 250.', type: 'number' },
+    { name: 'minSearchLength', description: 'Minimum typed search length before remote search. Form Builder select defaults to 1.', type: 'number' },
+    { name: 'loadOnOpen', description: 'Whether to load the first async page when the select opens. Defaults to true.', type: 'boolean' }
   ];
 
   readonly builtInFields = [

@@ -15,6 +15,9 @@ import { SelectFooter } from '../select-footer/select-footer';
 import { SelectHeader } from '../select-header/select-header';
 import { SelectTrigger } from '../select-trigger/select-trigger';
 import { Select, SelectChange } from './select';
+import { SelectDataSource, SelectDataSourceRequest } from './select-data-source';
+import { SelectOptionContentDef } from './select-option-content-def.directive';
+import { SelectValueDef } from './select-value-def.directive';
 
 @Component({
   standalone: true,
@@ -261,6 +264,130 @@ class HideCheckIconHost {
 
 @Component({
   standalone: true,
+  imports: [ReactiveFormsModule, Select],
+  template: `
+    <ngs-select
+      [formControl]="user()"
+      [dataSource]="usersDataSource"
+      [pageSize]="2"
+      searchable
+      [searchDebounce]="0"
+      aria-label="Async users">
+    </ngs-select>
+  `
+})
+class AsyncSelectHost {
+  readonly user = signal(new FormControl<string | null>('user_42'));
+  readonly requests: SelectDataSourceRequest[] = [];
+  readonly usersDataSource: SelectDataSource<{ id: string; name: string }> = vi.fn(async request => {
+    this.requests.push(request);
+
+    if (request.reason === 'page') {
+      return {
+        items: [
+          { label: 'Katherine Johnson', value: 'user_12', data: { id: 'user_12', name: 'Katherine Johnson' } }
+        ],
+        hasMore: false
+      };
+    }
+
+    if (request.reason === 'initial' || request.search === '') {
+      const selectedItems = request.selectedValues.includes('user_12')
+        ? [
+            { label: 'Katherine Johnson', value: 'user_12', data: { id: 'user_12', name: 'Katherine Johnson' } }
+          ]
+        : [];
+
+      return {
+        items: [
+          ...selectedItems,
+          { label: 'Ada Lovelace', value: 'user_42', data: { id: 'user_42', name: 'Ada Lovelace' } },
+          { label: 'Grace Hopper', value: 'user_7', data: { id: 'user_7', name: 'Grace Hopper' } }
+        ],
+        hasMore: true,
+        nextCursor: 'page-2'
+      };
+    }
+
+    if (request.reason === 'search') {
+      return {
+        items: [
+          { label: 'Alan Turing', value: 'user_9', data: { id: 'user_9', name: 'Alan Turing' } }
+        ],
+        hasMore: false
+      };
+    }
+
+    return [];
+  });
+}
+
+@Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, Select],
+  template: `
+    <ngs-select
+      [formControl]="users()"
+      [dataSource]="usersDataSource"
+      [pageSize]="2"
+      multiple
+      searchable
+      [searchDebounce]="0"
+      aria-label="Async users multiple">
+    </ngs-select>
+  `
+})
+class MultipleAsyncSelectHost {
+  readonly users = signal(new FormControl<string[]>(['user_42']));
+  readonly usersDataSource: SelectDataSource<{ id: string; name: string }> = async request => {
+    if (request.search) {
+      return [
+        { label: 'Alan Turing', value: 'user_9', data: { id: 'user_9', name: 'Alan Turing' } }
+      ];
+    }
+
+    return {
+      items: [
+        { label: 'Ada Lovelace', value: 'user_42', data: { id: 'user_42', name: 'Ada Lovelace' } },
+        { label: 'Grace Hopper', value: 'user_7', data: { id: 'user_7', name: 'Grace Hopper' } }
+      ],
+      hasMore: false
+    };
+  };
+}
+
+@Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, Select, SelectOptionContentDef, SelectValueDef],
+  template: `
+    <ngs-select
+      [formControl]="user()"
+      [dataSource]="usersDataSource"
+      clearable
+      aria-label="Templated async users">
+      <ng-template ngsOptionContentDef let-user let-label="label" let-selected="selected">
+        <span class="custom-option">{{ user.name }} / {{ user.team }} / {{ selected }} / {{ label }}</span>
+      </ng-template>
+
+      <ng-template ngsSelectValueDef let-user let-label="label" let-count="count">
+        <span class="custom-value">{{ user.name }} owner / {{ count }} / {{ label }}</span>
+      </ng-template>
+    </ngs-select>
+  `
+})
+class AsyncTemplateSelectHost {
+  readonly user = signal(new FormControl<string | null>('user_42'));
+  readonly usersDataSource: SelectDataSource<{ id: string; name: string; team: string }> = async () => ({
+    items: [
+      { label: 'Ada Lovelace - Platform', value: 'user_42', data: { id: 'user_42', name: 'Ada Lovelace', team: 'Platform' } },
+      { label: 'Grace Hopper - Infrastructure', value: 'user_7', data: { id: 'user_7', name: 'Grace Hopper', team: 'Infrastructure' } }
+    ],
+    hasMore: false
+  });
+}
+
+@Component({
+  standalone: true,
   imports: [ReactiveFormsModule, FormField, Select, Option],
   template: `
     <ngs-form-field>
@@ -306,6 +433,12 @@ function getOverlayOptions(): HTMLElement[] {
 
 function openSelect(fixture: ComponentFixture<unknown>): void {
   getSelectHost(fixture).click();
+  fixture.detectChanges();
+}
+
+async function flushAsyncSelect(fixture: ComponentFixture<unknown>): Promise<void> {
+  await Promise.resolve();
+  await Promise.resolve();
   fixture.detectChanges();
 }
 
@@ -734,6 +867,144 @@ describe('Select', () => {
     const selectedOption = getOverlayOptions()[0];
     expect(selectedOption.classList.contains('ngs-option-selected')).toBe(true);
     expect(selectedOption.querySelector('ngs-icon')).toBeNull();
+  });
+
+  it('loads selected async options on the first data source request', async () => {
+    const fixture = await createHost(AsyncSelectHost);
+    const component = fixture.componentInstance;
+    const select = getSelect(fixture);
+
+    await flushAsyncSelect(fixture);
+
+    expect(component.requests.length).toBe(0);
+    expect(select.triggerValue()).toBe('');
+
+    openSelect(fixture);
+    await flushAsyncSelect(fixture);
+
+    expect(component.requests[0].reason).toBe('initial');
+    expect(component.requests[0].selectedValues).toEqual(['user_42']);
+    expect(component.requests[0].page).toBe(1);
+    expect(component.requests[0].pageSize).toBe(2);
+    expect(select.triggerValue()).toBe('Ada Lovelace');
+    expect(select.selectedData()).toEqual({ id: 'user_42', name: 'Ada Lovelace' });
+
+    expect(getOverlayOptions().map(option => option.textContent?.trim())).toEqual([
+      'Ada Lovelace',
+      'Grace Hopper'
+    ]);
+  });
+
+  it('loads a missing selected async option when reopening with a changed value', async () => {
+    const fixture = await createHost(AsyncSelectHost);
+    const component = fixture.componentInstance;
+    const select = getSelect(fixture);
+
+    openSelect(fixture);
+    await flushAsyncSelect(fixture);
+
+    select.close();
+    component.user().setValue('user_12');
+    fixture.detectChanges();
+
+    openSelect(fixture);
+    await flushAsyncSelect(fixture);
+
+    expect(component.requests.at(-1)?.reason).toBe('initial');
+    expect(component.requests.at(-1)?.selectedValues).toEqual(['user_12']);
+    expect(select.triggerValue()).toBe('Katherine Johnson');
+    expect(select.selectedData()).toEqual({ id: 'user_12', name: 'Katherine Johnson' });
+  });
+
+  it('reloads async options from search and appends the next page on scroll', async () => {
+    vi.useFakeTimers();
+    const fixture = await createHost(AsyncSelectHost);
+    const component = fixture.componentInstance;
+
+    openSelect(fixture);
+    await flushAsyncSelect(fixture);
+
+    const searchInput = getOverlayRoot().querySelector('.ngs-select-search-input') as HTMLInputElement;
+    searchInput.value = 'alan';
+    searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+    vi.runOnlyPendingTimers();
+    await flushAsyncSelect(fixture);
+
+    expect(component.requests.at(-1)?.reason).toBe('search');
+    expect(component.requests.at(-1)?.search).toBe('alan');
+    expect(getOverlayOptions().map(option => option.textContent?.trim())).toEqual(['Alan Turing']);
+
+    searchInput.value = '';
+    searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+    vi.runOnlyPendingTimers();
+    await flushAsyncSelect(fixture);
+
+    const content = getOverlayRoot().querySelector('.ngs-select-async-content') as HTMLElement;
+    Object.defineProperty(content, 'scrollHeight', { configurable: true, value: 100 });
+    Object.defineProperty(content, 'clientHeight', { configurable: true, value: 80 });
+    Object.defineProperty(content, 'scrollTop', { configurable: true, value: 20 });
+    content.dispatchEvent(new Event('scroll'));
+    await flushAsyncSelect(fixture);
+
+    expect(component.requests.at(-1)?.reason).toBe('page');
+    expect(component.requests.at(-1)?.cursor).toBe('page-2');
+    expect(getOverlayOptions().map(option => option.textContent?.trim())).toEqual([
+      'Ada Lovelace',
+      'Grace Hopper',
+      'Katherine Johnson'
+    ]);
+  });
+
+  it('keeps hidden async multiple selections when selecting search results', async () => {
+    vi.useFakeTimers();
+    const fixture = await createHost(MultipleAsyncSelectHost);
+    const component = fixture.componentInstance;
+    const select = getSelect(fixture);
+
+    openSelect(fixture);
+    await flushAsyncSelect(fixture);
+
+    const searchInput = getOverlayRoot().querySelector('.ngs-select-search-input') as HTMLInputElement;
+    searchInput.value = 'alan';
+    searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+    vi.runOnlyPendingTimers();
+    await flushAsyncSelect(fixture);
+
+    clickOverlayOption(fixture, 0);
+
+    expect(component.users().value).toEqual(['user_42', 'user_9']);
+    expect(select.triggerValue()).toBe('Ada Lovelace, Alan Turing');
+    expect(select.selectedData()).toEqual([
+      { id: 'user_42', name: 'Ada Lovelace' },
+      { id: 'user_9', name: 'Alan Turing' }
+    ]);
+  });
+
+  it('renders async options and selected value with custom template defs', async () => {
+    const fixture = await createHost(AsyncTemplateSelectHost);
+    const select = getSelect(fixture);
+
+    expect(select.empty).toBe(true);
+    expect(getSelectHost(fixture).querySelector('.ngs-select-clear-button')).toBeNull();
+    expect(getSelectHost(fixture).querySelector('.custom-value')).toBeNull();
+    expect(getSelectHost(fixture).textContent).not.toContain('owner');
+
+    openSelect(fixture);
+    await flushAsyncSelect(fixture);
+
+    const options = getOverlayOptions();
+
+    expect(options[0].querySelector('.custom-option')?.textContent?.trim()).toBe(
+      'Ada Lovelace / Platform / true / Ada Lovelace - Platform'
+    );
+    expect(options[1].querySelector('.custom-option')?.textContent?.trim()).toBe(
+      'Grace Hopper / Infrastructure / false / Grace Hopper - Infrastructure'
+    );
+    expect(select.empty).toBe(false);
+    expect(getSelectHost(fixture).querySelector('.ngs-select-clear-button')).toBeTruthy();
+    expect(getSelectHost(fixture).querySelector('.custom-value')?.textContent?.trim()).toBe(
+      'Ada Lovelace owner / 1 / Ada Lovelace - Platform'
+    );
   });
 
   it('works inside ngs-form-field and updates the field focus/error state', async () => {

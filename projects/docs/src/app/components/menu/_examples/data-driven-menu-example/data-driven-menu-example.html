@@ -1,0 +1,16 @@
+<div class="flex flex-col items-start gap-3">
+  <button ngsButton [ngsMenuTriggerFor]="projectMenu">
+    Project actions
+  </button>
+
+  <span class="text-sm text-neutral-600">{{ selectedAction() }}</span>
+</div>
+
+<ngs-menu #projectMenu="ngsMenu">
+  @for (action of actions; track action.id) {
+    <button ngs-menu-item [disabled]="action.disabled ?? false" (click)="selectAction(action)">
+      <ngs-icon [name]="action.icon"/>
+      <span>{{ action.label }}</span>
+    </button>
+  }
+</ngs-menu>

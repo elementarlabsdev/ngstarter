@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  Type,
   ViewContainerRef,
   computed,
   effect,
@@ -9,6 +10,7 @@ import {
   signal,
   viewChild
 } from '@angular/core';
+import { NgComponentOutlet } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import {
   Datepicker,
@@ -23,11 +25,19 @@ import {
 } from '@ngstarter-ui/components/datepicker';
 import { FormField, Hint, IconButtonSuffix, Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
-import { Select } from '@ngstarter-ui/components/select';
+import {
+  Select,
+  SelectDataSource,
+  SelectOptionContentContext,
+  SelectOptionContentDef,
+  SelectValueContext,
+  SelectValueDef
+} from '@ngstarter-ui/components/select';
 import { Option } from '@ngstarter-ui/components/option';
 import { Checkbox } from '@ngstarter-ui/components/checkbox';
 import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
 import { RadioButton, RadioGroup, RadioGroupOrientation } from '@ngstarter-ui/components/radio';
+import { Segmented, SegmentedButton } from '@ngstarter-ui/components/segmented';
 import { CountrySelect } from '@ngstarter-ui/components/country-select';
 import { CurrencySelect } from '@ngstarter-ui/components/currency-select';
 import { TimezoneSelect } from '@ngstarter-ui/components/timezone-select';
@@ -42,7 +52,7 @@ import {
   UploadFileSelectedEvent,
   UploadTriggerDirective
 } from '@ngstarter-ui/components/upload';
-import { FORM_BUILDER_UPLOAD_CALLBACK } from '../config';
+import { FORM_BUILDER_SELECT_DATA_SOURCES, FORM_BUILDER_UPLOAD_CALLBACK } from '../config';
 import { FormBuilderField, FormBuilderFieldDefinition, FormBuilderUploadCallback } from '../types';
 
 @Component({
@@ -62,12 +72,17 @@ import { FormBuilderField, FormBuilderFieldDefinition, FormBuilderUploadCallback
     IconButtonSuffix,
     Label,
     Input,
+    NgComponentOutlet,
     Select,
+    SelectOptionContentDef,
+    SelectValueDef,
     Option,
     Checkbox,
     SlideToggle,
     RadioButton,
     RadioGroup,
+    Segmented,
+    SegmentedButton,
     CountrySelect,
     CurrencySelect,
     TimezoneSelect,
@@ -108,6 +123,7 @@ import { FormBuilderField, FormBuilderFieldDefinition, FormBuilderUploadCallback
 })
 export class FormBuilderFieldHost {
   private readonly providedUploadCallback = inject(FORM_BUILDER_UPLOAD_CALLBACK, { optional: true });
+  private readonly selectDataSources = inject(FORM_BUILDER_SELECT_DATA_SOURCES, { optional: true }) ?? [];
 
   readonly field = input.required<FormBuilderField>();
   readonly control = input.required<FormControl>();
@@ -156,6 +172,38 @@ export class FormBuilderFieldHost {
   });
   protected readonly dateRangeStartValue = computed(() => this.formatDateRangePart(this.controlValue()?.start));
   protected readonly dateRangeEndValue = computed(() => this.formatDateRangePart(this.controlValue()?.end));
+  protected readonly selectUsesDataSource = computed(() => {
+    const field = this.field();
+
+    return field.optionsSource === 'dataSource' || (!field.optionsSource && !!field.dataSource);
+  });
+  protected readonly selectDataSourceDefinition = computed(() => {
+    if (!this.selectUsesDataSource()) {
+      return null;
+    }
+
+    const dataSourceId = this.field().dataSource;
+
+    if (!dataSourceId) {
+      return null;
+    }
+
+    return this.selectDataSources.find(dataSource => dataSource.id === dataSourceId) ?? null;
+  });
+  protected readonly selectDataSource = computed<SelectDataSource | null>(() =>
+    this.selectDataSourceDefinition()?.dataSource ?? null
+  );
+  protected readonly selectOptionContentComponent = computed<Type<any> | null>(() =>
+    this.selectDataSourceDefinition()?.optionContentComponent ?? null
+  );
+  protected readonly selectValueComponent = computed<Type<any> | null>(() =>
+    this.selectDataSourceDefinition()?.valueComponent ?? null
+  );
+  protected readonly selectPageSize = computed(() => this.field().dataSourceOptions?.pageSize ?? 20);
+  protected readonly selectSearchable = computed(() => this.field().dataSourceOptions?.searchable ?? true);
+  protected readonly selectSearchDebounce = computed(() => this.field().dataSourceOptions?.searchDebounce ?? 250);
+  protected readonly selectMinSearchLength = computed(() => this.field().dataSourceOptions?.minSearchLength ?? 1);
+  protected readonly selectLoadOnOpen = computed(() => this.field().dataSourceOptions?.loadOnOpen ?? true);
 
   private readonly anchor = viewChild.required('anchor', { read: ViewContainerRef });
 
@@ -226,6 +274,74 @@ export class FormBuilderFieldHost {
     this.control().markAsDirty();
     this.control().markAsTouched();
     this.control().updateValueAndValidity();
+  }
+
+  protected selectOptionContentInputs(
+    data: unknown,
+    option: SelectOptionContentContext['option'],
+    value: unknown,
+    label: string,
+    selected: boolean,
+    disabled: boolean,
+    multiple: boolean
+  ): Record<string, unknown> {
+    const context: SelectOptionContentContext = {
+      $implicit: data,
+      data,
+      option,
+      value,
+      label,
+      selected,
+      disabled,
+      multiple
+    };
+
+    return {
+      context,
+      field: this.field(),
+      control: this.control(),
+      data,
+      option,
+      value,
+      label,
+      selected,
+      disabled,
+      multiple
+    };
+  }
+
+  protected selectValueInputs(
+    data: SelectValueContext['data'],
+    option: SelectValueContext['option'],
+    value: SelectValueContext['value'],
+    label: string,
+    labels: string[],
+    count: number,
+    multiple: boolean
+  ): Record<string, unknown> {
+    const context: SelectValueContext = {
+      $implicit: data,
+      data,
+      option,
+      value,
+      label,
+      labels,
+      count,
+      multiple
+    };
+
+    return {
+      context,
+      field: this.field(),
+      control: this.control(),
+      data,
+      option,
+      value,
+      label,
+      labels,
+      count,
+      multiple
+    };
   }
 
   protected onDateRangeChanged(rangeInput: DateRangeInput<any>): void {

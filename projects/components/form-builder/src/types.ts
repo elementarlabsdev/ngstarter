@@ -1,14 +1,32 @@
 import { Type } from '@angular/core';
 import { FormControl, ValidatorFn } from '@angular/forms';
+import { SelectDataSource } from '@ngstarter-ui/components/select';
 
 export type FormBuilderFieldWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export type FormBuilderItemKind = 'field' | 'layout' | 'static';
 export type FormBuilderSettingsInheritance = 'field' | 'input-field' | 'layout' | 'layout-container' | 'static' | 'none';
+export type FormBuilderSelectOptionsSource = 'static' | 'dataSource';
 
 export interface FormBuilderOption {
   label: string;
   value: any;
   selected?: boolean;
+}
+
+export interface FormBuilderSelectDataSourceOptions {
+  pageSize?: number;
+  searchable?: boolean;
+  searchDebounce?: number;
+  minSearchLength?: number;
+  loadOnOpen?: boolean;
+}
+
+export interface FormBuilderSelectDataSourceDefinition {
+  id: string;
+  name: string;
+  dataSource: SelectDataSource;
+  optionContentComponent?: Type<any>;
+  valueComponent?: Type<any>;
 }
 
 export interface FormBuilderValidationRule {
@@ -33,6 +51,9 @@ export interface FormBuilderField {
   readonly?: boolean;
   width?: FormBuilderFieldWidth;
   options?: FormBuilderOption[];
+  optionsSource?: FormBuilderSelectOptionsSource;
+  dataSource?: string;
+  dataSourceOptions?: FormBuilderSelectDataSourceOptions;
   validation?: FormBuilderValidationRule[];
   settings?: Record<string, any>;
   children?: FormBuilderField[];

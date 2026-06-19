@@ -182,7 +182,7 @@
   --ngs-dropdown-padding-y: --spacing(2);
   --ngs-dropdown-padding: var(--ngs-dropdown-padding-y) var(--ngs-dropdown-padding-x);
   --ngs-dropdown-item-padding-x: --spacing(3);
-  --ngs-dropdown-item-padding-y: 0;
+  --ngs-dropdown-item-padding-y: --spacing(2);
   --ngs-dropdown-item-padding: var(--ngs-dropdown-item-padding-y) var(--ngs-dropdown-item-padding-x);
   --ngs-dropdown-item-nested-padding-start: calc(var(--ngs-dropdown-item-padding-x) + --spacing(4));
   --ngs-dropdown-item-radius: var(--ngs-control-radius);

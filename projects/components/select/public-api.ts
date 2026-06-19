@@ -1,4 +1,7 @@
 export * from './src/select/select';
+export * from './src/select/select-data-source';
+export * from './src/select/select-option-content-def.directive';
+export * from './src/select/select-value-def.directive';
 export * from './src/select/select-token';
 export * from './src/select-trigger/select-trigger';
 export * from './src/filter-trigger/filter-trigger';

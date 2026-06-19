@@ -13,6 +13,16 @@ import { Icon } from '@ngstarter-ui/components/icon';
 export class Blog {
   readonly articles = [
     {
+      title: 'Select data sources in NgStarter UI',
+      description:
+        'Load select options lazily, support remote search and paging, and register the same data source for Form Builder select fields.',
+      href: '/blog/select-data-source',
+      date: 'June 19, 2026',
+      readTime: '8 min',
+      category: 'Select',
+      icon: 'fluent:database-search-24-regular',
+    },
+    {
       title: 'How to add and configure a custom field in Form Builder',
       description:
         'Register a custom field, render it with Angular reactive forms, and expose schema-driven settings in the NgStarter Form Builder inspector.',

@@ -4,6 +4,7 @@ import {
   FormBuilderField,
   FormBuilderFieldDefinition,
   FormBuilderItemDefinition,
+  FormBuilderSelectDataSourceDefinition,
   FormBuilderSchema,
   FormBuilderSettingsDefinition,
   FormBuilderUploadCallback,
@@ -21,6 +22,9 @@ export const FORM_BUILDER_SETTINGS =
 
 export const FORM_BUILDER_UPLOAD_CALLBACK =
   new InjectionToken<FormBuilderUploadCallback>('FORM_BUILDER_UPLOAD_CALLBACK');
+
+export const FORM_BUILDER_SELECT_DATA_SOURCES =
+  new InjectionToken<FormBuilderSelectDataSourceDefinition[]>('FORM_BUILDER_SELECT_DATA_SOURCES');
 
 export function formBuilderField(definition: FormBuilderFieldDefinition): FormBuilderFieldDefinition {
   return definition;
@@ -46,10 +50,23 @@ export function provideFormBuilderFields(definitions: FormBuilderFieldDefinition
   return definitions.map(definition => provideFormBuilderField(definition));
 }
 
+export function provideFormBuilderSelectDataSource(definition: FormBuilderSelectDataSourceDefinition): Provider {
+  return {
+    provide: FORM_BUILDER_SELECT_DATA_SOURCES,
+    useValue: definition,
+    multi: true
+  };
+}
+
+export function provideFormBuilderSelectDataSources(definitions: FormBuilderSelectDataSourceDefinition[]): Provider[] {
+  return definitions.map(definition => provideFormBuilderSelectDataSource(definition));
+}
+
 export function provideFormBuilder(config: {
   items?: FormBuilderItemDefinition[];
   fields?: FormBuilderFieldDefinition[];
   settings?: FormBuilderSettingsDefinition[];
+  selectDataSources?: FormBuilderSelectDataSourceDefinition[];
   uploadCallback?: FormBuilderUploadCallback;
 } = {}): EnvironmentProviders {
   return makeEnvironmentProviders([
@@ -71,6 +88,11 @@ export function provideFormBuilder(config: {
       provide: FORM_BUILDER_SETTINGS,
       useValue: settings,
       multi: true
+    })),
+    ...(config.selectDataSources ?? []).map(dataSource => ({
+      provide: FORM_BUILDER_SELECT_DATA_SOURCES,
+      useValue: dataSource,
+      multi: true
     }))
   ]);
 }
@@ -84,6 +106,11 @@ const SPACER_HEIGHT_OPTIONS = [8, 16, 24, 32, 48, 64]
 const ORIENTATION_OPTIONS = [
   { label: 'Vertical', value: 'vertical' },
   { label: 'Horizontal', value: 'horizontal' }
+];
+
+const SELECT_OPTIONS_SOURCE_OPTIONS = [
+  { label: 'Custom options', value: 'static' },
+  { label: 'Data source', value: 'dataSource' }
 ];
 
 export const FORM_BUILDER_FIELD_BASE_SETTINGS_SCHEMA: FormBuilderSchema = {
@@ -209,6 +236,53 @@ const OPTIONS_SETTINGS_SCHEMA: FormBuilderSchema = {
     }
   ]
 };
+
+function selectSettingsSchema(field: FormBuilderField): FormBuilderSchema {
+  const optionsSource = field.optionsSource ?? (field.dataSource ? 'dataSource' : 'static');
+  const sourceSection = {
+    id: 'select-options-source-settings',
+    title: 'Options',
+    fields: [
+      {
+        id: 'select-options-source',
+        name: 'optionsSource',
+        type: 'segmented',
+        label: 'Options source',
+        defaultValue: 'static',
+        options: SELECT_OPTIONS_SOURCE_OPTIONS,
+        settings: {
+          valueAdapter: 'selectOptionsSource'
+        }
+      }
+    ]
+  };
+
+  const dataSourceSection = {
+    id: 'select-data-source-settings',
+    title: 'Data source',
+    fields: [
+      {
+        id: 'select-data-source',
+        name: 'dataSource',
+        type: 'select',
+        label: 'Data source',
+        hint: 'Choose a registered data source.',
+        settings: {
+          valueAdapter: 'selectDataSource'
+        }
+      }
+    ]
+  };
+
+  return {
+    sections: [
+      sourceSection,
+      ...(optionsSource === 'dataSource'
+        ? [dataSourceSection]
+        : OPTIONS_SETTINGS_SCHEMA.sections)
+    ]
+  };
+}
 
 const HIDDEN_SETTINGS_SCHEMA: FormBuilderSchema = {
   sections: [
@@ -399,6 +473,7 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
       label: 'Select',
       placeholder: 'Choose an option',
       clearable: true,
+      optionsSource: 'static',
       options: [
         { label: 'Option 1', value: 'option_1' },
         { label: 'Option 2', value: 'option_2' }
@@ -406,7 +481,7 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     },
     settings: {
       extends: 'input-field',
-      schema: {
+      schema: context => ({
         sections: [
           {
             id: 'select-behavior-settings',
@@ -425,9 +500,9 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
               { id: 'select-clearable', name: 'clearable', type: 'toggle', label: 'Clearable', defaultValue: true }
             ]
           },
-          ...OPTIONS_SETTINGS_SCHEMA.sections
+          ...selectSettingsSchema(context.item as FormBuilderField).sections
         ]
-      }
+      })
     }
   },
   {

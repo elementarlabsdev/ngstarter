@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Option, Select, SelectBody, SelectHeader } from '@ngstarter-ui/components/select';
 
@@ -21,6 +21,7 @@ interface Food {
   styleUrl: './select-search-example.scss',
 })
 export class SelectSearchExample {
+  search = signal('');
   foods = signal<Food[]>([
     { value: 'steak-0', viewValue: 'Steak' },
     { value: 'pizza-1', viewValue: 'Pizza' },
@@ -73,4 +74,18 @@ export class SelectSearchExample {
     { value: 'toffee-48', viewValue: 'Toffee' },
     { value: 'candy-49', viewValue: 'Candy' },
   ]);
+
+  filteredFoods = computed(() => {
+    const query = this.search().trim().toLowerCase();
+
+    if (!query) {
+      return this.foods();
+    }
+
+    return this.foods().filter(food => food.viewValue.toLowerCase().includes(query));
+  });
+
+  updateSearch(value: string): void {
+    this.search.set(value);
+  }
 }

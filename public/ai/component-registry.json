@@ -4189,13 +4189,13 @@
           "name": "file-type-gallery-example",
           "title": "File type gallery",
           "file": "projects/docs/src/app/components/file-type/_examples/file-type-gallery-example/file-type-gallery-example.html",
-          "source": "<div class=\"grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5\">\n  @for (type of types(); track type) {\n    <div class=\"flex flex-col items-center gap-2 rounded-lg border border-subtle p-4\">\n      <ngs-file-type [extension]=\"type\" class=\"size-16\"/>\n      <div class=\"text-xs uppercase text-secondary\">{{ type }}</div>\n    </div>\n  }\n</div>"
+          "source": "<div class=\"grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5\">\n  @for (type of types(); track type) {\n    <div class=\"flex flex-col items-center gap-2 rounded-lg border border-border p-4\">\n      <ngs-file-type [extension]=\"type\" class=\"size-16\"/>\n      <div class=\"text-xs uppercase text-secondary\">{{ type }}</div>\n    </div>\n  }\n</div>"
         },
         {
           "name": "file-type-mime-example",
           "title": "File type mime",
           "file": "projects/docs/src/app/components/file-type/_examples/file-type-mime-example/file-type-mime-example.html",
-          "source": "<div class=\"grid gap-4 sm:grid-cols-2\">\n  @for (file of files(); track file.name) {\n    <div class=\"flex items-center gap-4 rounded-lg border border-subtle p-4\">\n      <ngs-file-type [mimeType]=\"file.mimeType\" [fallback]=\"file.fallback\" class=\"size-12\"/>\n      <div class=\"min-w-0\">\n        <div class=\"truncate text-sm\">{{ file.name }}</div>\n        <div class=\"truncate text-xs text-secondary\">{{ file.mimeType }}</div>\n      </div>\n    </div>\n  }\n</div>"
+          "source": "<div class=\"grid gap-4 sm:grid-cols-2\">\n  @for (file of files(); track file.name) {\n    <div class=\"flex items-center gap-4 rounded-lg border border-border p-4\">\n      <ngs-file-type [mimeType]=\"file.mimeType\" [fallback]=\"file.fallback\" class=\"size-12\"/>\n      <div class=\"min-w-0\">\n        <div class=\"truncate text-sm\">{{ file.name }}</div>\n        <div class=\"truncate text-xs text-secondary\">{{ file.mimeType }}</div>\n      </div>\n    </div>\n  }\n</div>"
         }
       ],
       "previewAsset": "projects/components/file-type/preview.svg",
@@ -4430,6 +4430,7 @@
         "FORM_BUILDER_LAYOUT_BASE_SETTINGS_SCHEMA",
         "FORM_BUILDER_LAYOUT_CONTAINER_BASE_SETTINGS_SCHEMA",
         "FORM_BUILDER_SECTION_BASE_SETTINGS_SCHEMA",
+        "FORM_BUILDER_SELECT_DATA_SOURCES",
         "FORM_BUILDER_SETTINGS",
         "FORM_BUILDER_STATIC_BASE_SETTINGS_SCHEMA",
         "FORM_BUILDER_UPLOAD_CALLBACK",
@@ -4451,6 +4452,9 @@
         "FormBuilderSchema",
         "FormBuilderSection",
         "FormBuilderSectionSettingsContext",
+        "FormBuilderSelectDataSourceDefinition",
+        "FormBuilderSelectDataSourceOptions",
+        "FormBuilderSelectOptionsSource",
         "formBuilderSettings",
         "FormBuilderSettingsConfig",
         "FormBuilderSettingsContext",
@@ -4465,6 +4469,8 @@
         "provideFormBuilder",
         "provideFormBuilderField",
         "provideFormBuilderFields",
+        "provideFormBuilderSelectDataSource",
+        "provideFormBuilderSelectDataSources",
         "validatorsFromRules"
       ],
       "inputs": [
@@ -5726,13 +5732,13 @@
         "Layout with nested layouts example",
         "Layout with nested layouts"
       ],
-      "minimalExample": "<div class=\"h-[300px] border border-muted\">\n  <ngs-layout>\n    <ngs-layout-sidebar>\n      <div class=\"p-6 border-r border-e-muted h-full w-[240px]\">Sidebar</div>\n    </ngs-layout-sidebar>\n    <ngs-layout-content class=\"p-6\">\n      Body\n    </ngs-layout-content>\n    <ngs-layout-aside>\n      <div class=\"p-6 border-l border-s-muted h-full w-[200px]\">Aside</div>\n    </ngs-layout-aside>\n  </ngs-layout>\n</div>",
+      "minimalExample": "<div class=\"h-[300px] border border-muted\">\n  <ngs-layout>\n    <ngs-layout-sidebar>\n      <div class=\"p-6 border-r border-e-muted h-full w-[240px]\">Sidebar</div>\n    </ngs-layout-sidebar>\n    <ngs-layout-content class=\"p-6\">\n      Body\n    </ngs-layout-content>\n    <ngs-layout-aside>\n      <div class=\"p-6 border-s border-s-muted h-full w-[200px]\">Aside</div>\n    </ngs-layout-aside>\n  </ngs-layout>\n</div>",
       "exampleFiles": [
         {
           "name": "layout-aside-example",
           "title": "Layout aside",
           "file": "projects/docs/src/app/components/layout/_examples/layout-aside-example/layout-aside-example.html",
-          "source": "<div class=\"h-[300px] border border-muted\">\n  <ngs-layout>\n    <ngs-layout-sidebar>\n      <div class=\"p-6 border-r border-e-muted h-full w-[240px]\">Sidebar</div>\n    </ngs-layout-sidebar>\n    <ngs-layout-content class=\"p-6\">\n      Body\n    </ngs-layout-content>\n    <ngs-layout-aside>\n      <div class=\"p-6 border-l border-s-muted h-full w-[200px]\">Aside</div>\n    </ngs-layout-aside>\n  </ngs-layout>\n</div>"
+          "source": "<div class=\"h-[300px] border border-muted\">\n  <ngs-layout>\n    <ngs-layout-sidebar>\n      <div class=\"p-6 border-r border-e-muted h-full w-[240px]\">Sidebar</div>\n    </ngs-layout-sidebar>\n    <ngs-layout-content class=\"p-6\">\n      Body\n    </ngs-layout-content>\n    <ngs-layout-aside>\n      <div class=\"p-6 border-s border-s-muted h-full w-[200px]\">Aside</div>\n    </ngs-layout-aside>\n  </ngs-layout>\n</div>"
         },
         {
           "name": "layout-footer-example",
@@ -6030,6 +6036,7 @@
         "Menu With Icons",
         "Menu Divider",
         "Menu Heading",
+        "Data Driven Menu",
         "Menu Header & Footer",
         "Nested Menu",
         "Menu Positioning",
@@ -6052,10 +6059,10 @@
           "source": "<div class=\"w-[300px] h-[300px] p-10 rounded-2xl text-center border border-muted flex items-center justify-center\"\n     [ngsContextMenuTriggerFor]=\"contextMenu\">\n  Right click here to trigger a context menu\n</div>\n<ngs-menu #contextMenu>\n  <button ngs-menu-item>\n    <ngs-icon name=\"fluent:cut-24-regular\"/>\n    Cut\n  </button>\n  <button ngs-menu-item>\n    <ngs-icon name=\"fluent:copy-24-regular\"/>\n    Copy\n  </button>\n  <button ngs-menu-item>\n    <ngs-icon name=\"fluent:clipboard-text-24-regular\"/>\n    Paste\n  </button>\n  <button ngs-menu-item>\n    <ngs-icon name=\"fluent:print-24-regular\"/>\n    Print\n  </button>\n</ngs-menu>"
         },
         {
-          "name": "lazy-rendering-example",
-          "title": "Lazy rendering",
-          "file": "projects/docs/src/app/components/menu/_examples/lazy-rendering-example/lazy-rendering-example.html",
-          "source": "<ngs-menu #appMenu=\"ngsMenu\">\n  <ng-template ngsMenuContent let-name=\"name\">\n    <button ngs-menu-item>Settings</button>\n    <button ngs-menu-item>Log off {{name}}</button>\n  </ng-template>\n</ngs-menu>\n<button ngsIconButton [ngsMenuTriggerFor]=\"appMenu\" [ngsMenuTriggerData]=\"{name: 'Sally'}\">\n  <ngs-icon name=\"fluent:more-vertical-24-regular\"/>\n</button>\n<button ngsIconButton [ngsMenuTriggerFor]=\"appMenu\" [ngsMenuTriggerData]=\"{name: 'Bob'}\">\n  <ngs-icon name=\"fluent:more-vertical-24-regular\"/>\n</button>"
+          "name": "data-driven-menu-example",
+          "title": "Data driven menu",
+          "file": "projects/docs/src/app/components/menu/_examples/data-driven-menu-example/data-driven-menu-example.html",
+          "source": "<div class=\"flex flex-col items-start gap-3\">\n  <button ngsButton [ngsMenuTriggerFor]=\"projectMenu\">\n    Project actions\n  </button>\n  <span class=\"text-sm text-neutral-600\">{{ selectedAction() }}</span>\n</div>\n<ngs-menu #projectMenu=\"ngsMenu\">\n  @for (action of actions; track action.id) {\n    <button ngs-menu-item [disabled]=\"action.disabled ?? false\" (click)=\"selectAction(action)\">\n      <ngs-icon [name]=\"action.icon\"/>\n      <span>{{ action.label }}</span>\n    </button>\n  }\n</ngs-menu>"
         }
       ],
       "previewAsset": "projects/components/menu/preview.svg",
@@ -8008,10 +8015,12 @@
         "Multiple Selection",
         "Customizing the trigger label",
         "Select with search feature",
+        "Async Data Source",
         "Get set value",
         "Resetting value",
         "Custom trigger",
         "Select search",
+        "Async data source select",
         "Filter trigger count options",
         "Filter trigger"
       ],
@@ -8024,21 +8033,23 @@
           "source": "<p>Basic ngs-select</p>\n<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite food</ngs-label>\n  <ngs-select>\n    @for (food of foods; track food) {\n      <ngs-option [value]=\"food.value\">{{food.viewValue}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
         },
         {
+          "name": "async-data-source-select-example",
+          "title": "Async data source select",
+          "file": "projects/docs/src/app/forms/select/_examples/async-data-source-select-example/async-data-source-select-example.html",
+          "source": "<ngs-form-field class=\"w-full max-w-md\">\n  <ngs-label>Owner</ngs-label>\n  <ngs-select\n    [formControl]=\"owner\"\n    [dataSource]=\"usersDataSource\"\n    placeholder=\"Assign owner\"\n    searchable\n    clearable\n    [pageSize]=\"20\"\n    [searchDebounce]=\"150\">\n    <ng-template ngsOptionContentDef let-user let-label=\"label\">\n      <span class=\"flex min-w-0 flex-col\">\n        <span class=\"truncate\">{{ user.name }}</span>\n        <span class=\"truncate text-xs text-neutral-500\">{{ user.team }} - {{ label }}</span>\n      </span>\n    </ng-template>\n    <ng-template ngsSelectValueDef let-user>\n      {{ user.name }} - {{ user.team }}\n    </ng-template>\n  </ngs-select>\n</ngs-form-field>"
+        },
+        {
           "name": "clearable-select-example",
           "title": "Clearable select",
           "file": "projects/docs/src/app/forms/select/_examples/clearable-select-example/clearable-select-example.html",
           "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Status</ngs-label>\n  <ngs-select [formControl]=\"status()\" clearable>\n    @for (statusOption of statuses(); track statusOption.value) {\n      <ngs-option [value]=\"statusOption.value\">{{ statusOption.label }}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
-        },
-        {
-          "name": "custom-trigger-example",
-          "title": "Custom trigger",
-          "file": "projects/docs/src/app/forms/select/_examples/custom-trigger-example/custom-trigger-example.html",
-          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Toppings</ngs-label>\n  <ngs-select [formControl]=\"toppings\" multiple>\n    <ngs-select-trigger>\n      {{ toppings.value?.[0] || '' }}\n      @if ((toppings.value?.length || 0) > 1) {\n        <span class=\"opacity-75 text-sm\">\n          (+{{ (toppings.value?.length || 0) - 1 }} {{ toppings.value?.length === 2 ? 'other' : 'others' }})\n        </span>\n      }\n    </ngs-select-trigger>\n    @for (topping of toppingList; track topping) {\n      <ngs-option [value]=\"topping\">{{topping}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
         }
       ],
       "previewAsset": "projects/components/select/preview.svg",
       "selectors": [
         "ng-template[ngsFilterTriggerValue]",
+        "ng-template[ngsOptionContentDef]",
+        "ng-template[ngsSelectValueDef]",
         "ngs-filter-trigger",
         "ngs-select",
         "ngs-select-body",
@@ -8054,21 +8065,35 @@
         "SELECT",
         "SelectBody",
         "SelectChange",
+        "SelectDataSource",
+        "SelectDataSourceOption",
+        "SelectDataSourceRequest",
+        "SelectDataSourceResult",
         "SelectFooter",
         "SelectHeader",
-        "SelectTrigger"
+        "SelectOptionContentContext",
+        "SelectOptionContentDef",
+        "SelectTrigger",
+        "SelectValueContext",
+        "SelectValueDef"
       ],
       "inputs": [
         "aria-describedby",
         "aria-label",
         "clearable",
+        "dataSource",
         "disabled",
         "hideCheckIcon",
         "id",
+        "loadOnOpen",
         "maxCount",
+        "minSearchLength",
         "multiple",
+        "pageSize",
         "placeholder",
         "required",
+        "searchable",
+        "searchDebounce",
         "showZero",
         "tabIndex",
         "value"
@@ -8084,7 +8109,10 @@
         "--ngs-color-on-surface",
         "--ngs-color-on-surface-variant",
         "--ngs-color-outline",
+        "--ngs-color-outline-variant",
         "--ngs-color-primary",
+        "--ngs-color-surface-container-high",
+        "--ngs-color-surface-container-lowest",
         "--ngs-dropdown-bg",
         "--ngs-dropdown-border",
         "--ngs-dropdown-item-gap",
@@ -8109,6 +8137,7 @@
         "--ngs-filter-trigger-gap",
         "--ngs-filter-trigger-value-color",
         "--ngs-filter-trigger-value-font-weight",
+        "--ngs-font-size-sm",
         "--ngs-select-arrow-color",
         "--ngs-select-arrow-container-width",
         "--ngs-select-arrow-size",
@@ -8126,6 +8155,18 @@
         "--ngs-select-panel-max-height",
         "--ngs-select-panel-shadow",
         "--ngs-select-placeholder-color",
+        "--ngs-select-search-bg",
+        "--ngs-select-search-border",
+        "--ngs-select-search-color",
+        "--ngs-select-search-focus-border-color",
+        "--ngs-select-search-font-size",
+        "--ngs-select-search-height",
+        "--ngs-select-search-padding-inline",
+        "--ngs-select-state-action-color",
+        "--ngs-select-state-color",
+        "--ngs-select-state-font-size",
+        "--ngs-select-state-min-height",
+        "--ngs-select-state-padding",
         "--ngs-select-trigger-gap"
       ],
       "example": "<ngs-select [value]=\"value\">...</ngs-select>"
@@ -9434,7 +9475,7 @@
           "name": "tab-panel-with-panels-inside-example",
           "title": "Tab panel with panels inside",
           "file": "projects/docs/src/app/navigation/tab-panel/_examples/tab-panel-with-panels-inside-example/tab-panel-with-panels-inside-example.html",
-          "source": "<div class=\"flex gap-10\">\n  <ngs-tab-panel activeItemId=\"home\" class=\"h-[500px]\">\n    <ngs-tab-panel-content>\n      <ngs-tab-panel-nav>\n        <ngs-tab-panel-item for=\"home\">\n          <ngs-icon name=\"fluent:home-24-regular\" ngsTabPanelItemIcon/>\n          <ngs-tab-panel-item-text>Home</ngs-tab-panel-item-text>\n        </ngs-tab-panel-item>\n        <ngs-tab-panel-item for=\"code\">\n          <ngs-icon name=\"fluent:code-24-regular\" ngsTabPanelItemIcon/>\n          <ngs-tab-panel-item-text>Code</ngs-tab-panel-item-text>\n        </ngs-tab-panel-item>\n      </ngs-tab-panel-nav>\n    </ngs-tab-panel-content>\n    <ngs-tab-panel-aside class=\"bg-surface-container-low rounded-xl\">\n      <ng-template ngsTabPanelAsideContent=\"home\">\n        <ngs-panel>\n          <ngs-panel-header class=\"border-b border-b-subtle flex items-center px-4\">Home Header</ngs-panel-header>\n          <ngs-panel-content class=\"p-4\">\n            <div class=\"h-[1000px]\">Home Content</div>\n          </ngs-panel-content>\n          <ngs-panel-footer class=\"border-t border-t-subtle flex items-center px-4\">Footer</ngs-panel-footer>\n        </ngs-panel>\n      </ng-template>\n      <ng-template ngsTabPanelAsideContent=\"code\">\n        <ngs-panel>\n          <ngs-panel-header class=\"border-b border-b-subtle flex items-center px-4\">Code Header</ngs-panel-header>\n          <ngs-panel-content class=\"p-4\">\n            <div class=\"h-[1000px]\">Code Content</div>\n          </ngs-panel-content>\n          <ngs-panel-footer class=\"border-t border-t-subtle flex items-center px-4\">Footer</ngs-panel-footer>\n        </ngs-panel>\n      </ng-\n..."
+          "source": "<div class=\"flex gap-10\">\n  <ngs-tab-panel activeItemId=\"home\" class=\"h-[500px]\">\n    <ngs-tab-panel-content>\n      <ngs-tab-panel-nav>\n        <ngs-tab-panel-item for=\"home\">\n          <ngs-icon name=\"fluent:home-24-regular\" ngsTabPanelItemIcon/>\n          <ngs-tab-panel-item-text>Home</ngs-tab-panel-item-text>\n        </ngs-tab-panel-item>\n        <ngs-tab-panel-item for=\"code\">\n          <ngs-icon name=\"fluent:code-24-regular\" ngsTabPanelItemIcon/>\n          <ngs-tab-panel-item-text>Code</ngs-tab-panel-item-text>\n        </ngs-tab-panel-item>\n      </ngs-tab-panel-nav>\n    </ngs-tab-panel-content>\n    <ngs-tab-panel-aside class=\"bg-surface-container-low rounded-xl\">\n      <ng-template ngsTabPanelAsideContent=\"home\">\n        <ngs-panel>\n          <ngs-panel-header class=\"border-b border-b-border flex items-center px-4\">Home Header</ngs-panel-header>\n          <ngs-panel-content class=\"p-4\">\n            <div class=\"h-[1000px]\">Home Content</div>\n          </ngs-panel-content>\n          <ngs-panel-footer class=\"border-t border-t-border flex items-center px-4\">Footer</ngs-panel-footer>\n        </ngs-panel>\n      </ng-template>\n      <ng-template ngsTabPanelAsideContent=\"code\">\n        <ngs-panel>\n          <ngs-panel-header class=\"border-b border-b-border flex items-center px-4\">Code Header</ngs-panel-header>\n          <ngs-panel-content class=\"p-4\">\n            <div class=\"h-[1000px]\">Code Content</div>\n          </ngs-panel-content>\n          <ngs-panel-footer class=\"border-t border-t-border flex items-center px-4\">Footer</ngs-panel-footer>\n        </ngs-panel>\n      </ng-\n..."
         }
       ],
       "previewAsset": "projects/components/tab-panel/preview.svg",

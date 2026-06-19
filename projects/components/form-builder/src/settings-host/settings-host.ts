@@ -4,6 +4,7 @@ import {
   ViewContainerRef,
   computed,
   effect,
+  inject,
   input,
   signal,
   viewChild
@@ -13,6 +14,7 @@ import {
   FORM_BUILDER_INPUT_FIELD_BASE_SETTINGS_SCHEMA,
   FORM_BUILDER_LAYOUT_BASE_SETTINGS_SCHEMA,
   FORM_BUILDER_LAYOUT_CONTAINER_BASE_SETTINGS_SCHEMA,
+  FORM_BUILDER_SELECT_DATA_SOURCES,
   FORM_BUILDER_SECTION_BASE_SETTINGS_SCHEMA,
   FORM_BUILDER_STATIC_BASE_SETTINGS_SCHEMA
 } from '../config';
@@ -44,6 +46,8 @@ import { FormRenderer } from '../form-renderer/form-renderer';
   }
 })
 export class FormBuilderSettingsHost {
+  private readonly selectDataSources = inject(FORM_BUILDER_SELECT_DATA_SOURCES, { optional: true }) ?? [];
+
   readonly field = input<FormBuilderField | null>(null);
   readonly section = input<FormBuilderSection | null>(null);
   readonly schema = input.required<FormBuilderSchema>();
@@ -71,7 +75,7 @@ export class FormBuilderSettingsHost {
       this.resolveOwnSettingsSchema(config, definition)
     ].filter((schema): schema is FormBuilderSchema => !!schema);
 
-    return mergeSettingsSchemas(schemas);
+    return this.withRegisteredSelectDataSources(mergeSettingsSchemas(schemas));
   });
   protected readonly settingsValue = computed(() => {
     const item = this.section() ?? this.field();
@@ -166,6 +170,21 @@ export class FormBuilderSettingsHost {
     const patch: Record<string, any> = {};
 
     for (const settingField of flattenSettingsFields(schema)) {
+      if (settingField.settings?.['valueAdapter'] === 'selectOptionsSource' && isFormBuilderField(item)) {
+        const nextSource = value[settingField.name] === 'dataSource' ? 'dataSource' : 'static';
+
+        if (nextSource === this.readSettingValue(item, settingField)) {
+          continue;
+        }
+
+        patch['optionsSource'] = nextSource;
+        patch['defaultValue'] = nextSource === 'dataSource'
+          ? item.multiple ? [] : null
+          : resolveSelectedDefaultValue(item.options ?? [], item);
+
+        continue;
+      }
+
       if (settingField.settings?.['valueAdapter'] === 'optionsText' && isFormBuilderField(item)) {
         if (value[settingField.name] === this.readSettingValue(item, settingField)) {
           continue;
@@ -219,6 +238,10 @@ export class FormBuilderSettingsHost {
   }
 
   private readSettingValue(item: FormBuilderField | FormBuilderSection, settingField: FormBuilderField): any {
+    if (settingField.settings?.['valueAdapter'] === 'selectOptionsSource' && isFormBuilderField(item)) {
+      return item.optionsSource ?? (item.dataSource ? 'dataSource' : 'static');
+    }
+
     if (settingField.settings?.['valueAdapter'] === 'optionsText' && isFormBuilderField(item)) {
       return optionsToText(item.options ?? [], item.defaultValue);
     }
@@ -318,6 +341,40 @@ export class FormBuilderSettingsHost {
       default:
         return null;
     }
+  }
+
+  private withRegisteredSelectDataSources(schema: FormBuilderSchema | null): FormBuilderSchema | null {
+    if (!schema) {
+      return null;
+    }
+
+    const dataSourceOptions = this.selectDataSources.map(dataSource => ({
+      label: dataSource.name,
+      value: dataSource.id
+    }));
+
+    return {
+      ...schema,
+      fields: schema.fields?.map(field => this.withSelectDataSourceOptions(field, dataSourceOptions)),
+      sections: schema.sections.map(section => ({
+        ...section,
+        fields: section.fields.map(field => this.withSelectDataSourceOptions(field, dataSourceOptions))
+      }))
+    };
+  }
+
+  private withSelectDataSourceOptions(field: FormBuilderField, options: FormBuilderOption[]): FormBuilderField {
+    const children = field.children?.map(child => this.withSelectDataSourceOptions(child, options));
+
+    if (field.settings?.['valueAdapter'] !== 'selectDataSource') {
+      return children ? { ...field, children } : field;
+    }
+
+    return {
+      ...field,
+      children,
+      options
+    };
   }
 }
 

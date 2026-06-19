@@ -164,6 +164,46 @@
   </table>
 </div>
 
+<h3>FormBuilderSelectDataSourceDefinition</h3>
+<div class="my-6 overflow-hidden rounded-xl border border-muted shadow-sm">
+  <table ngs-table [dataSource]="selectDataSourceDefinitionProperties">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Property</th>
+      <td ngs-cell *ngsCellDef="let item">{{ item.name }}</td>
+    </ng-container>
+    <ng-container ngsColumnDef="description">
+      <th ngs-header-cell *ngsHeaderCellDef>Description</th>
+      <td ngs-cell *ngsCellDef="let item">{{ item.description }}</td>
+    </ng-container>
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let item">{{ item.type }}</td>
+    </ng-container>
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'description', 'type']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'description', 'type'];"></tr>
+  </table>
+</div>
+
+<h3>FormBuilderSelectDataSourceOptions</h3>
+<div class="my-6 overflow-hidden rounded-xl border border-muted shadow-sm">
+  <table ngs-table [dataSource]="selectDataSourceOptionsProperties">
+    <ng-container ngsColumnDef="name">
+      <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Property</th>
+      <td ngs-cell *ngsCellDef="let item">{{ item.name }}</td>
+    </ng-container>
+    <ng-container ngsColumnDef="description">
+      <th ngs-header-cell *ngsHeaderCellDef>Description</th>
+      <td ngs-cell *ngsCellDef="let item">{{ item.description }}</td>
+    </ng-container>
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let item">{{ item.type }}</td>
+    </ng-container>
+    <tr ngs-header-row *ngsHeaderRowDef="['name', 'description', 'type']"></tr>
+    <tr ngs-row *ngsRowDef="let row; columns: ['name', 'description', 'type'];"></tr>
+  </table>
+</div>
+
 <h3>Built-in field types</h3>
 <div class="my-6 overflow-hidden rounded-xl border border-muted shadow-sm">
   <table ngs-table [dataSource]="builtInFields">

@@ -285,6 +285,8 @@ const formBuilderCustomFieldArticleDescription =
   'NgStarter Form Builder tutorial: add a custom Angular field, register it with provideFormBuilderField, and configure schema-driven inspector settings.';
 const formBuilderSchemaArticleDescription =
   'NgStarter Form Builder schema reference: understand sections, fields, layout ordering, validation, settings, and nested field structures.';
+const selectDataSourceArticleDescription =
+  'NgStarter Select data source tutorial: load options lazily, support remote search and paging, return selected options, and register data sources for Form Builder select fields.';
 
 export const HOME_SEO: SeoData = {
   title: 'NgStarter - AI-Friendly Angular Components Library for Admin Apps',
@@ -552,6 +554,51 @@ export const FORM_BUILDER_SCHEMA_ARTICLE_SEO: SeoData = {
         'schema driven forms',
         'angular form schema',
         'NgStarter UI',
+      ],
+      isPartOf: {
+        '@id': `${SITE_URL}/blog#blog`,
+      },
+    },
+  ],
+};
+
+export const SELECT_DATA_SOURCE_ARTICLE_SEO: SeoData = {
+  title: 'Select Data Sources in NgStarter UI | Form Builder Select',
+  description: selectDataSourceArticleDescription,
+  canonicalPath: '/blog/select-data-source',
+  ogType: 'article',
+  structuredData: [
+    organizationSchema,
+    websiteSchema,
+    webPageSchema(
+      '/blog/select-data-source',
+      'Select data sources in NgStarter UI',
+      selectDataSourceArticleDescription,
+    ),
+    {
+      '@type': 'BlogPosting',
+      '@id': `${SITE_URL}/blog/select-data-source#article`,
+      headline: 'Select data sources in NgStarter UI',
+      description: selectDataSourceArticleDescription,
+      url: `${SITE_URL}/blog/select-data-source`,
+      datePublished: '2026-06-19',
+      dateModified: '2026-06-19',
+      author: {
+        '@type': 'Organization',
+        name: 'NgStarter',
+        url: SITE_URL,
+      },
+      publisher: {
+        '@id': `${SITE_URL}/#organization`,
+      },
+      image: DEFAULT_OG_IMAGE,
+      inLanguage: 'en',
+      keywords: [
+        'NgStarter Select',
+        'Angular select data source',
+        'remote select search',
+        'Form Builder select',
+        'schema driven forms',
       ],
       isPartOf: {
         '@id': `${SITE_URL}/blog#blog`,

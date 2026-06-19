@@ -1,0 +1,124 @@
+<article class="bg-background px-6 pb-16 pt-8 sm:px-8 lg:px-10">
+  <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
+    <div class="min-w-0">
+      <a ngsButton="text" routerLink="/blog">
+        <ngs-icon name="fluent:arrow-left-24-regular" />
+        All articles
+      </a>
+
+      <header class="mt-8 max-w-4xl">
+        <ngs-chip-set>
+          <ngs-chip appearance="outlined">Select</ngs-chip>
+          <ngs-chip appearance="outlined">Data source</ngs-chip>
+          <ngs-chip appearance="outlined">Form Builder</ngs-chip>
+        </ngs-chip-set>
+        <h1 class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl">
+          Select data sources in NgStarter UI
+        </h1>
+        <p class="mt-6 text-lg leading-8 text-on-surface-variant">
+          Load select options lazily from an API, keep selected values renderable before the panel
+          opens, and expose the same data source to Form Builder select fields.
+        </p>
+        <div class="mt-6 flex flex-wrap items-center gap-3 text-sm text-on-surface-variant">
+          <span>June 19, 2026</span>
+          <span>8 min read</span>
+        </div>
+      </header>
+
+      <div class="article-content mt-14 max-w-4xl">
+        <section id="why">
+          <h2>Why use a data source?</h2>
+          <p>
+            Static <code>ngs-option</code> elements are perfect for short lists. A data source is
+            better when options come from a server, the list is large, or users need remote search.
+            The select calls your function when it needs data, passes paging and search state, and
+            renders the returned items as options.
+          </p>
+        </section>
+
+        <section id="contract">
+          <h2>The data source contract</h2>
+          <p>
+            A <code>SelectDataSource</code> receives a request with <code>search</code>,
+            <code>page</code>, <code>pageSize</code>, <code>selectedValues</code>,
+            <code>reason</code>, and an optional <code>signal</code>. The important rule is that the
+            first request must be able to return the currently selected option. That lets the
+            trigger show a label even when the option is not part of the first loaded page.
+          </p>
+          <ngs-code-highlighter [code]="dataSourceCode" language="typescript" title="users-data-source.ts" showCopyButton />
+        </section>
+
+        <section id="select">
+          <h2>Use it in ngs-select</h2>
+          <p>
+            Pass the function to <code>[dataSource]</code>. Enable <code>searchable</code> when the
+            panel should include the remote search input. <code>pageSize</code> controls how many
+            options load per request, and <code>minSearchLength</code> avoids sending short search
+            terms to the API.
+          </p>
+          <ngs-code-highlighter [code]="selectTemplateCode" language="html" title="owner-select.html" showCopyButton />
+        </section>
+
+        <section id="form-builder">
+          <h2>Register it for Form Builder</h2>
+          <p>
+            Form Builder select fields use named data sources. Register each source with an
+            <code>id</code>, a human-readable <code>name</code>, and the same
+            <code>SelectDataSource</code> function. The <code>name</code> is what editors see in
+            the select field inspector.
+          </p>
+          <ngs-code-highlighter [code]="formBuilderProviderCode" language="typescript" title="form-builder-providers.ts" showCopyButton />
+        </section>
+
+        <section id="schema">
+          <h2>Save the selected data source in the schema</h2>
+          <p>
+            A Form Builder select field stores <code>optionsSource: 'dataSource'</code> and the
+            registered data source id. Static custom options still use
+            <code>optionsSource: 'static'</code> and the regular <code>options</code> array.
+          </p>
+          <ngs-code-highlighter [code]="formBuilderSchemaCode" language="typescript" title="form-builder-schema.ts" showCopyButton />
+        </section>
+
+        <section id="templates">
+          <h2>Custom option and value templates</h2>
+          <p>
+            Direct <code>ngs-select</code> usage can customize async rows with
+            <code>ngsOptionContentDef</code> and selected values with
+            <code>ngsSelectValueDef</code>. Form Builder uses component classes instead, registered
+            as <code>optionContentComponent</code> and <code>valueComponent</code> on the data
+            source definition.
+          </p>
+          <ngs-code-highlighter [code]="componentTemplateCode" language="typescript" title="user-option.component.ts" showCopyButton />
+        </section>
+
+        <section id="checklist">
+          <h2>Implementation checklist</h2>
+          <ul>
+            <li>Return selected options on the initial request when <code>selectedValues</code> is not empty.</li>
+            <li>Deduplicate selected options and page results before returning items.</li>
+            <li>Respect <code>request.signal</code> when your HTTP client supports aborting stale requests.</li>
+            <li>Use stable option values such as database ids, not labels.</li>
+            <li>Keep Form Builder data source ids stable because schemas persist them.</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <aside class="article-aside hidden lg:block">
+      <nav ngs-scroll-spy-nav>
+        <ngs-scroll-spy-title>On this page</ngs-scroll-spy-title>
+        <a ngs-scroll-spy-on targetId="why">Why use it</a>
+        <a ngs-scroll-spy-on targetId="contract">Contract</a>
+        <a ngs-scroll-spy-on targetId="select">ngs-select</a>
+        <a ngs-scroll-spy-on targetId="form-builder">Form Builder</a>
+        <a ngs-scroll-spy-on targetId="schema">Schema</a>
+        <a ngs-scroll-spy-on targetId="templates">Templates</a>
+        <a ngs-scroll-spy-on targetId="checklist">Checklist</a>
+        <button ngs-scroll-spy-back-to-top>
+          Back to top
+        </button>
+      </nav>
+    </aside>
+  </div>
+</article>

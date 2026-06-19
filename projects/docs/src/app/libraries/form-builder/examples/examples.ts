@@ -1,9 +1,74 @@
 import { Component, signal } from '@angular/core';
-import { FormBuilder, FormBuilderSchema } from '@ngstarter-ui/components/form-builder';
+import {
+  FormBuilder,
+  FormBuilderSchema,
+  provideFormBuilderSelectDataSource
+} from '@ngstarter-ui/components/form-builder';
+import { SelectDataSource, SelectDataSourceOption } from '@ngstarter-ui/components/select';
+
+interface OwnerOption {
+  id: string;
+  name: string;
+  team: string;
+}
+
+const OWNER_OPTIONS: OwnerOption[] = [
+  { id: 'owner-1', name: 'Ada Lovelace', team: 'Platform' },
+  { id: 'owner-2', name: 'Grace Hopper', team: 'Infrastructure' },
+  { id: 'owner-3', name: 'Alan Turing', team: 'Research' },
+  { id: 'owner-4', name: 'Katherine Johnson', team: 'Analytics' },
+  { id: 'owner-5', name: 'Margaret Hamilton', team: 'Reliability' }
+];
+
+const ownersDataSource: SelectDataSource<OwnerOption> = async request => {
+  const query = request.search.trim().toLowerCase();
+  const selected = request.reason === 'initial'
+    ? OWNER_OPTIONS.filter(owner => request.selectedValues.includes(owner.id))
+    : [];
+  const filtered = OWNER_OPTIONS.filter(owner =>
+    !query ||
+    owner.name.toLowerCase().includes(query) ||
+    owner.team.toLowerCase().includes(query)
+  );
+  const start = (request.page - 1) * request.pageSize;
+  const page = filtered.slice(start, start + request.pageSize);
+
+  return {
+    items: toOwnerOptions([...selected, ...page]),
+    hasMore: start + request.pageSize < filtered.length,
+    nextCursor: request.page + 1
+  };
+};
+
+function toOwnerOptions(owners: OwnerOption[]): SelectDataSourceOption<OwnerOption>[] {
+  const seen = new Set<string>();
+
+  return owners
+    .filter(owner => {
+      if (seen.has(owner.id)) {
+        return false;
+      }
+
+      seen.add(owner.id);
+      return true;
+    })
+    .map(owner => ({
+      label: `${owner.name} - ${owner.team}`,
+      value: owner.id,
+      data: owner
+    }));
+}
 
 @Component({
   imports: [
     FormBuilder
+  ],
+  providers: [
+    provideFormBuilderSelectDataSource({
+      id: 'owners',
+      name: 'Owners',
+      dataSource: ownersDataSource
+    })
   ],
   templateUrl: './examples.html',
   styleUrl: './examples.scss'

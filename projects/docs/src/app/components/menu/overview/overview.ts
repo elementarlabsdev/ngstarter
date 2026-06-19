@@ -11,6 +11,7 @@ import { MenuHeadingExample } from '../_examples/menu-heading-example/menu-headi
 import {
   MenuHeaderFooterExample
 } from '../_examples/menu-header-footer-example/menu-header-footer-example';
+import { DataDrivenMenuExample } from '../_examples/data-driven-menu-example/data-driven-menu-example';
 
 @Component({
   selector: 'app-overview',
@@ -24,7 +25,8 @@ import {
     LazyRenderingExample,
     MenuDividerExample,
     MenuHeadingExample,
-    MenuHeaderFooterExample
+    MenuHeaderFooterExample,
+    DataDrivenMenuExample
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'
