@@ -115,6 +115,10 @@ export const appConfig = {
 - Do not restyle NgStarter components through wrapper-only classes when a component selector or
   `--ngs-*` component token fits.
 - Use global CSS variables and theme tokens for global visual customization.
+- For custom modal workflows, use `Dialog.open(ComponentOrTemplate, config)` from
+  `@ngstarter-ui/components/dialog`. Structure content with `DialogTitle`, `DialogContent`,
+  `DialogActions`, and `DialogClose`; set `showCloseButton: true` in `DialogConfig` when the
+  dialog should render the built-in icon close button in the container.
 - Do not put visual styling in templates with `[style.*]`, `[attr.style]`, `[ngStyle]`, or inline
   `style` attributes. This applies to component CSS variables, colors, gradients, spacing, sizing,
   shadows, borders, typography, and other visual values. Add a purpose-named class in the template

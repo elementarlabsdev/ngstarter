@@ -1076,26 +1076,26 @@ export class App implements OnInit {
         },
       ]
     },
-    {
-      key: 'visual-builder',
-      type: 'group',
-      name: 'Visual Builder',
-      icon: 'fluent:form-24-regular',
-      children: [
-        {
-          key: uuid(),
-          type: 'link',
-          name: 'Overview',
-          link: '/libraries/visual-builder/overview'
-        },
-        {
-          key: uuid(),
-          type: 'link',
-          name: 'Basic Example',
-          link: '/libraries/visual-builder/basic-example'
-        },
-      ]
-    },
+    // {
+    //   key: 'visual-builder',
+    //   type: 'group',
+    //   name: 'Visual Builder',
+    //   icon: 'fluent:form-24-regular',
+    //   children: [
+    //     {
+    //       key: uuid(),
+    //       type: 'link',
+    //       name: 'Overview',
+    //       link: '/libraries/visual-builder/overview'
+    //     },
+    //     {
+    //       key: uuid(),
+    //       type: 'link',
+    //       name: 'Basic Example',
+    //       link: '/libraries/visual-builder/basic-example'
+    //     },
+    //   ]
+    // },
     {
       key: 'content-editor',
       type: 'group',

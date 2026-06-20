@@ -6,3 +6,4 @@ export * from './src/dialog-title/dialog-title';
 export * from './src/dialog-content/dialog-content';
 export * from './src/dialog-actions/dialog-actions';
 export * from './src/dialog-close';
+export * from './src/dialog-header/dialog-header';

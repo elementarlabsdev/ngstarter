@@ -1,12 +1,19 @@
-import { ChangeDetectorRef, Component, EventEmitter, inject, viewChild, ElementRef, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, OnInit } from '@angular/core';
 import { CdkDialogContainer, DialogModule } from '@angular/cdk/dialog';
-import { CdkPortalOutlet } from '@angular/cdk/portal';
+import { Button } from "@ngstarter-ui/components/button";
+import { Icon } from "@ngstarter-ui/components/icon";
+import type { DialogConfig } from "../dialog-config";
 
 @Component({
   selector: 'ngs-dialog-container',
-  imports: [DialogModule],
+  exportAs: 'ngsDialogContainer',
+  imports: [
+    DialogModule,
+    Button,
+    Icon,
+  ],
   templateUrl: './dialog-container.html',
-  styleUrls: ['./dialog-container.scss'],
+  styleUrl: './dialog-container.scss',
   host: {
     'class': 'ngs-dialog-container',
     '[class.ngs-dialog-container-enter]': '_animationState === "enter"',
@@ -16,8 +23,11 @@ import { CdkPortalOutlet } from '@angular/cdk/portal';
 })
 export class DialogContainer extends CdkDialogContainer implements OnInit {
   private readonly _cdr = inject(ChangeDetectorRef);
+  private _closeHandler?: () => void;
 
-  override readonly _portalOutlet = viewChild(CdkPortalOutlet) as any;
+  get showCloseButton(): boolean {
+    return Boolean((this._config as DialogConfig).showCloseButton);
+  }
 
   /** State of the dialog animation. */
   _animationState: 'void' | 'enter' | 'exit' = 'void';
@@ -69,5 +79,13 @@ export class DialogContainer extends CdkDialogContainer implements OnInit {
   _startExitAnimation(): void {
     this._animationState = 'exit';
     this._cdr.markForCheck();
+  }
+
+  _setCloseHandler(handler: () => void): void {
+    this._closeHandler = handler;
+  }
+
+  protected close(): void {
+    this._closeHandler?.();
   }
 }

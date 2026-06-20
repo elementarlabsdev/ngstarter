@@ -1,1 +1,8 @@
+@if (showCloseButton) {
+  <span class="close">
+    <button type="button" ngsIconButton aria-label="Close dialog" (click)="close()">
+      <ngs-icon name="fluent:dismiss-24-regular"/>
+    </button>
+  </span>
+}
 <ng-template cdkPortalOutlet />

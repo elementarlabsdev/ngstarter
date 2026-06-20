@@ -1,0 +1,8 @@
+@reference 'tailwindcss';
+
+:host {
+  display: grid;
+  min-height: --spacing(80);
+  place-items: center;
+  padding: --spacing(6);
+}

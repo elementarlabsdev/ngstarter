@@ -1,55 +1,94 @@
 <p class="docs-seo-intro mb-6 text-base leading-7 text-neutral-600">
-  The NgStarter Angular Stepper component lets you render a ready-made visual wizard for several connected steps in one process. Use ngs-stepper with ngs-step when users must move through related steps and see their current progress. It includes examples for Basic Stepper, Stepper Vertical, Stepper Header Position, and Stepper That Displays Errors In The Steps.
+  The NgStarter Angular Stepper component lets you render a ready-made visual wizard for several
+  connected steps in one process. Use ngs-stepper with ngs-step when users must move through related
+  steps and see their current progress. It includes examples for Basic Stepper, Stepper In Dialog,
+  Stepper Vertical, Stepper Header Position, and Stepper That Displays Errors In The Steps.
 </p>
 
 <div>
   <h3>Basic Stepper</h3>
   <p>
-    Use a basic stepper when a workflow has several connected steps and each step owns its own content.
-    Add <code>ngsStepperNext</code> and <code>ngsStepperPrevious</code> to NgStarter buttons for normal wizard navigation.
+    Use a basic stepper when a workflow has several connected steps and each step owns its own
+    content. Add <code>ngsStepperNext</code> and <code>ngsStepperPrevious</code> to NgStarter
+    buttons for normal wizard navigation.
   </p>
-  <ngs-playground exampleUrl="_docs/components/stepper/_examples" exampleName="basic-stepper-example">
-    <app-basic-stepper-example/>
+  <ngs-playground
+    exampleUrl="_docs/components/stepper/_examples"
+    exampleName="basic-stepper-example"
+  >
+    <app-basic-stepper-example />
+  </ngs-playground>
+
+  <h3>Stepper In Dialog</h3>
+  <p>
+    Put a stepper inside Dialog when a temporary modal workflow needs several guided steps before
+    returning a result to the opener.
+  </p>
+  <ngs-playground
+    exampleUrl="_docs/components/stepper/_examples"
+    exampleName="stepper-in-dialog-example"
+  >
+    <app-stepper-in-dialog-example />
   </ngs-playground>
 
   <h3>Stepper Vertical</h3>
   <p>
-    Use the vertical orientation when step labels need more room or the flow sits inside a narrow page, drawer, or mobile layout.
+    Use the vertical orientation when step labels need more room or the flow sits inside a narrow
+    page, drawer, or mobile layout.
   </p>
-  <ngs-playground exampleUrl="_docs/components/stepper/_examples" exampleName="stepper-vertical-example">
-    <app-stepper-vertical-example/>
+  <ngs-playground
+    exampleUrl="_docs/components/stepper/_examples"
+    exampleName="stepper-vertical-example"
+  >
+    <app-stepper-vertical-example />
   </ngs-playground>
 
   <h3>Stepper Header Position</h3>
   <p>
-    Move the header to the bottom when the step content should stay visually first and the step navigation acts like a footer.
+    Move the header to the bottom when the step content should stay visually first and the step
+    navigation acts like a footer.
   </p>
-  <ngs-playground exampleUrl="_docs/components/stepper/_examples" exampleName="stepper-header-position-example">
-    <app-stepper-header-position-example/>
+  <ngs-playground
+    exampleUrl="_docs/components/stepper/_examples"
+    exampleName="stepper-header-position-example"
+  >
+    <app-stepper-header-position-example />
   </ngs-playground>
 
   <h3>Stepper That Displays Errors In The Steps</h3>
   <p>
-    Connect steps to form controls with <code>stepControl</code> when a linear flow must block progress until the current step is valid.
-    Step errors help users return to the part of the process that needs attention.
+    Connect steps to form controls with <code>stepControl</code> when a linear flow must block
+    progress until the current step is valid. Step errors help users return to the part of the
+    process that needs attention.
   </p>
-  <ngs-playground exampleUrl="_docs/components/stepper/_examples" exampleName="stepper-with-errors-state-example">
-    <app-stepper-with-errors-state-example/>
+  <ngs-playground
+    exampleUrl="_docs/components/stepper/_examples"
+    exampleName="stepper-with-errors-state-example"
+  >
+    <app-stepper-with-errors-state-example />
   </ngs-playground>
 
   <h3>Stepper Responsive</h3>
   <p>
-    Switch between horizontal and vertical orientation when the same process must work on both wide dashboards and smaller screens.
+    Switch between horizontal and vertical orientation when the same process must work on both wide
+    dashboards and smaller screens.
   </p>
-  <ngs-playground exampleUrl="_docs/components/stepper/_examples" exampleName="stepper-responsive-example">
-    <app-stepper-responsive-example/>
+  <ngs-playground
+    exampleUrl="_docs/components/stepper/_examples"
+    exampleName="stepper-responsive-example"
+  >
+    <app-stepper-responsive-example />
   </ngs-playground>
 
   <h3>Stepper Label Bottom Position</h3>
   <p>
-    Put labels below the step icons when horizontal space is tight or the labels should align as captions under each step marker.
+    Put labels below the step icons when horizontal space is tight or the labels should align as
+    captions under each step marker.
   </p>
-  <ngs-playground exampleUrl="_docs/components/stepper/_examples" exampleName="stepper-label-bottom-position-example">
-    <app-stepper-label-bottom-position-example/>
+  <ngs-playground
+    exampleUrl="_docs/components/stepper/_examples"
+    exampleName="stepper-label-bottom-position-example"
+  >
+    <app-stepper-label-bottom-position-example />
   </ngs-playground>
 </div>

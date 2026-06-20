@@ -19,6 +19,7 @@ export class DialogConfig<D = any> {
   ariaLabel?: string | null = null;
   role?: 'dialog' | 'alertdialog' = 'dialog';
   closeOnNavigation?: boolean = true;
+  showCloseButton?: boolean = false;
 }
 
 export const DIALOG_DATA = new InjectionToken<any>('DialogData');

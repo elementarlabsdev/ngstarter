@@ -1,6 +1,7 @@
 export * from './src/config';
 export * from './src/types';
 export * from './src/form-builder/form-builder';
+export * from './src/form-logic/form-logic';
 export * from './src/form-renderer/form-renderer';
 export * from './src/field-host/field-host';
 export * from './src/settings-host/settings-host';

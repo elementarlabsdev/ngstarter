@@ -245,7 +245,28 @@ const curatedGuidance = new Map(Object.entries({
   },
   dialog: {
     purpose: 'Open custom focused modal workflows above the current page.',
-    useWhen: 'Use Dialog.open(ComponentOrTemplate, config) for forms, editing records, creating objects, settings, detail views, wizard-like steps, scrollable content, and custom modal workflows where users must complete or close the task before returning to the page. Structure custom dialog components with ngs-dialog-title, ngs-dialog-content, ngs-dialog-actions, DialogRef.close(...), ngs-dialog-close, and optional DIALOG_DATA. Use DialogConfig for data, sizing, disableClose, autofocus, backdrop, panel classes, and accessibility labels. Do not use for a short binary destructive confirmation; use Confirm. Do not use for global messages; use Announcement, Alert, or SnackBar. Do not use for mobile bottom action panels; use BottomSheet. Do not use for side inspectors, filters, or detail panels; use Drawer or SidePanel.',
+    useWhen: 'Use Dialog.open(ComponentOrTemplate, config) for forms, editing records, creating objects, settings, detail views, wizard-like steps, scrollable content, and custom modal workflows where users must complete or close the task before returning to the page. Structure custom dialog components with ngs-dialog-title, ngs-dialog-content, ngs-dialog-actions, DialogRef.close(...), ngs-dialog-close, and optional DIALOG_DATA. Use DialogConfig for data, sizing, disableClose, autofocus, backdrop, panel classes, accessibility labels, and showCloseButton when the dialog should render the built-in icon close button. Do not use for a short binary destructive confirmation; use Confirm. Do not use for global messages; use Announcement, Alert, or SnackBar. Do not use for mobile bottom action panels; use BottomSheet. Do not use for side inspectors, filters, or detail panels; use Drawer or SidePanel.',
+    configOptions: [
+      'data',
+      'width',
+      'height',
+      'minWidth',
+      'minHeight',
+      'maxWidth',
+      'maxHeight',
+      'hasBackdrop',
+      'backdropClass',
+      'panelClass',
+      'disableClose',
+      'autoFocus',
+      'restoreFocus',
+      'ariaDescribedBy',
+      'ariaLabelledBy',
+      'ariaLabel',
+      'role',
+      'closeOnNavigation',
+      'showCloseButton',
+    ],
   },
   divider: {
     purpose: 'Separate related groups of content or actions with a visual rule.',
@@ -951,6 +972,7 @@ async function buildRegistry() {
       purpose,
       useWhen,
       ...(guidance.schemaFormat ? { schemaFormat: guidance.schemaFormat } : {}),
+      ...(guidance.configOptions ? { configOptions: guidance.configOptions } : {}),
       exampleTopics: overview?.exampleTopics || [],
       minimalExample: overview?.examples?.[0]?.source || priorityExamples.get(name) || null,
       exampleFiles: overview?.examples || [],
@@ -1095,6 +1117,9 @@ function buildLlms(registry, full = false) {
       }
       if (component.outputs.length) {
         lines.push(`  outputs: ${component.outputs.slice(0, 24).map(output => `\`${output}\``).join(', ')}`);
+      }
+      if (component.configOptions?.length) {
+        lines.push(`  config options: ${component.configOptions.slice(0, 24).map(option => `\`${option}\``).join(', ')}`);
       }
       if (component.cssTokens.length) {
         lines.push(`  tokens: ${component.cssTokens.slice(0, 16).map(token => `\`${token}\``).join(', ')}`);

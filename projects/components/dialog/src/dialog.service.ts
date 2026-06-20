@@ -53,6 +53,8 @@ export class Dialog {
     dialogRef._cdkRef = cdkRef;
 
     if (container) {
+      container._setCloseHandler(() => dialogRef.close());
+
       container._animationStateChanged
         .pipe(
           filter((event: any) => event.phaseName === 'done' && event.toState === 'enter'),

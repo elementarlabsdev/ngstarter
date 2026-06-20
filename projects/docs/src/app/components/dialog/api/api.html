@@ -22,7 +22,10 @@
 </table>
 
 <h3 class="mt-8">Dialog Configuration</h3>
-<p>The <code>DialogConfig</code> object configures dialog behavior and appearance.</p>
+<p>
+  The <code>DialogConfig</code> object configures dialog behavior, accessibility, sizing, and
+  container affordances such as the built-in close button.
+</p>
 <table class="w-full border-collapse border border-slate-400 my-4">
   <thead>
     <tr class="bg-slate-100">
@@ -48,9 +51,59 @@
       <td class="border border-slate-300 p-2">Dialog height.</td>
     </tr>
     <tr>
+      <td class="border border-slate-300 p-2"><code>minWidth</code> / <code>minHeight</code></td>
+      <td class="border border-slate-300 p-2"><code>string | number</code></td>
+      <td class="border border-slate-300 p-2">Minimum dialog dimensions. Numeric values are treated as pixels.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>maxWidth</code> / <code>maxHeight</code></td>
+      <td class="border border-slate-300 p-2"><code>string | number</code></td>
+      <td class="border border-slate-300 p-2">Maximum dialog dimensions. Numeric values are treated as pixels.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>hasBackdrop</code></td>
+      <td class="border border-slate-300 p-2"><code>boolean</code></td>
+      <td class="border border-slate-300 p-2">Controls whether the dialog opens with a backdrop.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>backdropClass</code> / <code>panelClass</code></td>
+      <td class="border border-slate-300 p-2"><code>string | string[]</code></td>
+      <td class="border border-slate-300 p-2">Additional classes applied to the backdrop or overlay panel.</td>
+    </tr>
+    <tr>
       <td class="border border-slate-300 p-2"><code>disableClose</code></td>
       <td class="border border-slate-300 p-2"><code>boolean</code></td>
       <td class="border border-slate-300 p-2">Prevents the dialog from closing when the backdrop is clicked or Escape is pressed.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>autoFocus</code></td>
+      <td class="border border-slate-300 p-2"><code>boolean | string</code></td>
+      <td class="border border-slate-300 p-2">Controls which element receives focus when the dialog opens.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>restoreFocus</code></td>
+      <td class="border border-slate-300 p-2"><code>boolean</code></td>
+      <td class="border border-slate-300 p-2">Restores focus to the previously focused element when the dialog closes.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>ariaLabel</code> / <code>ariaLabelledBy</code> / <code>ariaDescribedBy</code></td>
+      <td class="border border-slate-300 p-2"><code>string | null</code></td>
+      <td class="border border-slate-300 p-2">Accessible labeling and description options for the dialog.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>role</code></td>
+      <td class="border border-slate-300 p-2"><code>'dialog' | 'alertdialog'</code></td>
+      <td class="border border-slate-300 p-2">ARIA role for the dialog container.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>closeOnNavigation</code></td>
+      <td class="border border-slate-300 p-2"><code>boolean</code></td>
+      <td class="border border-slate-300 p-2">Controls whether the dialog closes when browser navigation occurs.</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 p-2"><code>showCloseButton</code></td>
+      <td class="border border-slate-300 p-2"><code>boolean</code></td>
+      <td class="border border-slate-300 p-2">Shows the built-in icon close button in the dialog container. Defaults to <code>false</code>.</td>
     </tr>
   </tbody>
 </table>

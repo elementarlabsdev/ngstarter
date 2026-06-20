@@ -3,7 +3,7 @@ import { DialogRef } from './dialog-ref';
 import { Dialog } from './dialog.service';
 
 @Directive({
-  selector: '[ngs-dialog-close], [ngsDialogClose]',
+  selector: '[ngs-dialog-close],[ngsDialogClose]',
   exportAs: 'ngsDialogClose',
   host: {
     '[attr.aria-label]': 'ariaLabel() || null',

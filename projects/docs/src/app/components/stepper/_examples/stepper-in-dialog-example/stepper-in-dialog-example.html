@@ -1,0 +1,152 @@
+<button ngsButton="filled" (click)="openDialog()">Open setup dialog</button>
+
+@if (result()) {
+  <p class="mt-3">Result: {{ result() }}</p>
+}
+
+<ng-template #setupDialog>
+  <h3 ngs-dialog-title>Workspace setup</h3>
+  <ngs-dialog-content>
+    <ngs-stepper linear #stepper>
+      <ngs-step [stepControl]="workspaceForm">
+        <ng-template ngsStepLabel>Workspace</ng-template>
+        <form [formGroup]="workspaceForm" class="grid gap-4 md:grid-cols-2">
+          <ngs-form-field>
+            <ngs-label>Workspace name</ngs-label>
+            <input
+              ngsInput
+              formControlName="workspaceName"
+              placeholder="Atlas Operations"
+              required
+            />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Workspace slug</ngs-label>
+            <input ngsInput formControlName="slug" placeholder="atlas-ops" required />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Region</ngs-label>
+            <input ngsInput formControlName="region" placeholder="Europe / Warsaw" required />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Owner</ngs-label>
+            <input ngsInput formControlName="owner" placeholder="Maya Chen" required />
+          </ngs-form-field>
+
+          <ngs-form-field class="md:col-span-2">
+            <ngs-label>Description</ngs-label>
+            <textarea
+              ngsInput
+              formControlName="description"
+              placeholder="Describe what this workspace is used for"
+              rows="4"
+              required
+            ></textarea>
+          </ngs-form-field>
+        </form>
+      </ngs-step>
+
+      <ngs-step [stepControl]="accessForm">
+        <ng-template ngsStepLabel>Access</ng-template>
+        <form [formGroup]="accessForm" class="grid gap-4 md:grid-cols-2">
+          <ngs-form-field>
+            <ngs-label>Admin email</ngs-label>
+            <input
+              ngsInput
+              formControlName="adminEmail"
+              placeholder="maya.chen@example.com"
+              required
+            />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Team</ngs-label>
+            <input ngsInput formControlName="team" placeholder="Operations" />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Seats</ngs-label>
+            <input ngsInput formControlName="seats" placeholder="24" required />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Default role</ngs-label>
+            <input ngsInput formControlName="defaultRole" placeholder="Editor" required />
+          </ngs-form-field>
+
+          <ngs-form-field class="md:col-span-2">
+            <ngs-label>Invitation note</ngs-label>
+            <textarea
+              ngsInput
+              formControlName="invitationNote"
+              placeholder="Add a short note for invited teammates"
+              rows="4"
+            ></textarea>
+          </ngs-form-field>
+        </form>
+      </ngs-step>
+
+      <ngs-step [stepControl]="launchForm">
+        <ng-template ngsStepLabel>Review</ng-template>
+        <form [formGroup]="launchForm" class="grid gap-4 md:grid-cols-2">
+          <ngs-form-field>
+            <ngs-label>Checklist owner</ngs-label>
+            <input ngsInput formControlName="checklistOwner" placeholder="Jordan Lee" required />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Launch date</ngs-label>
+            <input ngsInput formControlName="launchDate" placeholder="2026-07-01" required />
+          </ngs-form-field>
+
+          <ngs-form-field class="md:col-span-2">
+            <ngs-label>Support channel</ngs-label>
+            <input
+              ngsInput
+              formControlName="supportChannel"
+              placeholder="#atlas-support"
+              required
+            />
+          </ngs-form-field>
+
+          <ngs-form-field class="md:col-span-2">
+            <ngs-label>Review notes</ngs-label>
+            <textarea
+              ngsInput
+              formControlName="notes"
+              placeholder="Add final launch notes"
+              rows="4"
+            ></textarea>
+          </ngs-form-field>
+        </form>
+      </ngs-step>
+    </ngs-stepper>
+  </ngs-dialog-content>
+  <ngs-dialog-actions align="end">
+    <button ngsButton ngs-dialog-close>Cancel</button>
+    @if (stepper.selectedIndex > 0) {
+      <button ngsButton="outlined" type="button" (click)="stepper.previous()">Back</button>
+    }
+    @if (stepper.selectedIndex < 2) {
+      <button
+        ngsButton="filled"
+        type="button"
+        [disabled]="!canMoveNext(stepper.selectedIndex)"
+        (click)="stepper.next()"
+      >
+        Next
+      </button>
+    } @else {
+      <button
+        ngsButton="filled"
+        [disabled]="!canFinish()"
+        [ngs-dialog-close]="'Workspace setup completed'"
+      >
+        Finish
+      </button>
+    }
+  </ngs-dialog-actions>
+</ng-template>

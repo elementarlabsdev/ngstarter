@@ -1,0 +1,20 @@
+<button ngsButton="filled" (click)="openDialog()">Open close dialog</button>
+
+@if (result()) {
+  <p class="mt-3">Result: {{ result() }}</p>
+}
+
+<ng-template #closeDialog>
+  <h3 ngs-dialog-title>Close dialog</h3>
+  <ngs-dialog-content>
+    <p>
+      This dialog enables the built-in close button through <code>showCloseButton</code>. Action
+      buttons can still use <code>ngs-dialog-close</code> to close the current dialog and optionally
+      return a result to the opener.
+    </p>
+  </ngs-dialog-content>
+  <ngs-dialog-actions align="end">
+    <button ngsButton ngs-dialog-close>Cancel</button>
+    <button ngsButton="filled" [ngs-dialog-close]="'Saved changes'">Save</button>
+  </ngs-dialog-actions>
+</ng-template>

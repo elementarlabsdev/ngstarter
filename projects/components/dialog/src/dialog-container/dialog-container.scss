@@ -30,4 +30,14 @@
   &.ngs-dialog-container-exit {
     opacity: 0;
   }
+
+  .close {
+    &:empty {
+      display: none;
+    }
+
+    position: absolute;
+    right: --spacing(2);
+    top: --spacing(2);
+  }
 }

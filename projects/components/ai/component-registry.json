@@ -3423,14 +3423,37 @@
       "docsPath": "/components/dialog",
       "docsOverviewSource": "projects/docs/src/app/components/dialog/overview/overview.html",
       "purpose": "Open custom focused modal workflows above the current page.",
-      "useWhen": "Use Dialog.open(ComponentOrTemplate, config) for forms, editing records, creating objects, settings, detail views, wizard-like steps, scrollable content, and custom modal workflows where users must complete or close the task before returning to the page. Structure custom dialog components with ngs-dialog-title, ngs-dialog-content, ngs-dialog-actions, DialogRef.close(...), ngs-dialog-close, and optional DIALOG_DATA. Use DialogConfig for data, sizing, disableClose, autofocus, backdrop, panel classes, and accessibility labels. Do not use for a short binary destructive confirmation; use Confirm. Do not use for global messages; use Announcement, Alert, or SnackBar. Do not use for mobile bottom action panels; use BottomSheet. Do not use for side inspectors, filters, or detail panels; use Drawer or SidePanel.",
+      "useWhen": "Use Dialog.open(ComponentOrTemplate, config) for forms, editing records, creating objects, settings, detail views, wizard-like steps, scrollable content, and custom modal workflows where users must complete or close the task before returning to the page. Structure custom dialog components with ngs-dialog-title, ngs-dialog-content, ngs-dialog-actions, DialogRef.close(...), ngs-dialog-close, and optional DIALOG_DATA. Use DialogConfig for data, sizing, disableClose, autofocus, backdrop, panel classes, accessibility labels, and showCloseButton when the dialog should render the built-in icon close button. Do not use for a short binary destructive confirmation; use Confirm. Do not use for global messages; use Announcement, Alert, or SnackBar. Do not use for mobile bottom action panels; use BottomSheet. Do not use for side inspectors, filters, or detail panels; use Drawer or SidePanel.",
+      "configOptions": [
+        "data",
+        "width",
+        "height",
+        "minWidth",
+        "minHeight",
+        "maxWidth",
+        "maxHeight",
+        "hasBackdrop",
+        "backdropClass",
+        "panelClass",
+        "disableClose",
+        "autoFocus",
+        "restoreFocus",
+        "ariaDescribedBy",
+        "ariaLabelledBy",
+        "ariaLabel",
+        "role",
+        "closeOnNavigation",
+        "showCloseButton"
+      ],
       "exampleTopics": [
         "Basic Dialog",
+        "Dialog Close",
         "Dialog With Scrollable Content",
         "Dialog Sizing (height, min-height)",
         "Dialog scrollable content",
         "Dialog sizing",
-        "Basic"
+        "Basic",
+        "Dialog close example dialog"
       ],
       "minimalExample": "<h3 ngs-dialog-title>Hi {{ data.name }}</h3>\n<ngs-dialog-content>\n  <p class=\"mb-3\">What's your favorite animal?</p>\n  <ngs-form-field subscriptHiddenIfEmpty>\n    <ngs-label>Favorite Animal</ngs-label>\n    <input ngsInput [(ngModel)]=\"data.animal\">\n  </ngs-form-field>\n</ngs-dialog-content>\n<ngs-dialog-actions align=\"end\">\n  <button ngsButton (click)=\"onNoClick()\">No Thanks</button>\n  <button ngsButton=\"filled\" [ngs-dialog-close]=\"data.animal\">Ok</button>\n</ngs-dialog-actions>",
       "exampleFiles": [
@@ -3447,10 +3470,10 @@
           "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>What's your name?</ngs-label>\n  <input ngsInput [(ngModel)]=\"name\">\n</ngs-form-field>\n<div>\n  <button ngsButton=\"outlined\" (click)=\"openDialog()\">Pick one</button>\n</div>\n@if (animal) {\n  <p>You chose: <em>{{ animal }}</em></p>\n}"
         },
         {
-          "name": "dialog-scrollable-content",
-          "title": "Dialog scrollable content",
-          "file": "projects/docs/src/app/components/dialog/_examples/dialog-scrollable-content/dialog-scrollable-content.dialog.html",
-          "source": "<h3 ngs-dialog-title>Install Angular</h3>\n<ngs-dialog-content class=\"prose dark:prose-invert max-w-full\">\n  <h2>Develop across all platforms</h2>\n  <p>Learn one way to build applications with Angular and reuse your code and abilities to build\n    apps for any deployment target. For web, mobile web, native mobile and native desktop.</p>\n  <h2>Speed &amp; Performance</h2>\n  <p>Achieve the maximum speed possible on the Web Platform today, and take it further, via Web\n    Workers and server-side rendering. Angular puts you in control over scalability. Meet huge\n    data requirements by building data models on RxJS, Immutable.js or another push-model.</p>\n  <h3>Incredible tooling</h3>\n  <p>Build features quickly with simple, declarative templates. Extend the template language with\n    your own components and use a wide array of existing components. Get immediate Angular-specific\n    help and feedback with nearly every IDE and editor. All this comes together so you can focus\n    on building amazing apps rather than trying to make the code work.</p>\n  <h3>Loved by millions</h3>\n  <p>From prototype through global deployment, Angular delivers the productivity and scalable\n    infrastructure that supports Google's largest applications.</p>\n  <h3>What is Angular?</h3>\n  <p>Angular is a platform that makes it easy to build applications with the web. Angular\n    combines declarative templates, dependency injection, end to end tooling, and integrated\n    best practices to solve development challenges. Angular empowers developers to build\n    applications that live on the web, mobile, or\n..."
+          "name": "dialog-close-example",
+          "title": "Dialog close",
+          "file": "projects/docs/src/app/components/dialog/_examples/dialog-close-example/dialog-close-example.html",
+          "source": "<button ngsButton=\"filled\" (click)=\"openDialog()\">Open close dialog</button>\n@if (result()) {\n  <p class=\"mt-3\">Result: {{ result() }}</p>\n}\n<ng-template #closeDialog>\n  <h3 ngs-dialog-title>Close dialog</h3>\n  <ngs-dialog-content>\n    <p>\n      This dialog enables the built-in close button through <code>showCloseButton</code>. Action\n      buttons can still use <code>ngs-dialog-close</code> to close the current dialog and optionally\n      return a result to the opener.\n    </p>\n  </ngs-dialog-content>\n  <ngs-dialog-actions align=\"end\">\n    <button ngsButton ngs-dialog-close>Cancel</button>\n    <button ngsButton=\"filled\" [ngs-dialog-close]=\"'Saved changes'\">Save</button>\n  </ngs-dialog-actions>\n</ng-template>"
         }
       ],
       "previewAsset": "projects/components/dialog/preview.svg",
@@ -3466,6 +3489,7 @@
         "ngs-dialog-actions",
         "ngs-dialog-container",
         "ngs-dialog-content",
+        "ngs-dialog-header",
         "ngs-dialog-title"
       ],
       "exportedSymbols": [
@@ -3477,6 +3501,7 @@
         "DialogConfig",
         "DialogContainer",
         "DialogContent",
+        "DialogHeader",
         "DialogRef",
         "DialogTitle"
       ],
@@ -4414,6 +4439,7 @@
         "ngs-form-builder",
         "ngs-form-builder-field-host",
         "ngs-form-builder-settings-host",
+        "ngs-form-logic",
         "ngs-form-renderer"
       ],
       "exportedSymbols": [
@@ -4465,6 +4491,7 @@
         "FormBuilderUploadCallback",
         "FormBuilderUploadContext",
         "FormBuilderValidationRule",
+        "FormLogic",
         "FormRenderer",
         "provideFormBuilder",
         "provideFormBuilderField",
@@ -4477,6 +4504,7 @@
         "canvasDropPlaceholderDelay",
         "control",
         "definitions",
+        "description",
         "editableCanvas",
         "field",
         "inspectorTitle",
@@ -4487,6 +4515,7 @@
         "settingsDefinitions",
         "showSubmit",
         "submitLabel",
+        "title",
         "uploadCallback"
       ],
       "outputs": [
@@ -9295,6 +9324,7 @@
       "useWhen": "Use ngs-stepper with ngs-step when users must move through related steps and see their current progress. Good for onboarding, checkout, setup, import/export flows, account or tenant creation, review flows, and multi-step forms. Use linear mode with stepControl when each step must be valid before the user continues. Use ngsStepperNext and ngsStepperPrevious on NgStarter buttons for standard wizard navigation, ngsStepLabel or label for step labels, optional/completed/error states for step status, and horizontal or vertical orientation for responsive layouts. Do not use Stepper when you only need step state and validation logic without the default visual UI; use HeadlessStepper. Do not use for independent page sections; use Tabs or ExpansionPanel. Do not use for app route navigation; use Navigation, Breadcrumbs, Sidebar, or routing. Do not use for showing only a percentage; use ProgressBar. Do not use for product tours over existing UI; use GuidedTour.",
       "exampleTopics": [
         "Basic Stepper",
+        "Stepper In Dialog",
         "Stepper Vertical",
         "Stepper Header Position",
         "Stepper That Displays Errors In The Steps",
@@ -9317,10 +9347,10 @@
           "source": "<ngs-stepper headerPosition=\"bottom\" #stepper>\n  <ngs-step [stepControl]=\"firstFormGroup\">\n    <form [formGroup]=\"firstFormGroup\">\n      <ng-template ngsStepLabel>Fill out your name</ng-template>\n      <ngs-form-field class=\"w-1/2\">\n        <input ngsInput placeholder=\"Last name, First name\" formControlName=\"firstCtrl\" required>\n      </ngs-form-field>\n      <div>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step [stepControl]=\"secondFormGroup\" optional>\n    <form [formGroup]=\"secondFormGroup\">\n      <ng-template ngsStepLabel>Fill out your address</ng-template>\n      <ngs-form-field class=\"w-1/2\">\n        <input ngsInput placeholder=\"Address\" formControlName=\"secondCtrl\" required>\n      </ngs-form-field>\n      <div class=\"flex gap-3\">\n        <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step>\n    <ng-template ngsStepLabel>Done</ng-template>\n    You are now done.\n    <div class=\"flex gap-3\">\n      <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n      <button ngsButton=\"filled\" (click)=\"stepper.reset()\">Reset</button>\n    </div>\n  </ngs-step>\n</ngs-stepper>"
         },
         {
-          "name": "stepper-label-bottom-position-example",
-          "title": "Stepper label bottom position",
-          "file": "projects/docs/src/app/components/stepper/_examples/stepper-label-bottom-position-example/stepper-label-bottom-position-example.html",
-          "source": "<ngs-stepper labelPosition=\"bottom\" #stepper>\n  <ngs-step [stepControl]=\"firstFormGroup\">\n    <form [formGroup]=\"firstFormGroup\">\n      <ng-template ngsStepLabel>Fill out your name</ng-template>\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Name</ngs-label>\n        <input ngsInput placeholder=\"Last name, First name\" formControlName=\"firstCtrl\" required>\n      </ngs-form-field>\n      <div>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step [stepControl]=\"secondFormGroup\" optional>\n    <form [formGroup]=\"secondFormGroup\">\n      <ng-template ngsStepLabel>Fill out your address</ng-template>\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Address</ngs-label>\n        <input ngsInput formControlName=\"secondCtrl\" placeholder=\"Ex. 1 Main St, New York, NY\"\n               required>\n      </ngs-form-field>\n      <div class=\"flex gap-3\">\n        <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step>\n    <ng-template ngsStepLabel>Done</ng-template>\n    <p>You are now done.</p>\n    <div class=\"flex gap-3\">\n      <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n      <button ngsButton=\"filled\" (click)=\"stepper.reset()\">Reset</button>\n    </div>\n  </ngs-step>\n</ngs-stepper>"
+          "name": "stepper-in-dialog-example",
+          "title": "Stepper in dialog",
+          "file": "projects/docs/src/app/components/stepper/_examples/stepper-in-dialog-example/stepper-in-dialog-example.html",
+          "source": "<button ngsButton=\"filled\" (click)=\"openDialog()\">Open setup dialog</button>\n@if (result()) {\n  <p class=\"mt-3\">Result: {{ result() }}</p>\n}\n<ng-template #setupDialog>\n  <h3 ngs-dialog-title>Workspace setup</h3>\n  <ngs-dialog-content>\n    <ngs-stepper linear #stepper>\n      <ngs-step [stepControl]=\"workspaceForm\">\n        <ng-template ngsStepLabel>Workspace</ng-template>\n        <form [formGroup]=\"workspaceForm\" class=\"grid gap-4 md:grid-cols-2\">\n          <ngs-form-field>\n            <ngs-label>Workspace name</ngs-label>\n            <input\n              ngsInput\n              formControlName=\"workspaceName\"\n              placeholder=\"Atlas Operations\"\n              required\n            />\n          </ngs-form-field>\n          <ngs-form-field>\n            <ngs-label>Workspace slug</ngs-label>\n            <input ngsInput formControlName=\"slug\" placeholder=\"atlas-ops\" required />\n          </ngs-form-field>\n          <ngs-form-field>\n            <ngs-label>Region</ngs-label>\n            <input ngsInput formControlName=\"region\" placeholder=\"Europe / Warsaw\" required />\n          </ngs-form-field>\n          <ngs-form-field>\n            <ngs-label>Owner</ngs-label>\n            <input ngsInput formControlName=\"owner\" placeholder=\"Maya Chen\" required />\n          </ngs-form-field>\n          <ngs-form-field class=\"md:col-span-2\">\n            <ngs-label>Description</ngs-label>\n            <textarea\n              ngsInput\n              formControlName=\"description\"\n              placeholder=\"Describe what this workspace is used for\"\n              rows=\"4\"\n              required\n..."
         }
       ],
       "previewAsset": "projects/components/stepper/preview.svg",
@@ -9344,11 +9374,11 @@
       ],
       "outputs": [],
       "cssTokens": [
+        "--ngs-color-border",
         "--ngs-color-on-primary",
         "--ngs-color-on-success",
         "--ngs-color-on-surface",
         "--ngs-color-on-surface-variant",
-        "--ngs-color-outline-variant",
         "--ngs-color-primary",
         "--ngs-color-success",
         "--ngs-color-surface-container-high",
