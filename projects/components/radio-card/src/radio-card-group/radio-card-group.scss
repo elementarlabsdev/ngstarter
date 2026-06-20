@@ -10,11 +10,9 @@
   --ngs-radio-card-color-selected-bg: var(--ngs-color-primary-100);
   --ngs-radio-card-content-font-size: var(--ngs-font-size-sm);
   --ngs-radio-card-content-color: var(--ngs-color-neutral-600);
-
   --ngs-radio-card-title-font-size: var(--ngs-font-size-sm);
   --ngs-radio-card-title-gap: --spacing(1.5);
 
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: var(--ngs-radio-card-group-gap);
 }
