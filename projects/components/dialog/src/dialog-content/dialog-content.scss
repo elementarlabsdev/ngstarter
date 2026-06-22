@@ -14,9 +14,9 @@
 }
 
 :host-context(ngs-dialog-container:has(.ngs-dialog-title)) {
-  padding-top: 2px;
+  padding-top: 0;
 }
 
 :host-context(ngs-dialog-container:has(.ngs-dialog-actions)) {
-  padding-bottom: 2px; // border width outline
+  padding-bottom: 0; // border width outline
 }

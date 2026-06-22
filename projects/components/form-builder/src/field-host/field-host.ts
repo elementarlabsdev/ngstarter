@@ -12,6 +12,9 @@ import {
 } from '@angular/core';
 import { NgComponentOutlet } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { Dicebear } from '@ngstarter-ui/components/avatar';
+import { Button } from '@ngstarter-ui/components/button';
+import { Chip } from '@ngstarter-ui/components/chips';
 import {
   Datepicker,
   DatepickerInput,
@@ -44,6 +47,9 @@ import { TimezoneSelect } from '@ngstarter-ui/components/timezone-select';
 import { Timepicker, TimepickerInput, TimepickerToggle } from '@ngstarter-ui/components/timepicker';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
+  File as UploadFile,
+  FileControl,
+  FileList,
   UploadArea,
   UploadAreaDropStateDirective,
   UploadAreaIconDirective,
@@ -71,6 +77,9 @@ import {
   exportAs: 'ngsFormBuilderFieldHost',
   imports: [
     ReactiveFormsModule,
+    Dicebear,
+    Button,
+    Chip,
     Datepicker,
     DatepickerInput,
     DatepickerToggle,
@@ -102,6 +111,9 @@ import {
     TimepickerInput,
     TimepickerToggle,
     Icon,
+    UploadFile,
+    FileControl,
+    FileList,
     UploadArea,
     UploadAreaIconDirective,
     UploadAreaMainStateDirective,
@@ -179,6 +191,56 @@ export class FormBuilderFieldHost {
     }
 
     return `${files.length} files selected`;
+  });
+  protected readonly logoUploadValue = computed(() => {
+    const value = this.controlValue();
+
+    return Array.isArray(value) ? value[0] ?? null : value ?? null;
+  });
+  protected readonly hasLogoUploadValue = computed(() => this.logoUploadValue() !== null);
+  protected readonly logoUploadInstruction = computed(() =>
+    normalizedString(this.field().placeholder) || 'Drop logo here'
+  );
+  protected readonly logoUploadFormatLabels = computed(() =>
+    parseFormatLabels(this.field().settings?.['formats'])
+  );
+  protected readonly logoUploadRequirementsText = computed(() => {
+    return this.logoUploadFormatLabels().join(', ');
+  });
+  protected readonly logoUploadPreviewKey = computed(() => {
+    const configured = normalizedString(this.field().settings?.['previewText']);
+
+    if (configured) {
+      return configured;
+    }
+
+    const fileName = this.logoUploadFileName();
+
+    if (this.hasLogoUploadValue() && fileName !== 'Selected logo') {
+      return fileName;
+    }
+
+    return this.field().label
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(part => part[0])
+      .join('')
+      .toUpperCase() || 'LG';
+  });
+  protected readonly logoUploadImageSrc = computed(() =>
+    readStringProperty(this.logoUploadValue(), ['url', 'src', 'previewUrl', 'imageUrl', 'href'])
+  );
+  protected readonly logoUploadFileName = computed(() =>
+    readStringProperty(this.logoUploadValue(), ['name', 'fileName', 'filename', 'originalName']) || 'Selected logo'
+  );
+  protected readonly logoUploadFileSize = computed(() =>
+    formatUploadFileSize(readUnknownProperty(this.logoUploadValue(), ['size', 'fileSize']))
+  );
+  protected readonly logoUploadState = computed(() => {
+    this.controlStateVersion();
+
+    return this.control().pending ? 'uploading' : 'uploaded';
   });
   protected readonly spacerHeight = computed(() => {
     const height = Number(this.field().settings?.['height'] ?? 24);
@@ -331,6 +393,20 @@ export class FormBuilderFieldHost {
     }
 
     this.control().setValue(value);
+    this.control().markAsDirty();
+    this.control().markAsTouched();
+    this.control().updateValueAndValidity();
+  }
+
+  protected clearLogoUpload(event?: Event): void {
+    event?.preventDefault();
+    event?.stopPropagation();
+
+    if (this.uploadDisabled()) {
+      return;
+    }
+
+    this.control().setValue(null);
     this.control().markAsDirty();
     this.control().markAsTouched();
     this.control().updateValueAndValidity();
@@ -572,4 +648,96 @@ export class FormBuilderFieldHost {
 
 function isValidationRule(value: unknown): value is FormBuilderValidationRule {
   return typeof value === 'object' && value !== null && 'type' in value;
+}
+
+function normalizedString(value: unknown): string {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function parseFormatLabels(value: unknown): string[] {
+  const fallback = ['PNG', 'SVG', 'JPG', 'WEBP'];
+
+  if (Array.isArray(value)) {
+    const labels = value.map(item => normalizedString(item)).filter(Boolean);
+
+    return labels.length ? labels : fallback;
+  }
+
+  const text = normalizedString(value);
+
+  if (!text) {
+    return fallback;
+  }
+
+  const labels = text
+    .split(/[\n,]/)
+    .map(item => item.trim())
+    .filter(Boolean);
+
+  return labels.length ? labels : fallback;
+}
+
+function readUnknownProperty(value: unknown, propertyNames: string[]): unknown {
+  if (isNativeFile(value) && propertyNames.includes('size')) {
+    return value.size;
+  }
+
+  if (!isRecord(value)) {
+    return undefined;
+  }
+
+  for (const propertyName of propertyNames) {
+    if (value[propertyName] !== undefined) {
+      return value[propertyName];
+    }
+  }
+
+  return undefined;
+}
+
+function readStringProperty(value: unknown, propertyNames: string[]): string {
+  if (isNativeFile(value) && propertyNames.includes('name')) {
+    return value.name;
+  }
+
+  if (typeof value === 'string' && propertyNames.some(propertyName => ['url', 'src', 'href'].includes(propertyName))) {
+    return value;
+  }
+
+  const propertyValue = readUnknownProperty(value, propertyNames);
+
+  return normalizedString(propertyValue);
+}
+
+function formatUploadFileSize(value: unknown): string {
+  if (typeof value === 'string') {
+    return value.trim();
+  }
+
+  if (typeof value !== 'number' || Number.isNaN(value) || value <= 0) {
+    return '';
+  }
+
+  const units = ['B', 'KB', 'MB', 'GB'];
+  let unitIndex = 0;
+  let size = value;
+
+  while (size >= 1024 && unitIndex < units.length - 1) {
+    size /= 1024;
+    unitIndex += 1;
+  }
+
+  const formatted = size >= 10 || unitIndex === 0
+    ? Math.round(size).toString()
+    : size.toFixed(1);
+
+  return `${formatted} ${units[unitIndex]}`;
+}
+
+function isNativeFile(value: unknown): value is globalThis.File {
+  return typeof globalThis.File !== 'undefined' && value instanceof globalThis.File;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
 }

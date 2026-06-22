@@ -59,6 +59,7 @@ export class Pricing {
     'Unlimited projects',
     'Unlimited domains',
     'All UI components and admin templates',
+    'Private source code access',
     'Priority GitHub ticket support',
   ];
 
@@ -113,11 +114,19 @@ export class Pricing {
     },
     {
       icon: 'fluent:code-24-regular',
-      title: 'Source code',
-      standard: 'Included',
+      title: 'Source code access',
+      standard: 'Private licensed use',
       standardTone: 'positive',
-      professional: 'Included',
+      professional: 'Private licensed use',
       professionalTone: 'positive',
+    },
+    {
+      icon: 'fluent:lock-closed-24-regular',
+      title: 'Public source publishing',
+      standard: 'Not allowed',
+      standardTone: 'limited',
+      professional: 'Not allowed',
+      professionalTone: 'limited',
     },
     {
       icon: 'fluent:timer-24-regular',

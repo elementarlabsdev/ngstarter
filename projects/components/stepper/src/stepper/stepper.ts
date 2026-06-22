@@ -1,4 +1,4 @@
-import { Component, input, contentChildren } from '@angular/core';
+import { booleanAttribute, Component, input, contentChildren } from '@angular/core';
 import { CdkStepper, StepperOrientation } from '@angular/cdk/stepper';
 import { Step } from '../step/step';
 import { StepLabel } from '../step-label';
@@ -8,24 +8,23 @@ import { CommonModule } from '@angular/common';
   selector: 'ngs-stepper',
   exportAs: 'ngsStepper',
   standalone: true,
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   templateUrl: './stepper.html',
   styleUrl: './stepper.scss',
   providers: [
     {
       provide: CdkStepper,
-      useExisting: Stepper
-    }
+      useExisting: Stepper,
+    },
   ],
   host: {
-    'class': 'ngs-stepper',
-  }
+    class: 'ngs-stepper',
+  },
 })
 export class Stepper extends CdkStepper {
   headerPosition = input<'top' | 'bottom'>('top');
   labelPosition = input<'top' | 'bottom'>('top');
+  stickyHeader = input(false, { transform: booleanAttribute });
 
   private _stepperOrientation: StepperOrientation = 'horizontal';
 

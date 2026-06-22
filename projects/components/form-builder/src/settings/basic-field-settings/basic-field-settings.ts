@@ -53,7 +53,7 @@ export class BasicFormBuilderFieldSettings {
   protected readonly hasClearable = computed(() => ['select', 'country-select'].includes(this.field().type));
   protected readonly hasMultiple = computed(() => ['select', 'upload'].includes(this.field().type));
   protected readonly isSelect = computed(() => this.field().type === 'select');
-  protected readonly isUpload = computed(() => this.field().type === 'upload');
+  protected readonly isUpload = computed(() => ['upload', 'logo-upload'].includes(this.field().type));
   protected readonly isRadio = computed(() => this.field().type === 'radio');
   protected readonly isSpacer = computed(() => this.field().type === 'spacer');
   protected readonly hasBehaviorToggles = computed(() => !this.isSpacer());

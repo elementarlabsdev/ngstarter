@@ -1570,7 +1570,7 @@ export class FormBuilder implements OnDestroy {
       return field.defaultValue;
     }
 
-    if (field.type === 'upload') {
+    if (field.type === 'upload' || field.type === 'logo-upload') {
       return field.multiple ? [] : null;
     }
 

@@ -1,6 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
-import { FormRenderer, FormBuilderSchema } from '@ngstarter-ui/components/form-builder';
+import { FormRenderer, FormBuilderSchema, FormBuilderUploadCallback } from '@ngstarter-ui/components/form-builder';
 import { Card, CardContent, CardHeader, CardTitle } from '@ngstarter-ui/components/card';
 
 @Component({
@@ -19,6 +19,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@ngstarter-ui/componen
 export class FormBuilderRendererExample {
   readonly value = signal<Record<string, any>>({
     company: 'Elementar Labs',
+    company_logo: {
+      name: 'solo-logo.svg',
+      size: 42000,
+      type: 'image/svg+xml'
+    },
     currency: 'usd',
     contact_name: 'Alex Morgan',
     contact_email: 'alex@example.com'
@@ -57,6 +62,14 @@ export class FormBuilderRendererExample {
             placeholder: 'finance@example.com',
             required: true,
             width: 6
+          },
+          {
+            id: 'company_logo',
+            name: 'company_logo',
+            type: 'logo-upload',
+            label: 'Logo Upload',
+            placeholder: 'Logo Upload',
+            width: 12
           },
           {
             id: 'currency',
@@ -106,5 +119,17 @@ export class FormBuilderRendererExample {
         ]
       }
     ]
+  };
+
+  readonly uploadCallback: FormBuilderUploadCallback = ({ files }) => {
+    const file = files[0];
+
+    return file
+      ? {
+          name: file.name,
+          size: file.size,
+          type: file.type
+        }
+      : null;
   };
 }

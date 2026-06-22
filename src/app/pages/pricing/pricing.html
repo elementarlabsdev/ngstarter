@@ -11,8 +11,8 @@
       </h1>
       <p class="mx-auto mt-6 max-w-3xl text-lg leading-8 text-on-surface-variant">
         Choose a one-time NgStarter license for standalone Angular UI components, admin dashboard
-        templates, source code, commercial usage, updates, and GitHub support. Start in trial mode
-        for 3 months, then keep shipping with the plan that fits your project scope.
+        templates, private source code access, commercial usage, updates, and GitHub support. Start
+        in trial mode for 3 months, then keep shipping with the plan that fits your project scope.
       </p>
       <div
         class="mt-8 flex flex-wrap justify-center gap-4 [--ngs-button-font-size:0.975rem] [--ngs-button-font-weight:700] [--ngs-button-height:3.5rem] [--ngs-button-padding-x:1.5rem] [--ngs-button-radius:var(--ngs-radius-xl)] [--ngs-control-gap:0.75rem]"
@@ -43,8 +43,8 @@
         <h2 class="text-3xl font-semibold text-on-background">Standard vs Professional</h2>
         <p class="mt-4 text-base leading-7 text-on-surface-variant">
           Both plans include the same NgStarter UI components, templates, source code, and
-          commercial usage rights. The difference is how many products and domains the license
-          covers.
+          commercial usage rights. Source code is provided for private licensed use and may not be
+          published publicly. The difference is how many products and domains the license covers.
         </p>
       </div>
       <ngs-card appearance="outlined" class="comparison-card mt-10">
@@ -131,6 +131,8 @@
                     >
                       @if (row.professionalTone === 'positive') {
                         <ngs-icon name="fluent:checkmark-24-filled" />
+                      } @else if (row.professionalTone === 'limited') {
+                        <ngs-icon name="fluent:lock-closed-24-filled" />
                       }
                       <span>{{ row.professional }}</span>
                     </div>
@@ -226,6 +228,7 @@
         </h2>
         <p class="mx-auto mt-4 max-w-2xl text-base leading-7 text-on-surface-variant">
           Answers about source code, commercial use, updates, support, and the 3-month trial mode.
+          Source code access is private and does not allow public publishing.
         </p>
       </div>
       <ngs-accordion class="block space-y-3">

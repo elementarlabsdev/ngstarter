@@ -1,6 +1,7 @@
 <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
   <ngs-form-renderer
     [schema]="schema"
+    [uploadCallback]="uploadCallback"
     [(value)]="value"
     submitLabel="Save profile"
     (formSubmit)="submittedValue.set($event)"/>

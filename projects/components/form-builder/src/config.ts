@@ -675,6 +675,59 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     }
   },
   {
+    type: 'logo-upload',
+    label: 'Logo upload',
+    group: 'Files',
+    icon: 'fluent:image-add-24-regular',
+    defaults: {
+      label: 'Logo Upload',
+      placeholder: 'Logo Upload',
+      width: 12,
+      multiple: false,
+      settings: {
+        accept: 'image/png,image/svg+xml,image/jpeg,image/webp',
+        formats: ['PNG', 'SVG', 'JPG', 'WEBP'],
+        previewText: 'AI'
+      }
+    },
+    settings: {
+      extends: 'input-field',
+      schema: {
+        sections: [
+          {
+            id: 'logo-upload-settings',
+            title: 'Logo upload',
+            fields: [
+              {
+                id: 'logo-upload-accept',
+                name: 'settings.accept',
+                type: 'text',
+                label: 'Accepted file types',
+                defaultValue: 'image/png,image/svg+xml,image/jpeg,image/webp',
+                hint: 'Use MIME types separated by commas, for example image/png,image/svg+xml,image/jpeg,image/webp.'
+              },
+              {
+                id: 'logo-upload-formats',
+                name: 'settings.formats',
+                type: 'textarea',
+                label: 'Format badges',
+                defaultValue: 'PNG, SVG, JPG, WEBP',
+                hint: 'Use comma-separated or one-per-line labels.'
+              },
+              {
+                id: 'logo-upload-preview-text',
+                name: 'settings.previewText',
+                type: 'text',
+                label: 'Preview fallback text',
+                defaultValue: 'AI'
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     type: 'timezone-select',
     label: 'Timezone select',
     group: 'Date and time',

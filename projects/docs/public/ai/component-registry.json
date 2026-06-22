@@ -4430,7 +4430,7 @@
           "name": "form-builder-renderer-example",
           "title": "Form builder renderer",
           "file": "projects/docs/src/app/libraries/form-builder/_examples/form-builder-renderer-example/form-builder-renderer-example.html",
-          "source": "<div class=\"grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]\">\n  <ngs-form-renderer\n    [schema]=\"schema\"\n    [(value)]=\"value\"\n    submitLabel=\"Save profile\"\n    (formSubmit)=\"submittedValue.set($event)\"/>\n  <ngs-card>\n    <ngs-card-header>\n      <ngs-card-title>Submitted value</ngs-card-title>\n    </ngs-card-header>\n    <ngs-card-content>\n      <pre>{{ submittedValue() || value() | json }}</pre>\n    </ngs-card-content>\n  </ngs-card>\n</div>"
+          "source": "<div class=\"grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]\">\n  <ngs-form-renderer\n    [schema]=\"schema\"\n    [uploadCallback]=\"uploadCallback\"\n    [(value)]=\"value\"\n    submitLabel=\"Save profile\"\n    (formSubmit)=\"submittedValue.set($event)\"/>\n  <ngs-card>\n    <ngs-card-header>\n      <ngs-card-title>Submitted value</ngs-card-title>\n    </ngs-card-header>\n    <ngs-card-content>\n      <pre>{{ submittedValue() || value() | json }}</pre>\n    </ngs-card-content>\n  </ngs-card>\n</div>"
         }
       ],
       "previewAsset": null,
@@ -4536,6 +4536,8 @@
         "formReady"
       ],
       "cssTokens": [
+        "--ngs-avatar-font-weight",
+        "--ngs-avatar-size",
         "--ngs-card-padding",
         "--ngs-color-border",
         "--ngs-color-danger",
@@ -4560,7 +4562,9 @@
         "--ngs-state-focus-ring",
         "--ngs-tab-label-height",
         "--ngs-tree-node-gap",
+        "--ngs-upload-area-border",
         "--ngs-upload-area-border-radius",
+        "--ngs-upload-area-drop-active-border",
         "--ngs-upload-area-padding"
       ],
       "example": null
@@ -7552,7 +7556,7 @@
           "name": "radio-card-example",
           "title": "Radio card",
           "file": "projects/docs/src/app/forms/radio/_examples/radio-card-example/radio-card-example.html",
-          "source": "<form [formGroup]=\"form\">\n  <ngs-radio-card-group formControlName=\"privacy\">\n    <ngs-radio-card value=\"open\">\n      <ngs-radio-card-title>\n        <ngs-icon name=\"fluent:globe-24-regular\"/>\n        Open\n      </ngs-radio-card-title>\n      <ngs-radio-card-content>\n        Posts and community members are public and visible to search engines.\n      </ngs-radio-card-content>\n    </ngs-radio-card>\n    <ngs-radio-card value=\"closed\">\n      <ngs-radio-card-title>\n        <ngs-icon name=\"fluent:lock-closed-24-regular\"/>\n        Closed\n      </ngs-radio-card-title>\n      <ngs-radio-card-content>\n        Only members can view community members and posts. Content is not visible to search engines.\n      </ngs-radio-card-content>\n    </ngs-radio-card>\n  </ngs-radio-card-group>\n</form>\n<div class=\"mt-10\">\n  <p>\n    <button ngsButton=\"filled\" (click)=\"toggleDisabled()\">\n      {{ form.get('privacy')?.disabled ? 'Enable' : 'Disable' }} Control\n    </button>\n  </p>\n  <p>Control value: {{ form.get('privacy')?.value }}</p>\n</div>"
+          "source": "<form [formGroup]=\"form\">\n  <ngs-radio-card-group formControlName=\"privacy\" class=\"grid-cols-12\">\n    <ngs-radio-card value=\"open\" class=\"col-span-6\">\n      <ngs-radio-card-title>\n        <ngs-icon name=\"fluent:globe-24-regular\"/>\n        Open\n      </ngs-radio-card-title>\n      <ngs-radio-card-content>\n        Posts and community members are public and visible to search engines.\n      </ngs-radio-card-content>\n    </ngs-radio-card>\n    <ngs-radio-card value=\"closed\" class=\"col-span-6\">\n      <ngs-radio-card-title>\n        <ngs-icon name=\"fluent:lock-closed-24-regular\"/>\n        Closed\n      </ngs-radio-card-title>\n      <ngs-radio-card-content>\n        Only members can view community members and posts. Content is not visible to search engines.\n      </ngs-radio-card-content>\n    </ngs-radio-card>\n  </ngs-radio-card-group>\n</form>\n<div class=\"mt-10\">\n  <p>\n    <button ngsButton=\"filled\" (click)=\"toggleDisabled()\">\n      {{ form.get('privacy')?.disabled ? 'Enable' : 'Disable' }} Control\n    </button>\n  </p>\n  <p>Control value: {{ form.get('privacy')?.value }}</p>\n</div>"
         },
         {
           "name": "radio-orientation-example",
@@ -9358,7 +9362,7 @@
           "name": "stepper-in-dialog-example",
           "title": "Stepper in dialog",
           "file": "projects/docs/src/app/components/stepper/_examples/stepper-in-dialog-example/stepper-in-dialog-example.html",
-          "source": "<button ngsButton=\"filled\" (click)=\"openDialog()\">Open setup dialog</button>\n@if (result()) {\n  <p class=\"mt-3\">Result: {{ result() }}</p>\n}\n<ng-template #setupDialog>\n  <h3 ngs-dialog-title>Workspace setup</h3>\n  <ngs-dialog-content>\n    <ngs-stepper linear #stepper>\n      <ngs-step [stepControl]=\"workspaceForm\">\n        <ng-template ngsStepLabel>Workspace</ng-template>\n        <form [formGroup]=\"workspaceForm\" class=\"grid gap-4 md:grid-cols-2\">\n          <ngs-form-field>\n            <ngs-label>Workspace name</ngs-label>\n            <input\n              ngsInput\n              formControlName=\"workspaceName\"\n              placeholder=\"Atlas Operations\"\n              required\n            />\n          </ngs-form-field>\n          <ngs-form-field>\n            <ngs-label>Workspace slug</ngs-label>\n            <input ngsInput formControlName=\"slug\" placeholder=\"atlas-ops\" required />\n          </ngs-form-field>\n          <ngs-form-field>\n            <ngs-label>Region</ngs-label>\n            <input ngsInput formControlName=\"region\" placeholder=\"Europe / Warsaw\" required />\n          </ngs-form-field>\n          <ngs-form-field>\n            <ngs-label>Owner</ngs-label>\n            <input ngsInput formControlName=\"owner\" placeholder=\"Maya Chen\" required />\n          </ngs-form-field>\n          <ngs-form-field class=\"md:col-span-2\">\n            <ngs-label>Description</ngs-label>\n            <textarea\n              ngsInput\n              formControlName=\"description\"\n              placeholder=\"Describe what this workspace is used for\"\n              rows=\"4\"\n              required\n..."
+          "source": "<button ngsButton=\"filled\" (click)=\"openDialog()\">Open setup dialog</button>\n@if (result()) {\n  <p class=\"mt-3\">Result: {{ result() }}</p>\n}\n<ng-template #setupDialog>\n  <h3 ngs-dialog-title>Workspace setup</h3>\n  <ngs-dialog-content>\n    <ngs-stepper linear stickyHeader #stepper>\n      <ngs-step [stepControl]=\"workspaceForm\">\n        <ng-template ngsStepLabel>Workspace</ng-template>\n        <form [formGroup]=\"workspaceForm\" class=\"grid gap-4 md:grid-cols-2\">\n          <ngs-form-field>\n            <ngs-label>Workspace name</ngs-label>\n            <input\n              ngsInput\n              formControlName=\"workspaceName\"\n              placeholder=\"Atlas Operations\"\n              required\n            />\n          </ngs-form-field>\n          <ngs-form-field>\n            <ngs-label>Workspace slug</ngs-label>\n            <input ngsInput formControlName=\"slug\" placeholder=\"atlas-ops\" required />\n          </ngs-form-field>\n          <ngs-form-field>\n            <ngs-label>Region</ngs-label>\n            <input ngsInput formControlName=\"region\" placeholder=\"Europe / Warsaw\" required />\n          </ngs-form-field>\n          <ngs-form-field>\n            <ngs-label>Owner</ngs-label>\n            <input ngsInput formControlName=\"owner\" placeholder=\"Maya Chen\" required />\n          </ngs-form-field>\n          <ngs-form-field>\n            <ngs-label>Workspace type</ngs-label>\n            <input ngsInput formControlName=\"workspaceType\" placeholder=\"Operations hub\" required />\n          </ngs-form-field>\n          <ngs-form-field>\n            <ngs-label>Environment</ngs-label>\n..."
         }
       ],
       "previewAsset": "projects/components/stepper/preview.svg",
@@ -9378,7 +9382,8 @@
       ],
       "inputs": [
         "headerPosition",
-        "labelPosition"
+        "labelPosition",
+        "stickyHeader"
       ],
       "outputs": [],
       "cssTokens": [
@@ -9391,6 +9396,7 @@
         "--ngs-color-success",
         "--ngs-color-surface-container-high",
         "--ngs-color-surface-container-highest",
+        "--ngs-color-surface-container-lowest",
         "--ngs-stepper-content-padding",
         "--ngs-stepper-header-gap",
         "--ngs-stepper-header-padding",

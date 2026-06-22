@@ -137,7 +137,7 @@ export const pricingFaqItems = [
   {
     question: 'Is NgStarter open source?',
     answer:
-      'NgStarter is a commercial Angular UI components library. Purchases include source code access according to the selected license.',
+      'NgStarter is a commercial Angular UI components library. Purchases include private source code access according to the selected license, but the source code may not be published publicly.',
   },
   {
     question: 'Can I use NgStarter in commercial projects?',
@@ -147,7 +147,7 @@ export const pricingFaqItems = [
   {
     question: 'Do I get the source code?',
     answer:
-      'Yes. Standard and Professional both include source code for the NgStarter UI components and admin dashboard templates.',
+      'Yes. Standard and Professional both include source code for the NgStarter UI components and admin dashboard templates for private licensed use. Public source code publishing is not allowed.',
   },
   {
     question: 'Are updates included?',
@@ -181,7 +181,7 @@ export const templatesFaqItems = [
   {
     question: 'Can I customize the Angular admin dashboard templates?',
     answer:
-      'Yes. The templates include source code through the NgStarter license, so you can adapt layouts, widgets, routes, styles, and data integration for your product.',
+      'Yes. The templates include source code through the NgStarter license, so you can adapt layouts, widgets, routes, styles, and data integration for your product. The source code may not be published publicly.',
   },
   {
     question: 'Are the templates included in the NgStarter license?',
@@ -191,7 +191,7 @@ export const templatesFaqItems = [
   {
     question: 'Do the templates include source code?',
     answer:
-      'Yes. Template source code is included together with the NgStarter UI component source code under the selected commercial license.',
+      'Yes. Template source code is included together with the NgStarter UI component source code under the selected commercial license for private use, and it may not be published publicly.',
   },
   {
     question: 'Are the admin templates responsive?',

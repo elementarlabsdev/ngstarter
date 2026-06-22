@@ -67,6 +67,18 @@ class BottomLabelStepperHost {}
   standalone: true,
   imports: [Step, Stepper],
   template: `
+    <ngs-stepper stickyHeader>
+      <ngs-step label="Account">Account content</ngs-step>
+      <ngs-step label="Billing">Billing content</ngs-step>
+    </ngs-stepper>
+  `,
+})
+class StickyHeaderStepperHost {}
+
+@Component({
+  standalone: true,
+  imports: [Step, Stepper],
+  template: `
     <ngs-stepper orientation="vertical">
       <ngs-step label="Account">Account content</ngs-step>
       <ngs-step label="Billing">Billing content</ngs-step>
@@ -91,19 +103,19 @@ describe('Stepper', () => {
   it('should select steps from header clicks and stepper controls', async () => {
     const fixture = await createFixture(InteractiveStepperHost);
 
-    expect(stepContents(fixture).map(content => content.hidden)).toEqual([false, true]);
+    expect(stepContents(fixture).map((content) => content.hidden)).toEqual([false, true]);
 
     stepHeaders(fixture)[1].click();
     fixture.detectChanges();
-    expect(stepContents(fixture).map(content => content.hidden)).toEqual([true, false]);
+    expect(stepContents(fixture).map((content) => content.hidden)).toEqual([true, false]);
 
     getButton(fixture, 'Back').click();
     fixture.detectChanges();
-    expect(stepContents(fixture).map(content => content.hidden)).toEqual([false, true]);
+    expect(stepContents(fixture).map((content) => content.hidden)).toEqual([false, true]);
 
     getButton(fixture, 'Next').click();
     fixture.detectChanges();
-    expect(stepContents(fixture).map(content => content.hidden)).toEqual([true, false]);
+    expect(stepContents(fixture).map((content) => content.hidden)).toEqual([true, false]);
   });
 
   it('should apply bottom header and bottom label classes', async () => {
@@ -111,11 +123,21 @@ describe('Stepper', () => {
 
     expect(stepperElement(fixture).classList.contains('ngs-stepper-header-bottom')).toBe(true);
     expect(
-      (fixture.nativeElement.querySelector('.ngs-stepper-header-container') as HTMLElement).classList.contains(
-        'ngs-stepper-label-bottom-container'
-      )
+      (
+        fixture.nativeElement.querySelector('.ngs-stepper-header-container') as HTMLElement
+      ).classList.contains('ngs-stepper-label-bottom-container'),
     ).toBe(true);
-    expect(stepHeaders(fixture).every(header => header.classList.contains('ngs-stepper-label-bottom'))).toBe(true);
+    expect(
+      stepHeaders(fixture).every((header) => header.classList.contains('ngs-stepper-label-bottom')),
+    ).toBe(true);
+  });
+
+  it('should apply the sticky header class when stickyHeader is enabled', async () => {
+    const fixture = await createFixture(StickyHeaderStepperHost);
+
+    expect(stepperHeaderContainer(fixture).classList.contains('ngs-stepper-header-sticky')).toBe(
+      true,
+    );
   });
 
   it('should render the vertical layout classes and connectors', async () => {
@@ -142,7 +164,10 @@ async function createFixture<T>(component: new () => T): Promise<ComponentFixtur
 }
 
 function stepLabelText(fixture: ComponentFixture<unknown>): string {
-  return (hostElement(fixture).querySelector('.ngs-stepper-label') as HTMLElement).textContent?.trim() ?? '';
+  return (
+    (hostElement(fixture).querySelector('.ngs-stepper-label') as HTMLElement).textContent?.trim() ??
+    ''
+  );
 }
 
 function stepperElement(fixture: ComponentFixture<unknown>): HTMLElement {
@@ -153,13 +178,17 @@ function stepHeaders(fixture: ComponentFixture<unknown>): HTMLElement[] {
   return Array.from(hostElement(fixture).querySelectorAll('.ngs-stepper-header')) as HTMLElement[];
 }
 
+function stepperHeaderContainer(fixture: ComponentFixture<unknown>): HTMLElement {
+  return hostElement(fixture).querySelector('.ngs-stepper-header-container') as HTMLElement;
+}
+
 function stepContents(fixture: ComponentFixture<unknown>): HTMLElement[] {
   return Array.from(hostElement(fixture).querySelectorAll('.ngs-stepper-content')) as HTMLElement[];
 }
 
 function getButton(fixture: ComponentFixture<unknown>, text: string): HTMLButtonElement {
   return (Array.from(hostElement(fixture).querySelectorAll('button')) as HTMLButtonElement[]).find(
-    button => button.textContent?.trim() === text
+    (button) => button.textContent?.trim() === text,
   ) as HTMLButtonElement;
 }
 

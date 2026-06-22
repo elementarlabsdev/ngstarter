@@ -7,7 +7,7 @@
 <ng-template #setupDialog>
   <h3 ngs-dialog-title>Workspace setup</h3>
   <ngs-dialog-content>
-    <ngs-stepper linear #stepper>
+    <ngs-stepper linear stickyHeader #stepper>
       <ngs-step [stepControl]="workspaceForm">
         <ng-template ngsStepLabel>Workspace</ng-template>
         <form [formGroup]="workspaceForm" class="grid gap-4 md:grid-cols-2">
@@ -34,6 +34,92 @@
           <ngs-form-field>
             <ngs-label>Owner</ngs-label>
             <input ngsInput formControlName="owner" placeholder="Maya Chen" required />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Workspace type</ngs-label>
+            <input ngsInput formControlName="workspaceType" placeholder="Operations hub" required />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Environment</ngs-label>
+            <input ngsInput formControlName="environment" placeholder="Production" required />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Primary domain</ngs-label>
+            <input
+              ngsInput
+              formControlName="primaryDomain"
+              placeholder="atlas.example.com"
+              required
+            />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Default language</ngs-label>
+            <input ngsInput formControlName="defaultLanguage" placeholder="English" required />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Compliance tier</ngs-label>
+            <input ngsInput formControlName="complianceTier" placeholder="SOC 2" required />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Backup window</ngs-label>
+            <input ngsInput formControlName="backupWindow" placeholder="02:00-04:00 UTC" required />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Lifecycle stage</ngs-label>
+            <input
+              ngsInput
+              formControlName="lifecycleStage"
+              placeholder="Implementation"
+              required
+            />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Analytics workspace</ngs-label>
+            <input ngsInput formControlName="analyticsWorkspace" placeholder="Atlas BI" required />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Billing account</ngs-label>
+            <input ngsInput formControlName="billingAccount" placeholder="BA-1048" required />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Cost center</ngs-label>
+            <input ngsInput formControlName="costCenter" placeholder="OPS-240" required />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Business unit</ngs-label>
+            <input
+              ngsInput
+              formControlName="businessUnit"
+              placeholder="Global Operations"
+              required
+            />
+          </ngs-form-field>
+
+          <ngs-form-field>
+            <ngs-label>Contact email</ngs-label>
+            <input
+              ngsInput
+              type="email"
+              formControlName="contactEmail"
+              placeholder="workspace-admin@example.com"
+              required
+            />
+          </ngs-form-field>
+
+          <ngs-form-field class="md:col-span-2">
+            <ngs-label>Escalation channel</ngs-label>
+            <input ngsInput formControlName="escalationChannel" placeholder="#atlas-escalations" />
           </ngs-form-field>
 
           <ngs-form-field class="md:col-span-2">

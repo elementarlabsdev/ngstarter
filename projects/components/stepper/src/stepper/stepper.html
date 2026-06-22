@@ -1,22 +1,30 @@
-<div class="ngs-stepper"
-     [class.ngs-stepper-vertical]="orientation === 'vertical'"
-     [class.ngs-stepper-horizontal]="orientation === 'horizontal'"
-     [class.ngs-stepper-header-bottom]="headerPosition() === 'bottom'">
+<div
+  class="ngs-stepper"
+  [class.ngs-stepper-vertical]="orientation === 'vertical'"
+  [class.ngs-stepper-horizontal]="orientation === 'horizontal'"
+  [class.ngs-stepper-header-bottom]="headerPosition() === 'bottom'"
+>
   @if (orientation === 'horizontal') {
-    <div class="ngs-stepper-header-container" [class.ngs-stepper-label-bottom-container]="labelPosition() === 'bottom'">
+    <div
+      class="ngs-stepper-header-container"
+      [class.ngs-stepper-label-bottom-container]="labelPosition() === 'bottom'"
+      [class.ngs-stepper-header-sticky]="stickyHeader()"
+    >
       @for (step of stepItems(); track step; let i = $index) {
-        <div class="ngs-stepper-header"
-             [class.ngs-stepper-header-active]="selectedIndex === i"
-             [class.ngs-stepper-header-completed]="step.completed"
-             [class.ngs-stepper-label-bottom]="labelPosition() === 'bottom'"
-             (click)="step.select()"
-             role="tab"
-             [attr.aria-selected]="selectedIndex === i"
-             [attr.aria-controls]="_getStepContentId(i)">
+        <div
+          class="ngs-stepper-header"
+          [class.ngs-stepper-header-active]="selectedIndex === i"
+          [class.ngs-stepper-header-completed]="step.completed"
+          [class.ngs-stepper-label-bottom]="labelPosition() === 'bottom'"
+          (click)="step.select()"
+          role="tab"
+          [attr.aria-selected]="selectedIndex === i"
+          [attr.aria-controls]="_getStepContentId(i)"
+        >
           <div class="ngs-stepper-icon">
             @if (step.completed) {
               <svg viewBox="0 0 24 24" width="16" height="16">
-                <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
               </svg>
             } @else {
               {{ i + 1 }}
@@ -38,28 +46,32 @@
 
     <div class="ngs-stepper-content-container">
       @for (step of stepItems(); track step; let i = $index) {
-        <div class="ngs-stepper-content"
-             [id]="_getStepContentId(i)"
-             role="tabpanel"
-             [attr.aria-labelledby]="_getStepLabelId(i)"
-             [hidden]="selectedIndex !== i">
+        <div
+          class="ngs-stepper-content"
+          [id]="_getStepContentId(i)"
+          role="tabpanel"
+          [attr.aria-labelledby]="_getStepLabelId(i)"
+          [hidden]="selectedIndex !== i"
+        >
           <ng-container [ngTemplateOutlet]="step.content" />
         </div>
       }
     </div>
   } @else {
     @for (step of stepItems(); track step; let i = $index) {
-      <div class="ngs-stepper-header"
-           [class.ngs-stepper-header-active]="selectedIndex === i"
-           [class.ngs-stepper-header-completed]="step.completed"
-           (click)="step.select()"
-           role="tab"
-           [attr.aria-selected]="selectedIndex === i"
-           [attr.aria-controls]="_getStepContentId(i)">
+      <div
+        class="ngs-stepper-header"
+        [class.ngs-stepper-header-active]="selectedIndex === i"
+        [class.ngs-stepper-header-completed]="step.completed"
+        (click)="step.select()"
+        role="tab"
+        [attr.aria-selected]="selectedIndex === i"
+        [attr.aria-controls]="_getStepContentId(i)"
+      >
         <div class="ngs-stepper-icon">
           @if (step.completed) {
             <svg viewBox="0 0 24 24" width="16" height="16">
-              <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
             </svg>
           } @else {
             {{ i + 1 }}
@@ -73,13 +85,18 @@
           }
         </div>
       </div>
-      <div class="ngs-stepper-content-wrapper" [class.ngs-stepper-last-step]="i === stepItems().length - 1">
+      <div
+        class="ngs-stepper-content-wrapper"
+        [class.ngs-stepper-last-step]="i === stepItems().length - 1"
+      >
         <div class="ngs-stepper-vertical-line"></div>
-        <div class="ngs-stepper-content"
-             [id]="_getStepContentId(i)"
-             role="tabpanel"
-             [attr.aria-labelledby]="_getStepLabelId(i)"
-             [hidden]="selectedIndex !== i">
+        <div
+          class="ngs-stepper-content"
+          [id]="_getStepContentId(i)"
+          role="tabpanel"
+          [attr.aria-labelledby]="_getStepLabelId(i)"
+          [hidden]="selectedIndex !== i"
+        >
           <ng-container [ngTemplateOutlet]="step.content" />
         </div>
       </div>

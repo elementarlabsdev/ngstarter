@@ -97,7 +97,7 @@ export class Templates {
     'Angular signal APIs',
     'NgStarter cards, lists, chips, buttons, side navigation, and layout primitives',
     'ECharts dashboard widgets',
-    'Commercial source code included with NgStarter plans',
+    'Private commercial source code included with NgStarter plans',
   ];
 
   readonly dashboardComponents = [
