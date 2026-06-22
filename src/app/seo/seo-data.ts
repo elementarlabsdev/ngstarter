@@ -283,6 +283,8 @@ const panelLayoutArticleDescription =
   'Angular panel layout tutorial: create practical admin workspace layouts with ngs-panel, PanelHeader, PanelContent, PanelSidebar, PanelAside, and PanelFooter.';
 const formBuilderCustomFieldArticleDescription =
   'NgStarter Form Builder tutorial: add a custom Angular field, register it with provideFormBuilderField, and configure schema-driven inspector settings.';
+const formBuilderCustomValidatorArticleDescription =
+  'NgStarter Form Builder tutorial: add a custom validator, register it globally, configure field rules, and show custom error messages under rendered controls.';
 const formBuilderSchemaArticleDescription =
   'NgStarter Form Builder schema reference: understand sections, fields, layout ordering, validation, settings, and nested field structures.';
 const selectDataSourceArticleDescription =
@@ -507,6 +509,51 @@ export const FORM_BUILDER_CUSTOM_FIELD_ARTICLE_SEO: SeoData = {
         'form builder',
         'angular form builder',
         'custom angular field',
+        'NgStarter UI',
+        'schema driven forms',
+      ],
+      isPartOf: {
+        '@id': `${SITE_URL}/blog#blog`,
+      },
+    },
+  ],
+};
+
+export const FORM_BUILDER_CUSTOM_VALIDATOR_ARTICLE_SEO: SeoData = {
+  title: 'How to Add a Custom Validator to Form Builder | NgStarter UI',
+  description: formBuilderCustomValidatorArticleDescription,
+  canonicalPath: '/blog/form-builder-custom-validator',
+  ogType: 'article',
+  structuredData: [
+    organizationSchema,
+    websiteSchema,
+    webPageSchema(
+      '/blog/form-builder-custom-validator',
+      'How to Add a Custom Validator to Form Builder',
+      formBuilderCustomValidatorArticleDescription,
+    ),
+    {
+      '@type': 'BlogPosting',
+      '@id': `${SITE_URL}/blog/form-builder-custom-validator#article`,
+      headline: 'How to Add a Custom Validator to Form Builder',
+      description: formBuilderCustomValidatorArticleDescription,
+      url: `${SITE_URL}/blog/form-builder-custom-validator`,
+      datePublished: '2026-06-22',
+      dateModified: '2026-06-22',
+      author: {
+        '@type': 'Organization',
+        name: 'NgStarter',
+        url: SITE_URL,
+      },
+      publisher: {
+        '@id': `${SITE_URL}/#organization`,
+      },
+      image: DEFAULT_OG_IMAGE,
+      inLanguage: 'en',
+      keywords: [
+        'form builder validator',
+        'angular validator',
+        'custom angular validator',
         'NgStarter UI',
         'schema driven forms',
       ],

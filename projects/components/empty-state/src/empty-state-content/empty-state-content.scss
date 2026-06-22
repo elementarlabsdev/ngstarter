@@ -4,6 +4,7 @@
   display: block;
   font-size: var(--ngs-font-size-sm);
   color: var(--ngs-color-neutral-600);
+  text-align: center;
 }
 
 :host-context(html.dark) {

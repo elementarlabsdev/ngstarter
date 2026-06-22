@@ -17,7 +17,7 @@
   </url>
   <url>
     <loc>https://ngstarter.com/blog</loc>
-    <lastmod>2026-06-18</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
@@ -28,6 +28,11 @@
   <url>
     <loc>https://ngstarter.com/blog/form-builder-custom-field</loc>
     <lastmod>2026-06-18</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://ngstarter.com/blog/form-builder-custom-validator</loc>
+    <lastmod>2026-06-22</lastmod>
     <priority>0.70</priority>
   </url>
   <url>

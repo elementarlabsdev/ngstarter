@@ -3,6 +3,7 @@ import {
   BASIC_LAYOUT_ARTICLE_SEO,
   BLOG_SEO,
   FORM_BUILDER_CUSTOM_FIELD_ARTICLE_SEO,
+  FORM_BUILDER_CUSTOM_VALIDATOR_ARTICLE_SEO,
   FORM_BUILDER_SCHEMA_ARTICLE_SEO,
   HOME_SEO,
   LICENSE_SEO,
@@ -68,6 +69,17 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./blog/articles/form-builder-custom-field/form-builder-custom-field').then(
         c => c.FormBuilderCustomField,
+      ),
+  },
+  {
+    path: 'blog/form-builder-custom-validator',
+    title: FORM_BUILDER_CUSTOM_VALIDATOR_ARTICLE_SEO.title,
+    data: {
+      seo: FORM_BUILDER_CUSTOM_VALIDATOR_ARTICLE_SEO,
+    },
+    loadComponent: () =>
+      import('./blog/articles/form-builder-custom-validator/form-builder-custom-validator').then(
+        c => c.FormBuilderCustomValidatorArticle,
       ),
   },
   {

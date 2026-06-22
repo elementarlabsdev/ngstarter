@@ -23,7 +23,7 @@ import {
   provideNativeDateAdapter,
   StartDate
 } from '@ngstarter-ui/components/datepicker';
-import { FormField, Hint, IconButtonSuffix, Label } from '@ngstarter-ui/components/form-field';
+import { Error as FormFieldError, FormField, Hint, IconButtonSuffix, Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 import {
   Select,
@@ -52,8 +52,19 @@ import {
   UploadFileSelectedEvent,
   UploadTriggerDirective
 } from '@ngstarter-ui/components/upload';
-import { FORM_BUILDER_SELECT_DATA_SOURCES, FORM_BUILDER_UPLOAD_CALLBACK } from '../config';
-import { FormBuilderField, FormBuilderFieldDefinition, FormBuilderUploadCallback } from '../types';
+import {
+  FORM_BUILDER_SELECT_DATA_SOURCES,
+  FORM_BUILDER_UPLOAD_CALLBACK,
+  FORM_BUILDER_VALIDATORS,
+  mergeFormBuilderValidatorDefinitions
+} from '../config';
+import {
+  FormBuilderField,
+  FormBuilderFieldDefinition,
+  FormBuilderUploadCallback,
+  FormBuilderValidationRule,
+  FormBuilderValidatorDefinition
+} from '../types';
 
 @Component({
   selector: 'ngs-form-builder-field-host',
@@ -68,6 +79,7 @@ import { FormBuilderField, FormBuilderFieldDefinition, FormBuilderUploadCallback
     StartDate,
     EndDate,
     FormField,
+    FormFieldError,
     Hint,
     IconButtonSuffix,
     Label,
@@ -124,6 +136,7 @@ import { FormBuilderField, FormBuilderFieldDefinition, FormBuilderUploadCallback
 export class FormBuilderFieldHost {
   private readonly providedUploadCallback = inject(FORM_BUILDER_UPLOAD_CALLBACK, { optional: true });
   private readonly selectDataSources = inject(FORM_BUILDER_SELECT_DATA_SOURCES, { optional: true }) ?? [];
+  private readonly providedValidators = inject(FORM_BUILDER_VALIDATORS, { optional: true }) ?? [];
 
   readonly field = input.required<FormBuilderField>();
   readonly control = input.required<FormControl>();
@@ -134,6 +147,7 @@ export class FormBuilderFieldHost {
 
   protected readonly customLoaded = signal(false);
   protected readonly controlValue = signal<any>(null);
+  protected readonly controlStateVersion = signal(0);
   protected readonly textInputType = computed(() => {
     const type = this.field().type;
     return type === 'number' || type === 'email' ? type : 'text';
@@ -204,6 +218,45 @@ export class FormBuilderFieldHost {
   protected readonly selectSearchDebounce = computed(() => this.field().dataSourceOptions?.searchDebounce ?? 250);
   protected readonly selectMinSearchLength = computed(() => this.field().dataSourceOptions?.minSearchLength ?? 1);
   protected readonly selectLoadOnOpen = computed(() => this.field().dataSourceOptions?.loadOnOpen ?? true);
+  protected readonly isRequired = computed(() =>
+    this.field().required === true || this.field().validation?.some(rule => rule.type === 'required') === true
+  );
+  protected readonly validationDefinitions = computed(() => {
+    const excluded = new Set<string>(this.field().settings?.['excludedValidatorTypes'] ?? []);
+
+    return mergeFormBuilderValidatorDefinitions(this.providedValidators)
+      .filter(definition => !excluded.has(definition.type));
+  });
+  protected readonly validationErrorMessage = computed(() => {
+    this.controlValue();
+    this.controlStateVersion();
+
+    const control = this.control();
+
+    if (!control.invalid || !(control.touched || control.dirty)) {
+      return '';
+    }
+
+    const errors = control.errors;
+
+    if (!errors) {
+      return '';
+    }
+
+    for (const rule of this.fieldValidationRules()) {
+      const definition = this.validationDefinitions().find(item => item.type === rule.type);
+      const errorKey = definition?.errorKey ?? rule.type;
+
+      if (errors[errorKey]) {
+        return this.interpolateValidationMessage(
+          rule.message || definition?.defaultMessage || `${definition?.label ?? rule.type} is invalid.`,
+          rule
+        );
+      }
+    }
+
+    return '';
+  });
 
   private readonly anchor = viewChild.required('anchor', { read: ViewContainerRef });
 
@@ -214,9 +267,16 @@ export class FormBuilderFieldHost {
       this.controlValue.set(control.value);
       const subscription = control.valueChanges.subscribe(value => {
         this.controlValue.set(value);
+        this.controlStateVersion.update(version => version + 1);
+      });
+      const statusSubscription = control.statusChanges.subscribe(() => {
+        this.controlStateVersion.update(version => version + 1);
       });
 
-      onCleanup(() => subscription.unsubscribe());
+      onCleanup(() => {
+        subscription.unsubscribe();
+        statusSubscription.unsubscribe();
+      });
     });
 
     effect(async () => {
@@ -274,6 +334,74 @@ export class FormBuilderFieldHost {
     this.control().markAsDirty();
     this.control().markAsTouched();
     this.control().updateValueAndValidity();
+  }
+
+  protected hasValidationRule(type: string): boolean {
+    return this.validationRules().some(rule => rule.type === type);
+  }
+
+  protected validationRuleValue(type: string): any {
+    return this.validationRules().find(rule => rule.type === type)?.value ?? '';
+  }
+
+  protected validationRuleMessage(type: string): string {
+    const rule = this.validationRules().find(item => item.type === type);
+    const definition = this.validationDefinitions().find(item => item.type === type);
+
+    return rule?.message ?? this.defaultValidationRuleMessage(definition);
+  }
+
+  protected validatorRequiresValue(definition: FormBuilderValidatorDefinition): boolean {
+    return definition.requiresValue === true;
+  }
+
+  protected validationRuleInputType(definition: FormBuilderValidatorDefinition): string {
+    return definition.valueType === 'number' ? 'number' : 'text';
+  }
+
+  protected setValidationRuleEnabled(definition: FormBuilderValidatorDefinition, enabled: boolean): void {
+    const rules = this.validationRules();
+    const exists = rules.some(rule => rule.type === definition.type);
+
+    if (enabled && !exists) {
+      this.writeValidationRules([
+        ...rules,
+        {
+          type: definition.type,
+          value: definition.requiresValue ? definition.defaultValue ?? null : undefined,
+          message: this.defaultValidationRuleMessage(definition)
+        }
+      ]);
+      return;
+    }
+
+    if (!enabled && exists) {
+      this.writeValidationRules(rules.filter(rule => rule.type !== definition.type));
+    }
+  }
+
+  protected updateValidationRuleValue(definition: FormBuilderValidatorDefinition, event: Event): void {
+    const input = event.target;
+
+    if (!(input instanceof HTMLInputElement)) {
+      return;
+    }
+
+    const value = definition.valueType === 'number'
+      ? input.value === '' ? null : Number(input.value)
+      : input.value;
+
+    this.patchValidationRule(definition, { value });
+  }
+
+  protected updateValidationRuleMessage(definition: FormBuilderValidatorDefinition, event: Event): void {
+    const input = event.target;
+
+    if (!(input instanceof HTMLInputElement)) {
+      return;
+    }
+
+    this.patchValidationRule(definition, { message: input.value });
   }
 
   protected selectOptionContentInputs(
@@ -344,6 +472,81 @@ export class FormBuilderFieldHost {
     };
   }
 
+  private patchValidationRule(
+    definition: FormBuilderValidatorDefinition,
+    changes: Partial<FormBuilderValidationRule>
+  ): void {
+    const rules = this.validationRules();
+    const index = rules.findIndex(rule => rule.type === definition.type);
+    const current = index === -1
+      ? {
+          type: definition.type,
+          value: definition.requiresValue ? definition.defaultValue ?? null : undefined,
+          message: this.defaultValidationRuleMessage(definition)
+        }
+      : rules[index];
+    const nextRule = {
+      ...current,
+      ...changes
+    };
+    const nextRules = [...rules];
+
+    if (index === -1) {
+      nextRules.push(nextRule);
+    } else {
+      nextRules[index] = nextRule;
+    }
+
+    this.writeValidationRules(nextRules);
+  }
+
+  private validationRules(): FormBuilderValidationRule[] {
+    const value = this.control().value;
+
+    return Array.isArray(value)
+      ? value.filter(isValidationRule).map(rule => ({ ...rule }))
+      : [];
+  }
+
+  private writeValidationRules(rules: FormBuilderValidationRule[]): void {
+    this.control().setValue(rules);
+    this.control().markAsDirty();
+    this.control().markAsTouched();
+    this.control().updateValueAndValidity();
+  }
+
+  private fieldValidationRules(): FormBuilderValidationRule[] {
+    const field = this.field();
+    const rules = field.validation?.map(rule => ({ ...rule })) ?? [];
+
+    if (field.required && !rules.some(rule => rule.type === 'required')) {
+      return [
+        {
+          type: 'required',
+          message: this.defaultValidationRuleMessage(
+            this.validationDefinitions().find(definition => definition.type === 'required')
+          )
+        },
+        ...rules
+      ];
+    }
+
+    return rules;
+  }
+
+  private defaultValidationRuleMessage(definition: FormBuilderValidatorDefinition | undefined): string {
+    return this.interpolateValidationMessage(
+      definition?.defaultMessage || `${definition?.label ?? 'Value'} is invalid.`,
+      {
+        value: definition?.defaultValue
+      }
+    );
+  }
+
+  private interpolateValidationMessage(message: string, rule: Pick<FormBuilderValidationRule, 'value'>): string {
+    return message.split('{value}').join(rule.value === undefined || rule.value === null ? '' : String(rule.value));
+  }
+
   protected onDateRangeChanged(rangeInput: DateRangeInput<any>): void {
     queueMicrotask(() => {
       const range = rangeInput.value;
@@ -365,4 +568,8 @@ export class FormBuilderFieldHost {
 
     return String(value);
   }
+}
+
+function isValidationRule(value: unknown): value is FormBuilderValidationRule {
+  return typeof value === 'object' && value !== null && 'type' in value;
 }

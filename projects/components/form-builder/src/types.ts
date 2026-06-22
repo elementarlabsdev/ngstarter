@@ -35,6 +35,25 @@ export interface FormBuilderValidationRule {
   message?: string;
 }
 
+export type FormBuilderValidatorValueType = 'text' | 'number' | 'boolean' | 'pattern';
+
+export type FormBuilderValidatorFactory =
+  (rule: FormBuilderValidationRule, field: FormBuilderField) => ValidatorFn | ValidatorFn[] | null | undefined;
+
+export interface FormBuilderValidatorDefinition {
+  type: string;
+  label: string;
+  description?: string;
+  errorKey?: string;
+  valueType?: FormBuilderValidatorValueType;
+  valueLabel?: string;
+  valuePlaceholder?: string;
+  requiresValue?: boolean;
+  defaultValue?: any;
+  defaultMessage?: string;
+  validator: FormBuilderValidatorFactory;
+}
+
 export interface FormBuilderField {
   id: string;
   name: string;

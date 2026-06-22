@@ -13,6 +13,16 @@ import { Icon } from '@ngstarter-ui/components/icon';
 export class Blog {
   readonly articles = [
     {
+      title: 'How to add a custom validator to Form Builder',
+      description:
+        'Register a global Form Builder validator, configure it in the Validators tab, and show custom error messages below rendered fields.',
+      href: '/blog/form-builder-custom-validator',
+      date: 'June 22, 2026',
+      readTime: '8 min',
+      category: 'Form Builder',
+      icon: 'fluent:shield-checkmark-24-regular',
+    },
+    {
       title: 'Select data sources in NgStarter UI',
       description:
         'Load select options lazily, support remote search and paging, and register the same data source for Form Builder select fields.',

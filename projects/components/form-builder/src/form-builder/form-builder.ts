@@ -5,6 +5,7 @@ import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardAside, CardContent, CardHeader } from '@ngstarter-ui/components/card';
 import { ConfirmManager } from '@ngstarter-ui/components/confirm';
 import { Dialog, DialogActions, DialogClose, DialogContent, DialogTitle } from '@ngstarter-ui/components/dialog';
+import { EmptyState, EmptyStateContent, EmptyStateIcon, EmptyStateTitle } from '@ngstarter-ui/components/empty-state';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
 import { Panel, PanelAside, PanelContent, PanelHeader, PanelSidebar } from '@ngstarter-ui/components/panel';
@@ -12,6 +13,7 @@ import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import {Toolbar, ToolbarItem, ToolbarSpacer, ToolbarSubtitle, ToolbarTitle} from '@ngstarter-ui/components/toolbar';
 import { Tree, TreeDragPlaceholder, TreeNode, TreeNodeDef, TreeNodeDrop, TreeNodeDropPosition, TreeNodePadding } from '@ngstarter-ui/components/tree';
+import { Subscription } from 'rxjs';
 import {
   DEFAULT_FORM_BUILDER_ITEMS,
   FORM_BUILDER_FIELDS,
@@ -28,9 +30,11 @@ import {
   FormBuilderSchema,
   FormBuilderSection,
   FormBuilderSettingsDefinition,
-  FormBuilderUploadCallback
+  FormBuilderUploadCallback,
+  FormBuilderValidationRule
 } from '../types';
 import { FormBuilderFieldHost } from '../field-host/field-host';
+import { FormLogic } from '../form-logic/form-logic';
 import { FormRenderer } from '../form-renderer/form-renderer';
 import { FormBuilderSettingsHost } from '../settings-host/settings-host';
 
@@ -96,6 +100,14 @@ const ROOT_DROP_LIST_ID = 'ngs-form-builder-root-fields';
 const PALETTE_DRAG_TYPE = 'application/x-ngstarter-form-builder-field';
 const PALETTE_DRAG_ITEM = 'application/x-ngstarter-form-builder-item';
 const ACTUAL_FIELDS_TAB_INDEX = 1;
+const VALIDATION_SETTINGS_FIELD: FormBuilderField = {
+  id: 'field-validation-settings',
+  name: 'validation',
+  type: 'validation-rules',
+  label: 'Additional validators',
+  hint: 'Choose validators and configure their values.',
+  defaultValue: []
+};
 
 @Component({
   selector: 'ngs-form-builder',
@@ -112,6 +124,10 @@ const ACTUAL_FIELDS_TAB_INDEX = 1;
     DialogClose,
     DialogContent,
     DialogTitle,
+    EmptyState,
+    EmptyStateContent,
+    EmptyStateIcon,
+    EmptyStateTitle,
     Icon,
     Input,
     Panel,
@@ -132,6 +148,7 @@ const ACTUAL_FIELDS_TAB_INDEX = 1;
     TreeNodeDef,
     TreeNodePadding,
     FormBuilderFieldHost,
+    FormLogic,
     FormRenderer,
     FormBuilderSettingsHost,
     ToolbarSubtitle
@@ -151,6 +168,8 @@ export class FormBuilder implements OnDestroy {
   private readonly providedFields = inject(FORM_BUILDER_FIELDS, { optional: true }) ?? [];
   private readonly providedSettings = inject(FORM_BUILDER_SETTINGS, { optional: true }) ?? [];
   private readonly previewControls = new Map<string, FormControl>();
+  private readonly validatorsControls = new Map<string, FormControl>();
+  private readonly validatorsControlSubscriptions = new Map<string, Subscription>();
   private readonly fieldTreeNodeCache = new Map<string, FormBuilderFieldTreeNode>();
   private readonly canvasAnimationTimers = new WeakMap<HTMLElement, number>();
   private readonly actualFieldsTree = viewChild<Tree<FormBuilderFieldTreeNode>>('actualFieldsTree');
@@ -163,7 +182,7 @@ export class FormBuilder implements OnDestroy {
   readonly schema = model<FormBuilderSchema>(createDefaultFormBuilderSchema());
   readonly paletteTitle = input('Fields');
   readonly inspectorTitle = input('Field properties');
-  readonly canvasDropPlaceholderDelay = input(200, { transform: numberAttribute });
+  readonly canvasDropPlaceholderDelay = input(100, { transform: numberAttribute });
   readonly uploadCallback = input<FormBuilderUploadCallback | null | undefined>(undefined);
 
   readonly fieldSelected = output<FormBuilderFieldChange>();
@@ -205,6 +224,7 @@ export class FormBuilder implements OnDestroy {
     return definitions;
   }, []));
   protected readonly settingsDefinitions = computed<FormBuilderSettingsDefinition[]>(() => this.providedSettings);
+  protected readonly validationSettingsField = VALIDATION_SETTINGS_FIELD;
   protected readonly canvasItems = computed<FormBuilderCanvasItem[]>(() => this.resolveCanvasItems(this.schema()));
   protected readonly layoutDefinitions = computed<FormBuilderFieldDefinition[]>(() => {
     const query = this.search().trim().toLowerCase();
@@ -282,6 +302,8 @@ export class FormBuilder implements OnDestroy {
 
   ngOnDestroy(): void {
     this.clearPendingNativeDropTarget();
+    this.validatorsControlSubscriptions.forEach(subscription => subscription.unsubscribe());
+    this.validatorsControlSubscriptions.clear();
   }
 
   protected paletteDragStarted(event: DragEvent, definition: FormBuilderFieldDefinition): void {
@@ -697,6 +719,28 @@ export class FormBuilder implements OnDestroy {
     return control;
   }
 
+  protected validatorsControl(field: FormBuilderField): FormControl {
+    const value = validationRulesForField(field);
+    const existing = this.validatorsControls.get(field.id);
+
+    if (existing) {
+      if (!sameValidationRules(existing.value, value)) {
+        existing.setValue(value, { emitEvent: false });
+      }
+
+      return existing;
+    }
+
+    const control = new FormControl(value);
+    const subscription = control.valueChanges.subscribe(nextValue => {
+      this.updateFieldValidation(field.id, nextValue);
+    });
+
+    this.validatorsControls.set(field.id, control);
+    this.validatorsControlSubscriptions.set(field.id, subscription);
+    return control;
+  }
+
   protected patchSelectedField(changes: Partial<FormBuilderField>): void {
     const selectedId = this.selectedFieldId();
 
@@ -723,6 +767,27 @@ export class FormBuilder implements OnDestroy {
     location.siblings[location.index] = nextField;
     this.schema.set(schema);
     this.syncPreviewControl(nextField);
+  }
+
+  private updateFieldValidation(fieldId: string, value: unknown): void {
+    const schema = cloneSchema(this.schema());
+    const location = this.findFieldLocation(schema, fieldId);
+
+    if (!location) {
+      return;
+    }
+
+    const validation = Array.isArray(value)
+      ? value.filter(isValidationRule).map(rule => ({ ...rule }))
+      : [];
+    const nextField = {
+      ...location.field,
+      required: undefined,
+      validation: validation.length ? validation : undefined
+    };
+
+    location.siblings[location.index] = nextField;
+    this.schema.set(schema);
   }
 
   protected isContainerField(field: FormBuilderField): boolean {
@@ -1701,6 +1766,9 @@ export class FormBuilder implements OnDestroy {
 
   private deletePreviewControls(field: FormBuilderField): void {
     this.previewControls.delete(field.id);
+    this.validatorsControls.delete(field.id);
+    this.validatorsControlSubscriptions.get(field.id)?.unsubscribe();
+    this.validatorsControlSubscriptions.delete(field.id);
 
     for (const child of field.children ?? []) {
       this.deletePreviewControls(child);
@@ -1741,6 +1809,31 @@ function cloneField(field: FormBuilderField): FormBuilderField {
     settings: field.settings ? { ...field.settings } : undefined,
     children: field.children?.map(cloneField)
   };
+}
+
+function cloneValidationRules(rules: FormBuilderValidationRule[] | undefined): FormBuilderValidationRule[] {
+  return rules?.map(rule => ({ ...rule })) ?? [];
+}
+
+function validationRulesForField(field: FormBuilderField): FormBuilderValidationRule[] {
+  const rules = cloneValidationRules(field.validation);
+
+  if (field.required && !rules.some(rule => rule.type === 'required')) {
+    return [
+      { type: 'required' },
+      ...rules
+    ];
+  }
+
+  return rules;
+}
+
+function sameValidationRules(first: unknown, second: FormBuilderValidationRule[]): boolean {
+  return JSON.stringify(first ?? []) === JSON.stringify(second);
+}
+
+function isValidationRule(value: unknown): value is FormBuilderValidationRule {
+  return typeof value === 'object' && value !== null && 'type' in value;
 }
 
 function clampIndex(index: number, length: number): number {

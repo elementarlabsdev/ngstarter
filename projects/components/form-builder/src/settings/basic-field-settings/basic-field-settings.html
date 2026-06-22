@@ -50,12 +50,6 @@
 
   @if (hasBehaviorToggles()) {
     <ngs-slide-toggle-group class="mb-4">
-      <ngs-slide-toggle [ngModel]="field().required ?? false"
-                        [ngModelOptions]="{standalone: true}"
-                        (ngModelChange)="patch({ required: $event })">
-        Required field
-      </ngs-slide-toggle>
-
       <ngs-slide-toggle [ngModel]="field().readonly ?? false"
                         [ngModelOptions]="{standalone: true}"
                         (ngModelChange)="patch({ readonly: $event })">

@@ -94,11 +94,12 @@
     --ngs-tab-label-height: --spacing(10);
   }
 
+  .ngs-form-builder-inspector-tabs {
+    height: 100%;
+  }
+
   ngs-tree {
     --ngs-tree-node-gap: --spacing(1);
-    //--ngs-tree-node-drop-line-color: var(--ngs-color-primary);
-    //--ngs-tree-node-drop-target-outline: 0;
-    //--ngs-tree-node-drop-target-bg: var(--ngs-color-primary-container);
 
     ngs-tree-node {
       cursor: grab;

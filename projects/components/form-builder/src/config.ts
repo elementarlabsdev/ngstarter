@@ -1,5 +1,5 @@
 import { EnvironmentProviders, InjectionToken, Provider, makeEnvironmentProviders } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { ValidatorFn, Validators } from '@angular/forms';
 import {
   FormBuilderField,
   FormBuilderFieldDefinition,
@@ -8,7 +8,8 @@ import {
   FormBuilderSchema,
   FormBuilderSettingsDefinition,
   FormBuilderUploadCallback,
-  FormBuilderValidationRule
+  FormBuilderValidationRule,
+  FormBuilderValidatorDefinition
 } from './types';
 
 export const FORM_BUILDER_ITEMS =
@@ -26,6 +27,9 @@ export const FORM_BUILDER_UPLOAD_CALLBACK =
 export const FORM_BUILDER_SELECT_DATA_SOURCES =
   new InjectionToken<FormBuilderSelectDataSourceDefinition[]>('FORM_BUILDER_SELECT_DATA_SOURCES');
 
+export const FORM_BUILDER_VALIDATORS =
+  new InjectionToken<FormBuilderValidatorDefinition[]>('FORM_BUILDER_VALIDATORS');
+
 export function formBuilderField(definition: FormBuilderFieldDefinition): FormBuilderFieldDefinition {
   return definition;
 }
@@ -35,6 +39,10 @@ export function formBuilderItem(definition: FormBuilderItemDefinition): FormBuil
 }
 
 export function formBuilderSettings(definition: FormBuilderSettingsDefinition): FormBuilderSettingsDefinition {
+  return definition;
+}
+
+export function formBuilderValidator(definition: FormBuilderValidatorDefinition): FormBuilderValidatorDefinition {
   return definition;
 }
 
@@ -62,11 +70,24 @@ export function provideFormBuilderSelectDataSources(definitions: FormBuilderSele
   return definitions.map(definition => provideFormBuilderSelectDataSource(definition));
 }
 
+export function provideFormBuilderValidator(definition: FormBuilderValidatorDefinition): Provider {
+  return {
+    provide: FORM_BUILDER_VALIDATORS,
+    useValue: definition,
+    multi: true
+  };
+}
+
+export function provideFormBuilderValidators(definitions: FormBuilderValidatorDefinition[]): Provider[] {
+  return definitions.map(definition => provideFormBuilderValidator(definition));
+}
+
 export function provideFormBuilder(config: {
   items?: FormBuilderItemDefinition[];
   fields?: FormBuilderFieldDefinition[];
   settings?: FormBuilderSettingsDefinition[];
   selectDataSources?: FormBuilderSelectDataSourceDefinition[];
+  validators?: FormBuilderValidatorDefinition[];
   uploadCallback?: FormBuilderUploadCallback;
 } = {}): EnvironmentProviders {
   return makeEnvironmentProviders([
@@ -92,6 +113,11 @@ export function provideFormBuilder(config: {
     ...(config.selectDataSources ?? []).map(dataSource => ({
       provide: FORM_BUILDER_SELECT_DATA_SOURCES,
       useValue: dataSource,
+      multi: true
+    })),
+    ...(config.validators ?? []).map(validator => ({
+      provide: FORM_BUILDER_VALIDATORS,
+      useValue: validator,
       multi: true
     }))
   ]);
@@ -123,7 +149,6 @@ export const FORM_BUILDER_FIELD_BASE_SETTINGS_SCHEMA: FormBuilderSchema = {
         { id: 'field-name', name: 'name', type: 'text', label: 'Field ID' },
         { id: 'field-hint', name: 'hint', type: 'text', label: 'Hint' },
         { id: 'field-width', name: 'width', type: 'select', label: 'Width', defaultValue: 12, options: FIELD_WIDTH_OPTIONS },
-        { id: 'field-required', name: 'required', type: 'toggle', label: 'Required field', defaultValue: false },
         { id: 'field-readonly', name: 'readonly', type: 'toggle', label: 'Readonly', defaultValue: false },
         { id: 'field-disabled', name: 'disabled', type: 'toggle', label: 'Disabled', defaultValue: false }
       ]
@@ -142,7 +167,6 @@ export const FORM_BUILDER_INPUT_FIELD_BASE_SETTINGS_SCHEMA: FormBuilderSchema = 
         { id: 'input-field-placeholder', name: 'placeholder', type: 'text', label: 'Placeholder' },
         { id: 'input-field-hint', name: 'hint', type: 'text', label: 'Hint' },
         { id: 'input-field-width', name: 'width', type: 'select', label: 'Width', defaultValue: 12, options: FIELD_WIDTH_OPTIONS },
-        { id: 'input-field-required', name: 'required', type: 'toggle', label: 'Required field', defaultValue: false },
         { id: 'input-field-readonly', name: 'readonly', type: 'toggle', label: 'Readonly', defaultValue: false },
         { id: 'input-field-disabled', name: 'disabled', type: 'toggle', label: 'Disabled', defaultValue: false }
       ]
@@ -733,26 +757,155 @@ export const DEFAULT_FORM_BUILDER_ITEMS: FormBuilderItemDefinition[] = [
   ...DEFAULT_FORM_BUILDER_FIELDS
 ];
 
-export function validatorsFromRules(rules: FormBuilderValidationRule[] = [], field?: FormBuilderField) {
-  const validators = [];
+export const DEFAULT_FORM_BUILDER_VALIDATORS: FormBuilderValidatorDefinition[] = [
+  formBuilderValidator({
+    type: 'required',
+    label: 'Required',
+    description: 'Requires a non-empty value.',
+    defaultMessage: 'This field is required.',
+    validator: () => Validators.required
+  }),
+  formBuilderValidator({
+    type: 'requiredTrue',
+    label: 'Required true',
+    description: 'Requires the value to be true.',
+    errorKey: 'required',
+    defaultMessage: 'This field must be checked.',
+    validator: () => Validators.requiredTrue
+  }),
+  formBuilderValidator({
+    type: 'email',
+    label: 'Email',
+    description: 'Requires a valid email address.',
+    defaultMessage: 'Enter a valid email address.',
+    validator: () => Validators.email
+  }),
+  formBuilderValidator({
+    type: 'minLength',
+    label: 'Minimum length',
+    description: 'Requires at least the configured number of characters.',
+    errorKey: 'minlength',
+    valueType: 'number',
+    valueLabel: 'Characters',
+    valuePlaceholder: '3',
+    requiresValue: true,
+    defaultValue: 3,
+    defaultMessage: 'Enter at least {value} characters.',
+    validator: rule => Validators.minLength(Number(rule.value))
+  }),
+  formBuilderValidator({
+    type: 'maxLength',
+    label: 'Maximum length',
+    description: 'Requires no more than the configured number of characters.',
+    errorKey: 'maxlength',
+    valueType: 'number',
+    valueLabel: 'Characters',
+    valuePlaceholder: '120',
+    requiresValue: true,
+    defaultValue: 120,
+    defaultMessage: 'Enter no more than {value} characters.',
+    validator: rule => Validators.maxLength(Number(rule.value))
+  }),
+  formBuilderValidator({
+    type: 'min',
+    label: 'Minimum value',
+    description: 'Requires a numeric value greater than or equal to the configured value.',
+    valueType: 'number',
+    valueLabel: 'Value',
+    valuePlaceholder: '0',
+    requiresValue: true,
+    defaultValue: 0,
+    defaultMessage: 'Enter a value greater than or equal to {value}.',
+    validator: rule => Validators.min(Number(rule.value))
+  }),
+  formBuilderValidator({
+    type: 'max',
+    label: 'Maximum value',
+    description: 'Requires a numeric value less than or equal to the configured value.',
+    valueType: 'number',
+    valueLabel: 'Value',
+    valuePlaceholder: '100',
+    requiresValue: true,
+    defaultValue: 100,
+    defaultMessage: 'Enter a value less than or equal to {value}.',
+    validator: rule => Validators.max(Number(rule.value))
+  }),
+  formBuilderValidator({
+    type: 'pattern',
+    label: 'Pattern',
+    description: 'Requires the value to match the configured regular expression.',
+    valueType: 'pattern',
+    valueLabel: 'Regular expression',
+    valuePlaceholder: '^[a-z0-9_]+$',
+    requiresValue: true,
+    defaultValue: '',
+    defaultMessage: 'Enter a value that matches the required format.',
+    validator: rule => Validators.pattern(String(rule.value ?? ''))
+  })
+];
+
+export function mergeFormBuilderValidatorDefinitions(
+  definitions: FormBuilderValidatorDefinition[] = []
+): FormBuilderValidatorDefinition[] {
+  return [
+    ...DEFAULT_FORM_BUILDER_VALIDATORS,
+    ...definitions
+  ].reduce<FormBuilderValidatorDefinition[]>((merged, definition) => {
+    const index = merged.findIndex(item => item.type === definition.type);
+
+    if (index === -1) {
+      merged.push(definition);
+    } else {
+      merged[index] = {
+        ...merged[index],
+        ...definition
+      };
+    }
+
+    return merged;
+  }, []);
+}
+
+export function validatorsFromRules(
+  rules: FormBuilderValidationRule[] = [],
+  field?: FormBuilderField,
+  validatorDefinitions: FormBuilderValidatorDefinition[] = DEFAULT_FORM_BUILDER_VALIDATORS
+): ValidatorFn[] {
+  const validators: ValidatorFn[] = [];
+  const definitions = mergeFormBuilderValidatorDefinitions(validatorDefinitions);
 
   if (field?.required || rules.some(rule => rule.type === 'required')) {
     validators.push(Validators.required);
   }
 
   for (const rule of rules) {
-    if (rule.type === 'email') {
-      validators.push(Validators.email);
-    } else if (rule.type === 'minLength') {
-      validators.push(Validators.minLength(Number(rule.value)));
-    } else if (rule.type === 'maxLength') {
-      validators.push(Validators.maxLength(Number(rule.value)));
-    } else if (rule.type === 'min') {
-      validators.push(Validators.min(Number(rule.value)));
-    } else if (rule.type === 'max') {
-      validators.push(Validators.max(Number(rule.value)));
+    const definition = definitions.find(item => item.type === rule.type);
+
+    if (!definition || (definition.requiresValue && isEmptyValidatorValue(rule.value))) {
+      continue;
+    }
+
+    const validator = definition.validator(rule, field ?? createValidatorFieldFallback());
+
+    if (Array.isArray(validator)) {
+      validators.push(...validator);
+    } else if (validator) {
+      validators.push(validator);
     }
   }
 
   return validators;
+}
+
+function isEmptyValidatorValue(value: any): boolean {
+  return value === undefined || value === null || value === '';
+}
+
+function createValidatorFieldFallback(): FormBuilderField {
+  return {
+    id: '',
+    name: '',
+    type: '',
+    label: ''
+  };
 }

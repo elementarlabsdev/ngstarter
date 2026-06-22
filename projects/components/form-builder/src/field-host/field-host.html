@@ -13,6 +13,9 @@
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
         }
+        @if (validationErrorMessage(); as errorMessage) {
+          <ngs-error>{{ errorMessage }}</ngs-error>
+        }
       </ngs-form-field>
     }
 
@@ -72,6 +75,9 @@
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
         }
+        @if (validationErrorMessage(); as errorMessage) {
+          <ngs-error>{{ errorMessage }}</ngs-error>
+        }
       </ngs-form-field>
     }
 
@@ -88,6 +94,9 @@
         @if (field().hint) {
           <span class="ngs-form-builder-choice-hint">{{ field().hint }}</span>
         }
+        @if (validationErrorMessage(); as errorMessage) {
+          <span class="ngs-form-builder-field-error">{{ errorMessage }}</span>
+        }
       </div>
     }
 
@@ -103,6 +112,9 @@
         @if (field().hint) {
           <span class="ngs-form-builder-choice-hint">{{ field().hint }}</span>
         }
+        @if (validationErrorMessage(); as errorMessage) {
+          <span class="ngs-form-builder-field-error">{{ errorMessage }}</span>
+        }
       </div>
     }
 
@@ -113,6 +125,9 @@
         </ngs-checkbox>
         @if (field().hint) {
           <span>{{ field().hint }}</span>
+        }
+        @if (validationErrorMessage(); as errorMessage) {
+          <span class="ngs-form-builder-field-error">{{ errorMessage }}</span>
         }
       </div>
     }
@@ -125,6 +140,64 @@
         @if (field().hint) {
           <span>{{ field().hint }}</span>
         }
+        @if (validationErrorMessage(); as errorMessage) {
+          <span class="ngs-form-builder-field-error">{{ errorMessage }}</span>
+        }
+      </div>
+    }
+
+    @case ('validation-rules') {
+      <div class="ngs-form-builder-validation-rules">
+        <div>
+          <div class="ngs-form-builder-choice-label">{{ field().label }}</div>
+          @if (field().hint) {
+            <div class="ngs-form-builder-choice-hint">{{ field().hint }}</div>
+          }
+        </div>
+
+        <div class="ngs-form-builder-validation-rule-list mt-2">
+          @for (definition of validationDefinitions(); track definition.type) {
+            <div class="ngs-form-builder-validation-rule">
+              <ngs-checkbox
+                [checked]="hasValidationRule(definition.type)"
+                [disabled]="readonly() || !!field().readonly || !!field().disabled"
+                (change)="setValidationRuleEnabled(definition, $event.checked)">
+                {{ definition.label }}
+              </ngs-checkbox>
+
+              @if (definition.description) {
+                <span class="ngs-form-builder-validation-rule-description">{{ definition.description }}</span>
+              }
+
+              @if (hasValidationRule(definition.type)) {
+                <div class="ngs-form-builder-validation-rule-settings">
+                  @if (validatorRequiresValue(definition)) {
+                    <ngs-form-field>
+                      <ngs-label>{{ definition.valueLabel || 'Value' }}</ngs-label>
+                      <input ngsInput
+                             [type]="validationRuleInputType(definition)"
+                             [value]="validationRuleValue(definition.type)"
+                             [placeholder]="definition.valuePlaceholder || ''"
+                             [readonly]="readonly() || !!field().readonly"
+                             [disabled]="!!field().disabled"
+                             (input)="updateValidationRuleValue(definition, $event)">
+                    </ngs-form-field>
+                  }
+
+                  <ngs-form-field>
+                    <ngs-label>Error message</ngs-label>
+                    <input ngsInput
+                           type="text"
+                           [value]="validationRuleMessage(definition.type)"
+                           [readonly]="readonly() || !!field().readonly"
+                           [disabled]="!!field().disabled"
+                           (input)="updateValidationRuleMessage(definition, $event)">
+                  </ngs-form-field>
+                </div>
+              }
+            </div>
+          }
+        </div>
       </div>
     }
 
@@ -141,6 +214,9 @@
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
         }
+        @if (validationErrorMessage(); as errorMessage) {
+          <ngs-error>{{ errorMessage }}</ngs-error>
+        }
       </ngs-form-field>
     }
 
@@ -156,6 +232,9 @@
         <ngs-timepicker #timePicker/>
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+        @if (validationErrorMessage(); as errorMessage) {
+          <ngs-error>{{ errorMessage }}</ngs-error>
         }
       </ngs-form-field>
     }
@@ -182,6 +261,9 @@
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
         }
+        @if (validationErrorMessage(); as errorMessage) {
+          <ngs-error>{{ errorMessage }}</ngs-error>
+        }
       </ngs-form-field>
     }
 
@@ -207,6 +289,9 @@
         @if (field().hint) {
           <span class="ngs-form-builder-choice-hint">{{ field().hint }}</span>
         }
+        @if (validationErrorMessage(); as errorMessage) {
+          <span class="ngs-form-builder-field-error">{{ errorMessage }}</span>
+        }
       </div>
     }
 
@@ -226,9 +311,12 @@
         <ngs-label>{{ field().label }}</ngs-label>
         <ngs-timezone-select [formControl]="control()"
                              [placeholder]="field().placeholder || ''"
-                             [required]="field().required ?? false"/>
+                             [required]="isRequired()"/>
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+        @if (validationErrorMessage(); as errorMessage) {
+          <ngs-error>{{ errorMessage }}</ngs-error>
         }
       </ngs-form-field>
     }
@@ -245,6 +333,9 @@
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
         }
+        @if (validationErrorMessage(); as errorMessage) {
+          <ngs-error>{{ errorMessage }}</ngs-error>
+        }
       </ngs-form-field>
     }
 
@@ -253,9 +344,12 @@
         <ngs-label>{{ field().label }}</ngs-label>
         <ngs-currency-select [formControl]="control()"
                              [placeholder]="field().placeholder || ''"
-                             [required]="field().required ?? false"/>
+                             [required]="isRequired()"/>
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+        @if (validationErrorMessage(); as errorMessage) {
+          <ngs-error>{{ errorMessage }}</ngs-error>
         }
       </ngs-form-field>
     }
@@ -266,9 +360,12 @@
         <ngs-country-select [formControl]="control()"
                             [placeholder]="field().placeholder || ''"
                             [clearable]="field().clearable ?? false"
-                            [required]="field().required ?? false"/>
+                            [required]="isRequired()"/>
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+        @if (validationErrorMessage(); as errorMessage) {
+          <ngs-error>{{ errorMessage }}</ngs-error>
         }
       </ngs-form-field>
     }
@@ -283,6 +380,9 @@
                [readonly]="readonly() || field().readonly">
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+        @if (validationErrorMessage(); as errorMessage) {
+          <ngs-error>{{ errorMessage }}</ngs-error>
         }
       </ngs-form-field>
     }

@@ -429,7 +429,7 @@ Typography:
   example topics: Basic empty state, Empty state with image, Empty state with icon, Empty state with custom icon, Empty state with actions
   selectors: `[ngs-empty-state-title]`, `ngs-empty-state`, `ngs-empty-state-actions`, `ngs-empty-state-content`, `ngs-empty-state-icon`, `ngs-empty-state-image`, `ngs-empty-state-title`
   exports: `EmptyState`, `EmptyStateActions`, `EmptyStateContent`, `EmptyStateIcon`, `EmptyStateImage`, `EmptyStateTitle`
-  tokens: `--ngs-color-neutral-500`, `--ngs-color-neutral-600`, `--ngs-color-surface-container`, `--ngs-empty-state-padding`, `--ngs-font-size-sm`, `--ngs-icon-size`
+  tokens: `--ngs-color-neutral-500`, `--ngs-color-neutral-600`, `--ngs-color-surface-container`, `--ngs-empty-state-padding`, `--ngs-empty-state-title-font-size`, `--ngs-empty-state-title-font-weight`, `--ngs-font-size-sm`, `--ngs-icon-size`
 - events: `@ngstarter-ui/components/events` docs: /components/events
   purpose: The NgStarter Angular Events components let you build grouped schedule lists with day markers, event cards, inline statuses, time ranges, status tones, and attendee actions.
   use when: Choose Events when the workflow matches examples such as Basic Events, Weekly Grouping, Weekly events, Empty events.
@@ -478,7 +478,7 @@ Typography:
   use when: Choose Form Builder when the workflow matches examples such as Basic form builder, Custom field registration, Form builder renderer.
   example topics: Basic form builder, Custom field registration, Form builder renderer
   selectors: `ngs-basic-form-builder-field-settings`, `ngs-basic-form-builder-layout-settings`, `ngs-basic-form-builder-section-settings`, `ngs-form-builder`, `ngs-form-builder-field-host`, `ngs-form-builder-settings-host`, `ngs-form-logic`, `ngs-form-renderer`
-  exports: `BasicFormBuilderFieldSettings`, `BasicFormBuilderLayoutSettings`, `BasicFormBuilderSectionSettings`, `createDefaultFormBuilderSchema`, `DEFAULT_FORM_BUILDER_FIELDS`, `DEFAULT_FORM_BUILDER_ITEMS`, `FORM_BUILDER_FIELD_BASE_SETTINGS_SCHEMA`, `FORM_BUILDER_FIELDS`, `FORM_BUILDER_INPUT_FIELD_BASE_SETTINGS_SCHEMA`, `FORM_BUILDER_ITEMS`, `FORM_BUILDER_LAYOUT_BASE_SETTINGS_SCHEMA`, `FORM_BUILDER_LAYOUT_CONTAINER_BASE_SETTINGS_SCHEMA`
+  exports: `BasicFormBuilderFieldSettings`, `BasicFormBuilderLayoutSettings`, `BasicFormBuilderSectionSettings`, `createDefaultFormBuilderSchema`, `DEFAULT_FORM_BUILDER_FIELDS`, `DEFAULT_FORM_BUILDER_ITEMS`, `DEFAULT_FORM_BUILDER_VALIDATORS`, `FORM_BUILDER_FIELD_BASE_SETTINGS_SCHEMA`, `FORM_BUILDER_FIELDS`, `FORM_BUILDER_INPUT_FIELD_BASE_SETTINGS_SCHEMA`, `FORM_BUILDER_ITEMS`, `FORM_BUILDER_LAYOUT_BASE_SETTINGS_SCHEMA`
   inputs: `canvasDropPlaceholderDelay`, `control`, `definitions`, `description`, `editableCanvas`, `field`, `inspectorTitle`, `paletteTitle`, `readonly`, `schema`, `section`, `settingsDefinitions`, `showSubmit`, `submitLabel`, `title`, `uploadCallback`
   outputs: `fieldAdded`, `fieldRemoved`, `fieldSelected`, `formReady`
   tokens: `--ngs-card-padding`, `--ngs-color-border`, `--ngs-color-danger`, `--ngs-color-on-primary-container`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-outline-variant`, `--ngs-color-primary`, `--ngs-color-primary-container`, `--ngs-color-surface`, `--ngs-color-surface-container-lowest`, `--ngs-field-radius`, `--ngs-font-size-base`, `--ngs-font-size-lg`, `--ngs-font-size-sm`, `--ngs-font-size-xs`

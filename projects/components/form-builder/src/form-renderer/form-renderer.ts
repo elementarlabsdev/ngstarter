@@ -11,7 +11,14 @@ import {
 } from '@angular/core';
 import { AbstractControl, FormArray, ReactiveFormsModule, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
-import { DEFAULT_FORM_BUILDER_ITEMS, FORM_BUILDER_FIELDS, FORM_BUILDER_ITEMS, validatorsFromRules } from '../config';
+import {
+  DEFAULT_FORM_BUILDER_ITEMS,
+  FORM_BUILDER_FIELDS,
+  FORM_BUILDER_ITEMS,
+  FORM_BUILDER_VALIDATORS,
+  mergeFormBuilderValidatorDefinitions,
+  validatorsFromRules
+} from '../config';
 import { FormBuilderField, FormBuilderFieldDefinition, FormBuilderItemDefinition, FormBuilderLayoutItem, FormBuilderSchema, FormBuilderSection, FormBuilderUploadCallback } from '../types';
 import { FormBuilderFieldHost } from '../field-host/field-host';
 
@@ -39,6 +46,7 @@ interface FormRendererCanvasItem extends FormBuilderLayoutItem {
 export class FormRenderer {
   private readonly providedItems = inject(FORM_BUILDER_ITEMS, { optional: true }) ?? [];
   private readonly providedFields = inject(FORM_BUILDER_FIELDS, { optional: true }) ?? [];
+  private readonly providedValidators = inject(FORM_BUILDER_VALIDATORS, { optional: true }) ?? [];
   private readonly orphanControls = new Map<string, FormControl>();
 
   readonly schema = input.required<FormBuilderSchema>();
@@ -75,6 +83,9 @@ export class FormRenderer {
   }, []));
   protected readonly visibleCanvasItems = computed<FormRendererCanvasItem[]>(() =>
     this.resolveCanvasItems(this.schema()).filter(item => !!item.field || !!item.section?.fields.length)
+  );
+  protected readonly validatorDefinitions = computed(() =>
+    mergeFormBuilderValidatorDefinitions(this.providedValidators)
   );
   protected readonly formGroup = computed(() => this.createFormGroup());
 
@@ -224,7 +235,7 @@ export class FormRenderer {
         continue;
       }
 
-      const validators = definition?.validators?.(field) ?? validatorsFromRules(field.validation, field);
+      const validators = this.resolveValidators(field, definition);
       const control = new FormControl(
         {
           value: value[field.name] ?? this.fieldInitialValue(field),
@@ -260,7 +271,7 @@ export class FormRenderer {
         continue;
       }
 
-      const validators = definition?.validators?.(child) ?? validatorsFromRules(child.validation, child);
+      const validators = this.resolveValidators(child, definition);
       controls[child.name] = new FormControl(
         {
           value: rowValue[child.name] ?? this.fieldInitialValue(child),
@@ -271,6 +282,16 @@ export class FormRenderer {
     }
 
     return new FormGroup(controls);
+  }
+
+  private resolveValidators(
+    field: FormBuilderField,
+    definition: FormBuilderFieldDefinition | undefined
+  ) {
+    return [
+      ...(definition?.validators?.(field) ?? []),
+      ...validatorsFromRules(field.validation, field, this.validatorDefinitions())
+    ];
   }
 
   private fieldInitialValue(field: FormBuilderField): any {

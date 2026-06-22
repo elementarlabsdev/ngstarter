@@ -210,71 +210,85 @@
       </ngs-tab>
       <ngs-tab label="Layers" class="relative">
         <ngs-scrollbar-area>
-          <div class="px-4 py-4">
-            <ngs-tree
-              #actualFieldsTree="ngsTree"
-              [dataSource]="fieldTree()"
-              [childrenAccessor]="fieldTreeChildrenAccessor"
-              [trackBy]="trackFieldTreeNode"
-              [draggablePredicate]="fieldTreeDraggablePredicate"
-              [dropPredicate]="fieldTreeDropPredicate"
-              [nodePaddingIndent]="80"
-              [reorderOnDrop]="false"
-              (nodeDrop)="fieldTreeNodeDropped($event)"
-              draggable>
-              <ng-template ngsTreeDragPlaceholder let-source="source">
-                <div class="ngs-form-builder-tree-drag-placeholder">
-                  <ngs-icon [name]="fieldTreePlaceholderIcon(source)"/>
-                  <span>{{ source.label }}</span>
-                </div>
-              </ng-template>
+          @if (fieldTree().length) {
+            <div class="px-4 py-4">
+              <ngs-tree
+                #actualFieldsTree="ngsTree"
+                [dataSource]="fieldTree()"
+                [childrenAccessor]="fieldTreeChildrenAccessor"
+                [trackBy]="trackFieldTreeNode"
+                [draggablePredicate]="fieldTreeDraggablePredicate"
+                [dropPredicate]="fieldTreeDropPredicate"
+                [nodePaddingIndent]="80"
+                [reorderOnDrop]="false"
+                (nodeDrop)="fieldTreeNodeDropped($event)"
+                draggable>
+                <ng-template ngsTreeDragPlaceholder let-source="source">
+                  <div class="ngs-form-builder-tree-drag-placeholder">
+                    <ngs-icon [name]="fieldTreePlaceholderIcon(source)"/>
+                    <span>{{ source.label }}</span>
+                  </div>
+                </ng-template>
 
-              <ngs-tree-node *ngsTreeNodeDef="let node; when: hasFieldTreeChildren"
-                             ngsTreeNodePadding
-                             [value]="node.id"
-                             [cdkTreeNodeTypeaheadLabel]="node.label">
-                <button
-                  ngsIconButton
-                  class="ngs-form-builder-tree-toggle"
-                  [attr.aria-label]="'Toggle ' + node.label"
-                  (click)="toggleFieldTreeNode(actualFieldsTree, node, $event)">
-                  <ngs-icon [name]="isFieldTreeNodeExpanded(actualFieldsTree, node) ? 'fluent:chevron-down-24-regular' : 'fluent:chevron-right-24-regular'" class="size-4"/>
-                </button>
-                <button
-                  ngsButton="text"
-                  type="button"
-                  class="ngs-form-builder-tree-item"
-                  [class.is-selected]="selectedFieldId() === node.id"
-                  [attr.data-form-builder-tree-node-id]="node.id"
-                  (click)="selectFieldTreeNode(node)">
-                    <ngs-icon [name]="node.icon"/>
-                    <span>{{ node.label }}</span>
-  <!--                  @if (node.name) {-->
-  <!--                    <small>{{ node.name }}</small>-->
-  <!--                  }-->
-                </button>
-              </ngs-tree-node>
+                <ngs-tree-node *ngsTreeNodeDef="let node; when: hasFieldTreeChildren"
+                               ngsTreeNodePadding
+                               [value]="node.id"
+                               [cdkTreeNodeTypeaheadLabel]="node.label">
+                  <button
+                    ngsIconButton
+                    class="ngs-form-builder-tree-toggle"
+                    [attr.aria-label]="'Toggle ' + node.label"
+                    (click)="toggleFieldTreeNode(actualFieldsTree, node, $event)">
+                    <ngs-icon [name]="isFieldTreeNodeExpanded(actualFieldsTree, node) ? 'fluent:chevron-down-24-regular' : 'fluent:chevron-right-24-regular'" class="size-4"/>
+                  </button>
+                  <button
+                    ngsButton="text"
+                    type="button"
+                    class="ngs-form-builder-tree-item"
+                    [class.is-selected]="selectedFieldId() === node.id"
+                    [attr.data-form-builder-tree-node-id]="node.id"
+                    (click)="selectFieldTreeNode(node)">
+                      <ngs-icon [name]="node.icon"/>
+                      <span>{{ node.label }}</span>
+    <!--                  @if (node.name) {-->
+    <!--                    <small>{{ node.name }}</small>-->
+    <!--                  }-->
+                  </button>
+                </ngs-tree-node>
 
-              <ngs-tree-node *ngsTreeNodeDef="let node" ngsTreeNodePadding [value]="node.id">
-                <button
-                  ngsButton="text"
-                  type="button"
-                  class="ngs-form-builder-tree-item"
-                  [class.is-selected]="selectedFieldId() === node.id"
-                  [attr.data-form-builder-tree-node-id]="node.id"
-                  (click)="selectFieldTreeNode(node)">
-                    <ngs-icon [name]="node.icon"/>
-                    {{ node.label }}
-<!--                  <span class="inline-flex flex-col">-->
-<!--                    -->
-<!--                    @if (node.name) {-->
-<!--                      <small>{{ node.name }}</small>-->
-<!--                    }-->
-<!--                  </span>-->
-                </button>
-              </ngs-tree-node>
-            </ngs-tree>
-          </div>
+                <ngs-tree-node *ngsTreeNodeDef="let node" ngsTreeNodePadding [value]="node.id">
+                  <button
+                    ngsButton="text"
+                    type="button"
+                    class="ngs-form-builder-tree-item"
+                    [class.is-selected]="selectedFieldId() === node.id"
+                    [attr.data-form-builder-tree-node-id]="node.id"
+                    (click)="selectFieldTreeNode(node)">
+                      <ngs-icon [name]="node.icon"/>
+                      {{ node.label }}
+  <!--                  <span class="inline-flex flex-col">-->
+  <!--                    -->
+  <!--                    @if (node.name) {-->
+  <!--                      <small>{{ node.name }}</small>-->
+  <!--                    }-->
+  <!--                  </span>-->
+                  </button>
+                </ngs-tree-node>
+              </ngs-tree>
+            </div>
+          } @else {
+            <ngs-empty-state>
+              <ngs-empty-state-icon>
+                <ngs-icon name="fluent:layer-24-regular"/>
+              </ngs-empty-state-icon>
+              <ngs-empty-state-title>
+                No fields yet
+              </ngs-empty-state-title>
+              <ngs-empty-state-content>
+                Add fields to the canvas to see them in layers.
+              </ngs-empty-state-content>
+            </ngs-empty-state>
+          }
         </ngs-scrollbar-area>
       </ngs-tab>
     </ngs-tab-group>
@@ -449,31 +463,65 @@
 
     <ngs-panel-content>
       @if (selectedField() || selectedSection()) {
-        <ngs-scrollbar-area [absolute]="true">
-          <div class="flex flex-col gap-4 p-5">
-            <ngs-form-builder-settings-host
-              [field]="selectedField()"
-              [section]="selectedSection()"
-              [schema]="schema()"
-              [definitions]="definitions()"
-              [settingsDefinitions]="settingsDefinitions()"
-              [update]="updateSelectedField"
-              [updateSection]="updateSelectedSection"/>
+        <ngs-tab-group animationDuration="0ms" class="ngs-form-builder-inspector-tabs">
+          <ngs-tab label="Settings">
+            <ngs-scrollbar-area [absolute]="true">
+              <div class="flex flex-col gap-4 p-5">
+                <ngs-form-builder-settings-host
+                  [field]="selectedField()"
+                  [section]="selectedSection()"
+                  [schema]="schema()"
+                  [definitions]="definitions()"
+                  [settingsDefinitions]="settingsDefinitions()"
+                  [update]="updateSelectedField"
+                  [updateSection]="updateSelectedSection"/>
 
-            @if (selectedField(); as field) {
-              <div class="mt-3">
-                <button ngsButton="text" type="button" class="ngs-form-builder-delete-button" (click)="confirmRemoveField(field)">
-                  <ngs-icon name="fluent:delete-24-regular"/>
-                  Delete field
-                </button>
+                @if (selectedField(); as field) {
+                  <div class="mt-3">
+                    <button ngsButton="text" type="button" class="ngs-form-builder-delete-button" (click)="confirmRemoveField(field)">
+                      <ngs-icon name="fluent:delete-24-regular"/>
+                      Delete field
+                    </button>
+                  </div>
+                }
               </div>
-            }
-          </div>
-        </ngs-scrollbar-area>
+            </ngs-scrollbar-area>
+          </ngs-tab>
+
+          @if (selectedField(); as field) {
+            <ngs-tab label="Validators">
+              <ngs-scrollbar-area [absolute]="true">
+                <div class="flex flex-col gap-4 p-5">
+                  <ngs-form-builder-field-host
+                    [field]="validationSettingsField"
+                    [control]="validatorsControl(field)"
+                    [definitions]="definitions()"/>
+                </div>
+              </ngs-scrollbar-area>
+            </ngs-tab>
+          }
+
+          <ngs-tab label="Logic">
+            <ngs-scrollbar-area [absolute]="true">
+              <ngs-form-logic
+                [schema]="schema()"
+                title="Logic"
+                description="Field visibility and calculations will be configured here."/>
+            </ngs-scrollbar-area>
+          </ngs-tab>
+        </ngs-tab-group>
       } @else {
-        <div class="ngs-form-builder-empty-inspector">
-          Select a field on the canvas or in the fields tree to edit its settings.
-        </div>
+        <ngs-empty-state>
+          <ngs-empty-state-icon>
+            <ngs-icon name="fluent:cursor-click-24-regular"/>
+          </ngs-empty-state-icon>
+          <ngs-empty-state-title>
+            No field selected
+          </ngs-empty-state-title>
+          <ngs-empty-state-content>
+            Select a field on the canvas or in the fields tree to edit its settings.
+          </ngs-empty-state-content>
+        </ngs-empty-state>
       }
     </ngs-panel-content>
   </ngs-panel-aside>
