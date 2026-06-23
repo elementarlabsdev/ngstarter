@@ -1,15 +1,22 @@
 import { NgTemplateOutlet } from '@angular/common';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, TemplateRef, computed, inject, input, model, numberAttribute, output, signal, viewChild } from '@angular/core';
 import { FormsModule, FormControl } from '@angular/forms';
+import { Autocomplete, AutocompleteSelectedEvent, AutocompleteTrigger, Option } from '@ngstarter-ui/components/autocomplete';
 import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardAside, CardContent, CardHeader } from '@ngstarter-ui/components/card';
+import { ChipGrid, ChipInput, ChipInputEvent, ChipRemove, ChipRow } from '@ngstarter-ui/components/chips';
 import { ConfirmManager } from '@ngstarter-ui/components/confirm';
 import { Dialog, DialogActions, DialogClose, DialogContent, DialogTitle } from '@ngstarter-ui/components/dialog';
-import { EmptyState, EmptyStateContent, EmptyStateIcon, EmptyStateTitle } from '@ngstarter-ui/components/empty-state';
+import { EmptyState, EmptyStateActions, EmptyStateContent, EmptyStateIcon, EmptyStateTitle } from '@ngstarter-ui/components/empty-state';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
+import { List, ListItem } from '@ngstarter-ui/components/list';
 import { Panel, PanelAside, PanelContent, PanelHeader, PanelSidebar } from '@ngstarter-ui/components/panel';
+import { RadioCard, RadioCardContent, RadioCardGroup, RadioCardTitle } from '@ngstarter-ui/components/radio-card';
 import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
+import { Step, Stepper } from '@ngstarter-ui/components/stepper';
 import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import {Toolbar, ToolbarItem, ToolbarSpacer, ToolbarSubtitle, ToolbarTitle} from '@ngstarter-ui/components/toolbar';
 import { Tree, TreeDragPlaceholder, TreeNode, TreeNodeDef, TreeNodeDrop, TreeNodeDropPosition, TreeNodePadding } from '@ngstarter-ui/components/tree';
@@ -18,7 +25,9 @@ import {
   DEFAULT_FORM_BUILDER_ITEMS,
   FORM_BUILDER_FIELDS,
   FORM_BUILDER_ITEMS,
-  FORM_BUILDER_SETTINGS
+  FORM_BUILDER_SETTINGS,
+  FORM_BUILDER_VALIDATORS,
+  mergeFormBuilderValidatorDefinitions
 } from '../config';
 import {
   FormBuilderField,
@@ -31,7 +40,8 @@ import {
   FormBuilderSection,
   FormBuilderSettingsDefinition,
   FormBuilderUploadCallback,
-  FormBuilderValidationRule
+  FormBuilderValidationRule,
+  FormBuilderValidatorDefinition
 } from '../types';
 import { FormBuilderFieldHost } from '../field-host/field-host';
 import { FormLogic } from '../form-logic/form-logic';
@@ -108,6 +118,157 @@ const VALIDATION_SETTINGS_FIELD: FormBuilderField = {
   hint: 'Choose validators and configure their values.',
   defaultValue: []
 };
+const MIME_TYPE_OPTIONS = [
+  'application/atom+xml',
+  'application/epub+zip',
+  'application/gzip',
+  'application/java-archive',
+  'application/javascript',
+  'application/json',
+  'application/ld+json',
+  'application/msword',
+  'application/octet-stream',
+  'application/ogg',
+  'application/pdf',
+  'application/pkcs10',
+  'application/pkcs7-mime',
+  'application/pkcs7-signature',
+  'application/postscript',
+  'application/rtf',
+  'application/wasm',
+  'application/xhtml+xml',
+  'application/xml',
+  'application/zip',
+  'application/zstd',
+  'application/vnd.amazon.ebook',
+  'application/vnd.android.package-archive',
+  'application/vnd.apple.installer+xml',
+  'application/vnd.apple.keynote',
+  'application/vnd.apple.numbers',
+  'application/vnd.apple.pages',
+  'application/vnd.google-earth.kml+xml',
+  'application/vnd.google-earth.kmz',
+  'application/vnd.mozilla.xul+xml',
+  'application/vnd.ms-excel',
+  'application/vnd.ms-excel.addin.macroenabled.12',
+  'application/vnd.ms-excel.sheet.binary.macroenabled.12',
+  'application/vnd.ms-excel.sheet.macroenabled.12',
+  'application/vnd.ms-excel.template.macroenabled.12',
+  'application/vnd.ms-fontobject',
+  'application/vnd.ms-powerpoint',
+  'application/vnd.ms-powerpoint.addin.macroenabled.12',
+  'application/vnd.ms-powerpoint.presentation.macroenabled.12',
+  'application/vnd.ms-powerpoint.slideshow.macroenabled.12',
+  'application/vnd.ms-powerpoint.template.macroenabled.12',
+  'application/vnd.ms-word.document.macroenabled.12',
+  'application/vnd.ms-word.template.macroenabled.12',
+  'application/vnd.oasis.opendocument.chart',
+  'application/vnd.oasis.opendocument.database',
+  'application/vnd.oasis.opendocument.formula',
+  'application/vnd.oasis.opendocument.graphics',
+  'application/vnd.oasis.opendocument.image',
+  'application/vnd.oasis.opendocument.presentation',
+  'application/vnd.oasis.opendocument.spreadsheet',
+  'application/vnd.oasis.opendocument.text',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'application/vnd.openxmlformats-officedocument.presentationml.slide',
+  'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+  'application/vnd.openxmlformats-officedocument.presentationml.template',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+  'application/vnd.rar',
+  'application/vnd.visio',
+  'application/x-7z-compressed',
+  'application/x-abiword',
+  'application/x-apple-diskimage',
+  'application/x-bzip',
+  'application/x-bzip2',
+  'application/x-cdf',
+  'application/x-csh',
+  'application/x-httpd-php',
+  'application/x-iso9660-image',
+  'application/x-latex',
+  'application/x-msdownload',
+  'application/x-rar-compressed',
+  'application/x-sh',
+  'application/x-shockwave-flash',
+  'application/x-tar',
+  'application/x-tex',
+  'application/x-texinfo',
+  'application/x-www-form-urlencoded',
+  'application/x-x509-ca-cert',
+  'application/x-xpinstall',
+  'audio/aac',
+  'audio/flac',
+  'audio/midi',
+  'audio/mp4',
+  'audio/mpeg',
+  'audio/ogg',
+  'audio/opus',
+  'audio/wav',
+  'audio/webm',
+  'audio/x-aiff',
+  'audio/x-midi',
+  'audio/x-ms-wma',
+  'font/collection',
+  'font/otf',
+  'font/sfnt',
+  'font/ttf',
+  'font/woff',
+  'font/woff2',
+  'image/avif',
+  'image/bmp',
+  'image/gif',
+  'image/heic',
+  'image/heif',
+  'image/ico',
+  'image/jpeg',
+  'image/png',
+  'image/svg+xml',
+  'image/tiff',
+  'image/vnd.adobe.photoshop',
+  'image/vnd.microsoft.icon',
+  'image/webp',
+  'image/x-icon',
+  'message/rfc822',
+  'model/gltf+json',
+  'model/gltf-binary',
+  'model/iges',
+  'model/mesh',
+  'model/mtl',
+  'model/obj',
+  'model/stl',
+  'model/vrml',
+  'multipart/form-data',
+  'text/calendar',
+  'text/css',
+  'text/csv',
+  'text/html',
+  'text/javascript',
+  'text/markdown',
+  'text/plain',
+  'text/richtext',
+  'text/rtf',
+  'text/tab-separated-values',
+  'text/vcard',
+  'text/xml',
+  'text/yaml',
+  'video/3gpp',
+  'video/3gpp2',
+  'video/mp2t',
+  'video/mp4',
+  'video/mpeg',
+  'video/ogg',
+  'video/quicktime',
+  'video/webm',
+  'video/x-flv',
+  'video/x-m4v',
+  'video/x-matroska',
+  'video/x-ms-wmv',
+  'video/x-msvideo'
+];
 
 @Component({
   selector: 'ngs-form-builder',
@@ -115,27 +276,45 @@ const VALIDATION_SETTINGS_FIELD: FormBuilderField = {
   imports: [
     NgTemplateOutlet,
     FormsModule,
+    Autocomplete,
+    AutocompleteTrigger,
     Button,
     Card,
     CardAside,
     CardContent,
     CardHeader,
+    ChipGrid,
+    ChipInput,
+    ChipRemove,
+    ChipRow,
     DialogActions,
     DialogClose,
     DialogContent,
     DialogTitle,
     EmptyState,
+    EmptyStateActions,
     EmptyStateContent,
     EmptyStateIcon,
     EmptyStateTitle,
+    FormField,
     Icon,
     Input,
+    Label,
+    List,
+    ListItem,
+    Option,
     Panel,
     PanelAside,
     PanelContent,
     PanelHeader,
     PanelSidebar,
+    RadioCard,
+    RadioCardContent,
+    RadioCardGroup,
+    RadioCardTitle,
     ScrollbarArea,
+    Step,
+    Stepper,
     Tab,
     TabGroup,
     Toolbar,
@@ -167,6 +346,7 @@ export class FormBuilder implements OnDestroy {
   private readonly providedItems = inject(FORM_BUILDER_ITEMS, { optional: true }) ?? [];
   private readonly providedFields = inject(FORM_BUILDER_FIELDS, { optional: true }) ?? [];
   private readonly providedSettings = inject(FORM_BUILDER_SETTINGS, { optional: true }) ?? [];
+  private readonly providedValidators = inject(FORM_BUILDER_VALIDATORS, { optional: true }) ?? [];
   private readonly previewControls = new Map<string, FormControl>();
   private readonly validatorsControls = new Map<string, FormControl>();
   private readonly validatorsControlSubscriptions = new Map<string, Subscription>();
@@ -192,6 +372,12 @@ export class FormBuilder implements OnDestroy {
   protected readonly search = signal('');
   protected readonly fieldsTabIndex = signal(0);
   protected readonly selectedFieldId = signal<string | null>(null);
+  protected readonly validatorDialogStep = signal(0);
+  protected readonly selectedValidatorDefinition = signal<FormBuilderValidatorDefinition | null>(null);
+  protected readonly pendingValidationRule = signal<FormBuilderValidationRule | null>(null);
+  protected readonly editingValidationRuleIndex = signal<number | null>(null);
+  protected readonly mimeTypeFilter = signal('');
+  protected readonly mimeTypeSeparatorKeyCodes = [ENTER, COMMA];
   protected readonly nativeDragItem = signal<FormBuilderNativeDragItem | null>(null);
   protected readonly nativeDragFieldDefinition = computed(() => {
     const item = this.nativeDragItem();
@@ -224,6 +410,18 @@ export class FormBuilder implements OnDestroy {
     return definitions;
   }, []));
   protected readonly settingsDefinitions = computed<FormBuilderSettingsDefinition[]>(() => this.providedSettings);
+  protected readonly validatorDefinitions = computed<FormBuilderValidatorDefinition[]>(() =>
+    mergeFormBuilderValidatorDefinitions(this.providedValidators)
+  );
+  protected readonly selectedMimeTypes = computed(() => mimeTypeValueToArray(this.pendingValidationRule()?.value));
+  protected readonly filteredMimeTypes = computed(() => {
+    const query = normalizeMimeType(this.mimeTypeFilter());
+    const selected = new Set(this.selectedMimeTypes());
+
+    return MIME_TYPE_OPTIONS.filter(mimeType =>
+      !selected.has(mimeType) && (!query || mimeType.includes(query))
+    );
+  });
   protected readonly validationSettingsField = VALIDATION_SETTINGS_FIELD;
   protected readonly canvasItems = computed<FormBuilderCanvasItem[]>(() => this.resolveCanvasItems(this.schema()));
   protected readonly layoutDefinitions = computed<FormBuilderFieldDefinition[]>(() => {
@@ -499,6 +697,208 @@ export class FormBuilder implements OnDestroy {
     });
   }
 
+  protected openAddValidatorDialog(template: TemplateRef<unknown>): void {
+    this.editingValidationRuleIndex.set(null);
+    this.selectedValidatorDefinition.set(null);
+    this.pendingValidationRule.set(null);
+    this.mimeTypeFilter.set('');
+    this.validatorDialogStep.set(0);
+    this.openValidatorDialog(template, 'Add validator');
+  }
+
+  protected openEditValidatorDialog(
+    template: TemplateRef<unknown>,
+    rule: FormBuilderValidationRule,
+    index: number
+  ): void {
+    const definition = this.validatorDefinitionForRule(rule);
+
+    this.editingValidationRuleIndex.set(index);
+    this.selectedValidatorDefinition.set(definition);
+    this.pendingValidationRule.set(this.normalizeValidationRule(definition, rule));
+    this.mimeTypeFilter.set('');
+    this.validatorDialogStep.set(1);
+    this.openValidatorDialog(template, 'Edit validator');
+  }
+
+  protected selectValidatorDefinition(definition: FormBuilderValidatorDefinition): void {
+    this.selectedValidatorDefinition.set(definition);
+    this.pendingValidationRule.set(this.normalizeValidationRule(definition));
+    this.mimeTypeFilter.set('');
+  }
+
+  protected selectValidatorDefinitionByType(type: string): void {
+    const definition = this.validatorDefinitions().find(item => item.type === type);
+
+    if (definition) {
+      this.selectValidatorDefinition(definition);
+    }
+  }
+
+  protected selectedValidatorValue(): any {
+    return this.pendingValidationRule()?.value ?? '';
+  }
+
+  protected selectedValidatorMessage(): string {
+    return this.pendingValidationRule()?.message ?? '';
+  }
+
+  protected updatePendingValidatorValue(definition: FormBuilderValidatorDefinition, event: Event): void {
+    const input = event.target;
+
+    if (!(input instanceof HTMLInputElement)) {
+      return;
+    }
+
+    const value = definition.valueType === 'number'
+      ? input.value === '' ? null : Number(input.value)
+      : input.value;
+
+    this.pendingValidationRule.update(rule => rule ? { ...rule, value } : this.normalizeValidationRule(definition, { value }));
+  }
+
+  protected isMimeTypeValidator(definition: FormBuilderValidatorDefinition): boolean {
+    return definition.type === 'mimeType';
+  }
+
+  protected updateMimeTypeFilter(event: Event): void {
+    const input = event.target;
+
+    if (input instanceof HTMLInputElement) {
+      this.mimeTypeFilter.set(input.value);
+    }
+  }
+
+  protected addMimeTypeFromInput(event: ChipInputEvent): void {
+    this.addMimeType(event.value);
+    event.chipInput.clear();
+    this.mimeTypeFilter.set('');
+  }
+
+  protected selectMimeType(event: AutocompleteSelectedEvent, input: HTMLInputElement): void {
+    this.addMimeType(event.option.value() || event.option.viewValue);
+    input.value = '';
+    this.mimeTypeFilter.set('');
+  }
+
+  protected removeMimeType(mimeType: string): void {
+    const nextValue = this.selectedMimeTypes().filter(item => item !== mimeType);
+
+    this.pendingValidationRule.update(rule => rule ? { ...rule, value: nextValue } : rule);
+  }
+
+  protected updatePendingValidatorMessage(definition: FormBuilderValidatorDefinition, event: Event): void {
+    const input = event.target;
+
+    if (!(input instanceof HTMLInputElement)) {
+      return;
+    }
+
+    this.pendingValidationRule.update(rule => rule
+      ? { ...rule, message: input.value }
+      : this.normalizeValidationRule(definition, { message: input.value })
+    );
+  }
+
+  protected canSavePendingValidator(): boolean {
+    const definition = this.selectedValidatorDefinition();
+    const rule = this.pendingValidationRule();
+
+    if (!definition || !rule) {
+      return false;
+    }
+
+    return !definition.requiresValue || !isEmptyValidationRuleValue(rule.value);
+  }
+
+  protected savePendingValidator(field: FormBuilderField): void {
+    const rule = this.pendingValidationRule();
+
+    if (!rule || !this.canSavePendingValidator()) {
+      return;
+    }
+
+    const nextRules = validationRulesForField(field);
+    const editingIndex = this.editingValidationRuleIndex();
+
+    if (editingIndex === null) {
+      nextRules.push({ ...rule });
+    } else {
+      nextRules[editingIndex] = { ...rule };
+    }
+
+    this.updateFieldValidation(field.id, nextRules);
+  }
+
+  protected confirmRemoveValidator(field: FormBuilderField, rule: FormBuilderValidationRule, index: number): void {
+    const confirmRef = this.confirmManager.open({
+      title: 'Delete validator',
+      description: `Delete "${this.validatorRuleTitle(rule)}" from this field? This action cannot be undone.`
+    });
+
+    confirmRef.confirmed.subscribe(() => {
+      this.removeValidator(field, index);
+    });
+  }
+
+  private removeValidator(field: FormBuilderField, index: number): void {
+    this.updateFieldValidation(
+      field.id,
+      validationRulesForField(field).filter((_, ruleIndex) => ruleIndex !== index)
+    );
+  }
+
+  protected validatorDefinitionForRule(rule: FormBuilderValidationRule): FormBuilderValidatorDefinition | null {
+    return this.validatorDefinitions().find(definition => definition.type === rule.type) ?? null;
+  }
+
+  protected validatorRuleTitle(rule: FormBuilderValidationRule): string {
+    return this.validatorDefinitionForRule(rule)?.label ?? rule.type;
+  }
+
+  protected validatorInputType(definition: FormBuilderValidatorDefinition): string {
+    return definition.valueType === 'number' ? 'number' : 'text';
+  }
+
+  private addMimeType(value: unknown): void {
+    const definition = this.selectedValidatorDefinition();
+    const mimeType = normalizeMimeType(value);
+
+    if (!definition || !mimeType) {
+      return;
+    }
+
+    const nextValue = Array.from(new Set([...this.selectedMimeTypes(), mimeType]));
+
+    this.pendingValidationRule.update(rule => rule
+      ? { ...rule, value: nextValue }
+      : this.normalizeValidationRule(definition, { value: nextValue })
+    );
+  }
+
+  private openValidatorDialog(template: TemplateRef<unknown>, ariaLabel: string): void {
+    this.dialog.open(template, {
+      width: '680px',
+      maxWidth: 'calc(100vw - 48px)',
+      maxHeight: 'calc(100vh - 48px)',
+      showCloseButton: true,
+      ariaLabel
+    });
+  }
+
+  private normalizeValidationRule(
+    definition: FormBuilderValidatorDefinition | null,
+    rule: Partial<FormBuilderValidationRule> = {}
+  ): FormBuilderValidationRule {
+    return {
+      type: definition?.type ?? rule.type ?? '',
+      value: definition?.requiresValue
+        ? rule.value ?? definition.defaultValue ?? null
+        : rule.value,
+      message: rule.message ?? defaultValidationRuleMessage(definition)
+    };
+  }
+
   protected removeSection(section: FormBuilderSection): void {
     const schema = cloneSchema(this.schema());
     schema.sections = schema.sections.filter(item => item.id !== section.id);
@@ -717,6 +1117,10 @@ export class FormBuilder implements OnDestroy {
     });
     this.previewControls.set(field.id, control);
     return control;
+  }
+
+  protected validationRulesForField(field: FormBuilderField): FormBuilderValidationRule[] {
+    return validationRulesForField(field);
   }
 
   protected validatorsControl(field: FormBuilderField): FormControl {
@@ -1834,6 +2238,39 @@ function sameValidationRules(first: unknown, second: FormBuilderValidationRule[]
 
 function isValidationRule(value: unknown): value is FormBuilderValidationRule {
   return typeof value === 'object' && value !== null && 'type' in value;
+}
+
+function isEmptyValidationRuleValue(value: any): boolean {
+  if (Array.isArray(value)) {
+    return value.length === 0;
+  }
+
+  return value === undefined || value === null || value === '';
+}
+
+function mimeTypeValueToArray(value: unknown): string[] {
+  const values = Array.isArray(value) ? value : String(value ?? '').split(/[\n,]/);
+
+  return Array.from(new Set(
+    values
+      .map(item => normalizeMimeType(item))
+      .filter(Boolean)
+  ));
+}
+
+function normalizeMimeType(value: unknown): string {
+  return String(value ?? '').trim().toLowerCase();
+}
+
+function defaultValidationRuleMessage(definition: FormBuilderValidatorDefinition | null | undefined): string {
+  return interpolateValidationMessage(
+    definition?.defaultMessage || `${definition?.label ?? 'Value'} is invalid.`,
+    definition?.defaultValue
+  );
+}
+
+function interpolateValidationMessage(message: string, value: any): string {
+  return message.split('{value}').join(value === undefined || value === null ? '' : String(value));
 }
 
 function clampIndex(index: number, length: number): number {

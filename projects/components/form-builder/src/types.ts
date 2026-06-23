@@ -1,5 +1,5 @@
 import { Type } from '@angular/core';
-import { FormControl, ValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn, FormControl, ValidatorFn } from '@angular/forms';
 import { SelectDataSource } from '@ngstarter-ui/components/select';
 
 export type FormBuilderFieldWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
@@ -38,7 +38,8 @@ export interface FormBuilderValidationRule {
 export type FormBuilderValidatorValueType = 'text' | 'number' | 'boolean' | 'pattern';
 
 export type FormBuilderValidatorFactory =
-  (rule: FormBuilderValidationRule, field: FormBuilderField) => ValidatorFn | ValidatorFn[] | null | undefined;
+  (rule: FormBuilderValidationRule, field: FormBuilderField) =>
+    ValidatorFn | ValidatorFn[] | AsyncValidatorFn | AsyncValidatorFn[] | null | undefined;
 
 export interface FormBuilderValidatorDefinition {
   type: string;
@@ -51,6 +52,7 @@ export interface FormBuilderValidatorDefinition {
   requiresValue?: boolean;
   defaultValue?: any;
   defaultMessage?: string;
+  async?: boolean;
   validator: FormBuilderValidatorFactory;
 }
 

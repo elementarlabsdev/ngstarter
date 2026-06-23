@@ -12,6 +12,7 @@ import {
 import { AbstractControl, FormArray, ReactiveFormsModule, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
 import {
+  asyncValidatorsFromRules,
   DEFAULT_FORM_BUILDER_ITEMS,
   FORM_BUILDER_FIELDS,
   FORM_BUILDER_ITEMS,
@@ -236,12 +237,14 @@ export class FormRenderer {
       }
 
       const validators = this.resolveValidators(field, definition);
+      const asyncValidators = this.resolveAsyncValidators(field);
       const control = new FormControl(
         {
           value: value[field.name] ?? this.fieldInitialValue(field),
           disabled: field.disabled || this.readonly()
         },
-        validators
+        validators,
+        asyncValidators
       );
 
       controls[field.name] = control;
@@ -272,12 +275,14 @@ export class FormRenderer {
       }
 
       const validators = this.resolveValidators(child, definition);
+      const asyncValidators = this.resolveAsyncValidators(child);
       controls[child.name] = new FormControl(
         {
           value: rowValue[child.name] ?? this.fieldInitialValue(child),
           disabled: child.disabled || this.readonly()
         },
-        validators
+        validators,
+        asyncValidators
       );
     }
 
@@ -292,6 +297,10 @@ export class FormRenderer {
       ...(definition?.validators?.(field) ?? []),
       ...validatorsFromRules(field.validation, field, this.validatorDefinitions())
     ];
+  }
+
+  private resolveAsyncValidators(field: FormBuilderField) {
+    return asyncValidatorsFromRules(field.validation, field, this.validatorDefinitions());
   }
 
   private fieldInitialValue(field: FormBuilderField): any {

@@ -1,5 +1,5 @@
 import { EnvironmentProviders, InjectionToken, Provider, makeEnvironmentProviders } from '@angular/core';
-import { ValidatorFn, Validators } from '@angular/forms';
+import { AsyncValidatorFn, ValidatorFn, Validators } from '@angular/forms';
 import {
   FormBuilderField,
   FormBuilderFieldDefinition,
@@ -686,7 +686,13 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
       multiple: false,
       settings: {
         accept: 'image/png,image/svg+xml,image/jpeg,image/webp',
-        formats: ['PNG', 'SVG', 'JPG', 'WEBP'],
+        allowedFormats: {
+          svg: true,
+          png: true,
+          jpg: true,
+          webp: true
+        },
+        maxFileSize: '5 MB',
         previewText: 'AI'
       }
     },
@@ -696,30 +702,42 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
         sections: [
           {
             id: 'logo-upload-settings',
-            title: 'Logo upload',
+            title: 'Allowed formats',
             fields: [
               {
-                id: 'logo-upload-accept',
-                name: 'settings.accept',
-                type: 'text',
-                label: 'Accepted file types',
-                defaultValue: 'image/png,image/svg+xml,image/jpeg,image/webp',
-                hint: 'Use MIME types separated by commas, for example image/png,image/svg+xml,image/jpeg,image/webp.'
+                id: 'logo-upload-format-svg',
+                name: 'settings.allowedFormats.svg',
+                type: 'checkbox',
+                label: 'SVG',
+                defaultValue: true
               },
               {
-                id: 'logo-upload-formats',
-                name: 'settings.formats',
-                type: 'textarea',
-                label: 'Format badges',
-                defaultValue: 'PNG, SVG, JPG, WEBP',
-                hint: 'Use comma-separated or one-per-line labels.'
+                id: 'logo-upload-format-png',
+                name: 'settings.allowedFormats.png',
+                type: 'checkbox',
+                label: 'PNG',
+                defaultValue: true
               },
               {
-                id: 'logo-upload-preview-text',
-                name: 'settings.previewText',
+                id: 'logo-upload-format-jpg',
+                name: 'settings.allowedFormats.jpg',
+                type: 'checkbox',
+                label: 'JPG',
+                defaultValue: true
+              },
+              {
+                id: 'logo-upload-format-webp',
+                name: 'settings.allowedFormats.webp',
+                type: 'checkbox',
+                label: 'WEBP',
+                defaultValue: true
+              },
+              {
+                id: 'logo-upload-max-file-size',
+                name: 'settings.maxFileSize',
                 type: 'text',
-                label: 'Preview fallback text',
-                defaultValue: 'AI'
+                label: 'Max file size',
+                defaultValue: '5 MB'
               }
             ]
           }
@@ -894,6 +912,113 @@ export const DEFAULT_FORM_BUILDER_VALIDATORS: FormBuilderValidatorDefinition[] =
     defaultValue: '',
     defaultMessage: 'Enter a value that matches the required format.',
     validator: rule => Validators.pattern(String(rule.value ?? ''))
+  }),
+  formBuilderValidator({
+    type: 'mimeType',
+    label: 'MIME type',
+    description: 'Requires uploaded file MIME types to match the configured list.',
+    valueType: 'text',
+    valueLabel: 'Allowed MIME types',
+    valuePlaceholder: 'Search MIME type',
+    requiresValue: true,
+    defaultMessage: 'Use one of these file types: {value}.',
+    validator: rule => {
+      const allowedTypes = parseCommaList(rule.value);
+
+      return control => {
+        if (!allowedTypes.length) {
+          return null;
+        }
+
+        const files = valueToFileLikeArray(control.value);
+        const invalidFile = files.find(file => file.type && !allowedTypes.includes(file.type.toLowerCase()));
+
+        return invalidFile
+          ? {
+              mimeType: {
+                allowed: allowedTypes,
+                actual: invalidFile.type
+              }
+            }
+          : null;
+      };
+    }
+  }),
+  formBuilderValidator({
+    type: 'fileMaxSize',
+    label: 'Maximum file size',
+    description: 'Requires uploaded files to stay below the configured size.',
+    valueType: 'text',
+    valueLabel: 'File size',
+    valuePlaceholder: '5 MB',
+    requiresValue: true,
+    defaultValue: '5 MB',
+    defaultMessage: 'File must be {value} or smaller.',
+    validator: rule => {
+      const maxBytes = parseFileSize(rule.value);
+
+      return control => {
+        if (!maxBytes) {
+          return null;
+        }
+
+        const files = valueToFileLikeArray(control.value);
+        const invalidFile = files.find(file => typeof file.size === 'number' && file.size > maxBytes);
+
+        return invalidFile
+          ? {
+              fileMaxSize: {
+                maxBytes,
+                actualBytes: invalidFile.size
+              }
+            }
+          : null;
+      };
+    }
+  }),
+  formBuilderValidator({
+    type: 'imageDimensions',
+    label: 'Image dimensions',
+    description: 'Requires uploaded images to fit within the configured width and height.',
+    valueType: 'text',
+    valueLabel: 'Max width x height',
+    valuePlaceholder: '512x512',
+    requiresValue: true,
+    defaultValue: '512x512',
+    defaultMessage: 'Image must fit within {value}px.',
+    async: true,
+    validator: rule => {
+      const dimensions = parseImageDimensions(rule.value);
+
+      return async control => {
+        if (!dimensions) {
+          return null;
+        }
+
+        const files = valueToFileLikeArray(control.value);
+
+        for (const file of files) {
+          const imageDimensions = await readImageDimensions(file);
+
+          if (!imageDimensions) {
+            continue;
+          }
+
+          if (imageDimensions.width > dimensions.width || imageDimensions.height > dimensions.height) {
+            return {
+              imageDimensions: {
+                maxWidth: dimensions.width,
+                maxHeight: dimensions.height,
+                actualWidth: imageDimensions.width,
+                actualHeight: imageDimensions.height
+              }
+            };
+          }
+        }
+
+        return null;
+      };
+    }
   })
 ];
 
@@ -934,16 +1059,43 @@ export function validatorsFromRules(
   for (const rule of rules) {
     const definition = definitions.find(item => item.type === rule.type);
 
-    if (!definition || (definition.requiresValue && isEmptyValidatorValue(rule.value))) {
+    if (!definition || definition.async || (definition.requiresValue && isEmptyValidatorValue(rule.value))) {
       continue;
     }
 
     const validator = definition.validator(rule, field ?? createValidatorFieldFallback());
 
     if (Array.isArray(validator)) {
-      validators.push(...validator);
+      validators.push(...(validator as ValidatorFn[]));
     } else if (validator) {
-      validators.push(validator);
+      validators.push(validator as ValidatorFn);
+    }
+  }
+
+  return validators;
+}
+
+export function asyncValidatorsFromRules(
+  rules: FormBuilderValidationRule[] = [],
+  field?: FormBuilderField,
+  validatorDefinitions: FormBuilderValidatorDefinition[] = DEFAULT_FORM_BUILDER_VALIDATORS
+): AsyncValidatorFn[] {
+  const validators: AsyncValidatorFn[] = [];
+  const definitions = mergeFormBuilderValidatorDefinitions(validatorDefinitions);
+
+  for (const rule of rules) {
+    const definition = definitions.find(item => item.type === rule.type);
+
+    if (!definition?.async || (definition.requiresValue && isEmptyValidatorValue(rule.value))) {
+      continue;
+    }
+
+    const validator = definition.validator(rule, field ?? createValidatorFieldFallback());
+
+    if (Array.isArray(validator)) {
+      validators.push(...(validator as AsyncValidatorFn[]));
+    } else if (validator) {
+      validators.push(validator as AsyncValidatorFn);
     }
   }
 
@@ -961,4 +1113,154 @@ function createValidatorFieldFallback(): FormBuilderField {
     type: '',
     label: ''
   };
+}
+
+interface FileLikeValue {
+  size?: number;
+  type?: string;
+  width?: number;
+  height?: number;
+  file?: File;
+}
+
+function valueToFileLikeArray(value: unknown): FileLikeValue[] {
+  if (Array.isArray(value)) {
+    return value.flatMap(item => valueToFileLikeArray(item));
+  }
+
+  if (!value) {
+    return [];
+  }
+
+  if (isNativeFile(value)) {
+    return [{
+      file: value,
+      size: value.size,
+      type: value.type
+    }];
+  }
+
+  if (!isRecord(value)) {
+    return [];
+  }
+
+  const nestedFile = value['file'];
+
+  if (isNativeFile(nestedFile)) {
+    return [{
+      file: nestedFile,
+      size: nestedFile.size,
+      type: nestedFile.type
+    }];
+  }
+
+  return [{
+    size: typeof value['size'] === 'number' ? value['size'] : undefined,
+    type: normalizedString(value['type']) || normalizedString(value['mimeType']) || normalizedString(value['contentType']),
+    width: typeof value['width'] === 'number' ? value['width'] : undefined,
+    height: typeof value['height'] === 'number' ? value['height'] : undefined
+  }];
+}
+
+function parseCommaList(value: unknown): string[] {
+  const values = Array.isArray(value) ? value : [value];
+
+  return values
+    .flatMap(item => normalizedString(item).split(/[\n,]/))
+    .map(item => item.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+function parseFileSize(value: unknown): number | null {
+  if (typeof value === 'number') {
+    return value > 0 ? value : null;
+  }
+
+  const text = normalizedString(value).replace(',', '.');
+
+  if (!text) {
+    return null;
+  }
+
+  const match = text.match(/^(\d+(?:\.\d+)?)\s*([kmgt]?b|[кмгт]?б)?$/i);
+
+  if (!match) {
+    return null;
+  }
+
+  const size = Number(match[1]);
+  const unit = (match[2] || 'mb').toLowerCase();
+  const multiplier = unit.startsWith('k') || unit.startsWith('к')
+    ? 1024
+    : unit.startsWith('m') || unit.startsWith('м')
+      ? 1024 ** 2
+      : unit.startsWith('g') || unit.startsWith('г')
+        ? 1024 ** 3
+        : unit.startsWith('t') || unit.startsWith('т')
+          ? 1024 ** 4
+          : 1;
+
+  return Number.isFinite(size) && size > 0 ? size * multiplier : null;
+}
+
+function parseImageDimensions(value: unknown): { width: number; height: number } | null {
+  if (isRecord(value) && typeof value['width'] === 'number' && typeof value['height'] === 'number') {
+    return value['width'] > 0 && value['height'] > 0
+      ? { width: value['width'], height: value['height'] }
+      : null;
+  }
+
+  const text = normalizedString(value);
+  const match = text.match(/^(\d+)\s*[x×]\s*(\d+)$/i);
+
+  if (!match) {
+    return null;
+  }
+
+  const width = Number(match[1]);
+  const height = Number(match[2]);
+
+  return width > 0 && height > 0 ? { width, height } : null;
+}
+
+async function readImageDimensions(value: FileLikeValue): Promise<{ width: number; height: number } | null> {
+  if (typeof value.width === 'number' && typeof value.height === 'number') {
+    return value.width > 0 && value.height > 0
+      ? { width: value.width, height: value.height }
+      : null;
+  }
+
+  if (!value.file || !value.file.type.startsWith('image/') || typeof Image === 'undefined' || typeof URL === 'undefined') {
+    return null;
+  }
+
+  return new Promise(resolve => {
+    const image = new Image();
+    const url = URL.createObjectURL(value.file!);
+
+    image.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve({
+        width: image.naturalWidth,
+        height: image.naturalHeight
+      });
+    };
+    image.onerror = () => {
+      URL.revokeObjectURL(url);
+      resolve(null);
+    };
+    image.src = url;
+  });
+}
+
+function normalizedString(value: unknown): string {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function isNativeFile(value: unknown): value is File {
+  return typeof File !== 'undefined' && value instanceof File;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
 }

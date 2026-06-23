@@ -1,13 +1,16 @@
 @reference 'tailwindcss';
 
 :host {
+  --ngs-dialog-actions-padding: --spacing(4) --spacing(6);
+  --ngs-dialog-actions-gap: --spacing(3);
+
   display: flex;
   flex-wrap: wrap;
   min-height: var(--ngs-control-height-lg);
   align-items: center;
   box-sizing: content-box;
-  gap: --spacing(2);
-  padding: var(--ngs-dialog-actions-padding, --spacing(4) --spacing(6));
+  gap: var(--ngs-dialog-actions-gap);
+  padding: var(--ngs-dialog-actions-padding);
   flex: none;
 
   &.ngs-dialog-actions-align-center {

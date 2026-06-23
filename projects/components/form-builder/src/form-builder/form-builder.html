@@ -491,12 +491,48 @@
           @if (selectedField(); as field) {
             <ngs-tab label="Validators">
               <ngs-scrollbar-area [absolute]="true">
-                <div class="flex flex-col gap-4 p-5">
-                  <ngs-form-builder-field-host
-                    [field]="validationSettingsField"
-                    [control]="validatorsControl(field)"
-                    [definitions]="definitions()"/>
-                </div>
+                @if (validationRulesForField(field).length) {
+                  <div class="p-5">
+                    <ngs-list class="ngs-form-builder-validator-list mb-3">
+                      @for (rule of validationRulesForField(field); track $index; let ruleIndex = $index) {
+                        <ngs-list-item class="ngs-form-builder-validator-item">
+                          <span ngsListItemTitle>{{ validatorRuleTitle(rule) }}</span>
+                          <span ngsListItemMeta class="ngs-form-builder-validator-actions">
+                            <button ngsIconButton type="button" aria-label="Edit validator" (click)="openEditValidatorDialog(validatorDialog, rule, ruleIndex)">
+                              <ngs-icon name="fluent:edit-24-regular"/>
+                            </button>
+                            <button ngsIconButton type="button" aria-label="Delete validator" (click)="confirmRemoveValidator(field, rule, ruleIndex)">
+                              <ngs-icon name="fluent:delete-24-regular"/>
+                            </button>
+                          </span>
+                        </ngs-list-item>
+                      }
+                    </ngs-list>
+
+                    <button ngsButton="filled" type="button" (click)="openAddValidatorDialog(validatorDialog)">
+                      <ngs-icon name="fluent:add-24-regular"/>
+                      Add validator
+                    </button>
+                  </div>
+                } @else {
+                  <ngs-empty-state class="ngs-form-builder-validator-empty">
+                    <ngs-empty-state-icon>
+                      <ngs-icon name="fluent:shield-checkmark-24-regular"/>
+                    </ngs-empty-state-icon>
+                    <ngs-empty-state-title>
+                      No validators
+                    </ngs-empty-state-title>
+                    <ngs-empty-state-content>
+                      Add a validator to require a value, limit length, validate files, or set another rule.
+                    </ngs-empty-state-content>
+                    <ngs-empty-state-actions>
+                      <button ngsButton="filled" type="button" (click)="openAddValidatorDialog(validatorDialog)">
+                        <ngs-icon name="fluent:add-24-regular"/>
+                        Add validator
+                      </button>
+                    </ngs-empty-state-actions>
+                  </ngs-empty-state>
+                }
               </ngs-scrollbar-area>
             </ngs-tab>
           }
@@ -538,4 +574,152 @@
   <ngs-dialog-actions align="end">
     <button ngsButton="outlined" type="button" ngs-dialog-close>Close</button>
   </ngs-dialog-actions>
+</ng-template>
+
+<ng-template #validatorDialog>
+  @if (selectedField(); as field) {
+    <h3 ngs-dialog-title>
+      {{ editingValidationRuleIndex() === null ? 'Add validator' : 'Edit validator' }}
+    </h3>
+    <ng-template #validatorSettings let-definition>
+      <div class="ngs-form-builder-validator-settings">
+        <div>
+          <div class="ngs-form-builder-validator-heading font-semibold">{{ definition.label }}</div>
+          @if (definition.description) {
+            <div class="ngs-form-builder-validator-hint text-neutral-500">{{ definition.description }}</div>
+          }
+        </div>
+
+        <div class="ngs-form-builder-validator-fields mt-5">
+          @if (definition.requiresValue) {
+            @if (isMimeTypeValidator(definition)) {
+              <ngs-form-field>
+                <ngs-label>{{ definition.valueLabel || 'Allowed MIME types' }}</ngs-label>
+                <ngs-chip-grid #mimeTypeChipGrid aria-label="Allowed MIME types">
+                  @for (mimeType of selectedMimeTypes(); track mimeType) {
+                    <ngs-chip-row (removed)="removeMimeType(mimeType)">
+                      {{ mimeType }}
+                      <button ngsChipRemove type="button" aria-label="Remove MIME type">
+                        <ngs-icon name="fluent:dismiss-20-regular"/>
+                      </button>
+                    </ngs-chip-row>
+                  }
+
+                  <input
+                    #mimeTypeInput
+                    ngsInput
+                    [placeholder]="definition.valuePlaceholder || 'Search MIME type'"
+                    [ngsChipInputFor]="mimeTypeChipGrid"
+                    [ngsChipInputSeparatorKeyCodes]="mimeTypeSeparatorKeyCodes"
+                    [ngsAutocomplete]="mimeTypeAutocomplete"
+                    (input)="updateMimeTypeFilter($event)"
+                    (chipInputTokenEnd)="addMimeTypeFromInput($event)">
+                </ngs-chip-grid>
+                <ngs-autocomplete #mimeTypeAutocomplete="ngsAutocomplete" (optionSelected)="selectMimeType($event, mimeTypeInput)">
+                  @for (mimeType of filteredMimeTypes(); track mimeType) {
+                    <ngs-option [value]="mimeType">{{ mimeType }}</ngs-option>
+                  }
+                </ngs-autocomplete>
+              </ngs-form-field>
+            } @else {
+              <ngs-form-field>
+                <ngs-label>{{ definition.valueLabel || 'Value' }}</ngs-label>
+                <input
+                  ngsInput
+                  [type]="validatorInputType(definition)"
+                  [value]="selectedValidatorValue()"
+                  [placeholder]="definition.valuePlaceholder || ''"
+                  (input)="updatePendingValidatorValue(definition, $event)">
+              </ngs-form-field>
+            }
+          }
+
+          <ngs-form-field>
+            <ngs-label>Error message</ngs-label>
+            <input
+              ngsInput
+              type="text"
+              [value]="selectedValidatorMessage()"
+              (input)="updatePendingValidatorMessage(definition, $event)">
+          </ngs-form-field>
+        </div>
+      </div>
+    </ng-template>
+
+    <ngs-dialog-content class="ngs-form-builder-validator-dialog-content">
+      @if (editingValidationRuleIndex() === null) {
+        <ngs-stepper
+          linear
+          stickyHeader
+          [selectedIndex]="validatorDialogStep()"
+          (selectionChange)="validatorDialogStep.set($event.selectedIndex)">
+          <ngs-step label="Validator" [completed]="!!selectedValidatorDefinition()">
+            <ngs-radio-card-group
+              class="ngs-form-builder-validator-picker grid-cols-2"
+              [ngModel]="selectedValidatorDefinition()?.type"
+              (ngModelChange)="selectValidatorDefinitionByType($event)">
+              @for (definition of validatorDefinitions(); track definition.type) {
+                <ngs-radio-card [value]="definition.type">
+                  <ngs-radio-card-title>
+                    {{ definition.label }}
+                  </ngs-radio-card-title>
+                  <ngs-radio-card-content>
+                    {{ definition.description || definition.type }}
+                  </ngs-radio-card-content>
+                </ngs-radio-card>
+              }
+            </ngs-radio-card-group>
+          </ngs-step>
+
+          <ngs-step label="Settings">
+            @if (selectedValidatorDefinition(); as definition) {
+              <ng-container
+                [ngTemplateOutlet]="validatorSettings"
+                [ngTemplateOutletContext]="{ $implicit: definition }"/>
+            }
+          </ngs-step>
+        </ngs-stepper>
+      } @else {
+        @if (selectedValidatorDefinition(); as definition) {
+          <ng-container
+            [ngTemplateOutlet]="validatorSettings"
+            [ngTemplateOutletContext]="{ $implicit: definition }"/>
+        }
+      }
+    </ngs-dialog-content>
+    <ngs-dialog-actions align="end">
+      @if (editingValidationRuleIndex() === null) {
+        @if (validatorDialogStep() === 0) {
+          <button ngsButton="outlined" type="button" ngs-dialog-close>Cancel</button>
+          <button
+            ngsButton="filled"
+            type="button"
+            [disabled]="!selectedValidatorDefinition()"
+            (click)="validatorDialogStep.set(1)">
+            Next
+          </button>
+        } @else {
+          <button ngsButton="outlined" type="button" (click)="validatorDialogStep.set(0)">Back</button>
+          <button
+            ngsButton="filled"
+            type="button"
+            ngs-dialog-close
+            [disabled]="!canSavePendingValidator()"
+            (click)="savePendingValidator(field)">
+            Add
+          </button>
+        }
+      } @else {
+        <button ngsButton="outlined" type="button" ngs-dialog-close>Cancel</button>
+        <button
+          ngsButton="filled"
+          type="button"
+          ngs-dialog-close
+          [disabled]="!canSavePendingValidator()"
+          (click)="savePendingValidator(field)">
+          Save
+        </button>
+      }
+    </ngs-dialog-actions>
+  }
 </ng-template>

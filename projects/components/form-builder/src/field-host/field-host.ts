@@ -167,7 +167,11 @@ export class FormBuilderFieldHost {
   protected readonly radioOrientation = computed<RadioGroupOrientation>(() =>
     this.field().settings?.['orientation'] === 'horizontal' ? 'horizontal' : 'vertical'
   );
-  protected readonly uploadAccept = computed(() => this.field().settings?.['accept'] || '*/*');
+  protected readonly uploadAccept = computed(() =>
+    this.field().type === 'logo-upload'
+      ? logoUploadAccept(this.field())
+      : this.field().settings?.['accept'] || '*/*'
+  );
   protected readonly uploadDisabled = computed(() =>
     this.readonly() || this.field().readonly || this.field().disabled || this.control().disabled
   );
@@ -202,11 +206,14 @@ export class FormBuilderFieldHost {
     normalizedString(this.field().placeholder) || 'Drop logo here'
   );
   protected readonly logoUploadFormatLabels = computed(() =>
-    parseFormatLabels(this.field().settings?.['formats'])
+    logoUploadFormatLabels(this.field())
   );
   protected readonly logoUploadRequirementsText = computed(() => {
     return this.logoUploadFormatLabels().join(', ');
   });
+  protected readonly logoUploadMaxFileSizeText = computed(() =>
+    normalizedString(this.field().settings?.['maxFileSize']) || '5 MB'
+  );
   protected readonly logoUploadPreviewKey = computed(() => {
     const configured = normalizedString(this.field().settings?.['previewText']);
 
@@ -317,6 +324,10 @@ export class FormBuilderFieldHost {
       }
     }
 
+    if (errors['formBuilderLogoUploadMaxFileSize']) {
+      return `File must be ${this.logoUploadMaxFileSizeText()} or smaller.`;
+    }
+
     return '';
   });
 
@@ -370,6 +381,17 @@ export class FormBuilderFieldHost {
       return;
     }
 
+    if (this.field().type === 'logo-upload' && this.logoUploadFileExceedsMaxSize(event.files[0])) {
+      this.control().setErrors({
+        ...(this.control().errors ?? {}),
+        formBuilderLogoUploadMaxFileSize: true
+      });
+      this.control().markAsDirty();
+      this.control().markAsTouched();
+      this.controlStateVersion.update(version => version + 1);
+      return;
+    }
+
     const fallbackValue = this.field().multiple
       ? event.files
       : event.files[0] ?? null;
@@ -393,6 +415,7 @@ export class FormBuilderFieldHost {
     }
 
     this.control().setValue(value);
+    this.clearLogoUploadMaxSizeError();
     this.control().markAsDirty();
     this.control().markAsTouched();
     this.control().updateValueAndValidity();
@@ -407,9 +430,28 @@ export class FormBuilderFieldHost {
     }
 
     this.control().setValue(null);
+    this.clearLogoUploadMaxSizeError();
     this.control().markAsDirty();
     this.control().markAsTouched();
     this.control().updateValueAndValidity();
+  }
+
+  private logoUploadFileExceedsMaxSize(file: File | undefined): boolean {
+    const maxSize = parseLogoUploadMaxFileSize(this.field().settings?.['maxFileSize']);
+
+    return !!file && !!maxSize && file.size > maxSize;
+  }
+
+  private clearLogoUploadMaxSizeError(): void {
+    const errors = this.control().errors;
+
+    if (!errors?.['formBuilderLogoUploadMaxFileSize']) {
+      return;
+    }
+
+    const nextErrors = { ...errors };
+    delete nextErrors['formBuilderLogoUploadMaxFileSize'];
+    this.control().setErrors(Object.keys(nextErrors).length ? nextErrors : null);
   }
 
   protected hasValidationRule(type: string): boolean {
@@ -654,8 +696,60 @@ function normalizedString(value: unknown): string {
   return typeof value === 'string' ? value.trim() : '';
 }
 
-function parseFormatLabels(value: unknown): string[] {
-  const fallback = ['PNG', 'SVG', 'JPG', 'WEBP'];
+const LOGO_UPLOAD_FORMATS = [
+  {
+    key: 'svg',
+    label: 'SVG',
+    accept: 'image/svg+xml'
+  },
+  {
+    key: 'png',
+    label: 'PNG',
+    accept: 'image/png'
+  },
+  {
+    key: 'jpg',
+    label: 'JPG',
+    accept: 'image/jpeg'
+  },
+  {
+    key: 'webp',
+    label: 'WEBP',
+    accept: 'image/webp'
+  }
+];
+
+function logoUploadFormatLabels(field: FormBuilderField): string[] {
+  const allowedFormats = field.settings?.['allowedFormats'];
+
+  if (isRecord(allowedFormats)) {
+    const labels = LOGO_UPLOAD_FORMATS
+      .filter(format => allowedFormats[format.key] === true)
+      .map(format => format.label);
+
+    return labels.length ? labels : LOGO_UPLOAD_FORMATS.map(format => format.label);
+  }
+
+  return parseLegacyFormatLabels(field.settings?.['formats']);
+}
+
+function logoUploadAccept(field: FormBuilderField): string {
+  const allowedFormats = field.settings?.['allowedFormats'];
+
+  if (isRecord(allowedFormats)) {
+    const accept = LOGO_UPLOAD_FORMATS
+      .filter(format => allowedFormats[format.key] === true)
+      .map(format => format.accept)
+      .join(',');
+
+    return accept || LOGO_UPLOAD_FORMATS.map(format => format.accept).join(',');
+  }
+
+  return normalizedString(field.settings?.['accept']) || LOGO_UPLOAD_FORMATS.map(format => format.accept).join(',');
+}
+
+function parseLegacyFormatLabels(value: unknown): string[] {
+  const fallback = LOGO_UPLOAD_FORMATS.map(format => format.label);
 
   if (Array.isArray(value)) {
     const labels = value.map(item => normalizedString(item)).filter(Boolean);
@@ -675,6 +769,36 @@ function parseFormatLabels(value: unknown): string[] {
     .filter(Boolean);
 
   return labels.length ? labels : fallback;
+}
+
+function parseLogoUploadMaxFileSize(value: unknown): number | null {
+  if (typeof value === 'number') {
+    return value > 0 ? value * 1024 * 1024 : null;
+  }
+
+  const text = normalizedString(value).replace(',', '.');
+
+  if (!text) {
+    return 5 * 1024 * 1024;
+  }
+
+  const match = text.match(/^(\d+(?:\.\d+)?)\s*([kmgt]?b|[кмгт]?б)?$/i);
+
+  if (!match) {
+    return null;
+  }
+
+  const size = Number(match[1]);
+  const unit = (match[2] || 'mb').toLowerCase();
+  const multiplier = unit.startsWith('k') || unit.startsWith('к')
+    ? 1024
+    : unit.startsWith('g') || unit.startsWith('г')
+      ? 1024 ** 3
+      : unit.startsWith('t') || unit.startsWith('т')
+        ? 1024 ** 4
+        : 1024 ** 2;
+
+  return Number.isFinite(size) && size > 0 ? size * multiplier : null;
 }
 
 function readUnknownProperty(value: unknown, propertyNames: string[]): unknown {

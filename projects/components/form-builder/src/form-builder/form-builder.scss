@@ -98,6 +98,82 @@
     height: 100%;
   }
 
+  .ngs-form-builder-validator-heading {
+    color: var(--ngs-color-on-surface);
+    font-size: var(--ngs-font-size-sm);
+    font-weight: 600;
+  }
+
+  .ngs-form-builder-validator-hint {
+    color: var(--ngs-color-on-surface-variant);
+    font-size: var(--ngs-font-size-xs);
+    font-weight: 400;
+  }
+
+  .ngs-form-builder-validator-list {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(3);
+  }
+
+  .ngs-form-builder-validator-item {
+    border: 1px solid var(--ngs-color-border);
+    border-radius: var(--ngs-radius-current);
+    background: var(--ngs-color-surface-container-lowest);
+
+    [ngsListItemIcon] {
+      color: var(--ngs-color-primary);
+    }
+  }
+
+  .ngs-form-builder-validator-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: --spacing(1);
+  }
+
+  .ngs-form-builder-validator-empty {
+    min-height: --spacing(56);
+  }
+
+  .ngs-form-builder-validator-dialog-content {
+    width: min(100%, --spacing(170));
+    padding: 0;
+
+    ngs-stepper {
+      display: block;
+      --ngs-stepper-content-padding: --spacing(5);
+    }
+  }
+
+  .ngs-form-builder-validator-picker {
+    --ngs-radio-card-group-gap: --spacing(3);
+    --ngs-radio-card-padding: --spacing(3);
+    --ngs-radio-card-border-radius: var(--ngs-radius-current);
+    --ngs-radio-card-title-gap: --spacing(2);
+
+    max-height: min(48vh, --spacing(96));
+    overflow: auto;
+    padding: --spacing(0.5);
+  }
+
+  .ngs-form-builder-validator-settings {
+    display: flex;
+    flex-direction: column;
+    min-height: --spacing(48);
+  }
+
+  .ngs-form-builder-validator-fields {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(4);
+    margin-top: --spacing(6);
+
+    ngs-chip-grid {
+      width: 100%;
+    }
+  }
+
   ngs-tree {
     --ngs-tree-node-gap: --spacing(1);
 

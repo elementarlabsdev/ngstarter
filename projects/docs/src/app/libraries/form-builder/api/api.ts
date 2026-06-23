@@ -276,7 +276,7 @@ export class Api {
     { name: 'date-range', description: 'Start and end date input.', type: 'Date and time' },
     { name: 'timezone-select', description: 'Timezone selector.', type: 'Date and time' },
     { name: 'upload', description: 'File upload control with optional upload callback.', type: 'Files' },
-    { name: 'logo-upload', description: 'Single logo upload control with preview, format badges, and optional upload callback.', type: 'Files' },
+    { name: 'logo-upload', description: 'Single logo upload control with preview, format settings, max file size, and optional upload callback.', type: 'Files' },
     { name: 'currency', description: 'Numeric currency amount input.', type: 'Finance' },
     { name: 'currency-select', description: 'Currency selector.', type: 'Finance' },
     { name: 'country-select', description: 'Country selector.', type: 'Location' },
