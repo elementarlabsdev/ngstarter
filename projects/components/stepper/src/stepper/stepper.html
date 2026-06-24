@@ -9,6 +9,7 @@
       class="ngs-stepper-header-container"
       [class.ngs-stepper-label-bottom-container]="labelPosition() === 'bottom'"
       [class.ngs-stepper-header-sticky]="stickyHeader()"
+      [class.ngs-stepper-header-border-hidden]="hideHeaderBorder()"
     >
       @for (step of stepItems(); track step; let i = $index) {
         <div

@@ -7,6 +7,7 @@ import { StepperWithErrorsStateExample } from '../_examples/stepper-with-errors-
 import { StepperResponsiveExample } from '../_examples/stepper-responsive-example/stepper-responsive-example';
 import { StepperLabelBottomPositionExample } from '../_examples/stepper-label-bottom-position-example/stepper-label-bottom-position-example';
 import { StepperInDialogExample } from '../_examples/stepper-in-dialog-example/stepper-in-dialog-example';
+import { StepperHiddenHeaderBorderExample } from '../_examples/stepper-hidden-header-border-example/stepper-hidden-header-border-example';
 
 @Component({
   selector: 'app-overview',
@@ -19,6 +20,7 @@ import { StepperInDialogExample } from '../_examples/stepper-in-dialog-example/s
     StepperResponsiveExample,
     StepperLabelBottomPositionExample,
     StepperInDialogExample,
+    StepperHiddenHeaderBorderExample,
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss',

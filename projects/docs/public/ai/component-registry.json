@@ -3517,6 +3517,7 @@
       "cssTokens": [
         "--ngs-color-on-surface",
         "--ngs-control-height-lg",
+        "--ngs-dialog-actions-gap",
         "--ngs-dialog-actions-padding",
         "--ngs-dialog-background",
         "--ngs-dialog-bg",
@@ -4556,11 +4557,16 @@
         "--ngs-font-size-sm",
         "--ngs-font-size-xs",
         "--ngs-line-height-base",
+        "--ngs-radio-card-border-radius",
+        "--ngs-radio-card-group-gap",
+        "--ngs-radio-card-padding",
+        "--ngs-radio-card-title-gap",
         "--ngs-radius-current",
         "--ngs-radius-lg",
         "--ngs-radius-md",
         "--ngs-radius-sm",
         "--ngs-state-focus-ring",
+        "--ngs-stepper-content-padding",
         "--ngs-tab-label-height",
         "--ngs-tree-node-gap",
         "--ngs-upload-area-border",
@@ -9340,9 +9346,11 @@
         "Stepper In Dialog",
         "Stepper Vertical",
         "Stepper Header Position",
+        "Stepper Without Header Border",
         "Stepper That Displays Errors In The Steps",
         "Stepper Responsive",
         "Stepper Label Bottom Position",
+        "Stepper hidden header border",
         "Stepper with errors state"
       ],
       "minimalExample": "<button ngsButton=\"tonal\" (click)=\"isLinear = !isLinear\" id=\"toggle-linear\" class=\"mb-6\">\n  {{ !isLinear ? 'Enable linear mode' : 'Disable linear mode' }}\n</button>\n<ngs-stepper [linear]=\"isLinear\" #stepper>\n  <ngs-step [stepControl]=\"firstFormGroup\">\n    <form [formGroup]=\"firstFormGroup\">\n      <ng-template ngsStepLabel>Fill out your name</ng-template>\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Name</ngs-label>\n        <input ngsInput placeholder=\"Last name, First name\" formControlName=\"firstCtrl\" required>\n      </ngs-form-field>\n      <div>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step [stepControl]=\"secondFormGroup\" label=\"Fill out your address\">\n    <form [formGroup]=\"secondFormGroup\">\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Address</ngs-label>\n        <input ngsInput formControlName=\"secondCtrl\" placeholder=\"Ex. 1 Main St, New York, NY\" required>\n      </ngs-form-field>\n      <div class=\"flex gap-3\">\n        <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step>\n    <ng-template ngsStepLabel>Done</ng-template>\n    <p>You are now done.</p>\n    <div class=\"flex gap-3\">\n      <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n      <button ngsButton=\"filled\" (click)=\"stepper.reset()\">Reset</button>\n    </div>\n  </ngs-step>\n</ngs-stepper>",
@@ -9360,10 +9368,10 @@
           "source": "<ngs-stepper headerPosition=\"bottom\" #stepper>\n  <ngs-step [stepControl]=\"firstFormGroup\">\n    <form [formGroup]=\"firstFormGroup\">\n      <ng-template ngsStepLabel>Fill out your name</ng-template>\n      <ngs-form-field class=\"w-1/2\">\n        <input ngsInput placeholder=\"Last name, First name\" formControlName=\"firstCtrl\" required>\n      </ngs-form-field>\n      <div>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step [stepControl]=\"secondFormGroup\" optional>\n    <form [formGroup]=\"secondFormGroup\">\n      <ng-template ngsStepLabel>Fill out your address</ng-template>\n      <ngs-form-field class=\"w-1/2\">\n        <input ngsInput placeholder=\"Address\" formControlName=\"secondCtrl\" required>\n      </ngs-form-field>\n      <div class=\"flex gap-3\">\n        <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step>\n    <ng-template ngsStepLabel>Done</ng-template>\n    You are now done.\n    <div class=\"flex gap-3\">\n      <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n      <button ngsButton=\"filled\" (click)=\"stepper.reset()\">Reset</button>\n    </div>\n  </ngs-step>\n</ngs-stepper>"
         },
         {
-          "name": "stepper-in-dialog-example",
-          "title": "Stepper in dialog",
-          "file": "projects/docs/src/app/components/stepper/_examples/stepper-in-dialog-example/stepper-in-dialog-example.html",
-          "source": "<button ngsButton=\"filled\" (click)=\"openDialog()\">Open setup dialog</button>\n@if (result()) {\n  <p class=\"mt-3\">Result: {{ result() }}</p>\n}\n<ng-template #setupDialog>\n  <h3 ngs-dialog-title>Workspace setup</h3>\n  <ngs-dialog-content>\n    <ngs-stepper linear stickyHeader #stepper>\n      <ngs-step [stepControl]=\"workspaceForm\">\n        <ng-template ngsStepLabel>Workspace</ng-template>\n        <form [formGroup]=\"workspaceForm\" class=\"grid gap-4 md:grid-cols-2\">\n          <ngs-form-field>\n            <ngs-label>Workspace name</ngs-label>\n            <input\n              ngsInput\n              formControlName=\"workspaceName\"\n              placeholder=\"Atlas Operations\"\n              required\n            />\n          </ngs-form-field>\n          <ngs-form-field>\n            <ngs-label>Workspace slug</ngs-label>\n            <input ngsInput formControlName=\"slug\" placeholder=\"atlas-ops\" required />\n          </ngs-form-field>\n          <ngs-form-field>\n            <ngs-label>Region</ngs-label>\n            <input ngsInput formControlName=\"region\" placeholder=\"Europe / Warsaw\" required />\n          </ngs-form-field>\n          <ngs-form-field>\n            <ngs-label>Owner</ngs-label>\n            <input ngsInput formControlName=\"owner\" placeholder=\"Maya Chen\" required />\n          </ngs-form-field>\n          <ngs-form-field>\n            <ngs-label>Workspace type</ngs-label>\n            <input ngsInput formControlName=\"workspaceType\" placeholder=\"Operations hub\" required />\n          </ngs-form-field>\n          <ngs-form-field>\n            <ngs-label>Environment</ngs-label>\n..."
+          "name": "stepper-hidden-header-border-example",
+          "title": "Stepper hidden header border",
+          "file": "projects/docs/src/app/components/stepper/_examples/stepper-hidden-header-border-example/stepper-hidden-header-border-example.html",
+          "source": "<ngs-stepper hideHeaderBorder headerPosition=\"bottom\" #stepper>\n  <ngs-step [stepControl]=\"accountForm\">\n    <form [formGroup]=\"accountForm\">\n      <ng-template ngsStepLabel>Account</ng-template>\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Account name</ngs-label>\n        <input ngsInput formControlName=\"accountName\" placeholder=\"Acme Finance\" required>\n      </ngs-form-field>\n      <div>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step [stepControl]=\"workspaceForm\">\n    <form [formGroup]=\"workspaceForm\">\n      <ng-template ngsStepLabel>Workspace</ng-template>\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Workspace name</ngs-label>\n        <input ngsInput formControlName=\"workspaceName\" placeholder=\"Revenue operations\" required>\n      </ngs-form-field>\n      <div class=\"flex gap-3\">\n        <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step>\n    <ng-template ngsStepLabel>Review</ng-template>\n    <p>Review the setup before creating the workspace.</p>\n    <div class=\"flex gap-3\">\n      <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n      <button ngsButton=\"filled\" (click)=\"stepper.reset()\">Reset</button>\n    </div>\n  </ngs-step>\n</ngs-stepper>"
         }
       ],
       "previewAsset": "projects/components/stepper/preview.svg",
@@ -9383,6 +9391,7 @@
       ],
       "inputs": [
         "headerPosition",
+        "hideHeaderBorder",
         "labelPosition",
         "stickyHeader"
       ],
@@ -9399,6 +9408,7 @@
         "--ngs-color-surface-container-highest",
         "--ngs-color-surface-container-lowest",
         "--ngs-stepper-content-padding",
+        "--ngs-stepper-header-border-color",
         "--ngs-stepper-header-gap",
         "--ngs-stepper-header-padding",
         "--ngs-stepper-icon-active-bg",

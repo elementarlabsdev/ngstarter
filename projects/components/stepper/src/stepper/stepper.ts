@@ -25,6 +25,7 @@ export class Stepper extends CdkStepper {
   headerPosition = input<'top' | 'bottom'>('top');
   labelPosition = input<'top' | 'bottom'>('top');
   stickyHeader = input(false, { transform: booleanAttribute });
+  hideHeaderBorder = input(false, { transform: booleanAttribute });
 
   private _stepperOrientation: StepperOrientation = 'horizontal';
 

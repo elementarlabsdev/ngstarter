@@ -47,6 +47,9 @@ export const appConfig = {
 - Prefer existing NgStarter components before creating new UI primitives.
 - Admin app shells, navigation, cards, data views, static tables, form fields, pagination, buttons,
   icons, checkboxes, chips, and progress bars must use NgStarter components.
+- When an icon in `button[ngsButton]` or `a[ngsButton]` must appear on the right side of the label,
+  always use the button `reverse` input. Do not reorder markup, add custom flex direction classes,
+  or use ad hoc CSS to move the icon to the right.
 - Choose NgStarter components by UI job: `Menu` for action menus, `Popover` for compact non-menu
   overlays, `List`/`SelectionList` for listboxes and rows, `Notifications` for feeds,
   `Avatar`/`Badge` for identity and counters, `Tooltip` for icon help, `Alert`/`Announcement`/

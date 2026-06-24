@@ -13,6 +13,7 @@
   --ngs-stepper-label-color: var(--ngs-color-on-surface-variant);
   --ngs-stepper-label-active-color: var(--ngs-color-on-surface);
   --ngs-stepper-line-color: var(--ngs-color-border);
+  --ngs-stepper-header-border-color: var(--ngs-stepper-line-color);
   --ngs-stepper-content-padding: 24px;
 
   .ngs-stepper {
@@ -57,7 +58,7 @@
 
       .ngs-stepper-header-container {
         border-bottom: none;
-        border-top: 1px solid var(--ngs-stepper-line-color);
+        border-top: 1px solid var(--ngs-stepper-header-border-color);
       }
     }
   }
@@ -66,7 +67,7 @@
     display: flex;
     align-items: center;
     padding: 0 var(--ngs-stepper-header-padding);
-    border-bottom: 1px solid var(--ngs-stepper-line-color);
+    border-bottom: 1px solid var(--ngs-stepper-header-border-color);
     overflow-x: hidden;
 
     &.ngs-stepper-label-bottom-container {
@@ -85,6 +86,10 @@
       top: 0;
       z-index: 2;
       background: var(--ngs-color-surface-container-lowest);
+    }
+
+    &.ngs-stepper-header-border-hidden {
+      --ngs-stepper-header-border-color: transparent;
     }
   }
 

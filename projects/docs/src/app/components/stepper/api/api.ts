@@ -51,6 +51,12 @@ export class Api {
       default: 'false',
     },
     {
+      name: 'hideHeaderBorder',
+      description: 'Whether the horizontal stepper header border should be hidden',
+      type: 'boolean',
+      default: 'false',
+    },
+    {
       name: 'orientation',
       description: 'The orientation of the stepper',
       type: 'StepperOrientation',

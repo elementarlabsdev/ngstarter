@@ -2,7 +2,8 @@
   The NgStarter Angular Stepper component lets you render a ready-made visual wizard for several
   connected steps in one process. Use ngs-stepper with ngs-step when users must move through related
   steps and see their current progress. It includes examples for Basic Stepper, Stepper In Dialog,
-  Stepper Vertical, Stepper Header Position, and Stepper That Displays Errors In The Steps.
+  Stepper Vertical, Stepper Header Position, Stepper Without Header Border, and Stepper That Displays
+  Errors In The Steps.
 </p>
 
 <div>
@@ -53,6 +54,18 @@
     exampleName="stepper-header-position-example"
   >
     <app-stepper-header-position-example />
+  </ngs-playground>
+
+  <h3>Stepper Without Header Border</h3>
+  <p>
+    Hide the header separator when the stepper is placed inside a surface that already provides its
+    own boundary or when the header is used as a bottom navigation area.
+  </p>
+  <ngs-playground
+    exampleUrl="_docs/components/stepper/_examples"
+    exampleName="stepper-hidden-header-border-example"
+  >
+    <app-stepper-hidden-header-border-example />
   </ngs-playground>
 
   <h3>Stepper That Displays Errors In The Steps</h3>

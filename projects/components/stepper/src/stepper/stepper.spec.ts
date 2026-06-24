@@ -87,6 +87,18 @@ class StickyHeaderStepperHost {}
 })
 class VerticalStepperHost {}
 
+@Component({
+  standalone: true,
+  imports: [Step, Stepper],
+  template: `
+    <ngs-stepper hideHeaderBorder>
+      <ngs-step label="Account">Account content</ngs-step>
+      <ngs-step label="Billing">Billing content</ngs-step>
+    </ngs-stepper>
+  `,
+})
+class HiddenHeaderBorderStepperHost {}
+
 describe('Stepper', () => {
   it('should render a custom step label from ngsStepLabel', async () => {
     const fixture = await createFixture(CustomStepLabelHost);
@@ -138,6 +150,14 @@ describe('Stepper', () => {
     expect(stepperHeaderContainer(fixture).classList.contains('ngs-stepper-header-sticky')).toBe(
       true,
     );
+  });
+
+  it('should apply the hidden header border class when hideHeaderBorder is enabled', async () => {
+    const fixture = await createFixture(HiddenHeaderBorderStepperHost);
+
+    expect(
+      stepperHeaderContainer(fixture).classList.contains('ngs-stepper-header-border-hidden'),
+    ).toBe(true);
   });
 
   it('should render the vertical layout classes and connectors', async () => {

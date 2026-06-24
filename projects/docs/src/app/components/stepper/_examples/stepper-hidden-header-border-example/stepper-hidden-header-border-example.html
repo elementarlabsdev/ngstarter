@@ -1,0 +1,37 @@
+<ngs-stepper hideHeaderBorder headerPosition="bottom" #stepper>
+  <ngs-step [stepControl]="accountForm">
+    <form [formGroup]="accountForm">
+      <ng-template ngsStepLabel>Account</ng-template>
+      <ngs-form-field class="w-1/2 mt-2">
+        <ngs-label>Account name</ngs-label>
+        <input ngsInput formControlName="accountName" placeholder="Acme Finance" required>
+      </ngs-form-field>
+      <div>
+        <button ngsButton="filled" ngsStepperNext>Next</button>
+      </div>
+    </form>
+  </ngs-step>
+
+  <ngs-step [stepControl]="workspaceForm">
+    <form [formGroup]="workspaceForm">
+      <ng-template ngsStepLabel>Workspace</ng-template>
+      <ngs-form-field class="w-1/2 mt-2">
+        <ngs-label>Workspace name</ngs-label>
+        <input ngsInput formControlName="workspaceName" placeholder="Revenue operations" required>
+      </ngs-form-field>
+      <div class="flex gap-3">
+        <button ngsButton="outlined" ngsStepperPrevious>Back</button>
+        <button ngsButton="filled" ngsStepperNext>Next</button>
+      </div>
+    </form>
+  </ngs-step>
+
+  <ngs-step>
+    <ng-template ngsStepLabel>Review</ng-template>
+    <p>Review the setup before creating the workspace.</p>
+    <div class="flex gap-3">
+      <button ngsButton="outlined" ngsStepperPrevious>Back</button>
+      <button ngsButton="filled" (click)="stepper.reset()">Reset</button>
+    </div>
+  </ngs-step>
+</ngs-stepper>
