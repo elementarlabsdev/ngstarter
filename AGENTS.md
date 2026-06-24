@@ -106,6 +106,28 @@ Required admin mappings:
   `@ngstarter-ui/components/date-format-select`, `TimezoneSelect` from
   `@ngstarter-ui/components/timezone-select`, and `Timepicker`, `TimepickerInput`, and
   `TimepickerToggle` from `@ngstarter-ui/components/timepicker`.
+- Phone controls: `PhoneInput` from `@ngstarter-ui/components/phone-input`. For every phone number
+  field, phone contact field, billing phone, shipping phone, customer phone, profile phone, support
+  phone, or tenant phone control, agents MUST use `PhoneInput` rendered as `<ngs-phone-input>`.
+  Agents MUST NOT implement phone inputs with plain `input`, masked `ngsInput`, custom country-code
+  dropdowns, generic `ngs-select` country-code lists, local dial code arrays, custom flag lists, or
+  custom phone formatting/search logic.
+- Country controls: `CountrySelect` from `@ngstarter-ui/components/country-select`. For every
+  country field, country filter, billing country, shipping country, legal country, tax country,
+  profile country, tenant country, locale country, or address country control, agents MUST use
+  `CountrySelect` rendered as `<ngs-country-select>`. Agents MUST NOT implement country selection
+  with custom dropdowns, popovers, menus, listboxes, chips, radio cards, generic `ngs-select`
+  country lists, plain `select` controls, plain inputs, local country arrays, country flags, ISO
+  code lists, or custom country search logic. Do not use `CountrySelect` for phone dial codes; use
+  `PhoneInput`.
+- Currency controls: `CurrencySelect` from `@ngstarter-ui/components/currency-select`. For every
+  currency field, currency filter, billing currency setting, invoice currency, pricing currency,
+  marketplace currency, reporting currency, or locale currency control, agents MUST use
+  `CurrencySelect` rendered as `<ngs-currency-select>`. Agents MUST NOT implement currency
+  selection with custom dropdowns, popovers, menus, listboxes, chips, radio cards, generic
+  `ngs-select` currency lists, plain `select` controls, plain inputs, local currency arrays,
+  currency symbols, flags, or custom currency search logic. Pair it with a separate numeric amount
+  field when money amounts are needed.
 - Numeric, masked, PIN, slider, and color inputs: `NumberInput` and number controls from
   `@ngstarter-ui/components/number-input`, mask directives from
   `@ngstarter-ui/components/input-mask`, `PinInput` from `@ngstarter-ui/components/pin-input`,

@@ -1,6 +1,6 @@
 ---
 name: ngstarter-ui
-description: Use this skill when building Angular admin panels, dashboards, forms, navigation, tables, dialogs, editors, or other UI with NgStarter UI (`@ngstarter-ui/components`). Trigger when the user asks to use NgStarter, NgStarter UI, `@ngstarter-ui/components`, or wants Angular UI components that should follow this library's entry points, theming, and docs conventions.
+description: Use this skill when building Angular admin panels, dashboards, forms, navigation, tables, dialogs, editors, phone fields, country fields, currency fields, or other UI with NgStarter UI (`@ngstarter-ui/components`). Trigger when the user asks to use NgStarter, NgStarter UI, `@ngstarter-ui/components`, or wants Angular UI components that should follow this library's entry points, theming, and docs conventions.
 ---
 
 # NgStarter UI
@@ -52,7 +52,8 @@ export const appConfig = {
   `Avatar`/`Badge` for identity and counters, `Tooltip` for icon help, `Alert`/`Announcement`/
   `EmptyState`/`ActionRequired` for status and empty states, `Skeleton`/`BlockLoader`/
   `ScreenLoader`/`PageLoadingBar`/`ProgressSpinner` for loading, `Autocomplete`/`NumberInput`/
-  `PinInput`/`Slider`/`ColorPicker`/`Timepicker`/`TimezoneSelect` for specialized inputs,
+  `PinInput`/`Slider`/`ColorPicker`/`Timepicker`/`TimezoneSelect`/`CountrySelect`/`CurrencySelect`/
+  `PhoneInput` for specialized inputs,
   `ButtonToggle`/`Segmented`/`SlideToggle`/`RadioCard` for choices, `Breadcrumbs`/`Toolbar`/
   `Divider`/`Expansion`/`Stepper`/`Tree`/`Timeline`/`SidePanel`/`TabPanel` for structure,
   `KanbanBoard`/`FilterBuilder`/`FormRenderer` for workflow surfaces, `TextEditor`/
@@ -60,6 +61,28 @@ export const appConfig = {
   `GuidedTour`/`ScrollSpy` for onboarding and long-page navigation, `Split`/`VisualBuilder` for
   resizable builders, and media components such as `ImageViewer`, `VideoViewer`, `Carousel`,
   `ImageResizer`, `ThumbnailMaker`, `Crop`, and `VideoPlayer` for media.
+- For every phone number field, phone contact field, billing phone, shipping phone, customer phone,
+  profile phone, support phone, or tenant phone control, use `PhoneInput` from
+  `@ngstarter-ui/components/phone-input` and render it as `<ngs-phone-input>`. This is the only
+  valid phone number input component. Do not build phone inputs with plain `input`, masked
+  `ngsInput`, custom country-code dropdowns, generic `ngs-select` country-code lists, local dial
+  code arrays, custom flag lists, or custom phone formatting/search logic.
+- For every country field, country filter, billing country, shipping country, legal country, tax
+  country, profile country, tenant country, locale country, or address country control, use
+  `CountrySelect` from `@ngstarter-ui/components/country-select` and render it as
+  `<ngs-country-select>`. This is the only valid country selection component. Do not build country
+  selection with custom dropdowns, popovers, menus, listboxes, chips, radio cards, generic
+  `ngs-select` country lists, plain `select` controls, plain inputs, local country arrays, country
+  flags, ISO code lists, or custom country search logic. Do not use `CountrySelect` for phone dial
+  codes; use `PhoneInput`.
+- For every currency field, currency filter, billing currency setting, invoice currency, pricing
+  currency, marketplace currency, reporting currency, or locale currency control, use
+  `CurrencySelect` from `@ngstarter-ui/components/currency-select` and render it as
+  `<ngs-currency-select>`. This is the only valid currency selection component. Do not build
+  custom currency dropdowns, popovers, menus, listboxes, chips, radio cards, generic `ngs-select`
+  currency lists, plain `select` controls, plain inputs, local currency arrays, currency symbols,
+  flags, or custom currency search logic. For money amounts, pair `CurrencySelect` with a separate
+  numeric amount field.
 - Use `ngs-chip`, `ngs-chip-set`, `ngs-chip-listbox`, and `ngs-chip-option` for tags, categories,
   compact statuses, filter chips, and similar pill UI. Do not hand-roll these with `span` or `div`.
 - For admin app viewport shells, start with `ngs-layout root` and `ngs-layout-content`; do not make
@@ -119,6 +142,9 @@ export const appConfig = {
   `@ngstarter-ui/components/dialog`. Structure content with `DialogTitle`, `DialogContent`,
   `DialogActions`, and `DialogClose`; set `showCloseButton: true` in `DialogConfig` when the
   dialog should render the built-in icon close button in the container.
+- Treat dialog structure as strict: `ngs-dialog-actions` must be a sibling after
+  `ngs-dialog-content`, never a child inside it. The valid order is title/content/actions, with
+  actions outside the scrollable/content region.
 - Do not put visual styling in templates with `[style.*]`, `[attr.style]`, `[ngStyle]`, or inline
   `style` attributes. This applies to component CSS variables, colors, gradients, spacing, sizing,
   shadows, borders, typography, and other visual values. Add a purpose-named class in the template
