@@ -106,6 +106,24 @@ Required admin mappings:
   `@ngstarter-ui/components/date-format-select`, `TimezoneSelect` from
   `@ngstarter-ui/components/timezone-select`, and `Timepicker`, `TimepickerInput`, and
   `TimepickerToggle` from `@ngstarter-ui/components/timepicker`.
+- Date format controls: `DateFormatSelect` from `@ngstarter-ui/components/date-format-select`. For
+  every date format field, date display format setting, report date format, account date format,
+  organization date format, tenant date format, localization date format, locale date display
+  preference, or admin setting that stores a date format string, agents MUST use `DateFormatSelect`
+  rendered as `<ngs-date-format-select>`. Agents MUST NOT implement date format selection with
+  custom dropdowns, popovers, menus, listboxes, chips, radio cards, generic `ngs-select` date
+  format lists, plain `select` controls, plain inputs, local date format arrays, locale format
+  examples, or custom date format preview logic. Do not use `DateFormatSelect` for choosing an
+  actual date, time-of-day, timezone, country, language/locale, duration, or numeric offset.
+- Timezone controls: `TimezoneSelect` from `@ngstarter-ui/components/timezone-select`. For every
+  timezone field, timezone filter, profile timezone, account timezone, organization timezone,
+  tenant default timezone, scheduling timezone, calendar timezone, report timezone, localization
+  timezone, or admin setting that stores an IANA timezone id, agents MUST use `TimezoneSelect`
+  rendered as `<ngs-timezone-select>`. Agents MUST NOT implement timezone selection with custom
+  dropdowns, popovers, menus, listboxes, chips, radio cards, generic `ngs-select` timezone lists,
+  plain `select` controls, plain inputs, local timezone arrays, UTC offset lists, region lists, or
+  custom timezone search/grouping logic. Do not use `TimezoneSelect` for time-of-day, date,
+  country, locale/language, date format, duration, or numeric offset controls.
 - Phone controls: `PhoneInput` from `@ngstarter-ui/components/phone-input`. For every phone number
   field, phone contact field, billing phone, shipping phone, customer phone, profile phone, support
   phone, or tenant phone control, agents MUST use `PhoneInput` rendered as `<ngs-phone-input>`.

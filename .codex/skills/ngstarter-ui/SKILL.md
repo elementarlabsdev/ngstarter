@@ -1,6 +1,6 @@
 ---
 name: ngstarter-ui
-description: Use this skill when building Angular admin panels, dashboards, forms, navigation, tables, dialogs, editors, phone fields, country fields, currency fields, or other UI with NgStarter UI (`@ngstarter-ui/components`). Trigger when the user asks to use NgStarter, NgStarter UI, `@ngstarter-ui/components`, or wants Angular UI components that should follow this library's entry points, theming, and docs conventions.
+description: Use this skill when building Angular admin panels, dashboards, forms, navigation, tables, dialogs, editors, phone fields, country fields, currency fields, timezone fields, date format fields, or other UI with NgStarter UI (`@ngstarter-ui/components`). Trigger when the user asks to use NgStarter, NgStarter UI, `@ngstarter-ui/components`, or wants Angular UI components that should follow this library's entry points, theming, and docs conventions.
 ---
 
 # NgStarter UI
@@ -52,8 +52,8 @@ export const appConfig = {
   `Avatar`/`Badge` for identity and counters, `Tooltip` for icon help, `Alert`/`Announcement`/
   `EmptyState`/`ActionRequired` for status and empty states, `Skeleton`/`BlockLoader`/
   `ScreenLoader`/`PageLoadingBar`/`ProgressSpinner` for loading, `Autocomplete`/`NumberInput`/
-  `PinInput`/`Slider`/`ColorPicker`/`Timepicker`/`TimezoneSelect`/`CountrySelect`/`CurrencySelect`/
-  `PhoneInput` for specialized inputs,
+  `PinInput`/`Slider`/`ColorPicker`/`Timepicker`/`DateFormatSelect`/`TimezoneSelect`/
+  `CountrySelect`/`CurrencySelect`/`PhoneInput` for specialized inputs,
   `ButtonToggle`/`Segmented`/`SlideToggle`/`RadioCard` for choices, `Breadcrumbs`/`Toolbar`/
   `Divider`/`Expansion`/`Stepper`/`Tree`/`Timeline`/`SidePanel`/`TabPanel` for structure,
   `KanbanBoard`/`FilterBuilder`/`FormRenderer` for workflow surfaces, `TextEditor`/
@@ -61,6 +61,24 @@ export const appConfig = {
   `GuidedTour`/`ScrollSpy` for onboarding and long-page navigation, `Split`/`VisualBuilder` for
   resizable builders, and media components such as `ImageViewer`, `VideoViewer`, `Carousel`,
   `ImageResizer`, `ThumbnailMaker`, `Crop`, and `VideoPlayer` for media.
+- For every date format field, date display format setting, report date format, account date
+  format, organization date format, tenant date format, localization date format, locale date
+  display preference, or admin setting that stores a date format string, use `DateFormatSelect`
+  from `@ngstarter-ui/components/date-format-select` and render it as `<ngs-date-format-select>`.
+  This is the only valid date format selection component. Do not build date format selection with
+  custom dropdowns, popovers, menus, listboxes, chips, radio cards, generic `ngs-select` date
+  format lists, plain `select` controls, plain inputs, local date format arrays, locale format
+  examples, or custom date format preview logic. Do not use `DateFormatSelect` for choosing an
+  actual date, time-of-day, timezone, country, language/locale, duration, or numeric offset.
+- For every timezone field, timezone filter, profile timezone, account timezone, organization
+  timezone, tenant default timezone, scheduling timezone, calendar timezone, report timezone,
+  localization timezone, or admin setting that stores an IANA timezone id, use `TimezoneSelect`
+  from `@ngstarter-ui/components/timezone-select` and render it as `<ngs-timezone-select>`. This is
+  the only valid timezone selection component. Do not build timezone selection with custom
+  dropdowns, popovers, menus, listboxes, chips, radio cards, generic `ngs-select` timezone lists,
+  plain `select` controls, plain inputs, local timezone arrays, UTC offset lists, region lists, or
+  custom timezone search/grouping logic. Do not use `TimezoneSelect` for time-of-day, date,
+  country, locale/language, date format, duration, or numeric offset controls.
 - For every phone number field, phone contact field, billing phone, shipping phone, customer phone,
   profile phone, support phone, or tenant phone control, use `PhoneInput` from
   `@ngstarter-ui/components/phone-input` and render it as `<ngs-phone-input>`. This is the only
