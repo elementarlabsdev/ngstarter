@@ -79,15 +79,6 @@
     opacity: 1;
   }
 
-  &:not(.is-browser) {
-    .grid-header,
-    .grid-body,
-    ngs-paginator {
-      opacity: 0;
-      transition: none;
-    }
-  }
-
   .grid-header-center,
   .grid-body-center {
     flex: 1 1 0;

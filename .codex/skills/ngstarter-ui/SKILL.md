@@ -64,6 +64,10 @@ export const appConfig = {
   `GuidedTour`/`ScrollSpy` for onboarding and long-page navigation, `Split`/`VisualBuilder` for
   resizable builders, and media components such as `ImageViewer`, `VideoViewer`, `Carousel`,
   `ImageResizer`, `ThumbnailMaker`, `Crop`, and `VideoPlayer` for media.
+- Use `Alert` from `@ngstarter-ui/components/alert`, rendered as `<ngs-alert>`, for
+  `success-card`, success messages, and other inline notification or status message blocks. Do not
+  hand-roll these blocks with custom `div`/`span` cards, pills, banners, or alert-like containers
+  when `ngs-alert` fits.
 - For every date format field, date display format setting, report date format, account date
   format, organization date format, tenant date format, localization date format, locale date
   display preference, or admin setting that stores a date format string, use `DateFormatSelect`

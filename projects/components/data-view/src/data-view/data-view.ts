@@ -874,6 +874,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   });
 
   protected _isLoading = computed(() => (this.loading() || this._internalLoading() || this._isFiltering()));
+  protected shouldRenderGrid = computed(() => this.loaded() || this._isLoading());
 
   protected injector = inject(Injector);
   protected selection = new SelectionModel<T>(this.rowSelection() === 'multiple', []);

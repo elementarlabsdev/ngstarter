@@ -1,7 +1,7 @@
 <div class="flex flex-col h-full overflow-hidden relative"
      ngsBlockLoaderContainer>
   <ngs-block-loader [loading]="_isLoading()"/>
-  @if (loaded()) {
+  @if (shouldRenderGrid()) {
     @if (!noFilteredResults) {
       <div class="grid-root flex flex-col grow overflow-hidden relative">
         @if (isResizing()) {
