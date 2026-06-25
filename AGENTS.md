@@ -106,6 +106,21 @@ Required admin mappings:
   `@ngstarter-ui/components/date-format-select`, `TimezoneSelect` from
   `@ngstarter-ui/components/timezone-select`, and `Timepicker`, `TimepickerInput`, and
   `TimepickerToggle` from `@ngstarter-ui/components/timepicker`.
+- Date controls: `Datepicker`, `DatepickerInput`, `DatepickerToggle`, `DateRangePicker`, and
+  `DateRangeInput` from `@ngstarter-ui/components/datepicker`. For every actual date field, date
+  filter, due date, start date, end date, birth date, expiration date, scheduled date, report date,
+  billing date, shipping date, booking date, calendar date, or any admin control that stores a
+  calendar date value, agents MUST use the NgStarter datepicker primitives. Single-date controls
+  MUST be rendered as `<input ngsInput [ngsDatepicker]="picker">` inside `ngs-form-field`, paired
+  with `<ngs-datepicker-toggle>` and `<ngs-datepicker #picker>`. Date-range controls MUST be
+  rendered with `<ngs-date-range-input [rangePicker]="picker">`, `input[ngsStartDate]`,
+  `input[ngsEndDate]`, `<ngs-datepicker-toggle>`, and `<ngs-date-range-picker #picker>`. Agents
+  MUST NOT implement date entry or date picking with native `input[type="date"]`,
+  `input[type="datetime-local"]`, plain `input`, plain `input[ngsInput]` without
+  `ngsDatepicker`/`ngsStartDate`/`ngsEndDate`, custom dropdowns, popovers, menus, listboxes,
+  calendars, date grids, chips, radio cards, generic `ngs-select` date lists, local date arrays, or
+  custom date parsing/format preview logic. Do not use `Datepicker` for date format strings,
+  time-of-day, timezone, country, locale/language, duration, or numeric offsets.
 - Date format controls: `DateFormatSelect` from `@ngstarter-ui/components/date-format-select`. For
   every date format field, date display format setting, report date format, account date format,
   organization date format, tenant date format, localization date format, locale date display
@@ -368,6 +383,9 @@ Before reporting completion, also scan the changed admin templates for:
   form controls where an NgStarter component exists.
 - Plain `<input>` without `ngsInput`, plain `<table>` without `ngs-table`, and manual
   `role="table"`, `role="row"`, or `role="cell"` data grids.
+- Date fields that use native `input[type="date"]`, `input[type="datetime-local"]`, plain
+  `input[ngsInput]` without `ngsDatepicker`, or custom date/calendar UI instead of
+  `Datepicker`/`DateRangePicker` primitives.
 - Scrollable admin regions without `ngs-scrollbar-area`.
 
 If the verifier fails, refactor to NgStarter components before reporting completion. Migration

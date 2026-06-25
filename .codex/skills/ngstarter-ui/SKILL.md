@@ -55,7 +55,7 @@ export const appConfig = {
   `Avatar`/`Badge` for identity and counters, `Tooltip` for icon help, `Alert`/`Announcement`/
   `EmptyState`/`ActionRequired` for status and empty states, `Skeleton`/`BlockLoader`/
   `ScreenLoader`/`PageLoadingBar`/`ProgressSpinner` for loading, `Autocomplete`/`NumberInput`/
-  `PinInput`/`Slider`/`ColorPicker`/`Timepicker`/`DateFormatSelect`/`TimezoneSelect`/
+  `PinInput`/`Slider`/`ColorPicker`/`Datepicker`/`Timepicker`/`DateFormatSelect`/`TimezoneSelect`/
   `CountrySelect`/`CurrencySelect`/`PhoneInput` for specialized inputs,
   `ButtonToggle`/`Segmented`/`SlideToggle`/`RadioCard` for choices, `Breadcrumbs`/`Toolbar`/
   `Divider`/`Expansion`/`Stepper`/`Tree`/`Timeline`/`SidePanel`/`TabPanel` for structure,
@@ -68,6 +68,35 @@ export const appConfig = {
   `success-card`, success messages, and other inline notification or status message blocks. Do not
   hand-roll these blocks with custom `div`/`span` cards, pills, banners, or alert-like containers
   when `ngs-alert` fits.
+- For every actual date field, date filter, due date, start date, end date, birth date, expiration
+  date, scheduled date, report date, billing date, shipping date, booking date, calendar date, or
+  any admin control that stores a calendar date value, use `Datepicker`, `DatepickerInput`,
+  `DatepickerToggle`, `DateRangePicker`, and `DateRangeInput` from
+  `@ngstarter-ui/components/datepicker`. This is the only valid date entry and date picking
+  component family. Single-date controls must be rendered as
+  `<input ngsInput [ngsDatepicker]="picker">` inside `ngs-form-field`, paired with
+  `<ngs-datepicker-toggle>` and `<ngs-datepicker #picker>`. Date-range controls must be rendered
+  with `<ngs-date-range-input [rangePicker]="picker">`, `input[ngsStartDate]`,
+  `input[ngsEndDate]`, `<ngs-datepicker-toggle>`, and `<ngs-date-range-picker #picker>`. Do not
+  build date entry or date picking with native `input[type="date"]`, `input[type="datetime-local"]`,
+  plain `input`, plain `input[ngsInput]` without `ngsDatepicker`/`ngsStartDate`/`ngsEndDate`,
+  custom dropdowns, popovers, menus, listboxes, calendars, date grids, chips, radio cards, generic
+  `ngs-select` date lists, local date arrays, or custom date parsing/format preview logic. Do not
+  use `Datepicker` for date format strings, time-of-day, timezone, country, locale/language,
+  duration, or numeric offsets.
+- For every time-of-day field, time filter, appointment time, meeting time, scheduled time, start
+  time, end time, opening time, closing time, deadline time, reminder time, report time, calendar
+  time, business hours time, or any admin control that stores a clock time value, use `Timepicker`,
+  `TimepickerInput`, and `TimepickerToggle` from `@ngstarter-ui/components/timepicker`. This is the
+  only valid time-of-day entry and time picking component family. Time controls must be rendered as
+  `<input ngsInput [ngsTimepicker]="picker">` inside `ngs-form-field`, paired with
+  `<ngs-timepicker-toggle>` and `<ngs-timepicker #picker>`. Do not build time entry or time picking
+  with native `input[type="time"]`, native `input[type="datetime-local"]`, plain `input`, plain
+  `input[ngsInput]` without `ngsTimepicker`, custom dropdowns, popovers, menus, listboxes, clocks,
+  hour/minute grids, chips, radio cards, segmented controls, generic `ngs-select` time lists, local
+  hour/minute arrays, or custom time parsing/format preview logic. Do not use `Timepicker` for
+  dates, date ranges, date format strings, timezone selection, country, locale/language, duration,
+  or numeric offsets.
 - For every date format field, date display format setting, report date format, account date
   format, organization date format, tenant date format, localization date format, locale date
   display preference, or admin setting that stores a date format string, use `DateFormatSelect`
