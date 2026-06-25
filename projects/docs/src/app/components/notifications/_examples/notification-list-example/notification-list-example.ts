@@ -12,7 +12,7 @@ import {
   NotificationContent
 } from '@ngstarter-ui/components/notifications';
 import { Icon } from '@ngstarter-ui/components/icon';
-import { Dicebear } from '@ngstarter-ui/components/avatar';
+import { Avatar } from '@ngstarter-ui/components/avatar';
 import { RouterLink } from '@angular/router';
 import {Button} from "@ngstarter-ui/components/button";
 
@@ -28,7 +28,7 @@ import {Button} from "@ngstarter-ui/components/button";
     NotificationList,
     MenuTrigger,
     Notification,
-    Dicebear,
+    Avatar,
     NotificationAvatarDirective,
     NotificationActor,
     NotificationMessage,

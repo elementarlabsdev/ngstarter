@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import {Dicebear} from "@ngstarter-ui/components/avatar";
+import {Avatar} from "@ngstarter-ui/components/avatar";
 import {Icon} from "@ngstarter-ui/components/icon";
 import {KanbanBoard, KanbanColumn, KanbanItemDefDirective} from "@ngstarter-ui/components/kanban-board";
 
 @Component({
   selector: 'app-basic-example',
   imports: [
-    Dicebear,
+    Avatar,
     Icon,
     KanbanBoard,
     KanbanItemDefDirective

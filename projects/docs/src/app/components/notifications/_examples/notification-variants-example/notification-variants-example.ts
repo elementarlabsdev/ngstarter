@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Dicebear } from '@ngstarter-ui/components/avatar';
+import { Avatar } from '@ngstarter-ui/components/avatar';
 import { Button } from '@ngstarter-ui/components/button';
 import { Chip } from '@ngstarter-ui/components/chips';
 import { Icon } from '@ngstarter-ui/components/icon';
@@ -18,7 +18,7 @@ import {
   imports: [
     Button,
     Chip,
-    Dicebear,
+    Avatar,
     Icon,
     Notification,
     NotificationActor,

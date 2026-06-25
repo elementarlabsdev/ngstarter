@@ -1,7 +1,7 @@
 import { Component, effect, input, output, signal } from '@angular/core';
 import { Menu, MenuTrigger } from '@ngstarter-ui/components/menu';
 import { Icon } from '@ngstarter-ui/components/icon';
-import { Dicebear } from '@ngstarter-ui/components/avatar';
+import { Avatar } from '@ngstarter-ui/components/avatar';
 import { Divider } from '@ngstarter-ui/components/divider';
 import { Button } from '@ngstarter-ui/components/button';
 import { Ripple } from '@ngstarter-ui/components/core';
@@ -12,7 +12,7 @@ import { Ripple } from '@ngstarter-ui/components/core';
     Menu,
     MenuTrigger,
     Icon,
-    Dicebear,
+    Avatar,
     Divider,
     Button,
     Ripple,

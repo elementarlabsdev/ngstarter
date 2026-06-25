@@ -12,8 +12,6 @@
     "@codemirror/lang-json",
     "@codemirror/lang-sass",
     "@ctrl/tinycolor",
-    "@dicebear/collection",
-    "@dicebear/core",
     "@embedpdf/core",
     "@embedpdf/engines",
     "@embedpdf/models",

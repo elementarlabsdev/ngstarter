@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { NgComponentOutlet } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
-import { Dicebear } from '@ngstarter-ui/components/avatar';
+import { Avatar } from '@ngstarter-ui/components/avatar';
 import { Button } from '@ngstarter-ui/components/button';
 import { Chip } from '@ngstarter-ui/components/chips';
 import {
@@ -77,7 +77,7 @@ import {
   exportAs: 'ngsFormBuilderFieldHost',
   imports: [
     ReactiveFormsModule,
-    Dicebear,
+    Avatar,
     Button,
     Chip,
     Datepicker,

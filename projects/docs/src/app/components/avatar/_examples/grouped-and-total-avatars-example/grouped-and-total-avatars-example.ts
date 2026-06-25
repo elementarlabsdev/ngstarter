@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import {
   Avatar,
   AvatarGroup,
-  AvatarMore,
-  Dicebear
+  AvatarMore
 } from '@ngstarter-ui/components/avatar';
 
 @Component({
@@ -12,8 +11,7 @@ import {
   imports: [
     Avatar,
     AvatarGroup,
-    AvatarMore,
-    Dicebear
+    AvatarMore
   ],
   styleUrl: './grouped-and-total-avatars-example.scss'
 })

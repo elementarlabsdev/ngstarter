@@ -6,14 +6,14 @@ import {
   NotificationMessage,
   NotificationTime, NotificationContent
 } from '@ngstarter-ui/components/notifications';
-import { Dicebear } from '@ngstarter-ui/components/avatar';
+import { Avatar } from '@ngstarter-ui/components/avatar';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-basic-notifications-example',
   imports: [
     Notification,
-    Dicebear,
+    Avatar,
     NotificationAvatarDirective,
     NotificationMessage,
     NotificationTime,

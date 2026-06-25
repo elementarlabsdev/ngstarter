@@ -53,8 +53,6 @@
     "@codemirror/lang-json": "^6.0.2",
     "@codemirror/lang-sass": "^6.0.2",
     "@ctrl/tinycolor": "^4.1.0",
-    "@dicebear/collection": "^9.2.2",
-    "@dicebear/core": "^9.4.2",
     "@embedpdf/core": "^2.14.3",
     "@embedpdf/engines": "^2.14.3",
     "@embedpdf/models": "^2.14.3",

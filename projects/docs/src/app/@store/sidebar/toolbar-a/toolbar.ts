@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
-import { Dicebear } from '@ngstarter-ui/components/avatar';
+import { Avatar } from '@ngstarter-ui/components/avatar';
 import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
@@ -8,7 +8,7 @@ import { Button } from '@ngstarter-ui/components/button';
   imports: [
     Icon,
     Button,
-    Dicebear
+    Avatar
   ],
   templateUrl: './toolbar.html',
   styleUrl: './toolbar.scss'

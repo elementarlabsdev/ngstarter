@@ -2,6 +2,39 @@
   <img class="image" loading="lazy" [src]="image()" [alt]="alt()" (load)="onImageLoaded()">
 }
 
+@if (!image() && generatedAvatar(); as avatar) {
+  @if (avatar.kind === 'identicon') {
+    <svg class="generated-avatar" viewBox="0 0 9 9" fill="none" shape-rendering="crispEdges" aria-hidden="true">
+      <rect width="9" height="9" x="0" y="0" [attr.fill]="avatar.background"></rect>
+      <g>
+        @for (cell of avatar.cells; track cell.id) {
+          <rect
+            [attr.x]="cell.x + 2"
+            [attr.y]="cell.y + 2"
+            width="1"
+            height="1"
+            [attr.fill]="avatar.foreground"></rect>
+        }
+      </g>
+    </svg>
+  } @else {
+    <svg class="generated-avatar" viewBox="0 0 100 100" aria-hidden="true">
+      <rect width="100" height="100" x="0" y="0" [attr.fill]="avatar.background"></rect>
+      <g transform="translate(12.5 12.5) scale(0.75)">
+        <text
+          x="50%"
+          y="50%"
+          font-family="Arial, sans-serif"
+          font-weight="500"
+          font-size="50"
+          dy="17.800"
+          text-anchor="middle"
+          [attr.fill]="avatar.foreground">{{ avatar.label }}</text>
+      </g>
+    </svg>
+  }
+}
+
 @if (presenceIndicator()) {
   <div class="presence-indicator"
        [class.is-online]="presenceIndicator() === 'online'"
@@ -9,7 +42,7 @@
        [class.is-away]="presenceIndicator() === 'away'"></div>
 }
 
-@if (label() && showLabel) {
+@if (label() && showLabel && !generatedAvatar()) {
   <svg viewBox="0 0 50 50" class="text">
     <text
       x="50%"

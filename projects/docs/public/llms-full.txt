@@ -129,9 +129,9 @@ Typography:
   purpose: Represent users, teams, or entities with initials, images, icons, generated colors, and presence.
   use when: Use in account menus, lists, comments, assignees, collaborators, and activity feeds.
   example topics: Basic Avatar, Avatar Variants, Presence Indicator, Avatar Sizes, Avatar With Images, Avatar With Icons, Grouped Avatars, Grouped and Total Avatars
-  selectors: `[ngs-avatar-more]`, `[ngs-avatar-total]`, `[ngs-avatar]`, `[ngs-dicebear]`, `ngs-avatar`, `ngs-avatar-group`, `ngs-avatar-more`, `ngs-avatar-total`, `ngs-dicebear`
-  exports: `Avatar`, `AVATAR_ACCESSOR`, `AvatarGroup`, `AvatarMore`, `AvatarPresenceIndicator`, `AvatarTotal`, `AvatarVariant`, `Dicebear`, `Preset`
-  inputs: `alt`, `automaticColor`, `clickable`, `image`, `key`, `label`, `presenceIndicator`, `preset`, `variant`
+  selectors: `[ngs-avatar-more]`, `[ngs-avatar-total]`, `[ngs-avatar]`, `ngs-avatar`, `ngs-avatar-group`, `ngs-avatar-more`, `ngs-avatar-total`
+  exports: `Avatar`, `AVATAR_ACCESSOR`, `AvatarGroup`, `AvatarKey`, `AvatarMore`, `AvatarPresenceIndicator`, `AvatarPreset`, `AvatarTotal`, `AvatarVariant`
+  inputs: `alt`, `automaticColor`, `backgroundColors`, `clickable`, `foregroundColors`, `image`, `key`, `label`, `presenceIndicator`, `preset`, `variant`
   tokens: `--ngs-avatar-bg`, `--ngs-avatar-border-color`, `--ngs-avatar-border-color-auto`, `--ngs-avatar-border-radius`, `--ngs-avatar-border-width`, `--ngs-avatar-color`, `--ngs-avatar-font-weight`, `--ngs-avatar-group-item-border`, `--ngs-avatar-group-item-offset`, `--ngs-avatar-inner-border`, `--ngs-avatar-presence-indicator-away-bg`, `--ngs-avatar-presence-indicator-offline-bg`, `--ngs-avatar-presence-indicator-online-bg`, `--ngs-avatar-presence-indicator-outline`, `--ngs-avatar-presence-indicator-position-end`, `--ngs-avatar-presence-indicator-position-top`
 - badge: `@ngstarter-ui/components/badge` docs: /components/badge
   purpose: Attach compact counts, statuses, or labels to another UI element.

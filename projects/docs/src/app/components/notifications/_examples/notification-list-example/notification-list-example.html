@@ -1,7 +1,7 @@
 <ngs-notification-list [notifications]="notifications" [static]="false">
   <ng-template ngsNotificationDef="mentionedInComment" let-notification>
     <ngs-notification [isUnread]="notification.isUnread">
-      <ngs-dicebear [key]="notification.actor.id"
+      <ngs-avatar preset="identicon" [key]="notification.actor.id"
                     [image]="notification.actor.avatarUrl"
                     ngsNotificationAvatar/>
       <ngs-notification-message>
@@ -16,7 +16,7 @@
   </ng-template>
   <ng-template ngsNotificationDef="inviteToEditFilesInFolder" let-notification>
     <ngs-notification [isUnread]="notification.isUnread">
-      <ngs-dicebear [key]="notification.actor.id"
+      <ngs-avatar preset="identicon" [key]="notification.actor.id"
                     [image]="notification.actor.avatarUrl"
                     ngsNotificationAvatar/>
       <ngs-notification-message>

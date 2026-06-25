@@ -18,7 +18,7 @@ import {
 import {
   AvatarAutomaticColorExample
 } from '../_examples/avatar-automatic-color-example/avatar-automatic-color-example';
-import { AvatarDicebearExample } from '../_examples/avatar-dicebear-example/avatar-dicebear-example';
+import { AvatarGeneratedExample } from '../_examples/avatar-generated-example/avatar-generated-example';
 import { AvatarVariantsExample } from '../_examples/avatar-variants-example/avatar-variants-example';
 
 @Component({
@@ -34,7 +34,7 @@ import { AvatarVariantsExample } from '../_examples/avatar-variants-example/avat
     GroupedAndTotalAvatarsExample,
     AvatarPresenceIndicatorExample,
     AvatarAutomaticColorExample,
-    AvatarDicebearExample,
+    AvatarGeneratedExample,
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'

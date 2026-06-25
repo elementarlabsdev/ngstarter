@@ -1,11 +1,11 @@
 import { Component, input } from '@angular/core';
 import { DataViewCellRenderer, DataViewColumnDef } from '@ngstarter-ui/components/data-view';
-import { Dicebear } from '@ngstarter-ui/components/avatar';
+import { Avatar } from '@ngstarter-ui/components/avatar';
 
 @Component({
   selector: 'app-user-cell',
   imports: [
-    Dicebear
+    Avatar
   ],
   templateUrl: './user-cell.renderer.html',
   styleUrl: './user-cell.renderer.scss'

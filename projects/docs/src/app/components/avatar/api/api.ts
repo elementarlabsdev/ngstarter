@@ -48,6 +48,30 @@ export class Api {
       default: "''"
     },
     {
+      name: 'key',
+      description: 'Stable key used to generate deterministic avatar placeholders',
+      type: 'string | number | null | undefined',
+      default: "''"
+    },
+    {
+      name: 'preset',
+      description: 'Generated placeholder preset to render when image is not provided',
+      type: "'identicon' | 'initials' | string",
+      default: "''"
+    },
+    {
+      name: 'backgroundColors',
+      description: 'HEX background color palette used by generated avatar presets',
+      type: 'string[]',
+      default: '[]'
+    },
+    {
+      name: 'foregroundColors',
+      description: 'HEX foreground color palette used by generated identicon patterns',
+      type: 'string[]',
+      default: '[]'
+    },
+    {
       name: 'alt',
       description: 'Accessibility label for the image',
       type: 'string',
