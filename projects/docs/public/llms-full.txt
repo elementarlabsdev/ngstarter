@@ -126,12 +126,12 @@ Typography:
   outputs: `closed`, `opened`, `optionActivated`, `optionSelected`
   tokens: `--ngs-autocomplete-panel-bg`, `--ngs-autocomplete-panel-border`, `--ngs-autocomplete-panel-max-height`, `--ngs-autocomplete-panel-padding`, `--ngs-autocomplete-panel-shadow`, `--ngs-dropdown-bg`, `--ngs-dropdown-border`, `--ngs-dropdown-max-height`, `--ngs-dropdown-padding`, `--ngs-dropdown-radius`, `--ngs-dropdown-shadow`
 - avatar: `@ngstarter-ui/components/avatar` docs: /components/avatar
-  purpose: Represent users, teams, or entities with initials, images, icons, generated colors, and presence.
-  use when: Use in account menus, lists, comments, assignees, collaborators, and activity feeds.
+  purpose: Represent users, teams, or entities with images, initials, icons, generated key-based avatar appearances, and presence.
+  use when: Use in account menus, lists, comments, assignees, collaborators, and activity feeds. Use the default appearance for normal image, label, or icon avatars. Use appearance="identicon" or appearance="initials" with a stable key for deterministic generated placeholders, optionally with backgroundColors and foregroundColors. Set a global default with provideAvatar({ appearance }) and override individual avatars with appearance="default" when generated placeholders should be disabled.
   example topics: Basic Avatar, Avatar Variants, Presence Indicator, Avatar Sizes, Avatar With Images, Avatar With Icons, Grouped Avatars, Grouped and Total Avatars
   selectors: `[ngs-avatar-more]`, `[ngs-avatar-total]`, `[ngs-avatar]`, `ngs-avatar`, `ngs-avatar-group`, `ngs-avatar-more`, `ngs-avatar-total`
-  exports: `Avatar`, `AVATAR_ACCESSOR`, `AvatarGroup`, `AvatarKey`, `AvatarMore`, `AvatarPresenceIndicator`, `AvatarPreset`, `AvatarTotal`, `AvatarVariant`
-  inputs: `alt`, `automaticColor`, `backgroundColors`, `clickable`, `foregroundColors`, `image`, `key`, `label`, `presenceIndicator`, `preset`, `variant`
+  exports: `Avatar`, `AVATAR_ACCESSOR`, `AVATAR_CONFIG`, `AvatarAppearance`, `AvatarConfig`, `AvatarGenerator`, `AvatarGeneratorOptions`, `AvatarGroup`, `AvatarKey`, `AvatarMore`, `AvatarPresenceIndicator`, `AvatarTotal`
+  inputs: `alt`, `appearance`, `automaticColor`, `backgroundColors`, `clickable`, `foregroundColors`, `image`, `key`, `label`, `presenceIndicator`, `variant`
   tokens: `--ngs-avatar-bg`, `--ngs-avatar-border-color`, `--ngs-avatar-border-color-auto`, `--ngs-avatar-border-radius`, `--ngs-avatar-border-width`, `--ngs-avatar-color`, `--ngs-avatar-font-weight`, `--ngs-avatar-group-item-border`, `--ngs-avatar-group-item-offset`, `--ngs-avatar-inner-border`, `--ngs-avatar-presence-indicator-away-bg`, `--ngs-avatar-presence-indicator-offline-bg`, `--ngs-avatar-presence-indicator-online-bg`, `--ngs-avatar-presence-indicator-outline`, `--ngs-avatar-presence-indicator-position-end`, `--ngs-avatar-presence-indicator-position-top`
 - badge: `@ngstarter-ui/components/badge` docs: /components/badge
   purpose: Attach compact counts, statuses, or labels to another UI element.

@@ -124,8 +124,8 @@ const curatedGuidance = new Map(Object.entries({
     useWhen: 'Use for large option lists where a select would be too slow or crowded.',
   },
   avatar: {
-    purpose: 'Represent users, teams, or entities with initials, images, icons, generated colors, and presence.',
-    useWhen: 'Use in account menus, lists, comments, assignees, collaborators, and activity feeds.',
+    purpose: 'Represent users, teams, or entities with images, initials, icons, generated key-based avatar appearances, and presence.',
+    useWhen: 'Use in account menus, lists, comments, assignees, collaborators, and activity feeds. Use the default appearance for normal image, label, or icon avatars. Use appearance="identicon" or appearance="initials" with a stable key for deterministic generated placeholders, optionally with backgroundColors and foregroundColors. Set a global default with provideAvatar({ appearance }) and override individual avatars with appearance="default" when generated placeholders should be disabled.',
   },
   badge: {
     purpose: 'Attach compact counts, statuses, or labels to another UI element.',

@@ -54,20 +54,20 @@ export class Api {
       default: "''"
     },
     {
-      name: 'preset',
-      description: 'Generated placeholder preset to render when image is not provided',
-      type: "'identicon' | 'initials' | string",
-      default: "''"
+      name: 'appearance',
+      description: 'Avatar appearance. Use default for normal image, label, or icon avatars, and identicon or initials for generated key-based placeholders',
+      type: "'default' | 'identicon' | 'initials' | string",
+      default: "'default'"
     },
     {
       name: 'backgroundColors',
-      description: 'HEX background color palette used by generated avatar presets',
+      description: 'HEX background color palette used by generated avatar appearances',
       type: 'string[]',
       default: '[]'
     },
     {
       name: 'foregroundColors',
-      description: 'HEX foreground color palette used by generated identicon patterns',
+      description: 'HEX foreground color palette used by generated avatar appearances',
       type: 'string[]',
       default: '[]'
     },
@@ -94,6 +94,15 @@ export class Api {
       description: 'The presence status indicator',
       type: 'AvatarPresenceIndicator',
       default: 'null'
+    }
+  ];
+
+  configProperties = [
+    {
+      name: 'appearance',
+      description: 'Default avatar appearance used when an avatar does not set its own appearance input',
+      type: "'default' | 'identicon' | 'initials' | string",
+      default: "'default'"
     }
   ];
 }
