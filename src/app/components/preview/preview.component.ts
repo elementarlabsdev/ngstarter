@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Alert, AlertIconDirective, AlertTitleDirective } from '@ngstarter-ui/components/alert';
-import { AvatarGroup, Dicebear } from '@ngstarter-ui/components/avatar';
+import { Avatar, AvatarGroup } from '@ngstarter-ui/components/avatar';
 import { Badge } from '@ngstarter-ui/components/badge';
 import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardContent } from '@ngstarter-ui/components/card';
@@ -20,6 +20,7 @@ import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
     Alert,
     AlertIconDirective,
     AlertTitleDirective,
+    Avatar,
     AvatarGroup,
     Badge,
     Button,
@@ -30,7 +31,6 @@ import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
     ChipListbox,
     ChipOption,
     ChipSet,
-    Dicebear,
     Icon,
     Kbd,
     KbdGroup,

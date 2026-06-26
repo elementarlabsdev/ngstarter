@@ -4,7 +4,7 @@
      [ngsMenuTriggerFor]="menu">
   @if (_selectedWorkspace()) {
     <span class="flex items-center gap-3 grow ps-2 text-sm">
-      <ngs-avatar preset="identicon" [key]="_selectedWorkspace().id" class="rounded-lg size-9 shadow-xs"/>
+      <ngs-avatar appearance="identicon" [key]="_selectedWorkspace().id" class="rounded-lg size-9 shadow-xs"/>
       {{ _selectedWorkspace().name }}
     </span>
   } @else {
@@ -23,7 +23,7 @@
                [class.is-active]="workspace.id === _selectedWorkspace()?.id"
                (click)="selectWorkspace(workspace)" ngsRipple>
             <div class="flex items-center gap-3 grow">
-              <ngs-avatar preset="identicon" [key]="workspace.id" [image]="workspace.logoUrl" class="rounded-lg size-9 shadow-xs"/>
+              <ngs-avatar appearance="identicon" [key]="workspace.id" [image]="workspace.logoUrl" class="rounded-lg size-9 shadow-xs"/>
               <div>
                 <div>{{ workspace.name }}</div>
                 <div class="text-2xs text-neutral-600">{{ workspace.membersCount }} members</div>

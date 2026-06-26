@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Dicebear } from '@ngstarter-ui/components/avatar';
+import { Avatar } from '@ngstarter-ui/components/avatar';
 import { Card, CardContent } from '@ngstarter-ui/components/card';
 import { Icon } from '@ngstarter-ui/components/icon';
 
@@ -7,7 +7,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
   selector: 'app-testimonials',
   standalone: true,
   imports: [
-    Dicebear,
+    Avatar,
     Card,
     CardContent,
     Icon,
