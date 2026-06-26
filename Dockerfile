@@ -1,5 +1,5 @@
 # --- Base Stage ---
-FROM node:20-bullseye AS build
+FROM node:24-bullseye AS build
 WORKDIR /app
 ENV NODE_OPTIONS="--max_old_space_size=4096"
 COPY package*.json ./
@@ -13,7 +13,7 @@ RUN npm run build:admin-modern:prod
 RUN npm run build:admin-classic:prod
 
 # --- Final Stage ---
-FROM node:20-bullseye-slim
+FROM node:24-bullseye-slim
 WORKDIR /app
 
 COPY --from=build /app/dist /app/dist
