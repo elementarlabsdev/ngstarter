@@ -140,8 +140,8 @@
   --ngs-button-filled-color: var(--ngs-color-on-primary);
   --ngs-button-tonal-bg: var(--ngs-color-secondary-container);
   --ngs-button-tonal-color: var(--ngs-color-on-secondary-container);
-  --ngs-button-outlined-border: var(--ngs-color-outline);
-  --ngs-button-outlined-color: var(--ngs-color-primary);
+  --ngs-button-outlined-border: var(--ngs-color-outline-variant);
+  --ngs-button-outlined-color: inherit;
   --ngs-button-text-color: var(--ngs-color-primary);
 
   --ngs-field-color: var(--ngs-color-primary);
@@ -152,7 +152,7 @@
   --ngs-field-label-color: var(--ngs-color-on-surface-variant);
   --ngs-field-label-focus-color: var(--ngs-color-primary);
   --ngs-field-error-color: var(--ngs-color-danger);
-  --ngs-field-border-color: var(--ngs-color-emphasis);
+  --ngs-field-border-color: var(--ngs-color-outline-variant);
   --ngs-field-border-focus-color: var(--ngs-color-primary);
   --ngs-field-border-width: 1px;
   --ngs-field-radius: var(--ngs-control-radius);

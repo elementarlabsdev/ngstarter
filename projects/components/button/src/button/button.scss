@@ -157,8 +157,8 @@
   }
 
   &.ngs-button-outlined {
-    border: 1px solid var(--ngs-button-outlined-border, var(--ngs-color-emphasis));
-    --ngs-button-color: var(--ngs-button-outlined-color, var(--ngs-color-primary));
+    border: 1px solid var(--ngs-button-outlined-border, var(--ngs-color-muted));
+    --ngs-button-color: var(--ngs-button-outlined-color, var(--ngs-color-on-secondary-container));
   }
 
   &.ngs-icon-button {
