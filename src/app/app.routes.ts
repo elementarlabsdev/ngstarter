@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import {
   BASIC_LAYOUT_ARTICLE_SEO,
   BLOG_SEO,
+  FORM_BUILDER_CALCULATED_FIELD_ARTICLE_SEO,
   FORM_BUILDER_CUSTOM_FIELD_ARTICLE_SEO,
   FORM_BUILDER_CUSTOM_VALIDATOR_ARTICLE_SEO,
   FORM_BUILDER_SCHEMA_ARTICLE_SEO,
@@ -48,6 +49,17 @@ export const routes: Routes = [
       seo: BLOG_SEO,
     },
     loadComponent: () => import('./blog/blog/blog').then(c => c.Blog),
+  },
+  {
+    path: 'blog/form-builder-calculated-field',
+    title: FORM_BUILDER_CALCULATED_FIELD_ARTICLE_SEO.title,
+    data: {
+      seo: FORM_BUILDER_CALCULATED_FIELD_ARTICLE_SEO,
+    },
+    loadComponent: () =>
+      import('./blog/articles/form-builder-calculated-field/form-builder-calculated-field').then(
+        c => c.FormBuilderCalculatedFieldArticle,
+      ),
   },
   {
     path: 'blog/select-data-source',

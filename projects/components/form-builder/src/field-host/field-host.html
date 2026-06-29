@@ -23,6 +23,23 @@
       <input type="hidden" [formControl]="control()">
     }
 
+    @case ('calculated') {
+      <ngs-form-field>
+        <ngs-label>{{ field().label }}</ngs-label>
+        <input ngsInput
+               [type]="calculatedInputType()"
+               [formControl]="control()"
+               [placeholder]="field().placeholder || ''"
+               readonly>
+        @if (field().hint) {
+          <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+        @if (validationErrorMessage(); as errorMessage) {
+          <ngs-error>{{ errorMessage }}</ngs-error>
+        }
+      </ngs-form-field>
+    }
+
     @case ('select') {
       <ngs-form-field>
         <ngs-label>{{ field().label }}</ngs-label>

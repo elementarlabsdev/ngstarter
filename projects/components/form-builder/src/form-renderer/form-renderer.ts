@@ -14,14 +14,16 @@ import { Button } from '@ngstarter-ui/components/button';
 import {
   asyncValidatorsFromRules,
   DEFAULT_FORM_BUILDER_ITEMS,
+  FORM_BUILDER_CALCULATION_ENGINE,
   FORM_BUILDER_FIELDS,
   FORM_BUILDER_ITEMS,
   FORM_BUILDER_VALIDATORS,
   mergeFormBuilderValidatorDefinitions,
   validatorsFromRules
 } from '../config';
-import { FormBuilderField, FormBuilderFieldDefinition, FormBuilderItemDefinition, FormBuilderLayoutItem, FormBuilderSchema, FormBuilderSection, FormBuilderUploadCallback } from '../types';
+import { FormBuilderCalculationEngine, FormBuilderField, FormBuilderFieldDefinition, FormBuilderItemDefinition, FormBuilderLayoutItem, FormBuilderSchema, FormBuilderSection, FormBuilderUploadCallback } from '../types';
 import { FormBuilderFieldHost } from '../field-host/field-host';
+import { DEFAULT_FORM_BUILDER_CALCULATION_ENGINE } from '../calculation-engine';
 
 interface FormRendererCanvasItem extends FormBuilderLayoutItem {
   field?: FormBuilderField;
@@ -48,6 +50,8 @@ export class FormRenderer {
   private readonly providedItems = inject(FORM_BUILDER_ITEMS, { optional: true }) ?? [];
   private readonly providedFields = inject(FORM_BUILDER_FIELDS, { optional: true }) ?? [];
   private readonly providedValidators = inject(FORM_BUILDER_VALIDATORS, { optional: true }) ?? [];
+  private readonly calculationEngine = inject(FORM_BUILDER_CALCULATION_ENGINE, { optional: true }) ??
+    DEFAULT_FORM_BUILDER_CALCULATION_ENGINE;
   private readonly orphanControls = new Map<string, FormControl>();
 
   readonly schema = input.required<FormBuilderSchema>();
@@ -93,8 +97,11 @@ export class FormRenderer {
   constructor() {
     effect(onCleanup => {
       const form = this.formGroup();
+
+      this.applyCalculations(form);
       this.formReady.emit(form);
       const subscription = form.valueChanges.subscribe(() => {
+        this.applyCalculations(form);
         this.value.set(form.getRawValue());
       });
 
@@ -289,6 +296,225 @@ export class FormRenderer {
     return new FormGroup(controls);
   }
 
+  private applyCalculations(formGroup: FormGroup): void {
+    const fields = [
+      ...(this.schema().fields ?? []),
+      ...this.schema().sections.flatMap(section => section.fields)
+    ];
+    const scopeFields = this.scopeFields(fields);
+
+    this.applyCalculatedFields(formGroup, scopeFields);
+    this.applyRepeaterCalculations(formGroup, fields);
+    this.applyCalculatedFields(formGroup, scopeFields);
+  }
+
+  private applyRepeaterCalculations(formGroup: FormGroup, fields: FormBuilderField[]): void {
+    for (const field of fields) {
+      if (this.isRepeaterField(field)) {
+        const control = formGroup.controls[field.name];
+
+        if (control instanceof FormArray) {
+          const scopeFields = this.scopeFields(field.children ?? []);
+
+          control.controls.forEach(group => {
+            if (!(group instanceof FormGroup)) {
+              return;
+            }
+
+            this.applyCalculatedFields(group, scopeFields);
+            this.applyRepeaterCalculations(group, field.children ?? []);
+            this.applyCalculatedFields(group, scopeFields);
+          });
+        }
+
+        continue;
+      }
+
+      if (this.isContainerField(field)) {
+        this.applyRepeaterCalculations(formGroup, field.children ?? []);
+      }
+    }
+  }
+
+  private applyCalculatedFields(formGroup: FormGroup, fields: FormBuilderField[]): void {
+    const calculatedFields = fields.filter(field =>
+      field.type === 'calculated' && formGroup.controls[field.name] instanceof FormControl
+    );
+
+    if (!calculatedFields.length) {
+      return;
+    }
+
+    const orderedFields = this.orderCalculatedFields(calculatedFields, fields, this.calculationEngine);
+    const cyclicFields = new Set(calculatedFields.filter(field => !orderedFields.includes(field)).map(field => field.name));
+
+    cyclicFields.forEach(fieldName => {
+      const control = formGroup.controls[fieldName];
+
+      if (control instanceof FormControl) {
+        this.setCalculationError(control, 'Circular calculation dependency.');
+      }
+    });
+
+    for (const field of orderedFields) {
+      const control = formGroup.controls[field.name];
+
+      if (!(control instanceof FormControl)) {
+        continue;
+      }
+
+      const expression = normalizedString(field.settings?.['expression']);
+
+      if (!expression) {
+        this.writeCalculatedValue(control, this.emptyCalculatedValue(field));
+        this.clearCalculationError(control);
+        continue;
+      }
+
+      const result = this.calculationEngine.evaluate(expression, {
+        field,
+        fields,
+        values: formGroup.getRawValue()
+      });
+
+      if (result.error) {
+        this.writeCalculatedValue(control, this.emptyCalculatedValue(field));
+        this.setCalculationError(control, result.error);
+        continue;
+      }
+
+      this.writeCalculatedValue(control, this.coerceCalculatedValue(result.value, field));
+      this.clearCalculationError(control);
+    }
+  }
+
+  private orderCalculatedFields(
+    calculatedFields: FormBuilderField[],
+    fields: FormBuilderField[],
+    calculationEngine: FormBuilderCalculationEngine
+  ): FormBuilderField[] {
+    const fieldByName = new Map(calculatedFields.map(field => [field.name, field]));
+    const dependenciesByName = new Map(calculatedFields.map(field => {
+      const expression = normalizedString(field.settings?.['expression']);
+      const dependencies = calculationEngine.dependencies?.(expression, fields) ?? [];
+
+      return [
+        field.name,
+        dependencies.filter(dependency => fieldByName.has(dependency))
+      ] as const;
+    }));
+    const ordered: FormBuilderField[] = [];
+    const temporary = new Set<string>();
+    const permanent = new Set<string>();
+
+    const visit = (field: FormBuilderField): boolean => {
+      if (permanent.has(field.name)) {
+        return true;
+      }
+
+      if (temporary.has(field.name)) {
+        return false;
+      }
+
+      temporary.add(field.name);
+
+      for (const dependencyName of dependenciesByName.get(field.name) ?? []) {
+        const dependency = fieldByName.get(dependencyName);
+
+        if (dependency && !visit(dependency)) {
+          return false;
+        }
+      }
+
+      temporary.delete(field.name);
+      permanent.add(field.name);
+      ordered.push(field);
+      return true;
+    };
+
+    calculatedFields.forEach(field => visit(field));
+    return ordered;
+  }
+
+  private scopeFields(fields: FormBuilderField[]): FormBuilderField[] {
+    const scoped: FormBuilderField[] = [];
+
+    for (const field of fields) {
+      if (this.isRepeaterField(field)) {
+        scoped.push(field);
+        continue;
+      }
+
+      if (this.isContainerField(field)) {
+        scoped.push(...this.scopeFields(field.children ?? []));
+        continue;
+      }
+
+      scoped.push(field);
+    }
+
+    return scoped;
+  }
+
+  private writeCalculatedValue(control: FormControl, value: any): void {
+    if (control.value !== value) {
+      control.setValue(value, { emitEvent: false });
+    }
+  }
+
+  private coerceCalculatedValue(value: any, field: FormBuilderField): any {
+    const valueType = field.settings?.['valueType'];
+
+    if (valueType === 'number') {
+      const numeric = Number(value);
+      const precision = field.settings?.['precision'];
+      const decimalPlaces: number | undefined = precision === null || precision === undefined || precision === ''
+        ? undefined
+        : Number(precision);
+
+      if (!Number.isFinite(numeric)) {
+        return this.emptyCalculatedValue(field);
+      }
+
+      return decimalPlaces !== undefined && Number.isInteger(decimalPlaces) && decimalPlaces >= 0
+        ? Number(numeric.toFixed(decimalPlaces))
+        : numeric;
+    }
+
+    if (valueType === 'text') {
+      return value === null || value === undefined ? '' : String(value);
+    }
+
+    if (valueType === 'boolean') {
+      return !!value;
+    }
+
+    return value;
+  }
+
+  private emptyCalculatedValue(field: FormBuilderField): any {
+    return field.settings?.['emptyValue'] ?? null;
+  }
+
+  private setCalculationError(control: FormControl, message: string): void {
+    control.setErrors({
+      ...(control.errors ?? {}),
+      formBuilderCalculation: { message }
+    });
+  }
+
+  private clearCalculationError(control: FormControl): void {
+    const errors = control.errors;
+
+    if (!errors?.['formBuilderCalculation']) {
+      return;
+    }
+
+    const nextErrors = { ...errors };
+    delete nextErrors['formBuilderCalculation'];
+    control.setErrors(Object.keys(nextErrors).length ? nextErrors : null);
+  }
+
   private resolveValidators(
     field: FormBuilderField,
     definition: FormBuilderFieldDefinition | undefined
@@ -367,6 +593,10 @@ function flattenFields(fields: FormBuilderField[]): FormBuilderField[] {
 
 function isRecord(value: unknown): value is Record<string, any> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function normalizedString(value: unknown): string {
+  return typeof value === 'string' ? value.trim() : '';
 }
 
 function repeaterRequiredValidator(control: AbstractControl): ValidationErrors | null {

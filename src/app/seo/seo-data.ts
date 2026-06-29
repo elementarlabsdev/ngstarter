@@ -285,6 +285,8 @@ const formBuilderCustomFieldArticleDescription =
   'NgStarter Form Builder tutorial: add a custom Angular field, register it with provideFormBuilderField, and configure schema-driven inspector settings.';
 const formBuilderCustomValidatorArticleDescription =
   'NgStarter Form Builder tutorial: add a custom validator, register it globally, configure field rules, and show custom error messages under rendered controls.';
+const formBuilderCalculatedFieldArticleDescription =
+  'NgStarter Form Builder tutorial: create calculated fields with Excel-like expressions, field references, type coercion, dependency order, repeaters, and custom calculation engines.';
 const formBuilderSchemaArticleDescription =
   'NgStarter Form Builder schema reference: understand sections, fields, layout ordering, validation, settings, and nested field structures.';
 const selectDataSourceArticleDescription =
@@ -556,6 +558,51 @@ export const FORM_BUILDER_CUSTOM_VALIDATOR_ARTICLE_SEO: SeoData = {
         'custom angular validator',
         'NgStarter UI',
         'schema driven forms',
+      ],
+      isPartOf: {
+        '@id': `${SITE_URL}/blog#blog`,
+      },
+    },
+  ],
+};
+
+export const FORM_BUILDER_CALCULATED_FIELD_ARTICLE_SEO: SeoData = {
+  title: 'Calculated Fields and Expressions in Form Builder | NgStarter UI',
+  description: formBuilderCalculatedFieldArticleDescription,
+  canonicalPath: '/blog/form-builder-calculated-field',
+  ogType: 'article',
+  structuredData: [
+    organizationSchema,
+    websiteSchema,
+    webPageSchema(
+      '/blog/form-builder-calculated-field',
+      'Calculated Fields and Expressions in Form Builder',
+      formBuilderCalculatedFieldArticleDescription,
+    ),
+    {
+      '@type': 'BlogPosting',
+      '@id': `${SITE_URL}/blog/form-builder-calculated-field#article`,
+      headline: 'Calculated Fields and Expressions in Form Builder',
+      description: formBuilderCalculatedFieldArticleDescription,
+      url: `${SITE_URL}/blog/form-builder-calculated-field`,
+      datePublished: '2026-06-29',
+      dateModified: '2026-06-29',
+      author: {
+        '@type': 'Organization',
+        name: 'NgStarter',
+        url: SITE_URL,
+      },
+      publisher: {
+        '@id': `${SITE_URL}/#organization`,
+      },
+      image: DEFAULT_OG_IMAGE,
+      inLanguage: 'en',
+      keywords: [
+        'Form Builder calculated field',
+        'Angular form expressions',
+        'Excel-like formulas',
+        'schema driven forms',
+        'NgStarter UI',
       ],
       isPartOf: {
         '@id': `${SITE_URL}/blog#blog`,

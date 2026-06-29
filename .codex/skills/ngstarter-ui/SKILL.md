@@ -64,6 +64,16 @@ export const appConfig = {
   `GuidedTour`/`ScrollSpy` for onboarding and long-page navigation, `Split`/`VisualBuilder` for
   resizable builders, and media components such as `ImageViewer`, `VideoViewer`, `Carousel`,
   `ImageResizer`, `ThumbnailMaker`, `Crop`, and `VideoPlayer` for media.
+- In Form Builder schemas, use the built-in `calculated` field type for readonly calculated
+  values. Store the formula in `settings.expression`, reference other fields by their `name`, and
+  configure numeric output with `settings.valueType: 'number'` plus optional `settings.precision`.
+  Expressions are written directly and must not start with a spreadsheet-style `=` prefix. Example:
+  `{ type: 'calculated', name: 'total', label: 'Total', settings: { expression: 'ROUND(price * quantity, 2)', valueType: 'number', precision: 2 } }`.
+  The default engine supports safe Excel-like basics such as arithmetic, comparisons, `SUM`,
+  `ROUND`, `IF`, `MIN`, `MAX`, `AVG`, `COUNT`, and `COUNTA`. For repeater aggregates, reference
+  collection fields with dotted paths such as `SUM(items.line_total)`; row-level calculated values
+  are evaluated before outer aggregate fields. For full spreadsheet semantics or custom functions,
+  provide a custom `FormBuilderCalculationEngine` through `provideFormBuilder({ calculationEngine })`.
 - Use `Alert` from `@ngstarter-ui/components/alert`, rendered as `<ngs-alert>`, for
   `success-card`, success messages, and other inline notification or status message blocks. Do not
   hand-roll these blocks with custom `div`/`span` cards, pills, banners, or alert-like containers

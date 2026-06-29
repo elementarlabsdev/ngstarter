@@ -180,3 +180,19 @@ export interface FormBuilderFieldChange {
   field: FormBuilderField;
   section?: FormBuilderSection;
 }
+
+export interface FormBuilderCalculationContext {
+  field: FormBuilderField;
+  fields: FormBuilderField[];
+  values: Record<string, any>;
+}
+
+export interface FormBuilderCalculationResult {
+  value: any;
+  error?: string;
+}
+
+export interface FormBuilderCalculationEngine {
+  evaluate(expression: string, context: FormBuilderCalculationContext): FormBuilderCalculationResult;
+  dependencies?(expression: string, fields: FormBuilderField[]): string[];
+}

@@ -80,9 +80,14 @@ export class BasicFormBuilderExample {
           {
             id: 'invoice_items',
             name: 'invoice_items',
-            type: 'group',
+            type: 'repeater',
+            kind: 'layout',
             label: 'Invoice items',
             width: 12,
+            settings: {
+              allowNullValue: false,
+              emptyText: 'No invoice items yet.'
+            },
             children: [
               {
                 id: 'item_description',
@@ -106,8 +111,34 @@ export class BasicFormBuilderExample {
                 type: 'currency',
                 label: 'Price',
                 width: 3
+              },
+              {
+                id: 'item_total',
+                name: 'item_total',
+                type: 'calculated',
+                label: 'Line total',
+                width: 3,
+                settings: {
+                  expression: 'ROUND(item_quantity * item_price, 2)',
+                  valueType: 'number',
+                  precision: 2,
+                  emptyValue: ''
+                }
               }
             ]
+          },
+          {
+            id: 'invoice_total',
+            name: 'invoice_total',
+            type: 'calculated',
+            label: 'Invoice total',
+            width: 4,
+            settings: {
+              expression: 'ROUND(SUM(invoice_items.item_total), 2)',
+              valueType: 'number',
+              precision: 2,
+              emptyValue: ''
+            }
           }
         ]
       }

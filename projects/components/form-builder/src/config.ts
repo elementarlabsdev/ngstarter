@@ -1,6 +1,7 @@
 import { EnvironmentProviders, InjectionToken, Provider, makeEnvironmentProviders } from '@angular/core';
 import { AsyncValidatorFn, ValidatorFn, Validators } from '@angular/forms';
 import {
+  FormBuilderCalculationEngine,
   FormBuilderField,
   FormBuilderFieldDefinition,
   FormBuilderItemDefinition,
@@ -29,6 +30,9 @@ export const FORM_BUILDER_SELECT_DATA_SOURCES =
 
 export const FORM_BUILDER_VALIDATORS =
   new InjectionToken<FormBuilderValidatorDefinition[]>('FORM_BUILDER_VALIDATORS');
+
+export const FORM_BUILDER_CALCULATION_ENGINE =
+  new InjectionToken<FormBuilderCalculationEngine>('FORM_BUILDER_CALCULATION_ENGINE');
 
 export function formBuilderField(definition: FormBuilderFieldDefinition): FormBuilderFieldDefinition {
   return definition;
@@ -88,12 +92,17 @@ export function provideFormBuilder(config: {
   settings?: FormBuilderSettingsDefinition[];
   selectDataSources?: FormBuilderSelectDataSourceDefinition[];
   validators?: FormBuilderValidatorDefinition[];
+  calculationEngine?: FormBuilderCalculationEngine;
   uploadCallback?: FormBuilderUploadCallback;
 } = {}): EnvironmentProviders {
   return makeEnvironmentProviders([
     ...(config.uploadCallback ? [{
       provide: FORM_BUILDER_UPLOAD_CALLBACK,
       useValue: config.uploadCallback
+    }] : []),
+    ...(config.calculationEngine ? [{
+      provide: FORM_BUILDER_CALCULATION_ENGINE,
+      useValue: config.calculationEngine
     }] : []),
     ...(config.items ?? []).map(item => ({
       provide: FORM_BUILDER_ITEMS,
@@ -137,6 +146,13 @@ const ORIENTATION_OPTIONS = [
 const SELECT_OPTIONS_SOURCE_OPTIONS = [
   { label: 'Custom options', value: 'static' },
   { label: 'Data source', value: 'dataSource' }
+];
+
+const CALCULATED_VALUE_TYPE_OPTIONS = [
+  { label: 'Automatic', value: 'auto' },
+  { label: 'Number', value: 'number' },
+  { label: 'Text', value: 'text' },
+  { label: 'Boolean', value: 'boolean' }
 ];
 
 export const FORM_BUILDER_FIELD_BASE_SETTINGS_SCHEMA: FormBuilderSchema = {
@@ -323,6 +339,48 @@ const HIDDEN_SETTINGS_SCHEMA: FormBuilderSchema = {
   ]
 };
 
+const CALCULATED_SETTINGS_SCHEMA: FormBuilderSchema = {
+  sections: [
+    {
+      id: 'calculated-settings',
+      title: 'Calculation',
+      fields: [
+        {
+          id: 'calculated-expression',
+          name: 'settings.expression',
+          type: 'textarea',
+          label: 'Expression',
+          placeholder: 'price * quantity',
+          hint: 'Use field IDs and Excel-style functions, for example ROUND(price * quantity, 2).'
+        },
+        {
+          id: 'calculated-value-type',
+          name: 'settings.valueType',
+          type: 'select',
+          label: 'Value type',
+          defaultValue: 'auto',
+          options: CALCULATED_VALUE_TYPE_OPTIONS
+        },
+        {
+          id: 'calculated-precision',
+          name: 'settings.precision',
+          type: 'number',
+          label: 'Decimal places',
+          defaultValue: null,
+          hint: 'Optional rounding for numeric results.'
+        },
+        {
+          id: 'calculated-empty-value',
+          name: 'settings.emptyValue',
+          type: 'text',
+          label: 'Empty value',
+          defaultValue: ''
+        }
+      ]
+    }
+  ]
+};
+
 export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
   {
     type: 'text',
@@ -377,6 +435,27 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     settings: {
       extends: 'none',
       schema: HIDDEN_SETTINGS_SCHEMA
+    }
+  },
+  {
+    type: 'calculated',
+    label: 'Calculated',
+    group: 'Basic',
+    icon: 'fluent:calculator-24-regular',
+    description: 'Readonly field calculated from an Excel-style expression.',
+    defaults: {
+      label: 'Calculated value',
+      placeholder: 'Calculated automatically',
+      readonly: true,
+      settings: {
+        expression: '',
+        valueType: 'auto',
+        emptyValue: ''
+      }
+    },
+    settings: {
+      extends: 'field',
+      schema: CALCULATED_SETTINGS_SCHEMA
     }
   },
   {

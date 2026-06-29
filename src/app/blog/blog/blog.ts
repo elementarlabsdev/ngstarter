@@ -13,6 +13,16 @@ import { Icon } from '@ngstarter-ui/components/icon';
 export class Blog {
   readonly articles = [
     {
+      title: 'Calculated fields and expressions in Form Builder',
+      description:
+        'Use readonly calculated fields, Excel-like expressions, field references, dependency order, type coercion, and custom calculation engines.',
+      href: '/blog/form-builder-calculated-field',
+      date: 'June 29, 2026',
+      readTime: '14 min',
+      category: 'Form Builder',
+      icon: 'fluent:calculator-24-regular',
+    },
+    {
       title: 'How to add a custom validator to Form Builder',
       description:
         'Register a global Form Builder validator, configure it in the Validators tab, and show custom error messages below rendered fields.',

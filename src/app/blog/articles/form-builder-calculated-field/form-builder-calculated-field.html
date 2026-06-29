@@ -1,0 +1,280 @@
+<article class="bg-background px-6 pb-16 pt-8 sm:px-8 lg:px-10">
+  <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
+    <div class="min-w-0">
+      <a ngsButton="text" routerLink="/blog">
+        <ngs-icon name="fluent:arrow-left-24-regular" />
+        All articles
+      </a>
+
+      <header class="mt-8 max-w-4xl">
+        <ngs-chip-set>
+          <ngs-chip appearance="outlined">Form Builder</ngs-chip>
+          <ngs-chip appearance="outlined">Calculated fields</ngs-chip>
+          <ngs-chip appearance="outlined">Expressions</ngs-chip>
+        </ngs-chip-set>
+        <h1 class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl">
+          Calculated fields in Form Builder
+        </h1>
+        <p class="mt-6 text-lg leading-8 text-on-surface-variant">
+          A complete guide to the <code>calculated</code> field type in NgStarter Form Builder:
+          how formulas are stored, how expressions reference other fields, which Excel-like
+          operators and functions are supported, how dependency order works, and when to replace
+          the default calculation engine.
+        </p>
+        <div class="mt-6 flex flex-wrap items-center gap-3 text-sm text-on-surface-variant">
+          <span>June 29, 2026</span>
+          <span>14 min read</span>
+        </div>
+      </header>
+
+      <div class="article-content mt-14 max-w-4xl">
+        <section id="what-it-is">
+          <h2>What the calculated field does</h2>
+          <p>
+            A calculated field is a readonly Form Builder field whose value is derived from an
+            expression instead of direct user input. A form author can drag the field into a schema,
+            open its settings, and enter an Excel-like expression such as
+            <code>ROUND(quantity * unit_price, 2)</code>. At runtime,
+            <code>ngs-form-renderer</code> evaluates the expression whenever the form value changes
+            and writes the result into the calculated field's Angular form control.
+          </p>
+          <p>
+            The calculated value is included in <code>form.getRawValue()</code> and in the value
+            emitted by the renderer, even though the control is rendered as readonly. That makes it
+            useful for invoice totals, quote totals, scores, eligibility flags, generated display
+            names, workflow estimates, and admin review fields that should be visible but not
+            manually edited.
+          </p>
+        </section>
+
+        <section id="minimal-field">
+          <h2>Minimal field schema</h2>
+          <p>
+            The field uses the normal <code>FormBuilderField</code> shape. The only special part is
+            <code>type: 'calculated'</code> and the calculation configuration under
+            <code>settings</code>. The <code>name</code> remains the submitted value key, just like
+            every other Form Builder control.
+          </p>
+          <ngs-code-highlighter [code]="minimalFieldCode" language="typescript" title="calculated-field.ts" showCopyButton />
+        </section>
+
+        <section id="settings">
+          <h2>Calculation settings</h2>
+          <p>
+            The builder inspector exposes four settings. <code>settings.expression</code> stores the
+            formula. <code>settings.valueType</code> controls result coercion and can be
+            <code>auto</code>, <code>number</code>, <code>text</code>, or <code>boolean</code>.
+            <code>settings.precision</code> optionally rounds numeric results to a fixed number of
+            decimal places. <code>settings.emptyValue</code> is used when the expression is empty or
+            the result cannot be converted to the requested value type.
+          </p>
+          <ngs-code-highlighter [code]="settingsCode" language="typescript" title="calculated-settings.ts" showCopyButton />
+        </section>
+
+        <section id="full-example">
+          <h2>Invoice line example</h2>
+          <p>
+            This schema renders quantity, unit price, and a readonly line total. If the user changes
+            <code>quantity</code> or <code>unit_price</code>, the renderer recomputes
+            <code>line_total</code> immediately.
+          </p>
+          <ngs-code-highlighter [code]="invoiceSchemaCode" language="typescript" title="invoice.schema.ts" showCopyButton />
+          <p>
+            The renderer does not need special template syntax for calculated fields. It receives
+            the schema, creates a control for <code>line_total</code>, subscribes to form changes,
+            and keeps that control synchronized with the expression result.
+          </p>
+          <ngs-code-highlighter [code]="rendererCode" language="html" title="invoice-form.html" showCopyButton />
+        </section>
+
+        <section id="expression-basics">
+          <h2>Expression basics</h2>
+          <p>
+            Expressions are written directly and must not start with a spreadsheet-style
+            <code>=</code> prefix. You can write arithmetic, grouped subexpressions, comparisons,
+            string literals, field references, and a small set of built-in functions.
+          </p>
+          <ngs-code-highlighter [code]="formulaExamplesCode" language="text" title="formula-examples.txt" showCopyButton />
+          <ul>
+            <li><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, and <code>^</code> handle numeric arithmetic.</li>
+            <li><code>&amp;</code> concatenates text values.</li>
+            <li><code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>=</code>, and <code>&lt;&gt;</code> return boolean results.</li>
+            <li>Parentheses control grouping, for example <code>(subtotal + shipping) * tax_rate</code>.</li>
+            <li>String literals can use single or double quotes.</li>
+          </ul>
+        </section>
+
+        <section id="field-references">
+          <h2>Referencing fields</h2>
+          <p>
+            A formula references other fields by their <code>name</code>, not by their
+            <code>id</code> or label. In <code>ROUND(quantity * unit_price, 2)</code>, the names
+            <code>quantity</code> and <code>unit_price</code> are looked up in the renderer's raw
+            form value. This is why field names should be stable, machine-friendly identifiers.
+          </p>
+          <p>
+            If a referenced field is missing or currently empty, the default engine reads it as
+            <code>null</code>. Numeric operations convert <code>null</code>, <code>undefined</code>,
+            and empty strings to <code>0</code>. This keeps simple totals from failing while users
+            are still filling out the form.
+          </p>
+          <ngs-code-highlighter [code]="valueCode" language="typescript" title="raw-value.ts" showCopyButton />
+        </section>
+
+        <section id="functions">
+          <h2>Supported functions</h2>
+          <p>
+            The default engine is intentionally small and safe. It is not a full Excel runtime, but
+            it covers common admin form calculations. Supported functions include
+            <code>SUM</code>, <code>ROUND</code>, <code>IF</code>, <code>MIN</code>,
+            <code>MAX</code>, <code>AVG</code>, <code>AVERAGE</code>, <code>ABS</code>,
+            <code>COUNT</code>, <code>COUNTA</code>, <code>POWER</code>, <code>SQRT</code>,
+            <code>MOD</code>, <code>FLOOR</code>, <code>CEIL</code>, <code>CEILING</code>,
+            <code>CONCAT</code>, and <code>CONCATENATE</code>.
+          </p>
+          <ul>
+            <li><code>SUM(subtotal, tax, shipping)</code> adds multiple values.</li>
+            <li><code>SUM(items.line_total)</code> adds values from every row in a repeater.</li>
+            <li><code>AVG(items.score)</code> averages a numeric collection.</li>
+            <li><code>COUNT(items.line_total)</code> counts numeric values in a collection.</li>
+            <li><code>ROUND(total, 2)</code> rounds to two decimal places.</li>
+            <li><code>IF(score &gt;= 80, 'Approved', 'Review')</code> returns one of two values.</li>
+            <li><code>CONCAT(first_name, ' ', last_name)</code> builds display text.</li>
+          </ul>
+        </section>
+
+        <section id="type-coercion">
+          <h2>Result types and coercion</h2>
+          <p>
+            Use <code>settings.valueType</code> when the saved value should have a predictable type.
+            <code>number</code> converts the result with <code>Number(...)</code> and can apply
+            <code>settings.precision</code>. <code>text</code> converts non-empty results with
+            <code>String(...)</code>. <code>boolean</code> stores truthy or falsy output.
+            <code>auto</code> stores the raw result returned by the engine.
+          </p>
+          <p>
+            For financial UI, prefer <code>valueType: 'number'</code> and an explicit
+            <code>precision</code>. For display-only helper values such as a generated customer
+            name, use <code>valueType: 'text'</code>. For eligibility or workflow checks, use
+            <code>valueType: 'boolean'</code>.
+          </p>
+        </section>
+
+        <section id="dependency-order">
+          <h2>Dependency order</h2>
+          <p>
+            Calculated fields can depend on other calculated fields. The renderer asks the engine
+            for dependencies, builds a dependency order, and evaluates upstream calculations before
+            downstream calculations. This makes chained formulas work without manual subscriptions.
+          </p>
+          <ngs-code-highlighter [code]="dependencyCode" language="typescript" title="dependency-order.ts" showCopyButton />
+          <p>
+            Self-references and circular chains are treated as errors. For example,
+            <code>total = total + 1</code> or <code>a = b + 1</code> with <code>b = a + 1</code>
+            cannot produce a stable value, so the calculated field gets a calculation error instead
+            of silently using a stale result.
+          </p>
+        </section>
+
+        <section id="groups-repeaters">
+          <h2>Groups and repeaters</h2>
+          <p>
+            Layout groups flatten their child fields into the current form group, so a calculated
+            field inside a group can reference sibling group fields by name. Repeaters are evaluated
+            per row: a calculated field inside a repeater row references fields from the same row.
+            This is the right model for line item totals where each row has its own
+            <code>quantity</code>, <code>unit_price</code>, and <code>line_total</code>.
+          </p>
+          <ngs-code-highlighter [code]="repeaterCode" language="typescript" title="repeater-calculation.ts" showCopyButton />
+          <p>
+            A calculated field outside the repeater can aggregate values from every row with a path
+            expression. <code>items.line_total</code> resolves to an array of all
+            <code>line_total</code> values in the repeater, so collection-aware functions such as
+            <code>SUM</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code>,
+            <code>COUNT</code>, and <code>COUNTA</code> can consume it directly.
+          </p>
+          <ngs-code-highlighter [code]="aggregateCode" language="typescript" title="repeater-aggregate.ts" showCopyButton />
+          <p>
+            The renderer calculates row-level expressions first, then recalculates outer fields.
+            That means <code>SUM(items.line_total)</code> sees fresh row totals even when
+            <code>line_total</code> itself is a calculated field.
+          </p>
+        </section>
+
+        <section id="errors">
+          <h2>Errors and readonly rendering</h2>
+          <p>
+            A calculated field renders as a readonly NgStarter input. If parsing or evaluation
+            fails, the renderer stores a <code>formBuilderCalculation</code> error on the control
+            and the field host shows the error message below the input. The form can then surface
+            invalid formulas during preview, QA, or production rendering.
+          </p>
+          <p>
+            Common errors include unknown functions, unclosed string literals, invalid operators,
+            and circular dependencies. Formula errors are intentionally visible because a saved
+            schema is production configuration and should fail loudly when it cannot be evaluated.
+          </p>
+        </section>
+
+        <section id="security">
+          <h2>Security model</h2>
+          <p>
+            The default engine does not use <code>eval</code> or <code>new Function</code>. It
+            tokenizes the expression, parses it with a small recursive descent parser, resolves
+            field names against form values, and calls an allowlisted set of functions. This keeps
+            formulas suitable for user-authored admin schemas without giving those users arbitrary
+            JavaScript execution.
+          </p>
+        </section>
+
+        <section id="custom-engine">
+          <h2>Replacing the calculation engine</h2>
+          <p>
+            If you need full spreadsheet behavior, project-specific functions, server-backed
+            values, currency conversion, or a different parser, replace the engine through
+            <code>provideFormBuilder</code>. A custom engine implements
+            <code>FormBuilderCalculationEngine</code> with <code>evaluate</code> and optionally
+            <code>dependencies</code>. The renderer will use it for every calculated field.
+          </p>
+          <ngs-code-highlighter [code]="customEngineCode" language="typescript" title="custom-calculation-engine.ts" showCopyButton />
+        </section>
+
+        <section id="checklist">
+          <h2>Production checklist</h2>
+          <ul>
+            <li>Use stable field <code>name</code> values because formulas reference names.</li>
+            <li>Use <code>valueType: 'number'</code> and <code>precision</code> for money-like totals.</li>
+            <li>Keep formula fields readonly and do not ask users to edit calculated output manually.</li>
+            <li>Prefer small, explicit expressions over deeply nested business logic.</li>
+            <li>Validate saved schemas in preview before publishing them to production users.</li>
+            <li>Use <code>SUM(items.line_total)</code>, <code>AVG(items.score)</code>, or similar paths for repeater aggregates.</li>
+            <li>Replace the default engine when you need full Excel compatibility, spreadsheet ranges, or custom functions.</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <aside class="article-aside hidden lg:block">
+      <nav ngs-scroll-spy-nav>
+        <ngs-scroll-spy-title>On this page</ngs-scroll-spy-title>
+        <a ngs-scroll-spy-on targetId="what-it-is">What it does</a>
+        <a ngs-scroll-spy-on targetId="minimal-field">Minimal field</a>
+        <a ngs-scroll-spy-on targetId="settings">Settings</a>
+        <a ngs-scroll-spy-on targetId="full-example">Invoice example</a>
+        <a ngs-scroll-spy-on targetId="expression-basics">Expression basics</a>
+        <a ngs-scroll-spy-on targetId="field-references">Field references</a>
+        <a ngs-scroll-spy-on targetId="functions">Functions</a>
+        <a ngs-scroll-spy-on targetId="type-coercion">Result types</a>
+        <a ngs-scroll-spy-on targetId="dependency-order">Dependencies</a>
+        <a ngs-scroll-spy-on targetId="groups-repeaters">Groups and repeaters</a>
+        <a ngs-scroll-spy-on targetId="errors">Errors</a>
+        <a ngs-scroll-spy-on targetId="security">Security</a>
+        <a ngs-scroll-spy-on targetId="custom-engine">Custom engine</a>
+        <a ngs-scroll-spy-on targetId="checklist">Checklist</a>
+        <button ngs-scroll-spy-back-to-top>
+          Back to top
+        </button>
+      </nav>
+    </aside>
+  </div>
+</article>

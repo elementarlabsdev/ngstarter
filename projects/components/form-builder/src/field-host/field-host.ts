@@ -164,6 +164,9 @@ export class FormBuilderFieldHost {
     const type = this.field().type;
     return type === 'number' || type === 'email' ? type : 'text';
   });
+  protected readonly calculatedInputType = computed(() =>
+    this.field().settings?.['valueType'] === 'number' ? 'number' : 'text'
+  );
   protected readonly radioOrientation = computed<RadioGroupOrientation>(() =>
     this.field().settings?.['orientation'] === 'horizontal' ? 'horizontal' : 'vertical'
   );
@@ -301,6 +304,13 @@ export class FormBuilderFieldHost {
     this.controlStateVersion();
 
     const control = this.control();
+    const calculationError = control.errors?.['formBuilderCalculation'];
+
+    if (calculationError) {
+      return typeof calculationError.message === 'string'
+        ? calculationError.message
+        : 'Calculation failed.';
+    }
 
     if (!control.invalid || !(control.touched || control.dirty)) {
       return '';

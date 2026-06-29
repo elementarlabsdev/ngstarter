@@ -25,6 +25,8 @@ export class FormBuilderRendererExample {
       type: 'image/svg+xml'
     },
     currency: 'usd',
+    seats: 12,
+    seat_price: 24,
     contact_name: 'Alex Morgan',
     contact_email: 'alex@example.com'
   });
@@ -82,6 +84,35 @@ export class FormBuilderRendererExample {
               { label: 'Euro', value: 'eur' },
               { label: 'Polish Zloty', value: 'pln' }
             ]
+          },
+          {
+            id: 'seats',
+            name: 'seats',
+            type: 'number',
+            label: 'Seats',
+            width: 3,
+            defaultValue: 1
+          },
+          {
+            id: 'seat_price',
+            name: 'seat_price',
+            type: 'currency',
+            label: 'Seat price',
+            width: 3,
+            defaultValue: 24
+          },
+          {
+            id: 'monthly_total',
+            name: 'monthly_total',
+            type: 'calculated',
+            label: 'Monthly total',
+            width: 6,
+            settings: {
+              expression: 'ROUND(seats * seat_price, 2)',
+              valueType: 'number',
+              precision: 2,
+              emptyValue: ''
+            }
           },
           {
             id: 'notes',
