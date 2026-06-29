@@ -12,7 +12,9 @@
           <ngs-chip appearance="outlined">Validators</ngs-chip>
           <ngs-chip appearance="outlined">Angular forms</ngs-chip>
         </ngs-chip-set>
-        <h1 class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl">
+        <h1
+          class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl"
+        >
           How to add a custom validator to Form Builder
         </h1>
         <p class="mt-6 text-lg leading-8 text-on-surface-variant">
@@ -32,12 +34,54 @@
           <p>
             Form Builder ships with built-in validators based on Angular validators such as
             <code>required</code>, <code>email</code>, <code>minLength</code>,
-            <code>maxLength</code>, <code>min</code>, <code>max</code>, and
-            <code>pattern</code>. A custom validator follows the same rule model: the field schema
-            stores a <code>type</code>, optional <code>value</code>, and optional
-            <code>message</code>. The registered validator definition tells the builder how to
-            render the setting and how to create an Angular <code>ValidatorFn</code>.
+            <code>maxLength</code>, <code>min</code>, <code>max</code>, and <code>pattern</code>. A
+            custom validator follows the same rule model: the field schema stores a
+            <code>type</code>, optional <code>value</code>, and optional <code>message</code>. The
+            registered validator definition tells the builder how to render the setting and how to
+            create an Angular <code>ValidatorFn</code>.
           </p>
+        </section>
+
+        <section id="related-docs">
+          <h2>Related component docs</h2>
+          <p>
+            Use these docs for the Form Builder provider APIs and the lower-level input validation
+            primitives that pair with custom validation rules.
+          </p>
+          <div class="related-links-grid">
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/libraries/form-builder">
+                  <ngs-icon name="fluent:form-24-regular" />
+                  <span>Form Builder overview</span>
+                </a>
+              </div>
+            </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/libraries/form-builder/api">
+                  <ngs-icon name="fluent:document-bullet-list-24-regular" />
+                  <span>Form Builder API</span>
+                </a>
+              </div>
+            </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/forms/input-validator">
+                  <ngs-icon name="fluent:shield-checkmark-24-regular" />
+                  <span>Input Validator</span>
+                </a>
+              </div>
+            </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/forms/input">
+                  <ngs-icon name="fluent:text-field-24-regular" />
+                  <span>Input component</span>
+                </a>
+              </div>
+            </ngs-card>
+          </div>
         </section>
 
         <section id="imports">
@@ -46,7 +90,13 @@
             Validator definitions and provider helpers are exported from the Form Builder secondary
             entry point. The validator itself can use the normal Angular forms types.
           </p>
-          <ngs-code-highlighter [code]="importsCode" language="typescript" title="imports.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="importsCode"
+            language="typescript"
+            title="imports.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="definition">
@@ -56,16 +106,22 @@
             appears as <strong>SKU prefix</strong>, asks for one text value, and uses
             <code>defaultMessage</code> when a field rule does not provide its own message.
           </p>
-          <ngs-code-highlighter [code]="validatorCode" language="typescript" title="sku-prefix.validator.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="validatorCode"
+            language="typescript"
+            title="sku-prefix.validator.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="error-key">
           <h2>Match the Angular error key</h2>
           <p>
-            Set <code>errorKey</code> when the Angular validator returns an error object whose key is
-            different from the Form Builder rule type. The built-in <code>minLength</code> rule, for
-            example, maps to Angular's <code>minlength</code> error key. If your custom validator
-            returns <code>&#123; skuPrefix: ... &#125;</code>, keep
+            Set <code>errorKey</code> when the Angular validator returns an error object whose key
+            is different from the Form Builder rule type. The built-in <code>minLength</code> rule,
+            for example, maps to Angular's <code>minlength</code> error key. If your custom
+            validator returns <code>&#123; skuPrefix: ... &#125;</code>, keep
             <code>errorKey: 'skuPrefix'</code>.
           </p>
         </section>
@@ -73,11 +129,18 @@
         <section id="register-one">
           <h2>Register it globally</h2>
           <p>
-            Add the validator to application providers with <code>provideFormBuilderValidator</code>.
-            Once registered, every Form Builder instance can show it in the field Validators tab and
-            every renderer can resolve it when the schema is rendered.
+            Add the validator to application providers with
+            <code>provideFormBuilderValidator</code>. Once registered, every Form Builder instance
+            can show it in the field Validators tab and every renderer can resolve it when the
+            schema is rendered.
           </p>
-          <ngs-code-highlighter [code]="appConfigCode" language="typescript" title="app.config.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="appConfigCode"
+            language="typescript"
+            title="app.config.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="register-many">
@@ -87,7 +150,13 @@
             catalog of project-specific validators. This is useful for product codes, internal IDs,
             domain-specific ranges, and other rules that should be available to form authors.
           </p>
-          <ngs-code-highlighter [code]="multipleProvidersCode" language="typescript" title="validators.provider.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="multipleProvidersCode"
+            language="typescript"
+            title="validators.provider.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="provide-form-builder">
@@ -97,7 +166,13 @@
             <code>provideFormBuilder</code> alongside custom fields, settings, select data sources,
             and upload callbacks.
           </p>
-          <ngs-code-highlighter [code]="provideFormBuilderCode" language="typescript" title="form-builder.providers.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="provideFormBuilderCode"
+            language="typescript"
+            title="form-builder.providers.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="schema">
@@ -107,7 +182,13 @@
             <code>message</code>. This message is shown below the field when the control is dirty or
             touched and the Angular validator reports the matching error key.
           </p>
-          <ngs-code-highlighter [code]="schemaCode" language="typescript" title="product-form.schema.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="schemaCode"
+            language="typescript"
+            title="product-form.schema.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="render">
@@ -117,17 +198,34 @@
             configure the validator in the builder, save the schema, and the renderer will apply the
             same Angular validation behavior.
           </p>
-          <ngs-code-highlighter [code]="templateCode" language="html" title="product-form.html" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="templateCode"
+            language="html"
+            title="product-form.html"
+            showCopyButton
+          />
         </section>
 
         <section id="checklist">
           <h2>Custom validator checklist</h2>
           <ul>
             <li>Use a stable, unique <code>type</code> because it is saved in the schema.</li>
-            <li>Set <code>requiresValue</code> when the rule should not run without a configured value.</li>
-            <li>Use <code>valueType</code>, <code>valueLabel</code>, and <code>valuePlaceholder</code> to shape the builder UI.</li>
-            <li>Set <code>errorKey</code> when the Angular error key does not match the rule type.</li>
-            <li>Use <code>defaultMessage</code> for the reusable fallback and <code>message</code> for per-field copy.</li>
+            <li>
+              Set <code>requiresValue</code> when the rule should not run without a configured
+              value.
+            </li>
+            <li>
+              Use <code>valueType</code>, <code>valueLabel</code>, and
+              <code>valuePlaceholder</code> to shape the builder UI.
+            </li>
+            <li>
+              Set <code>errorKey</code> when the Angular error key does not match the rule type.
+            </li>
+            <li>
+              Use <code>defaultMessage</code> for the reusable fallback and <code>message</code> for
+              per-field copy.
+            </li>
           </ul>
         </section>
       </div>
@@ -137,6 +235,7 @@
       <nav ngs-scroll-spy-nav>
         <ngs-scroll-spy-title>On this page</ngs-scroll-spy-title>
         <a ngs-scroll-spy-on targetId="what-you-build">What you build</a>
+        <a ngs-scroll-spy-on targetId="related-docs">Docs</a>
         <a ngs-scroll-spy-on targetId="imports">Imports</a>
         <a ngs-scroll-spy-on targetId="definition">Definition</a>
         <a ngs-scroll-spy-on targetId="error-key">Error key</a>
@@ -146,9 +245,7 @@
         <a ngs-scroll-spy-on targetId="schema">Schema</a>
         <a ngs-scroll-spy-on targetId="render">Render</a>
         <a ngs-scroll-spy-on targetId="checklist">Checklist</a>
-        <button ngs-scroll-spy-back-to-top>
-          Back to top
-        </button>
+        <button ngs-scroll-spy-back-to-top>Back to top</button>
       </nav>
     </aside>
   </div>

@@ -12,7 +12,9 @@
           <ngs-chip appearance="outlined">Schema</ngs-chip>
           <ngs-chip appearance="outlined">JSON forms</ngs-chip>
         </ngs-chip-set>
-        <h1 class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl">
+        <h1
+          class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl"
+        >
           Form Builder schema explained
         </h1>
         <p class="mt-6 text-lg leading-8 text-on-surface-variant">
@@ -27,6 +29,48 @@
       </header>
 
       <div class="article-content mt-14 max-w-4xl">
+        <section id="related-docs">
+          <h2>Related component docs</h2>
+          <p>
+            Keep the schema reference close to the visual builder, renderer, API, and select docs
+            when you are designing forms that persist as JSON.
+          </p>
+          <div class="related-links-grid">
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/libraries/form-builder">
+                  <ngs-icon name="fluent:form-24-regular" />
+                  <span>Form Builder overview</span>
+                </a>
+              </div>
+            </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/libraries/form-builder/form-renderer">
+                  <ngs-icon name="fluent:window-play-24-regular" />
+                  <span>Form Renderer</span>
+                </a>
+              </div>
+            </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/libraries/form-builder/api">
+                  <ngs-icon name="fluent:document-bullet-list-24-regular" />
+                  <span>Form Builder API</span>
+                </a>
+              </div>
+            </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/forms/select">
+                  <ngs-icon name="fluent:multiselect-24-regular" />
+                  <span>Select component</span>
+                </a>
+              </div>
+            </ngs-card>
+          </div>
+        </section>
+
         <section id="schema-shape">
           <h2>The schema shape</h2>
           <p>
@@ -35,13 +79,21 @@
             <code>sections</code>; top-level <code>fields</code> and <code>layout</code> are
             optional, but useful when a form mixes standalone fields and sections.
           </p>
-          <ngs-code-highlighter [code]="schemaCode" language="typescript" title="form-builder-schema.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="schemaCode"
+            language="typescript"
+            title="form-builder-schema.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="top-level">
           <h2>Top-level properties</h2>
           <ul>
-            <li><code>title</code> is optional metadata for your app, storage, or surrounding page UI.</li>
+            <li>
+              <code>title</code> is optional metadata for your app, storage, or surrounding page UI.
+            </li>
             <li><code>fields</code> stores top-level fields that are not inside a section.</li>
             <li><code>sections</code> stores named groups of fields and is always present.</li>
             <li><code>layout</code> stores the visual order of top-level fields and sections.</li>
@@ -55,10 +107,9 @@
         <section id="sections">
           <h2>Sections</h2>
           <p>
-            A section has an <code>id</code>, <code>title</code>, optional
-            <code>description</code>, optional <code>collapsed</code> state, and a
-            <code>fields</code> array. Use sections for visible form groups such as Contact,
-            Billing, Security, or Approval details.
+            A section has an <code>id</code>, <code>title</code>, optional <code>description</code>,
+            optional <code>collapsed</code> state, and a <code>fields</code> array. Use sections for
+            visible form groups such as Contact, Billing, Security, or Approval details.
           </p>
         </section>
 
@@ -70,7 +121,13 @@
             <code>type</code> must match a registered field definition, either one of the built-in
             fields or a custom field registered with <code>provideFormBuilderField</code>.
           </p>
-          <ngs-code-highlighter [code]="fieldCode" language="typescript" title="field.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="fieldCode"
+            language="typescript"
+            title="field.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="layout">
@@ -80,7 +137,13 @@
             stored inside each section's <code>fields</code> array, and nested container order is
             stored inside <code>children</code>.
           </p>
-          <ngs-code-highlighter [code]="layoutCode" language="typescript" title="layout.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="layoutCode"
+            language="typescript"
+            title="layout.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="options">
@@ -90,7 +153,13 @@
             it exists; otherwise selected options become the initial value for select, radio, and
             multiple-choice fields.
           </p>
-          <ngs-code-highlighter [code]="optionCode" language="typescript" title="options.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="optionCode"
+            language="typescript"
+            title="options.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="validation">
@@ -106,9 +175,9 @@
         <section id="settings">
           <h2>Settings</h2>
           <p>
-            <code>settings</code> is the extensibility bag. Built-in fields use it for values such as
-            upload accept types, repeater empty text, radio orientation, and static spacer height.
-            Custom fields should store renderer-specific configuration there too.
+            <code>settings</code> is the extensibility bag. Built-in fields use it for values such
+            as upload accept types, repeater empty text, radio orientation, and static spacer
+            height. Custom fields should store renderer-specific configuration there too.
           </p>
         </section>
 
@@ -119,7 +188,13 @@
             <code>children</code>. Groups flatten child controls into the current form group.
             Repeaters create a <code>FormArray</code> of row groups from their child fields.
           </p>
-          <ngs-code-highlighter [code]="nestedCode" language="typescript" title="nested-fields.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="nestedCode"
+            language="typescript"
+            title="nested-fields.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="storage">
@@ -138,6 +213,7 @@
     <aside class="article-aside hidden lg:block">
       <nav ngs-scroll-spy-nav>
         <ngs-scroll-spy-title>On this page</ngs-scroll-spy-title>
+        <a ngs-scroll-spy-on targetId="related-docs">Docs</a>
         <a ngs-scroll-spy-on targetId="schema-shape">Schema shape</a>
         <a ngs-scroll-spy-on targetId="top-level">Top level</a>
         <a ngs-scroll-spy-on targetId="sections">Sections</a>
@@ -148,9 +224,7 @@
         <a ngs-scroll-spy-on targetId="settings">Settings</a>
         <a ngs-scroll-spy-on targetId="nested">Nested fields</a>
         <a ngs-scroll-spy-on targetId="storage">Storage</a>
-        <button ngs-scroll-spy-back-to-top>
-          Back to top
-        </button>
+        <button ngs-scroll-spy-back-to-top>Back to top</button>
       </nav>
     </aside>
   </div>

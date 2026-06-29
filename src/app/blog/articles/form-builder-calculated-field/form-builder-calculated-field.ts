@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Button } from '@ngstarter-ui/components/button';
+import { Card, CardContent } from '@ngstarter-ui/components/card';
 import { Chip, ChipSet } from '@ngstarter-ui/components/chips';
 import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
+import { FormBuilderSchema, FormRenderer } from '@ngstarter-ui/components/form-builder';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
   ScrollSpyBackToTop,
@@ -15,9 +17,12 @@ import {
   selector: 'app-form-builder-calculated-field',
   imports: [
     Button,
+    Card,
+    CardContent,
     Chip,
     ChipSet,
     CodeHighlighter,
+    FormRenderer,
     Icon,
     RouterLink,
     ScrollSpyBackToTop,
@@ -29,6 +34,123 @@ import {
   styleUrl: './form-builder-calculated-field.scss',
 })
 export class FormBuilderCalculatedFieldArticle {
+  readonly calculatorValue = signal<Record<string, any>>({
+    quantity: 8,
+    unit_price: 49,
+    discount_rate: 10,
+    tax_rate: 8,
+  });
+
+  readonly calculatorSchema: FormBuilderSchema = {
+    title: 'Quote calculator',
+    sections: [
+      {
+        id: 'quote',
+        title: 'Quote calculator',
+        description: 'Change the editable inputs and the calculated fields update immediately.',
+        fields: [
+          {
+            id: 'quantity',
+            name: 'quantity',
+            type: 'number',
+            label: 'Quantity',
+            width: 3,
+            defaultValue: 8,
+          },
+          {
+            id: 'unit-price',
+            name: 'unit_price',
+            type: 'currency',
+            label: 'Unit price',
+            width: 3,
+            defaultValue: 49,
+          },
+          {
+            id: 'discount-rate',
+            name: 'discount_rate',
+            type: 'number',
+            label: 'Discount %',
+            width: 3,
+            defaultValue: 10,
+          },
+          {
+            id: 'tax-rate',
+            name: 'tax_rate',
+            type: 'number',
+            label: 'Tax %',
+            width: 3,
+            defaultValue: 8,
+          },
+          {
+            id: 'subtotal',
+            name: 'subtotal',
+            type: 'calculated',
+            label: 'Subtotal',
+            width: 4,
+            settings: {
+              expression: 'ROUND(quantity * unit_price, 2)',
+              valueType: 'number',
+              precision: 2,
+              emptyValue: '',
+            },
+          },
+          {
+            id: 'discount-amount',
+            name: 'discount_amount',
+            type: 'calculated',
+            label: 'Discount amount',
+            width: 4,
+            settings: {
+              expression: 'ROUND(subtotal * discount_rate / 100, 2)',
+              valueType: 'number',
+              precision: 2,
+              emptyValue: '',
+            },
+          },
+          {
+            id: 'taxable-total',
+            name: 'taxable_total',
+            type: 'calculated',
+            label: 'Taxable total',
+            width: 4,
+            settings: {
+              expression: 'ROUND(subtotal - discount_amount, 2)',
+              valueType: 'number',
+              precision: 2,
+              emptyValue: '',
+            },
+          },
+          {
+            id: 'tax-amount',
+            name: 'tax_amount',
+            type: 'calculated',
+            label: 'Tax amount',
+            width: 6,
+            settings: {
+              expression: 'ROUND(taxable_total * tax_rate / 100, 2)',
+              valueType: 'number',
+              precision: 2,
+              emptyValue: '',
+            },
+          },
+          {
+            id: 'grand-total',
+            name: 'grand_total',
+            type: 'calculated',
+            label: 'Grand total',
+            width: 6,
+            settings: {
+              expression: 'ROUND(taxable_total + tax_amount, 2)',
+              valueType: 'number',
+              precision: 2,
+              emptyValue: '',
+            },
+          },
+        ],
+      },
+    ],
+  };
+
   readonly minimalFieldCode = `{
   id: 'line_total',
   name: 'line_total',

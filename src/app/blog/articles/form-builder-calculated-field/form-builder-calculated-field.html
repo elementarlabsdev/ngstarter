@@ -12,14 +12,16 @@
           <ngs-chip appearance="outlined">Calculated fields</ngs-chip>
           <ngs-chip appearance="outlined">Expressions</ngs-chip>
         </ngs-chip-set>
-        <h1 class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl">
+        <h1
+          class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl"
+        >
           Calculated fields in Form Builder
         </h1>
         <p class="mt-6 text-lg leading-8 text-on-surface-variant">
-          A complete guide to the <code>calculated</code> field type in NgStarter Form Builder:
-          how formulas are stored, how expressions reference other fields, which Excel-like
-          operators and functions are supported, how dependency order works, and when to replace
-          the default calculation engine.
+          A complete guide to the <code>calculated</code> field type in NgStarter Form Builder: how
+          formulas are stored, how expressions reference other fields, which Excel-like operators
+          and functions are supported, how dependency order works, and when to replace the default
+          calculation engine.
         </p>
         <div class="mt-6 flex flex-wrap items-center gap-3 text-sm text-on-surface-variant">
           <span>June 29, 2026</span>
@@ -47,6 +49,48 @@
           </p>
         </section>
 
+        <section id="related-docs">
+          <h2>Related component docs</h2>
+          <p>
+            These docs cover the Form Builder pieces used by calculated fields, plus the numeric and
+            currency controls that often feed invoice and quote formulas.
+          </p>
+          <div class="related-links-grid">
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/libraries/form-builder">
+                  <ngs-icon name="fluent:form-24-regular" />
+                  <span>Form Builder overview</span>
+                </a>
+              </div>
+            </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/libraries/form-builder/form-renderer">
+                  <ngs-icon name="fluent:window-play-24-regular" />
+                  <span>Form Renderer</span>
+                </a>
+              </div>
+            </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/forms/number-input">
+                  <ngs-icon name="fluent:number-symbol-24-regular" />
+                  <span>Number Input</span>
+                </a>
+              </div>
+            </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/forms/currency-select">
+                  <ngs-icon name="fluent:money-24-regular" />
+                  <span>Currency Select</span>
+                </a>
+              </div>
+            </ngs-card>
+          </div>
+        </section>
+
         <section id="minimal-field">
           <h2>Minimal field schema</h2>
           <p>
@@ -55,7 +99,13 @@
             <code>settings</code>. The <code>name</code> remains the submitted value key, just like
             every other Form Builder control.
           </p>
-          <ngs-code-highlighter [code]="minimalFieldCode" language="typescript" title="calculated-field.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="minimalFieldCode"
+            language="typescript"
+            title="calculated-field.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="settings">
@@ -68,7 +118,13 @@
             decimal places. <code>settings.emptyValue</code> is used when the expression is empty or
             the result cannot be converted to the requested value type.
           </p>
-          <ngs-code-highlighter [code]="settingsCode" language="typescript" title="calculated-settings.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="settingsCode"
+            language="typescript"
+            title="calculated-settings.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="full-example">
@@ -78,13 +134,44 @@
             <code>quantity</code> or <code>unit_price</code>, the renderer recomputes
             <code>line_total</code> immediately.
           </p>
-          <ngs-code-highlighter [code]="invoiceSchemaCode" language="typescript" title="invoice.schema.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="invoiceSchemaCode"
+            language="typescript"
+            title="invoice.schema.ts"
+            showCopyButton
+          />
           <p>
             The renderer does not need special template syntax for calculated fields. It receives
             the schema, creates a control for <code>line_total</code>, subscribes to form changes,
             and keeps that control synchronized with the expression result.
           </p>
-          <ngs-code-highlighter [code]="rendererCode" language="html" title="invoice-form.html" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="rendererCode"
+            language="html"
+            title="invoice-form.html"
+            showCopyButton
+          />
+        </section>
+
+        <section id="live-renderer">
+          <h2>Live renderer with chained calculations</h2>
+          <p>
+            This live <code>ngs-form-renderer</code> calculates several fields from the same
+            editable inputs. <code>subtotal</code> depends on quantity and unit price,
+            <code>discount_amount</code> depends on subtotal, <code>taxable_total</code> depends on
+            both, and <code>grand_total</code> depends on the final tax calculation.
+          </p>
+          <ngs-card appearance="outlined" class="calculator-demo-card">
+            <div ngs-card-content>
+              <ngs-form-renderer
+                [schema]="calculatorSchema"
+                [(value)]="calculatorValue"
+                [showSubmit]="false"
+              />
+            </div>
+          </ngs-card>
         </section>
 
         <section id="expression-basics">
@@ -94,12 +181,27 @@
             <code>=</code> prefix. You can write arithmetic, grouped subexpressions, comparisons,
             string literals, field references, and a small set of built-in functions.
           </p>
-          <ngs-code-highlighter [code]="formulaExamplesCode" language="text" title="formula-examples.txt" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="formulaExamplesCode"
+            language="text"
+            title="formula-examples.txt"
+            showCopyButton
+          />
           <ul>
-            <li><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, and <code>^</code> handle numeric arithmetic.</li>
+            <li>
+              <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, and
+              <code>^</code> handle numeric arithmetic.
+            </li>
             <li><code>&amp;</code> concatenates text values.</li>
-            <li><code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>=</code>, and <code>&lt;&gt;</code> return boolean results.</li>
-            <li>Parentheses control grouping, for example <code>(subtotal + shipping) * tax_rate</code>.</li>
+            <li>
+              <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>,
+              <code>=</code>, and <code>&lt;&gt;</code> return boolean results.
+            </li>
+            <li>
+              Parentheses control grouping, for example
+              <code>(subtotal + shipping) * tax_rate</code>.
+            </li>
             <li>String literals can use single or double quotes.</li>
           </ul>
         </section>
@@ -118,7 +220,13 @@
             and empty strings to <code>0</code>. This keeps simple totals from failing while users
             are still filling out the form.
           </p>
-          <ngs-code-highlighter [code]="valueCode" language="typescript" title="raw-value.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="valueCode"
+            language="typescript"
+            title="raw-value.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="functions">
@@ -138,7 +246,9 @@
             <li><code>AVG(items.score)</code> averages a numeric collection.</li>
             <li><code>COUNT(items.line_total)</code> counts numeric values in a collection.</li>
             <li><code>ROUND(total, 2)</code> rounds to two decimal places.</li>
-            <li><code>IF(score &gt;= 80, 'Approved', 'Review')</code> returns one of two values.</li>
+            <li>
+              <code>IF(score &gt;= 80, 'Approved', 'Review')</code> returns one of two values.
+            </li>
             <li><code>CONCAT(first_name, ' ', last_name)</code> builds display text.</li>
           </ul>
         </section>
@@ -167,7 +277,13 @@
             for dependencies, builds a dependency order, and evaluates upstream calculations before
             downstream calculations. This makes chained formulas work without manual subscriptions.
           </p>
-          <ngs-code-highlighter [code]="dependencyCode" language="typescript" title="dependency-order.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="dependencyCode"
+            language="typescript"
+            title="dependency-order.ts"
+            showCopyButton
+          />
           <p>
             Self-references and circular chains are treated as errors. For example,
             <code>total = total + 1</code> or <code>a = b + 1</code> with <code>b = a + 1</code>
@@ -185,7 +301,13 @@
             This is the right model for line item totals where each row has its own
             <code>quantity</code>, <code>unit_price</code>, and <code>line_total</code>.
           </p>
-          <ngs-code-highlighter [code]="repeaterCode" language="typescript" title="repeater-calculation.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="repeaterCode"
+            language="typescript"
+            title="repeater-calculation.ts"
+            showCopyButton
+          />
           <p>
             A calculated field outside the repeater can aggregate values from every row with a path
             expression. <code>items.line_total</code> resolves to an array of all
@@ -193,7 +315,13 @@
             <code>SUM</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code>,
             <code>COUNT</code>, and <code>COUNTA</code> can consume it directly.
           </p>
-          <ngs-code-highlighter [code]="aggregateCode" language="typescript" title="repeater-aggregate.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="aggregateCode"
+            language="typescript"
+            title="repeater-aggregate.ts"
+            showCopyButton
+          />
           <p>
             The renderer calculates row-level expressions first, then recalculates outer fields.
             That means <code>SUM(items.line_total)</code> sees fresh row totals even when
@@ -230,25 +358,41 @@
         <section id="custom-engine">
           <h2>Replacing the calculation engine</h2>
           <p>
-            If you need full spreadsheet behavior, project-specific functions, server-backed
-            values, currency conversion, or a different parser, replace the engine through
+            If you need full spreadsheet behavior, project-specific functions, server-backed values,
+            currency conversion, or a different parser, replace the engine through
             <code>provideFormBuilder</code>. A custom engine implements
             <code>FormBuilderCalculationEngine</code> with <code>evaluate</code> and optionally
             <code>dependencies</code>. The renderer will use it for every calculated field.
           </p>
-          <ngs-code-highlighter [code]="customEngineCode" language="typescript" title="custom-calculation-engine.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="customEngineCode"
+            language="typescript"
+            title="custom-calculation-engine.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="checklist">
           <h2>Production checklist</h2>
           <ul>
             <li>Use stable field <code>name</code> values because formulas reference names.</li>
-            <li>Use <code>valueType: 'number'</code> and <code>precision</code> for money-like totals.</li>
-            <li>Keep formula fields readonly and do not ask users to edit calculated output manually.</li>
+            <li>
+              Use <code>valueType: 'number'</code> and <code>precision</code> for money-like totals.
+            </li>
+            <li>
+              Keep formula fields readonly and do not ask users to edit calculated output manually.
+            </li>
             <li>Prefer small, explicit expressions over deeply nested business logic.</li>
             <li>Validate saved schemas in preview before publishing them to production users.</li>
-            <li>Use <code>SUM(items.line_total)</code>, <code>AVG(items.score)</code>, or similar paths for repeater aggregates.</li>
-            <li>Replace the default engine when you need full Excel compatibility, spreadsheet ranges, or custom functions.</li>
+            <li>
+              Use <code>SUM(items.line_total)</code>, <code>AVG(items.score)</code>, or similar
+              paths for repeater aggregates.
+            </li>
+            <li>
+              Replace the default engine when you need full Excel compatibility, spreadsheet ranges,
+              or custom functions.
+            </li>
           </ul>
         </section>
       </div>
@@ -258,9 +402,11 @@
       <nav ngs-scroll-spy-nav>
         <ngs-scroll-spy-title>On this page</ngs-scroll-spy-title>
         <a ngs-scroll-spy-on targetId="what-it-is">What it does</a>
+        <a ngs-scroll-spy-on targetId="related-docs">Docs</a>
         <a ngs-scroll-spy-on targetId="minimal-field">Minimal field</a>
         <a ngs-scroll-spy-on targetId="settings">Settings</a>
         <a ngs-scroll-spy-on targetId="full-example">Invoice example</a>
+        <a ngs-scroll-spy-on targetId="live-renderer">Live renderer</a>
         <a ngs-scroll-spy-on targetId="expression-basics">Expression basics</a>
         <a ngs-scroll-spy-on targetId="field-references">Field references</a>
         <a ngs-scroll-spy-on targetId="functions">Functions</a>
@@ -271,9 +417,7 @@
         <a ngs-scroll-spy-on targetId="security">Security</a>
         <a ngs-scroll-spy-on targetId="custom-engine">Custom engine</a>
         <a ngs-scroll-spy-on targetId="checklist">Checklist</a>
-        <button ngs-scroll-spy-back-to-top>
-          Back to top
-        </button>
+        <button ngs-scroll-spy-back-to-top>Back to top</button>
       </nav>
     </aside>
   </div>

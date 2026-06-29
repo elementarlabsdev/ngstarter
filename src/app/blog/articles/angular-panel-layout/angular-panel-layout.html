@@ -12,7 +12,9 @@
           <ngs-chip appearance="outlined">ngs-panel</ngs-chip>
           <ngs-chip appearance="outlined">Admin UI</ngs-chip>
         </ngs-chip-set>
-        <h1 class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl">
+        <h1
+          class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl"
+        >
           Angular Panel Layout: Create Admin Workspaces with ngs-panel
         </h1>
         <p class="mt-6 text-lg leading-8 text-on-surface-variant">
@@ -86,10 +88,11 @@
           <h2>Import the panel building blocks</h2>
           <p>
             Start with the public panel entry point and add <code>ScrollbarArea</code> for any
-            region that needs internal scrolling. For action rows, compose <code>Toolbar</code>
-            inside <code>ngs-panel-header</code>.
+            region that needs internal scrolling. For action rows, compose
+            <code>Toolbar</code> inside <code>ngs-panel-header</code>.
           </p>
           <ngs-code-highlighter
+            class="mb-10"
             [code]="importCode"
             language="typescript"
             title="panel imports"
@@ -105,6 +108,7 @@
             <code>ngs-panel-content</code> contains the scroll host.
           </p>
           <ngs-code-highlighter
+            class="mb-10"
             [code]="singleWorkspaceCode"
             language="html"
             title="single-workspace-panel.html"
@@ -120,6 +124,7 @@
             reachable.
           </p>
           <ngs-code-highlighter
+            class="mb-10"
             [code]="headerFooterCode"
             language="html"
             title="panel-with-footer.html"
@@ -131,11 +136,12 @@
           <h2>Master-detail panel layout</h2>
           <p>
             For records, inboxes, CRM objects, and operational queues, place the collection in
-            <code>ngs-panel-sidebar</code> and the selected record in <code>ngs-panel-content</code>.
-            This angular panel layout avoids manual split wrappers while keeping both regions
-            independently scrollable.
+            <code>ngs-panel-sidebar</code> and the selected record in
+            <code>ngs-panel-content</code>. This angular panel layout avoids manual split wrappers
+            while keeping both regions independently scrollable.
           </p>
           <ngs-code-highlighter
+            class="mb-10"
             [code]="masterDetailCode"
             language="html"
             title="master-detail-panel.html"
@@ -151,6 +157,7 @@
             panel because it is part of the current workspace, not the global application shell.
           </p>
           <ngs-code-highlighter
+            class="mb-10"
             [code]="inspectorCode"
             language="html"
             title="panel-with-inspector.html"
@@ -166,6 +173,7 @@
             keeping the structure readable.
           </p>
           <ngs-code-highlighter
+            class="mb-10"
             [code]="complexWorkspaceCode"
             language="html"
             title="settings-panel-layout.html"
@@ -181,6 +189,7 @@
             <code>:host</code>.
           </p>
           <ngs-code-highlighter
+            class="mb-10"
             [code]="sizingCode"
             language="scss"
             title="workspace-panel.scss"
@@ -193,7 +202,9 @@
           <ul>
             <li>Use <code>ngs-panel-header</code> for page title, filters, and primary actions.</li>
             <li>Use <code>ngs-panel-content</code> as the main scrollable workspace.</li>
-            <li>Use <code>ngs-panel-sidebar</code> for local record navigation or settings navigation.</li>
+            <li>
+              Use <code>ngs-panel-sidebar</code> for local record navigation or settings navigation.
+            </li>
             <li>Use <code>ngs-panel-aside</code> for inspectors, details, help, or activity.</li>
             <li>Use <code>ngs-panel-footer</code> for persistent confirmation actions.</li>
           </ul>
@@ -219,9 +230,7 @@
         <a ngs-scroll-spy-on targetId="settings-workspace">Settings layout</a>
         <a ngs-scroll-spy-on targetId="sizing-and-tokens">Sizing</a>
         <a ngs-scroll-spy-on targetId="panel-layout-checklist">Checklist</a>
-        <button ngs-scroll-spy-back-to-top>
-          Back to top
-        </button>
+        <button ngs-scroll-spy-back-to-top>Back to top</button>
       </nav>
     </aside>
   </div>

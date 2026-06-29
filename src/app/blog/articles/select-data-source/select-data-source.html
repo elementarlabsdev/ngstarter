@@ -12,7 +12,9 @@
           <ngs-chip appearance="outlined">Data source</ngs-chip>
           <ngs-chip appearance="outlined">Form Builder</ngs-chip>
         </ngs-chip-set>
-        <h1 class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl">
+        <h1
+          class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl"
+        >
           Select data sources in NgStarter UI
         </h1>
         <p class="mt-6 text-lg leading-8 text-on-surface-variant">
@@ -36,6 +38,48 @@
           </p>
         </section>
 
+        <section id="related-docs">
+          <h2>Related component docs</h2>
+          <p>
+            These docs cover the select component, Form Builder integration, and the code snippets
+            used throughout this data-source guide.
+          </p>
+          <div class="related-links-grid">
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/forms/select">
+                  <ngs-icon name="fluent:multiselect-24-regular" />
+                  <span>Select component</span>
+                </a>
+              </div>
+            </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/libraries/form-builder">
+                  <ngs-icon name="fluent:form-24-regular" />
+                  <span>Form Builder overview</span>
+                </a>
+              </div>
+            </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/libraries/form-builder/api">
+                  <ngs-icon name="fluent:document-bullet-list-24-regular" />
+                  <span>Form Builder API</span>
+                </a>
+              </div>
+            </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/components/code-highlighter">
+                  <ngs-icon name="fluent:code-24-regular" />
+                  <span>Code Highlighter</span>
+                </a>
+              </div>
+            </ngs-card>
+          </div>
+        </section>
+
         <section id="contract">
           <h2>The data source contract</h2>
           <p>
@@ -45,7 +89,13 @@
             first request must be able to return the currently selected option. That lets the
             trigger show a label even when the option is not part of the first loaded page.
           </p>
-          <ngs-code-highlighter [code]="dataSourceCode" language="typescript" title="users-data-source.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="dataSourceCode"
+            language="typescript"
+            title="users-data-source.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="select">
@@ -56,7 +106,13 @@
             options load per request, and <code>minSearchLength</code> avoids sending short search
             terms to the API.
           </p>
-          <ngs-code-highlighter [code]="selectTemplateCode" language="html" title="owner-select.html" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="selectTemplateCode"
+            language="html"
+            title="owner-select.html"
+            showCopyButton
+          />
         </section>
 
         <section id="form-builder">
@@ -64,10 +120,16 @@
           <p>
             Form Builder select fields use named data sources. Register each source with an
             <code>id</code>, a human-readable <code>name</code>, and the same
-            <code>SelectDataSource</code> function. The <code>name</code> is what editors see in
-            the select field inspector.
+            <code>SelectDataSource</code> function. The <code>name</code> is what editors see in the
+            select field inspector.
           </p>
-          <ngs-code-highlighter [code]="formBuilderProviderCode" language="typescript" title="form-builder-providers.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="formBuilderProviderCode"
+            language="typescript"
+            title="form-builder-providers.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="schema">
@@ -77,7 +139,13 @@
             registered data source id. Static custom options still use
             <code>optionsSource: 'static'</code> and the regular <code>options</code> array.
           </p>
-          <ngs-code-highlighter [code]="formBuilderSchemaCode" language="typescript" title="form-builder-schema.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="formBuilderSchemaCode"
+            language="typescript"
+            title="form-builder-schema.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="templates">
@@ -89,15 +157,27 @@
             as <code>optionContentComponent</code> and <code>valueComponent</code> on the data
             source definition.
           </p>
-          <ngs-code-highlighter [code]="componentTemplateCode" language="typescript" title="user-option.component.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="componentTemplateCode"
+            language="typescript"
+            title="user-option.component.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="checklist">
           <h2>Implementation checklist</h2>
           <ul>
-            <li>Return selected options on the initial request when <code>selectedValues</code> is not empty.</li>
+            <li>
+              Return selected options on the initial request when <code>selectedValues</code> is not
+              empty.
+            </li>
             <li>Deduplicate selected options and page results before returning items.</li>
-            <li>Respect <code>request.signal</code> when your HTTP client supports aborting stale requests.</li>
+            <li>
+              Respect <code>request.signal</code> when your HTTP client supports aborting stale
+              requests.
+            </li>
             <li>Use stable option values such as database ids, not labels.</li>
             <li>Keep Form Builder data source ids stable because schemas persist them.</li>
           </ul>
@@ -109,15 +189,14 @@
       <nav ngs-scroll-spy-nav>
         <ngs-scroll-spy-title>On this page</ngs-scroll-spy-title>
         <a ngs-scroll-spy-on targetId="why">Why use it</a>
+        <a ngs-scroll-spy-on targetId="related-docs">Docs</a>
         <a ngs-scroll-spy-on targetId="contract">Contract</a>
         <a ngs-scroll-spy-on targetId="select">ngs-select</a>
         <a ngs-scroll-spy-on targetId="form-builder">Form Builder</a>
         <a ngs-scroll-spy-on targetId="schema">Schema</a>
         <a ngs-scroll-spy-on targetId="templates">Templates</a>
         <a ngs-scroll-spy-on targetId="checklist">Checklist</a>
-        <button ngs-scroll-spy-back-to-top>
-          Back to top
-        </button>
+        <button ngs-scroll-spy-back-to-top>Back to top</button>
       </nav>
     </aside>
   </div>

@@ -12,7 +12,9 @@
           <ngs-chip appearance="outlined">Custom fields</ngs-chip>
           <ngs-chip appearance="outlined">Angular forms</ngs-chip>
         </ngs-chip-set>
-        <h1 class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl">
+        <h1
+          class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl"
+        >
           How to add and configure a custom field in Form Builder
         </h1>
         <p class="mt-6 text-lg leading-8 text-on-surface-variant">
@@ -60,6 +62,14 @@
                 </a>
               </div>
             </ngs-card>
+            <ngs-card appearance="outlined" class="related-link-card">
+              <div ngs-card-content>
+                <a href="https://docs.ngstarter.com/forms/button-toggle">
+                  <ngs-icon name="fluent:toggle-multiple-24-regular" />
+                  <span>Button Toggle</span>
+                </a>
+              </div>
+            </ngs-card>
           </div>
         </section>
 
@@ -70,7 +80,13 @@
             field types, and provider helpers are exported from
             <code>&#64;ngstarter-ui/components/form-builder</code>.
           </p>
-          <ngs-code-highlighter [code]="importCode" language="typescript" title="imports.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="importCode"
+            language="typescript"
+            title="imports.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="renderer">
@@ -80,7 +96,13 @@
             <code>field()</code> and binds the provided <code>control()</code> to NgStarter form
             components. In this example the custom priority field uses <code>ButtonToggle</code>.
           </p>
-          <ngs-code-highlighter [code]="rendererCode" language="typescript" title="priority-field.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="rendererCode"
+            language="typescript"
+            title="priority-field.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="register">
@@ -90,7 +112,13 @@
             <code>provideFormBuilder</code> when you want to register multiple fields, layout items,
             settings components, or a global upload callback in one place.
           </p>
-          <ngs-code-highlighter [code]="providerCode" language="typescript" title="field-provider.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="providerCode"
+            language="typescript"
+            title="field-provider.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="settings">
@@ -100,7 +128,13 @@
             schema for custom options. Use dotted names such as <code>settings.lowLabel</code> when
             the value belongs in the field's custom settings bag.
           </p>
-          <ngs-code-highlighter [code]="settingsCode" language="typescript" title="field-settings.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="settingsCode"
+            language="typescript"
+            title="field-settings.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="schema">
@@ -110,7 +144,13 @@
             definition. The renderer and builder both resolve the definition at runtime, so the JSON
             remains compact and backend-friendly.
           </p>
-          <ngs-code-highlighter [code]="schemaCode" language="typescript" title="schema.ts" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="schemaCode"
+            language="typescript"
+            title="schema.ts"
+            showCopyButton
+          />
         </section>
 
         <section id="template">
@@ -119,7 +159,13 @@
             Bind the schema with two-way model syntax. When users drag the custom field or edit its
             settings, the schema signal receives the updated JSON.
           </p>
-          <ngs-code-highlighter [code]="builderCode" language="html" title="builder.html" showCopyButton />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="builderCode"
+            language="html"
+            title="builder.html"
+            showCopyButton
+          />
         </section>
 
         <section id="checklist">
@@ -127,9 +173,15 @@
           <ul>
             <li>Give every field type a unique <code>type</code>.</li>
             <li>Set <code>defaults</code> for label, width, default value, and custom settings.</li>
-            <li>Use NgStarter controls inside renderer components where a matching component exists.</li>
-            <li>Use <code>settings.schema</code> for inspector controls instead of custom settings UI.</li>
-            <li>Keep saved form data in <code>FormBuilderSchema</code>, not in component-only state.</li>
+            <li>
+              Use NgStarter controls inside renderer components where a matching component exists.
+            </li>
+            <li>
+              Use <code>settings.schema</code> for inspector controls instead of custom settings UI.
+            </li>
+            <li>
+              Keep saved form data in <code>FormBuilderSchema</code>, not in component-only state.
+            </li>
           </ul>
         </section>
       </div>
@@ -147,9 +199,7 @@
         <a ngs-scroll-spy-on targetId="schema">Schema</a>
         <a ngs-scroll-spy-on targetId="template">Template</a>
         <a ngs-scroll-spy-on targetId="checklist">Checklist</a>
-        <button ngs-scroll-spy-back-to-top>
-          Back to top
-        </button>
+        <button ngs-scroll-spy-back-to-top>Back to top</button>
       </nav>
     </aside>
   </div>

@@ -73,9 +73,67 @@
     --ngs-code-highlighter-margin: 1.25rem 0 0;
   }
 
+  .related-links-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .related-link-card {
+    --ngs-card-bg: var(--ngs-color-surface-container-lowest);
+    outline: 1px solid transparent;
+    outline-offset: 0;
+    transition:
+      outline-color 160ms ease,
+      box-shadow 160ms ease;
+
+    a {
+      display: flex;
+      min-height: 100%;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--ngs-color-on-surface);
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 160ms ease;
+    }
+
+    ngs-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      color: var(--ngs-color-primary);
+    }
+
+    &:hover,
+    &:focus-within {
+      outline-color: var(--ngs-color-primary);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--ngs-color-primary) 14%, transparent);
+
+      a {
+        color: var(--ngs-color-primary);
+      }
+    }
+  }
+
+  .calculator-demo-card {
+    --ngs-card-bg: var(--ngs-color-surface-container-lowest);
+    margin-top: 1.5rem;
+
+    ngs-form-renderer {
+      display: block;
+    }
+  }
+
   .article-aside {
     position: sticky;
     top: 6rem;
     height: max-content;
+  }
+
+  @media (max-width: 640px) {
+    .related-links-grid {
+      grid-template-columns: 1fr;
+    }
   }
 }

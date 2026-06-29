@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Button } from '@ngstarter-ui/components/button';
+import { Card, CardContent } from '@ngstarter-ui/components/card';
 import { Chip, ChipSet } from '@ngstarter-ui/components/chips';
 import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 import { Icon } from '@ngstarter-ui/components/icon';
@@ -15,6 +16,8 @@ import {
   selector: 'app-form-builder-schema',
   imports: [
     Button,
+    Card,
+    CardContent,
     Chip,
     ChipSet,
     CodeHighlighter,
