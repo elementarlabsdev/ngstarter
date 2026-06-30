@@ -215,10 +215,28 @@ export class Api {
       type: 'FormBuilderLayoutItem[]'
     },
     {
+      name: 'flow',
+      description: 'Optional presentation flow. Use mode steps with FormBuilderStep entries to render the same form as a multi-step flow.',
+      type: 'FormBuilderFlow'
+    },
+    {
       name: 'sections',
       description: 'Required list of sections. A schema may use an empty array when all fields live at the top level.',
       type: 'FormBuilderSection[]'
     }
+  ];
+
+  readonly flowProperties = [
+    { name: 'mode', description: 'single renders the legacy flat layout. steps renders flow.steps through NgStarter Stepper.', type: "'single' | 'steps'" },
+    { name: 'steps', description: 'Ordered step definitions. Each step references existing top-level fields or sections through items.', type: 'FormBuilderStep[]' }
+  ];
+
+  readonly stepProperties = [
+    { name: 'id', description: 'Stable step id used by builder canvas, Layers, and drag/drop.', type: 'string' },
+    { name: 'title', description: 'Step label shown in Layers, builder canvas, and the runtime stepper.', type: 'string' },
+    { name: 'description', description: 'Optional helper text shown in the builder canvas and renderer.', type: 'string' },
+    { name: 'optional', description: 'Marks the step as optional in the runtime stepper.', type: 'boolean' },
+    { name: 'items', description: 'Ordered references to top-level fields or sections displayed in this step.', type: 'FormBuilderLayoutItem[]' }
   ];
 
   readonly fieldProperties = [

@@ -81,6 +81,12 @@ export const appConfig = {
   the text references it as `{id}`. Keep `settings.expression` omitted or `false` for literal text.
   Example:
   `{ type: 'plain-text', kind: 'static', label: 'Summary', settings: { text: 'Total: {count_total}', expression: true, expressions: [{ id: 'count_total', expression: 'ROUND(SUM(items.line_total), 2)' }] } }`.
+- In Form Builder schemas, use `schema.flow` for multi-step presentation. Steps are not fields and
+  not sections; store them as `flow: { mode: 'steps', steps: [{ id, title, items }] }`, where each
+  step `items` array references existing top-level fields or sections by `{ kind: 'field' |
+  'section', id }`. Keep submitted values, field names, sections, calculations, and repeater
+  aggregates in the normal form model; steps only control canvas/Layers grouping and renderer
+  navigation.
 - Use `Alert` from `@ngstarter-ui/components/alert`, rendered as `<ngs-alert>`, for
   `success-card`, success messages, and other inline notification or status message blocks. Do not
   hand-roll these blocks with custom `div`/`span` cards, pills, banners, or alert-like containers

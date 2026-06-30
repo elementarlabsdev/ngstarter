@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { AbstractControl, FormArray, ReactiveFormsModule, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
+import { Step, Stepper } from '@ngstarter-ui/components/stepper';
 import {
   asyncValidatorsFromRules,
   DEFAULT_FORM_BUILDER_ITEMS,
@@ -21,13 +22,17 @@ import {
   mergeFormBuilderValidatorDefinitions,
   validatorsFromRules
 } from '../config';
-import { FormBuilderCalculationEngine, FormBuilderField, FormBuilderFieldDefinition, FormBuilderItemDefinition, FormBuilderLayoutItem, FormBuilderSchema, FormBuilderSection, FormBuilderUploadCallback } from '../types';
+import { FormBuilderCalculationEngine, FormBuilderField, FormBuilderFieldDefinition, FormBuilderItemDefinition, FormBuilderLayoutItem, FormBuilderSchema, FormBuilderSection, FormBuilderStep, FormBuilderUploadCallback } from '../types';
 import { FormBuilderFieldHost } from '../field-host/field-host';
 import { DEFAULT_FORM_BUILDER_CALCULATION_ENGINE } from '../calculation-engine';
 
 interface FormRendererCanvasItem extends FormBuilderLayoutItem {
   field?: FormBuilderField;
   section?: FormBuilderSection;
+}
+
+interface FormRendererStep extends FormBuilderStep {
+  items: FormRendererCanvasItem[];
 }
 
 interface PlainTextExpression {
@@ -42,6 +47,8 @@ interface PlainTextExpression {
     NgTemplateOutlet,
     ReactiveFormsModule,
     Button,
+    Step,
+    Stepper,
     FormBuilderFieldHost
   ],
   templateUrl: './form-renderer.html',
@@ -93,6 +100,13 @@ export class FormRenderer {
   }, []));
   protected readonly visibleCanvasItems = computed<FormRendererCanvasItem[]>(() =>
     this.resolveCanvasItems(this.schema()).filter(item => !!item.field || !!item.section?.fields.length)
+  );
+  protected readonly stepsMode = computed(() => this.isStepsMode(this.schema()));
+  protected readonly visibleSteps = computed<FormRendererStep[]>(() =>
+    this.resolveSteps(this.schema()).map(step => ({
+      ...step,
+      items: step.items.filter(item => !!item.field || !!item.section?.fields.length)
+    })).filter(step => step.items.length || step.optional !== true)
   );
   protected readonly validatorDefinitions = computed(() =>
     mergeFormBuilderValidatorDefinitions(this.providedValidators)
@@ -699,6 +713,88 @@ export class FormRenderer {
     }
 
     return items;
+  }
+
+  private resolveSteps(schema: FormBuilderSchema): FormRendererStep[] {
+    return this.normalizedSteps(schema).map(step => ({
+      ...step,
+      items: this.resolveLayoutItems(schema, step.items)
+    }));
+  }
+
+  private resolveLayoutItems(schema: FormBuilderSchema, layout: FormBuilderLayoutItem[]): FormRendererCanvasItem[] {
+    const fieldsById = new Map((schema.fields ?? []).map(field => [field.id, field]));
+    const sectionsById = new Map(schema.sections.map(section => [section.id, section]));
+    const items: FormRendererCanvasItem[] = [];
+
+    for (const item of layout) {
+      if (item.kind === 'field') {
+        const field = fieldsById.get(item.id);
+
+        if (field) {
+          items.push({ ...item, field });
+        }
+
+        continue;
+      }
+
+      const section = sectionsById.get(item.id);
+
+      if (section) {
+        items.push({ ...item, section });
+      }
+    }
+
+    return items;
+  }
+
+  private isStepsMode(schema: FormBuilderSchema): boolean {
+    return schema.flow?.mode === 'steps' && !!schema.flow.steps?.length;
+  }
+
+  private normalizedSteps(schema: FormBuilderSchema): FormBuilderStep[] {
+    if (schema.flow?.mode !== 'steps' || !schema.flow.steps?.length) {
+      return [];
+    }
+
+    const validItems = new Set([
+      ...(schema.fields ?? []).map(field => `field:${field.id}`),
+      ...schema.sections.map(section => `section:${section.id}`)
+    ]);
+    const used = new Set<string>();
+    const steps = schema.flow.steps.map((step, index) => {
+      const items: FormBuilderLayoutItem[] = [];
+
+      for (const item of step.items ?? []) {
+        const key = `${item.kind}:${item.id}`;
+
+        if (used.has(key) || !validItems.has(key)) {
+          continue;
+        }
+
+        used.add(key);
+        items.push({ ...item });
+      }
+
+      return {
+        ...step,
+        title: step.title || `Step ${index + 1}`,
+        items
+      };
+    });
+
+    const lastStep = steps[steps.length - 1];
+
+    for (const item of normalizedLayout(schema)) {
+      const key = `${item.kind}:${item.id}`;
+
+      if (!used.has(key)) {
+        used.add(key);
+        lastStep.items.push({ ...item });
+      }
+    }
+
+    return steps;
   }
 }
 

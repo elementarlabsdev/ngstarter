@@ -32,6 +32,25 @@
     gap: --spacing(4);
   }
 
+  .ngs-form-renderer-step-description {
+    color: var(--ngs-color-on-surface-variant);
+    font-size: var(--ngs-font-size-sm);
+    margin-bottom: --spacing(4);
+  }
+
+  .ngs-form-renderer-step-content {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(6);
+  }
+
+  .ngs-form-renderer-step-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: --spacing(3);
+    margin-top: --spacing(6);
+  }
+
   .ngs-form-renderer-grid-field {
     display: flex;
     grid-column: 1 / -1;

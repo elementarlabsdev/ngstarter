@@ -5,6 +5,7 @@ import { FormsModule, FormControl } from '@angular/forms';
 import { Autocomplete, AutocompleteSelectedEvent, AutocompleteTrigger, Option } from '@ngstarter-ui/components/autocomplete';
 import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardAside, CardContent, CardHeader } from '@ngstarter-ui/components/card';
+import { Checkbox } from '@ngstarter-ui/components/checkbox';
 import { ChipGrid, ChipInput, ChipInputEvent, ChipRemove, ChipRow } from '@ngstarter-ui/components/chips';
 import { ConfirmManager } from '@ngstarter-ui/components/confirm';
 import { Dialog, DialogActions, DialogClose, DialogContent, DialogTitle } from '@ngstarter-ui/components/dialog';
@@ -39,6 +40,7 @@ import {
   FormBuilderSchema,
   FormBuilderSection,
   FormBuilderSettingsDefinition,
+  FormBuilderStep,
   FormBuilderUploadCallback,
   FormBuilderValidationRule,
   FormBuilderValidatorDefinition
@@ -59,9 +61,10 @@ interface FormBuilderFieldTreeNode {
   name?: string;
   type: string;
   icon: string;
-  kind: 'section' | 'field';
+  kind: 'step' | 'section' | 'field';
   field?: FormBuilderField;
   section?: FormBuilderSection;
+  step?: FormBuilderStep;
   children?: FormBuilderFieldTreeNode[];
 }
 
@@ -89,6 +92,10 @@ interface FormBuilderContainerLocation {
 interface FormBuilderCanvasItem extends FormBuilderLayoutItem {
   field?: FormBuilderField;
   section?: FormBuilderSection;
+}
+
+interface FormBuilderCanvasStep extends FormBuilderStep {
+  items: FormBuilderCanvasItem[];
 }
 
 type FormBuilderNativeDragItem =
@@ -283,6 +290,7 @@ const MIME_TYPE_OPTIONS = [
     CardAside,
     CardContent,
     CardHeader,
+    Checkbox,
     ChipGrid,
     ChipInput,
     ChipRemove,
@@ -424,6 +432,8 @@ export class FormBuilder implements OnDestroy {
   });
   protected readonly validationSettingsField = VALIDATION_SETTINGS_FIELD;
   protected readonly canvasItems = computed<FormBuilderCanvasItem[]>(() => this.resolveCanvasItems(this.schema()));
+  protected readonly stepsMode = computed(() => this.isStepsMode(this.schema()));
+  protected readonly canvasSteps = computed<FormBuilderCanvasStep[]>(() => this.resolveCanvasSteps(this.schema()));
   protected readonly layoutDefinitions = computed<FormBuilderFieldDefinition[]>(() => {
     const query = this.search().trim().toLowerCase();
 
@@ -459,12 +469,18 @@ export class FormBuilder implements OnDestroy {
     const selectedId = this.selectedFieldId();
     return selectedId ? this.schema().sections.find(section => section.id === selectedId) ?? null : null;
   });
+  protected readonly selectedStep = computed(() => {
+    const selectedId = this.selectedFieldId();
+    return selectedId ? this.normalizedSteps(this.schema()).find(step => step.id === selectedId) ?? null : null;
+  });
   protected readonly fieldTree = computed<FormBuilderFieldTreeNode[]>(() => {
-    const nodes = this.resolveCanvasItems(this.schema()).map(item => {
-      return item.field
-        ? this.upsertFieldTreeNode(item.field)
-        : this.upsertSectionTreeNode(item.section!);
-    });
+    const nodes = this.stepsMode()
+      ? this.canvasSteps().map(step => this.upsertStepTreeNode(step))
+      : this.resolveCanvasItems(this.schema()).map(item => {
+          return item.field
+            ? this.upsertFieldTreeNode(item.field)
+            : this.upsertSectionTreeNode(item.section!);
+        });
     const structureKey = this.resolveFieldTreeStructureKey(nodes);
 
     if (structureKey !== this.fieldTreeStructureKey) {
@@ -495,6 +511,13 @@ export class FormBuilder implements OnDestroy {
 
     if (section) {
       this.updateSection(section, changes);
+    }
+  };
+  protected readonly updateSelectedStep = (changes: Partial<FormBuilderStep>) => {
+    const step = this.selectedStep();
+
+    if (step) {
+      this.updateStep(step, changes);
     }
   };
 
@@ -547,6 +570,20 @@ export class FormBuilder implements OnDestroy {
       ROOT_DROP_LIST_ID,
       '.ngs-form-builder-field:not(.ngs-form-builder-native-ghost-field), .ngs-form-builder-section:not(.ngs-form-builder-native-ghost-section)'
     );
+  }
+
+  protected nativeStepDragOver(event: DragEvent, step: FormBuilderStep): void {
+    event.stopPropagation();
+    this.nativeDragOver(
+      event,
+      this.stepDropListId(step),
+      '.ngs-form-builder-field:not(.ngs-form-builder-native-ghost-field), .ngs-form-builder-section:not(.ngs-form-builder-native-ghost-section)'
+    );
+  }
+
+  protected nativeStepDrop(event: DragEvent, step: FormBuilderStep): void {
+    event.stopPropagation();
+    this.nativeFieldDrop(event, this.stepDropListId(step));
   }
 
   protected nativeFieldDragOver(event: DragEvent, containerId: string): void {
@@ -638,11 +675,13 @@ export class FormBuilder implements OnDestroy {
     const index = target?.containerId === containerId ? target.index : 0;
 
     if (item.kind === 'section') {
-      if (containerId !== ROOT_DROP_LIST_ID) {
+      if (containerId === ROOT_DROP_LIST_ID) {
+        this.insertNativeSection(index);
+      } else if (this.isStepDropListId(containerId)) {
+        this.insertNativeSectionIntoStep(containerId, index);
+      } else {
         return;
       }
-
-      this.insertNativeSection(index);
     } else {
       this.insertNativeField(item.definition, containerId, index);
     }
@@ -686,6 +725,37 @@ export class FormBuilder implements OnDestroy {
     });
     schema.layout = this.normalizedLayout(schema);
     this.schema.set(schema);
+  }
+
+  protected addStep(): void {
+    const schema = cloneSchema(this.schema());
+    const wasStepsMode = this.isStepsMode(schema);
+    this.ensureStepsFlow(schema);
+    const steps = schema.flow?.steps ?? [];
+
+    if (!wasStepsMode) {
+      const firstStep = steps[0];
+
+      this.schema.set(schema);
+
+      if (firstStep) {
+        this.selectStep(firstStep);
+      }
+
+      this.fieldsTabIndex.set(ACTUAL_FIELDS_TAB_INDEX);
+      return;
+    }
+
+    const step: FormBuilderStep = {
+      id: uniqueId('step'),
+      title: `Step ${steps.length + 1}`,
+      items: []
+    };
+
+    steps.push(step);
+    this.schema.set(schema);
+    this.selectStep(step);
+    this.fieldsTabIndex.set(ACTUAL_FIELDS_TAB_INDEX);
   }
 
   protected openPreview(template: TemplateRef<unknown>): void {
@@ -903,6 +973,7 @@ export class FormBuilder implements OnDestroy {
     const schema = cloneSchema(this.schema());
     schema.sections = schema.sections.filter(item => item.id !== section.id);
     schema.layout = this.normalizedLayout(schema).filter(item => !(item.kind === 'section' && item.id === section.id));
+    this.removeStepItemReferences(schema, { kind: 'section', id: section.id });
 
     if (
       this.selectedFieldId() === section.id ||
@@ -927,6 +998,56 @@ export class FormBuilder implements OnDestroy {
     this.restoreFieldTreeExpansion();
   }
 
+  protected updateStep(step: FormBuilderStep, changes: Partial<FormBuilderStep>): void {
+    const schema = cloneSchema(this.schema());
+    const nextStep = schema.flow?.steps?.find(item => item.id === step.id);
+
+    if (!nextStep) {
+      return;
+    }
+
+    Object.assign(nextStep, changes);
+    this.schema.set(schema);
+    this.restoreFieldTreeExpansion();
+  }
+
+  protected removeStep(step: FormBuilderStep): void {
+    const schema = cloneSchema(this.schema());
+    const steps = schema.flow?.steps;
+
+    if (!steps) {
+      return;
+    }
+
+    const stepIndex = steps.findIndex(item => item.id === step.id);
+
+    if (stepIndex === -1) {
+      return;
+    }
+
+    const [removedStep] = steps.splice(stepIndex, 1);
+
+    if (removedStep.items.length) {
+      const targetStep = steps[Math.max(0, stepIndex - 1)] ?? steps[0];
+
+      if (targetStep) {
+        targetStep.items.push(...removedStep.items);
+      } else {
+        schema.layout = this.normalizedLayout(schema);
+      }
+    }
+
+    if (!steps.length) {
+      schema.flow = { mode: 'single' };
+    }
+
+    if (this.selectedFieldId() === step.id) {
+      this.selectedFieldId.set(null);
+    }
+
+    this.schema.set(schema);
+  }
+
   protected isSectionCollapsed(section: FormBuilderSection): boolean {
     return section.collapsed === true;
   }
@@ -940,12 +1061,22 @@ export class FormBuilder implements OnDestroy {
     this.selectedFieldId.set(section.id);
   }
 
+  protected selectStep(step: FormBuilderStep): void {
+    this.selectedFieldId.set(step.id);
+  }
+
   protected selectCanvasField(field: FormBuilderField, section?: FormBuilderSection): void {
     this.selectField(field, section);
     this.openActualFieldsTreeForField(field.id);
   }
 
   protected selectFieldTreeNode(node: FormBuilderFieldTreeNode): void {
+    if (node.step) {
+      this.selectStep(node.step);
+      this.scrollCanvasStepIntoView(node.step.id);
+      return;
+    }
+
     if (node.section && !node.field) {
       this.selectSection(node.section);
       this.scrollCanvasSectionIntoView(node.section.id);
@@ -992,10 +1123,17 @@ export class FormBuilder implements OnDestroy {
   }
 
   protected fieldTreePlaceholderIcon(source: FormBuilderFieldTreeNode): string {
-    return source.kind === 'section' ? 'fluent:folder-24-regular' : source.icon;
+    return source.kind === 'step'
+      ? 'fluent:step-24-regular'
+      : source.kind === 'section' ? 'fluent:folder-24-regular' : source.icon;
   }
 
   protected fieldTreeNodeDropped(event: TreeNodeDrop<FormBuilderFieldTreeNode>): void {
+    if (event.source.kind === 'step') {
+      this.dropFieldTreeStep(event);
+      return;
+    }
+
     if (event.source.kind === 'section') {
       this.dropFieldTreeSection(event);
       return;
@@ -1042,7 +1180,37 @@ export class FormBuilder implements OnDestroy {
       }
     }
 
+    if (event.target.kind === 'step' && event.position === 'inside') {
+      const targetStep = schema.flow?.steps?.find(step => step.id === event.target.id);
+
+      if (targetStep) {
+        schema.fields ??= [];
+
+        if (!schema.fields.some(item => item.id === movingField.id)) {
+          schema.fields.push(movingField);
+        }
+
+        this.removeStepItemReferences(schema, { kind: 'field', id: movingField.id });
+        targetStep.items.push({ kind: 'field', id: movingField.id });
+        this.schema.set(schema);
+        this.restoreFieldTreeExpansion();
+        this.selectField(movingField);
+        return;
+      }
+    }
+
     if (event.target.kind === 'field') {
+      if (this.isStepsMode(schema) && event.position !== 'inside') {
+        const inserted = this.insertFieldAroundStepTreeItem(schema, movingField, event.target.id, event.position);
+
+        if (inserted) {
+          this.schema.set(schema);
+          this.restoreFieldTreeExpansion();
+          this.selectField(movingField);
+          return;
+        }
+      }
+
       const target = this.resolveTreeFieldInsertTarget(schema, event.target.id, event.position);
 
       if (target) {
@@ -1082,6 +1250,7 @@ export class FormBuilder implements OnDestroy {
 
     location.siblings.splice(location.index, 1);
     schema.layout = this.normalizedLayout(schema).filter(item => !(item.kind === 'field' && item.id === field.id));
+    this.removeStepItemReferences(schema, { kind: 'field', id: field.id });
     this.deletePreviewControls(field);
 
     if (this.selectedFieldId() === field.id || containsField(field, this.selectedFieldId())) {
@@ -1094,6 +1263,10 @@ export class FormBuilder implements OnDestroy {
 
   protected sectionDropListId(section: FormBuilderSection): string {
     return `ngs-form-builder-section-${section.id}`;
+  }
+
+  protected stepDropListId(step: FormBuilderStep): string {
+    return `ngs-form-builder-step-${step.id}`;
   }
 
   protected fieldDropListId(field: FormBuilderField): string {
@@ -1222,7 +1395,7 @@ export class FormBuilder implements OnDestroy {
   private nativeDragOver(event: DragEvent, containerId: string, itemSelector: string): void {
     const item = this.nativeDragItem();
 
-    if (!item || (item.kind === 'section' && containerId !== ROOT_DROP_LIST_ID)) {
+    if (!item || (item.kind === 'section' && containerId !== ROOT_DROP_LIST_ID && !this.isStepDropListId(containerId))) {
       return;
     }
 
@@ -1391,7 +1564,7 @@ export class FormBuilder implements OnDestroy {
 
   private getCanvasAnimatedItems(): HTMLElement[] {
     return Array.from(this.elementRef.nativeElement.querySelectorAll<HTMLElement>(
-      '.ngs-form-builder-canvas [data-form-builder-field-id], .ngs-form-builder-canvas [data-form-builder-section-id]'
+      '.ngs-form-builder-canvas [data-form-builder-step-id], .ngs-form-builder-canvas [data-form-builder-field-id], .ngs-form-builder-canvas [data-form-builder-section-id]'
     ));
   }
 
@@ -1400,6 +1573,12 @@ export class FormBuilder implements OnDestroy {
 
     if (fieldId) {
       return `field:${fieldId}`;
+    }
+
+    const stepId = element.dataset['formBuilderStepId'];
+
+    if (stepId) {
+      return `step:${stepId}`;
     }
 
     const sectionId = element.dataset['formBuilderSectionId'];
@@ -1416,6 +1595,22 @@ export class FormBuilder implements OnDestroy {
       schema.fields.push(field);
       layout.splice(clampIndex(index, layout.length), 0, { kind: 'field', id: field.id });
       schema.layout = layout;
+      this.schema.set(schema);
+      this.selectField(field);
+      this.fieldAdded.emit({ field });
+      return;
+    }
+
+    if (this.isStepDropListId(containerId)) {
+      const step = this.findStepByDropListId(schema, containerId);
+
+      if (!step) {
+        return;
+      }
+
+      schema.fields ??= [];
+      schema.fields.push(field);
+      this.insertStepItem(step, { kind: 'field', id: field.id }, index);
       this.schema.set(schema);
       this.selectField(field);
       this.fieldAdded.emit({ field });
@@ -1448,6 +1643,26 @@ export class FormBuilder implements OnDestroy {
     layout.splice(clampIndex(index, layout.length), 0, { kind: 'section', id: section.id });
     schema.layout = layout;
     this.schema.set(schema);
+  }
+
+  private insertNativeSectionIntoStep(containerId: string, index: number): void {
+    const schema = cloneSchema(this.schema());
+    const step = this.findStepByDropListId(schema, containerId);
+
+    if (!step) {
+      return;
+    }
+
+    const section = {
+      id: uniqueId('section'),
+      title: `Section ${schema.sections.length + 1}`,
+      fields: []
+    };
+
+    schema.sections.push(section);
+    this.insertStepItem(step, { kind: 'section', id: section.id }, index);
+    this.schema.set(schema);
+    this.selectSection(section);
   }
 
   private resolveNativeDragItem(event: DragEvent): FormBuilderNativeDragItem | null {
@@ -1563,6 +1778,39 @@ export class FormBuilder implements OnDestroy {
     return items;
   }
 
+  private resolveCanvasSteps(schema: FormBuilderSchema): FormBuilderCanvasStep[] {
+    return this.normalizedSteps(schema).map(step => ({
+      ...step,
+      items: this.resolveLayoutItems(schema, step.items)
+    }));
+  }
+
+  private resolveLayoutItems(schema: FormBuilderSchema, layout: FormBuilderLayoutItem[]): FormBuilderCanvasItem[] {
+    const fieldsById = new Map((schema.fields ?? []).map(field => [field.id, field]));
+    const sectionsById = new Map(schema.sections.map(section => [section.id, section]));
+    const items: FormBuilderCanvasItem[] = [];
+
+    for (const item of layout) {
+      if (item.kind === 'field') {
+        const field = fieldsById.get(item.id);
+
+        if (field) {
+          items.push({ ...item, field });
+        }
+
+        continue;
+      }
+
+      const section = sectionsById.get(item.id);
+
+      if (section) {
+        items.push({ ...item, section });
+      }
+    }
+
+    return items;
+  }
+
   private normalizedLayout(schema: FormBuilderSchema): FormBuilderLayoutItem[] {
     const used = new Set<string>();
     const layout: FormBuilderLayoutItem[] = [];
@@ -1601,6 +1849,100 @@ export class FormBuilder implements OnDestroy {
     }
 
     return layout;
+  }
+
+  private isStepsMode(schema: FormBuilderSchema): boolean {
+    return schema.flow?.mode === 'steps' && !!schema.flow.steps?.length;
+  }
+
+  private normalizedSteps(schema: FormBuilderSchema): FormBuilderStep[] {
+    if (schema.flow?.mode !== 'steps' || !schema.flow.steps?.length) {
+      return [];
+    }
+
+    const validItems = this.validLayoutItemSet(schema);
+    const used = new Set<string>();
+    const steps = schema.flow.steps.map((step, index) => {
+      const items: FormBuilderLayoutItem[] = [];
+
+      for (const item of step.items ?? []) {
+        const key = `${item.kind}:${item.id}`;
+
+        if (used.has(key) || !validItems.has(key)) {
+          continue;
+        }
+
+        used.add(key);
+        items.push({ ...item });
+      }
+
+      return {
+        ...step,
+        title: step.title || `Step ${index + 1}`,
+        items
+      };
+    });
+
+    const lastStep = steps[steps.length - 1];
+
+    for (const item of this.normalizedLayout(schema)) {
+      const key = `${item.kind}:${item.id}`;
+
+      if (!used.has(key)) {
+        used.add(key);
+        lastStep.items.push({ ...item });
+      }
+    }
+
+    return steps;
+  }
+
+  private ensureStepsFlow(schema: FormBuilderSchema): void {
+    if (schema.flow?.mode === 'steps' && schema.flow.steps?.length) {
+      schema.flow.steps = this.normalizedSteps(schema);
+      return;
+    }
+
+    schema.flow = {
+      mode: 'steps',
+      steps: [{
+        id: uniqueId('step'),
+        title: 'Step 1',
+        items: this.normalizedLayout(schema)
+      }]
+    };
+  }
+
+  private validLayoutItemSet(schema: FormBuilderSchema): Set<string> {
+    return new Set([
+      ...(schema.fields ?? []).map(field => `field:${field.id}`),
+      ...schema.sections.map(section => `section:${section.id}`)
+    ]);
+  }
+
+  private insertStepItem(step: FormBuilderStep, item: FormBuilderLayoutItem, index: number): void {
+    step.items = step.items.filter(existing => !(existing.kind === item.kind && existing.id === item.id));
+    step.items.splice(clampIndex(index, step.items.length), 0, item);
+  }
+
+  private removeStepItemReferences(schema: FormBuilderSchema, item: FormBuilderLayoutItem): void {
+    for (const step of schema.flow?.steps ?? []) {
+      step.items = (step.items ?? []).filter(existing => !(existing.kind === item.kind && existing.id === item.id));
+    }
+  }
+
+  private findStepContainingItem(schema: FormBuilderSchema, item: FormBuilderLayoutItem): FormBuilderStep | null {
+    return schema.flow?.steps?.find(step =>
+      (step.items ?? []).some(existing => existing.kind === item.kind && existing.id === item.id)
+    ) ?? null;
+  }
+
+  private isStepDropListId(containerId: string): boolean {
+    return containerId.startsWith('ngs-form-builder-step-');
+  }
+
+  private findStepByDropListId(schema: FormBuilderSchema, containerId: string): FormBuilderStep | null {
+    return schema.flow?.steps?.find(step => this.stepDropListId(step) === containerId) ?? null;
   }
 
   private detachFieldFromLocation(schema: FormBuilderSchema, location: FormBuilderFieldLocation): void {
@@ -1652,6 +1994,25 @@ export class FormBuilder implements OnDestroy {
       schema.fields.push(field);
     }
 
+    if (this.isStepsMode(schema)) {
+      const targetStep = this.findStepContainingItem(schema, { kind: 'section', id: sectionId });
+
+      if (!targetStep) {
+        return null;
+      }
+
+      this.removeStepItemReferences(schema, { kind: 'field', id: field.id });
+      const sectionIndex = targetStep.items.findIndex(item => item.kind === 'section' && item.id === sectionId);
+      this.insertStepItem(targetStep, { kind: 'field', id: field.id }, sectionIndex === -1
+        ? targetStep.items.length
+        : sectionIndex + (position === 'after' ? 1 : 0));
+
+      return {
+        fields: schema.fields,
+        index: schema.fields.findIndex(item => item.id === field.id)
+      };
+    }
+
     const layout = this.normalizedLayout(schema).filter(item => !(item.kind === 'field' && item.id === field.id));
     const sectionIndex = layout.findIndex(item => item.kind === 'section' && item.id === sectionId);
     layout.splice(sectionIndex === -1 ? layout.length : sectionIndex + (position === 'after' ? 1 : 0), 0, {
@@ -1664,6 +2025,34 @@ export class FormBuilder implements OnDestroy {
       fields: schema.fields,
       index: schema.fields.findIndex(item => item.id === field.id)
     };
+  }
+
+  private insertFieldAroundStepTreeItem(
+    schema: FormBuilderSchema,
+    field: FormBuilderField,
+    targetFieldId: string,
+    position: 'before' | 'after'
+  ): boolean {
+    const targetStep = this.findStepContainingItem(schema, { kind: 'field', id: targetFieldId });
+
+    if (!targetStep) {
+      return false;
+    }
+
+    schema.fields ??= [];
+
+    if (!schema.fields.some(item => item.id === field.id)) {
+      schema.fields.push(field);
+    }
+
+    this.removeStepItemReferences(schema, { kind: 'field', id: field.id });
+    const targetIndex = targetStep.items.findIndex(item => item.kind === 'field' && item.id === targetFieldId);
+
+    this.insertStepItem(targetStep, { kind: 'field', id: field.id }, targetIndex === -1
+      ? targetStep.items.length
+      : targetIndex + (position === 'after' ? 1 : 0));
+
+    return true;
   }
 
   private resolveTreeFieldInsertTarget(
@@ -1707,6 +2096,21 @@ export class FormBuilder implements OnDestroy {
       schema.fields.push(field);
     }
 
+    if (this.isStepsMode(schema)) {
+      const targetStep = this.findStepContainingItem(schema, { kind: 'field', id: targetFieldId });
+
+      if (!targetStep) {
+        return;
+      }
+
+      this.removeStepItemReferences(schema, { kind: 'field', id: field.id });
+      const targetIndex = targetStep.items.findIndex(item => item.kind === 'field' && item.id === targetFieldId);
+      this.insertStepItem(targetStep, { kind: 'field', id: field.id }, targetIndex === -1
+        ? targetStep.items.length
+        : targetIndex + (position === 'before' ? 0 : 1));
+      return;
+    }
+
     const layout = this.normalizedLayout(schema).filter(item => !(item.kind === 'field' && item.id === field.id));
     const targetIndex = layout.findIndex(item => item.kind === 'field' && item.id === targetFieldId);
     layout.splice(targetIndex === -1 ? layout.length : targetIndex + (position === 'before' ? 0 : 1), 0, {
@@ -1730,8 +2134,20 @@ export class FormBuilder implements OnDestroy {
       return false;
     }
 
+    if (source.kind === 'step') {
+      return target.kind === 'step' && position !== 'inside';
+    }
+
     if (source.kind === 'section') {
+      if (target.kind === 'step') {
+        return position === 'inside';
+      }
+
       return position !== 'inside' && (target.kind === 'section' || this.isRootFieldTreeNode(target));
+    }
+
+    if (target.kind === 'step') {
+      return position === 'inside';
     }
 
     if (target.kind === 'field' && position === 'inside') {
@@ -1748,6 +2164,38 @@ export class FormBuilder implements OnDestroy {
     }
 
     const schema = cloneSchema(this.schema());
+
+    if (this.isStepsMode(schema)) {
+      const sourceItem: FormBuilderLayoutItem = { kind: 'section', id: event.source.id };
+      const targetStep = event.target.kind === 'step'
+        ? schema.flow?.steps?.find(step => step.id === event.target.id)
+        : this.findStepContainingItem(schema, {
+            kind: event.target.kind === 'section' ? 'section' : 'field',
+            id: event.target.id
+          });
+
+      if (!targetStep) {
+        this.resetFieldTreeAfterRejectedDrop();
+        return;
+      }
+
+      this.removeStepItemReferences(schema, sourceItem);
+      const targetItem = event.target.kind === 'step'
+        ? null
+        : { kind: event.target.kind === 'section' ? 'section' : 'field', id: event.target.id } as FormBuilderLayoutItem;
+      const targetIndex = targetItem
+        ? targetStep.items.findIndex(item => item.kind === targetItem.kind && item.id === targetItem.id)
+        : targetStep.items.length;
+      const insertIndex = targetIndex === -1
+        ? targetStep.items.length
+        : targetIndex + (event.position === 'after' ? 1 : 0);
+
+      this.insertStepItem(targetStep, sourceItem, insertIndex);
+      this.schema.set(schema);
+      this.restoreFieldTreeExpansion();
+      return;
+    }
+
     const layout = this.normalizedLayout(schema);
     const sourceIndex = layout.findIndex(item => item.kind === 'section' && item.id === event.source.id);
     const targetKind = event.target.kind === 'section' ? 'section' : 'field';
@@ -1762,6 +2210,35 @@ export class FormBuilder implements OnDestroy {
     const adjustedTargetIndex = sourceIndex < targetIndex ? targetIndex - 1 : targetIndex;
     layout.splice(adjustedTargetIndex + (event.position === 'after' ? 1 : 0), 0, sectionItem);
     schema.layout = layout;
+    this.schema.set(schema);
+    this.restoreFieldTreeExpansion();
+  }
+
+  private dropFieldTreeStep(event: TreeNodeDrop<FormBuilderFieldTreeNode>): void {
+    if (!this.canDropFieldTreeNode(event.source, event.target, event.position)) {
+      this.resetFieldTreeAfterRejectedDrop();
+      return;
+    }
+
+    const schema = cloneSchema(this.schema());
+    const steps = schema.flow?.steps;
+
+    if (!steps) {
+      this.resetFieldTreeAfterRejectedDrop();
+      return;
+    }
+
+    const sourceIndex = steps.findIndex(step => step.id === event.source.id);
+    const targetIndex = steps.findIndex(step => step.id === event.target.id);
+
+    if (sourceIndex === -1 || targetIndex === -1) {
+      this.resetFieldTreeAfterRejectedDrop();
+      return;
+    }
+
+    const [step] = steps.splice(sourceIndex, 1);
+    const adjustedTargetIndex = sourceIndex < targetIndex ? targetIndex - 1 : targetIndex;
+    steps.splice(adjustedTargetIndex + (event.position === 'after' ? 1 : 0), 0, step);
     this.schema.set(schema);
     this.restoreFieldTreeExpansion();
   }
@@ -1791,6 +2268,7 @@ export class FormBuilder implements OnDestroy {
 
         for (const node of this.flattenFieldTree(this.fieldTree())) {
           if (node.children && expandedIds.has(node.id)) {
+            tree.collapse(node);
             tree.expand(node);
           }
         }
@@ -1910,6 +2388,10 @@ export class FormBuilder implements OnDestroy {
     this.scrollCanvasItemIntoView(() => this.findCanvasSectionElement(sectionId));
   }
 
+  private scrollCanvasStepIntoView(stepId: string): void {
+    this.scrollCanvasItemIntoView(() => this.findCanvasStepElement(stepId));
+  }
+
   private scrollCanvasItemIntoView(resolveTarget: () => HTMLElement | null): void {
     this.afterNextPaint(() => {
       this.afterNextPaint(() => {
@@ -1947,6 +2429,14 @@ export class FormBuilder implements OnDestroy {
     );
 
     return Array.from(sections).find(section => section.dataset['formBuilderSectionId'] === sectionId) ?? null;
+  }
+
+  private findCanvasStepElement(stepId: string): HTMLElement | null {
+    const steps = this.elementRef.nativeElement.querySelectorAll<HTMLElement>(
+      '.ngs-form-builder-canvas [data-form-builder-step-id]'
+    );
+
+    return Array.from(steps).find(step => step.dataset['formBuilderStepId'] === stepId) ?? null;
   }
 
   private syncPreviewControl(field: FormBuilderField): void {
@@ -2030,6 +2520,26 @@ export class FormBuilder implements OnDestroy {
     window.setTimeout(callback);
   }
 
+  private upsertStepTreeNode(step: FormBuilderCanvasStep): FormBuilderFieldTreeNode {
+    const node = this.getCachedFieldTreeNode(step.id);
+    const children = step.items.map(item => item.field
+      ? this.upsertFieldTreeNode(item.field)
+      : this.upsertSectionTreeNode(item.section!)
+    );
+
+    node.label = step.title;
+    node.name = undefined;
+    node.type = 'step';
+    node.icon = 'fluent:step-24-regular';
+    node.kind = 'step';
+    node.field = undefined;
+    node.section = undefined;
+    node.step = step;
+    node.children ??= [];
+    replaceArrayContents(node.children, children);
+    return node;
+  }
+
   private upsertSectionTreeNode(section: FormBuilderSection): FormBuilderFieldTreeNode {
     const node = this.getCachedFieldTreeNode(section.id);
     const children = section.fields.map(field => this.upsertFieldTreeNode(field, section));
@@ -2041,6 +2551,7 @@ export class FormBuilder implements OnDestroy {
     node.kind = 'section';
     node.field = undefined;
     node.section = section;
+    node.step = undefined;
     node.children ??= [];
     replaceArrayContents(node.children, children);
     return node;
@@ -2058,6 +2569,7 @@ export class FormBuilder implements OnDestroy {
     node.kind = 'field';
     node.field = field;
     node.section = section;
+    node.step = undefined;
 
     if (children?.length || this.isContainerField(field)) {
       node.children ??= [];
@@ -2202,6 +2714,13 @@ function cloneSchema(schema: FormBuilderSchema): FormBuilderSchema {
     ...schema,
     fields: (schema.fields ?? []).map(cloneField),
     layout: schema.layout?.map(item => ({ ...item })),
+    flow: schema.flow ? {
+      ...schema.flow,
+      steps: schema.flow.steps?.map(step => ({
+        ...step,
+        items: step.items.map(item => ({ ...item }))
+      }))
+    } : undefined,
     sections: schema.sections.map(section => ({
       ...section,
       fields: section.fields.map(cloneField)

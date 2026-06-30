@@ -93,10 +93,24 @@ export interface FormBuilderLayoutItem {
   id: string;
 }
 
+export interface FormBuilderStep {
+  id: string;
+  title: string;
+  description?: string;
+  optional?: boolean;
+  items: FormBuilderLayoutItem[];
+}
+
+export interface FormBuilderFlow {
+  mode: 'single' | 'steps';
+  steps?: FormBuilderStep[];
+}
+
 export interface FormBuilderSchema {
   title?: string;
   fields?: FormBuilderField[];
   layout?: FormBuilderLayoutItem[];
+  flow?: FormBuilderFlow;
   sections: FormBuilderSection[];
 }
 

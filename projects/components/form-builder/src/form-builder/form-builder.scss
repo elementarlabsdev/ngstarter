@@ -186,6 +186,21 @@
     }
   }
 
+  .ngs-form-builder-layers-scroll {
+    .ngs-form-builder-layers-content {
+      min-width: max-content;
+    }
+
+    ngs-tree {
+      min-width: max-content;
+    }
+
+    ngs-tree-node {
+      width: max-content;
+      min-width: 100%;
+    }
+  }
+
   .ngs-form-builder-tree-toggle {
     flex: none;
     width: --spacing(10);
@@ -266,6 +281,41 @@
     --ngs-card-padding: --spacing(4);
 
     grid-column: span 12;
+  }
+
+  .ngs-form-builder-steps {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(5);
+    padding-bottom: --spacing(5);
+  }
+
+  .ngs-form-builder-step {
+    --ngs-card-padding: --spacing(4);
+
+    cursor: pointer;
+
+    &.is-selected {
+      border-color: var(--ngs-color-primary);
+      box-shadow: 0 0 0 1px var(--ngs-color-primary);
+    }
+  }
+
+  .ngs-form-builder-step-list {
+    min-height: --spacing(28);
+  }
+
+  .ngs-form-builder-step-empty {
+    display: flex;
+    min-height: --spacing(20);
+    align-items: center;
+    justify-content: center;
+    grid-column: 1 / -1;
+    border: 1px dashed var(--ngs-color-outline-variant);
+    border-radius: var(--ngs-radius-md);
+    color: var(--ngs-color-on-surface-variant);
+    font-size: var(--ngs-font-size-sm);
+    text-align: center;
   }
 
   .ngs-form-builder-native-ghost-section {

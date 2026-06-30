@@ -121,6 +121,132 @@
   </div>
 </ng-template>
 
+<ng-template #canvasItem let-item>
+  @if (item.field; as field) {
+    @if (isContainerField(field)) {
+      <div
+        class="ngs-form-builder-field is-container"
+        [class.is-width-1]="(field.width ?? 12) === 1"
+        [class.is-width-2]="field.width === 2"
+        [class.is-width-3]="field.width === 3"
+        [class.is-width-4]="field.width === 4"
+        [class.is-width-5]="field.width === 5"
+        [class.is-width-6]="field.width === 6"
+        [class.is-width-7]="field.width === 7"
+        [class.is-width-8]="field.width === 8"
+        [class.is-width-9]="field.width === 9"
+        [class.is-width-10]="field.width === 10"
+        [class.is-width-11]="field.width === 11"
+        [class.is-width-12]="(field.width ?? 12) === 12"
+        [class.is-selected]="selectedFieldId() === field.id"
+        [attr.data-form-builder-field-id]="field.id"
+        (dragover)="nativeContainerFieldDragOver($event, field)"
+        (dragleave)="nativeContainerFieldDragLeave($event, field)"
+        (drop)="nativeContainerFieldDrop($event, field)"
+        (click)="$event.stopPropagation(); selectCanvasField(field)">
+        <div class="ngs-form-builder-field-header">
+          <div class="ngs-form-builder-field-label">
+            <ngs-icon [name]="fieldIcon(field)"/>
+            <span>{{ field.label }}</span>
+          </div>
+        </div>
+
+        <div class="ngs-form-builder-grid-field">
+          <ng-container
+            [ngTemplateOutlet]="fieldList"
+            [ngTemplateOutletContext]="{
+              $implicit: field.children ?? [],
+              containerId: fieldDropListId(field)
+            }"/>
+        </div>
+      </div>
+    } @else {
+      <div
+        class="ngs-form-builder-field"
+        [class.is-width-1]="(field.width ?? 12) === 1"
+        [class.is-width-2]="field.width === 2"
+        [class.is-width-3]="field.width === 3"
+        [class.is-width-4]="field.width === 4"
+        [class.is-width-5]="field.width === 5"
+        [class.is-width-6]="field.width === 6"
+        [class.is-width-7]="field.width === 7"
+        [class.is-width-8]="field.width === 8"
+        [class.is-width-9]="field.width === 9"
+        [class.is-width-10]="field.width === 10"
+        [class.is-width-11]="field.width === 11"
+        [class.is-width-12]="(field.width ?? 12) === 12"
+        [class.is-selected]="selectedFieldId() === field.id"
+        [attr.data-form-builder-field-id]="field.id"
+        (click)="$event.stopPropagation(); selectCanvasField(field)">
+        <div class="ngs-form-builder-field-header">
+          <div class="ngs-form-builder-field-label">
+            <ngs-icon [name]="fieldIcon(field)"/>
+            <span>{{ field.label }}</span>
+          </div>
+        </div>
+
+        <ngs-form-builder-field-host
+          [field]="field"
+          [control]="previewControl(field)"
+          [definitions]="definitions()"
+          [uploadCallback]="uploadCallback()"
+          [readonly]="true"
+          [editableCanvas]="true"/>
+      </div>
+    }
+  } @else if (item.section; as section) {
+    <ngs-card class="ngs-form-builder-section"
+              [attr.data-form-builder-section-id]="section.id"
+              (dragover)="nativeSectionDragOver($event, section)"
+              (dragleave)="nativeDragLeave($event, sectionDropListId(section))"
+              (drop)="nativeSectionDrop($event, section)"
+              (click)="selectSection(section)">
+      <ngs-card-header>
+        <div class="ngs-form-builder-section-heading">
+          <input ngsInput
+                 class="ngs-form-builder-section-title"
+                 [ngModel]="section.title"
+                 [ngModelOptions]="{standalone: true}"
+                 (ngModelChange)="updateSection(section, { title: $event })"
+                 aria-label="Section title">
+        </div>
+        @if (section.description) {
+          <p class="truncate text-sm text-secondary">{{ section.description }}</p>
+        }
+
+        <ngs-card-aside>
+          <div class="ngs-form-builder-section-actions">
+            <button ngsIconButton type="button" aria-label="Collapse section" (click)="updateSection(section, { collapsed: !section.collapsed })">
+              <ngs-icon [name]="isSectionCollapsed(section) ? 'fluent:chevron-down-24-regular' : 'fluent:chevron-up-24-regular'"/>
+            </button>
+            <button ngsIconButton type="button" aria-label="Delete section" (click)="removeSection(section)">
+              <ngs-icon name="fluent:delete-24-regular"/>
+            </button>
+          </div>
+        </ngs-card-aside>
+      </ngs-card-header>
+
+      @if (!isSectionCollapsed(section)) {
+        <ngs-card-content>
+          <ng-container
+            [ngTemplateOutlet]="fieldList"
+            [ngTemplateOutletContext]="{
+              $implicit: section.fields,
+              containerId: sectionDropListId(section),
+              section
+            }"/>
+        </ngs-card-content>
+      } @else if (isNativeDropTarget(sectionDropListId(section), section.fields.length)) {
+        <ngs-card-content>
+          <div class="ngs-form-builder-drop-list ngs-form-builder-canvas-drop-list">
+            <ng-container [ngTemplateOutlet]="nativeFieldGhost"/>
+          </div>
+        </ngs-card-content>
+      }
+    </ngs-card>
+  }
+</ng-template>
+
 <ngs-panel class="ngs-form-builder-shell">
   <ngs-panel-header autoHeight class="border-b border-border px-5 py-3">
     <ngs-toolbar>
@@ -130,6 +256,13 @@
       </div>
 
       <ngs-toolbar-spacer/>
+
+      <ngs-toolbar-item>
+        <button ngsButton="outlined" type="button" (click)="addStep()">
+          <ngs-icon name="fluent:step-24-regular"/>
+          Add step
+        </button>
+      </ngs-toolbar-item>
 
       <ngs-toolbar-item>
         <button ngsButton="outlined" type="button" (click)="openPreview(previewDialog)">
@@ -209,9 +342,9 @@
         </ngs-scrollbar-area>
       </ngs-tab>
       <ngs-tab label="Layers" class="relative">
-        <ngs-scrollbar-area>
+        <ngs-scrollbar-area class="ngs-form-builder-layers-scroll">
           @if (fieldTree().length) {
-            <div class="px-4 py-4">
+            <div class="ngs-form-builder-layers-content px-4 py-4">
               <ngs-tree
                 #actualFieldsTree="ngsTree"
                 [dataSource]="fieldTree()"
@@ -297,159 +430,94 @@
   <ngs-panel-content>
     <ngs-scrollbar-area [absolute]="true">
       <div class="ngs-form-builder-canvas flex flex-col gap-5 p-6">
-        <div
-          class="ngs-form-builder-canvas-list pb-5"
-          [id]="rootDropListId()"
-          (dragover)="nativeCanvasDragOver($event)"
-          (dragleave)="nativeDragLeave($event, rootDropListId())"
-          (drop)="nativeFieldDrop($event, rootDropListId())">
-          @for (item of canvasItems(); track item.kind + ':' + item.id; let itemIndex = $index) {
-            @if (isNativeDropTarget(rootDropListId(), itemIndex)) {
-              <ng-container [ngTemplateOutlet]="nativeDragSection() ? nativeSectionGhost : nativeFieldGhost"/>
-            }
-            @if (item.field; as field) {
-              @if (isContainerField(field)) {
-                <div
-                  class="ngs-form-builder-field is-container"
-                  [class.is-width-1]="(field.width ?? 12) === 1"
-                  [class.is-width-2]="field.width === 2"
-                  [class.is-width-3]="field.width === 3"
-                  [class.is-width-4]="field.width === 4"
-                  [class.is-width-5]="field.width === 5"
-                  [class.is-width-6]="field.width === 6"
-                  [class.is-width-7]="field.width === 7"
-                  [class.is-width-8]="field.width === 8"
-                  [class.is-width-9]="field.width === 9"
-                  [class.is-width-10]="field.width === 10"
-                  [class.is-width-11]="field.width === 11"
-                  [class.is-width-12]="(field.width ?? 12) === 12"
-                  [class.is-selected]="selectedFieldId() === field.id"
-                  [attr.data-form-builder-field-id]="field.id"
-                  (dragover)="nativeContainerFieldDragOver($event, field)"
-                  (dragleave)="nativeContainerFieldDragLeave($event, field)"
-                  (drop)="nativeContainerFieldDrop($event, field)"
-                  (click)="$event.stopPropagation(); selectCanvasField(field)">
-                  <div class="ngs-form-builder-field-header">
-                    <div class="ngs-form-builder-field-label">
-                      <ngs-icon [name]="fieldIcon(field)"/>
-                      <span>{{ field.label }}</span>
-                    </div>
-                  </div>
-
-                  <div class="ngs-form-builder-grid-field">
-                    <ng-container
-                      [ngTemplateOutlet]="fieldList"
-                      [ngTemplateOutletContext]="{
-                        $implicit: field.children ?? [],
-                        containerId: fieldDropListId(field)
-                      }"/>
-                  </div>
-                </div>
-              } @else {
-                <div
-                  class="ngs-form-builder-field"
-                  [class.is-width-1]="(field.width ?? 12) === 1"
-                  [class.is-width-2]="field.width === 2"
-                  [class.is-width-3]="field.width === 3"
-                  [class.is-width-4]="field.width === 4"
-                  [class.is-width-5]="field.width === 5"
-                  [class.is-width-6]="field.width === 6"
-                  [class.is-width-7]="field.width === 7"
-                  [class.is-width-8]="field.width === 8"
-                  [class.is-width-9]="field.width === 9"
-                  [class.is-width-10]="field.width === 10"
-                  [class.is-width-11]="field.width === 11"
-                  [class.is-width-12]="(field.width ?? 12) === 12"
-                  [class.is-selected]="selectedFieldId() === field.id"
-                  [attr.data-form-builder-field-id]="field.id"
-                  (click)="$event.stopPropagation(); selectCanvasField(field)">
-                  <div class="ngs-form-builder-field-header">
-                    <div class="ngs-form-builder-field-label">
-                      <ngs-icon [name]="fieldIcon(field)"/>
-                      <span>{{ field.label }}</span>
-                    </div>
-                  </div>
-
-                  <ngs-form-builder-field-host
-                    [field]="field"
-                    [control]="previewControl(field)"
-                    [definitions]="definitions()"
-                    [uploadCallback]="uploadCallback()"
-                    [readonly]="true"
-                    [editableCanvas]="true"/>
-                </div>
-              }
-            } @else if (item.section; as section) {
-              <ngs-card class="ngs-form-builder-section"
-                        [attr.data-form-builder-section-id]="section.id"
-                        (dragover)="nativeSectionDragOver($event, section)"
-                        (dragleave)="nativeDragLeave($event, sectionDropListId(section))"
-                        (drop)="nativeSectionDrop($event, section)"
-                        (click)="selectSection(section)">
+        @if (stepsMode()) {
+          <div class="ngs-form-builder-steps">
+            @for (step of canvasSteps(); track step.id; let stepIndex = $index) {
+              <ngs-card class="ngs-form-builder-step"
+                        [class.is-selected]="selectedFieldId() === step.id"
+                        [attr.data-form-builder-step-id]="step.id"
+                        (click)="selectStep(step)">
                 <ngs-card-header>
                   <div class="ngs-form-builder-section-heading">
+                    <ngs-icon name="fluent:step-24-regular"/>
                     <input ngsInput
                            class="ngs-form-builder-section-title"
-                           [ngModel]="section.title"
+                           [ngModel]="step.title"
                            [ngModelOptions]="{standalone: true}"
-                           (ngModelChange)="updateSection(section, { title: $event })"
-                           aria-label="Section title">
+                           (ngModelChange)="updateStep(step, { title: $event })"
+                           aria-label="Step title">
                   </div>
-                  @if (section.description) {
-                    <p class="truncate text-sm text-secondary">{{ section.description }}</p>
+                  @if (step.description) {
+                    <p class="truncate text-sm text-secondary">{{ step.description }}</p>
                   }
-
                   <ngs-card-aside>
                     <div class="ngs-form-builder-section-actions">
-                      <button ngsIconButton type="button" aria-label="Collapse section" (click)="updateSection(section, { collapsed: !section.collapsed })">
-                        <ngs-icon [name]="isSectionCollapsed(section) ? 'fluent:chevron-down-24-regular' : 'fluent:chevron-up-24-regular'"/>
-                      </button>
-                      <button ngsIconButton type="button" aria-label="Delete section" (click)="removeSection(section)">
+                      <button ngsIconButton type="button" aria-label="Delete step" (click)="$event.stopPropagation(); removeStep(step)">
                         <ngs-icon name="fluent:delete-24-regular"/>
                       </button>
                     </div>
                   </ngs-card-aside>
                 </ngs-card-header>
+                <ngs-card-content>
+                  <div
+                    class="ngs-form-builder-canvas-list ngs-form-builder-step-list"
+                    [id]="stepDropListId(step)"
+                    (dragover)="nativeStepDragOver($event, step)"
+                    (dragleave)="nativeDragLeave($event, stepDropListId(step))"
+                    (drop)="nativeStepDrop($event, step)">
+                    @for (item of step.items; track item.kind + ':' + item.id; let itemIndex = $index) {
+                      @if (isNativeDropTarget(stepDropListId(step), itemIndex)) {
+                        <ng-container [ngTemplateOutlet]="nativeDragSection() ? nativeSectionGhost : nativeFieldGhost"/>
+                      }
+                      <ng-container [ngTemplateOutlet]="canvasItem" [ngTemplateOutletContext]="{ $implicit: item }"/>
+                    }
 
-                @if (!isSectionCollapsed(section)) {
-                  <ngs-card-content>
-                    <ng-container
-                      [ngTemplateOutlet]="fieldList"
-                      [ngTemplateOutletContext]="{
-                        $implicit: section.fields,
-                        containerId: sectionDropListId(section),
-                        section
-                      }"/>
-                  </ngs-card-content>
-                } @else if (isNativeDropTarget(sectionDropListId(section), section.fields.length)) {
-                  <ngs-card-content>
-                    <div class="ngs-form-builder-drop-list ngs-form-builder-canvas-drop-list">
-                      <ng-container [ngTemplateOutlet]="nativeFieldGhost"/>
-                    </div>
-                  </ngs-card-content>
-                }
+                    @if (isNativeDropTarget(stepDropListId(step), step.items.length)) {
+                      <ng-container [ngTemplateOutlet]="nativeDragSection() ? nativeSectionGhost : nativeFieldGhost"/>
+                    }
+
+                    @if (!step.items.length && !isNativeDropTarget(stepDropListId(step), 0)) {
+                      <div class="ngs-form-builder-step-empty">
+                        Drop fields or sections into this step.
+                      </div>
+                    }
+                  </div>
+                </ngs-card-content>
               </ngs-card>
             }
-          }
+          </div>
+        } @else {
+          <div
+            class="ngs-form-builder-canvas-list pb-5"
+            [id]="rootDropListId()"
+            (dragover)="nativeCanvasDragOver($event)"
+            (dragleave)="nativeDragLeave($event, rootDropListId())"
+            (drop)="nativeFieldDrop($event, rootDropListId())">
+            @for (item of canvasItems(); track item.kind + ':' + item.id; let itemIndex = $index) {
+              @if (isNativeDropTarget(rootDropListId(), itemIndex)) {
+                <ng-container [ngTemplateOutlet]="nativeDragSection() ? nativeSectionGhost : nativeFieldGhost"/>
+              }
+              <ng-container [ngTemplateOutlet]="canvasItem" [ngTemplateOutletContext]="{ $implicit: item }"/>
+            }
 
-          @if (isNativeDropTarget(rootDropListId(), canvasItems().length)) {
-            <ng-container [ngTemplateOutlet]="nativeDragSection() ? nativeSectionGhost : nativeFieldGhost"/>
-          }
-
-        </div>
+            @if (isNativeDropTarget(rootDropListId(), canvasItems().length)) {
+              <ng-container [ngTemplateOutlet]="nativeDragSection() ? nativeSectionGhost : nativeFieldGhost"/>
+            }
+          </div>
+        }
       </div>
     </ngs-scrollbar-area>
   </ngs-panel-content>
 
   <ngs-panel-aside class="ngs-form-builder-inspector w-88 border-s border-border">
-    @if (selectedField() || selectedSection()) {
+    @if (selectedField() || selectedSection() || selectedStep()) {
       <ngs-panel-header class="ps-5 pe-2 border-b border-border">
         <ngs-toolbar>
           <ngs-toolbar-title class="truncate">
             {{ inspectorTitle() }}
           </ngs-toolbar-title>
           <ngs-toolbar-subtitle>
-            {{ selectedField()?.label || selectedSection()?.title }}
+            {{ selectedField()?.label || selectedSection()?.title || selectedStep()?.title }}
           </ngs-toolbar-subtitle>
           <ngs-toolbar-spacer/>
           <ngs-toolbar-item>
@@ -462,19 +530,50 @@
     }
 
     <ngs-panel-content>
-      @if (selectedField() || selectedSection()) {
+      @if (selectedField() || selectedSection() || selectedStep()) {
         <ngs-tab-group animationDuration="0ms" class="ngs-form-builder-inspector-tabs">
           <ngs-tab label="Settings">
             <ngs-scrollbar-area [absolute]="true">
               <div class="flex flex-col gap-4 p-5">
-                <ngs-form-builder-settings-host
-                  [field]="selectedField()"
-                  [section]="selectedSection()"
-                  [schema]="schema()"
-                  [definitions]="definitions()"
-                  [settingsDefinitions]="settingsDefinitions()"
-                  [update]="updateSelectedField"
-                  [updateSection]="updateSelectedSection"/>
+                @if (selectedStep(); as step) {
+                  <ngs-form-field>
+                    <ngs-label>Title</ngs-label>
+                    <input ngsInput
+                           [ngModel]="step.title"
+                           [ngModelOptions]="{standalone: true}"
+                           (ngModelChange)="updateSelectedStep({ title: $event })">
+                  </ngs-form-field>
+
+                  <ngs-form-field>
+                    <ngs-label>Description</ngs-label>
+                    <textarea ngsInput
+                              rows="3"
+                              [ngModel]="step.description || ''"
+                              [ngModelOptions]="{standalone: true}"
+                              (ngModelChange)="updateSelectedStep({ description: $event })"></textarea>
+                  </ngs-form-field>
+
+                  <ngs-checkbox [checked]="step.optional === true"
+                                (checkedChange)="updateSelectedStep({ optional: $event })">
+                    Optional step
+                  </ngs-checkbox>
+
+                  <div class="mt-3">
+                    <button ngsButton="text" type="button" class="ngs-form-builder-delete-button" (click)="removeStep(step)">
+                      <ngs-icon name="fluent:delete-24-regular"/>
+                      Delete step
+                    </button>
+                  </div>
+                } @else {
+                  <ngs-form-builder-settings-host
+                    [field]="selectedField()"
+                    [section]="selectedSection()"
+                    [schema]="schema()"
+                    [definitions]="definitions()"
+                    [settingsDefinitions]="settingsDefinitions()"
+                    [update]="updateSelectedField"
+                    [updateSection]="updateSelectedSection"/>
+                }
 
                 @if (selectedField(); as field) {
                   <div class="mt-3">

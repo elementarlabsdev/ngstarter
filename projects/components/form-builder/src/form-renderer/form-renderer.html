@@ -66,37 +66,74 @@
   </div>
 </ng-template>
 
-<form [formGroup]="formGroup()" (ngSubmit)="submit()">
-  <div class="flex flex-col gap-6">
-    @for (item of visibleCanvasItems(); track item.kind + ':' + item.id) {
-      @if (item.field) {
+<ng-template #renderCanvasItems let-items let-controlGroup="controlGroup">
+  @for (item of items; track item.kind + ':' + item.id) {
+    @if (item.field) {
+      <ng-container
+        [ngTemplateOutlet]="renderFields"
+        [ngTemplateOutletContext]="{ $implicit: [item.field], controlGroup: controlGroup }"/>
+    } @else if (item.section; as section) {
+      <section class="ngs-form-renderer-section">
+        @if (section.title || section.description) {
+          <header>
+            @if (section.title) {
+              <h3>{{ section.title }}</h3>
+            }
+            @if (section.description) {
+              <p>{{ section.description }}</p>
+            }
+          </header>
+        }
+
         <ng-container
           [ngTemplateOutlet]="renderFields"
-          [ngTemplateOutletContext]="{ $implicit: [item.field], controlGroup: formGroup() }"/>
-      } @else if (item.section; as section) {
-        <section class="ngs-form-renderer-section">
-          @if (section.title || section.description) {
-            <header>
-              @if (section.title) {
-                <h3>{{ section.title }}</h3>
-              }
-              @if (section.description) {
-                <p>{{ section.description }}</p>
-              }
-            </header>
-          }
-
-          <ng-container
-            [ngTemplateOutlet]="renderFields"
-            [ngTemplateOutletContext]="{ $implicit: section.fields, controlGroup: formGroup() }"/>
-        </section>
-      }
+          [ngTemplateOutletContext]="{ $implicit: section.fields, controlGroup: controlGroup }"/>
+      </section>
     }
+  }
+</ng-template>
 
-    @if (showSubmit() && !readonly()) {
-      <div class="flex justify-end">
-        <button ngsButton="filled" type="submit">{{ submitLabel() }}</button>
-      </div>
+<form [formGroup]="formGroup()" (ngSubmit)="submit()">
+  <div class="flex flex-col gap-6">
+    @if (stepsMode()) {
+      <ngs-stepper #formStepper>
+        @for (step of visibleSteps(); track step.id; let stepIndex = $index; let first = $first; let last = $last) {
+          <ngs-step [label]="step.title" [optional]="step.optional === true">
+            @if (step.description) {
+              <p class="ngs-form-renderer-step-description">{{ step.description }}</p>
+            }
+
+            <div class="ngs-form-renderer-step-content">
+              <ng-container
+                [ngTemplateOutlet]="renderCanvasItems"
+                [ngTemplateOutletContext]="{ $implicit: step.items, controlGroup: formGroup() }"/>
+            </div>
+
+            @if (!readonly()) {
+              <div class="ngs-form-renderer-step-actions">
+                @if (!first) {
+                  <button ngsButton="outlined" type="button" (click)="formStepper.previous()">Previous</button>
+                }
+                @if (!last) {
+                  <button ngsButton="filled" type="button" (click)="formStepper.next()">Next</button>
+                } @else if (showSubmit()) {
+                  <button ngsButton="filled" type="submit">{{ submitLabel() }}</button>
+                }
+              </div>
+            }
+          </ngs-step>
+        }
+      </ngs-stepper>
+    } @else {
+      <ng-container
+        [ngTemplateOutlet]="renderCanvasItems"
+        [ngTemplateOutletContext]="{ $implicit: visibleCanvasItems(), controlGroup: formGroup() }"/>
+
+      @if (showSubmit() && !readonly()) {
+        <div class="flex justify-end">
+          <button ngsButton="filled" type="submit">{{ submitLabel() }}</button>
+        </div>
+      }
     }
   </div>
 </form>
