@@ -74,6 +74,13 @@ export const appConfig = {
   collection fields with dotted paths such as `SUM(items.line_total)`; row-level calculated values
   are evaluated before outer aggregate fields. For full spreadsheet semantics or custom functions,
   provide a custom `FormBuilderCalculationEngine` through `provideFormBuilder({ calculationEngine })`.
+- In Form Builder schemas, use the built-in `plain-text` static field type for read-only display
+  copy that should not be included in submitted form values. Store the displayed copy in
+  `settings.text`; set `settings.expression: true` only when tokens in that text should be replaced
+  with values from `settings.expressions`. Each expression entry has an `id` and `expression`, and
+  the text references it as `{id}`. Keep `settings.expression` omitted or `false` for literal text.
+  Example:
+  `{ type: 'plain-text', kind: 'static', label: 'Summary', settings: { text: 'Total: {count_total}', expression: true, expressions: [{ id: 'count_total', expression: 'ROUND(SUM(items.line_total), 2)' }] } }`.
 - Use `Alert` from `@ngstarter-ui/components/alert`, rendered as `<ngs-alert>`, for
   `success-card`, success messages, and other inline notification or status message blocks. Do not
   hand-roll these blocks with custom `div`/`span` cards, pills, banners, or alert-like containers

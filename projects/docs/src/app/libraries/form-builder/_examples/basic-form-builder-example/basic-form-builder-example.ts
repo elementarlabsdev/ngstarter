@@ -139,6 +139,24 @@ export class BasicFormBuilderExample {
               precision: 2,
               emptyValue: ''
             }
+          },
+          {
+            id: 'invoice_summary',
+            name: 'invoice_summary',
+            type: 'plain-text',
+            kind: 'static',
+            label: 'Invoice summary',
+            width: 8,
+            settings: {
+              text: 'Estimated total: {count_total}',
+              expression: true,
+              expressions: [
+                {
+                  id: 'count_total',
+                  expression: 'ROUND(SUM(invoice_items.item_total), 2)'
+                }
+              ]
+            }
           }
         ]
       }

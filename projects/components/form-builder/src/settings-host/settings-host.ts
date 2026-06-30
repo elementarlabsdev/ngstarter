@@ -75,7 +75,7 @@ export class FormBuilderSettingsHost {
       this.resolveOwnSettingsSchema(config, definition)
     ].filter((schema): schema is FormBuilderSchema => !!schema);
 
-    return this.withRegisteredSelectDataSources(mergeSettingsSchemas(schemas));
+    return this.withRegisteredSelectDataSources(this.withFieldPathInfo(mergeSettingsSchemas(schemas)));
   });
   protected readonly settingsValue = computed(() => {
     const item = this.section() ?? this.field();
@@ -170,6 +170,10 @@ export class FormBuilderSettingsHost {
     const patch: Record<string, any> = {};
 
     for (const settingField of flattenSettingsFields(schema)) {
+      if (settingField.kind === 'static') {
+        continue;
+      }
+
       if (settingField.settings?.['valueAdapter'] === 'selectOptionsSource' && isFormBuilderField(item)) {
         const nextSource = value[settingField.name] === 'dataSource' ? 'dataSource' : 'static';
 
@@ -343,6 +347,56 @@ export class FormBuilderSettingsHost {
     }
   }
 
+  private withFieldPathInfo(schema: FormBuilderSchema | null): FormBuilderSchema | null {
+    const field = this.field();
+
+    if (!schema || !field) {
+      return schema;
+    }
+
+    const path = fieldPathInfo(this.schema(), field);
+
+    if (!path) {
+      return schema;
+    }
+
+    const pathField: FormBuilderField = {
+      id: 'field-path-info',
+      name: '__fieldPathInfo',
+      type: 'alert',
+      kind: 'static',
+      label: 'Path',
+      width: 12,
+      settings: {
+        variant: 'informative',
+        fieldPath: path
+      }
+    };
+    const [firstSection, ...restSections] = schema.sections;
+
+    if (!firstSection) {
+      return {
+        ...schema,
+        sections: [{
+          id: 'field-path-info-section',
+          title: 'Field',
+          fields: [pathField]
+        }]
+      };
+    }
+
+    return {
+      ...schema,
+      sections: [
+        {
+          ...firstSection,
+          fields: [pathField, ...firstSection.fields]
+        },
+        ...restSections
+      ]
+    };
+  }
+
   private withRegisteredSelectDataSources(schema: FormBuilderSchema | null): FormBuilderSchema | null {
     if (!schema) {
       return null;
@@ -396,6 +450,77 @@ function flattenSettingsFields(schema: FormBuilderSchema): FormBuilderField[] {
     ...(schema.fields ?? []),
     ...schema.sections.flatMap(section => section.fields)
   ].flatMap(field => [field, ...flattenSettingsFields({ sections: [], fields: field.children ?? [] })]);
+}
+
+interface FieldPathInfo {
+  treePath: string[];
+  fieldPath: string[];
+}
+
+function fieldPathInfo(schema: FormBuilderSchema, target: FormBuilderField): string {
+  const info = findFieldPathInfo(schema, target);
+
+  if (!info) {
+    return target.name || '';
+  }
+
+  return info.fieldPath.join('.');
+}
+
+function findFieldPathInfo(schema: FormBuilderSchema, target: FormBuilderField): FieldPathInfo | null {
+  for (const section of schema.sections) {
+    const sectionLabel = section.title || section.id;
+    const result = findFieldPathInfoInFields(
+      section.fields,
+      target,
+      sectionLabel ? [sectionLabel] : [],
+      []
+    );
+
+    if (result) {
+      return result;
+    }
+  }
+
+  return findFieldPathInfoInFields(schema.fields ?? [], target, [], []);
+}
+
+function findFieldPathInfoInFields(
+  fields: FormBuilderField[],
+  target: FormBuilderField,
+  treePath: string[],
+  fieldPath: string[]
+): FieldPathInfo | null {
+  for (const field of fields) {
+    const nextTreePath = [...treePath, fieldPathLabel(field)];
+    const nextFieldPath = field.name
+      ? [...fieldPath, field.name]
+      : fieldPath;
+
+    if (field.id === target.id) {
+      return {
+        treePath: nextTreePath,
+        fieldPath: nextFieldPath
+      };
+    }
+
+    const childResult = findFieldPathInfoInFields(
+      field.children ?? [],
+      target,
+      nextTreePath,
+      field.type === 'repeater' ? nextFieldPath : fieldPath
+    );
+
+    if (childResult) {
+      return childResult;
+    }
+  }
+
+  return null;
+}
+
+function fieldPathLabel(field: FormBuilderField): string {
+  return field.label || field.name || field.type;
 }
 
 function getPathValue(source: Record<string, any>, path: string): any {

@@ -397,6 +397,26 @@
            aria-hidden="true"></div>
     }
 
+    @case ('plain-text') {
+      <div class="ngs-form-builder-plain-text" [textContent]="plainTextValue()"></div>
+      @if (validationErrorMessage(); as errorMessage) {
+        <span class="ngs-form-builder-field-error">{{ errorMessage }}</span>
+      }
+    }
+
+    @case ('alert') {
+      <ngs-alert class="ngs-form-builder-alert" [variant]="alertVariant()">
+        <div class="ngs-form-builder-alert-content">
+          @if (alertFieldPath()) {
+            <div class="ngs-form-builder-alert-row">
+              <span class="ngs-form-builder-alert-label">Field path:</span>
+              <code class="ngs-form-builder-alert-path">{{ alertFieldPath() }}</code>
+            </div>
+          }
+        </div>
+      </ngs-alert>
+    }
+
     @case ('timezone-select') {
       <ngs-form-field>
         <ngs-label>{{ field().label }}</ngs-label>

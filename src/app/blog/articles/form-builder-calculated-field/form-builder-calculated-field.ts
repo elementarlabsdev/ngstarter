@@ -289,6 +289,24 @@ export class FormBuilderCalculatedFieldArticle {
   },
 }`;
 
+  readonly plainTextCode = `{
+  id: 'invoice_summary',
+  name: 'invoice_summary',
+  type: 'plain-text',
+  kind: 'static',
+  label: 'Invoice summary',
+  settings: {
+    text: 'Estimated total: {count_total}',
+    expression: true,
+    expressions: [
+      {
+        id: 'count_total',
+        expression: 'ROUND(SUM(items.line_total), 2)',
+      },
+    ],
+  },
+}`;
+
   readonly customEngineCode = `import {
   FormBuilderCalculationEngine,
   provideFormBuilder,

@@ -4449,7 +4449,8 @@
         "ngs-form-builder-field-host",
         "ngs-form-builder-settings-host",
         "ngs-form-logic",
-        "ngs-form-renderer"
+        "ngs-form-renderer",
+        "ngs-plain-text-form-builder-settings"
       ],
       "exportedSymbols": [
         "asyncValidatorsFromRules",
@@ -4515,6 +4516,7 @@
         "FormLogic",
         "FormRenderer",
         "mergeFormBuilderValidatorDefinitions",
+        "PlainTextFormBuilderSettings",
         "provideFormBuilder",
         "provideFormBuilderField",
         "provideFormBuilderFields",
@@ -4549,6 +4551,7 @@
         "formReady"
       ],
       "cssTokens": [
+        "--ngs-alert-border-radius",
         "--ngs-avatar-font-weight",
         "--ngs-avatar-size",
         "--ngs-card-padding",
@@ -4562,6 +4565,10 @@
         "--ngs-color-primary-container",
         "--ngs-color-surface",
         "--ngs-color-surface-container-lowest",
+        "--ngs-field-container-height",
+        "--ngs-field-font-size",
+        "--ngs-field-height",
+        "--ngs-field-line-height",
         "--ngs-field-radius",
         "--ngs-font-size-base",
         "--ngs-font-size-lg",

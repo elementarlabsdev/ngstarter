@@ -1,0 +1,81 @@
+<div class="plain-text-settings">
+  <ngs-form-field>
+    <ngs-label>Text</ngs-label>
+    <textarea #textInput
+              ngsInput
+              rows="5"
+              [ngModel]="field().settings?.['text'] || ''"
+              [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="patchText($event)"></textarea>
+    <ngs-hint>Use tokens such as &#123;count_total&#125; when Expression is enabled.</ngs-hint>
+  </ngs-form-field>
+
+  <div class="plain-text-expression-toggle">
+    <ngs-slide-toggle [ngModel]="expressionEnabled()"
+                      [ngModelOptions]="{standalone: true}"
+                      (ngModelChange)="patchExpressionEnabled($event)">
+      Expression
+    </ngs-slide-toggle>
+  </div>
+
+  @if (expressionEnabled()) {
+    <div class="plain-text-expression-panel">
+      @if (expressions().length) {
+        <div class="plain-text-expression-list">
+          @for (expression of expressions(); track $index) {
+            <section class="plain-text-expression-item">
+              <div class="plain-text-expression-item-header">
+                <span>Expression {{ $index + 1 }}</span>
+                <div class="plain-text-expression-actions">
+                  <button ngsIconButton
+                          type="button"
+                          aria-label="Insert token"
+                          [disabled]="!!expressionIdError(expression.id)"
+                          (click)="insertToken(expression.id)">
+                    <ngs-icon name="fluent:braces-24-regular"/>
+                  </button>
+
+                  <button ngsIconButton
+                          type="button"
+                          aria-label="Remove expression"
+                          (click)="removeExpression($index)">
+                    <ngs-icon name="fluent:delete-24-regular"/>
+                  </button>
+                </div>
+              </div>
+
+              <ngs-form-field>
+                <ngs-label>ID</ngs-label>
+                <input ngsInput
+                       [ngModel]="expression.id"
+                       [ngModelOptions]="{standalone: true}"
+                       (ngModelChange)="updateExpression($index, { id: $event })">
+                @if (expressionIdError(expression.id); as error) {
+                  <ngs-error>{{ error }}</ngs-error>
+                }
+                <ngs-hint [textContent]="tokenHint(expression.id)"></ngs-hint>
+              </ngs-form-field>
+
+              <ngs-form-field>
+                <ngs-label>Expression</ngs-label>
+                <textarea ngsInput
+                          rows="3"
+                          [ngModel]="expression.expression"
+                          [ngModelOptions]="{standalone: true}"
+                          (ngModelChange)="updateExpression($index, { expression: $event })"></textarea>
+                <ngs-hint>Example: ROUND(item_quantity * item_price, 2)</ngs-hint>
+              </ngs-form-field>
+            </section>
+          }
+        </div>
+      }
+
+      <div>
+        <button ngsButton="outlined" type="button" (click)="addExpression()">
+          <ngs-icon name="fluent:add-24-regular"/>
+          Add expression
+        </button>
+      </div>
+    </div>
+  }
+</div>

@@ -258,7 +258,7 @@
   }
 
   .ngs-form-builder-canvas {
-    height: 100%;
+    box-sizing: border-box;
     min-height: 100%;
   }
 
@@ -278,11 +278,11 @@
 
   .ngs-form-builder-canvas-list {
     display: grid;
-    flex: 1;
+    flex: 1 1 auto;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     align-content: start;
     gap: --spacing(4);
-    min-height: 100%;
+    min-height: --spacing(16);
   }
 
   .ngs-form-builder-section-heading {

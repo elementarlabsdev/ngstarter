@@ -223,7 +223,7 @@ export class Api {
 
   readonly fieldProperties = [
     { name: 'id', description: 'Stable unique id used by drag/drop layout and field selection.', type: 'string' },
-    { name: 'name', description: 'Reactive form control name and saved value key.', type: 'string' },
+    { name: 'name', description: 'Reactive form control name and saved value key. The builder inspector shows the resulting field path for nested fields, for example invoice_items.item_description.', type: 'string' },
     { name: 'type', description: 'Field type matched to a FormBuilderFieldDefinition.', type: 'string' },
     { name: 'kind', description: 'Optional item kind. Defaults to field; layout and static alter rendering and form control creation.', type: 'FormBuilderItemKind' },
     { name: 'label', description: 'Visible label used by the builder canvas, renderer, and default settings.', type: 'string' },
@@ -282,6 +282,7 @@ export class Api {
     { name: 'country-select', description: 'Country selector.', type: 'Location' },
     { name: 'group', description: 'Layout container for nested child fields.', type: 'Layout' },
     { name: 'repeater', description: 'Layout container that renders child fields as a FormArray.', type: 'Layout' },
+    { name: 'plain-text', description: 'Static text block with optional expression-based output.', type: 'Layout' },
     { name: 'spacer', description: 'Static vertical spacing block.', type: 'Layout' }
   ];
 

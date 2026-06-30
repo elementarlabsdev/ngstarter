@@ -30,6 +30,11 @@ interface FormRendererCanvasItem extends FormBuilderLayoutItem {
   section?: FormBuilderSection;
 }
 
+interface PlainTextExpression {
+  id: string;
+  expression: string;
+}
+
 @Component({
   selector: 'ngs-form-renderer',
   exportAs: 'ngsFormRenderer',
@@ -52,7 +57,7 @@ export class FormRenderer {
   private readonly providedValidators = inject(FORM_BUILDER_VALIDATORS, { optional: true }) ?? [];
   private readonly calculationEngine = inject(FORM_BUILDER_CALCULATION_ENGINE, { optional: true }) ??
     DEFAULT_FORM_BUILDER_CALCULATION_ENGINE;
-  private readonly orphanControls = new Map<string, FormControl>();
+  private readonly orphanControls = new WeakMap<AbstractControl, Map<string, FormControl>>();
 
   readonly schema = input.required<FormBuilderSchema>();
   readonly readonly = input(false);
@@ -116,18 +121,7 @@ export class FormRenderer {
       return control;
     }
 
-    const existing = this.orphanControls.get(field.id);
-
-    if (existing) {
-      return existing;
-    }
-
-    const nextControl = new FormControl({
-      value: this.fieldInitialValue(field),
-      disabled: true
-    });
-    this.orphanControls.set(field.id, nextControl);
-    return nextControl;
+    return this.getOrCreateOrphanControl(field, formGroup);
   }
 
   protected isContainerField(field: FormBuilderField): boolean {
@@ -306,6 +300,7 @@ export class FormRenderer {
     this.applyCalculatedFields(formGroup, scopeFields);
     this.applyRepeaterCalculations(formGroup, fields);
     this.applyCalculatedFields(formGroup, scopeFields);
+    this.applyPlainTextFields(formGroup, scopeFields);
   }
 
   private applyRepeaterCalculations(formGroup: FormGroup, fields: FormBuilderField[]): void {
@@ -324,6 +319,7 @@ export class FormRenderer {
             this.applyCalculatedFields(group, scopeFields);
             this.applyRepeaterCalculations(group, field.children ?? []);
             this.applyCalculatedFields(group, scopeFields);
+            this.applyPlainTextFields(group, scopeFields);
           });
         }
 
@@ -386,6 +382,100 @@ export class FormRenderer {
       this.writeCalculatedValue(control, this.coerceCalculatedValue(result.value, field));
       this.clearCalculationError(control);
     }
+  }
+
+  private applyPlainTextFields(formGroup: FormGroup, fields: FormBuilderField[]): void {
+    const plainTextFields = fields.filter(field => field.type === 'plain-text');
+
+    for (const field of plainTextFields) {
+      const control = this.getOrCreateOrphanControl(field, formGroup);
+      const text = stringValue(field.settings?.['text']);
+      const expressions = plainTextExpressions(field.settings?.['expressions']);
+
+      if (field.settings?.['expression'] !== true) {
+        this.writeDisplayValue(control, text);
+        this.clearCalculationError(control);
+        continue;
+      }
+
+      if (expressions.length) {
+        const result = this.renderPlainTextTemplate(text, expressions, field, fields, formGroup);
+
+        this.writeDisplayValue(control, result.value);
+
+        if (result.error) {
+          this.setCalculationError(control, result.error);
+        } else {
+          this.clearCalculationError(control);
+        }
+
+        continue;
+      }
+
+      const expression = normalizedString(text);
+
+      if (!expression) {
+        this.writeDisplayValue(control, '');
+        this.clearCalculationError(control);
+        continue;
+      }
+
+      const result = this.calculationEngine.evaluate(expression, {
+        field,
+        fields,
+        values: formGroup.getRawValue()
+      });
+
+      if (result.error) {
+        this.writeDisplayValue(control, '');
+        this.setCalculationError(control, result.error);
+        continue;
+      }
+
+      this.writeDisplayValue(control, result.value === null || result.value === undefined ? '' : String(result.value));
+      this.clearCalculationError(control);
+    }
+  }
+
+  private renderPlainTextTemplate(
+    text: string,
+    expressions: PlainTextExpression[],
+    field: FormBuilderField,
+    fields: FormBuilderField[],
+    formGroup: FormGroup
+  ): { value: string; error?: string } {
+    const values = new Map<string, string>();
+    let error = '';
+
+    for (const item of expressions) {
+      const id = normalizedString(item.id);
+      const expression = normalizedString(item.expression);
+
+      if (!id || !expression) {
+        continue;
+      }
+
+      const result = this.calculationEngine.evaluate(expression, {
+        field,
+        fields,
+        values: formGroup.getRawValue()
+      });
+
+      if (result.error) {
+        error = error || `${id}: ${result.error}`;
+        values.set(id, '');
+        continue;
+      }
+
+      values.set(id, result.value === null || result.value === undefined ? '' : String(result.value));
+    }
+
+    return {
+      value: text.replace(/\{([A-Za-z_][A-Za-z0-9_-]*)\}/g, (token, id: string) =>
+        values.has(id) ? values.get(id) ?? '' : token
+      ),
+      error: error || undefined
+    };
   }
 
   private orderCalculatedFields(
@@ -462,6 +552,34 @@ export class FormRenderer {
     }
   }
 
+  private writeDisplayValue(control: FormControl, value: any): void {
+    if (control.value !== value) {
+      control.setValue(value);
+    }
+  }
+
+  private getOrCreateOrphanControl(field: FormBuilderField, formGroup: AbstractControl): FormControl {
+    let controls = this.orphanControls.get(formGroup);
+
+    if (!controls) {
+      controls = new Map<string, FormControl>();
+      this.orphanControls.set(formGroup, controls);
+    }
+
+    const existing = controls.get(field.id);
+
+    if (existing) {
+      return existing;
+    }
+
+    const control = new FormControl({
+      value: this.fieldInitialValue(field),
+      disabled: true
+    });
+    controls.set(field.id, control);
+    return control;
+  }
+
   private coerceCalculatedValue(value: any, field: FormBuilderField): any {
     const valueType = field.settings?.['valueType'];
 
@@ -530,6 +648,10 @@ export class FormRenderer {
   }
 
   private fieldInitialValue(field: FormBuilderField): any {
+    if (field.type === 'plain-text') {
+      return stringValue(field.settings?.['text']);
+    }
+
     if (field.defaultValue !== undefined) {
       return field.defaultValue;
     }
@@ -597,6 +719,24 @@ function isRecord(value: unknown): value is Record<string, any> {
 
 function normalizedString(value: unknown): string {
   return typeof value === 'string' ? value.trim() : '';
+}
+
+function stringValue(value: unknown): string {
+  return typeof value === 'string' ? value : '';
+}
+
+function plainTextExpressions(value: unknown): PlainTextExpression[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .filter(isRecord)
+    .map(item => ({
+      id: stringValue(item['id']).trim(),
+      expression: stringValue(item['expression']).trim()
+    }))
+    .filter(item => item.id || item.expression);
 }
 
 function repeaterRequiredValidator(control: AbstractControl): ValidationErrors | null {

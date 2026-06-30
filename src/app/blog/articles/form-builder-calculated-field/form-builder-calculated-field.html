@@ -174,6 +174,30 @@
           </ngs-card>
         </section>
 
+        <section id="plain-text">
+          <h2>Plain Text expressions</h2>
+          <p>
+            Use <code>plain-text</code> when you want to show explanatory or summary text without
+            adding a value to the submitted form payload. The field stores its display copy in
+            <code>settings.text</code>. By default that text is rendered literally.
+          </p>
+          <p>
+            When <code>settings.expression</code> is <code>true</code>, the renderer evaluates
+            expression entries from <code>settings.expressions</code> with the same engine used by
+            calculated fields. Put tokens such as <code>&#123;count_total&#125;</code> anywhere in
+            <code>settings.text</code>, then add an expression with the matching
+            <code>id</code>. This is useful for summary labels, repeater totals, and dynamic
+            confirmation copy that should not become part of <code>form.getRawValue()</code>.
+          </p>
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="plainTextCode"
+            language="typescript"
+            title="plain-text-expression.ts"
+            showCopyButton
+          />
+        </section>
+
         <section id="expression-basics">
           <h2>Expression basics</h2>
           <p>
@@ -219,6 +243,13 @@
             <code>null</code>. Numeric operations convert <code>null</code>, <code>undefined</code>,
             and empty strings to <code>0</code>. This keeps simple totals from failing while users
             are still filling out the form.
+          </p>
+          <p>
+            In the builder inspector, each field shows its calculated <strong>Field path</strong>.
+            Use that highlighted path when you need to reference nested data from outside its local
+            scope. For example, a child field named <code>item_description</code> inside a repeater
+            named <code>invoice_items</code> appears as
+            <code>invoice_items.item_description</code>.
           </p>
           <ngs-code-highlighter
             class="mb-10"
@@ -388,6 +419,10 @@
             <li>
               Use <code>SUM(items.line_total)</code>, <code>AVG(items.score)</code>, or similar
               paths for repeater aggregates.
+            </li>
+            <li>
+              Check the highlighted <strong>Field path</strong> in the builder inspector when
+              writing nested or repeater formulas.
             </li>
             <li>
               Replace the default engine when you need full Excel compatibility, spreadsheet ranges,

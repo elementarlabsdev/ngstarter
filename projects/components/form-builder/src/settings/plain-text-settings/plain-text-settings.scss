@@ -1,0 +1,60 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+
+  .plain-text-settings {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(4);
+  }
+
+  .plain-text-expression-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: --spacing(3);
+  }
+
+  .plain-text-expression-list {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(3);
+  }
+
+  .plain-text-expression-panel {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(3);
+  }
+
+  .plain-text-expression-add {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .plain-text-expression-item {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(3);
+    border-radius: var(--ngs-radius-md);
+    padding: --spacing(3);
+    outline: 1px solid var(--ngs-color-outline-variant);
+  }
+
+  .plain-text-expression-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: --spacing(2);
+    color: var(--ngs-color-on-surface);
+    font-size: var(--ngs-font-size-sm);
+    font-weight: 600;
+  }
+
+  .plain-text-expression-actions {
+    display: flex;
+    align-items: center;
+    gap: --spacing(1);
+  }
+}

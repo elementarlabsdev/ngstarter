@@ -459,6 +459,26 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     }
   },
   {
+    type: 'plain-text',
+    label: 'Plain Text',
+    kind: 'static',
+    group: 'Layout',
+    icon: 'fluent:text-description-24-regular',
+    description: 'Static text block with optional expression-based output.',
+    defaults: {
+      kind: 'static',
+      label: 'Plain Text',
+      width: 12,
+      settings: {
+        text: 'Plain text',
+        expression: false,
+        expressions: []
+      }
+    },
+    settings: () => import('./settings/plain-text-settings/plain-text-settings')
+      .then(m => m.PlainTextFormBuilderSettings)
+  },
+  {
     type: 'textarea',
     label: 'Textarea',
     group: 'Basic',

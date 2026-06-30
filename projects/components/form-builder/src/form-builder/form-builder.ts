@@ -1970,6 +1970,10 @@ export class FormBuilder implements OnDestroy {
   }
 
   private fieldInitialValue(field: FormBuilderField): any {
+    if (field.type === 'plain-text') {
+      return typeof field.settings?.['text'] === 'string' ? field.settings['text'] : '';
+    }
+
     if (field.defaultValue !== undefined) {
       return field.defaultValue;
     }

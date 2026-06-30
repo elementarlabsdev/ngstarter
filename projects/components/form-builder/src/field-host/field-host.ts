@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { NgComponentOutlet } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { Alert } from '@ngstarter-ui/components/alert';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 import { Button } from '@ngstarter-ui/components/button';
 import { Chip } from '@ngstarter-ui/components/chips';
@@ -77,6 +78,7 @@ import {
   exportAs: 'ngsFormBuilderFieldHost',
   imports: [
     ReactiveFormsModule,
+    Alert,
     Avatar,
     Button,
     Chip,
@@ -167,6 +169,17 @@ export class FormBuilderFieldHost {
   protected readonly calculatedInputType = computed(() =>
     this.field().settings?.['valueType'] === 'number' ? 'number' : 'text'
   );
+  protected readonly plainTextValue = computed(() => {
+    const value = this.controlValue();
+
+    if (value === null || value === undefined) {
+      return '';
+    }
+
+    return String(value);
+  });
+  protected readonly alertVariant = computed(() => normalizedString(this.field().settings?.['variant']) || 'informative');
+  protected readonly alertFieldPath = computed(() => normalizedString(this.field().settings?.['fieldPath']));
   protected readonly radioOrientation = computed<RadioGroupOrientation>(() =>
     this.field().settings?.['orientation'] === 'horizontal' ? 'horizontal' : 'vertical'
   );
