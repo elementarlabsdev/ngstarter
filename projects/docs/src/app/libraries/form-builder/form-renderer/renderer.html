@@ -1,1 +1,22 @@
-<app-form-builder-renderer-example/>
+<section class="flex flex-col gap-4">
+  <div>
+    <h3>Basic renderer</h3>
+    <p>Render a saved builder schema as a reactive form.</p>
+  </div>
+  <app-form-builder-renderer-example/>
+</section>
+
+<section class="mt-10 flex flex-col gap-4">
+  <div>
+    <h3>External renderer flow</h3>
+    <p>
+      Keep the schema reusable and pass the runtime step layout directly to the renderer from a
+      dedicated example page.
+    </p>
+  </div>
+  <div>
+    <a ngsButton="outlined" routerLink="/libraries/form-builder/external-renderer-flow">
+      Open external flow example
+    </a>
+  </div>
+</section>

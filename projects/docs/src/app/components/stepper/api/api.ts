@@ -75,6 +75,18 @@ export class Api {
       default: '0',
     },
     {
+      name: 'isFirstStep',
+      description: 'Computed signal that returns true when the selected step is the first step',
+      type: 'Signal<boolean>',
+      default: '-',
+    },
+    {
+      name: 'isLastStep',
+      description: 'Computed signal that returns true when the selected step is the last step',
+      type: 'Signal<boolean>',
+      default: '-',
+    },
+    {
       name: 'animationDone',
       description: 'Event emitted when the step transition animation is done',
       type: 'EventEmitter<void>',

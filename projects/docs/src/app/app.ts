@@ -1016,6 +1016,12 @@ export class App implements OnInit {
           name: 'Api',
           link: '/libraries/form-builder/api'
         },
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'External Renderer Flow',
+          link: '/libraries/form-builder/external-renderer-flow'
+        },
       ]
     },
     {

@@ -1,0 +1,44 @@
+<ngs-stepper
+  #externalStepper="ngsStepper"
+  class="mb-6"
+  (selectionChange)="selectedStepIndex.set($event.selectedIndex)">
+  @for (step of runtimeSteps; track step.id) {
+    <ngs-step [label]="step.title" [optional]="step.optional === true">
+      <p class="m-0 text-sm text-neutral-600">
+        This external step renders its schema items in the form below.
+      </p>
+    </ngs-step>
+  }
+</ngs-stepper>
+
+<ngs-form-renderer
+  #invoiceRenderer="ngsFormRenderer"
+  [schema]="schema"
+  [items]="activeStepItems()"
+  [showSubmit]="false"
+  [(value)]="value"
+  (formSubmit)="submittedValue.set($event)"/>
+
+<div class="mt-6 flex justify-end gap-3">
+  <button
+    ngsButton="outlined"
+    type="button"
+    [disabled]="externalStepper.isFirstStep()"
+    (click)="externalStepper.previous()">
+    Previous
+  </button>
+  @if (!externalStepper.isLastStep()) {
+    <button ngsButton="filled" type="button" (click)="externalStepper.next()">Next</button>
+  } @else {
+    <button ngsButton="filled" type="button" (click)="invoiceRenderer.submit()">Create invoice</button>
+  }
+</div>
+
+<ngs-card class="mt-6">
+  <ngs-card-header>
+    <ngs-card-title>Submitted value</ngs-card-title>
+  </ngs-card-header>
+  <ngs-card-content>
+    <pre class="overflow-auto rounded-md bg-surface-container p-4 text-sm text-on-surface">{{ submittedValue() || value() | json }}</pre>
+  </ngs-card-content>
+</ngs-card>

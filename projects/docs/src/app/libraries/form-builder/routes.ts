@@ -7,6 +7,14 @@ export const routes: Routes = [
     title: 'Form Builder / Example'
   },
   {
+    path: 'external-renderer-flow',
+    loadComponent: () =>
+      import('./external-renderer-flow/external-renderer-flow').then(
+        m => m.ExternalRendererFlow,
+      ),
+    title: 'Form Builder / External Renderer Flow'
+  },
+  {
     path: '',
     loadComponent: () => import('./common/common').then(m => m.Common),
     title: 'Form Builder',

@@ -1,0 +1,193 @@
+<article class="bg-background px-6 pb-16 pt-8 sm:px-8 lg:px-10">
+  <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
+    <div class="min-w-0">
+      <a ngsButton="text" routerLink="/blog">
+        <ngs-icon name="fluent:arrow-left-24-regular" />
+        All articles
+      </a>
+
+      <header class="mt-8 max-w-4xl">
+        <ngs-chip-set>
+          <ngs-chip appearance="outlined">Form Builder</ngs-chip>
+          <ngs-chip appearance="outlined">Stepper</ngs-chip>
+          <ngs-chip appearance="outlined">Renderer</ngs-chip>
+        </ngs-chip-set>
+        <h1
+          class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl"
+        >
+          Form Builder steps, external steppers, and one-form rendering
+        </h1>
+        <p class="mt-6 text-lg leading-8 text-on-surface-variant">
+          Multi-step forms can mean two different things: a renderer-owned stepper configured by
+          <code>FormBuilderFlow</code>, or a fully external <code>ngs-stepper</code> controlled by
+          the host application. The difference matters because it decides whether the form is one
+          Angular <code>FormGroup</code> or several independent forms.
+        </p>
+        <div class="mt-6 flex flex-wrap items-center gap-3 text-sm text-on-surface-variant">
+          <span>July 1, 2026</span>
+          <span>10 min read</span>
+        </div>
+      </header>
+
+      <div class="article-content mt-14 max-w-4xl">
+        <section id="problem">
+          <h2>The problem</h2>
+          <p>
+            A large schema often starts as one flat form. Later it needs to become a guided flow:
+            Client, Invoice, Review, Payment, or any other sequence that makes the form easier to
+            complete. The first idea is usually to place a <code>ngs-stepper</code> around several
+            renderers and render one part of the schema per step.
+          </p>
+          <p>
+            That visual structure is simple, but the form model is not automatic. If every step
+            creates its own <code>ngs-form-renderer</code>, every renderer creates its own Angular
+            <code>FormGroup</code>. The UI looks like one flow, but validation, calculations,
+            dirty state, touched state, and submit values are split across multiple form instances.
+          </p>
+        </section>
+
+        <section id="supported-flow">
+          <h2>Supported today: external flow config</h2>
+          <p>
+            The supported runtime-only option is to keep the stepper inside
+            <code>ngs-form-renderer</code>, but pass the step layout from outside. This uses the
+            <code>flow</code> input. The saved <code>FormBuilderSchema</code> can stay reusable and
+            flat, while a specific screen decides how to split it into steps.
+          </p>
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="rendererFlowCode"
+            language="typescript"
+            title="runtime-flow.ts"
+            showCopyButton
+          />
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="rendererFlowTemplateCode"
+            language="html"
+            title="renderer-flow.html"
+            showCopyButton
+          />
+          <p>
+            In this mode the renderer still owns one form group. The stepper is internal, but the
+            step setup is external. Calculated fields, plain text expressions, validators, repeaters,
+            and submit all operate against one form value.
+          </p>
+        </section>
+
+        <section id="not-one-form">
+          <h2>What is not one form</h2>
+          <p>
+            The following pattern is visually tempting, but it does not produce one form with the
+            current renderer contract. Each renderer creates a separate form group because there is
+            no shared form context.
+          </p>
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="separateFormsCode"
+            language="html"
+            title="separate-renderers.html"
+            showCopyButton
+          />
+          <ul>
+            <li>Each step has its own validators and validity state.</li>
+            <li>Cross-step calculations cannot safely depend on one shared form value.</li>
+            <li>Submit must manually merge values from several renderer instances.</li>
+            <li>Dirty and touched state are fragmented by step.</li>
+          </ul>
+        </section>
+
+        <section id="external-stepper">
+          <h2>External stepper architecture</h2>
+          <p>
+            A true external stepper is a different API. The host owns the
+            <code>ngs-stepper</code>, and the renderer becomes a partial schema renderer. It needs
+            to accept the list of top-level items to render for that step.
+          </p>
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="externalStepperCode"
+            language="html"
+            title="external-stepper.html"
+            showCopyButton
+          />
+          <p>
+            This solves visual ownership, but it is still not enough for one form. It decides which
+            fields appear in each step. It does not decide where controls live.
+          </p>
+        </section>
+
+        <section id="one-form">
+          <h2>External stepper as one form</h2>
+          <p>
+            To make an external stepper behave as one form, all partial renderers must share the
+            same Angular <code>FormGroup</code>. The host form owns submit, while each renderer
+            only projects a subset of fields into that shared form.
+          </p>
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="oneFormCode"
+            language="html"
+            title="one-form-external-stepper.html"
+            showCopyButton
+          />
+          <p>
+            That requires renderer inputs like <code>items</code> and <code>formGroup</code>. The
+            renderer would use the supplied group instead of creating its own. The same controls,
+            value object, validators, calculated fields, and submission lifecycle would then span
+            every step.
+          </p>
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="futureInputsCode"
+            language="typescript"
+            title="renderer-contract.ts"
+            showCopyButton
+          />
+        </section>
+
+        <section id="decision">
+          <h2>Which model to choose</h2>
+          <p>
+            Use renderer-owned steps when you want the fastest safe implementation. Pass
+            <code>[flow]</code> when the step layout is runtime-specific and should not be stored in
+            the schema. Use a true external stepper only when the parent screen must control the
+            stepper header, actions, route synchronization, analytics, or cross-step navigation.
+          </p>
+          <ngs-code-highlighter
+            class="mb-10"
+            [code]="decisionCode"
+            language="html"
+            title="decision.html"
+            showCopyButton
+          />
+        </section>
+
+        <section id="summary">
+          <h2>Summary</h2>
+          <ul>
+            <li><code>schema.flow</code> stores step layout with the schema.</li>
+            <li><code>&lt;ngs-form-renderer [flow]="flow"&gt;</code> keeps steps outside the schema.</li>
+            <li>Both of those modes still let one renderer own one form.</li>
+            <li>Multiple renderer instances are multiple forms unless they share a <code>FormGroup</code>.</li>
+            <li>A true external stepper needs partial rendering with <code>items</code> plus shared <code>formGroup</code>.</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <aside class="article-aside hidden lg:block">
+      <nav ngs-scroll-spy-nav>
+        <ngs-scroll-spy-title>On this page</ngs-scroll-spy-title>
+        <a ngs-scroll-spy-on targetId="problem">Problem</a>
+        <a ngs-scroll-spy-on targetId="supported-flow">External flow</a>
+        <a ngs-scroll-spy-on targetId="not-one-form">Not one form</a>
+        <a ngs-scroll-spy-on targetId="external-stepper">External stepper</a>
+        <a ngs-scroll-spy-on targetId="one-form">One form</a>
+        <a ngs-scroll-spy-on targetId="decision">Decision</a>
+        <a ngs-scroll-spy-on targetId="summary">Summary</a>
+        <button ngs-scroll-spy-back-to-top>Back to top</button>
+      </nav>
+    </aside>
+  </div>
+</article>

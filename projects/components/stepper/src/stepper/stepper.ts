@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, input, contentChildren } from '@angular/core';
+import { booleanAttribute, Component, computed, contentChildren, input } from '@angular/core';
 import { CdkStepper, StepperOrientation } from '@angular/cdk/stepper';
 import { Step } from '../step/step';
 import { StepLabel } from '../step-label';
@@ -39,6 +39,8 @@ export class Stepper extends CdkStepper {
   // Use a separate signal for template iteration to avoid overriding CdkStepper's QueryList `_steps`.
   readonly stepItems = contentChildren(Step, { descendants: true });
   readonly _stepLabels = contentChildren(StepLabel, { descendants: true });
+  readonly isFirstStep = computed(() => this.selectedIndex === 0);
+  readonly isLastStep = computed(() => this.selectedIndex >= this.stepItems().length - 1);
 
   override ngAfterContentInit() {
     super.ngAfterContentInit();

@@ -1,0 +1,35 @@
+<app-page>
+  <h1 appPageTitle>External renderer flow</h1>
+
+  <div appPageContent>
+    <p class="docs-seo-intro mb-6 max-w-4xl text-base leading-7 text-neutral-600">
+      Use an external renderer flow when a saved <code>FormBuilderSchema</code> should stay reusable,
+      but a specific screen needs to render the same form as a step-by-step workflow.
+    </p>
+
+    <section class="max-w-4xl">
+      <h3>Runtime steps without changing the schema</h3>
+      <p class="mt-3 leading-7 text-neutral-600">
+        Store steps in <code>schema.flow</code> from the visual Form Builder, then derive the
+        renderer-only <code>FormBuilderFlow</code> from that saved schema. The screen does not need
+        to know the step ids, titles, or items ahead of time.
+      </p>
+      <p class="mt-3 leading-7 text-neutral-600">
+        Render those derived steps with an external <code>ngs-stepper</code>. When the selected step
+        changes, pass that step's <code>items</code> to <code>ngs-form-renderer</code> through the
+        <code>items</code> input.
+      </p>
+      <p class="mt-3 leading-7 text-neutral-600">
+        The stepper stays outside the form. The renderer only displays the active step's fields,
+        while keeping one Angular form group and one submitted value.
+      </p>
+    </section>
+
+    <ngs-playground
+      class="block max-w-4xl"
+      exampleUrl="_docs/libraries/form-builder/_examples"
+      exampleName="external-renderer-flow-example">
+      <app-external-renderer-flow-example/>
+    </ngs-playground>
+  </div>
+</app-page>

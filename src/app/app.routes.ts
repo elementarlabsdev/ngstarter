@@ -5,6 +5,7 @@ import {
   FORM_BUILDER_CALCULATED_FIELD_ARTICLE_SEO,
   FORM_BUILDER_CUSTOM_FIELD_ARTICLE_SEO,
   FORM_BUILDER_CUSTOM_VALIDATOR_ARTICLE_SEO,
+  FORM_BUILDER_EXTERNAL_STEPPER_ARTICLE_SEO,
   FORM_BUILDER_SCHEMA_ARTICLE_SEO,
   HOME_SEO,
   LICENSE_SEO,
@@ -59,6 +60,17 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./blog/articles/form-builder-calculated-field/form-builder-calculated-field').then(
         c => c.FormBuilderCalculatedFieldArticle,
+      ),
+  },
+  {
+    path: 'blog/form-builder-external-stepper',
+    title: FORM_BUILDER_EXTERNAL_STEPPER_ARTICLE_SEO.title,
+    data: {
+      seo: FORM_BUILDER_EXTERNAL_STEPPER_ARTICLE_SEO,
+    },
+    loadComponent: () =>
+      import('./blog/articles/form-builder-external-stepper/form-builder-external-stepper').then(
+        c => c.FormBuilderExternalStepperArticle,
       ),
   },
   {

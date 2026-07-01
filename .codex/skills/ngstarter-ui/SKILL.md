@@ -86,7 +86,12 @@ export const appConfig = {
   step `items` array references existing top-level fields or sections by `{ kind: 'field' |
   'section', id }`. Keep submitted values, field names, sections, calculations, and repeater
   aggregates in the normal form model; steps only control canvas/Layers grouping and renderer
-  navigation.
+  navigation. When steps should be runtime-only, pass the same `FormBuilderFlow` shape to
+  `<ngs-form-renderer [flow]="flow">`; renderer `flow` overrides `schema.flow` without changing the
+  saved schema. For a true external `ngs-stepper`, derive steps from `schema.flow`, keep the stepper
+  outside the form, and pass the selected step `items` to a single
+  `<ngs-form-renderer [items]="activeStepItems">`. Do not model one flow by placing multiple
+  independent `ngs-form-renderer` instances unless separate forms are intended.
 - Use `Alert` from `@ngstarter-ui/components/alert`, rendered as `<ngs-alert>`, for
   `success-card`, success messages, and other inline notification or status message blocks. Do not
   hand-roll these blocks with custom `div`/`span` cards, pills, banners, or alert-like containers
@@ -208,6 +213,10 @@ export const appConfig = {
   default and focused states so the control size does not shift.
 - Use TailwindCSS utility classes in templates for layout, responsive behavior, sizing, spacing,
   flex, grid, and alignment.
+- In `projects/docs` pages and examples, do not add component-local SCSS for ordinary layout,
+  spacing, width, typography, colors, or simple state styling. Put those styles directly in the
+  template with TailwindCSS utility classes. Use SCSS in docs only for NgStarter component token
+  overrides, selectors Tailwind cannot express, or genuinely reusable component internals.
 - Start local SCSS files that use Tailwind tokens with `@reference 'tailwindcss';`.
 - In local SCSS, write spacing values with `--spacing(N)`.
 - Override NgStarter components locally through selectors such as `ngs-card`, `ngs-navigation`,

@@ -4401,7 +4401,7 @@
       "docsPath": "/libraries/form-builder",
       "docsOverviewSource": "projects/docs/src/app/libraries/form-builder/overview/overview.html",
       "purpose": "The NgStarter Angular Form Builder library provides a drag-and-drop form designer, schema model, runtime renderer, and provider registration API for custom field types and field-specific settings.",
-      "useWhen": "Choose Form Builder when the workflow matches examples such as Basic form builder, Custom field registration, Form builder renderer.",
+      "useWhen": "Choose Form Builder when the workflow matches examples such as Basic form builder, Custom field registration, External renderer flow, Form builder renderer.",
       "schemaFormat": [
         "FormBuilderSchema shape: { title?: string; fields?: FormBuilderField[]; layout?: FormBuilderLayoutItem[]; sections: FormBuilderSection[] }.",
         "Root-level fields live in schema.fields and can be placed outside sections. Sections live in schema.sections and contain section.fields. The optional schema.layout array controls top-level canvas order with items like { kind: \"field\" | \"section\", id }.",
@@ -4417,6 +4417,7 @@
       "exampleTopics": [
         "Basic form builder",
         "Custom field registration",
+        "External renderer flow",
         "Form builder renderer"
       ],
       "minimalExample": "<div class=\"flex flex-col gap-6\">\n  <ngs-form-builder [(schema)]=\"schema\"/>\n  <ngs-card>\n    <ngs-card-header>\n      <ngs-card-title>Current schema</ngs-card-title>\n    </ngs-card-header>\n    <ngs-card-content>\n      <ngs-code-highlighter\n        [code]=\"schemaCode()\"\n        language=\"json\"\n        appearance=\"none\"\n        disableOverflow/>\n    </ngs-card-content>\n  </ngs-card>\n</div>",
@@ -4434,10 +4435,10 @@
           "source": "<ngs-form-builder [(schema)]=\"schema\"/>"
         },
         {
-          "name": "form-builder-renderer-example",
-          "title": "Form builder renderer",
-          "file": "projects/docs/src/app/libraries/form-builder/_examples/form-builder-renderer-example/form-builder-renderer-example.html",
-          "source": "<div class=\"grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]\">\n  <ngs-form-renderer\n    [schema]=\"schema\"\n    [uploadCallback]=\"uploadCallback\"\n    [(value)]=\"value\"\n    submitLabel=\"Save profile\"\n    (formSubmit)=\"submittedValue.set($event)\"/>\n  <ngs-card>\n    <ngs-card-header>\n      <ngs-card-title>Submitted value</ngs-card-title>\n    </ngs-card-header>\n    <ngs-card-content>\n      <pre>{{ submittedValue() || value() | json }}</pre>\n    </ngs-card-content>\n  </ngs-card>\n</div>"
+          "name": "external-renderer-flow-example",
+          "title": "External renderer flow",
+          "file": "projects/docs/src/app/libraries/form-builder/_examples/external-renderer-flow-example/external-renderer-flow-example.html",
+          "source": "<ngs-stepper\n  #externalStepper=\"ngsStepper\"\n  class=\"mb-6\"\n  (selectionChange)=\"selectedStepIndex.set($event.selectedIndex)\">\n  @for (step of runtimeSteps; track step.id) {\n    <ngs-step [label]=\"step.title\" [optional]=\"step.optional === true\">\n      <p class=\"m-0 text-sm text-neutral-600\">\n        This external step renders its schema items in the form below.\n      </p>\n    </ngs-step>\n  }\n</ngs-stepper>\n<ngs-form-renderer\n  #invoiceRenderer=\"ngsFormRenderer\"\n  [schema]=\"schema\"\n  [items]=\"activeStepItems()\"\n  [showSubmit]=\"false\"\n  [(value)]=\"value\"\n  (formSubmit)=\"submittedValue.set($event)\"/>\n<div class=\"mt-6 flex justify-end gap-3\">\n  <button\n    ngsButton=\"outlined\"\n    type=\"button\"\n    [disabled]=\"externalStepper.isFirstStep()\"\n    (click)=\"externalStepper.previous()\">\n    Previous\n  </button>\n  @if (!externalStepper.isLastStep()) {\n    <button ngsButton=\"filled\" type=\"button\" (click)=\"externalStepper.next()\">Next</button>\n  } @else {\n    <button ngsButton=\"filled\" type=\"button\" (click)=\"invoiceRenderer.submit()\">Create invoice</button>\n  }\n</div>\n<ngs-card class=\"mt-6\">\n  <ngs-card-header>\n    <ngs-card-title>Submitted value</ngs-card-title>\n  </ngs-card-header>\n  <ngs-card-content>\n    <pre class=\"overflow-auto rounded-md bg-surface-container p-4 text-sm text-on-surface\">{{ submittedValue() || value() | json }}</pre>\n  </ngs-card-content>\n</ngs-card>"
         }
       ],
       "previewAsset": null,
@@ -4535,7 +4536,9 @@
         "description",
         "editableCanvas",
         "field",
+        "flow",
         "inspectorTitle",
+        "items",
         "paletteTitle",
         "readonly",
         "schema",

@@ -287,6 +287,8 @@ const formBuilderCustomValidatorArticleDescription =
   'NgStarter Form Builder tutorial: add a custom validator, register it globally, configure field rules, and show custom error messages under rendered controls.';
 const formBuilderCalculatedFieldArticleDescription =
   'NgStarter Form Builder tutorial: create calculated fields with Excel-like expressions, field references, type coercion, dependency order, repeaters, and custom calculation engines.';
+const formBuilderExternalStepperArticleDescription =
+  'NgStarter Form Builder tutorial: compare renderer-owned steps, external renderer flow, external steppers, shared FormGroup requirements, and one-form multi-step rendering.';
 const formBuilderSchemaArticleDescription =
   'NgStarter Form Builder schema reference: understand sections, fields, layout ordering, validation, settings, and nested field structures.';
 const selectDataSourceArticleDescription =
@@ -601,6 +603,51 @@ export const FORM_BUILDER_CALCULATED_FIELD_ARTICLE_SEO: SeoData = {
         'Form Builder calculated field',
         'Angular form expressions',
         'Excel-like formulas',
+        'schema driven forms',
+        'NgStarter UI',
+      ],
+      isPartOf: {
+        '@id': `${SITE_URL}/blog#blog`,
+      },
+    },
+  ],
+};
+
+export const FORM_BUILDER_EXTERNAL_STEPPER_ARTICLE_SEO: SeoData = {
+  title: 'Form Builder Steps and External Steppers | NgStarter UI',
+  description: formBuilderExternalStepperArticleDescription,
+  canonicalPath: '/blog/form-builder-external-stepper',
+  ogType: 'article',
+  structuredData: [
+    organizationSchema,
+    websiteSchema,
+    webPageSchema(
+      '/blog/form-builder-external-stepper',
+      'Form Builder Steps and External Steppers',
+      formBuilderExternalStepperArticleDescription,
+    ),
+    {
+      '@type': 'BlogPosting',
+      '@id': `${SITE_URL}/blog/form-builder-external-stepper#article`,
+      headline: 'Form Builder Steps and External Steppers',
+      description: formBuilderExternalStepperArticleDescription,
+      url: `${SITE_URL}/blog/form-builder-external-stepper`,
+      datePublished: '2026-07-01',
+      dateModified: '2026-07-01',
+      author: {
+        '@type': 'Organization',
+        name: 'NgStarter',
+        url: SITE_URL,
+      },
+      publisher: {
+        '@id': `${SITE_URL}/#organization`,
+      },
+      image: DEFAULT_OG_IMAGE,
+      inLanguage: 'en',
+      keywords: [
+        'Form Builder steps',
+        'Angular external stepper',
+        'Angular FormGroup',
         'schema driven forms',
         'NgStarter UI',
       ],

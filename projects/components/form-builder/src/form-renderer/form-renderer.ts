@@ -22,7 +22,7 @@ import {
   mergeFormBuilderValidatorDefinitions,
   validatorsFromRules
 } from '../config';
-import { FormBuilderCalculationEngine, FormBuilderField, FormBuilderFieldDefinition, FormBuilderItemDefinition, FormBuilderLayoutItem, FormBuilderSchema, FormBuilderSection, FormBuilderStep, FormBuilderUploadCallback } from '../types';
+import { FormBuilderCalculationEngine, FormBuilderField, FormBuilderFieldDefinition, FormBuilderFlow, FormBuilderItemDefinition, FormBuilderLayoutItem, FormBuilderSchema, FormBuilderSection, FormBuilderStep, FormBuilderUploadCallback } from '../types';
 import { FormBuilderFieldHost } from '../field-host/field-host';
 import { DEFAULT_FORM_BUILDER_CALCULATION_ENGINE } from '../calculation-engine';
 
@@ -67,6 +67,8 @@ export class FormRenderer {
   private readonly orphanControls = new WeakMap<AbstractControl, Map<string, FormControl>>();
 
   readonly schema = input.required<FormBuilderSchema>();
+  readonly flow = input<FormBuilderFlow | null | undefined>(undefined);
+  readonly items = input<FormBuilderLayoutItem[] | null | undefined>(undefined);
   readonly readonly = input(false);
   readonly showSubmit = input(true);
   readonly submitLabel = input('Submit');
@@ -98,12 +100,16 @@ export class FormRenderer {
 
     return definitions;
   }, []));
-  protected readonly visibleCanvasItems = computed<FormRendererCanvasItem[]>(() =>
-    this.resolveCanvasItems(this.schema()).filter(item => !!item.field || !!item.section?.fields.length)
-  );
-  protected readonly stepsMode = computed(() => this.isStepsMode(this.schema()));
+  protected readonly visibleCanvasItems = computed<FormRendererCanvasItem[]>(() => {
+    const items = this.items();
+
+    return this.resolveCanvasItems(this.schema(), items ?? undefined)
+      .filter(item => !!item.field || !!item.section?.fields.length);
+  });
+  protected readonly activeFlow = computed(() => this.flow() ?? this.schema().flow);
+  protected readonly stepsMode = computed(() => this.items() == null && this.isStepsMode(this.activeFlow()));
   protected readonly visibleSteps = computed<FormRendererStep[]>(() =>
-    this.resolveSteps(this.schema()).map(step => ({
+    this.resolveSteps(this.schema(), this.activeFlow()).map(step => ({
       ...step,
       items: step.items.filter(item => !!item.field || !!item.section?.fields.length)
     })).filter(step => step.items.length || step.optional !== true)
@@ -204,7 +210,7 @@ export class FormRenderer {
     return this.allowsNullValue(field) || this.repeaterArray(field, formGroup).length > 1;
   }
 
-  protected submit(): void {
+  submit(): void {
     const form = this.formGroup();
 
     if (form.invalid) {
@@ -689,34 +695,15 @@ export class FormRenderer {
     return field.settings?.['allowNullValue'] === true;
   }
 
-  private resolveCanvasItems(schema: FormBuilderSchema): FormRendererCanvasItem[] {
-    const fieldsById = new Map((schema.fields ?? []).map(field => [field.id, field]));
-    const sectionsById = new Map(schema.sections.map(section => [section.id, section]));
-    const items: FormRendererCanvasItem[] = [];
-
-    for (const item of normalizedLayout(schema)) {
-      if (item.kind === 'field') {
-        const field = fieldsById.get(item.id);
-
-        if (field) {
-          items.push({ ...item, field });
-        }
-
-        continue;
-      }
-
-      const section = sectionsById.get(item.id);
-
-      if (section) {
-        items.push({ ...item, section });
-      }
-    }
-
-    return items;
+  private resolveCanvasItems(
+    schema: FormBuilderSchema,
+    layout: FormBuilderLayoutItem[] = normalizedLayout(schema)
+  ): FormRendererCanvasItem[] {
+    return this.resolveLayoutItems(schema, layout);
   }
 
-  private resolveSteps(schema: FormBuilderSchema): FormRendererStep[] {
-    return this.normalizedSteps(schema).map(step => ({
+  private resolveSteps(schema: FormBuilderSchema, flow: FormBuilderFlow | null | undefined): FormRendererStep[] {
+    return this.normalizedSteps(schema, flow).map(step => ({
       ...step,
       items: this.resolveLayoutItems(schema, step.items)
     }));
@@ -748,12 +735,12 @@ export class FormRenderer {
     return items;
   }
 
-  private isStepsMode(schema: FormBuilderSchema): boolean {
-    return schema.flow?.mode === 'steps' && !!schema.flow.steps?.length;
+  private isStepsMode(flow: FormBuilderFlow | null | undefined): boolean {
+    return flow?.mode === 'steps' && !!flow.steps?.length;
   }
 
-  private normalizedSteps(schema: FormBuilderSchema): FormBuilderStep[] {
-    if (schema.flow?.mode !== 'steps' || !schema.flow.steps?.length) {
+  private normalizedSteps(schema: FormBuilderSchema, flow: FormBuilderFlow | null | undefined): FormBuilderStep[] {
+    if (flow?.mode !== 'steps' || !flow.steps?.length) {
       return [];
     }
 
@@ -762,7 +749,7 @@ export class FormRenderer {
       ...schema.sections.map(section => `section:${section.id}`)
     ]);
     const used = new Set<string>();
-    const steps = schema.flow.steps.map((step, index) => {
+    const steps = flow.steps.map((step, index) => {
       const items: FormBuilderLayoutItem[] = [];
 
       for (const item of step.items ?? []) {

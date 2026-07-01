@@ -13,6 +13,16 @@ import { Icon } from '@ngstarter-ui/components/icon';
 export class Blog {
   readonly articles = [
     {
+      title: 'Form Builder steps and external steppers',
+      description:
+        'Understand renderer-owned steps, runtime flow config, external steppers, shared FormGroup requirements, and when a multi-step UI is still one form.',
+      href: '/blog/form-builder-external-stepper',
+      date: 'July 1, 2026',
+      readTime: '10 min',
+      category: 'Form Builder',
+      icon: 'fluent:step-24-regular',
+    },
+    {
       title: 'Calculated fields and expressions in Form Builder',
       description:
         'Use readonly calculated fields, Excel-like expressions, field references, dependency order, type coercion, and custom calculation engines.',

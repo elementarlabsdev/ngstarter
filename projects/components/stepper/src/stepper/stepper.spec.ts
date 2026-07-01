@@ -1,6 +1,7 @@
 import '@angular/compiler';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { describe, expect, it } from 'vitest';
 import { Step } from '../step/step';
 import { StepLabel } from '../step-label';
@@ -130,6 +131,26 @@ describe('Stepper', () => {
     expect(stepContents(fixture).map((content) => content.hidden)).toEqual([true, false]);
   });
 
+  it('should expose first and last step state as public computed API', async () => {
+    const fixture = await createFixture(InteractiveStepperHost);
+    const stepper = stepperInstance(fixture);
+
+    expect(stepper.isFirstStep()).toBe(true);
+    expect(stepper.isLastStep()).toBe(false);
+
+    getButton(fixture, 'Next').click();
+    fixture.detectChanges();
+
+    expect(stepper.isFirstStep()).toBe(false);
+    expect(stepper.isLastStep()).toBe(true);
+
+    getButton(fixture, 'Back').click();
+    fixture.detectChanges();
+
+    expect(stepper.isFirstStep()).toBe(true);
+    expect(stepper.isLastStep()).toBe(false);
+  });
+
   it('should apply bottom header and bottom label classes', async () => {
     const fixture = await createFixture(BottomLabelStepperHost);
 
@@ -192,6 +213,10 @@ function stepLabelText(fixture: ComponentFixture<unknown>): string {
 
 function stepperElement(fixture: ComponentFixture<unknown>): HTMLElement {
   return hostElement(fixture).querySelector('ngs-stepper > .ngs-stepper') as HTMLElement;
+}
+
+function stepperInstance(fixture: ComponentFixture<unknown>): Stepper {
+  return fixture.debugElement.query(By.directive(Stepper)).componentInstance as Stepper;
 }
 
 function stepHeaders(fixture: ComponentFixture<unknown>): HTMLElement[] {

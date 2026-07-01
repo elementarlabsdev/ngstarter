@@ -83,6 +83,18 @@ export class Api {
       default: '–'
     },
     {
+      name: 'flow',
+      description: 'Optional renderer-only presentation flow. When provided, it overrides schema.flow and can set up runtime steps without changing the saved schema.',
+      type: 'FormBuilderFlow | null',
+      default: 'undefined'
+    },
+    {
+      name: 'items',
+      description: 'Optional top-level field and section references to render. Use this with an external stepper to render only the selected step while keeping one renderer form.',
+      type: 'FormBuilderLayoutItem[] | null',
+      default: 'undefined'
+    },
+    {
       name: 'value',
       description: 'Two-way model for runtime form values.',
       type: 'Record<string, any>',
@@ -227,8 +239,8 @@ export class Api {
   ];
 
   readonly flowProperties = [
-    { name: 'mode', description: 'single renders the legacy flat layout. steps renders flow.steps through NgStarter Stepper.', type: "'single' | 'steps'" },
-    { name: 'steps', description: 'Ordered step definitions. Each step references existing top-level fields or sections through items.', type: 'FormBuilderStep[]' }
+    { name: 'mode', description: 'single renders the flat layout. steps renders flow.steps through NgStarter Stepper.', type: "'single' | 'steps'" },
+    { name: 'steps', description: 'Ordered step definitions. Each step references existing top-level fields or sections through items. Can be stored in schema.flow or passed to FormRenderer through its flow input.', type: 'FormBuilderStep[]' }
   ];
 
   readonly stepProperties = [
