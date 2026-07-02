@@ -16,6 +16,8 @@ import { Alert } from '@ngstarter-ui/components/alert';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 import { Button } from '@ngstarter-ui/components/button';
 import { Chip } from '@ngstarter-ui/components/chips';
+import { ColorPicker, ColorPickerThumbnail, ColorPickerTriggerForDirective } from '@ngstarter-ui/components/color-picker';
+import { ColorSwitcher } from '@ngstarter-ui/components/color-switcher';
 import {
   Datepicker,
   DatepickerInput,
@@ -27,7 +29,7 @@ import {
   provideNativeDateAdapter,
   StartDate
 } from '@ngstarter-ui/components/datepicker';
-import { Error as FormFieldError, FormField, Hint, IconButtonSuffix, Label } from '@ngstarter-ui/components/form-field';
+import { Error as FormFieldError, FormField, Hint, IconButtonSuffix, Label, Suffix } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 import {
   Select,
@@ -73,6 +75,18 @@ import {
   FormBuilderValidatorDefinition
 } from '../types';
 
+const DEFAULT_COLOR_SWITCHER_COLORS = [
+  '#35d1b3',
+  '#08b0fe',
+  '#8268f2',
+  '#ae52d3',
+  '#eb4ea3',
+  '#fb811e',
+  '#fac624',
+  '#c2c2c2',
+  '#4ed7ff'
+];
+
 @Component({
   selector: 'ngs-form-builder-field-host',
   exportAs: 'ngsFormBuilderFieldHost',
@@ -82,6 +96,10 @@ import {
     Avatar,
     Button,
     Chip,
+    ColorPicker,
+    ColorPickerThumbnail,
+    ColorPickerTriggerForDirective,
+    ColorSwitcher,
     Datepicker,
     DatepickerInput,
     DatepickerToggle,
@@ -94,6 +112,7 @@ import {
     Hint,
     IconButtonSuffix,
     Label,
+    Suffix,
     Input,
     NgComponentOutlet,
     Select,
@@ -183,6 +202,28 @@ export class FormBuilderFieldHost {
   protected readonly radioOrientation = computed<RadioGroupOrientation>(() =>
     this.field().settings?.['orientation'] === 'horizontal' ? 'horizontal' : 'vertical'
   );
+  protected readonly colorPickerShowOpacity = computed(() => this.field().settings?.['showOpacity'] !== false);
+  protected readonly colorPickerResultFormat = computed(() => {
+    const format = this.field().settings?.['resultFormat'];
+
+    return format === 'hex' || format === 'hsl' || format === 'hsv' ? format : 'rgb';
+  });
+  protected readonly colorPickerValue = computed(() => {
+    const value = this.controlValue();
+
+    return typeof value === 'string' ? value : '';
+  });
+  protected readonly colorPickerDisabled = computed(() =>
+    this.readonly() || !!this.field().readonly || !!this.field().disabled || this.control().disabled
+  );
+  protected readonly colorSwitcherColors = computed(() => {
+    const colors = this.field().settings?.['colors'];
+    const normalizedColors = Array.isArray(colors)
+      ? colors.filter(color => typeof color === 'string' && color.trim()).map(color => color.trim())
+      : [];
+
+    return normalizedColors.length ? normalizedColors : DEFAULT_COLOR_SWITCHER_COLORS;
+  });
   protected readonly uploadAccept = computed(() =>
     this.field().type === 'logo-upload'
       ? logoUploadAccept(this.field())

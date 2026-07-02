@@ -155,6 +155,25 @@ const CALCULATED_VALUE_TYPE_OPTIONS = [
   { label: 'Boolean', value: 'boolean' }
 ];
 
+const COLOR_PICKER_RESULT_FORMAT_OPTIONS = [
+  { label: 'RGB', value: 'rgb' },
+  { label: 'HEX', value: 'hex' },
+  { label: 'HSL', value: 'hsl' },
+  { label: 'HSV', value: 'hsv' }
+];
+
+const DEFAULT_COLOR_SWITCHER_COLORS = [
+  '#35d1b3',
+  '#08b0fe',
+  '#8268f2',
+  '#ae52d3',
+  '#eb4ea3',
+  '#fb811e',
+  '#fac624',
+  '#c2c2c2',
+  '#4ed7ff'
+];
+
 export const FORM_BUILDER_FIELD_BASE_SETTINGS_SCHEMA: FormBuilderSchema = {
   sections: [
     {
@@ -688,6 +707,50 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     }
   },
   {
+    type: 'color-switcher',
+    label: 'Color switcher',
+    group: 'Choices',
+    icon: 'fluent:color-24-regular',
+    defaults: {
+      label: 'Color',
+      defaultValue: DEFAULT_COLOR_SWITCHER_COLORS[0],
+      width: 12,
+      settings: {
+        colors: DEFAULT_COLOR_SWITCHER_COLORS
+      }
+    },
+    settings: {
+      extends: 'field',
+      schema: {
+        sections: [
+          {
+            id: 'color-switcher-settings',
+            title: 'Colors',
+            fields: [
+              {
+                id: 'color-switcher-colors',
+                name: 'settings.colors',
+                type: 'textarea',
+                label: 'Colors',
+                hint: 'One color per line. Use HEX, RGB, HSL, or named CSS colors.',
+                settings: {
+                  valueAdapter: 'stringList'
+                }
+              },
+              {
+                id: 'color-switcher-default-value',
+                name: 'defaultValue',
+                type: 'text',
+                label: 'Default color',
+                defaultValue: DEFAULT_COLOR_SWITCHER_COLORS[0]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     type: 'date',
     label: 'Date',
     group: 'Date and time',
@@ -725,6 +788,56 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
     },
     settings: {
       extends: 'input-field'
+    }
+  },
+  {
+    type: 'color-picker',
+    label: 'Color picker',
+    group: 'Advanced',
+    icon: 'fluent:color-24-regular',
+    defaults: {
+      label: 'Color',
+      defaultValue: '#35d1b3',
+      width: 12,
+      settings: {
+        resultFormat: 'hex',
+        showOpacity: false
+      }
+    },
+    settings: {
+      extends: 'field',
+      schema: {
+        sections: [
+          {
+            id: 'color-picker-settings',
+            title: 'Color picker',
+            fields: [
+              {
+                id: 'color-picker-result-format',
+                name: 'settings.resultFormat',
+                type: 'select',
+                label: 'Result format',
+                defaultValue: 'hex',
+                options: COLOR_PICKER_RESULT_FORMAT_OPTIONS
+              },
+              {
+                id: 'color-picker-show-opacity',
+                name: 'settings.showOpacity',
+                type: 'toggle',
+                label: 'Show opacity',
+                defaultValue: false
+              },
+              {
+                id: 'color-picker-default-value',
+                name: 'defaultValue',
+                type: 'text',
+                label: 'Default color',
+                defaultValue: '#35d1b3'
+              }
+            ]
+          }
+        ]
+      }
     }
   },
   {

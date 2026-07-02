@@ -228,6 +228,16 @@ export class FormBuilderSettingsHost {
         continue;
       }
 
+      if (settingField.settings?.['valueAdapter'] === 'stringList') {
+        if (value[settingField.name] === this.readSettingValue(item, settingField)) {
+          continue;
+        }
+
+        seedPathPatch(patch, item, settingField.name);
+        setPathValue(patch, settingField.name, parseStringList(String(value[settingField.name] ?? '')));
+        continue;
+      }
+
       const nextValue = value[settingField.name];
 
       if (nextValue === this.readSettingValue(item, settingField)) {
@@ -248,6 +258,10 @@ export class FormBuilderSettingsHost {
 
     if (settingField.settings?.['valueAdapter'] === 'optionsText' && isFormBuilderField(item)) {
       return optionsToText(item.options ?? [], item.defaultValue);
+    }
+
+    if (settingField.settings?.['valueAdapter'] === 'stringList') {
+      return stringListToText(getPathValue(item, settingField.name) ?? settingField.defaultValue ?? []);
     }
 
     const value = getPathValue(item, settingField.name);
@@ -562,6 +576,19 @@ function optionsToText(options: FormBuilderOption[], defaultValue: any): string 
   return options
     .map(option => `${option.label}:${option.value}${isOptionSelected(option, defaultValue) ? ':selected' : ''}`)
     .join('\n');
+}
+
+function stringListToText(value: unknown): string {
+  return Array.isArray(value)
+    ? value.filter(item => typeof item === 'string' && item.trim()).join('\n')
+    : '';
+}
+
+function parseStringList(value: string): string[] {
+  return value
+    .split('\n')
+    .map(line => line.trim())
+    .filter(Boolean);
 }
 
 function parseOptionsText(value: string, field: FormBuilderField): FormBuilderOption[] {

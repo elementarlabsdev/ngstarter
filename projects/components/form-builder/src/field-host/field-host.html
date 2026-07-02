@@ -163,6 +163,21 @@
       </div>
     }
 
+    @case ('color-switcher') {
+      <div class="ngs-form-builder-choice-field">
+        <span class="ngs-form-builder-choice-label">{{ field().label }}</span>
+        <ngs-color-switcher [formControl]="control()"
+                            [colors]="colorSwitcherColors()"
+                            [disabled]="readonly() || !!field().readonly || !!field().disabled"/>
+        @if (field().hint) {
+          <span class="ngs-form-builder-choice-hint">{{ field().hint }}</span>
+        }
+        @if (validationErrorMessage(); as errorMessage) {
+          <span class="ngs-form-builder-field-error">{{ errorMessage }}</span>
+        }
+      </div>
+    }
+
     @case ('validation-rules') {
       <div class="ngs-form-builder-validation-rules">
         <div>
@@ -275,6 +290,34 @@
         </ngs-date-range-input>
         <ngs-datepicker-toggle ngsIconButtonSuffix [for]="rangePicker"/>
         <ngs-date-range-picker #rangePicker/>
+        @if (field().hint) {
+          <ngs-hint>{{ field().hint }}</ngs-hint>
+        }
+        @if (validationErrorMessage(); as errorMessage) {
+          <ngs-error>{{ errorMessage }}</ngs-error>
+        }
+      </ngs-form-field>
+    }
+
+    @case ('color-picker') {
+      <ngs-form-field>
+        <ngs-label>{{ field().label }}</ngs-label>
+        <input ngsInput
+               type="text"
+               [formControl]="control()"
+               [placeholder]="field().placeholder || 'Select color'"
+               readonly>
+        <button ngs-color-picker-thumbnail
+                ngsSuffix
+                [color]="colorPickerValue()"
+                [disabled]="colorPickerDisabled()"
+                [ngsColorPickerTriggerFor]="colorPicker"></button>
+        <ng-template #colorPicker>
+          <ngs-color-picker [formControl]="control()"
+                            [showOpacity]="colorPickerShowOpacity()"
+                            [resultFormat]="colorPickerResultFormat()"
+                            [disabled]="colorPickerDisabled()"/>
+        </ng-template>
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
         }
