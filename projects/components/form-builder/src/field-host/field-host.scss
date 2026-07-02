@@ -76,6 +76,25 @@
     gap: --spacing(2);
   }
 
+  .ngs-form-builder-signature-field {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(2);
+
+    &.is-disabled {
+      pointer-events: none;
+      opacity: .7;
+    }
+
+    ngs-signature-pad {
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+      border: 1px solid var(--ngs-color-outline-variant);
+      border-radius: var(--ngs-field-radius);
+    }
+  }
+
   .ngs-form-builder-upload-field {
     display: flex;
     flex-direction: column;

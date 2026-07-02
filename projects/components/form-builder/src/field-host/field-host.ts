@@ -44,6 +44,7 @@ import { Checkbox } from '@ngstarter-ui/components/checkbox';
 import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
 import { RadioButton, RadioGroup, RadioGroupOrientation } from '@ngstarter-ui/components/radio';
 import { Segmented, SegmentedButton } from '@ngstarter-ui/components/segmented';
+import { SignaturePad } from '@ngstarter-ui/components/signature-pad';
 import { CountrySelect } from '@ngstarter-ui/components/country-select';
 import { CurrencySelect } from '@ngstarter-ui/components/currency-select';
 import { TimezoneSelect } from '@ngstarter-ui/components/timezone-select';
@@ -87,6 +88,8 @@ const DEFAULT_COLOR_SWITCHER_COLORS = [
   '#4ed7ff'
 ];
 
+const DEFAULT_SIGNATURE_PAD_COLORS = ['#000', '#0059ff', '#ff0000'];
+
 @Component({
   selector: 'ngs-form-builder-field-host',
   exportAs: 'ngsFormBuilderFieldHost',
@@ -125,6 +128,7 @@ const DEFAULT_COLOR_SWITCHER_COLORS = [
     RadioGroup,
     Segmented,
     SegmentedButton,
+    SignaturePad,
     CountrySelect,
     CurrencySelect,
     TimezoneSelect,
@@ -224,6 +228,28 @@ export class FormBuilderFieldHost {
 
     return normalizedColors.length ? normalizedColors : DEFAULT_COLOR_SWITCHER_COLORS;
   });
+  protected readonly signaturePadColors = computed(() => {
+    const colors = this.field().settings?.['colors'];
+    const normalizedColors = Array.isArray(colors)
+      ? colors.filter(color => typeof color === 'string' && color.trim()).map(color => color.trim())
+      : [];
+
+    return normalizedColors.length ? normalizedColors : DEFAULT_SIGNATURE_PAD_COLORS;
+  });
+  protected readonly signaturePadPenColor = computed(() =>
+    normalizedString(this.field().settings?.['penColor']) || DEFAULT_SIGNATURE_PAD_COLORS[0]
+  );
+  protected readonly signaturePadLineWidth = computed(() => {
+    const lineWidth = Number(this.field().settings?.['lineWidth'] ?? 4);
+
+    return Number.isFinite(lineWidth) && lineWidth > 0 ? lineWidth : 4;
+  });
+  protected readonly signaturePadBackgroundColor = computed(() =>
+    normalizedString(this.field().settings?.['backgroundColor']) || 'transparent'
+  );
+  protected readonly signaturePadDisabled = computed(() =>
+    this.readonly() || !!this.field().readonly || !!this.field().disabled || this.control().disabled
+  );
   protected readonly uploadAccept = computed(() =>
     this.field().type === 'logo-upload'
       ? logoUploadAccept(this.field())
@@ -438,6 +464,28 @@ export class FormBuilderFieldHost {
       componentRef.setInput('definition', definitions.find(definition => definition.type === field.type));
       this.customLoaded.set(true);
     });
+  }
+
+  protected onSignatureSaved(signature: string): void {
+    if (this.signaturePadDisabled()) {
+      return;
+    }
+
+    this.control().setValue(signature);
+    this.control().markAsDirty();
+    this.control().markAsTouched();
+    this.control().updateValueAndValidity();
+  }
+
+  protected onSignatureCleared(): void {
+    if (this.signaturePadDisabled()) {
+      return;
+    }
+
+    this.control().setValue(null);
+    this.control().markAsDirty();
+    this.control().markAsTouched();
+    this.control().updateValueAndValidity();
   }
 
   protected async onUploadFilesSelected(event: UploadFileSelectedEvent): Promise<void> {

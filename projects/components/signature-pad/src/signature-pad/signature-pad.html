@@ -1,13 +1,16 @@
 <canvas #signatureCanvas
-        class="signature-canvas">
+        class="signature-canvas"
+        width="500"
+        height="250">
   Your browser does not support the HTML canvas tag.
 </canvas>
 <div class="line"></div>
-<ngs-color-switcher [selectedColor]="penColor()"
-                  [colors]="colors()"
-                  (colorChange)="onColorChange($event)"/>
+<ngs-color-switcher
+  [selectedColor]="penColor()"
+  [colors]="colors()"
+  (colorChange)="onColorChange($event)"/>
 <div class="clear-button">
-  <button ngsIconButton (click)="clear()">
+  <button type="button" ngsIconButton (click)="clear()">
     <ngs-icon name="fluent:dismiss-24-regular"/>
   </button>
 </div>

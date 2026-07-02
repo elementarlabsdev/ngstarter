@@ -3,12 +3,13 @@
 :host {
   display: block;
   position: relative;
-  width: max-content;
-  height: max-content;
+  width: 100%;
+  max-width: 100%;
   background: var(--ngs-color-surface-container-lowest);
 
   canvas {
-    width: 500px;
+    display: block;
+    width: 100%;
     height: 250px;
     z-index: 1;
     position: relative;

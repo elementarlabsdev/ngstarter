@@ -40,6 +40,8 @@ import { Button } from '@ngstarter-ui/components/button';
   }
 })
 export class SignaturePad implements OnDestroy {
+  private readonly fixedCanvasHeight = 250;
+
   penColor = model<string>('#000');
   lineWidth = input<number>(4);
   backgroundColor = input<string>('transparent');
@@ -54,7 +56,7 @@ export class SignaturePad implements OnDestroy {
   mainCanvasRef = viewChild.required<ElementRef<HTMLCanvasElement>>('signatureCanvas');
 
   private canvasWidth = signal<number>(400);
-  private canvasHeight = signal<number>(200);
+  private canvasHeight = signal<number>(this.fixedCanvasHeight);
 
   private mainContext = signal<CanvasRenderingContext2D | null>(null);
   private memoryCanvasElement: HTMLCanvasElement | null = null;
@@ -186,7 +188,7 @@ export class SignaturePad implements OnDestroy {
       for (const entry of entries) {
         const contentBoxSize = Array.isArray(entry.contentBoxSize) ? entry.contentBoxSize[0] : entry.contentBoxSize;
         const newWidth = contentBoxSize ? contentBoxSize.inlineSize : entry.contentRect.width;
-        const newHeight = contentBoxSize ? contentBoxSize.blockSize : entry.contentRect.height;
+        const newHeight = this.fixedCanvasHeight;
         if (newWidth > 0 && newHeight > 0 && (this.canvasWidth() !== newWidth || this.canvasHeight() !== newHeight)) {
           this.canvasWidth.set(newWidth);
           this.canvasHeight.set(newHeight);

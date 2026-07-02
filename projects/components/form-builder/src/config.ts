@@ -174,6 +174,8 @@ const DEFAULT_COLOR_SWITCHER_COLORS = [
   '#4ed7ff'
 ];
 
+const DEFAULT_SIGNATURE_PAD_COLORS = ['#000', '#0059ff', '#ff0000'];
+
 export const FORM_BUILDER_FIELD_BASE_SETTINGS_SCHEMA: FormBuilderSchema = {
   sections: [
     {
@@ -833,6 +835,67 @@ export const DEFAULT_FORM_BUILDER_FIELDS: FormBuilderFieldDefinition[] = [
                 type: 'text',
                 label: 'Default color',
                 defaultValue: '#35d1b3'
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    type: 'signature',
+    label: 'Signature',
+    group: 'Advanced',
+    icon: 'fluent:signature-24-regular',
+    defaults: {
+      label: 'Signature',
+      defaultValue: null,
+      width: 12,
+      settings: {
+        penColor: DEFAULT_SIGNATURE_PAD_COLORS[0],
+        lineWidth: 4,
+        backgroundColor: 'transparent',
+        colors: DEFAULT_SIGNATURE_PAD_COLORS
+      }
+    },
+    settings: {
+      extends: 'field',
+      schema: {
+        sections: [
+          {
+            id: 'signature-settings',
+            title: 'Signature',
+            fields: [
+              {
+                id: 'signature-pen-color',
+                name: 'settings.penColor',
+                type: 'text',
+                label: 'Default pen color',
+                defaultValue: DEFAULT_SIGNATURE_PAD_COLORS[0]
+              },
+              {
+                id: 'signature-line-width',
+                name: 'settings.lineWidth',
+                type: 'number',
+                label: 'Line width',
+                defaultValue: 4
+              },
+              {
+                id: 'signature-background-color',
+                name: 'settings.backgroundColor',
+                type: 'text',
+                label: 'Background color',
+                defaultValue: 'transparent'
+              },
+              {
+                id: 'signature-colors',
+                name: 'settings.colors',
+                type: 'textarea',
+                label: 'Pen colors',
+                hint: 'One color per line. Use HEX, RGB, HSL, or named CSS colors.',
+                settings: {
+                  valueAdapter: 'stringList'
+                }
               }
             ]
           }

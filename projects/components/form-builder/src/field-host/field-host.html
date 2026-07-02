@@ -327,6 +327,25 @@
       </ngs-form-field>
     }
 
+    @case ('signature') {
+      <div class="ngs-form-builder-signature-field"
+           [class.is-disabled]="signaturePadDisabled()">
+        <span class="ngs-form-builder-choice-label">{{ field().label }}</span>
+        <ngs-signature-pad [penColor]="signaturePadPenColor()"
+                           [lineWidth]="signaturePadLineWidth()"
+                           [backgroundColor]="signaturePadBackgroundColor()"
+                           [colors]="signaturePadColors()"
+                           (signatureSaved)="onSignatureSaved($event)"
+                           (signatureCleared)="onSignatureCleared()"></ngs-signature-pad>
+        @if (field().hint) {
+          <span class="ngs-form-builder-choice-hint">{{ field().hint }}</span>
+        }
+        @if (validationErrorMessage(); as errorMessage) {
+          <span class="ngs-form-builder-field-error">{{ errorMessage }}</span>
+        }
+      </div>
+    }
+
     @case ('upload') {
       <div class="ngs-form-builder-upload-field"
            [class.is-disabled]="uploadDisabled()">
