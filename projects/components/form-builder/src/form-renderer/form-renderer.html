@@ -10,12 +10,6 @@
                 <p>{{ field.hint }}</p>
               }
             </div>
-
-            @if (!readonly()) {
-              <button ngsButton="outlined" type="button" (click)="addRepeaterItem(field, controlGroup)">
-                +
-              </button>
-            }
           </header>
 
           <div class="ngs-form-renderer-repeater-items">
@@ -40,6 +34,14 @@
               </div>
             }
           </div>
+
+          @if (!readonly()) {
+            <div class="ngs-form-renderer-repeater-actions">
+              <button ngsButton="outlined" type="button" (click)="addRepeaterItem(field, controlGroup)">
+                Add Item
+              </button>
+            </div>
+          }
         </section>
       } @else if (isContainerField(field)) {
         <section class="ngs-form-renderer-grid-field">

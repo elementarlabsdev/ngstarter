@@ -113,4 +113,9 @@
     font-size: var(--ngs-font-size-sm);
     margin: 0;
   }
+
+  .ngs-form-renderer-repeater-actions {
+    display: flex;
+    justify-content: flex-start;
+  }
 }
