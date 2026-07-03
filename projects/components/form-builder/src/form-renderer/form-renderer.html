@@ -1,7 +1,7 @@
 <ng-template #renderFields let-fields let-controlGroup="controlGroup">
   <div class="ngs-form-renderer-grid">
     @for (field of fields; track field.id) {
-      @if (isRepeaterField(field)) {
+      @if (fieldVisible(field, controlGroup) && isRepeaterField(field)) {
         <section class="ngs-form-renderer-grid-field ngs-form-renderer-repeater">
           <header>
             <div>
@@ -30,7 +30,7 @@
 
                 <ng-container
                   [ngTemplateOutlet]="renderFields"
-                  [ngTemplateOutletContext]="{ $implicit: visibleChildren(field), controlGroup: group }"/>
+                  [ngTemplateOutletContext]="{ $implicit: visibleChildren(field, group), controlGroup: group }"/>
               </div>
             }
           </div>
@@ -43,7 +43,7 @@
             </div>
           }
         </section>
-      } @else if (isContainerField(field)) {
+      } @else if (fieldVisible(field, controlGroup) && isContainerField(field)) {
         <section class="ngs-form-renderer-grid-field">
           <header>
             <h4>{{ field.label }}</h4>
@@ -54,15 +54,15 @@
 
           <ng-container
             [ngTemplateOutlet]="renderFields"
-            [ngTemplateOutletContext]="{ $implicit: visibleChildren(field), controlGroup: controlGroup }"/>
+            [ngTemplateOutletContext]="{ $implicit: visibleChildren(field, controlGroup), controlGroup: controlGroup }"/>
         </section>
-      } @else {
+      } @else if (fieldVisible(field, controlGroup)) {
         <ngs-form-builder-field-host
-          [field]="field"
+          [field]="effectiveField(field, controlGroup)"
           [control]="getControl(field, controlGroup)"
           [definitions]="definitions()"
           [uploadCallback]="uploadCallback()"
-          [readonly]="readonly()"/>
+          [readonly]="readonly() || fieldReadonly(field, controlGroup)"/>
       }
     }
   </div>
@@ -75,7 +75,8 @@
         [ngTemplateOutlet]="renderFields"
         [ngTemplateOutletContext]="{ $implicit: [item.field], controlGroup: controlGroup }"/>
     } @else if (item.section; as section) {
-      <section class="ngs-form-renderer-section">
+      @if (sectionVisible(section, controlGroup)) {
+        <section class="ngs-form-renderer-section">
         @if (section.title || section.description) {
           <header>
             @if (section.title) {
@@ -90,7 +91,8 @@
         <ng-container
           [ngTemplateOutlet]="renderFields"
           [ngTemplateOutletContext]="{ $implicit: section.fields, controlGroup: controlGroup }"/>
-      </section>
+        </section>
+      }
     }
   }
 </ng-template>

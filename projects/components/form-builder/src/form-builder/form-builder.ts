@@ -37,6 +37,8 @@ import {
   FormBuilderItemDefinition,
   FormBuilderLayoutItem,
   FormBuilderFieldWidth,
+  FormBuilderLogicCondition,
+  FormBuilderLogicRule,
   FormBuilderSchema,
   FormBuilderSection,
   FormBuilderSettingsDefinition,
@@ -1009,6 +1011,13 @@ export class FormBuilder implements OnDestroy {
     Object.assign(nextStep, changes);
     this.schema.set(schema);
     this.restoreFieldTreeExpansion();
+  }
+
+  protected updateLogic(logic: FormBuilderLogicRule[]): void {
+    const schema = cloneSchema(this.schema());
+
+    schema.logic = logic.map(cloneLogicRule);
+    this.schema.set(schema);
   }
 
   protected removeStep(step: FormBuilderStep): void {
@@ -2701,6 +2710,7 @@ export function createDefaultFormBuilderSchema(): FormBuilderSchema {
     title: 'New form',
     fields: [],
     layout: [],
+    logic: [],
     sections: []
   };
 }
@@ -2721,11 +2731,32 @@ function cloneSchema(schema: FormBuilderSchema): FormBuilderSchema {
         items: step.items.map(item => ({ ...item }))
       }))
     } : undefined,
+    logic: schema.logic?.map(cloneLogicRule),
     sections: schema.sections.map(section => ({
       ...section,
       fields: section.fields.map(cloneField)
     }))
   };
+}
+
+function cloneLogicRule(rule: FormBuilderLogicRule): FormBuilderLogicRule {
+  return {
+    ...rule,
+    when: cloneLogicCondition(rule.when),
+    actions: rule.actions.map(action => ({ ...action })),
+    elseActions: rule.elseActions?.map(action => ({ ...action }))
+  };
+}
+
+function cloneLogicCondition(condition: FormBuilderLogicCondition): FormBuilderLogicCondition {
+  if (condition.type === 'all' || condition.type === 'any') {
+    return {
+      ...condition,
+      conditions: condition.conditions.map(cloneLogicCondition)
+    };
+  }
+
+  return { ...condition };
 }
 
 function cloneField(field: FormBuilderField): FormBuilderField {

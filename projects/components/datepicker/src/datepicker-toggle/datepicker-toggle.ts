@@ -29,13 +29,15 @@ export class DatepickerToggle<D> {
   private _intl = inject(DatepickerIntl);
   private _formField = inject<FormField>(FORM_FIELD, { optional: true });
 
-  readonly for = input.required<Datepicker<D> | DateRangePicker<D>>(); // Reference to the datepicker
+  readonly for = input<Datepicker<D> | DateRangePicker<D> | null>(null); // Reference to the datepicker
 
   readonly customIcon = contentChild(DatepickerToggleIcon);
 
   _open(event: MouseEvent): void {
-    if (this.for()) {
-      this.for().open();
+    const datepicker = this.for();
+
+    if (datepicker) {
+      datepicker.open();
       event.stopPropagation();
     }
   }

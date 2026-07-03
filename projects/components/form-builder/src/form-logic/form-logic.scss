@@ -1,6 +1,164 @@
 @reference 'tailwindcss';
 
 :host {
+  container-type: inline-size;
   display: block;
   height: 100%;
+
+  .ngs-form-logic-content {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(4);
+    padding: --spacing(5);
+    min-height: 100%;
+
+    .ngs-form-logic-heading {
+      align-items: flex-start;
+      display: flex;
+      gap: --spacing(3);
+      justify-content: space-between;
+
+      > div {
+        display: flex;
+        flex-direction: column;
+        gap: --spacing(1);
+      }
+    }
+
+    h4,
+    h5 {
+      font-size: var(--ngs-font-size-sm);
+      font-weight: 600;
+    }
+
+    p {
+      color: var(--ngs-color-text-secondary);
+      font-size: var(--ngs-font-size-sm);
+    }
+
+    code {
+      color: var(--ngs-color-text);
+      font-size: var(--ngs-font-size-xs);
+    }
+  }
+
+  .ngs-form-logic-rule-list,
+  .ngs-form-logic-editor,
+  .ngs-form-logic-editor-section,
+  .ngs-form-logic-action-list {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(3);
+    min-width: 0;
+  }
+
+  .ngs-form-logic-rule-list {
+    ngs-list-item {
+      cursor: pointer;
+    }
+  }
+
+  .ngs-form-logic-editor-actions {
+    align-items: center;
+    display: flex;
+    gap: --spacing(1);
+  }
+
+  .ngs-form-logic-editor-section {
+    border-bottom: 1px solid var(--ngs-color-border);
+    padding-bottom: --spacing(4);
+
+    > header {
+      align-items: flex-start;
+      display: flex;
+      gap: --spacing(3);
+      justify-content: space-between;
+
+      > div {
+        display: flex;
+        flex-direction: column;
+        gap: --spacing(1);
+      }
+    }
+  }
+
+  .ngs-form-logic-form-grid,
+  .ngs-form-logic-action-grid {
+    align-items: flex-start;
+    display: grid;
+    gap: --spacing(3);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .ngs-form-logic-action-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  }
+
+  .ngs-form-logic-action-row,
+  .ngs-form-logic-condition-row {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(3);
+  }
+
+  .ngs-form-logic-condition-row {
+    align-items: flex-start;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .ngs-form-logic-muted {
+    color: var(--ngs-color-text-secondary);
+    font-size: var(--ngs-font-size-sm);
+  }
+
+  .ngs-form-logic-dialog-content {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(4);
+    min-width: min(560px, calc(100vw - 96px));
+  }
+
+  .ngs-form-logic-editor-dialog-content {
+    min-width: min(680px, calc(100vw - 96px));
+  }
+
+  @media (max-width: 960px) {
+    .ngs-form-logic-form-grid,
+    .ngs-form-logic-action-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @container (max-width: 640px) {
+    .ngs-form-logic-content {
+      gap: --spacing(3);
+      padding: --spacing(4);
+
+      .ngs-form-logic-heading {
+        align-items: stretch;
+        flex-direction: column;
+
+        button[ngsButton] {
+          align-self: flex-start;
+        }
+      }
+    }
+
+    .ngs-form-logic-form-grid,
+    .ngs-form-logic-action-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ngs-form-logic-editor-section {
+      > header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    .ngs-form-logic-editor-actions {
+      flex-wrap: wrap;
+    }
+  }
 }

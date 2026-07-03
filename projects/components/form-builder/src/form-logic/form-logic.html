@@ -1,7 +1,230 @@
-<ngs-empty-state>
-  <ngs-empty-state-icon>
-    <ngs-icon name="fluent:flowchart-24-regular"/>
-  </ngs-empty-state-icon>
-  <ngs-empty-state-title>{{ title() }}</ngs-empty-state-title>
-  <ngs-empty-state-content>{{ description() }}</ngs-empty-state-content>
-</ngs-empty-state>
+<ng-template #actionsEditor let-rule let-branch="branch" let-title="title">
+  <section class="ngs-form-logic-editor-section">
+    <header>
+      <div>
+        <h5>{{ title }}</h5>
+        <p>{{ branch === 'actions' ? 'Runs when the condition matches.' : 'Runs when the condition does not match.' }}</p>
+      </div>
+      <button ngsButton="text" type="button" (click)="addAction(rule, branch)">
+        <ngs-icon name="fluent:add-24-regular"/>
+        Add action
+      </button>
+    </header>
+
+    @if (actionsFor(rule, branch).length) {
+      <div class="ngs-form-logic-action-list">
+        @for (action of actionsFor(rule, branch); track $index) {
+          <section class="ngs-form-logic-action-row">
+            <div class="ngs-form-logic-action-grid">
+              <ngs-form-field>
+                <ngs-label>Target</ngs-label>
+                <ngs-select [ngModel]="actionTargetValue(action)"
+                            [ngModelOptions]="{standalone: true}"
+                            placeholder="Select target"
+                            (ngModelChange)="updateActionTarget(rule, branch, $index, $event)">
+                  @for (option of targetOptions(); track option.kind + ':' + option.id) {
+                    <ngs-option [value]="option.kind + ':' + option.id">{{ targetOptionLabel(option) }}</ngs-option>
+                  }
+                </ngs-select>
+              </ngs-form-field>
+
+              <ngs-form-field>
+                <ngs-label>Action</ngs-label>
+                <ngs-select [ngModel]="action.type"
+                            [ngModelOptions]="{standalone: true}"
+                            [disabled]="!action.targetId"
+                            placeholder="Select action"
+                            (ngModelChange)="updateActionType(rule, branch, $index, $event)">
+                  @for (option of actionTypeOptionsForTarget(action.targetKind); track option.value) {
+                    <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
+                  }
+                </ngs-select>
+              </ngs-form-field>
+
+              <button ngsIconButton type="button" aria-label="Remove action" (click)="removeAction(rule, branch, $index)">
+                <ngs-icon name="fluent:delete-24-regular"/>
+              </button>
+            </div>
+
+            @if (action.type === 'setValue') {
+              <ngs-form-field>
+                <ngs-label>Value expression</ngs-label>
+                <textarea ngsInput
+                          rows="2"
+                          [ngModel]="action.expression"
+                          [ngModelOptions]="{standalone: true}"
+                          (ngModelChange)="updateActionExpression(rule, branch, $index, $event)"></textarea>
+              </ngs-form-field>
+            }
+          </section>
+        }
+      </div>
+    } @else {
+      <p class="ngs-form-logic-muted">No actions configured.</p>
+    }
+  </section>
+</ng-template>
+
+@if (rules().length) {
+  <div class="ngs-form-logic-content">
+    <header class="ngs-form-logic-heading">
+      <div>
+        <h4>{{ title() }}</h4>
+        <p>{{ description() }}</p>
+      </div>
+      <button ngsButton="filled" type="button" (click)="openAddRuleDialog(ruleEditorDialog)">
+        <ngs-icon name="fluent:add-24-regular"/>
+        Add rule
+      </button>
+    </header>
+
+    <ngs-list class="ngs-form-logic-rule-list">
+      @for (rule of rules(); track rule.id) {
+        <ngs-list-item (click)="openRuleEditorDialog(rule, ruleEditorDialog)">
+          <ngs-icon name="fluent:flowchart-24-regular" ngsListItemIcon/>
+          <span ngsListItemTitle>{{ rule.name || rule.id }}</span>
+          <span ngsListItemMeta>{{ rule.enabled === false ? 'Off' : 'On' }}</span>
+        </ngs-list-item>
+      }
+    </ngs-list>
+  </div>
+} @else {
+  <ngs-empty-state>
+    <ngs-empty-state-icon>
+      <ngs-icon name="fluent:flowchart-24-regular"/>
+    </ngs-empty-state-icon>
+    <ngs-empty-state-title>No logic rules</ngs-empty-state-title>
+    <ngs-empty-state-content>{{ description() }}</ngs-empty-state-content>
+    <ngs-empty-state-actions>
+      <button ngsButton="filled" type="button" (click)="openAddRuleDialog(ruleEditorDialog)">
+        <ngs-icon name="fluent:add-24-regular"/>
+        Add rule
+      </button>
+    </ngs-empty-state-actions>
+  </ngs-empty-state>
+}
+
+<ng-template #ruleEditorDialog>
+  @if (selectedRule(); as rule) {
+    <h3 ngs-dialog-title>{{ rule.name || rule.id }}</h3>
+    <ngs-dialog-content>
+      <div class="ngs-form-logic-editor-dialog-content">
+        <section class="ngs-form-logic-editor">
+          <section class="ngs-form-logic-editor-section">
+            <header>
+              <div>
+                <h5>Rule</h5>
+                <p>Basic rule settings.</p>
+              </div>
+              <div class="ngs-form-logic-editor-actions">
+                <ngs-slide-toggle [ngModel]="rule.enabled !== false"
+                                  [ngModelOptions]="{standalone: true}"
+                                  (ngModelChange)="updateRule(rule, { enabled: $event })">
+                  Enabled
+                </ngs-slide-toggle>
+                @if (rules().length > 1) {
+                  <button ngsIconButton type="button" aria-label="Move rule up" [disabled]="isFirstRule(rule)" (click)="moveRule(rule, -1)">
+                    <ngs-icon name="fluent:arrow-up-24-regular"/>
+                  </button>
+                  <button ngsIconButton type="button" aria-label="Move rule down" [disabled]="isLastRule(rule)" (click)="moveRule(rule, 1)">
+                    <ngs-icon name="fluent:arrow-down-24-regular"/>
+                  </button>
+                }
+                <button ngsIconButton type="button" aria-label="Duplicate rule" (click)="duplicateRule(rule)">
+                  <ngs-icon name="fluent:copy-24-regular"/>
+                </button>
+                <button ngsIconButton type="button" aria-label="Delete rule" ngs-dialog-close (click)="removeRule(rule)">
+                  <ngs-icon name="fluent:delete-24-regular"/>
+                </button>
+              </div>
+            </header>
+
+            <div class="ngs-form-logic-form-grid">
+              <ngs-form-field>
+                <ngs-label>Name</ngs-label>
+                <input ngsInput
+                       [ngModel]="rule.name || ''"
+                       [ngModelOptions]="{standalone: true}"
+                       (ngModelChange)="updateRule(rule, { name: $event })">
+              </ngs-form-field>
+
+              <ngs-form-field>
+                <ngs-label>Priority</ngs-label>
+                <input ngsInput
+                       type="number"
+                       [ngModel]="rule.priority ?? 0"
+                       [ngModelOptions]="{standalone: true}"
+                       (ngModelChange)="updateRule(rule, { priority: $event === '' ? undefined : +$event })">
+              </ngs-form-field>
+            </div>
+          </section>
+
+          <section class="ngs-form-logic-editor-section">
+            <header>
+              <div>
+                <h5>When</h5>
+                <p>Use field names in expressions, for example <code>country = "US"</code>.</p>
+              </div>
+            </header>
+
+            <ngs-form-field>
+              <ngs-label>Condition mode</ngs-label>
+              <ngs-select [ngModel]="rule.when.type"
+                          [ngModelOptions]="{standalone: true}"
+                          (ngModelChange)="setConditionType(rule, $event)">
+                @for (option of conditionTypeOptions; track option.value) {
+                  <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
+                }
+              </ngs-select>
+            </ngs-form-field>
+
+            @if (rule.when.type === 'expression') {
+              <ngs-form-field>
+                <ngs-label>Expression</ngs-label>
+                <textarea ngsInput
+                          rows="3"
+                          [ngModel]="rule.when.expression"
+                          [ngModelOptions]="{standalone: true}"
+                          (ngModelChange)="updateConditionExpression(rule, $event)"></textarea>
+              </ngs-form-field>
+            } @else {
+              <div class="ngs-form-logic-condition-list">
+                @for (condition of rule.when.conditions; track $index) {
+                  <div class="ngs-form-logic-condition-row">
+                    <ngs-form-field>
+                      <ngs-label>Expression {{ $index + 1 }}</ngs-label>
+                      <textarea ngsInput
+                                rows="2"
+                                [ngModel]="condition.type === 'expression' ? condition.expression : conditionLabel(condition)"
+                                [ngModelOptions]="{standalone: true}"
+                                (ngModelChange)="updateConditionExpression(rule, $event, $index)"></textarea>
+                    </ngs-form-field>
+                    <button ngsIconButton type="button" aria-label="Remove condition" (click)="removeCondition(rule, $index)">
+                      <ngs-icon name="fluent:delete-24-regular"/>
+                    </button>
+                  </div>
+                }
+              </div>
+
+              <button ngsButton="text" type="button" (click)="addCondition(rule)">
+                <ngs-icon name="fluent:add-24-regular"/>
+                Add condition
+              </button>
+            }
+          </section>
+
+          <ng-container
+            [ngTemplateOutlet]="actionsEditor"
+            [ngTemplateOutletContext]="{ $implicit: rule, branch: 'actions', title: 'Then' }"/>
+
+          <ng-container
+            [ngTemplateOutlet]="actionsEditor"
+            [ngTemplateOutletContext]="{ $implicit: rule, branch: 'elseActions', title: 'Else' }"/>
+        </section>
+      </div>
+    </ngs-dialog-content>
+    <ngs-dialog-actions align="end">
+      <button ngsButton="filled" type="button" ngs-dialog-close>Done</button>
+    </ngs-dialog-actions>
+  }
+</ng-template>

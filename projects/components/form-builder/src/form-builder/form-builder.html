@@ -640,8 +640,10 @@
             <ngs-scrollbar-area [absolute]="true">
               <ngs-form-logic
                 [schema]="schema()"
+                [logic]="schema().logic ?? []"
+                (logicChange)="updateLogic($event)"
                 title="Logic"
-                description="Field visibility and calculations will be configured here."/>
+                description="Create rules that react to form values and update field behavior."/>
             </ngs-scrollbar-area>
           </ngs-tab>
         </ngs-tab-group>

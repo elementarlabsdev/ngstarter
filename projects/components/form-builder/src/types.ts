@@ -106,11 +106,38 @@ export interface FormBuilderFlow {
   steps?: FormBuilderStep[];
 }
 
+export type FormBuilderLogicCondition =
+  | { type: 'expression'; expression: string }
+  | { type: 'all'; conditions: FormBuilderLogicCondition[] }
+  | { type: 'any'; conditions: FormBuilderLogicCondition[] };
+
+export type FormBuilderLogicTargetKind = 'field' | 'section';
+
+export type FormBuilderLogicAction =
+  | { type: ''; targetId: ''; targetKind?: FormBuilderLogicTargetKind }
+  | { type: 'show' | 'hide'; targetId: string; targetKind?: FormBuilderLogicTargetKind }
+  | { type: 'enable' | 'disable'; targetId: string; targetKind?: FormBuilderLogicTargetKind }
+  | { type: 'readonly' | 'editable'; targetId: string; targetKind?: FormBuilderLogicTargetKind }
+  | { type: 'require' | 'optional'; targetId: string; targetKind?: FormBuilderLogicTargetKind }
+  | { type: 'setValue'; targetId: string; targetKind?: FormBuilderLogicTargetKind; expression: string }
+  | { type: 'clearValue'; targetId: string; targetKind?: FormBuilderLogicTargetKind };
+
+export interface FormBuilderLogicRule {
+  id: string;
+  name?: string;
+  enabled?: boolean;
+  priority?: number;
+  when: FormBuilderLogicCondition;
+  actions: FormBuilderLogicAction[];
+  elseActions?: FormBuilderLogicAction[];
+}
+
 export interface FormBuilderSchema {
   title?: string;
   fields?: FormBuilderField[];
   layout?: FormBuilderLayoutItem[];
   flow?: FormBuilderFlow;
+  logic?: FormBuilderLogicRule[];
   sections: FormBuilderSection[];
 }
 
@@ -209,4 +236,37 @@ export interface FormBuilderCalculationResult {
 export interface FormBuilderCalculationEngine {
   evaluate(expression: string, context: FormBuilderCalculationContext): FormBuilderCalculationResult;
   dependencies?(expression: string, fields: FormBuilderField[]): string[];
+}
+
+export interface FormBuilderLogicContext {
+  fields: FormBuilderField[];
+  sections?: FormBuilderSection[];
+  values: Record<string, any>;
+  calculationEngine: FormBuilderCalculationEngine;
+}
+
+export interface FormBuilderLogicFieldState {
+  hidden?: boolean;
+  disabled?: boolean;
+  readonly?: boolean;
+  required?: boolean;
+  value?: any;
+  hasValue?: boolean;
+  errors?: string[];
+}
+
+export interface FormBuilderLogicError {
+  ruleId: string;
+  targetId?: string;
+  message: string;
+}
+
+export interface FormBuilderLogicEvaluation {
+  fields: Record<string, FormBuilderLogicFieldState>;
+  sections: Record<string, FormBuilderLogicFieldState>;
+  errors: FormBuilderLogicError[];
+}
+
+export interface FormBuilderLogicEngine {
+  evaluate(rules: FormBuilderLogicRule[], context: FormBuilderLogicContext): FormBuilderLogicEvaluation;
 }

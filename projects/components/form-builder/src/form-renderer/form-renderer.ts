@@ -7,7 +7,8 @@ import {
   inject,
   input,
   model,
-  output
+  output,
+  signal
 } from '@angular/core';
 import { AbstractControl, FormArray, ReactiveFormsModule, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
@@ -18,13 +19,15 @@ import {
   FORM_BUILDER_CALCULATION_ENGINE,
   FORM_BUILDER_FIELDS,
   FORM_BUILDER_ITEMS,
+  FORM_BUILDER_LOGIC_ENGINE,
   FORM_BUILDER_VALIDATORS,
   mergeFormBuilderValidatorDefinitions,
   validatorsFromRules
 } from '../config';
-import { FormBuilderCalculationEngine, FormBuilderField, FormBuilderFieldDefinition, FormBuilderFlow, FormBuilderItemDefinition, FormBuilderLayoutItem, FormBuilderSchema, FormBuilderSection, FormBuilderStep, FormBuilderUploadCallback } from '../types';
+import { FormBuilderCalculationEngine, FormBuilderField, FormBuilderFieldDefinition, FormBuilderFlow, FormBuilderItemDefinition, FormBuilderLayoutItem, FormBuilderLogicEvaluation, FormBuilderLogicFieldState, FormBuilderSchema, FormBuilderSection, FormBuilderStep, FormBuilderUploadCallback } from '../types';
 import { FormBuilderFieldHost } from '../field-host/field-host';
 import { DEFAULT_FORM_BUILDER_CALCULATION_ENGINE } from '../calculation-engine';
+import { DEFAULT_FORM_BUILDER_LOGIC_ENGINE } from '../logic-engine';
 
 interface FormRendererCanvasItem extends FormBuilderLayoutItem {
   field?: FormBuilderField;
@@ -64,7 +67,11 @@ export class FormRenderer {
   private readonly providedValidators = inject(FORM_BUILDER_VALIDATORS, { optional: true }) ?? [];
   private readonly calculationEngine = inject(FORM_BUILDER_CALCULATION_ENGINE, { optional: true }) ??
     DEFAULT_FORM_BUILDER_CALCULATION_ENGINE;
+  private readonly logicEngine = inject(FORM_BUILDER_LOGIC_ENGINE, { optional: true }) ??
+    DEFAULT_FORM_BUILDER_LOGIC_ENGINE;
   private readonly orphanControls = new WeakMap<AbstractControl, Map<string, FormControl>>();
+  private readonly logicEvaluations = new WeakMap<AbstractControl, FormBuilderLogicEvaluation>();
+  private readonly logicVersion = signal(0);
 
   readonly schema = input.required<FormBuilderSchema>();
   readonly flow = input<FormBuilderFlow | null | undefined>(undefined);
@@ -123,10 +130,10 @@ export class FormRenderer {
     effect(onCleanup => {
       const form = this.formGroup();
 
-      this.applyCalculations(form);
+      this.applyRuntime(form);
       this.formReady.emit(form);
       const subscription = form.valueChanges.subscribe(() => {
-        this.applyCalculations(form);
+        this.applyRuntime(form);
         this.value.set(form.getRawValue());
       });
 
@@ -154,8 +161,83 @@ export class FormRenderer {
       field.type === 'grid';
   }
 
-  protected visibleChildren(field: FormBuilderField): FormBuilderField[] {
-    return field.children ?? [];
+  protected visibleChildren(field: FormBuilderField, formGroup = this.formGroup()): FormBuilderField[] {
+    return (field.children ?? []).filter(child => this.fieldVisible(child, formGroup));
+  }
+
+  protected fieldVisible(field: FormBuilderField, formGroup = this.formGroup()): boolean {
+    return this.logicState(field, formGroup).hidden !== true;
+  }
+
+  protected sectionVisible(section: FormBuilderSection, formGroup = this.formGroup()): boolean {
+    return this.sectionLogicState(section, formGroup).hidden !== true &&
+      section.fields.some(field => this.fieldVisible(field, formGroup));
+  }
+
+  protected effectiveField(field: FormBuilderField, formGroup = this.formGroup()): FormBuilderField {
+    const state = this.logicState(field, formGroup);
+
+    if (
+      state.readonly === undefined &&
+      state.disabled === undefined &&
+      state.required === undefined
+    ) {
+      return field;
+    }
+
+    const required = state.required ?? field.required;
+    const validation = state.required === false
+      ? field.validation?.filter(rule => rule.type !== 'required')
+      : field.validation;
+
+    return {
+      ...field,
+      readonly: state.readonly ?? field.readonly,
+      disabled: state.disabled ?? field.disabled,
+      required,
+      validation
+    };
+  }
+
+  protected fieldReadonly(field: FormBuilderField, formGroup = this.formGroup()): boolean {
+    return this.logicState(field, formGroup).readonly ?? false;
+  }
+
+  private logicState(field: FormBuilderField, formGroup: AbstractControl): FormBuilderLogicFieldState {
+    this.logicVersion();
+
+    return this.logicEvaluations.get(formGroup)?.fields[field.id] ?? {};
+  }
+
+  private sectionLogicState(section: FormBuilderSection, formGroup: AbstractControl): FormBuilderLogicFieldState {
+    this.logicVersion();
+
+    return this.logicEvaluations.get(formGroup)?.sections[section.id] ?? {};
+  }
+
+  private effectiveFieldFromState(
+    field: FormBuilderField,
+    state: FormBuilderLogicFieldState
+  ): FormBuilderField {
+    if (
+      state.readonly === undefined &&
+      state.disabled === undefined &&
+      state.required === undefined
+    ) {
+      return field;
+    }
+
+    const validation = state.required === false
+      ? field.validation?.filter(rule => rule.type !== 'required')
+      : field.validation;
+
+    return {
+      ...field,
+      readonly: state.readonly ?? field.readonly,
+      disabled: state.disabled ?? field.disabled,
+      required: state.required ?? field.required,
+      validation
+    };
   }
 
   protected isRepeaterField(field: FormBuilderField): boolean {
@@ -310,7 +392,7 @@ export class FormRenderer {
     return new FormGroup(controls);
   }
 
-  private applyCalculations(formGroup: FormGroup): void {
+  private applyRuntime(formGroup: FormGroup): void {
     const fields = [
       ...(this.schema().fields ?? []),
       ...this.schema().sections.flatMap(section => section.fields)
@@ -319,8 +401,10 @@ export class FormRenderer {
 
     this.applyCalculatedFields(formGroup, scopeFields);
     this.applyRepeaterCalculations(formGroup, fields);
+    this.applyLogic(formGroup, fields);
     this.applyCalculatedFields(formGroup, scopeFields);
     this.applyPlainTextFields(formGroup, scopeFields);
+    this.logicVersion.update(version => version + 1);
   }
 
   private applyRepeaterCalculations(formGroup: FormGroup, fields: FormBuilderField[]): void {
@@ -338,6 +422,7 @@ export class FormRenderer {
 
             this.applyCalculatedFields(group, scopeFields);
             this.applyRepeaterCalculations(group, field.children ?? []);
+            this.applyLogic(group, field.children ?? []);
             this.applyCalculatedFields(group, scopeFields);
             this.applyPlainTextFields(group, scopeFields);
           });
@@ -349,6 +434,62 @@ export class FormRenderer {
       if (this.isContainerField(field)) {
         this.applyRepeaterCalculations(formGroup, field.children ?? []);
       }
+    }
+  }
+
+  private applyLogic(formGroup: FormGroup, fields: FormBuilderField[]): void {
+    const rules = this.schema().logic ?? [];
+
+    if (!rules.length) {
+      this.logicEvaluations.set(formGroup, { fields: {}, sections: {}, errors: [] });
+      this.applyLogicControlEffects(formGroup, this.scopeFields(fields), {});
+      return;
+    }
+
+    const scopeFields = this.scopeFields(fields);
+    const evaluation = this.logicEngine.evaluate(rules, {
+      fields: scopeFields,
+      sections: this.schema().sections,
+      values: formGroup.getRawValue(),
+      calculationEngine: this.calculationEngine
+    });
+
+    this.logicEvaluations.set(formGroup, evaluation);
+    this.applyLogicControlEffects(formGroup, scopeFields, evaluation.fields);
+  }
+
+  private applyLogicControlEffects(
+    formGroup: FormGroup,
+    fields: FormBuilderField[],
+    states: Record<string, FormBuilderLogicFieldState>
+  ): void {
+    for (const field of fields) {
+      const control = formGroup.controls[field.name];
+
+      if (!(control instanceof FormControl)) {
+        continue;
+      }
+
+      const state = states[field.id] ?? {};
+
+      if (state.hasValue && control.value !== state.value) {
+        control.setValue(state.value, { emitEvent: false });
+      }
+
+      const effectiveField = this.effectiveFieldFromState(field, state);
+      const definition = this.definitions().find(item => item.type === field.type);
+      control.setValidators(this.resolveValidators(effectiveField, definition));
+      control.setAsyncValidators(this.resolveAsyncValidators(effectiveField));
+
+      const disabled = this.readonly() || effectiveField.disabled === true || state.hidden === true;
+
+      if (disabled && control.enabled) {
+        control.disable({ emitEvent: false });
+      } else if (!disabled && control.disabled) {
+        control.enable({ emitEvent: false });
+      }
+
+      control.updateValueAndValidity({ emitEvent: false });
     }
   }
 

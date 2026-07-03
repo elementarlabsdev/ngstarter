@@ -169,13 +169,10 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
     return this.origin() || this._elementRef;
   }
 
-  get overlayWidth(): string | number {
-    if (this._formField) {
-      const element = this._formField.wrapper().nativeElement || this._formField.elementRef.nativeElement;
-      return element.getBoundingClientRect?.().width || 'auto';
-    }
+  private readonly _overlayWidth = signal<string | number>('auto');
 
-    return 'auto';
+  get overlayWidth(): string | number {
+    return this._overlayWidth();
   }
 
   panelOpen = signal(false);
@@ -479,6 +476,7 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
     if (this.disabled || this.panelOpen()) {
       return;
     }
+    this._updateOverlayWidth();
     this.panelOpen.set(true);
     this._focused.set(true);
     this.stateChanges.set(undefined);
@@ -507,6 +505,23 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
     setTimeout(() => {
       this._scrollToSelectedOption();
     }, 10);
+  }
+
+  private _updateOverlayWidth(): void {
+    if (!this._formField) {
+      this._overlayWidth.set('auto');
+      return;
+    }
+
+    const wrapper = this._formField.wrapper()?.nativeElement;
+    const element = wrapper || this._formField.elementRef.nativeElement;
+    const width = element.getBoundingClientRect?.().width;
+
+    this._overlayWidth.set(
+      typeof width === 'number' && Number.isFinite(width) && width > 0
+        ? Math.round(width * 100) / 100
+        : 'auto'
+    );
   }
 
   close(): void {

@@ -236,13 +236,13 @@
     @case ('date') {
       <ngs-form-field>
         <ngs-label>{{ field().label }}</ngs-label>
+        <ngs-datepicker #picker/>
         <input ngsInput
                [ngsDatepicker]="picker"
                [formControl]="control()"
                [placeholder]="field().placeholder || ''"
                [readonly]="readonly() || field().readonly">
         <ngs-datepicker-toggle ngsIconButtonSuffix [for]="picker"/>
-        <ngs-datepicker #picker/>
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
         }

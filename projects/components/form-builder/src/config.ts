@@ -5,6 +5,7 @@ import {
   FormBuilderField,
   FormBuilderFieldDefinition,
   FormBuilderItemDefinition,
+  FormBuilderLogicEngine,
   FormBuilderSelectDataSourceDefinition,
   FormBuilderSchema,
   FormBuilderSettingsDefinition,
@@ -33,6 +34,9 @@ export const FORM_BUILDER_VALIDATORS =
 
 export const FORM_BUILDER_CALCULATION_ENGINE =
   new InjectionToken<FormBuilderCalculationEngine>('FORM_BUILDER_CALCULATION_ENGINE');
+
+export const FORM_BUILDER_LOGIC_ENGINE =
+  new InjectionToken<FormBuilderLogicEngine>('FORM_BUILDER_LOGIC_ENGINE');
 
 export function formBuilderField(definition: FormBuilderFieldDefinition): FormBuilderFieldDefinition {
   return definition;
@@ -93,6 +97,7 @@ export function provideFormBuilder(config: {
   selectDataSources?: FormBuilderSelectDataSourceDefinition[];
   validators?: FormBuilderValidatorDefinition[];
   calculationEngine?: FormBuilderCalculationEngine;
+  logicEngine?: FormBuilderLogicEngine;
   uploadCallback?: FormBuilderUploadCallback;
 } = {}): EnvironmentProviders {
   return makeEnvironmentProviders([
@@ -103,6 +108,10 @@ export function provideFormBuilder(config: {
     ...(config.calculationEngine ? [{
       provide: FORM_BUILDER_CALCULATION_ENGINE,
       useValue: config.calculationEngine
+    }] : []),
+    ...(config.logicEngine ? [{
+      provide: FORM_BUILDER_LOGIC_ENGINE,
+      useValue: config.logicEngine
     }] : []),
     ...(config.items ?? []).map(item => ({
       provide: FORM_BUILDER_ITEMS,
