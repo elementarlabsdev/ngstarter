@@ -213,6 +213,12 @@ export const appConfig = {
   default and focused states so the control size does not shift.
 - Use TailwindCSS utility classes in templates for layout, responsive behavior, sizing, spacing,
   flex, grid, and alignment.
+- STRICT: Do not put TailwindCSS layout, spacing, sizing, typography, border, radius, color, flex,
+  or grid utilities in component SCSS through `@apply`. Classes such as
+  `@apply flex min-w-0 flex-col gap-3`, `@apply grid grid-cols-*`, `@apply rounded-*`,
+  `@apply border-*`, `@apply p-*`, `@apply text-*`, and `@apply bg-*` belong in the HTML template
+  class attribute. Component SCSS is only for selectors/tokens that cannot reasonably be expressed
+  in template classes, non-visual mechanics, or component API styling hooks.
 - In `projects/docs` pages and examples, do not add component-local SCSS for ordinary layout,
   spacing, width, typography, colors, or simple state styling. Put those styles directly in the
   template with TailwindCSS utility classes. Use SCSS in docs only for NgStarter component token

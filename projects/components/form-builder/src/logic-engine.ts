@@ -51,11 +51,15 @@ function evaluateCondition(
   }
 
   if (condition.type === 'all') {
-    return (condition.conditions ?? []).every(item => evaluateCondition(item, rule, context, errors));
+    return !!condition.conditions?.length && condition.conditions.every(item => evaluateCondition(item, rule, context, errors));
   }
 
   if (condition.type === 'any') {
-    return (condition.conditions ?? []).some(item => evaluateCondition(item, rule, context, errors));
+    return !!condition.conditions?.length && condition.conditions.some(item => evaluateCondition(item, rule, context, errors));
+  }
+
+  if (condition.type === 'field') {
+    return evaluateFieldCondition(condition, context);
   }
 
   const expression = typeof condition.expression === 'string' ? condition.expression.trim() : '';
@@ -79,6 +83,44 @@ function evaluateCondition(
   }
 
   return !!result.value;
+}
+
+function evaluateFieldCondition(
+  condition: Extract<FormBuilderLogicCondition, { type: 'field' }>,
+  context: FormBuilderLogicContext
+): boolean {
+  const field = findFieldById(context.fields, condition.fieldId);
+  const operator = condition.operator;
+
+  if (!field || !operator) {
+    return false;
+  }
+
+  const value = context.values[field.name];
+  const expected = condition.value;
+
+  switch (operator) {
+    case 'equals':
+      return normalizeComparableValue(value) === normalizeComparableValue(expected);
+    case 'notEquals':
+      return normalizeComparableValue(value) !== normalizeComparableValue(expected);
+    case 'contains':
+      return String(value ?? '').includes(String(expected ?? ''));
+    case 'notContains':
+      return !String(value ?? '').includes(String(expected ?? ''));
+    case 'empty':
+      return isEmptyLogicValue(value);
+    case 'notEmpty':
+      return !isEmptyLogicValue(value);
+    case 'greaterThan':
+      return Number(value) > Number(expected);
+    case 'lessThan':
+      return Number(value) < Number(expected);
+    case 'before':
+      return Date.parse(String(value ?? '')) < Date.parse(String(expected ?? ''));
+    case 'after':
+      return Date.parse(String(value ?? '')) > Date.parse(String(expected ?? ''));
+  }
 }
 
 function applyAction(
@@ -275,6 +317,21 @@ function resolveTargetKind(
 
 function flattenFields(fields: FormBuilderField[]): FormBuilderField[] {
   return fields.flatMap(field => [field, ...flattenFields(field.children ?? [])]);
+}
+
+function findFieldById(fields: FormBuilderField[], fieldId: string): FormBuilderField | undefined {
+  return flattenFields(fields).find(field => field.id === fieldId);
+}
+
+function normalizeComparableValue(value: unknown): string {
+  return String(value ?? '').trim();
+}
+
+function isEmptyLogicValue(value: unknown): boolean {
+  return value === null
+    || value === undefined
+    || value === ''
+    || (Array.isArray(value) && value.length === 0);
 }
 
 function stateForField(

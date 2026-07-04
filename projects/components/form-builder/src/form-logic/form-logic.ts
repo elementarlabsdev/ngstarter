@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, TemplateRef, computed, inject, input, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, TemplateRef, ViewEncapsulation, computed, inject, input, model, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
@@ -7,15 +7,23 @@ import { EmptyState, EmptyStateActions, EmptyStateContent, EmptyStateIcon, Empty
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
-import { List, ListItem, ListItemIcon, ListItemLine, ListItemMeta, ListItemTitle } from '@ngstarter-ui/components/list';
+import { List, ListItem, ListItemIcon, ListItemMeta, ListItemTitle } from '@ngstarter-ui/components/list';
 import { Option } from '@ngstarter-ui/components/option';
 import { Select } from '@ngstarter-ui/components/select';
 import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
-import { FormBuilderField, FormBuilderLogicAction, FormBuilderLogicCondition, FormBuilderLogicRule, FormBuilderLogicTargetKind, FormBuilderSchema } from '../types';
+import {
+  FormBuilderField,
+  FormBuilderLogicAction,
+  FormBuilderLogicCondition,
+  FormBuilderLogicConditionOperator,
+  FormBuilderLogicRule,
+  FormBuilderLogicTargetKind,
+  FormBuilderSchema
+} from '../types';
 
 type FormBuilderLogicActionBranch = 'actions' | 'elseActions';
 type FormBuilderLogicActionType = Exclude<FormBuilderLogicAction['type'], ''>;
-type FormBuilderLogicConditionType = FormBuilderLogicCondition['type'];
+type FormBuilderLogicConditionMode = Exclude<FormBuilderLogicCondition['type'], 'field'>;
 
 interface FormBuilderLogicTargetOption {
   kind: FormBuilderLogicTargetKind;
@@ -26,10 +34,23 @@ interface FormBuilderLogicTargetOption {
   depth: number;
 }
 
-const CONDITION_TYPE_OPTIONS: { label: string; value: FormBuilderLogicConditionType }[] = [
+const CONDITION_TYPE_OPTIONS: { label: string; value: FormBuilderLogicConditionMode }[] = [
   { label: 'Custom expression', value: 'expression' },
   { label: 'Match all', value: 'all' },
   { label: 'Match any', value: 'any' }
+];
+
+const CONDITION_OPERATOR_OPTIONS: { label: string; value: FormBuilderLogicConditionOperator }[] = [
+  { label: 'is', value: 'equals' },
+  { label: 'is not', value: 'notEquals' },
+  { label: 'contains', value: 'contains' },
+  { label: 'does not contain', value: 'notContains' },
+  { label: 'is empty', value: 'empty' },
+  { label: 'is not empty', value: 'notEmpty' },
+  { label: 'greater than', value: 'greaterThan' },
+  { label: 'less than', value: 'lessThan' },
+  { label: 'before', value: 'before' },
+  { label: 'after', value: 'after' }
 ];
 
 const ACTION_TYPE_OPTIONS: { label: string; value: FormBuilderLogicActionType }[] = [
@@ -73,7 +94,6 @@ const SECTION_ACTION_TYPE_OPTIONS: { label: string; value: FormBuilderLogicActio
     List,
     ListItem,
     ListItemIcon,
-    ListItemLine,
     ListItemMeta,
     ListItemTitle,
     Option,
@@ -83,6 +103,7 @@ const SECTION_ACTION_TYPE_OPTIONS: { label: string; value: FormBuilderLogicActio
   templateUrl: './form-logic.html',
   styleUrl: './form-logic.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     'class': 'ngs-form-logic'
   }
@@ -96,6 +117,8 @@ export class FormLogic {
   readonly description = input('Create rules that react to form values and update field visibility, state, validation, or values.');
 
   protected readonly conditionTypeOptions = CONDITION_TYPE_OPTIONS;
+  protected readonly conditionOperatorOptions = CONDITION_OPERATOR_OPTIONS;
+  protected readonly draftRule = signal<FormBuilderLogicRule | null>(null);
   protected readonly selectedRuleId = signal<string | null>(null);
   protected readonly rules = computed<FormBuilderLogicRule[]>(() => this.logic());
   protected readonly targetOptions = computed<FormBuilderLogicTargetOption[]>(() => {
@@ -119,6 +142,12 @@ export class FormLogic {
     ];
   });
   protected readonly selectedRule = computed<FormBuilderLogicRule | null>(() => {
+    const draftRule = this.draftRule();
+
+    if (draftRule) {
+      return draftRule;
+    }
+
     const rules = this.rules();
     const selectedId = this.selectedRuleId();
 
@@ -129,18 +158,27 @@ export class FormLogic {
     const rules = this.rules();
     const rule = createLogicRule(rules.length + 1);
 
-    this.logic.set([...rules, rule]);
+    this.draftRule.set(rule);
     this.openRuleEditorDialog(rule, template, 'Add logic rule');
   }
 
   protected openRuleEditorDialog(rule: FormBuilderLogicRule, template: TemplateRef<unknown>, ariaLabel = 'Edit logic rule'): void {
     this.selectedRuleId.set(rule.id);
-    this.dialog.open(template, {
-      width: '760px',
+    const dialogRef = this.dialog.open(template, {
+      width: '920px',
       maxWidth: 'calc(100vw - 48px)',
       maxHeight: 'calc(100vh - 48px)',
+      panelClass: 'ngs-form-logic-rule-dialog',
       showCloseButton: true,
       ariaLabel
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      const draftRule = this.draftRule();
+
+      if (draftRule?.id === rule.id) {
+        this.discardDraftRule();
+      }
     });
   }
 
@@ -158,6 +196,11 @@ export class FormLogic {
   }
 
   protected removeRule(rule: FormBuilderLogicRule): void {
+    if (this.isDraftRule(rule)) {
+      this.discardDraftRule();
+      return;
+    }
+
     const rules = this.rules().filter(item => item.id !== rule.id);
 
     this.logic.set(rules);
@@ -196,6 +239,36 @@ export class FormLogic {
     return rules.findIndex(item => item.id === rule.id) === rules.length - 1;
   }
 
+  protected isDraftRule(rule: FormBuilderLogicRule): boolean {
+    return this.draftRule()?.id === rule.id;
+  }
+
+  protected saveRuleDialog(rule: FormBuilderLogicRule): void {
+    const draftRule = this.draftRule();
+
+    if (draftRule?.id !== rule.id) {
+      return;
+    }
+
+    this.logic.set([
+      ...this.rules().map(cloneLogicRule),
+      cloneLogicRule(draftRule)
+    ]);
+    this.draftRule.set(null);
+    this.selectedRuleId.set(draftRule.id);
+  }
+
+  protected discardDraftRule(): void {
+    const draftRule = this.draftRule();
+
+    if (!draftRule) {
+      return;
+    }
+
+    this.draftRule.set(null);
+    this.selectedRuleId.set(this.rules()[0]?.id ?? null);
+  }
+
   protected updateRule(rule: FormBuilderLogicRule, changes: Partial<FormBuilderLogicRule>): void {
     this.replaceRule(rule.id, current => ({
       ...current,
@@ -203,7 +276,7 @@ export class FormLogic {
     }));
   }
 
-  protected setConditionType(rule: FormBuilderLogicRule, type: FormBuilderLogicConditionType): void {
+  protected setConditionType(rule: FormBuilderLogicRule, type: FormBuilderLogicConditionMode): void {
     this.replaceRule(rule.id, current => ({
       ...current,
       when: coerceConditionType(current.when, type)
@@ -228,6 +301,58 @@ export class FormLogic {
     this.replaceRule(rule.id, current => ({
       ...current,
       when: removeCondition(current.when, index)
+    }));
+  }
+
+  protected conditionsFor(rule: FormBuilderLogicRule): FormBuilderLogicCondition[] {
+    return rule.when.type === 'all' || rule.when.type === 'any' ? rule.when.conditions : [];
+  }
+
+  protected fieldOptions(): FormBuilderLogicTargetOption[] {
+    return this.targetOptions().filter(option => option.kind === 'field');
+  }
+
+  protected conditionFieldValue(condition: FormBuilderLogicCondition): string {
+    return condition.type === 'field' ? condition.fieldId : '';
+  }
+
+  protected conditionOperatorValue(condition: FormBuilderLogicCondition): FormBuilderLogicConditionOperator | '' {
+    return condition.type === 'field' ? condition.operator : '';
+  }
+
+  protected conditionValue(condition: FormBuilderLogicCondition): string {
+    return condition.type === 'field' ? String(condition.value ?? '') : '';
+  }
+
+  protected conditionNeedsValue(condition: FormBuilderLogicCondition): boolean {
+    const operator = this.conditionOperatorValue(condition);
+
+    return !!operator && operator !== 'empty' && operator !== 'notEmpty';
+  }
+
+  protected updateConditionField(rule: FormBuilderLogicRule, index: number, fieldId: string): void {
+    this.updateFieldCondition(rule, index, condition => ({
+      ...condition,
+      fieldId
+    }));
+  }
+
+  protected updateConditionOperator(
+    rule: FormBuilderLogicRule,
+    index: number,
+    operator: FormBuilderLogicConditionOperator
+  ): void {
+    this.updateFieldCondition(rule, index, condition => ({
+      ...condition,
+      operator,
+      value: operator === 'empty' || operator === 'notEmpty' ? undefined : condition.value
+    }));
+  }
+
+  protected updateConditionValue(rule: FormBuilderLogicRule, index: number, value: string): void {
+    this.updateFieldCondition(rule, index, condition => ({
+      ...condition,
+      value
     }));
   }
 
@@ -304,6 +429,19 @@ export class FormLogic {
       return `${condition.conditions.length} conditions can match`;
     }
 
+    if (condition.type === 'field') {
+      const field = this.fieldOptions().find(option => option.id === condition.fieldId);
+      const operator = CONDITION_OPERATOR_OPTIONS.find(option => option.value === condition.operator);
+
+      if (!field || !operator) {
+        return 'Incomplete condition';
+      }
+
+      return this.conditionNeedsValue(condition)
+        ? `${field.label} ${operator.label} ${condition.value ?? ''}`
+        : `${field.label} ${operator.label}`;
+    }
+
     return condition.expression || 'Empty expression';
   }
 
@@ -353,10 +491,6 @@ export class FormLogic {
     return `${prefix}: ${option.label}${name}`;
   }
 
-  protected fieldOptions(): FormBuilderLogicTargetOption[] {
-    return this.targetOptions().filter(option => option.kind === 'field');
-  }
-
   protected fieldOptionLabel(option: FormBuilderLogicTargetOption): string {
     return this.targetOptionLabel(option);
   }
@@ -381,10 +515,29 @@ export class FormLogic {
     }));
   }
 
+  private updateFieldCondition(
+    rule: FormBuilderLogicRule,
+    index: number,
+    update: (condition: Extract<FormBuilderLogicCondition, { type: 'field' }>) => FormBuilderLogicCondition
+  ): void {
+    this.replaceRule(rule.id, current => ({
+      ...current,
+      when: updateFieldCondition(current.when, index, update)
+    }));
+  }
+
   private replaceRule(
     ruleId: string,
     update: (rule: FormBuilderLogicRule) => FormBuilderLogicRule
   ): void {
+    const draftRule = this.draftRule();
+
+    if (draftRule?.id === ruleId) {
+      this.draftRule.set(update(cloneLogicRule(draftRule)));
+      this.selectedRuleId.set(ruleId);
+      return;
+    }
+
     this.logic.set(this.rules().map(rule =>
       rule.id === ruleId ? update(cloneLogicRule(rule)) : cloneLogicRule(rule)
     ));
@@ -399,7 +552,7 @@ function createLogicRule(index: number): FormBuilderLogicRule {
     name: `Rule ${index}`,
     enabled: true,
     priority: index,
-    when: { type: 'expression', expression: '' },
+    when: { type: 'all', conditions: [] },
     actions: []
   };
 }
@@ -458,7 +611,7 @@ function coerceActionTypeForTarget(
 
 function coerceConditionType(
   condition: FormBuilderLogicCondition,
-  type: FormBuilderLogicConditionType
+  type: FormBuilderLogicConditionMode
 ): FormBuilderLogicCondition {
   if (type === 'expression') {
     return {
@@ -471,7 +624,9 @@ function coerceConditionType(
     type,
     conditions: condition.type === 'all' || condition.type === 'any'
       ? condition.conditions.map(cloneLogicCondition)
-      : [cloneLogicCondition(condition)]
+      : condition.type === 'field'
+        ? [cloneLogicCondition(condition)]
+        : []
   };
 }
 
@@ -482,6 +637,10 @@ function updateConditionExpression(
 ): FormBuilderLogicCondition {
   if (condition.type === 'expression') {
     return { ...condition, expression };
+  }
+
+  if (condition.type !== 'all' && condition.type !== 'any') {
+    return condition;
   }
 
   return {
@@ -496,24 +655,25 @@ function addCondition(condition: FormBuilderLogicCondition): FormBuilderLogicCon
   if (condition.type === 'expression') {
     return {
       type: 'all',
-      conditions: [
-        cloneLogicCondition(condition),
-        { type: 'expression', expression: '' }
-      ]
+      conditions: [createEmptyFieldCondition()]
     };
+  }
+
+  if (condition.type !== 'all' && condition.type !== 'any') {
+    return condition;
   }
 
   return {
     ...condition,
     conditions: [
       ...condition.conditions.map(cloneLogicCondition),
-      { type: 'expression', expression: '' }
+      createEmptyFieldCondition()
     ]
   };
 }
 
 function removeCondition(condition: FormBuilderLogicCondition, index: number): FormBuilderLogicCondition {
-  if (condition.type === 'expression') {
+  if (condition.type !== 'all' && condition.type !== 'any') {
     return condition;
   }
 
@@ -521,7 +681,7 @@ function removeCondition(condition: FormBuilderLogicCondition, index: number): F
 
   return {
     ...condition,
-    conditions: conditions.length ? conditions.map(cloneLogicCondition) : [{ type: 'expression', expression: '' }]
+    conditions: conditions.map(cloneLogicCondition)
   };
 }
 
@@ -530,7 +690,41 @@ function firstConditionExpression(condition: FormBuilderLogicCondition): string 
     return condition.expression;
   }
 
+  if (condition.type === 'field') {
+    return '';
+  }
+
   return condition.conditions.map(firstConditionExpression).find(Boolean) ?? '';
+}
+
+function createEmptyFieldCondition(): Extract<FormBuilderLogicCondition, { type: 'field' }> {
+  return {
+    type: 'field',
+    fieldId: '',
+    operator: '',
+    value: ''
+  };
+}
+
+function updateFieldCondition(
+  condition: FormBuilderLogicCondition,
+  index: number,
+  update: (condition: Extract<FormBuilderLogicCondition, { type: 'field' }>) => FormBuilderLogicCondition
+): FormBuilderLogicCondition {
+  if (condition.type !== 'all' && condition.type !== 'any') {
+    return condition;
+  }
+
+  return {
+    ...condition,
+    conditions: condition.conditions.map((item, itemIndex) => {
+      if (itemIndex !== index) {
+        return cloneLogicCondition(item);
+      }
+
+      return update(item.type === 'field' ? item : createEmptyFieldCondition());
+    })
+  };
 }
 
 function cloneLogicRule(rule: FormBuilderLogicRule): FormBuilderLogicRule {

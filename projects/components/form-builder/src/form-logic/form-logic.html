@@ -1,21 +1,17 @@
 <ng-template #actionsEditor let-rule let-branch="branch" let-title="title">
-  <section class="ngs-form-logic-editor-section">
-    <header>
+  <section class="ngs-form-logic-editor-section flex flex-col gap-3 rounded-xl border border-border bg-surface-container-lowest p-4">
+    <header class="flex items-start justify-between gap-3">
       <div>
-        <h5>{{ title }}</h5>
-        <p>{{ branch === 'actions' ? 'Runs when the condition matches.' : 'Runs when the condition does not match.' }}</p>
+        <h5 class="text-md font-semibold">{{ title }}</h5>
+        <p class="text-sm text-text-secondary">{{ branch === 'actions' ? 'Choose what happens when the conditions match.' : 'Optional fallback when conditions do not match.' }}</p>
       </div>
-      <button ngsButton="text" type="button" (click)="addAction(rule, branch)">
-        <ngs-icon name="fluent:add-24-regular"/>
-        Add action
-      </button>
     </header>
 
     @if (actionsFor(rule, branch).length) {
-      <div class="ngs-form-logic-action-list">
+      <div class="ngs-form-logic-action-list flex flex-col gap-3">
         @for (action of actionsFor(rule, branch); track $index) {
-          <section class="ngs-form-logic-action-row">
-            <div class="ngs-form-logic-action-grid">
+          <section class="ngs-form-logic-action-row flex flex-col gap-3">
+            <div class="ngs-form-logic-action-grid grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] items-start gap-3 rounded-lg border border-border bg-surface-container p-3 max-lg:grid-cols-1">
               <ngs-form-field>
                 <ngs-label>Target</ngs-label>
                 <ngs-select [ngModel]="actionTargetValue(action)"
@@ -62,25 +58,32 @@
     } @else {
       <p class="ngs-form-logic-muted">No actions configured.</p>
     }
+
+    <div class="ngs-form-logic-section-actions flex">
+      <button ngsButton="text" type="button" (click)="addAction(rule, branch)">
+        <ngs-icon name="fluent:add-24-regular"/>
+        Add action
+      </button>
+    </div>
   </section>
 </ng-template>
 
 @if (rules().length) {
-  <div class="ngs-form-logic-content">
-    <header class="ngs-form-logic-heading">
-      <div>
-        <h4>{{ title() }}</h4>
-        <p>{{ description() }}</p>
+  <div class="ngs-form-logic-content flex min-h-full flex-col gap-4 p-5 max-sm:gap-3 max-sm:p-4">
+    <header class="ngs-form-logic-heading flex items-start justify-between gap-3 max-sm:flex-col max-sm:items-stretch">
+      <div class="flex flex-col gap-1">
+        <h4 class="text-sm font-semibold">{{ title() }}</h4>
+        <p class="text-sm text-text-secondary">{{ description() }}</p>
       </div>
-      <button ngsButton="filled" type="button" (click)="openAddRuleDialog(ruleEditorDialog)">
+      <button ngsButton="filled" type="button" class="max-sm:self-start" (click)="openAddRuleDialog(ruleEditorDialog)">
         <ngs-icon name="fluent:add-24-regular"/>
         Add rule
       </button>
     </header>
 
-    <ngs-list class="ngs-form-logic-rule-list">
+    <ngs-list class="ngs-form-logic-rule-list flex min-w-0 flex-col gap-3">
       @for (rule of rules(); track rule.id) {
-        <ngs-list-item (click)="openRuleEditorDialog(rule, ruleEditorDialog)">
+        <ngs-list-item class="cursor-pointer" (click)="openRuleEditorDialog(rule, ruleEditorDialog)">
           <ngs-icon name="fluent:flowchart-24-regular" ngsListItemIcon/>
           <span ngsListItemTitle>{{ rule.name || rule.id }}</span>
           <span ngsListItemMeta>{{ rule.enabled === false ? 'Off' : 'On' }}</span>
@@ -106,23 +109,25 @@
 
 <ng-template #ruleEditorDialog>
   @if (selectedRule(); as rule) {
-    <h3 ngs-dialog-title>{{ rule.name || rule.id }}</h3>
+    <h3 ngs-dialog-title>Logic rule</h3>
     <ngs-dialog-content>
-      <div class="ngs-form-logic-editor-dialog-content">
-        <section class="ngs-form-logic-editor">
-          <section class="ngs-form-logic-editor-section">
-            <header>
+      <div class="ngs-form-logic-editor-dialog-content min-w-[min(860px,calc(100vw-96px))]">
+        <section class="ngs-form-logic-editor flex flex-col gap-5">
+          <section class="ngs-form-logic-editor-section flex flex-col gap-3 rounded-xl border border-border bg-surface-container-lowest p-4">
+            <header class="ngs-form-logic-rule-settings-header flex items-center justify-between gap-3">
               <div>
-                <h5>Rule</h5>
-                <p>Basic rule settings.</p>
+                <h5 class="text-md font-semibold">{{ isDraftRule(rule) ? 'Create logic rule' : 'Edit logic rule' }}</h5>
+                <p class="text-sm text-text-secondary">
+                  {{ isDraftRule(rule) ? 'Configure the rule before adding it to the list.' : 'Name the rule, set its priority, and keep it enabled when it should run.' }}
+                </p>
               </div>
-              <div class="ngs-form-logic-editor-actions">
+              <div class="ngs-form-logic-editor-actions flex items-center gap-1">
                 <ngs-slide-toggle [ngModel]="rule.enabled !== false"
                                   [ngModelOptions]="{standalone: true}"
                                   (ngModelChange)="updateRule(rule, { enabled: $event })">
                   Enabled
                 </ngs-slide-toggle>
-                @if (rules().length > 1) {
+                @if (!isDraftRule(rule) && rules().length > 1) {
                   <button ngsIconButton type="button" aria-label="Move rule up" [disabled]="isFirstRule(rule)" (click)="moveRule(rule, -1)">
                     <ngs-icon name="fluent:arrow-up-24-regular"/>
                   </button>
@@ -130,16 +135,18 @@
                     <ngs-icon name="fluent:arrow-down-24-regular"/>
                   </button>
                 }
-                <button ngsIconButton type="button" aria-label="Duplicate rule" (click)="duplicateRule(rule)">
-                  <ngs-icon name="fluent:copy-24-regular"/>
-                </button>
-                <button ngsIconButton type="button" aria-label="Delete rule" ngs-dialog-close (click)="removeRule(rule)">
-                  <ngs-icon name="fluent:delete-24-regular"/>
-                </button>
+                @if (!isDraftRule(rule)) {
+                  <button ngsIconButton type="button" aria-label="Duplicate rule" (click)="duplicateRule(rule)">
+                    <ngs-icon name="fluent:copy-24-regular"/>
+                  </button>
+                  <button ngsIconButton type="button" aria-label="Delete rule" ngs-dialog-close (click)="removeRule(rule)">
+                    <ngs-icon name="fluent:delete-24-regular"/>
+                  </button>
+                }
               </div>
             </header>
 
-            <div class="ngs-form-logic-form-grid">
+            <div class="ngs-form-logic-rule-settings-grid grid grid-cols-[minmax(0,1fr)_minmax(140px,180px)] items-start gap-3 max-lg:grid-cols-1">
               <ngs-form-field>
                 <ngs-label>Name</ngs-label>
                 <input ngsInput
@@ -159,28 +166,31 @@
             </div>
           </section>
 
-          <section class="ngs-form-logic-editor-section">
-            <header>
+          <section class="ngs-form-logic-editor-section flex flex-col gap-3 rounded-xl border border-border bg-surface-container-lowest p-4">
+            <header class="flex items-start justify-between gap-3">
               <div>
-                <h5>When</h5>
-                <p>Use field names in expressions, for example <code>country = "US"</code>.</p>
+                <h5 class="text-md font-semibold">When</h5>
+                <p class="text-sm text-text-secondary">Build conditions from form fields, or switch to a custom expression.</p>
               </div>
             </header>
 
-            <ngs-form-field>
-              <ngs-label>Condition mode</ngs-label>
-              <ngs-select [ngModel]="rule.when.type"
-                          [ngModelOptions]="{standalone: true}"
-                          (ngModelChange)="setConditionType(rule, $event)">
-                @for (option of conditionTypeOptions; track option.value) {
-                  <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
-                }
-              </ngs-select>
-            </ngs-form-field>
+            <div class="ngs-form-logic-condition-mode grid grid-cols-[auto_minmax(220px,1fr)] items-center gap-3 max-lg:grid-cols-1">
+              <span class="flex min-h-12 items-center text-sm text-text-secondary max-lg:min-h-0">Run when</span>
+              <ngs-form-field subscriptHiddenIfEmpty>
+                <ngs-select [ngModel]="rule.when.type"
+                            [ngModelOptions]="{standalone: true}"
+                            aria-label="Condition mode"
+                            (ngModelChange)="setConditionType(rule, $event)">
+                  @for (option of conditionTypeOptions; track option.value) {
+                    <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
+                  }
+                </ngs-select>
+              </ngs-form-field>
+            </div>
 
             @if (rule.when.type === 'expression') {
               <ngs-form-field>
-                <ngs-label>Expression</ngs-label>
+                <ngs-label>Custom expression</ngs-label>
                 <textarea ngsInput
                           rows="3"
                           [ngModel]="rule.when.expression"
@@ -188,28 +198,64 @@
                           (ngModelChange)="updateConditionExpression(rule, $event)"></textarea>
               </ngs-form-field>
             } @else {
-              <div class="ngs-form-logic-condition-list">
-                @for (condition of rule.when.conditions; track $index) {
-                  <div class="ngs-form-logic-condition-row">
+              @if (conditionsFor(rule).length) {
+                <div class="ngs-form-logic-condition-list flex flex-col gap-3">
+                  @for (condition of conditionsFor(rule); track $index) {
+                  <div class="ngs-form-logic-condition-row grid grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)_auto] items-start gap-3 rounded-lg border border-border bg-surface-container p-3 max-lg:grid-cols-1">
                     <ngs-form-field>
-                      <ngs-label>Expression {{ $index + 1 }}</ngs-label>
-                      <textarea ngsInput
-                                rows="2"
-                                [ngModel]="condition.type === 'expression' ? condition.expression : conditionLabel(condition)"
-                                [ngModelOptions]="{standalone: true}"
-                                (ngModelChange)="updateConditionExpression(rule, $event, $index)"></textarea>
+                      <ngs-label>Field</ngs-label>
+                      <ngs-select [ngModel]="conditionFieldValue(condition)"
+                                  [ngModelOptions]="{standalone: true}"
+                                  placeholder="Select field"
+                                  (ngModelChange)="updateConditionField(rule, $index, $event)">
+                        @for (option of fieldOptions(); track option.id) {
+                          <ngs-option [value]="option.id">{{ fieldOptionLabel(option) }}</ngs-option>
+                        }
+                      </ngs-select>
                     </ngs-form-field>
+
+                    <ngs-form-field>
+                      <ngs-label>Operator</ngs-label>
+                      <ngs-select [ngModel]="conditionOperatorValue(condition)"
+                                  [ngModelOptions]="{standalone: true}"
+                                  [disabled]="!conditionFieldValue(condition)"
+                                  placeholder="Select operator"
+                                  (ngModelChange)="updateConditionOperator(rule, $index, $event)">
+                        @for (option of conditionOperatorOptions; track option.value) {
+                          <ngs-option [value]="option.value">{{ option.label }}</ngs-option>
+                        }
+                      </ngs-select>
+                    </ngs-form-field>
+
+                    @if (conditionNeedsValue(condition)) {
+                      <ngs-form-field>
+                        <ngs-label>Value</ngs-label>
+                        <input ngsInput
+                               [ngModel]="conditionValue(condition)"
+                               [ngModelOptions]="{standalone: true}"
+                               placeholder="Enter value"
+                               (ngModelChange)="updateConditionValue(rule, $index, $event)">
+                      </ngs-form-field>
+                    } @else {
+                      <div class="ngs-form-logic-condition-value-placeholder"></div>
+                    }
+
                     <button ngsIconButton type="button" aria-label="Remove condition" (click)="removeCondition(rule, $index)">
                       <ngs-icon name="fluent:delete-24-regular"/>
                     </button>
                   </div>
-                }
-              </div>
+                  }
+                </div>
+              } @else {
+                <p class="ngs-form-logic-muted">No conditions configured.</p>
+              }
 
-              <button ngsButton="text" type="button" (click)="addCondition(rule)">
-                <ngs-icon name="fluent:add-24-regular"/>
-                Add condition
-              </button>
+              <div class="ngs-form-logic-condition-actions flex">
+                <button ngsButton="text" type="button" (click)="addCondition(rule)">
+                  <ngs-icon name="fluent:add-24-regular"/>
+                  Add condition
+                </button>
+              </div>
             }
           </section>
 
@@ -224,7 +270,10 @@
       </div>
     </ngs-dialog-content>
     <ngs-dialog-actions align="end">
-      <button ngsButton="filled" type="button" ngs-dialog-close>Done</button>
+      <button ngsButton="text" type="button" ngs-dialog-close (click)="discardDraftRule()">Close</button>
+      <button ngsButton="filled" type="button" ngs-dialog-close (click)="saveRuleDialog(rule)">
+        {{ isDraftRule(rule) ? 'Create' : 'Done' }}
+      </button>
     </ngs-dialog-actions>
   }
 </ng-template>

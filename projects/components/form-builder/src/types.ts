@@ -108,8 +108,21 @@ export interface FormBuilderFlow {
 
 export type FormBuilderLogicCondition =
   | { type: 'expression'; expression: string }
+  | { type: 'field'; fieldId: string; operator: FormBuilderLogicConditionOperator | ''; value?: unknown }
   | { type: 'all'; conditions: FormBuilderLogicCondition[] }
   | { type: 'any'; conditions: FormBuilderLogicCondition[] };
+
+export type FormBuilderLogicConditionOperator =
+  | 'equals'
+  | 'notEquals'
+  | 'contains'
+  | 'notContains'
+  | 'empty'
+  | 'notEmpty'
+  | 'greaterThan'
+  | 'lessThan'
+  | 'before'
+  | 'after';
 
 export type FormBuilderLogicTargetKind = 'field' | 'section';
 
