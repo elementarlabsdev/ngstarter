@@ -5,7 +5,7 @@ import { Error as FormFieldError, FormField, Hint, Label } from '@ngstarter-ui/c
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
 import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
-import { FormBuilderField } from '../../types';
+import { FormBuilderField, FormBuilderSection } from '../../types';
 
 interface PlainTextExpression {
   id: string;
@@ -36,6 +36,8 @@ interface PlainTextExpression {
 export class PlainTextFormBuilderSettings {
   readonly field = input.required<FormBuilderField>();
   readonly update = input.required<(changes: Partial<FormBuilderField>) => void>();
+  readonly updateField = input<(changes: Partial<FormBuilderField>) => void>();
+  readonly updateSection = input<(changes: Partial<FormBuilderSection>) => void>();
 
   protected readonly textInput = viewChild<ElementRef<HTMLTextAreaElement>>('textInput');
   protected readonly expressionEnabled = computed(() => this.field().settings?.['expression'] === true);
@@ -129,7 +131,7 @@ export class PlainTextFormBuilderSettings {
   }
 
   private patchSettings(changes: Record<string, any>): void {
-    this.update()({
+    (this.updateField() ?? this.update())({
       settings: {
         ...this.field().settings,
         ...changes

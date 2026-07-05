@@ -6,7 +6,7 @@ import { Input } from '@ngstarter-ui/components/input';
 import { Select } from '@ngstarter-ui/components/select';
 import { Option } from '@ngstarter-ui/components/option';
 import { SlideToggle, SlideToggleGroup } from '@ngstarter-ui/components/slide-toggle';
-import { FormBuilderField, FormBuilderFieldWidth, FormBuilderOption } from '../../types';
+import { FormBuilderField, FormBuilderFieldWidth, FormBuilderOption, FormBuilderSection } from '../../types';
 
 type RadioOrientation = 'vertical' | 'horizontal';
 type SpacerHeight = 8 | 16 | 24 | 32 | 48 | 64;
@@ -39,6 +39,8 @@ export class BasicFormBuilderFieldSettings {
 
   readonly field = input.required<FormBuilderField>();
   readonly update = input.required<(changes: Partial<FormBuilderField>) => void>();
+  readonly updateField = input<(changes: Partial<FormBuilderField>) => void>();
+  readonly updateSection = input<(changes: Partial<FormBuilderSection>) => void>();
 
   protected readonly optionsControl = new FormControl('', {
     nonNullable: true,
@@ -87,7 +89,7 @@ export class BasicFormBuilderFieldSettings {
   }
 
   protected patch(changes: Partial<FormBuilderField>): void {
-    this.update()(changes);
+    (this.updateField() ?? this.update())(changes);
   }
 
   protected patchSettings(changes: Record<string, any>): void {

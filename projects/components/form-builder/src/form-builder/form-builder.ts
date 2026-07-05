@@ -2459,7 +2459,7 @@ export class FormBuilder implements OnDestroy {
       const value = this.fieldInitialValue(field);
 
       if (control.value !== value) {
-        control.setValue(value, { emitEvent: false });
+        control.setValue(value);
       }
 
       if (control.enabled) {

@@ -6,7 +6,10 @@ import {
   effect,
   inject,
   input,
+  reflectComponentType,
   signal,
+  type ComponentRef,
+  type Type,
   viewChild
 } from '@angular/core';
 import {
@@ -94,6 +97,9 @@ export class FormBuilderSettingsHost {
   });
   protected readonly legacyLoaded = signal(false);
   private readonly anchor = viewChild.required('anchor', { read: ViewContainerRef });
+  private legacyComponentRef: ComponentRef<unknown> | null = null;
+  private legacyComponentType: Type<unknown> | null = null;
+  private legacyLoadId = 0;
 
   constructor() {
     effect(async () => {
@@ -112,24 +118,38 @@ export class FormBuilderSettingsHost {
 
         return !!definition.kind && definition.kind === kind;
       })?.component;
-
-      viewContainer.clear();
-      this.legacyLoaded.set(false);
+      const loadId = ++this.legacyLoadId;
 
       if (!legacySettings) {
+        viewContainer.clear();
+        this.legacyComponentRef = null;
+        this.legacyComponentType = null;
+        this.legacyLoaded.set(false);
         return;
       }
 
       const componentType = await legacySettings();
-      const componentRef = viewContainer.createComponent(componentType);
-      componentRef.setInput('item', section ?? field);
-      componentRef.setInput('field', field);
-      componentRef.setInput('section', section);
-      componentRef.setInput('schema', this.schema());
-      componentRef.setInput('definition', itemDefinition);
-      componentRef.setInput('update', section ? this.updateSection() : this.update());
-      componentRef.setInput('updateField', this.update());
-      componentRef.setInput('updateSection', this.updateSection());
+
+      if (loadId !== this.legacyLoadId) {
+        return;
+      }
+
+      if (!this.legacyComponentRef || this.legacyComponentType !== componentType) {
+        viewContainer.clear();
+        this.legacyComponentRef = viewContainer.createComponent(componentType);
+        this.legacyComponentType = componentType;
+      }
+
+      this.applyLegacyInputs(this.legacyComponentRef, {
+        item: section ?? field,
+        field,
+        section,
+        schema: this.schema(),
+        definition: itemDefinition,
+        update: section ? this.updateSection() : this.update(),
+        updateField: this.update(),
+        updateSection: this.updateSection()
+      });
       this.legacyLoaded.set(true);
     });
   }
@@ -279,6 +299,18 @@ export class FormBuilderSettingsHost {
     return typeof definition?.settings === 'function'
       ? definition.settings
       : undefined;
+  }
+
+  private setLegacyInput(componentRef: ComponentRef<unknown>, name: string, value: unknown): void {
+    if (hasComponentInput(componentRef.componentType, name)) {
+      componentRef.setInput(name, value);
+    }
+  }
+
+  private applyLegacyInputs(componentRef: ComponentRef<unknown>, inputs: Record<string, unknown>): void {
+    for (const [name, value] of Object.entries(inputs)) {
+      this.setLegacyInput(componentRef, name, value);
+    }
   }
 
   private resolveOwnSettingsSchema(
@@ -457,6 +489,12 @@ function mergeSettingsSchemas(schemas: FormBuilderSchema[]): FormBuilderSchema |
       fields: section.fields.map(field => ({ ...field }))
     })))
   };
+}
+
+function hasComponentInput(componentType: Type<unknown>, name: string): boolean {
+  return reflectComponentType(componentType)?.inputs.some(input =>
+    input.propName === name || input.templateName === name
+  ) ?? false;
 }
 
 function flattenSettingsFields(schema: FormBuilderSchema): FormBuilderField[] {

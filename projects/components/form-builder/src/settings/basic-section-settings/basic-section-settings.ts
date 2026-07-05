@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { FormField, Hint, Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
-import { FormBuilderSection } from '../../types';
+import { FormBuilderField, FormBuilderSection } from '../../types';
 
 @Component({
   selector: 'ngs-basic-form-builder-section-settings',
@@ -26,8 +26,10 @@ import { FormBuilderSection } from '../../types';
 export class BasicFormBuilderSectionSettings {
   readonly section = input.required<FormBuilderSection>();
   readonly update = input.required<(changes: Partial<FormBuilderSection>) => void>();
+  readonly updateField = input<(changes: Partial<FormBuilderField>) => void>();
+  readonly updateSection = input<(changes: Partial<FormBuilderSection>) => void>();
 
   protected patch(changes: Partial<FormBuilderSection>): void {
-    this.update()(changes);
+    (this.updateSection() ?? this.update())(changes);
   }
 }
