@@ -7186,7 +7186,6 @@
         "[ngsPdfViewerAnnotation]",
         "[ngsPdfViewerAnnotationDef]",
         "ngs-pdf-viewer",
-        "ngs-pdf-viewer-annotation-test-host",
         "ngs-pdf-viewer-annotations",
         "ngs-pdf-viewer-search"
       ],

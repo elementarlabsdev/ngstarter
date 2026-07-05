@@ -442,12 +442,19 @@ export class FormBuilderFieldHost {
       });
     });
 
-    effect(async () => {
+    effect(onCleanup => {
+      let cancelled = false;
       const field = this.field();
       const control = this.control();
       const definitions = this.definitions();
       const viewContainer = this.anchor();
-      const renderer = definitions.find(definition => definition.type === field.type)?.renderer;
+      const definition = definitions.find(definition => definition.type === field.type);
+      const renderer = definition?.renderer;
+      const readonly = this.readonly();
+
+      onCleanup(() => {
+        cancelled = true;
+      });
 
       viewContainer.clear();
       this.customLoaded.set(false);
@@ -456,13 +463,20 @@ export class FormBuilderFieldHost {
         return;
       }
 
-      const componentType = await renderer();
-      const componentRef = viewContainer.createComponent(componentType);
-      componentRef.setInput('field', field);
-      componentRef.setInput('control', control);
-      componentRef.setInput('readonly', this.readonly());
-      componentRef.setInput('definition', definitions.find(definition => definition.type === field.type));
-      this.customLoaded.set(true);
+      Promise.resolve(renderer()).then(componentType => {
+        if (cancelled) {
+          return;
+        }
+
+        viewContainer.clear();
+
+        const componentRef = viewContainer.createComponent(componentType);
+        componentRef.setInput('field', field);
+        componentRef.setInput('control', control);
+        componentRef.setInput('readonly', readonly);
+        componentRef.setInput('definition', definition);
+        this.customLoaded.set(true);
+      });
     });
   }
 

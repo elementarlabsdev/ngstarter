@@ -760,7 +760,7 @@ Typography:
   purpose: Import PDF Viewer from &#64;ngstarter-ui/components/pdf-viewer .
   use when: Choose Pdf Viewer when the workflow matches examples such as Basic pdf viewer.
   example topics: Basic pdf viewer
-  selectors: `[ngsPdfViewerAnnotation]`, `[ngsPdfViewerAnnotationDef]`, `ngs-pdf-viewer`, `ngs-pdf-viewer-annotation-test-host`, `ngs-pdf-viewer-annotations`, `ngs-pdf-viewer-search`
+  selectors: `[ngsPdfViewerAnnotation]`, `[ngsPdfViewerAnnotationDef]`, `ngs-pdf-viewer`, `ngs-pdf-viewer-annotations`, `ngs-pdf-viewer-search`
   exports: `PdfViewer`, `PdfViewerAnnotationDataSource`, `PdfViewerAnnotationDataSourceContext`, `PdfViewerAnnotationDataSourceParams`, `PdfViewerAnnotationDataSourceResult`, `PdfViewerAnnotationDef`, `PdfViewerAnnotations`, `PdfViewerAnnotationTemplateContext`, `PdfViewerAnnotationView`, `PdfViewerAnnotationWhen`, `PdfViewerEngineService`, `PdfViewerLoadedEvent`
   inputs: `annotationDefs`, `annotations`, `annotationsDataSource`, `annotationTypeProperty`, `documentName`, `maxRenderDimension`, `maxRenderPixels`, `maxScale`, `minScale`, `ngsPdfViewerAnnotation`, `ngsPdfViewerAnnotationDef`, `ngsPdfViewerAnnotationWhen`, `page`, `query`, `renderAll`, `results`, `scale`, `searchQuery`, `showAnnotationsPanel`, `showPageList`, `showSearchPanel`, `showToolbar`, `src`, `wasmUrl`
   outputs: `closed`, `error`, `loaded`, `pageChanged`, `pageRendered`, `pageSelected`, `resultSelected`, `searchChanged`

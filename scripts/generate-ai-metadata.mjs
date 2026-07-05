@@ -945,7 +945,9 @@ async function buildRegistry() {
   for (const name of names) {
     const entryDir = path.join(componentsDir, name);
     const publicApiPath = path.join(entryDir, 'public-api.ts');
-    const files = await collectFiles(entryDir, file => file.endsWith('.ts') || file.endsWith('.scss'));
+    const files = await collectFiles(entryDir, file =>
+      (file.endsWith('.ts') || file.endsWith('.scss')) && !file.endsWith('.spec.ts')
+    );
     const sourceParts = await Promise.all(files.map(file => readText(file)));
     const combinedSource = sourceParts.join('\n');
     const selectors = parseSelectors(combinedSource);
