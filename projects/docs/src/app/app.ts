@@ -1051,6 +1051,26 @@ export class App implements OnInit {
       ]
     },
     {
+      key: 'pdf-builder',
+      type: 'group',
+      name: 'PDF Builder',
+      icon: 'fluent:document-edit-24-regular',
+      children: [
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Overview',
+          link: '/libraries/pdf-builder/overview'
+        },
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Basic Example',
+          link: '/libraries/pdf-builder/basic-example'
+        },
+      ]
+    },
+    {
       key: 'video-player',
       type: 'group',
       name: 'Video Player',

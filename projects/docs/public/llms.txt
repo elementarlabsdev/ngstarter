@@ -145,6 +145,7 @@ Must use:
 - paginator: `@ngstarter-ui/components/paginator` docs: /components/paginator
 - panel: `@ngstarter-ui/components/panel` docs: /components/panel
 - password-strength: `@ngstarter-ui/components/password-strength` docs: /forms/password-strength
+- pdf-builder: `@ngstarter-ui/components/pdf-builder` docs: /libraries/pdf-builder
 - pdf-viewer: `@ngstarter-ui/components/pdf-viewer` docs: /libraries/pdf-viewer
 - phone-input: `@ngstarter-ui/components/phone-input` docs: /forms/phone-input
 - pin-input: `@ngstarter-ui/components/pin-input` docs: /forms/pin-input

@@ -340,6 +340,13 @@ export class PdfViewer {
 
       if (requestedPage !== untracked(() => this.activePage())) {
         this.activePage.set(requestedPage);
+
+        if (this.pdfDocument && !this.renderAll()) {
+          untracked(() => {
+            this.initializePageShells(this.pdfDocument!, this.zoom(), false, requestedPage);
+            this.schedulePageObserverRefresh();
+          });
+        }
       }
     });
 
@@ -936,7 +943,7 @@ export class PdfViewer {
 
       this.pdfDocument = pdfDocument;
       this.pageCount.set(pdfDocument.pageCount);
-      this.activePage.set(this.clamp(this.activePage(), 1, Math.max(pdfDocument.pageCount, 1)));
+      this.activePage.set(this.clamp(this.page(), 1, Math.max(pdfDocument.pageCount, 1)));
       this.loaded.emit({ pageCount: pdfDocument.pageCount });
       this.initializePageShells(pdfDocument, this.zoom(), this.renderAll(), this.activePage());
       this.schedulePageObserverRefresh();
