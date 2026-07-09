@@ -762,15 +762,15 @@ Typography:
   example topics: PDF Builder, Basic pdf builder
   selectors: `ngs-pdf-builder`
   exports: `PdfBuilder`
-  outputs: `createBlankPdf`, `exportPdf`, `pdfFileSelected`
-  tokens: `--ngs-button-border-radius`, `--ngs-button-content-gap`, `--ngs-button-height`, `--ngs-button-hover-bg`, `--ngs-button-outlined-border`, `--ngs-button-outlined-color`, `--ngs-button-padding`, `--ngs-card-bg`, `--ngs-card-border-color`, `--ngs-color-border`, `--ngs-color-border-strong`, `--ngs-color-on-primary-container`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-primary`, `--ngs-color-primary-container`
+  outputs: `createBlankPdf`, `exportPdf`
+  tokens: `--ngs-button-border-radius`, `--ngs-button-content-gap`, `--ngs-button-height`, `--ngs-button-hover-bg`, `--ngs-button-outlined-border`, `--ngs-button-outlined-color`, `--ngs-button-padding`, `--ngs-color-border`, `--ngs-color-border-strong`, `--ngs-color-on-primary-container`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-on-warning-container`, `--ngs-color-primary`, `--ngs-color-primary-container`, `--ngs-color-surface`
 - pdf-viewer: `@ngstarter-ui/components/pdf-viewer` docs: /libraries/pdf-viewer
   purpose: Import PDF Viewer from &#64;ngstarter-ui/components/pdf-viewer .
   use when: Choose Pdf Viewer when the workflow matches examples such as Basic pdf viewer.
   example topics: Basic pdf viewer
   selectors: `[ngsPdfViewerAnnotation]`, `[ngsPdfViewerAnnotationDef]`, `ngs-pdf-viewer`, `ngs-pdf-viewer-annotations`, `ngs-pdf-viewer-search`
   exports: `PdfViewer`, `PdfViewerAnnotationDataSource`, `PdfViewerAnnotationDataSourceContext`, `PdfViewerAnnotationDataSourceParams`, `PdfViewerAnnotationDataSourceResult`, `PdfViewerAnnotationDef`, `PdfViewerAnnotations`, `PdfViewerAnnotationTemplateContext`, `PdfViewerAnnotationView`, `PdfViewerAnnotationWhen`, `PdfViewerEngineService`, `PdfViewerLoadedEvent`
-  inputs: `annotationDefs`, `annotations`, `annotationsDataSource`, `annotationTypeProperty`, `documentName`, `maxRenderDimension`, `maxRenderPixels`, `maxScale`, `minScale`, `ngsPdfViewerAnnotation`, `ngsPdfViewerAnnotationDef`, `ngsPdfViewerAnnotationWhen`, `page`, `query`, `renderAll`, `results`, `scale`, `searchQuery`, `showAnnotationsPanel`, `showPageList`, `showSearchPanel`, `showToolbar`, `src`, `wasmUrl`
+  inputs: `annotationDefs`, `annotations`, `annotationsDataSource`, `annotationTypeProperty`, `documentName`, `enableCommandWheelZoom`, `maxRenderDimension`, `maxRenderPixels`, `maxScale`, `minScale`, `ngsPdfViewerAnnotation`, `ngsPdfViewerAnnotationDef`, `ngsPdfViewerAnnotationWhen`, `page`, `query`, `renderAll`, `results`, `scale`, `searchQuery`, `showAnnotationsPanel`, `showPageList`, `showSearchPanel`, `showToolbar`, `src`
   outputs: `closed`, `error`, `loaded`, `pageChanged`, `pageRendered`, `pageSelected`, `resultSelected`, `searchChanged`
   tokens: `--ngs-color-primary`, `--ngs-pdf-viewer-aside-width`, `--ngs-pdf-viewer-height`, `--ngs-pdf-viewer-min-height`, `--ngs-pdf-viewer-page-gap`, `--ngs-pdf-viewer-page-padding`, `--ngs-pdf-viewer-sidebar-width`, `--ngs-pdf-viewer-spread-gap`
 - phone-input: `@ngstarter-ui/components/phone-input` docs: /forms/phone-input

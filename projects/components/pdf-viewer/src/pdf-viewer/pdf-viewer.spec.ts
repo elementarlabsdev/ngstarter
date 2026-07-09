@@ -62,6 +62,24 @@ describe('PdfViewer', () => {
     expect(component.renderAll()).toBe(true);
   });
 
+  it('should allow command wheel zoom to be disabled', () => {
+    const component = fixture.componentInstance as unknown as {
+      onViewerWheel(event: WheelEvent): void;
+    };
+    const event = new WheelEvent('wheel', {
+      cancelable: true,
+      deltaY: -100,
+      metaKey: true,
+    });
+
+    fixture.componentRef.setInput('enableCommandWheelZoom', false);
+    fixture.detectChanges();
+
+    component.onViewerWheel(event);
+
+    expect(event.defaultPrevented).toBe(false);
+  });
+
   it('should keep selected page active during programmatic scroll', () => {
     const component = fixture.componentInstance as unknown as {
       activePage: { set(value: number): void; (): number };

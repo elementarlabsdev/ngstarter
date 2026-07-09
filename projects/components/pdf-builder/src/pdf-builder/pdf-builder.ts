@@ -14,28 +14,16 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardSubtitle,
-  CardTitle,
-} from '@ngstarter-ui/components/card';
-import { Chip, ChipSet } from '@ngstarter-ui/components/chips';
-import { FormField, IconButtonSuffix, Label } from '@ngstarter-ui/components/form-field';
+import { Divider } from '@ngstarter-ui/components/divider';
 import { Icon } from '@ngstarter-ui/components/icon';
-import { Input } from '@ngstarter-ui/components/input';
 import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemLine,
-  ListItemMeta,
-  ListItemTitle,
-} from '@ngstarter-ui/components/list';
-import { NumberInput } from '@ngstarter-ui/components/number-input';
+  Menu,
+  MenuDivider,
+  MenuHeading,
+  MenuItem,
+  MenuTrigger,
+} from '@ngstarter-ui/components/menu';
 import {
   Panel,
   PanelAside,
@@ -45,34 +33,23 @@ import {
 } from '@ngstarter-ui/components/panel';
 import {
   PdfViewer,
+  PdfViewerAnnotations,
+  PdfViewerSearch,
+  type PdfViewerAnnotationView,
   type PdfViewerLoadedEvent,
+  type PdfViewerSearchOptions,
+  type PdfViewerSearchResultView,
   type PdfViewerSource,
 } from '@ngstarter-ui/components/pdf-viewer';
-import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
-import { SlideToggle, type SlideToggleChange } from '@ngstarter-ui/components/slide-toggle';
 import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import {
   Toolbar,
   ToolbarItem,
   ToolbarSpacer,
-  ToolbarSubtitle,
   ToolbarTitle,
 } from '@ngstarter-ui/components/toolbar';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
-import {
-  File as UploadFile,
-  FileControl,
-  UploadAllowedTypes,
-  UploadArea,
-  UploadAreaDropStateDirective,
-  UploadAreaIconDirective,
-  UploadAreaInvalidStateDirective,
-  UploadAreaMainStateDirective,
-  UploadContainer,
-  UploadFileSelectedEvent,
-  UploadTriggerDirective,
-} from '@ngstarter-ui/components/upload';
 import {
   Tree,
   TreeNode,
@@ -83,9 +60,14 @@ import {
 type PdfBuilderCanvasTool = 'select' | 'pan' | 'text';
 type PdfBuilderFieldType = 'text' | 'variable' | 'signature' | 'initials' | 'checkbox' | 'stamp';
 type PdfBuilderFieldSlot = 'primary' | 'signature' | 'initials' | 'checkbox' | 'comment' | 'footer' | 'side';
+type PdfBuilderSpreadMode = 'single' | 'two-odd' | 'two-even';
+type PdfBuilderScrollLayout = 'vertical' | 'horizontal';
+type PdfBuilderPageRotation = 0 | 1 | 2 | 3;
 
 const PDF_BUILDER_PAGE_WIDTH = 595.276;
 const PDF_BUILDER_PAGE_HEIGHT = 841.89;
+const PDF_BUILDER_MAX_PORTRAIT_PAGE_WIDTH = 814;
+const PDF_BUILDER_FIXED_PAGE_SCALE = PDF_BUILDER_MAX_PORTRAIT_PAGE_WIDTH / PDF_BUILDER_PAGE_WIDTH;
 
 interface PdfBuilderTool {
   readonly type: PdfBuilderFieldType;
@@ -107,6 +89,12 @@ interface PdfBuilderPage {
   readonly label: string;
 }
 
+interface PdfBuilderPageSpread {
+  readonly id: string;
+  readonly leadingPlaceholder: boolean;
+  readonly pages: readonly PdfBuilderPage[];
+}
+
 interface PdfBuilderField {
   readonly id: string;
   readonly type: PdfBuilderFieldType;
@@ -123,19 +111,6 @@ interface PdfBuilderField {
   readonly required: boolean;
   readonly readonly: boolean;
   readonly locked: boolean;
-}
-
-interface PdfBuilderObject {
-  readonly label: string;
-  readonly type: string;
-  readonly icon: string;
-  readonly state: string;
-}
-
-interface PdfBuilderValidation {
-  readonly label: string;
-  readonly icon: string;
-  readonly passed: boolean;
 }
 
 interface PdfBuilderActivity {
@@ -203,57 +178,33 @@ interface PdfBuilderFieldResize {
   exportAs: 'ngsPdfBuilder',
   imports: [
     Button,
-    Card,
-    CardContent,
-    CardHeader,
-    CardSubtitle,
-    CardTitle,
-    Chip,
-    ChipSet,
-    FormField,
-    FormsModule,
+    Divider,
     Icon,
-    IconButtonSuffix,
-    Input,
-    Label,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemLine,
-    ListItemMeta,
-    ListItemTitle,
-    NumberInput,
+    Menu,
+    MenuDivider,
+    MenuHeading,
+    MenuItem,
+    MenuTrigger,
     Panel,
     PanelAside,
     PanelContent,
     PanelHeader,
     PanelSidebar,
     PdfViewer,
-    ProgressBar,
+    PdfViewerAnnotations,
+    PdfViewerSearch,
     ScrollbarArea,
-    SlideToggle,
     Tab,
     TabGroup,
     Toolbar,
     ToolbarItem,
     ToolbarSpacer,
-    ToolbarSubtitle,
     ToolbarTitle,
     Tooltip,
     Tree,
     TreeNode,
     TreeNodeDef,
     TreeNodePadding,
-    UploadAllowedTypes,
-    UploadArea,
-    UploadAreaDropStateDirective,
-    UploadAreaIconDirective,
-    UploadAreaInvalidStateDirective,
-    UploadAreaMainStateDirective,
-    UploadContainer,
-    FileControl,
-    UploadFile,
-    UploadTriggerDirective,
   ],
   templateUrl: './pdf-builder.html',
   styleUrl: './pdf-builder.scss',
@@ -271,11 +222,10 @@ export class PdfBuilder {
   private removePlacementListeners: (() => void) | null = null;
   private removeFieldDragListeners: (() => void) | null = null;
   private removeFieldResizeListeners: (() => void) | null = null;
-  private zoomAnimationFrameId: number | null = null;
+  private layerExpansionRestoreScheduled = false;
   private suppressFieldClickId: string | null = null;
 
   readonly createBlankPdf = output<void>();
-  readonly pdfFileSelected = output<UploadFileSelectedEvent>();
   readonly exportPdf = output<void>();
 
   protected readonly layersTree = viewChild<Tree<PdfBuilderLayerNode>>('layersTree');
@@ -287,17 +237,23 @@ export class PdfBuilder {
   protected readonly addedPageCount = signal(0);
   protected readonly pageCount = computed(() => this.sourcePageCount() + this.addedPageCount());
   protected readonly activePage = signal(1);
-  protected readonly pdfScale = signal(1.33);
-  protected readonly targetPdfScale = signal(1.33);
-  protected readonly zoomLabel = computed(() => `${Math.round(this.targetPdfScale() * 100)}%`);
+  protected readonly pdfScale = signal(PDF_BUILDER_FIXED_PAGE_SCALE);
+  protected readonly textFieldPlaceholder = 'Enter value';
   protected readonly activeCanvasTool = signal<PdfBuilderCanvasTool>('select');
   protected readonly selectedFieldId = signal<string | null>(null);
+  protected readonly editingFieldId = signal<string | null>(null);
   protected readonly placementGhost = signal<PdfBuilderPlacementGhost | null>(null);
   protected readonly fieldDrag = signal<PdfBuilderFieldDrag | null>(null);
   protected readonly fieldResize = signal<PdfBuilderFieldResize | null>(null);
   protected readonly pageStripVisible = signal(true);
   protected readonly libraryCollapsed = signal(false);
-  protected readonly inspectorCollapsed = signal(false);
+  protected readonly searchPanelVisible = signal(false);
+  protected readonly annotationsPanelVisible = signal(false);
+  protected readonly spreadMode = signal<PdfBuilderSpreadMode>('single');
+  protected readonly scrollLayout = signal<PdfBuilderScrollLayout>('vertical');
+  protected readonly pageRotation = signal<PdfBuilderPageRotation>(0);
+  protected readonly activeSearchQuery = signal('');
+  protected readonly pdfSearchResults = signal<PdfViewerSearchResultView[]>([]);
   protected readonly expandedLayerNodeIds = signal<ReadonlySet<string>>(new Set(['page-1', 'page-2']));
   protected readonly undoStack = signal<readonly PdfBuilderHistoryState[]>([]);
   protected readonly redoStack = signal<readonly PdfBuilderHistoryState[]>([]);
@@ -353,33 +309,35 @@ export class PdfBuilder {
       };
     }),
   );
-
-  protected readonly activePageFields = computed(() =>
-    this.fields().filter(field => field.page === this.activePage()),
+  protected readonly pageSpreads = computed<readonly PdfBuilderPageSpread[]>(() =>
+    this.groupPagesIntoSpreads(this.pages(), this.spreadMode()),
   );
 
   protected readonly fieldCount = computed(() => this.fields().length);
   protected readonly canUndo = computed(() => this.undoStack().length > 0);
   protected readonly canRedo = computed(() => this.redoStack().length > 0);
+  protected readonly canGoPrevious = computed(() => this.activePage() > 1);
+  protected readonly canGoNext = computed(() => this.activePage() < this.pageCount());
   protected readonly selectedField = computed(() =>
     this.fields().find(field => field.id === this.selectedFieldId()) ?? null,
   );
-  protected readonly selectedFieldTitle = computed(() => this.selectedField()?.label ?? 'No field selected');
-  protected readonly selectedFieldSubtitle = computed(() =>
-    this.selectedField() ? 'Selected field' : 'Inspector',
+  protected readonly isSearchPanelVisible = computed(() => this.searchPanelVisible());
+  protected readonly isAnnotationsPanelVisible = computed(() =>
+    !this.searchPanelVisible() && this.annotationsPanelVisible(),
   );
-  protected readonly passedValidationCount = computed(() =>
-    this.validations().filter(validation => validation.passed).length,
+  protected readonly annotationItems = computed<PdfViewerAnnotationView[]>(() =>
+    this.fields().map(field => ({
+      id: field.id,
+      type: field.type,
+      label: field.label,
+      author: 'PDF Builder',
+      time: `Page ${field.page}`,
+      avatarLabel: field.type.slice(0, 2).toUpperCase(),
+      text: this.getFieldAnnotationText(field),
+      pageNumber: field.page,
+      replyLabel: 'Select',
+    })),
   );
-  protected readonly preflightProgress = computed(() => {
-    const validations = this.validations();
-
-    if (!validations.length) {
-      return 0;
-    }
-
-    return Math.round((this.passedValidationCount() / validations.length) * 100);
-  });
 
   protected readonly layerTree = computed<PdfBuilderLayerNode[]>(() =>
     Array.from({ length: this.pageCount() }, (_, index) => {
@@ -408,38 +366,6 @@ export class PdfBuilder {
       };
     }),
   );
-
-  protected readonly selectedObjects = computed<readonly PdfBuilderObject[]>(() =>
-    this.fields().map(field => ({
-      label: field.label,
-      type: this.getFieldTypeLabel(field.type),
-      icon: field.icon,
-      state: field.locked ? 'Locked' : field.required ? 'Required' : field.binding ? 'Data' : 'Draft',
-    })),
-  );
-
-  protected readonly validations = computed<readonly PdfBuilderValidation[]>(() => [
-    {
-      label: this.documentSource() ? 'PDF loaded' : 'PDF missing',
-      icon: this.documentSource() ? 'fluent:checkmark-circle-24-regular' : 'fluent:warning-24-regular',
-      passed: !!this.documentSource(),
-    },
-    {
-      label: `${this.fieldCount()} fields placed`,
-      icon: 'fluent:form-24-regular',
-      passed: this.fieldCount() > 0,
-    },
-    {
-      label: 'Bindings mapped',
-      icon: 'fluent:database-link-24-regular',
-      passed: this.fields().every(field => field.type === 'text' || field.binding.trim().length > 0),
-    },
-    {
-      label: 'Required fields ready',
-      icon: 'fluent:signature-24-regular',
-      passed: this.fields().some(field => field.required),
-    },
-  ]);
 
   protected readonly activity = signal<readonly PdfBuilderActivity[]>([
     {
@@ -501,7 +427,6 @@ export class PdfBuilder {
       this.removePlacementEventListeners();
       this.removeFieldDragEventListeners();
       this.removeFieldResizeEventListeners();
-      this.cancelZoomAnimation();
     });
 
     effect(() => {
@@ -518,6 +443,13 @@ export class PdfBuilder {
       this.pdfScale();
 
       this.scheduleOverlayGeometrySync();
+    });
+
+    effect(() => {
+      this.layerTree();
+      this.expandedLayerNodeIds();
+
+      this.scheduleLayerTreeExpansionRestore();
     });
 
     effect(() => {
@@ -558,28 +490,9 @@ export class PdfBuilder {
   }
 
   protected onLibraryTabChange(index: number): void {
-    if (index === 2) {
+    if (index === 1) {
       setTimeout(() => this.restoreLayerTreeExpansion());
     }
-  }
-
-  protected onFileSelected(event: UploadFileSelectedEvent): void {
-    const [file] = event.files;
-
-    if (file) {
-      this.clearHistory();
-      this.documentSource.set(file);
-      this.documentName.set(file.name);
-      this.documentSizeLabel.set(this.formatFileSize(file.size));
-      this.sourcePageCount.set(0);
-      this.addedPageCount.set(0);
-      this.activePage.set(1);
-      this.selectedFieldId.set(null);
-      this.fields.set([]);
-      this.recordActivity('PDF uploaded', `${file.name} opened for field placement.`, 'fluent:arrow-upload-24-regular');
-    }
-
-    this.pdfFileSelected.emit(event);
   }
 
   protected onPdfLoaded(event: PdfViewerLoadedEvent): void {
@@ -610,6 +523,44 @@ export class PdfBuilder {
 
   protected pageFields(pageNumber: number): readonly PdfBuilderField[] {
     return this.fields().filter(field => field.page === pageNumber);
+  }
+
+  private groupPagesIntoSpreads(
+    pages: readonly PdfBuilderPage[],
+    mode: PdfBuilderSpreadMode,
+  ): readonly PdfBuilderPageSpread[] {
+    if (mode === 'single') {
+      return pages.map(page => ({
+        id: `single-${page.page}`,
+        leadingPlaceholder: false,
+        pages: [page],
+      }));
+    }
+
+    const spreads: PdfBuilderPageSpread[] = [];
+    let pageIndex = 0;
+
+    if (mode === 'two-even' && pages.length > 0) {
+      spreads.push({
+        id: 'two-even-cover',
+        leadingPlaceholder: true,
+        pages: [pages[0]],
+      });
+      pageIndex = 1;
+    }
+
+    while (pageIndex < pages.length) {
+      const spreadPages = pages.slice(pageIndex, pageIndex + 2);
+
+      spreads.push({
+        id: `${mode}-${spreadPages.map(page => page.page).join('-')}`,
+        leadingPlaceholder: false,
+        pages: spreadPages,
+      });
+      pageIndex += 2;
+    }
+
+    return spreads;
   }
 
   protected isSourcePdfPage(pageNumber: number): boolean {
@@ -650,9 +601,12 @@ export class PdfBuilder {
     }
   }
 
-  protected selectLayerNode(node: PdfBuilderLayerNode): void {
+  protected selectLayerNode(node: PdfBuilderLayerNode, event?: Event): void {
+    event?.stopPropagation();
+
     if (node.id.includes('pdf-layer')) {
       this.selectedFieldId.set(null);
+      this.editingFieldId.set(null);
       return;
     }
 
@@ -666,12 +620,16 @@ export class PdfBuilder {
     const field = this.fields().find(item => item.id === node.id);
 
     if (field) {
-      this.selectPage(field.page);
+      this.expandedLayerNodeIds.update(ids => new Set(ids).add(`page-${field.page}`));
+      this.activePage.set(field.page);
       this.selectedFieldId.set(field.id);
+      this.editingFieldId.set(null);
+      this.scrollFieldIntoView(field.id);
+      setTimeout(() => this.restoreLayerTreeExpansion());
     }
   }
 
-  protected selectField(fieldId: string, event?: MouseEvent): void {
+  protected selectField(fieldId: string, event?: Event): void {
     event?.stopPropagation();
 
     if (this.suppressFieldClickId === fieldId) {
@@ -679,8 +637,17 @@ export class PdfBuilder {
       return;
     }
 
+    const field = this.fields().find(item => item.id === fieldId);
+
     this.selectedFieldId.set(fieldId);
     this.activeCanvasTool.set('select');
+
+    if (field?.type === 'text' && !field.locked) {
+      this.startTextEditing(field.id);
+      return;
+    }
+
+    this.editingFieldId.set(null);
   }
 
   protected beginFieldDrag(event: PointerEvent, fieldId: string): void {
@@ -702,6 +669,7 @@ export class PdfBuilder {
     const initialActivePage = this.activePage();
 
     this.removeFieldDragEventListeners();
+    this.editingFieldId.set(null);
     this.activeCanvasTool.set('select');
     this.activePage.set(field.page);
     this.fieldDrag.set({
@@ -746,6 +714,7 @@ export class PdfBuilder {
 
     this.removeFieldResizeEventListeners();
     this.removeFieldDragEventListeners();
+    this.editingFieldId.set(null);
     this.activeCanvasTool.set('select');
     this.activePage.set(field.page);
     this.selectedFieldId.set(field.id);
@@ -774,6 +743,65 @@ export class PdfBuilder {
     }
 
     this.selectedFieldId.set(null);
+    this.editingFieldId.set(null);
+  }
+
+  protected updateTextFieldValue(fieldId: string, value: string): void {
+    this.fields.update(fields =>
+      fields.map(field => {
+        if (field.id !== fieldId || field.type !== 'text' || field.locked) {
+          return field;
+        }
+
+        return this.withAutosizedTextMetrics({ ...field, value });
+      }),
+    );
+  }
+
+  protected updateTextFieldValueFromEditor(fieldId: string, editor: HTMLElement): void {
+    const value = editor.textContent ?? '';
+
+    this.fields.update(fields =>
+      fields.map(field => {
+        if (field.id !== fieldId || field.type !== 'text' || field.locked) {
+          return field;
+        }
+
+        return this.withContentEditableTextMetrics({ ...field, value }, editor);
+      }),
+    );
+  }
+
+  protected finishTextEditing(fieldId: string): void {
+    if (this.editingFieldId() === fieldId) {
+      this.editingFieldId.set(null);
+    }
+  }
+
+  protected isFieldFilled(field: PdfBuilderField): boolean {
+    return field.value.trim().length > 0 && field.value !== this.getDefaultValue(field.type);
+  }
+
+  protected getFieldDisplayValue(field: PdfBuilderField): string {
+    if (field.type === 'text' && !field.value.trim()) {
+      return this.textFieldPlaceholder;
+    }
+
+    return field.value;
+  }
+
+  private startTextEditing(fieldId: string): void {
+    this.editingFieldId.set(fieldId);
+    this.scheduleDomSync(() => {
+      const editor = this.getTextFieldEditorElement(fieldId);
+
+      if (!editor) {
+        return;
+      }
+
+      editor.focus();
+      this.selectContentEditableText(editor);
+    });
   }
 
   protected addField(type: PdfBuilderFieldType): void {
@@ -806,6 +834,7 @@ export class PdfBuilder {
     const pagePoint = this.getPdfPointFromClient(event.clientX, event.clientY);
 
     this.selectedFieldId.set(null);
+    this.editingFieldId.set(null);
     this.activeCanvasTool.set('select');
     this.placementGhost.set({
       type,
@@ -823,16 +852,12 @@ export class PdfBuilder {
     this.addPlacementEventListeners();
   }
 
-  protected zoomIn(): void {
-    this.setPdfScaleTarget(this.targetPdfScale() + 0.1);
+  protected previousPage(): void {
+    this.selectPage(this.activePage() - 1);
   }
 
-  protected zoomOut(): void {
-    this.setPdfScaleTarget(this.targetPdfScale() - 0.1);
-  }
-
-  protected fitPage(): void {
-    this.setPdfScaleTarget(1.33);
+  protected nextPage(): void {
+    this.selectPage(this.activePage() + 1);
   }
 
   protected togglePageStrip(): void {
@@ -843,8 +868,94 @@ export class PdfBuilder {
     this.libraryCollapsed.update(collapsed => !collapsed);
   }
 
-  protected toggleInspectorCollapsed(): void {
-    this.inspectorCollapsed.update(collapsed => !collapsed);
+  protected setSpreadMode(mode: PdfBuilderSpreadMode): void {
+    this.spreadMode.set(mode);
+    this.refreshViewerLayout();
+  }
+
+  protected setScrollLayout(layout: PdfBuilderScrollLayout): void {
+    this.scrollLayout.set(layout);
+    this.refreshViewerLayout();
+  }
+
+  protected rotateClockwise(): void {
+    this.pageRotation.update(rotation => this.normalizePageRotation(rotation + 1));
+    this.refreshViewerLayout();
+  }
+
+  protected rotateCounterClockwise(): void {
+    this.pageRotation.update(rotation => this.normalizePageRotation(rotation - 1));
+    this.refreshViewerLayout();
+  }
+
+  protected toggleFullscreen(): void {
+    const targetDocument = this.document;
+    const targetElement = this.elementRef.nativeElement;
+
+    if (!targetDocument.defaultView) {
+      return;
+    }
+
+    if (targetDocument.fullscreenElement) {
+      void targetDocument.exitFullscreen?.();
+      return;
+    }
+
+    void targetElement.requestFullscreen?.();
+  }
+
+  protected toggleSearchPanel(): void {
+    const nextVisible = !this.searchPanelVisible();
+
+    this.searchPanelVisible.set(nextVisible);
+
+    if (nextVisible) {
+      this.annotationsPanelVisible.set(false);
+      this.updatePdfSearch({
+        query: this.activeSearchQuery(),
+        options: {
+          caseSensitive: false,
+          wholeWord: false,
+        },
+      });
+    }
+  }
+
+  protected toggleAnnotationsPanel(): void {
+    const nextVisible = !this.annotationsPanelVisible();
+
+    this.annotationsPanelVisible.set(nextVisible);
+
+    if (nextVisible) {
+      this.searchPanelVisible.set(false);
+    }
+  }
+
+  protected closeAsidePanel(): void {
+    this.searchPanelVisible.set(false);
+    this.annotationsPanelVisible.set(false);
+  }
+
+  protected updatePdfSearch(event: { query: string; options: PdfViewerSearchOptions }): void {
+    this.activeSearchQuery.set(event.query);
+    this.pdfSearchResults.set(this.searchBuilderFields(event.query, event.options));
+  }
+
+  protected selectSearchResult(result: PdfViewerSearchResultView): void {
+    this.activePage.set(result.pageNumber);
+
+    if (typeof result.id === 'string' && this.fields().some(field => field.id === result.id)) {
+      this.selectedFieldId.set(result.id);
+      this.editingFieldId.set(null);
+      this.scrollFieldIntoView(result.id);
+      return;
+    }
+
+    this.scrollPageIntoView(result.pageNumber);
+  }
+
+  protected selectAnnotationPage(pageNumber: number): void {
+    this.selectPage(pageNumber);
   }
 
   protected createBlankPdfDocument(): void {
@@ -856,6 +967,7 @@ export class PdfBuilder {
     this.addedPageCount.set(0);
     this.activePage.set(1);
     this.selectedFieldId.set(null);
+    this.editingFieldId.set(null);
     this.fields.set([]);
     this.recordActivity('Blank PDF created', 'A one-page PDF is ready for fields.', 'fluent:document-add-24-regular');
     this.createBlankPdf.emit();
@@ -871,6 +983,7 @@ export class PdfBuilder {
     this.addedPageCount.set(0);
     this.activePage.set(1);
     this.selectedFieldId.set(null);
+    this.editingFieldId.set(null);
     this.fields.set([]);
     this.recordActivity('PDF removed', 'The canvas is ready for a new PDF.', 'fluent:dismiss-24-regular');
   }
@@ -886,6 +999,7 @@ export class PdfBuilder {
     this.addedPageCount.update(count => count + 1);
     this.activePage.set(nextPage);
     this.selectedFieldId.set(null);
+    this.editingFieldId.set(null);
     this.expandedLayerNodeIds.update(ids => new Set(ids).add(`page-${nextPage}`));
     this.recordActivity('Page added', `Blank Page ${nextPage} added to the PDF builder.`, 'fluent:document-one-page-add-24-regular');
     setTimeout(() => this.scrollPageIntoView(nextPage));
@@ -937,6 +1051,7 @@ export class PdfBuilder {
 
     this.commitFields(fields => [...fields, duplicate]);
     this.selectedFieldId.set(duplicate.id);
+    this.editingFieldId.set(null);
     this.recordActivity('Field duplicated', `${duplicate.label} created.`, duplicate.icon);
   }
 
@@ -949,6 +1064,7 @@ export class PdfBuilder {
 
     this.commitFields(fields => fields.filter(item => item.id !== field.id));
     this.selectedFieldId.set(null);
+    this.editingFieldId.set(null);
     this.recordActivity('Field deleted', `${field.label} removed from Page ${field.page}.`, 'fluent:delete-24-regular');
   }
 
@@ -987,42 +1103,10 @@ export class PdfBuilder {
     );
   }
 
-  protected updateSelectedFieldNumber(
-    key: 'x' | 'y' | 'width' | 'height',
-    value: number | undefined,
-  ): void {
-    this.updateSelectedField(key, Math.max(0, Math.round(value ?? 0)) as PdfBuilderField[typeof key]);
-  }
-
-  protected updateSelectedFieldRequired(event: SlideToggleChange): void {
-    this.updateSelectedField('required', event.checked);
-  }
-
-  protected updateSelectedFieldReadonly(event: SlideToggleChange): void {
-    this.updateSelectedField('readonly', event.checked);
-  }
-
   protected exportCurrentPdf(): void {
     this.downloadCurrentPdf();
     this.recordActivity('PDF exported', `${this.documentName()} downloaded.`, 'fluent:document-pdf-24-regular');
     this.exportPdf.emit();
-  }
-
-  protected getFieldTypeLabel(type: PdfBuilderFieldType): string {
-    switch (type) {
-      case 'variable':
-        return 'Variable text';
-      case 'signature':
-        return 'Signer input';
-      case 'initials':
-        return 'Initials';
-      case 'checkbox':
-        return 'Choice';
-      case 'stamp':
-        return 'Stamp';
-      default:
-        return 'Text';
-    }
   }
 
   private restoreLayerTreeExpansion(): void {
@@ -1037,6 +1121,18 @@ export class PdfBuilder {
         tree.expand(node);
       }
     }
+  }
+
+  private scheduleLayerTreeExpansionRestore(): void {
+    if (this.layerExpansionRestoreScheduled) {
+      return;
+    }
+
+    this.layerExpansionRestoreScheduled = true;
+    this.scheduleDomSync(() => {
+      this.layerExpansionRestoreScheduled = false;
+      this.restoreLayerTreeExpansion();
+    });
   }
 
   private flattenLayerTree(nodes: readonly PdfBuilderLayerNode[]): PdfBuilderLayerNode[] {
@@ -1057,6 +1153,48 @@ export class PdfBuilder {
     }
 
     return undefined;
+  }
+
+  private getFieldAnnotationText(field: PdfBuilderField): string {
+    const value = field.value.trim();
+
+    return value ? `${field.label}: ${value}` : `${field.label} field on Page ${field.page}.`;
+  }
+
+  private searchBuilderFields(query: string, options: PdfViewerSearchOptions): PdfViewerSearchResultView[] {
+    const normalizedQuery = query.trim();
+
+    if (!normalizedQuery) {
+      return [];
+    }
+
+    const queryValue = options.caseSensitive ? normalizedQuery : normalizedQuery.toLocaleLowerCase();
+
+    const results: PdfViewerSearchResultView[] = [];
+
+    for (const field of this.fields()) {
+      const haystack = [field.label, field.value, field.binding, field.type, `page ${field.page}`]
+        .filter(Boolean)
+        .join(' ');
+      const searchable = options.caseSensitive ? haystack : haystack.toLocaleLowerCase();
+      const matches = options.wholeWord
+        ? new RegExp(`\\b${this.escapeRegExp(queryValue)}\\b`).test(searchable)
+        : searchable.includes(queryValue);
+
+      if (matches) {
+        results.push({
+          id: field.id,
+          pageNumber: field.page,
+          excerpt: this.getFieldAnnotationText(field),
+        });
+      }
+    }
+
+    return results;
+  }
+
+  private escapeRegExp(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
   private movePlacementGhost(event: PointerEvent): void {
@@ -1454,7 +1592,7 @@ export class PdfBuilder {
         continue;
       }
 
-      const scale = this.getRenderedPageScale(field.page);
+      const scale = this.getCanvasScale();
 
       this.setCssVar(element, '--pdf-builder-field-left', `${field.x * scale.x}px`);
       this.setCssVar(element, '--pdf-builder-field-top', `${field.y * scale.y}px`);
@@ -1479,7 +1617,7 @@ export class PdfBuilder {
       return;
     }
 
-    const scale = this.getRenderedPageScale(field.page);
+    const scale = this.getCanvasScale();
     const pageRect = pageShell.getBoundingClientRect();
     const toolbarWidth = toolbar.offsetWidth;
     const toolbarHeight = toolbar.offsetHeight;
@@ -1539,6 +1677,20 @@ export class PdfBuilder {
     };
   }
 
+  private withContentEditableTextMetrics(field: PdfBuilderField, editor: HTMLElement): PdfBuilderField {
+    const scale = this.getRenderedPageScale(field.page);
+    const minimumMetrics = this.getDefaultMetricsForType(field.type);
+    const pageInset = 8;
+    const editorHeight = Math.ceil((editor.scrollHeight + 2) / scale.y);
+    const maxHeight = Math.max(minimumMetrics.height, PDF_BUILDER_PAGE_HEIGHT - pageInset - field.y);
+    const height = this.clamp(editorHeight, minimumMetrics.height, maxHeight);
+
+    return {
+      ...field,
+      height: Math.round(height),
+    };
+  }
+
   private measureOverlayText(text: string, variant: 'label' | 'value'): number {
     const defaultView = this.document.defaultView;
     const canvas = this.document.createElement('canvas');
@@ -1566,7 +1718,7 @@ export class PdfBuilder {
       return;
     }
 
-    const scale = this.getRenderedPageScale(ghost.page ?? this.activePage());
+    const scale = this.getCanvasScale();
 
     this.setCssVar(element, '--pdf-builder-ghost-left', `${ghost.clientX}px`);
     this.setCssVar(element, '--pdf-builder-ghost-top', `${ghost.clientY}px`);
@@ -1590,6 +1742,12 @@ export class PdfBuilder {
     };
   }
 
+  private getCanvasScale(): { x: number; y: number } {
+    const scale = this.pdfScale();
+
+    return { x: scale, y: scale };
+  }
+
   private schedulePageGeometrySync(): void {
     this.scheduleDomSync(() => this.syncPageGeometry());
   }
@@ -1602,56 +1760,10 @@ export class PdfBuilder {
     this.scheduleDomSync(() => this.syncPlacementGhostGeometry());
   }
 
-  private setPdfScaleTarget(scale: number): void {
-    const nextScale = this.clamp(Number(scale.toFixed(2)), 0.7, 2);
-
-    this.targetPdfScale.set(nextScale);
-    this.animatePdfScale(nextScale);
-  }
-
-  private animatePdfScale(targetScale: number): void {
-    const defaultView = this.document.defaultView;
-    const startScale = this.pdfScale();
-
-    this.cancelZoomAnimation();
-
-    if (!defaultView || Math.abs(startScale - targetScale) < 0.0001) {
-      this.pdfScale.set(targetScale);
-      return;
-    }
-
-    const duration = 180;
-    let startedAt: number | null = null;
-
-    const tick = (timestamp: number): void => {
-      startedAt ??= timestamp;
-
-      const progress = this.clamp((timestamp - startedAt) / duration, 0, 1);
-      const easedProgress = 1 - Math.pow(1 - progress, 3);
-      const nextScale = startScale + (targetScale - startScale) * easedProgress;
-
-      this.pdfScale.set(Number(nextScale.toFixed(4)));
-
-      if (progress < 1 && this.targetPdfScale() === targetScale) {
-        this.zoomAnimationFrameId = defaultView.requestAnimationFrame(tick);
-        return;
-      }
-
-      this.zoomAnimationFrameId = null;
-      this.pdfScale.set(this.targetPdfScale());
-    };
-
-    this.zoomAnimationFrameId = defaultView.requestAnimationFrame(tick);
-  }
-
-  private cancelZoomAnimation(): void {
-    const defaultView = this.document.defaultView;
-
-    if (defaultView && this.zoomAnimationFrameId !== null) {
-      defaultView.cancelAnimationFrame(this.zoomAnimationFrameId);
-    }
-
-    this.zoomAnimationFrameId = null;
+  private syncCanvasGeometry(): void {
+    this.syncPageGeometry();
+    this.syncOverlayGeometry();
+    this.syncPlacementGhostGeometry();
   }
 
   private scheduleDomSync(callback: () => void): void {
@@ -1662,7 +1774,12 @@ export class PdfBuilder {
       return;
     }
 
-    defaultView.requestAnimationFrame(callback);
+    if (typeof defaultView.requestAnimationFrame === 'function') {
+      defaultView.requestAnimationFrame(callback);
+      return;
+    }
+
+    defaultView.setTimeout(callback, 0);
   }
 
   private getPageShellElement(pageNumber = this.activePage()): HTMLElement | null {
@@ -1692,8 +1809,22 @@ export class PdfBuilder {
     });
   }
 
+  private scrollFieldIntoView(fieldId: string): void {
+    this.scheduleDomSync(() => {
+      this.getOverlayFieldElement(fieldId)?.scrollIntoView({
+        block: 'center',
+        inline: 'center',
+        behavior: 'smooth',
+      });
+    });
+  }
+
   private getOverlayFieldElements(): HTMLElement[] {
     return Array.from(this.elementRef.nativeElement.querySelectorAll<HTMLElement>('[data-field-id]'));
+  }
+
+  private getOverlayFieldElement(fieldId: string): HTMLElement | null {
+    return this.elementRef.nativeElement.querySelector<HTMLElement>(`[data-field-id="${fieldId}"]`);
   }
 
   private getPlacementGhostElement(): HTMLElement | null {
@@ -1702,6 +1833,26 @@ export class PdfBuilder {
 
   private getSelectionToolbarElement(): HTMLElement | null {
     return this.elementRef.nativeElement.querySelector<HTMLElement>('.selection-toolbar');
+  }
+
+  private getTextFieldEditorElement(fieldId: string): HTMLElement | null {
+    return this.elementRef.nativeElement.querySelector<HTMLElement>(`[contenteditable][data-text-editor-for="${fieldId}"]`);
+  }
+
+  private selectContentEditableText(editor: HTMLElement): void {
+    const defaultView = this.document.defaultView;
+
+    if (!defaultView) {
+      return;
+    }
+
+    const range = this.document.createRange();
+
+    range.selectNodeContents(editor);
+    const selection = defaultView.getSelection();
+
+    selection?.removeAllRanges();
+    selection?.addRange(range);
   }
 
   private suppressNextFieldClick(fieldId: string): void {
@@ -1760,9 +1911,9 @@ export class PdfBuilder {
       case 'initials':
         return { x: 384, y: 612, width: 105, height: 42 };
       case 'checkbox':
-        return { x: 453, y: 282, width: 76, height: 21 };
+        return { x: 453, y: 282, width: 18, height: 18 };
       case 'comment':
-        return { x: 96, y: 160, width: 120, height: 96 };
+        return { x: 96, y: 160, width: 120, height: 77 };
       case 'footer':
         return { x: 96, y: 690, width: 137, height: 25 };
       case 'side':
@@ -1804,11 +1955,11 @@ export class PdfBuilder {
       case 'initials':
         return 'Initials';
       case 'checkbox':
-        return 'Checkbox';
+        return '';
       case 'stamp':
         return 'Reviewed';
       default:
-        return 'Enter value';
+        return '';
     }
   }
 
@@ -1833,6 +1984,7 @@ export class PdfBuilder {
   private restoreHistoryState(state: PdfBuilderHistoryState): void {
     this.fields.set(state.fields.map(field => ({ ...field })));
     this.selectedFieldId.set(state.selectedFieldId);
+    this.editingFieldId.set(null);
     this.activePage.set(state.activePage);
   }
 
@@ -1843,6 +1995,18 @@ export class PdfBuilder {
 
   private recordActivity(title: string, detail: string, icon: string): void {
     this.activity.update(items => [{ title, detail, icon }, ...items].slice(0, 8));
+  }
+
+  private refreshViewerLayout(): void {
+    const activePage = this.activePage();
+
+    this.schedulePageGeometrySync();
+    this.scheduleOverlayGeometrySync();
+    this.document.defaultView?.setTimeout(() => this.scrollPageIntoView(activePage), 0);
+  }
+
+  private normalizePageRotation(rotation: number): PdfBuilderPageRotation {
+    return (((rotation % 4) + 4) % 4) as PdfBuilderPageRotation;
   }
 
   private createBlankPdfBlob(): Blob {
@@ -1916,17 +2080,5 @@ export class PdfBuilder {
     if (revoke) {
       defaultView.setTimeout(() => defaultView.URL.revokeObjectURL(href), 0);
     }
-  }
-
-  private formatFileSize(size: number): string {
-    if (size < 1024) {
-      return `${size} B`;
-    }
-
-    if (size < 1024 * 1024) {
-      return `${(size / 1024).toFixed(1)} KB`;
-    }
-
-    return `${(size / 1024 / 1024).toFixed(1)} MB`;
   }
 }

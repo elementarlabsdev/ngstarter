@@ -175,6 +175,7 @@ export class PdfViewer {
   showPageList = input(true, { transform: booleanAttribute });
   showSearchPanel = input(true, { transform: booleanAttribute });
   showAnnotationsPanel = input(false, { transform: booleanAttribute });
+  enableCommandWheelZoom = input(true, { transform: booleanAttribute });
   annotations = input<PdfViewerAnnotationView[]>([]);
   annotationsDataSource = input<PdfViewerAnnotationDataSource | null>(null);
   annotationTypeProperty = input('type');
@@ -651,6 +652,10 @@ export class PdfViewer {
   }
 
   protected onViewerWheel(event: WheelEvent): void {
+    if (!this.enableCommandWheelZoom()) {
+      return;
+    }
+
     if (!event.metaKey && !event.ctrlKey) {
       return;
     }

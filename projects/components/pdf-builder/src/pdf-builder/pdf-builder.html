@@ -1,112 +1,264 @@
 <ngs-panel
-  class="pdf-builder-shell"
+  class="pdf-builder-shell pdf-viewer-panel"
   [class.is-library-collapsed]="libraryCollapsed()"
-  [class.is-inspector-collapsed]="inspectorCollapsed()"
 >
-  <ngs-panel-header autoHeight class="pdf-builder-header">
-    <ngs-toolbar class="pdf-builder-titlebar">
-      <div class="min-w-0">
-        <ngs-toolbar-subtitle>PDF builder</ngs-toolbar-subtitle>
-        <ngs-toolbar-title appearance="large" class="truncate">{{ documentName() }}</ngs-toolbar-title>
-      </div>
+  <ngs-panel-header class="pdf-builder-header min-w-0 border-b border-border bg-surface" flex>
+    <ngs-toolbar class="pdf-viewer-toolbar flex h-14 w-full min-w-0 items-center gap-4 overflow-visible px-2 text-on-surface-variant" aria-label="PDF builder controls">
+      <ngs-toolbar-item class="pdf-viewer-toolbar__start flex min-w-0 flex-none items-center gap-2">
+        <button
+          class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+          ngsIconButton
+          type="button"
+          [attr.aria-label]="pageStripVisible() ? 'Hide pages panel' : 'Show pages panel'"
+          [attr.aria-pressed]="pageStripVisible()"
+          (click)="togglePageStrip()"
+        >
+          <ngs-icon
+            class="text-2xl"
+            [name]="pageStripVisible() ? 'fluent:panel-left-contract-24-regular' : 'fluent:panel-left-expand-24-regular'"
+          />
+        </button>
+        <ngs-divider vertical fixedHeight />
+      </ngs-toolbar-item>
+
+      <ngs-toolbar-title class="min-w-0 max-w-[20%] flex-1 truncate text-sm! font-semibold! text-on-surface-variant" [title]="documentName()">
+        {{ documentName() }}
+      </ngs-toolbar-title>
+
+      <ngs-toolbar-item class="pdf-viewer-toolbar__center flex flex-none items-center gap-3">
+        <div class="pdf-viewer-toolbar__cluster flex min-w-0 items-center gap-2" aria-label="Page navigation">
+          <button
+            class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+            ngsIconButton
+            type="button"
+            aria-label="Previous page"
+            [disabled]="!canGoPrevious()"
+            (click)="previousPage()"
+          >
+            <ngs-icon class="text-2xl" name="fluent:chevron-left-24-regular" />
+          </button>
+          <span class="pdf-viewer-toolbar__page inline-flex h-9 min-w-16 items-center justify-center gap-2 rounded bg-surface-container-low text-sm font-bold text-on-surface">
+            <span>{{ activePage() }}</span>
+            <span>/</span>
+            <span>{{ pageCount() || 1 }}</span>
+          </span>
+          <button
+            class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+            ngsIconButton
+            type="button"
+            aria-label="Next page"
+            [disabled]="!canGoNext()"
+            (click)="nextPage()"
+          >
+            <ngs-icon class="text-2xl" name="fluent:chevron-right-24-regular" />
+          </button>
+        </div>
+      </ngs-toolbar-item>
 
       <ngs-toolbar-spacer />
 
-      <ngs-toolbar-item class="flex items-center gap-2">
-        <button ngsButton="outlined" type="button" (click)="createBlankPdfDocument()" hideTextOnMobile>
-          <ngs-icon name="fluent:document-add-24-regular" />
-          Create blank
+      <ngs-toolbar-item class="pdf-viewer-toolbar__end flex min-w-0 flex-1 items-center justify-end gap-2" aria-label="PDF builder tools">
+        <span class="builder-field-count text-xs font-medium text-on-surface-variant">{{ fieldCount() }} fields</span>
+        <ngs-divider vertical fixedHeight />
+        <button
+          class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+          ngsIconButton
+          type="button"
+          aria-label="Add blank page"
+          ngsTooltip="Add blank page"
+          (click)="addBlankPage()"
+        >
+          <ngs-icon class="text-2xl" name="fluent:document-one-page-add-24-regular" />
+        </button>
+        <ngs-divider vertical fixedHeight />
+        <button
+          class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+          ngsIconButton
+          type="button"
+          aria-label="Undo"
+          ngsTooltip="Undo"
+          [disabled]="!canUndo()"
+          (click)="undo()"
+        >
+          <ngs-icon class="text-2xl" name="fluent:arrow-undo-24-regular" />
         </button>
         <button
-          ngsButton="outlined"
+          class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+          ngsIconButton
           type="button"
-          ngsUploadTrigger
-          accept="application/pdf"
-          (fileSelected)="onFileSelected($event)"
-          hideTextOnMobile
+          aria-label="Redo"
+          ngsTooltip="Redo"
+          [disabled]="!canRedo()"
+          (click)="redo()"
         >
-          <ngs-icon name="fluent:arrow-upload-24-regular" />
-          Upload PDF
+          <ngs-icon class="text-2xl" name="fluent:arrow-redo-24-regular" />
         </button>
-        <button ngsButton="outlined" type="button" (click)="addBlankPage()" hideTextOnMobile>
-          <ngs-icon name="fluent:document-one-page-add-24-regular" />
-          Add page
+        <button
+          class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+          ngsIconButton
+          type="button"
+          [attr.aria-pressed]="!libraryCollapsed()"
+          aria-label="Toggle fields panel"
+          ngsTooltip="Fields and layers"
+          (click)="toggleLibraryCollapsed()"
+        >
+          <ngs-icon class="text-2xl" name="fluent:text-bullet-list-square-edit-24-regular" />
         </button>
-        <button ngsIconButton type="button" aria-label="Undo" ngsTooltip="Undo" [class.is-disabled]="!canUndo()" [attr.aria-disabled]="!canUndo()" (click)="undo()">
-          <ngs-icon name="fluent:arrow-undo-24-regular" />
+        <button
+          class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+          ngsIconButton
+          type="button"
+          [attr.aria-pressed]="isSearchPanelVisible()"
+          aria-label="Search PDF"
+          ngsTooltip="Search"
+          (click)="toggleSearchPanel()"
+        >
+          <ngs-icon class="text-2xl" name="fluent:search-24-regular" />
         </button>
-        <button ngsIconButton type="button" aria-label="Redo" ngsTooltip="Redo" [class.is-disabled]="!canRedo()" [attr.aria-disabled]="!canRedo()" (click)="redo()">
-          <ngs-icon name="fluent:arrow-redo-24-regular" />
+        <button
+          class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+          ngsIconButton
+          type="button"
+          aria-label="PDF builder settings"
+          ngsTooltip="Settings"
+          [ngsMenuTriggerFor]="settingsMenu"
+        >
+          <ngs-icon class="text-2xl" name="fluent:settings-24-regular" />
         </button>
-        <button ngsIconButton type="button" aria-label="Toggle page strip" ngsTooltip="Toggle page strip" (click)="togglePageStrip()">
-          <ngs-icon name="fluent:settings-24-regular" />
+        <button
+          class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+          ngsIconButton
+          type="button"
+          [attr.aria-pressed]="isAnnotationsPanelVisible()"
+          aria-label="Annotations"
+          ngsTooltip="Annotations"
+          (click)="toggleAnnotationsPanel()"
+        >
+          <ngs-icon class="text-2xl" name="fluent:comment-note-24-regular" />
         </button>
-        <button ngsButton="filled" type="button" (click)="exportCurrentPdf()" [class.is-disabled]="!documentSource()" [attr.aria-disabled]="!documentSource()" hideTextOnMobile>
-          <ngs-icon name="fluent:document-pdf-24-regular" />
-          Export PDF
+        <button
+          class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+          ngsIconButton
+          type="button"
+          aria-label="Export PDF"
+          ngsTooltip="Export PDF"
+          [disabled]="!documentSource()"
+          (click)="exportCurrentPdf()"
+        >
+          <ngs-icon class="text-2xl" name="fluent:document-pdf-24-regular" />
         </button>
       </ngs-toolbar-item>
     </ngs-toolbar>
+
+    <ngs-menu #settingsMenu="ngsMenu" xPosition="before">
+      <ngs-menu-heading>SPREAD MODE</ngs-menu-heading>
+      <button
+        ngs-menu-item
+        type="button"
+        [selected]="spreadMode() === 'single'"
+        (click)="setSpreadMode('single')">
+        <ngs-icon name="fluent:document-24-regular" />
+        <span>Single Page</span>
+      </button>
+      <button
+        ngs-menu-item
+        type="button"
+        [selected]="spreadMode() === 'two-odd'"
+        (click)="setSpreadMode('two-odd')">
+        <ngs-icon name="fluent:book-open-24-regular" />
+        <span>Two Page (Odd)</span>
+      </button>
+      <button
+        ngs-menu-item
+        type="button"
+        [selected]="spreadMode() === 'two-even'"
+        (click)="setSpreadMode('two-even')">
+        <ngs-icon name="fluent:document-text-24-regular" />
+        <span>Two Page (Even)</span>
+      </button>
+
+      <ngs-menu-divider />
+      <ngs-menu-heading>SCROLL LAYOUT</ngs-menu-heading>
+      <button
+        ngs-menu-item
+        type="button"
+        [selected]="scrollLayout() === 'vertical'"
+        (click)="setScrollLayout('vertical')">
+        <ngs-icon name="fluent:arrow-sort-24-regular" />
+        <span>Vertical</span>
+      </button>
+      <button
+        ngs-menu-item
+        type="button"
+        [selected]="scrollLayout() === 'horizontal'"
+        (click)="setScrollLayout('horizontal')">
+        <ngs-icon name="fluent:arrow-swap-24-regular" />
+        <span>Horizontal</span>
+      </button>
+
+      <ngs-menu-divider />
+      <ngs-menu-heading>PAGE ROTATION</ngs-menu-heading>
+      <button ngs-menu-item type="button" (click)="rotateClockwise()">
+        <ngs-icon name="fluent:arrow-clockwise-24-regular" />
+        <span>Rotate Clockwise</span>
+      </button>
+      <button ngs-menu-item type="button" (click)="rotateCounterClockwise()">
+        <ngs-icon name="fluent:arrow-counterclockwise-24-regular" />
+        <span>Rotate Counter-Clockwise</span>
+      </button>
+
+      <ngs-menu-divider />
+      <button ngs-menu-item type="button" (click)="toggleFullscreen()">
+        <ngs-icon name="fluent:arrow-maximize-24-regular" />
+        <span>Fullscreen</span>
+      </button>
+    </ngs-menu>
   </ngs-panel-header>
 
-  <ngs-panel-sidebar class="builder-library">
+  @if (pageStripVisible()) {
+    <ngs-panel-sidebar class="builder-pages w-[var(--ngs-pdf-viewer-sidebar-width)] min-w-[var(--ngs-pdf-viewer-sidebar-width)] border-r border-border bg-surface">
+      <div class="pdf-viewer-sidebar flex h-full min-h-0 flex-col gap-2 overflow-auto p-3" aria-label="PDF pages">
+        <div class="pdf-viewer-sidebar__title px-1 text-xs font-semibold text-on-surface-variant">Pages</div>
+        <div class="pdf-viewer-sidebar__pages flex min-h-0 flex-col gap-2">
+          @for (page of pages(); track page.page) {
+            <button
+              class="page-thumbnail pdf-viewer-sidebar__page group flex w-full cursor-pointer flex-col items-stretch gap-1 rounded border border-transparent bg-transparent p-1 text-left text-on-surface-variant focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&.is-active]:text-on-surface"
+              type="button"
+              [class.is-active]="page.page === activePage()"
+              [attr.aria-current]="page.page === activePage() ? 'page' : null"
+              [attr.aria-label]="'Open page ' + page.page"
+              (click)="selectPage(page.page)"
+            >
+              <span class="page-thumbnail-preview pdf-viewer-sidebar__thumb flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded border border-border bg-surface shadow-xs group-hover:border-border" aria-hidden="true">
+                @if (isSourcePdfPage(page.page)) {
+                  <ngs-pdf-viewer
+                    class="thumbnail-pdf-viewer"
+                    [src]="documentSource()"
+                    [documentName]="documentName()"
+                    [wasmUrl]="wasmUrl"
+                    [page]="page.page"
+                    [scale]="0.15"
+                    [renderAll]="false"
+                    [showToolbar]="false"
+                    [showPageList]="false"
+                    [showSearchPanel]="false"
+                    [showAnnotationsPanel]="false"
+                    [enableCommandWheelZoom]="false"
+                  />
+                } @else {
+                  <span class="page-thumbnail-blank"></span>
+                }
+              </span>
+              <span class="page-thumbnail-label pdf-viewer-sidebar__label block truncate text-center text-xs font-medium leading-tight">Page {{ page.page }}</span>
+            </button>
+          }
+        </div>
+      </div>
+    </ngs-panel-sidebar>
+  }
+
+  <ngs-panel-sidebar class="builder-library w-[var(--ngs-pdf-builder-library-width)] min-w-[var(--ngs-pdf-builder-library-width)] border-r border-border bg-surface" aria-label="PDF builder fields and layers">
     <ngs-tab-group animationDuration="0ms" class="builder-tabs" (selectedIndexChange)="onLibraryTabChange($event)">
-      <ngs-tab label="Source">
-        <ngs-scrollbar-area>
-          <div class="flex flex-col gap-4 p-4">
-            <ngs-upload-container>
-              <ngs-upload-area accept="application/pdf" (fileSelected)="onFileSelected($event)">
-                <ngs-icon name="fluent:document-pdf-24-regular" ngsUploadAreaIcon />
-                <div ngsUploadAreaMainState>
-                  <strong>Drop a PDF here</strong>
-                  <span>or choose a local document to edit</span>
-                </div>
-                <div ngsUploadAreaDropState>
-                  <strong>Release to load PDF</strong>
-                  <span>The editor will add an overlay layer</span>
-                </div>
-                <div ngsUploadAreaInvalidState>
-                  <strong>PDF files only</strong>
-                  <span>Choose an application/pdf file</span>
-                </div>
-              </ngs-upload-area>
-              <ngs-upload-allowed-types>PDF document</ngs-upload-allowed-types>
-            </ngs-upload-container>
-
-            <button ngsButton="filled" type="button" fullWidth (click)="createBlankPdfDocument()">
-              <ngs-icon name="fluent:document-add-24-regular" />
-              Create blank PDF
-            </button>
-
-            <button ngsButton="outlined" type="button" fullWidth (click)="addBlankPage()">
-              <ngs-icon name="fluent:document-one-page-add-24-regular" />
-              Add blank page
-            </button>
-
-            <ngs-file [name]="documentName()" [size]="documentSizeLabel()" state="uploaded" [progress]="documentSource() ? 100 : 0">
-              <ngs-file-control>
-                <button ngsIconButton type="button" aria-label="Remove PDF" ngsTooltip="Remove PDF" (click)="removePdf()" [class.is-disabled]="!documentSource()" [attr.aria-disabled]="!documentSource()">
-                  <ngs-icon name="fluent:dismiss-24-regular" />
-                </button>
-              </ngs-file-control>
-            </ngs-file>
-
-            <ngs-card appearance="filled" class="source-card">
-              <ngs-card-header>
-                <ngs-card-title>Document setup</ngs-card-title>
-                <ngs-card-subtitle>Viewer + editable overlay</ngs-card-subtitle>
-              </ngs-card-header>
-              <ngs-card-content>
-                <div class="source-stats">
-                  <span>Pages <strong>{{ pageCount() }}</strong></span>
-                  <span>Fields <strong>{{ fieldCount() }}</strong></span>
-                </div>
-              </ngs-card-content>
-            </ngs-card>
-          </div>
-        </ngs-scrollbar-area>
-      </ngs-tab>
-
       <ngs-tab label="Fields">
         <ngs-scrollbar-area>
           <div class="flex flex-col gap-5 p-4">
@@ -134,26 +286,6 @@
                   </span>
                 </button>
               }
-            </section>
-
-            <section class="flex flex-col gap-2">
-              <h4 class="palette-heading">Prepared fields</h4>
-              <ngs-list>
-                @for (object of selectedObjects(); track object.label) {
-                  <ngs-list-item lines="2">
-                    <ngs-icon [name]="object.icon" ngsListItemIcon />
-                    <span ngsListItemTitle>{{ object.label }}</span>
-                    <span ngsListItemLine>{{ object.type }}</span>
-                    <ngs-chip ngsListItemMeta>{{ object.state }}</ngs-chip>
-                  </ngs-list-item>
-                } @empty {
-                  <ngs-list-item lines="2">
-                    <ngs-icon name="fluent:form-new-24-regular" ngsListItemIcon />
-                    <span ngsListItemTitle>No fields yet</span>
-                    <span ngsListItemLine>Add a field from the palette</span>
-                  </ngs-list-item>
-                }
-              </ngs-list>
             </section>
           </div>
         </ngs-scrollbar-area>
@@ -193,7 +325,7 @@
                   type="button"
                   class="layer-tree-item"
                   [class.is-selected]="node.id === selectedFieldId() || node.id === 'page-' + activePage()"
-                  (click)="selectLayerNode(node)"
+                  (click)="selectLayerNode(node, $event)"
                 >
                   <ngs-icon [name]="node.icon" />
                   <span>{{ node.label }}</span>
@@ -216,7 +348,7 @@
                   type="button"
                   class="layer-tree-item"
                   [class.is-selected]="node.id === selectedFieldId()"
-                  (click)="selectLayerNode(node)"
+                  (click)="selectLayerNode(node, $event)"
                 >
                   <ngs-icon [name]="node.icon" />
                   <span>{{ node.label }}</span>
@@ -232,358 +364,168 @@
     </ngs-tab-group>
   </ngs-panel-sidebar>
 
-  <ngs-panel-content class="builder-workspace">
-    <ngs-toolbar class="viewer-toolbar">
-      <ngs-toolbar-item>
-        <button
-          ngsIconButton
-          type="button"
-          aria-label="Toggle library"
-          [ngsTooltip]="libraryCollapsed() ? 'Expand library' : 'Collapse library'"
-          ngsTooltipPosition="above"
-          (click)="toggleLibraryCollapsed()"
-        >
-          <ngs-icon [name]="libraryCollapsed() ? 'fluent:chevron-double-right-20-regular' : 'fluent:chevron-double-left-20-regular'" />
-        </button>
-        <button ngsIconButton type="button" aria-label="Zoom out" ngsTooltip="Zoom out" (click)="zoomOut()">
-          <ngs-icon name="fluent:subtract-24-regular" />
-        </button>
-        <button ngsButton type="button" reverse>
-          {{ zoomLabel() }}
-          <ngs-icon name="fluent:chevron-down-24-regular" />
-        </button>
-        <button ngsIconButton type="button" aria-label="Zoom in" ngsTooltip="Zoom in" (click)="zoomIn()">
-          <ngs-icon name="fluent:add-24-regular" />
-        </button>
-        <button ngsIconButton type="button" aria-label="Fit page" ngsTooltip="Fit page" (click)="fitPage()">
-          <ngs-icon name="fluent:fit-width-24-regular" />
-        </button>
-        <button ngsIconButton type="button" aria-label="Add blank page" ngsTooltip="Add blank page" (click)="addBlankPage()">
-          <ngs-icon name="fluent:document-one-page-add-24-regular" />
-        </button>
-        <button
-          ngsIconButton
-          type="button"
-          aria-label="Toggle inspector"
-          [ngsTooltip]="inspectorCollapsed() ? 'Expand inspector' : 'Collapse inspector'"
-          ngsTooltipPosition="above"
-          (click)="toggleInspectorCollapsed()"
-        >
-          <ngs-icon [name]="inspectorCollapsed() ? 'fluent:chevron-double-left-20-regular' : 'fluent:chevron-double-right-20-regular'" />
-        </button>
-      </ngs-toolbar-item>
+  <ngs-panel-content class="builder-workspace min-h-0 min-w-0 overflow-hidden bg-surface-container-low">
+    <ngs-scrollbar-area [absolute]="true" class="viewer-scrollbar" (scrolled)="onViewerScroll()">
+      <div
+        class="viewer-stage"
+        [class.is-vertical]="scrollLayout() === 'vertical'"
+        [class.is-horizontal]="scrollLayout() === 'horizontal'"
+      >
+        @for (spread of pageSpreads(); track spread.id) {
+          <div class="pdf-builder-spread">
+            @if (spread.leadingPlaceholder) {
+              <div class="pdf-builder-spread-placeholder" aria-hidden="true"></div>
+            }
 
-      <ngs-toolbar-spacer />
-
-      <ngs-toolbar-item>
-        <ngs-chip-set>
-          <ngs-chip>{{ pageCount() }} pages</ngs-chip>
-          <ngs-chip>{{ fieldCount() }} fields</ngs-chip>
-        </ngs-chip-set>
-      </ngs-toolbar-item>
-    </ngs-toolbar>
-
-    <div class="viewer-body" [class.is-page-strip-hidden]="!pageStripVisible()">
-      @if (pageStripVisible()) {
-      <aside class="page-strip" aria-label="PDF pages">
-        <ngs-scrollbar-area [absolute]="true">
-          <div class="page-strip-content">
-            @for (page of pages(); track page.page) {
-              <button
-                ngsButton="text"
-                type="button"
-                class="page-thumbnail"
-                [class.is-active]="page.page === activePage()"
-                (click)="selectPage(page.page)"
+            @for (page of spread.pages; track page.page) {
+              <div
+                class="pdf-page-shell rounded bg-surface shadow-md"
+                [attr.data-page-number]="page.page"
+                [class.is-active-page]="page.page === activePage()"
+                [class.is-placement-target]="placementGhost()?.overPage && placementGhost()?.page === page.page"
+                [class.is-rotated-90]="pageRotation() === 1"
+                [class.is-rotated-180]="pageRotation() === 2"
+                [class.is-rotated-270]="pageRotation() === 3"
+                [attr.aria-label]="'PDF editing canvas page ' + page.page"
+                (click)="activePage.set(page.page); clearSelection()"
               >
-                <span class="page-thumbnail-preview" aria-hidden="true">
-                  @if (isSourcePdfPage(page.page)) {
-                    <ngs-pdf-viewer
-                      class="thumbnail-pdf-viewer"
-                      [src]="documentSource()"
-                      [documentName]="documentName()"
-                      [wasmUrl]="wasmUrl"
-                      [page]="page.page"
-                      [scale]="0.16"
-                      [renderAll]="false"
-                      [showToolbar]="false"
-                      [showPageList]="false"
-                      [showSearchPanel]="false"
-                      [showAnnotationsPanel]="false"
-                    />
-                  } @else {
-                    <span class="page-thumbnail-blank"></span>
+                @if (isSourcePdfPage(page.page)) {
+                  <ngs-pdf-viewer
+                    class="embedded-pdf-viewer"
+                    [src]="documentSource()"
+                    [documentName]="documentName()"
+                    [wasmUrl]="wasmUrl"
+                    [page]="page.page"
+                    [scale]="pdfScale()"
+                    [renderAll]="false"
+                    [showToolbar]="false"
+                    [showPageList]="false"
+                    [showSearchPanel]="false"
+                    [showAnnotationsPanel]="false"
+                    [enableCommandWheelZoom]="false"
+                    (loaded)="onPdfLoaded($event)"
+                  />
+                } @else {
+                  <div class="blank-pdf-page" aria-label="Blank PDF page"></div>
+                }
+
+                <div class="pdf-overlay-layer">
+                  @for (field of pageFields(page.page); track field.id) {
+                    <div
+                      class="overlay-field"
+                      [attr.role]="field.id === editingFieldId() ? null : 'button'"
+                      [attr.tabindex]="field.id === editingFieldId() ? null : 0"
+                      [attr.data-field-id]="field.id"
+                      [class.is-selected]="field.id === selectedFieldId()"
+                      [class.is-editing]="field.id === editingFieldId()"
+                      [class.is-filled]="isFieldFilled(field)"
+                      [class.is-locked]="field.locked"
+                      [class.overlay-slot-primary]="field.slot === 'primary'"
+                      [class.overlay-slot-signature]="field.slot === 'signature'"
+                      [class.overlay-slot-initials]="field.slot === 'initials'"
+                      [class.overlay-slot-checkbox]="field.slot === 'checkbox'"
+                      [class.overlay-slot-comment]="field.slot === 'comment'"
+                      [class.overlay-slot-footer]="field.slot === 'footer'"
+                      [class.overlay-slot-side]="field.slot === 'side'"
+                      [class.overlay-type-text]="field.type === 'text'"
+                      [class.overlay-type-variable]="field.type === 'variable'"
+                      [class.overlay-type-signature]="field.type === 'signature'"
+                      [class.overlay-type-initials]="field.type === 'initials'"
+                      [class.overlay-type-checkbox]="field.type === 'checkbox'"
+                      [class.overlay-type-stamp]="field.type === 'stamp'"
+                      [class.is-dragging]="field.id === fieldDrag()?.fieldId"
+                      [class.is-resizing]="field.id === fieldResize()?.fieldId"
+                      (pointerdown)="beginFieldDrag($event, field.id)"
+                      (click)="selectField(field.id, $event)"
+                      (keydown.enter)="selectField(field.id, $event)"
+                      (keydown.space)="$event.preventDefault(); selectField(field.id, $event)"
+                    >
+                      @if (field.type !== 'checkbox') {
+                        <span class="field-badge">
+                          @if (field.type === 'initials') {
+                            <span class="initials-mark" aria-hidden="true">IN</span>
+                          } @else {
+                            <ngs-icon [name]="field.icon" />
+                          }
+                          <span class="field-label">{{ field.label }}</span>
+                        </span>
+                      }
+                      @if (field.type === 'text' && field.id === editingFieldId() && !field.locked) {
+                        <span
+                          class="text-field-editor"
+                          contenteditable="true"
+                          spellcheck="false"
+                          [attr.data-text-editor-for]="field.id"
+                          [attr.data-placeholder]="textFieldPlaceholder"
+                          [textContent]="field.value"
+                          aria-label="Text field value"
+                          (pointerdown)="$event.stopPropagation()"
+                          (click)="$event.stopPropagation()"
+                          (input)="updateTextFieldValueFromEditor(field.id, $any($event.target))"
+                          (blur)="finishTextEditing(field.id)"
+                          (keydown)="$event.stopPropagation()"
+                          (keydown.escape)="finishTextEditing(field.id)"
+                        ></span>
+                      } @else if ((field.type === 'text' || field.value) && field.type !== 'signature' && field.type !== 'initials' && field.type !== 'checkbox' && field.type !== 'stamp') {
+                        <span class="field-value" [class.is-placeholder]="field.type === 'text' && !field.value.trim()">{{ getFieldDisplayValue(field) }}</span>
+                      }
+                      @if (field.id === selectedFieldId() && !field.locked && field.id !== fieldDrag()?.fieldId && canResizeField(field)) {
+                        <span class="resize-handle handle-se" (pointerdown)="beginFieldResize($event, field.id)"></span>
+                      }
+                    </div>
                   }
-                </span>
-                <span class="page-thumbnail-label">Page {{ page.page }}</span>
-              </button>
+
+                  @if (selectedField()?.page === page.page && !fieldDrag()) {
+                    <div class="selection-toolbar">
+                      <button ngsIconButton type="button" aria-label="Duplicate field" ngsTooltip="Duplicate" (click)="$event.stopPropagation(); duplicateSelectedField()">
+                        <ngs-icon name="fluent:copy-24-regular" />
+                      </button>
+                      <button ngsIconButton type="button" aria-label="Lock field" ngsTooltip="Lock" (click)="$event.stopPropagation(); toggleSelectedFieldLock()">
+                        <ngs-icon [name]="selectedField()?.locked ? 'fluent:lock-open-24-regular' : 'fluent:lock-closed-24-regular'" />
+                      </button>
+                      <button ngsIconButton type="button" aria-label="Delete field" ngsTooltip="Delete" [class.is-disabled]="selectedField()?.locked" [attr.aria-disabled]="selectedField()?.locked" (click)="$event.stopPropagation(); deleteSelectedField()">
+                        <ngs-icon name="fluent:delete-24-regular" />
+                      </button>
+                    </div>
+                  }
+                </div>
+              </div>
             }
           </div>
-        </ngs-scrollbar-area>
-      </aside>
-      }
+        }
+      </div>
+    </ngs-scrollbar-area>
 
-      <ngs-scrollbar-area [absolute]="true" class="viewer-scrollbar" (scrolled)="onViewerScroll()">
-        <div class="viewer-stage">
-          @for (page of pages(); track page.page) {
-            <div
-              class="pdf-page-shell"
-              [attr.data-page-number]="page.page"
-              [class.is-active-page]="page.page === activePage()"
-              [class.is-placement-target]="placementGhost()?.overPage && placementGhost()?.page === page.page"
-              [attr.aria-label]="'PDF editing canvas page ' + page.page"
-              (click)="activePage.set(page.page); clearSelection()"
-            >
-              @if (isSourcePdfPage(page.page)) {
-                <ngs-pdf-viewer
-                  class="embedded-pdf-viewer"
-                  [src]="documentSource()"
-                  [documentName]="documentName()"
-                  [wasmUrl]="wasmUrl"
-                  [page]="page.page"
-                  [scale]="pdfScale()"
-                  [renderAll]="false"
-                  [showToolbar]="false"
-                  [showPageList]="false"
-                  [showSearchPanel]="false"
-                  [showAnnotationsPanel]="false"
-                  (loaded)="onPdfLoaded($event)"
-                />
-              } @else {
-                <div class="blank-pdf-page" aria-label="Blank PDF page"></div>
-              }
-
-              <div class="pdf-overlay-layer">
-                @for (field of pageFields(page.page); track field.id) {
-                  <button
-                    type="button"
-                    class="overlay-field"
-                    [attr.data-field-id]="field.id"
-                    [class.is-selected]="field.id === selectedFieldId()"
-                    [class.is-locked]="field.locked"
-                    [class.overlay-slot-primary]="field.slot === 'primary'"
-                    [class.overlay-slot-signature]="field.slot === 'signature'"
-                    [class.overlay-slot-initials]="field.slot === 'initials'"
-                    [class.overlay-slot-checkbox]="field.slot === 'checkbox'"
-                    [class.overlay-slot-comment]="field.slot === 'comment'"
-                    [class.overlay-slot-footer]="field.slot === 'footer'"
-                    [class.overlay-slot-side]="field.slot === 'side'"
-                    [class.overlay-type-text]="field.type === 'text'"
-                    [class.overlay-type-variable]="field.type === 'variable'"
-                    [class.overlay-type-signature]="field.type === 'signature'"
-                    [class.overlay-type-initials]="field.type === 'initials'"
-                    [class.overlay-type-checkbox]="field.type === 'checkbox'"
-                    [class.overlay-type-stamp]="field.type === 'stamp'"
-                    [class.is-dragging]="field.id === fieldDrag()?.fieldId"
-                    [class.is-resizing]="field.id === fieldResize()?.fieldId"
-                    (pointerdown)="beginFieldDrag($event, field.id)"
-                    (click)="selectField(field.id, $event)"
-                  >
-                    <span class="field-badge">
-                      @if (field.type === 'initials') {
-                        <span class="initials-mark" aria-hidden="true">IN</span>
-                      } @else {
-                        <ngs-icon [name]="field.icon" />
-                      }
-                      <span class="field-label">{{ field.label }}</span>
-                    </span>
-                    @if (field.value && field.type !== 'signature' && field.type !== 'initials' && field.type !== 'stamp') {
-                      <span class="field-value">{{ field.value }}</span>
-                    }
-                    @if (field.id === selectedFieldId() && !field.locked && field.id !== fieldDrag()?.fieldId && canResizeField(field)) {
-                      <span class="resize-handle handle-se" (pointerdown)="beginFieldResize($event, field.id)"></span>
-                    }
-                  </button>
-                }
-
-                @if (selectedField()?.page === page.page && !fieldDrag()) {
-                <div class="selection-toolbar">
-                  <button ngsIconButton type="button" aria-label="Duplicate field" ngsTooltip="Duplicate" (click)="$event.stopPropagation(); duplicateSelectedField()">
-                    <ngs-icon name="fluent:copy-24-regular" />
-                  </button>
-                  <button ngsIconButton type="button" aria-label="Lock field" ngsTooltip="Lock" (click)="$event.stopPropagation(); toggleSelectedFieldLock()">
-                    <ngs-icon [name]="selectedField()?.locked ? 'fluent:lock-open-24-regular' : 'fluent:lock-closed-24-regular'" />
-                  </button>
-                  <button ngsIconButton type="button" aria-label="Delete field" ngsTooltip="Delete" [class.is-disabled]="selectedField()?.locked" [attr.aria-disabled]="selectedField()?.locked" (click)="$event.stopPropagation(); deleteSelectedField()">
-                    <ngs-icon name="fluent:delete-24-regular" />
-                  </button>
-                </div>
-                }
-              </div>
-            </div>
+    @if (placementGhost(); as ghost) {
+      <div class="placement-ghost" [class.is-over-page]="ghost.overPage" aria-hidden="true">
+        <span class="field-badge">
+          @if (ghost.type === 'initials') {
+            <span class="initials-mark" aria-hidden="true">IN</span>
+          } @else {
+            <ngs-icon [name]="ghost.icon" />
           }
-        </div>
-      </ngs-scrollbar-area>
-
-      @if (placementGhost(); as ghost) {
-        <div
-          class="placement-ghost"
-          [class.is-over-page]="ghost.overPage"
-          aria-hidden="true"
-        >
-          <span class="field-badge">
-            @if (ghost.type === 'initials') {
-              <span class="initials-mark" aria-hidden="true">IN</span>
-            } @else {
-              <ngs-icon [name]="ghost.icon" />
-            }
-            {{ ghost.label }}
-          </span>
-        </div>
-      }
-    </div>
+          {{ ghost.label }}
+        </span>
+      </div>
+    }
   </ngs-panel-content>
 
-  <ngs-panel-aside class="builder-inspector">
-    <ngs-panel-header class="inspector-header px-5">
-      <ngs-toolbar>
-        <div class="min-w-0">
-          <ngs-toolbar-subtitle>{{ selectedFieldSubtitle() }}</ngs-toolbar-subtitle>
-          <ngs-toolbar-title class="truncate">{{ selectedFieldTitle() }}</ngs-toolbar-title>
-        </div>
-        <ngs-toolbar-spacer />
-        <ngs-toolbar-item>
-          <button ngsIconButton type="button" aria-label="Close inspector" ngsTooltip="Close inspector" (click)="selectedFieldId.set(null)">
-            <ngs-icon name="fluent:dismiss-24-regular" />
-          </button>
-        </ngs-toolbar-item>
-      </ngs-toolbar>
-    </ngs-panel-header>
+  @if (isSearchPanelVisible() || isAnnotationsPanelVisible()) {
+    <ngs-panel-aside class="builder-viewer-aside w-[var(--ngs-pdf-viewer-aside-width)] min-w-[var(--ngs-pdf-viewer-aside-width)] border-l border-border bg-surface">
+      @if (isSearchPanelVisible()) {
+        <ngs-pdf-viewer-search
+          [query]="activeSearchQuery()"
+          [results]="pdfSearchResults()"
+          (closed)="closeAsidePanel()"
+          (searchChanged)="updatePdfSearch($event)"
+          (resultSelected)="selectSearchResult($event)" />
+      } @else {
+        <ngs-pdf-viewer-annotations
+          [annotations]="annotationItems()"
+          (closed)="closeAsidePanel()"
+          (pageSelected)="selectAnnotationPage($event)" />
+      }
+    </ngs-panel-aside>
+  }
 
-    <ngs-panel-content>
-      <ngs-tab-group animationDuration="0ms" class="inspector-tabs">
-        <ngs-tab label="Settings">
-          <ngs-scrollbar-area [absolute]="true">
-            <div class="flex flex-col gap-4 p-5">
-              @if (selectedField(); as field) {
-              <ngs-form-field>
-                <ngs-label>Field label</ngs-label>
-                <input
-                  ngsInput
-                  [value]="field.label"
-                  [disabled]="field.locked"
-                  (input)="updateSelectedField('label', $any($event.target).value)"
-                />
-              </ngs-form-field>
-
-              <ngs-form-field>
-                <ngs-label>Binding</ngs-label>
-                <input
-                  ngsInput
-                  [value]="field.binding"
-                  [disabled]="field.locked"
-                  (input)="updateSelectedField('binding', $any($event.target).value)"
-                />
-                <button ngsIconButton ngsIconButtonSuffix type="button" aria-label="Choose binding">
-                  <ngs-icon name="fluent:more-horizontal-24-regular" />
-                </button>
-              </ngs-form-field>
-
-              <div class="inspector-grid">
-                <ngs-form-field>
-                  <ngs-label>X</ngs-label>
-                  <ngs-number-input
-                    [ngModel]="field.x"
-                    [disabled]="field.locked"
-                    (ngModelChange)="updateSelectedFieldNumber('x', $event)"
-                  />
-                </ngs-form-field>
-                <ngs-form-field>
-                  <ngs-label>Y</ngs-label>
-                  <ngs-number-input
-                    [ngModel]="field.y"
-                    [disabled]="field.locked"
-                    (ngModelChange)="updateSelectedFieldNumber('y', $event)"
-                  />
-                </ngs-form-field>
-                <ngs-form-field>
-                  <ngs-label>W</ngs-label>
-                  <ngs-number-input
-                    [ngModel]="field.width"
-                    [disabled]="field.locked"
-                    (ngModelChange)="updateSelectedFieldNumber('width', $event)"
-                  />
-                </ngs-form-field>
-                <ngs-form-field>
-                  <ngs-label>H</ngs-label>
-                  <ngs-number-input
-                    [ngModel]="field.height"
-                    [disabled]="field.locked"
-                    (ngModelChange)="updateSelectedFieldNumber('height', $event)"
-                  />
-                </ngs-form-field>
-              </div>
-
-              <div class="setting-row">
-                <span>Required</span>
-                <ngs-slide-toggle [checked]="field.required" [disabled]="field.locked" aria-label="Required" (change)="updateSelectedFieldRequired($event)" />
-              </div>
-              <div class="setting-row">
-                <span>Readonly on generated PDFs</span>
-                <ngs-slide-toggle [checked]="field.readonly" [disabled]="field.locked" aria-label="Readonly on generated PDFs" (change)="updateSelectedFieldReadonly($event)" />
-              </div>
-              <div class="setting-row">
-                <span>Locked</span>
-                <ngs-slide-toggle [checked]="field.locked" aria-label="Locked" (change)="updateSelectedField('locked', $event.checked)" />
-              </div>
-              } @else {
-                <ngs-card appearance="filled" class="inspector-card">
-                  <ngs-card-header>
-                    <ngs-card-title>No field selected</ngs-card-title>
-                    <ngs-card-subtitle>Select a field on the PDF or in Layers</ngs-card-subtitle>
-                  </ngs-card-header>
-                  <ngs-card-content>
-                    <button ngsButton="filled" type="button" fullWidth (click)="addField('variable')">
-                      <ngs-icon name="fluent:braces-variable-24-regular" />
-                      Add variable field
-                    </button>
-                  </ngs-card-content>
-                </ngs-card>
-              }
-
-              <ngs-card appearance="filled" class="inspector-card">
-                <ngs-card-header>
-                  <ngs-card-title>Preflight</ngs-card-title>
-                  <ngs-card-subtitle>Document generation checks</ngs-card-subtitle>
-                </ngs-card-header>
-                <ngs-card-content>
-                  <div class="meter-heading">
-                    <span>Ready to generate</span>
-                    <ngs-chip>{{ preflightProgress() }}%</ngs-chip>
-                  </div>
-                  <ngs-progress-bar [value]="preflightProgress()" />
-                </ngs-card-content>
-              </ngs-card>
-            </div>
-          </ngs-scrollbar-area>
-        </ngs-tab>
-
-        <ngs-tab label="Validation">
-          <ngs-scrollbar-area [absolute]="true">
-            <div class="flex flex-col gap-4 p-5">
-              <ngs-chip-set class="validation-chips">
-                @for (item of validations(); track item.label) {
-                  <ngs-chip [class.is-muted]="!item.passed">
-                    <ngs-icon [name]="item.icon" />
-                    {{ item.label }}
-                  </ngs-chip>
-                }
-              </ngs-chip-set>
-
-              <ngs-list>
-                @for (item of activity(); track $index) {
-                  <ngs-list-item lines="2">
-                    <ngs-icon [name]="item.icon" ngsListItemIcon />
-                    <span ngsListItemTitle>{{ item.title }}</span>
-                    <span ngsListItemLine>{{ item.detail }}</span>
-                    <ngs-chip ngsListItemMeta>Log</ngs-chip>
-                  </ngs-list-item>
-                }
-              </ngs-list>
-            </div>
-          </ngs-scrollbar-area>
-        </ngs-tab>
-      </ngs-tab-group>
-    </ngs-panel-content>
-  </ngs-panel-aside>
 </ngs-panel>
