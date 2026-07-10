@@ -19,6 +19,17 @@
     overflow: hidden;
   }
 
+  :host-context(.ngs-pdf-builder-drag-cursor) {
+    .pdf-builder-shell,
+    .pdf-builder-shell * {
+      cursor: grabbing !important;
+    }
+
+    ::ng-deep .pdf-builder-shell * {
+      cursor: grabbing !important;
+    }
+  }
+
   .pdf-builder-header {
     min-height: --spacing(14);
   }
@@ -190,7 +201,7 @@
   .layer-toggle,
   .layer-toggle-spacer {
     flex: none;
-    width: --spacing(9);
+    width: --spacing(10);
   }
 
   .layer-toggle-spacer {
@@ -198,13 +209,13 @@
   }
 
   .layer-tree-item {
-    min-width: --spacing(52);
+    min-width: 0;
     flex: 1;
     justify-content: flex-start;
     overflow: hidden;
     font-weight: 400;
 
-    span {
+    > span:not(.layer-required-marker) {
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -218,12 +229,24 @@
       font-weight: 400;
     }
 
+    .layer-required-marker {
+      flex: none;
+      color: var(--ngs-color-danger);
+      font-size: var(--ngs-font-size-md);
+      font-weight: 600;
+      line-height: 1;
+    }
+
     &.is-selected {
       background: var(--ngs-color-primary-container);
       color: var(--ngs-color-on-primary-container);
 
       small {
         color: currentColor;
+      }
+
+      .layer-required-marker {
+        color: var(--ngs-color-danger);
       }
     }
   }
@@ -573,11 +596,25 @@
     box-shadow: var(--ngs-shadow-lg);
     opacity: 0.9;
     pointer-events: none;
-    transform: translate(-50%, -50%);
+    transform: none;
 
     &.is-over-page {
       border-color: var(--ngs-color-primary);
       background: color-mix(in srgb, var(--ngs-color-primary), var(--ngs-color-surface) 92%);
+    }
+
+    &.is-checkbox {
+      min-width: 0;
+      min-height: 0;
+      border-color: var(--ngs-color-border-strong);
+      border-radius: --spacing(0.75);
+      background: transparent;
+      box-shadow: none;
+
+      &.is-over-page {
+        border-color: var(--ngs-color-primary);
+        background: transparent;
+      }
     }
   }
 
@@ -688,7 +725,7 @@
     justify-content: flex-start;
     border-color: color-mix(in srgb, var(--ngs-color-primary), transparent 54%);
     background: color-mix(in srgb, var(--ngs-color-primary), transparent 92%);
-    padding: --spacing(1.5) --spacing(3);
+    padding: --spacing(2.5) --spacing(3) --spacing(1.5);
 
     .field-badge {
       display: none;
@@ -748,15 +785,30 @@
   }
 
   .overlay-type-variable {
-    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
     padding: --spacing(1.5) --spacing(3);
 
+    .field-badge {
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      color: var(--ngs-color-warning);
+
+      ngs-icon {
+        flex: none;
+      }
+    }
+
     .field-value {
+      min-width: 0;
       margin: 0;
       color: var(--ngs-color-on-surface);
       font-family: var(--ngs-font-family-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace);
       font-size: var(--ngs-font-size-sm);
       font-weight: 500;
+      line-height: 1;
     }
 
     .field-label {
@@ -837,8 +889,8 @@
   }
 
   .overlay-type-checkbox {
-    min-width: --spacing(4.5);
-    min-height: --spacing(4.5);
+    min-width: --spacing(4);
+    min-height: --spacing(4);
     border-color: var(--ngs-color-border-strong);
     border-radius: --spacing(0.75);
     background: transparent;
@@ -952,15 +1004,22 @@
     bottom: calc(--spacing(1) * -1);
   }
 
+  .handle-e {
+    top: 50%;
+    right: calc(--spacing(1) * -1);
+    cursor: ew-resize;
+    transform: translateY(-50%);
+  }
+
   .selection-toolbar {
     position: absolute;
     top: var(--pdf-builder-toolbar-top, --spacing(2));
     left: var(--pdf-builder-toolbar-left, 50%);
     display: inline-flex;
-    gap: --spacing(1);
-    padding: --spacing(1);
+    gap: --spacing(0.5);
+    padding: --spacing(0.5);
     border: 1px solid var(--ngs-color-border);
-    border-radius: var(--ngs-radius-current);
+    border-radius: --spacing(2);
     background: var(--ngs-color-surface);
     box-shadow: var(--ngs-shadow-md);
     pointer-events: auto;
@@ -968,7 +1027,11 @@
   }
 
   .selection-toolbar button[ngsIconButton] {
-    --ngs-button-height: --spacing(8);
+    --ngs-button-height: --spacing(7);
+
+    ngs-icon {
+      font-size: var(--ngs-font-size-xl);
+    }
   }
 
   .pdf-builder-shell.is-library-collapsed {

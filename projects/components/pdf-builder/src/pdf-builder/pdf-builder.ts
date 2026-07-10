@@ -47,7 +47,6 @@ import {
   Toolbar,
   ToolbarItem,
   ToolbarSpacer,
-  ToolbarTitle,
 } from '@ngstarter-ui/components/toolbar';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
 import {
@@ -76,11 +75,17 @@ interface PdfBuilderTool {
   readonly description: string;
 }
 
+interface PdfBuilderVariableBinding {
+  readonly label: string;
+  readonly path: string;
+}
+
 interface PdfBuilderLayerNode {
   id: string;
   label: string;
   icon: string;
   meta?: string;
+  required?: boolean;
   children?: PdfBuilderLayerNode[];
 }
 
@@ -199,7 +204,6 @@ interface PdfBuilderFieldResize {
     Toolbar,
     ToolbarItem,
     ToolbarSpacer,
-    ToolbarTitle,
     Tooltip,
     Tree,
     TreeNode,
@@ -224,6 +228,8 @@ export class PdfBuilder {
   private removeFieldResizeListeners: (() => void) | null = null;
   private layerExpansionRestoreScheduled = false;
   private suppressFieldClickId: string | null = null;
+  private dragCursorLocked = false;
+  private readonly dragCursorClass = 'ngs-pdf-builder-drag-cursor';
 
   readonly createBlankPdf = output<void>();
   readonly exportPdf = output<void>();
@@ -241,6 +247,7 @@ export class PdfBuilder {
   protected readonly textFieldPlaceholder = 'Enter value';
   protected readonly activeCanvasTool = signal<PdfBuilderCanvasTool>('select');
   protected readonly selectedFieldId = signal<string | null>(null);
+  protected readonly hoveredFieldId = signal<string | null>(null);
   protected readonly editingFieldId = signal<string | null>(null);
   protected readonly placementGhost = signal<PdfBuilderPlacementGhost | null>(null);
   protected readonly fieldDrag = signal<PdfBuilderFieldDrag | null>(null);
@@ -297,6 +304,14 @@ export class PdfBuilder {
     },
   ]);
 
+  protected readonly variableBindings = signal<readonly PdfBuilderVariableBinding[]>([
+    { label: 'Company name', path: 'company.name' },
+    { label: 'Counterparty name', path: 'counterparty.name' },
+    { label: 'Effective date', path: 'contract.effective_date' },
+    { label: 'Contract value', path: 'contract.value' },
+    { label: 'Legal status', path: 'review.legal.status' },
+  ]);
+
   protected readonly fields = signal<readonly PdfBuilderField[]>([]);
 
   protected readonly pages = computed<readonly PdfBuilderPage[]>(() =>
@@ -348,21 +363,13 @@ export class PdfBuilder {
         id: `page-${page}`,
         label: `Page ${page}`,
         icon: 'fluent:document-one-page-24-regular',
-        meta: page === this.activePage() ? 'selected' : undefined,
-        children: [
-          {
-            id: `page-${page}-pdf-layer`,
-            label: 'Imported PDF layer',
-            icon: 'fluent:layer-24-regular',
-            meta: 'locked',
-          },
-          ...pageFields.map(field => ({
-            id: field.id,
-            label: field.label,
-            icon: field.icon,
-            meta: this.getLayerMeta(field),
-          })),
-        ],
+        children: pageFields.map(field => ({
+          id: field.id,
+          label: field.label,
+          icon: field.icon,
+          meta: this.getLayerMeta(field),
+          required: field.required,
+        })),
       };
     }),
   );
@@ -383,7 +390,7 @@ export class PdfBuilder {
   protected readonly layerChildrenAccessor = (node: PdfBuilderLayerNode) => node.children ?? [];
   protected readonly layerTrackBy = (_index: number, node: PdfBuilderLayerNode) => node.id;
   protected readonly hasLayerChildren = (_index: number, node: PdfBuilderLayerNode) =>
-    !!node.children?.length;
+    !!node.children;
 
   private readonly handlePlacementPointerMove = (event: PointerEvent): void => {
     this.movePlacementGhost(event);
@@ -427,6 +434,7 @@ export class PdfBuilder {
       this.removePlacementEventListeners();
       this.removeFieldDragEventListeners();
       this.removeFieldResizeEventListeners();
+      this.setDragCursorLocked(false);
     });
 
     effect(() => {
@@ -441,6 +449,8 @@ export class PdfBuilder {
       this.fields();
       this.selectedField();
       this.pdfScale();
+      this.fieldDrag();
+      this.fieldResize();
 
       this.scheduleOverlayGeometrySync();
     });
@@ -457,6 +467,10 @@ export class PdfBuilder {
       this.pdfScale();
 
       this.schedulePlacementGhostGeometrySync();
+    });
+
+    effect(() => {
+      this.setDragCursorLocked(!!this.placementGhost() || !!this.fieldDrag());
     });
   }
 
@@ -604,12 +618,6 @@ export class PdfBuilder {
   protected selectLayerNode(node: PdfBuilderLayerNode, event?: Event): void {
     event?.stopPropagation();
 
-    if (node.id.includes('pdf-layer')) {
-      this.selectedFieldId.set(null);
-      this.editingFieldId.set(null);
-      return;
-    }
-
     const pageMatch = /^page-(\d+)$/.exec(node.id);
 
     if (pageMatch) {
@@ -691,7 +699,12 @@ export class PdfBuilder {
   }
 
   protected canResizeField(field: PdfBuilderField): boolean {
-    return field.type === 'text' || field.type === 'stamp' || field.type === 'signature' || field.type === 'initials';
+    return field.type === 'text' ||
+      field.type === 'variable' ||
+      field.type === 'checkbox' ||
+      field.type === 'stamp' ||
+      field.type === 'signature' ||
+      field.type === 'initials';
   }
 
   protected beginFieldResize(event: PointerEvent, fieldId: string): void {
@@ -779,6 +792,10 @@ export class PdfBuilder {
   }
 
   protected isFieldFilled(field: PdfBuilderField): boolean {
+    if (field.type === 'variable') {
+      return false;
+    }
+
     return field.value.trim().length > 0 && field.value !== this.getDefaultValue(field.type);
   }
 
@@ -787,20 +804,65 @@ export class PdfBuilder {
       return this.textFieldPlaceholder;
     }
 
+    if (field.type === 'variable') {
+      return field.value.trim() || this.getVariableToken(field.binding);
+    }
+
     return field.value;
+  }
+
+  protected getVariableBindingLabel(field: PdfBuilderField | null): string {
+    if (!field || field.type !== 'variable') {
+      return 'Select binding';
+    }
+
+    const binding = this.variableBindings().find(item => item.path === field.binding);
+
+    return binding?.label ?? (field.binding || 'Select binding');
+  }
+
+  protected applyVariableBinding(binding: PdfBuilderVariableBinding): void {
+    const field = this.selectedField();
+
+    if (!field || field.type !== 'variable' || field.locked) {
+      return;
+    }
+
+    this.commitFields(fields =>
+      fields.map(item =>
+        item.id === field.id
+          ? {
+            ...item,
+            binding: binding.path,
+            value: this.getVariableToken(binding.path),
+          }
+          : item,
+      ),
+    );
+    this.recordActivity('Binding updated', `${field.label} bound to ${binding.path}.`, 'fluent:database-link-24-regular');
   }
 
   private startTextEditing(fieldId: string): void {
     this.editingFieldId.set(fieldId);
     this.scheduleDomSync(() => {
       const editor = this.getTextFieldEditorElement(fieldId);
+      const field = this.fields().find(item => item.id === fieldId);
 
-      if (!editor) {
+      if (!editor || !field) {
         return;
       }
 
+      if ((editor.textContent ?? '') !== field.value) {
+        editor.textContent = field.value;
+      }
+
       editor.focus();
-      this.selectContentEditableText(editor);
+      this.placeContentEditableCaretAtEnd(editor);
+      this.document.defaultView?.setTimeout(() => {
+        if (this.editingFieldId() === fieldId) {
+          this.placeContentEditableCaretAtEnd(editor);
+        }
+      }, 0);
     });
   }
 
@@ -832,6 +894,7 @@ export class PdfBuilder {
     const metrics = this.getDefaultMetricsForType(type);
     const tool = this.tools().find(item => item.type === type);
     const pagePoint = this.getPdfPointFromClient(event.clientX, event.clientY);
+    const pageMetrics = pagePoint ? this.getPlacementFieldMetrics(type, pagePoint.x, pagePoint.y) : null;
 
     this.selectedFieldId.set(null);
     this.editingFieldId.set(null);
@@ -846,8 +909,8 @@ export class PdfBuilder {
       height: metrics.height,
       overPage: !!pagePoint,
       page: pagePoint?.page ?? null,
-      pageX: pagePoint?.x ?? null,
-      pageY: pagePoint?.y ?? null,
+      pageX: pageMetrics?.x ?? null,
+      pageY: pageMetrics?.y ?? null,
     });
     this.addPlacementEventListeners();
   }
@@ -1140,16 +1203,8 @@ export class PdfBuilder {
   }
 
   private getLayerMeta(field: PdfBuilderField): string | undefined {
-    if (field.id === this.selectedFieldId()) {
-      return 'selected';
-    }
-
     if (field.locked) {
       return 'locked';
-    }
-
-    if (field.required) {
-      return 'required';
     }
 
     return undefined;
@@ -1207,6 +1262,7 @@ export class PdfBuilder {
     event.preventDefault();
 
     const pagePoint = this.getPdfPointFromClient(event.clientX, event.clientY);
+    const pageMetrics = pagePoint ? this.getPlacementFieldMetrics(ghost.type, pagePoint.x, pagePoint.y) : null;
 
     this.placementGhost.set({
       ...ghost,
@@ -1214,8 +1270,8 @@ export class PdfBuilder {
       clientY: event.clientY,
       overPage: !!pagePoint,
       page: pagePoint?.page ?? null,
-      pageX: pagePoint?.x ?? null,
-      pageY: pagePoint?.y ?? null,
+      pageX: pageMetrics?.x ?? null,
+      pageY: pageMetrics?.y ?? null,
     });
 
     if (pagePoint && pagePoint.page !== this.activePage()) {
@@ -1232,19 +1288,20 @@ export class PdfBuilder {
 
     event.preventDefault();
 
-    const pagePoint = this.getPdfPointFromClient(event.clientX, event.clientY);
-
     this.removePlacementEventListeners();
     this.placementGhost.set(null);
 
-    if (!pagePoint) {
+    if (!ghost.overPage || ghost.page === null || ghost.pageX === null || ghost.pageY === null) {
       return;
     }
 
     const field = this.createField(ghost.type, {
-      page: pagePoint.page,
+      page: ghost.page,
       slot: this.getDefaultSlotForType(ghost.type),
-      ...this.getCenteredFieldMetrics(ghost.type, pagePoint.x, pagePoint.y),
+      x: ghost.pageX,
+      y: ghost.pageY,
+      width: Math.round(ghost.width),
+      height: Math.round(ghost.height),
     });
 
     this.commitFields(fields => [...fields, field]);
@@ -1272,8 +1329,8 @@ export class PdfBuilder {
     const deltaY = (event.clientY - drag.originClientY) / scale.y;
     const maxX = Math.max(0, PDF_BUILDER_PAGE_WIDTH - drag.width);
     const maxY = Math.max(0, PDF_BUILDER_PAGE_HEIGHT - drag.height);
-    const x = Math.round(this.clamp(drag.startX + deltaX, 0, maxX));
-    const y = Math.round(this.clamp(drag.startY + deltaY, 0, maxY));
+    const x = this.clamp(drag.startX + deltaX, 0, maxX);
+    const y = this.clamp(drag.startY + deltaY, 0, maxY);
     const moved = drag.moved ||
       Math.abs(event.clientX - drag.originClientX) > 3 ||
       Math.abs(event.clientY - drag.originClientY) > 3;
@@ -1356,13 +1413,31 @@ export class PdfBuilder {
     }
 
     const scale = this.getRenderedPageScale(resize.page);
-    const minimumMetrics = this.getDefaultMetricsForType(currentField.type);
+    const minimumMetrics = this.getMinimumResizeMetrics(currentField);
     const deltaX = (event.clientX - resize.originClientX) / scale.x;
     const deltaY = (event.clientY - resize.originClientY) / scale.y;
-    const maxWidth = Math.max(minimumMetrics.width, PDF_BUILDER_PAGE_WIDTH - resize.startX);
-    const maxHeight = Math.max(minimumMetrics.height, PDF_BUILDER_PAGE_HEIGHT - resize.startY);
-    const width = Math.round(this.clamp(resize.startWidth + deltaX, minimumMetrics.width, maxWidth));
-    const height = Math.round(this.clamp(resize.startHeight + deltaY, minimumMetrics.height, maxHeight));
+    let width: number;
+    let height: number;
+
+    if (currentField.type === 'checkbox') {
+      const baseSide = this.getDefaultMetricsForType('checkbox').width;
+      const maxSide = Math.max(
+        baseSide,
+        Math.min(baseSide * 2, PDF_BUILDER_PAGE_WIDTH - resize.startX, PDF_BUILDER_PAGE_HEIGHT - resize.startY),
+      );
+      const side = Math.round(this.clamp(resize.startWidth + Math.max(deltaX, deltaY), baseSide, maxSide));
+
+      width = side;
+      height = side;
+    } else {
+      const maxWidth = Math.max(minimumMetrics.width, PDF_BUILDER_PAGE_WIDTH - resize.startX);
+      const maxHeight = Math.max(minimumMetrics.height, PDF_BUILDER_PAGE_HEIGHT - resize.startY);
+
+      width = Math.round(this.clamp(resize.startWidth + deltaX, minimumMetrics.width, maxWidth));
+      height = currentField.type === 'variable'
+        ? resize.startHeight
+        : Math.round(this.clamp(resize.startHeight + deltaY, minimumMetrics.height, maxHeight));
+    }
     const moved = resize.moved ||
       Math.abs(event.clientX - resize.originClientX) > 3 ||
       Math.abs(event.clientY - resize.originClientY) > 3;
@@ -1547,18 +1622,18 @@ export class PdfBuilder {
     return null;
   }
 
-  private getCenteredFieldMetrics(
+  private getPlacementFieldMetrics(
     type: PdfBuilderFieldType,
-    centerX: number,
-    centerY: number,
+    pageX: number,
+    pageY: number,
   ): Pick<PdfBuilderField, 'x' | 'y' | 'width' | 'height'> {
     const metrics = this.getDefaultMetricsForType(type);
     const width = Math.min(metrics.width, PDF_BUILDER_PAGE_WIDTH);
     const height = Math.min(metrics.height, PDF_BUILDER_PAGE_HEIGHT);
 
     return {
-      x: Math.round(this.clamp(centerX - width / 2, 0, PDF_BUILDER_PAGE_WIDTH - width)),
-      y: Math.round(this.clamp(centerY - height / 2, 0, PDF_BUILDER_PAGE_HEIGHT - height)),
+      x: this.clamp(pageX, 0, PDF_BUILDER_PAGE_WIDTH - width),
+      y: this.clamp(pageY, 0, PDF_BUILDER_PAGE_HEIGHT - height),
       width: Math.round(width),
       height: Math.round(height),
     };
@@ -1592,7 +1667,7 @@ export class PdfBuilder {
         continue;
       }
 
-      const scale = this.getCanvasScale();
+      const scale = this.getRenderedPageScale(field.page);
 
       this.setCssVar(element, '--pdf-builder-field-left', `${field.x * scale.x}px`);
       this.setCssVar(element, '--pdf-builder-field-top', `${field.y * scale.y}px`);
@@ -1617,7 +1692,7 @@ export class PdfBuilder {
       return;
     }
 
-    const scale = this.getCanvasScale();
+    const scale = this.getRenderedPageScale(field.page);
     const pageRect = pageShell.getBoundingClientRect();
     const toolbarWidth = toolbar.offsetWidth;
     const toolbarHeight = toolbar.offsetHeight;
@@ -1681,7 +1756,14 @@ export class PdfBuilder {
     const scale = this.getRenderedPageScale(field.page);
     const minimumMetrics = this.getDefaultMetricsForType(field.type);
     const pageInset = 8;
-    const editorHeight = Math.ceil((editor.scrollHeight + 2) / scale.y);
+    const contentHeight = Math.max(editor.scrollHeight, this.getContentEditableContentHeight(editor));
+    const lineHeight = this.getContentEditableLineHeight(editor);
+    const hasExplicitLineBreak = (field.value || editor.textContent || '').includes('\n');
+    const isMultiline = hasExplicitLineBreak || contentHeight > lineHeight * 1.55;
+    const verticalChrome = this.getElementVerticalChrome(editor);
+    const editorHeight = isMultiline
+      ? Math.ceil((contentHeight + verticalChrome + 2) / scale.y)
+      : minimumMetrics.height;
     const maxHeight = Math.max(minimumMetrics.height, PDF_BUILDER_PAGE_HEIGHT - pageInset - field.y);
     const height = this.clamp(editorHeight, minimumMetrics.height, maxHeight);
 
@@ -1689,6 +1771,53 @@ export class PdfBuilder {
       ...field,
       height: Math.round(height),
     };
+  }
+
+  private getContentEditableContentHeight(editor: HTMLElement): number {
+    const range = this.document.createRange();
+
+    range.selectNodeContents(editor);
+    const height = range.getBoundingClientRect().height;
+    range.detach();
+
+    return height;
+  }
+
+  private getContentEditableLineHeight(editor: HTMLElement): number {
+    const defaultView = this.document.defaultView;
+
+    if (!defaultView) {
+      return 20;
+    }
+
+    const style = defaultView.getComputedStyle(editor);
+    const lineHeight = Number.parseFloat(style.lineHeight);
+
+    if (Number.isFinite(lineHeight)) {
+      return lineHeight;
+    }
+
+    const fontSize = Number.parseFloat(style.fontSize);
+
+    return Number.isFinite(fontSize) ? fontSize * 1.25 : 20;
+  }
+
+  private getElementVerticalChrome(element: HTMLElement): number {
+    const defaultView = this.document.defaultView;
+    const fieldElement = element.closest<HTMLElement>('.overlay-field');
+
+    if (!defaultView || !fieldElement) {
+      return 0;
+    }
+
+    const style = defaultView.getComputedStyle(fieldElement);
+
+    return [
+      style.paddingTop,
+      style.paddingBottom,
+      style.borderTopWidth,
+      style.borderBottomWidth,
+    ].reduce((total, value) => total + (Number.parseFloat(value) || 0), 0);
   }
 
   private measureOverlayText(text: string, variant: 'label' | 'value'): number {
@@ -1718,10 +1847,22 @@ export class PdfBuilder {
       return;
     }
 
-    const scale = this.getCanvasScale();
+    const scale = ghost.page ? this.getRenderedPageScale(ghost.page) : this.getCanvasScale();
+    const pageShell = ghost.page ? this.getPageShellElement(ghost.page) : null;
+    let left = ghost.clientX;
+    let top = ghost.clientY;
 
-    this.setCssVar(element, '--pdf-builder-ghost-left', `${ghost.clientX}px`);
-    this.setCssVar(element, '--pdf-builder-ghost-top', `${ghost.clientY}px`);
+    if (pageShell && ghost.pageX !== null && ghost.pageY !== null) {
+      const rect = pageShell.getBoundingClientRect();
+      const ghostLeft = rect.left + ghost.pageX * scale.x;
+      const ghostTop = rect.top + ghost.pageY * scale.y;
+
+      left = ghostLeft;
+      top = ghostTop;
+    }
+
+    this.setCssVar(element, '--pdf-builder-ghost-left', `${left}px`);
+    this.setCssVar(element, '--pdf-builder-ghost-top', `${top}px`);
     this.setCssVar(element, '--pdf-builder-ghost-width', `${ghost.width * scale.x}px`);
     this.setCssVar(element, '--pdf-builder-ghost-height', `${ghost.height * scale.y}px`);
   }
@@ -1735,6 +1876,11 @@ export class PdfBuilder {
     }
 
     const rect = pageShell.getBoundingClientRect();
+
+    if (rect.width <= 0 || rect.height <= 0) {
+      const scale = this.pdfScale();
+      return { x: scale, y: scale };
+    }
 
     return {
       x: rect.width / PDF_BUILDER_PAGE_WIDTH,
@@ -1839,7 +1985,7 @@ export class PdfBuilder {
     return this.elementRef.nativeElement.querySelector<HTMLElement>(`[contenteditable][data-text-editor-for="${fieldId}"]`);
   }
 
-  private selectContentEditableText(editor: HTMLElement): void {
+  private placeContentEditableCaretAtEnd(editor: HTMLElement): void {
     const defaultView = this.document.defaultView;
 
     if (!defaultView) {
@@ -1847,12 +1993,37 @@ export class PdfBuilder {
     }
 
     const range = this.document.createRange();
+    const lastTextNode = this.getLastTextNode(editor);
 
-    range.selectNodeContents(editor);
+    if (lastTextNode) {
+      range.setStart(lastTextNode, lastTextNode.data.length);
+    } else {
+      range.setStart(editor, editor.childNodes.length);
+    }
+
+    range.collapse(true);
     const selection = defaultView.getSelection();
 
     selection?.removeAllRanges();
     selection?.addRange(range);
+  }
+
+  private getLastTextNode(node: Node): Text | null {
+    for (let index = node.childNodes.length - 1; index >= 0; index--) {
+      const child = node.childNodes.item(index);
+
+      if (child.nodeType === Node.TEXT_NODE) {
+        return child as Text;
+      }
+
+      const nested = this.getLastTextNode(child);
+
+      if (nested) {
+        return nested;
+      }
+    }
+
+    return null;
   }
 
   private suppressNextFieldClick(fieldId: string): void {
@@ -1869,6 +2040,27 @@ export class PdfBuilder {
     this.renderer.setStyle(element, name, value, RendererStyleFlags2.DashCase);
   }
 
+  private setDragCursorLocked(locked: boolean): void {
+    if (this.dragCursorLocked === locked) {
+      return;
+    }
+
+    const body = this.document.body;
+
+    if (!body) {
+      this.dragCursorLocked = locked;
+      return;
+    }
+
+    if (locked) {
+      this.renderer.addClass(body, this.dragCursorClass);
+    } else {
+      this.renderer.removeClass(body, this.dragCursorClass);
+    }
+
+    this.dragCursorLocked = locked;
+  }
+
   private createField(
     type: PdfBuilderFieldType,
     placement?: Partial<Pick<PdfBuilderField, 'page' | 'slot' | 'x' | 'y' | 'width' | 'height'>>,
@@ -1876,14 +2068,15 @@ export class PdfBuilder {
     const tool = this.tools().find(item => item.type === type);
     const slot = placement?.slot ?? this.nextSlot();
     const id = this.nextFieldId(type);
+    const binding = this.getDefaultBinding(type, id);
 
     return {
       id,
       type,
       page: placement?.page ?? this.activePage(),
       label: this.getDefaultLabel(type, tool?.label),
-      binding: type === 'text' ? '' : `document.${id}`,
-      value: this.getDefaultValue(type),
+      binding,
+      value: this.getDefaultValue(type, binding),
       icon: tool?.icon ?? 'fluent:form-24-regular',
       slot,
       ...this.getSlotMetrics(slot),
@@ -1911,7 +2104,7 @@ export class PdfBuilder {
       case 'initials':
         return { x: 384, y: 612, width: 105, height: 42 };
       case 'checkbox':
-        return { x: 453, y: 282, width: 18, height: 18 };
+        return { x: 453, y: 282, width: 16, height: 16 };
       case 'comment':
         return { x: 96, y: 160, width: 120, height: 77 };
       case 'footer':
@@ -1925,6 +2118,14 @@ export class PdfBuilder {
 
   private getDefaultMetricsForType(type: PdfBuilderFieldType): Pick<PdfBuilderField, 'width' | 'height'> {
     return this.getSlotMetrics(this.getDefaultSlotForType(type));
+  }
+
+  private getMinimumResizeMetrics(field: PdfBuilderField): Pick<PdfBuilderField, 'width' | 'height'> {
+    if (field.type === 'variable') {
+      return { width: 72, height: field.height };
+    }
+
+    return this.getDefaultMetricsForType(field.type);
   }
 
   private getDefaultSlotForType(type: PdfBuilderFieldType): PdfBuilderFieldSlot {
@@ -1946,10 +2147,10 @@ export class PdfBuilder {
     return Math.min(Math.max(value, min), max);
   }
 
-  private getDefaultValue(type: PdfBuilderFieldType): string {
+  private getDefaultValue(type: PdfBuilderFieldType, binding = ''): string {
     switch (type) {
       case 'variable':
-        return '{{variable.value}}';
+        return this.getVariableToken(binding);
       case 'signature':
         return 'Signature';
       case 'initials':
@@ -1961,6 +2162,18 @@ export class PdfBuilder {
       default:
         return '';
     }
+  }
+
+  private getDefaultBinding(type: PdfBuilderFieldType, id: string): string {
+    if (type === 'text' || type === 'variable') {
+      return '';
+    }
+
+    return `document.${id}`;
+  }
+
+  private getVariableToken(binding = ''): string {
+    return `{{${binding.trim() || 'variable'}}}`;
   }
 
   private getDefaultLabel(type: PdfBuilderFieldType, fallback?: string): string {
