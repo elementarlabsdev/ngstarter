@@ -5,7 +5,7 @@
 >
   <ngs-panel-header class="pdf-builder-header min-w-0 border-b border-border bg-surface" flex>
     <ngs-toolbar class="pdf-viewer-toolbar flex h-14 w-full min-w-0 items-center gap-4 overflow-visible px-2 text-on-surface-variant" aria-label="PDF builder controls">
-      <ngs-toolbar-item class="pdf-viewer-toolbar__start flex min-w-0 flex-none items-center gap-2" aria-label="PDF builder document actions">
+      <ngs-toolbar-item class="pdf-viewer-toolbar__start flex min-w-0 flex-none items-center gap-2 pl-4" aria-label="PDF builder document actions">
         <span class="builder-field-count text-xs font-medium text-on-surface-variant">{{ fieldCount() }} fields</span>
         <ngs-divider vertical fixedHeight />
         <button
@@ -410,6 +410,7 @@
                       [class.is-filled]="isFieldFilled(field)"
                       [class.is-locked]="field.locked"
                       [class.overlay-slot-primary]="field.slot === 'primary'"
+                      [class.overlay-slot-date]="field.slot === 'date'"
                       [class.overlay-slot-signature]="field.slot === 'signature'"
                       [class.overlay-slot-initials]="field.slot === 'initials'"
                       [class.overlay-slot-checkbox]="field.slot === 'checkbox'"
@@ -418,6 +419,7 @@
                       [class.overlay-slot-side]="field.slot === 'side'"
                       [class.overlay-type-text]="field.type === 'text'"
                       [class.overlay-type-variable]="field.type === 'variable'"
+                      [class.overlay-type-date]="field.type === 'date'"
                       [class.overlay-type-signature]="field.type === 'signature'"
                       [class.overlay-type-initials]="field.type === 'initials'"
                       [class.overlay-type-checkbox]="field.type === 'checkbox'"
@@ -435,11 +437,13 @@
                         <span class="field-badge">
                           @if (field.type === 'initials') {
                             <span class="initials-mark" aria-hidden="true">IN</span>
-                          } @else if (field.type !== 'variable' || !field.binding) {
+                          } @else if ((field.type !== 'variable' || !field.binding) && (field.type !== 'date' || !field.value.trim())) {
                             <ngs-icon [name]="field.icon" />
                           }
                           @if (field.type === 'variable') {
                             <span class="field-value variable-token">{{ getFieldDisplayValue(field) }}</span>
+                          } @else if (field.type === 'date') {
+                            <span class="field-value date-value" [class.is-placeholder]="!field.value.trim()">{{ getFieldDisplayValue(field) }}</span>
                           } @else {
                             <span class="field-label">{{ field.label }}</span>
                           }
@@ -460,14 +464,14 @@
                           (keydown)="$event.stopPropagation()"
                           (keydown.escape)="finishTextEditing(field.id)"
                         ></span>
-                      } @else if ((field.type === 'text' || field.value) && field.type !== 'variable' && field.type !== 'signature' && field.type !== 'initials' && field.type !== 'checkbox' && field.type !== 'stamp') {
+                      } @else if ((field.type === 'text' || field.value) && field.type !== 'variable' && field.type !== 'date' && field.type !== 'signature' && field.type !== 'initials' && field.type !== 'checkbox' && field.type !== 'stamp') {
                         <span class="field-value" [class.is-placeholder]="field.type === 'text' && !field.value.trim()">{{ getFieldDisplayValue(field) }}</span>
                       }
                       @if ((field.id === selectedFieldId() || field.id === hoveredFieldId()) && !field.locked && field.id !== fieldDrag()?.fieldId && canResizeField(field)) {
                         <span
                           class="resize-handle"
-                          [class.handle-e]="field.type === 'variable'"
-                          [class.handle-se]="field.type !== 'variable'"
+                          [class.handle-e]="field.type === 'variable' || field.type === 'date'"
+                          [class.handle-se]="field.type !== 'variable' && field.type !== 'date'"
                           (pointerdown)="beginFieldResize($event, field.id)"
                         ></span>
                       }
@@ -491,6 +495,19 @@
                       <button ngsIconButton type="button" aria-label="Duplicate field" ngsTooltip="Duplicate" (click)="$event.stopPropagation(); duplicateSelectedField()">
                         <ngs-icon name="fluent:copy-24-regular" />
                       </button>
+                      <button
+                        ngsIconButton
+                        type="button"
+                        aria-label="Toggle required field"
+                        [class.is-active]="selectedField()?.required"
+                        [class.is-disabled]="selectedField()?.locked"
+                        [attr.aria-disabled]="selectedField()?.locked"
+                        [attr.aria-pressed]="selectedField()?.required"
+                        [ngsTooltip]="selectedField()?.required ? 'Required' : 'Not required'"
+                        (click)="$event.stopPropagation(); toggleSelectedFieldRequired()"
+                      >
+                        <ngs-icon name="fluent:asterisk-24-regular" />
+                      </button>
                       <button ngsIconButton type="button" aria-label="Lock field" ngsTooltip="Lock" (click)="$event.stopPropagation(); toggleSelectedFieldLock()">
                         <ngs-icon [name]="selectedField()?.locked ? 'fluent:lock-open-24-regular' : 'fluent:lock-closed-24-regular'" />
                       </button>
@@ -506,6 +523,16 @@
         }
       </div>
     </ngs-scrollbar-area>
+
+    <input
+      class="date-picker-anchor"
+      readonly
+      tabindex="-1"
+      aria-hidden="true"
+      [ngsDatepicker]="dateFieldPicker"
+      #dateFieldInput="ngsDatepickerInput"
+    />
+    <ngs-datepicker #dateFieldPicker />
 
     @if (placementGhost(); as ghost) {
       <div

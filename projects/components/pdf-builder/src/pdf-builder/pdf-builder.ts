@@ -8,13 +8,20 @@ import {
   effect,
   ElementRef,
   inject,
+  input,
   output,
   Renderer2,
   RendererStyleFlags2,
   signal,
+  untracked,
   viewChild,
 } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
+import {
+  Datepicker,
+  DatepickerInput,
+  provideNativeDateAdapter,
+} from '@ngstarter-ui/components/datepicker';
 import { Divider } from '@ngstarter-ui/components/divider';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
@@ -56,12 +63,12 @@ import {
   TreeNodePadding,
 } from '@ngstarter-ui/components/tree';
 
-type PdfBuilderCanvasTool = 'select' | 'pan' | 'text';
-type PdfBuilderFieldType = 'text' | 'variable' | 'signature' | 'initials' | 'checkbox' | 'stamp';
-type PdfBuilderFieldSlot = 'primary' | 'signature' | 'initials' | 'checkbox' | 'comment' | 'footer' | 'side';
-type PdfBuilderSpreadMode = 'single' | 'two-odd' | 'two-even';
-type PdfBuilderScrollLayout = 'vertical' | 'horizontal';
-type PdfBuilderPageRotation = 0 | 1 | 2 | 3;
+export type PdfBuilderCanvasTool = 'select' | 'pan' | 'text';
+export type PdfBuilderFieldType = 'text' | 'variable' | 'date' | 'signature' | 'initials' | 'checkbox' | 'stamp';
+export type PdfBuilderFieldSlot = 'primary' | 'date' | 'signature' | 'initials' | 'checkbox' | 'comment' | 'footer' | 'side';
+export type PdfBuilderSpreadMode = 'single' | 'two-odd' | 'two-even';
+export type PdfBuilderScrollLayout = 'vertical' | 'horizontal';
+export type PdfBuilderPageRotation = 0 | 1 | 2 | 3;
 
 const PDF_BUILDER_PAGE_WIDTH = 595.276;
 const PDF_BUILDER_PAGE_HEIGHT = 841.89;
@@ -100,7 +107,7 @@ interface PdfBuilderPageSpread {
   readonly pages: readonly PdfBuilderPage[];
 }
 
-interface PdfBuilderField {
+export interface PdfBuilderField {
   readonly id: string;
   readonly type: PdfBuilderFieldType;
   readonly page: number;
@@ -116,6 +123,32 @@ interface PdfBuilderField {
   readonly required: boolean;
   readonly readonly: boolean;
   readonly locked: boolean;
+}
+
+export interface PdfBuilderSchema {
+  readonly version: 1;
+  readonly document: {
+    readonly name: string;
+    readonly source: PdfViewerSource | null;
+    readonly sizeLabel: string;
+    readonly sourcePageCount: number;
+    readonly addedPageCount: number;
+  };
+  readonly view: {
+    readonly activePage: number;
+    readonly selectedFieldId: string | null;
+    readonly activeCanvasTool: PdfBuilderCanvasTool;
+    readonly pageStripVisible: boolean;
+    readonly libraryCollapsed: boolean;
+    readonly searchPanelVisible: boolean;
+    readonly annotationsPanelVisible: boolean;
+    readonly spreadMode: PdfBuilderSpreadMode;
+    readonly scrollLayout: PdfBuilderScrollLayout;
+    readonly pageRotation: PdfBuilderPageRotation;
+    readonly activeSearchQuery: string;
+    readonly expandedLayerNodeIds: readonly string[];
+  };
+  readonly fields: readonly PdfBuilderField[];
 }
 
 interface PdfBuilderActivity {
@@ -183,6 +216,8 @@ interface PdfBuilderFieldResize {
   exportAs: 'ngsPdfBuilder',
   imports: [
     Button,
+    Datepicker,
+    DatepickerInput,
     Divider,
     Icon,
     Menu,
@@ -210,6 +245,7 @@ interface PdfBuilderFieldResize {
     TreeNodeDef,
     TreeNodePadding,
   ],
+  providers: [provideNativeDateAdapter()],
   templateUrl: './pdf-builder.html',
   styleUrl: './pdf-builder.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -229,12 +265,18 @@ export class PdfBuilder {
   private layerExpansionRestoreScheduled = false;
   private suppressFieldClickId: string | null = null;
   private dragCursorLocked = false;
+  private schemaChangeEffectReady = false;
+  private suppressNextSchemaChange = false;
   private readonly dragCursorClass = 'ngs-pdf-builder-drag-cursor';
 
+  readonly schema = input<PdfBuilderSchema | null>(null);
+  readonly schemaChange = output<PdfBuilderSchema>();
   readonly createBlankPdf = output<void>();
   readonly exportPdf = output<void>();
 
   protected readonly layersTree = viewChild<Tree<PdfBuilderLayerNode>>('layersTree');
+  protected readonly dateFieldPicker = viewChild<Datepicker<Date>>('dateFieldPicker');
+  protected readonly dateFieldInput = viewChild<DatepickerInput<Date>>('dateFieldInput');
   protected readonly documentName = signal('MSA.pdf');
   protected readonly documentSource = signal<PdfViewerSource>('/assets/pdf-builder/sample-contract.pdf');
   protected readonly documentSizeLabel = signal('4.1 KB');
@@ -277,6 +319,12 @@ export class PdfBuilder {
       label: 'Variable field',
       icon: 'fluent:braces-variable-24-regular',
       description: 'Bind text to contract or CRM data.',
+    },
+    {
+      type: 'date',
+      label: 'Date field',
+      icon: 'fluent:calendar-ltr-24-regular',
+      description: 'Pick a date and place it in the PDF.',
     },
     {
       type: 'signature',
@@ -438,6 +486,16 @@ export class PdfBuilder {
     });
 
     effect(() => {
+      const schema = this.schema();
+
+      if (!schema) {
+        return;
+      }
+
+      untracked(() => this.restoreSchema(schema));
+    });
+
+    effect(() => {
       this.pdfScale();
       this.activePage();
       this.pageCount();
@@ -471,6 +529,22 @@ export class PdfBuilder {
 
     effect(() => {
       this.setDragCursorLocked(!!this.placementGhost() || !!this.fieldDrag());
+    });
+
+    effect(() => {
+      const schema = this.captureSchema();
+
+      if (!this.schemaChangeEffectReady) {
+        this.schemaChangeEffectReady = true;
+        return;
+      }
+
+      if (this.suppressNextSchemaChange) {
+        this.suppressNextSchemaChange = false;
+        return;
+      }
+
+      this.schemaChange.emit(schema);
     });
   }
 
@@ -656,6 +730,10 @@ export class PdfBuilder {
     }
 
     this.editingFieldId.set(null);
+
+    if (field?.type === 'date' && !field.locked) {
+      this.openDateFieldPicker(field);
+    }
   }
 
   protected beginFieldDrag(event: PointerEvent, fieldId: string): void {
@@ -701,6 +779,7 @@ export class PdfBuilder {
   protected canResizeField(field: PdfBuilderField): boolean {
     return field.type === 'text' ||
       field.type === 'variable' ||
+      field.type === 'date' ||
       field.type === 'checkbox' ||
       field.type === 'stamp' ||
       field.type === 'signature' ||
@@ -808,6 +887,10 @@ export class PdfBuilder {
       return field.value.trim() || this.getVariableToken(field.binding);
     }
 
+    if (field.type === 'date') {
+      return field.value.trim() || 'Select date';
+    }
+
     return field.value;
   }
 
@@ -840,6 +923,60 @@ export class PdfBuilder {
       ),
     );
     this.recordActivity('Binding updated', `${field.label} bound to ${binding.path}.`, 'fluent:database-link-24-regular');
+  }
+
+  private openDateFieldPicker(field: PdfBuilderField): void {
+    const picker = this.dateFieldPicker();
+    const input = this.dateFieldInput();
+    const anchor = this.getDatePickerAnchorElement();
+    const fieldElement = this.getOverlayFieldElement(field.id);
+
+    if (!picker || !input || !anchor || !fieldElement) {
+      return;
+    }
+
+    const rect = fieldElement.getBoundingClientRect();
+
+    this.setCssVar(anchor, '--pdf-builder-date-anchor-left', `${rect.left}px`);
+    this.setCssVar(anchor, '--pdf-builder-date-anchor-top', `${rect.top}px`);
+    this.setCssVar(anchor, '--pdf-builder-date-anchor-width', `${rect.width}px`);
+    this.setCssVar(anchor, '--pdf-builder-date-anchor-height', `${rect.height}px`);
+
+    input.registerOnChange((date: Date | null) => this.applyDateFieldValue(field.id, date));
+    input.writeValue(this.parseDateFieldValue(field.value));
+    this.scheduleDomSync(() => picker.open());
+  }
+
+  private applyDateFieldValue(fieldId: string, date: Date | null): void {
+    if (!date || Number.isNaN(date.getTime())) {
+      return;
+    }
+
+    const value = this.formatDateFieldValue(date);
+
+    this.commitFields(fields =>
+      fields.map(field =>
+        field.id === fieldId && field.type === 'date' && !field.locked
+          ? { ...field, value }
+          : field,
+      ),
+    );
+    this.selectedFieldId.set(fieldId);
+    this.recordActivity('Date selected', `${value} inserted.`, 'fluent:calendar-ltr-24-regular');
+  }
+
+  private parseDateFieldValue(value: string): Date | null {
+    const timestamp = Date.parse(value);
+
+    return Number.isNaN(timestamp) ? null : new Date(timestamp);
+  }
+
+  private formatDateFieldValue(date: Date): string {
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(date);
   }
 
   private startTextEditing(fieldId: string): void {
@@ -1095,6 +1232,78 @@ export class PdfBuilder {
     this.recordActivity('Redo', 'Field change restored.', 'fluent:arrow-redo-24-regular');
   }
 
+  private captureSchema(): PdfBuilderSchema {
+    return {
+      version: 1,
+      document: {
+        name: this.documentName(),
+        source: this.documentSource(),
+        sizeLabel: this.documentSizeLabel(),
+        sourcePageCount: this.sourcePageCount(),
+        addedPageCount: this.addedPageCount(),
+      },
+      view: {
+        activePage: this.activePage(),
+        selectedFieldId: this.selectedFieldId(),
+        activeCanvasTool: this.activeCanvasTool(),
+        pageStripVisible: this.pageStripVisible(),
+        libraryCollapsed: this.libraryCollapsed(),
+        searchPanelVisible: this.searchPanelVisible(),
+        annotationsPanelVisible: this.annotationsPanelVisible(),
+        spreadMode: this.spreadMode(),
+        scrollLayout: this.scrollLayout(),
+        pageRotation: this.pageRotation(),
+        activeSearchQuery: this.activeSearchQuery(),
+        expandedLayerNodeIds: Array.from(this.expandedLayerNodeIds()),
+      },
+      fields: this.fields().map(field => ({ ...field })),
+    };
+  }
+
+  private restoreSchema(schema: PdfBuilderSchema): void {
+    const sourcePageCount = Math.max(0, Math.floor(schema.document?.sourcePageCount ?? 0));
+    const addedPageCount = Math.max(0, Math.floor(schema.document?.addedPageCount ?? 0));
+    const pageCount = Math.max(1, sourcePageCount + addedPageCount);
+    const fields = (schema.fields ?? []).map(field => ({ ...field }));
+    const view = schema.view;
+
+    this.suppressNextSchemaChange = true;
+    this.removePlacementEventListeners();
+    this.removeFieldDragEventListeners();
+    this.removeFieldResizeEventListeners();
+    this.documentName.set(schema.document?.name ?? 'Untitled.pdf');
+    this.documentSource.set(schema.document?.source ?? null);
+    this.documentSizeLabel.set(schema.document?.sizeLabel ?? '0 KB');
+    this.sourcePageCount.set(sourcePageCount);
+    this.addedPageCount.set(addedPageCount);
+    this.fields.set(fields);
+    this.activePage.set(this.clamp(Math.floor(view?.activePage ?? 1), 1, pageCount));
+    this.pageStripVisible.set(view?.pageStripVisible ?? true);
+    this.libraryCollapsed.set(view?.libraryCollapsed ?? false);
+    this.searchPanelVisible.set(view?.searchPanelVisible ?? false);
+    this.annotationsPanelVisible.set(view?.annotationsPanelVisible ?? false);
+    this.spreadMode.set(this.normalizeSpreadMode(view?.spreadMode));
+    this.scrollLayout.set(this.normalizeScrollLayout(view?.scrollLayout));
+    this.pageRotation.set(this.normalizePageRotation(view?.pageRotation));
+    this.expandedLayerNodeIds.set(new Set(view?.expandedLayerNodeIds ?? []));
+    const selectedFieldId = fields.some(field => field.id === view?.selectedFieldId)
+      ? view?.selectedFieldId ?? null
+      : null;
+
+    this.selectedFieldId.set(selectedFieldId);
+    this.hoveredFieldId.set(null);
+    this.editingFieldId.set(null);
+    this.placementGhost.set(null);
+    this.fieldDrag.set(null);
+    this.fieldResize.set(null);
+    this.activeCanvasTool.set(this.normalizeCanvasTool(view?.activeCanvasTool));
+    this.activeSearchQuery.set(view?.activeSearchQuery ?? '');
+    this.pdfSearchResults.set([]);
+    this.undoStack.set([]);
+    this.redoStack.set([]);
+    this.syncFieldIdFromFields(fields);
+  }
+
   protected duplicateSelectedField(): void {
     const field = this.selectedField();
 
@@ -1139,6 +1348,16 @@ export class PdfBuilder {
     }
 
     this.updateSelectedField('locked', !field.locked);
+  }
+
+  protected toggleSelectedFieldRequired(): void {
+    const field = this.selectedField();
+
+    if (!field || field.locked) {
+      return;
+    }
+
+    this.updateSelectedField('required', !field.required);
   }
 
   protected updateSelectedField<K extends keyof PdfBuilderField>(
@@ -1434,7 +1653,7 @@ export class PdfBuilder {
       const maxHeight = Math.max(minimumMetrics.height, PDF_BUILDER_PAGE_HEIGHT - resize.startY);
 
       width = Math.round(this.clamp(resize.startWidth + deltaX, minimumMetrics.width, maxWidth));
-      height = currentField.type === 'variable'
+      height = currentField.type === 'variable' || currentField.type === 'date'
         ? resize.startHeight
         : Math.round(this.clamp(resize.startHeight + deltaY, minimumMetrics.height, maxHeight));
     }
@@ -1981,6 +2200,10 @@ export class PdfBuilder {
     return this.elementRef.nativeElement.querySelector<HTMLElement>('.selection-toolbar');
   }
 
+  private getDatePickerAnchorElement(): HTMLElement | null {
+    return this.elementRef.nativeElement.querySelector<HTMLElement>('.date-picker-anchor');
+  }
+
   private getTextFieldEditorElement(fieldId: string): HTMLElement | null {
     return this.elementRef.nativeElement.querySelector<HTMLElement>(`[contenteditable][data-text-editor-for="${fieldId}"]`);
   }
@@ -2093,12 +2316,14 @@ export class PdfBuilder {
   }
 
   private nextSlot(): PdfBuilderFieldSlot {
-    const slots: PdfBuilderFieldSlot[] = ['primary', 'checkbox', 'signature', 'initials', 'footer', 'side', 'comment'];
+    const slots: PdfBuilderFieldSlot[] = ['primary', 'date', 'checkbox', 'signature', 'initials', 'footer', 'side', 'comment'];
     return slots[this.fields().length % slots.length];
   }
 
   private getSlotMetrics(slot: PdfBuilderFieldSlot): Pick<PdfBuilderField, 'x' | 'y' | 'width' | 'height'> {
     switch (slot) {
+      case 'date':
+        return { x: 96, y: 220, width: 118, height: 28 };
       case 'signature':
         return { x: 384, y: 711, width: 154, height: 42 };
       case 'initials':
@@ -2125,6 +2350,10 @@ export class PdfBuilder {
       return { width: 72, height: field.height };
     }
 
+    if (field.type === 'date') {
+      return { width: 82, height: field.height };
+    }
+
     return this.getDefaultMetricsForType(field.type);
   }
 
@@ -2134,6 +2363,8 @@ export class PdfBuilder {
         return 'signature';
       case 'initials':
         return 'initials';
+      case 'date':
+        return 'date';
       case 'checkbox':
         return 'checkbox';
       case 'stamp':
@@ -2147,10 +2378,33 @@ export class PdfBuilder {
     return Math.min(Math.max(value, min), max);
   }
 
+  private normalizeSpreadMode(value: unknown): PdfBuilderSpreadMode {
+    return value === 'two-odd' || value === 'two-even' ? value : 'single';
+  }
+
+  private normalizeScrollLayout(value: unknown): PdfBuilderScrollLayout {
+    return value === 'horizontal' ? 'horizontal' : 'vertical';
+  }
+
+  private normalizeCanvasTool(value: unknown): PdfBuilderCanvasTool {
+    return value === 'pan' || value === 'text' ? value : 'select';
+  }
+
+  private syncFieldIdFromFields(fields: readonly PdfBuilderField[]): void {
+    this.fieldId = fields.reduce((max, field) => {
+      const match = /-(\d+)$/.exec(field.id);
+      const idNumber = match ? Number.parseInt(match[1], 10) : 0;
+
+      return Number.isFinite(idNumber) ? Math.max(max, idNumber) : max;
+    }, 0);
+  }
+
   private getDefaultValue(type: PdfBuilderFieldType, binding = ''): string {
     switch (type) {
       case 'variable':
         return this.getVariableToken(binding);
+      case 'date':
+        return '';
       case 'signature':
         return 'Signature';
       case 'initials':
@@ -2165,7 +2419,7 @@ export class PdfBuilder {
   }
 
   private getDefaultBinding(type: PdfBuilderFieldType, id: string): string {
-    if (type === 'text' || type === 'variable') {
+    if (type === 'text' || type === 'variable' || type === 'date') {
       return '';
     }
 
@@ -2218,8 +2472,10 @@ export class PdfBuilder {
     this.document.defaultView?.setTimeout(() => this.scrollPageIntoView(activePage), 0);
   }
 
-  private normalizePageRotation(rotation: number): PdfBuilderPageRotation {
-    return (((rotation % 4) + 4) % 4) as PdfBuilderPageRotation;
+  private normalizePageRotation(rotation: unknown): PdfBuilderPageRotation {
+    const value = typeof rotation === 'number' && Number.isFinite(rotation) ? rotation : 0;
+
+    return (((value % 4) + 4) % 4) as PdfBuilderPageRotation;
   }
 
   private createBlankPdfBlob(): Blob {

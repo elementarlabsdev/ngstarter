@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { PdfViewer } from '@ngstarter-ui/components/pdf-viewer';
 
-import { PdfBuilder } from './pdf-builder';
+import { PdfBuilder, type PdfBuilderSchema } from './pdf-builder';
 
 describe('PdfBuilder', () => {
   let component: PdfBuilder;
@@ -37,6 +37,111 @@ describe('PdfBuilder', () => {
     expect(element.textContent).toContain('0 fields');
     expect(element.textContent).not.toContain('Prepared fields');
     expect(element.textContent).not.toContain('Source');
+  });
+
+  it('emits schema changes when builder state changes', async () => {
+    const emitted: PdfBuilderSchema[] = [];
+    const subscription = component.schemaChange.subscribe(schema => emitted.push(schema));
+    const state = component as unknown as {
+      activePage: { set: (page: number) => void };
+      addField: (type: 'text') => void;
+    };
+
+    state.addField('text');
+    fixture.detectChanges();
+    await Promise.resolve();
+
+    expect(emitted.at(-1)?.fields).toHaveLength(1);
+    expect(emitted.at(-1)?.fields[0]).toMatchObject({
+      type: 'text',
+      label: 'Text box',
+    });
+
+    state.activePage.set(2);
+    fixture.detectChanges();
+    await Promise.resolve();
+
+    expect(emitted.at(-1)?.view.activePage).toBe(2);
+    subscription.unsubscribe();
+  });
+
+  it('restores fields and builder state from the schema input', async () => {
+    const emitted: PdfBuilderSchema[] = [];
+    const subscription = component.schemaChange.subscribe(schema => emitted.push(schema));
+    const schema: PdfBuilderSchema = {
+      version: 1,
+      document: {
+        name: 'Restored.pdf',
+        source: '/assets/pdf-builder/sample-contract.pdf',
+        sizeLabel: '9 KB',
+        sourcePageCount: 2,
+        addedPageCount: 1,
+      },
+      view: {
+        activePage: 3,
+        selectedFieldId: 'field-date-7',
+        activeCanvasTool: 'select',
+        pageStripVisible: false,
+        libraryCollapsed: true,
+        searchPanelVisible: true,
+        annotationsPanelVisible: false,
+        spreadMode: 'two-odd',
+        scrollLayout: 'horizontal',
+        pageRotation: 1,
+        activeSearchQuery: 'effective',
+        expandedLayerNodeIds: ['page-3'],
+      },
+      fields: [
+        {
+          id: 'field-date-7',
+          type: 'date',
+          page: 3,
+          label: 'Date field',
+          binding: '',
+          value: '07/12/2026',
+          icon: 'fluent:calendar-ltr-24-regular',
+          slot: 'date',
+          x: 120,
+          y: 160,
+          width: 118,
+          height: 28,
+          required: false,
+          readonly: false,
+          locked: false,
+        },
+      ],
+    };
+    const state = component as unknown as {
+      activePage: () => number;
+      documentName: () => string;
+      fields: () => readonly { id: string; type: string; value: string }[];
+      libraryCollapsed: () => boolean;
+      pageCount: () => number;
+      pageStripVisible: () => boolean;
+      schema: () => PdfBuilderSchema;
+      searchPanelVisible: () => boolean;
+      addField: (type: 'text') => void;
+    };
+
+    fixture.componentRef.setInput('schema', schema);
+    fixture.detectChanges();
+    await Promise.resolve();
+
+    expect(state.documentName()).toBe('Restored.pdf');
+    expect(state.pageCount()).toBe(3);
+    expect(state.activePage()).toBe(3);
+    expect(state.pageStripVisible()).toBe(false);
+    expect(state.libraryCollapsed()).toBe(true);
+    expect(state.searchPanelVisible()).toBe(true);
+    expect(state.fields()).toEqual(schema.fields);
+    expect(emitted).toEqual([]);
+
+    state.addField('text');
+    fixture.detectChanges();
+    await Promise.resolve();
+
+    expect(state.fields().at(-1)?.id).toBe('field-text-8');
+    subscription.unsubscribe();
   });
 
   it('does not expose a create blank PDF action in the builder chrome', () => {
@@ -226,6 +331,35 @@ describe('PdfBuilder', () => {
     expect(element.textContent).not.toContain('required');
   });
 
+  it('toggles the selected field required state from the selection toolbar', async () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const emitted: PdfBuilderSchema[] = [];
+    const subscription = component.schemaChange.subscribe(schema => emitted.push(schema));
+    const state = component as unknown as {
+      addField: (type: 'text') => void;
+      fields: () => readonly { required: boolean }[];
+    };
+
+    state.addField('text');
+    fixture.detectChanges();
+
+    const requiredButton = element.querySelector<HTMLButtonElement>('button[aria-label="Toggle required field"]');
+
+    expect(requiredButton).not.toBeNull();
+    expect(requiredButton!.getAttribute('aria-pressed')).toBe('false');
+
+    requiredButton!.click();
+    fixture.detectChanges();
+    await Promise.resolve();
+
+    expect(state.fields()[0].required).toBe(true);
+    expect(emitted.at(-1)?.fields[0].required).toBe(true);
+    expect(requiredButton!.getAttribute('aria-pressed')).toBe('true');
+    expect(requiredButton!.classList.contains('is-active')).toBe(true);
+
+    subscription.unsubscribe();
+  });
+
   it('keeps layer expansion restored when scrolling changes the active page', async () => {
     const state = component as unknown as {
       activePage: { set: (page: number) => void };
@@ -362,6 +496,58 @@ describe('PdfBuilder', () => {
       width: 105,
       height: 42,
     });
+  });
+
+  it('uses compact horizontal metrics for date fields', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const state = component as unknown as {
+      addField: (type: 'date') => void;
+      fields: () => readonly { label: string; binding: string; width: number; height: number; value: string }[];
+    };
+
+    state.addField('date');
+    fixture.detectChanges();
+
+    expect(state.fields()[0]).toMatchObject({
+      label: 'Date field',
+      binding: '',
+      value: '',
+      width: 118,
+      height: 28,
+    });
+    expect(element.querySelector('.overlay-type-date')?.textContent).toContain('Select date');
+  });
+
+  it('opens a datepicker for date fields and inserts the selected date', async () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const state = component as unknown as {
+      addField: (type: 'date') => void;
+      fields: () => readonly { id: string; value: string }[];
+    };
+
+    state.addField('date');
+    fixture.detectChanges();
+
+    const field = state.fields()[0];
+    const overlayField = element.querySelector<HTMLElement>(`[data-field-id="${field.id}"]`);
+
+    expect(overlayField).not.toBeNull();
+    expect(overlayField!.querySelector('ngs-icon')).not.toBeNull();
+
+    overlayField!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fixture.detectChanges();
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+
+    const calendarCell = document.querySelector<HTMLElement>('.ngs-calendar-cell:not(.ngs-calendar-cell-empty)');
+
+    expect(calendarCell).not.toBeNull();
+
+    calendarCell!.click();
+    fixture.detectChanges();
+
+    expect(state.fields()[0].value).not.toBe('');
+    expect(element.querySelector('.overlay-type-date')?.textContent).toContain(state.fields()[0].value);
+    expect(element.querySelector('.overlay-type-date ngs-icon')).toBeNull();
   });
 
   it('uses a slightly wider than tall canvas shape for stamp fields', () => {
@@ -1161,6 +1347,70 @@ describe('PdfBuilder', () => {
     const resizedField = state.fields()[0];
 
     expect(resizedField.width).toBe(72);
+    expect(resizedField.height).toBe(field.height);
+    expect(state.fieldResize()).toBeNull();
+  });
+
+  it('resizes date fields horizontally without changing their height', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const state = component as unknown as {
+      addField: (type: 'date') => void;
+      fields: () => readonly { id: string; x: number; y: number; width: number; height: number }[];
+      fieldResize: () => unknown;
+    };
+
+    state.addField('date');
+    fixture.detectChanges();
+
+    const pageShell = element.querySelector<HTMLElement>('.pdf-page-shell[data-page-number="1"]');
+
+    expect(pageShell).not.toBeNull();
+
+    pageShell!.getBoundingClientRect = () => ({
+      x: 0,
+      y: 0,
+      top: 0,
+      left: 0,
+      right: 595.276,
+      bottom: 841.89,
+      width: 595.276,
+      height: 841.89,
+      toJSON: () => undefined,
+    });
+
+    const field = state.fields()[0];
+    const handle = element.querySelector<HTMLElement>('.overlay-type-date .resize-handle.handle-e');
+
+    expect(handle).not.toBeNull();
+
+    handle!.dispatchEvent(new PointerEvent('pointerdown', {
+      bubbles: true,
+      button: 0,
+      clientX: field.x + field.width,
+      clientY: field.y + field.height / 2,
+      pointerId: 31,
+    }));
+    fixture.detectChanges();
+
+    expect(state.fieldResize()).not.toBeNull();
+
+    window.dispatchEvent(new PointerEvent('pointermove', {
+      bubbles: true,
+      clientX: field.x + field.width - 1000,
+      clientY: field.y + field.height + 1000,
+      pointerId: 31,
+    }));
+    window.dispatchEvent(new PointerEvent('pointerup', {
+      bubbles: true,
+      clientX: field.x + field.width - 1000,
+      clientY: field.y + field.height + 1000,
+      pointerId: 31,
+    }));
+    fixture.detectChanges();
+
+    const resizedField = state.fields()[0];
+
+    expect(resizedField.width).toBe(82);
     expect(resizedField.height).toBe(field.height);
     expect(state.fieldResize()).toBeNull();
   });

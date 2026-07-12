@@ -627,6 +627,12 @@
     padding: --spacing(2) --spacing(3);
   }
 
+  .overlay-slot-date {
+    align-items: center;
+    justify-content: center;
+    padding: 0 --spacing(3);
+  }
+
   .overlay-slot-signature {
     align-items: center;
     justify-content: center;
@@ -725,7 +731,7 @@
     justify-content: flex-start;
     border-color: color-mix(in srgb, var(--ngs-color-primary), transparent 54%);
     background: color-mix(in srgb, var(--ngs-color-primary), transparent 92%);
-    padding: --spacing(2.5) --spacing(3) --spacing(1.5);
+    padding: --spacing(2.5) --spacing(2) --spacing(1.5);
 
     .field-badge {
       display: none;
@@ -788,7 +794,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    padding: --spacing(1.5) --spacing(3);
+    padding: --spacing(1.5) --spacing(2);
 
     .field-badge {
       width: 100%;
@@ -809,6 +815,45 @@
       font-size: var(--ngs-font-size-sm);
       font-weight: 500;
       line-height: 1;
+    }
+
+    .field-label {
+      display: none;
+    }
+  }
+
+  .overlay-type-date {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    border-color: color-mix(in srgb, var(--ngs-color-primary), transparent 54%);
+    background: color-mix(in srgb, var(--ngs-color-primary), transparent 92%);
+    padding: 0 --spacing(2);
+
+    .field-badge {
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      gap: --spacing(2);
+      color: var(--ngs-color-primary);
+    }
+
+    ngs-icon {
+      flex: none;
+      font-size: var(--ngs-font-size-xl);
+    }
+
+    .field-value {
+      min-width: 0;
+      margin: 0;
+      color: var(--ngs-color-on-surface);
+      font-size: var(--ngs-font-size-sm);
+      font-weight: 400;
+      line-height: 1;
+
+      &.is-placeholder {
+        color: var(--ngs-color-on-surface-variant);
+      }
     }
 
     .field-label {
@@ -988,6 +1033,18 @@
     white-space: nowrap;
   }
 
+  .date-picker-anchor {
+    position: fixed;
+    left: var(--pdf-builder-date-anchor-left, -10000px);
+    top: var(--pdf-builder-date-anchor-top, -10000px);
+    z-index: -1;
+    width: var(--pdf-builder-date-anchor-width, --spacing(28));
+    height: var(--pdf-builder-date-anchor-height, --spacing(7));
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
   .resize-handle {
     position: absolute;
     width: --spacing(2);
@@ -1031,6 +1088,11 @@
 
     ngs-icon {
       font-size: var(--ngs-font-size-xl);
+    }
+
+    &.is-active {
+      color: var(--ngs-color-primary);
+      background: color-mix(in srgb, var(--ngs-color-primary), transparent 90%);
     }
   }
 
