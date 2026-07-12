@@ -200,7 +200,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   private _initialViewState = signal<DataViewState[]>([]);
 
   // Resize and Pin state
-  private _manualWidths = signal<Record<string, string | undefined>>({});
+  private _manualWidths = signal<Record<string, DataViewColumnDef['width'] | undefined>>({});
   private _manualPinned = signal<Record<string, { pinned: boolean, pinAlign: DataViewPinAlign } | undefined>>({});
   private _isResizing = signal(false);
   private _resizeLineLeft = signal(0);
@@ -247,7 +247,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
       const overrideWidth = overrides[mergedCol.field];
       const pinOverride = pinOverrides[mergedCol.field];
       const visibleOverride = visibility[mergedCol.field];
-      const width = this._normalizeWidth(overrideWidth ?? mergedCol.width);
+      const width = this._normalizeWidth(overrideWidth ?? mergedCol.width ?? mergedCol.minWidth);
       const flex = (overrideWidth ? undefined : mergedCol.flex) ?? (width ? undefined : 1);
       const pinned = pinOverride ? pinOverride.pinned : mergedCol.pinned;
       const pinAlign = pinOverride ? pinOverride.pinAlign : mergedCol.pinAlign;

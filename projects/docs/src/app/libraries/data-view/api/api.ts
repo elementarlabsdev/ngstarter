@@ -306,8 +306,8 @@ export class Api {
     },
     {
       name: 'width',
-      description: 'Fixed column width. Numeric strings are normalized to pixels.',
-      type: 'string',
+      description: 'Fixed column width. Numeric values and numeric strings are normalized to pixels. When omitted, minWidth is used as the initial width.',
+      type: 'string | number',
       default: '-'
     },
     {

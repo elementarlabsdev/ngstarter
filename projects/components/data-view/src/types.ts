@@ -16,12 +16,14 @@ export interface DataViewAPI<T = any> {
   getSnapshot(): DataViewState[];
 }
 
+export type DataViewColumnWidth = string | number;
+
 export interface DataViewColumnDef {
   name: string;
   field: string;
   cellRenderer?: string;
   visible?: boolean;
-  width?: string;
+  width?: DataViewColumnWidth;
   flex?: number;
   type?: string;
   valueGetter?: (value: any) => any;
@@ -83,7 +85,7 @@ export type DataViewPinAlign = 'start' | 'end' | undefined;
 export interface DataViewState {
   field: string;
   visible?: boolean;
-  width?: string;
+  width?: DataViewColumnWidth;
   pinned?: boolean;
   pinAlign?: DataViewPinAlign;
 }

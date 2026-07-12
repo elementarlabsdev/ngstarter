@@ -3140,6 +3140,7 @@
         "DataViewCellRendererDef",
         "DataViewColumnDef",
         "DataViewColumnSettingsDialog",
+        "DataViewColumnWidth",
         "DataViewConfig",
         "DataViewDatasource",
         "DataViewEmptyDataDirective",
