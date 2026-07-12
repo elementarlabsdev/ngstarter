@@ -347,6 +347,7 @@ describe('PdfBuilder', () => {
 
     expect(requiredButton).not.toBeNull();
     expect(requiredButton!.getAttribute('aria-pressed')).toBe('false');
+    expect(requiredButton!.querySelector('ngs-icon')?.getAttribute('name')).toBe('fluent:text-asterisk-20-regular');
 
     requiredButton!.click();
     fixture.detectChanges();

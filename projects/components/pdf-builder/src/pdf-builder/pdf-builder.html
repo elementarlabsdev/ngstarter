@@ -506,7 +506,7 @@
                         [ngsTooltip]="selectedField()?.required ? 'Required' : 'Not required'"
                         (click)="$event.stopPropagation(); toggleSelectedFieldRequired()"
                       >
-                        <ngs-icon name="fluent:asterisk-24-regular" />
+                        <ngs-icon name="fluent:text-asterisk-20-regular" />
                       </button>
                       <button ngsIconButton type="button" aria-label="Lock field" ngsTooltip="Lock" (click)="$event.stopPropagation(); toggleSelectedFieldLock()">
                         <ngs-icon [name]="selectedField()?.locked ? 'fluent:lock-open-24-regular' : 'fluent:lock-closed-24-regular'" />
