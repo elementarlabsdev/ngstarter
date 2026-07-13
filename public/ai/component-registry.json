@@ -7174,13 +7174,13 @@
         "PDF Builder",
         "Basic pdf builder"
       ],
-      "minimalExample": "<ngs-pdf-builder />",
+      "minimalExample": "<ngs-pdf-builder [recipients]=\"recipients()\" (removeRecipient)=\"removeRecipient($event)\" />",
       "exampleFiles": [
         {
           "name": "basic-pdf-builder-example",
           "title": "Basic pdf builder",
           "file": "projects/docs/src/app/libraries/pdf-builder/_examples/basic-pdf-builder-example/basic-pdf-builder-example.html",
-          "source": "<ngs-pdf-builder />"
+          "source": "<ngs-pdf-builder [recipients]=\"recipients()\" (removeRecipient)=\"removeRecipient($event)\" />"
         }
       ],
       "previewAsset": null,
@@ -7188,12 +7188,35 @@
         "ngs-pdf-builder"
       ],
       "exportedSymbols": [
-        "PdfBuilder"
+        "PdfBuilder",
+        "PdfBuilderCanvasTool",
+        "PdfBuilderField",
+        "PdfBuilderFieldSlot",
+        "PdfBuilderFieldType",
+        "PdfBuilderPageRotation",
+        "PdfBuilderRecipient",
+        "PdfBuilderSchema",
+        "PdfBuilderSchemaPage",
+        "PdfBuilderSchemaPageKind",
+        "PdfBuilderScrollLayout",
+        "PdfBuilderSpreadMode"
       ],
-      "inputs": [],
+      "inputs": [
+        "annotations",
+        "recipients",
+        "schema"
+      ],
       "outputs": [
+        "addRecipient",
         "createBlankPdf",
-        "exportPdf"
+        "createRecipientContact",
+        "editRecipientDetails",
+        "exportPdf",
+        "recipientSearchChanged",
+        "recipientSelected",
+        "removeRecipient",
+        "replaceRecipient",
+        "schemaChange"
       ],
       "cssTokens": [
         "--ngs-button-border-radius",
@@ -7205,6 +7228,7 @@
         "--ngs-button-padding",
         "--ngs-color-border",
         "--ngs-color-border-strong",
+        "--ngs-color-danger",
         "--ngs-color-on-primary-container",
         "--ngs-color-on-surface",
         "--ngs-color-on-surface-variant",
@@ -7231,7 +7255,6 @@
         "--ngs-pdf-viewer-sidebar-width",
         "--ngs-radius-current",
         "--ngs-shadow-lg",
-        "--ngs-shadow-md",
         "--ngs-shadow-sm",
         "--ngs-shadow-xs",
         "--ngs-state-focus-ring",

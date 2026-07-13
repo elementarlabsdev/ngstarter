@@ -27,13 +27,19 @@ describe('PdfBuilder', () => {
   it('starts with a clean PDF canvas without fields', () => {
     const element: HTMLElement = fixture.nativeElement;
     const state = component as unknown as {
+      documentSource: () => unknown;
       fields: () => readonly unknown[];
+      pageCount: () => number;
       selectedField: () => unknown;
     };
 
+    expect(state.documentSource()).toBeNull();
+    expect(state.pageCount()).toBe(1);
     expect(state.fields()).toEqual([]);
     expect(state.selectedField()).toBeNull();
     expect(element.querySelectorAll('.overlay-field').length).toBe(0);
+    expect(element.querySelectorAll('.blank-pdf-page').length).toBe(1);
+    expect(element.querySelector('ngs-pdf-viewer')).toBeNull();
     expect(element.textContent).toContain('0 fields');
     expect(element.textContent).not.toContain('Prepared fields');
     expect(element.textContent).not.toContain('Source');
@@ -52,6 +58,16 @@ describe('PdfBuilder', () => {
     await Promise.resolve();
 
     expect(emitted.at(-1)?.fields).toHaveLength(1);
+    expect(emitted.at(-1)?.document).toMatchObject({
+      source: null,
+      sourcePageCount: 0,
+      addedPageCount: 1,
+    });
+    expect(emitted.at(-1)?.document.pages).toHaveLength(1);
+    expect(emitted.at(-1)?.document.pages?.[0]).toMatchObject({
+      id: 'virtual-1',
+      kind: 'virtual',
+    });
     expect(emitted.at(-1)?.fields[0]).toMatchObject({
       type: 'text',
       label: 'Text box',
@@ -144,6 +160,65 @@ describe('PdfBuilder', () => {
     subscription.unsubscribe();
   });
 
+  it('normalizes loaded PDF pages into schema pages', async () => {
+    const schema: PdfBuilderSchema = {
+      version: 1,
+      document: {
+        name: 'Loaded.pdf',
+        source: '/assets/pdf-builder/sample-contract.pdf',
+        sizeLabel: '9 KB',
+        sourcePageCount: 1,
+        addedPageCount: 1,
+        pages: [
+          {
+            id: 'source-1',
+            kind: 'source',
+            sourcePage: 1,
+          },
+          {
+            id: 'virtual-2',
+            kind: 'virtual',
+          },
+        ],
+      },
+      view: {
+        activePage: 2,
+        selectedFieldId: null,
+        activeCanvasTool: 'select',
+        pageStripVisible: true,
+        libraryCollapsed: false,
+        searchPanelVisible: false,
+        annotationsPanelVisible: false,
+        spreadMode: 'single',
+        scrollLayout: 'vertical',
+        pageRotation: 0,
+        activeSearchQuery: '',
+        expandedLayerNodeIds: ['page-1', 'page-2'],
+      },
+      fields: [],
+    };
+    const state = component as unknown as {
+      addedPageCount: () => number;
+      documentPages: () => readonly { kind: string; sourcePage?: number }[];
+      onPdfLoaded: (event: { pageCount: number }) => void;
+      pageCount: () => number;
+      sourcePageCount: () => number;
+    };
+
+    fixture.componentRef.setInput('schema', schema);
+    fixture.detectChanges();
+    await Promise.resolve();
+
+    state.onPdfLoaded({ pageCount: 3 });
+    fixture.detectChanges();
+
+    expect(state.sourcePageCount()).toBe(3);
+    expect(state.addedPageCount()).toBe(1);
+    expect(state.pageCount()).toBe(4);
+    expect(state.documentPages().map(page => page.kind)).toEqual(['source', 'source', 'source', 'virtual']);
+    expect(state.documentPages().slice(0, 3).map(page => page.sourcePage)).toEqual([1, 2, 3]);
+  });
+
   it('does not expose a create blank PDF action in the builder chrome', () => {
     const element: HTMLElement = fixture.nativeElement;
 
@@ -158,19 +233,30 @@ describe('PdfBuilder', () => {
     expect(element.textContent).not.toContain('Upload PDF');
   });
 
-  it('keeps document action buttons on the left side of the toolbar', () => {
+  it('moves field count and blank page actions from the toolbar to the right panel', () => {
     const element: HTMLElement = fixture.nativeElement;
     const start = element.querySelector<HTMLElement>('.pdf-viewer-toolbar__start');
     const end = element.querySelector<HTMLElement>('.pdf-viewer-toolbar__end');
+    const aside = element.querySelector<HTMLElement>('ngs-panel-aside.builder-viewer-aside');
+    const state = component as unknown as {
+      pageCount: () => number;
+    };
 
     expect(start).not.toBeNull();
-    expect(start!.textContent).toContain('0 fields');
-    expect(start!.querySelector('[aria-label="Add blank page"]')).not.toBeNull();
+    expect(start!.textContent).not.toContain('0 fields');
+    expect(start!.querySelector('[aria-label="Add blank page"]')).toBeNull();
     expect(start!.querySelector('[aria-label="Undo"]')).not.toBeNull();
     expect(start!.querySelector('[aria-label="Redo"]')).not.toBeNull();
     expect(end!.querySelector('[aria-label="Add blank page"]')).toBeNull();
     expect(end!.querySelector('[aria-label="Undo"]')).toBeNull();
     expect(end!.querySelector('[aria-label="Redo"]')).toBeNull();
+    expect(aside).not.toBeNull();
+    expect(aside!.querySelector('.field-sidebar-actions')?.textContent).toContain('0 fields');
+
+    aside!.querySelector<HTMLButtonElement>('[aria-label="Add blank page"]')!.click();
+    fixture.detectChanges();
+
+    expect(state.pageCount()).toBe(2);
   });
 
   it('keeps fields and layers in the left panel sidebar', () => {
@@ -191,7 +277,8 @@ describe('PdfBuilder', () => {
 
     expect(searchButton).not.toBeNull();
     expect(annotationsButton).not.toBeNull();
-    expect(element.querySelector('ngs-panel-aside.builder-viewer-aside')).toBeNull();
+    expect(element.querySelector('ngs-panel-aside.builder-viewer-aside')).not.toBeNull();
+    expect(element.querySelector('.field-sidebar-actions')).not.toBeNull();
 
     searchButton!.click();
     fixture.detectChanges();
@@ -202,6 +289,7 @@ describe('PdfBuilder', () => {
     expect(searchAside!.classList.contains('border-l')).toBe(true);
     expect(searchAside!.className).toContain('w-[var(--ngs-pdf-viewer-aside-width)]');
     expect(searchAside!.querySelector('ngs-pdf-viewer-search')).not.toBeNull();
+    expect(searchAside!.querySelector('.field-sidebar-actions')).toBeNull();
     expect(searchAside!.querySelector('ngs-tab-group')).toBeNull();
 
     annotationsButton!.click();
@@ -212,6 +300,291 @@ describe('PdfBuilder', () => {
     expect(annotationsAside).not.toBeNull();
     expect(annotationsAside!.querySelector('ngs-pdf-viewer-annotations')).not.toBeNull();
     expect(annotationsAside!.querySelector('ngs-pdf-viewer-search')).toBeNull();
+  });
+
+  it('does not derive annotation cards from builder fields', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const annotationsButton = element.querySelector<HTMLButtonElement>('[aria-label="Annotations"]');
+    const state = component as unknown as {
+      addField: (type: 'text') => void;
+      closeFieldSettingsPanel: () => void;
+      updateTextFieldValue: (fieldId: string, value: string) => void;
+      fields: () => readonly { id: string }[];
+    };
+
+    state.addField('text');
+    fixture.detectChanges();
+    state.updateTextFieldValue(state.fields()[0].id, 'Typed value');
+    state.closeFieldSettingsPanel();
+    fixture.detectChanges();
+
+    annotationsButton!.click();
+    fixture.detectChanges();
+
+    const annotationsAside = element.querySelector<HTMLElement>('ngs-panel-aside.builder-viewer-aside');
+
+    expect(annotationsAside!.querySelector('ngs-pdf-viewer-annotations')).not.toBeNull();
+    expect(annotationsAside!.textContent).toContain('No annotations found.');
+    expect(annotationsAside!.textContent).not.toContain('PDF Builder');
+    expect(annotationsAside!.textContent).not.toContain('Text box');
+    expect(annotationsAside!.textContent).not.toContain('Typed value');
+    expect(annotationsAside!.textContent).not.toContain('Select');
+  });
+
+  it('renders annotations from the annotations input', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const annotationsButton = element.querySelector<HTMLButtonElement>('[aria-label="Annotations"]');
+
+    fixture.componentRef.setInput('annotations', [
+      {
+        id: 'annotation-1',
+        type: 'comment',
+        label: 'Legal note',
+        author: 'Legal Team',
+        time: 'Today',
+        avatarLabel: 'LT',
+        text: 'Please confirm the indemnity clause.',
+        pageNumber: 1,
+        replyLabel: 'Open',
+      },
+    ]);
+    fixture.detectChanges();
+
+    annotationsButton!.click();
+    fixture.detectChanges();
+
+    const annotationsAside = element.querySelector<HTMLElement>('ngs-panel-aside.builder-viewer-aside');
+
+    expect(annotationsAside!.querySelector('ngs-pdf-viewer-annotations')).not.toBeNull();
+    expect(annotationsAside!.textContent).toContain('Legal Team');
+    expect(annotationsAside!.textContent).toContain('Legal note');
+    expect(annotationsAside!.textContent).toContain('Please confirm the indemnity clause.');
+    expect(annotationsAside!.textContent).toContain('Open');
+    expect(annotationsAside!.textContent).not.toContain('No annotations found.');
+  });
+
+  it('does not render a recipients block when there are no recipients', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const state = component as unknown as {
+      addField: (type: 'signature') => void;
+      closeFieldSettingsPanel: () => void;
+      fieldSettingsPanelVisible: () => boolean;
+    };
+
+    expect(element.querySelector('.field-recipients-panel')).toBeNull();
+    expect(element.querySelector('ngs-list')).toBeNull();
+    expect(element.textContent).not.toContain('No fields yet');
+    expect(element.textContent).not.toContain('No recipients yet');
+    expect(element.textContent).not.toContain('Add recipients');
+    expect(element.querySelector('.field-sidebar-actions')).not.toBeNull();
+
+    state.addField('signature');
+    fixture.detectChanges();
+
+    expect(state.fieldSettingsPanelVisible()).toBe(true);
+    expect(element.querySelector('.field-settings-panel')).not.toBeNull();
+    expect(element.querySelector('.field-settings-summary')).toBeNull();
+    expect(element.querySelector('.field-settings-summary-icon')).toBeNull();
+
+    state.closeFieldSettingsPanel();
+    fixture.detectChanges();
+
+    const aside = element.querySelector<HTMLElement>('ngs-panel-aside.builder-viewer-aside');
+
+    expect(aside).not.toBeNull();
+    expect(element.querySelector('.field-settings-panel')).toBeNull();
+    expect(element.querySelector('.field-recipients-panel')).toBeNull();
+    expect(element.querySelector('.field-sidebar-actions')).not.toBeNull();
+    expect(aside!.textContent).not.toContain('Add recipients');
+    expect(aside!.textContent).not.toContain('Signer');
+    expect(aside!.textContent).not.toContain('Signature');
+    expect(aside!.textContent).not.toContain('Page 1');
+  });
+
+  it('renders recipients from the recipients input without deriving them from fields', () => {
+    const element: HTMLElement = fixture.nativeElement;
+
+    fixture.componentRef.setInput('recipients', [
+      {
+        id: 'pavel',
+        name: 'Pavel Salauyou',
+        email: 'pavel.salauyou@gmail.com',
+        role: 'Signer',
+        avatarLabel: 'PS',
+        isCurrentUser: true,
+      },
+      {
+        id: 'legal',
+        name: 'Legal Approver',
+        email: 'legal@example.com',
+        role: 'Approver',
+      },
+    ]);
+    fixture.detectChanges();
+
+    const panel = element.querySelector<HTMLElement>('.field-recipients-panel');
+    const items = Array.from(element.querySelectorAll<HTMLElement>('.field-recipients-list ngs-list-item'));
+
+    expect(panel).not.toBeNull();
+    expect(panel!.textContent).toContain('Add recipients');
+    expect(panel!.textContent).toContain('Who are you sending this document to?');
+    expect(items).toHaveLength(2);
+    expect(items[0].querySelector('ngs-avatar')).not.toBeNull();
+    expect(items[0].textContent).toContain('Pavel Salauyou');
+    expect(items[0].textContent).toContain('Signer');
+    expect(items[0].textContent).toContain('YOU');
+    expect(items[0].textContent).toContain('pavel.salauyou@gmail.com');
+    expect(items[1].textContent).toContain('Legal Approver');
+    expect(items[1].textContent).toContain('legal@example.com');
+    expect(panel!.textContent).toContain('Add recipient');
+    expect(panel!.textContent).not.toContain('Manage recipients permissions');
+    expect(panel!.textContent).not.toContain('Signature');
+    expect(panel!.textContent).not.toContain('Page 1');
+    expect(element.querySelector('.field-sidebar-actions')).not.toBeNull();
+  });
+
+  it('opens field settings from an input recipient only when fieldIds maps to a field', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const emitted: unknown[] = [];
+    const subscription = component.recipientSelected.subscribe(recipient => emitted.push(recipient));
+    const state = component as unknown as {
+      addField: (type: 'signature') => void;
+      closeFieldSettingsPanel: () => void;
+      fields: () => readonly { id: string }[];
+      selectedFieldId: () => string | null;
+    };
+
+    state.addField('signature');
+    fixture.detectChanges();
+    state.closeFieldSettingsPanel();
+    fixture.detectChanges();
+
+    const fieldId = state.fields()[0].id;
+
+    fixture.componentRef.setInput('recipients', [
+      {
+        id: 'signer-1',
+        name: 'Primary Signer',
+        email: 'signer@example.com',
+        role: 'Signer',
+        fieldIds: [fieldId],
+      },
+    ]);
+    fixture.detectChanges();
+
+    const recipientItem = Array.from(element.querySelectorAll<HTMLElement>('.field-recipients-list ngs-list-item'))
+      .find(item => item.textContent?.includes('Primary Signer'));
+
+    recipientItem!.click();
+    fixture.detectChanges();
+
+    expect(emitted).toHaveLength(1);
+    expect(state.selectedFieldId()).toBe(fieldId);
+    expect(element.querySelector('.field-settings-panel')).not.toBeNull();
+
+    subscription.unsubscribe();
+  });
+
+  it('opens recipient actions menu and emits recipient action outputs', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const editEvents: unknown[] = [];
+    const replaceEvents: unknown[] = [];
+    const removeEvents: unknown[] = [];
+    const subscriptions = [
+      component.editRecipientDetails.subscribe(recipient => editEvents.push(recipient)),
+      component.replaceRecipient.subscribe(recipient => replaceEvents.push(recipient)),
+      component.removeRecipient.subscribe(recipient => removeEvents.push(recipient)),
+    ];
+
+    fixture.componentRef.setInput('recipients', [
+      {
+        id: 'pavel',
+        name: 'Pavel Salauyou',
+        email: 'pavel.salauyou@gmail.com',
+        role: 'Signer',
+        avatarLabel: 'PS',
+      },
+    ]);
+    fixture.detectChanges();
+
+    const openMenu = () => {
+      element.querySelector<HTMLButtonElement>('button[aria-label="Recipient actions"]')!.click();
+      fixture.detectChanges();
+    };
+
+    openMenu();
+
+    expect(document.body.textContent).toContain('Edit personal details');
+    expect(document.body.textContent).toContain('Replace recipient');
+    expect(document.body.textContent).toContain('Remove');
+
+    document.querySelector<HTMLButtonElement>('.ngs-menu-panel [ngs-menu-item]')!.click();
+    fixture.detectChanges();
+
+    openMenu();
+    Array.from(document.querySelectorAll<HTMLButtonElement>('.ngs-menu-panel [ngs-menu-item]'))[1].click();
+    fixture.detectChanges();
+
+    openMenu();
+    Array.from(document.querySelectorAll<HTMLButtonElement>('.ngs-menu-panel [ngs-menu-item]'))[2].click();
+    fixture.detectChanges();
+
+    expect(editEvents).toHaveLength(1);
+    expect(replaceEvents).toHaveLength(1);
+    expect(removeEvents).toHaveLength(1);
+
+    subscriptions.forEach(subscription => subscription.unsubscribe());
+  });
+
+  it('opens add recipient popover and emits search/create events', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const addEvents: unknown[] = [];
+    const searchEvents: string[] = [];
+    const createEvents: string[] = [];
+    const subscriptions = [
+      component.addRecipient.subscribe(() => addEvents.push(true)),
+      component.recipientSearchChanged.subscribe(query => searchEvents.push(query)),
+      component.createRecipientContact.subscribe(query => createEvents.push(query)),
+    ];
+
+    fixture.componentRef.setInput('recipients', [
+      {
+        id: 'pavel',
+        name: 'Pavel Salauyou',
+      },
+    ]);
+    fixture.detectChanges();
+
+    expect(document.querySelector('.ngs-popover-panel [aria-label="Add recipient"]')).toBeNull();
+
+    const addButton = Array.from(element.querySelectorAll<HTMLButtonElement>('button'))
+      .find(button => button.textContent?.includes('Add recipient'));
+
+    addButton!.click();
+    fixture.detectChanges();
+
+    const panel = document.querySelector<HTMLElement>('.ngs-popover-panel [aria-label="Add recipient"]');
+    const input = panel!.querySelector<HTMLInputElement>('input[ngsInput]')!;
+
+    expect(addEvents).toHaveLength(1);
+    expect(panel).not.toBeNull();
+    expect(panel!.textContent).toContain('Create new contact');
+    expect(input.placeholder).toBe('Start typing recipient email, name or group');
+
+    input.value = 'new@example.com';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const createButton = Array.from(panel!.querySelectorAll<HTMLButtonElement>('button'))
+      .find(button => button.textContent?.includes('Create new contact'));
+
+    createButton!.click();
+    fixture.detectChanges();
+
+    expect(searchEvents.at(-1)).toBe('new@example.com');
+    expect(createEvents).toEqual(['new@example.com']);
+
+    subscriptions.forEach(subscription => subscription.unsubscribe());
   });
 
   it('selects layer fields without closing the tree and scrolls to the canvas field', async () => {
@@ -331,7 +704,7 @@ describe('PdfBuilder', () => {
     expect(element.textContent).not.toContain('required');
   });
 
-  it('toggles the selected field required state from the selection toolbar', async () => {
+  it('toggles the selected field required state from the right settings panel', async () => {
     const element: HTMLElement = fixture.nativeElement;
     const emitted: PdfBuilderSchema[] = [];
     const subscription = component.schemaChange.subscribe(schema => emitted.push(schema));
@@ -343,7 +716,7 @@ describe('PdfBuilder', () => {
     state.addField('text');
     fixture.detectChanges();
 
-    const requiredButton = element.querySelector<HTMLButtonElement>('button[aria-label="Toggle required field"]');
+    const requiredButton = element.querySelector<HTMLButtonElement>('.field-settings-actions button[aria-pressed]');
 
     expect(requiredButton).not.toBeNull();
     expect(requiredButton!.getAttribute('aria-pressed')).toBe('false');
@@ -355,7 +728,7 @@ describe('PdfBuilder', () => {
 
     expect(state.fields()[0].required).toBe(true);
     expect(emitted.at(-1)?.fields[0].required).toBe(true);
-    expect(requiredButton!.getAttribute('aria-pressed')).toBe('true');
+    expect(element.querySelector<HTMLButtonElement>('.field-settings-actions button[aria-pressed]')!.getAttribute('aria-pressed')).toBe('true');
     expect(requiredButton!.classList.contains('is-active')).toBe(true);
 
     subscription.unsubscribe();
@@ -386,22 +759,59 @@ describe('PdfBuilder', () => {
       activePage: () => number;
       addBlankPage: () => void;
       addedPageCount: () => number;
+      documentPages: () => readonly { kind: string }[];
       pageCount: () => number;
     };
 
-    expect(state.pageCount()).toBe(2);
+    expect(state.pageCount()).toBe(1);
+    expect(state.addedPageCount()).toBe(1);
 
     state.addBlankPage();
     fixture.detectChanges();
 
-    expect(state.addedPageCount()).toBe(1);
-    expect(state.pageCount()).toBe(3);
-    expect(state.activePage()).toBe(3);
-    expect(element.querySelectorAll('.page-thumbnail').length).toBe(3);
+    expect(state.addedPageCount()).toBe(2);
+    expect(state.pageCount()).toBe(2);
+    expect(state.activePage()).toBe(2);
+    expect(state.documentPages().map(page => page.kind)).toEqual(['virtual', 'virtual']);
+    expect(element.querySelectorAll('.page-thumbnail').length).toBe(2);
     expect(element.querySelector('.blank-pdf-page')).not.toBeNull();
   });
 
-  it('uses a thumbnail scale that keeps PDF pages inside the preview frame', () => {
+  it('uses a thumbnail scale that keeps loaded PDF pages inside the preview frame', () => {
+    fixture.componentRef.setInput('schema', {
+      version: 1,
+      document: {
+        name: 'Loaded.pdf',
+        source: '/assets/pdf-builder/sample-contract.pdf',
+        sizeLabel: '9 KB',
+        sourcePageCount: 1,
+        addedPageCount: 0,
+        pages: [
+          {
+            id: 'source-1',
+            kind: 'source',
+            sourcePage: 1,
+          },
+        ],
+      },
+      view: {
+        activePage: 1,
+        selectedFieldId: null,
+        activeCanvasTool: 'select',
+        pageStripVisible: true,
+        libraryCollapsed: false,
+        searchPanelVisible: false,
+        annotationsPanelVisible: false,
+        spreadMode: 'single',
+        scrollLayout: 'vertical',
+        pageRotation: 0,
+        activeSearchQuery: '',
+        expandedLayerNodeIds: ['page-1'],
+      },
+      fields: [],
+    } satisfies PdfBuilderSchema);
+    fixture.detectChanges();
+
     const thumbnailViewer = fixture.debugElement
       .queryAll(By.directive(PdfViewer))
       .find(item => item.nativeElement.classList.contains('thumbnail-pdf-viewer'))
@@ -967,7 +1377,8 @@ describe('PdfBuilder', () => {
 
     const field = state.fields()[0];
     const variable = element.querySelector<HTMLElement>(`[data-field-id="${field.id}"]`);
-    const bindButton = element.querySelector<HTMLButtonElement>('[aria-label="Bind variable field"]');
+    const bindButton = Array.from(element.querySelectorAll<HTMLButtonElement>('.field-settings-actions button'))
+      .find(button => button.textContent?.includes('Select binding'));
 
     expect(field.binding).toBe('');
     expect(field.value).toBe('{{variable}}');
@@ -1547,10 +1958,11 @@ describe('PdfBuilder', () => {
     expect(document.body.classList.contains('ngs-pdf-builder-drag-cursor')).toBe(false);
   });
 
-  it('keeps the selection toolbar anchored after clicking an already selected field again', async () => {
+  it('keeps field settings in the right panel after clicking an already selected field again', async () => {
     const element: HTMLElement = fixture.nativeElement;
     const state = component as unknown as {
       addField: (type: 'initials') => void;
+      fieldSettingsPanelVisible: () => boolean;
       fields: () => readonly { id: string; x: number; y: number; width: number; height: number }[];
       fieldDrag: () => unknown;
     };
@@ -1579,16 +1991,11 @@ describe('PdfBuilder', () => {
 
     const field = state.fields()[0];
     const overlayField = element.querySelector<HTMLElement>(`[data-field-id="${field.id}"]`);
-    let toolbar = element.querySelector<HTMLElement>('.selection-toolbar');
 
     expect(overlayField).not.toBeNull();
-    expect(toolbar).not.toBeNull();
-
-    const initialTop = toolbar!.style.getPropertyValue('--pdf-builder-toolbar-top');
-    const initialLeft = toolbar!.style.getPropertyValue('--pdf-builder-toolbar-left');
-
-    expect(initialTop).not.toBe('');
-    expect(initialLeft).not.toBe('');
+    expect(element.querySelector('.selection-toolbar')).toBeNull();
+    expect(element.querySelector('.field-settings-panel')).not.toBeNull();
+    expect(state.fieldSettingsPanelVisible()).toBe(true);
 
     overlayField!.dispatchEvent(new PointerEvent('pointerdown', {
       bubbles: true,
@@ -1601,6 +2008,7 @@ describe('PdfBuilder', () => {
 
     expect(state.fieldDrag()).not.toBeNull();
     expect(element.querySelector('.selection-toolbar')).toBeNull();
+    expect(element.querySelector('.field-settings-panel')).not.toBeNull();
 
     window.dispatchEvent(new PointerEvent('pointerup', {
       bubbles: true,
@@ -1615,10 +2023,8 @@ describe('PdfBuilder', () => {
     await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
     fixture.detectChanges();
 
-    toolbar = element.querySelector<HTMLElement>('.selection-toolbar');
-
-    expect(toolbar).not.toBeNull();
-    expect(toolbar!.style.getPropertyValue('--pdf-builder-toolbar-top')).toBe(initialTop);
-    expect(toolbar!.style.getPropertyValue('--pdf-builder-toolbar-left')).toBe(initialLeft);
+    expect(element.querySelector('.selection-toolbar')).toBeNull();
+    expect(element.querySelector('.field-settings-panel')).not.toBeNull();
+    expect(state.fieldSettingsPanelVisible()).toBe(true);
   });
 });

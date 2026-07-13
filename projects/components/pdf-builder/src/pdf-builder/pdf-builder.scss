@@ -463,7 +463,7 @@
   .blank-pdf-page {
     width: var(--pdf-builder-page-width, 792px);
     height: var(--pdf-builder-page-height, 1120px);
-    background: var(--ngs-color-surface);
+    background: #fff;
   }
 
   ::ng-deep .embedded-pdf-viewer,
@@ -1068,34 +1068,6 @@
     transform: translateY(-50%);
   }
 
-  .selection-toolbar {
-    position: absolute;
-    top: var(--pdf-builder-toolbar-top, --spacing(2));
-    left: var(--pdf-builder-toolbar-left, 50%);
-    display: inline-flex;
-    gap: --spacing(0.5);
-    padding: --spacing(0.5);
-    border: 1px solid var(--ngs-color-border);
-    border-radius: --spacing(2);
-    background: var(--ngs-color-surface);
-    box-shadow: var(--ngs-shadow-md);
-    pointer-events: auto;
-    transform: translateX(-50%);
-  }
-
-  .selection-toolbar button[ngsIconButton] {
-    --ngs-button-height: --spacing(7);
-
-    ngs-icon {
-      font-size: var(--ngs-font-size-xl);
-    }
-
-    &.is-active {
-      color: var(--ngs-color-primary);
-      background: color-mix(in srgb, var(--ngs-color-primary), transparent 90%);
-    }
-  }
-
   .pdf-builder-shell.is-library-collapsed {
     .builder-library {
       width: 0;
@@ -1105,5 +1077,128 @@
       pointer-events: none;
       visibility: hidden;
     }
+  }
+
+  .builder-viewer-aside {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .field-recipients-panel {
+    display: flex;
+    max-height: 62%;
+    min-height: 0;
+    flex-direction: column;
+    border-bottom: 1px solid var(--ngs-color-border);
+  }
+
+  .field-settings-header {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: --spacing(3);
+    min-height: --spacing(20);
+    padding: --spacing(4);
+    border-bottom: 1px solid var(--ngs-color-border);
+
+    h3 {
+      margin: 0;
+      overflow: hidden;
+      color: var(--ngs-color-on-surface);
+      font-size: var(--ngs-font-size-sm);
+      font-weight: 600;
+      line-height: 1.25;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .field-recipients-header {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    gap: --spacing(1);
+    padding: --spacing(5) --spacing(4) --spacing(4);
+
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h3 {
+      color: var(--ngs-color-on-surface);
+      font-size: var(--ngs-font-size-xl);
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    p {
+      color: var(--ngs-color-on-surface-variant);
+      font-size: var(--ngs-font-size-sm);
+      font-weight: 400;
+      line-height: 1.35;
+    }
+  }
+
+  .field-settings-header {
+    justify-content: flex-start;
+  }
+
+  .field-recipients-scroll {
+    position: relative;
+    inset: auto;
+    display: block;
+    flex: 1 1 auto;
+    max-height: --spacing(76);
+    min-height: 0;
+  }
+
+  .field-recipients-list {
+    padding: 0 --spacing(4) --spacing(4);
+  }
+
+  .field-sidebar-actions {
+    display: inline-flex;
+    width: 100%;
+    min-height: --spacing(16);
+    align-items: center;
+    gap: --spacing(2);
+    padding: --spacing(4);
+    border-bottom: 1px solid var(--ngs-color-border);
+    color: var(--ngs-color-on-surface-variant);
+
+    .builder-field-count {
+      font-size: var(--ngs-font-size-sm);
+      font-weight: 500;
+      line-height: 1;
+      white-space: nowrap;
+    }
+  }
+
+  .field-settings-panel {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    background: var(--ngs-color-surface);
+    box-shadow: -10px 0 22px color-mix(in srgb, var(--ngs-color-on-surface), transparent 92%);
+  }
+
+  .field-settings-body {
+    display: flex;
+    min-height: 0;
+    flex: 1;
+    flex-direction: column;
+    gap: --spacing(4);
+    padding: --spacing(4);
+  }
+
+  .field-settings-actions {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(2);
   }
 }

@@ -16,6 +16,7 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
+import { Avatar } from '@ngstarter-ui/components/avatar';
 import { Button } from '@ngstarter-ui/components/button';
 import {
   Datepicker,
@@ -23,7 +24,17 @@ import {
   provideNativeDateAdapter,
 } from '@ngstarter-ui/components/datepicker';
 import { Divider } from '@ngstarter-ui/components/divider';
+import { FormField, IconButtonSuffix, IconPrefix } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
+import { Input } from '@ngstarter-ui/components/input';
+import {
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemLine,
+  ListItemMeta,
+  ListItemTitle,
+} from '@ngstarter-ui/components/list';
 import {
   Menu,
   MenuDivider,
@@ -38,6 +49,7 @@ import {
   PanelHeader,
   PanelSidebar,
 } from '@ngstarter-ui/components/panel';
+import { Popover, PopoverContent, PopoverTriggerForDirective } from '@ngstarter-ui/components/popover';
 import {
   PdfViewer,
   PdfViewerAnnotations,
@@ -69,6 +81,7 @@ export type PdfBuilderFieldSlot = 'primary' | 'date' | 'signature' | 'initials' 
 export type PdfBuilderSpreadMode = 'single' | 'two-odd' | 'two-even';
 export type PdfBuilderScrollLayout = 'vertical' | 'horizontal';
 export type PdfBuilderPageRotation = 0 | 1 | 2 | 3;
+export type PdfBuilderSchemaPageKind = 'source' | 'virtual';
 
 const PDF_BUILDER_PAGE_WIDTH = 595.276;
 const PDF_BUILDER_PAGE_HEIGHT = 841.89;
@@ -99,6 +112,8 @@ interface PdfBuilderLayerNode {
 interface PdfBuilderPage {
   readonly page: number;
   readonly label: string;
+  readonly kind: PdfBuilderSchemaPageKind;
+  readonly sourcePage: number | null;
 }
 
 interface PdfBuilderPageSpread {
@@ -125,6 +140,26 @@ export interface PdfBuilderField {
   readonly locked: boolean;
 }
 
+export interface PdfBuilderRecipient {
+  readonly id: string;
+  readonly name: string;
+  readonly email?: string;
+  readonly role?: string;
+  readonly avatarLabel?: string;
+  readonly isCurrentUser?: boolean;
+  readonly fieldIds?: readonly string[];
+  readonly disabled?: boolean;
+}
+
+export interface PdfBuilderSchemaPage {
+  readonly id: string;
+  readonly kind: PdfBuilderSchemaPageKind;
+  readonly label?: string;
+  readonly sourcePage?: number;
+  readonly width?: number;
+  readonly height?: number;
+}
+
 export interface PdfBuilderSchema {
   readonly version: 1;
   readonly document: {
@@ -133,6 +168,7 @@ export interface PdfBuilderSchema {
     readonly sizeLabel: string;
     readonly sourcePageCount: number;
     readonly addedPageCount: number;
+    readonly pages?: readonly PdfBuilderSchemaPage[];
   };
   readonly view: {
     readonly activePage: number;
@@ -215,11 +251,22 @@ interface PdfBuilderFieldResize {
   selector: 'ngs-pdf-builder',
   exportAs: 'ngsPdfBuilder',
   imports: [
+    Avatar,
     Button,
     Datepicker,
     DatepickerInput,
     Divider,
+    FormField,
+    IconButtonSuffix,
+    IconPrefix,
     Icon,
+    Input,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemLine,
+    ListItemMeta,
+    ListItemTitle,
     Menu,
     MenuDivider,
     MenuHeading,
@@ -230,6 +277,9 @@ interface PdfBuilderFieldResize {
     PanelContent,
     PanelHeader,
     PanelSidebar,
+    Popover,
+    PopoverContent,
+    PopoverTriggerForDirective,
     PdfViewer,
     PdfViewerAnnotations,
     PdfViewerSearch,
@@ -270,20 +320,32 @@ export class PdfBuilder {
   private readonly dragCursorClass = 'ngs-pdf-builder-drag-cursor';
 
   readonly schema = input<PdfBuilderSchema | null>(null);
+  readonly annotations = input<readonly PdfViewerAnnotationView[]>([]);
+  readonly recipients = input<readonly PdfBuilderRecipient[]>([]);
   readonly schemaChange = output<PdfBuilderSchema>();
   readonly createBlankPdf = output<void>();
   readonly exportPdf = output<void>();
+  readonly recipientSelected = output<PdfBuilderRecipient>();
+  readonly addRecipient = output<void>();
+  readonly recipientSearchChanged = output<string>();
+  readonly createRecipientContact = output<string>();
+  readonly editRecipientDetails = output<PdfBuilderRecipient>();
+  readonly replaceRecipient = output<PdfBuilderRecipient>();
+  readonly removeRecipient = output<PdfBuilderRecipient>();
 
   protected readonly layersTree = viewChild<Tree<PdfBuilderLayerNode>>('layersTree');
   protected readonly dateFieldPicker = viewChild<Datepicker<Date>>('dateFieldPicker');
   protected readonly dateFieldInput = viewChild<DatepickerInput<Date>>('dateFieldInput');
-  protected readonly documentName = signal('MSA.pdf');
-  protected readonly documentSource = signal<PdfViewerSource>('/assets/pdf-builder/sample-contract.pdf');
-  protected readonly documentSizeLabel = signal('4.1 KB');
+  protected readonly documentName = signal('Untitled.pdf');
+  protected readonly documentSource = signal<PdfViewerSource>(null);
+  protected readonly documentSizeLabel = signal('Virtual PDF');
   protected readonly wasmUrl = '/assets/embedpdf/pdfium.wasm';
-  protected readonly sourcePageCount = signal(2);
-  protected readonly addedPageCount = signal(0);
-  protected readonly pageCount = computed(() => this.sourcePageCount() + this.addedPageCount());
+  protected readonly sourcePageCount = signal(0);
+  protected readonly addedPageCount = signal(1);
+  protected readonly documentPages = signal<readonly PdfBuilderSchemaPage[]>([
+    this.createVirtualSchemaPage(1),
+  ]);
+  protected readonly pageCount = computed(() => this.documentPages().length);
   protected readonly activePage = signal(1);
   protected readonly pdfScale = signal(PDF_BUILDER_FIXED_PAGE_SCALE);
   protected readonly textFieldPlaceholder = 'Enter value';
@@ -296,6 +358,8 @@ export class PdfBuilder {
   protected readonly fieldResize = signal<PdfBuilderFieldResize | null>(null);
   protected readonly pageStripVisible = signal(true);
   protected readonly libraryCollapsed = signal(false);
+  protected readonly fieldSettingsPanelVisible = signal(false);
+  protected readonly recipientSearchQuery = signal('');
   protected readonly searchPanelVisible = signal(false);
   protected readonly annotationsPanelVisible = signal(false);
   protected readonly spreadMode = signal<PdfBuilderSpreadMode>('single');
@@ -303,7 +367,7 @@ export class PdfBuilder {
   protected readonly pageRotation = signal<PdfBuilderPageRotation>(0);
   protected readonly activeSearchQuery = signal('');
   protected readonly pdfSearchResults = signal<PdfViewerSearchResultView[]>([]);
-  protected readonly expandedLayerNodeIds = signal<ReadonlySet<string>>(new Set(['page-1', 'page-2']));
+  protected readonly expandedLayerNodeIds = signal<ReadonlySet<string>>(new Set(['page-1']));
   protected readonly undoStack = signal<readonly PdfBuilderHistoryState[]>([]);
   protected readonly redoStack = signal<readonly PdfBuilderHistoryState[]>([]);
 
@@ -366,9 +430,13 @@ export class PdfBuilder {
     Array.from({ length: this.pageCount() }, (_, index) => {
       const page = index + 1;
 
+      const schemaPage = this.documentPages()[index];
+
       return {
         page,
-        label: page === 1 ? 'Cover' : page === this.pageCount() ? 'Signatures' : `Page ${page}`,
+        label: schemaPage?.label ?? (page === 1 ? 'Cover' : page === this.pageCount() ? 'Signatures' : `Page ${page}`),
+        kind: schemaPage?.kind ?? 'virtual',
+        sourcePage: schemaPage?.kind === 'source' ? schemaPage.sourcePage ?? page : null,
       };
     }),
   );
@@ -384,23 +452,12 @@ export class PdfBuilder {
   protected readonly selectedField = computed(() =>
     this.fields().find(field => field.id === this.selectedFieldId()) ?? null,
   );
+  protected readonly recipientItems = computed(() => this.recipients().filter(recipient => recipient.id && recipient.name));
   protected readonly isSearchPanelVisible = computed(() => this.searchPanelVisible());
   protected readonly isAnnotationsPanelVisible = computed(() =>
     !this.searchPanelVisible() && this.annotationsPanelVisible(),
   );
-  protected readonly annotationItems = computed<PdfViewerAnnotationView[]>(() =>
-    this.fields().map(field => ({
-      id: field.id,
-      type: field.type,
-      label: field.label,
-      author: 'PDF Builder',
-      time: `Page ${field.page}`,
-      avatarLabel: field.type.slice(0, 2).toUpperCase(),
-      text: this.getFieldAnnotationText(field),
-      pageNumber: field.page,
-      replyLabel: 'Select',
-    })),
-  );
+  protected readonly annotationItems = computed<PdfViewerAnnotationView[]>(() => [...this.annotations()]);
 
   protected readonly layerTree = computed<PdfBuilderLayerNode[]>(() =>
     Array.from({ length: this.pageCount() }, (_, index) => {
@@ -424,14 +481,9 @@ export class PdfBuilder {
 
   protected readonly activity = signal<readonly PdfBuilderActivity[]>([
     {
-      title: 'PDF imported',
-      detail: 'MSA.pdf loaded with 2 editable pages.',
-      icon: 'fluent:document-pdf-24-regular',
-    },
-    {
-      title: 'Field mapped',
-      detail: 'Counterparty variable bound to deal.legalName.',
-      icon: 'fluent:database-link-24-regular',
+      title: 'Virtual PDF ready',
+      detail: 'A one-page virtual PDF is ready for fields.',
+      icon: 'fluent:document-one-page-24-regular',
     },
   ]);
 
@@ -585,9 +637,14 @@ export class PdfBuilder {
 
   protected onPdfLoaded(event: PdfViewerLoadedEvent): void {
     const sourcePageCount = Math.max(0, event.pageCount);
-    const pageCount = sourcePageCount + this.addedPageCount();
+    const virtualPages = this.documentPages().filter(page => page.kind === 'virtual');
+    const pages = [
+      ...this.createSourceSchemaPages(sourcePageCount),
+      ...virtualPages,
+    ];
+    const pageCount = pages.length;
 
-    this.sourcePageCount.set(sourcePageCount);
+    this.setDocumentPages(pages);
     this.activePage.update(page => Math.max(1, Math.min(page, Math.max(1, pageCount))));
     this.fields.update(fields => fields.filter(field => field.page <= pageCount));
     this.expandedLayerNodeIds.update(ids => {
@@ -652,7 +709,11 @@ export class PdfBuilder {
   }
 
   protected isSourcePdfPage(pageNumber: number): boolean {
-    return !!this.documentSource() && pageNumber <= this.sourcePageCount();
+    return !!this.documentSource() && this.getSchemaPage(pageNumber)?.kind === 'source';
+  }
+
+  protected getSourcePageNumber(pageNumber: number): number {
+    return this.getSchemaPage(pageNumber)?.sourcePage ?? pageNumber;
   }
 
   protected onViewerScroll(): void {
@@ -706,6 +767,7 @@ export class PdfBuilder {
       this.activePage.set(field.page);
       this.selectedFieldId.set(field.id);
       this.editingFieldId.set(null);
+      this.openFieldSettingsPanel();
       this.scrollFieldIntoView(field.id);
       setTimeout(() => this.restoreLayerTreeExpansion());
     }
@@ -723,6 +785,7 @@ export class PdfBuilder {
 
     this.selectedFieldId.set(fieldId);
     this.activeCanvasTool.set('select');
+    this.openFieldSettingsPanel();
 
     if (field?.type === 'text' && !field.locked) {
       this.startTextEditing(field.id);
@@ -836,6 +899,7 @@ export class PdfBuilder {
 
     this.selectedFieldId.set(null);
     this.editingFieldId.set(null);
+    this.fieldSettingsPanelVisible.set(false);
   }
 
   protected updateTextFieldValue(fieldId: string, value: string): void {
@@ -1004,14 +1068,13 @@ export class PdfBuilder {
   }
 
   protected addField(type: PdfBuilderFieldType): void {
-    if (!this.documentSource() || this.pageCount() === 0) {
-      this.createBlankPdfDocument();
-    }
+    this.ensureDocumentPages();
 
     const field = this.createField(type, { slot: this.getDefaultSlotForType(type) });
 
     this.commitFields(fields => [...fields, field]);
     this.selectedFieldId.set(field.id);
+    this.openFieldSettingsPanel();
     this.recordActivity('Field added', `${field.label} placed on Page ${field.page}.`, field.icon);
     setTimeout(() => this.restoreLayerTreeExpansion());
   }
@@ -1024,9 +1087,7 @@ export class PdfBuilder {
     event.preventDefault();
     event.stopPropagation();
 
-    if (!this.documentSource() || this.pageCount() === 0) {
-      this.createBlankPdfDocument();
-    }
+    this.ensureDocumentPages();
 
     const metrics = this.getDefaultMetricsForType(type);
     const tool = this.tools().find(item => item.type === type);
@@ -1136,6 +1197,115 @@ export class PdfBuilder {
     this.annotationsPanelVisible.set(false);
   }
 
+  protected openFieldSettingsPanel(): void {
+    if (!this.selectedField()) {
+      return;
+    }
+
+    this.searchPanelVisible.set(false);
+    this.annotationsPanelVisible.set(false);
+    this.fieldSettingsPanelVisible.set(true);
+  }
+
+  protected closeFieldSettingsPanel(): void {
+    this.fieldSettingsPanelVisible.set(false);
+  }
+
+  protected selectRecipient(recipient: PdfBuilderRecipient, event?: Event): void {
+    event?.stopPropagation();
+
+    if (recipient.disabled) {
+      return;
+    }
+
+    this.recipientSelected.emit(recipient);
+
+    const field = this.getRecipientTargetField(recipient);
+
+    if (!field) {
+      return;
+    }
+
+    this.activePage.set(field.page);
+    this.selectedFieldId.set(field.id);
+    this.editingFieldId.set(null);
+    this.openFieldSettingsPanel();
+    this.scrollFieldIntoView(field.id);
+  }
+
+  protected requestAddRecipient(): void {
+    this.addRecipient.emit();
+  }
+
+  protected updateRecipientSearch(query: string): void {
+    this.recipientSearchQuery.set(query);
+    this.recipientSearchChanged.emit(query);
+  }
+
+  protected requestCreateRecipientContact(event?: Event): void {
+    event?.stopPropagation();
+    this.createRecipientContact.emit(this.recipientSearchQuery().trim());
+  }
+
+  protected requestEditRecipientDetails(recipient: PdfBuilderRecipient, event?: Event): void {
+    event?.stopPropagation();
+    this.editRecipientDetails.emit(recipient);
+  }
+
+  protected requestReplaceRecipient(recipient: PdfBuilderRecipient, event?: Event): void {
+    event?.stopPropagation();
+    this.replaceRecipient.emit(recipient);
+  }
+
+  protected requestRemoveRecipient(recipient: PdfBuilderRecipient, event?: Event): void {
+    event?.stopPropagation();
+    this.removeRecipient.emit(recipient);
+  }
+
+  protected openSelectedDatePicker(event?: Event): void {
+    event?.stopPropagation();
+
+    const field = this.selectedField();
+
+    if (!field || field.type !== 'date' || field.locked) {
+      return;
+    }
+
+    this.openDateFieldPicker(field);
+  }
+
+  protected getRecipientAvatarLabel(recipient: PdfBuilderRecipient): string {
+    const explicitLabel = recipient.avatarLabel?.trim();
+
+    if (explicitLabel) {
+      return explicitLabel.slice(0, 2).toUpperCase();
+    }
+
+    return recipient.name
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(part => part[0])
+      .join('')
+      .toUpperCase();
+  }
+
+  protected getRecipientRoleLabel(recipient: PdfBuilderRecipient): string {
+    return recipient.role?.trim() || 'Recipient';
+  }
+
+  protected isRecipientSelected(recipient: PdfBuilderRecipient): boolean {
+    const selectedFieldId = this.selectedFieldId();
+
+    return !!selectedFieldId && !!recipient.fieldIds?.includes(selectedFieldId);
+  }
+
+  private getRecipientTargetField(recipient: PdfBuilderRecipient): PdfBuilderField | null {
+    const fieldIds = recipient.fieldIds ?? [];
+
+    return this.fields().find(field => fieldIds.includes(field.id)) ?? null;
+  }
+
   protected updatePdfSearch(event: { query: string; options: PdfViewerSearchOptions }): void {
     this.activeSearchQuery.set(event.query);
     this.pdfSearchResults.set(this.searchBuilderFields(event.query, event.options));
@@ -1160,16 +1330,16 @@ export class PdfBuilder {
 
   protected createBlankPdfDocument(): void {
     this.clearHistory();
-    this.documentSource.set(this.createBlankPdfBlob());
-    this.documentName.set('Blank contract.pdf');
-    this.documentSizeLabel.set('1.0 KB');
-    this.sourcePageCount.set(1);
-    this.addedPageCount.set(0);
+    this.documentSource.set(null);
+    this.documentName.set('Untitled.pdf');
+    this.documentSizeLabel.set('Virtual PDF');
+    this.setDocumentPages([this.createVirtualSchemaPage(1)]);
     this.activePage.set(1);
     this.selectedFieldId.set(null);
     this.editingFieldId.set(null);
+    this.fieldSettingsPanelVisible.set(false);
     this.fields.set([]);
-    this.recordActivity('Blank PDF created', 'A one-page PDF is ready for fields.', 'fluent:document-add-24-regular');
+    this.recordActivity('Virtual PDF created', 'A one-page virtual PDF is ready for fields.', 'fluent:document-add-24-regular');
     this.createBlankPdf.emit();
     setTimeout(() => this.restoreLayerTreeExpansion());
   }
@@ -1177,29 +1347,27 @@ export class PdfBuilder {
   protected removePdf(): void {
     this.clearHistory();
     this.documentSource.set(null);
-    this.documentName.set('No PDF loaded');
-    this.documentSizeLabel.set('0 KB');
-    this.sourcePageCount.set(0);
-    this.addedPageCount.set(0);
+    this.documentName.set('Untitled.pdf');
+    this.documentSizeLabel.set('Virtual PDF');
+    this.setDocumentPages([this.createVirtualSchemaPage(1)]);
     this.activePage.set(1);
     this.selectedFieldId.set(null);
     this.editingFieldId.set(null);
+    this.fieldSettingsPanelVisible.set(false);
     this.fields.set([]);
-    this.recordActivity('PDF removed', 'The canvas is ready for a new PDF.', 'fluent:dismiss-24-regular');
+    this.recordActivity('PDF removed', 'The virtual canvas is ready for fields.', 'fluent:dismiss-24-regular');
   }
 
   protected addBlankPage(): void {
-    if (!this.documentSource() && this.pageCount() === 0) {
-      this.createBlankPdfDocument();
-      return;
-    }
+    this.ensureDocumentPages();
 
     const nextPage = this.pageCount() + 1;
 
-    this.addedPageCount.update(count => count + 1);
+    this.setDocumentPages([...this.documentPages(), this.createVirtualSchemaPage(nextPage)]);
     this.activePage.set(nextPage);
     this.selectedFieldId.set(null);
     this.editingFieldId.set(null);
+    this.fieldSettingsPanelVisible.set(false);
     this.expandedLayerNodeIds.update(ids => new Set(ids).add(`page-${nextPage}`));
     this.recordActivity('Page added', `Blank Page ${nextPage} added to the PDF builder.`, 'fluent:document-one-page-add-24-regular');
     setTimeout(() => this.scrollPageIntoView(nextPage));
@@ -1241,6 +1409,7 @@ export class PdfBuilder {
         sizeLabel: this.documentSizeLabel(),
         sourcePageCount: this.sourcePageCount(),
         addedPageCount: this.addedPageCount(),
+        pages: this.documentPages().map(page => ({ ...page })),
       },
       view: {
         activePage: this.activePage(),
@@ -1261,10 +1430,12 @@ export class PdfBuilder {
   }
 
   private restoreSchema(schema: PdfBuilderSchema): void {
-    const sourcePageCount = Math.max(0, Math.floor(schema.document?.sourcePageCount ?? 0));
-    const addedPageCount = Math.max(0, Math.floor(schema.document?.addedPageCount ?? 0));
-    const pageCount = Math.max(1, sourcePageCount + addedPageCount);
-    const fields = (schema.fields ?? []).map(field => ({ ...field }));
+    const documentSource = schema.document?.source ?? null;
+    const pages = this.getSchemaPagesFromDocument(schema.document, documentSource);
+    const pageCount = pages.length;
+    const fields = (schema.fields ?? [])
+      .filter(field => field.page >= 1 && field.page <= pageCount)
+      .map(field => ({ ...field }));
     const view = schema.view;
 
     this.suppressNextSchemaChange = true;
@@ -1272,10 +1443,9 @@ export class PdfBuilder {
     this.removeFieldDragEventListeners();
     this.removeFieldResizeEventListeners();
     this.documentName.set(schema.document?.name ?? 'Untitled.pdf');
-    this.documentSource.set(schema.document?.source ?? null);
-    this.documentSizeLabel.set(schema.document?.sizeLabel ?? '0 KB');
-    this.sourcePageCount.set(sourcePageCount);
-    this.addedPageCount.set(addedPageCount);
+    this.documentSource.set(documentSource);
+    this.documentSizeLabel.set(schema.document?.sizeLabel ?? (documentSource ? '' : 'Virtual PDF'));
+    this.setDocumentPages(pages);
     this.fields.set(fields);
     this.activePage.set(this.clamp(Math.floor(view?.activePage ?? 1), 1, pageCount));
     this.pageStripVisible.set(view?.pageStripVisible ?? true);
@@ -1291,6 +1461,7 @@ export class PdfBuilder {
       : null;
 
     this.selectedFieldId.set(selectedFieldId);
+    this.fieldSettingsPanelVisible.set(false);
     this.hoveredFieldId.set(null);
     this.editingFieldId.set(null);
     this.placementGhost.set(null);
@@ -1302,6 +1473,108 @@ export class PdfBuilder {
     this.undoStack.set([]);
     this.redoStack.set([]);
     this.syncFieldIdFromFields(fields);
+  }
+
+  private getSchemaPagesFromDocument(
+    documentSchema: PdfBuilderSchema['document'] | undefined,
+    source: PdfViewerSource | null,
+  ): readonly PdfBuilderSchemaPage[] {
+    const explicitPages = documentSchema?.pages;
+
+    if (explicitPages?.length) {
+      return this.normalizeSchemaPages(explicitPages, source);
+    }
+
+    const sourcePageCount = Math.max(0, Math.floor(documentSchema?.sourcePageCount ?? 0));
+    const addedPageCount = Math.max(0, Math.floor(documentSchema?.addedPageCount ?? 0));
+    const migratedPages = [
+      ...this.createSourceSchemaPages(source ? sourcePageCount : 0),
+      ...Array.from({ length: addedPageCount }, (_, index) =>
+        this.createVirtualSchemaPage((source ? sourcePageCount : 0) + index + 1),
+      ),
+    ];
+
+    return this.normalizeSchemaPages(migratedPages, source);
+  }
+
+  private normalizeSchemaPages(
+    pages: readonly PdfBuilderSchemaPage[],
+    source: PdfViewerSource | null = this.documentSource(),
+  ): readonly PdfBuilderSchemaPage[] {
+    const normalized = pages
+      .map((page, index) => {
+        const pageNumber = index + 1;
+        const kind: PdfBuilderSchemaPageKind = source && page.kind === 'source' ? 'source' : 'virtual';
+        const sourcePage = kind === 'source'
+          ? Math.max(1, Math.floor(page.sourcePage ?? pageNumber))
+          : undefined;
+
+        return {
+          id: page.id || `${kind}-${pageNumber}`,
+          kind,
+          label: page.label,
+          sourcePage,
+          width: page.width ?? PDF_BUILDER_PAGE_WIDTH,
+          height: page.height ?? PDF_BUILDER_PAGE_HEIGHT,
+        };
+      });
+
+    return normalized.length ? normalized : [this.createVirtualSchemaPage(1)];
+  }
+
+  private setDocumentPages(pages: readonly PdfBuilderSchemaPage[]): void {
+    const normalized = this.normalizeSchemaPages(pages);
+
+    this.documentPages.set(normalized);
+    this.sourcePageCount.set(normalized.filter(page => page.kind === 'source').length);
+    this.addedPageCount.set(normalized.filter(page => page.kind === 'virtual').length);
+    this.expandedLayerNodeIds.update(ids => {
+      const next = new Set(ids);
+
+      for (let page = 1; page <= normalized.length; page++) {
+        next.add(`page-${page}`);
+      }
+
+      return next;
+    });
+  }
+
+  private ensureDocumentPages(): void {
+    if (this.documentPages().length) {
+      return;
+    }
+
+    this.setDocumentPages([this.createVirtualSchemaPage(1)]);
+    this.activePage.set(1);
+  }
+
+  private createSourceSchemaPages(count: number): PdfBuilderSchemaPage[] {
+    return Array.from({ length: Math.max(0, Math.floor(count)) }, (_, index) => {
+      const pageNumber = index + 1;
+
+      return {
+        id: `source-${pageNumber}`,
+        kind: 'source',
+        label: pageNumber === 1 ? 'Cover' : `Page ${pageNumber}`,
+        sourcePage: pageNumber,
+        width: PDF_BUILDER_PAGE_WIDTH,
+        height: PDF_BUILDER_PAGE_HEIGHT,
+      };
+    });
+  }
+
+  private createVirtualSchemaPage(pageNumber: number): PdfBuilderSchemaPage {
+    return {
+      id: `virtual-${pageNumber}`,
+      kind: 'virtual',
+      label: pageNumber === 1 ? 'Page 1' : `Page ${pageNumber}`,
+      width: PDF_BUILDER_PAGE_WIDTH,
+      height: PDF_BUILDER_PAGE_HEIGHT,
+    };
+  }
+
+  private getSchemaPage(pageNumber: number): PdfBuilderSchemaPage | null {
+    return this.documentPages()[pageNumber - 1] ?? null;
   }
 
   protected duplicateSelectedField(): void {
@@ -1324,6 +1597,7 @@ export class PdfBuilder {
     this.commitFields(fields => [...fields, duplicate]);
     this.selectedFieldId.set(duplicate.id);
     this.editingFieldId.set(null);
+    this.openFieldSettingsPanel();
     this.recordActivity('Field duplicated', `${duplicate.label} created.`, duplicate.icon);
   }
 
@@ -1337,6 +1611,7 @@ export class PdfBuilder {
     this.commitFields(fields => fields.filter(item => item.id !== field.id));
     this.selectedFieldId.set(null);
     this.editingFieldId.set(null);
+    this.fieldSettingsPanelVisible.set(false);
     this.recordActivity('Field deleted', `${field.label} removed from Page ${field.page}.`, 'fluent:delete-24-regular');
   }
 
@@ -1429,7 +1704,7 @@ export class PdfBuilder {
     return undefined;
   }
 
-  private getFieldAnnotationText(field: PdfBuilderField): string {
+  private getFieldSearchExcerpt(field: PdfBuilderField): string {
     const value = field.value.trim();
 
     return value ? `${field.label}: ${value}` : `${field.label} field on Page ${field.page}.`;
@@ -1459,7 +1734,7 @@ export class PdfBuilder {
         results.push({
           id: field.id,
           pageNumber: field.page,
-          excerpt: this.getFieldAnnotationText(field),
+          excerpt: this.getFieldSearchExcerpt(field),
         });
       }
     }
@@ -1525,6 +1800,7 @@ export class PdfBuilder {
 
     this.commitFields(fields => [...fields, field]);
     this.selectedFieldId.set(field.id);
+    this.openFieldSettingsPanel();
     this.recordActivity('Field added', `${field.label} placed on Page ${field.page}.`, field.icon);
     setTimeout(() => this.restoreLayerTreeExpansion());
   }
@@ -1893,43 +2169,6 @@ export class PdfBuilder {
       this.setCssVar(element, '--pdf-builder-field-width', `${field.width * scale.x}px`);
       this.setCssVar(element, '--pdf-builder-field-height', `${field.height * scale.y}px`);
     }
-
-    this.syncSelectionToolbarGeometry();
-  }
-
-  private syncSelectionToolbarGeometry(): void {
-    const field = this.selectedField();
-    const toolbar = this.getSelectionToolbarElement();
-
-    if (this.fieldDrag() || !field || !toolbar) {
-      return;
-    }
-
-    const pageShell = this.getPageShellElement(field.page);
-
-    if (!pageShell) {
-      return;
-    }
-
-    const scale = this.getRenderedPageScale(field.page);
-    const pageRect = pageShell.getBoundingClientRect();
-    const toolbarWidth = toolbar.offsetWidth;
-    const toolbarHeight = toolbar.offsetHeight;
-    const gap = 10;
-    const inset = 8;
-    const fieldLeft = field.x * scale.x;
-    const fieldTop = field.y * scale.y;
-    const fieldWidth = field.width * scale.x;
-    const fieldHeight = field.height * scale.y;
-    const centeredLeft = fieldLeft + fieldWidth / 2;
-    const minLeft = toolbarWidth / 2 + inset;
-    const maxLeft = Math.max(minLeft, pageRect.width - toolbarWidth / 2 - inset);
-    const aboveTop = fieldTop - toolbarHeight - gap;
-    const belowTop = fieldTop + fieldHeight + gap;
-    const top = aboveTop >= inset ? aboveTop : Math.min(belowTop, pageRect.height - toolbarHeight - inset);
-
-    this.setCssVar(toolbar, '--pdf-builder-toolbar-left', `${this.clamp(centeredLeft, minLeft, maxLeft)}px`);
-    this.setCssVar(toolbar, '--pdf-builder-toolbar-top', `${Math.max(inset, top)}px`);
   }
 
   private shouldAutosizeField<K extends keyof PdfBuilderField>(
@@ -2194,10 +2433,6 @@ export class PdfBuilder {
 
   private getPlacementGhostElement(): HTMLElement | null {
     return this.elementRef.nativeElement.querySelector<HTMLElement>('.placement-ghost');
-  }
-
-  private getSelectionToolbarElement(): HTMLElement | null {
-    return this.elementRef.nativeElement.querySelector<HTMLElement>('.selection-toolbar');
   }
 
   private getDatePickerAnchorElement(): HTMLElement | null {
@@ -2478,15 +2713,19 @@ export class PdfBuilder {
     return (((value % 4) + 4) % 4) as PdfBuilderPageRotation;
   }
 
-  private createBlankPdfBlob(): Blob {
-    const content = 'BT /F1 18 Tf 72 760 Td (Blank contract PDF) Tj ET';
+  private createVirtualPdfBlob(pageCount: number): Blob {
+    const pageTotal = Math.max(1, Math.floor(pageCount));
     const objects = [
       '1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n',
-      '2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n',
-      '3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.276 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n',
-      `4 0 obj\n<< /Length ${content.length} >>\nstream\n${content}\nendstream\nendobj\n`,
-      '5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n',
     ];
+    const pageObjectIds = Array.from({ length: pageTotal }, (_, index) => 3 + index);
+
+    objects.push(`2 0 obj\n<< /Type /Pages /Kids [${pageObjectIds.map(id => `${id} 0 R`).join(' ')}] /Count ${pageTotal} >>\nendobj\n`);
+
+    for (const pageObjectId of pageObjectIds) {
+      objects.push(`${pageObjectId} 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.276 841.89] /Resources << >> >>\nendobj\n`);
+    }
+
     let pdf = '%PDF-1.4\n';
     const offsets = [0];
 
@@ -2511,10 +2750,6 @@ export class PdfBuilder {
   private downloadCurrentPdf(): void {
     const source = this.documentSource();
 
-    if (!source) {
-      return;
-    }
-
     const defaultView = this.document.defaultView ?? window;
     let href: string | null = null;
     let revoke = false;
@@ -2524,7 +2759,9 @@ export class PdfBuilder {
     } else {
       let blob: Blob;
 
-      if (source instanceof Blob) {
+      if (!source) {
+        blob = this.createVirtualPdfBlob(this.pageCount());
+      } else if (source instanceof Blob) {
         blob = source;
       } else if (source instanceof ArrayBuffer) {
         blob = new Blob([source], { type: 'application/pdf' });

@@ -6,19 +6,6 @@
   <ngs-panel-header class="pdf-builder-header min-w-0 border-b border-border bg-surface" flex>
     <ngs-toolbar class="pdf-viewer-toolbar flex h-14 w-full min-w-0 items-center gap-4 overflow-visible px-2 text-on-surface-variant" aria-label="PDF builder controls">
       <ngs-toolbar-item class="pdf-viewer-toolbar__start flex min-w-0 flex-none items-center gap-2 pl-4" aria-label="PDF builder document actions">
-        <span class="builder-field-count text-xs font-medium text-on-surface-variant">{{ fieldCount() }} fields</span>
-        <ngs-divider vertical fixedHeight />
-        <button
-          class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
-          ngsIconButton
-          type="button"
-          aria-label="Add blank page"
-          ngsTooltip="Add blank page"
-          (click)="addBlankPage()"
-        >
-          <ngs-icon class="text-2xl" name="fluent:document-one-page-add-24-regular" />
-        </button>
-        <ngs-divider vertical fixedHeight />
         <button
           class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
           ngsIconButton
@@ -125,7 +112,7 @@
           type="button"
           aria-label="Export PDF"
           ngsTooltip="Export PDF"
-          [disabled]="!documentSource()"
+          [disabled]="pageCount() === 0"
           (click)="exportCurrentPdf()"
         >
           <ngs-icon class="text-2xl" name="fluent:document-pdf-24-regular" />
@@ -219,7 +206,7 @@
                     [src]="documentSource()"
                     [documentName]="documentName()"
                     [wasmUrl]="wasmUrl"
-                    [page]="page.page"
+                    [page]="getSourcePageNumber(page.page)"
                     [scale]="0.15"
                     [renderAll]="false"
                     [showToolbar]="false"
@@ -384,7 +371,7 @@
                     [src]="documentSource()"
                     [documentName]="documentName()"
                     [wasmUrl]="wasmUrl"
-                    [page]="page.page"
+                    [page]="getSourcePageNumber(page.page)"
                     [scale]="pdfScale()"
                     [renderAll]="false"
                     [showToolbar]="false"
@@ -478,44 +465,6 @@
                     </div>
                   }
 
-                  @if (selectedField()?.page === page.page && !fieldDrag() && !fieldResize()) {
-                    <div class="selection-toolbar">
-                      @if (selectedField()?.type === 'variable') {
-                        <button
-                          ngsIconButton
-                          type="button"
-                          aria-label="Bind variable field"
-                          [ngsTooltip]="getVariableBindingLabel(selectedField())"
-                          [ngsMenuTriggerFor]="variableBindingMenu"
-                          (click)="$event.stopPropagation()"
-                        >
-                          <ngs-icon name="fluent:database-link-24-regular" />
-                        </button>
-                      }
-                      <button ngsIconButton type="button" aria-label="Duplicate field" ngsTooltip="Duplicate" (click)="$event.stopPropagation(); duplicateSelectedField()">
-                        <ngs-icon name="fluent:copy-24-regular" />
-                      </button>
-                      <button
-                        ngsIconButton
-                        type="button"
-                        aria-label="Toggle required field"
-                        [class.is-active]="selectedField()?.required"
-                        [class.is-disabled]="selectedField()?.locked"
-                        [attr.aria-disabled]="selectedField()?.locked"
-                        [attr.aria-pressed]="selectedField()?.required"
-                        [ngsTooltip]="selectedField()?.required ? 'Required' : 'Not required'"
-                        (click)="$event.stopPropagation(); toggleSelectedFieldRequired()"
-                      >
-                        <ngs-icon name="fluent:text-asterisk-20-regular" />
-                      </button>
-                      <button ngsIconButton type="button" aria-label="Lock field" ngsTooltip="Lock" (click)="$event.stopPropagation(); toggleSelectedFieldLock()">
-                        <ngs-icon [name]="selectedField()?.locked ? 'fluent:lock-open-24-regular' : 'fluent:lock-closed-24-regular'" />
-                      </button>
-                      <button ngsIconButton type="button" aria-label="Delete field" ngsTooltip="Delete" [class.is-disabled]="selectedField()?.locked" [attr.aria-disabled]="selectedField()?.locked" (click)="$event.stopPropagation(); deleteSelectedField()">
-                        <ngs-icon name="fluent:delete-24-regular" />
-                      </button>
-                    </div>
-                  }
                 </div>
               </div>
             }
@@ -555,23 +504,211 @@
     }
   </ngs-panel-content>
 
-  @if (isSearchPanelVisible() || isAnnotationsPanelVisible()) {
-    <ngs-panel-aside class="builder-viewer-aside w-[var(--ngs-pdf-viewer-aside-width)] min-w-[var(--ngs-pdf-viewer-aside-width)] border-l border-border bg-surface">
-      @if (isSearchPanelVisible()) {
-        <ngs-pdf-viewer-search
-          [query]="activeSearchQuery()"
-          [results]="pdfSearchResults()"
-          (closed)="closeAsidePanel()"
-          (searchChanged)="updatePdfSearch($event)"
-          (resultSelected)="selectSearchResult($event)" />
-      } @else {
-        <ngs-pdf-viewer-annotations
-          [annotations]="annotationItems()"
-          (closed)="closeAsidePanel()"
-          (pageSelected)="selectAnnotationPage($event)" />
+  <ngs-panel-aside class="builder-viewer-aside w-[var(--ngs-pdf-viewer-aside-width)] min-w-[var(--ngs-pdf-viewer-aside-width)] border-l border-border bg-surface">
+    @if (isSearchPanelVisible()) {
+      <ngs-pdf-viewer-search
+        [query]="activeSearchQuery()"
+        [results]="pdfSearchResults()"
+        (closed)="closeAsidePanel()"
+        (searchChanged)="updatePdfSearch($event)"
+        (resultSelected)="selectSearchResult($event)" />
+    } @else if (isAnnotationsPanelVisible()) {
+      <ngs-pdf-viewer-annotations
+        [annotations]="annotationItems()"
+        (closed)="closeAsidePanel()"
+        (pageSelected)="selectAnnotationPage($event)" />
+    } @else if (fieldSettingsPanelVisible() && selectedField(); as field) {
+      <section class="field-settings-panel" aria-label="Field settings">
+        <header class="field-settings-header">
+          <button
+            ngsIconButton
+            type="button"
+            aria-label="Close field settings"
+            ngsTooltip="Close"
+            (click)="closeFieldSettingsPanel()"
+          >
+            <ngs-icon name="fluent:chevron-left-24-regular" />
+          </button>
+          <div class="min-w-0">
+            <h3>{{ field.label }}</h3>
+          </div>
+        </header>
+
+        <div class="field-settings-body">
+          <div class="field-settings-actions" aria-label="Selected field actions">
+            @if (field.type === 'variable') {
+              <button
+                ngsButton="outlined"
+                type="button"
+                [disabled]="field.locked"
+                [ngsMenuTriggerFor]="variableBindingMenu"
+              >
+                <ngs-icon name="fluent:database-link-24-regular" />
+                {{ getVariableBindingLabel(field) }}
+              </button>
+            }
+
+            @if (field.type === 'date') {
+              <button
+                ngsButton="outlined"
+                type="button"
+                [disabled]="field.locked"
+                (click)="openSelectedDatePicker($event)"
+              >
+                <ngs-icon name="fluent:calendar-ltr-24-regular" />
+                {{ field.value.trim() ? 'Change date' : 'Select date' }}
+              </button>
+            }
+
+            <button ngsButton="outlined" type="button" (click)="duplicateSelectedField()">
+              <ngs-icon name="fluent:copy-24-regular" />
+              Duplicate
+            </button>
+            <button
+              ngsButton="outlined"
+              type="button"
+              [class.is-active]="field.required"
+              [disabled]="field.locked"
+              [attr.aria-pressed]="field.required"
+              (click)="toggleSelectedFieldRequired()"
+            >
+              <ngs-icon name="fluent:text-asterisk-20-regular" />
+              {{ field.required ? 'Required' : 'Optional' }}
+            </button>
+            <button ngsButton="outlined" type="button" (click)="toggleSelectedFieldLock()">
+              <ngs-icon [name]="field.locked ? 'fluent:lock-open-24-regular' : 'fluent:lock-closed-24-regular'" />
+              {{ field.locked ? 'Unlock' : 'Lock' }}
+            </button>
+            <button ngsButton="outlined" type="button" [disabled]="field.locked" (click)="deleteSelectedField()">
+              <ngs-icon name="fluent:delete-24-regular" />
+              Delete
+            </button>
+          </div>
+        </div>
+      </section>
+    } @else {
+      @if (recipientItems().length) {
+        <section class="field-recipients-panel" aria-label="Document recipients">
+          <header class="field-recipients-header">
+            <h3>Add recipients</h3>
+            <p>Who are you sending this document to?</p>
+          </header>
+
+          <ngs-scrollbar-area class="field-recipients-scroll">
+            <ngs-list role="list" class="field-recipients-list">
+              @for (recipient of recipientItems(); track recipient.id) {
+                <ngs-list-item
+                  role="listitem"
+                  lines="2"
+                  [disabled]="recipient.disabled"
+                  (click)="selectRecipient(recipient, $event)"
+                >
+                  <ngs-avatar
+                    ngsListItemAvatar
+                    [label]="getRecipientAvatarLabel(recipient)"
+                    [key]="recipient.id"
+                  />
+                  <span ngsListItemTitle>
+                    {{ recipient.name }}
+                    <span>{{ getRecipientRoleLabel(recipient) }}</span>
+                    @if (recipient.isCurrentUser) {
+                      <span>YOU</span>
+                    }
+                  </span>
+                  @if (recipient.email) {
+                    <span ngsListItemLine>{{ recipient.email }}</span>
+                  }
+                  <span ngsListItemMeta>
+                    <button
+                      ngsIconButton
+                      type="button"
+                      aria-label="Recipient actions"
+                      [ngsMenuTriggerFor]="recipientActionsMenu"
+                      (click)="$event.stopPropagation()"
+                    >
+                      <ngs-icon name="fluent:more-vertical-24-regular" />
+                    </button>
+                    <ngs-menu #recipientActionsMenu="ngsMenu" xPosition="before">
+                      <button ngs-menu-item type="button" (click)="requestEditRecipientDetails(recipient, $event)">
+                        <ngs-icon name="fluent:edit-24-regular" />
+                        <span>Edit personal details</span>
+                      </button>
+                      <button ngs-menu-item type="button" (click)="requestReplaceRecipient(recipient, $event)">
+                        <ngs-icon name="fluent:arrow-swap-24-regular" />
+                        <span>Replace recipient</span>
+                      </button>
+                      <ngs-menu-divider />
+                      <button ngs-menu-item type="button" (click)="requestRemoveRecipient(recipient, $event)">
+                        <ngs-icon name="fluent:dismiss-24-regular" />
+                        <span>Remove</span>
+                      </button>
+                    </ngs-menu>
+                  </span>
+                </ngs-list-item>
+              }
+
+            </ngs-list>
+
+            <button
+              ngsButton="outlined"
+              type="button"
+              [ngsPopoverTriggerFor]="addRecipientPopover"
+              position="below-end"
+              hasBackdrop
+              (opened)="requestAddRecipient()"
+            >
+              <ngs-icon name="fluent:add-24-regular" />
+              <span>Add recipient</span>
+            </button>
+
+            <ngs-popover #addRecipientPopover="ngsPopover">
+              <ng-template ngsPopoverContent>
+                <div class="flex w-80 flex-col gap-2 p-3" aria-label="Add recipient">
+                  <ngs-form-field class="w-full" subscriptHiddenIfEmpty>
+                    <ngs-icon ngsIconPrefix name="fluent:search-24-regular" />
+                    <input
+                      ngsInput
+                      type="text"
+                      aria-label="Search recipients"
+                      placeholder="Start typing recipient email, name or group"
+                      [value]="recipientSearchQuery()"
+                      (input)="updateRecipientSearch($any($event.target).value)"
+                    />
+                    <button ngsIconButton ngsIconButtonSuffix type="button" aria-label="Recipient search options">
+                      <ngs-icon name="fluent:more-horizontal-24-regular" />
+                    </button>
+                  </ngs-form-field>
+
+                  <button
+                    ngsButton="text"
+                    type="button"
+                    (click)="requestCreateRecipientContact($event)"
+                  >
+                    <ngs-icon name="fluent:person-add-24-regular" />
+                    <span>Create new contact</span>
+                  </button>
+                </div>
+              </ng-template>
+            </ngs-popover>
+          </ngs-scrollbar-area>
+        </section>
       }
-    </ngs-panel-aside>
-  }
+
+      <div class="field-sidebar-actions" aria-label="PDF builder document actions">
+        <span class="builder-field-count">{{ fieldCount() }} fields</span>
+        <ngs-divider vertical fixedHeight />
+        <button
+          ngsIconButton
+          type="button"
+          aria-label="Add blank page"
+          ngsTooltip="Add blank page"
+          (click)="addBlankPage()"
+        >
+          <ngs-icon name="fluent:document-one-page-add-24-regular" />
+        </button>
+      </div>
+    }
+  </ngs-panel-aside>
 
   <ngs-menu #variableBindingMenu="ngsMenu">
     <ngs-menu-heading>Binding</ngs-menu-heading>
