@@ -1,0 +1,43 @@
+<app-page>
+  <h1 appPageTitle>Typed Signature Pad</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p>
+        Typed Signature Pad lets users type initials, names, or short signature text and emits the
+        rendered result as an image data URL. Use it in PDF signing, approval, onboarding, consent,
+        checkout, and document workflows where users can provide a typed signature instead of
+        drawing one.
+      </p>
+      <div class="my-7">
+        <div>Use it for:</div>
+        <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
+          <li>
+            Capturing typed initials or signature text from the keyboard.
+          </li>
+          <li>
+            Letting users choose a signature font and a color palette.
+          </li>
+          <li>
+            Emitting signature metadata with the typed value, font family, color, and SVG data URL.
+          </li>
+          <li>
+            Clearing the typed signature through the same compact control surface as Signature Pad.
+          </li>
+        </ul>
+      </div>
+      <p>
+        Do not use Typed Signature Pad as a legal validation system by itself. App code should still
+        require the signature when needed, persist the emitted image data URL, attach it to the
+        workflow or document, and enforce backend or legal rules.
+      </p>
+    </main>
+    <nav ngs-tab-nav-bar>
+      <a routerLink="/components/typed-signature-pad" ngs-tab-link>Overview</a>
+      <a routerLink="/components/typed-signature-pad/examples" ngs-tab-link>Examples</a>
+      <a routerLink="/components/typed-signature-pad/api" ngs-tab-link>Api</a>
+    </nav>
+    <ngs-tab-nav-panel>
+      <router-outlet/>
+    </ngs-tab-nav-panel>
+  </div>
+</app-page>

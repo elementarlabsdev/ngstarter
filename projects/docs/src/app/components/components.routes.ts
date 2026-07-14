@@ -376,6 +376,11 @@ export const routes: Routes = [
     title: 'Signature Pad'
   },
   {
+    path: 'typed-signature-pad',
+    loadChildren: () => import('./typed-signature-pad/routes').then(m => m.routes),
+    title: 'Typed Signature Pad'
+  },
+  {
     path: 'notifications',
     loadChildren: () => import('./notifications/routes').then(m => m.routes),
     title: 'Notifications'

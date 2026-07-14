@@ -11,16 +11,12 @@
     </ngs-tab>
 
     <ngs-tab label="Type">
-      <ngs-form-field class="w-full" subscriptHiddenIfEmpty>
-        <input
-          ngsInput
-          type="text"
-          aria-label="Typed signature"
-          placeholder="Type your signature"
-          [value]="typedSignature()"
-          (input)="handleTypedSignature($any($event.target).value)"
-        />
-      </ngs-form-field>
+      <ngs-typed-signature-pad
+        class="overflow-hidden rounded border border-border"
+        placeholder="Type initials or signature"
+        (signatureTyped)="handleTypedSignature($event)"
+        (signatureCleared)="typedSignature.set(null)"
+      />
     </ngs-tab>
 
     <ngs-tab label="Upload">
@@ -55,17 +51,34 @@
 
     @if (data.signatures.length) {
       <ngs-tab label="My Signature">
-        <ngs-selection-list aria-label="Saved signatures">
+        <div class="flex flex-col gap-3" aria-label="Saved signatures">
           @for (signature of data.signatures; track signature.id) {
-            <ngs-list-option [selected]="selectedSignature()?.id === signature.id" (selectedChange)="selectSignature(signature)">
-              <ngs-icon ngsListItemAvatar name="fluent:signature-24-regular" />
-              <span ngsListItemTitle>{{ signature.name }}</span>
-              @if (signature.description) {
-                <span ngsListItemLine>{{ signature.description }}</span>
+            <button
+              class="my-signature-option flex w-full items-center gap-4 rounded border border-border bg-surface p-3 text-left transition hover:bg-surface-container-low"
+              type="button"
+              [class.border-primary]="selectedSignature()?.id === signature.id"
+              [class.bg-primary-container]="selectedSignature()?.id === signature.id"
+              [attr.aria-pressed]="selectedSignature()?.id === signature.id"
+              (click)="selectSignature(signature)"
+            >
+              @if (getSignatureAssetImage(signature); as imageSource) {
+                <span class="flex h-16 w-40 shrink-0 items-center justify-center rounded bg-surface-container-low px-4 py-2">
+                  <img class="my-signature-image max-h-full max-w-full object-contain" [src]="imageSource" [alt]="signature.name" />
+                </span>
+              } @else {
+                <span class="flex h-16 w-40 shrink-0 items-center justify-center rounded bg-surface-container-low px-4 py-2 text-sm text-on-surface-variant">
+                  {{ signature.name }}
+                </span>
               }
-            </ngs-list-option>
+              <span class="flex min-w-0 flex-col">
+                <span class="truncate text-sm text-on-surface">{{ signature.name }}</span>
+                @if (signature.description) {
+                  <span class="truncate text-xs text-on-surface-variant">{{ signature.description }}</span>
+                }
+              </span>
+            </button>
           }
-        </ngs-selection-list>
+        </div>
       </ngs-tab>
     }
   </ngs-tab-group>
@@ -75,9 +88,6 @@
     of my handwritten signature and are considered originals on all documents.
   </p>
 
-  <ngs-alert class="mt-4" variant="notice">
-    To make your signature valid, please use at least two alphanumeric characters or continue signing.
-  </ngs-alert>
 </ngs-dialog-content>
 
 <ngs-dialog-actions align="end">

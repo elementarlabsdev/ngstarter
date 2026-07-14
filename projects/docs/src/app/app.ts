@@ -888,6 +888,12 @@ export class App implements OnInit {
         {
           key: uuid(),
           type: 'link',
+          name: 'Typed Signature Pad',
+          link: '/components/typed-signature-pad'
+        },
+        {
+          key: uuid(),
+          type: 'link',
           name: 'Notifications',
           link: '/components/notifications'
         },

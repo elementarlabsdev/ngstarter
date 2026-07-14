@@ -138,6 +138,7 @@ export interface PdfBuilderField {
   readonly label: string;
   readonly binding: string;
   readonly value: string;
+  readonly signer?: PdfBuilderFieldSigner | null;
   readonly icon: string;
   readonly slot: PdfBuilderFieldSlot;
   readonly x: number;
@@ -158,6 +159,18 @@ export interface PdfBuilderRecipient {
   readonly isCurrentUser?: boolean;
   readonly fieldIds?: readonly string[];
   readonly disabled?: boolean;
+}
+
+export interface PdfBuilderSigner {
+  readonly id: string;
+  readonly fullName: string;
+  readonly email?: string;
+}
+
+export interface PdfBuilderFieldSigner {
+  readonly id: string;
+  readonly fullName: string;
+  readonly email?: string;
 }
 
 export interface PdfBuilderStampAsset {
@@ -203,6 +216,9 @@ export interface PdfBuilderSignatureDraw {
 export interface PdfBuilderSignatureType {
   readonly field: PdfBuilderField;
   readonly value: string;
+  readonly dataUrl: string;
+  readonly fontFamily: string;
+  readonly color: string;
 }
 
 export type PdfBuilderSignatureUploadCallbackResult =
@@ -406,6 +422,7 @@ export class PdfBuilder {
   readonly schema = input<PdfBuilderSchema | null>(null);
   readonly annotations = input<readonly PdfViewerAnnotationView[]>([]);
   readonly recipients = input<readonly PdfBuilderRecipient[]>([]);
+  readonly signers = input<readonly PdfBuilderSigner[]>([]);
   readonly stamps = input<readonly PdfBuilderStampAsset[]>([]);
   readonly uploadedSignatures = input<readonly PdfBuilderSignatureAsset[]>([]);
   readonly drawnSignatureUploadCallback = input<PdfBuilderDrawnSignatureUploadCallback | null | undefined>(undefined);
@@ -547,6 +564,7 @@ export class PdfBuilder {
     this.fields().find(field => field.id === this.selectedFieldId()) ?? null,
   );
   protected readonly recipientItems = computed(() => this.recipients().filter(recipient => recipient.id && recipient.name));
+  protected readonly signerItems = computed(() => this.getNormalizedSigners());
   protected readonly isSearchPanelVisible = computed(() => this.searchPanelVisible());
   protected readonly isAnnotationsPanelVisible = computed(() =>
     !this.searchPanelVisible() && this.annotationsPanelVisible(),
@@ -1107,6 +1125,14 @@ export class PdfBuilder {
     return field.value;
   }
 
+  protected getFieldSignerTooltip(field: PdfBuilderField): string {
+    if (field.id === this.selectedFieldId()) {
+      return '';
+    }
+
+    return field.signer?.fullName.trim() ?? '';
+  }
+
   protected isSignatureImageValue(value: string): boolean {
     const source = value.trim();
 
@@ -1453,6 +1479,32 @@ export class PdfBuilder {
     return recipient.role?.trim() || 'Recipient';
   }
 
+  private getNormalizedSigners(): readonly PdfBuilderFieldSigner[] {
+    const explicitSigners = this.signers()
+      .filter(signer => signer.id.trim() && signer.fullName.trim())
+      .map(signer => ({
+        id: signer.id,
+        fullName: signer.fullName.trim(),
+        email: signer.email,
+      }));
+
+    if (explicitSigners.length) {
+      return explicitSigners;
+    }
+
+    return this.recipientItems()
+      .filter(recipient => this.getRecipientRoleLabel(recipient).toLowerCase() === 'signer')
+      .map(recipient => ({
+        id: recipient.id,
+        fullName: recipient.name.trim(),
+        email: recipient.email,
+      }));
+  }
+
+  private getDefaultFieldSigner(): PdfBuilderFieldSigner | null {
+    return this.signerItems()[0] ?? null;
+  }
+
   protected isRecipientSelected(recipient: PdfBuilderRecipient): boolean {
     const selectedFieldId = this.selectedFieldId();
 
@@ -1594,7 +1646,7 @@ export class PdfBuilder {
     const pageCount = pages.length;
     const fields = (schema.fields ?? [])
       .filter(field => field.page >= 1 && field.page <= pageCount)
-      .map(field => ({ ...field }));
+      .map(field => this.withDefaultFieldSigner(field));
     const view = schema.view;
 
     this.suppressNextSchemaChange = true;
@@ -1888,7 +1940,13 @@ export class PdfBuilder {
     }
 
     if (result.type === 'type') {
-      this.signatureTyped.emit({ field: appliedField, value: result.value });
+      this.signatureTyped.emit({
+        field: appliedField,
+        value: result.value,
+        dataUrl: result.dataUrl,
+        fontFamily: result.fontFamily,
+        color: result.color,
+      });
       this.recordActivity('Signature typed', `${signatureLabel} applied.`, currentField.icon);
       return;
     }
@@ -1966,7 +2024,7 @@ export class PdfBuilder {
       case 'draw':
         return result.dataUrl;
       case 'type':
-        return result.value;
+        return result.dataUrl;
       case 'file':
         return result.file.name;
     }
@@ -2847,6 +2905,7 @@ export class PdfBuilder {
       label: this.getDefaultLabel(type, tool?.label),
       binding,
       value: this.getDefaultValue(type, binding),
+      signer: this.getDefaultFieldSigner(),
       icon: tool?.icon ?? 'fluent:form-24-regular',
       slot,
       ...this.getSlotMetrics(slot),
@@ -2854,6 +2913,17 @@ export class PdfBuilder {
       required: type === 'signature' || type === 'initials',
       readonly: type === 'stamp',
       locked: false,
+    };
+  }
+
+  private withDefaultFieldSigner(field: PdfBuilderField): PdfBuilderField {
+    if (field.signer !== undefined) {
+      return { ...field };
+    }
+
+    return {
+      ...field,
+      signer: this.getDefaultFieldSigner(),
     };
   }
 

@@ -7,9 +7,11 @@ import {
   PdfBuilder,
   type PdfBuilderDrawnSignatureUploadContext,
   type PdfBuilderSchema,
+  type PdfBuilderSigner,
   type PdfBuilderSignatureAsset,
   type PdfBuilderSignatureImageUploadContext,
   type PdfBuilderSignatureSelection,
+  type PdfBuilderSignatureType,
   type PdfBuilderStampAsset,
   type PdfBuilderStampSelection,
 } from './pdf-builder';
@@ -158,7 +160,12 @@ describe('PdfBuilder', () => {
     expect(state.pageStripVisible()).toBe(false);
     expect(state.libraryCollapsed()).toBe(true);
     expect(state.searchPanelVisible()).toBe(true);
-    expect(state.fields()).toEqual(schema.fields);
+    expect(state.fields()).toEqual([
+      {
+        ...schema.fields[0],
+        signer: null,
+      },
+    ]);
     expect(emitted).toEqual([]);
 
     state.addField('text');
@@ -451,6 +458,71 @@ describe('PdfBuilder', () => {
     expect(panel!.textContent).not.toContain('Signature');
     expect(panel!.textContent).not.toContain('Page 1');
     expect(element.querySelector('.field-sidebar-actions')).not.toBeNull();
+  });
+
+  it('assigns the first signer input to newly added fields and exposes full name for tooltip', () => {
+    const signers: readonly PdfBuilderSigner[] = [
+      {
+        id: 'signer-1',
+        fullName: 'Primary Signer',
+        email: 'signer@example.com',
+      },
+      {
+        id: 'signer-2',
+        fullName: 'Backup Signer',
+      },
+    ];
+    const state = component as unknown as {
+      addField: (type: 'text' | 'signature') => void;
+      fields: () => readonly { signer?: { id: string; fullName: string; email?: string } | null }[];
+      getFieldSignerTooltip: (field: { signer?: { fullName: string } | null }) => string;
+    };
+
+    fixture.componentRef.setInput('signers', signers);
+    state.addField('text');
+    state.addField('signature');
+    fixture.detectChanges();
+
+    expect(state.fields()[0].signer).toEqual({
+      id: 'signer-1',
+      fullName: 'Primary Signer',
+      email: 'signer@example.com',
+    });
+    expect(state.fields()[1].signer).toEqual({
+      id: 'signer-1',
+      fullName: 'Primary Signer',
+      email: 'signer@example.com',
+    });
+    expect(state.getFieldSignerTooltip(state.fields()[0])).toBe('Primary Signer');
+  });
+
+  it('falls back to the first signer recipient when signers input is empty', () => {
+    const state = component as unknown as {
+      addField: (type: 'text') => void;
+      fields: () => readonly { signer?: { id: string; fullName: string; email?: string } | null }[];
+    };
+
+    fixture.componentRef.setInput('recipients', [
+      {
+        id: 'approver',
+        name: 'Legal Approver',
+        role: 'Approver',
+      },
+      {
+        id: 'signer-1',
+        name: 'Primary Signer',
+        email: 'signer@example.com',
+        role: 'Signer',
+      },
+    ]);
+    state.addField('text');
+    fixture.detectChanges();
+
+    expect(state.fields()[0].signer).toEqual({
+      id: 'signer-1',
+      fullName: 'Primary Signer',
+      email: 'signer@example.com',
+    });
   });
 
   it('opens field settings from an input recipient only when fieldIds maps to a field', () => {
@@ -910,6 +982,13 @@ describe('PdfBuilder', () => {
         id: 'pavel-signature',
         name: 'Pavel signature',
         description: 'Saved signature',
+        imageUrl: '/assets/signatures/pavel.png',
+      },
+      {
+        id: 'olga-signature',
+        name: 'Olga signature',
+        description: 'Saved initials',
+        imageUrl: '/assets/signatures/olga.png',
       },
     ];
     const state = component as unknown as {
@@ -937,6 +1016,17 @@ describe('PdfBuilder', () => {
     expect(document.body.textContent).toContain('My Signature');
     expect(document.querySelector('ngs-signature-pad')).not.toBeNull();
 
+    const typeTab = Array.from(document.querySelectorAll<HTMLElement>('.ngs-tab-label'))
+      .find(tab => tab.textContent?.includes('Type'));
+
+    expect(typeTab).not.toBeNull();
+
+    typeTab!.click();
+    fixture.detectChanges();
+
+    expect(document.querySelector('ngs-typed-signature-pad')).not.toBeNull();
+    expect(document.body.textContent).toContain('Signature');
+
     const mySignatureTab = Array.from(document.querySelectorAll<HTMLElement>('.ngs-tab-label'))
       .find(tab => tab.textContent?.includes('My Signature'));
 
@@ -947,6 +1037,14 @@ describe('PdfBuilder', () => {
 
     expect(document.body.textContent).toContain('Pavel signature');
     expect(document.body.textContent).toContain('Saved signature');
+    expect(document.body.textContent).toContain('Olga signature');
+
+    const signatureImages = Array.from(document.querySelectorAll<HTMLImageElement>('.my-signature-image'));
+
+    expect(signatureImages.map(image => image.getAttribute('src'))).toEqual([
+      '/assets/signatures/pavel.png',
+      '/assets/signatures/olga.png',
+    ]);
 
     document.querySelector<HTMLButtonElement>('[ngs-dialog-close]')?.click();
     fixture.detectChanges();
@@ -960,6 +1058,7 @@ describe('PdfBuilder', () => {
         id: 'pavel-signature',
         name: 'Pavel signature',
         description: 'Saved signature',
+        imageUrl: '/assets/signatures/pavel.png',
       },
     ];
     const emitted: PdfBuilderSignatureSelection[] = [];
@@ -990,7 +1089,7 @@ describe('PdfBuilder', () => {
     mySignatureTab!.click();
     fixture.detectChanges();
 
-    const signatureOption = document.querySelector<HTMLElement>('ngs-list-option');
+    const signatureOption = document.querySelector<HTMLElement>('.my-signature-option');
 
     expect(signatureOption).not.toBeNull();
 
@@ -1008,7 +1107,7 @@ describe('PdfBuilder', () => {
 
     expect(state.fields()[0]).toEqual(expect.objectContaining({
       label: 'Pavel signature',
-      value: 'Pavel signature',
+      value: '/assets/signatures/pavel.png',
     }));
     expect(emitted).toHaveLength(1);
     expect(emitted[0]).toEqual(expect.objectContaining({
@@ -1119,6 +1218,60 @@ describe('PdfBuilder', () => {
       label: 'signature.png',
       value: uploadedSignatureUrl,
     }));
+  });
+
+  it('renders a typed signature result as an image on the canvas', async () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const typedSignature = 'data:image/svg+xml;charset=utf-8,%3Csvg%3E%3C%2Fsvg%3E';
+    const emitted: PdfBuilderSignatureType[] = [];
+    const subscription = component.signatureTyped.subscribe(event => emitted.push(event));
+    const state = component as unknown as {
+      addField: (type: 'signature') => void;
+      fields: () => readonly { id: string; label: string; value: string }[];
+      applySignatureDialogResult: (
+        field: { id: string },
+        result: {
+          type: 'type';
+          value: string;
+          dataUrl: string;
+          fontFamily: string;
+          color: string;
+        },
+      ) => Promise<void>;
+    };
+
+    state.addField('signature');
+    fixture.detectChanges();
+
+    const field = state.fields()[0];
+
+    await state.applySignatureDialogResult(field, {
+      type: 'type',
+      value: 'P.S.',
+      dataUrl: typedSignature,
+      fontFamily: 'Brush Script MT, cursive',
+      color: '#000',
+    });
+    fixture.detectChanges();
+
+    const overlayField = element.querySelector<HTMLElement>(`[data-field-id="${field.id}"]`);
+    const image = overlayField?.querySelector<HTMLImageElement>('img.signature-field-image');
+
+    expect(state.fields()[0]).toEqual(expect.objectContaining({
+      label: 'P.S.',
+      value: typedSignature,
+    }));
+    expect(image).not.toBeNull();
+    expect(image!.getAttribute('src')).toBe(typedSignature);
+    expect(emitted).toHaveLength(1);
+    expect(emitted[0]).toEqual(expect.objectContaining({
+      value: 'P.S.',
+      dataUrl: typedSignature,
+      fontFamily: 'Brush Script MT, cursive',
+      color: '#000',
+    }));
+
+    subscription.unsubscribe();
   });
 
   it('uses lower canvas metrics for initials fields', () => {

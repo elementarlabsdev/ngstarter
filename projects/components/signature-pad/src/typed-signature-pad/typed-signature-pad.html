@@ -1,0 +1,55 @@
+<div class="font-button">
+  <button
+    class="typed-signature-clear"
+    ngsIconButton
+    type="button"
+    aria-label="Clear typed signature"
+    (click)="clear()"
+  >
+    <ngs-icon name="fluent:dismiss-24-regular" />
+  </button>
+
+  <button
+    class="typed-signature-font-trigger"
+    ngsButton="text"
+    reverse
+    type="button"
+    [ngsMenuTriggerFor]="fontMenu"
+  >
+    <span>{{ selectedFont().label }}</span>
+    <ngs-icon name="fluent:chevron-down-24-filled" />
+  </button>
+</div>
+
+<input
+  #signatureInput
+  class="signature-canvas typed-signature-input"
+  type="text"
+  autocomplete="off"
+  spellcheck="false"
+  aria-label="Typed signature"
+  [attr.placeholder]="placeholder()"
+  [value]="value()"
+  (input)="updateValue($any($event.target).value)"
+/>
+
+<div class="line" aria-hidden="true"></div>
+
+<ngs-color-switcher
+  [selectedColor]="penColor()"
+  [colors]="colors()"
+  (colorChange)="onColorChange($event)"
+/>
+
+<ngs-menu #fontMenu="ngsMenu">
+  @for (font of fonts(); track font.family) {
+    <button
+      ngs-menu-item
+      type="button"
+      [selected]="font.family === fontFamily()"
+      (click)="selectFont(font)"
+    >
+      <span class="typed-signature-font-sample">{{ font.label }}</span>
+    </button>
+  }
+</ngs-menu>

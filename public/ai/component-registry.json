@@ -7174,13 +7174,13 @@
         "PDF Builder",
         "Basic pdf builder"
       ],
-      "minimalExample": "<ngs-pdf-builder\n  [recipients]=\"recipients()\"\n  [stamps]=\"stamps\"\n  [uploadedSignatures]=\"uploadedSignatures\"\n  (removeRecipient)=\"removeRecipient($event)\"\n/>",
+      "minimalExample": "<ngs-pdf-builder\n  [recipients]=\"recipients()\"\n  [signers]=\"signers\"\n  [stamps]=\"stamps\"\n  [uploadedSignatures]=\"uploadedSignatures\"\n  (removeRecipient)=\"removeRecipient($event)\"\n/>",
       "exampleFiles": [
         {
           "name": "basic-pdf-builder-example",
           "title": "Basic pdf builder",
           "file": "projects/docs/src/app/libraries/pdf-builder/_examples/basic-pdf-builder-example/basic-pdf-builder-example.html",
-          "source": "<ngs-pdf-builder\n  [recipients]=\"recipients()\"\n  [stamps]=\"stamps\"\n  [uploadedSignatures]=\"uploadedSignatures\"\n  (removeRecipient)=\"removeRecipient($event)\"\n/>"
+          "source": "<ngs-pdf-builder\n  [recipients]=\"recipients()\"\n  [signers]=\"signers\"\n  [stamps]=\"stamps\"\n  [uploadedSignatures]=\"uploadedSignatures\"\n  (removeRecipient)=\"removeRecipient($event)\"\n/>"
         }
       ],
       "previewAsset": null,
@@ -7195,6 +7195,7 @@
         "PdfBuilderDrawnSignatureUploadCallback",
         "PdfBuilderDrawnSignatureUploadContext",
         "PdfBuilderField",
+        "PdfBuilderFieldSigner",
         "PdfBuilderFieldSlot",
         "PdfBuilderFieldType",
         "PdfBuilderPageRotation",
@@ -7214,6 +7215,7 @@
         "PdfBuilderSignatureType",
         "PdfBuilderSignatureUpload",
         "PdfBuilderSignatureUploadCallbackResult",
+        "PdfBuilderSigner",
         "PdfBuilderSpreadMode",
         "PdfBuilderStampAsset",
         "PdfBuilderStampDialog",
@@ -7228,6 +7230,7 @@
         "recipients",
         "schema",
         "signatureImageUploadCallback",
+        "signers",
         "stamps",
         "uploadedSignatures"
       ],
@@ -8789,7 +8792,8 @@
       ],
       "previewAsset": "projects/components/signature-pad/preview.svg",
       "selectors": [
-        "ngs-signature-pad"
+        "ngs-signature-pad",
+        "ngs-typed-signature-pad"
       ],
       "exportedSymbols": [
         "LazyBrush",
@@ -8797,26 +8801,48 @@
         "LazyBrushUpdateOptions",
         "LazyPoint",
         "Point",
-        "SignaturePad"
+        "SignaturePad",
+        "TypedSignatureFont",
+        "TypedSignaturePad",
+        "TypedSignaturePadValue"
       ],
       "inputs": [
         "backgroundColor",
         "colors",
+        "fontFamily",
+        "fonts",
         "lazyEnabled",
         "lazyFriction",
         "lazyRadius",
         "lineWidth",
-        "penColor"
+        "penColor",
+        "placeholder",
+        "value"
       ],
       "outputs": [
         "signatureCleared",
-        "signatureSaved"
+        "signatureSaved",
+        "signatureTyped"
       ],
       "cssTokens": [
         "--ngs-brand-colors-color-size",
         "--ngs-brand-colors-gap",
+        "--ngs-button-content-gap",
+        "--ngs-button-height",
+        "--ngs-button-hover-bg",
+        "--ngs-button-padding",
+        "--ngs-button-text-color",
+        "--ngs-color-on-surface",
         "--ngs-color-surface-container-highest",
-        "--ngs-color-surface-container-lowest"
+        "--ngs-color-surface-container-low",
+        "--ngs-color-surface-container-lowest",
+        "--ngs-font-family",
+        "--ngs-font-size-lg",
+        "--ngs-font-size-sm",
+        "--ngs-icon-button-size",
+        "--ngs-icon-size",
+        "--ngs-typed-signature-color",
+        "--ngs-typed-signature-font"
       ],
       "example": null
     },

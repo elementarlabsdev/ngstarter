@@ -1,0 +1,15 @@
+<ngs-typed-signature-pad
+  class="border border-muted rounded-2xl overflow-hidden"
+  placeholder="Type initials or signature"
+  (signatureTyped)="onSignatureTyped($event)"
+  (signatureCleared)="onSignatureCleared()"
+/>
+
+@if (signature(); as typedSignature) {
+  <div class="mt-10 flex flex-col gap-3">
+    <img class="max-h-24 w-fit" [src]="typedSignature.dataUrl" alt="">
+    <p class="text-sm text-neutral-600">
+      {{ typedSignature.value }} - {{ typedSignature.color }}
+    </p>
+  </div>
+}

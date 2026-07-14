@@ -98,6 +98,7 @@ const COMPONENT_TITLES: Record<string, SeoTitleConfig> = {
   'screen-loader': { label: 'Screen Loader', detail: 'Full-screen Loading' },
   sidenav: { label: 'Sidenav', detail: 'App Navigation Shells' },
   'signature-pad': { label: 'Signature Pad', detail: 'Signature Capture' },
+  'typed-signature-pad': { label: 'Typed Signature Pad', detail: 'Typed Signature Capture' },
   skeleton: { label: 'Skeleton', detail: 'Loading Placeholders' },
   slider: { label: 'Slider', detail: 'Range Inputs' },
   snackbar: { label: 'Snackbar', detail: 'Toast Notifications' },

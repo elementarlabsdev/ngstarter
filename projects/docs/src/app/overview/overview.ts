@@ -480,6 +480,11 @@ export class Overview {
       name: 'Signature Pad'
     },
     {
+      routerLink: '/components/typed-signature-pad',
+      imageUrl: 'assets/overview/signature-pad.svg',
+      name: 'Typed Signature Pad'
+    },
+    {
       routerLink: '/components/skeleton',
       imageUrl: 'assets/overview/skeleton.svg',
       name: 'Skeleton'

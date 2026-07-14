@@ -761,8 +761,8 @@ Typography:
   use when: Choose Pdf Builder when the workflow matches examples such as PDF Builder, Basic pdf builder.
   example topics: PDF Builder, Basic pdf builder
   selectors: `ngs-pdf-builder`, `ngs-pdf-builder-signature-dialog`, `ngs-pdf-builder-stamp-dialog`
-  exports: `PdfBuilder`, `PdfBuilderCanvasTool`, `PdfBuilderDrawnSignatureUploadCallback`, `PdfBuilderDrawnSignatureUploadContext`, `PdfBuilderField`, `PdfBuilderFieldSlot`, `PdfBuilderFieldType`, `PdfBuilderPageRotation`, `PdfBuilderRecipient`, `PdfBuilderSchema`, `PdfBuilderSchemaPage`, `PdfBuilderSchemaPageKind`
-  inputs: `annotations`, `drawnSignatureUploadCallback`, `recipients`, `schema`, `signatureImageUploadCallback`, `stamps`, `uploadedSignatures`
+  exports: `PdfBuilder`, `PdfBuilderCanvasTool`, `PdfBuilderDrawnSignatureUploadCallback`, `PdfBuilderDrawnSignatureUploadContext`, `PdfBuilderField`, `PdfBuilderFieldSigner`, `PdfBuilderFieldSlot`, `PdfBuilderFieldType`, `PdfBuilderPageRotation`, `PdfBuilderRecipient`, `PdfBuilderSchema`, `PdfBuilderSchemaPage`
+  inputs: `annotations`, `drawnSignatureUploadCallback`, `recipients`, `schema`, `signatureImageUploadCallback`, `signers`, `stamps`, `uploadedSignatures`
   outputs: `addRecipient`, `createBlankPdf`, `createRecipientContact`, `editRecipientDetails`, `exportPdf`, `recipientSearchChanged`, `recipientSelected`, `removeRecipient`, `replaceRecipient`, `schemaChange`, `signatureDrawn`, `signatureSelected`, `signatureTyped`, `signatureUploaded`, `stampSelected`, `stampUploaded`
   tokens: `--ngs-button-border-radius`, `--ngs-button-content-gap`, `--ngs-button-height`, `--ngs-button-hover-bg`, `--ngs-button-outlined-border`, `--ngs-button-outlined-color`, `--ngs-button-padding`, `--ngs-color-border`, `--ngs-color-border-strong`, `--ngs-color-danger`, `--ngs-color-on-primary-container`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-on-warning-container`, `--ngs-color-primary`, `--ngs-color-primary-container`
 - pdf-viewer: `@ngstarter-ui/components/pdf-viewer` docs: /libraries/pdf-viewer
@@ -915,11 +915,11 @@ Typography:
   purpose: Capture a handwritten signature and emit it as a PNG data URL.
   use when: Use ngs-signature-pad in approval, contract, consent, delivery confirmation, onboarding, checkout, legal acknowledgement, or internal workflow forms where the user must draw a signature. It supports mouse, touch, or pen input, penColor, colors for the fixed allowed pen palette, lineWidth, backgroundColor, lazy brush smoothing through lazyRadius/lazyFriction/lazyEnabled, clear(), save(), signatureSaved with a base64 PNG data URL, and signatureCleared. Use the emitted PNG in app code to store or attach the signature to the workflow or document. Do not use SignaturePad as a general drawing canvas, image editor, annotation tool, sketch board, whiteboard, file upload, typed-name field, or legal validation system by itself. App code still needs to require the signature when needed, persist it, and enforce backend or legal rules.
   example topics: Basic signature pad
-  selectors: `ngs-signature-pad`
-  exports: `LazyBrush`, `LazyBrushOptions`, `LazyBrushUpdateOptions`, `LazyPoint`, `Point`, `SignaturePad`
-  inputs: `backgroundColor`, `colors`, `lazyEnabled`, `lazyFriction`, `lazyRadius`, `lineWidth`, `penColor`
-  outputs: `signatureCleared`, `signatureSaved`
-  tokens: `--ngs-brand-colors-color-size`, `--ngs-brand-colors-gap`, `--ngs-color-surface-container-highest`, `--ngs-color-surface-container-lowest`
+  selectors: `ngs-signature-pad`, `ngs-typed-signature-pad`
+  exports: `LazyBrush`, `LazyBrushOptions`, `LazyBrushUpdateOptions`, `LazyPoint`, `Point`, `SignaturePad`, `TypedSignatureFont`, `TypedSignaturePad`, `TypedSignaturePadValue`
+  inputs: `backgroundColor`, `colors`, `fontFamily`, `fonts`, `lazyEnabled`, `lazyFriction`, `lazyRadius`, `lineWidth`, `penColor`, `placeholder`, `value`
+  outputs: `signatureCleared`, `signatureSaved`, `signatureTyped`
+  tokens: `--ngs-brand-colors-color-size`, `--ngs-brand-colors-gap`, `--ngs-button-content-gap`, `--ngs-button-height`, `--ngs-button-hover-bg`, `--ngs-button-padding`, `--ngs-button-text-color`, `--ngs-color-on-surface`, `--ngs-color-surface-container-highest`, `--ngs-color-surface-container-low`, `--ngs-color-surface-container-lowest`, `--ngs-font-family`, `--ngs-font-size-lg`, `--ngs-font-size-sm`, `--ngs-icon-button-size`, `--ngs-icon-size`
 - skeleton: `@ngstarter-ui/components/skeleton` docs: /components/skeleton
   purpose: Show placeholder blocks for loading content when the final layout is already known.
   use when: Use ngs-skeleton to preserve layout while cards, lists, table rows, dashboard widgets, chart areas, avatars, text lines, or media blocks are loading. Shape and size each skeleton with TailwindCSS utilities such as h-*, w-*, size-*, flex, grid, gap, and wrapper layouts so it roughly matches the UI that will replace it. Use roundedFull for circular placeholders such as avatars or icon circles. Do not use Skeleton for unknown long operations where progress matters; use ProgressBar. Do not use for global route or app loading; use PageLoadingBar or ScreenLoader. Do not use for blocking a local section; use BlockLoader. Do not use for empty results; use EmptyState. Do not use for image fallback after load failure; use ImagePlaceholder. Do not use random grey blocks that do not resemble the final content.
