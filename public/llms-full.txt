@@ -760,10 +760,10 @@ Typography:
   purpose: The NgStarter Angular PDF Builder component provides a contract document builder workspace with a block palette, layers, editable PDF canvas, selected-block toolbar, and inspector panel for document automation interfaces.
   use when: Choose Pdf Builder when the workflow matches examples such as PDF Builder, Basic pdf builder.
   example topics: PDF Builder, Basic pdf builder
-  selectors: `ngs-pdf-builder`
-  exports: `PdfBuilder`, `PdfBuilderCanvasTool`, `PdfBuilderField`, `PdfBuilderFieldSlot`, `PdfBuilderFieldType`, `PdfBuilderPageRotation`, `PdfBuilderRecipient`, `PdfBuilderSchema`, `PdfBuilderSchemaPage`, `PdfBuilderSchemaPageKind`, `PdfBuilderScrollLayout`, `PdfBuilderSpreadMode`
-  inputs: `annotations`, `recipients`, `schema`
-  outputs: `addRecipient`, `createBlankPdf`, `createRecipientContact`, `editRecipientDetails`, `exportPdf`, `recipientSearchChanged`, `recipientSelected`, `removeRecipient`, `replaceRecipient`, `schemaChange`
+  selectors: `ngs-pdf-builder`, `ngs-pdf-builder-signature-dialog`, `ngs-pdf-builder-stamp-dialog`
+  exports: `PdfBuilder`, `PdfBuilderCanvasTool`, `PdfBuilderDrawnSignatureUploadCallback`, `PdfBuilderDrawnSignatureUploadContext`, `PdfBuilderField`, `PdfBuilderFieldSlot`, `PdfBuilderFieldType`, `PdfBuilderPageRotation`, `PdfBuilderRecipient`, `PdfBuilderSchema`, `PdfBuilderSchemaPage`, `PdfBuilderSchemaPageKind`
+  inputs: `annotations`, `drawnSignatureUploadCallback`, `recipients`, `schema`, `signatureImageUploadCallback`, `stamps`, `uploadedSignatures`
+  outputs: `addRecipient`, `createBlankPdf`, `createRecipientContact`, `editRecipientDetails`, `exportPdf`, `recipientSearchChanged`, `recipientSelected`, `removeRecipient`, `replaceRecipient`, `schemaChange`, `signatureDrawn`, `signatureSelected`, `signatureTyped`, `signatureUploaded`, `stampSelected`, `stampUploaded`
   tokens: `--ngs-button-border-radius`, `--ngs-button-content-gap`, `--ngs-button-height`, `--ngs-button-hover-bg`, `--ngs-button-outlined-border`, `--ngs-button-outlined-color`, `--ngs-button-padding`, `--ngs-color-border`, `--ngs-color-border-strong`, `--ngs-color-danger`, `--ngs-color-on-primary-container`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-on-warning-container`, `--ngs-color-primary`, `--ngs-color-primary-container`
 - pdf-viewer: `@ngstarter-ui/components/pdf-viewer` docs: /libraries/pdf-viewer
   purpose: Import PDF Viewer from &#64;ngstarter-ui/components/pdf-viewer .

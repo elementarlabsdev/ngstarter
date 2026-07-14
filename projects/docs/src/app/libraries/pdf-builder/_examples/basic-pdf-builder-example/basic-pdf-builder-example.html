@@ -1,1 +1,6 @@
-<ngs-pdf-builder [recipients]="recipients()" (removeRecipient)="removeRecipient($event)" />
+<ngs-pdf-builder
+  [recipients]="recipients()"
+  [stamps]="stamps"
+  [uploadedSignatures]="uploadedSignatures"
+  (removeRecipient)="removeRecipient($event)"
+/>

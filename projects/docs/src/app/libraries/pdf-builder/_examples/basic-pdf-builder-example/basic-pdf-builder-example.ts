@@ -1,5 +1,10 @@
 import { Component, signal } from '@angular/core';
-import { PdfBuilder, type PdfBuilderRecipient } from '@ngstarter-ui/components/pdf-builder';
+import {
+  PdfBuilder,
+  type PdfBuilderRecipient,
+  type PdfBuilderSignatureAsset,
+  type PdfBuilderStampAsset,
+} from '@ngstarter-ui/components/pdf-builder';
 
 @Component({
   selector: 'app-basic-pdf-builder-example',
@@ -27,6 +32,22 @@ export class BasicPdfBuilderExample {
       avatarLabel: 'LA',
     },
   ]);
+
+  protected readonly stamps: readonly PdfBuilderStampAsset[] = [
+    {
+      id: 'company-stamp',
+      name: 'Company stamp',
+      description: 'Uploaded stamp',
+    },
+  ];
+
+  protected readonly uploadedSignatures: readonly PdfBuilderSignatureAsset[] = [
+    {
+      id: 'pavel-signature',
+      name: 'Pavel signature',
+      description: 'Saved signature',
+    },
+  ];
 
   protected removeRecipient(recipient: PdfBuilderRecipient): void {
     this.recipients.update(recipients => recipients.filter(item => item.id !== recipient.id));

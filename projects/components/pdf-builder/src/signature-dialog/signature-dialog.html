@@ -1,0 +1,86 @@
+<h3 ngs-dialog-title>Signature</h3>
+
+<ngs-dialog-content>
+  <ngs-tab-group animationDuration="0ms" ngs-stretch-tabs="false">
+    <ngs-tab label="Draw">
+      <ngs-signature-pad
+        class="overflow-hidden rounded border border-border"
+        (signatureSaved)="handleDrawnSignature($event)"
+        (signatureCleared)="drawnSignature.set('')"
+      />
+    </ngs-tab>
+
+    <ngs-tab label="Type">
+      <ngs-form-field class="w-full" subscriptHiddenIfEmpty>
+        <input
+          ngsInput
+          type="text"
+          aria-label="Typed signature"
+          placeholder="Type your signature"
+          [value]="typedSignature()"
+          (input)="handleTypedSignature($any($event.target).value)"
+        />
+      </ngs-form-field>
+    </ngs-tab>
+
+    <ngs-tab label="Upload">
+      <ngs-upload-container>
+        <ngs-upload-area
+          ngsUploadTrigger
+          accept="image/*"
+          (fileSelected)="handleFileSelected($event)"
+        >
+          <ngs-icon name="fluent:arrow-upload-24-regular" ngsUploadAreaIcon />
+          <ng-container ngsUploadAreaMainState>
+            <div class="flex flex-col items-center gap-2">
+              <strong>Drag & drop a signature file here</strong>
+              <span>or</span>
+              <button ngsButton="filled" type="button">Choose a local file</button>
+            </div>
+          </ng-container>
+          <ng-container ngsUploadAreaDropState>
+            Drop signature file here.
+          </ng-container>
+          <ng-container ngsUploadAreaInvalidState>
+            Select an image file.
+          </ng-container>
+        </ngs-upload-area>
+        <ngs-upload-allowed-types>Image files are accepted.</ngs-upload-allowed-types>
+      </ngs-upload-container>
+
+      @if (selectedFile(); as file) {
+        <p class="mt-3 text-sm text-on-surface-variant">Selected file: {{ file.name }}</p>
+      }
+    </ngs-tab>
+
+    @if (data.signatures.length) {
+      <ngs-tab label="My Signature">
+        <ngs-selection-list aria-label="Saved signatures">
+          @for (signature of data.signatures; track signature.id) {
+            <ngs-list-option [selected]="selectedSignature()?.id === signature.id" (selectedChange)="selectSignature(signature)">
+              <ngs-icon ngsListItemAvatar name="fluent:signature-24-regular" />
+              <span ngsListItemTitle>{{ signature.name }}</span>
+              @if (signature.description) {
+                <span ngsListItemLine>{{ signature.description }}</span>
+              }
+            </ngs-list-option>
+          }
+        </ngs-selection-list>
+      </ngs-tab>
+    }
+  </ngs-tab-group>
+
+  <p class="mt-4 text-sm text-on-surface-variant">
+    By electronically signing this document, I agree that my signature and initials are the equivalent
+    of my handwritten signature and are considered originals on all documents.
+  </p>
+
+  <ngs-alert class="mt-4" variant="notice">
+    To make your signature valid, please use at least two alphanumeric characters or continue signing.
+  </ngs-alert>
+</ngs-dialog-content>
+
+<ngs-dialog-actions align="end">
+  <button ngsButton ngs-dialog-close>Cancel</button>
+  <button ngsButton="filled" type="button" [disabled]="!canApply()" (click)="apply()">Accept and sign</button>
+</ngs-dialog-actions>

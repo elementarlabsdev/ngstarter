@@ -7174,22 +7174,26 @@
         "PDF Builder",
         "Basic pdf builder"
       ],
-      "minimalExample": "<ngs-pdf-builder [recipients]=\"recipients()\" (removeRecipient)=\"removeRecipient($event)\" />",
+      "minimalExample": "<ngs-pdf-builder\n  [recipients]=\"recipients()\"\n  [stamps]=\"stamps\"\n  [uploadedSignatures]=\"uploadedSignatures\"\n  (removeRecipient)=\"removeRecipient($event)\"\n/>",
       "exampleFiles": [
         {
           "name": "basic-pdf-builder-example",
           "title": "Basic pdf builder",
           "file": "projects/docs/src/app/libraries/pdf-builder/_examples/basic-pdf-builder-example/basic-pdf-builder-example.html",
-          "source": "<ngs-pdf-builder [recipients]=\"recipients()\" (removeRecipient)=\"removeRecipient($event)\" />"
+          "source": "<ngs-pdf-builder\n  [recipients]=\"recipients()\"\n  [stamps]=\"stamps\"\n  [uploadedSignatures]=\"uploadedSignatures\"\n  (removeRecipient)=\"removeRecipient($event)\"\n/>"
         }
       ],
       "previewAsset": null,
       "selectors": [
-        "ngs-pdf-builder"
+        "ngs-pdf-builder",
+        "ngs-pdf-builder-signature-dialog",
+        "ngs-pdf-builder-stamp-dialog"
       ],
       "exportedSymbols": [
         "PdfBuilder",
         "PdfBuilderCanvasTool",
+        "PdfBuilderDrawnSignatureUploadCallback",
+        "PdfBuilderDrawnSignatureUploadContext",
         "PdfBuilderField",
         "PdfBuilderFieldSlot",
         "PdfBuilderFieldType",
@@ -7199,12 +7203,33 @@
         "PdfBuilderSchemaPage",
         "PdfBuilderSchemaPageKind",
         "PdfBuilderScrollLayout",
-        "PdfBuilderSpreadMode"
+        "PdfBuilderSignatureAsset",
+        "PdfBuilderSignatureDialog",
+        "PdfBuilderSignatureDialogData",
+        "PdfBuilderSignatureDialogResult",
+        "PdfBuilderSignatureDraw",
+        "PdfBuilderSignatureImageUploadCallback",
+        "PdfBuilderSignatureImageUploadContext",
+        "PdfBuilderSignatureSelection",
+        "PdfBuilderSignatureType",
+        "PdfBuilderSignatureUpload",
+        "PdfBuilderSignatureUploadCallbackResult",
+        "PdfBuilderSpreadMode",
+        "PdfBuilderStampAsset",
+        "PdfBuilderStampDialog",
+        "PdfBuilderStampDialogData",
+        "PdfBuilderStampDialogResult",
+        "PdfBuilderStampSelection",
+        "PdfBuilderStampUpload"
       ],
       "inputs": [
         "annotations",
+        "drawnSignatureUploadCallback",
         "recipients",
-        "schema"
+        "schema",
+        "signatureImageUploadCallback",
+        "stamps",
+        "uploadedSignatures"
       ],
       "outputs": [
         "addRecipient",
@@ -7216,7 +7241,13 @@
         "recipientSelected",
         "removeRecipient",
         "replaceRecipient",
-        "schemaChange"
+        "schemaChange",
+        "signatureDrawn",
+        "signatureSelected",
+        "signatureTyped",
+        "signatureUploaded",
+        "stampSelected",
+        "stampUploaded"
       ],
       "cssTokens": [
         "--ngs-button-border-radius",

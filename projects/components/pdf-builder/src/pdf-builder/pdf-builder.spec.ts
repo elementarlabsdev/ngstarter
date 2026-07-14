@@ -3,7 +3,16 @@ import { By } from '@angular/platform-browser';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { PdfViewer } from '@ngstarter-ui/components/pdf-viewer';
 
-import { PdfBuilder, type PdfBuilderSchema } from './pdf-builder';
+import {
+  PdfBuilder,
+  type PdfBuilderDrawnSignatureUploadContext,
+  type PdfBuilderSchema,
+  type PdfBuilderSignatureAsset,
+  type PdfBuilderSignatureImageUploadContext,
+  type PdfBuilderSignatureSelection,
+  type PdfBuilderStampAsset,
+  type PdfBuilderStampSelection,
+} from './pdf-builder';
 
 describe('PdfBuilder', () => {
   let component: PdfBuilder;
@@ -382,7 +391,8 @@ describe('PdfBuilder', () => {
     fixture.detectChanges();
 
     expect(state.fieldSettingsPanelVisible()).toBe(true);
-    expect(element.querySelector('.field-settings-panel')).not.toBeNull();
+    expect(element.querySelector('ngs-panel.field-settings-panel')).not.toBeNull();
+    expect(element.querySelector('section.field-settings-panel')).toBeNull();
     expect(element.querySelector('.field-settings-summary')).toBeNull();
     expect(element.querySelector('.field-settings-summary-icon')).toBeNull();
 
@@ -893,6 +903,224 @@ describe('PdfBuilder', () => {
     });
   });
 
+  it('opens a signature dialog when clicking an active signature field again', async () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const signatures: readonly PdfBuilderSignatureAsset[] = [
+      {
+        id: 'pavel-signature',
+        name: 'Pavel signature',
+        description: 'Saved signature',
+      },
+    ];
+    const state = component as unknown as {
+      addField: (type: 'signature') => void;
+      fields: () => readonly { id: string }[];
+    };
+
+    fixture.componentRef.setInput('uploadedSignatures', signatures);
+    state.addField('signature');
+    fixture.detectChanges();
+
+    const field = state.fields()[0];
+    const overlayField = element.querySelector<HTMLElement>(`[data-field-id="${field.id}"]`);
+
+    expect(overlayField).not.toBeNull();
+
+    overlayField!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fixture.detectChanges();
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+
+    expect(document.body.textContent).toContain('Signature');
+    expect(document.body.textContent).toContain('Draw');
+    expect(document.body.textContent).toContain('Type');
+    expect(document.body.textContent).toContain('Upload');
+    expect(document.body.textContent).toContain('My Signature');
+    expect(document.querySelector('ngs-signature-pad')).not.toBeNull();
+
+    const mySignatureTab = Array.from(document.querySelectorAll<HTMLElement>('.ngs-tab-label'))
+      .find(tab => tab.textContent?.includes('My Signature'));
+
+    expect(mySignatureTab).not.toBeNull();
+
+    mySignatureTab!.click();
+    fixture.detectChanges();
+
+    expect(document.body.textContent).toContain('Pavel signature');
+    expect(document.body.textContent).toContain('Saved signature');
+
+    document.querySelector<HTMLButtonElement>('[ngs-dialog-close]')?.click();
+    fixture.detectChanges();
+    await new Promise<void>(resolve => setTimeout(resolve, 260));
+  });
+
+  it('applies a saved signature selected from the signature dialog', async () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const signatures: readonly PdfBuilderSignatureAsset[] = [
+      {
+        id: 'pavel-signature',
+        name: 'Pavel signature',
+        description: 'Saved signature',
+      },
+    ];
+    const emitted: PdfBuilderSignatureSelection[] = [];
+    const subscription = component.signatureSelected.subscribe(event => emitted.push(event));
+    const state = component as unknown as {
+      addField: (type: 'signature') => void;
+      fields: () => readonly { id: string; label: string; value: string }[];
+    };
+
+    fixture.componentRef.setInput('uploadedSignatures', signatures);
+    state.addField('signature');
+    fixture.detectChanges();
+
+    const field = state.fields()[0];
+    const overlayField = element.querySelector<HTMLElement>(`[data-field-id="${field.id}"]`);
+
+    expect(overlayField).not.toBeNull();
+
+    overlayField!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fixture.detectChanges();
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+
+    const mySignatureTab = Array.from(document.querySelectorAll<HTMLElement>('.ngs-tab-label'))
+      .find(tab => tab.textContent?.includes('My Signature'));
+
+    expect(mySignatureTab).not.toBeNull();
+
+    mySignatureTab!.click();
+    fixture.detectChanges();
+
+    const signatureOption = document.querySelector<HTMLElement>('ngs-list-option');
+
+    expect(signatureOption).not.toBeNull();
+
+    signatureOption!.click();
+    fixture.detectChanges();
+
+    const applyButton = Array.from(document.querySelectorAll<HTMLButtonElement>('button'))
+      .find(button => button.textContent?.includes('Accept and sign'));
+
+    expect(applyButton).not.toBeNull();
+
+    applyButton!.click();
+    fixture.detectChanges();
+    await new Promise<void>(resolve => setTimeout(resolve, 260));
+
+    expect(state.fields()[0]).toEqual(expect.objectContaining({
+      label: 'Pavel signature',
+      value: 'Pavel signature',
+    }));
+    expect(emitted).toHaveLength(1);
+    expect(emitted[0]).toEqual(expect.objectContaining({
+      signature: signatures[0],
+    }));
+
+    subscription.unsubscribe();
+  });
+
+  it('renders a drawn signature result as an image on the canvas', async () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const drawnSignature = 'data:image/png;base64,iVBORw0KGgo=';
+    const state = component as unknown as {
+      addField: (type: 'signature') => void;
+      fields: () => readonly { id: string; label: string; value: string }[];
+      applySignatureDialogResult: (
+        field: { id: string },
+        result: { type: 'draw'; dataUrl: string },
+      ) => Promise<void>;
+    };
+
+    state.addField('signature');
+    fixture.detectChanges();
+
+    const field = state.fields()[0];
+
+    await state.applySignatureDialogResult(field, { type: 'draw', dataUrl: drawnSignature });
+    fixture.detectChanges();
+
+    const overlayField = element.querySelector<HTMLElement>(`[data-field-id="${field.id}"]`);
+    const image = overlayField?.querySelector<HTMLImageElement>('img.signature-field-image');
+
+    expect(image).not.toBeNull();
+    expect(image!.src).toBe(drawnSignature);
+    expect(overlayField!.querySelector('.field-badge')).toBeNull();
+  });
+
+  it('uses the drawn signature upload callback result before applying the signature image', async () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const drawnSignature = 'data:image/png;base64,iVBORw0KGgo=';
+    const uploadedSignatureUrl = '/uploads/drawn-signature.png';
+    const callbackCalls: string[] = [];
+    const state = component as unknown as {
+      addField: (type: 'signature') => void;
+      fields: () => readonly { id: string; label: string; value: string }[];
+      applySignatureDialogResult: (
+        field: { id: string },
+        result: { type: 'draw'; dataUrl: string },
+      ) => Promise<void>;
+    };
+
+    fixture.componentRef.setInput('drawnSignatureUploadCallback', async (context: PdfBuilderDrawnSignatureUploadContext) => {
+      callbackCalls.push(context.dataUrl);
+
+      return {
+        name: 'Uploaded drawn signature',
+        imageUrl: uploadedSignatureUrl,
+      };
+    });
+    state.addField('signature');
+    fixture.detectChanges();
+
+    const field = state.fields()[0];
+
+    await state.applySignatureDialogResult(field, { type: 'draw', dataUrl: drawnSignature });
+    fixture.detectChanges();
+
+    const overlayField = element.querySelector<HTMLElement>(`[data-field-id="${field.id}"]`);
+    const image = overlayField?.querySelector<HTMLImageElement>('img.signature-field-image');
+
+    expect(callbackCalls).toEqual([drawnSignature]);
+    expect(state.fields()[0]).toEqual(expect.objectContaining({
+      label: 'Uploaded drawn signature',
+      value: uploadedSignatureUrl,
+    }));
+    expect(image).not.toBeNull();
+    expect(image!.getAttribute('src')).toBe(uploadedSignatureUrl);
+  });
+
+  it('uses the signature image upload callback result before applying the uploaded image', async () => {
+    const uploadedSignatureUrl = '/uploads/signature-image.png';
+    const file = new File(['signature'], 'signature.png', { type: 'image/png' });
+    const callbackCalls: string[] = [];
+    const state = component as unknown as {
+      addField: (type: 'signature') => void;
+      fields: () => readonly { id: string; label: string; value: string }[];
+      applySignatureDialogResult: (
+        field: { id: string },
+        result: { type: 'file'; file: File },
+      ) => Promise<void>;
+    };
+
+    fixture.componentRef.setInput('signatureImageUploadCallback', async (context: PdfBuilderSignatureImageUploadContext) => {
+      callbackCalls.push(context.file.name);
+
+      return uploadedSignatureUrl;
+    });
+    state.addField('signature');
+    fixture.detectChanges();
+
+    const field = state.fields()[0];
+
+    await state.applySignatureDialogResult(field, { type: 'file', file });
+    fixture.detectChanges();
+
+    expect(callbackCalls).toEqual(['signature.png']);
+    expect(state.fields()[0]).toEqual(expect.objectContaining({
+      label: 'signature.png',
+      value: uploadedSignatureUrl,
+    }));
+  });
+
   it('uses lower canvas metrics for initials fields', () => {
     const state = component as unknown as {
       addField: (type: 'initials') => void;
@@ -976,6 +1204,120 @@ describe('PdfBuilder', () => {
       height: 77,
     });
     expect(state.fields()[0].width).toBeGreaterThan(state.fields()[0].height);
+  });
+
+  it('opens a stamp dialog with uploaded stamps when clicking an active stamp field again', async () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const stamps: readonly PdfBuilderStampAsset[] = [
+      {
+        id: 'company-stamp',
+        name: 'Company stamp',
+        description: 'Uploaded stamp',
+      },
+    ];
+    const state = component as unknown as {
+      addField: (type: 'stamp') => void;
+      fields: () => readonly { id: string }[];
+    };
+
+    fixture.componentRef.setInput('stamps', stamps);
+    state.addField('stamp');
+    fixture.detectChanges();
+
+    const field = state.fields()[0];
+    const overlayField = element.querySelector<HTMLElement>(`[data-field-id="${field.id}"]`);
+
+    expect(overlayField).not.toBeNull();
+
+    overlayField!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fixture.detectChanges();
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+
+    expect(document.body.textContent).toContain('Stamp');
+    expect(document.body.textContent).toContain('Upload');
+    expect(document.body.textContent).toContain('Uploaded stamps');
+    expect(document.body.textContent).toContain('Drag & drop a stamp file here');
+    expect(document.querySelector('ngs-upload-area')).not.toBeNull();
+
+    const uploadedTab = Array.from(document.querySelectorAll<HTMLElement>('.ngs-tab-label'))
+      .find(tab => tab.textContent?.includes('Uploaded stamps'));
+
+    expect(uploadedTab).not.toBeNull();
+
+    uploadedTab!.click();
+    fixture.detectChanges();
+
+    expect(document.body.textContent).toContain('Company stamp');
+    expect(document.body.textContent).toContain('Uploaded stamp');
+
+    document.querySelector<HTMLButtonElement>('[ngs-dialog-close]')?.click();
+    fixture.detectChanges();
+    await new Promise<void>(resolve => setTimeout(resolve, 260));
+  });
+
+  it('applies an uploaded stamp asset selected from the stamp dialog', async () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const stamps: readonly PdfBuilderStampAsset[] = [
+      {
+        id: 'company-stamp',
+        name: 'Company stamp',
+        description: 'Uploaded stamp',
+      },
+    ];
+    const emitted: PdfBuilderStampSelection[] = [];
+    const subscription = component.stampSelected.subscribe(event => emitted.push(event));
+    const state = component as unknown as {
+      addField: (type: 'stamp') => void;
+      fields: () => readonly { id: string; label: string; value: string }[];
+    };
+
+    fixture.componentRef.setInput('stamps', stamps);
+    state.addField('stamp');
+    fixture.detectChanges();
+
+    const field = state.fields()[0];
+    const overlayField = element.querySelector<HTMLElement>(`[data-field-id="${field.id}"]`);
+
+    expect(overlayField).not.toBeNull();
+
+    overlayField!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fixture.detectChanges();
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+
+    const uploadedTab = Array.from(document.querySelectorAll<HTMLElement>('.ngs-tab-label'))
+      .find(tab => tab.textContent?.includes('Uploaded stamps'));
+
+    expect(uploadedTab).not.toBeNull();
+
+    uploadedTab!.click();
+    fixture.detectChanges();
+
+    const stampOption = document.querySelector<HTMLElement>('ngs-list-option');
+
+    expect(stampOption).not.toBeNull();
+
+    stampOption!.click();
+    fixture.detectChanges();
+
+    const applyButton = Array.from(document.querySelectorAll<HTMLButtonElement>('button'))
+      .find(button => button.textContent?.includes('Accept and apply'));
+
+    expect(applyButton).not.toBeNull();
+
+    applyButton!.click();
+    fixture.detectChanges();
+    await new Promise<void>(resolve => setTimeout(resolve, 260));
+
+    expect(state.fields()[0]).toEqual(expect.objectContaining({
+      label: 'Company stamp',
+      value: 'Company stamp',
+    }));
+    expect(emitted).toHaveLength(1);
+    expect(emitted[0]).toEqual(expect.objectContaining({
+      stamp: stamps[0],
+    }));
+
+    subscription.unsubscribe();
   });
 
   it('renders checkbox fields as plain checkbox squares without canvas labels', () => {

@@ -420,7 +420,9 @@
                       (keydown.enter)="selectField(field.id, $event)"
                       (keydown.space)="$event.preventDefault(); selectField(field.id, $event)"
                     >
-                      @if (field.type !== 'checkbox') {
+                      @if (field.type === 'signature' && isSignatureImageValue(field.value)) {
+                        <img class="signature-field-image" [src]="field.value" alt="" />
+                      } @else if (field.type !== 'checkbox') {
                         <span class="field-badge">
                           @if (field.type === 'initials') {
                             <span class="initials-mark" aria-hidden="true">IN</span>
@@ -518,8 +520,8 @@
         (closed)="closeAsidePanel()"
         (pageSelected)="selectAnnotationPage($event)" />
     } @else if (fieldSettingsPanelVisible() && selectedField(); as field) {
-      <section class="field-settings-panel" aria-label="Field settings">
-        <header class="field-settings-header">
+      <ngs-panel class="field-settings-panel" aria-label="Field settings" absolute>
+        <ngs-panel-header class="field-settings-header" flex>
           <button
             ngsIconButton
             type="button"
@@ -532,9 +534,9 @@
           <div class="min-w-0">
             <h3>{{ field.label }}</h3>
           </div>
-        </header>
+        </ngs-panel-header>
 
-        <div class="field-settings-body">
+        <ngs-panel-content class="field-settings-body">
           <div class="field-settings-actions" aria-label="Selected field actions">
             @if (field.type === 'variable') {
               <button
@@ -584,8 +586,8 @@
               Delete
             </button>
           </div>
-        </div>
-      </section>
+        </ngs-panel-content>
+      </ngs-panel>
     } @else {
       @if (recipientItems().length) {
         <section class="field-recipients-panel" aria-label="Document recipients">
@@ -649,17 +651,19 @@
 
             </ngs-list>
 
-            <button
-              ngsButton="outlined"
-              type="button"
-              [ngsPopoverTriggerFor]="addRecipientPopover"
-              position="below-end"
-              hasBackdrop
-              (opened)="requestAddRecipient()"
-            >
-              <ngs-icon name="fluent:add-24-regular" />
-              <span>Add recipient</span>
-            </button>
+            <div class="px-4 pb-4">
+              <button
+                ngsButton="outlined"
+                type="button"
+                [ngsPopoverTriggerFor]="addRecipientPopover"
+                position="below-end"
+                hasBackdrop
+                (opened)="requestAddRecipient()"
+              >
+                <ngs-icon name="fluent:add-24-regular" />
+                <span>Add recipient</span>
+              </button>
+            </div>
 
             <ngs-popover #addRecipientPopover="ngsPopover">
               <ng-template ngsPopoverContent>

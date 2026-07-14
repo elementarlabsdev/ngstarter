@@ -23,6 +23,7 @@ import {
   DatepickerInput,
   provideNativeDateAdapter,
 } from '@ngstarter-ui/components/datepicker';
+import { Dialog } from '@ngstarter-ui/components/dialog';
 import { Divider } from '@ngstarter-ui/components/divider';
 import { FormField, IconButtonSuffix, IconPrefix } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
@@ -74,6 +75,14 @@ import {
   TreeNodeDef,
   TreeNodePadding,
 } from '@ngstarter-ui/components/tree';
+import {
+  PdfBuilderSignatureDialog,
+  type PdfBuilderSignatureDialogResult,
+} from '../signature-dialog/signature-dialog';
+import {
+  PdfBuilderStampDialog,
+  type PdfBuilderStampDialogResult,
+} from '../stamp-dialog/stamp-dialog';
 
 export type PdfBuilderCanvasTool = 'select' | 'pan' | 'text';
 export type PdfBuilderFieldType = 'text' | 'variable' | 'date' | 'signature' | 'initials' | 'checkbox' | 'stamp';
@@ -150,6 +159,80 @@ export interface PdfBuilderRecipient {
   readonly fieldIds?: readonly string[];
   readonly disabled?: boolean;
 }
+
+export interface PdfBuilderStampAsset {
+  readonly id: string;
+  readonly name: string;
+  readonly description?: string;
+  readonly imageUrl?: string;
+}
+
+export interface PdfBuilderStampSelection {
+  readonly field: PdfBuilderField;
+  readonly stamp: PdfBuilderStampAsset;
+}
+
+export interface PdfBuilderStampUpload {
+  readonly field: PdfBuilderField;
+  readonly file: File;
+}
+
+export interface PdfBuilderSignatureAsset {
+  readonly id: string;
+  readonly name: string;
+  readonly description?: string;
+  readonly imageUrl?: string;
+  readonly dataUrl?: string;
+}
+
+export interface PdfBuilderSignatureSelection {
+  readonly field: PdfBuilderField;
+  readonly signature: PdfBuilderSignatureAsset;
+}
+
+export interface PdfBuilderSignatureUpload {
+  readonly field: PdfBuilderField;
+  readonly file: File;
+}
+
+export interface PdfBuilderSignatureDraw {
+  readonly field: PdfBuilderField;
+  readonly dataUrl: string;
+}
+
+export interface PdfBuilderSignatureType {
+  readonly field: PdfBuilderField;
+  readonly value: string;
+}
+
+export type PdfBuilderSignatureUploadCallbackResult =
+  | string
+  | PdfBuilderSignatureAsset
+  | {
+    readonly label?: string;
+    readonly name?: string;
+    readonly value?: string;
+    readonly imageUrl?: string;
+    readonly dataUrl?: string;
+  };
+
+export interface PdfBuilderDrawnSignatureUploadContext {
+  readonly field: PdfBuilderField;
+  readonly dataUrl: string;
+}
+
+export interface PdfBuilderSignatureImageUploadContext {
+  readonly field: PdfBuilderField;
+  readonly file: File;
+}
+
+export type PdfBuilderDrawnSignatureUploadCallback = (
+  context: PdfBuilderDrawnSignatureUploadContext,
+) => PdfBuilderSignatureUploadCallbackResult | Promise<PdfBuilderSignatureUploadCallbackResult>;
+
+export type PdfBuilderSignatureImageUploadCallback = (
+  context: PdfBuilderSignatureImageUploadContext,
+) => PdfBuilderSignatureUploadCallbackResult | Promise<PdfBuilderSignatureUploadCallbackResult>;
 
 export interface PdfBuilderSchemaPage {
   readonly id: string;
@@ -305,6 +388,7 @@ interface PdfBuilderFieldResize {
 })
 export class PdfBuilder {
   private readonly document = inject(DOCUMENT);
+  private readonly dialog = inject(Dialog);
   private readonly destroyRef = inject(DestroyRef);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly renderer = inject(Renderer2);
@@ -322,6 +406,10 @@ export class PdfBuilder {
   readonly schema = input<PdfBuilderSchema | null>(null);
   readonly annotations = input<readonly PdfViewerAnnotationView[]>([]);
   readonly recipients = input<readonly PdfBuilderRecipient[]>([]);
+  readonly stamps = input<readonly PdfBuilderStampAsset[]>([]);
+  readonly uploadedSignatures = input<readonly PdfBuilderSignatureAsset[]>([]);
+  readonly drawnSignatureUploadCallback = input<PdfBuilderDrawnSignatureUploadCallback | null | undefined>(undefined);
+  readonly signatureImageUploadCallback = input<PdfBuilderSignatureImageUploadCallback | null | undefined>(undefined);
   readonly schemaChange = output<PdfBuilderSchema>();
   readonly createBlankPdf = output<void>();
   readonly exportPdf = output<void>();
@@ -332,6 +420,12 @@ export class PdfBuilder {
   readonly editRecipientDetails = output<PdfBuilderRecipient>();
   readonly replaceRecipient = output<PdfBuilderRecipient>();
   readonly removeRecipient = output<PdfBuilderRecipient>();
+  readonly stampSelected = output<PdfBuilderStampSelection>();
+  readonly stampUploaded = output<PdfBuilderStampUpload>();
+  readonly signatureSelected = output<PdfBuilderSignatureSelection>();
+  readonly signatureUploaded = output<PdfBuilderSignatureUpload>();
+  readonly signatureDrawn = output<PdfBuilderSignatureDraw>();
+  readonly signatureTyped = output<PdfBuilderSignatureType>();
 
   protected readonly layersTree = viewChild<Tree<PdfBuilderLayerNode>>('layersTree');
   protected readonly dateFieldPicker = viewChild<Datepicker<Date>>('dateFieldPicker');
@@ -782,10 +876,21 @@ export class PdfBuilder {
     }
 
     const field = this.fields().find(item => item.id === fieldId);
+    const wasSelected = this.selectedFieldId() === fieldId;
 
     this.selectedFieldId.set(fieldId);
     this.activeCanvasTool.set('select');
     this.openFieldSettingsPanel();
+
+    if (field?.type === 'stamp' && wasSelected && !field.locked) {
+      this.openStampDialog(field);
+      return;
+    }
+
+    if (field?.type === 'signature' && wasSelected && !field.locked) {
+      this.openSignatureDialog(field);
+      return;
+    }
 
     if (field?.type === 'text' && !field.locked) {
       this.startTextEditing(field.id);
@@ -797,6 +902,50 @@ export class PdfBuilder {
     if (field?.type === 'date' && !field.locked) {
       this.openDateFieldPicker(field);
     }
+  }
+
+  protected openStampDialog(field: PdfBuilderField): void {
+    const dialogRef = this.dialog.open<PdfBuilderStampDialog, { stamps: readonly PdfBuilderStampAsset[] }, PdfBuilderStampDialogResult>(
+      PdfBuilderStampDialog,
+      {
+        width: '640px',
+        showCloseButton: true,
+        data: {
+          stamps: this.stamps(),
+        },
+      },
+    );
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+
+      this.applyStampDialogResult(field, result);
+    });
+  }
+
+  protected openSignatureDialog(field: PdfBuilderField): void {
+    const dialogRef = this.dialog.open<PdfBuilderSignatureDialog, { signatures: readonly PdfBuilderSignatureAsset[] }, PdfBuilderSignatureDialogResult>(
+      PdfBuilderSignatureDialog,
+      {
+        width: '720px',
+        showCloseButton: true,
+        data: {
+          signatures: this.uploadedSignatures(),
+        },
+      },
+    );
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+
+      void this.applySignatureDialogResult(field, result).catch(error => {
+        console.error('Failed to apply signature.', error);
+      });
+    });
   }
 
   protected beginFieldDrag(event: PointerEvent, fieldId: string): void {
@@ -956,6 +1105,16 @@ export class PdfBuilder {
     }
 
     return field.value;
+  }
+
+  protected isSignatureImageValue(value: string): boolean {
+    const source = value.trim();
+
+    return /^data:image\//i.test(source) ||
+      /^blob:/i.test(source) ||
+      /^https?:\/\//i.test(source) ||
+      source.startsWith('/') ||
+      source.startsWith('assets/');
   }
 
   protected getVariableBindingLabel(field: PdfBuilderField | null): string {
@@ -1658,6 +1817,159 @@ export class PdfBuilder {
           : nextField;
       }),
     );
+  }
+
+  private applyStampDialogResult(
+    field: PdfBuilderField,
+    result: PdfBuilderStampDialogResult,
+  ): void {
+    const currentField = this.fields().find(item => item.id === field.id);
+
+    if (!currentField || currentField.type !== 'stamp' || currentField.locked) {
+      return;
+    }
+
+    const stampLabel = result.type === 'asset' ? result.stamp.name : result.file.name;
+    const appliedField = { ...currentField, label: stampLabel, value: stampLabel };
+
+    this.commitFields(fields =>
+      fields.map(item => item.id === currentField.id ? appliedField : item),
+    );
+    this.selectedFieldId.set(currentField.id);
+    this.openFieldSettingsPanel();
+
+    if (result.type === 'asset') {
+      this.stampSelected.emit({ field: appliedField, stamp: result.stamp });
+      this.recordActivity('Stamp selected', `${stampLabel} applied.`, currentField.icon);
+      return;
+    }
+
+    this.stampUploaded.emit({ field: appliedField, file: result.file });
+    this.recordActivity('Stamp uploaded', `${stampLabel} applied.`, currentField.icon);
+  }
+
+  private async applySignatureDialogResult(
+    field: PdfBuilderField,
+    result: PdfBuilderSignatureDialogResult,
+  ): Promise<void> {
+    const currentField = this.fields().find(item => item.id === field.id);
+
+    if (!currentField || currentField.type !== 'signature' || currentField.locked) {
+      return;
+    }
+
+    const uploadResult = await this.resolveSignatureUploadResult(currentField, result);
+    const signatureLabel = this.getSignatureResultLabel(
+      uploadResult,
+      this.getSignatureDialogResultLabel(result),
+    );
+    const signatureValue = this.getSignatureResultValue(
+      uploadResult,
+      this.getSignatureDialogResultValue(result),
+    );
+    const appliedField = { ...currentField, label: signatureLabel, value: signatureValue };
+
+    this.commitFields(fields =>
+      fields.map(item => item.id === currentField.id ? appliedField : item),
+    );
+    this.selectedFieldId.set(currentField.id);
+    this.openFieldSettingsPanel();
+
+    if (result.type === 'asset') {
+      this.signatureSelected.emit({ field: appliedField, signature: result.signature });
+      this.recordActivity('Signature selected', `${signatureLabel} applied.`, currentField.icon);
+      return;
+    }
+
+    if (result.type === 'draw') {
+      this.signatureDrawn.emit({ field: appliedField, dataUrl: result.dataUrl });
+      this.recordActivity('Signature drawn', 'Drawn signature applied.', currentField.icon);
+      return;
+    }
+
+    if (result.type === 'type') {
+      this.signatureTyped.emit({ field: appliedField, value: result.value });
+      this.recordActivity('Signature typed', `${signatureLabel} applied.`, currentField.icon);
+      return;
+    }
+
+    this.signatureUploaded.emit({ field: appliedField, file: result.file });
+    this.recordActivity('Signature uploaded', `${signatureLabel} applied.`, currentField.icon);
+  }
+
+  private async resolveSignatureUploadResult(
+    field: PdfBuilderField,
+    result: PdfBuilderSignatureDialogResult,
+  ): Promise<PdfBuilderSignatureUploadCallbackResult | null> {
+    if (result.type === 'draw') {
+      const callback = this.drawnSignatureUploadCallback();
+
+      return callback ? callback({ field, dataUrl: result.dataUrl }) : null;
+    }
+
+    if (result.type === 'file') {
+      const callback = this.signatureImageUploadCallback();
+
+      return callback ? callback({ field, file: result.file }) : null;
+    }
+
+    return null;
+  }
+
+  private getSignatureResultLabel(
+    result: PdfBuilderSignatureUploadCallbackResult | null,
+    fallback: string,
+  ): string {
+    if (!result || typeof result === 'string') {
+      return fallback;
+    }
+
+    const customResult = result as { readonly label?: string };
+
+    return customResult.label ?? result.name ?? fallback;
+  }
+
+  private getSignatureResultValue(
+    result: PdfBuilderSignatureUploadCallbackResult | null,
+    fallback: string,
+  ): string {
+    if (!result) {
+      return fallback;
+    }
+
+    if (typeof result === 'string') {
+      return result;
+    }
+
+    const customResult = result as { readonly value?: string };
+
+    return result.dataUrl ?? result.imageUrl ?? customResult.value ?? fallback;
+  }
+
+  private getSignatureDialogResultLabel(result: PdfBuilderSignatureDialogResult): string {
+    switch (result.type) {
+      case 'asset':
+        return result.signature.name;
+      case 'draw':
+        return 'Drawn signature';
+      case 'type':
+        return result.value;
+      case 'file':
+        return result.file.name;
+    }
+  }
+
+  private getSignatureDialogResultValue(result: PdfBuilderSignatureDialogResult): string {
+    switch (result.type) {
+      case 'asset':
+        return result.signature.dataUrl ?? result.signature.imageUrl ?? result.signature.name;
+      case 'draw':
+        return result.dataUrl;
+      case 'type':
+        return result.value;
+      case 'file':
+        return result.file.name;
+    }
   }
 
   protected exportCurrentPdf(): void {

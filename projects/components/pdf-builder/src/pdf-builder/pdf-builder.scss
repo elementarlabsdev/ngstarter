@@ -891,6 +891,14 @@
       font-size: var(--ngs-font-size-2xl);
     }
 
+    .signature-field-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
     &.is-selected {
       border-color: color-mix(in srgb, var(--ngs-color-primary), transparent 54%);
       background: color-mix(in srgb, var(--ngs-color-primary), transparent 92%);
@@ -1177,12 +1185,8 @@
   }
 
   .field-settings-panel {
-    position: absolute;
-    inset: 0;
     z-index: 2;
-    display: flex;
     min-height: 0;
-    flex-direction: column;
     background: var(--ngs-color-surface);
     box-shadow: -10px 0 22px color-mix(in srgb, var(--ngs-color-on-surface), transparent 92%);
   }

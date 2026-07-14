@@ -1,0 +1,56 @@
+<h3 ngs-dialog-title>Stamp</h3>
+
+<ngs-dialog-content>
+  <ngs-tab-group animationDuration="0ms" ngs-stretch-tabs="false">
+    <ngs-tab label="Upload">
+      <ngs-upload-container>
+        <ngs-upload-area
+          ngsUploadTrigger
+          accept="image/*,application/pdf"
+          (fileSelected)="handleFileSelected($event)"
+        >
+          <ngs-icon name="fluent:arrow-upload-24-regular" ngsUploadAreaIcon />
+          <ng-container ngsUploadAreaMainState>
+            <div class="flex flex-col items-center gap-2">
+              <strong>Drag & drop a stamp file here</strong>
+              <span>or</span>
+              <button ngsButton="filled" type="button">Choose a local file</button>
+            </div>
+          </ng-container>
+          <ng-container ngsUploadAreaDropState>
+            Drop stamp file here.
+          </ng-container>
+          <ng-container ngsUploadAreaInvalidState>
+            Select an image or PDF file.
+          </ng-container>
+        </ngs-upload-area>
+        <ngs-upload-allowed-types>Images and PDF files are accepted.</ngs-upload-allowed-types>
+      </ngs-upload-container>
+
+      @if (selectedFile(); as file) {
+        <p class="mt-3 text-sm text-on-surface-variant">Selected file: {{ file.name }}</p>
+      }
+    </ngs-tab>
+
+    @if (data.stamps.length) {
+      <ngs-tab label="Uploaded stamps">
+        <ngs-selection-list aria-label="Uploaded stamps">
+          @for (stamp of data.stamps; track stamp.id) {
+            <ngs-list-option [selected]="selectedStamp()?.id === stamp.id" (selectedChange)="selectStamp(stamp)">
+              <ngs-icon ngsListItemAvatar name="fluent:stamp-24-regular" />
+              <span ngsListItemTitle>{{ stamp.name }}</span>
+              @if (stamp.description) {
+                <span ngsListItemLine>{{ stamp.description }}</span>
+              }
+            </ngs-list-option>
+          }
+        </ngs-selection-list>
+      </ngs-tab>
+    }
+  </ngs-tab-group>
+</ngs-dialog-content>
+
+<ngs-dialog-actions align="end">
+  <button ngsButton ngs-dialog-close>Cancel</button>
+  <button ngsButton="filled" type="button" [disabled]="!canApply()" (click)="apply()">Accept and apply</button>
+</ngs-dialog-actions>
