@@ -423,7 +423,7 @@
                       (keydown.enter)="selectField(field.id, $event)"
                       (keydown.space)="$event.preventDefault(); selectField(field.id, $event)"
                     >
-                      @if (field.type === 'signature' && isSignatureImageValue(field.value)) {
+                      @if ((field.type === 'signature' || field.type === 'initials') && isSignatureImageValue(field.value)) {
                         <img class="signature-field-image" [src]="field.value" alt="" />
                       } @else if (field.type !== 'checkbox') {
                         <span class="field-badge">

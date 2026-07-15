@@ -6,6 +6,8 @@ import { PdfViewer } from '@ngstarter-ui/components/pdf-viewer';
 import {
   PdfBuilder,
   type PdfBuilderDrawnSignatureUploadContext,
+  type PdfBuilderInitialsSelection,
+  type PdfBuilderInitialsType,
   type PdfBuilderSchema,
   type PdfBuilderSigner,
   type PdfBuilderSignatureAsset,
@@ -1288,6 +1290,185 @@ describe('PdfBuilder', () => {
       width: 105,
       height: 42,
     });
+  });
+
+  it('opens an initials dialog without draw when clicking an active initials field again', async () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const initials: readonly PdfBuilderSignatureAsset[] = [
+      {
+        id: 'pavel-initials',
+        name: 'P.S.',
+        description: 'Saved initials',
+        imageUrl: '/assets/signatures/ps.png',
+      },
+    ];
+    const state = component as unknown as {
+      addField: (type: 'initials') => void;
+      fields: () => readonly { id: string }[];
+    };
+
+    fixture.componentRef.setInput('uploadedInitials', initials);
+    state.addField('initials');
+    fixture.detectChanges();
+
+    const field = state.fields()[0];
+    const overlayField = element.querySelector<HTMLElement>(`[data-field-id="${field.id}"]`);
+
+    expect(overlayField).not.toBeNull();
+
+    overlayField!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fixture.detectChanges();
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+
+    expect(document.body.textContent).toContain('Initials');
+    expect(document.body.textContent).toContain('Type');
+    expect(document.body.textContent).toContain('Upload');
+    expect(document.body.textContent).toContain('My Initials');
+    expect(document.body.textContent).not.toContain('Draw');
+    expect(document.querySelector('ngs-signature-pad')).toBeNull();
+    expect(document.querySelector('ngs-typed-signature-pad')).not.toBeNull();
+
+    const myInitialsTab = Array.from(document.querySelectorAll<HTMLElement>('.ngs-tab-label'))
+      .find(tab => tab.textContent?.includes('My Initials'));
+
+    expect(myInitialsTab).not.toBeNull();
+
+    myInitialsTab!.click();
+    fixture.detectChanges();
+
+    const initialsImages = Array.from(document.querySelectorAll<HTMLImageElement>('.my-signature-image'));
+
+    expect(initialsImages.map(image => image.getAttribute('src'))).toEqual(['/assets/signatures/ps.png']);
+
+    document.querySelector<HTMLButtonElement>('[ngs-dialog-close]')?.click();
+    fixture.detectChanges();
+    await new Promise<void>(resolve => setTimeout(resolve, 260));
+  });
+
+  it('applies a saved initials image selected from the initials dialog', async () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const initials: readonly PdfBuilderSignatureAsset[] = [
+      {
+        id: 'pavel-initials',
+        name: 'P.S.',
+        description: 'Saved initials',
+        imageUrl: '/assets/signatures/ps.png',
+      },
+    ];
+    const emitted: PdfBuilderInitialsSelection[] = [];
+    const subscription = component.initialsSelected.subscribe(event => emitted.push(event));
+    const state = component as unknown as {
+      addField: (type: 'initials') => void;
+      fields: () => readonly { id: string; label: string; value: string }[];
+    };
+
+    fixture.componentRef.setInput('uploadedInitials', initials);
+    state.addField('initials');
+    fixture.detectChanges();
+
+    const field = state.fields()[0];
+    const overlayField = element.querySelector<HTMLElement>(`[data-field-id="${field.id}"]`);
+
+    expect(overlayField).not.toBeNull();
+
+    overlayField!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fixture.detectChanges();
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+
+    const myInitialsTab = Array.from(document.querySelectorAll<HTMLElement>('.ngs-tab-label'))
+      .find(tab => tab.textContent?.includes('My Initials'));
+
+    expect(myInitialsTab).not.toBeNull();
+
+    myInitialsTab!.click();
+    fixture.detectChanges();
+
+    const initialsOption = document.querySelector<HTMLElement>('.my-signature-option');
+
+    expect(initialsOption).not.toBeNull();
+
+    initialsOption!.click();
+    fixture.detectChanges();
+
+    const applyButton = Array.from(document.querySelectorAll<HTMLButtonElement>('button'))
+      .find(button => button.textContent?.includes('Accept initials'));
+
+    expect(applyButton).not.toBeNull();
+
+    applyButton!.click();
+    fixture.detectChanges();
+    await new Promise<void>(resolve => setTimeout(resolve, 260));
+
+    const appliedField = state.fields()[0];
+    const appliedOverlayField = element.querySelector<HTMLElement>(`[data-field-id="${appliedField.id}"]`);
+    const image = appliedOverlayField?.querySelector<HTMLImageElement>('img.signature-field-image');
+
+    expect(appliedField).toEqual(expect.objectContaining({
+      label: 'P.S.',
+      value: '/assets/signatures/ps.png',
+    }));
+    expect(image).not.toBeNull();
+    expect(image!.getAttribute('src')).toBe('/assets/signatures/ps.png');
+    expect(emitted).toHaveLength(1);
+    expect(emitted[0]).toEqual(expect.objectContaining({
+      initials: initials[0],
+    }));
+
+    subscription.unsubscribe();
+  });
+
+  it('renders a typed initials result as an image on the canvas', async () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const typedInitials = 'data:image/svg+xml;charset=utf-8,%3Csvg%3E%3C%2Fsvg%3E';
+    const emitted: PdfBuilderInitialsType[] = [];
+    const subscription = component.initialsTyped.subscribe(event => emitted.push(event));
+    const state = component as unknown as {
+      addField: (type: 'initials') => void;
+      fields: () => readonly { id: string; label: string; value: string }[];
+      applyInitialsDialogResult: (
+        field: { id: string },
+        result: {
+          type: 'type';
+          value: string;
+          dataUrl: string;
+          fontFamily: string;
+          color: string;
+        },
+      ) => Promise<void>;
+    };
+
+    state.addField('initials');
+    fixture.detectChanges();
+
+    const field = state.fields()[0];
+
+    await state.applyInitialsDialogResult(field, {
+      type: 'type',
+      value: 'P.S.',
+      dataUrl: typedInitials,
+      fontFamily: 'Brush Script MT, cursive',
+      color: '#000',
+    });
+    fixture.detectChanges();
+
+    const overlayField = element.querySelector<HTMLElement>(`[data-field-id="${field.id}"]`);
+    const image = overlayField?.querySelector<HTMLImageElement>('img.signature-field-image');
+
+    expect(state.fields()[0]).toEqual(expect.objectContaining({
+      label: 'P.S.',
+      value: typedInitials,
+    }));
+    expect(image).not.toBeNull();
+    expect(image!.getAttribute('src')).toBe(typedInitials);
+    expect(emitted).toHaveLength(1);
+    expect(emitted[0]).toEqual(expect.objectContaining({
+      value: 'P.S.',
+      dataUrl: typedInitials,
+      fontFamily: 'Brush Script MT, cursive',
+      color: '#000',
+    }));
+
+    subscription.unsubscribe();
   });
 
   it('uses compact horizontal metrics for date fields', () => {

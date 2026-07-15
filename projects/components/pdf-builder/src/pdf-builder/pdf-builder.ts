@@ -77,6 +77,7 @@ import {
 } from '@ngstarter-ui/components/tree';
 import {
   PdfBuilderSignatureDialog,
+  type PdfBuilderSignatureDialogData,
   type PdfBuilderSignatureDialogResult,
 } from '../signature-dialog/signature-dialog';
 import {
@@ -198,12 +199,24 @@ export interface PdfBuilderSignatureAsset {
   readonly dataUrl?: string;
 }
 
+export type PdfBuilderInitialsAsset = PdfBuilderSignatureAsset;
+
 export interface PdfBuilderSignatureSelection {
   readonly field: PdfBuilderField;
   readonly signature: PdfBuilderSignatureAsset;
 }
 
+export interface PdfBuilderInitialsSelection {
+  readonly field: PdfBuilderField;
+  readonly initials: PdfBuilderInitialsAsset;
+}
+
 export interface PdfBuilderSignatureUpload {
+  readonly field: PdfBuilderField;
+  readonly file: File;
+}
+
+export interface PdfBuilderInitialsUpload {
   readonly field: PdfBuilderField;
   readonly file: File;
 }
@@ -220,6 +233,8 @@ export interface PdfBuilderSignatureType {
   readonly fontFamily: string;
   readonly color: string;
 }
+
+export type PdfBuilderInitialsType = PdfBuilderSignatureType;
 
 export type PdfBuilderSignatureUploadCallbackResult =
   | string
@@ -242,12 +257,21 @@ export interface PdfBuilderSignatureImageUploadContext {
   readonly file: File;
 }
 
+export interface PdfBuilderInitialsImageUploadContext {
+  readonly field: PdfBuilderField;
+  readonly file: File;
+}
+
 export type PdfBuilderDrawnSignatureUploadCallback = (
   context: PdfBuilderDrawnSignatureUploadContext,
 ) => PdfBuilderSignatureUploadCallbackResult | Promise<PdfBuilderSignatureUploadCallbackResult>;
 
 export type PdfBuilderSignatureImageUploadCallback = (
   context: PdfBuilderSignatureImageUploadContext,
+) => PdfBuilderSignatureUploadCallbackResult | Promise<PdfBuilderSignatureUploadCallbackResult>;
+
+export type PdfBuilderInitialsImageUploadCallback = (
+  context: PdfBuilderInitialsImageUploadContext,
 ) => PdfBuilderSignatureUploadCallbackResult | Promise<PdfBuilderSignatureUploadCallbackResult>;
 
 export interface PdfBuilderSchemaPage {
@@ -425,8 +449,10 @@ export class PdfBuilder {
   readonly signers = input<readonly PdfBuilderSigner[]>([]);
   readonly stamps = input<readonly PdfBuilderStampAsset[]>([]);
   readonly uploadedSignatures = input<readonly PdfBuilderSignatureAsset[]>([]);
+  readonly uploadedInitials = input<readonly PdfBuilderInitialsAsset[]>([]);
   readonly drawnSignatureUploadCallback = input<PdfBuilderDrawnSignatureUploadCallback | null | undefined>(undefined);
   readonly signatureImageUploadCallback = input<PdfBuilderSignatureImageUploadCallback | null | undefined>(undefined);
+  readonly initialsImageUploadCallback = input<PdfBuilderInitialsImageUploadCallback | null | undefined>(undefined);
   readonly schemaChange = output<PdfBuilderSchema>();
   readonly createBlankPdf = output<void>();
   readonly exportPdf = output<void>();
@@ -443,6 +469,9 @@ export class PdfBuilder {
   readonly signatureUploaded = output<PdfBuilderSignatureUpload>();
   readonly signatureDrawn = output<PdfBuilderSignatureDraw>();
   readonly signatureTyped = output<PdfBuilderSignatureType>();
+  readonly initialsSelected = output<PdfBuilderInitialsSelection>();
+  readonly initialsUploaded = output<PdfBuilderInitialsUpload>();
+  readonly initialsTyped = output<PdfBuilderInitialsType>();
 
   protected readonly layersTree = viewChild<Tree<PdfBuilderLayerNode>>('layersTree');
   protected readonly dateFieldPicker = viewChild<Datepicker<Date>>('dateFieldPicker');
@@ -910,6 +939,11 @@ export class PdfBuilder {
       return;
     }
 
+    if (field?.type === 'initials' && wasSelected && !field.locked) {
+      this.openInitialsDialog(field);
+      return;
+    }
+
     if (field?.type === 'text' && !field.locked) {
       this.startTextEditing(field.id);
       return;
@@ -944,7 +978,7 @@ export class PdfBuilder {
   }
 
   protected openSignatureDialog(field: PdfBuilderField): void {
-    const dialogRef = this.dialog.open<PdfBuilderSignatureDialog, { signatures: readonly PdfBuilderSignatureAsset[] }, PdfBuilderSignatureDialogResult>(
+    const dialogRef = this.dialog.open<PdfBuilderSignatureDialog, PdfBuilderSignatureDialogData, PdfBuilderSignatureDialogResult>(
       PdfBuilderSignatureDialog,
       {
         width: '720px',
@@ -962,6 +996,39 @@ export class PdfBuilder {
 
       void this.applySignatureDialogResult(field, result).catch(error => {
         console.error('Failed to apply signature.', error);
+      });
+    });
+  }
+
+  protected openInitialsDialog(field: PdfBuilderField): void {
+    const dialogRef = this.dialog.open<PdfBuilderSignatureDialog, PdfBuilderSignatureDialogData, PdfBuilderSignatureDialogResult>(
+      PdfBuilderSignatureDialog,
+      {
+        width: '720px',
+        showCloseButton: true,
+        data: {
+          signatures: this.uploadedInitials(),
+          title: 'Initials',
+          includeDraw: false,
+          typePlaceholder: 'Type initials',
+          uploadMainText: 'Drag & drop an initials image here',
+          uploadDropText: 'Drop initials image here.',
+          uploadInvalidText: 'Select an image file.',
+          uploadAllowedTypesText: 'Image files are accepted.',
+          savedTabLabel: 'My Initials',
+          savedListLabel: 'Saved initials',
+          acceptLabel: 'Accept initials',
+        },
+      },
+    );
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+
+      void this.applyInitialsDialogResult(field, result).catch(error => {
+        console.error('Failed to apply initials.', error);
       });
     });
   }
@@ -1955,6 +2022,55 @@ export class PdfBuilder {
     this.recordActivity('Signature uploaded', `${signatureLabel} applied.`, currentField.icon);
   }
 
+  private async applyInitialsDialogResult(
+    field: PdfBuilderField,
+    result: PdfBuilderSignatureDialogResult,
+  ): Promise<void> {
+    const currentField = this.fields().find(item => item.id === field.id);
+
+    if (!currentField || currentField.type !== 'initials' || currentField.locked || result.type === 'draw') {
+      return;
+    }
+
+    const uploadResult = await this.resolveInitialsUploadResult(currentField, result);
+    const initialsLabel = this.getSignatureResultLabel(
+      uploadResult,
+      this.getSignatureDialogResultLabel(result),
+    );
+    const initialsValue = this.getSignatureResultValue(
+      uploadResult,
+      this.getSignatureDialogResultValue(result),
+    );
+    const appliedField = { ...currentField, label: initialsLabel, value: initialsValue };
+
+    this.commitFields(fields =>
+      fields.map(item => item.id === currentField.id ? appliedField : item),
+    );
+    this.selectedFieldId.set(currentField.id);
+    this.openFieldSettingsPanel();
+
+    if (result.type === 'asset') {
+      this.initialsSelected.emit({ field: appliedField, initials: result.signature });
+      this.recordActivity('Initials selected', `${initialsLabel} applied.`, currentField.icon);
+      return;
+    }
+
+    if (result.type === 'type') {
+      this.initialsTyped.emit({
+        field: appliedField,
+        value: result.value,
+        dataUrl: result.dataUrl,
+        fontFamily: result.fontFamily,
+        color: result.color,
+      });
+      this.recordActivity('Initials typed', `${initialsLabel} applied.`, currentField.icon);
+      return;
+    }
+
+    this.initialsUploaded.emit({ field: appliedField, file: result.file });
+    this.recordActivity('Initials uploaded', `${initialsLabel} applied.`, currentField.icon);
+  }
+
   private async resolveSignatureUploadResult(
     field: PdfBuilderField,
     result: PdfBuilderSignatureDialogResult,
@@ -1967,6 +2083,19 @@ export class PdfBuilder {
 
     if (result.type === 'file') {
       const callback = this.signatureImageUploadCallback();
+
+      return callback ? callback({ field, file: result.file }) : null;
+    }
+
+    return null;
+  }
+
+  private async resolveInitialsUploadResult(
+    field: PdfBuilderField,
+    result: PdfBuilderSignatureDialogResult,
+  ): Promise<PdfBuilderSignatureUploadCallbackResult | null> {
+    if (result.type === 'file') {
+      const callback = this.initialsImageUploadCallback();
 
       return callback ? callback({ field, file: result.file }) : null;
     }

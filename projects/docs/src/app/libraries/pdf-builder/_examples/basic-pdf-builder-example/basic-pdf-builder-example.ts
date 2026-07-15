@@ -59,6 +59,15 @@ export class BasicPdfBuilderExample {
     },
   ];
 
+  protected readonly uploadedInitials: readonly PdfBuilderSignatureAsset[] = [
+    {
+      id: 'pavel-initials',
+      name: 'P.S.',
+      description: 'Saved initials',
+      dataUrl: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22120%22%20viewBox%3D%220%200%20200%20120%22%3E%3Crect%20width%3D%22200%22%20height%3D%22120%22%20fill%3D%22transparent%22%2F%3E%3Ctext%20x%3D%22100%22%20y%3D%2264%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%20fill%3D%22%23000%22%20font-family%3D%22Brush%20Script%20MT%2C%20Segoe%20Script%2C%20cursive%22%20font-size%3D%2252%22%3EP.S.%3C%2Ftext%3E%3C%2Fsvg%3E',
+    },
+  ];
+
   protected removeRecipient(recipient: PdfBuilderRecipient): void {
     this.recipients.update(recipients => recipients.filter(item => item.id !== recipient.id));
   }

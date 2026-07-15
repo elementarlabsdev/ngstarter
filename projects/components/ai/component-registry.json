@@ -7174,13 +7174,13 @@
         "PDF Builder",
         "Basic pdf builder"
       ],
-      "minimalExample": "<ngs-pdf-builder\n  [recipients]=\"recipients()\"\n  [signers]=\"signers\"\n  [stamps]=\"stamps\"\n  [uploadedSignatures]=\"uploadedSignatures\"\n  (removeRecipient)=\"removeRecipient($event)\"\n/>",
+      "minimalExample": "<ngs-pdf-builder\n  [recipients]=\"recipients()\"\n  [signers]=\"signers\"\n  [stamps]=\"stamps\"\n  [uploadedSignatures]=\"uploadedSignatures\"\n  [uploadedInitials]=\"uploadedInitials\"\n  (removeRecipient)=\"removeRecipient($event)\"\n/>",
       "exampleFiles": [
         {
           "name": "basic-pdf-builder-example",
           "title": "Basic pdf builder",
           "file": "projects/docs/src/app/libraries/pdf-builder/_examples/basic-pdf-builder-example/basic-pdf-builder-example.html",
-          "source": "<ngs-pdf-builder\n  [recipients]=\"recipients()\"\n  [signers]=\"signers\"\n  [stamps]=\"stamps\"\n  [uploadedSignatures]=\"uploadedSignatures\"\n  (removeRecipient)=\"removeRecipient($event)\"\n/>"
+          "source": "<ngs-pdf-builder\n  [recipients]=\"recipients()\"\n  [signers]=\"signers\"\n  [stamps]=\"stamps\"\n  [uploadedSignatures]=\"uploadedSignatures\"\n  [uploadedInitials]=\"uploadedInitials\"\n  (removeRecipient)=\"removeRecipient($event)\"\n/>"
         }
       ],
       "previewAsset": null,
@@ -7198,6 +7198,12 @@
         "PdfBuilderFieldSigner",
         "PdfBuilderFieldSlot",
         "PdfBuilderFieldType",
+        "PdfBuilderInitialsAsset",
+        "PdfBuilderInitialsImageUploadCallback",
+        "PdfBuilderInitialsImageUploadContext",
+        "PdfBuilderInitialsSelection",
+        "PdfBuilderInitialsType",
+        "PdfBuilderInitialsUpload",
         "PdfBuilderPageRotation",
         "PdfBuilderRecipient",
         "PdfBuilderSchema",
@@ -7227,11 +7233,13 @@
       "inputs": [
         "annotations",
         "drawnSignatureUploadCallback",
+        "initialsImageUploadCallback",
         "recipients",
         "schema",
         "signatureImageUploadCallback",
         "signers",
         "stamps",
+        "uploadedInitials",
         "uploadedSignatures"
       ],
       "outputs": [
@@ -7240,6 +7248,9 @@
         "createRecipientContact",
         "editRecipientDetails",
         "exportPdf",
+        "initialsSelected",
+        "initialsTyped",
+        "initialsUploaded",
         "recipientSearchChanged",
         "recipientSelected",
         "removeRecipient",

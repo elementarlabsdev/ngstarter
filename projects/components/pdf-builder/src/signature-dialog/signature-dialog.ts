@@ -30,6 +30,16 @@ import type { PdfBuilderSignatureAsset } from '../pdf-builder/pdf-builder';
 
 export interface PdfBuilderSignatureDialogData {
   readonly signatures: readonly PdfBuilderSignatureAsset[];
+  readonly title?: string;
+  readonly includeDraw?: boolean;
+  readonly typePlaceholder?: string;
+  readonly uploadMainText?: string;
+  readonly uploadDropText?: string;
+  readonly uploadInvalidText?: string;
+  readonly uploadAllowedTypesText?: string;
+  readonly savedTabLabel?: string;
+  readonly savedListLabel?: string;
+  readonly acceptLabel?: string;
 }
 
 export type PdfBuilderSignatureDialogResult =
@@ -72,6 +82,16 @@ export type PdfBuilderSignatureDialogResult =
 export class PdfBuilderSignatureDialog {
   private readonly dialogRef = inject<DialogRef<PdfBuilderSignatureDialog, PdfBuilderSignatureDialogResult>>(DialogRef);
   protected readonly data = inject<PdfBuilderSignatureDialogData>(DIALOG_DATA);
+  protected readonly title = computed(() => this.data.title ?? 'Signature');
+  protected readonly includeDraw = computed(() => this.data.includeDraw ?? true);
+  protected readonly typePlaceholder = computed(() => this.data.typePlaceholder ?? 'Type initials or signature');
+  protected readonly uploadMainText = computed(() => this.data.uploadMainText ?? 'Drag & drop a signature file here');
+  protected readonly uploadDropText = computed(() => this.data.uploadDropText ?? 'Drop signature file here.');
+  protected readonly uploadInvalidText = computed(() => this.data.uploadInvalidText ?? 'Select an image file.');
+  protected readonly uploadAllowedTypesText = computed(() => this.data.uploadAllowedTypesText ?? 'Image files are accepted.');
+  protected readonly savedTabLabel = computed(() => this.data.savedTabLabel ?? 'My Signature');
+  protected readonly savedListLabel = computed(() => this.data.savedListLabel ?? 'Saved signatures');
+  protected readonly acceptLabel = computed(() => this.data.acceptLabel ?? 'Accept and sign');
   protected readonly selectedSignature = signal<PdfBuilderSignatureAsset | null>(null);
   protected readonly drawnSignature = signal('');
   protected readonly typedSignature = signal<TypedSignaturePadValue | null>(null);
