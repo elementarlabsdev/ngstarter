@@ -58,6 +58,31 @@ describe('PdfBuilder', () => {
     expect(element.textContent).not.toContain('Source');
   });
 
+  it('syncs overlay geometry when data attributes are available without dataset', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const state = component as unknown as {
+      addField: (type: 'text') => void;
+      fields: () => readonly { id: string }[];
+      syncOverlayGeometry: () => void;
+    };
+
+    state.addField('text');
+    fixture.detectChanges();
+
+    const field = state.fields()[0];
+    const overlayField = element.querySelector<HTMLElement>(`[data-field-id="${field.id}"]`);
+
+    expect(overlayField).not.toBeNull();
+
+    Object.defineProperty(overlayField!, 'dataset', {
+      configurable: true,
+      value: undefined,
+    });
+
+    expect(() => state.syncOverlayGeometry()).not.toThrow();
+    expect(overlayField!.style.getPropertyValue('--pdf-builder-field-left')).toContain('px');
+  });
+
   it('emits schema changes when builder state changes', async () => {
     const emitted: PdfBuilderSchema[] = [];
     const subscription = component.schemaChange.subscribe(schema => emitted.push(schema));

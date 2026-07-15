@@ -2654,7 +2654,7 @@ export class PdfBuilder {
     const fields = new Map(this.fields().map(field => [field.id, field]));
 
     for (const element of this.getOverlayFieldElements()) {
-      const fieldId = element.dataset['fieldId'];
+      const fieldId = element.getAttribute('data-field-id');
       const field = fieldId ? fields.get(fieldId) : null;
 
       if (!field) {
@@ -2894,7 +2894,7 @@ export class PdfBuilder {
   }
 
   private getPageNumberFromShell(pageShell: HTMLElement): number | null {
-    const value = Number(pageShell.dataset['pageNumber']);
+    const value = Number(pageShell.getAttribute('data-page-number'));
     return Number.isFinite(value) && value > 0 ? value : null;
   }
 
