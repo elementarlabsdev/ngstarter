@@ -63,6 +63,7 @@
       <ngs-toolbar-spacer />
 
       <ngs-toolbar-item class="pdf-viewer-toolbar__end flex min-w-0 flex-1 items-center justify-end gap-2" aria-label="PDF builder tools">
+        <span class="builder-field-count">{{ fieldCount() }} fields</span>
         <button
           class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
           ngsIconButton
@@ -73,6 +74,16 @@
           (click)="toggleLibraryCollapsed()"
         >
           <ngs-icon class="text-2xl" name="fluent:text-bullet-list-square-edit-24-regular" />
+        </button>
+        <button
+          class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+          ngsIconButton
+          type="button"
+          aria-label="Add blank page"
+          ngsTooltip="Add blank page"
+          (click)="addBlankPage()"
+        >
+          <ngs-icon class="text-2xl" name="fluent:document-one-page-add-24-regular" />
         </button>
         <button
           class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
@@ -90,7 +101,6 @@
           ngsIconButton
           type="button"
           aria-label="PDF builder settings"
-          ngsTooltip="Settings"
           [ngsMenuTriggerFor]="settingsMenu"
         >
           <ngs-icon class="text-2xl" name="fluent:settings-24-regular" />
@@ -105,17 +115,6 @@
           (click)="toggleAnnotationsPanel()"
         >
           <ngs-icon class="text-2xl" name="fluent:comment-note-24-regular" />
-        </button>
-        <button
-          class="pdf-viewer-toolbar__button size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
-          ngsIconButton
-          type="button"
-          aria-label="Export PDF"
-          ngsTooltip="Export PDF"
-          [disabled]="pageCount() === 0"
-          (click)="exportCurrentPdf()"
-        >
-          <ngs-icon class="text-2xl" name="fluent:document-pdf-24-regular" />
         </button>
       </ngs-toolbar-item>
     </ngs-toolbar>
@@ -389,6 +388,7 @@
                   @for (field of pageFields(page.page); track field.id) {
                     <div
                       class="overlay-field"
+                      #fieldSignerTooltip="ngsTooltip"
                       [attr.role]="field.id === editingFieldId() ? null : 'button'"
                       [attr.tabindex]="field.id === editingFieldId() ? null : 0"
                       [attr.data-field-id]="field.id"
@@ -418,10 +418,10 @@
                       [ngsTooltipDisabled]="!getFieldSignerTooltip(field)"
                       (pointerenter)="hoveredFieldId.set(field.id)"
                       (pointerleave)="hoveredFieldId.set(null)"
-                      (pointerdown)="beginFieldDrag($event, field.id)"
-                      (click)="selectField(field.id, $event)"
-                      (keydown.enter)="selectField(field.id, $event)"
-                      (keydown.space)="$event.preventDefault(); selectField(field.id, $event)"
+                      (pointerdown)="fieldSignerTooltip.hideImmediately(); beginFieldDrag($event, field.id)"
+                      (click)="fieldSignerTooltip.hideImmediately(); selectField(field.id, $event)"
+                      (keydown.enter)="fieldSignerTooltip.hideImmediately(); selectField(field.id, $event)"
+                      (keydown.space)="$event.preventDefault(); fieldSignerTooltip.hideImmediately(); selectField(field.id, $event)"
                     >
                       @if ((field.type === 'signature' || field.type === 'initials') && isSignatureImageValue(field.value)) {
                         <img class="signature-field-image" [src]="field.value" alt="" />
@@ -470,6 +470,50 @@
                     </div>
                   }
 
+                  @if (selectedField(); as selectedOverlayField) {
+                    @if (selectedOverlayField.page === page.page && selectedOverlayField.id !== fieldDrag()?.fieldId && selectedOverlayField.id !== fieldResize()?.fieldId) {
+                      <div
+                        class="selection-toolbar"
+                        aria-label="Selected field toolbar"
+                        [attr.data-selection-toolbar-field-id]="selectedOverlayField.id"
+                        (pointerdown)="$event.stopPropagation()"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      >
+                        <button
+                          ngsIconButton
+                          type="button"
+                          aria-label="Field settings"
+                          ngsTooltip="Field settings"
+                          (click)="openFieldSettingsPanel()"
+                        >
+                          <ngs-icon name="fluent:settings-24-regular" />
+                        </button>
+                        <button
+                          ngsButton="outlined"
+                          type="button"
+                          class="selection-recipient-trigger"
+                          [disabled]="selectedOverlayField.locked || !recipientItems().length"
+                          [ngsMenuTriggerFor]="fieldRecipientMenu"
+                        >
+                          <span>{{ getFieldSignerLabel(selectedOverlayField) }}</span>
+                        </button>
+                        <ngs-menu #fieldRecipientMenu="ngsMenu">
+                          <ngs-menu-heading>Recipient</ngs-menu-heading>
+                          @for (recipient of recipientItems(); track recipient.id) {
+                            <button
+                              ngs-menu-item
+                              type="button"
+                              [disabled]="recipient.disabled"
+                              (click)="assignSelectedFieldRecipient(recipient, $event)"
+                            >
+                              <span>{{ recipient.name }}</span>
+                            </button>
+                          }
+                        </ngs-menu>
+                      </div>
+                    }
+                  }
                 </div>
               </div>
             }
@@ -593,127 +637,116 @@
       </ngs-panel>
     } @else {
       @if (recipientItems().length) {
-        <section class="field-recipients-panel" aria-label="Document recipients">
-          <header class="field-recipients-header">
-            <h3>Add recipients</h3>
-            <p>Who are you sending this document to?</p>
-          </header>
-
-          <ngs-scrollbar-area class="field-recipients-scroll">
-            <ngs-list role="list" class="field-recipients-list">
-              @for (recipient of recipientItems(); track recipient.id) {
-                <ngs-list-item
-                  role="listitem"
-                  lines="2"
-                  [disabled]="recipient.disabled"
-                  (click)="selectRecipient(recipient, $event)"
-                >
-                  <ngs-avatar
-                    ngsListItemAvatar
-                    [label]="getRecipientAvatarLabel(recipient)"
-                    [key]="recipient.id"
-                  />
-                  <span ngsListItemTitle>
-                    {{ recipient.name }}
-                    <span>{{ getRecipientRoleLabel(recipient) }}</span>
-                    @if (recipient.isCurrentUser) {
-                      <span>YOU</span>
-                    }
-                  </span>
-                  @if (recipient.email) {
-                    <span ngsListItemLine>{{ recipient.email }}</span>
-                  }
-                  <span ngsListItemMeta>
-                    <button
-                      ngsIconButton
-                      type="button"
-                      aria-label="Recipient actions"
-                      [ngsMenuTriggerFor]="recipientActionsMenu"
-                      (click)="$event.stopPropagation()"
-                    >
-                      <ngs-icon name="fluent:more-vertical-24-regular" />
-                    </button>
-                    <ngs-menu #recipientActionsMenu="ngsMenu" xPosition="before">
-                      <button ngs-menu-item type="button" (click)="requestEditRecipientDetails(recipient, $event)">
-                        <ngs-icon name="fluent:edit-24-regular" />
-                        <span>Edit personal details</span>
-                      </button>
-                      <button ngs-menu-item type="button" (click)="requestReplaceRecipient(recipient, $event)">
-                        <ngs-icon name="fluent:arrow-swap-24-regular" />
-                        <span>Replace recipient</span>
-                      </button>
-                      <ngs-menu-divider />
-                      <button ngs-menu-item type="button" (click)="requestRemoveRecipient(recipient, $event)">
-                        <ngs-icon name="fluent:dismiss-24-regular" />
-                        <span>Remove</span>
-                      </button>
-                    </ngs-menu>
-                  </span>
-                </ngs-list-item>
-              }
-
-            </ngs-list>
-
-            <div class="px-4 pb-4">
-              <button
-                ngsButton="outlined"
-                type="button"
-                [ngsPopoverTriggerFor]="addRecipientPopover"
-                position="below-end"
-                hasBackdrop
-                (opened)="requestAddRecipient()"
-              >
-                <ngs-icon name="fluent:add-24-regular" />
-                <span>Add recipient</span>
-              </button>
+        <ngs-panel aria-label="Document recipients">
+          <ngs-panel-header class="border-b border-b-border px-5">
+            <div>
+              <div class="font-bold">Add recipients</div>
+              <div class="text-sm">Who are you sending this document to?</div>
             </div>
+          </ngs-panel-header>
+          <ngs-panel-content>
+            <ngs-scrollbar-area>
+              <div class="px-2">
+                <ngs-list role="list">
+                  @for (recipient of recipientItems(); track recipient.id) {
+                    <ngs-list-item
+                      role="listitem"
+                      lines="2"
+                      [disabled]="recipient.disabled"
+                      (click)="selectRecipient(recipient, $event)"
+                    >
+                      <ngs-avatar
+                        ngsListItemAvatar
+                        [label]="getRecipientAvatarLabel(recipient)"
+                        [key]="recipient.id"
+                      />
+                      <span ngsListItemTitle>
+                      {{ recipient.name }}
+                      @if (recipient.isCurrentUser) {
+                        <span class="text-xs text-primary font-semibold">YOU</span>
+                      }
+                    </span>
+                      @if (recipient.email) {
+                        <span ngsListItemLine>{{ recipient.email }}</span>
+                      }
+                      <span ngsListItemMeta>
+                      <button
+                        ngsIconButton
+                        type="button"
+                        aria-label="Recipient actions"
+                        [ngsMenuTriggerFor]="recipientActionsMenu"
+                        (click)="$event.stopPropagation()"
+                      >
+                        <ngs-icon name="fluent:more-vertical-24-regular" />
+                      </button>
+                      <ngs-menu #recipientActionsMenu="ngsMenu" xPosition="before">
+                        <button ngs-menu-item type="button" (click)="requestEditRecipientDetails(recipient, $event)">
+                          <ngs-icon name="fluent:edit-24-regular" />
+                          <span>Edit personal details</span>
+                        </button>
+                        <button ngs-menu-item type="button" (click)="requestReplaceRecipient(recipient, $event)">
+                          <ngs-icon name="fluent:arrow-swap-24-regular" />
+                          <span>Replace recipient</span>
+                        </button>
+                        <ngs-menu-divider />
+                        <button ngs-menu-item type="button" (click)="requestRemoveRecipient(recipient, $event)">
+                          <ngs-icon name="fluent:dismiss-24-regular" />
+                          <span>Remove</span>
+                        </button>
+                      </ngs-menu>
+                    </span>
+                    </ngs-list-item>
+                  }
+                </ngs-list>
+              </div>
 
-            <ngs-popover #addRecipientPopover="ngsPopover">
-              <ng-template ngsPopoverContent>
-                <div class="flex w-80 flex-col gap-2 p-3" aria-label="Add recipient">
-                  <ngs-form-field class="w-full" subscriptHiddenIfEmpty>
-                    <ngs-icon ngsIconPrefix name="fluent:search-24-regular" />
-                    <input
-                      ngsInput
-                      type="text"
-                      aria-label="Search recipients"
-                      placeholder="Start typing recipient email, name or group"
-                      [value]="recipientSearchQuery()"
-                      (input)="updateRecipientSearch($any($event.target).value)"
-                    />
-                    <button ngsIconButton ngsIconButtonSuffix type="button" aria-label="Recipient search options">
-                      <ngs-icon name="fluent:more-horizontal-24-regular" />
+<!--              <div class="px-4 pb-4">-->
+<!--                <button-->
+<!--                  ngsButton="outlined"-->
+<!--                  type="button"-->
+<!--                  [ngsPopoverTriggerFor]="addRecipientPopover"-->
+<!--                  position="below-end"-->
+<!--                  hasBackdrop-->
+<!--                  (opened)="requestAddRecipient()"-->
+<!--                >-->
+<!--                  <ngs-icon name="fluent:add-24-regular" />-->
+<!--                  <span>Add recipient</span>-->
+<!--                </button>-->
+<!--              </div>-->
+
+              <ngs-popover #addRecipientPopover="ngsPopover">
+                <ng-template ngsPopoverContent>
+                  <div class="flex w-80 flex-col gap-2 p-3" aria-label="Add recipient">
+                    <ngs-form-field class="w-full" subscriptHiddenIfEmpty>
+                      <ngs-icon ngsIconPrefix name="fluent:search-24-regular" />
+                      <input
+                        ngsInput
+                        type="text"
+                        aria-label="Search recipients"
+                        placeholder="Start typing recipient email, name or group"
+                        [value]="recipientSearchQuery()"
+                        (input)="updateRecipientSearch($any($event.target).value)"
+                      />
+                      <button ngsIconButton ngsIconButtonSuffix type="button" aria-label="Recipient search options">
+                        <ngs-icon name="fluent:more-horizontal-24-regular" />
+                      </button>
+                    </ngs-form-field>
+
+                    <button
+                      ngsButton="text"
+                      type="button"
+                      (click)="requestCreateRecipientContact($event)"
+                    >
+                      <ngs-icon name="fluent:person-add-24-regular" />
+                      <span>Create new contact</span>
                     </button>
-                  </ngs-form-field>
-
-                  <button
-                    ngsButton="text"
-                    type="button"
-                    (click)="requestCreateRecipientContact($event)"
-                  >
-                    <ngs-icon name="fluent:person-add-24-regular" />
-                    <span>Create new contact</span>
-                  </button>
-                </div>
-              </ng-template>
-            </ngs-popover>
-          </ngs-scrollbar-area>
-        </section>
+                  </div>
+                </ng-template>
+              </ngs-popover>
+            </ngs-scrollbar-area>
+          </ngs-panel-content>
+        </ngs-panel>
       }
-
-      <div class="field-sidebar-actions" aria-label="PDF builder document actions">
-        <span class="builder-field-count">{{ fieldCount() }} fields</span>
-        <ngs-divider vertical fixedHeight />
-        <button
-          ngsIconButton
-          type="button"
-          aria-label="Add blank page"
-          ngsTooltip="Add blank page"
-          (click)="addBlankPage()"
-        >
-          <ngs-icon name="fluent:document-one-page-add-24-regular" />
-        </button>
-      </div>
     }
   </ngs-panel-aside>
 

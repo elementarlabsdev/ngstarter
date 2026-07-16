@@ -2,12 +2,15 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { PdfViewer } from '@ngstarter-ui/components/pdf-viewer';
+import { Tooltip } from '@ngstarter-ui/components/tooltip';
+import { vi } from 'vitest';
 
 import {
   PdfBuilder,
   type PdfBuilderDrawnSignatureUploadContext,
   type PdfBuilderInitialsSelection,
   type PdfBuilderInitialsType,
+  type PdfBuilderRecipient,
   type PdfBuilderSchema,
   type PdfBuilderSigner,
   type PdfBuilderSignatureAsset,
@@ -81,6 +84,28 @@ describe('PdfBuilder', () => {
 
     expect(() => state.syncOverlayGeometry()).not.toThrow();
     expect(overlayField!.style.getPropertyValue('--pdf-builder-field-left')).toContain('px');
+  });
+
+  it('falls back to pdf scale when page shells cannot report a bounding rect', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const state = component as unknown as {
+      addField: (type: 'text') => void;
+      syncOverlayGeometry: () => void;
+    };
+
+    state.addField('text');
+    fixture.detectChanges();
+
+    const pageShell = element.querySelector<HTMLElement>('.pdf-page-shell[data-page-number="1"]');
+
+    expect(pageShell).not.toBeNull();
+
+    Object.defineProperty(pageShell!, 'getBoundingClientRect', {
+      configurable: true,
+      value: undefined,
+    });
+
+    expect(() => state.syncOverlayGeometry()).not.toThrow();
   });
 
   it('emits schema changes when builder state changes', async () => {
@@ -276,7 +301,14 @@ describe('PdfBuilder', () => {
     expect(element.textContent).not.toContain('Upload PDF');
   });
 
-  it('moves field count and blank page actions from the toolbar to the right panel', () => {
+  it('does not expose an export PDF action in the builder chrome', () => {
+    const element: HTMLElement = fixture.nativeElement;
+
+    expect(element.querySelector('[aria-label="Export PDF"]')).toBeNull();
+    expect(element.textContent).not.toContain('Export PDF');
+  });
+
+  it('keeps field count and blank page action in the top toolbar', () => {
     const element: HTMLElement = fixture.nativeElement;
     const start = element.querySelector<HTMLElement>('.pdf-viewer-toolbar__start');
     const end = element.querySelector<HTMLElement>('.pdf-viewer-toolbar__end');
@@ -290,13 +322,17 @@ describe('PdfBuilder', () => {
     expect(start!.querySelector('[aria-label="Add blank page"]')).toBeNull();
     expect(start!.querySelector('[aria-label="Undo"]')).not.toBeNull();
     expect(start!.querySelector('[aria-label="Redo"]')).not.toBeNull();
-    expect(end!.querySelector('[aria-label="Add blank page"]')).toBeNull();
+    expect(end!.querySelector('[aria-label="Toggle fields panel"]')).not.toBeNull();
+    expect(end!.querySelector('[aria-label="Add blank page"]')).not.toBeNull();
     expect(end!.querySelector('[aria-label="Undo"]')).toBeNull();
     expect(end!.querySelector('[aria-label="Redo"]')).toBeNull();
+    expect(end!.querySelector('.builder-field-count')?.textContent).toContain('0 fields');
     expect(aside).not.toBeNull();
-    expect(aside!.querySelector('.field-sidebar-actions')?.textContent).toContain('0 fields');
+    expect(aside!.querySelector('.field-sidebar-actions')).toBeNull();
+    expect(aside!.querySelector('.builder-field-count')).toBeNull();
+    expect(aside!.querySelector('[aria-label="Add blank page"]')).toBeNull();
 
-    aside!.querySelector<HTMLButtonElement>('[aria-label="Add blank page"]')!.click();
+    end!.querySelector<HTMLButtonElement>('[aria-label="Add blank page"]')!.click();
     fixture.detectChanges();
 
     expect(state.pageCount()).toBe(2);
@@ -321,7 +357,8 @@ describe('PdfBuilder', () => {
     expect(searchButton).not.toBeNull();
     expect(annotationsButton).not.toBeNull();
     expect(element.querySelector('ngs-panel-aside.builder-viewer-aside')).not.toBeNull();
-    expect(element.querySelector('.field-sidebar-actions')).not.toBeNull();
+    expect(element.querySelector('.pdf-viewer-toolbar__end .builder-field-count')).not.toBeNull();
+    expect(element.querySelector('.field-sidebar-actions')).toBeNull();
 
     searchButton!.click();
     fixture.detectChanges();
@@ -419,13 +456,14 @@ describe('PdfBuilder', () => {
     expect(element.textContent).not.toContain('No fields yet');
     expect(element.textContent).not.toContain('No recipients yet');
     expect(element.textContent).not.toContain('Add recipients');
-    expect(element.querySelector('.field-sidebar-actions')).not.toBeNull();
+    expect(element.querySelector('.pdf-viewer-toolbar__end .builder-field-count')).not.toBeNull();
+    expect(element.querySelector('.field-sidebar-actions')).toBeNull();
 
     state.addField('signature');
     fixture.detectChanges();
 
-    expect(state.fieldSettingsPanelVisible()).toBe(true);
-    expect(element.querySelector('ngs-panel.field-settings-panel')).not.toBeNull();
+    expect(state.fieldSettingsPanelVisible()).toBe(false);
+    expect(element.querySelector('ngs-panel.field-settings-panel')).toBeNull();
     expect(element.querySelector('section.field-settings-panel')).toBeNull();
     expect(element.querySelector('.field-settings-summary')).toBeNull();
     expect(element.querySelector('.field-settings-summary-icon')).toBeNull();
@@ -438,7 +476,8 @@ describe('PdfBuilder', () => {
     expect(aside).not.toBeNull();
     expect(element.querySelector('.field-settings-panel')).toBeNull();
     expect(element.querySelector('.field-recipients-panel')).toBeNull();
-    expect(element.querySelector('.field-sidebar-actions')).not.toBeNull();
+    expect(element.querySelector('.pdf-viewer-toolbar__end .builder-field-count')).not.toBeNull();
+    expect(element.querySelector('.field-sidebar-actions')).toBeNull();
     expect(aside!.textContent).not.toContain('Add recipients');
     expect(aside!.textContent).not.toContain('Signer');
     expect(aside!.textContent).not.toContain('Signature');
@@ -470,6 +509,7 @@ describe('PdfBuilder', () => {
     const items = Array.from(element.querySelectorAll<HTMLElement>('.field-recipients-list ngs-list-item'));
 
     expect(panel).not.toBeNull();
+    expect(panel!.tagName.toLowerCase()).toBe('ngs-panel');
     expect(panel!.textContent).toContain('Add recipients');
     expect(panel!.textContent).toContain('Who are you sending this document to?');
     expect(items).toHaveLength(2);
@@ -484,7 +524,8 @@ describe('PdfBuilder', () => {
     expect(panel!.textContent).not.toContain('Manage recipients permissions');
     expect(panel!.textContent).not.toContain('Signature');
     expect(panel!.textContent).not.toContain('Page 1');
-    expect(element.querySelector('.field-sidebar-actions')).not.toBeNull();
+    expect(element.querySelector('.pdf-viewer-toolbar__end .builder-field-count')).not.toBeNull();
+    expect(element.querySelector('.field-sidebar-actions')).toBeNull();
   });
 
   it('assigns the first signer input to newly added fields and exposes full name for tooltip', () => {
@@ -523,6 +564,97 @@ describe('PdfBuilder', () => {
     expect(state.getFieldSignerTooltip(state.fields()[0])).toBe('Primary Signer');
   });
 
+  it('hides the signer tooltip immediately when a field is selected', () => {
+    const signers: readonly PdfBuilderSigner[] = [
+      {
+        id: 'signer-1',
+        fullName: 'Primary Signer',
+      },
+    ];
+    const state = component as unknown as {
+      addField: (type: 'signature') => void;
+      fields: () => readonly { id: string }[];
+    };
+
+    fixture.componentRef.setInput('signers', signers);
+    state.addField('signature');
+    fixture.detectChanges();
+
+    const field = state.fields()[0];
+    const fieldDebugElement = fixture.debugElement.query(By.css(`[data-field-id="${field.id}"]`));
+    const tooltip = fieldDebugElement.injector.get(Tooltip);
+
+    const hideImmediatelySpy = vi.spyOn(tooltip, 'hideImmediately');
+
+    fieldDebugElement.nativeElement.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fixture.detectChanges();
+
+    expect(hideImmediatelySpy).toHaveBeenCalled();
+  });
+
+  it('shows a selected field toolbar with settings and quick recipient controls', () => {
+    const recipients: readonly PdfBuilderRecipient[] = [
+      {
+        id: 'recipient-1',
+        name: 'Primary Recipient',
+        role: 'Signer',
+      },
+    ];
+    const state = component as unknown as {
+      addField: (type: 'signature') => void;
+    };
+
+    fixture.componentRef.setInput('recipients', recipients);
+    state.addField('signature');
+    fixture.detectChanges();
+
+    const element: HTMLElement = fixture.nativeElement;
+    const toolbar = element.querySelector<HTMLElement>('.selection-toolbar');
+    const recipientTrigger = toolbar!.querySelector<HTMLElement>('.selection-recipient-trigger');
+
+    expect(toolbar).not.toBeNull();
+    expect(toolbar!.querySelector('[aria-label="Field settings"]')).not.toBeNull();
+    expect(recipientTrigger?.textContent).toContain('Primary Recipient');
+    expect(recipientTrigger?.querySelector('ngs-icon')).toBeNull();
+  });
+
+  it('updates the selected field signer from the quick recipient control', () => {
+    const recipients: readonly PdfBuilderRecipient[] = [
+      {
+        id: 'recipient-1',
+        name: 'Primary Recipient',
+        role: 'Signer',
+      },
+      {
+        id: 'recipient-2',
+        name: 'Backup Recipient',
+        email: 'backup@example.com',
+        role: 'Approver',
+      },
+    ];
+    const state = component as unknown as {
+      addField: (type: 'signature') => void;
+      assignSelectedFieldRecipient: (recipient: PdfBuilderRecipient) => void;
+      fields: () => readonly { signer?: { id: string; fullName: string; email?: string } | null }[];
+    };
+
+    fixture.componentRef.setInput('recipients', recipients);
+    state.addField('signature');
+    fixture.detectChanges();
+
+    state.assignSelectedFieldRecipient(recipients[1]);
+    fixture.detectChanges();
+
+    const element: HTMLElement = fixture.nativeElement;
+
+    expect(state.fields()[0].signer).toEqual({
+      id: 'recipient-2',
+      fullName: 'Backup Recipient',
+      email: 'backup@example.com',
+    });
+    expect(element.querySelector<HTMLElement>('.selection-recipient-trigger')?.textContent).toContain('Backup Recipient');
+  });
+
   it('falls back to the first signer recipient when signers input is empty', () => {
     const state = component as unknown as {
       addField: (type: 'text') => void;
@@ -552,7 +684,7 @@ describe('PdfBuilder', () => {
     });
   });
 
-  it('opens field settings from an input recipient only when fieldIds maps to a field', () => {
+  it('selects fields from input recipients without opening field settings', () => {
     const element: HTMLElement = fixture.nativeElement;
     const emitted: unknown[] = [];
     const subscription = component.recipientSelected.subscribe(recipient => emitted.push(recipient));
@@ -589,7 +721,8 @@ describe('PdfBuilder', () => {
 
     expect(emitted).toHaveLength(1);
     expect(state.selectedFieldId()).toBe(fieldId);
-    expect(element.querySelector('.field-settings-panel')).not.toBeNull();
+    expect(element.querySelector('.selection-toolbar')).not.toBeNull();
+    expect(element.querySelector('.field-settings-panel')).toBeNull();
 
     subscription.unsubscribe();
   });
@@ -823,6 +956,9 @@ describe('PdfBuilder', () => {
     };
 
     state.addField('text');
+    fixture.detectChanges();
+
+    element.querySelector<HTMLButtonElement>('[aria-label="Field settings"]')!.click();
     fixture.detectChanges();
 
     const requiredButton = element.querySelector<HTMLButtonElement>('.field-settings-actions button[aria-pressed]');
@@ -2659,6 +2795,135 @@ describe('PdfBuilder', () => {
     expect(document.body.classList.contains('ngs-pdf-builder-drag-cursor')).toBe(false);
   });
 
+  it('does not activate a field after dragging it', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const state = component as unknown as {
+      addField: (type: 'text') => void;
+      fields: () => readonly { id: string; x: number; y: number; width: number; height: number }[];
+      selectedFieldId: (() => string | null) & { set: (fieldId: string | null) => void };
+    };
+
+    state.addField('text');
+    state.addField('text');
+    fixture.detectChanges();
+
+    const pageShell = element.querySelector<HTMLElement>('.pdf-page-shell[data-page-number="1"]');
+
+    expect(pageShell).not.toBeNull();
+
+    pageShell!.getBoundingClientRect = () => ({
+      x: 0,
+      y: 0,
+      top: 0,
+      left: 0,
+      right: 595.276,
+      bottom: 841.89,
+      width: 595.276,
+      height: 841.89,
+      toJSON: () => undefined,
+    });
+
+    const [draggedField, selectedField] = state.fields();
+    const overlayField = element.querySelector<HTMLElement>(`[data-field-id="${draggedField.id}"]`);
+
+    expect(overlayField).not.toBeNull();
+
+    state.selectedFieldId.set(selectedField.id);
+    fixture.detectChanges();
+
+    overlayField!.dispatchEvent(new PointerEvent('pointerdown', {
+      bubbles: true,
+      button: 0,
+      clientX: draggedField.x,
+      clientY: draggedField.y,
+      pointerId: 11,
+    }));
+    window.dispatchEvent(new PointerEvent('pointermove', {
+      bubbles: true,
+      clientX: draggedField.x + 48,
+      clientY: draggedField.y + 48,
+      pointerId: 11,
+    }));
+    window.dispatchEvent(new PointerEvent('pointerup', {
+      bubbles: true,
+      clientX: draggedField.x + 48,
+      clientY: draggedField.y + 48,
+      pointerId: 11,
+    }));
+    overlayField!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fixture.detectChanges();
+
+    expect(state.selectedFieldId()).toBe(selectedField.id);
+  });
+
+  it('does not activate a field after resizing it', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const state = component as unknown as {
+      addField: (type: 'text') => void;
+      fields: () => readonly { id: string; x: number; y: number; width: number; height: number }[];
+      selectedFieldId: (() => string | null) & { set: (fieldId: string | null) => void };
+    };
+
+    state.addField('text');
+    state.addField('text');
+    fixture.detectChanges();
+
+    const pageShell = element.querySelector<HTMLElement>('.pdf-page-shell[data-page-number="1"]');
+
+    expect(pageShell).not.toBeNull();
+
+    pageShell!.getBoundingClientRect = () => ({
+      x: 0,
+      y: 0,
+      top: 0,
+      left: 0,
+      right: 595.276,
+      bottom: 841.89,
+      width: 595.276,
+      height: 841.89,
+      toJSON: () => undefined,
+    });
+
+    const [resizedField, selectedField] = state.fields();
+    const overlayField = element.querySelector<HTMLElement>(`[data-field-id="${resizedField.id}"]`);
+
+    expect(overlayField).not.toBeNull();
+
+    state.selectedFieldId.set(selectedField.id);
+    fixture.detectChanges();
+
+    overlayField!.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
+    fixture.detectChanges();
+
+    const handle = overlayField!.querySelector<HTMLElement>('.resize-handle.handle-se');
+
+    expect(handle).not.toBeNull();
+
+    handle!.dispatchEvent(new PointerEvent('pointerdown', {
+      bubbles: true,
+      button: 0,
+      clientX: resizedField.x + resizedField.width,
+      clientY: resizedField.y + resizedField.height,
+      pointerId: 12,
+    }));
+    window.dispatchEvent(new PointerEvent('pointermove', {
+      bubbles: true,
+      clientX: resizedField.x + resizedField.width + 48,
+      clientY: resizedField.y + resizedField.height + 48,
+      pointerId: 12,
+    }));
+    window.dispatchEvent(new PointerEvent('pointerup', {
+      bubbles: true,
+      clientX: resizedField.x + resizedField.width + 48,
+      clientY: resizedField.y + resizedField.height + 48,
+      pointerId: 12,
+    }));
+    overlayField!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fixture.detectChanges();
+
+    expect(state.selectedFieldId()).toBe(selectedField.id);
+  });
+
   it('keeps field settings in the right panel after clicking an already selected field again', async () => {
     const element: HTMLElement = fixture.nativeElement;
     const state = component as unknown as {
@@ -2694,7 +2959,13 @@ describe('PdfBuilder', () => {
     const overlayField = element.querySelector<HTMLElement>(`[data-field-id="${field.id}"]`);
 
     expect(overlayField).not.toBeNull();
-    expect(element.querySelector('.selection-toolbar')).toBeNull();
+    expect(element.querySelector('.selection-toolbar')).not.toBeNull();
+    expect(element.querySelector('.field-settings-panel')).toBeNull();
+    expect(state.fieldSettingsPanelVisible()).toBe(false);
+
+    element.querySelector<HTMLButtonElement>('[aria-label="Field settings"]')!.click();
+    fixture.detectChanges();
+
     expect(element.querySelector('.field-settings-panel')).not.toBeNull();
     expect(state.fieldSettingsPanelVisible()).toBe(true);
 
@@ -2724,7 +2995,7 @@ describe('PdfBuilder', () => {
     await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
     fixture.detectChanges();
 
-    expect(element.querySelector('.selection-toolbar')).toBeNull();
+    expect(element.querySelector('.selection-toolbar')).not.toBeNull();
     expect(element.querySelector('.field-settings-panel')).not.toBeNull();
     expect(state.fieldSettingsPanelVisible()).toBe(true);
   });

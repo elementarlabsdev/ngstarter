@@ -24,7 +24,6 @@ import {
   provideNativeDateAdapter,
 } from '@ngstarter-ui/components/datepicker';
 import { Dialog } from '@ngstarter-ui/components/dialog';
-import { Divider } from '@ngstarter-ui/components/divider';
 import { FormField, IconButtonSuffix, IconPrefix } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
@@ -378,7 +377,6 @@ interface PdfBuilderFieldResize {
     Button,
     Datepicker,
     DatepickerInput,
-    Divider,
     FormField,
     IconButtonSuffix,
     IconPrefix,
@@ -865,7 +863,12 @@ export class PdfBuilder {
       return;
     }
 
-    const scrollRect = scrollElement.getBoundingClientRect();
+    const scrollRect = this.getElementClientRect(scrollElement);
+
+    if (!scrollRect) {
+      return;
+    }
+
     const anchorTop = scrollRect.top + Math.min(160, scrollRect.height * 0.28);
     let nearestPage = this.activePage();
     let nearestDistance = Number.POSITIVE_INFINITY;
@@ -877,7 +880,12 @@ export class PdfBuilder {
         continue;
       }
 
-      const rect = pageShell.getBoundingClientRect();
+      const rect = this.getElementClientRect(pageShell);
+
+      if (!rect) {
+        continue;
+      }
+
       const distance = Math.abs(rect.top - anchorTop);
 
       if (rect.bottom >= scrollRect.top && rect.top <= scrollRect.bottom && distance < nearestDistance) {
@@ -908,7 +916,6 @@ export class PdfBuilder {
       this.activePage.set(field.page);
       this.selectedFieldId.set(field.id);
       this.editingFieldId.set(null);
-      this.openFieldSettingsPanel();
       this.scrollFieldIntoView(field.id);
       setTimeout(() => this.restoreLayerTreeExpansion());
     }
@@ -927,7 +934,6 @@ export class PdfBuilder {
 
     this.selectedFieldId.set(fieldId);
     this.activeCanvasTool.set('select');
-    this.openFieldSettingsPanel();
 
     if (field?.type === 'stamp' && wasSelected && !field.locked) {
       this.openStampDialog(field);
@@ -1106,7 +1112,6 @@ export class PdfBuilder {
     this.editingFieldId.set(null);
     this.activeCanvasTool.set('select');
     this.activePage.set(field.page);
-    this.selectedFieldId.set(field.id);
     this.fieldResize.set({
       fieldId,
       page: field.page,
@@ -1200,6 +1205,10 @@ export class PdfBuilder {
     return field.signer?.fullName.trim() ?? '';
   }
 
+  protected getFieldSignerLabel(field: PdfBuilderField): string {
+    return field.signer?.fullName.trim() || 'Assign recipient';
+  }
+
   protected isSignatureImageValue(value: string): boolean {
     const source = value.trim();
 
@@ -1251,7 +1260,11 @@ export class PdfBuilder {
       return;
     }
 
-    const rect = fieldElement.getBoundingClientRect();
+    const rect = this.getElementClientRect(fieldElement);
+
+    if (!rect) {
+      return;
+    }
 
     this.setCssVar(anchor, '--pdf-builder-date-anchor-left', `${rect.left}px`);
     this.setCssVar(anchor, '--pdf-builder-date-anchor-top', `${rect.top}px`);
@@ -1326,7 +1339,6 @@ export class PdfBuilder {
 
     this.commitFields(fields => [...fields, field]);
     this.selectedFieldId.set(field.id);
-    this.openFieldSettingsPanel();
     this.recordActivity('Field added', `${field.label} placed on Page ${field.page}.`, field.icon);
     setTimeout(() => this.restoreLayerTreeExpansion());
   }
@@ -1481,7 +1493,6 @@ export class PdfBuilder {
     this.activePage.set(field.page);
     this.selectedFieldId.set(field.id);
     this.editingFieldId.set(null);
-    this.openFieldSettingsPanel();
     this.scrollFieldIntoView(field.id);
   }
 
@@ -1875,7 +1886,6 @@ export class PdfBuilder {
     this.commitFields(fields => [...fields, duplicate]);
     this.selectedFieldId.set(duplicate.id);
     this.editingFieldId.set(null);
-    this.openFieldSettingsPanel();
     this.recordActivity('Field duplicated', `${duplicate.label} created.`, duplicate.icon);
   }
 
@@ -1911,6 +1921,27 @@ export class PdfBuilder {
     }
 
     this.updateSelectedField('required', !field.required);
+  }
+
+  protected assignSelectedFieldRecipient(recipient: PdfBuilderRecipient, event?: Event): void {
+    event?.stopPropagation();
+
+    const field = this.selectedField();
+
+    if (!field || field.locked || recipient.disabled) {
+      return;
+    }
+
+    this.updateSelectedField('signer', {
+      id: recipient.id,
+      fullName: recipient.name.trim(),
+      email: recipient.email,
+    });
+    this.recordActivity(
+      'Recipient updated',
+      `${field.label} assigned to ${recipient.name.trim()}.`,
+      'fluent:person-24-regular',
+    );
   }
 
   protected updateSelectedField<K extends keyof PdfBuilderField>(
@@ -1955,7 +1986,6 @@ export class PdfBuilder {
       fields.map(item => item.id === currentField.id ? appliedField : item),
     );
     this.selectedFieldId.set(currentField.id);
-    this.openFieldSettingsPanel();
 
     if (result.type === 'asset') {
       this.stampSelected.emit({ field: appliedField, stamp: result.stamp });
@@ -1992,7 +2022,6 @@ export class PdfBuilder {
       fields.map(item => item.id === currentField.id ? appliedField : item),
     );
     this.selectedFieldId.set(currentField.id);
-    this.openFieldSettingsPanel();
 
     if (result.type === 'asset') {
       this.signatureSelected.emit({ field: appliedField, signature: result.signature });
@@ -2047,7 +2076,6 @@ export class PdfBuilder {
       fields.map(item => item.id === currentField.id ? appliedField : item),
     );
     this.selectedFieldId.set(currentField.id);
-    this.openFieldSettingsPanel();
 
     if (result.type === 'asset') {
       this.initialsSelected.emit({ field: appliedField, initials: result.signature });
@@ -2299,7 +2327,6 @@ export class PdfBuilder {
 
     this.commitFields(fields => [...fields, field]);
     this.selectedFieldId.set(field.id);
-    this.openFieldSettingsPanel();
     this.recordActivity('Field added', `${field.label} placed on Page ${field.page}.`, field.icon);
     setTimeout(() => this.restoreLayerTreeExpansion());
   }
@@ -2372,7 +2399,6 @@ export class PdfBuilder {
       },
     ]);
     this.redoStack.set([]);
-    this.selectedFieldId.set(drag.fieldId);
     this.suppressNextFieldClick(drag.fieldId);
   }
 
@@ -2479,7 +2505,7 @@ export class PdfBuilder {
       },
     ]);
     this.redoStack.set([]);
-    this.selectedFieldId.set(resize.fieldId);
+    this.suppressNextFieldClick(resize.fieldId);
   }
 
   private cancelFieldResize(): void {
@@ -2586,7 +2612,11 @@ export class PdfBuilder {
     }
 
     for (const pageShell of pageShells) {
-      const rect = pageShell.getBoundingClientRect();
+      const rect = this.getElementClientRect(pageShell);
+
+      if (!rect) {
+        continue;
+      }
 
       if (
         clientX < rect.left ||
@@ -2667,6 +2697,24 @@ export class PdfBuilder {
       this.setCssVar(element, '--pdf-builder-field-top', `${field.y * scale.y}px`);
       this.setCssVar(element, '--pdf-builder-field-width', `${field.width * scale.x}px`);
       this.setCssVar(element, '--pdf-builder-field-height', `${field.height * scale.y}px`);
+    }
+
+    for (const element of this.getSelectionToolbarElements()) {
+      const fieldId = element.getAttribute('data-selection-toolbar-field-id');
+      const field = fieldId ? fields.get(fieldId) : null;
+
+      if (!field) {
+        continue;
+      }
+
+      const scale = this.getRenderedPageScale(field.page);
+
+      this.setCssVar(
+        element,
+        '--pdf-builder-toolbar-left',
+        `${(field.x + field.width / 2) * scale.x}px`,
+      );
+      this.setCssVar(element, '--pdf-builder-toolbar-top', `${field.y * scale.y}px`);
     }
   }
 
@@ -2810,12 +2858,15 @@ export class PdfBuilder {
     let top = ghost.clientY;
 
     if (pageShell && ghost.pageX !== null && ghost.pageY !== null) {
-      const rect = pageShell.getBoundingClientRect();
-      const ghostLeft = rect.left + ghost.pageX * scale.x;
-      const ghostTop = rect.top + ghost.pageY * scale.y;
+      const rect = this.getElementClientRect(pageShell);
 
-      left = ghostLeft;
-      top = ghostTop;
+      if (rect) {
+        const ghostLeft = rect.left + ghost.pageX * scale.x;
+        const ghostTop = rect.top + ghost.pageY * scale.y;
+
+        left = ghostLeft;
+        top = ghostTop;
+      }
     }
 
     this.setCssVar(element, '--pdf-builder-ghost-left', `${left}px`);
@@ -2832,9 +2883,9 @@ export class PdfBuilder {
       return { x: scale, y: scale };
     }
 
-    const rect = pageShell.getBoundingClientRect();
+    const rect = this.getElementClientRect(pageShell);
 
-    if (rect.width <= 0 || rect.height <= 0) {
+    if (!rect || rect.width <= 0 || rect.height <= 0) {
       const scale = this.pdfScale();
       return { x: scale, y: scale };
     }
@@ -2849,6 +2900,12 @@ export class PdfBuilder {
     const scale = this.pdfScale();
 
     return { x: scale, y: scale };
+  }
+
+  private getElementClientRect(element: Element): DOMRect | null {
+    return typeof element.getBoundingClientRect === 'function'
+      ? element.getBoundingClientRect()
+      : null;
   }
 
   private schedulePageGeometrySync(): void {
@@ -2928,6 +2985,12 @@ export class PdfBuilder {
 
   private getOverlayFieldElement(fieldId: string): HTMLElement | null {
     return this.elementRef.nativeElement.querySelector<HTMLElement>(`[data-field-id="${fieldId}"]`);
+  }
+
+  private getSelectionToolbarElements(): HTMLElement[] {
+    return Array.from(
+      this.elementRef.nativeElement.querySelectorAll<HTMLElement>('[data-selection-toolbar-field-id]'),
+    );
   }
 
   private getPlacementGhostElement(): HTMLElement | null {

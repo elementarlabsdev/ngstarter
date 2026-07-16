@@ -7266,6 +7266,7 @@
       "cssTokens": [
         "--ngs-button-border-radius",
         "--ngs-button-content-gap",
+        "--ngs-button-font-size",
         "--ngs-button-height",
         "--ngs-button-hover-bg",
         "--ngs-button-outlined-border",
@@ -7299,6 +7300,7 @@
         "--ngs-pdf-viewer-page-padding",
         "--ngs-pdf-viewer-sidebar-width",
         "--ngs-radius-current",
+        "--ngs-radius-sm",
         "--ngs-shadow-lg",
         "--ngs-shadow-sm",
         "--ngs-shadow-xs",

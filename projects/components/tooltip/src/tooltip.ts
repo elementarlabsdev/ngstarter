@@ -134,7 +134,7 @@ export class Tooltip implements OnDestroy {
 
     effect(() => {
       if (this.disabled()) {
-        this.hide(0);
+        this.hideImmediately();
       }
     });
   }
@@ -249,6 +249,25 @@ export class Tooltip implements OnDestroy {
     } else {
       this._hideTimeoutId = setTimeout(handler, 100) as any;
     }
+  }
+
+  hideImmediately(): void {
+    this._isContentHovered = false;
+
+    if (this._hideTimeoutId) {
+      if (isPlatformBrowser(this._platformId)) {
+        window.clearTimeout(this._hideTimeoutId);
+      } else {
+        clearTimeout(this._hideTimeoutId);
+      }
+      this._hideTimeoutId = null;
+    }
+
+    if (this._tooltipInstance) {
+      this._tooltipInstance.hideImmediately();
+    }
+
+    this._detach();
   }
 
   toggle(event?: MouseEvent | TouchEvent): void {

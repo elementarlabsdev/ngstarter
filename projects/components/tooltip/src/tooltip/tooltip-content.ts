@@ -115,6 +115,16 @@ export class TooltipContent implements OnDestroy {
     }
   }
 
+  /**
+   * Hides the tooltip without entering the animated hidden state.
+   */
+  hideImmediately(): void {
+    this._cancelPendingAnimations();
+    this._visibility = 'hidden';
+    this._changeDetectorRef.markForCheck();
+    this._onHide.next();
+  }
+
   /** Returns an observable that notifies when the tooltip has been hidden from view. */
   afterHidden() {
     return this._onHide.asObservable();
@@ -147,7 +157,7 @@ export class TooltipContent implements OnDestroy {
    */
   _handleBodyClick() {
     if (this.isVisible()) {
-      this.hide(0);
+      this.hideImmediately();
     }
   }
 

@@ -10,8 +10,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 760px;
-  color: var(--ngs-color-on-surface);
+  min-height: 560px;
 
   .pdf-builder-shell {
     height: 100%;
@@ -55,6 +54,15 @@
     &__end {
       position: relative;
       z-index: 2;
+    }
+
+    .builder-field-count {
+      flex: none;
+      color: var(--ngs-color-on-surface-variant);
+      font-size: var(--ngs-font-size-sm);
+      font-weight: 500;
+      line-height: 1;
+      white-space: nowrap;
     }
   }
 
@@ -578,6 +586,41 @@
     outline: 0;
   }
 
+  .selection-toolbar {
+    position: absolute;
+    left: var(--pdf-builder-toolbar-left, 50%);
+    top: var(--pdf-builder-toolbar-top, 0);
+    z-index: 5;
+    display: inline-flex;
+    max-width: min(260px, calc(100vw - --spacing(8)));
+    align-items: center;
+    gap: --spacing(1);
+    pointer-events: auto;
+    transform: translate(-50%, calc(-100% - --spacing(2)));
+
+    button[ngsIconButton] {
+      --ngs-button-height: --spacing(7);
+      flex: none;
+    }
+
+    .selection-recipient-trigger {
+      --ngs-button-height: --spacing(7);
+      --ngs-button-padding: 0 --spacing(2.5);
+      --ngs-button-border-radius: var(--ngs-radius-sm);
+      --ngs-button-content-gap: --spacing(1);
+      --ngs-button-font-size: var(--ngs-font-size-xs);
+      max-width: --spacing(32);
+      min-width: 0;
+
+      span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+
   .placement-ghost {
     position: fixed;
     left: var(--pdf-builder-ghost-left, 0);
@@ -1092,14 +1135,6 @@
     overflow: hidden;
   }
 
-  .field-recipients-panel {
-    display: flex;
-    max-height: 62%;
-    min-height: 0;
-    flex-direction: column;
-    border-bottom: 1px solid var(--ngs-color-border);
-  }
-
   .field-settings-header {
     display: flex;
     flex: none;
@@ -1122,66 +1157,8 @@
     }
   }
 
-  .field-recipients-header {
-    display: flex;
-    flex: none;
-    flex-direction: column;
-    gap: --spacing(1);
-    padding: --spacing(5) --spacing(4) --spacing(4);
-
-    h3,
-    p {
-      margin: 0;
-    }
-
-    h3 {
-      color: var(--ngs-color-on-surface);
-      font-size: var(--ngs-font-size-xl);
-      font-weight: 700;
-      line-height: 1.15;
-    }
-
-    p {
-      color: var(--ngs-color-on-surface-variant);
-      font-size: var(--ngs-font-size-sm);
-      font-weight: 400;
-      line-height: 1.35;
-    }
-  }
-
   .field-settings-header {
     justify-content: flex-start;
-  }
-
-  .field-recipients-scroll {
-    position: relative;
-    inset: auto;
-    display: block;
-    flex: 1 1 auto;
-    max-height: --spacing(76);
-    min-height: 0;
-  }
-
-  .field-recipients-list {
-    padding: 0 --spacing(4) --spacing(4);
-  }
-
-  .field-sidebar-actions {
-    display: inline-flex;
-    width: 100%;
-    min-height: --spacing(16);
-    align-items: center;
-    gap: --spacing(2);
-    padding: --spacing(4);
-    border-bottom: 1px solid var(--ngs-color-border);
-    color: var(--ngs-color-on-surface-variant);
-
-    .builder-field-count {
-      font-size: var(--ngs-font-size-sm);
-      font-weight: 500;
-      line-height: 1;
-      white-space: nowrap;
-    }
   }
 
   .field-settings-panel {
