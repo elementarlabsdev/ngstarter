@@ -15,7 +15,6 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Alert } from '@ngstarter-ui/components/alert';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 import { Button } from '@ngstarter-ui/components/button';
-import { Chip } from '@ngstarter-ui/components/chips';
 import { ColorPicker, ColorPickerThumbnail, ColorPickerTriggerForDirective } from '@ngstarter-ui/components/color-picker';
 import { ColorSwitcher } from '@ngstarter-ui/components/color-switcher';
 import {
@@ -51,9 +50,6 @@ import { TimezoneSelect } from '@ngstarter-ui/components/timezone-select';
 import { Timepicker, TimepickerInput, TimepickerToggle } from '@ngstarter-ui/components/timepicker';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
-  File as UploadFile,
-  FileControl,
-  FileList,
   UploadArea,
   UploadAreaDropStateDirective,
   UploadAreaIconDirective,
@@ -98,7 +94,6 @@ const DEFAULT_SIGNATURE_PAD_COLORS = ['#000', '#0059ff', '#ff0000'];
     Alert,
     Avatar,
     Button,
-    Chip,
     ColorPicker,
     ColorPickerThumbnail,
     ColorPickerTriggerForDirective,
@@ -136,9 +131,6 @@ const DEFAULT_SIGNATURE_PAD_COLORS = ['#000', '#0059ff', '#ff0000'];
     TimepickerInput,
     TimepickerToggle,
     Icon,
-    UploadFile,
-    FileControl,
-    FileList,
     UploadArea,
     UploadAreaIconDirective,
     UploadAreaMainStateDirective,
@@ -185,6 +177,7 @@ export class FormBuilderFieldHost {
   protected readonly customLoaded = signal(false);
   protected readonly controlValue = signal<any>(null);
   protected readonly controlStateVersion = signal(0);
+  protected readonly logoUploadLocalPreview = signal('');
   protected readonly textInputType = computed(() => {
     const type = this.field().type;
     return type === 'number' || type === 'email' ? type : 'text';
@@ -319,19 +312,12 @@ export class FormBuilderFieldHost {
       .toUpperCase() || 'LG';
   });
   protected readonly logoUploadImageSrc = computed(() =>
-    readStringProperty(this.logoUploadValue(), ['url', 'src', 'previewUrl', 'imageUrl', 'href'])
+    readStringProperty(this.logoUploadValue(), ['url', 'src', 'previewUrl', 'imageUrl', 'href']) ||
+    this.logoUploadLocalPreview()
   );
   protected readonly logoUploadFileName = computed(() =>
     readStringProperty(this.logoUploadValue(), ['name', 'fileName', 'filename', 'originalName']) || 'Selected logo'
   );
-  protected readonly logoUploadFileSize = computed(() =>
-    formatUploadFileSize(readUnknownProperty(this.logoUploadValue(), ['size', 'fileSize']))
-  );
-  protected readonly logoUploadState = computed(() => {
-    this.controlStateVersion();
-
-    return this.control().pending ? 'uploading' : 'uploaded';
-  });
   protected readonly spacerHeight = computed(() => {
     const height = Number(this.field().settings?.['height'] ?? 24);
     return [8, 16, 24, 32, 48, 64].includes(height) ? height : 24;
@@ -521,6 +507,11 @@ export class FormBuilderFieldHost {
     const fallbackValue = this.field().multiple
       ? event.files
       : event.files[0] ?? null;
+
+    if (this.field().type === 'logo-upload') {
+      this.logoUploadLocalPreview.set(await readFileAsDataUrl(event.files[0]));
+    }
+
     const callback = this.uploadCallback() ?? this.providedUploadCallback;
     let value = fallbackValue;
 
@@ -556,6 +547,7 @@ export class FormBuilderFieldHost {
     }
 
     this.control().setValue(null);
+    this.logoUploadLocalPreview.set('');
     this.clearLogoUploadMaxSizeError();
     this.control().markAsDirty();
     this.control().markAsTouched();
@@ -959,29 +951,17 @@ function readStringProperty(value: unknown, propertyNames: string[]): string {
   return normalizedString(propertyValue);
 }
 
-function formatUploadFileSize(value: unknown): string {
-  if (typeof value === 'string') {
-    return value.trim();
+function readFileAsDataUrl(file: File | undefined): Promise<string> {
+  if (!file || !file.type.startsWith('image/') || typeof FileReader === 'undefined') {
+    return Promise.resolve('');
   }
 
-  if (typeof value !== 'number' || Number.isNaN(value) || value <= 0) {
-    return '';
-  }
-
-  const units = ['B', 'KB', 'MB', 'GB'];
-  let unitIndex = 0;
-  let size = value;
-
-  while (size >= 1024 && unitIndex < units.length - 1) {
-    size /= 1024;
-    unitIndex += 1;
-  }
-
-  const formatted = size >= 10 || unitIndex === 0
-    ? Math.round(size).toString()
-    : size.toFixed(1);
-
-  return `${formatted} ${units[unitIndex]}`;
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '');
+    reader.onerror = () => resolve('');
+    reader.readAsDataURL(file);
+  });
 }
 
 function isNativeFile(value: unknown): value is globalThis.File {

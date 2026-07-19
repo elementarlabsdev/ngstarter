@@ -44,7 +44,7 @@ class FieldHostTestComponent {
     type: 'first',
     label: 'Field'
   });
-  readonly control = new FormControl('');
+  readonly control = new FormControl<any>('');
   readonly definitions = signal<FormBuilderFieldDefinition[]>([]);
 }
 
@@ -104,6 +104,36 @@ describe('FormBuilderFieldHost', () => {
     expect(fixture.nativeElement.querySelector('.second-field')).toBeTruthy();
     expect(fixture.nativeElement.querySelector('.first-field')).toBeFalsy();
   });
+
+  it('switches the logo action between Upload and Remove', async () => {
+    fixture.componentInstance.field.set({
+      id: 'company-logo',
+      name: 'company_logo',
+      type: 'logo-upload',
+      label: 'Company logo'
+    });
+    fixture.componentInstance.control.setValue(null);
+    fixture.detectChanges();
+
+    expect(logoActionText(fixture)).toBe('Upload');
+
+    fixture.componentInstance.control.setValue({
+      name: 'logo.svg',
+      url: 'data:image/svg+xml;base64,PHN2Zy8+'
+    });
+    fixture.detectChanges();
+
+    expect(logoActionText(fixture)).toBe('Remove');
+
+    const removeButton: HTMLButtonElement | null = fixture.nativeElement.querySelector(
+      '.ngs-form-builder-logo-upload-actions button'
+    );
+    removeButton?.click();
+    await settleFixture(fixture);
+
+    expect(fixture.componentInstance.control.value).toBeNull();
+    expect(logoActionText(fixture)).toBe('Upload');
+  });
 });
 
 async function settleFixture<T>(fixture: ComponentFixture<T>): Promise<void> {
@@ -114,4 +144,10 @@ async function settleFixture<T>(fixture: ComponentFixture<T>): Promise<void> {
 
 function customFields<T>(fixture: ComponentFixture<T>): NodeListOf<HTMLElement> {
   return fixture.nativeElement.querySelectorAll('.custom-field');
+}
+
+function logoActionText<T>(fixture: ComponentFixture<T>): string {
+  return fixture.nativeElement
+    .querySelector('.ngs-form-builder-logo-upload-actions button')
+    ?.textContent?.trim() ?? '';
 }

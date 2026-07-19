@@ -64,6 +64,24 @@
   </table>
 </div>
 
+<h3>Upload callback examples</h3>
+<p class="mt-2 text-sm text-neutral-600">
+  Pass one callback to <code>FormRenderer</code>. The callback receives the field definition, so it can return
+  a single logo value for <code>logo-upload</code> and one or many file values for <code>upload</code>.
+</p>
+<div class="my-6 flex flex-col gap-4">
+  <ngs-code-highlighter
+    [code]="uploadCallbackTemplateExample"
+    language="html"
+    title="template.html"
+    showCopyButton/>
+  <ngs-code-highlighter
+    [code]="uploadCallbackTypeScriptExample"
+    language="typescript"
+    title="component.ts"
+    showCopyButton/>
+</div>
+
 <h3>Renderer events</h3>
 <div class="my-6 overflow-hidden rounded-xl border border-muted shadow-sm">
   <table ngs-table [dataSource]="rendererEvents">

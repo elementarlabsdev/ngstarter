@@ -377,8 +377,8 @@
     @case ('logo-upload') {
       <div class="ngs-form-builder-logo-upload-field"
            [class.is-disabled]="uploadDisabled()">
-        <ngs-upload-area ngsUploadTrigger
-                         [accept]="uploadAccept()"
+        <ngs-upload-area [accept]="uploadAccept()"
+                         [allowHover]="false"
                          [multiple]="false"
                          (fileSelected)="onUploadFilesSelected($event)">
           <div class="ngs-form-builder-logo-upload-content" ngsUploadAreaMainState>
@@ -391,15 +391,22 @@
               <strong>{{ logoUploadInstruction() }}</strong>
 
               <div class="ngs-form-builder-logo-upload-actions">
-                <button ngsButton="outlined" type="button" [disabled]="uploadDisabled()">
-                  Choose file
-                </button>
                 @if (hasLogoUploadValue()) {
-                  <button ngsButton="text"
+                  <button ngsButton="outlined"
                           type="button"
                           [disabled]="uploadDisabled()"
                           (click)="clearLogoUpload($event)">
                     Remove
+                  </button>
+                } @else {
+                  <button ngsButton="outlined"
+                          ngsUploadTrigger
+                          type="button"
+                          [accept]="uploadAccept()"
+                          [multiple]="false"
+                          [disabled]="uploadDisabled()"
+                          (fileSelected)="onUploadFilesSelected($event)">
+                    Upload
                   </button>
                 }
               </div>
@@ -417,28 +424,6 @@
         @if (logoUploadRequirementsText(); as requirementsText) {
           <span class="ngs-form-builder-logo-upload-requirements">{{ requirementsText }}</span>
         }
-
-        @if (hasLogoUploadValue()) {
-          <div class="ngs-form-builder-logo-upload-file-row">
-            <ngs-file-list>
-              <ngs-file [name]="logoUploadFileName()"
-                        [size]="logoUploadFileSize()"
-                        [state]="logoUploadState()">
-                <button type="button"
-                        ngs-file-control
-                        aria-label="Remove logo"
-                        [disabled]="uploadDisabled()"
-                        (click)="clearLogoUpload($event)">
-                  <ngs-icon name="fluent:dismiss-24-regular"/>
-                </button>
-              </ngs-file>
-            </ngs-file-list>
-            <ngs-chip appearance="success">
-              Ready
-            </ngs-chip>
-          </div>
-        }
-
         @if (field().hint) {
           <span class="ngs-form-builder-choice-hint">{{ field().hint }}</span>
         }

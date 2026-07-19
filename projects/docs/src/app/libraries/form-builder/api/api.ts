@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 import {
   Cell,
   CellDef,
@@ -15,6 +16,7 @@ import {
 @Component({
   selector: 'app-form-builder-api',
   imports: [
+    CodeHighlighter,
     Table,
     HeaderCellDef,
     HeaderCell,
@@ -30,6 +32,64 @@ import {
   styleUrl: './api.scss'
 })
 export class Api {
+  readonly uploadCallbackTemplateExample = `<ngs-form-renderer
+  [schema]="schema"
+  [uploadCallback]="uploadCallback"
+  [(value)]="value"/>`;
+
+  readonly uploadCallbackTypeScriptExample = `import { inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import {
+  FormBuilderSchema,
+  FormBuilderUploadCallback
+} from '@ngstarter-ui/components/form-builder';
+
+private readonly http = inject(HttpClient);
+
+readonly schema: FormBuilderSchema = {
+  sections: [{
+    id: 'files',
+    title: 'Files',
+    fields: [
+      {
+        id: 'attachments',
+        name: 'attachments',
+        type: 'upload',
+        label: 'Attachments',
+        multiple: true,
+        settings: { accept: 'application/pdf,image/*' }
+      },
+      {
+        id: 'company_logo',
+        name: 'company_logo',
+        type: 'logo-upload',
+        label: 'Company logo'
+      }
+    ]
+  }]
+};
+
+readonly uploadCallback: FormBuilderUploadCallback = async ({ field, files, multiple }) => {
+  const uploadedFiles = await Promise.all(files.map(file => this.uploadFile(file)));
+
+  // The same FormRenderer input handles both built-in upload field types.
+  if (field.type === 'logo-upload') {
+    return uploadedFiles[0] ?? null;
+  }
+
+  return multiple ? uploadedFiles : uploadedFiles[0] ?? null;
+};
+
+private async uploadFile(file: File) {
+  const body = new FormData();
+  body.append('file', file);
+
+  return await firstValueFrom(
+    this.http.post<{ name: string; url: string; size: number }>('/api/uploads', body)
+  );
+}`;
+
   readonly builderInputs = [
     {
       name: 'schema',
@@ -48,12 +108,6 @@ export class Api {
       description: 'Title shown above the field settings inspector.',
       type: 'string',
       default: 'Field properties'
-    },
-    {
-      name: 'uploadCallback',
-      description: 'Optional upload handler used by upload and logo-upload fields. Overrides the global provider callback.',
-      type: 'FormBuilderUploadCallback | null',
-      default: 'undefined'
     }
   ];
 

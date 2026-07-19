@@ -43,7 +43,6 @@ import {
   FormBuilderSection,
   FormBuilderSettingsDefinition,
   FormBuilderStep,
-  FormBuilderUploadCallback,
   FormBuilderValidationRule,
   FormBuilderValidatorDefinition
 } from '../types';
@@ -373,8 +372,6 @@ export class FormBuilder implements OnDestroy {
   readonly paletteTitle = input('Fields');
   readonly inspectorTitle = input('Field properties');
   readonly canvasDropPlaceholderDelay = input(100, { transform: numberAttribute });
-  readonly uploadCallback = input<FormBuilderUploadCallback | null | undefined>(undefined);
-
   readonly fieldSelected = output<FormBuilderFieldChange>();
   readonly fieldAdded = output<FormBuilderFieldChange>();
   readonly fieldRemoved = output<FormBuilderFieldChange>();

@@ -122,19 +122,14 @@
     }
 
     ngs-upload-area {
-      --ngs-upload-area-padding: --spacing(4);
+      --ngs-upload-area-padding: --spacing(4) 0;
       --ngs-upload-area-border-radius: var(--ngs-field-radius);
-      --ngs-upload-area-border: 1px solid var(--ngs-color-outline-variant);
-      --ngs-upload-area-drop-active-border: 1px solid var(--ngs-color-primary);
+      --ngs-upload-area-border: 0;
+      --ngs-upload-area-drop-active-border: 0;
       align-items: flex-start;
       justify-content: flex-start;
-      outline: 1px solid var(--ngs-color-outline-variant);
-      outline-offset: -1px;
+      outline: 0;
       text-align: left;
-    }
-
-    ngs-upload-area.is-drop-active {
-      outline-color: var(--ngs-color-primary);
     }
   }
 
@@ -180,19 +175,6 @@
   .ngs-form-builder-logo-upload-requirements {
     color: var(--ngs-color-on-surface-variant);
     font-size: var(--ngs-font-size-sm);
-  }
-
-  .ngs-form-builder-logo-upload-file-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: --spacing(3);
-    padding-top: --spacing(2);
-    border-top: 1px solid var(--ngs-color-border);
-
-    ngs-file-list {
-      min-width: 0;
-    }
   }
 
   .ngs-form-builder-choice-label {
