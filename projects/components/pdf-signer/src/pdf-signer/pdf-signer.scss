@@ -1,0 +1,472 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-pdf-viewer-sidebar-width: 152px;
+  --ngs-pdf-viewer-page-gap: 24px;
+  --ngs-pdf-viewer-page-padding: 24px;
+
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 560px;
+
+  .pdf-signer-shell {
+    height: 100%;
+    min-height: inherit;
+    overflow: hidden;
+  }
+
+  .pdf-signer-header {
+    min-height: --spacing(14);
+  }
+
+  button[ngsButton].is-disabled,
+  button[ngsIconButton].is-disabled {
+    opacity: 0.48;
+    pointer-events: none;
+  }
+
+  .pdf-signer-workspace {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pdf-viewer-sidebar__page {
+    &.is-active {
+      .pdf-viewer-sidebar__thumb {
+        outline: 2px solid var(--ngs-color-primary);
+      }
+    }
+  }
+
+  .pdf-viewer-sidebar__thumb {
+    background: var(--ngs-color-white, #fff);
+  }
+
+  .next-field-marker {
+    --ngs-button-bg: var(--ngs-color-warning-container);
+    --ngs-button-color: var(--ngs-color-on-warning-container);
+    --ngs-button-hover-bg: color-mix(
+      in srgb,
+      var(--ngs-color-warning-container),
+      var(--ngs-color-warning) 18%
+    );
+    --ngs-button-height: --spacing(9);
+    --ngs-button-padding: 0;
+    --ngs-button-border-radius: 0 var(--ngs-radius-sm) var(--ngs-radius-sm) 0;
+
+    position: absolute;
+    top: 50%;
+    left: 0;
+    z-index: 3;
+    width: --spacing(8);
+    min-width: --spacing(8);
+    border: 1px solid color-mix(in srgb, var(--ngs-color-warning), transparent 45%);
+    box-shadow: var(--ngs-shadow-sm);
+    transform: translateY(-50%);
+
+    ngs-icon {
+      font-size: var(--ngs-font-size-lg);
+    }
+  }
+
+  .page-thumbnail-blank {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--ngs-color-white, #fff);
+  }
+
+  .thumbnail-pdf-viewer {
+    --ngs-pdf-viewer-height: 100%;
+    --ngs-pdf-viewer-min-height: 100%;
+    --ngs-pdf-viewer-page-padding: 0;
+    --ngs-pdf-viewer-page-gap: 0;
+
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .viewer-scrollbar {
+    inset: 0;
+  }
+
+  .viewer-stage {
+    position: relative;
+    box-sizing: border-box;
+    display: grid;
+    gap: var(--ngs-pdf-viewer-page-gap);
+    width: 100%;
+    min-width: calc(var(--pdf-signer-page-width, 814px) + var(--ngs-pdf-viewer-page-padding) * 2);
+    min-height: 100%;
+    padding: var(--ngs-pdf-viewer-page-padding);
+
+    &.is-vertical {
+      grid-auto-flow: row;
+      grid-auto-rows: max-content;
+      align-content: start;
+      justify-items: center;
+    }
+
+    &.is-horizontal {
+      width: max-content;
+      align-content: center;
+      align-items: center;
+      grid-auto-columns: max-content;
+      grid-auto-flow: column;
+      justify-content: start;
+    }
+  }
+
+  .pdf-signer-spread {
+    display: grid;
+    align-items: start;
+    gap: --spacing(4);
+    grid-auto-columns: max-content;
+    grid-auto-flow: column;
+    justify-content: center;
+  }
+
+  .pdf-signer-spread-placeholder {
+    width: var(--pdf-signer-page-width, 814px);
+    height: var(--pdf-signer-page-height, 1151px);
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .pdf-page-shell {
+    position: relative;
+    flex: none;
+    width: var(--pdf-signer-page-width, 814px);
+    height: var(--pdf-signer-page-height, 1151px);
+    margin: 0;
+    overflow: hidden;
+
+    &.is-rotated-90,
+    &.is-rotated-270 {
+      width: var(--pdf-signer-page-height, 1151px);
+      height: var(--pdf-signer-page-width, 814px);
+    }
+
+    &.is-rotated-90,
+    &.is-rotated-180,
+    &.is-rotated-270 {
+      > .embedded-pdf-viewer,
+      > .blank-pdf-page,
+      > .pdf-overlay-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: var(--pdf-signer-page-width, 814px);
+        height: var(--pdf-signer-page-height, 1151px);
+        transform-origin: top left;
+      }
+    }
+
+    &.is-rotated-90 {
+      > .embedded-pdf-viewer,
+      > .blank-pdf-page,
+      > .pdf-overlay-layer {
+        transform: rotate(90deg) translateY(-100%);
+      }
+    }
+
+    &.is-rotated-180 {
+      > .embedded-pdf-viewer,
+      > .blank-pdf-page,
+      > .pdf-overlay-layer {
+        transform: rotate(180deg) translate(-100%, -100%);
+      }
+    }
+
+    &.is-rotated-270 {
+      > .embedded-pdf-viewer,
+      > .blank-pdf-page,
+      > .pdf-overlay-layer {
+        transform: rotate(-90deg) translateX(-100%);
+      }
+    }
+  }
+
+  .embedded-pdf-viewer {
+    --ngs-pdf-viewer-height: var(--pdf-signer-page-height, 1151px);
+    --ngs-pdf-viewer-min-height: var(--pdf-signer-page-height, 1151px);
+    --ngs-pdf-viewer-page-padding: 0;
+    --ngs-pdf-viewer-page-gap: 0;
+
+    display: block;
+    width: var(--pdf-signer-page-width, 814px);
+    height: var(--pdf-signer-page-height, 1151px);
+  }
+
+  .blank-pdf-page {
+    width: var(--pdf-signer-page-width, 814px);
+    height: var(--pdf-signer-page-height, 1151px);
+    background: #fff;
+  }
+
+  ::ng-deep .embedded-pdf-viewer,
+  ::ng-deep .thumbnail-pdf-viewer {
+    .pdf-viewer-panel {
+      border: 0;
+      border-radius: 0;
+      background: var(--ngs-color-surface);
+    }
+
+    .pdf-viewer-body {
+      overflow: hidden;
+    }
+
+    .pdf-viewer-pages {
+      align-content: start;
+      justify-items: center;
+    }
+
+    .pdf-viewer-page__surface {
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+
+  ::ng-deep .thumbnail-pdf-viewer {
+    .pdf-viewer-panel {
+      background: var(--ngs-color-white, #fff);
+    }
+
+    ngs-block-loader,
+    .pdf-viewer-state {
+      display: none;
+    }
+  }
+
+  .pdf-overlay-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .overlay-field {
+    position: absolute;
+    left: var(--pdf-signer-field-left, 0);
+    top: var(--pdf-signer-field-top, 0);
+    box-sizing: border-box;
+    display: flex;
+    width: var(--pdf-signer-field-width, --spacing(44));
+    height: var(--pdf-signer-field-height, --spacing(10));
+    min-width: --spacing(4);
+    min-height: --spacing(4);
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    border: 1px solid color-mix(in srgb, var(--ngs-color-primary), transparent 54%);
+    border-radius: --spacing(1);
+    background: color-mix(in srgb, var(--ngs-color-primary), transparent 92%);
+    color: var(--ngs-color-on-surface);
+    cursor: pointer;
+    overflow: hidden;
+    padding: --spacing(2);
+    pointer-events: auto;
+    text-align: start;
+    transition:
+      background-color 140ms cubic-bezier(0, 0, 0.2, 1),
+      border-color 140ms cubic-bezier(0, 0, 0.2, 1);
+
+    &:focus-visible {
+      outline: 2px solid var(--ngs-color-primary);
+      outline-offset: 2px;
+    }
+
+    &:hover,
+    &.is-selected {
+      border-color: var(--ngs-color-primary);
+      background: color-mix(in srgb, var(--ngs-color-primary), transparent 88%);
+    }
+
+    &.is-filled {
+      background: transparent;
+    }
+
+    &.is-readonly {
+      border-color: var(--ngs-color-border-strong);
+      border-style: dashed;
+      background: color-mix(in srgb, var(--ngs-color-surface), transparent 18%);
+      color: var(--ngs-color-on-surface-variant);
+      cursor: default;
+      opacity: 0.72;
+
+      &:hover {
+        border-color: var(--ngs-color-border-strong);
+        background: color-mix(in srgb, var(--ngs-color-surface), transparent 18%);
+      }
+    }
+  }
+
+  .overlay-slot-primary,
+  .overlay-slot-footer,
+  .overlay-slot-side {
+    align-items: flex-start;
+  }
+
+  .overlay-slot-date,
+  .overlay-slot-signature,
+  .overlay-slot-initials {
+    justify-content: center;
+  }
+
+  .overlay-type-text {
+    align-items: flex-start;
+    padding: --spacing(2.5) --spacing(2) --spacing(1.5);
+
+    .field-value,
+    .text-field-editor {
+      display: block;
+      width: 100%;
+      margin: 0;
+      color: var(--ngs-color-on-surface);
+      font-size: var(--ngs-font-size-md);
+      font-weight: 400;
+      line-height: 1.25;
+      overflow: hidden;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .field-value {
+      &.is-placeholder {
+        color: var(--ngs-color-on-surface-variant);
+      }
+    }
+
+    .text-field-editor {
+      min-height: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
+
+      &:empty::before {
+        color: var(--ngs-color-on-surface-variant);
+        content: attr(data-placeholder);
+        pointer-events: none;
+      }
+    }
+  }
+
+  .overlay-type-variable {
+    border-color: color-mix(in srgb, var(--ngs-color-warning), transparent 30%);
+    background: var(--ngs-color-warning-container);
+    color: var(--ngs-color-on-warning-container);
+
+    .field-badge {
+      color: var(--ngs-color-warning);
+    }
+  }
+
+  .overlay-type-date,
+  .overlay-type-initials {
+    justify-content: center;
+  }
+
+  .overlay-type-signature,
+  .overlay-type-stamp {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: --spacing(3);
+    padding: 0 --spacing(4);
+
+    .field-badge {
+      width: auto;
+      min-height: 0;
+      align-items: center;
+      justify-content: center;
+      gap: --spacing(3);
+    }
+
+    .field-label {
+      display: inline;
+      color: var(--ngs-color-on-surface);
+      font-size: var(--ngs-font-size-md);
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    ngs-icon {
+      flex: none;
+      font-size: var(--ngs-font-size-2xl);
+    }
+  }
+
+  .overlay-type-checkbox {
+    align-items: center;
+    justify-content: center;
+    border-color: var(--ngs-color-border-strong);
+    border-radius: --spacing(0.75);
+    background: var(--ngs-color-surface);
+    padding: 0;
+
+    &.is-filled {
+      border-color: var(--ngs-color-primary);
+      background: var(--ngs-color-primary);
+      color: var(--ngs-color-on-primary);
+    }
+
+    .checkbox-mark {
+      font-size: var(--ngs-font-size-md);
+    }
+  }
+
+  .field-badge {
+    display: inline-flex;
+    min-width: 0;
+    max-width: 100%;
+    align-items: center;
+    gap: --spacing(1.5);
+    color: var(--ngs-color-primary);
+    font-size: var(--ngs-font-size-xs);
+    font-weight: 500;
+  }
+
+  .field-value {
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    color: var(--ngs-color-on-surface);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &.is-placeholder {
+      color: var(--ngs-color-on-surface-variant);
+    }
+  }
+
+  .initials-mark {
+    border-bottom: 2px solid currentColor;
+    font-size: var(--ngs-font-size-lg);
+    font-weight: 500;
+  }
+
+  .field-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
+  .date-picker-anchor {
+    position: fixed;
+    left: var(--pdf-signer-date-anchor-left, -10000px);
+    top: var(--pdf-signer-date-anchor-top, -10000px);
+    z-index: -1;
+    width: var(--pdf-signer-date-anchor-width, --spacing(28));
+    height: var(--pdf-signer-date-anchor-height, --spacing(7));
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+}

@@ -423,7 +423,7 @@
                       (keydown.enter)="fieldSignerTooltip.hideImmediately(); selectField(field.id, $event)"
                       (keydown.space)="$event.preventDefault(); fieldSignerTooltip.hideImmediately(); selectField(field.id, $event)"
                     >
-                      @if ((field.type === 'signature' || field.type === 'initials') && isSignatureImageValue(field.value)) {
+                      @if ((field.type === 'signature' || field.type === 'initials' || field.type === 'stamp') && isSignatureImageValue(field.value)) {
                         <img class="signature-field-image" [src]="field.value" alt="" />
                       } @else if (field.type !== 'checkbox') {
                         <span class="field-badge">
@@ -680,10 +680,6 @@
                         <ngs-icon name="fluent:more-vertical-24-regular" />
                       </button>
                       <ngs-menu #recipientActionsMenu="ngsMenu" xPosition="before">
-                        <button ngs-menu-item type="button" (click)="requestEditRecipientDetails(recipient, $event)">
-                          <ngs-icon name="fluent:edit-24-regular" />
-                          <span>Edit personal details</span>
-                        </button>
                         <button ngs-menu-item type="button" (click)="requestReplaceRecipient(recipient, $event)">
                           <ngs-icon name="fluent:arrow-swap-24-regular" />
                           <span>Replace recipient</span>

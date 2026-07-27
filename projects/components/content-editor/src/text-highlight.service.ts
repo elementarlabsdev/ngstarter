@@ -16,17 +16,17 @@ export class TextHighlightService {
     const selection = window.getSelection();
     const range = this.getCurrentRangeInternal(selection);
     this.savedRange = range ? range.cloneRange() : null;
-    // // console.log('TextHighlightService: Выделение сохранено/очищено.');
+    // // console.log('TextHighlightService: Selection saved/cleared.');
   }
 
   public restoreSelection(): void {
     if (!this.savedRange) {
-      // // console.warn('TextHighlightService: Нет сохраненного выделения для восстановления.');
+      // // console.warn('TextHighlightService: No saved selection to restore.');
       return;
     }
     const selection = window.getSelection();
     if (!selection) {
-      // // console.error('TextHighlightService: Не удалось получить window.getSelection() для восстановления.');
+      // // console.error('TextHighlightService: Failed to get window.getSelection() for restoration.');
       this.savedRange = null;
       return;
     }
@@ -34,13 +34,13 @@ export class TextHighlightService {
       try {
         selection.removeAllRanges();
         selection.addRange(this.savedRange);
-        // // console.log('TextHighlightService: Выделение восстановлено.');
+        // // console.log('TextHighlightService: Selection restored.');
       } catch (e) {
-        // // console.error('TextHighlightService: Ошибка при восстановлении выделения:', e);
+        // // console.error('TextHighlightService: Error restoring selection:', e);
         this.savedRange = null;
       }
     } else {
-      // // console.warn('TextHighlightService: Сохраненный диапазон стал невалидным, восстановление невозможно.');
+      // // console.warn('TextHighlightService: The saved range is no longer valid and cannot be restored.');
       this.savedRange = null;
     }
   }
@@ -61,7 +61,7 @@ export class TextHighlightService {
     const selection = window.getSelection();
     const range = this.getCurrentRangeInternal(selection);
     if (!range || !selection) {
-      // // console.warn('TextHighlightService (wrapSelection): Нет валидного выделения.');
+      // // console.warn('TextHighlightService (wrapSelection): No valid selection.');
       return;
     }
     const normalizedTagName = tagName.toLowerCase();
@@ -74,10 +74,10 @@ export class TextHighlightService {
       const newExactRange = document.createRange();
       newExactRange.selectNodeContents(exactExistingContainer);
       selection.addRange(newExactRange);
-      // // console.log(`TextHighlightService (wrapSelection): Модифицирован существующий элемент <${normalizedTagName}>.`);
+      // // console.log(`TextHighlightService (wrapSelection): Modified existing <${normalizedTagName}> element.`);
     } else {
       this.wrapRange(selection, range, normalizedTagName, styles, classNames, attrs);
-      // // console.log(`TextHighlightService (wrapSelection): Создана новая обертка <${normalizedTagName}>.`);
+      // // console.log(`TextHighlightService (wrapSelection): Created a new <${normalizedTagName}> wrapper.`);
     }
   }
 
@@ -96,7 +96,7 @@ export class TextHighlightService {
     const selection = window.getSelection();
     const range = this.getCurrentRangeInternal(selection);
     if (!range || !selection) {
-      // // console.warn('TextHighlightService (wrapOrSplitInlineSelection): Нет валидного выделения.');
+      // // console.warn('TextHighlightService (wrapOrSplitInlineSelection): No valid selection.');
       return;
     }
     const normalizedTagName = tagName.toLowerCase();
@@ -108,18 +108,18 @@ export class TextHighlightService {
       const newExactRange = document.createRange();
       newExactRange.selectNodeContents(exactContainer);
       selection.addRange(newExactRange);
-      // // console.log(`TextHighlightService (wrapOrSplitInlineSelection): Модифицирован существующий <${normalizedTagName}>.`);
+      // // console.log(`TextHighlightService (wrapOrSplitInlineSelection): Modified existing <${normalizedTagName}>.`);
       return;
     }
 
     const containingAncestor = this.findContainingAncestor(range, normalizedTagName);
     if (containingAncestor && this.isInlineElement(containingAncestor)) {
-      // // console.log(`TextHighlightService (wrapOrSplitInlineSelection): Попытка разделить inline <${normalizedTagName}>.`);
+      // // console.log(`TextHighlightService (wrapOrSplitInlineSelection): Attempting to split inline <${normalizedTagName}>.`);
       this.splitInlineElementAndApplyToSelection(selection, range, containingAncestor, normalizedTagName, styles, classNames, attrs);
       return;
     }
 
-    // // console.log(`TextHighlightService (wrapOrSplitInlineSelection): Создаем новую обертку <${normalizedTagName}>.`);
+    // // console.log(`TextHighlightService (wrapOrSplitInlineSelection): Creating a new <${normalizedTagName}> wrapper.`);
     this.wrapRange(selection, range, normalizedTagName, styles, classNames, attrs);
   }
 
@@ -135,9 +135,9 @@ export class TextHighlightService {
 
     if (elementToUnwrap) {
       this.unwrapElementAndReselect(selection, elementToUnwrap);
-      // // console.log(`TextHighlightService (unwrapSelection): <${normalizedTagName}> развернут.`);
+      // // console.log(`TextHighlightService (unwrapSelection): Unwrapped <${normalizedTagName}>.`);
     } else {
-      // // console.warn(`TextHighlightService (unwrapSelection): Не найден <${normalizedTagName}> для разворачивания.`);
+      // // console.warn(`TextHighlightService (unwrapSelection): No <${normalizedTagName}> found to unwrap.`);
     }
   }
 
@@ -510,14 +510,14 @@ export class TextHighlightService {
     }
 
     const prefixRange = document.createRange();
-    prefixRange.setStart(existingElement, 0); // От начала содержимого existingElement
+    prefixRange.setStart(existingElement, 0); // From the start of existingElement's contents
     try {
       prefixRange.setEnd(selectedRange.startContainer, selectedRange.startOffset);
     } catch (e) {
-      // Если selectedRange.startContainer не является потомком existingElement, это может вызвать ошибку.
-      // В таком случае, префиксной части нет или она не может быть корректно определена этим способом.
+      // If selectedRange.startContainer is not a descendant of existingElement, this may throw an error.
+      // In that case, there is no prefix, or it cannot be determined correctly this way.
       // console.warn("Error setting prefixRange end:", e);
-      prefixRange.setEnd(existingElement, 0); // Схлопываем в начало
+      prefixRange.setEnd(existingElement, 0); // Collapse to the start
     }
 
 
@@ -534,17 +534,17 @@ export class TextHighlightService {
         prefixElementClone.appendChild(prefixFragment);
       } catch(e) {
         // console.error("Error extracting/creating prefix:", e);
-        prefixElementClone = null; // Не удалось создать префикс
+        prefixElementClone = null; // Failed to create the prefix
       }
     }
 
-    // Извлекаем выделенное содержимое ДО работы с суффиксом, так как selectedRange может стать невалидным
+    // Extract the selected content BEFORE processing the suffix because selectedRange may become invalid
     let selectedFragment: DocumentFragment;
     try {
       if (selectedRange.commonAncestorContainer.isConnected && !selectedRange.collapsed) {
         selectedFragment = selectedRange.extractContents();
       } else {
-        selectedFragment = document.createDocumentFragment(); // Пустой, если не удалось извлечь
+        selectedFragment = document.createDocumentFragment(); // Empty if extraction failed
       }
     } catch(e) {
       // console.error("Error extracting selectedFragment:", e);
@@ -553,7 +553,7 @@ export class TextHighlightService {
 
 
     let suffixElementClone: HTMLElement | null = null;
-    // То, что осталось в existingElement после извлечения префикса и выделенной части, - это суффикс
+    // What remains in existingElement after extracting the prefix and selected part is the suffix
     if (existingElement.hasChildNodes()) {
       suffixElementClone = document.createElement(existingElement.tagName);
       for (const attrName in originalElementAttributes) {

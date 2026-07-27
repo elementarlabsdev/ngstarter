@@ -56,7 +56,7 @@
         <div class="flex flex-col gap-3 mt-3" [attr.aria-label]="savedListLabel()">
           @for (signature of data.signatures; track signature.id) {
             <button
-              class="my-signature-option flex w-full items-center gap-4 rounded border border-border bg-surface p-3 text-left transition hover:bg-surface-container-low"
+              class="my-signature-option flex w-full items-center gap-4 rounded-lg border border-border bg-surface p-3 text-left transition hover:bg-surface-container-low"
               type="button"
               [class.border-primary]="selectedSignature()?.id === signature.id"
               [class.bg-primary-container]="selectedSignature()?.id === signature.id"

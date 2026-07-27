@@ -1,0 +1,254 @@
+<ngs-panel class="pdf-signer-shell">
+  <ngs-panel-header class="pdf-signer-header min-w-0 border-b border-border bg-surface" flex>
+    <ngs-toolbar
+      class="flex h-14 w-full min-w-0 items-center gap-4 overflow-visible px-2 text-on-surface-variant"
+      aria-label="PDF signing controls"
+    >
+      <ngs-toolbar-item class="flex min-w-0 flex-none items-center gap-2 pl-4">
+        <span class="truncate text-sm font-medium text-on-surface">{{ documentName() }}</span>
+      </ngs-toolbar-item>
+
+      <ngs-toolbar-spacer />
+
+      <ngs-toolbar-item class="flex flex-none items-center gap-2" aria-label="Page navigation">
+        <button
+          class="size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+          ngsIconButton
+          type="button"
+          aria-label="Previous page"
+          [disabled]="!canGoPrevious()"
+          (click)="previousPage()"
+        >
+          <ngs-icon class="text-2xl" name="fluent:chevron-left-24-regular" />
+        </button>
+        <span class="inline-flex h-9 min-w-16 items-center justify-center gap-2 rounded bg-surface-container-low text-sm font-medium text-on-surface">
+          <span>{{ activePage() }}</span>
+          <span>/</span>
+          <span>{{ pageCount() }}</span>
+        </span>
+        <button
+          class="size-10 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+          ngsIconButton
+          type="button"
+          aria-label="Next page"
+          [disabled]="!canGoNext()"
+          (click)="nextPage()"
+        >
+          <ngs-icon class="text-2xl" name="fluent:chevron-right-24-regular" />
+        </button>
+      </ngs-toolbar-item>
+
+      <ngs-toolbar-spacer />
+
+      <ngs-toolbar-item class="flex min-w-0 flex-none items-center justify-end gap-2 pr-4">
+        <span class="text-sm text-on-surface-variant">
+          {{ completedCurrentSignerFieldCount() }} / {{ currentSignerFieldCount() }} completed
+        </span>
+      </ngs-toolbar-item>
+    </ngs-toolbar>
+  </ngs-panel-header>
+
+  @if (showPageList()) {
+    <ngs-panel-sidebar
+      class="w-[var(--ngs-pdf-viewer-sidebar-width)] min-w-[var(--ngs-pdf-viewer-sidebar-width)] border-r border-border bg-surface"
+    >
+      <div class="pdf-viewer-sidebar flex h-full min-h-0 flex-col gap-2 overflow-auto p-3">
+        <div class="pdf-viewer-sidebar__title px-1 text-xs font-semibold text-on-surface-variant">Pages</div>
+        <div class="pdf-viewer-sidebar__pages flex min-h-0 flex-col gap-2" aria-label="PDF pages">
+          @for (page of pages(); track page.page) {
+            <button
+              type="button"
+              class="pdf-viewer-sidebar__page group flex w-full cursor-pointer flex-col items-stretch gap-1 rounded border border-transparent bg-transparent p-1 text-left text-on-surface-variant focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&.is-active]:text-on-surface"
+              [class.is-active]="page.page === activePage()"
+              [attr.aria-current]="page.page === activePage() ? 'page' : null"
+              [attr.aria-label]="'Open page ' + page.page"
+              [attr.data-ngs-pdf-page-button]="page.page"
+              (click)="selectPage(page.page)"
+            >
+              <span class="pdf-viewer-sidebar__thumb flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded border border-border shadow-xs group-hover:border-border" aria-hidden="true">
+                @if (isSourcePdfPage(page.page)) {
+                  <ngs-pdf-viewer
+                    class="thumbnail-pdf-viewer"
+                    [src]="documentSource()"
+                    [documentName]="documentName()"
+                    [wasmUrl]="wasmUrl"
+                    [page]="getSourcePageNumber(page.page)"
+                    [scale]="0.15"
+                    [renderAll]="false"
+                    [showToolbar]="false"
+                    [showPageList]="false"
+                    [showSearchPanel]="false"
+                    [showAnnotationsPanel]="false"
+                    [enableCommandWheelZoom]="false"
+                  />
+                } @else {
+                  <span class="page-thumbnail-blank"></span>
+                }
+              </span>
+              <span class="pdf-viewer-sidebar__label block truncate text-center text-xs font-medium leading-tight">
+                Page {{ page.page }}
+              </span>
+            </button>
+          }
+        </div>
+      </div>
+    </ngs-panel-sidebar>
+  }
+
+  <ngs-panel-content class="pdf-signer-workspace min-h-0 min-w-0 overflow-hidden bg-surface-container-low">
+    @if (nextIncompleteField(); as nextField) {
+      <button
+        ngsButton="text"
+        type="button"
+        class="next-field-marker"
+        [attr.aria-label]="'Go to next field: ' + nextField.label + ', page ' + nextField.page"
+        [attr.data-next-field-id]="nextField.id"
+        ngsTooltip="Go to next field"
+        ngsTooltipPosition="right"
+        (click)="goToField(nextField, $event)"
+      >
+        <ngs-icon name="fluent:arrow-right-24-regular" />
+      </button>
+    }
+
+    <ngs-scrollbar-area #viewerScrollbar [absolute]="true" class="viewer-scrollbar">
+      <div
+        class="viewer-stage"
+        [class.is-vertical]="scrollLayout() === 'vertical'"
+        [class.is-horizontal]="scrollLayout() === 'horizontal'"
+      >
+        @for (spread of pageSpreads(); track spread.id) {
+          <div class="pdf-signer-spread">
+            @if (spread.leadingPlaceholder) {
+              <div class="pdf-signer-spread-placeholder" aria-hidden="true"></div>
+            }
+
+            @for (page of spread.pages; track page.page) {
+              <div
+                class="pdf-page-shell rounded bg-surface shadow-md"
+                [attr.data-page-number]="page.page"
+                [class.is-active-page]="page.page === activePage()"
+                [class.is-rotated-90]="pageRotation() === 1"
+                [class.is-rotated-180]="pageRotation() === 2"
+                [class.is-rotated-270]="pageRotation() === 3"
+                [attr.aria-label]="'PDF signing page ' + page.page"
+                (click)="activePage.set(page.page); clearSelection()"
+              >
+                @if (isSourcePdfPage(page.page)) {
+                  <ngs-pdf-viewer
+                    class="embedded-pdf-viewer"
+                    [src]="documentSource()"
+                    [documentName]="documentName()"
+                    [wasmUrl]="wasmUrl"
+                    [page]="getSourcePageNumber(page.page)"
+                    [scale]="pdfScale()"
+                    [renderAll]="false"
+                    [showToolbar]="false"
+                    [showPageList]="false"
+                    [showSearchPanel]="false"
+                    [showAnnotationsPanel]="false"
+                    [enableCommandWheelZoom]="false"
+                    (loaded)="onPdfLoaded($event)"
+                  />
+                } @else {
+                  <div class="blank-pdf-page" aria-label="Blank PDF page"></div>
+                }
+
+                <div class="pdf-overlay-layer">
+                  @for (field of pageFields(page.page); track field.id) {
+                    <div
+                      class="overlay-field"
+                      [attr.role]="isFieldInteractive(field) && field.id !== editingFieldId() ? 'button' : null"
+                      [attr.tabindex]="isFieldInteractive(field) && field.id !== editingFieldId() ? 0 : null"
+                      [attr.data-field-id]="field.id"
+                      [attr.data-signer-id]="field.signer?.id ?? null"
+                      [attr.aria-label]="field.label + (isFieldEditable(field) ? '' : ' (read only)')"
+                      [class.is-selected]="field.id === selectedFieldId()"
+                      [class.is-editing]="field.id === editingFieldId()"
+                      [class.is-filled]="isFieldFilled(field)"
+                      [class.is-readonly]="!isFieldEditable(field)"
+                      [class.overlay-slot-primary]="field.slot === 'primary'"
+                      [class.overlay-slot-date]="field.slot === 'date'"
+                      [class.overlay-slot-signature]="field.slot === 'signature'"
+                      [class.overlay-slot-initials]="field.slot === 'initials'"
+                      [class.overlay-slot-checkbox]="field.slot === 'checkbox'"
+                      [class.overlay-slot-comment]="field.slot === 'comment'"
+                      [class.overlay-slot-footer]="field.slot === 'footer'"
+                      [class.overlay-slot-side]="field.slot === 'side'"
+                      [class.overlay-type-text]="field.type === 'text'"
+                      [class.overlay-type-variable]="field.type === 'variable'"
+                      [class.overlay-type-date]="field.type === 'date'"
+                      [class.overlay-type-signature]="field.type === 'signature'"
+                      [class.overlay-type-initials]="field.type === 'initials'"
+                      [class.overlay-type-checkbox]="field.type === 'checkbox'"
+                      [class.overlay-type-stamp]="field.type === 'stamp'"
+                      [ngsTooltip]="getFieldTooltip(field)"
+                      ngsTooltipPosition="above"
+                      [ngsTooltipDisabled]="!getFieldTooltip(field)"
+                      (click)="activateField(field, $event)"
+                      (keydown.enter)="activateField(field, $event)"
+                      (keydown.space)="$event.preventDefault(); activateField(field, $event)"
+                    >
+                      @if (field.type === 'checkbox') {
+                        @if (isCheckboxChecked(field)) {
+                          <ngs-icon class="checkbox-mark" name="fluent:checkmark-16-regular" />
+                        }
+                      } @else if (
+                        (field.type === 'signature' || field.type === 'initials' || field.type === 'stamp') &&
+                        isImageValue(field.value)
+                      ) {
+                        <img class="field-image" [src]="field.value" alt="" />
+                      } @else if (field.type === 'text' && field.id === editingFieldId() && isFieldEditable(field)) {
+                        <span
+                          class="text-field-editor"
+                          contenteditable="true"
+                          spellcheck="false"
+                          [attr.data-text-editor-for]="field.id"
+                          [attr.data-placeholder]="textFieldPlaceholder"
+                          aria-label="Text field value"
+                          (click)="$event.stopPropagation()"
+                          (input)="updateTextFieldValueFromEditor(field.id, $any($event.target))"
+                          (blur)="finishTextEditing(field.id)"
+                          (keydown)="$event.stopPropagation()"
+                          (keydown.escape)="finishTextEditing(field.id)"
+                        ></span>
+                      } @else if (field.type === 'text') {
+                        <span class="field-value" [class.is-placeholder]="!field.value.trim()">
+                          {{ getFieldDisplayValue(field) }}
+                        </span>
+                      } @else {
+                        <span class="field-badge">
+                          @if (field.type === 'initials') {
+                            <span class="initials-mark" aria-hidden="true">IN</span>
+                          } @else if (field.type !== 'variable' || !field.binding) {
+                            <ngs-icon [name]="field.icon" />
+                          }
+                          <span
+                            class="field-value"
+                            [class.is-placeholder]="!field.value.trim()"
+                          >
+                            {{ getFieldDisplayValue(field) }}
+                          </span>
+                        </span>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </ngs-scrollbar-area>
+
+    <input
+      class="date-picker-anchor"
+      readonly
+      tabindex="-1"
+      aria-hidden="true"
+      [ngsDatepicker]="dateFieldPicker"
+      #dateFieldInput="ngsDatepickerInput"
+    />
+    <ngs-datepicker #dateFieldPicker />
+  </ngs-panel-content>
+</ngs-panel>

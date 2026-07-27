@@ -764,7 +764,16 @@ Typography:
   exports: `PdfBuilder`, `PdfBuilderCanvasTool`, `PdfBuilderDrawnSignatureUploadCallback`, `PdfBuilderDrawnSignatureUploadContext`, `PdfBuilderField`, `PdfBuilderFieldSigner`, `PdfBuilderFieldSlot`, `PdfBuilderFieldType`, `PdfBuilderInitialsAsset`, `PdfBuilderInitialsImageUploadCallback`, `PdfBuilderInitialsImageUploadContext`, `PdfBuilderInitialsSelection`
   inputs: `annotations`, `drawnSignatureUploadCallback`, `initialsImageUploadCallback`, `recipients`, `schema`, `signatureImageUploadCallback`, `signers`, `stamps`, `uploadedInitials`, `uploadedSignatures`
   outputs: `addRecipient`, `createBlankPdf`, `createRecipientContact`, `editRecipientDetails`, `exportPdf`, `initialsSelected`, `initialsTyped`, `initialsUploaded`, `recipientSearchChanged`, `recipientSelected`, `removeRecipient`, `replaceRecipient`, `schemaChange`, `signatureDrawn`, `signatureSelected`, `signatureTyped`, `signatureUploaded`, `stampSelected`, `stampUploaded`
-  tokens: `--ngs-button-border-radius`, `--ngs-button-content-gap`, `--ngs-button-font-size`, `--ngs-button-height`, `--ngs-button-hover-bg`, `--ngs-button-outlined-border`, `--ngs-button-outlined-color`, `--ngs-button-padding`, `--ngs-color-border`, `--ngs-color-border-strong`, `--ngs-color-danger`, `--ngs-color-on-primary-container`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-on-warning-container`, `--ngs-color-primary`
+  tokens: `--ngs-button-bg`, `--ngs-button-border-radius`, `--ngs-button-content-gap`, `--ngs-button-font-size`, `--ngs-button-height`, `--ngs-button-hover-bg`, `--ngs-button-outlined-border`, `--ngs-button-outlined-color`, `--ngs-button-padding`, `--ngs-color-border`, `--ngs-color-border-strong`, `--ngs-color-danger`, `--ngs-color-on-primary-container`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-on-warning-container`
+- pdf-signer: `@ngstarter-ui/components/pdf-signer` docs: /libraries/pdf-signer
+  purpose: The NgStarter Angular PDF Signer renders a prepared PDF Builder schema as a signing workspace.
+  use when: Choose Pdf Signer when the workflow matches examples such as PDF Signer, Basic pdf signer.
+  example topics: PDF Signer, Basic pdf signer
+  selectors: `ngs-pdf-signer`
+  exports: `PdfSigner`, `PdfSignerFieldValueChange`
+  inputs: `drawnSignatureUploadCallback`, `initialsImageUploadCallback`, `schema`, `showOtherSignerFields`, `showPageList`, `signatureImageUploadCallback`, `signer`, `stamps`, `uploadedInitials`, `uploadedSignatures`
+  outputs: `fieldValueChange`, `initialsSelected`, `initialsTyped`, `initialsUploaded`, `schemaChange`, `signatureDrawn`, `signatureSelected`, `signatureTyped`, `signatureUploaded`, `stampSelected`, `stampUploaded`
+  tokens: `--ngs-button-bg`, `--ngs-button-border-radius`, `--ngs-button-color`, `--ngs-button-height`, `--ngs-button-hover-bg`, `--ngs-button-padding`, `--ngs-color-border-strong`, `--ngs-color-on-primary`, `--ngs-color-on-surface`, `--ngs-color-on-surface-variant`, `--ngs-color-on-warning-container`, `--ngs-color-primary`, `--ngs-color-surface`, `--ngs-color-warning`, `--ngs-color-warning-container`, `--ngs-font-size-lg`
 - pdf-viewer: `@ngstarter-ui/components/pdf-viewer` docs: /libraries/pdf-viewer
   purpose: Import PDF Viewer from &#64;ngstarter-ui/components/pdf-viewer .
   use when: Choose Pdf Viewer when the workflow matches examples such as Basic pdf viewer.

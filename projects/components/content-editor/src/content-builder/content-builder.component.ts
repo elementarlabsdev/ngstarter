@@ -589,7 +589,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     }
     // Initial resolve after view init
     this._resolvedScrollContainer = this._computeScrollContainer();
-    // Привязываем подписку на скролл к текущему контейнеру
+    // Bind the scroll subscription to the current container
     this._rebindScrollListener();
 
     // Watch for changes of the input selector and recompute when it changes.
@@ -598,7 +598,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
       this._scrollEffect = effect(() => {
         const _selector = this.scrollContainer();
         this._resolvedScrollContainer = this._computeScrollContainer();
-        // Перепривязка слушателя при смене контейнера
+        // Rebind the listener when the container changes
         this._rebindScrollListener();
       });
     });
@@ -669,7 +669,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     if (isPlatformServer(this._platformId)) {
       return;
     }
-    // Отписываемся от предыдущего контейнера, если был
+    // Unsubscribe from the previous container, if any
     if (this._scrollBindSub) {
       try {
         this._scrollBindSub.unsubscribe();
@@ -681,7 +681,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     if (!container) {
       return;
     }
-    // Формируем источник скролла
+    // Create the scroll source
     const getTop = () => {
       if (container instanceof Window) {
         return container.scrollY || (container as any).pageYOffset || 0;
@@ -694,13 +694,13 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
       startWith(getTop()),
       distinctUntilChanged(),
     );
-    // Подписка: проксируем значения в общий Subject
+    // Subscribe and forward values to the shared Subject
     this._scrollBindSub = source$.subscribe(top => {
       this._scrollSubject.next(top);
     });
   }
 
-  // удалён дубликат ngOnDestroy — см. реализацию в конце класса
+  // Duplicate ngOnDestroy removed; see the implementation at the end of the class
 
   appendBlock(type: string, focus: boolean = true) {
     this.insertBlock(type, this._content().length, {}, focus);

@@ -1077,6 +1077,26 @@ export class App implements OnInit {
       ]
     },
     {
+      key: 'pdf-signer',
+      type: 'group',
+      name: 'PDF Signer',
+      icon: 'fluent:signature-24-regular',
+      children: [
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Overview',
+          link: '/libraries/pdf-signer/overview'
+        },
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Basic Example',
+          link: '/libraries/pdf-signer/basic-example'
+        },
+      ]
+    },
+    {
       key: 'video-player',
       type: 'group',
       name: 'Video Player',

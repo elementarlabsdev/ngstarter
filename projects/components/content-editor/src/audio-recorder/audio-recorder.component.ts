@@ -116,7 +116,7 @@ export class AudioRecorderComponent implements OnInit, OnDestroy {
     this.recognitionState.set(this.recorder.getRecognitionState());
   }
 
-  // ngOnChanges не используется для input() сигналов
+  // ngOnChanges is not used for input() signals
 
   ngOnDestroy(): void {
     this.recorder?.cleanup();
@@ -125,15 +125,15 @@ export class AudioRecorderComponent implements OnInit, OnDestroy {
   private insertTextAtCursor(textChunk: string): void {
     if (!this.insertAtCursor()) return;
 
-    const activeElement = document.activeElement as HTMLElement | null; // Типизируем как HTMLElement
+    const activeElement = document.activeElement as HTMLElement | null; // Cast as HTMLElement
     if (!activeElement) return;
 
     const trimmedText = textChunk.trim();
     if (!trimmedText) return;
-    // Добавляем пробел в начале, если перед курсором не пробел, и всегда в конце
-    const textToInsert = ' ' + trimmedText + ' '; // Упрощенное добавление пробелов
+    // Add a leading space if the character before the cursor is not a space, and always add a trailing space
+    const textToInsert = ' ' + trimmedText + ' '; // Simplified space insertion
 
-    // --- Обработка Input и Textarea ---
+    // --- Input and Textarea handling ---
     if (activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement) {
       const inputElement = activeElement;
       const start = inputElement.selectionStart;
@@ -142,7 +142,7 @@ export class AudioRecorderComponent implements OnInit, OnDestroy {
       if (start === null || end === null) return;
 
       const originalValue = inputElement.value;
-      // Умное добавление пробела в начале
+      // Smart leading-space insertion
       const smartPrefix = (start > 0 && originalValue[start - 1] !== ' ') ? ' ' : '';
       const textWithSmartSpace = smartPrefix + trimmedText + ' ';
 
@@ -156,18 +156,18 @@ export class AudioRecorderComponent implements OnInit, OnDestroy {
         inputElement.dispatchEvent(new Event('input', { bubbles: true }));
         console.log(`Inserted text into input/textarea: "${textWithSmartSpace}"`);
       });
-      inputElement.focus(); // Важно вернуть фокус
+      inputElement.focus(); // Restoring focus is important
     }
-    // --- Обработка ContentEditable ---
+    // --- ContentEditable handling ---
     else if (activeElement.isContentEditable) {
       const selection = window.getSelection();
       if (selection && selection.rangeCount > 0) {
-        // Убедимся, что выделение находится внутри активного элемента
+        // Ensure the selection is inside the active element
         if (activeElement.contains(selection.anchorNode) && activeElement.contains(selection.focusNode)) {
           const range = selection.getRangeAt(0);
-          range.deleteContents(); // Удаляем выделенный текст, если есть
+          range.deleteContents(); // Delete the selected text, if any
 
-          // Добавляем пробел в начале, если нужно
+          // Add a leading space if needed
           const previousCharRange = document.createRange();
           previousCharRange.setStart(range.startContainer, Math.max(0, range.startOffset - 1));
           previousCharRange.setEnd(range.startContainer, range.startOffset);
@@ -177,18 +177,18 @@ export class AudioRecorderComponent implements OnInit, OnDestroy {
           const textNode = document.createTextNode(textWithSmartSpace);
           range.insertNode(textNode);
 
-          // Перемещаем курсор в конец вставленного текста
+          // Move the cursor to the end of the inserted text
           range.setStartAfter(textNode);
-          range.collapse(true); // Collapse(true) ставит курсор в начало диапазона (т.е. после textNode)
+          range.collapse(true); // collapse(true) places the cursor at the start of the range (that is, after textNode)
 
-          // Обновляем выделение
+          // Update the selection
           selection.removeAllRanges();
           selection.addRange(range);
 
           console.log(`Inserted text into contenteditable: "${textWithSmartSpace}"`);
 
-          // Диспатчим событие input для contenteditable, чтобы триггерить возможные обработчики
-          // (хотя стандартно они могут не реагировать как на input/textarea)
+          // Dispatch an input event for contenteditable to trigger any registered handlers
+          // (although they may not react the same way as they do for input/textarea by default)
           activeElement.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
 
         } else {
@@ -197,7 +197,7 @@ export class AudioRecorderComponent implements OnInit, OnDestroy {
       } else {
         console.warn("Cannot get valid selection for contenteditable element.");
       }
-      activeElement.focus(); // Важно вернуть фокус
+      activeElement.focus(); // Restoring focus is important
     } else {
       console.log("No suitable input, textarea, or contenteditable element focused.");
     }
@@ -231,13 +231,13 @@ export class AudioRecorderComponent implements OnInit, OnDestroy {
       this.interimTranscript.set('');
       this.recognitionError.set(null);
       this.recognitionState.set(this.recorder?.getRecognitionState() ?? 'idle');
-      this.insertTextAtCursor(result.transcript); // Вставляем финальный кусок
+      this.insertTextAtCursor(result.transcript); // Insert the final segment
     };
     this.recorder.setOnRecognitionResult(handleFinalResult);
 
     const handleInterimResult: RecognitionResultHandler = (result) => {
       this.interimTranscript.set(result.transcript);
-      // Не вставляем промежуточные результаты
+      // Do not insert interim results
     };
     this.recorder.setOnRecognitionInterimResult(handleInterimResult);
 
@@ -279,14 +279,14 @@ export class AudioRecorderComponent implements OnInit, OnDestroy {
     this.errorMessage.set(null);
     this.recognitionError.set(null);
     this.audioURL.set(null);
-    this.finalTranscript.set(''); // Сбрасываем при старте
+    this.finalTranscript.set(''); // Reset on start
     this.interimTranscript.set('');
     this.recordingState.set('recording');
     try {
       if (this.recorder.getRecognitionLanguage() !== this.recognitionLang()) {
         this.recorder.setRecognitionLanguage(this.recognitionLang());
       }
-      this.recorder.clearTranscript(); // Очищаем историю в библиотеке
+      this.recorder.clearTranscript(); // Clear the library's transcript history
       await this.recorder.start();
       this.recordingState.set(this.recorder.getState());
     } catch (error) {
@@ -310,7 +310,7 @@ export class AudioRecorderComponent implements OnInit, OnDestroy {
       if (!this.errorMessage()) this.errorMessage.set(`Error stopping recording: ${message}`);
       if (!this.recognitionError()) this.recognitionError.set(`Error stopping recognition: ${message}`);
       this.interimTranscript.set('');
-      // Финальный транскрипт не сбрасываем при ошибке стопа
+      // Do not reset the final transcript if stopping fails
     }
   }
 

@@ -1,0 +1,26 @@
+<app-page>
+  <h1 appPageTitle>PDF Signer</h1>
+  <div appPageContent>
+    <main class="mb-10">
+      <p class="docs-seo-intro mb-6 text-base leading-7 text-neutral-600">
+        The NgStarter Angular PDF Signer renders a prepared PDF Builder schema as a signing
+        workspace. It keeps field positions fixed and lets only the supplied signer fill fields
+        assigned to them.
+      </p>
+
+      <p class="mb-6">
+        Import <code>PdfSigner</code> from
+        <code>&#64;ngstarter-ui/components/pdf-signer</code>. Pass the prepared
+        <code>schema</code>, the current <code>signer</code>, and use
+        <code>showOtherSignerFields</code> to show read-only fields for other signers or hide them.
+      </p>
+
+      <ngs-playground
+        exampleUrl="_docs/libraries/pdf-signer/_examples"
+        exampleName="basic-pdf-signer-example"
+      >
+        <app-basic-pdf-signer-example />
+      </ngs-playground>
+    </main>
+  </div>
+</app-page>

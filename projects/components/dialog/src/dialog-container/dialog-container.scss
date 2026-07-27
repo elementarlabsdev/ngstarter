@@ -36,6 +36,8 @@
       display: none;
     }
 
+    width: max-content !important;
+    height: max-content !important;
     position: absolute;
     right: --spacing(2);
     top: --spacing(2);

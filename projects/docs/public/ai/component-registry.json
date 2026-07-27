@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate-ai-metadata.mjs",
   "package": "@ngstarter-ui/components",
   "description": "AI-readable registry for NgStarter UI Angular secondary entry points.",
-  "componentCount": 127,
+  "componentCount": 128,
   "conventions": {
     "importPattern": "@ngstarter-ui/components/<component>",
     "selectorPrefix": "ngs",
@@ -7264,6 +7264,7 @@
         "stampUploaded"
       ],
       "cssTokens": [
+        "--ngs-button-bg",
         "--ngs-button-border-radius",
         "--ngs-button-content-gap",
         "--ngs-button-font-size",
@@ -7307,6 +7308,94 @@
         "--ngs-state-focus-ring",
         "--ngs-tab-label-height",
         "--ngs-tree-node-gap"
+      ],
+      "example": null
+    },
+    {
+      "name": "pdf-signer",
+      "title": "Pdf Signer",
+      "overviewName": "PDF Signer",
+      "category": "libraries",
+      "package": "@ngstarter-ui/components",
+      "importPath": "@ngstarter-ui/components/pdf-signer",
+      "publicApi": "projects/components/pdf-signer/public-api.ts",
+      "sourceRoot": "projects/components/pdf-signer/src",
+      "docsPath": "/libraries/pdf-signer",
+      "docsOverviewSource": "projects/docs/src/app/libraries/pdf-signer/overview/overview.html",
+      "purpose": "The NgStarter Angular PDF Signer renders a prepared PDF Builder schema as a signing workspace.",
+      "useWhen": "Choose Pdf Signer when the workflow matches examples such as PDF Signer, Basic pdf signer.",
+      "exampleTopics": [
+        "PDF Signer",
+        "Basic pdf signer"
+      ],
+      "minimalExample": "<div class=\"mb-4 flex items-center gap-3\">\n  <button\n    ngsButton=\"outlined\"\n    type=\"button\"\n    (click)=\"showOtherSignerFields.set(!showOtherSignerFields())\"\n  >\n    {{ showOtherSignerFields() ? 'Hide other signer fields' : 'Show other signer fields' }}\n  </button>\n</div>\n<ngs-pdf-signer\n  class=\"block h-[720px]\"\n  [schema]=\"schema()\"\n  [signer]=\"currentSigner\"\n  [showOtherSignerFields]=\"showOtherSignerFields()\"\n  [stamps]=\"stamps\"\n  [uploadedSignatures]=\"uploadedSignatures\"\n  [uploadedInitials]=\"uploadedInitials\"\n  (schemaChange)=\"schema.set($event)\"\n/>",
+      "exampleFiles": [
+        {
+          "name": "basic-pdf-signer-example",
+          "title": "Basic pdf signer",
+          "file": "projects/docs/src/app/libraries/pdf-signer/_examples/basic-pdf-signer-example/basic-pdf-signer-example.html",
+          "source": "<div class=\"mb-4 flex items-center gap-3\">\n  <button\n    ngsButton=\"outlined\"\n    type=\"button\"\n    (click)=\"showOtherSignerFields.set(!showOtherSignerFields())\"\n  >\n    {{ showOtherSignerFields() ? 'Hide other signer fields' : 'Show other signer fields' }}\n  </button>\n</div>\n<ngs-pdf-signer\n  class=\"block h-[720px]\"\n  [schema]=\"schema()\"\n  [signer]=\"currentSigner\"\n  [showOtherSignerFields]=\"showOtherSignerFields()\"\n  [stamps]=\"stamps\"\n  [uploadedSignatures]=\"uploadedSignatures\"\n  [uploadedInitials]=\"uploadedInitials\"\n  (schemaChange)=\"schema.set($event)\"\n/>"
+        }
+      ],
+      "previewAsset": null,
+      "selectors": [
+        "ngs-pdf-signer"
+      ],
+      "exportedSymbols": [
+        "PdfSigner",
+        "PdfSignerFieldValueChange"
+      ],
+      "inputs": [
+        "drawnSignatureUploadCallback",
+        "initialsImageUploadCallback",
+        "schema",
+        "showOtherSignerFields",
+        "showPageList",
+        "signatureImageUploadCallback",
+        "signer",
+        "stamps",
+        "uploadedInitials",
+        "uploadedSignatures"
+      ],
+      "outputs": [
+        "fieldValueChange",
+        "initialsSelected",
+        "initialsTyped",
+        "initialsUploaded",
+        "schemaChange",
+        "signatureDrawn",
+        "signatureSelected",
+        "signatureTyped",
+        "signatureUploaded",
+        "stampSelected",
+        "stampUploaded"
+      ],
+      "cssTokens": [
+        "--ngs-button-bg",
+        "--ngs-button-border-radius",
+        "--ngs-button-color",
+        "--ngs-button-height",
+        "--ngs-button-hover-bg",
+        "--ngs-button-padding",
+        "--ngs-color-border-strong",
+        "--ngs-color-on-primary",
+        "--ngs-color-on-surface",
+        "--ngs-color-on-surface-variant",
+        "--ngs-color-on-warning-container",
+        "--ngs-color-primary",
+        "--ngs-color-surface",
+        "--ngs-color-warning",
+        "--ngs-color-warning-container",
+        "--ngs-font-size-lg",
+        "--ngs-font-size-md",
+        "--ngs-font-size-xs",
+        "--ngs-pdf-viewer-height",
+        "--ngs-pdf-viewer-min-height",
+        "--ngs-pdf-viewer-page-gap",
+        "--ngs-pdf-viewer-page-padding",
+        "--ngs-pdf-viewer-sidebar-width",
+        "--ngs-radius-sm",
+        "--ngs-shadow-sm"
       ],
       "example": null
     },

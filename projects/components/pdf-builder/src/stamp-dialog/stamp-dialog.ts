@@ -9,13 +9,6 @@ import {
   DialogTitle,
 } from '@ngstarter-ui/components/dialog';
 import { Icon } from '@ngstarter-ui/components/icon';
-import {
-  ListItemAvatar,
-  ListItemLine,
-  ListItemTitle,
-  ListOption,
-  SelectionList,
-} from '@ngstarter-ui/components/list';
 import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import {
   UploadAllowedTypes,
@@ -47,11 +40,6 @@ export type PdfBuilderStampDialogResult =
     DialogContent,
     DialogTitle,
     Icon,
-    ListItemAvatar,
-    ListItemLine,
-    ListItemTitle,
-    ListOption,
-    SelectionList,
     Tab,
     TabGroup,
     UploadAllowedTypes,
@@ -71,6 +59,9 @@ export class PdfBuilderStampDialog {
   protected readonly data = inject<PdfBuilderStampDialogData>(DIALOG_DATA);
   protected readonly selectedStamp = signal<PdfBuilderStampAsset | null>(null);
   protected readonly selectedFile = signal<File | null>(null);
+  protected readonly savedStamps = computed(() =>
+    this.data.stamps.filter(stamp => !!this.getStampAssetImage(stamp)),
+  );
   protected readonly canApply = computed(() => !!this.selectedStamp() || !!this.selectedFile());
 
   protected selectStamp(stamp: PdfBuilderStampAsset): void {
@@ -81,6 +72,10 @@ export class PdfBuilderStampDialog {
   protected handleFileSelected(event: UploadFileSelectedEvent): void {
     this.selectedFile.set(event.files[0] ?? null);
     this.selectedStamp.set(null);
+  }
+
+  protected getStampAssetImage(stamp: PdfBuilderStampAsset): string {
+    return stamp.dataUrl?.trim() || stamp.imageUrl?.trim() || '';
   }
 
   protected apply(): void {

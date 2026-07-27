@@ -228,7 +228,7 @@
               [attr.aria-label]="'Open page ' + pageItem.pageNumber"
               [attr.data-ngs-pdf-page-button]="pageItem.pageNumber"
               (click)="setPage(pageItem.pageNumber)">
-              <span class="pdf-viewer-sidebar__thumb flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded border border-border bg-surface shadow-xs group-hover:border-border" aria-hidden="true">
+              <span class="pdf-viewer-sidebar__thumb flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded border border-border shadow-xs group-hover:border-border" aria-hidden="true">
                 @if (pageItem.thumbnail; as thumbnail) {
                   <img
                     class="block h-full w-full select-none object-contain"

@@ -100,7 +100,7 @@
     user-select: none;
   }
 
-  /* Показываем ручку, когда на родительской ячейке есть класс */
+  /* Show the handle when the parent cell has the class */
   table[ngsResizableTable] th.resizable-hover-handle::after,
   table[ngsResizableTable] td.resizable-hover-handle::after {
     opacity: 1;

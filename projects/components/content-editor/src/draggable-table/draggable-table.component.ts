@@ -90,7 +90,7 @@ export class DraggableTableComponent implements OnInit, AfterViewInit, OnDestroy
   private handlerOffset = -9;
   private indicatorThickness = 3;
   private suppressResetTimeoutId: any = null;
-  private scrollContainerRef: Element | Window | null = null; // оставлено для обратной совместимости, не используется напрямую
+  private scrollContainerRef: Element | Window | null = null; // Kept for backward compatibility; not used directly
   private scrollSub: Subscription | null = null;
   @HostBinding('class.draggable-table-host') hostClass = true;
 

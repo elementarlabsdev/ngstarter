@@ -48,7 +48,7 @@ export class ResizableTableDirective implements OnInit, AfterViewInit, OnDestroy
 
   private destroy$ = new Subject<void>();
   private hideHandleDebounced: () => void;
-  private syncColumnsDebounced: () => void; // Debounce для синхронизации колонок
+  private syncColumnsDebounced: () => void; // Debounce column synchronization
 
   private listeners: (() => void)[] = [];
   private observer: MutationObserver | null = null;
@@ -103,7 +103,7 @@ export class ResizableTableDirective implements OnInit, AfterViewInit, OnDestroy
     this.cleanupWrapperAndHandle();
   }
 
-  private checkTableLayout(): void { /* ... как раньше ... */
+  private checkTableLayout(): void { /* ... as before ... */
     if (getComputedStyle(this.table).tableLayout !== 'fixed') {
       console.warn('ResizableTableDirective: table-layout: fixed is highly recommended.');
       this.renderer.setStyle(this.table, 'table-layout', 'fixed');
@@ -117,7 +117,7 @@ export class ResizableTableDirective implements OnInit, AfterViewInit, OnDestroy
     if (firstDataRow) {
       requiredColumnCount = firstDataRow.cells.length;
     } else {
-      // Если tbody пуст, можно попробовать определить по thead, если он есть
+      // If tbody is empty, try determining the column count from thead, if present
       const firstHeadRow = this.table.querySelector('thead > tr:first-child') as HTMLTableRowElement | null;
 
       if (firstHeadRow) {
@@ -220,7 +220,7 @@ export class ResizableTableDirective implements OnInit, AfterViewInit, OnDestroy
     this.resizeHandle = null;
   }
 
-  private cleanupWrapperAndHandleOnError(): void { /* ... как раньше ... */
+  private cleanupWrapperAndHandleOnError(): void { /* ... as before ... */
     if (this.wrapper && this.table.parentNode === this.wrapper) {
       const parent = this.wrapper.parentNode;
       if(parent) {

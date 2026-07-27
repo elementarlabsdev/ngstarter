@@ -604,6 +604,7 @@
     }
 
     .selection-recipient-trigger {
+      --ngs-button-bg: var(--ngs-color-surface);
       --ngs-button-height: --spacing(7);
       --ngs-button-padding: 0 --spacing(2.5);
       --ngs-button-border-radius: var(--ngs-radius-sm);

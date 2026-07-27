@@ -727,13 +727,11 @@ describe('PdfBuilder', () => {
     subscription.unsubscribe();
   });
 
-  it('opens recipient actions menu and emits recipient action outputs', () => {
+  it('opens recipient actions menu without personal details and emits the remaining actions', () => {
     const element: HTMLElement = fixture.nativeElement;
-    const editEvents: unknown[] = [];
     const replaceEvents: unknown[] = [];
     const removeEvents: unknown[] = [];
     const subscriptions = [
-      component.editRecipientDetails.subscribe(recipient => editEvents.push(recipient)),
       component.replaceRecipient.subscribe(recipient => replaceEvents.push(recipient)),
       component.removeRecipient.subscribe(recipient => removeEvents.push(recipient)),
     ];
@@ -756,7 +754,7 @@ describe('PdfBuilder', () => {
 
     openMenu();
 
-    expect(document.body.textContent).toContain('Edit personal details');
+    expect(document.body.textContent).not.toContain('Edit personal details');
     expect(document.body.textContent).toContain('Replace recipient');
     expect(document.body.textContent).toContain('Remove');
 
@@ -767,11 +765,6 @@ describe('PdfBuilder', () => {
     Array.from(document.querySelectorAll<HTMLButtonElement>('.ngs-menu-panel [ngs-menu-item]'))[1].click();
     fixture.detectChanges();
 
-    openMenu();
-    Array.from(document.querySelectorAll<HTMLButtonElement>('.ngs-menu-panel [ngs-menu-item]'))[2].click();
-    fixture.detectChanges();
-
-    expect(editEvents).toHaveLength(1);
     expect(replaceEvents).toHaveLength(1);
     expect(removeEvents).toHaveLength(1);
 
@@ -1708,6 +1701,7 @@ describe('PdfBuilder', () => {
         id: 'company-stamp',
         name: 'Company stamp',
         description: 'Uploaded stamp',
+        imageUrl: '/assets/stamps/company.png',
       },
     ];
     const state = component as unknown as {
@@ -1732,7 +1726,9 @@ describe('PdfBuilder', () => {
     expect(document.body.textContent).toContain('Upload');
     expect(document.body.textContent).toContain('Uploaded stamps');
     expect(document.body.textContent).toContain('Drag & drop a stamp file here');
+    expect(document.body.textContent).toContain('Image files are accepted.');
     expect(document.querySelector('ngs-upload-area')).not.toBeNull();
+    expect(document.querySelector('ngs-upload-area')?.getAttribute('accept')).toBe('image/*');
 
     const uploadedTab = Array.from(document.querySelectorAll<HTMLElement>('.ngs-tab-label'))
       .find(tab => tab.textContent?.includes('Uploaded stamps'));
@@ -1744,6 +1740,8 @@ describe('PdfBuilder', () => {
 
     expect(document.body.textContent).toContain('Company stamp');
     expect(document.body.textContent).toContain('Uploaded stamp');
+    expect(document.querySelector<HTMLImageElement>('.my-stamp-image')?.getAttribute('src'))
+      .toBe('/assets/stamps/company.png');
 
     document.querySelector<HTMLButtonElement>('[ngs-dialog-close]')?.click();
     fixture.detectChanges();
@@ -1757,6 +1755,7 @@ describe('PdfBuilder', () => {
         id: 'company-stamp',
         name: 'Company stamp',
         description: 'Uploaded stamp',
+        dataUrl: 'data:image/png;base64,c3RhbXA=',
       },
     ];
     const emitted: PdfBuilderStampSelection[] = [];
@@ -1787,7 +1786,7 @@ describe('PdfBuilder', () => {
     uploadedTab!.click();
     fixture.detectChanges();
 
-    const stampOption = document.querySelector<HTMLElement>('ngs-list-option');
+    const stampOption = document.querySelector<HTMLElement>('.my-stamp-option');
 
     expect(stampOption).not.toBeNull();
 
@@ -1805,7 +1804,7 @@ describe('PdfBuilder', () => {
 
     expect(state.fields()[0]).toEqual(expect.objectContaining({
       label: 'Company stamp',
-      value: 'Company stamp',
+      value: 'data:image/png;base64,c3RhbXA=',
     }));
     expect(emitted).toHaveLength(1);
     expect(emitted[0]).toEqual(expect.objectContaining({
@@ -1813,6 +1812,35 @@ describe('PdfBuilder', () => {
     }));
 
     subscription.unsubscribe();
+  });
+
+  it('renders an uploaded stamp file as an image instead of its file name', async () => {
+    const file = new File(['stamp'], 'company-stamp.png', { type: 'image/png' });
+    const state = component as unknown as {
+      addField: (type: 'stamp') => void;
+      applyStampDialogResult: (
+        field: { id: string },
+        result: { type: 'file'; file: File },
+      ) => Promise<void>;
+      fields: () => readonly { id: string; label: string; value: string }[];
+    };
+
+    state.addField('stamp');
+    fixture.detectChanges();
+
+    const field = state.fields()[0];
+
+    await state.applyStampDialogResult(field, { type: 'file', file });
+    fixture.detectChanges();
+    const element: HTMLElement = fixture.nativeElement;
+
+    expect(state.fields()[0]).toEqual(expect.objectContaining({
+      label: 'company-stamp.png',
+      value: 'data:image/png;base64,c3RhbXA=',
+    }));
+    expect(element
+      .querySelector<HTMLImageElement>(`[data-field-id="${field.id}"] img.signature-field-image`)
+      ?.getAttribute('src')).toBe('data:image/png;base64,c3RhbXA=');
   });
 
   it('renders checkbox fields as plain checkbox squares without canvas labels', () => {

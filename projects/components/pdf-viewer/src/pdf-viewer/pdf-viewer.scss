@@ -77,6 +77,10 @@
     }
   }
 
+  .pdf-viewer-sidebar__thumb {
+    background: var(--ngs-color-white, #fff);
+  }
+
   .pdf-viewer-page {
     &__selection-layer {
       forced-color-adjust: none;

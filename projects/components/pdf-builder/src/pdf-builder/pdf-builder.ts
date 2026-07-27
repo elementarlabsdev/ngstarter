@@ -49,7 +49,7 @@ import {
   PanelHeader,
   PanelSidebar,
 } from '@ngstarter-ui/components/panel';
-import { Popover, PopoverContent, PopoverTriggerForDirective } from '@ngstarter-ui/components/popover';
+import { Popover, PopoverContent } from '@ngstarter-ui/components/popover';
 import {
   PdfViewer,
   PdfViewerAnnotations,
@@ -178,6 +178,7 @@ export interface PdfBuilderStampAsset {
   readonly name: string;
   readonly description?: string;
   readonly imageUrl?: string;
+  readonly dataUrl?: string;
 }
 
 export interface PdfBuilderStampSelection {
@@ -400,7 +401,6 @@ interface PdfBuilderFieldResize {
     PanelSidebar,
     Popover,
     PopoverContent,
-    PopoverTriggerForDirective,
     PdfViewer,
     PdfViewerAnnotations,
     PdfViewerSearch,
@@ -979,7 +979,9 @@ export class PdfBuilder {
         return;
       }
 
-      this.applyStampDialogResult(field, result);
+      void this.applyStampDialogResult(field, result).catch(error => {
+        console.error('Failed to apply stamp.', error);
+      });
     });
   }
 
@@ -1510,11 +1512,6 @@ export class PdfBuilder {
     this.createRecipientContact.emit(this.recipientSearchQuery().trim());
   }
 
-  protected requestEditRecipientDetails(recipient: PdfBuilderRecipient, event?: Event): void {
-    event?.stopPropagation();
-    this.editRecipientDetails.emit(recipient);
-  }
-
   protected requestReplaceRecipient(recipient: PdfBuilderRecipient, event?: Event): void {
     event?.stopPropagation();
     this.replaceRecipient.emit(recipient);
@@ -1969,10 +1966,10 @@ export class PdfBuilder {
     );
   }
 
-  private applyStampDialogResult(
+  private async applyStampDialogResult(
     field: PdfBuilderField,
     result: PdfBuilderStampDialogResult,
-  ): void {
+  ): Promise<void> {
     const currentField = this.fields().find(item => item.id === field.id);
 
     if (!currentField || currentField.type !== 'stamp' || currentField.locked) {
@@ -1980,7 +1977,10 @@ export class PdfBuilder {
     }
 
     const stampLabel = result.type === 'asset' ? result.stamp.name : result.file.name;
-    const appliedField = { ...currentField, label: stampLabel, value: stampLabel };
+    const stampValue = result.type === 'asset'
+      ? result.stamp.dataUrl?.trim() || result.stamp.imageUrl?.trim() || stampLabel
+      : await this.readImageFileAsDataUrl(result.file);
+    const appliedField = { ...currentField, label: stampLabel, value: stampValue };
 
     this.commitFields(fields =>
       fields.map(item => item.id === currentField.id ? appliedField : item),
@@ -1995,6 +1995,31 @@ export class PdfBuilder {
 
     this.stampUploaded.emit({ field: appliedField, file: result.file });
     this.recordActivity('Stamp uploaded', `${stampLabel} applied.`, currentField.icon);
+  }
+
+  private readImageFileAsDataUrl(file: File): Promise<string> {
+    const FileReaderConstructor = this.document.defaultView?.FileReader;
+
+    if (!FileReaderConstructor) {
+      return Promise.reject(new Error('Image file reading is not available.'));
+    }
+
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReaderConstructor();
+
+      reader.addEventListener('load', () => {
+        if (typeof reader.result === 'string') {
+          resolve(reader.result);
+          return;
+        }
+
+        reject(new Error('The selected stamp image could not be read.'));
+      });
+      reader.addEventListener('error', () => {
+        reject(reader.error ?? new Error('The selected stamp image could not be read.'));
+      });
+      reader.readAsDataURL(file);
+    });
   }
 
   private async applySignatureDialogResult(

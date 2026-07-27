@@ -36,6 +36,11 @@ export const routes: Routes = [
     title: 'PDF Builder'
   },
   {
+    path: 'pdf-signer',
+    loadChildren: () => import('./pdf-signer/routes').then(m => m.routes),
+    title: 'PDF Signer'
+  },
+  {
     path: 'kanban-board',
     loadChildren: () => import('./kanban-board/routes').then(m => m.routes),
     title: 'Kanban Board'
