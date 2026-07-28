@@ -125,7 +125,6 @@ describe('PdfSigner', () => {
     };
     const state = component as unknown as {
       activePage: () => number;
-      selectedFieldId: () => string | null;
     };
 
     setInputs(schema, currentSigner);
@@ -159,7 +158,7 @@ describe('PdfSigner', () => {
     await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
 
     expect(state.activePage()).toBe(2);
-    expect(state.selectedFieldId()).toBe('page-two-date');
+    expect(document.activeElement).toBe(fieldElement);
     expect(scrollTo).toHaveBeenCalledWith({
       top: 1120,
       left: 500,
@@ -172,10 +171,13 @@ describe('PdfSigner', () => {
 
     const element: HTMLElement = fixture.nativeElement;
     const currentField = element.querySelector<HTMLElement>('[data-field-id="current-text"]');
+    const currentEditor = currentField?.querySelector<HTMLElement>('[data-text-editor-for="current-text"]');
     const otherField = element.querySelector<HTMLElement>('[data-field-id="other-text"]');
 
     expect(currentField).not.toBeNull();
-    expect(currentField?.getAttribute('role')).toBe('button');
+    expect(currentField?.hasAttribute('role')).toBe(false);
+    expect(currentEditor?.getAttribute('role')).toBe('textbox');
+    expect(currentEditor?.getAttribute('contenteditable')).toBe('true');
     expect(currentField?.classList.contains('is-readonly')).toBe(false);
     expect(otherField).not.toBeNull();
     expect(otherField?.hasAttribute('role')).toBe(false);
@@ -187,7 +189,7 @@ describe('PdfSigner', () => {
     const stamp = createField({
       id: 'current-stamp',
       type: 'stamp',
-      label: 'Approval stamp',
+      label: 'Stamp',
       signer: currentSigner,
       slot: 'primary',
       value: '',
@@ -211,6 +213,36 @@ describe('PdfSigner', () => {
     expect(style.justifyContent).toBe('center');
   });
 
+  it('left-aligns date content using the standard horizontal field padding', () => {
+    const schema = createSchema();
+    const date = createField({
+      id: 'current-date',
+      type: 'date',
+      label: 'Signing date',
+      signer: currentSigner,
+      slot: 'date',
+      value: '07/14/2026',
+      x: 40,
+      y: 272,
+      width: 118,
+      height: 28,
+    });
+
+    setInputs({
+      ...schema,
+      fields: [...schema.fields, date],
+    }, currentSigner);
+
+    const element: HTMLElement = fixture.nativeElement;
+    const dateField = element.querySelector<HTMLElement>('[data-field-id="current-date"]');
+    const style = getComputedStyle(dateField!);
+
+    expect(dateField).not.toBeNull();
+    expect(style.justifyContent).toBe('flex-start');
+    expect(style.paddingLeft).toBe('8px');
+    expect(style.paddingRight).toBe('8px');
+  });
+
   it('hides fields assigned to other signers when showOtherSignerFields is false', () => {
     fixture.componentRef.setInput('showOtherSignerFields', false);
     setInputs(createSchema(), currentSigner);
@@ -228,12 +260,12 @@ describe('PdfSigner', () => {
     const schema = createSchema();
     const subscription = component.schemaChange.subscribe(value => emitted.push(value));
     const state = component as unknown as {
-      activateField: (field: PdfBuilderField) => void;
+      executeFieldAction: (field: PdfBuilderField) => void;
       fields: () => readonly PdfBuilderField[];
     };
 
     setInputs(schema, currentSigner);
-    state.activateField(schema.fields.find(field => field.id === 'other-text')!);
+    state.executeFieldAction(schema.fields.find(field => field.id === 'other-text')!);
     fixture.detectChanges();
 
     expect(state.fields().find(field => field.id === 'other-text')?.value).toBe('Other value');
@@ -248,26 +280,63 @@ describe('PdfSigner', () => {
     const schemaSubscription = component.schemaChange.subscribe(value => emitted.push(value));
     const fieldSubscription = component.fieldValueChange.subscribe(change => changes.push(change.value));
     const state = component as unknown as {
-      activateField: (field: PdfBuilderField) => void;
+      executeFieldAction: (field: PdfBuilderField) => void;
       fields: () => readonly PdfBuilderField[];
     };
 
     setInputs(schema, currentSigner);
-    state.activateField(schema.fields.find(field => field.id === 'current-checkbox')!);
+    state.executeFieldAction(schema.fields.find(field => field.id === 'current-checkbox')!);
     fixture.detectChanges();
 
     expect(state.fields().find(field => field.id === 'current-checkbox')?.value).toBe('true');
     expect(emitted.at(-1)?.fields.find(field => field.id === 'current-checkbox')?.value).toBe('true');
+    expect(emitted.at(-1)?.view.selectedFieldId).toBeNull();
     expect(changes).toEqual(['true']);
     schemaSubscription.unsubscribe();
     fieldSubscription.unsubscribe();
+  });
+
+  it('opens the signature action on the first click without selecting the field', async () => {
+    const schema = createSchema();
+    const signature = createField({
+      id: 'current-signature',
+      type: 'signature',
+      label: 'Signature',
+      signer: currentSigner,
+      slot: 'signature',
+      value: '',
+      x: 40,
+      y: 272,
+      width: 154,
+      height: 42,
+    });
+
+    setInputs({
+      ...schema,
+      fields: [...schema.fields, signature],
+    }, currentSigner);
+
+    const element: HTMLElement = fixture.nativeElement;
+    const signatureField = element.querySelector<HTMLElement>('[data-field-id="current-signature"]');
+
+    signatureField!.click();
+    fixture.detectChanges();
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+
+    expect(signatureField?.classList.contains('is-selected')).toBe(false);
+    expect(document.querySelector('ngs-dialog-container')).not.toBeNull();
+    expect(document.body.textContent).toContain('Accept and sign');
+
+    document.querySelector<HTMLButtonElement>('[ngs-dialog-close]')?.click();
+    fixture.detectChanges();
+    await new Promise<void>(resolve => setTimeout(resolve, 260));
   });
 
   it('renders an uploaded stamp file as an image instead of its file name', async () => {
     const stamp = createField({
       id: 'current-stamp',
       type: 'stamp',
-      label: 'Approval stamp',
+      label: 'Stamp',
       signer: currentSigner,
       value: '',
       x: 40,
@@ -291,13 +360,13 @@ describe('PdfSigner', () => {
 
     await state.applyStampDialogResult(stamp, {
       type: 'file',
-      file: new File(['stamp'], 'approval-stamp.png', { type: 'image/png' }),
+      file: new File(['stamp'], 'stamp.png', { type: 'image/png' }),
     });
     fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
 
     expect(state.fields().find(field => field.id === stamp.id)).toEqual(expect.objectContaining({
-      label: 'approval-stamp.png',
+      label: 'Stamp',
       value: 'data:image/png;base64,c3RhbXA=',
     }));
     expect(element
@@ -305,7 +374,7 @@ describe('PdfSigner', () => {
       ?.getAttribute('src')).toBe('data:image/png;base64,c3RhbXA=');
   });
 
-  it('lets the current signer enter text and emits its value', () => {
+  it('renders an immediately editable text field and emits its value', async () => {
     const changes: string[] = [];
     const subscription = component.fieldValueChange.subscribe(change => changes.push(change.value));
 
@@ -313,13 +382,16 @@ describe('PdfSigner', () => {
 
     const element: HTMLElement = fixture.nativeElement;
     const field = element.querySelector<HTMLElement>('[data-field-id="current-text"]');
-
-    field?.click();
-    fixture.detectChanges();
-
     const editor = element.querySelector<HTMLElement>('[data-text-editor-for="current-text"]');
 
     expect(editor).not.toBeNull();
+    expect(editor?.getAttribute('contenteditable')).toBe('true');
+
+    field?.click();
+    fixture.detectChanges();
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+
+    expect(document.activeElement).toBe(editor);
 
     editor!.textContent = 'Signed by current user';
     editor!.dispatchEvent(new InputEvent('input', { bubbles: true }));
@@ -327,6 +399,54 @@ describe('PdfSigner', () => {
 
     expect(changes.at(-1)).toBe('Signed by current user');
     subscription.unsubscribe();
+  });
+
+  it('restores an entered text value when the field is opened again', async () => {
+    setInputs(createSchema(), currentSigner);
+
+    const element: HTMLElement = fixture.nativeElement;
+    let field = element.querySelector<HTMLElement>('[data-field-id="current-text"]');
+
+    field!.click();
+    fixture.detectChanges();
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+
+    const editor = element.querySelector<HTMLElement>('[data-text-editor-for="current-text"]');
+
+    editor!.textContent = 'Persisted value';
+    editor!.dispatchEvent(new InputEvent('input', { bubbles: true }));
+    editor!.dispatchEvent(new FocusEvent('blur', { bubbles: false }));
+    fixture.detectChanges();
+
+    expect(editor?.textContent).toBe('Persisted value');
+    expect(editor?.isConnected).toBe(true);
+
+    field = element.querySelector<HTMLElement>('[data-field-id="current-text"]');
+    field!.click();
+    fixture.detectChanges();
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+
+    expect(document.activeElement).toBe(editor);
+    expect(editor?.textContent).toBe('Persisted value');
+  });
+
+  it('does not overwrite a newly entered value during deferred editor initialization', async () => {
+    setInputs(createSchema(), currentSigner);
+
+    const element: HTMLElement = fixture.nativeElement;
+    const field = element.querySelector<HTMLElement>('[data-field-id="current-text"]');
+
+    field!.click();
+    fixture.detectChanges();
+
+    const editor = element.querySelector<HTMLElement>('[data-text-editor-for="current-text"]');
+
+    editor!.textContent = 'Fast entered value';
+    editor!.dispatchEvent(new InputEvent('input', { bubbles: true }));
+    fixture.detectChanges();
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+
+    expect(editor?.textContent).toBe('Fast entered value');
   });
 
   it('never moves or resizes fields in response to pointer gestures', () => {

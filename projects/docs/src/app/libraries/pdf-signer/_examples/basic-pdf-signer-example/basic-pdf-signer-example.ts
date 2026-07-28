@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import {
+  PDF_BUILDER_DEFAULT_FIELD_METRICS,
   type PdfBuilderField,
   type PdfBuilderSchema,
   type PdfBuilderSigner,
@@ -25,7 +26,7 @@ export class BasicPdfSignerExample {
     {
       id: 'approved',
       name: 'Approved',
-      description: 'Approval stamp',
+      description: 'Saved stamp',
       dataUrl: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22320%22%20height%3D%22180%22%20viewBox%3D%220%200%20320%20180%22%3E%3Crect%20x%3D%2212%22%20y%3D%2212%22%20width%3D%22296%22%20height%3D%22156%22%20rx%3D%2212%22%20fill%3D%22none%22%20stroke%3D%22%230078d4%22%20stroke-width%3D%228%22%2F%3E%3Ctext%20x%3D%22160%22%20y%3D%2296%22%20text-anchor%3D%22middle%22%20fill%3D%22%230078d4%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2240%22%20font-weight%3D%22700%22%3EAPPROVED%3C%2Ftext%3E%3C%2Fsvg%3E',
     },
   ];
@@ -106,8 +107,7 @@ export class BasicPdfSignerExample {
           signer: this.currentSigner,
           x: 72,
           y: 128,
-          width: 240,
-          height: 48,
+          ...PDF_BUILDER_DEFAULT_FIELD_METRICS.text,
         }),
         this.createField({
           id: 'signer-date',
@@ -118,8 +118,7 @@ export class BasicPdfSignerExample {
           slot: 'date',
           x: 72,
           y: 208,
-          width: 180,
-          height: 40,
+          ...PDF_BUILDER_DEFAULT_FIELD_METRICS.date,
         }),
         this.createField({
           id: 'other-signer-name',
@@ -129,8 +128,7 @@ export class BasicPdfSignerExample {
           value: 'Other Signer',
           x: 72,
           y: 320,
-          width: 240,
-          height: 48,
+          ...PDF_BUILDER_DEFAULT_FIELD_METRICS.text,
         }),
         this.createField({
           id: 'terms-confirmed',
@@ -142,8 +140,7 @@ export class BasicPdfSignerExample {
           slot: 'checkbox',
           x: 72,
           y: 128,
-          width: 20,
-          height: 20,
+          ...PDF_BUILDER_DEFAULT_FIELD_METRICS.checkbox,
         }),
         this.createField({
           id: 'signer-signature',
@@ -155,8 +152,7 @@ export class BasicPdfSignerExample {
           slot: 'signature',
           x: 72,
           y: 216,
-          width: 240,
-          height: 72,
+          ...PDF_BUILDER_DEFAULT_FIELD_METRICS.signature,
         }),
         this.createField({
           id: 'signer-initials',
@@ -168,21 +164,19 @@ export class BasicPdfSignerExample {
           slot: 'initials',
           x: 72,
           y: 128,
-          width: 128,
-          height: 56,
+          ...PDF_BUILDER_DEFAULT_FIELD_METRICS.initials,
         }),
         this.createField({
-          id: 'approval-stamp',
+          id: 'signer-stamp',
           type: 'stamp',
-          label: 'Approval stamp',
+          label: 'Stamp',
           signer: this.currentSigner,
           page: 3,
           icon: 'fluent:stamp-32-light',
-          slot: 'primary',
+          slot: 'comment',
           x: 72,
           y: 232,
-          width: 180,
-          height: 64,
+          ...PDF_BUILDER_DEFAULT_FIELD_METRICS.stamp,
         }),
       ],
     };

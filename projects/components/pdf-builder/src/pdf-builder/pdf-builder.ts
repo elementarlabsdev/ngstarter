@@ -150,6 +150,18 @@ export interface PdfBuilderField {
   readonly locked: boolean;
 }
 
+export type PdfBuilderFieldMetrics = Pick<PdfBuilderField, 'width' | 'height'>;
+
+export const PDF_BUILDER_DEFAULT_FIELD_METRICS = {
+  text: { width: 168, height: 28 },
+  variable: { width: 168, height: 28 },
+  date: { width: 118, height: 28 },
+  signature: { width: 154, height: 42 },
+  initials: { width: 105, height: 42 },
+  checkbox: { width: 16, height: 16 },
+  stamp: { width: 120, height: 77 },
+} as const satisfies Readonly<Record<PdfBuilderFieldType, PdfBuilderFieldMetrics>>;
+
 export interface PdfBuilderRecipient {
   readonly id: string;
   readonly name: string;
@@ -1978,9 +1990,14 @@ export class PdfBuilder {
 
     const stampLabel = result.type === 'asset' ? result.stamp.name : result.file.name;
     const stampValue = result.type === 'asset'
-      ? result.stamp.dataUrl?.trim() || result.stamp.imageUrl?.trim() || stampLabel
+      ? result.stamp.dataUrl?.trim() || result.stamp.imageUrl?.trim() || ''
       : await this.readImageFileAsDataUrl(result.file);
-    const appliedField = { ...currentField, label: stampLabel, value: stampValue };
+
+    if (!stampValue) {
+      return;
+    }
+
+    const appliedField = { ...currentField, value: stampValue };
 
     this.commitFields(fields =>
       fields.map(item => item.id === currentField.id ? appliedField : item),
@@ -3157,26 +3174,26 @@ export class PdfBuilder {
   private getSlotMetrics(slot: PdfBuilderFieldSlot): Pick<PdfBuilderField, 'x' | 'y' | 'width' | 'height'> {
     switch (slot) {
       case 'date':
-        return { x: 96, y: 220, width: 118, height: 28 };
+        return { x: 96, y: 220, ...PDF_BUILDER_DEFAULT_FIELD_METRICS.date };
       case 'signature':
-        return { x: 384, y: 711, width: 154, height: 42 };
+        return { x: 384, y: 711, ...PDF_BUILDER_DEFAULT_FIELD_METRICS.signature };
       case 'initials':
-        return { x: 384, y: 612, width: 105, height: 42 };
+        return { x: 384, y: 612, ...PDF_BUILDER_DEFAULT_FIELD_METRICS.initials };
       case 'checkbox':
-        return { x: 453, y: 282, width: 16, height: 16 };
+        return { x: 453, y: 282, ...PDF_BUILDER_DEFAULT_FIELD_METRICS.checkbox };
       case 'comment':
-        return { x: 96, y: 160, width: 120, height: 77 };
+        return { x: 96, y: 160, ...PDF_BUILDER_DEFAULT_FIELD_METRICS.stamp };
       case 'footer':
         return { x: 96, y: 690, width: 137, height: 25 };
       case 'side':
         return { x: 390, y: 186, width: 104, height: 34 };
       default:
-        return { x: 96, y: 160, width: 168, height: 28 };
+        return { x: 96, y: 160, ...PDF_BUILDER_DEFAULT_FIELD_METRICS.text };
     }
   }
 
   private getDefaultMetricsForType(type: PdfBuilderFieldType): Pick<PdfBuilderField, 'width' | 'height'> {
-    return this.getSlotMetrics(this.getDefaultSlotForType(type));
+    return PDF_BUILDER_DEFAULT_FIELD_METRICS[type];
   }
 
   private getMinimumResizeMetrics(field: PdfBuilderField): Pick<PdfBuilderField, 'width' | 'height'> {

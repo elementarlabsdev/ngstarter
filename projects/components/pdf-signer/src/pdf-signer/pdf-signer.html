@@ -132,7 +132,7 @@
                 [class.is-rotated-180]="pageRotation() === 2"
                 [class.is-rotated-270]="pageRotation() === 3"
                 [attr.aria-label]="'PDF signing page ' + page.page"
-                (click)="activePage.set(page.page); clearSelection()"
+                (click)="activePage.set(page.page)"
               >
                 @if (isSourcePdfPage(page.page)) {
                   <ngs-pdf-viewer
@@ -158,13 +158,11 @@
                   @for (field of pageFields(page.page); track field.id) {
                     <div
                       class="overlay-field"
-                      [attr.role]="isFieldInteractive(field) && field.id !== editingFieldId() ? 'button' : null"
-                      [attr.tabindex]="isFieldInteractive(field) && field.id !== editingFieldId() ? 0 : null"
+                      [attr.role]="isButtonActionField(field) ? 'button' : null"
+                      [attr.tabindex]="isButtonActionField(field) ? 0 : null"
                       [attr.data-field-id]="field.id"
                       [attr.data-signer-id]="field.signer?.id ?? null"
                       [attr.aria-label]="field.label + (isFieldEditable(field) ? '' : ' (read only)')"
-                      [class.is-selected]="field.id === selectedFieldId()"
-                      [class.is-editing]="field.id === editingFieldId()"
                       [class.is-filled]="isFieldFilled(field)"
                       [class.is-readonly]="!isFieldEditable(field)"
                       [class.overlay-slot-primary]="field.slot === 'primary'"
@@ -185,9 +183,9 @@
                       [ngsTooltip]="getFieldTooltip(field)"
                       ngsTooltipPosition="above"
                       [ngsTooltipDisabled]="!getFieldTooltip(field)"
-                      (click)="activateField(field, $event)"
-                      (keydown.enter)="activateField(field, $event)"
-                      (keydown.space)="$event.preventDefault(); activateField(field, $event)"
+                      (click)="executeFieldAction(field, $event)"
+                      (keydown.enter)="executeFieldAction(field, $event)"
+                      (keydown.space)="$event.preventDefault(); executeFieldAction(field, $event)"
                     >
                       @if (field.type === 'checkbox') {
                         @if (isCheckboxChecked(field)) {
@@ -198,24 +196,24 @@
                         isImageValue(field.value)
                       ) {
                         <img class="field-image" [src]="field.value" alt="" />
-                      } @else if (field.type === 'text' && field.id === editingFieldId() && isFieldEditable(field)) {
+                      } @else if (field.type === 'text' && isFieldEditable(field)) {
                         <span
                           class="text-field-editor"
                           contenteditable="true"
+                          role="textbox"
+                          aria-multiline="true"
                           spellcheck="false"
                           [attr.data-text-editor-for]="field.id"
                           [attr.data-placeholder]="textFieldPlaceholder"
                           aria-label="Text field value"
+                          (focus)="activePage.set(field.page)"
                           (click)="$event.stopPropagation()"
                           (input)="updateTextFieldValueFromEditor(field.id, $any($event.target))"
-                          (blur)="finishTextEditing(field.id)"
                           (keydown)="$event.stopPropagation()"
-                          (keydown.escape)="finishTextEditing(field.id)"
+                          (keydown.escape)="$any($event.target).blur()"
                         ></span>
                       } @else if (field.type === 'text') {
-                        <span class="field-value" [class.is-placeholder]="!field.value.trim()">
-                          {{ getFieldDisplayValue(field) }}
-                        </span>
+                        <span class="field-value" [class.is-placeholder]="!field.value.trim()">{{ getFieldDisplayValue(field) }}</span>
                       } @else {
                         <span class="field-badge">
                           @if (field.type === 'initials') {

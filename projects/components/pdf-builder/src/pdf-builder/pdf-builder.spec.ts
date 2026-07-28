@@ -1803,7 +1803,7 @@ describe('PdfBuilder', () => {
     await new Promise<void>(resolve => setTimeout(resolve, 260));
 
     expect(state.fields()[0]).toEqual(expect.objectContaining({
-      label: 'Company stamp',
+      label: field.label,
       value: 'data:image/png;base64,c3RhbXA=',
     }));
     expect(emitted).toHaveLength(1);
@@ -1835,7 +1835,7 @@ describe('PdfBuilder', () => {
     const element: HTMLElement = fixture.nativeElement;
 
     expect(state.fields()[0]).toEqual(expect.objectContaining({
-      label: 'company-stamp.png',
+      label: field.label,
       value: 'data:image/png;base64,c3RhbXA=',
     }));
     expect(element

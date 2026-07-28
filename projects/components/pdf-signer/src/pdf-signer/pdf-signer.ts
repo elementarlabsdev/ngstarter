@@ -155,8 +155,6 @@ export class PdfSigner {
   ]);
   protected readonly fields = signal<readonly PdfBuilderField[]>([]);
   protected readonly activePage = signal(1);
-  protected readonly selectedFieldId = signal<string | null>(null);
-  protected readonly editingFieldId = signal<string | null>(null);
 
   protected readonly documentName = computed(() => this.schema()?.document.name ?? 'Untitled.pdf');
   protected readonly documentSource = computed<PdfViewerSource>(() => this.schema()?.document.source ?? null);
@@ -243,6 +241,10 @@ export class PdfSigner {
     return this.isFieldEditable(field) && field.type !== 'variable';
   }
 
+  protected isButtonActionField(field: PdfBuilderField): boolean {
+    return this.isFieldInteractive(field) && field.type !== 'text';
+  }
+
   protected isFieldFilled(field: PdfBuilderField): boolean {
     if (field.type === 'checkbox') {
       return this.isCheckboxChecked(field);
@@ -305,7 +307,7 @@ export class PdfSigner {
       source.startsWith('assets/');
   }
 
-  protected activateField(field: PdfBuilderField, event?: Event): void {
+  protected executeFieldAction(field: PdfBuilderField, event?: Event): void {
     event?.stopPropagation();
 
     if (!this.isFieldInteractive(field)) {
@@ -313,30 +315,24 @@ export class PdfSigner {
     }
 
     this.activePage.set(field.page);
-    this.selectedFieldId.set(field.id);
 
     switch (field.type) {
       case 'text':
-        this.startTextEditing(field.id);
+        this.focusTextFieldEditor(field.id);
         return;
       case 'date':
-        this.editingFieldId.set(null);
         this.openDateFieldPicker(field);
         return;
       case 'signature':
-        this.editingFieldId.set(null);
         this.openSignatureDialog(field);
         return;
       case 'initials':
-        this.editingFieldId.set(null);
         this.openInitialsDialog(field);
         return;
       case 'stamp':
-        this.editingFieldId.set(null);
         this.openStampDialog(field);
         return;
       case 'checkbox':
-        this.editingFieldId.set(null);
         this.updateFieldValue(field.id, this.isCheckboxChecked(field) ? '' : 'true');
         return;
       case 'variable':
@@ -346,12 +342,6 @@ export class PdfSigner {
 
   protected updateTextFieldValueFromEditor(fieldId: string, editor: HTMLElement): void {
     this.updateFieldValue(fieldId, editor.textContent ?? '');
-  }
-
-  protected finishTextEditing(fieldId: string): void {
-    if (this.editingFieldId() === fieldId) {
-      this.editingFieldId.set(null);
-    }
   }
 
   protected selectPage(pageNumber: number): void {
@@ -379,8 +369,6 @@ export class PdfSigner {
     event?.stopPropagation();
 
     this.activePage.set(field.page);
-    this.selectedFieldId.set(field.id);
-    this.editingFieldId.set(null);
     this.scheduleDomSync(() => {
       const fieldElement = this.getOverlayFieldElement(field.id);
 
@@ -389,13 +377,12 @@ export class PdfSigner {
       }
 
       this.scrollFieldIntoViewport(fieldElement);
-      fieldElement?.focus({ preventScroll: true });
-    });
-  }
+      const focusTarget = field.type === 'text'
+        ? this.getTextFieldEditorElement(field.id)
+        : fieldElement;
 
-  protected clearSelection(): void {
-    this.selectedFieldId.set(null);
-    this.editingFieldId.set(null);
+      focusTarget?.focus({ preventScroll: true });
+    });
   }
 
   protected isSourcePdfPage(pageNumber: number): boolean {
@@ -436,8 +423,7 @@ export class PdfSigner {
       1,
       Math.max(1, pages.length),
     ));
-    this.selectedFieldId.set(null);
-    this.editingFieldId.set(null);
+    this.scheduleDomSync(() => this.syncTextFieldEditors());
   }
 
   private getSchemaPages(schema: PdfBuilderSchema): readonly PdfBuilderSchemaPage[] {
@@ -581,7 +567,7 @@ export class PdfSigner {
       view: {
         ...source.view,
         activePage: this.activePage(),
-        selectedFieldId: field.id,
+        selectedFieldId: null,
       },
       fields: this.fields().map(item => ({ ...item })),
     };
@@ -596,28 +582,46 @@ export class PdfSigner {
     });
   }
 
-  private startTextEditing(fieldId: string): void {
+  private focusTextFieldEditor(fieldId: string): void {
     const field = this.fields().find(item => item.id === fieldId);
 
     if (!field || !this.isFieldEditable(field) || field.type !== 'text') {
       return;
     }
 
-    this.editingFieldId.set(fieldId);
     this.scheduleDomSync(() => {
+      const currentField = this.fields().find(item => item.id === fieldId);
       const editor = this.getTextFieldEditorElement(fieldId);
 
-      if (!editor) {
+      if (!currentField || !editor) {
         return;
       }
 
-      if ((editor.textContent ?? '') !== field.value) {
-        editor.textContent = field.value;
+      if ((editor.textContent ?? '') !== currentField.value) {
+        editor.textContent = currentField.value;
       }
 
       editor.focus();
       this.placeContentEditableCaretAtEnd(editor);
     });
+  }
+
+  private syncTextFieldEditors(): void {
+    const activeElement = this.document.activeElement;
+
+    for (const field of this.fields()) {
+      if (field.type !== 'text' || !this.isFieldEditable(field)) {
+        continue;
+      }
+
+      const editor = this.getTextFieldEditorElement(field.id);
+
+      if (!editor || editor === activeElement || (editor.textContent ?? '') === field.value) {
+        continue;
+      }
+
+      editor.textContent = field.value;
+    }
   }
 
   private openDateFieldPicker(field: PdfBuilderField): void {
@@ -687,11 +691,15 @@ export class PdfSigner {
     field: PdfBuilderField,
     result: PdfBuilderStampDialogResult,
   ): Promise<void> {
-    const label = result.type === 'asset' ? result.stamp.name : result.file.name;
     const value = result.type === 'asset'
-      ? result.stamp.dataUrl?.trim() || result.stamp.imageUrl?.trim() || label
+      ? result.stamp.dataUrl?.trim() || result.stamp.imageUrl?.trim() || ''
       : await this.readImageFileAsDataUrl(result.file);
-    const appliedField = this.updateField(field.id, current => ({ ...current, label, value }));
+
+    if (!value) {
+      return;
+    }
+
+    const appliedField = this.updateField(field.id, current => ({ ...current, value }));
 
     if (!appliedField) {
       return;
