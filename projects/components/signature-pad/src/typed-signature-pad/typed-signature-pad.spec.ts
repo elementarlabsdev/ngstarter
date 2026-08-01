@@ -47,6 +47,14 @@ describe('TypedSignaturePad', () => {
     }));
     expect(emitted[0].dataUrl).toMatch(/^data:image\/svg\+xml/);
 
+    const svg = decodeURIComponent(emitted[0].dataUrl.split(',')[1]);
+    const [, width, height] = svg.match(/<svg[^>]+width="(\d+)" height="(\d+)"/) ?? [];
+
+    expect(svg).toContain('font-size="96"');
+    expect(svg).toContain('scale(0.9)');
+    expect(Number(width)).toBeLessThan(900);
+    expect(Number(height)).toBeLessThanOrEqual(120);
+
     subscription.unsubscribe();
   });
 });

@@ -195,7 +195,12 @@
                         (field.type === 'signature' || field.type === 'initials' || field.type === 'stamp') &&
                         isImageValue(field.value)
                       ) {
-                        <img class="field-image" [src]="field.value" alt="" />
+                        <img
+                          class="field-image"
+                          [class.is-typed-signature-image]="isTypedSignatureImageValue(field.value)"
+                          [src]="field.value"
+                          alt=""
+                        />
                       } @else if (field.type === 'text' && isFieldEditable(field)) {
                         <span
                           class="text-field-editor"

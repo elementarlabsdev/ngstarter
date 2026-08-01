@@ -1419,6 +1419,8 @@ describe('PdfBuilder', () => {
     }));
     expect(image).not.toBeNull();
     expect(image!.getAttribute('src')).toBe(typedSignature);
+    expect(image!.classList).toContain('is-typed-signature-image');
+    expect(getComputedStyle(image!).maxWidth).toBe('none');
     expect(emitted).toHaveLength(1);
     expect(emitted[0]).toEqual(expect.objectContaining({
       value: 'P.S.',
@@ -1430,7 +1432,7 @@ describe('PdfBuilder', () => {
     subscription.unsubscribe();
   });
 
-  it('uses lower canvas metrics for initials fields', () => {
+  it('keeps initials narrower while matching the signature field height', () => {
     const state = component as unknown as {
       addField: (type: 'initials') => void;
       fields: () => readonly { label: string; width: number; height: number }[];
@@ -1614,6 +1616,8 @@ describe('PdfBuilder', () => {
     }));
     expect(image).not.toBeNull();
     expect(image!.getAttribute('src')).toBe(typedInitials);
+    expect(image!.classList).toContain('is-typed-signature-image');
+    expect(getComputedStyle(image!).maxWidth).toBe('none');
     expect(emitted).toHaveLength(1);
     expect(emitted[0]).toEqual(expect.objectContaining({
       value: 'P.S.',

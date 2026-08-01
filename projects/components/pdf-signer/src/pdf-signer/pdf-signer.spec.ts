@@ -243,6 +243,52 @@ describe('PdfSigner', () => {
     expect(style.paddingRight).toBe('8px');
   });
 
+  it('uses the same typed image height for signature and initials fields', () => {
+    const schema = createSchema();
+    const typedImage = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"></svg>',
+    )}`;
+    const signature = createField({
+      id: 'current-signature',
+      type: 'signature',
+      label: 'Signature',
+      signer: currentSigner,
+      slot: 'signature',
+      value: typedImage,
+      x: 40,
+      y: 272,
+      width: 154,
+      height: 42,
+    });
+    const initials = createField({
+      id: 'current-initials',
+      type: 'initials',
+      label: 'Initials',
+      signer: currentSigner,
+      slot: 'initials',
+      value: typedImage,
+      x: 40,
+      y: 340,
+      width: 105,
+      height: 42,
+    });
+
+    setInputs({
+      ...schema,
+      fields: [...schema.fields, signature, initials],
+    }, currentSigner);
+
+    const element: HTMLElement = fixture.nativeElement;
+    const signatureField = element.querySelector<HTMLElement>('[data-field-id="current-signature"]');
+    const initialsField = element.querySelector<HTMLElement>('[data-field-id="current-initials"]');
+    const signatureImage = signatureField?.querySelector<HTMLImageElement>('.is-typed-signature-image');
+    const initialsImage = initialsField?.querySelector<HTMLImageElement>('.is-typed-signature-image');
+
+    expect(getComputedStyle(signatureField!).paddingTop).toBe('0px');
+    expect(getComputedStyle(initialsField!).paddingTop).toBe('0px');
+    expect(getComputedStyle(signatureImage!).height).toBe(getComputedStyle(initialsImage!).height);
+  });
+
   it('hides fields assigned to other signers when showOtherSignerFields is false', () => {
     fixture.componentRef.setInput('showOtherSignerFields', false);
     setInputs(createSchema(), currentSigner);

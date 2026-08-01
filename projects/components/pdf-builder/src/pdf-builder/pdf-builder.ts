@@ -1233,6 +1233,10 @@ export class PdfBuilder {
       source.startsWith('assets/');
   }
 
+  protected isTypedSignatureImageValue(value: string): boolean {
+    return value.trim().toLowerCase().startsWith('data:image/svg+xml');
+  }
+
   protected getVariableBindingLabel(field: PdfBuilderField | null): string {
     if (!field || field.type !== 'variable') {
       return 'Select binding';

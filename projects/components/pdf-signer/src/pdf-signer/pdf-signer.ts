@@ -307,6 +307,10 @@ export class PdfSigner {
       source.startsWith('assets/');
   }
 
+  protected isTypedSignatureImageValue(value: string): boolean {
+    return value.trim().toLowerCase().startsWith('data:image/svg+xml');
+  }
+
   protected executeFieldAction(field: PdfBuilderField, event?: Event): void {
     event?.stopPropagation();
 

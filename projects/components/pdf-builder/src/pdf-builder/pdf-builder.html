@@ -424,7 +424,12 @@
                       (keydown.space)="$event.preventDefault(); fieldSignerTooltip.hideImmediately(); selectField(field.id, $event)"
                     >
                       @if ((field.type === 'signature' || field.type === 'initials' || field.type === 'stamp') && isSignatureImageValue(field.value)) {
-                        <img class="signature-field-image" [src]="field.value" alt="" />
+                        <img
+                          class="signature-field-image"
+                          [class.is-typed-signature-image]="isTypedSignatureImageValue(field.value)"
+                          [src]="field.value"
+                          alt=""
+                        />
                       } @else if (field.type !== 'checkbox') {
                         <span class="field-badge">
                           @if (field.type === 'initials') {

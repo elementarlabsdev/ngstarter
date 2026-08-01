@@ -173,17 +173,57 @@ export class TypedSignaturePad {
   }
 
   private createSignatureDataUrl(): string {
-    const value = this.escapeXml(this.value().trim());
+    const rawValue = this.value().trim();
+    const value = this.escapeXml(rawValue);
     const fontFamily = this.escapeXml(this.fontFamily());
     const color = this.escapeXml(this.penColor());
+    const fontSize = 96;
+    const paddingX = 8;
+    const paddingY = 4;
+    const textMetrics = this.measureSignatureText(rawValue, fontSize);
+    const width = Math.ceil(textMetrics.width + paddingX * 2);
+    const height = Math.ceil(textMetrics.ascent + textMetrics.descent + paddingY * 2);
+    const textX = width / 2;
+    const textY = paddingY + textMetrics.ascent;
+    const centerY = height / 2;
     const svg = [
-      '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="300" viewBox="0 0 900 300">',
-      '<rect width="900" height="300" fill="transparent"/>',
-      `<text x="450" y="160" text-anchor="middle" dominant-baseline="middle" fill="${color}" font-family="${fontFamily}" font-size="96" font-weight="500">${value}</text>`,
+      `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
+      `<rect width="${width}" height="${height}" fill="transparent"/>`,
+      `<g transform="translate(${textX} ${centerY}) scale(0.9) translate(${-textX} ${-centerY})">`,
+      `<text x="${textX}" y="${textY}" text-anchor="middle" fill="${color}" font-family="${fontFamily}" font-size="${fontSize}" font-weight="500">${value}</text>`,
+      '</g>',
       '</svg>',
     ].join('');
 
     return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+  }
+
+  private measureSignatureText(value: string, fontSize: number): {
+    readonly width: number;
+    readonly ascent: number;
+    readonly descent: number;
+  } {
+    const fallbackWidth = Math.max(fontSize * 0.5, value.length * fontSize * 0.55);
+    const fallbackAscent = fontSize * 0.75;
+    const fallbackDescent = fontSize * 0.15;
+    const context = this.document.createElement('canvas').getContext('2d');
+
+    if (!context) {
+      return {
+        width: fallbackWidth,
+        ascent: fallbackAscent,
+        descent: fallbackDescent,
+      };
+    }
+
+    context.font = `500 ${fontSize}px ${this.fontFamily()}`;
+    const metrics = context.measureText(value);
+
+    return {
+      width: Math.max(metrics.width, metrics.actualBoundingBoxLeft + metrics.actualBoundingBoxRight, fallbackWidth),
+      ascent: Math.max(metrics.actualBoundingBoxAscent, fallbackAscent),
+      descent: Math.max(metrics.actualBoundingBoxDescent, fallbackDescent),
+    };
   }
 
   private escapeXml(value: string): string {

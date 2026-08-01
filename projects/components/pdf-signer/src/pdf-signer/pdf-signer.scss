@@ -394,6 +394,7 @@
 
   .overlay-type-initials {
     justify-content: center;
+    padding: 0 --spacing(3);
   }
 
   .overlay-type-signature,
@@ -481,6 +482,15 @@
     height: 100%;
     object-fit: contain;
     pointer-events: none;
+  }
+
+  .overlay-type-signature,
+  .overlay-type-initials {
+    .field-image.is-typed-signature-image {
+      width: auto;
+      max-width: none;
+      height: 85%;
+    }
   }
 
   .date-picker-anchor {

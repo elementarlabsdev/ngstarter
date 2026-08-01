@@ -985,6 +985,16 @@
     }
   }
 
+  .overlay-type-signature,
+  .overlay-type-initials {
+    .signature-field-image.is-typed-signature-image {
+      width: auto;
+      max-width: none;
+      height: 85%;
+      object-fit: contain;
+    }
+  }
+
   .overlay-type-checkbox {
     min-width: --spacing(4);
     min-height: --spacing(4);
