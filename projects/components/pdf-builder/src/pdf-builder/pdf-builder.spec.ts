@@ -972,6 +972,60 @@ describe('PdfBuilder', () => {
     subscription.unsubscribe();
   });
 
+  it('stores text font settings in the schema and applies them to the builder field', async () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const emitted: PdfBuilderSchema[] = [];
+    const subscription = component.schemaChange.subscribe(schema => emitted.push(schema));
+    const state = component as unknown as {
+      addField: (type: 'text') => void;
+      fields: () => readonly { id: string; fontColor?: string; fontFamily?: string; fontSize?: number }[];
+      syncOverlayGeometry: () => void;
+      updateTextFieldValue: (fieldId: string, value: string) => void;
+      updateSelectedTextFontColor: (value: string) => void;
+      updateSelectedTextFontFamily: (value: string) => void;
+      updateSelectedTextFontSize: (value: number) => void;
+    };
+
+    state.addField('text');
+    fixture.detectChanges();
+    element.querySelector<HTMLButtonElement>('[aria-label="Field settings"]')!.click();
+    fixture.detectChanges();
+
+    expect(element.querySelector('ngs-select[aria-label="Font family"]')).not.toBeNull();
+    expect(element.querySelector('ngs-number-input[aria-label="Font size"]')).not.toBeNull();
+    expect(element.querySelector('input[aria-label="Font color"]')).not.toBeNull();
+    expect(element.querySelector('[aria-label="Choose font color"]')).not.toBeNull();
+    expect(state.fields()[0].fontColor).toBe('#000000');
+
+    state.updateSelectedTextFontFamily('Georgia, serif');
+    state.updateSelectedTextFontSize(24);
+    state.updateSelectedTextFontColor('#155eef');
+    state.updateTextFieldValue(state.fields()[0].id, 'Styled text');
+    fixture.detectChanges();
+    state.syncOverlayGeometry();
+    await Promise.resolve();
+
+    const overlay = element.querySelector<HTMLElement>('.overlay-type-text');
+    const value = overlay?.querySelector<HTMLElement>('.field-value');
+
+    expect(state.fields()[0]).toMatchObject({
+      fontColor: '#155eef',
+      fontFamily: 'Georgia, serif',
+      fontSize: 24,
+    });
+    expect(overlay?.style.getPropertyValue('--pdf-builder-text-font-family')).toBe('Georgia, serif');
+    expect(overlay?.style.getPropertyValue('--pdf-builder-text-font-size')).toBe('24px');
+    expect(overlay?.style.getPropertyValue('--pdf-builder-text-font-color')).toBe('#155eef');
+    expect(getComputedStyle(value!).color).toBe('rgb(21, 94, 239)');
+    expect(emitted.at(-1)?.fields[0]).toMatchObject({
+      fontColor: '#155eef',
+      fontFamily: 'Georgia, serif',
+      fontSize: 24,
+    });
+
+    subscription.unsubscribe();
+  });
+
   it('keeps layer expansion restored when scrolling changes the active page', async () => {
     const state = component as unknown as {
       activePage: { set: (page: number) => void };

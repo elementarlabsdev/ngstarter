@@ -447,6 +447,40 @@ describe('PdfSigner', () => {
     subscription.unsubscribe();
   });
 
+  it('applies text font settings from the builder schema', () => {
+    const schema = createSchema();
+    const styledSchema: PdfBuilderSchema = {
+      ...schema,
+      fields: schema.fields.map(field => field.id === 'current-text'
+        ? {
+          ...field,
+          fontColor: '#155eef',
+          fontFamily: 'Georgia, serif',
+          fontSize: 24,
+        }
+        : field),
+    };
+    const state = component as unknown as {
+      syncOverlayGeometry: () => void;
+    };
+
+    setInputs(styledSchema, currentSigner);
+    state.syncOverlayGeometry();
+
+    const element: HTMLElement = fixture.nativeElement;
+    const overlay = element.querySelector<HTMLElement>('[data-field-id="current-text"]');
+    const editor = overlay?.querySelector<HTMLElement>('.text-field-editor');
+    const legacyOverlay = element.querySelector<HTMLElement>('[data-field-id="other-text"]');
+
+    expect(overlay?.style.getPropertyValue('--pdf-signer-text-font-family')).toBe('Georgia, serif');
+    expect(overlay?.style.getPropertyValue('--pdf-signer-text-font-size')).toBe('24px');
+    expect(overlay?.style.getPropertyValue('--pdf-signer-text-font-color')).toBe('#155eef');
+    expect(legacyOverlay?.style.getPropertyValue('--pdf-signer-text-font-color')).toBe('#000000');
+    expect(getComputedStyle(editor!).color).toBe('rgb(21, 94, 239)');
+    expect(getComputedStyle(editor!).fontFamily).toContain('Georgia');
+    expect(getComputedStyle(editor!).fontSize).toBe('24px');
+  });
+
   it('restores an entered text value when the field is opened again', async () => {
     setInputs(createSchema(), currentSigner);
 

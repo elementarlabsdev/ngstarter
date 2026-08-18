@@ -589,6 +589,67 @@
         </ngs-panel-header>
 
         <ngs-panel-content class="field-settings-body">
+          @if (field.type === 'text') {
+            <div class="text-field-settings" aria-label="Text appearance">
+              <ngs-form-field>
+                <ngs-label>Font family</ngs-label>
+                <ngs-select
+                  aria-label="Font family"
+                  [value]="getTextFieldFontFamily(field)"
+                  [disabled]="field.locked"
+                  (selectionChange)="updateSelectedTextFontFamily($event.value)"
+                >
+                  @for (font of textFontFamilyOptions; track font.value) {
+                    <ngs-option [value]="font.value">{{ font.label }}</ngs-option>
+                  }
+                </ngs-select>
+              </ngs-form-field>
+
+              <ngs-form-field>
+                <ngs-label>Font size</ngs-label>
+                <ngs-number-input
+                  aria-label="Font size"
+                  [ngModel]="getTextFieldFontSize(field)"
+                  [min]="minTextFontSize"
+                  [max]="maxTextFontSize"
+                  [disabled]="field.locked"
+                  (ngModelChange)="updateSelectedTextFontSize($event)"
+                />
+              </ngs-form-field>
+
+              <ngs-form-field>
+                <ngs-label>Font color</ngs-label>
+                <input
+                  type="text"
+                  ngsInput
+                  readonly
+                  aria-label="Font color"
+                  [ngModel]="getTextFieldFontColor(field)"
+                  [disabled]="field.locked"
+                />
+                <button
+                  ngs-color-picker-thumbnail
+                  ngsSuffix
+                  type="button"
+                  class="cursor-pointer"
+                  aria-label="Choose font color"
+                  [color]="getTextFieldFontColor(field)"
+                  [disabled]="field.locked"
+                  [ngsColorPickerTriggerFor]="textColorPicker"
+                ></button>
+                <ng-template #textColorPicker>
+                  <ngs-color-picker
+                    resultFormat="hex"
+                    [showOpacity]="false"
+                    [disabled]="field.locked"
+                    [ngModel]="getTextFieldFontColor(field)"
+                    (ngModelChange)="updateSelectedTextFontColor($event)"
+                  />
+                </ng-template>
+              </ngs-form-field>
+            </div>
+          }
+
           <div class="field-settings-actions" aria-label="Selected field actions">
             @if (field.type === 'variable') {
               <button

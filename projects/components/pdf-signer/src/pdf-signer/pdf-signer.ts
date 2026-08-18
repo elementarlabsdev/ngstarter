@@ -25,6 +25,11 @@ import { Dialog } from '@ngstarter-ui/components/dialog';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Panel, PanelContent, PanelHeader, PanelSidebar } from '@ngstarter-ui/components/panel';
 import {
+  PDF_BUILDER_DEFAULT_TEXT_FONT_COLOR,
+  PDF_BUILDER_DEFAULT_TEXT_FONT_FAMILY,
+  PDF_BUILDER_DEFAULT_TEXT_FONT_SIZE,
+  PDF_BUILDER_MAX_TEXT_FONT_SIZE,
+  PDF_BUILDER_MIN_TEXT_FONT_SIZE,
   type PdfBuilderDrawnSignatureUploadCallback,
   type PdfBuilderField,
   type PdfBuilderInitialsAsset,
@@ -275,6 +280,22 @@ export class PdfSigner {
     }
 
     return field.value.trim() || field.label;
+  }
+
+  private getTextFieldFontSize(field: PdfBuilderField): number {
+    const fontSize = field.fontSize;
+
+    return typeof fontSize === 'number' && Number.isFinite(fontSize)
+      ? this.clamp(fontSize, PDF_BUILDER_MIN_TEXT_FONT_SIZE, PDF_BUILDER_MAX_TEXT_FONT_SIZE)
+      : PDF_BUILDER_DEFAULT_TEXT_FONT_SIZE;
+  }
+
+  private getTextFieldFontFamily(field: PdfBuilderField): string {
+    return field.fontFamily?.trim() || PDF_BUILDER_DEFAULT_TEXT_FONT_FAMILY;
+  }
+
+  private getTextFieldFontColor(field: PdfBuilderField): string {
+    return field.fontColor?.trim() || PDF_BUILDER_DEFAULT_TEXT_FONT_COLOR;
   }
 
   protected getFieldTooltip(field: PdfBuilderField): string {
@@ -987,6 +1008,12 @@ export class PdfSigner {
       this.setCssVar(element, '--pdf-signer-field-top', `${field.y * scale.y}px`);
       this.setCssVar(element, '--pdf-signer-field-width', `${field.width * scale.x}px`);
       this.setCssVar(element, '--pdf-signer-field-height', `${field.height * scale.y}px`);
+
+      if (field.type === 'text') {
+        this.setCssVar(element, '--pdf-signer-text-font-size', `${this.getTextFieldFontSize(field)}px`);
+        this.setCssVar(element, '--pdf-signer-text-font-family', this.getTextFieldFontFamily(field));
+        this.setCssVar(element, '--pdf-signer-text-font-color', this.getTextFieldFontColor(field));
+      }
     }
   }
 

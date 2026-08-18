@@ -16,15 +16,27 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 import { Button } from '@ngstarter-ui/components/button';
+import {
+  ColorPicker,
+  ColorPickerThumbnail,
+  ColorPickerTriggerForDirective,
+} from '@ngstarter-ui/components/color-picker';
 import {
   Datepicker,
   DatepickerInput,
   provideNativeDateAdapter,
 } from '@ngstarter-ui/components/datepicker';
 import { Dialog } from '@ngstarter-ui/components/dialog';
-import { FormField, IconButtonSuffix, IconPrefix } from '@ngstarter-ui/components/form-field';
+import {
+  FormField,
+  IconButtonSuffix,
+  IconPrefix,
+  Label,
+  Suffix,
+} from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
 import {
@@ -50,6 +62,7 @@ import {
   PanelSidebar,
 } from '@ngstarter-ui/components/panel';
 import { Popover, PopoverContent } from '@ngstarter-ui/components/popover';
+import { NumberInput } from '@ngstarter-ui/components/number-input';
 import {
   PdfViewer,
   PdfViewerAnnotations,
@@ -61,6 +74,7 @@ import {
   type PdfViewerSource,
 } from '@ngstarter-ui/components/pdf-viewer';
 import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
+import { Option, Select } from '@ngstarter-ui/components/select';
 import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import {
   Toolbar,
@@ -96,6 +110,11 @@ const PDF_BUILDER_PAGE_WIDTH = 595.276;
 const PDF_BUILDER_PAGE_HEIGHT = 841.89;
 const PDF_BUILDER_MAX_PORTRAIT_PAGE_WIDTH = 814;
 const PDF_BUILDER_FIXED_PAGE_SCALE = PDF_BUILDER_MAX_PORTRAIT_PAGE_WIDTH / PDF_BUILDER_PAGE_WIDTH;
+export const PDF_BUILDER_DEFAULT_TEXT_FONT_SIZE = 16;
+export const PDF_BUILDER_MIN_TEXT_FONT_SIZE = 8;
+export const PDF_BUILDER_MAX_TEXT_FONT_SIZE = 72;
+export const PDF_BUILDER_DEFAULT_TEXT_FONT_FAMILY = 'inherit';
+export const PDF_BUILDER_DEFAULT_TEXT_FONT_COLOR = '#000000';
 
 interface PdfBuilderTool {
   readonly type: PdfBuilderFieldType;
@@ -107,6 +126,11 @@ interface PdfBuilderTool {
 interface PdfBuilderVariableBinding {
   readonly label: string;
   readonly path: string;
+}
+
+interface PdfBuilderTextFontFamilyOption {
+  readonly label: string;
+  readonly value: string;
 }
 
 interface PdfBuilderLayerNode {
@@ -138,6 +162,9 @@ export interface PdfBuilderField {
   readonly label: string;
   readonly binding: string;
   readonly value: string;
+  readonly fontSize?: number;
+  readonly fontFamily?: string;
+  readonly fontColor?: string;
   readonly signer?: PdfBuilderFieldSigner | null;
   readonly icon: string;
   readonly slot: PdfBuilderFieldSlot;
@@ -334,7 +361,7 @@ interface PdfBuilderHistoryState {
   readonly activePage: number;
 }
 
-type PdfBuilderAutosizeKey = 'label' | 'value';
+type PdfBuilderAutosizeKey = 'label' | 'value' | 'fontSize' | 'fontFamily';
 
 interface PdfBuilderPlacementGhost {
   readonly type: PdfBuilderFieldType;
@@ -388,11 +415,17 @@ interface PdfBuilderFieldResize {
   imports: [
     Avatar,
     Button,
+    ColorPicker,
+    ColorPickerThumbnail,
+    ColorPickerTriggerForDirective,
     Datepicker,
     DatepickerInput,
     FormField,
+    FormsModule,
     IconButtonSuffix,
     IconPrefix,
+    Label,
+    Suffix,
     Icon,
     Input,
     List,
@@ -413,10 +446,13 @@ interface PdfBuilderFieldResize {
     PanelSidebar,
     Popover,
     PopoverContent,
+    NumberInput,
     PdfViewer,
     PdfViewerAnnotations,
     PdfViewerSearch,
     ScrollbarArea,
+    Select,
+    Option,
     Tab,
     TabGroup,
     Toolbar,
@@ -499,6 +535,15 @@ export class PdfBuilder {
   protected readonly activePage = signal(1);
   protected readonly pdfScale = signal(PDF_BUILDER_FIXED_PAGE_SCALE);
   protected readonly textFieldPlaceholder = 'Enter value';
+  protected readonly textFontFamilyOptions: readonly PdfBuilderTextFontFamilyOption[] = [
+    { label: 'Default', value: PDF_BUILDER_DEFAULT_TEXT_FONT_FAMILY },
+    { label: 'Arial', value: 'Arial, sans-serif' },
+    { label: 'Georgia', value: 'Georgia, serif' },
+    { label: 'Times New Roman', value: '"Times New Roman", serif' },
+    { label: 'Courier New', value: '"Courier New", monospace' },
+  ];
+  protected readonly minTextFontSize = PDF_BUILDER_MIN_TEXT_FONT_SIZE;
+  protected readonly maxTextFontSize = PDF_BUILDER_MAX_TEXT_FONT_SIZE;
   protected readonly activeCanvasTool = signal<PdfBuilderCanvasTool>('select');
   protected readonly selectedFieldId = signal<string | null>(null);
   protected readonly hoveredFieldId = signal<string | null>(null);
@@ -1737,7 +1782,7 @@ export class PdfBuilder {
     const pageCount = pages.length;
     const fields = (schema.fields ?? [])
       .filter(field => field.page >= 1 && field.page <= pageCount)
-      .map(field => this.withDefaultFieldSigner(field));
+      .map(field => this.withDefaultFieldSettings(field));
     const view = schema.view;
 
     this.suppressNextSchemaChange = true;
@@ -1979,6 +2024,51 @@ export class PdfBuilder {
           ? this.withAutosizedTextMetrics(nextField)
           : nextField;
       }),
+    );
+  }
+
+  protected getTextFieldFontSize(field: PdfBuilderField): number {
+    const fontSize = field.fontSize;
+
+    return typeof fontSize === 'number' && Number.isFinite(fontSize)
+      ? this.clamp(fontSize, PDF_BUILDER_MIN_TEXT_FONT_SIZE, PDF_BUILDER_MAX_TEXT_FONT_SIZE)
+      : PDF_BUILDER_DEFAULT_TEXT_FONT_SIZE;
+  }
+
+  protected getTextFieldFontFamily(field: PdfBuilderField): string {
+    return field.fontFamily?.trim() || PDF_BUILDER_DEFAULT_TEXT_FONT_FAMILY;
+  }
+
+  protected getTextFieldFontColor(field: PdfBuilderField): string {
+    return field.fontColor?.trim() || PDF_BUILDER_DEFAULT_TEXT_FONT_COLOR;
+  }
+
+  protected updateSelectedTextFontSize(value: number | undefined): void {
+    if (!Number.isFinite(value)) {
+      return;
+    }
+
+    this.updateSelectedField(
+      'fontSize',
+      this.clamp(
+        Math.round(value as number),
+        PDF_BUILDER_MIN_TEXT_FONT_SIZE,
+        PDF_BUILDER_MAX_TEXT_FONT_SIZE,
+      ),
+    );
+  }
+
+  protected updateSelectedTextFontFamily(value: string): void {
+    this.updateSelectedField(
+      'fontFamily',
+      value.trim() || PDF_BUILDER_DEFAULT_TEXT_FONT_FAMILY,
+    );
+  }
+
+  protected updateSelectedTextFontColor(value: string): void {
+    this.updateSelectedField(
+      'fontColor',
+      value.trim() || PDF_BUILDER_DEFAULT_TEXT_FONT_COLOR,
     );
   }
 
@@ -2743,6 +2833,12 @@ export class PdfBuilder {
       this.setCssVar(element, '--pdf-builder-field-top', `${field.y * scale.y}px`);
       this.setCssVar(element, '--pdf-builder-field-width', `${field.width * scale.x}px`);
       this.setCssVar(element, '--pdf-builder-field-height', `${field.height * scale.y}px`);
+
+      if (field.type === 'text') {
+        this.setCssVar(element, '--pdf-builder-text-font-size', `${this.getTextFieldFontSize(field)}px`);
+        this.setCssVar(element, '--pdf-builder-text-font-family', this.getTextFieldFontFamily(field));
+        this.setCssVar(element, '--pdf-builder-text-font-color', this.getTextFieldFontColor(field));
+      }
     }
 
     for (const element of this.getSelectionToolbarElements()) {
@@ -2768,7 +2864,12 @@ export class PdfBuilder {
     key: K,
     field: PdfBuilderField,
   ): key is Extract<K, PdfBuilderAutosizeKey> {
-    return (key === 'label' || key === 'value') && field.type !== 'stamp';
+    return (
+      key === 'label' ||
+      key === 'value' ||
+      key === 'fontSize' ||
+      key === 'fontFamily'
+    ) && field.type !== 'stamp';
   }
 
   private withAutosizedTextMetrics(field: PdfBuilderField): PdfBuilderField {
@@ -2777,14 +2878,16 @@ export class PdfBuilder {
     const displayedValue = field.value && field.type !== 'signature' && field.type !== 'initials' && field.type !== 'stamp'
       ? field.value
       : '';
-    const labelWidth = this.measureOverlayText(field.label, 'label') + 46;
-    const valueWidth = displayedValue ? this.measureOverlayText(displayedValue, 'value') + 24 : 0;
+    const labelWidth = this.measureOverlayText(field.label, 'label', field) + 46;
+    const valueWidth = displayedValue ? this.measureOverlayText(displayedValue, 'value', field) + 24 : 0;
     const minimumWidth = minimumMetrics.width * scale.x;
     const desiredWidth = Math.ceil(Math.max(minimumWidth, labelWidth, valueWidth) / scale.x);
     const desiredHeight = Math.ceil(Math.max(
       field.height,
       minimumMetrics.height,
-      (displayedValue ? 50 : 36) / scale.y,
+      (displayedValue
+        ? Math.max(50, this.getTextFieldFontSize(field) * 1.25 + 16)
+        : 36) / scale.y,
     ));
     const pageInset = 8;
     const maxWidth = Math.max(32, PDF_BUILDER_PAGE_WIDTH - pageInset * 2);
@@ -2871,7 +2974,11 @@ export class PdfBuilder {
     ].reduce((total, value) => total + (Number.parseFloat(value) || 0), 0);
   }
 
-  private measureOverlayText(text: string, variant: 'label' | 'value'): number {
+  private measureOverlayText(
+    text: string,
+    variant: 'label' | 'value',
+    field: PdfBuilderField,
+  ): number {
     const defaultView = this.document.defaultView;
     const canvas = this.document.createElement('canvas');
     const context = canvas.getContext('2d');
@@ -2883,9 +2990,13 @@ export class PdfBuilder {
     const fontFamily = defaultView
       ? defaultView.getComputedStyle(this.elementRef.nativeElement).fontFamily
       : 'sans-serif';
+    const valueFontFamily = this.getTextFieldFontFamily(field);
+
     context.font = variant === 'label'
       ? `600 13px ${fontFamily}`
-      : `500 14px ${fontFamily}`;
+      : `400 ${this.getTextFieldFontSize(field)}px ${valueFontFamily === 'inherit'
+        ? fontFamily
+        : valueFontFamily}`;
 
     return context.measureText(text).width;
   }
@@ -3143,6 +3254,11 @@ export class PdfBuilder {
       label: this.getDefaultLabel(type, tool?.label),
       binding,
       value: this.getDefaultValue(type, binding),
+      ...(type === 'text' ? {
+        fontSize: PDF_BUILDER_DEFAULT_TEXT_FONT_SIZE,
+        fontFamily: PDF_BUILDER_DEFAULT_TEXT_FONT_FAMILY,
+        fontColor: PDF_BUILDER_DEFAULT_TEXT_FONT_COLOR,
+      } : {}),
       signer: this.getDefaultFieldSigner(),
       icon: tool?.icon ?? 'fluent:form-24-regular',
       slot,
@@ -3154,14 +3270,15 @@ export class PdfBuilder {
     };
   }
 
-  private withDefaultFieldSigner(field: PdfBuilderField): PdfBuilderField {
-    if (field.signer !== undefined) {
-      return { ...field };
-    }
-
+  private withDefaultFieldSettings(field: PdfBuilderField): PdfBuilderField {
     return {
       ...field,
-      signer: this.getDefaultFieldSigner(),
+      ...(field.type === 'text' ? {
+        fontSize: this.getTextFieldFontSize(field),
+        fontFamily: this.getTextFieldFontFamily(field),
+        fontColor: this.getTextFieldFontColor(field),
+      } : {}),
+      signer: field.signer === undefined ? this.getDefaultFieldSigner() : field.signer,
     };
   }
 

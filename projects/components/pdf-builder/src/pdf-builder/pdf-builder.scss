@@ -789,8 +789,9 @@
       display: block;
       width: 100%;
       margin: 0;
-      color: var(--ngs-color-on-surface);
-      font-size: var(--ngs-font-size-md);
+      color: var(--pdf-builder-text-font-color, #000000);
+      font-family: var(--pdf-builder-text-font-family, inherit);
+      font-size: var(--pdf-builder-text-font-size, var(--ngs-font-size-md));
       font-weight: 400;
       line-height: 1.25;
       overflow: hidden;
@@ -811,9 +812,9 @@
       outline: 0;
       background: transparent;
       box-shadow: none;
-      color: var(--ngs-color-on-surface);
-      font: inherit;
-      font-size: var(--ngs-font-size-md);
+      color: var(--pdf-builder-text-font-color, #000000);
+      font-family: var(--pdf-builder-text-font-family, inherit);
+      font-size: var(--pdf-builder-text-font-size, var(--ngs-font-size-md));
       font-weight: 400;
       line-height: 1.25;
       overflow: visible;
@@ -1192,5 +1193,14 @@
     display: flex;
     flex-direction: column;
     gap: --spacing(2);
+  }
+
+  .text-field-settings {
+    display: grid;
+    gap: --spacing(3);
+
+    ngs-form-field {
+      width: 100%;
+    }
   }
 }
