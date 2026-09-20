@@ -26,6 +26,7 @@ import { NotificationInterface } from '../types';
   host: {
     'class': 'ngs-notification-list',
     '[class.is-static]': 'static()',
+    '[class.has-controls]': '!!controlsDef()',
     'role': 'list'
   }
 })

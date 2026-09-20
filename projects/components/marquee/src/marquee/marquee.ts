@@ -9,7 +9,8 @@ import {
   booleanAttribute,
   OnChanges,
   SimpleChanges,
-  OnDestroy
+  OnDestroy,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 
@@ -18,6 +19,7 @@ import { isPlatformServer } from '@angular/common';
   exportAs: 'ngsMarquee',
   templateUrl: './marquee.html',
   styleUrl: './marquee.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-marquee'
   }

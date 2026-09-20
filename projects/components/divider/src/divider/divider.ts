@@ -1,10 +1,11 @@
-import { booleanAttribute, Component, input } from '@angular/core';
+import { booleanAttribute, Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-divider',
   exportAs: 'ngsDivider',
   template: '',
   styleUrl: './divider.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'role': 'separator',
     'class': 'ngs-divider',

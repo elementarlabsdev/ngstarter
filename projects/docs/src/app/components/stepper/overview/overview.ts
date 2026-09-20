@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicStepperExample } from '../_examples/basic-stepper-example/basic-stepper-example';
 import { StepperVerticalExample } from '../_examples/stepper-vertical-example/stepper-vertical-example';
@@ -23,6 +23,7 @@ import { StepperHiddenHeaderBorderExample } from '../_examples/stepper-hidden-he
     StepperHiddenHeaderBorderExample,
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss',
 })
 export class Overview {}

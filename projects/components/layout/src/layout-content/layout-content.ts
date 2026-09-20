@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, ElementRef, forwardRef, inject, input, OnInit, PLATFORM_ID } from '@angular/core';
+import { booleanAttribute, Component, ElementRef, forwardRef, inject, input, OnInit, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { isPlatformServer } from '@angular/common';
@@ -19,6 +19,7 @@ import { LAYOUT_CONTENT, LayoutContentInterface } from '../types';
       useExisting: forwardRef(() => LayoutContent)
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-layout-content ngs-scroll-lg'
   }

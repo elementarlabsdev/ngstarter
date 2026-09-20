@@ -1,10 +1,11 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { GRID } from '@ngstarter-ui/components/grid';
 
 @Component({
   selector: 'ngs-recent-activity-content',
   imports: [],
   templateUrl: './recent-activity-widget.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './recent-activity-widget.scss'
 })
 export class RecentActivityWidget implements OnInit {

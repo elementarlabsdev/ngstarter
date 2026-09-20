@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Autocomplete, AutocompleteTrigger, Option } from '@ngstarter-ui/components/autocomplete';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
@@ -19,6 +19,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule
   ],
   templateUrl: './auto-highlight-first-person-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './auto-highlight-first-person-example.scss'
 })
 export class AutoHighlightFirstPersonExample {

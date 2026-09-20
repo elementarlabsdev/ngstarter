@@ -1,5 +1,5 @@
 <ngs-comment-editor #editor [imageUploadFn]="uploadFn" (sent)="onSent($event)"
-                    class="rounded-xl border border-muted">
+                    class="rounded-xl border border-border">
   <ngs-comment-editor-toolbar>
     <button ngsIconButton ngsTooltip="Bold"
             ngsCommentEditorCommand ngsCommentEditorCommandBold>
@@ -83,7 +83,7 @@
 @if (comments.length > 0) {
   <div class="mt-10 flex flex-col gap-7">
     @for (comment of comments; track comment) {
-      <div class="border border-muted  rounded-xl p-5" [innerHTML]="comment | safeHtml"></div>
+      <div class="border border-border  rounded-xl p-5" [innerHTML]="comment | safeHtml"></div>
     }
   </div>
 }

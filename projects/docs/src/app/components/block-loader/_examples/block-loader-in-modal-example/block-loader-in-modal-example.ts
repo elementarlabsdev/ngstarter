@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Dialog } from '@ngstarter-ui/components/dialog';
 import { BlockLoaderModal } from '../_modals/block-loader-modal/block-loader-modal';
@@ -9,6 +9,7 @@ import { BlockLoaderModal } from '../_modals/block-loader-modal/block-loader-mod
     Button
   ],
   templateUrl: './block-loader-in-modal-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './block-loader-in-modal-example.scss'
 })
 export class BlockLoaderInModalExample {

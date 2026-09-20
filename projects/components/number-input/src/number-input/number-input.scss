@@ -2,22 +2,24 @@
 
 :host {
   --ngs-number-input-gap: --spacing(2);
-  --ngs-number-input-control-bg: none;
-  --ngs-number-input-control-color: var(--ngs-color-neutral-500);
-  --ngs-number-input-control-hover-color: var(--ngs-color-neutral-600);
-  --ngs-number-input-control-active-color: var(--ngs-color-neutral-700);
-  --ngs-number-input-control-hover-bg: var(--ngs-color-surface-container);
-  --ngs-number-input-control-active-bg: var(--ngs-color-surface-container-high);
+  --ngs-number-input-control-bg: var(--ngs-color-primary);
+  --ngs-number-input-control-color: var(--ngs-color-on-primary);
+  --ngs-number-input-control-hover-color: var(--ngs-color-on-primary);
+  --ngs-number-input-control-active-color: var(--ngs-color-on-primary);
+  --ngs-number-input-control-hover-bg: var(--ngs-color-primary);
+  --ngs-number-input-control-active-bg: var(--ngs-color-primary);
   --ngs-number-input-control-font-size: 1.5rem;
   --ngs-number-input-control-border-radius: var(--ngs-radius-md);
   --ngs-number-input-suffix-gap: --spacing(3);
   --ngs-number-input-control-size: --spacing(7);
   --ngs-number-input-control-border: none;
   --ngs-number-input-controls-wdith: --spacing(16);
+  --ngs-number-input-controls-offset: --spacing(1);
 
   display: flex !important;
+  box-sizing: border-box;
   gap: var(--ngs-number-input-gap);
-  padding-right: var(--ngs-number-input-controls-wdith);
+  padding-right: calc(var(--ngs-number-input-controls-wdith) + var(--ngs-number-input-controls-offset));
 
   .number-input {
     width: auto;
@@ -43,7 +45,7 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 0;
+    right: var(--ngs-number-input-controls-offset);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -87,15 +89,14 @@
       color: var(--ngs-number-input-control-hover-color);
     }
 
+    &:active {
+      background: var(--ngs-number-input-control-active-bg);
+      color: var(--ngs-number-input-control-active-color);
+    }
+
     &[disabled] {
       pointer-events: none;
       opacity: 0.65;
     }
   }
-}
-
-:host-context(html.dark) {
-  --ngs-number-input-control-color: var(--ngs-color-neutral-300);
-  --ngs-number-input-control-hover-color: var(--ngs-color-neutral-200);
-  --ngs-number-input-control-hover-bg: var(--ngs-color-neutral-500);
 }

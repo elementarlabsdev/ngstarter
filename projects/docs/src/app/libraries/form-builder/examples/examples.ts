@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   FormBuilder,
   FormBuilderSchema,
@@ -71,6 +71,7 @@ function toOwnerOptions(owners: OwnerOption[]): SelectDataSourceOption<OwnerOpti
     })
   ],
   templateUrl: './examples.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './examples.scss'
 })
 export class Examples {

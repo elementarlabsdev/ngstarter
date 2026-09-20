@@ -1,4 +1,4 @@
-import { Component, model } from '@angular/core';
+import { Component, model, ChangeDetectionStrategy } from '@angular/core';
 import {
   DataViewActionBar,
   DataViewActionBarDirective,
@@ -35,6 +35,7 @@ const DATA: PeriodicElement[] = [
     Button
   ],
   templateUrl: './data-view-loading-state-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './data-view-loading-state-example.scss'
 })
 export class DataViewLoadingStateExample {

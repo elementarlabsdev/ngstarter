@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicListExample } from '../_examples/basic-list-example/basic-list-example';
 import {
@@ -25,6 +25,7 @@ import { NavListExample } from '../_examples/nav-list-example/nav-list-example';
     NavListExample,
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

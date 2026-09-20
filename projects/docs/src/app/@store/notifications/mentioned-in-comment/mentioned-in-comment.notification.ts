@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 import { NotificationInterface } from '@ngstarter-ui/components/notifications';
@@ -10,6 +10,7 @@ import { NotificationInterface } from '@ngstarter-ui/components/notifications';
     Avatar
   ],
   templateUrl: './mentioned-in-comment.notification.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './mentioned-in-comment.notification.scss'
 })
 export class MentionedInCommentNotification {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-kbd',
@@ -6,6 +6,7 @@ import { Component, inject } from '@angular/core';
   imports: [],
   templateUrl: './kbd.html',
   styleUrl: './kbd.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-kbd',
   }

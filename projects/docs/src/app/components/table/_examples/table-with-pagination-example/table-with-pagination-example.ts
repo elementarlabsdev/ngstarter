@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, PLATFORM_ID, viewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, PLATFORM_ID, viewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { Paginator } from '@ngstarter-ui/components/paginator';
 import { isPlatformBrowser } from '@angular/common';
@@ -61,6 +61,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
     HeaderCellDef
   ],
   templateUrl: './table-with-pagination-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './table-with-pagination-example.scss'
 })
 export class TableWithPaginationExample implements AfterViewInit {

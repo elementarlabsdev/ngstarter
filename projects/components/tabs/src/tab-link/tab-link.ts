@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, ElementRef, computed, inject, input } from '@angular/core';
+import { booleanAttribute, Component, ElementRef, computed, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Ripple } from '@ngstarter-ui/components/core';
 import { TabNavBar } from '../tab-nav-bar/tab-nav-bar';
@@ -19,6 +19,7 @@ import { TabNavBar } from '../tab-nav-bar/tab-nav-bar';
     '[attr.aria-controls]': '_ariaControls()',
     '(click)': '_onClick($event)'
   },
+  changeDetection: ChangeDetectionStrategy.Eager,
   hostDirectives: [
     { directive: Ripple, inputs: ['ngsRippleDisabled: ngsRippleDisabled'] }
   ]

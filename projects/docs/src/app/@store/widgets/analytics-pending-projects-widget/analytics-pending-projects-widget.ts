@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { GRID, Grid } from '@ngstarter-ui/components/grid';
 import { Icon } from '@ngstarter-ui/components/icon';
 
@@ -9,6 +9,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
 
   ],
   templateUrl: './analytics-pending-projects-widget.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './analytics-pending-projects-widget.scss'
 })
 export class AnalyticsPendingProjectsWidget implements OnInit {

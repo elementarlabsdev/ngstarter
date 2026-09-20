@@ -11,7 +11,8 @@ import {
   Optional,
   Self,
   booleanAttribute, inject,
-  viewChild, input, effect, output, DestroyRef, computed, signal, AfterViewInit
+  viewChild, input, effect, output, DestroyRef, computed, signal, AfterViewInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { FormGroupDirective, NG_VALIDATORS, NgControl, NgForm, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ErrorStateMatcher, Ripple } from '@ngstarter-ui/components/core';
@@ -63,6 +64,7 @@ import { Button } from '@ngstarter-ui/components/button';
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-phone-input',
     '[class.is-floating]': 'shouldLabelFloat',

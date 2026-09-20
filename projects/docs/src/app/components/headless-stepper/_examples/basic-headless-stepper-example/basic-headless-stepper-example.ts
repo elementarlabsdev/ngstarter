@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardContent } from '@ngstarter-ui/components/card';
 import { HeadlessStep, HeadlessStepper } from '@ngstarter-ui/components/headless-stepper';
@@ -15,6 +15,7 @@ import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
     ProgressBar
   ],
   templateUrl: './basic-headless-stepper-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-headless-stepper-example.scss'
 })
 export class BasicHeadlessStepperExample {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
 import { Kbd, KbdGroup } from '@ngstarter-ui/components/kbd';
@@ -16,6 +16,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     Icon
   ],
   templateUrl: './kbd-with-menu-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './kbd-with-menu-example.scss',
 })
 export class KbdWithMenuExample {

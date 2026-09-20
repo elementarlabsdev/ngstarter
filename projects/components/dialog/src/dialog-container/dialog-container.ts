@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CdkDialogContainer, DialogModule } from '@angular/cdk/dialog';
 import { Button } from "@ngstarter-ui/components/button";
 import { Icon } from "@ngstarter-ui/components/icon";
@@ -14,6 +14,7 @@ import type { DialogConfig } from "../dialog-config";
   ],
   templateUrl: './dialog-container.html',
   styleUrl: './dialog-container.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-dialog-container',
     '[class.ngs-dialog-container-enter]': '_animationState === "enter"',

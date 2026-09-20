@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, computed, contentChildren, input } from '@angular/core';
+import { booleanAttribute, Component, computed, contentChildren, input, ChangeDetectionStrategy } from '@angular/core';
 import { CdkStepper, StepperOrientation } from '@angular/cdk/stepper';
 import { Step } from '../step/step';
 import { StepLabel } from '../step-label';
@@ -17,6 +17,7 @@ import { CommonModule } from '@angular/common';
       useExisting: Stepper,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'ngs-stepper',
   },

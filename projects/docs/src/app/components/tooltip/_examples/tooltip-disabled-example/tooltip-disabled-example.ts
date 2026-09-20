@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Checkbox } from '@ngstarter-ui/components/checkbox';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
@@ -13,6 +13,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './tooltip-disabled-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tooltip-disabled-example.scss',
 })
 export class TooltipDisabledExample {

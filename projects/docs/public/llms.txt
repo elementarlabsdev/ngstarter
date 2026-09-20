@@ -3,7 +3,7 @@
 NgStarter UI is an AI-friendly Angular component kit for admin panels and product dashboards.
 
 Package: `@ngstarter-ui/components`
-Angular: 21
+Angular: 22
 Primary docs: https://ngstarter.com
 AI registry: https://ngstarter.com/ai/component-registry.json
 

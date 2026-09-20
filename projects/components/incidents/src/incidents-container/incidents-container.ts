@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { IncidentsStore } from '../incidents.store';
 import { Incidents } from '../incidents/incidents';
 import { Icon } from '@ngstarter-ui/components/icon';
@@ -30,6 +30,7 @@ import { IncidentsList } from '../incidents-list/incidents-list';
   ],
   templateUrl: './incidents-container.html',
   styleUrl: './incidents-container.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-incidents-global',
     '[class.is-active]': 'hasIncidents()'

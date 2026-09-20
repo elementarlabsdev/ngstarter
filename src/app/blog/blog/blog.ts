@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Card, CardContent } from '@ngstarter-ui/components/card';
 import { Chip, ChipSet } from '@ngstarter-ui/components/chips';
@@ -8,6 +8,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
   selector: 'app-blog',
   imports: [Card, CardContent, Chip, ChipSet, Icon, RouterLink],
   templateUrl: './blog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './blog.scss',
 })
 export class Blog {

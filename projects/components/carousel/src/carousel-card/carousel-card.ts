@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject } from '@angular/core';
+import { Component, ElementRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CAROUSEL_CARD } from '../types';
 
 @Component({
@@ -13,6 +13,7 @@ import { CAROUSEL_CARD } from '../types';
   ],
   templateUrl: './carousel-card.html',
   styleUrl: './carousel-card.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-carousel-card',
   }

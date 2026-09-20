@@ -2,7 +2,8 @@ import {
   booleanAttribute,
   Component,
   inject,
-  input
+  input,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { SEGMENTED } from '../types';
 import { Segmented } from '../segmented/segmented';
@@ -16,6 +17,7 @@ import { Ripple } from '@ngstarter-ui/components/core';
   hostDirectives: [
     Ripple
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-segmented-button',
     '[class.icon-only]': 'iconOnly()',

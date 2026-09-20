@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicCardExample } from '../_examples/basic-card-example/basic-card-example';
 import { CardActionsExample } from '../_examples/card-actions-example/card-actions-example';
@@ -22,6 +22,7 @@ import { CardAppearanceExample } from '../_examples/card-appearance-example/card
     CardAppearanceExample,
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonToggle, ButtonToggleGroup } from '@ngstarter-ui/components/button-toggle';
 import { FormBuilderField } from '@ngstarter-ui/components/form-builder';
@@ -11,6 +11,7 @@ import { FormBuilderField } from '@ngstarter-ui/components/form-builder';
     ButtonToggleGroup
   ],
   templateUrl: './priority-field.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './priority-field.scss'
 })
 export class PriorityField {

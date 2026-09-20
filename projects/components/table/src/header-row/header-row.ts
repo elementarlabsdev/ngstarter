@@ -13,7 +13,7 @@ import {
     'class': 'ngs-header-row',
     'role': 'row',
   },
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   imports: [CdkCellOutlet],
   providers: [{provide: CdkHeaderRow, useExisting: forwardRef(() => HeaderRow)}],

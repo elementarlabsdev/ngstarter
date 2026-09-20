@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Checkbox } from '@ngstarter-ui/components/checkbox';
 
@@ -16,6 +16,7 @@ export interface Task {
     Checkbox
   ],
   templateUrl: './basic-checkboxes-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-checkboxes-example.scss'
 })
 export class BasicCheckboxesExample {

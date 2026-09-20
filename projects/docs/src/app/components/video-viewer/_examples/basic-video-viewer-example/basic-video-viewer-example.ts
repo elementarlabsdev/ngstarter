@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { VideoPlayer } from '@ngstarter-ui/components/video-player';
 import {
   VideoViewerDirective, VideoViewerVideoDirective
@@ -13,6 +13,7 @@ import {
   ],
   standalone: true,
   templateUrl: './basic-video-viewer-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-video-viewer-example.scss'
 })
 export class BasicVideoViewerExample {

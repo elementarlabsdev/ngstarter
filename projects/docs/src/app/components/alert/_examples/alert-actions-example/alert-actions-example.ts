@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
   AlertActionDirective,
@@ -20,6 +20,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './alert-actions-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './alert-actions-example.scss'
 })
 export class AlertActionsExample {

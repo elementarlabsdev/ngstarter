@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { TabPanelApiService } from '../tab-panel-api.service';
 
 @Component({
@@ -6,6 +6,7 @@ import { TabPanelApiService } from '../tab-panel-api.service';
   exportAs: 'ngsTabPanelCustomItem',
   templateUrl: './tab-panel-custom-item.html',
   styleUrl: './tab-panel-custom-item.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-tab-panel-custom-item',
     '(click)': '_handleClick()'

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Skeleton } from '@ngstarter-ui/components/skeleton';
 
 @Component({
@@ -7,6 +7,7 @@ import { Skeleton } from '@ngstarter-ui/components/skeleton';
     Skeleton
   ],
   templateUrl: './grid-stats-widget-skeleton.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './grid-stats-widget-skeleton.css'
 })
 export class GridStatsWidgetSkeleton {

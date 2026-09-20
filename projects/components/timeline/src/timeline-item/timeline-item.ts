@@ -1,4 +1,4 @@
-import { Component, contentChild, TemplateRef } from '@angular/core';
+import { Component, contentChild, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { TimelineItemIndicatorDirective } from '../timeline-item-indicator.directive';
 import { NgTemplateOutlet } from '@angular/common';
 
@@ -10,6 +10,7 @@ import { NgTemplateOutlet } from '@angular/common';
   host: {
     'class': 'ngs-timeline-item'
   },
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [NgTemplateOutlet]
 })
 export class TimelineItem {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicTilesExample } from '../_examples/basic-tiles-example/basic-tiles-example';
 
@@ -9,6 +9,7 @@ import { BasicTilesExample } from '../_examples/basic-tiles-example/basic-tiles-
     BasicTilesExample
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss',
 })
 export class Overview {

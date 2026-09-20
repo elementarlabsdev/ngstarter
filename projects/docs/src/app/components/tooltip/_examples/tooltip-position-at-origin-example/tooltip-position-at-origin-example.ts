@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
 import { Checkbox } from '@ngstarter-ui/components/checkbox';
@@ -13,6 +13,7 @@ import { Button } from '@ngstarter-ui/components/button';
     ReactiveFormsModule
   ],
   templateUrl: './tooltip-position-at-origin-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tooltip-position-at-origin-example.scss',
 })
 export class TooltipPositionAtOriginExample {

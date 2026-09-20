@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { AnnouncementStore } from '@ngstarter-ui/components/announcement';
 
@@ -8,6 +8,7 @@ import { AnnouncementStore } from '@ngstarter-ui/components/announcement';
     Button
   ],
   templateUrl: './show-hide-announcement-dynamically.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './show-hide-announcement-dynamically.scss'
 })
 export class ShowHideAnnouncementDynamically {

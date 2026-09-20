@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { GRID, Grid } from '@ngstarter-ui/components/grid';
 import { Ripple } from '@ngstarter-ui/components/core';
@@ -16,6 +16,7 @@ export interface ArticleSnippetWidget {
     Ripple
   ],
   templateUrl: './article-snippet-widget.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './article-snippet-widget.css'
 })
 export class ArticleSnippetWidget implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { LogoTextSize } from '../types';
 
 @Component({
@@ -6,6 +6,7 @@ import { LogoTextSize } from '../types';
   exportAs: 'ngsLogoText',
   templateUrl: './logo-text.html',
   styleUrl: './logo-text.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-logo-text',
     '[attr.data-size]': 'size()',

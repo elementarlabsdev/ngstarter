@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   MchartLine, MchartTooltipBody,
   MchartTooltip,
@@ -15,6 +15,7 @@ import { Grid, GRID } from '@ngstarter-ui/components/grid';
     MchartTooltipBody
   ],
   templateUrl: './total-projects-widget.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './total-projects-widget.scss'
 })
 export class TotalProjectsWidget implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ContentBuilderComponent, ContentEditorBlock } from '@ngstarter-ui/components/content-editor';
 import { Button } from '@ngstarter-ui/components/button';
 import { Dialog } from '@ngstarter-ui/components/dialog';
@@ -13,6 +13,7 @@ import { ContentBuilderPreviewDialog } from '../preview-dialog/content-builder-p
     Icon
   ],
   templateUrl: './content-builder.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './content-builder.scss',
 })
 export class ContentBuilder {

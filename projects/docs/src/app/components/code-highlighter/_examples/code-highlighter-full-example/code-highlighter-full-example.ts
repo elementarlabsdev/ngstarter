@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 
 @Component({
   selector: 'app-code-highlighter-full-example',
   standalone: true,
   imports: [CodeHighlighter],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './code-highlighter-full-example.html',
 })
 export class CodeHighlighterFullExample {

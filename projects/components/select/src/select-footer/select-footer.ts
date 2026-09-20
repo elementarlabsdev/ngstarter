@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-select-footer',
@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   imports: [],
   template: '<ng-content />',
   styleUrl: './select-footer.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-select-footer'
   }

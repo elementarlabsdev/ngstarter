@@ -8,7 +8,7 @@ import {
   inject,
   Optional,
   SkipSelf,
-  model
+  linkedSignal
 } from '@angular/core';
 import { Accordion } from '../accordion/accordion';
 
@@ -35,7 +35,8 @@ export class ExpansionPanel {
     transform: booleanAttribute
   });
 
-  expanded = model(false);
+  expandedInput = input(false, {alias: 'expanded'});
+  expanded = linkedSignal(this.expandedInput);
 
   hideToggle = input(false, {
     transform: booleanAttribute

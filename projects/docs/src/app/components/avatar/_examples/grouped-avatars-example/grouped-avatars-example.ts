@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Avatar, AvatarGroup } from '@ngstarter-ui/components/avatar';
 
 @Component({
@@ -8,6 +8,7 @@ import { Avatar, AvatarGroup } from '@ngstarter-ui/components/avatar';
     Avatar,
     AvatarGroup
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './grouped-avatars-example.scss'
 })
 export class GroupedAvatarsExample {

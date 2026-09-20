@@ -1,10 +1,11 @@
-import { booleanAttribute, Component, input } from '@angular/core';
+import { booleanAttribute, Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-panel-footer',
   exportAs: 'ngsPanelFooter',
   templateUrl: './panel-footer.html',
   styleUrl: './panel-footer.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-panel-footer',
     '[class.is-auto-height]': 'autoHeight()',

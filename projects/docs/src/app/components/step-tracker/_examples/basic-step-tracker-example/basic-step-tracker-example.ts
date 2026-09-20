@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import {
   StepTracker,
@@ -12,6 +12,7 @@ import {
     StepTracker,
     StepTrackerItem,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './basic-step-tracker-example.html',
 })
 export class BasicStepTrackerExample {

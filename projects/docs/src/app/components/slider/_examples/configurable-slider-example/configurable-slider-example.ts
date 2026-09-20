@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Slider, SliderThumb } from '@ngstarter-ui/components/slider';
 import { Checkbox } from '@ngstarter-ui/components/checkbox';
@@ -19,6 +19,7 @@ import { Input } from '@ngstarter-ui/components/input';
     FormField
   ],
   templateUrl: './configurable-slider-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './configurable-slider-example.scss'
 })
 export class ConfigurableSliderExample {

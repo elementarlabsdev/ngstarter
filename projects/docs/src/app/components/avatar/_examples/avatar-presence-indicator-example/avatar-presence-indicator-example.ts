@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 
 @Component({
@@ -7,6 +7,7 @@ import { Avatar } from '@ngstarter-ui/components/avatar';
   imports: [
     Avatar
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './avatar-presence-indicator-example.scss'
 })
 export class AvatarPresenceIndicatorExample {

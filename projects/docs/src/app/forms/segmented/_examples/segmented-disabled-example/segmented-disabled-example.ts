@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { SegmentedButton, Segmented } from '@ngstarter-ui/components/segmented';
 
 @Component({
@@ -8,6 +8,7 @@ import { SegmentedButton, Segmented } from '@ngstarter-ui/components/segmented';
     Segmented
   ],
   templateUrl: './segmented-disabled-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './segmented-disabled-example.scss'
 })
 export class SegmentedDisabledExample {

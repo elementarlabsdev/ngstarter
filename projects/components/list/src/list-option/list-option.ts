@@ -7,8 +7,8 @@ import {
   HostListener,
   output,
   ChangeDetectorRef,
-  model,
-  contentChildren
+  contentChildren,
+  linkedSignal
 } from '@angular/core';
 import { ListItem } from '../list-item/list-item';
 import { SelectionList } from '../selection-list/selection-list';
@@ -57,7 +57,8 @@ export class ListOption extends ListItem {
 
   override readonly _meta = contentChildren(ListItemMeta, { descendants: true });
 
-  selected = model(false);
+  selectedInput = input(false, {alias: 'selected'});
+  selected = linkedSignal(this.selectedInput);
 
   value = input<any>();
 

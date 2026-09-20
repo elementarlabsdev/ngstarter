@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   Navigation,
   NavigationHeading,
@@ -13,6 +13,7 @@ import {
     Navigation
   ],
   templateUrl: './navigation-with-heading-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './navigation-with-heading-example.scss'
 })
 export class NavigationWithHeadingExample {

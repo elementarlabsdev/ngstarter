@@ -9,7 +9,8 @@ import {
   input,
   OnChanges,
   OnInit,
-  SimpleChanges
+  SimpleChanges,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { AVATAR_ACCESSOR, AvatarAppearance, AvatarKey, AvatarPresenceIndicator, AvatarVariant } from '../types';
 import { AVATAR_CONFIG } from '../config';
@@ -29,6 +30,7 @@ const alreadyLoadedImages: string[] = [];
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-avatar',
     '[class.is-clickable]': 'clickable()',

@@ -4,7 +4,8 @@ import {
   forwardRef,
   input,
   OnInit,
-  signal
+  signal,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   GRID, GridItemConfig, GridItem
@@ -27,6 +28,7 @@ import { AsyncPipe, NgComponentOutlet, NgTemplateOutlet } from '@angular/common'
   ],
   templateUrl: './grid.html',
   styleUrl: './grid.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-grid'
   }

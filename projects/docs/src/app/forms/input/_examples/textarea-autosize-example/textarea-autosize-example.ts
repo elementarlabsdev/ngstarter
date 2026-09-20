@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 import { TextareaAutoSize } from '@ngstarter-ui/components/core';
@@ -12,6 +12,7 @@ import { TextareaAutoSize } from '@ngstarter-ui/components/core';
     TextareaAutoSize
   ],
   templateUrl: './textarea-autosize-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './textarea-autosize-example.scss'
 })
 export class TextareaAutosizeExample {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PinInput } from '@ngstarter-ui/components/pin-input';
 
 @Component({
@@ -7,6 +7,7 @@ import { PinInput } from '@ngstarter-ui/components/pin-input';
     PinInput
   ],
   templateUrl: './pin-input-length-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './pin-input-length-example.scss'
 })
 export class PinInputLengthExample {

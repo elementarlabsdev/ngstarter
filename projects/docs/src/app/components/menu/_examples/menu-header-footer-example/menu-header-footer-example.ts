@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Menu, MenuFooter, MenuHeader, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
 
@@ -13,6 +13,7 @@ import { Menu, MenuFooter, MenuHeader, MenuItem, MenuTrigger } from '@ngstarter-
     MenuFooter
   ],
   templateUrl: './menu-header-footer-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './menu-header-footer-example.scss'
 })
 export class MenuHeaderFooterExample {

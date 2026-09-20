@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
   Navigation,
@@ -15,6 +15,7 @@ import {
     Navigation,
   ],
   templateUrl: './navigation-with-icons-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './navigation-with-icons-example.scss'
 })
 export class NavigationWithIconsExample {

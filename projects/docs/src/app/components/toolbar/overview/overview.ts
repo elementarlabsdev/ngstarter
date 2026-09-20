@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicToolbarExample } from '../_examples/basic-toolbar-example/basic-toolbar-example';
 import { MultiRowToolbarExample } from '../_examples/multi-row-toolbar-example/multi-row-toolbar-example';
@@ -17,6 +17,7 @@ import {ToolbarNavExample} from "../_examples/toolbar-nav-example/toolbar-nav-ex
     ToolbarNavExample,
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss',
 })
 export class Overview {}

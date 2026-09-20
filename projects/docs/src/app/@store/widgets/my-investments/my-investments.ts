@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { RouterLink } from '@angular/router';
 import {
@@ -22,6 +22,7 @@ import { GRID } from '@ngstarter-ui/components/grid';
     ListItemMeta
   ],
   templateUrl: './my-investments.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './my-investments.scss'
 })
 export class MyInvestments implements OnInit {

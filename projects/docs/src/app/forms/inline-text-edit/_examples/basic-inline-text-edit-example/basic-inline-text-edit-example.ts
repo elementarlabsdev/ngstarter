@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { InlineTextEdit } from '@ngstarter-ui/components/inline-text-edit';
 import { Alert } from '@ngstarter-ui/components/alert';
 import { Divider } from '@ngstarter-ui/components/divider';
@@ -11,6 +11,7 @@ import { Divider } from '@ngstarter-ui/components/divider';
     Divider
   ],
   templateUrl: './basic-inline-text-edit-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-inline-text-edit-example.scss'
 })
 export class BasicInlineTextEditExample {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   LayoutContent,
   Layout, LayoutFooter,
@@ -19,6 +19,7 @@ import { Announcement } from '@ngstarter-ui/components/announcement';
     Announcement
   ],
   templateUrl: './layout-with-nested-layouts-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './layout-with-nested-layouts-example.scss'
 })
 export class LayoutWithNestedLayoutsExample {

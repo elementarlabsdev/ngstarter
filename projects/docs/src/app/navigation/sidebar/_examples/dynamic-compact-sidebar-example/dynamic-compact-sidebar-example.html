@@ -4,7 +4,7 @@
     {{ compact() ? 'Expand sidebar' : 'Compact sidebar' }}
   </button>
 
-  <div class="h-[420px] w-full relative border border-muted rounded-2xl overflow-hidden">
+  <div class="h-[420px] w-full relative border border-border rounded-2xl overflow-hidden">
     <ngs-sidenav-container autosize hasBackdrop="false">
       <ngs-sidenav [opened]="true" mode="side" [collapsed]="compact()" disableClose>
         <ngs-sidebar class="border-r border-r-muted">

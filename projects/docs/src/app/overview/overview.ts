@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Card, CardContent, CardFooter } from '@ngstarter-ui/components/card';
 import { OrderByPipe } from '@ngstarter-ui/components/core';
@@ -40,6 +40,7 @@ function withImageMetadata(item: OverviewItem): OverviewCard {
     OrderByPipe
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

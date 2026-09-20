@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import {
   BasicExpansionPanelExample
@@ -17,6 +17,7 @@ import { ExpansionPanelAsAccordionExample } from '../_examples/expansion-panel-a
     ExpansionPanelAsAccordionExample
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

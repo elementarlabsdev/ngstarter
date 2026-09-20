@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DataViewColumnDef, DataView } from '@ngstarter-ui/components/data-view';
 
 export interface PeriodicElement {
@@ -28,6 +28,7 @@ const DATA: PeriodicElement[] = [
     DataView
   ],
   templateUrl: './data-view-resizable-columns-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './data-view-resizable-columns-example.scss'
 })
 export class DataViewResizableColumnsExample {

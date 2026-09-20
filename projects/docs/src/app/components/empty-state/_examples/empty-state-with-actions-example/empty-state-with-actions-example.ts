@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   EmptyStateActions,
   EmptyState,
@@ -17,6 +17,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './empty-state-with-actions-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './empty-state-with-actions-example.scss'
 })
 export class EmptyStateWithActionsExample {

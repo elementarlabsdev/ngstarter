@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   ColorPicker,
   ColorPickerThumbnail,
@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule
   ],
   templateUrl: './color-picker-with-popover-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './color-picker-with-popover-example.scss'
 })
 export class ColorPickerWithPopoverExample {

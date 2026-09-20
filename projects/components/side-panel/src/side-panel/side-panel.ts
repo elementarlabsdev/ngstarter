@@ -5,7 +5,8 @@ import {
   TemplateRef,
   contentChildren,
   effect,
-  input, output
+  input, output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Icon } from '@ngstarter-ui/components/icon';
@@ -26,6 +27,7 @@ import { Button } from '@ngstarter-ui/components/button';
   ],
   templateUrl: './side-panel.html',
   styleUrl: './side-panel.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-side-panel',
     '[class.panel-open]': 'isOpen()',

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { HeroComponent } from '../../components/hero/hero.component';
 import { FeaturesComponent } from '../../components/features/features.component';
 import { PreviewComponent } from '../../components/preview/preview.component';
@@ -13,6 +13,7 @@ import { FaqComponent } from '../../components/faq/faq.component';
     FaqComponent,
   ],
   templateUrl: './home.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './home.scss',
 })
 export class Home {

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   CookiePopupAcceptAllButtonDirective,
   CookiePopupAcceptNecessaryOnlyButtonDirective,
@@ -18,6 +18,7 @@ import { Button } from '@ngstarter-ui/components/button';
     CookiePopupAcceptNecessaryOnlyButtonDirective
   ],
   templateUrl: './basic-cookie-popup-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-cookie-popup-example.scss'
 })
 export class BasicCookiePopupExample {

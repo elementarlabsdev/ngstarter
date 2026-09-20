@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { AsyncPipe } from '@angular/common';
 import { Autocomplete, AutocompleteTrigger, Option } from '@ngstarter-ui/components/autocomplete';
@@ -23,6 +23,7 @@ export interface User {
         Label
     ],
     templateUrl: './separate-controls-and-display-values-example.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './separate-controls-and-display-values-example.scss'
 })
 export class SeparateControlsAndDisplayValuesExample {

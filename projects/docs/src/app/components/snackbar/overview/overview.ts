@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicSnackbarExample } from '../_examples/basic-snackbar-example/basic-snackbar-example';
 import {
@@ -16,6 +16,7 @@ import {
     ConfigurableSnackbarExample
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

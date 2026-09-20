@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   Table,
   ColumnDef,
@@ -25,6 +25,7 @@ import {
     HeaderRow,
     Row
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './api.html'
 })
 export class Api {

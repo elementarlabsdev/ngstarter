@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { IncidentsStore } from '../incidents.store';
 import { Button } from '@ngstarter-ui/components/button';
 
@@ -13,6 +13,7 @@ let incidentId = 0;
   ],
   templateUrl: './incident.html',
   styleUrl: './incident.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-incident'
   }

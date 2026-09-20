@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, ElementRef, inject, input } from '@angular/core';
+import { booleanAttribute, Component, ElementRef, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { Ripple } from '@ngstarter-ui/components/core';
 import { SIDEBAR_NAVIGATION } from '../types';
 import { SidebarNav } from '../sidebar-nav/sidebar-nav';
@@ -16,6 +16,7 @@ export class SidebarNavItemInterface {
   ],
   templateUrl: './sidebar-nav-item.html',
   styleUrl: './sidebar-nav-item.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-sidebar-nav-item',
     '[class.is-active]': 'forceActive() || active',

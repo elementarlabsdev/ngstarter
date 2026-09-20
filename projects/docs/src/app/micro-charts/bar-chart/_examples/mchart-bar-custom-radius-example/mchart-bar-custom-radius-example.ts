@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MchartBar } from '@ngstarter-ui/components/micro-chart';
 import { ShuffleArrayPipe } from '@meta/shuffle-array.pipe';
 
@@ -9,6 +9,7 @@ import { ShuffleArrayPipe } from '@meta/shuffle-array.pipe';
     ShuffleArrayPipe
   ],
   templateUrl: './mchart-bar-custom-radius-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './mchart-bar-custom-radius-example.scss'
 })
 export class MchartBarCustomRadiusExample {

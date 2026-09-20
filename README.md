@@ -10,15 +10,15 @@ secondary entry points such as `@ngstarter-ui/components/button`,
 
 ## Installation
 
-For a new Angular 21 project, create the app with SCSS and add NgStarter UI:
+For a new Angular 22 project, create the app with SCSS and add NgStarter UI:
 
 ```bash
-npx @angular/cli@21 new project-name --style=scss
+npx @angular/cli@22 new project-name --style=scss
 cd project-name
 npx ng add @ngstarter-ui/components
 ```
 
-For an existing Angular 21 app, run the same schematic from your project root:
+For an existing Angular 22 app, run the same schematic from your project root:
 
 ```bash
 npx ng add @ngstarter-ui/components

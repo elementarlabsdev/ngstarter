@@ -4,6 +4,6 @@
 <!--</span>-->
 
 <ngs-chip>
-  <ngs-avatar [key]="element()?.name" appearance="initials" ngsChipAvatar/>
+  <ngs-avatar [key]="$safeNavigationMigration(element()?.name)" appearance="initials" ngsChipAvatar/>
   {{ element()?.name }}
 </ngs-chip>

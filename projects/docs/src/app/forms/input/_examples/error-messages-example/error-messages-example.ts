@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Input } from '@ngstarter-ui/components/input';
 import { Error, FormField, Label } from '@ngstarter-ui/components/form-field';
@@ -14,6 +14,7 @@ import { Error, FormField, Label } from '@ngstarter-ui/components/form-field';
     Error
   ],
   templateUrl: './error-messages-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './error-messages-example.scss'
 })
 export class ErrorMessagesExample {

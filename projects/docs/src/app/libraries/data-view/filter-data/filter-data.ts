@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
@@ -15,6 +15,7 @@ import { DataViewFilterDataExample } from '../_examples/data-view-filter-data-ex
     DataViewFilterDataExample
   ],
   templateUrl: './filter-data.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './filter-data.scss'
 })
 export class DataViewFilterData {

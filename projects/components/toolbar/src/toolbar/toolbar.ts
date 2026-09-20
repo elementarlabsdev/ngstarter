@@ -10,7 +10,8 @@ import {
   NgZone,
   OnDestroy,
   PLATFORM_ID,
-  signal
+  signal,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
 import { ToolbarItem } from '../toolbar-item/toolbar-item';
@@ -32,6 +33,7 @@ import { Button } from '@ngstarter-ui/components/button';
   ],
   templateUrl: './toolbar.html',
   styleUrl: './toolbar.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-toolbar',
     '[class.ngs-toolbar-stacked]': '!!_rows().length'

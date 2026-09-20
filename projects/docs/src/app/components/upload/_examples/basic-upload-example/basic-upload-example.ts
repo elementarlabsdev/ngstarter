@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter-ui/components/upload';
 import { JsonPipe } from '@angular/common';
 import { Button } from '@ngstarter-ui/components/button';
@@ -11,6 +11,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './basic-upload-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-upload-example.scss'
 })
 export class BasicUploadExample {

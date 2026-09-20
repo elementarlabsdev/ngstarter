@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { TourService } from '@ngstarter-ui/components/guided-tour';
 import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
   selector: 'app-close-on-backdrop-click-example',
   imports: [Button],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './close-on-backdrop-click-example.html',
 })
 export class CloseOnBackdropClickExample {

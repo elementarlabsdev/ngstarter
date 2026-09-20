@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   DIALOG_DATA,
@@ -25,6 +25,7 @@ import { FormField, Label } from '@ngstarter-ui/components/form-field';
     ReactiveFormsModule
   ],
   templateUrl: './youtube.dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './youtube.dialog.scss'
 })
 export class YoutubeDialog {

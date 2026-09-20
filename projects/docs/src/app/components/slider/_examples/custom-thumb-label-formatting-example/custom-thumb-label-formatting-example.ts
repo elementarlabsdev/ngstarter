@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Slider, SliderThumb } from '@ngstarter-ui/components/slider';
 
 @Component({
@@ -8,6 +8,7 @@ import { Slider, SliderThumb } from '@ngstarter-ui/components/slider';
     SliderThumb
   ],
   templateUrl: './custom-thumb-label-formatting-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './custom-thumb-label-formatting-example.scss'
 })
 export class CustomThumbLabelFormattingExample {

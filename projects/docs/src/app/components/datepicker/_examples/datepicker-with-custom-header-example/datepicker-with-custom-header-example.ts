@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { provideNativeDateAdapter } from '@ngstarter-ui/components/datepicker';
 import { CustomHeader } from '../custom-header/custom-header';
 import { Datepicker, DatepickerInput, DatepickerToggle } from '@ngstarter-ui/components/datepicker';
@@ -19,6 +19,7 @@ import { Input } from '@ngstarter-ui/components/input';
   ],
   templateUrl: './datepicker-with-custom-header-example.html',
   styleUrl: './datepicker-with-custom-header-example.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     provideNativeDateAdapter()
   ]

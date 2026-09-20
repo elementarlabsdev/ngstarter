@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { Chip } from '@ngstarter-ui/components/chips';
 import { DataViewCellRenderer, DataViewColumnDef } from '@ngstarter-ui/components/data-view';
 import { StaffStatus } from '../../staff-data';
@@ -9,6 +9,7 @@ import { StaffStatus } from '../../staff-data';
     Chip
   ],
   templateUrl: './staff-status-cell.renderer.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './staff-status-cell.renderer.scss'
 })
 export class StaffStatusCellRenderer implements DataViewCellRenderer {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
@@ -17,6 +17,7 @@ import { Input } from '@ngstarter-ui/components/input';
     FormField
   ],
   templateUrl: './tooltip-show-hide-delay-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tooltip-show-hide-delay-example.scss',
 })
 export class TooltipShowHideDelayExample {

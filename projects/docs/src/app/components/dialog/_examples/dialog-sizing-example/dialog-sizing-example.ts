@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Dialog } from '@ngstarter-ui/components/dialog';
 import { BasicDialog } from '../basic/basic.dialog';
@@ -7,6 +7,7 @@ import { BasicDialog } from '../basic/basic.dialog';
   selector: 'app-dialog-sizing-example',
   imports: [Button],
   templateUrl: './dialog-sizing-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dialog-sizing-example.scss',
 })
 export class DialogSizingExample {

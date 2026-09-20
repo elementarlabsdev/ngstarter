@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { startWith } from 'rxjs';
@@ -55,6 +55,7 @@ import {Toolbar, ToolbarSpacer} from "@ngstarter-ui/components/toolbar";
     ToolbarSpacer
   ],
   templateUrl: './dataview-layout.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dataview-layout.scss'
 })
 export class DataViewLayout {

@@ -1,7 +1,7 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-pin-input-width: --spacing(14);
+  --ngs-pin-input-width: var(--ngs-field-height, var(--ngs-field-container-height));
   --ngs-pin-gap: --spacing(4);
   --ngs-form-field-input-text-align: center;
   --ngs-form-field-width: var(--ngs-pin-input-width);

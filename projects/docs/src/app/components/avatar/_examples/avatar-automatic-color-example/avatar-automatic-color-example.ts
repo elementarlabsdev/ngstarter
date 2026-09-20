@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
   Avatar,
@@ -15,6 +15,7 @@ import {
     AvatarMore
   ],
   templateUrl: './avatar-automatic-color-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './avatar-automatic-color-example.scss'
 })
 export class AvatarAutomaticColorExample {

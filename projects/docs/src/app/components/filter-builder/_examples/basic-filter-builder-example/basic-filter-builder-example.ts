@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import {
   FilterBuilder,
@@ -13,6 +13,7 @@ import {
     FilterBuilder
   ],
   templateUrl: './basic-filter-builder-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-filter-builder-example.scss'
 })
 export class BasicFilterBuilderExample {

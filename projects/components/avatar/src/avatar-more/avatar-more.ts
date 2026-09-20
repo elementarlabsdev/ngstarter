@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-avatar-more,[ngs-avatar-more]',
@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './avatar-more.html',
   styleUrl: './avatar-more.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-avatar-more'
   }

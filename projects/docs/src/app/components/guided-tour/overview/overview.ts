@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicGuidedTourExample } from '../_examples/basic-guided-tour-example/basic-guided-tour-example';
 import { BackdropGuidedTourExample } from '../_examples/backdrop-guided-tour-example/backdrop-guided-tour-example';
@@ -27,6 +27,7 @@ import { RouteNavigationGuidedTourExample } from '../_examples/route-navigation-
     RouteNavigationGuidedTourExample
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss',
 })
 export class Overview {

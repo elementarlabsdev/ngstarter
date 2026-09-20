@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { LayoutContent, Layout, LayoutSidebar } from '@ngstarter-ui/components/layout';
 
 @Component({
@@ -9,6 +9,7 @@ import { LayoutContent, Layout, LayoutSidebar } from '@ngstarter-ui/components/l
     LayoutSidebar
   ],
   templateUrl: './layout-sidebar-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './layout-sidebar-example.scss'
 })
 export class LayoutSidebarExample {

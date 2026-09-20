@@ -1,10 +1,11 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { GRID, Grid } from '@ngstarter-ui/components/grid';
 
 @Component({
   selector: 'app-analytics-new-signups-content',
   imports: [],
   templateUrl: './analytics-new-signups-widget.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './analytics-new-signups-widget.scss'
 })
 export class AnalyticsNewSignupsWidget implements OnInit {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Input } from '@ngstarter-ui/components/input';
 import { Datepicker, DatepickerInput, DatepickerToggle } from '@ngstarter-ui/components/datepicker';
 import { FormField, IconButtonSuffix, Label } from '@ngstarter-ui/components/form-field';
@@ -21,6 +21,7 @@ import { Timepicker, TimepickerInput, TimepickerToggle } from '@ngstarter-ui/com
     IconButtonSuffix
   ],
   templateUrl: './timepicker-with-datepicker-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './timepicker-with-datepicker-example.scss'
 })
 export class TimepickerWithDatepickerExample {

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import {
   PdfViewer,
@@ -15,6 +15,7 @@ import {
     PdfViewerAnnotationDef,
   ],
   templateUrl: './basic-pdf-viewer-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-pdf-viewer-example.scss'
 })
 export class BasicPdfViewerExample {

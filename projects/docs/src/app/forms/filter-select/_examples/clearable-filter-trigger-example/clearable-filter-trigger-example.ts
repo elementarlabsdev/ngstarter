@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FilterTrigger, Option, Select } from '@ngstarter-ui/components/select';
 
@@ -11,6 +11,7 @@ import { FilterTrigger, Option, Select } from '@ngstarter-ui/components/select';
     Select
   ],
   templateUrl: './clearable-filter-trigger-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './clearable-filter-trigger-example.scss'
 })
 export class ClearableFilterTriggerExample {

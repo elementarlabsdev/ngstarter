@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ChipListbox, ChipOption } from '@ngstarter-ui/components/chips';
 
 @Component({
@@ -8,6 +8,7 @@ import { ChipListbox, ChipOption } from '@ngstarter-ui/components/chips';
     ChipListbox
   ],
   templateUrl: './basic-chips-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-chips-example.scss'
 })
 export class BasicChipsExample {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   DataViewColumnDef,
   DataView,
@@ -11,6 +11,7 @@ import {
   imports: [
     DataView
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './data-view-server-side-empty-state-example.html',
 })
 export class DataViewServerSideEmptyStateExample {

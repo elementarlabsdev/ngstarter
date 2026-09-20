@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import {
   BasicDatepickerExample
@@ -37,6 +37,7 @@ import { provideNativeDateAdapter } from '@ngstarter-ui/components/datepicker';
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     provideNativeDateAdapter()
   ]

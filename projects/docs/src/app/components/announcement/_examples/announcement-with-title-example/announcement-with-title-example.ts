@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Announcement } from '@ngstarter-ui/components/announcement';
 
 @Component({
@@ -7,6 +7,7 @@ import { Announcement } from '@ngstarter-ui/components/announcement';
     Announcement
   ],
   templateUrl: './announcement-with-title-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './announcement-with-title-example.scss'
 })
 export class AnnouncementWithTitleExample {

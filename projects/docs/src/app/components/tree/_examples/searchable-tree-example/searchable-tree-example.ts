@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
@@ -57,6 +57,7 @@ const EXAMPLE_DATA: FoodNode[] = [
     TreeNodeToggle,
   ],
   templateUrl: './searchable-tree-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './searchable-tree-example.scss',
 })
 export class SearchableTreeExample {

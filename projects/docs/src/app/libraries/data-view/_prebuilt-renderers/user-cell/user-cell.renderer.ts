@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { DataViewCellRenderer, DataViewColumnDef } from '@ngstarter-ui/components/data-view';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 
@@ -8,6 +8,7 @@ import { Avatar } from '@ngstarter-ui/components/avatar';
     Avatar
   ],
   templateUrl: './user-cell.renderer.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './user-cell.renderer.scss'
 })
 export class UserCellRenderer implements DataViewCellRenderer {

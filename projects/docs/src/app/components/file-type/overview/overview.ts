@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicFileTypeExample } from '../_examples/basic-file-type-example/basic-file-type-example';
 import { FileTypeGalleryExample } from '../_examples/file-type-gallery-example/file-type-gallery-example';
@@ -14,6 +14,7 @@ import { FileTypeSizesExample } from '../_examples/file-type-sizes-example/file-
     FileTypeSizesExample
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss',
 })
 export class Overview {

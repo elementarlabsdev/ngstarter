@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 // DEPRECATED
 @Component({
@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   exportAs: 'ngsAvatarTotal',
   templateUrl: './avatar-total.html',
   styleUrl: './avatar-total.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-avatar-total'
   }

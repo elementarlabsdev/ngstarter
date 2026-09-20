@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   Navigation,
   NavigationDivider,
@@ -13,6 +13,7 @@ import {
     Navigation
   ],
   templateUrl: './navigation-with-divider-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './navigation-with-divider-example.scss'
 })
 export class NavigationWithDividerExample {

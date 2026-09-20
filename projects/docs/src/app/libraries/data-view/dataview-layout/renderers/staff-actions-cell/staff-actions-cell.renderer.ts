@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { DataViewCellRenderer, DataViewColumnDef } from '@ngstarter-ui/components/data-view';
 import { Icon } from '@ngstarter-ui/components/icon';
@@ -14,6 +14,7 @@ import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
     MenuTrigger
   ],
   templateUrl: './staff-actions-cell.renderer.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './staff-actions-cell.renderer.scss'
 })
 export class StaffActionsCellRenderer implements DataViewCellRenderer {

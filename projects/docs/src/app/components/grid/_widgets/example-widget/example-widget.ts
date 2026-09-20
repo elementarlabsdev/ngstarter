@@ -1,10 +1,11 @@
-import { Component, input, OnInit } from '@angular/core';
+import { Component, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { GridItemAware } from '@ngstarter-ui/components/grid';
 
 @Component({
   selector: 'app-example-content',
   imports: [],
   templateUrl: './example-widget.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './example-widget.scss'
 })
 export class ExampleWidget implements GridItemAware, OnInit {

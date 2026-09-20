@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { Ripple } from '@ngstarter-ui/components/core';
 
 @Component({
@@ -9,6 +9,7 @@ import { Ripple } from '@ngstarter-ui/components/core';
   hostDirectives: [
     Ripple,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-command-bar-command'
   }

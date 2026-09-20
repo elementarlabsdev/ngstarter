@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { DividerOverviewExample } from '../_examples/divider-overview-example/divider-overview-example';
 import { TextDividerExample } from '../_examples/text-divider-example/text-divider-example';
@@ -10,6 +10,7 @@ import { TextDividerExample } from '../_examples/text-divider-example/text-divid
     TextDividerExample
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

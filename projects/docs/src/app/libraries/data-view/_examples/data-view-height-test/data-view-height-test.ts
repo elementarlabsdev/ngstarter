@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DataViewColumnDef, DataView } from '@ngstarter-ui/components/data-view';
 
 @Component({
   selector: 'app-data-view-height-test',
   standalone: true,
   imports: [DataView],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <div style="height: 400px; border: 2px solid red; padding: 10px; display: flex; flex-direction: column;">
       <h3>400px container, data with 2 rows</h3>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Drawer } from '@ngstarter-ui/components/drawer';
 import { Button } from '@ngstarter-ui/components/button';
 import {
@@ -19,6 +19,7 @@ import {
     PanelHeader
   ],
   templateUrl: './drawer-without-backdrop-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './drawer-without-backdrop-example.scss'
 })
 export class DrawerWithoutBackdropExample {

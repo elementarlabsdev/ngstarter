@@ -1,4 +1,4 @@
-import { afterNextRender, Component, inject, model, OnInit } from '@angular/core';
+import { afterNextRender, Component, inject, model, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { PageLoadingBar } from '@ngstarter-ui/components/page-loading-bar';
@@ -166,6 +166,7 @@ function sortDocsNavItems(items: readonly DocsNavItem[], preserveSections = fals
     ToolbarItem,
     // SplashScreen,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './app.html'
 })
 export class App implements OnInit {
@@ -940,7 +941,6 @@ export class App implements OnInit {
       key: 'kanban-board',
       type: 'group',
       name: 'Kanban Board',
-      icon: 'fluent:grid-kanban-20-regular',
       children: [
         {
           key: uuid(),
@@ -960,7 +960,6 @@ export class App implements OnInit {
       key: 'image-designer',
       type: 'group',
       name: 'Image Designer',
-      icon: 'fluent:image-edit-24-regular',
       children: [
         {
           key: uuid(),
@@ -980,7 +979,6 @@ export class App implements OnInit {
       key: 'form-builder',
       type: 'group',
       name: 'Form Builder',
-      icon: 'fluent:form-new-24-regular',
       children: [
         {
           key: uuid(),
@@ -1018,7 +1016,6 @@ export class App implements OnInit {
       key: 'pdf-viewer',
       type: 'group',
       name: 'PDF Viewer',
-      icon: 'fluent:document-pdf-24-regular',
       children: [
         {
           key: uuid(),
@@ -1044,7 +1041,6 @@ export class App implements OnInit {
       key: 'pdf-builder',
       type: 'group',
       name: 'PDF Builder',
-      icon: 'fluent:document-edit-24-regular',
       children: [
         {
           key: uuid(),
@@ -1064,7 +1060,6 @@ export class App implements OnInit {
       key: 'pdf-signer',
       type: 'group',
       name: 'PDF Signer',
-      icon: 'fluent:signature-24-regular',
       children: [
         {
           key: uuid(),
@@ -1084,7 +1079,6 @@ export class App implements OnInit {
       key: 'video-player',
       type: 'group',
       name: 'Video Player',
-      icon: 'fluent:video-clip-24-regular',
       children: [
         {
           key: uuid(),
@@ -1136,7 +1130,6 @@ export class App implements OnInit {
       key: 'content-editor',
       type: 'group',
       name: 'Content Editor',
-      icon: 'fluent:content-view-24-regular',
       children: [
         {
           key: uuid(),
@@ -1162,7 +1155,6 @@ export class App implements OnInit {
       key: 'data-view',
       type: 'group',
       name: 'Data View',
-      icon: 'fluent:table-24-regular',
       children: [
         {
           key: uuid(),

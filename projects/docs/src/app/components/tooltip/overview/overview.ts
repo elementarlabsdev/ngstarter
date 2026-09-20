@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicTooltipExample } from '../_examples/basic-tooltip-example/basic-tooltip-example';
 import {
@@ -30,6 +30,7 @@ import {
     TooltipPositionAtOriginExample
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

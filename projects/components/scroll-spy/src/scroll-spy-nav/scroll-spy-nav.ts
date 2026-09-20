@@ -7,7 +7,8 @@ import {
   NgZone,
   PLATFORM_ID,
   contentChildren,
-  DOCUMENT
+  DOCUMENT,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { debounceTime, fromEvent } from 'rxjs';
@@ -28,6 +29,7 @@ import { PANEL_CONTENT } from '@ngstarter-ui/components/panel';
       useExisting: ScrollSpyNav
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-scroll-spy-nav'
   }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicMenuExample } from '../_examples/basic-menu-example/basic-menu-example';
 import { MenuWithIconsExample } from '../_examples/menu-with-icons-example/menu-with-icons-example';
@@ -29,6 +29,7 @@ import { DataDrivenMenuExample } from '../_examples/data-driven-menu-example/dat
     DataDrivenMenuExample
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

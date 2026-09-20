@@ -7,7 +7,7 @@
       <ngs-carousel [stopPropagation]="true">
         @for (video of videos(); track video.title) {
           <ngs-carousel-card>
-            <div class="w-[600px] aspect-video rounded-lg overflow-hidden border border-muted bg-black">
+            <div class="w-[600px] aspect-video rounded-lg overflow-hidden border border-border bg-black">
               <ngs-video-player
                 [src]="video.src"
                 [thumbnailUrl]="video.thumbnail"

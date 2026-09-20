@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 import {
@@ -23,6 +23,7 @@ import {
     TimelineTitle
   ],
   templateUrl: './timeline-with-cutsom-indicator-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './timeline-with-cutsom-indicator-example.scss'
 })
 export class TimelineWithCutsomIndicatorExample {

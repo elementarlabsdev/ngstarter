@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-dialog-header',
@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './dialog-header.html',
   styleUrl: './dialog-header.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-dialog-header',
   }

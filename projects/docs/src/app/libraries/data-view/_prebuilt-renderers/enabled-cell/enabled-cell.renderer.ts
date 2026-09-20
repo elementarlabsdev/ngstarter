@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { DataViewCellRenderer } from '@ngstarter-ui/components/data-view';
 import { Icon } from '@ngstarter-ui/components/icon';
 
@@ -8,6 +8,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     Icon
   ],
   templateUrl: './enabled-cell.renderer.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './enabled-cell.renderer.scss'
 })
 export class EnabledCellRenderer {

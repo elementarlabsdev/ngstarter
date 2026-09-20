@@ -58,9 +58,7 @@ export class ColorSchemeSwitcher {
   }
 
   protected toggleScheme() {
-    const order: ColorScheme[] = ['light', 'dark', 'auto'];
-    const currentIndex = order.indexOf(this.store.theme());
-    const newScheme = order[(currentIndex + 1) % order.length];
+    const newScheme: ColorScheme = this.store.resolvedTheme() === 'dark' ? 'light' : 'dark';
     this.store.setScheme(newScheme);
     this.setPortal();
     this.colorSchemeChanged.emit(this.store.theme());

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import { Button } from '@ngstarter-ui/components/button';
 
@@ -10,6 +10,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button,
     RouterLinkActive,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './navbar.component.html'
 })
 export class NavbarComponent {}

@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { VIDEO_VIEWER_DATA, VIDEO_VIEWER_REF } from '../types';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { VideoPlayer } from '@ngstarter-ui/components/video-player';
@@ -17,6 +17,7 @@ import { NgTemplateOutlet } from '@angular/common';
   ],
   templateUrl: './video-viewer.html',
   styleUrl: './video-viewer.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-video-viewer',
   }

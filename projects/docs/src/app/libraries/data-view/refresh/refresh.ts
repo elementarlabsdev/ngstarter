@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
@@ -15,6 +15,7 @@ import { DataViewRefreshExample } from '../_examples/data-view-refresh-example/d
     DataViewRefreshExample
   ],
   templateUrl: './refresh.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './refresh.scss'
 })
 export class DataViewRefresh {

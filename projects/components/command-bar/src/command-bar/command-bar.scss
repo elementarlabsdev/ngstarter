@@ -105,9 +105,3 @@
     }
   }
 }
-
-:host-context(html.dark) {
-  --ngs-command-bar-bg: var(--ngs-color-primary-200);
-  --ngs-command-bar-color: var(--ngs-color-neutral-950);
-  --ngs-command-bar-command-color: var(--ngs-color-neutral-950);
-}

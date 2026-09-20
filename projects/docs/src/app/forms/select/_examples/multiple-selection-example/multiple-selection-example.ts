@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Option, Select } from '@ngstarter-ui/components/select';
 import { Label } from '@ngstarter-ui/components/form-field';
@@ -14,6 +14,7 @@ import { FormField } from '@ngstarter-ui/components/form-field';
     FormField
   ],
   templateUrl: './multiple-selection-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './multiple-selection-example.scss'
 })
 export class MultipleSelectionExample {

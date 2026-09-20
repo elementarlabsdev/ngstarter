@@ -1,4 +1,4 @@
-import { Component, Injectable, signal } from '@angular/core';
+import { Component, Injectable, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { CollectionViewer, DataSource, SelectionChange } from '@angular/cdk/collections';
@@ -161,6 +161,7 @@ export class DynamicDataSource implements DataSource<DynamicFlatNode> {
     ProgressBar
   ],
   templateUrl: './tree-with-dynamic-data-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tree-with-dynamic-data-example.scss'
 })
 export class TreeWithDynamicDataExample {

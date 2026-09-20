@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
@@ -17,6 +17,7 @@ import { TabLink, TabNavBar, TabNavPanel } from '@ngstarter-ui/components/tabs';
     RouterOutlet,
   ],
   templateUrl: './common.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './common.scss',
 })
 export class Common {}

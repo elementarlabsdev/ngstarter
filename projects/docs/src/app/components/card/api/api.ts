@@ -28,6 +28,7 @@ import {
     Row
   ],
   templateUrl: './api.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './api.scss',
 })
 export class ApiComponent {

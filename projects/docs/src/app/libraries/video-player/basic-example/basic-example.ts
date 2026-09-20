@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { VideoPlayer } from "@ngstarter-ui/components/video-player";
 
 @Component({
@@ -6,6 +6,7 @@ import { VideoPlayer } from "@ngstarter-ui/components/video-player";
     VideoPlayer
   ],
   templateUrl: './basic-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-example.scss',
 })
 export class BasicExample {

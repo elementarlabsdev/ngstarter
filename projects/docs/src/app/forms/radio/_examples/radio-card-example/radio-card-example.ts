@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   RadioCard,
@@ -20,6 +20,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button,
   ],
   templateUrl: './radio-card-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './radio-card-example.scss'
 })
 export class RadioCardExample {

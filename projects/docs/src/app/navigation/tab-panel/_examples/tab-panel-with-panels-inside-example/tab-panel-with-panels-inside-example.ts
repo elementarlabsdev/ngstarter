@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
   TabPanelAside,
@@ -32,6 +32,7 @@ import {
     TabPanel
   ],
   templateUrl: './tab-panel-with-panels-inside-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tab-panel-with-panels-inside-example.scss'
 })
 export class TabPanelWithPanelsInsideExample {

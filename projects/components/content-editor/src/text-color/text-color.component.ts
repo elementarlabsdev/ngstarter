@@ -1,4 +1,4 @@
-import { Component, input, model, output } from '@angular/core';
+import { Component, input, model, output, ChangeDetectionStrategy, DOCUMENT, inject } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
 
@@ -15,12 +15,13 @@ export interface TextColor {
     Tooltip
   ],
   templateUrl: './text-color.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './text-color.component.scss'
 })
 export class TextColorComponent {
-  recentlyUsed = model<TextColor[]>(
-    localStorage ? JSON.parse(localStorage.getItem('ngsContentEditorRecentlyUsedTextColor') || '[]') : []
-  );
+  private readonly _document = inject(DOCUMENT);
+
+  recentlyUsed = model<TextColor[]>(this._getRecentlyUsed());
   selectedTextColor = model<TextColor | null>(null);
   selectedBackgroundColor = model<TextColor | null>(null);
 
@@ -164,6 +165,27 @@ export class TextColorComponent {
     let colors = [...this.recentlyUsed()];
     colors = colors.length >= 5 ? colors.slice(1, 5) : colors;
     this.recentlyUsed.set([...colors, color]);
-    localStorage.setItem('ngsContentEditorRecentlyUsedTextColor', JSON.stringify(this.recentlyUsed()));
+
+    try {
+      this._document.defaultView?.localStorage.setItem(
+        'ngsContentEditorRecentlyUsedTextColor',
+        JSON.stringify(this.recentlyUsed()),
+      );
+    } catch {
+      // Keep the recent colors in memory when browser storage is unavailable.
+    }
+  }
+
+  private _getRecentlyUsed(): TextColor[] {
+    try {
+      const value = this._document.defaultView?.localStorage.getItem(
+        'ngsContentEditorRecentlyUsedTextColor',
+      );
+      const colors = value ? JSON.parse(value) : [];
+
+      return Array.isArray(colors) ? colors : [];
+    } catch {
+      return [];
+    }
   }
 }

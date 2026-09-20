@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   Accordion,
   ExpansionPanel,
@@ -15,6 +15,7 @@ import { faqItems } from '../../seo/seo-data';
     ExpansionPanelHeader,
     ExpansionPanelTitle,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './faq.component.html',
 })
 export class FaqComponent {

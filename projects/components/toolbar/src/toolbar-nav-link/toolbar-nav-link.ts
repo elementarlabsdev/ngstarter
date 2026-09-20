@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-toolbar-nav-link,a[ngs-toolbar-nav-link]',
@@ -7,6 +7,7 @@ import { Component, input } from '@angular/core';
   template: '<ng-content />',
   imports: [],
   styleUrl: './toolbar-nav-link.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-toolbar-nav-link',
     '[class.ngs-toolbar-nav-link-active]': 'active()',

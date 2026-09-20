@@ -5,7 +5,8 @@ import {
   inject, input,
   numberAttribute,
   OnInit,
-  viewChildren
+  viewChildren,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -39,6 +40,7 @@ import { Input } from '@ngstarter-ui/components/input';
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-pin-input',
     '[class.is-disabled]': 'isDisabled()',

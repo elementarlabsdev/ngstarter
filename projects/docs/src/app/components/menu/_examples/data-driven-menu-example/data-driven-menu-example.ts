@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
@@ -20,6 +20,7 @@ interface MenuAction {
     MenuTrigger
   ],
   templateUrl: './data-driven-menu-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './data-driven-menu-example.scss'
 })
 export class DataDrivenMenuExample {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Tree, TreeNode, TreeNodeDef, TreeNodePadding, TreeNodeToggle } from '@ngstarter-ui/components/tree';
@@ -51,6 +51,7 @@ const EXAMPLE_DATA: PermissionNode[] = [
     TreeNodeToggle,
   ],
   templateUrl: './checkable-tree-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './checkable-tree-example.scss',
 })
 export class CheckableTreeExample {

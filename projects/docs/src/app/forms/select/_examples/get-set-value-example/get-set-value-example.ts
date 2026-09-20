@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Option, Select } from '@ngstarter-ui/components/select';
 import { Label } from '@ngstarter-ui/components/form-field';
 import { FormField } from '@ngstarter-ui/components/form-field';
@@ -12,6 +12,7 @@ import { FormField } from '@ngstarter-ui/components/form-field';
     FormField
   ],
   templateUrl: './get-set-value-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './get-set-value-example.scss'
 })
 export class GetSetValueExample {

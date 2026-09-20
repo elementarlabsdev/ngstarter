@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Button } from '@ngstarter-ui/components/button';
@@ -18,6 +18,7 @@ import { Input } from '@ngstarter-ui/components/input';
     IconButtonSuffix
   ],
   templateUrl: './clear-button-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './clear-button-example.scss'
 })
 export class ClearButtonExample {

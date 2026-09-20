@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
 import { Divider } from '@ngstarter-ui/components/divider';
@@ -17,6 +17,7 @@ import { Badge } from '@ngstarter-ui/components/badge';
     Badge
   ],
   templateUrl: './toolbar.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './toolbar.scss'
 })
 export class Toolbar {

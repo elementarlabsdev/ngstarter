@@ -14,6 +14,7 @@ import { Platform } from '@angular/cdk/platform';
   selector: 'textarea[ngsTextareaAutoSize]',
   exportAs: 'ngsTextareaAutoSize',
   host: {
+    'class': 'ngs-textarea-autosize',
     'rows': '1',
     '(input)': 'resize()',
     'style': 'display: block; overflow: hidden; resize: none; box-sizing: border-box;',

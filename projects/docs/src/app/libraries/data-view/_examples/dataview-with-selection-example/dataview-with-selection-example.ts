@@ -1,4 +1,4 @@
-import { Component, model } from '@angular/core';
+import { Component, model, ChangeDetectionStrategy } from '@angular/core';
 import { DataViewColumnDef, DataView, DataViewRowSelectionEvent } from '@ngstarter-ui/components/data-view';
 import { JsonPipe } from '@angular/common';
 import { RadioButton, RadioGroup } from '@ngstarter-ui/components/radio';
@@ -32,6 +32,7 @@ const DATA: PeriodicElement[] = [
     SegmentedButton
   ],
   templateUrl: './dataview-with-selection-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dataview-with-selection-example.scss'
 })
 export class DataviewWithSelectionExample {

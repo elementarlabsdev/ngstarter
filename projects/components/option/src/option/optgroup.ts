@@ -1,4 +1,4 @@
-import { Component, input, booleanAttribute } from '@angular/core';
+import { Component, input, booleanAttribute, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-optgroup',
@@ -28,6 +28,7 @@ import { Component, input, booleanAttribute } from '@angular/core';
       text-transform: uppercase;
     }
   `],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-optgroup',
     '[class.ngs-optgroup-disabled]': 'disabled()',

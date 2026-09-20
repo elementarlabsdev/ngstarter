@@ -6,7 +6,8 @@ import {
   Input,
   OnInit,
   Renderer2,
-  contentChild, TemplateRef, input, numberAttribute, effect, output, OnChanges, SimpleChanges
+  contentChild, TemplateRef, input, numberAttribute, effect, output, OnChanges, SimpleChanges,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { ALERT, AlertVariant } from '../alert.properties';
 import { AlertIconDirective } from '../alert-icon.directive';
@@ -24,6 +25,7 @@ import { NgTemplateOutlet } from '@angular/common';
       useExisting: Alert
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-alert',
     '[class.is-bordered]': 'bordered()',

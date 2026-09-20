@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import {
   BasicStepTrackerExample
@@ -26,6 +26,7 @@ import {
     StepTrackerProjectedContentExample,
     StepTrackerStatesExample,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './overview.html',
 })
 export class Overview {}

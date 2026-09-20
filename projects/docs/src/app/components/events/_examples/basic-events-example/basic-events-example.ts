@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Avatar, AvatarGroup } from '@ngstarter-ui/components/avatar';
 import {
   Event,
@@ -26,6 +26,7 @@ import {
     EventActionsDirective
   ],
   templateUrl: './basic-events-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-events-example.scss'
 })
 export class BasicEventsExample {}

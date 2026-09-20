@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { DataView, DataViewColumnDef, DataViewRowSelectionEvent } from '@ngstarter-ui/components/data-view';
 
@@ -27,6 +27,7 @@ const DATA: SupportTicket[] = [
     JsonPipe
   ],
   templateUrl: './data-view-row-click-selection-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './data-view-row-click-selection-example.scss'
 })
 export class DataViewRowClickSelectionExample {

@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Option, Select, SelectBody, SelectHeader } from '@ngstarter-ui/components/select';
 
@@ -18,6 +18,7 @@ interface Food {
     SelectBody
   ],
   templateUrl: './select-search-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './select-search-example.scss',
 })
 export class SelectSearchExample {

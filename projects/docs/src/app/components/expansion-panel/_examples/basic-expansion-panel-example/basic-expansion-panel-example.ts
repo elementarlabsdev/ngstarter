@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   Accordion,
   ExpansionPanel,
@@ -17,6 +17,7 @@ import {
     Accordion
   ],
   templateUrl: './basic-expansion-panel-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-expansion-panel-example.scss'
 })
 export class BasicExpansionPanelExample {

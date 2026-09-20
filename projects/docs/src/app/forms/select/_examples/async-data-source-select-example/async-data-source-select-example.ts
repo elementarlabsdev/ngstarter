@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import {
@@ -21,6 +21,7 @@ import { USER_OPTIONS, UserOption } from './async-data-source-select-example-dat
     SelectValueDef
   ],
   templateUrl: './async-data-source-select-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './async-data-source-select-example.scss'
 })
 export class AsyncDataSourceSelectExample {

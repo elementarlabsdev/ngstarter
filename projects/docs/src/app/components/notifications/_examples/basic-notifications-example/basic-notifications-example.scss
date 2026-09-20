@@ -1,0 +1,9 @@
+@reference 'tailwindcss';
+
+:host {
+  .notification-danger-avatar {
+    --ngs-avatar-bg: var(--ngs-color-danger-container);
+    --ngs-avatar-color: var(--ngs-color-danger);
+    --ngs-icon-color: var(--ngs-color-danger);
+  }
+}

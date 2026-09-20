@@ -1,4 +1,4 @@
-import { Component, input, OnInit, inject } from '@angular/core';
+import { Component, input, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { DialogRef } from '../dialog-ref';
 
 let nextUniqueId = 0;
@@ -8,6 +8,7 @@ let nextUniqueId = 0;
   exportAs: 'ngsDialogTitle',
   template: '<ng-content/>',
   styleUrl: './dialog-title.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-dialog-title',
     '[id]': 'id()',

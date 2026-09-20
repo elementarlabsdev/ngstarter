@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ShuffleArrayPipe } from '@meta/shuffle-array.pipe';
 import { ResizableContainer } from '@ngstarter-ui/components/resizable-container';
 import { MchartBar } from '@ngstarter-ui/components/micro-chart';
@@ -11,6 +11,7 @@ import { MchartBar } from '@ngstarter-ui/components/micro-chart';
     ResizableContainer
   ],
   templateUrl: './mchart-bar-responsive-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './mchart-bar-responsive-example.scss'
 })
 export class MchartBarResponsiveExample {

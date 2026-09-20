@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Gauge } from '@ngstarter-ui/components/gauge';
 
@@ -9,6 +9,7 @@ import { Gauge } from '@ngstarter-ui/components/gauge';
     Icon
   ],
   templateUrl: './used-space.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './used-space.scss'
 })
 export class UsedSpace {

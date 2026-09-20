@@ -11,7 +11,8 @@ import {
   Renderer2, SimpleChanges,
   contentChildren,
   Signal,
-  DestroyRef
+  DestroyRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -36,6 +37,7 @@ import { SegmentedButton } from '../segmented-button/segmented-button';
       useExisting: forwardRef(() => Segmented)
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-segmented',
     '[class.is-disabled]': 'disabled() || _disabled || null',

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
@@ -19,6 +19,7 @@ import { AsyncPipe } from '@angular/common';
     AsyncPipe
   ],
   templateUrl: './simple-autocomplete-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './simple-autocomplete-example.scss'
 })
 export class SimpleAutocompleteExample implements OnInit {

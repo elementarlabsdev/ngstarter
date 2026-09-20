@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormField, Label, Suffix } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
@@ -17,6 +17,7 @@ import { PassToggleVisibility, PasswordStrength } from '@ngstarter-ui/components
     PasswordStrength
   ],
   templateUrl: './password-toggle-visibility-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './password-toggle-visibility-example.scss'
 })
 export class PasswordToggleVisibilityExample {

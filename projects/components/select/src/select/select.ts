@@ -20,7 +20,8 @@ import {
   DestroyRef,
   untracked,
   viewChildren,
-  numberAttribute
+  numberAttribute,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { outputToObservable } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
@@ -75,6 +76,7 @@ export class SelectChange {
       useExisting: forwardRef(() => Select)
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'role': 'combobox',
     'aria-autocomplete': 'none',

@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
 import { GRID, Grid } from '@ngstarter-ui/components/grid';
@@ -12,6 +12,7 @@ import { Ripple } from '@ngstarter-ui/components/core';
     Ripple
   ],
   templateUrl: './unique-visitors-widget.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './unique-visitors-widget.scss'
 })
 export class UniqueVisitorsWidget implements OnInit {

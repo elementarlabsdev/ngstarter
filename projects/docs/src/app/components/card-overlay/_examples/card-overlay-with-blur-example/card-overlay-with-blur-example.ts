@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 import { CardOverlay, CardOverlayContainerDirective } from '@ngstarter-ui/components/card-overlay';
 import { Button } from '@ngstarter-ui/components/button';
@@ -28,6 +28,7 @@ import {
     CardTitle
   ],
   templateUrl: './card-overlay-with-blur-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './card-overlay-with-blur-example.scss'
 })
 export class CardOverlayWithBlurExample {

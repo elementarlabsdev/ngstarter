@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ScreenLoaderService } from '@ngstarter-ui/components/screen-loader';
 import { Button } from '@ngstarter-ui/components/button';
 
@@ -8,6 +8,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './basic-screen-loader-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-screen-loader-example.scss'
 })
 export class BasicScreenLoaderExample {

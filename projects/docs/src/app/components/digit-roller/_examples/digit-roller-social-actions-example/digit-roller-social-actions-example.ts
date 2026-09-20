@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, computed, inject, OnDestroy, PLATFORM_ID, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, PLATFORM_ID, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { DigitRoller, DigitRollerGroupDirective } from '@ngstarter-ui/components/digit-roller';
 import { Icon } from '@ngstarter-ui/components/icon';
@@ -19,6 +19,7 @@ interface SocialAction {
     DigitRollerGroupDirective,
     Icon,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './digit-roller-social-actions-example.html',
 })
 export class DigitRollerSocialActionsExample implements OnDestroy {

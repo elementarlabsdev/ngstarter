@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { IncidentsStore } from '@ngstarter-ui/components/incidents';
 
@@ -8,6 +8,7 @@ import { IncidentsStore } from '@ngstarter-ui/components/incidents';
     Button
   ],
   templateUrl: './incidents-show-hide-dynamicly-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './incidents-show-hide-dynamicly-example.scss'
 })
 export class IncidentsShowHideDynamiclyExample {

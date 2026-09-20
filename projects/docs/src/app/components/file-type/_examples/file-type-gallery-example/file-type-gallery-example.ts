@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FileType, FileTypeName } from '@ngstarter-ui/components/file-type';
 
 @Component({
@@ -7,6 +7,7 @@ import { FileType, FileTypeName } from '@ngstarter-ui/components/file-type';
     FileType
   ],
   templateUrl: './file-type-gallery-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './file-type-gallery-example.scss',
 })
 export class FileTypeGalleryExample {

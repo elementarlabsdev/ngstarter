@@ -8,7 +8,8 @@ import {
   OnDestroy, OnInit,
   output, PLATFORM_ID,
   viewChild,
-  DOCUMENT, signal
+  DOCUMENT, signal,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Editor } from '@tiptap/core';
 import Document from '@tiptap/extension-document';
@@ -50,6 +51,7 @@ import { SingleEmoji } from '../extensions/single-emoji';
       useExisting: forwardRef(() => CommentEditor)
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-comment-editor',
     '[class.full-view]': 'isFullViewVisible || fullViewMode()',

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   CommentEditorDivider,
   CommentEditorCommandBlockquoteDirective,
@@ -55,6 +55,7 @@ import { Tooltip } from '@ngstarter-ui/components/tooltip';
     Tooltip
   ],
   templateUrl: './comment-editor-with-upload-error-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './comment-editor-with-upload-error-example.scss'
 })
 export class CommentEditorWithUploadErrorExample {

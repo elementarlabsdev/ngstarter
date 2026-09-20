@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 export type ToolbarTitleAppearance = 'none' | 'large';
 
@@ -7,6 +7,7 @@ export type ToolbarTitleAppearance = 'none' | 'large';
   exportAs: 'ngsToolbarTitle',
   templateUrl: './toolbar-title.html',
   styleUrl: './toolbar-title.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-toolbar-title',
     '[class.appearance-none]': 'appearance() === "none"',

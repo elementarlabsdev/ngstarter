@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 
@@ -9,6 +9,7 @@ import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
     FormsModule
   ],
   templateUrl: './buffer-progress-bar-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './buffer-progress-bar-example.scss'
 })
 export class BufferProgressBarExample {

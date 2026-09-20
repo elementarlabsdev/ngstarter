@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicSelectExample } from '../_examples/basic-select-example/basic-select-example';
 import { GetSetValueExample } from '../_examples/get-set-value-example/get-set-value-example';
@@ -39,6 +39,7 @@ import {
     AsyncDataSourceSelectExample
   ],
     templateUrl: './overview.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './overview.scss'
 })
 export class Overview {

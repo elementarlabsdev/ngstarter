@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Button } from '@ngstarter-ui/components/button';
 import { Tree, TreeNode, TreeNodeDef, TreeNodePadding, TreeNodeToggle } from '@ngstarter-ui/components/tree';
@@ -40,6 +40,7 @@ const EXAMPLE_DATA: FoodNode[] = [
     TreeNodeToggle
   ],
   templateUrl: './basic-tree-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-tree-example.scss'
 })
 export class BasicTreeExample {

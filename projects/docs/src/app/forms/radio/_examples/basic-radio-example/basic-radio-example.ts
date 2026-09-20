@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RadioButton, RadioGroup } from '@ngstarter-ui/components/radio';
 
 @Component({
@@ -8,6 +8,7 @@ import { RadioButton, RadioGroup } from '@ngstarter-ui/components/radio';
         RadioGroup
     ],
     templateUrl: './basic-radio-example.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './basic-radio-example.scss'
 })
 export class BasicRadioExample {

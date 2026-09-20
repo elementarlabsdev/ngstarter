@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Ripple } from '@ngstarter-ui/components/core';
 
 @Component({
@@ -7,6 +7,7 @@ import { Ripple } from '@ngstarter-ui/components/core';
   imports: [],
   templateUrl: './suggestion.html',
   styleUrl: './suggestion.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   hostDirectives: [
     Ripple
   ]

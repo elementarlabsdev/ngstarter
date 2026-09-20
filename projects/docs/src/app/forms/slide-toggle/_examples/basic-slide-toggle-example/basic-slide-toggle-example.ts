@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
 
 @Component({
@@ -7,6 +7,7 @@ import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
     SlideToggle
   ],
     templateUrl: './basic-slide-toggle-example.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './basic-slide-toggle-example.scss'
 })
 export class BasicSlideToggleExample {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Kbd, KbdGroup } from '@ngstarter-ui/components/kbd';
 
 @Component({
@@ -8,6 +8,7 @@ import { Kbd, KbdGroup } from '@ngstarter-ui/components/kbd';
     KbdGroup
   ],
   templateUrl: './kbd-group-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './kbd-group-example.scss',
 })
 export class KbdGroupExample {

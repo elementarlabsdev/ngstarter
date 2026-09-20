@@ -3074,7 +3074,9 @@
         "--ngs-color-neutral-500",
         "--ngs-color-on-surface-variant",
         "--ngs-dropdown-item-gap",
-        "--ngs-font-size-sm"
+        "--ngs-field-label-color",
+        "--ngs-font-size-sm",
+        "--ngs-select-placeholder-color"
       ],
       "example": null
     },
@@ -4230,13 +4232,13 @@
         "File type sizes",
         "File type mime"
       ],
-      "minimalExample": "<div class=\"flex items-center gap-3\">\n  <ngs-file-type fileName=\"contract.pdf\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">contract.pdf</div>\n    <div class=\"text-xs text-secondary\">Resolved from fileName</div>\n  </div>\n</div>\n<div class=\"mt-5 flex items-center gap-3\">\n  <ngs-file-type extension=\"xlsx\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">Financial model</div>\n    <div class=\"text-xs text-secondary\">Resolved from extension</div>\n  </div>\n</div>",
+      "minimalExample": "<div class=\"flex items-center gap-2\">\n  <ngs-file-type fileName=\"contract.pdf\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">contract.pdf</div>\n    <div class=\"text-xs text-secondary\">Resolved from fileName</div>\n  </div>\n</div>\n<div class=\"mt-5 flex items-center gap-2\">\n  <ngs-file-type extension=\"xlsx\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">Financial model</div>\n    <div class=\"text-xs text-secondary\">Resolved from extension</div>\n  </div>\n</div>",
       "exampleFiles": [
         {
           "name": "basic-file-type-example",
           "title": "Basic file type",
           "file": "projects/docs/src/app/components/file-type/_examples/basic-file-type-example/basic-file-type-example.html",
-          "source": "<div class=\"flex items-center gap-3\">\n  <ngs-file-type fileName=\"contract.pdf\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">contract.pdf</div>\n    <div class=\"text-xs text-secondary\">Resolved from fileName</div>\n  </div>\n</div>\n<div class=\"mt-5 flex items-center gap-3\">\n  <ngs-file-type extension=\"xlsx\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">Financial model</div>\n    <div class=\"text-xs text-secondary\">Resolved from extension</div>\n  </div>\n</div>"
+          "source": "<div class=\"flex items-center gap-2\">\n  <ngs-file-type fileName=\"contract.pdf\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">contract.pdf</div>\n    <div class=\"text-xs text-secondary\">Resolved from fileName</div>\n  </div>\n</div>\n<div class=\"mt-5 flex items-center gap-2\">\n  <ngs-file-type extension=\"xlsx\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">Financial model</div>\n    <div class=\"text-xs text-secondary\">Resolved from extension</div>\n  </div>\n</div>"
         },
         {
           "name": "file-type-gallery-example",
@@ -5200,10 +5202,18 @@
       "inputs": [],
       "outputs": [],
       "cssTokens": [
-        "--ngs-color-neutral-100",
-        "--ngs-color-neutral-300",
         "--ngs-color-neutral-400",
-        "--ngs-color-surface-container"
+        "--ngs-color-neutral-500",
+        "--ngs-color-neutral-600",
+        "--ngs-color-outline-variant",
+        "--ngs-color-surface",
+        "--ngs-color-surface-container",
+        "--ngs-image-placeholder-bg",
+        "--ngs-image-placeholder-illustration-accent",
+        "--ngs-image-placeholder-illustration-accent-border",
+        "--ngs-image-placeholder-illustration-bg",
+        "--ngs-image-placeholder-illustration-primary",
+        "--ngs-image-placeholder-illustration-secondary"
       ],
       "example": null
     },
@@ -5468,8 +5478,9 @@
         "--ngs-color-neutral-500",
         "--ngs-color-neutral-700",
         "--ngs-color-neutral-900",
-        "--ngs-color-on-orange-container",
-        "--ngs-color-orange-container",
+        "--ngs-color-on-warning-container",
+        "--ngs-color-warning",
+        "--ngs-color-warning-container",
         "--ngs-font-size-sm",
         "--ngs-incident-bg",
         "--ngs-incident-border-radius",
@@ -5498,6 +5509,7 @@
         "--ngs-incidents-title-font-weight",
         "--ngs-layout-top-header-height",
         "--ngs-layout-top-header-top",
+        "--ngs-overlay-backdrop-bg",
         "--ngs-radius-md",
         "--ngs-shadow-sm"
       ],
@@ -6253,6 +6265,7 @@
         "--ngs-dropdown-item-hover-bg",
         "--ngs-dropdown-item-padding",
         "--ngs-dropdown-item-radius",
+        "--ngs-dropdown-max-height",
         "--ngs-dropdown-padding",
         "--ngs-dropdown-radius",
         "--ngs-dropdown-shadow",
@@ -6526,6 +6539,7 @@
         "--ngs-nav-heading-text-transform",
         "--ngs-nav-item-active-bg",
         "--ngs-nav-item-active-color",
+        "--ngs-nav-item-active-font-weight",
         "--ngs-nav-item-active-icon-color",
         "--ngs-nav-item-border-color",
         "--ngs-nav-item-border-width",
@@ -6576,6 +6590,7 @@
         "--ngs-navigation-heading-text-transform",
         "--ngs-navigation-item-active-bg",
         "--ngs-navigation-item-active-color",
+        "--ngs-navigation-item-active-font-weight",
         "--ngs-navigation-item-active-icon-color",
         "--ngs-navigation-item-bg",
         "--ngs-navigation-item-border-color",
@@ -6610,6 +6625,7 @@
         "--ngs-navigation-nested-item-indicator-position-start",
         "--ngs-navigation-nested-item-indicator-width",
         "--ngs-navigation-nested-item-margin",
+        "--ngs-navigation-nested-item-offset",
         "--ngs-navigation-nested-item-padding"
       ],
       "example": null
@@ -6630,27 +6646,28 @@
       "exampleTopics": [
         "Basic notifications",
         "Notification variants",
-        "Notification list"
+        "Notification list",
+        "Notification actions"
       ],
-      "minimalExample": "<ngs-notification class=\"w-2/3 p-4\">\n  <ngs-avatar appearance=\"identicon\" ngsNotificationAvatar/>\n  <ngs-notification-message>\n    <a routerLink=\"/\" ngs-notification-actor>Sam Anderson</a>\n    commented your post <a routerLink=\"/\" class=\"link\">Super article</a>\n  </ngs-notification-message>\n  <ngs-notification-content class=\"border border-muted rounded-lg p-2.5 text-sm\">\n    This is a comment.\n  </ngs-notification-content>\n  <ngs-notification-time>1 day ago</ngs-notification-time>\n</ngs-notification>\n<ngs-notification class=\"w-2/3 border border-muted rounded-xl p-4 mt-7\">\n  <ngs-avatar appearance=\"identicon\" ngsNotificationAvatar/>\n  <ngs-notification-message>\n    <a routerLink=\"/\" ngs-notification-actor>Sam Anderson</a>\n    commented your post <a routerLink=\"/\" class=\"link\">Super article</a>\n  </ngs-notification-message>\n  <ngs-notification-content class=\"border border-muted rounded-lg p-2.5 text-sm\">\n    This is a comment.\n  </ngs-notification-content>\n  <ngs-notification-time>1 day ago</ngs-notification-time>\n</ngs-notification>\n<ngs-notification class=\"w-2/3 bg-surface-container-low rounded-xl p-4 mt-7\">\n  <ngs-avatar appearance=\"identicon\" ngsNotificationAvatar/>\n  <ngs-notification-message>\n    <a routerLink=\"/\" ngs-notification-actor>Sam Anderson</a>\n    commented your post <a routerLink=\"/\" class=\"link\">Super article</a>\n  </ngs-notification-message>\n  <ngs-notification-content class=\"border border-muted rounded-lg p-2.5 text-sm\">\n    This is a comment.\n  </ngs-notification-content>\n  <ngs-notification-time>1 day ago</ngs-notification-time>\n</ngs-notification>\n<ngs-\n...",
+      "minimalExample": "<div class=\"flex w-full max-w-4xl flex-col divide-y divide-muted\">\n  <ngs-notification>\n    <ngs-avatar appearance=\"identicon\" key=\"sam-anderson-default\" ngsNotificationAvatar/>\n    <ngs-notification-message>\n      <a routerLink=\"/\" ngs-notification-actor>Sam Anderson</a>\n      commented on your post <a routerLink=\"/\" class=\"link\">Super article</a>\n    </ngs-notification-message>\n    <ngs-notification-content>This is a comment.</ngs-notification-content>\n    <ngs-notification-time>1 day ago</ngs-notification-time>\n    <app-notification-actions ngsNotificationControls/>\n  </ngs-notification>\n  <ngs-notification isUnread>\n    <ngs-avatar appearance=\"identicon\" key=\"sam-anderson-unread\" ngsNotificationAvatar/>\n    <ngs-notification-message>\n      <a routerLink=\"/\" ngs-notification-actor>Sam Anderson</a>\n      commented on your post <a routerLink=\"/\" class=\"link\">Super article</a>\n    </ngs-notification-message>\n    <ngs-notification-content>This is a comment.</ngs-notification-content>\n    <ngs-notification-time>1 day ago</ngs-notification-time>\n    <app-notification-actions ngsNotificationControls/>\n  </ngs-notification>\n  <ngs-notification>\n    <ngs-avatar appearance=\"identicon\" key=\"sam-anderson-read\" ngsNotificationAvatar/>\n    <ngs-notification-message>\n      <a routerLink=\"/\" ngs-notification-actor>Sam Anderson</a>\n      commented on your post <a routerLink=\"/\" class=\"link\">Super article</a>\n    </ngs-notification-message>\n    <ngs-notification-content>This is a comment.</ngs-notification-content>\n    <ngs-notification-time>1 day ago</ngs-notification-time>\n    <app-noti\n...",
       "exampleFiles": [
         {
           "name": "basic-notifications-example",
           "title": "Basic notifications",
           "file": "projects/docs/src/app/components/notifications/_examples/basic-notifications-example/basic-notifications-example.html",
-          "source": "<ngs-notification class=\"w-2/3 p-4\">\n  <ngs-avatar appearance=\"identicon\" ngsNotificationAvatar/>\n  <ngs-notification-message>\n    <a routerLink=\"/\" ngs-notification-actor>Sam Anderson</a>\n    commented your post <a routerLink=\"/\" class=\"link\">Super article</a>\n  </ngs-notification-message>\n  <ngs-notification-content class=\"border border-muted rounded-lg p-2.5 text-sm\">\n    This is a comment.\n  </ngs-notification-content>\n  <ngs-notification-time>1 day ago</ngs-notification-time>\n</ngs-notification>\n<ngs-notification class=\"w-2/3 border border-muted rounded-xl p-4 mt-7\">\n  <ngs-avatar appearance=\"identicon\" ngsNotificationAvatar/>\n  <ngs-notification-message>\n    <a routerLink=\"/\" ngs-notification-actor>Sam Anderson</a>\n    commented your post <a routerLink=\"/\" class=\"link\">Super article</a>\n  </ngs-notification-message>\n  <ngs-notification-content class=\"border border-muted rounded-lg p-2.5 text-sm\">\n    This is a comment.\n  </ngs-notification-content>\n  <ngs-notification-time>1 day ago</ngs-notification-time>\n</ngs-notification>\n<ngs-notification class=\"w-2/3 bg-surface-container-low rounded-xl p-4 mt-7\">\n  <ngs-avatar appearance=\"identicon\" ngsNotificationAvatar/>\n  <ngs-notification-message>\n    <a routerLink=\"/\" ngs-notification-actor>Sam Anderson</a>\n    commented your post <a routerLink=\"/\" class=\"link\">Super article</a>\n  </ngs-notification-message>\n  <ngs-notification-content class=\"border border-muted rounded-lg p-2.5 text-sm\">\n    This is a comment.\n  </ngs-notification-content>\n  <ngs-notification-time>1 day ago</ngs-notification-time>\n</ngs-notification>\n<ngs-\n..."
+          "source": "<div class=\"flex w-full max-w-4xl flex-col divide-y divide-muted\">\n  <ngs-notification>\n    <ngs-avatar appearance=\"identicon\" key=\"sam-anderson-default\" ngsNotificationAvatar/>\n    <ngs-notification-message>\n      <a routerLink=\"/\" ngs-notification-actor>Sam Anderson</a>\n      commented on your post <a routerLink=\"/\" class=\"link\">Super article</a>\n    </ngs-notification-message>\n    <ngs-notification-content>This is a comment.</ngs-notification-content>\n    <ngs-notification-time>1 day ago</ngs-notification-time>\n    <app-notification-actions ngsNotificationControls/>\n  </ngs-notification>\n  <ngs-notification isUnread>\n    <ngs-avatar appearance=\"identicon\" key=\"sam-anderson-unread\" ngsNotificationAvatar/>\n    <ngs-notification-message>\n      <a routerLink=\"/\" ngs-notification-actor>Sam Anderson</a>\n      commented on your post <a routerLink=\"/\" class=\"link\">Super article</a>\n    </ngs-notification-message>\n    <ngs-notification-content>This is a comment.</ngs-notification-content>\n    <ngs-notification-time>1 day ago</ngs-notification-time>\n    <app-notification-actions ngsNotificationControls/>\n  </ngs-notification>\n  <ngs-notification>\n    <ngs-avatar appearance=\"identicon\" key=\"sam-anderson-read\" ngsNotificationAvatar/>\n    <ngs-notification-message>\n      <a routerLink=\"/\" ngs-notification-actor>Sam Anderson</a>\n      commented on your post <a routerLink=\"/\" class=\"link\">Super article</a>\n    </ngs-notification-message>\n    <ngs-notification-content>This is a comment.</ngs-notification-content>\n    <ngs-notification-time>1 day ago</ngs-notification-time>\n    <app-noti\n..."
+        },
+        {
+          "name": "notification-actions-example",
+          "title": "Notification actions",
+          "file": "projects/docs/src/app/components/notifications/_examples/notification-actions-example/notification-actions-example.html",
+          "source": "<button ngsIconButton [ngsMenuTriggerFor]=\"actions\" aria-label=\"Notification actions\">\n  <ngs-icon name=\"fluent:more-vertical-24-regular\"/>\n</button>\n<ngs-menu #actions=\"ngsMenu\">\n  <button ngs-menu-item>\n    <ngs-icon name=\"fluent:checkmark-24-regular\"/>\n    <span>Mark as read</span>\n  </button>\n  <button ngs-menu-item>\n    <ngs-icon name=\"fluent:alert-off-24-regular\"/>\n    <span>Mute this type</span>\n  </button>\n  <button ngs-menu-item>\n    <ngs-icon name=\"fluent:delete-24-regular\"/>\n    <span>Delete notification</span>\n  </button>\n</ngs-menu>"
         },
         {
           "name": "notification-list-example",
           "title": "Notification list",
           "file": "projects/docs/src/app/components/notifications/_examples/notification-list-example/notification-list-example.html",
-          "source": "<ngs-notification-list [notifications]=\"notifications\" [static]=\"false\">\n  <ng-template ngsNotificationDef=\"mentionedInComment\" let-notification>\n    <ngs-notification [isUnread]=\"notification.isUnread\">\n      <ngs-avatar appearance=\"identicon\" [key]=\"notification.actor.id\"\n                    [image]=\"notification.actor.avatarUrl\"\n                    ngsNotificationAvatar/>\n      <ngs-notification-message>\n        <a routerLink=\"/\" ngs-notification-actor>{{ notification.actor.name }}</a>\n        {{ notification.message }}\n      </ngs-notification-message>\n      <ngs-notification-content class=\"border border-muted rounded-lg p-2.5 text-sm\">\n       This is a comment.\n      </ngs-notification-content>\n      <ngs-notification-time>{{ notification.createdAt }}</ngs-notification-time>\n    </ngs-notification>\n  </ng-template>\n  <ng-template ngsNotificationDef=\"inviteToEditFilesInFolder\" let-notification>\n    <ngs-notification [isUnread]=\"notification.isUnread\">\n      <ngs-avatar appearance=\"identicon\" [key]=\"notification.actor.id\"\n                    [image]=\"notification.actor.avatarUrl\"\n                    ngsNotificationAvatar/>\n      <ngs-notification-message>\n        <a routerLink=\"/\" ngs-notification-actor>{{ notification.actor.name }}</a>\n        invited you to edit <a routerLink=\"/\" class=\"link\">{{ notification.payload.folderName }}</a>\n      </ngs-notification-message>\n      <ngs-notification-content class=\"border border-muted rounded-lg p-2.5 text-sm\">\n        <div class=\"flex items-center gap-2\">\n          <ngs-icon name=\"fluent:folder-24-regular\" class=\"text-on-surfac\n..."
-        },
-        {
-          "name": "notification-variants-example",
-          "title": "Notification variants",
-          "file": "projects/docs/src/app/components/notifications/_examples/notification-variants-example/notification-variants-example.html",
-          "source": "<div class=\"flex flex-col gap-5\">\n  <ngs-notification class=\"border border-muted\">\n    <ngs-avatar appearance=\"identicon\" key=\"mila-ray\" image=\"assets/avatars/1.svg\" ngsNotificationAvatar/>\n    <ngs-notification-message>\n      <a routerLink=\"/\" ngs-notification-actor>Mila Ray</a>\n      mentioned you in <a routerLink=\"/\" class=\"link\">Launch planning</a>\n    </ngs-notification-message>\n    <ngs-notification-content class=\"notification-preview\">\n      Can you confirm the rollout window before we lock the customer email?\n    </ngs-notification-content>\n    <ngs-notification-time>Just now</ngs-notification-time>\n  </ngs-notification>\n  <ngs-notification isUnread class=\"border border-muted\">\n    <ngs-avatar appearance=\"identicon\" key=\"nolan-kim\" image=\"assets/avatars/2.svg\" ngsNotificationAvatar/>\n    <ngs-notification-message>\n      <a routerLink=\"/\" ngs-notification-actor>Nolan Kim</a>\n      requested access to <a routerLink=\"/\" class=\"link\">Q3 Pipeline</a>\n    </ngs-notification-message>\n    <ngs-notification-content>\n      <div class=\"notification-preview\">\n        Workspace role: Editor\n      </div>\n      <div class=\"mt-3 flex flex-wrap gap-2\">\n        <button ngsButton=\"filled\">Approve</button>\n        <button ngsButton=\"outlined\">Decline</button>\n      </div>\n    </ngs-notification-content>\n    <ngs-notification-time>8 minutes ago</ngs-notification-time>\n  </ngs-notification>\n  <ngs-notification class=\"border border-muted\">\n    <ngs-icon\n      name=\"fluent:checkmark-circle-24-regular\"\n      class=\"notification-icon-avatar notification-icon-avatar--success\"\n      ngsNotific\n..."
+          "source": "<ngs-notification-list [notifications]=\"notifications\" [static]=\"false\">\n  <ng-template ngsNotificationDef=\"mentionedInComment\" let-notification>\n    <ngs-notification [isUnread]=\"notification.isUnread\">\n      <ngs-avatar appearance=\"identicon\" [key]=\"notification.actor.id\"\n                    [image]=\"notification.actor.avatarUrl\"\n                    ngsNotificationAvatar/>\n      <ngs-notification-message>\n        <a routerLink=\"/\" ngs-notification-actor>{{ notification.actor.name }}</a>\n        {{ notification.message }}\n      </ngs-notification-message>\n      <ngs-notification-content>\n       This is a comment.\n      </ngs-notification-content>\n      <ngs-notification-time>{{ notification.createdAt }}</ngs-notification-time>\n    </ngs-notification>\n  </ng-template>\n  <ng-template ngsNotificationDef=\"inviteToEditFilesInFolder\" let-notification>\n    <ngs-notification [isUnread]=\"notification.isUnread\">\n      <ngs-avatar appearance=\"identicon\" [key]=\"notification.actor.id\"\n                    [image]=\"notification.actor.avatarUrl\"\n                    ngsNotificationAvatar/>\n      <ngs-notification-message>\n        <a routerLink=\"/\" ngs-notification-actor>{{ notification.actor.name }}</a>\n        invited you to edit <a routerLink=\"/\" class=\"link\">{{ notification.payload.folderName }}</a>\n      </ngs-notification-message>\n      <ngs-notification-content>\n        <div class=\"flex items-center gap-2\">\n          <ngs-icon name=\"fluent:folder-24-regular\" class=\"text-on-surface-variant\"/>\n          <span>{{ notification.payload.folderName }}</span>\n        </div>\n      </ngs-notif\n..."
         }
       ],
       "previewAsset": "projects/components/notifications/preview.svg",
@@ -6660,6 +6677,7 @@
         "[ngs-notification-time]",
         "[ngs-notification]",
         "[ngsNotificationAvatar]",
+        "[ngsNotificationControls]",
         "[ngsNotificationControlsDef]",
         "[ngsNotificationDef]",
         "[ngsNotificationProps]",
@@ -6678,6 +6696,7 @@
         "NotificationAvatarDirective",
         "NotificationContent",
         "NotificationControlsDefDirective",
+        "NotificationControlsDirective",
         "NotificationDefDirective",
         "NotificationInterface",
         "NotificationList",
@@ -6696,25 +6715,30 @@
         "notificationClick"
       ],
       "cssTokens": [
-        "--ngs-color-neutral-900",
-        "--ngs-color-neutral-950",
+        "--ngs-color-border",
         "--ngs-color-on-surface",
         "--ngs-color-on-surface-variant",
         "--ngs-color-primary",
-        "--ngs-color-surface-container",
+        "--ngs-color-surface",
         "--ngs-color-surface-container-low",
-        "--ngs-color-surface-container-lowest",
         "--ngs-font-size-sm",
         "--ngs-font-size-xs",
+        "--ngs-notification-action-space",
         "--ngs-notification-bg",
         "--ngs-notification-content-margin",
         "--ngs-notification-gap",
         "--ngs-notification-hover-bg",
         "--ngs-notification-is-unread-bg",
         "--ngs-notification-is-unread-hover-bg",
+        "--ngs-notification-list-divider-color",
+        "--ngs-notification-list-divider-inset",
         "--ngs-notification-list-gap",
         "--ngs-notification-padding",
         "--ngs-notification-radius",
+        "--ngs-notification-unread-indicator-color",
+        "--ngs-notification-unread-indicator-outline-color",
+        "--ngs-radius-full",
+        "--ngs-radius-lg",
         "--ngs-radius-xl"
       ],
       "example": null
@@ -8394,13 +8418,13 @@
         "Filter trigger count options",
         "Filter trigger"
       ],
-      "minimalExample": "<p>Basic ngs-select</p>\n<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite food</ngs-label>\n  <ngs-select>\n    @for (food of foods; track food) {\n      <ngs-option [value]=\"food.value\">{{food.viewValue}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>",
+      "minimalExample": "<p>Basic ngs-select</p>\n<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite food</ngs-label>\n  <ngs-select placeholder=\"Select food\">\n    @for (food of foods; track food) {\n      <ngs-option [value]=\"food.value\">{{food.viewValue}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>",
       "exampleFiles": [
         {
           "name": "basic-select-example",
           "title": "Basic select",
           "file": "projects/docs/src/app/forms/select/_examples/basic-select-example/basic-select-example.html",
-          "source": "<p>Basic ngs-select</p>\n<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite food</ngs-label>\n  <ngs-select>\n    @for (food of foods; track food) {\n      <ngs-option [value]=\"food.value\">{{food.viewValue}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
+          "source": "<p>Basic ngs-select</p>\n<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite food</ngs-label>\n  <ngs-select placeholder=\"Select food\">\n    @for (food of foods; track food) {\n      <ngs-option [value]=\"food.value\">{{food.viewValue}}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
         },
         {
           "name": "async-data-source-select-example",
@@ -8412,7 +8436,7 @@
           "name": "clearable-select-example",
           "title": "Clearable select",
           "file": "projects/docs/src/app/forms/select/_examples/clearable-select-example/clearable-select-example.html",
-          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Status</ngs-label>\n  <ngs-select [formControl]=\"status()\" clearable>\n    @for (statusOption of statuses(); track statusOption.value) {\n      <ngs-option [value]=\"statusOption.value\">{{ statusOption.label }}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
+          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Status</ngs-label>\n  <ngs-select [formControl]=\"status()\" placeholder=\"Select status\" clearable>\n    @for (statusOption of statuses(); track statusOption.value) {\n      <ngs-option [value]=\"statusOption.value\">{{ statusOption.label }}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
         }
       ],
       "previewAsset": "projects/components/select/preview.svg",
@@ -8494,6 +8518,7 @@
         "--ngs-field-font-size",
         "--ngs-field-label-color",
         "--ngs-field-line-height",
+        "--ngs-field-padding-x",
         "--ngs-filter-trigger-badge-background",
         "--ngs-filter-trigger-badge-color",
         "--ngs-filter-trigger-badge-font-size",
@@ -8724,6 +8749,7 @@
         "--ngs-nav-heading-text-transform",
         "--ngs-nav-item-active-bg",
         "--ngs-nav-item-active-color",
+        "--ngs-nav-item-active-font-weight",
         "--ngs-nav-item-active-icon-color",
         "--ngs-nav-item-border-color",
         "--ngs-nav-item-border-width",
@@ -8830,6 +8856,7 @@
         "--ngs-sidebar-nav-nested-item-indicator-position-start",
         "--ngs-sidebar-nav-nested-item-indicator-width",
         "--ngs-sidebar-nav-nested-item-margin",
+        "--ngs-sidebar-nav-nested-item-offset",
         "--ngs-sidebar-nav-nested-item-padding",
         "--ngs-sidebar-nav-padding",
         "--ngs-sidebar-width",

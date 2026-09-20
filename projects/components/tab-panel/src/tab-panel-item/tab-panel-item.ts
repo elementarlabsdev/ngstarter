@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { TabPanelApiService } from '../tab-panel-api.service';
 import { TabPanelNav } from '../tab-panel-nav/tab-panel-nav';
 import { TAB_PANEL_NAV } from '../types';
@@ -12,6 +12,7 @@ import { Ripple } from '@ngstarter-ui/components/core';
   hostDirectives: [
     Ripple
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-tab-panel-item',
     '[class.is-active]': 'api.isActive(this.for())',

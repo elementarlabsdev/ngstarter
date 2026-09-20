@@ -1,10 +1,11 @@
-import { booleanAttribute, Component, effect, ElementRef, inject, input, output } from '@angular/core';
+import { booleanAttribute, Component, effect, ElementRef, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-expand',
   exportAs: 'ngsExpand',
   templateUrl: './expand.html',
   styleUrl: './expand.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-expand',
     '[class.is-expanded]': '_expanded'

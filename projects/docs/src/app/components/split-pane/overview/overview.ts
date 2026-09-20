@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicSplitExample } from '../_examples/basic-split-example/basic-split-example';
 import { SplitHandleExample } from '../_examples/split-handle-example/split-handle-example';
@@ -17,6 +17,7 @@ import { SplitRestrictMoveExample } from '../_examples/split-restrict-move-examp
     SplitRestrictMoveExample,
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss',
 })
 export class Overview {

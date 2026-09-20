@@ -1,13 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   NotificationAvatarDirective,
   NotificationActor,
   Notification,
   NotificationMessage,
-  NotificationTime, NotificationContent
+  NotificationContent,
+  NotificationControlsDirective,
+  NotificationTime
 } from '@ngstarter-ui/components/notifications';
 import { Avatar } from '@ngstarter-ui/components/avatar';
+import { Icon } from '@ngstarter-ui/components/icon';
 import { RouterLink } from '@angular/router';
+import { NotificationActionsExample } from '../notification-actions-example/notification-actions-example';
 
 @Component({
   selector: 'app-basic-notifications-example',
@@ -19,31 +23,14 @@ import { RouterLink } from '@angular/router';
     NotificationTime,
     RouterLink,
     NotificationActor,
-    NotificationContent
+    NotificationContent,
+    NotificationControlsDirective,
+    NotificationActionsExample,
+    Icon
   ],
   templateUrl: './basic-notifications-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-notifications-example.scss'
 })
 export class BasicNotificationsExample {
-  notifications: any[] = [
-    {
-      actor: {
-        id: 1,
-        name: 'Justin Hansen',
-        username: 'justin.hansen',
-        avatarUrl: 'assets/avatars/5.svg'
-      },
-      notifier: {
-        id: 2,
-        name: 'Elma Johnson',
-        username: 'elma.johnson',
-        avatarUrl: 'assets/avatars/2.svg'
-      },
-      payload: {
-        message: 'what did you say?'
-      },
-      type: 'mentionedInComment',
-      createdAt: '1 hour ago'
-    }
-  ];
 }

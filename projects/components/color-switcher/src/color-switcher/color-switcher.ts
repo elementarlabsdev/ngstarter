@@ -6,7 +6,8 @@ import {
   output,
   forwardRef,
   inject,
-  ChangeDetectorRef, booleanAttribute
+  ChangeDetectorRef, booleanAttribute,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -29,6 +30,7 @@ const defaultColors = [
   ],
   templateUrl: './color-switcher.html',
   styleUrl: './color-switcher.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-brand-colors',
     '[class.is-disabled]': 'disabled() || _disabled',

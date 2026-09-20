@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 import { Button } from '@ngstarter-ui/components/button';
@@ -11,6 +11,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Avatar
   ],
   templateUrl: './toolbar.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './toolbar.scss'
 })
 export class ToolbarA {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
   IncidentCloseDirective, Incident, IncidentDetails,
@@ -25,6 +25,7 @@ import {
     Incidents
   ],
   templateUrl: './basic-incidents-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-incidents-example.scss'
 })
 export class BasicIncidentsExample {

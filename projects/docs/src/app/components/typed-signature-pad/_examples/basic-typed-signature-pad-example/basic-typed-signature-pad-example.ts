@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   TypedSignaturePad,
   type TypedSignaturePadValue,
@@ -10,6 +10,7 @@ import {
     TypedSignaturePad
   ],
   templateUrl: './basic-typed-signature-pad-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-typed-signature-pad-example.scss'
 })
 export class BasicTypedSignaturePadExample {

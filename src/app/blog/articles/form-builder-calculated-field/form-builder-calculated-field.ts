@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardContent } from '@ngstarter-ui/components/card';
@@ -31,6 +31,7 @@ import {
     ScrollSpyTitle,
   ],
   templateUrl: './form-builder-calculated-field.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './form-builder-calculated-field.scss',
 })
 export class FormBuilderCalculatedFieldArticle {

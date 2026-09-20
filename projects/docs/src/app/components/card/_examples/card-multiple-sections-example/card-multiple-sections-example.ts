@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 import {
   Card,
@@ -26,6 +26,7 @@ import { Button } from '@ngstarter-ui/components/button';
     CardAvatar
   ],
   templateUrl: './card-multiple-sections-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './card-multiple-sections-example.scss'
 })
 export class CardMultipleSectionsExample {

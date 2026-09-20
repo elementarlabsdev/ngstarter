@@ -86,6 +86,7 @@
     .inner {
       background: var(--ngs-navigation-item-active-bg);
       color: var(--ngs-navigation-item-active-color);
+      font-weight: var(--ngs-navigation-item-active-font-weight);
     }
   }
 
@@ -107,7 +108,7 @@
 :host-context(.ngs-navigation-group-menu) {
   .inner {
     margin: var(--ngs-navigation-nested-item-margin);
-    width: calc(var(--ngs-navigation-item-width) - var(--ngs-navigation-nested-item-margin));
+    width: calc(var(--ngs-navigation-item-width) - var(--ngs-navigation-nested-item-offset));
     background: var(--ngs-navigation-nested-item-bg);
     min-height: var(--ngs-navigation-nested-item-height);
     padding: var(--ngs-navigation-nested-item-padding);
@@ -125,6 +126,7 @@
   &.is-active:hover .inner {
     background: var(--ngs-navigation-nested-item-active-bg);
     color: var(--ngs-navigation-nested-item-active-color);
+    font-weight: var(--ngs-navigation-item-active-font-weight);
   }
 
   &:not(:last-child){

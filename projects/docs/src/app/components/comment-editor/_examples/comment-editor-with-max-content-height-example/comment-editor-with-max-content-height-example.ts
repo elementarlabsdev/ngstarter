@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   CommentEditorBubbleMenu,
   CommentEditorCommandBlockquoteDirective,
@@ -54,6 +54,7 @@ import { Tooltip } from '@ngstarter-ui/components/tooltip';
     Tooltip
   ],
   templateUrl: './comment-editor-with-max-content-height-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './comment-editor-with-max-content-height-example.scss'
 })
 export class CommentEditorWithMaxContentHeightExample {

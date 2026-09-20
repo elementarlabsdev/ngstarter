@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   BreadcrumbItem,
   Breadcrumbs,
@@ -13,6 +13,7 @@ import {
     Breadcrumbs
   ],
   templateUrl: './basic-breadcrumbs-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-breadcrumbs-example.scss'
 })
 export class BasicBreadcrumbsExample {

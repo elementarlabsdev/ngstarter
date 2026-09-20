@@ -1,4 +1,4 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, input, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Divider } from '@ngstarter-ui/components/divider';
 import { ContentEditorDataBlock } from '../../types';
 import { ContentEditorCodeBlockSettings } from '../code-block/code-block.component';
@@ -9,6 +9,7 @@ import { ContentEditorCodeBlockSettings } from '../code-block/code-block.compone
     Divider
   ],
   templateUrl: './divider-block.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './divider-block.component.scss'
 })
 export class DividerBlockComponent implements ContentEditorDataBlock {

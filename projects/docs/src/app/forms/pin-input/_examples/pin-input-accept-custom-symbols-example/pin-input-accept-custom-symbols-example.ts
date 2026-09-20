@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PinInput } from '@ngstarter-ui/components/pin-input';
 
@@ -9,6 +9,7 @@ import { PinInput } from '@ngstarter-ui/components/pin-input';
     PinInput
   ],
   templateUrl: './pin-input-accept-custom-symbols-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './pin-input-accept-custom-symbols-example.scss'
 })
 export class PinInputAcceptCustomSymbolsExample {

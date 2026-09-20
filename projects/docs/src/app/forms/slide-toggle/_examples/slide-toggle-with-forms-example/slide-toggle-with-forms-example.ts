@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
 import { Button } from '@ngstarter-ui/components/button';
@@ -12,6 +12,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './slide-toggle-with-forms-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './slide-toggle-with-forms-example.scss'
 })
 export class SlideToggleWithFormsExample {

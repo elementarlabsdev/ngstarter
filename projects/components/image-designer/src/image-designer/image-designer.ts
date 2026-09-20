@@ -11,7 +11,8 @@ import {
   viewChild,
   effect,
   PLATFORM_ID, OnInit, forwardRef, output, booleanAttribute, untracked,
-  DestroyRef, numberAttribute
+  DestroyRef, numberAttribute,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -124,6 +125,7 @@ import { Effects } from '../effects/effects';
   ],
   templateUrl: './image-designer.html',
   styleUrl: './image-designer.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-image-designer',
     '(keydown)': 'onKeyDown($event)'

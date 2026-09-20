@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
   SuggestionBlock,
@@ -21,6 +21,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './basic-suggestions-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-suggestions-example.scss'
 })
 export class BasicSuggestionsExample {

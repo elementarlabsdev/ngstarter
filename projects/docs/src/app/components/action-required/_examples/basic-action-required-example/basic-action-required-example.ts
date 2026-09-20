@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ActionRequired } from '@ngstarter-ui/components/action-required';
 
 @Component({
@@ -7,6 +7,7 @@ import { ActionRequired } from '@ngstarter-ui/components/action-required';
     ActionRequired
   ],
   templateUrl: './basic-action-required-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-action-required-example.scss'
 })
 export class BasicActionRequiredExample {

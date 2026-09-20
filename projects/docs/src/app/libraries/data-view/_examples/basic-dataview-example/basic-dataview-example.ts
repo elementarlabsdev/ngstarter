@@ -1,4 +1,4 @@
-import { Component, model } from '@angular/core';
+import { Component, model, ChangeDetectionStrategy } from '@angular/core';
 import { DataViewColumnDef, DataView } from '@ngstarter-ui/components/data-view';
 import { FormsModule } from '@angular/forms';
 
@@ -24,6 +24,7 @@ const DATA: PeriodicElement[] = [
     FormsModule
   ],
   templateUrl: './basic-dataview-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-dataview-example.scss'
 })
 export class BasicDataviewExample {

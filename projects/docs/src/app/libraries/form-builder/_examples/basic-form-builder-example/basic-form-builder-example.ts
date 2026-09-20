@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormBuilderSchema } from '@ngstarter-ui/components/form-builder';
 import { Card, CardContent, CardHeader, CardTitle } from '@ngstarter-ui/components/card';
 import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
@@ -14,6 +14,7 @@ import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
     FormBuilder
   ],
   templateUrl: './basic-form-builder-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-form-builder-example.scss'
 })
 export class BasicFormBuilderExample {

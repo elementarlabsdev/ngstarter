@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
@@ -66,6 +66,7 @@ const DATA: TodoTask[] = [
     Row
   ],
   templateUrl: './todos-widget.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './todos-widget.scss'
 })
 export class TodosWidget implements GridItemAware {

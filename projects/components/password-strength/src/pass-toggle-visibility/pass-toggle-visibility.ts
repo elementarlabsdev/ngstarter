@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, input } from '@angular/core';
+import { booleanAttribute, Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Button } from '@ngstarter-ui/components/button';
 
@@ -11,6 +11,7 @@ import { Button } from '@ngstarter-ui/components/button';
   ],
   templateUrl: './pass-toggle-visibility.html',
   styleUrl: './pass-toggle-visibility.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-pass-toggle-visibility',
   }

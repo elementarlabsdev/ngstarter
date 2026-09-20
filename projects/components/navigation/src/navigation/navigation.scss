@@ -13,6 +13,7 @@
   --ngs-navigation-item-border-width: var(--ngs-nav-item-border-width);
   --ngs-navigation-item-border-color: var(--ngs-nav-item-border-color);
   --ngs-navigation-item-font-weight: var(--ngs-nav-item-font-weight);
+  --ngs-navigation-item-active-font-weight: var(--ngs-nav-item-active-font-weight);
   --ngs-navigation-item-color: var(--ngs-nav-item-color);
   --ngs-navigation-item-hover-bg: var(--ngs-nav-item-hover-bg);
   --ngs-navigation-item-active-bg: var(--ngs-nav-item-active-bg);
@@ -46,6 +47,7 @@
   --ngs-navigation-nested-item-bg: transparent;
   --ngs-navigation-nested-item-height: var(--ngs-nav-nested-item-height);
   --ngs-navigation-nested-item-padding: var(--ngs-nav-nested-item-padding);
+  --ngs-navigation-nested-item-offset: calc(var(--ngs-navigation-item-icon-width) + var(--ngs-navigation-item-gap));
   --ngs-navigation-nested-item-margin: var(--ngs-nav-nested-item-margin);
   --ngs-navigation-nested-item-border-radius: var(--ngs-nav-nested-item-border-radius);
   --ngs-navigation-nested-item-color: var(--ngs-nav-item-color);

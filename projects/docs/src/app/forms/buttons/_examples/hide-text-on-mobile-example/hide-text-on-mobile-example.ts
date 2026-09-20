@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Icon } from '@ngstarter-ui/components/icon';
 
@@ -9,6 +9,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     Button,
     Icon
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './hide-text-on-mobile-example.html',
 })
 export class HideTextOnMobileExample {

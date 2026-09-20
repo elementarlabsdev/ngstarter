@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Input } from '@ngstarter-ui/components/input';
 import { Label, FormField, Hint } from '@ngstarter-ui/components/form-field';
 
@@ -11,6 +11,7 @@ import { Label, FormField, Hint } from '@ngstarter-ui/components/form-field';
     Label
   ],
   templateUrl: './input-with-hints-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './input-with-hints-example.scss'
 })
 export class InputWithHintsExample {

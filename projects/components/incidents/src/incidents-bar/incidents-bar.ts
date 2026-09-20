@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { INCIDENTS } from '../properties';
 import { Incidents } from '../incidents/incidents';
 import { Button } from '@ngstarter-ui/components/button';
@@ -12,6 +12,7 @@ import { Button } from '@ngstarter-ui/components/button';
   ],
   templateUrl: './incidents-bar.html',
   styleUrl: './incidents-bar.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-incidents-bar',
     '(click)': '_handleClick($event)'

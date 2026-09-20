@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ThumbnailMaker } from '@ngstarter-ui/components/thumbnail-maker';
 
 @Component({
@@ -7,6 +7,7 @@ import { ThumbnailMaker } from '@ngstarter-ui/components/thumbnail-maker';
     ThumbnailMaker
   ],
   templateUrl: './thumbnail-maker-with-helper-text-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './thumbnail-maker-with-helper-text-example.scss'
 })
 export class ThumbnailMakerWithHelperTextExample {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   Navigation,
   NavigationGroup,
@@ -21,6 +21,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     Navigation
   ],
   templateUrl: './navigation-with-badges-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './navigation-with-badges-example.scss'
 })
 export class NavigationWithBadgesExample {

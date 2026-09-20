@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MchartPie } from '@ngstarter-ui/components/micro-chart';
 
 @Component({
@@ -7,6 +7,7 @@ import { MchartPie } from '@ngstarter-ui/components/micro-chart';
     MchartPie
   ],
   templateUrl: './mchart-pie-with-legend-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './mchart-pie-with-legend-example.scss'
 })
 export class MchartPieWithLegendExample {

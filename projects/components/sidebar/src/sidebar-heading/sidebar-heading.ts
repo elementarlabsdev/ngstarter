@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-sidebar-heading',
@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './sidebar-heading.html',
   styleUrl: './sidebar-heading.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'ngs-sidebar-heading',
   },

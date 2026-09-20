@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
   Timepicker,
@@ -23,6 +23,7 @@ import { Input } from '@ngstarter-ui/components/input';
     IconButtonSuffix
   ],
   templateUrl: './timepicker-custom-toggle-icon-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './timepicker-custom-toggle-icon-example.scss'
 })
 export class TimepickerCustomToggleIconExample {

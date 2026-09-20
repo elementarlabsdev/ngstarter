@@ -4,7 +4,8 @@ import {
   inject,
   OnDestroy,
   TemplateRef,
-  ViewContainerRef
+  ViewContainerRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
@@ -33,6 +34,7 @@ import { Button } from '@ngstarter-ui/components/button';
   ],
   templateUrl: './assistant-search.html',
   styleUrl: './assistant-search.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'assistant-search',
     '[class.has-dropdown]': '_isAttached'

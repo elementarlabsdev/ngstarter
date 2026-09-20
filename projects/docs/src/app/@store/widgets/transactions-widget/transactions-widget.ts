@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { RouterLink } from '@angular/router';
 
@@ -30,6 +30,7 @@ export interface Transaction {
         RouterLink
     ],
     templateUrl: './transactions-widget.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './transactions-widget.scss'
 })
 export class TransactionsWidget {

@@ -1,4 +1,4 @@
-import { Directive, ElementRef } from '@angular/core';
+import { Directive } from '@angular/core';
 import { CdkHeaderCell } from '@angular/cdk/table';
 
 /** Header cell template container that adds the right classes and role. */
@@ -10,8 +10,4 @@ import { CdkHeaderCell } from '@angular/cdk/table';
   },
   standalone: true,
 })
-export class HeaderCell extends CdkHeaderCell {
-  constructor(elementRef: ElementRef) {
-    super(elementRef);
-  }
-}
+export class HeaderCell extends CdkHeaderCell {}

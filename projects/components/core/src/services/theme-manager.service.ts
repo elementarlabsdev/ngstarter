@@ -28,11 +28,13 @@ export class ThemeManagerService {
   private _options = inject(NGS_THEME_OPTIONS);
 
   private readonly _theme = signal<NgsThemeName>('default');
+  private readonly _selectedColorScheme = signal<NgsColorScheme>('auto');
   private readonly _colorScheme = signal<Exclude<NgsColorScheme, 'auto'>>('light');
   private readonly _radius = signal<NgsRadius>('medium');
   private readonly _colorPreset = signal<NgsThemeColorPreset>('default');
 
   readonly theme = this._theme.asReadonly();
+  readonly selectedColorScheme = this._selectedColorScheme.asReadonly();
   readonly colorScheme = this._colorScheme.asReadonly();
   readonly radius = this._radius.asReadonly();
   readonly colorPreset = this._colorPreset.asReadonly();
@@ -49,10 +51,8 @@ export class ThemeManagerService {
         this._window
           .matchMedia('(prefers-color-scheme: dark)')
           .addEventListener('change', () => {
-            const storedColorScheme = this._getStoredColorScheme();
-
-            if (storedColorScheme !== 'light' && storedColorScheme !== 'dark') {
-              this.setColorScheme(this.getPreferredColorScheme(), false);
+            if (this._selectedColorScheme() === 'auto') {
+              this.setColorScheme('auto', false);
             }
           })
         ;
@@ -65,7 +65,7 @@ export class ThemeManagerService {
   }
 
   toggleColorScheme(): void {
-    if (this._getStoredColorScheme() === 'dark') {
+    if (this._colorScheme() === 'dark') {
       this.changeColorScheme('light');
     } else {
       this.changeColorScheme('dark');
@@ -109,17 +109,19 @@ export class ThemeManagerService {
   };
 
   private _getStoredState(): StoredThemeState {
-    if (!this._options.persist || typeof localStorage === 'undefined') {
-      return {};
-    }
+    const storage = this._getStorage();
 
-    const rawValue = localStorage.getItem(this._storageKey);
-
-    if (!rawValue) {
+    if (!this._options.persist || storage === null) {
       return {};
     }
 
     try {
+      const rawValue = storage.getItem(this._storageKey);
+
+      if (!rawValue) {
+        return {};
+      }
+
       return JSON.parse(rawValue);
     } catch {
       return {};
@@ -127,12 +129,19 @@ export class ThemeManagerService {
   };
 
   private _persist(state: Partial<StoredThemeState>, persist = true): void {
-    if (!persist || !this._options.persist || typeof localStorage === 'undefined') {
+    const storage = this._getStorage();
+
+    if (!persist || !this._options.persist || storage === null) {
       return;
     }
 
     const meta = this._getStoredState();
-    localStorage.setItem(this._storageKey, JSON.stringify({ ...meta, ...state }));
+
+    try {
+      storage.setItem(this._storageKey, JSON.stringify({ ...meta, ...state }));
+    } catch {
+      // Keep the active theme in memory when browser storage is unavailable.
+    }
   };
 
   private _setStoredColorScheme(colorScheme: string): void {
@@ -154,8 +163,10 @@ export class ThemeManagerService {
   };
 
   setColorScheme(colorScheme: NgsColorScheme, persist = true): void {
+    this._selectedColorScheme.set(colorScheme);
+
     if (colorScheme === 'auto') {
-      this._colorScheme.set(this.getPreferredColorScheme());
+      this._colorScheme.set(this._getSystemColorScheme());
     } else {
       this._colorScheme.set(colorScheme);
     }
@@ -185,7 +196,8 @@ export class ThemeManagerService {
 
     root.classList?.toggle('dark', this._colorScheme() === 'dark');
     root.setAttribute('data-ngs-theme', this._theme());
-    root.setAttribute('data-ngs-color-scheme', this._colorScheme());
+    root.setAttribute('data-ngs-color-scheme', colorScheme);
+    root.setAttribute('data-ngs-resolved-color-scheme', colorScheme);
     root.setAttribute('data-ngs-radius', this._radius());
     root.setAttribute('data-ngs-color-preset', colorPreset);
 
@@ -206,5 +218,21 @@ export class ThemeManagerService {
 
   private get _storageKey(): string {
     return this._options.storageKey || 'ngs-admin';
+  }
+
+  private _getStorage(): Storage | null {
+    try {
+      return this._window?.localStorage ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  private _getSystemColorScheme(): 'dark' | 'light' {
+    if (this._window !== null && this._window.matchMedia) {
+      return this._window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    return 'light';
   }
 }

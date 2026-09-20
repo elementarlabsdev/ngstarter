@@ -88,6 +88,7 @@
   &.is-active:hover {
     background: var(--ngs-navigation-group-toggle-active-bg);
     color: var(--ngs-navigation-group-toggle-active-color);
+    font-weight: var(--ngs-navigation-item-active-font-weight);
   }
 
   &:not(.is-active):hover .icon {

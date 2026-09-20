@@ -1,10 +1,11 @@
-import { Component, ElementRef, inject, input, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, inject, input, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-color-picker-thumbnail,[ngs-color-picker-thumbnail]',
   exportAs: 'ngsColorPickerThumbnail',
   templateUrl: './color-picker-thumbnail.html',
   styleUrl: './color-picker-thumbnail.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-color-picker-thumbnail'
   }

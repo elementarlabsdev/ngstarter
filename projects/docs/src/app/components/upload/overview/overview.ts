@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicUploadExample } from '../_examples/basic-upload-example/basic-upload-example';
 import { UploadAreaExample } from '../_examples/upload-area-example/upload-area-example';
@@ -14,6 +14,7 @@ import { FileGridExample } from '../_examples/file-grid-example/file-grid-exampl
     FileGridExample
   ],
     templateUrl: './overview.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './overview.scss'
 })
 export class Overview {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ShuffleArrayPipe } from '@meta/shuffle-array.pipe';
 import {
   MchartBar,
@@ -16,6 +16,7 @@ import {
     MchartTooltipTitle
   ],
   templateUrl: './mchart-bar-with-tooltip-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './mchart-bar-with-tooltip-example.scss'
 })
 export class MchartBarWithTooltipExample {

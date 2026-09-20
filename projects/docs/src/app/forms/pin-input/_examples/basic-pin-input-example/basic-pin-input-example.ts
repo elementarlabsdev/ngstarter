@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PinInput } from '@ngstarter-ui/components/pin-input';
 
@@ -9,6 +9,7 @@ import { PinInput } from '@ngstarter-ui/components/pin-input';
     PinInput
   ],
   templateUrl: './basic-pin-input-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-pin-input-example.scss'
 })
 export class BasicPinInputExample {

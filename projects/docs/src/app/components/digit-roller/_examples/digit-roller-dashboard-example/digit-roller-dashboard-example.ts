@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, computed, inject, OnDestroy, PLATFORM_ID, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, PLATFORM_ID, signal, ChangeDetectionStrategy } from '@angular/core';
 import { DigitRoller, DigitRollerGroupDirective } from '@ngstarter-ui/components/digit-roller';
 
 interface SizeExample {
@@ -22,6 +22,7 @@ interface SizeExample {
     DigitRollerGroupDirective,
   ],
   templateUrl: './digit-roller-dashboard-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './digit-roller-dashboard-example.scss',
 })
 export class DigitRollerDashboardExample implements OnDestroy {

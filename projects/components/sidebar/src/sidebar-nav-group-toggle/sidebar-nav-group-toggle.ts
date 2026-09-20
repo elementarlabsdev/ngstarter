@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, contentChild, inject, signal } from '@angular/core';
 import { Ripple } from '@ngstarter-ui/components/core';
 import { SidebarNavStore } from '../sidebar.store';
+import { SidebarNavItemIconDirective } from '../sidebar-nav-item-icon.directive';
 
 @Component({
   selector: 'ngs-sidebar-nav-group-toggle',
@@ -14,6 +15,7 @@ import { SidebarNavStore } from '../sidebar.store';
   host: {
     'class': 'ngs-sidebar-nav-group-toggle',
     '[class.is-active]': 'active',
+    '[class.has-item-icon]': 'hasItemIcon()',
     '(click)': 'toggle($event)'
   }
 })
@@ -21,6 +23,8 @@ export class SidebarNavGroupToggle {
   private _navStore = inject(SidebarNavStore);
 
   readonly for = signal<any>(null);
+  readonly itemIcon = contentChild(SidebarNavItemIconDirective);
+  readonly hasItemIcon = computed(() => Boolean(this.itemIcon()));
 
   get active(): boolean {
     if (!this.for()) {

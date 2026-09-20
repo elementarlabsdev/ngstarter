@@ -1,4 +1,4 @@
-import { Component, model, inject, ElementRef, viewChild, TemplateRef } from '@angular/core';
+import { Component, model, inject, ElementRef, viewChild, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { ToolbarBaseItem } from '../toolbar-base-item';
 
@@ -7,6 +7,7 @@ import { ToolbarBaseItem } from '../toolbar-base-item';
   imports: [NgTemplateOutlet],
   templateUrl: './toolbar-item.html',
   styleUrl: './toolbar-item.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[class.ngs-toolbar-item-hidden]': 'hidden()',
   }

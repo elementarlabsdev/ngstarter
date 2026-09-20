@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   ImageViewerDirective,
   ImageViewerPictureCaptionDirective,
@@ -17,6 +17,7 @@ import {
     ImageViewerPictureTitleDirective
   ],
   templateUrl: './image-viewer-with-title-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './image-viewer-with-title-example.scss'
 })
 export class ImageViewerWithTitleExample {

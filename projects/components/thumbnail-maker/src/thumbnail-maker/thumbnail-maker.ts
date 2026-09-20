@@ -1,4 +1,4 @@
-import { Component, ElementRef, input, viewChild } from '@angular/core';
+import { Component, ElementRef, input, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Slider, SliderThumb } from '@ngstarter-ui/components/slider';
 import { FormsModule } from '@angular/forms';
 import { DragImageDirective } from '../drag-image.directive';
@@ -20,6 +20,7 @@ import { Button } from '@ngstarter-ui/components/button';
   ],
   templateUrl: './thumbnail-maker.html',
   styleUrl: './thumbnail-maker.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-thumbnail-maker',
     '[class.loading]': 'loading'

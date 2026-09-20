@@ -1,5 +1,6 @@
 import {
-  Component
+  Component,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { INCIDENTS } from '../properties';
 
@@ -14,6 +15,7 @@ import { INCIDENTS } from '../properties';
       useExisting: Incidents
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-incidents',
     '[class.is-visible]': 'isVisible',

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   cellRenderer,
   DataViewColumnDef,
@@ -25,6 +25,7 @@ export interface User {
     FormsModule
   ],
   templateUrl: './data-view-custom-cell-renderers-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './data-view-custom-cell-renderers-example.scss'
 })
 export class DataViewCustomCellRenderersExample implements OnInit {

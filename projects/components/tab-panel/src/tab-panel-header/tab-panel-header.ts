@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-tab-panel-header',
   exportAs: 'ngsTabPanelHeader',
   templateUrl: './tab-panel-header.html',
   styleUrl: './tab-panel-header.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-tab-panel-header'
   }

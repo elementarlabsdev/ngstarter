@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormField, IconButtonSuffix, Label } from '@ngstarter-ui/components/form-field';
 import {
@@ -25,6 +25,7 @@ import {
     EndDate,
     IconButtonSuffix
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './datepicker-presets-example.html',
 })
 export class DatepickerPresetsExample {

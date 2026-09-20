@@ -13,7 +13,7 @@ import {
     'class': 'ngs-row',
     'role': 'row',
   },
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   imports: [CdkCellOutlet],
   providers: [{provide: CdkRow, useExisting: forwardRef(() => Row)}],

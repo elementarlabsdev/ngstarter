@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
@@ -51,6 +51,7 @@ const EXAMPLE_DATA: ProjectNode[] = [
     TreeNodeToggle,
   ],
   templateUrl: './draggable-tree-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './draggable-tree-example.scss',
 })
 export class DraggableTreeExample {

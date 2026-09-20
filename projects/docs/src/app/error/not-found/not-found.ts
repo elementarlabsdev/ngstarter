@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Button } from '@ngstarter-ui/components/button';
 
@@ -9,6 +9,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './not-found.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './not-found.scss'
 })
 export class NotFound {

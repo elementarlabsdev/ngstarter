@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Option, Select } from '@ngstarter-ui/components/select';
 import { Error, Hint, Label } from '@ngstarter-ui/components/form-field';
@@ -21,6 +21,7 @@ interface Animal {
     Error
   ],
   templateUrl: './form-field-features-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './form-field-features-example.scss'
 })
 export class FormFieldFeaturesExample {

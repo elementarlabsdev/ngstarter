@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicBadgesExample } from '../_examples/basic-badges-example/basic-badges-example';
 
@@ -8,6 +8,7 @@ import { BasicBadgesExample } from '../_examples/basic-badges-example/basic-badg
     BasicBadgesExample,
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

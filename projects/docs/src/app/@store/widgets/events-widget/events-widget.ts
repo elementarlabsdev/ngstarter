@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   Avatar,
   AvatarGroup,
@@ -14,6 +14,7 @@ import { GRID, Grid } from '@ngstarter-ui/components/grid';
     Avatar,
     AvatarMore
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './events-widget.scss'
 })
 export class EventsWidget implements OnInit {

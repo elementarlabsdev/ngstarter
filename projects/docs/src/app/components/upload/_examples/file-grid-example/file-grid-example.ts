@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 export interface File {
   name: string;
@@ -32,6 +32,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './file-grid-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './file-grid-example.scss'
 })
 export class FileGridExample {

@@ -11,7 +11,8 @@ import {
   effect,
   computed,
   PLATFORM_ID,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Icon } from '@ngstarter-ui/components/icon';
@@ -26,6 +27,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   ],
   templateUrl: './comparison-slider.html',
   styleUrl: './comparison-slider.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-comparison-slider not-prose',
     '(contextmenu)': 'onContextMenu($event)',

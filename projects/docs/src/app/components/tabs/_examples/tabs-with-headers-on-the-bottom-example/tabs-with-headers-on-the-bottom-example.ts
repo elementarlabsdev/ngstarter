@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 
 @Component({
@@ -8,6 +8,7 @@ import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
     TabGroup
   ],
   templateUrl: './tabs-with-headers-on-the-bottom-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tabs-with-headers-on-the-bottom-example.scss'
 })
 export class TabsWithHeadersOnTheBottomExample {

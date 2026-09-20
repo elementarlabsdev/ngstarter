@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   BreadcrumbItem,
   BreadcrumbItemIconDirective, Breadcrumbs,
@@ -16,6 +16,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     Breadcrumbs
   ],
   templateUrl: './breadcrumbs-with-last-item-as-link-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './breadcrumbs-with-last-item-as-link-example.scss'
 })
 export class BreadcrumbsWithLastItemAsLinkExample {

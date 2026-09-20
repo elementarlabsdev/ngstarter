@@ -1,4 +1,4 @@
-<div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+<div class="border border-border rounded-xl shadow-sm overflow-hidden my-6">
   <table ngs-table [dataSource]="properties">
     <ng-container ngsColumnDef="name">
       <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
@@ -24,7 +24,7 @@
 </div>
 
 @if (events.length > 0) {
-  <div class="border border-muted rounded-xl shadow-sm overflow-hidden my-6">
+  <div class="border border-border rounded-xl shadow-sm overflow-hidden my-6">
     <table ngs-table [dataSource]="events">
       <ng-container ngsColumnDef="name">
         <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Event</th>

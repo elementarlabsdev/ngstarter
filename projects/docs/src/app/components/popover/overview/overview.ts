@@ -1,5 +1,5 @@
 import { PopoverTemplateRefExample } from '../_examples/popover-template-ref-example/popover-template-ref-example';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { BasicPopoverExample } from '../_examples/basic-popover-example/basic-popover-example';
 import { Playground } from '@meta/playground/playground';
 import { PopoverHoverExample } from '../_examples/popover-hover-example/popover-hover-example';
@@ -19,6 +19,7 @@ import { PopoverLazyContentExample } from '../_examples/popover-lazy-content-exa
     PopoverTemplateRefExample,
   ],
     templateUrl: './overview.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './overview.scss'
 })
 export class Overview {

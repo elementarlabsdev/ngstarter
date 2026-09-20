@@ -7,7 +7,8 @@ import {
   output,
   Renderer2,
   signal,
-  viewChild
+  viewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   CdkDrag,
@@ -51,6 +52,7 @@ import { Button } from '@ngstarter-ui/components/button';
   ],
   templateUrl: './kanban-board.html',
   styleUrl: './kanban-board.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-kanban-board',
     '[class.is-dragging-active]': 'isDraggingActive'

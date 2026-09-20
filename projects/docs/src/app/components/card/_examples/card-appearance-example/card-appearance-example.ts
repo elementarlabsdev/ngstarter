@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Card, CardContent, CardActions, CardHeader, CardSubtitle, CardTitle } from '@ngstarter-ui/components/card';
 import { Button } from '@ngstarter-ui/components/button';
 
@@ -14,6 +14,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button,
   ],
   templateUrl: './card-appearance-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './card-appearance-example.scss'
 })
 export class CardAppearanceExample {

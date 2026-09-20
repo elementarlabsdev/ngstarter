@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   DataViewColumnDef,
   DataView,
@@ -33,6 +33,7 @@ const DATA: PeriodicElement[] = [
     Icon
   ],
   templateUrl: './data-view-refresh-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './data-view-refresh-example.scss'
 })
 export class DataViewRefreshExample {

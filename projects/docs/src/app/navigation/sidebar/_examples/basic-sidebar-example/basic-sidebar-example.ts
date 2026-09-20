@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   SidebarBody,
   Sidebar,
@@ -38,6 +38,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     SidebarSpacer,
   ],
   templateUrl: './basic-sidebar-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-sidebar-example.scss'
 })
 export class BasicSidebarExample {

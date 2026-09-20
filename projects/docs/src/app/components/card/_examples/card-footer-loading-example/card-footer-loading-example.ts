@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import {
   Card,
@@ -30,6 +30,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     Icon,
   ],
   templateUrl: './card-footer-loading-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './card-footer-loading-example.scss'
 })
 export class CardFooterLoadingExample {

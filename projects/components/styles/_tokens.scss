@@ -136,7 +136,7 @@
   --ngs-button-filled-color: var(--ngs-color-on-primary);
   --ngs-button-tonal-bg: var(--ngs-color-primary-container);
   --ngs-button-tonal-color: var(--ngs-color-on-primary-container);
-  --ngs-button-outlined-border: var(--ngs-color-outline-variant);
+  --ngs-button-outlined-border: var(--ngs-color-strong);
   --ngs-button-outlined-color: #29364e;
   --ngs-button-text-color: var(--ngs-color-primary);
 
@@ -243,8 +243,9 @@
   --ngs-nav-item-padding: 0 --spacing(3);
   --ngs-nav-item-gap: --spacing(2);
   --ngs-nav-item-radius: var(--ngs-radius-md);
-  --ngs-nav-item-font-size: var(--ngs-font-size-md);
-  --ngs-nav-item-font-weight: 500;
+  --ngs-nav-item-font-size: var(--ngs-font-size-sm);
+  --ngs-nav-item-font-weight: 400;
+  --ngs-nav-item-active-font-weight: 600;
   --ngs-nav-item-border-width: 0;
   --ngs-nav-item-border-color: transparent;
   --ngs-nav-item-color: var(--ngs-color-on-surface-variant);
@@ -266,7 +267,8 @@
   --ngs-nav-group-toggle-icon-position-end: --spacing(3);
   --ngs-nav-nested-item-height: var(--ngs-nav-item-height);
   --ngs-nav-nested-item-padding: 0 --spacing(3);
-  --ngs-nav-nested-item-margin: 0 0 0 52px;
+  --ngs-nav-nested-item-offset: calc(var(--ngs-nav-item-icon-width) + var(--ngs-nav-item-gap));
+  --ngs-nav-nested-item-margin: 0 0 0 var(--ngs-nav-nested-item-offset);
   --ngs-nav-nested-item-border-radius: 0;
   --ngs-nav-nested-item-indicator-width: --spacing(3.5);
   --ngs-nav-nested-item-indicator-height: --spacing(0.5);

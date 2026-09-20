@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Select, Option } from '@ngstarter-ui/components/select';
 import { SnackBar, SnackBarHorizontalPosition, SnackBarVerticalPosition } from '@ngstarter-ui/components/snack-bar';
 import { Button } from '@ngstarter-ui/components/button';
@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
     FormField
   ],
   templateUrl: './configurable-snackbar-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './configurable-snackbar-example.scss'
 })
 export class ConfigurableSnackbarExample {

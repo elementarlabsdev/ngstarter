@@ -1,4 +1,4 @@
-import { Directive, ElementRef } from '@angular/core';
+import { Directive } from '@angular/core';
 import { CdkFooterCell } from '@angular/cdk/table';
 
 /** Footer cell template container that adds the right classes and role. */
@@ -10,8 +10,4 @@ import { CdkFooterCell } from '@angular/cdk/table';
   },
   standalone: true,
 })
-export class FooterCell extends CdkFooterCell {
-  constructor(elementRef: ElementRef) {
-    super(elementRef);
-  }
-}
+export class FooterCell extends CdkFooterCell {}

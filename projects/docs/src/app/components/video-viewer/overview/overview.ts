@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
 import { Playground } from '@meta/playground/playground';
@@ -14,6 +14,7 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     Playground,
     BasicVideoViewerExample,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './overview.html'
 })
 export class Overview {

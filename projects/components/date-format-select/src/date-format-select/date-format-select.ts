@@ -4,6 +4,7 @@ import {
   input,
   OnDestroy,
   signal, viewChild, OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { FormFieldControl } from '@ngstarter-ui/components/form-field';
@@ -30,6 +31,7 @@ export type DateFormat = {
     provide: FormFieldControl,
     useExisting: DateFormatSelect
   }],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[id]': 'id',
     'role': 'combobox',

@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-category-overview',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <section class="space-y-6">
       <p class="docs-seo-intro mb-6 text-base leading-7 text-neutral-600">

@@ -1,4 +1,4 @@
-import { Component, viewChild } from '@angular/core';
+import { Component, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
@@ -51,6 +51,7 @@ export const ELEMENT_DATA: PeriodicElement[] = [
     RowDef
   ],
   templateUrl: './sortable-table-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './sortable-table-example.scss'
 })
 export class SortableTableExample {

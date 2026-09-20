@@ -6,8 +6,8 @@
   --ngs-select-placeholder-color: var(--ngs-field-label-color);
   --ngs-select-border-color: var(--ngs-field-border-color);
   --ngs-select-min-width: 120px;
-  --ngs-select-arrow-container-width: --spacing(5);
   --ngs-select-arrow-size: 18px;
+  --ngs-select-arrow-container-width: --spacing(5);
   --ngs-select-clear-container-width: --spacing(6);
   --ngs-select-clear-icon-size: 20px;
   --ngs-select-clear-overlap: 0px;
@@ -15,21 +15,21 @@
   --ngs-select-clear-hover-color: var(--ngs-color-danger);
 
   display: inline-block;
+  box-sizing: border-box;
+  position: relative;
   outline: none;
   cursor: pointer;
   font-size: var(--ngs-select-font-size);
   min-width: var(--ngs-select-min-width);
-  padding-right: var(--ngs-select-arrow-container-width);
+  padding-inline-end: var(--ngs-select-arrow-container-width);
 
   &:has(ngs-filter-trigger) {
     --ngs-select-min-width: 0;
     --ngs-select-arrow-container-width: --spacing(7);
-
-    position: relative;
   }
 
   &.ngs-select-has-clear {
-    padding-right: calc(
+    padding-inline-end: calc(
       var(--ngs-select-arrow-container-width) +
       var(--ngs-select-clear-container-width) -
       var(--ngs-select-clear-overlap)
@@ -104,7 +104,7 @@
     flex-shrink: 0;
     display: inline-flex;
     position: absolute;
-    right: calc(var(--ngs-select-arrow-container-width) - var(--ngs-select-clear-overlap));
+    inset-inline-end: calc(var(--ngs-select-arrow-container-width) - var(--ngs-select-clear-overlap));
     top: 0;
     bottom: 0;
     width: var(--ngs-select-clear-container-width);
@@ -143,7 +143,7 @@
     display: inline-flex;
     transition: transform 200ms ease;
     position: absolute;
-    right: 0;
+    inset-inline-end: 0;
     top: 0;
     bottom: 0;
     width: var(--ngs-select-arrow-container-width);
@@ -250,7 +250,7 @@
   .ngs-select-search-input {
     width: 100%;
     min-width: 0;
-    height: var(--ngs-select-search-height, --spacing(14));
+    height: var(--ngs-select-search-height, var(--ngs-field-container-height, --spacing(10)));
     padding: 0 var(--ngs-select-search-padding-inline, --spacing(3));
     border: 0;
     border-bottom: var(--ngs-select-search-border, 1px solid var(--ngs-color-surface-container-high, var(--ngs-color-outline-variant)));

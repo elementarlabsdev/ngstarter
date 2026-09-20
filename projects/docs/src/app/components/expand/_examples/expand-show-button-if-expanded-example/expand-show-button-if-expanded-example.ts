@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Expand } from '@ngstarter-ui/components/expand';
 
 @Component({
@@ -7,6 +7,7 @@ import { Expand } from '@ngstarter-ui/components/expand';
     Expand
   ],
   templateUrl: './expand-show-button-if-expanded-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './expand-show-button-if-expanded-example.scss'
 })
 export class ExpandShowButtonIfExpandedExample {

@@ -29,6 +29,7 @@ interface PresetScheme {
   infoContainer: string;
   onInfoContainer: string;
   focusRing: string;
+  outlinedButtonBorder: string;
   primaryScale: readonly [string, string, string, string, string, string];
   secondaryScale: readonly [string, string, string, string];
   tertiaryScale: readonly [string, string, string, string, string];
@@ -75,7 +76,7 @@ function presetProperties(scheme: PresetScheme): NgsThemeCssProperties {
     '--ngs-color-tertiary-800': scheme.tertiaryScale[4],
     '--ngs-button-tonal-bg': scheme.secondaryContainer,
     '--ngs-button-tonal-color': scheme.onSecondaryContainer,
-    '--ngs-button-outlined-border': scheme.secondaryScale[2],
+    '--ngs-button-outlined-border': scheme.outlinedButtonBorder,
     '--ngs-field-border-focus-color': scheme.primary,
     '--ngs-dropdown-item-selected-bg': 'var(--ngs-color-surface-container-highest)',
     '--ngs-dropdown-item-selected-color': 'var(--ngs-color-on-surface)',
@@ -94,6 +95,7 @@ const defaultPreset: NgsThemeColorPresetDefinition = {
     secondary: '#60718e', onSecondary: '#ffffff', secondaryContainer: '#f0f3f7', onSecondaryContainer: '#29364e',
     tertiary: '#29364e', onTertiary: '#ffffff', tertiaryContainer: '#edf2ff', onTertiaryContainer: '#173a9f',
     info: '#245bff', onInfo: '#ffffff', infoContainer: '#e9efff', onInfoContainer: '#173a9f', focusRing: '#8caaff',
+    outlinedButtonBorder: '#60718e',
     primaryScale: ['#f2f5ff', '#e9efff', '#dce6ff', '#bfd0ff', '#8caaff', '#245bff'],
     secondaryScale: ['#fbfcfe', '#f7f9fc', '#f0f3f7', '#dce2eb'],
     tertiaryScale: ['#f7f9fc', '#f3f5f7', '#edf2ff', '#29364e', '#1a2942'],
@@ -103,6 +105,7 @@ const defaultPreset: NgsThemeColorPresetDefinition = {
     secondary: '#b9c4d3', onSecondary: '#0b1427', secondaryContainer: '#29364e', onSecondaryContainer: '#f0f3f7',
     tertiary: '#aab7c9', onTertiary: '#0b1427', tertiaryContainer: '#29364e', onTertiaryContainer: '#f7f9fc',
     info: '#8caaff', onInfo: '#08142c', infoContainer: '#173a9f', onInfoContainer: '#e9efff', focusRing: '#8caaff',
+    outlinedButtonBorder: '#aab7c9',
     primaryScale: ['#111d35', '#17284f', '#173a9f', '#245bff', '#5680ff', '#8caaff'],
     secondaryScale: ['#172033', '#202b40', '#29364e', '#455571'],
     tertiaryScale: ['#172033', '#202b40', '#29364e', '#b9c4d3', '#dce2eb'],

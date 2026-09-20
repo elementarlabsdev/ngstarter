@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { LayoutHeaderExample } from '../_examples/layout-header-example/layout-header-example';
 import { LayoutSidebarExample } from '../_examples/layout-sidebar-example/layout-sidebar-example';
@@ -30,6 +30,7 @@ import { LayoutAsideExample } from '../_examples/layout-aside-example/layout-asi
     LayoutAsideExample,
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

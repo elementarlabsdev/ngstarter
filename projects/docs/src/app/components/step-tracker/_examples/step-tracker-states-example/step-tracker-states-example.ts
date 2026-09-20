@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   StepTracker,
   StepTrackerDescription,
@@ -14,6 +14,7 @@ import {
     StepTrackerItem,
     StepTrackerLabel,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './step-tracker-states-example.html',
 })
 export class StepTrackerStatesExample {}

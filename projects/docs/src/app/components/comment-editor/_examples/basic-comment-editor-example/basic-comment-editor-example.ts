@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   CommentEditorCommandBlockquoteDirective,
   CommentEditorCommandBoldDirective,
@@ -54,6 +54,7 @@ import { Tooltip } from '@ngstarter-ui/components/tooltip';
     Tooltip
   ],
   templateUrl: './basic-comment-editor-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-comment-editor-example.scss'
 })
 export class BasicCommentEditorExample {

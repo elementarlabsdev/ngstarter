@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   CommentEditorDivider,
   CommentEditorCommandBlockquoteDirective,
@@ -53,6 +53,7 @@ import { Tooltip } from '@ngstarter-ui/components/tooltip';
     Tooltip
   ],
   templateUrl: './comment-editor-with-full-view-mode-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './comment-editor-with-full-view-mode-example.scss'
 })
 export class CommentEditorWithFullViewModeExample {

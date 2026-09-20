@@ -6,6 +6,7 @@ import {
   input,
   NgModule,
   numberAttribute,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 
@@ -37,6 +38,7 @@ const BASE_STROKE_WIDTH = 10;
   templateUrl: './progress-spinner.html',
   styleUrl: './progress-spinner.scss',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [NgTemplateOutlet]
 })
 export class ProgressSpinner {

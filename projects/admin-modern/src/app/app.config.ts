@@ -7,14 +7,14 @@ import {
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { provideClientHydration, withEventReplay, withNoIncrementalHydration } from '@angular/platform-browser';
 import { provideNgsTheme, ThemeManagerService } from '@ngstarter-ui/components/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideClientHydration(withEventReplay()),
+    provideClientHydration(withEventReplay(), withNoIncrementalHydration()),
     provideNgsTheme({
       theme: 'default',
       colorScheme: 'light',

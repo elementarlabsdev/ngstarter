@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { LAYOUT } from '../types';
 import { Layout } from '../layout/layout';
 import { LayoutSidebarStore } from '../layout.store';
@@ -8,6 +8,7 @@ import { LayoutSidebarStore } from '../layout.store';
   exportAs: 'ngsLayoutSidebar',
   templateUrl: './layout-sidebar.html',
   styleUrl: './layout-sidebar.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-layout-sidebar',
     '[class.is-hidden]': '!_isShown()'

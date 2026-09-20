@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Segmented, SegmentedButton } from '@ngstarter-ui/components/segmented';
 import { Button } from '@ngstarter-ui/components/button';
@@ -13,6 +13,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './segmented-form-control-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './segmented-form-control-example.scss'
 })
 export class SegmentedFormControlExample {

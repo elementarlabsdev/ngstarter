@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, input, OnInit, Renderer2, DOCUMENT } from '@angular/core';
+import { Component, ElementRef, inject, input, OnInit, Renderer2, DOCUMENT, ChangeDetectionStrategy } from '@angular/core';
 
 import { ScrollSpyNav } from '../scroll-spy-nav/scroll-spy-nav';
 import { SCROLL_SPY_NAV } from '../types';
@@ -8,6 +8,7 @@ import { SCROLL_SPY_NAV } from '../types';
   exportAs: 'ngsScrollSpyOn',
   templateUrl: './scroll-spy-on.html',
   styleUrl: './scroll-spy-on.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-scroll-spy-on',
     '[class.is-active]': 'isActive',

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DialogActions, DialogClose, DialogContent, DialogTitle } from '@ngstarter-ui/components/dialog';
 import { Button } from '@ngstarter-ui/components/button';
 
@@ -12,6 +12,7 @@ import { Button } from '@ngstarter-ui/components/button';
     DialogClose
   ],
   templateUrl: './dialog-scrollable-content.dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dialog-scrollable-content.dialog.scss'
 })
 export class DialogScrollableContentDialog {

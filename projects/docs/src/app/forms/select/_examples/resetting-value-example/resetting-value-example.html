@@ -1,6 +1,6 @@
 <ngs-form-field class="w-1/2">
   <ngs-label>State</ngs-label>
-  <ngs-select>
+  <ngs-select placeholder="Select a state">
     <ngs-option>None</ngs-option>
     @for (state of states; track state) {
       <ngs-option [value]="state">{{ state }}</ngs-option>

@@ -23,6 +23,7 @@
   --ngs-form-field-external-label-font-size: var(--ngs-field-font-size);
   --ngs-form-field-external-label-font-weight: 500;
   --ngs-form-field-external-label-color: var(--ngs-color-on-surface);
+  --ngs-textarea-autosize-content-offset: --spacing(0.5);
 
   display: block;
   width: var(--ngs-form-field-width, 100%);
@@ -143,6 +144,10 @@
     ::ng-deep textarea.ngs-input {
       min-height: var(--ngs-form-field-input-height);
       resize: vertical;
+
+      &.ngs-textarea-autosize {
+        translate: 0 var(--ngs-textarea-autosize-content-offset);
+      }
     }
 
   }
@@ -295,7 +300,6 @@
     width: 100%;
     border: none !important;
     background: transparent !important;
-    padding: 0 !important;
     color: inherit;
     outline: none !important;
     display: block;
@@ -314,6 +318,12 @@
       color: var(--ngs-form-field-label-color);
       transition: opacity 0.2s;
     }
+  }
+
+  ::ng-deep .ngs-input,
+  ::ng-deep .ngs-chip-input,
+  ::ng-deep .ngs-phone-input {
+    padding: 0 !important;
   }
 
   ::ng-deep {

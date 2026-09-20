@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Checkbox } from '@ngstarter-ui/components/checkbox';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
@@ -26,6 +26,7 @@ import {
     CommandBarCommand
   ],
   templateUrl: './basic-command-bar-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-command-bar-example.scss'
 })
 export class BasicCommandBarExample implements OnInit {

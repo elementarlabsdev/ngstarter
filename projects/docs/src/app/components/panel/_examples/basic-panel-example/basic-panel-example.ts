@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   PanelContent,
   Panel,
@@ -17,6 +17,7 @@ import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
     ScrollbarArea
   ],
   templateUrl: './basic-panel-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-panel-example.scss'
 })
 export class BasicPanelExample {

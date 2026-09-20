@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardContent } from '@ngstarter-ui/components/card';
@@ -28,6 +28,7 @@ import { templatesFaqItems } from '../../seo/seo-data';
     RouterLink,
   ],
   templateUrl: './templates.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './templates.scss',
 })
 export class Templates {

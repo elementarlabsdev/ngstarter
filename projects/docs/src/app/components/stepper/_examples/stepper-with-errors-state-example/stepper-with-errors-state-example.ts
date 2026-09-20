@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
@@ -28,6 +28,7 @@ import { Input } from '@ngstarter-ui/components/input';
     },
   ],
   templateUrl: './stepper-with-errors-state-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './stepper-with-errors-state-example.scss'
 })
 export class StepperWithErrorsStateExample {

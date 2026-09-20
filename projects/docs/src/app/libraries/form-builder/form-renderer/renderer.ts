@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Button } from '@ngstarter-ui/components/button';
 import {
@@ -12,6 +12,7 @@ import {
     RouterLink
   ],
   templateUrl: './renderer.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './renderer.scss'
 })
 export class Renderer {

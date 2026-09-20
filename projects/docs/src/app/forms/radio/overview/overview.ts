@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicRadioExample } from '../_examples/basic-radio-example/basic-radio-example';
 import { RadioOrientationExample } from '../_examples/radio-orientation-example/radio-orientation-example';
@@ -13,6 +13,7 @@ import { RadioCardExample } from '../_examples/radio-card-example/radio-card-exa
     RadioCardExample
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

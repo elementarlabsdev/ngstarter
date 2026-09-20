@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Chip, ChipSet } from '@ngstarter-ui/components/chips';
 
 @Component({
@@ -6,6 +6,7 @@ import { Chip, ChipSet } from '@ngstarter-ui/components/chips';
   standalone: true,
   imports: [ChipSet, Chip],
   templateUrl: './chips-appearance-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './chips-appearance-example.scss'
 })
 export class ChipsAppearanceExample {}

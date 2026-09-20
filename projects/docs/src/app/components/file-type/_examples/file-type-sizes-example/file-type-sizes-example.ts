@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FileType } from '@ngstarter-ui/components/file-type';
 
 interface FileTypeSizeExample {
@@ -12,6 +12,7 @@ interface FileTypeSizeExample {
     FileType
   ],
   templateUrl: './file-type-sizes-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './file-type-sizes-example.scss',
 })
 export class FileTypeSizesExample {

@@ -88,18 +88,21 @@
   ngs-date-range-input {
     --ngs-select-arrow-color: var(--ngs-color-neutral-500);
     --ngs-select-placeholder-color: var(--ngs-color-neutral-500);
-    --ngs-number-input-control-bg: var(--ngs-color-surface-container-low);
-    --ngs-number-input-control-hover-bg: var(--ngs-state-hover-bg);
-    --ngs-number-input-control-hover-color: var(--ngs-color-primary);
+    --ngs-number-input-control-bg: var(--ngs-color-primary);
+    --ngs-number-input-control-color: var(--ngs-color-on-primary);
+    --ngs-number-input-control-hover-bg: var(--ngs-color-primary);
+    --ngs-number-input-control-hover-color: var(--ngs-color-on-primary);
+    --ngs-number-input-control-active-bg: var(--ngs-color-primary);
+    --ngs-number-input-control-active-color: var(--ngs-color-on-primary);
   }
 
   ngs-option,
   ngs-optgroup {
-    --ngs-option-radius: var(--ngs-radius-sm);
-    --ngs-option-hover-background: var(--ngs-state-hover-bg);
-    --ngs-option-active-background: var(--ngs-state-active-bg);
-    --ngs-option-selected-background: var(--ngs-state-selected-bg);
-    --ngs-option-selected-color: var(--ngs-state-selected-color);
+    --ngs-option-radius: var(--ngs-menu-item-radius);
+    --ngs-option-hover-background: var(--ngs-menu-item-hover-background);
+    --ngs-option-active-background: var(--ngs-menu-item-active-background);
+    --ngs-option-selected-background: var(--ngs-menu-item-hover-background);
+    --ngs-option-selected-color: var(--ngs-menu-item-color);
   }
 
   ngs-option.ngs-option-selected:not(.ngs-option-multiple) ngs-icon {
@@ -238,7 +241,7 @@
     --ngs-sidebar-nav-heading-margin-bottom: --spacing(1);
     --ngs-sidebar-nav-nested-item-height: 2.5rem;
     --ngs-sidebar-nav-nested-item-padding: 0 --spacing(3);
-    --ngs-sidebar-nav-nested-item-margin: 0 0 0 --spacing(4);
+    --ngs-sidebar-nav-nested-item-margin: 0 0 0 var(--ngs-sidebar-nav-nested-item-offset);
     --ngs-sidebar-nav-nested-item-border-radius: var(--ngs-radius-md);
     --ngs-sidebar-nav-group-toggle-active-bg: var(--ngs-state-selected-bg);
     --ngs-sidebar-nav-group-toggle-active-color: var(--ngs-color-on-surface);
@@ -298,10 +301,13 @@
 
   ngs-notification,
   ngs-notification-list {
-    --ngs-notification-bg: var(--ngs-color-surface);
+    --ngs-notification-bg: transparent;
     --ngs-notification-hover-bg: var(--ngs-state-hover-bg);
-    --ngs-notification-is-unread-bg: var(--ngs-color-primary-container);
-    --ngs-notification-is-unread-hover-bg: var(--ngs-state-active-bg);
+    --ngs-notification-is-unread-bg: transparent;
+    --ngs-notification-is-unread-hover-bg: var(--ngs-state-hover-bg);
+    --ngs-notification-unread-indicator-color: var(--ngs-color-primary);
+    --ngs-notification-unread-indicator-outline-color: var(--ngs-color-surface);
+    --ngs-notification-list-divider-color: var(--ngs-color-border);
     --ngs-notification-radius: var(--ngs-radius-lg);
   }
 
@@ -372,27 +378,29 @@
   ngs-incidents-global,
   ngs-incidents-bar,
   ngs-incident {
-    --ngs-incidents-bar-bg: var(--ngs-color-neutral-900);
-    --ngs-incidents-bar-color: var(--ngs-color-neutral-50);
-    --ngs-incidents-list-bg: var(--ngs-color-surface);
+    --ngs-incidents-bar-bg: var(--ngs-color-warning-container);
+    --ngs-incidents-bar-color: var(--ngs-color-on-warning-container);
+    --ngs-incidents-list-bg: var(--ngs-overlay-backdrop-bg);
     --ngs-incident-bg: var(--ngs-color-surface-container-low);
     --ngs-incident-color: var(--ngs-color-on-surface);
     --ngs-incident-details-color: var(--ngs-color-on-surface-variant);
     --ngs-incident-border-radius: var(--ngs-radius-lg);
-    --ngs-incident-border-start: 3px solid var(--ngs-color-primary);
+    --ngs-incident-border-start: 3px solid var(--ngs-color-warning);
   }
 
   ngs-command-bar {
-    --ngs-command-bar-bg: var(--ngs-color-surface);
-    --ngs-command-bar-color: var(--ngs-color-on-surface);
-    --ngs-command-bar-border: 1px solid var(--ngs-color-border);
+    --ngs-command-bar-bg: var(--ngs-color-neutral-950);
+    --ngs-command-bar-color: var(--ngs-color-neutral-200);
+    --ngs-command-bar-border: 1px solid var(--ngs-color-neutral-700);
     --ngs-command-bar-border-radius: var(--ngs-radius-xl);
     --ngs-command-bar-shadow: var(--ngs-shadow-lg);
-    --ngs-command-bar-command-color: var(--ngs-color-on-surface-variant);
-    --ngs-command-bar-command-hover-bg: var(--ngs-state-hover-bg);
-    --ngs-command-bar-command-hover-color: var(--ngs-color-on-surface);
-    --ngs-command-bar-command-shortcut-bg: var(--ngs-color-surface-container-high);
-    --ngs-command-bar-command-shortcut-border: 1px solid var(--ngs-color-border);
+    --ngs-command-bar-command-color: var(--ngs-color-neutral-200);
+    --ngs-command-bar-command-hover-bg: var(--ngs-color-neutral-800);
+    --ngs-command-bar-command-hover-color: var(--ngs-color-neutral-100);
+    --ngs-command-bar-divider-bg: var(--ngs-color-neutral-600);
+    --ngs-command-bar-command-shortcut-bg: var(--ngs-color-neutral-700);
+    --ngs-command-bar-command-shortcut-color: var(--ngs-color-neutral-300);
+    --ngs-command-bar-command-shortcut-border: 1px solid var(--ngs-color-neutral-600);
   }
 
   ngs-filter-builder {

@@ -126,7 +126,7 @@
 :host-context(.ngs-sidebar-nav-group-menu) {
   .inner {
     margin: var(--ngs-sidebar-nav-nested-item-margin);
-    width: calc(var(--ngs-sidebar-nav-item-width) - var(--ngs-sidebar-nav-nested-item-margin));
+    width: calc(var(--ngs-sidebar-nav-item-width) - var(--ngs-sidebar-nav-nested-item-offset));
     background: var(--ngs-sidebar-nav-nested-item-bg);
     min-height: var(--ngs-sidebar-nav-nested-item-height);
     padding: var(--ngs-sidebar-nav-nested-item-padding);

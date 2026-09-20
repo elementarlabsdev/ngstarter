@@ -8,7 +8,8 @@ import {
   input, output,
   viewChild,
   DOCUMENT,
-  PLATFORM_ID
+  PLATFORM_ID,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { TEXT_EDITOR, TextEditorAPI } from '../types';
@@ -52,6 +53,7 @@ import { HorizontalRule } from '@tiptap/extension-horizontal-rule';
   ],
   templateUrl: './text-editor.html',
   styleUrl: './text-editor.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-text-editor'
   }

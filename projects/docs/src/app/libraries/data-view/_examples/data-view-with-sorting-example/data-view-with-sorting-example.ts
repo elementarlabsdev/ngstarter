@@ -1,4 +1,4 @@
-import { Component, model } from '@angular/core';
+import { Component, model, ChangeDetectionStrategy } from '@angular/core';
 import { DataViewColumnDef, DataView } from '@ngstarter-ui/components/data-view';
 import { Sort } from '@ngstarter-ui/components/sort';
 import { FormsModule } from '@angular/forms';
@@ -40,6 +40,7 @@ const DATA: PeriodicElement[] = [
     FormsModule
   ],
   templateUrl: './data-view-with-sorting-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './data-view-with-sorting-example.scss'
 })
 export class DataViewWithSortingExample {

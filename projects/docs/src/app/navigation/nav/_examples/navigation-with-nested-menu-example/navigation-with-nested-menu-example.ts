@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
   Navigation,
@@ -19,6 +19,7 @@ import {
     NavigationGroupMenu
   ],
   templateUrl: './navigation-with-nested-menu-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './navigation-with-nested-menu-example.scss'
 })
 export class NavigationWithNestedMenuExample {

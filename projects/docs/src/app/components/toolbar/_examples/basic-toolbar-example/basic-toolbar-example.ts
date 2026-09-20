@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Toolbar, ToolbarTitle, ToolbarSpacer } from '@ngstarter-ui/components/toolbar';
 
 @Component({
@@ -6,6 +6,7 @@ import { Toolbar, ToolbarTitle, ToolbarSpacer } from '@ngstarter-ui/components/t
   templateUrl: './basic-toolbar-example.html',
   styleUrl: './basic-toolbar-example.scss',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [Toolbar, ToolbarTitle, ToolbarSpacer],
 })
 export class BasicToolbarExample {}

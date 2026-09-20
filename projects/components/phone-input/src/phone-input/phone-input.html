@@ -8,7 +8,7 @@
     (menuOpened)="openCountryMenu()"
     (menuClosed)="closeCountryMenu()">
     @if (selectedCountry()) {
-      <span class="flag-icon" aria-hidden="true">{{ countryFlagEmoji(selectedCountry()?.shortCode) }}</span>
+      <span class="flag-icon" aria-hidden="true">{{ countryFlagEmoji($safeNavigationMigration(selectedCountry()?.shortCode)) }}</span>
 
       @if (selectedCountry()?.phoneCode) {
         <span class="country-selector-code">{{ selectedCountry()?.phoneCode }}</span>
@@ -25,6 +25,7 @@
     (blur)="onTouched()"
     (keypress)="onInputKeyPress($event)"
     [(ngModel)]="phoneNumber"
+    [ngModelOptions]="{standalone: true}"
     (ngModelChange)="onPhoneNumberChange()"
     [errorStateMatcher]="errorStateMatcher()"
     [placeholder]="_placeholder()"
@@ -35,14 +36,16 @@
 
 <ngs-menu #menu="ngsMenu">
   <ngs-menu-header>
-    <div class="sticky top-0 z-1 bg-surface-container-lowest">
+    <div class="relative bg-surface-container-lowest">
       <input #searchInput
              type="text"
              placeholder="Search..."
+             aria-label="Search country"
              autocomplete="off"
              [ngModel]="searchTerm()"
+             [ngModelOptions]="{standalone: true}"
              (ngModelChange)="onCountrySearch($event)"
-             class="w-full text-sm focus:outline-none border-b border-border focus:border-b-primary h-14 px-3">
+             class="h-10 w-full border-0 border-b border-border bg-transparent px-3 text-sm text-on-surface outline-none focus:border-b-primary">
       @if (searchTerm().trim()) {
         <div class="absolute end-1 top-1/2 -translate-y-1/2">
           <button
@@ -59,14 +62,16 @@
   </ngs-menu-header>
 
   @for (country of preferredCountriesInDropDown; track country.shortCode) {
-    <button type="button" ngs-menu-item (click)="onCountrySelect(country, focusable)">
-      <div class="flex items-center gap-2">
-        <span class="flag-icon-option text-2xl" aria-hidden="true">{{ countryFlagEmoji(country.shortCode) }}</span>
-        <div class="label-wrapper">
-          {{ country.name }}
-          <span [class.whitespace-nowrap]="!searchTerm()" class="text-neutral-500">{{ country.phoneCode }}</span>
-        </div>
-      </div>
+    <button
+      type="button"
+      ngs-menu-item
+      [selected]="selectedCountry()?.shortCode === country.shortCode"
+      (click)="onCountrySelect(country, focusable)">
+      <span class="inline-flex size-4 shrink-0 items-center justify-center text-base leading-4" aria-hidden="true">
+        {{ countryFlagEmoji(country.shortCode) }}
+      </span>
+      <span class="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap">{{ country.name }}</span>
+      <span class="ms-auto shrink-0 text-neutral-500">{{ country.phoneCode }}</span>
     </button>
   }
 
@@ -75,14 +80,16 @@
   }
 
   @for (country of visibleCountries(); track country.shortCode) {
-    <button type="button" ngs-menu-item (click)="onCountrySelect(country, focusable)">
-      <div class="flex items-center gap-2">
-        <span class="flag-icon-option text-2xl" aria-hidden="true">{{ countryFlagEmoji(country.shortCode) }}</span>
-        <div>
-          {{ country.name }}
-          <span [class.whitespace-nowrap]="!searchTerm()" class="text-neutral-500">{{ country.phoneCode }}</span>
-        </div>
-      </div>
+    <button
+      type="button"
+      ngs-menu-item
+      [selected]="selectedCountry()?.shortCode === country.shortCode"
+      (click)="onCountrySelect(country, focusable)">
+      <span class="inline-flex size-4 shrink-0 items-center justify-center text-base leading-4" aria-hidden="true">
+        {{ countryFlagEmoji(country.shortCode) }}
+      </span>
+      <span class="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap">{{ country.name }}</span>
+      <span class="ms-auto shrink-0 text-neutral-500">{{ country.phoneCode }}</span>
     </button>
   } @empty {
     @if (searchTerm()) {

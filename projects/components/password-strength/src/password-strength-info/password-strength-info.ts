@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, input } from '@angular/core';
+import { booleanAttribute, Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { PasswordStrength } from '../password-strength/password-strength';
 import { Icon } from '@ngstarter-ui/components/icon';
 
@@ -10,6 +10,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
   ],
   templateUrl: './password-strength-info.html',
   styleUrl: './password-strength-info.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-password-strength-info',
   }

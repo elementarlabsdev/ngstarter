@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 
 @Component({
@@ -8,6 +8,7 @@ import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
     Tab
   ],
     templateUrl: './paginated-tabs-example.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './paginated-tabs-example.scss'
 })
 export class PaginatedTabsExample {

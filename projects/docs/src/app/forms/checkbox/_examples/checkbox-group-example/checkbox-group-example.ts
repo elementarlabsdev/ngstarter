@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Checkbox, CheckboxGroup } from '@ngstarter-ui/components/checkbox';
 
@@ -10,6 +10,7 @@ import { Checkbox, CheckboxGroup } from '@ngstarter-ui/components/checkbox';
     CheckboxGroup
   ],
   templateUrl: './checkbox-group-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './checkbox-group-example.scss'
 })
 export class CheckboxGroupExample {

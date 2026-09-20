@@ -1,12 +1,17 @@
 <div class="avatar">
   <ng-content select="[ngsNotificationAvatar]"/>
 </div>
-<div class="grow">
-  <span class="message">
+<div class="body">
+  <div class="message">
     <ng-content select="ngs-notification-message,[ngs-notification-message]"/>
-  </span>
+  </div>
   <div class="content">
     <ng-content select="ngs-notification-content,[ngs-notification-content]"/>
   </div>
+</div>
+<div class="time">
   <ng-content select="ngs-notification-time,[ngs-notification-time]"/>
+</div>
+<div class="controls">
+  <ng-content select="[ngsNotificationControls]"/>
 </div>

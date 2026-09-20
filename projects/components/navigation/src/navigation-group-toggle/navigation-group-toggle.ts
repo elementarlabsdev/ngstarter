@@ -9,6 +9,7 @@ import {
   booleanAttribute
 } from '@angular/core';
 import { NavigationGroupToggleIconDirective } from '../navigation-group-toggle-icon.directive';
+import { NavigationItemIconDirective } from '../navigation-item-icon.directive';
 import { Ripple } from '@ngstarter-ui/components/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { NAVIGATION_GROUP } from '../types';
@@ -31,6 +32,7 @@ import { NavigationStore } from '../navigation.store';
     'class': 'ngs-navigation-group-toggle',
     '[class.is-active]': 'active()',
     '[class.is-badge-text-only]': 'badgeTextOnly()',
+    '[class.has-item-icon]': 'hasItemIcon()',
     '(click)': 'toggle($event)'
   }
 })
@@ -39,6 +41,8 @@ export class NavigationGroupToggle {
   private _group = inject<NavigationGroup>(NAVIGATION_GROUP);
 
   readonly iconRef = contentChild(NavigationGroupToggleIconDirective);
+  readonly itemIcon = contentChild(NavigationItemIconDirective);
+  readonly hasItemIcon = computed(() => Boolean(this.itemIcon()));
   readonly active = computed(() => {
     return this.store.activeGroupKey() === this._group.key();
   });

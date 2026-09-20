@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   Sidebar,
   SidebarBody,
@@ -22,6 +22,7 @@ import {
     SidebarDivider,
     SidebarSpacer
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './sidebar-structure-helpers-example.html',
 })
 export class SidebarStructureHelpersExample {

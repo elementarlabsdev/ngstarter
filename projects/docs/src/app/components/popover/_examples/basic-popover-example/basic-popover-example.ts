@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Popover, PopoverTriggerForDirective } from '@ngstarter-ui/components/popover';
 import { Button } from '@ngstarter-ui/components/button';
 
@@ -10,6 +10,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './basic-popover-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-popover-example.scss'
 })
 export class BasicPopoverExample {

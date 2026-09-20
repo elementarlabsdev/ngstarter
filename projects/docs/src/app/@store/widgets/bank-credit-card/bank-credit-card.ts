@@ -1,10 +1,11 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { GRID } from '@ngstarter-ui/components/grid';
 
 @Component({
   selector: 'ngs-bank-credit-card',
   imports: [],
   templateUrl: './bank-credit-card.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './bank-credit-card.scss'
 })
 export class BankCreditCard implements OnInit {

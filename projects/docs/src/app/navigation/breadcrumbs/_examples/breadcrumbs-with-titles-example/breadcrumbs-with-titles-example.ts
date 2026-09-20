@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   BreadcrumbItem,
   BreadcrumbItemIconDirective, Breadcrumbs, BreadcrumbSeparator,
@@ -17,6 +17,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     Breadcrumbs
   ],
   templateUrl: './breadcrumbs-with-titles-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './breadcrumbs-with-titles-example.scss'
 })
 export class BreadcrumbsWithTitlesExample {

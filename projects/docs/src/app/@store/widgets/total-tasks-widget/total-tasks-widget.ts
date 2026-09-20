@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   MchartLine,
   MchartTooltipBody,
@@ -16,6 +16,7 @@ import { Grid, GRID } from '@ngstarter-ui/components/grid';
     MchartTooltipTitle,
     MchartLine
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './total-tasks-widget.scss'
 })
 export class TotalTasksWidget implements OnInit {

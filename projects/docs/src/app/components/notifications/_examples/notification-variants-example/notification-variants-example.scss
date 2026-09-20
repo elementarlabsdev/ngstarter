@@ -5,15 +5,8 @@
 
   .notification-preview,
   .notification-task {
-    border: 1px solid var(--ngs-color-border);
-    border-radius: var(--ngs-radius-lg);
-    background: var(--ngs-color-surface-container-low);
     color: var(--ngs-color-on-surface-variant);
     font-size: var(--ngs-font-size-sm);
-  }
-
-  .notification-preview {
-    padding: --spacing(3);
   }
 
   .notification-task {
@@ -21,31 +14,23 @@
     align-items: center;
     justify-content: space-between;
     gap: --spacing(3);
-    padding: --spacing(3);
-  }
-
-  .notification-icon-avatar {
-    display: grid;
-    width: --spacing(10);
-    height: --spacing(10);
-    place-items: center;
-    border-radius: var(--ngs-radius-full);
-    background: var(--ngs-color-surface-container);
-    color: var(--ngs-color-on-surface-variant);
   }
 
   .notification-icon-avatar--success {
-    background: var(--ngs-color-success-container);
-    color: var(--ngs-color-success);
+    --ngs-avatar-bg: var(--ngs-color-success-container);
+    --ngs-avatar-color: var(--ngs-color-success);
+    --ngs-icon-color: var(--ngs-color-success);
   }
 
   .notification-icon-avatar--warning {
-    background: var(--ngs-color-warning-container);
-    color: var(--ngs-color-warning);
+    --ngs-avatar-bg: var(--ngs-color-warning-container);
+    --ngs-avatar-color: var(--ngs-color-warning);
+    --ngs-icon-color: var(--ngs-color-warning);
   }
 
   .notification-icon-avatar--info {
-    background: var(--ngs-color-info-container);
-    color: var(--ngs-color-info);
+    --ngs-avatar-bg: var(--ngs-color-info-container);
+    --ngs-avatar-color: var(--ngs-color-info);
+    --ngs-icon-color: var(--ngs-color-info);
   }
 }

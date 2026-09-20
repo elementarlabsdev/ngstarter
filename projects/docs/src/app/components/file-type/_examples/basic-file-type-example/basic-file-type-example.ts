@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FileType } from '@ngstarter-ui/components/file-type';
 
 @Component({
@@ -7,6 +7,7 @@ import { FileType } from '@ngstarter-ui/components/file-type';
     FileType
   ],
   templateUrl: './basic-file-type-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-file-type-example.scss',
 })
 export class BasicFileTypeExample {

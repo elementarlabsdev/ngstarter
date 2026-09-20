@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 
 @Component({
@@ -9,6 +9,7 @@ import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
     TabGroup
   ],
   templateUrl: './tabs-animations-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tabs-animations-example.scss'
 })
 export class TabsAnimationsExample {

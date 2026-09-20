@@ -1,4 +1,4 @@
-import { afterNextRender, Component, ElementRef, inject, input, viewChild } from '@angular/core';
+import { afterNextRender, Component, ElementRef, inject, input, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import * as echarts from 'echarts/core';
 import {
   DatasetComponent,
@@ -18,6 +18,7 @@ import { ThemeManagerService } from '@ngstarter-ui/components/core';
   selector: 'ngs-visitor-insights-content',
   imports: [],
   templateUrl: './visitor-insights-widget.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './visitor-insights-widget.scss'
 })
 export class VisitorInsightsWidget {

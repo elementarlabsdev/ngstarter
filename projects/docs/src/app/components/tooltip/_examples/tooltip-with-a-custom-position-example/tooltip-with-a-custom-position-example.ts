@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Tooltip, TooltipPosition } from '@ngstarter-ui/components/tooltip';
 import { Option, Select } from '@ngstarter-ui/components/select';
@@ -19,6 +19,7 @@ import { Button } from '@ngstarter-ui/components/button';
     FormField,
   ],
   templateUrl: './tooltip-with-a-custom-position-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tooltip-with-a-custom-position-example.scss'
 })
 export class TooltipWithACustomPositionExample {

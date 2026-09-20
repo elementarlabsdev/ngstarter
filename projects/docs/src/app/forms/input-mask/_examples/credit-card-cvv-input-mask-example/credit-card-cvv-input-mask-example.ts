@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { CreditCardCvvMaskDirective } from '@ngstarter-ui/components/input-mask';
 import { Input } from '@ngstarter-ui/components/input';
@@ -12,6 +12,7 @@ import { Input } from '@ngstarter-ui/components/input';
     FormField
   ],
   templateUrl: './credit-card-cvv-input-mask-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './credit-card-cvv-input-mask-example.scss'
 })
 export class CreditCardCvvInputMaskExample {

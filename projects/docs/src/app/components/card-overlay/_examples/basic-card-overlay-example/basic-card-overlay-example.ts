@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   Card,
   CardActions,
@@ -29,6 +29,7 @@ import { Button } from '@ngstarter-ui/components/button';
     CardOverlayContainerDirective
   ],
   templateUrl: './basic-card-overlay-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-card-overlay-example.scss'
 })
 export class BasicCardOverlayExample {

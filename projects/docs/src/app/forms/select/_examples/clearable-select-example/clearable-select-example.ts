@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Option, Select } from '@ngstarter-ui/components/select';
@@ -13,6 +13,7 @@ import { Option, Select } from '@ngstarter-ui/components/select';
     Select
   ],
   templateUrl: './clearable-select-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './clearable-select-example.scss'
 })
 export class ClearableSelectExample {

@@ -1,4 +1,4 @@
-import { Component, inject, signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, inject, signal, TemplateRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import {
   Dialog,
@@ -12,6 +12,7 @@ import {
   selector: 'app-dialog-close-example',
   imports: [Button, DialogActions, DialogClose, DialogContent, DialogTitle],
   templateUrl: './dialog-close-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dialog-close-example.scss',
 })
 export class DialogCloseExample {

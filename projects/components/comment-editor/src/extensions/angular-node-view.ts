@@ -1,8 +1,9 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import type { NodeViewProps } from '@tiptap/core';
 
 @Component({
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: ''
 })
 export class AngularNodeView {

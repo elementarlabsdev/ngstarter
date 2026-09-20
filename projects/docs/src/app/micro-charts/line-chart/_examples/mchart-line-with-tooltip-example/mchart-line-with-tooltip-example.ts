@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   MchartLine,
   MchartTooltipBody,
@@ -15,6 +15,7 @@ import {
     MchartTooltip
   ],
   templateUrl: './mchart-line-with-tooltip-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './mchart-line-with-tooltip-example.scss'
 })
 export class MchartLineWithTooltipExample {

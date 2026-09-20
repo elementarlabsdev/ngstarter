@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MchartLine } from '@ngstarter-ui/components/micro-chart';
 import { ShuffleArrayPipe } from '@meta/shuffle-array.pipe';
 
@@ -9,6 +9,7 @@ import { ShuffleArrayPipe } from '@meta/shuffle-array.pipe';
     ShuffleArrayPipe
   ],
   templateUrl: './mchart-line-compact-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './mchart-line-compact-example.scss'
 })
 export class MchartLineCompactExample {

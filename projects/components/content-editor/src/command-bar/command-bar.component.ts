@@ -1,6 +1,7 @@
 import {
   Component, computed,
   inject, Input, OnDestroy, OnInit, Renderer2, signal,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { TextAlignment, TextHighlightService } from '../text-highlight.service';
@@ -25,6 +26,7 @@ import { TextColorComponent } from '../text-color/text-color.component';
   ],
   templateUrl: './command-bar.component.html',
   styleUrl: './command-bar.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-command-bar'
   }

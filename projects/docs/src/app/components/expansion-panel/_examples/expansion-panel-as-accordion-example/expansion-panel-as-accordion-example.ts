@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Datepicker, DatepickerInput, provideNativeDateAdapter } from '@ngstarter-ui/components/datepicker';
 import {
@@ -31,6 +31,7 @@ import { Input } from '@ngstarter-ui/components/input';
   ],
   templateUrl: './expansion-panel-as-accordion-example.html',
   styleUrl: './expansion-panel-as-accordion-example.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     provideNativeDateAdapter()
   ]

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   EmptyState,
   EmptyStateContent,
@@ -15,6 +15,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     Icon
   ],
   templateUrl: './empty-state-with-custom-icon-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './empty-state-with-custom-icon-example.scss'
 })
 export class EmptyStateWithCustomIconExample {

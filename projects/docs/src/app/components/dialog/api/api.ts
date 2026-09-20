@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-api',
   imports: [],
   templateUrl: './api.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './api.scss'
 })
 export class Api { }

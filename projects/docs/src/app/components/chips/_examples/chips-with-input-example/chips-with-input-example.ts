@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
@@ -25,6 +25,7 @@ export interface Fruit {
     Input
   ],
   templateUrl: './chips-with-input-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './chips-with-input-example.scss'
 })
 export class ChipsWithInputExample {

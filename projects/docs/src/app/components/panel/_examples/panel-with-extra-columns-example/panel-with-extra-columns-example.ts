@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import {
   PanelAside,
@@ -20,6 +20,7 @@ import {
     PanelAside
   ],
   templateUrl: './panel-with-extra-columns-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './panel-with-extra-columns-example.scss'
 })
 export class PanelWithExtraColumnsExample {

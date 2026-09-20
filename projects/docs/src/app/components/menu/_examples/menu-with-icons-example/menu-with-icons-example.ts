@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Button } from '@ngstarter-ui/components/button';
 import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
@@ -13,6 +13,7 @@ import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
     Menu
   ],
   templateUrl: './menu-with-icons-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './menu-with-icons-example.scss'
 })
 export class MenuWithIconsExample {

@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActionRequired } from '@ngstarter-ui/components/action-required';
 import { GRID, Grid } from '@ngstarter-ui/components/grid';
 
@@ -17,6 +17,7 @@ export interface ActionRequiredWidget {
   ],
   templateUrl: './action-required-widget.html',
   styleUrl: './action-required-widget.css',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-action-required-content'
   }

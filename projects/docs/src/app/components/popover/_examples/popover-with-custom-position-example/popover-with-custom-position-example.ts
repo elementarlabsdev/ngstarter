@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Popover, PopoverPosition, PopoverTriggerForDirective } from '@ngstarter-ui/components/popover';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
@@ -18,6 +18,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './popover-with-custom-position-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './popover-with-custom-position-example.scss'
 })
 export class PopoverWithCustomPositionExample {

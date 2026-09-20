@@ -1,4 +1,4 @@
-import {booleanAttribute, Component, input} from '@angular/core';
+import {booleanAttribute, Component, input, ChangeDetectionStrategy} from '@angular/core';
 
 @Component({
   selector: 'ngs-panel-subheader',
@@ -6,6 +6,7 @@ import {booleanAttribute, Component, input} from '@angular/core';
   imports: [],
   templateUrl: './panel-subheader.html',
   styleUrl: './panel-subheader.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-panel-subheader',
     '[class.is-auto-height]': 'autoHeight()',

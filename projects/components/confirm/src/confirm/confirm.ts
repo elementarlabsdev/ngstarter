@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
@@ -17,6 +17,7 @@ import { DialogActions, DialogClose, DialogContent, DialogTitle } from '@ngstart
   ],
   templateUrl: './confirm.html',
   styleUrl: './confirm.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-confirm'
   }

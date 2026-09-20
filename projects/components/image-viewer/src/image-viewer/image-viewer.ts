@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, ElementRef, inject, Renderer2, DOCUMENT } from '@angular/core';
+import { Component, computed, DestroyRef, ElementRef, inject, Renderer2, DOCUMENT, ChangeDetectionStrategy } from '@angular/core';
 import { IMAGE_VIEWER_PICTURE_DATA, IMAGE_VIEWER_PICTURE_REF } from '../types';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { ProgressSpinner } from '@ngstarter-ui/components/spinner';
@@ -16,6 +16,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   ],
   templateUrl: './image-viewer.html',
   styleUrl: './image-viewer.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-image-viewer',
     '[class.loading]': 'loading',

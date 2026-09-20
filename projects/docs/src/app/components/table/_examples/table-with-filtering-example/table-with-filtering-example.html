@@ -2,7 +2,7 @@
   <ngs-label>Filter</ngs-label>
   <input ngsInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
 </ngs-form-field>
-<div class="border border-muted  rounded-xl overflow-hidden">
+<div class="border border-border  rounded-xl overflow-hidden">
   <table ngs-table [dataSource]="dataSource" class="">
     <!-- Position Column -->
     <ng-container ngsColumnDef="position">

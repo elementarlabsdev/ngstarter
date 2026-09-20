@@ -1,4 +1,4 @@
-import { Component, forwardRef, input, OnInit } from '@angular/core';
+import { Component, forwardRef, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { RAIL_NAV, RailNavAPI } from '../types';
 
 @Component({
@@ -13,6 +13,7 @@ import { RAIL_NAV, RailNavAPI } from '../types';
       useExisting: forwardRef(() => RailNav),
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-rail-nav'
   }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DateFormatSelect } from '@ngstarter-ui/components/date-format-select';
 import { Error, FormField, Label } from '@ngstarter-ui/components/form-field';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -13,6 +13,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
     ReactiveFormsModule
   ],
   templateUrl: './basic-date-format-select-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-date-format-select-example.scss'
 })
 export class BasicDateFormatSelectExample {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BasicDialog } from '../basic/basic.dialog';
 import { Dialog } from '@ngstarter-ui/components/dialog';
@@ -16,6 +16,7 @@ import { Input } from '@ngstarter-ui/components/input';
     Input
   ],
   templateUrl: './basic-dialog-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-dialog-example.scss'
 })
 export class BasicDialogExample {

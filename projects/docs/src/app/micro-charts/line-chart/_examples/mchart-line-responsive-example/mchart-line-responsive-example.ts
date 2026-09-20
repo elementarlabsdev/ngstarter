@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ShuffleArrayPipe } from '@meta/shuffle-array.pipe';
 import {
   MchartLine,
@@ -18,6 +18,7 @@ import { ResizableContainer } from '@ngstarter-ui/components/resizable-container
     ResizableContainer
   ],
   templateUrl: './mchart-line-responsive-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './mchart-line-responsive-example.scss'
 })
 export class MchartLineResponsiveExample {

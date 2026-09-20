@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Toolbar, ToolbarRow, ToolbarTitle, ToolbarSpacer, ToolbarItem } from '@ngstarter-ui/components/toolbar';
 
 @Component({
@@ -6,6 +6,7 @@ import { Toolbar, ToolbarRow, ToolbarTitle, ToolbarSpacer, ToolbarItem } from '@
   templateUrl: './multi-row-toolbar-example.html',
   styleUrl: './multi-row-toolbar-example.scss',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [Toolbar, ToolbarRow, ToolbarTitle, ToolbarSpacer, ToolbarItem],
 })
 export class MultiRowToolbarExample {}

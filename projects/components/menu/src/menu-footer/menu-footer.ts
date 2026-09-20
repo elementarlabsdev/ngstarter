@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-menu-footer',
@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './menu-footer.html',
   styleUrl: './menu-footer.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-menu-footer',
   }

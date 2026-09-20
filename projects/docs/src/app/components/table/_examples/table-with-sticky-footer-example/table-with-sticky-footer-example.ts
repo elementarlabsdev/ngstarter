@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import {
   Cell,
@@ -37,6 +37,7 @@ export interface Transaction {
     FooterRowDef
   ],
     templateUrl: './table-with-sticky-footer-example.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './table-with-sticky-footer-example.scss'
 })
 export class TableWithStickyFooterExample {

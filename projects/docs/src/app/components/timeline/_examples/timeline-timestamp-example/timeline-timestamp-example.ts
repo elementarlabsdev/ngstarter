@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 import {
   TimelineAttributes, Timeline,
@@ -20,6 +20,7 @@ import {
     Timeline
   ],
   templateUrl: './timeline-timestamp-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './timeline-timestamp-example.scss'
 })
 export class TimelineTimestampExample {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Alert, AlertIconDirective, AlertTitleDirective } from '@ngstarter-ui/components/alert';
 import { Avatar, AvatarGroup } from '@ngstarter-ui/components/avatar';
 import { Badge } from '@ngstarter-ui/components/badge';
@@ -41,6 +41,7 @@ import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
     TabGroup,
   ],
   templateUrl: './preview.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './preview.component.scss'
 })
 export class PreviewComponent {}

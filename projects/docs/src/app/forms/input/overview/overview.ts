@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicInputsExample } from '../_examples/basic-inputs-example/basic-inputs-example';
 import {
@@ -26,6 +26,7 @@ import {
     PrefixesAndSuffixesExample
   ],
     templateUrl: './overview.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './overview.scss'
 })
 export class Overview {

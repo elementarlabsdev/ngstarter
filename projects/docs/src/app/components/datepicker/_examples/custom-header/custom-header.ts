@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Subject } from 'rxjs';
 import { Button } from '@ngstarter-ui/components/button';
@@ -11,6 +11,7 @@ import { Calendar, DateAdapter } from '@ngstarter-ui/components/datepicker';
     Button
   ],
   templateUrl: './custom-header.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './custom-header.scss'
 })
 export class CustomHeader<D> implements OnDestroy {

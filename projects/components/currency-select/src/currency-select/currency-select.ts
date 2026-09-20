@@ -11,6 +11,7 @@ import {
   model,
   input,
   DestroyRef, viewChild, Renderer2, booleanAttribute, output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -46,6 +47,7 @@ import { Button } from '@ngstarter-ui/components/button';
     '(focus)': 'onFocusIn()',
     '(blur)': 'onFocusOut($event)',
   },
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     Option,
     Icon,

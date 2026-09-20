@@ -2,7 +2,7 @@
   <code class="code">ngs-command-bar</code> -
   the root component of the command bar. This component manages the state of the command bar.
 </p>
-<div class="border border-muted rounded-xl shadow-sm overflow-hidden mt-6 mb-6">
+<div class="border border-border rounded-xl shadow-sm overflow-hidden mt-6 mb-6">
   <table ngs-table [dataSource]="commandBarProperties">
     <ng-container ngsColumnDef="name">
       <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>
@@ -39,7 +39,7 @@
   the command component of the command bar. This component is used to display
   a command, as well as registering the keyboard shortcut.
 </p>
-<div class="border border-muted rounded-xl shadow-sm overflow-hidden mt-6">
+<div class="border border-border rounded-xl shadow-sm overflow-hidden mt-6">
   <table ngs-table [dataSource]="commandProperties">
     <ng-container ngsColumnDef="name">
       <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Prop</th>

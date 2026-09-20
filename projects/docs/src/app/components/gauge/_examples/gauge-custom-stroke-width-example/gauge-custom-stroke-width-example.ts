@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Gauge } from '@ngstarter-ui/components/gauge';
 
 @Component({
@@ -7,6 +7,7 @@ import { Gauge } from '@ngstarter-ui/components/gauge';
     Gauge
   ],
   templateUrl: './gauge-custom-stroke-width-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './gauge-custom-stroke-width-example.scss'
 })
 export class GaugeCustomStrokeWidthExample {

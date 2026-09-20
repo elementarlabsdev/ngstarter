@@ -6,7 +6,8 @@ import {
   input, output,
   TemplateRef,
   viewChild,
-  ViewContainerRef
+  ViewContainerRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -20,6 +21,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './cookie-popup.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './cookie-popup.scss'
 })
 export class CookiePopup {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   Cell,
   CellDef,
@@ -46,6 +46,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
     HeaderRowDef
   ],
   templateUrl: './basic-table-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-table-example.scss'
 })
 export class BasicTableExample {

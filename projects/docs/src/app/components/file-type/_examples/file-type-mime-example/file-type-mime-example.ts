@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FileType, FileTypeName } from '@ngstarter-ui/components/file-type';
 
 type FileTypeMimeExampleItem = {
@@ -13,6 +13,7 @@ type FileTypeMimeExampleItem = {
     FileType
   ],
   templateUrl: './file-type-mime-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './file-type-mime-example.scss',
 })
 export class FileTypeMimeExample {

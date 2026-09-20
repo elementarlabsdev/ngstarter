@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   StepTracker,
   StepTrackerItem
@@ -10,6 +10,7 @@ import {
     StepTracker,
     StepTrackerItem,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './horizontal-step-tracker-example.html',
 })
 export class HorizontalStepTrackerExample {}

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormField, Label, Suffix } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 import { FormsModule } from '@angular/forms';
@@ -21,6 +21,7 @@ import {
     ColorPicker,
   ],
   templateUrl: './input-with-color-picker-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './input-with-color-picker-example.scss'
 })
 export class InputWithColorPickerExample {

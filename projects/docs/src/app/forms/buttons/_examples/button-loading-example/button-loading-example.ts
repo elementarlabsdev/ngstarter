@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 
 @Component({
@@ -7,6 +7,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './button-loading-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './button-loading-example.scss'
 })
 export class ButtonLoadingExample {

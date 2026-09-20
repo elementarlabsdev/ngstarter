@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
   CarouselCard,
@@ -20,6 +20,7 @@ import { Button } from '@ngstarter-ui/components/button';
 
   ],
   templateUrl: './carousel-controls-custom-position-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './carousel-controls-custom-position-example.scss'
 })
 export class CarouselControlsCustomPositionExample {

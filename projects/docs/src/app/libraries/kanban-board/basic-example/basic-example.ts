@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {Avatar} from "@ngstarter-ui/components/avatar";
 import {Icon} from "@ngstarter-ui/components/icon";
 import {KanbanBoard, KanbanColumn, KanbanItemDefDirective} from "@ngstarter-ui/components/kanban-board";
@@ -12,6 +12,7 @@ import {KanbanBoard, KanbanColumn, KanbanItemDefDirective} from "@ngstarter-ui/c
     KanbanItemDefDirective
   ],
   templateUrl: './basic-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-example.scss',
 })
 export class BasicExample {

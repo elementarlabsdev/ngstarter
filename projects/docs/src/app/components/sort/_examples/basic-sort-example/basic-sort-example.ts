@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, PLATFORM_ID, viewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, PLATFORM_ID, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Sort, SortDirective, SortModule } from '@ngstarter-ui/components/sort';
@@ -47,6 +47,7 @@ const INVOICES: Invoice[] = [
     RowDef
   ],
   templateUrl: './basic-sort-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-sort-example.scss'
 })
 export class BasicSortExample implements AfterViewInit {

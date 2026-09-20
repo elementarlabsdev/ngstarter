@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 
@@ -9,6 +9,7 @@ import { Avatar } from '@ngstarter-ui/components/avatar';
     Avatar
   ],
   templateUrl: './avatar-with-icons-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './avatar-with-icons-example.scss'
 })
 export class AvatarWithIconsExample {

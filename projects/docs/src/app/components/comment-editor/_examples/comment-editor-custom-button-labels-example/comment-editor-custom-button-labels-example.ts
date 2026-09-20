@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   CommentEditorBubbleMenu,
   CommentEditorCommandBlockquoteDirective,
@@ -55,6 +55,7 @@ import { Tooltip } from '@ngstarter-ui/components/tooltip';
     Tooltip
   ],
   templateUrl: './comment-editor-custom-button-labels-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './comment-editor-custom-button-labels-example.scss'
 })
 export class CommentEditorCustomButtonLabelsExample {

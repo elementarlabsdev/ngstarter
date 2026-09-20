@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import {
   Cell,
@@ -52,6 +52,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
     NoDataRow
   ],
   templateUrl: './table-with-filtering-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './table-with-filtering-example.scss'
 })
 export class TableWithFilteringExample {

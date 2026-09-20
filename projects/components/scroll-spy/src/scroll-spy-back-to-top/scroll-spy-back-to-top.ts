@@ -1,4 +1,4 @@
-import { Component, DOCUMENT, inject, PLATFORM_ID } from '@angular/core';
+import { Component, DOCUMENT, inject, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 import { PANEL_CONTENT } from '@ngstarter-ui/components/panel';
 import { LAYOUT_CONTENT } from '@ngstarter-ui/components/layout';
 import { isPlatformServer } from '@angular/common';
@@ -12,6 +12,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
   ],
   templateUrl: './scroll-spy-back-to-top.html',
   styleUrl: './scroll-spy-back-to-top.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '(click)': 'scrollToTop()'
   }

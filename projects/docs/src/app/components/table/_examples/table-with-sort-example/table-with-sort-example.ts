@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, PLATFORM_ID, viewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, PLATFORM_ID, viewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { SortDirective, SortModule, Sort } from '@ngstarter-ui/components/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
@@ -52,6 +52,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
     RowDef
   ],
   templateUrl: './table-with-sort-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './table-with-sort-example.scss'
 })
 export class TableWithSortExample implements AfterViewInit {

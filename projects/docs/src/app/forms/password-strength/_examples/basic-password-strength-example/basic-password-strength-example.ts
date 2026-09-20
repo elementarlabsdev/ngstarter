@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
@@ -15,6 +15,7 @@ import { PasswordStrength } from '@ngstarter-ui/components/password-strength';
     PasswordStrength
   ],
   templateUrl: './basic-password-strength-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-password-strength-example.scss'
 })
 export class BasicPasswordStrengthExample {

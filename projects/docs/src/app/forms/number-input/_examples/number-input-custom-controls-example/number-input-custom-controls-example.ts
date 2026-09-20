@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
@@ -18,6 +18,7 @@ import {
     NumberInput
   ],
   templateUrl: './number-input-custom-controls-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './number-input-custom-controls-example.scss'
 })
 export class NumberInputCustomControlsExample {

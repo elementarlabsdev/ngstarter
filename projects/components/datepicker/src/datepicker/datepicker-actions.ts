@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-datepicker-actions',
@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
       <ng-content />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .ngs-datepicker-actions {
       display: flex;

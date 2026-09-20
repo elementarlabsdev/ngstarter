@@ -1,4 +1,5 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, contentChild, input } from '@angular/core';
+import { NotificationControlsDirective } from '../notification-controls.directive';
 
 @Component({
   selector: 'ngs-notification,[ngs-notification]',
@@ -9,10 +10,13 @@ import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@an
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-notification',
-    '[class.is-unread]': 'isUnread()'
+    '[class.is-unread]': 'isUnread()',
+    '[class.has-controls]': '!!controls()'
   }
 })
 export class Notification {
+  readonly controls = contentChild(NotificationControlsDirective);
+
   isUnread = input(false, {
     transform: booleanAttribute
   });

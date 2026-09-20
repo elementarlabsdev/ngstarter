@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { List, ListItem, ListItemTitle } from '@ngstarter-ui/components/list';
 
 @Component({
@@ -9,6 +9,7 @@ import { List, ListItem, ListItemTitle } from '@ngstarter-ui/components/list';
     List
   ],
   templateUrl: './list-variants-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './list-variants-example.scss'
 })
 export class ListVariantsExample {

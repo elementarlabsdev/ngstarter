@@ -11,6 +11,7 @@ import {
   untracked,
   viewChild,
   ViewContainerRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
@@ -29,6 +30,7 @@ import { ImageZoomViewerImage } from '../image-zoom-viewer-image';
   imports: [
     ImageZoomViewerStyle,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-image-zoom-viewer'
   }

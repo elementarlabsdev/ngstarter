@@ -1,7 +1,6 @@
-import { Component, contentChild, forwardRef, Inject } from '@angular/core';
+import { Component, contentChild, ChangeDetectionStrategy } from '@angular/core';
 import { CdkStep } from '@angular/cdk/stepper';
 import { StepLabel } from '../step-label';
-import { Stepper } from '../stepper/stepper';
 
 @Component({
   selector: 'ngs-step',
@@ -14,14 +13,11 @@ import { Stepper } from '../stepper/stepper';
       useExisting: Step
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-step'
   }
 })
 export class Step extends CdkStep {
   readonly ngsStepLabel = contentChild(StepLabel);
-
-  constructor(@Inject(forwardRef(() => Stepper)) stepper: Stepper) {
-    super(stepper);
-  }
 }

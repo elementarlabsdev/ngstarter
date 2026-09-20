@@ -1,0 +1,17 @@
+<button ngsIconButton [ngsMenuTriggerFor]="actions" aria-label="Notification actions">
+  <ngs-icon name="fluent:more-vertical-24-regular"/>
+</button>
+<ngs-menu #actions="ngsMenu">
+  <button ngs-menu-item>
+    <ngs-icon name="fluent:checkmark-24-regular"/>
+    <span>Mark as read</span>
+  </button>
+  <button ngs-menu-item>
+    <ngs-icon name="fluent:alert-off-24-regular"/>
+    <span>Mute this type</span>
+  </button>
+  <button ngs-menu-item>
+    <ngs-icon name="fluent:delete-24-regular"/>
+    <span>Delete notification</span>
+  </button>
+</ngs-menu>

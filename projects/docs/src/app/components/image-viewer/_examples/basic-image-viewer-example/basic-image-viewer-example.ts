@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   ImageViewerDirective, ImageViewerPictureDirective
 } from '@ngstarter-ui/components/image-viewer';
@@ -10,6 +10,7 @@ import {
     ImageViewerPictureDirective
   ],
   templateUrl: './basic-image-viewer-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-image-viewer-example.scss'
 })
 export class BasicImageViewerExample {

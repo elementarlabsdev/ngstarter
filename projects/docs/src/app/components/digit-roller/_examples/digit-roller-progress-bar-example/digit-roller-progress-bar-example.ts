@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, computed, inject, OnDestroy, PLATFORM_ID, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, PLATFORM_ID, signal, ChangeDetectionStrategy } from '@angular/core';
 import { DigitRoller, DigitRollerGroupDirective } from '@ngstarter-ui/components/digit-roller';
 import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 
@@ -10,6 +10,7 @@ import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
     DigitRollerGroupDirective,
     ProgressBar,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './digit-roller-progress-bar-example.html',
 })
 export class DigitRollerProgressBarExample implements OnDestroy {

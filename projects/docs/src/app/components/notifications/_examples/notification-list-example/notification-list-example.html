@@ -8,7 +8,7 @@
         <a routerLink="/" ngs-notification-actor>{{ notification.actor.name }}</a>
         {{ notification.message }}
       </ngs-notification-message>
-      <ngs-notification-content class="border border-muted rounded-lg p-2.5 text-sm">
+      <ngs-notification-content>
        This is a comment.
       </ngs-notification-content>
       <ngs-notification-time>{{ notification.createdAt }}</ngs-notification-time>
@@ -23,7 +23,7 @@
         <a routerLink="/" ngs-notification-actor>{{ notification.actor.name }}</a>
         invited you to edit <a routerLink="/" class="link">{{ notification.payload.folderName }}</a>
       </ngs-notification-message>
-      <ngs-notification-content class="border border-muted rounded-lg p-2.5 text-sm">
+      <ngs-notification-content>
         <div class="flex items-center gap-2">
           <ngs-icon name="fluent:folder-24-regular" class="text-on-surface-variant"/>
           <span>{{ notification.payload.folderName }}</span>
@@ -33,7 +33,7 @@
     </ngs-notification>
   </ng-template>
   <ng-template ngsNotificationControlsDef let-notification>
-    <button ngsIconButton [ngsMenuTriggerFor]="settings">
+    <button ngsIconButton [ngsMenuTriggerFor]="settings" aria-label="Notification actions">
       <ngs-icon name="fluent:more-vertical-24-regular"/>
     </button>
     <ngs-menu #settings="ngsMenu">

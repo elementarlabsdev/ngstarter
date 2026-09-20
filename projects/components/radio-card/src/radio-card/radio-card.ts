@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import {
   RadioCardGroup
 } from '../radio-card-group/radio-card-group';
@@ -12,6 +12,7 @@ import { RadioButton } from '@ngstarter-ui/components/radio';
   ],
   templateUrl: './radio-card.html',
   styleUrl: './radio-card.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-radio-card',
     '[class.is-selected]': 'isSelected()',

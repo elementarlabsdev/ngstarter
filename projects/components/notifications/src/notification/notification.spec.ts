@@ -6,6 +6,7 @@ import { describe, expect, it, beforeEach } from 'vitest';
 import { NotificationAvatarDirective } from '../notification-avatar.directive';
 import { NotificationActor } from '../notification-actor/notification-actor';
 import { NotificationContent } from '../notification-content/notification-content';
+import { NotificationControlsDirective } from '../notification-controls.directive';
 import { NotificationMessage } from '../notification-message/notification-message';
 import { NotificationPropsDirective } from '../notification-props.directive';
 import { NotificationTime } from '../notification-time/notification-time';
@@ -17,6 +18,7 @@ import { Notification } from './notification';
     NotificationActor,
     NotificationAvatarDirective,
     NotificationContent,
+    NotificationControlsDirective,
     NotificationMessage,
     NotificationTime
   ],
@@ -33,6 +35,7 @@ import { Notification } from './notification';
       <ngs-notification-time>
         <span class="projected-time">Just now</span>
       </ngs-notification-time>
+      <button ngsNotificationControls class="projected-controls">More</button>
     </ngs-notification>
   `
 })
@@ -74,6 +77,8 @@ describe('Notification', () => {
     expect(notification.querySelector('.message ngs-notification-message')?.textContent).toContain('mentioned you');
     expect(notification.querySelector('.content .projected-content')?.textContent?.trim()).toBe('Launch planning');
     expect(notification.querySelector('ngs-notification-time .projected-time')?.textContent?.trim()).toBe('Just now');
+    expect(notification.classList.contains('has-controls')).toBe(true);
+    expect(notification.querySelector('.controls .projected-controls')?.textContent?.trim()).toBe('More');
   });
 
   it('reflects unread state on the host class', () => {

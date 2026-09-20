@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AngularNodeView } from '../angular-node-view';
 import { ProgressSpinner } from '@ngstarter-ui/components/spinner';
 
@@ -10,6 +10,7 @@ import { ProgressSpinner } from '@ngstarter-ui/components/spinner';
   ],
   templateUrl: './image-uploading-placeholder.html',
   styleUrl: './image-uploading-placeholder.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-image-uploading-placeholder',
     '[class.selected]': 'selected()'

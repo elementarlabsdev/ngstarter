@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   PdfBuilder,
   type PdfBuilderRecipient,
@@ -13,6 +13,7 @@ import {
     PdfBuilder
   ],
   templateUrl: './basic-pdf-builder-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-pdf-builder-example.scss',
 })
 export class BasicPdfBuilderExample {

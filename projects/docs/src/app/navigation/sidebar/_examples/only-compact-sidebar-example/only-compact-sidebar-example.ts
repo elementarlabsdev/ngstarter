@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   Sidebar,
   SidebarBody,
@@ -22,6 +22,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     SidebarNavItemIconDirective,
     Icon
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './only-compact-sidebar-example.html'
 })
 export class OnlyCompactSidebarExample {

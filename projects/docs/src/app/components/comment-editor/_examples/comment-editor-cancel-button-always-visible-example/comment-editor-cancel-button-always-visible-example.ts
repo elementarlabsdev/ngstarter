@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   CommentEditorBubbleMenu,
   CommentEditorCommandBlockquoteDirective,
@@ -54,6 +54,7 @@ import { Tooltip } from '@ngstarter-ui/components/tooltip';
     Tooltip
   ],
   templateUrl: './comment-editor-cancel-button-always-visible-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './comment-editor-cancel-button-always-visible-example.scss'
 })
 export class CommentEditorCancelButtonAlwaysVisibleExample {

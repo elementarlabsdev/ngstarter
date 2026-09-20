@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AvatarGroup, Avatar } from '@ngstarter-ui/components/avatar';
 
 @Component({
@@ -8,6 +8,7 @@ import { AvatarGroup, Avatar } from '@ngstarter-ui/components/avatar';
     AvatarGroup
   ],
   templateUrl: './avatar-generated-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './avatar-generated-example.scss'
 })
 export class AvatarGeneratedExample {

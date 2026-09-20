@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
 import { Button } from '@ngstarter-ui/components/button';
 
@@ -9,6 +9,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './buttons-with-interactive-disabled-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './buttons-with-interactive-disabled-example.scss'
 })
 export class ButtonsWithInteractiveDisabledExample {

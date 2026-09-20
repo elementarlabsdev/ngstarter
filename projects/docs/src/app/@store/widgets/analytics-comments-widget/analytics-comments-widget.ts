@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { GRID, Grid } from '@ngstarter-ui/components/grid';
 import { Icon } from '@ngstarter-ui/components/icon';
 
@@ -8,6 +8,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     Icon
   ],
   templateUrl: './analytics-comments-widget.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './analytics-comments-widget.scss'
 })
 export class AnalyticsCommentsWidget implements OnInit {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 
 @Component({
@@ -7,6 +7,7 @@ import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
     Tab
   ],
   templateUrl: './api.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './api.scss'
 })
 export class Api {

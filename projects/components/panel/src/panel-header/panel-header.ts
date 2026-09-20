@@ -1,10 +1,11 @@
-import { booleanAttribute, Component, input } from '@angular/core';
+import { booleanAttribute, Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-panel-header',
   exportAs: 'ngsPanelHeader',
   templateUrl: './panel-header.html',
   styleUrl: './panel-header.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-panel-header',
     '[class.is-auto-height]': 'autoHeight()',

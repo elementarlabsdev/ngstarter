@@ -1,4 +1,4 @@
-import { Component, viewChild } from '@angular/core';
+import { Component, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
 import { Datepicker, DatepickerInput, provideNativeDateAdapter } from '@ngstarter-ui/components/datepicker';
@@ -30,6 +30,7 @@ import { FormField, Label } from '@ngstarter-ui/components/form-field';
   ],
   templateUrl: './expansion-panel-expand-collapse-toggles-example.html',
   styleUrl: './expansion-panel-expand-collapse-toggles-example.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     provideNativeDateAdapter()
   ]

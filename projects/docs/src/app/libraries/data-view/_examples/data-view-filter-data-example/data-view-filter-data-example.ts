@@ -1,4 +1,4 @@
-import { Component, model } from '@angular/core';
+import { Component, model, ChangeDetectionStrategy } from '@angular/core';
 import {
   DataViewColumnDef,
   DataView,
@@ -43,6 +43,7 @@ const DATA: PeriodicElement[] = [
     Input
   ],
   templateUrl: './data-view-filter-data-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './data-view-filter-data-example.scss'
 })
 export class DataViewFilterDataExample {

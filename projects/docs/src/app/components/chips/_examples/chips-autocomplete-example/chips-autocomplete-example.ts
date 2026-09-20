@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, viewChild } from '@angular/core';
+import { Component, ElementRef, inject, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import {
   Autocomplete,
   AutocompleteTrigger,
@@ -34,6 +34,7 @@ import { Input } from '@ngstarter-ui/components/input';
     Input
   ],
   templateUrl: './chips-autocomplete-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './chips-autocomplete-example.scss'
 })
 export class ChipsAutocompleteExample {

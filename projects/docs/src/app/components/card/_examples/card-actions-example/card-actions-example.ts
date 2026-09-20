@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardActions, CardHeader, CardSubtitle, CardTitle } from '@ngstarter-ui/components/card';
 
@@ -13,6 +13,7 @@ import { Card, CardActions, CardHeader, CardSubtitle, CardTitle } from '@ngstart
     Card
   ],
   templateUrl: './card-actions-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './card-actions-example.scss'
 })
 export class CardActionsExample {

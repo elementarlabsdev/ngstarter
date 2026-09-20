@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { EmojiPicker, EmojiPickerTriggerForDirective } from '@ngstarter-ui/components/emoji-picker';
 
@@ -10,6 +10,7 @@ import { EmojiPicker, EmojiPickerTriggerForDirective } from '@ngstarter-ui/compo
     EmojiPickerTriggerForDirective
   ],
   templateUrl: './basic-emoji-picker-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-emoji-picker-example.scss'
 })
 export class BasicEmojiPickerExample {

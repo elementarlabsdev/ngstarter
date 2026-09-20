@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   FormBuilder,
   FormBuilderSchema,
@@ -46,6 +46,7 @@ import {
     })
   ],
   templateUrl: './custom-field-registration-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './custom-field-registration-example.scss'
 })
 export class CustomFieldRegistrationExample {

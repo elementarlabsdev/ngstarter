@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Slider, SliderThumb } from '@ngstarter-ui/components/slider';
 import { ProgressSpinner } from '@ngstarter-ui/components/spinner';
@@ -17,6 +17,7 @@ import { Divider } from '@ngstarter-ui/components/divider';
     Divider
   ],
   templateUrl: './configurable-spinner-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './configurable-spinner-example.scss'
 })
 export class ConfigurableSpinnerExample {

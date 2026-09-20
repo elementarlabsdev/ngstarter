@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, contentChild, input } from '@angular/core';
+import { booleanAttribute, Component, contentChild, input, ChangeDetectionStrategy } from '@angular/core';
 import { PanelSidebar } from '../panel-sidebar/panel-sidebar';
 import { PanelAside } from '../panel-aside/panel-aside';
 import { PanelHeader } from '../panel-header/panel-header';
@@ -10,6 +10,7 @@ import { PanelFooter } from '../panel-footer/panel-footer';
   exportAs: 'ngsPanel',
   templateUrl: './panel.html',
   styleUrl: './panel.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-panel',
     '[class.is-absolute]': 'absolute()',

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Grid, GridItemConfig, GridItem } from '@ngstarter-ui/components/grid';
 
 @Component({
@@ -6,6 +6,7 @@ import { Grid, GridItemConfig, GridItem } from '@ngstarter-ui/components/grid';
     Grid,
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

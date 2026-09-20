@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ConfirmManager } from '@ngstarter-ui/components/confirm';
 import { SnackBar } from '@ngstarter-ui/components/snack-bar';
 import { Button } from '@ngstarter-ui/components/button';
@@ -13,6 +13,7 @@ import { DialogActions, DialogContent, DialogRef, DialogTitle } from '@ngstarter
     DialogTitle,
   ],
   templateUrl: './dialog-with-confirmation.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dialog-with-confirmation.scss'
 })
 export class DialogWithConfirmation {

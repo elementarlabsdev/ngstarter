@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Tab, TabGroup, TabLabel } from '@ngstarter-ui/components/tabs';
 
@@ -11,6 +11,7 @@ import { Tab, TabGroup, TabLabel } from '@ngstarter-ui/components/tabs';
     TabLabel
   ],
     templateUrl: './tabs-with-custom-label-template-example.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './tabs-with-custom-label-template-example.scss'
 })
 export class TabsWithCustomLabelTemplateExample {

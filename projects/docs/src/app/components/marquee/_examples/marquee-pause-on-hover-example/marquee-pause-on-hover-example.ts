@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Marquee } from '@ngstarter-ui/components/marquee';
 
 @Component({
@@ -7,6 +7,7 @@ import { Marquee } from '@ngstarter-ui/components/marquee';
     Marquee
   ],
   templateUrl: './marquee-pause-on-hover-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './marquee-pause-on-hover-example.scss'
 })
 export class MarqueePauseOnHoverExample {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Button } from '@ngstarter-ui/components/button';
 
@@ -10,6 +10,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './icon-buttons-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './icon-buttons-example.scss'
 })
 export class IconButtonsExample {

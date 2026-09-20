@@ -8,6 +8,7 @@ import {
   input,
   viewChild,
   computed,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { FormFieldControl } from '../form-field-control';
 import { Label } from '../label/label';
@@ -29,6 +30,7 @@ import { FORM_FIELD_CONFIG, FormFieldLabelMode } from '../config';
       useExisting: FormField
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-form-field',
     '[class.ngs-form-field-disabled]': 'control()?.disabled',

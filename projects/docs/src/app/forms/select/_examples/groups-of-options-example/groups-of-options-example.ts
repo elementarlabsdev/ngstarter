@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Option, Select, Optgroup } from '@ngstarter-ui/components/select';
 import { Label } from '@ngstarter-ui/components/form-field';
@@ -26,6 +26,7 @@ interface PokemonGroup {
     FormField
   ],
   templateUrl: './groups-of-options-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './groups-of-options-example.scss'
 })
 export class GroupsOfOptionsExample {

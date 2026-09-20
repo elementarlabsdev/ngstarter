@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { SelectionModel } from '@angular/cdk/collections';
 import {
@@ -51,6 +51,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
     RowDef
   ],
     templateUrl: './table-with-selection-example.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './table-with-selection-example.scss'
 })
 export class TableWithSelectionExample {

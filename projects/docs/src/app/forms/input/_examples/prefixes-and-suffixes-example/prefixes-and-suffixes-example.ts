@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { FormField, Label, TextPrefix, IconPrefix, IconButtonPrefix, IconSuffix, IconButtonSuffix } from '@ngstarter-ui/components/form-field';
 import { Button } from '@ngstarter-ui/components/button';
@@ -19,6 +19,7 @@ import { Input } from '@ngstarter-ui/components/input';
     Input
   ],
   templateUrl: './prefixes-and-suffixes-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './prefixes-and-suffixes-example.scss'
 })
 export class PrefixesAndSuffixesExample {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 
 @Component({
@@ -6,6 +6,7 @@ import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
   imports: [
     CodeHighlighter
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './basic-code-highlighter-example.html'
 })
 export class BasicCodeHighlighterExample {

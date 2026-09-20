@@ -47,7 +47,7 @@
           <button class="condition-operation"
                   #operationsMenuTrigger="ngsMenuTrigger"
                   [ngsMenuTriggerFor]="operationsMenu">
-            <ng-template [ngTemplateOutlet]="getConditionOperation(item['value'][1])?.name"/>
+            <ng-template [ngTemplateOutlet]="$safeNavigationMigration(getConditionOperation(item['value'][1])?.name)"/>
           </button>
           <div class="relative">
             @if (editItem && editItem === item) {

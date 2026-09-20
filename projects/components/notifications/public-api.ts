@@ -8,5 +8,6 @@ export * from './src/notification-content/notification-content';
 export * from './src/notification-def.directive';
 export * from './src/notification-props.directive';
 export * from './src/notification-controls-def.directive';
+export * from './src/notification-controls.directive';
 export * from './src/notification-avatar.directive';
 export * from './src/types';

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { FormsModule } from '@angular/forms';
 import { Input } from '@ngstarter-ui/components/input';
@@ -16,6 +16,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './snackbar-with-custom-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './snackbar-with-custom-example.scss'
 })
 export class SnackbarWithCustomExample {

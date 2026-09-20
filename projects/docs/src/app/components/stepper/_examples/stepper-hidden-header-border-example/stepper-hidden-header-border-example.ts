@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
@@ -25,6 +25,7 @@ import {
     StepperNext,
     StepperPrevious,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './stepper-hidden-header-border-example.html',
 })
 export class StepperHiddenHeaderBorderExample {

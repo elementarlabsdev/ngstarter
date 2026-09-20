@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { map, Observable, startWith } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
@@ -32,6 +32,7 @@ export const _filter = (opt: string[], value: string): string[] => {
     Label
   ],
   templateUrl: './option-groups-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './option-groups-example.scss'
 })
 export class OptionGroupsExample {

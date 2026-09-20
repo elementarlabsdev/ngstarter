@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonToggle, ButtonToggleGroup } from '@ngstarter-ui/components/button-toggle';
 
 @Component({
@@ -8,6 +8,7 @@ import { ButtonToggle, ButtonToggleGroup } from '@ngstarter-ui/components/button
     ButtonToggleGroup
   ],
   templateUrl: './basic-button-toggle-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-button-toggle-example.scss'
 })
 export class BasicButtonToggleExample {

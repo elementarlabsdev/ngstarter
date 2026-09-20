@@ -14,6 +14,7 @@ import {
   viewChild,
   effect,
   untracked,
+  linkedSignal
 } from '@angular/core';
 import {
   AbstractControl,
@@ -106,7 +107,8 @@ export class Checkbox implements ControlValueAccessor, Validator, AfterViewInit 
 
   readonly checked = model(false);
   readonly disabled = model(false);
-  readonly indeterminate = model(false);
+  readonly indeterminateInput = input(false, {alias: 'indeterminate'});
+  readonly indeterminate = linkedSignal(this.indeterminateInput);
 
   readonly change = output<CheckboxChange>();
   readonly indeterminateChange = output<boolean>();

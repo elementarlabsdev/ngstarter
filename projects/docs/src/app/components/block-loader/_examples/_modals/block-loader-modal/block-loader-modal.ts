@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   DialogActions,
@@ -26,6 +26,7 @@ import { Button } from '@ngstarter-ui/components/button';
     BlockLoader
   ],
   templateUrl: './block-loader-modal.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './block-loader-modal.scss'
 })
 export class BlockLoaderModal implements OnInit {

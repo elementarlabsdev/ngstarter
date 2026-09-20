@@ -1,4 +1,4 @@
-import { Component, model } from '@angular/core';
+import { Component, model, ChangeDetectionStrategy } from '@angular/core';
 import { CountrySelect } from '@ngstarter-ui/components/country-select';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { FormsModule } from '@angular/forms';
@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule
   ],
   templateUrl: './basic-country-select-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-country-select-example.scss'
 })
 export class BasicCountrySelectExample {

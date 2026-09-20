@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Card, CardContent, CardHeader, CardTitle } from '@ngstarter-ui/components/card';
 
@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@ngstarter-ui/componen
     RouterLink,
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss',
 })
 export class Overview {

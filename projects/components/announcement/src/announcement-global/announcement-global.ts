@@ -1,4 +1,4 @@
-import { Component, computed, inject, output } from '@angular/core';
+import { Component, computed, inject, output, ChangeDetectionStrategy } from '@angular/core';
 import { AnnouncementStore } from '../announcement.store';
 import { AnnouncementData as AnnouncementInterface } from '../types';
 import { Announcement } from '../announcement/announcement';
@@ -12,6 +12,7 @@ import { SafeHtmlPipe } from '@ngstarter-ui/components/core';
     SafeHtmlPipe
   ],
   templateUrl: './announcement-global.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './announcement-global.scss'
 })
 export class AnnouncementGlobal {

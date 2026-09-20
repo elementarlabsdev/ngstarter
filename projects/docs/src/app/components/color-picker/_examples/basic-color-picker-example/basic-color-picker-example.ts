@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ColorPicker, ColorPickerThumbnail } from '@ngstarter-ui/components/color-picker';
 
@@ -10,6 +10,7 @@ import { ColorPicker, ColorPickerThumbnail } from '@ngstarter-ui/components/colo
     ColorPickerThumbnail
   ],
   templateUrl: './basic-color-picker-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-color-picker-example.scss'
 })
 export class BasicColorPickerExample {

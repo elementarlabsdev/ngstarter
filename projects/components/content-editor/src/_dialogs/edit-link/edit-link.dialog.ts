@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
 import {
@@ -28,6 +28,7 @@ import { FormField, Hint, Label } from '@ngstarter-ui/components/form-field';
     Hint
   ],
   templateUrl: './edit-link.dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './edit-link.dialog.css'
 })
 export class EditLinkDialog {

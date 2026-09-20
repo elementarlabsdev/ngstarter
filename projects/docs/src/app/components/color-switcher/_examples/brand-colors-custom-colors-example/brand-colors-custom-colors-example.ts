@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ColorSwitcher } from '@ngstarter-ui/components/color-switcher';
 
 @Component({
@@ -7,6 +7,7 @@ import { ColorSwitcher } from '@ngstarter-ui/components/color-switcher';
     ColorSwitcher
   ],
   templateUrl: './brand-colors-custom-colors-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './brand-colors-custom-colors-example.scss'
 })
 export class BrandColorsCustomColorsExample {

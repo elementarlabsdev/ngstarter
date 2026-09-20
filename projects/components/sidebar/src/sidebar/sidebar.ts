@@ -1,10 +1,11 @@
-import { booleanAttribute, Component, input } from '@angular/core';
+import { booleanAttribute, Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-sidebar',
   exportAs: 'ngsSidebar',
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-sidebar',
     '[class.only-compact]': 'onlyCompact()'

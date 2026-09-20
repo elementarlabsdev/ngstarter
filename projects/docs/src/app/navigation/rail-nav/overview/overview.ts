@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicRailNavExample } from '../_examples/basic-rail-nav-example/basic-rail-nav-example';
 import {
@@ -12,6 +12,7 @@ import {
     RailNavCustomizationExample,
   ],
     templateUrl: './overview.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './overview.scss'
 })
 export class Overview {

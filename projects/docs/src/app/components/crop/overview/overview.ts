@@ -1,4 +1,4 @@
-import { Component, model, signal } from '@angular/core';
+import { Component, model, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Crop, CropSelection } from '@ngstarter-ui/components/crop';
 import { FormsModule } from '@angular/forms';
 import { FormField } from '@ngstarter-ui/components/form-field';
@@ -15,6 +15,7 @@ import { JsonPipe } from '@angular/common';
     JsonPipe
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

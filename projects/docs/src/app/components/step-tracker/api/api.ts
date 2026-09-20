@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 import {
   Cell,
@@ -28,6 +28,7 @@ import {
     RowDef,
     Table,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './api.html',
 })
 export class Api {

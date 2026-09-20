@@ -1,4 +1,4 @@
-import { Component, input, ViewEncapsulation, booleanAttribute, viewChild } from '@angular/core';
+import { Component, input, ViewEncapsulation, booleanAttribute, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 import { Button } from '@ngstarter-ui/components/button';
@@ -33,6 +33,7 @@ type PlaygroundSourceFile = {
   ],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './playground.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: 'playground.scss'
 })
 export class Playground {

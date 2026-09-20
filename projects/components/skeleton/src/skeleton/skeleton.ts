@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, input } from '@angular/core';
+import { booleanAttribute, Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-skeleton',
@@ -6,6 +6,7 @@ import { booleanAttribute, Component, input } from '@angular/core';
   imports: [],
   template: '',
   styleUrl: './skeleton.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'ngs-skeleton',
     '[class.rounded-full]': 'roundedFull'

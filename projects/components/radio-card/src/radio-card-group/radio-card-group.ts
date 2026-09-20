@@ -1,4 +1,4 @@
-import { Component, forwardRef, signal } from '@angular/core';
+import { Component, forwardRef, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -13,6 +13,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-radio-card-group',
     '[class.is-disabled]': 'disabled()'

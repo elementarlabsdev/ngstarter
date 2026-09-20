@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicCalendarExample } from '../_examples/basic-calendar-example/basic-calendar-example';
 import { CalendarMinMaxExample } from '../_examples/calendar-min-max-example/calendar-min-max-example';
@@ -7,6 +7,7 @@ import { CalendarWithEventsExample } from '../_examples/calendar-with-events-exa
 @Component({
   imports: [Playground, BasicCalendarExample, CalendarWithEventsExample, CalendarMinMaxExample],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss',
 })
 export class Overview {}

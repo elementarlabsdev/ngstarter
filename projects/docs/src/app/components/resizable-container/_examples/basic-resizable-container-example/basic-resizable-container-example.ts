@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ResizableContainer } from '@ngstarter-ui/components/resizable-container';
 
 @Component({
@@ -7,6 +7,7 @@ import { ResizableContainer } from '@ngstarter-ui/components/resizable-container
     ResizableContainer
   ],
   templateUrl: './basic-resizable-container-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-resizable-container-example.scss'
 })
 export class BasicResizableContainerExample {

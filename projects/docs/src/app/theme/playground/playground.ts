@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Page } from '@meta/page/page';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
 import { Alert, AlertIconDirective, AlertTitleDirective } from '@ngstarter-ui/components/alert';
@@ -50,6 +50,7 @@ type SchemeName = 'light' | 'dark' | 'auto';
     SlideToggle,
   ],
   templateUrl: './playground.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './playground.scss'
 })
 export class ThemePlayground {

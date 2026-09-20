@@ -1,3 +1,4 @@
+import { PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { setCustomIconsLoader } from 'iconify-icon';
 import { beforeEach, describe, expect, it } from 'vitest';
@@ -61,5 +62,18 @@ describe('IconRegistry', () => {
 
     expect(loaderCalls).toEqual([['add']]);
     expect(firstIcon).toBe(secondIcon);
+  });
+
+  it('does not load uncached icons remotely during server rendering', async () => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [{ provide: PLATFORM_ID, useValue: 'server' }],
+    });
+    registry = TestBed.inject(IconRegistry);
+
+    await expect(registry.get(`${prefix}:server-only`)).rejects.toThrow(
+      'is not available during server rendering',
+    );
+    expect(loaderCalls).toEqual([]);
   });
 });

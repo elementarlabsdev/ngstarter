@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   UploadAllowedTypes,
   UploadArea,
@@ -30,6 +30,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     UploadAreaInvalidStateDirective
   ],
   templateUrl: './upload-area-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './upload-area-example.scss'
 })
 export class UploadAreaExample {

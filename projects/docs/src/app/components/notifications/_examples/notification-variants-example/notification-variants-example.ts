@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 import { Button } from '@ngstarter-ui/components/button';
@@ -9,9 +9,11 @@ import {
   NotificationActor,
   NotificationAvatarDirective,
   NotificationContent,
+  NotificationControlsDirective,
   NotificationMessage,
   NotificationTime
 } from '@ngstarter-ui/components/notifications';
+import { NotificationActionsExample } from '../notification-actions-example/notification-actions-example';
 
 @Component({
   selector: 'app-notification-variants-example',
@@ -24,11 +26,14 @@ import {
     NotificationActor,
     NotificationAvatarDirective,
     NotificationContent,
+    NotificationControlsDirective,
+    NotificationActionsExample,
     NotificationMessage,
     NotificationTime,
     RouterLink
   ],
   templateUrl: './notification-variants-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './notification-variants-example.scss'
 })
 export class NotificationVariantsExample {

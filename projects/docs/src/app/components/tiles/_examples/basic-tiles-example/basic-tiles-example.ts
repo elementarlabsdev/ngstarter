@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { Tiles, Tile, TileHandleDirective } from '@ngstarter-ui/components/tiles';
 
@@ -7,6 +7,7 @@ import { Tiles, Tile, TileHandleDirective } from '@ngstarter-ui/components/tiles
   standalone: true,
   imports: [Tiles, Tile, TileHandleDirective],
   templateUrl: './basic-tiles-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-tiles-example.scss',
 })
 export class BasicTilesExample {

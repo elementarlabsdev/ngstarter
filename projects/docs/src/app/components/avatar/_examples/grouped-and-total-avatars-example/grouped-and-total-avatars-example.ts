@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   Avatar,
   AvatarGroup,
@@ -13,6 +13,7 @@ import {
     AvatarGroup,
     AvatarMore
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './grouped-and-total-avatars-example.scss'
 })
 export class GroupedAndTotalAvatarsExample {

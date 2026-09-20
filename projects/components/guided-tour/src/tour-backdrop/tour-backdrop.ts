@@ -1,10 +1,11 @@
-import { Component, ElementRef, inject, signal, HostListener, computed, output, input } from '@angular/core';
+import { Component, ElementRef, inject, signal, HostListener, computed, output, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-tour-backdrop',
   exportAs: 'ngsTourBackdrop',
   templateUrl: './tour-backdrop.html',
   styleUrl: './tour-backdrop.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[class.is-initial]': 'isInitial()',
     '[class.animate-enter]': 'animateEnterClass()',

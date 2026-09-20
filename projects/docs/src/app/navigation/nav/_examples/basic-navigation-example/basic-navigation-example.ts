@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Navigation, NavigationItem } from '@ngstarter-ui/components/navigation';
 
 @Component({
@@ -8,6 +8,7 @@ import { Navigation, NavigationItem } from '@ngstarter-ui/components/navigation'
     Navigation
   ],
   templateUrl: './basic-navigation-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-navigation-example.scss'
 })
 export class BasicNavigationExample {

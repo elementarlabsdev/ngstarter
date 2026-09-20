@@ -1,10 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Calendar } from '@ngstarter-ui/components/calendar';
 
 @Component({
   selector: 'app-calendar-min-max-example',
   imports: [Calendar],
   templateUrl: './calendar-min-max-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './calendar-min-max-example.scss',
 })
 export class CalendarMinMaxExample {

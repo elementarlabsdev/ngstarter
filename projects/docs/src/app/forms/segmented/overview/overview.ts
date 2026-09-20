@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicSegmentedExample } from '../_examples/basic-segmented-example/basic-segmented-example';
 import { SegmentedSizesExample } from '../_examples/segmented-sizes-example/segmented-sizes-example';
@@ -31,6 +31,7 @@ import {
     SegmentedNgModelExample
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

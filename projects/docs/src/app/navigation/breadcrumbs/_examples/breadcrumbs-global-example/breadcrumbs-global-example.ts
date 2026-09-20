@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   BreadcrumbItemIconDefDirective,
   BreadcrumbsGlobal,
@@ -18,6 +18,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     // BreadcrumbItemTitleDefDirective
   ],
   templateUrl: './breadcrumbs-global-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './breadcrumbs-global-example.scss'
 })
 export class BreadcrumbsGlobalExample {

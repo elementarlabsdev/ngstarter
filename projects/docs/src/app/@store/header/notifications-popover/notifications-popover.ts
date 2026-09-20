@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { InviteToEditFilesInFolderNotification, MentionedInCommentNotification } from '@store/notifications';
 import { RouterLink } from '@angular/router';
 import { Icon } from '@ngstarter-ui/components/icon';
@@ -21,6 +21,7 @@ import { Ripple } from '@ngstarter-ui/components/core';
     Ripple
   ],
   templateUrl: './notifications-popover.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './notifications-popover.scss'
 })
 export class NotificationsPopover {

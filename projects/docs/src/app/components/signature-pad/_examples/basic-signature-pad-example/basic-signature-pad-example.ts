@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { SignaturePad } from '@ngstarter-ui/components/signature-pad';
 
 @Component({
@@ -7,6 +7,7 @@ import { SignaturePad } from '@ngstarter-ui/components/signature-pad';
     SignaturePad
   ],
   templateUrl: './basic-signature-pad-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-signature-pad-example.scss'
 })
 export class BasicSignaturePadExample {

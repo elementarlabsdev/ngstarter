@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   EmptyState,
   EmptyStateContent,
@@ -13,6 +13,7 @@ import {
     EmptyStateImage
   ],
   templateUrl: './empty-state-with-image-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './empty-state-with-image-example.scss'
 })
 export class EmptyStateWithImageExample {

@@ -1,4 +1,4 @@
-import { Component, forwardRef, signal } from '@angular/core';
+import { Component, forwardRef, signal, ChangeDetectionStrategy } from '@angular/core';
 import { NAVIGATION_GROUP } from '../types';
 
 let nextId = 0;
@@ -14,6 +14,7 @@ let nextId = 0;
       useExisting: forwardRef(() => NavigationGroup)
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-navigation-group'
   }

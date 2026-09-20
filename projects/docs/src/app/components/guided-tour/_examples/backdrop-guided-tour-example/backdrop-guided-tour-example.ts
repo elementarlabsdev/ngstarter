@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { TourService, TourAnchorDirective } from '@ngstarter-ui/components/guided-tour';
 import { Button } from '@ngstarter-ui/components/button';
 
@@ -7,6 +7,7 @@ import { Button } from '@ngstarter-ui/components/button';
   standalone: true,
   imports: [TourAnchorDirective, Button],
   templateUrl: './backdrop-guided-tour-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './backdrop-guided-tour-example.scss',
 })
 export class BackdropGuidedTourExample {

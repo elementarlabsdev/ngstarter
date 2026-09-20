@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
 import {
   NotificationAvatarDirective,
@@ -38,6 +38,7 @@ import {Button} from "@ngstarter-ui/components/button";
     Button
   ],
   templateUrl: './notification-list-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './notification-list-example.scss'
 })
 export class NotificationListExample {

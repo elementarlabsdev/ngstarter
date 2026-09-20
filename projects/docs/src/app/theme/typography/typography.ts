@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 import { Page } from '@meta/page/page';
@@ -12,6 +12,7 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
     PageTitleDirective,
   ],
   templateUrl: './typography.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './typography.scss'
 })
 export class Typography {

@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, computed, inject, OnDestroy, PLATFORM_ID, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, PLATFORM_ID, signal, ChangeDetectionStrategy } from '@angular/core';
 import { DigitRoller, DigitRollerGroupDirective } from '@ngstarter-ui/components/digit-roller';
 import { Gauge, GaugeValue } from '@ngstarter-ui/components/gauge';
 
@@ -11,6 +11,7 @@ import { Gauge, GaugeValue } from '@ngstarter-ui/components/gauge';
     Gauge,
     GaugeValue,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './digit-roller-gauge-example.html',
 })
 export class DigitRollerGaugeExample implements OnDestroy {

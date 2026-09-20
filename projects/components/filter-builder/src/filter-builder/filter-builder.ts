@@ -7,7 +7,8 @@ import {
   output,
   PLATFORM_ID,
   viewChildren,
-  contentChildren, TemplateRef, input
+  contentChildren, TemplateRef, input,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { CommonModule, isPlatformServer, NgTemplateOutlet } from '@angular/common';
 import { FilterBuilderOperationDefDirective } from '../filter-builder-operation-def.directive';
@@ -50,6 +51,7 @@ import { FormField } from '@ngstarter-ui/components/form-field';
   ],
   templateUrl: './filter-builder.html',
   styleUrl: './filter-builder.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-filter-builder'
   },

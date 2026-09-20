@@ -754,7 +754,7 @@
           <ngs-step label="Validator" [completed]="!!selectedValidatorDefinition()">
             <ngs-radio-card-group
               class="ngs-form-builder-validator-picker grid-cols-2"
-              [ngModel]="selectedValidatorDefinition()?.type"
+              [ngModel]="$safeNavigationMigration(selectedValidatorDefinition()?.type)"
               (ngModelChange)="selectValidatorDefinitionByType($event)">
               @for (definition of validatorDefinitions(); track definition.type) {
                 <ngs-radio-card [value]="definition.type">

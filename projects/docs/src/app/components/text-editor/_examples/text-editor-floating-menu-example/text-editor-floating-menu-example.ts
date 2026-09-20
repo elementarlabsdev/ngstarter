@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
   TextEditorBubbleMenu,
@@ -52,6 +52,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './text-editor-floating-menu-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './text-editor-floating-menu-example.scss'
 })
 export class TextEditorFloatingMenuExample {

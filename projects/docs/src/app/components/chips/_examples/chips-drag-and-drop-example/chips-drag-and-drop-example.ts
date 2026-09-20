@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Chip, ChipSet } from '@ngstarter-ui/components/chips';
 
@@ -15,6 +15,7 @@ export interface Vegetable {
     ChipSet
   ],
   templateUrl: './chips-drag-and-drop-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './chips-drag-and-drop-example.scss'
 })
 export class ChipsDragAndDropExample {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef, inject } from '@angular/core';
+import { Component, ElementRef, forwardRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import { PANEL_CONTENT, PanelContentInterface } from '../types';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 
@@ -16,6 +16,7 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
       useExisting: forwardRef(() => PanelContent)
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-panel-content'
   }

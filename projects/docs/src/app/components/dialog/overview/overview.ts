@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicDialogExample } from '../_examples/basic-dialog-example/basic-dialog-example';
 import { DialogCloseExample } from '../_examples/dialog-close-example/dialog-close-example';
@@ -15,6 +15,7 @@ import { DialogScrollableContentExample } from '../_examples/dialog-scrollable-c
     DialogScrollableContentExample,
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss',
 })
 export class Overview {}

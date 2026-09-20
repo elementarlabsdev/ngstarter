@@ -4,6 +4,7 @@ import {
   inject, input,
   output,
   Renderer2, signal,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { UploadFileSelectedEvent } from '../types';
 
@@ -14,6 +15,7 @@ import { UploadFileSelectedEvent } from '../types';
   styleUrl: './upload-area.scss',
   imports: [
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-upload-area',
     '[class.is-drop-active]': 'isDropActive()',

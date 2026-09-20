@@ -1,38 +1,121 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-notification-padding: --spacing(5);
-  --ngs-notification-gap: --spacing(4);
-  --ngs-notification-bg: var(--ngs-color-surface-container-lowest);
+  --ngs-notification-padding: --spacing(3) --spacing(4);
+  --ngs-notification-gap: --spacing(3);
+  --ngs-notification-bg: transparent;
   --ngs-notification-hover-bg: var(--ngs-color-surface-container-low);
-  --ngs-notification-is-unread-bg: var(--ngs-color-surface-container-low);
-  --ngs-notification-is-unread-hover-bg: var(--ngs-color-surface-container);
-  --ngs-notification-radius: theme(--radius-xl);
+  --ngs-notification-is-unread-bg: transparent;
+  --ngs-notification-is-unread-hover-bg: var(--ngs-color-surface-container-low);
+  --ngs-notification-unread-indicator-color: var(--ngs-color-primary);
+  --ngs-notification-unread-indicator-outline-color: var(--ngs-color-surface);
+  --ngs-notification-radius: var(--ngs-radius-lg);
 
-  display: flex;
-  width: 100%;
+  display: grid;
   position: relative;
+  align-items: flex-start;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  width: 100%;
   border-radius: var(--ngs-notification-radius);
+  background: var(--ngs-notification-bg);
+  color: var(--ngs-color-on-surface);
   gap: var(--ngs-notification-gap);
   padding: var(--ngs-notification-padding);
+  transition: background-color 140ms ease;
 
   .avatar {
     position: relative;
+    flex: none;
 
     &:empty {
       display: none;
     }
   }
 
-  .actor {
-    &:empty {
-      display: none;
-    }
+  .body {
+    min-width: 0;
   }
 
   .message {
+    display: block;
+    line-height: 1.375rem;
+
     &:empty {
       display: none;
+    }
+  }
+
+  .content {
+    color: var(--ngs-color-on-surface-variant);
+  }
+
+  .time {
+    min-width: max-content;
+    margin-inline-start: --spacing(3);
+    margin-inline-end: var(--ngs-notification-action-space, 0);
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .controls {
+    position: absolute;
+    z-index: 1;
+    top: --spacing(2);
+    inset-inline-end: --spacing(2);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 120ms ease;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  &.has-controls {
+    --ngs-notification-action-space: --spacing(11);
+
+    &:hover,
+    &:focus-within {
+      background: var(--ngs-notification-hover-bg);
+
+      .controls {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+
+    &.is-unread {
+      &:hover,
+      &:focus-within {
+        background: var(--ngs-notification-is-unread-hover-bg);
+      }
+    }
+  }
+
+  &.is-unread {
+    .avatar {
+      &::after {
+        position: absolute;
+        top: -2px;
+        inset-inline-end: -2px;
+        width: --spacing(2.5);
+        height: --spacing(2.5);
+        border-radius: var(--ngs-radius-full);
+        background: var(--ngs-notification-unread-indicator-color);
+        box-shadow: 0 0 0 2px var(--ngs-notification-unread-indicator-outline-color);
+        content: '';
+      }
+    }
+  }
+
+  @media (hover: none) {
+    &.has-controls {
+      .controls {
+        opacity: 1;
+        pointer-events: auto;
+      }
     }
   }
 }
@@ -42,7 +125,6 @@
 }
 
 :host-context(ngs-notification-list) {
-  background: var(--ngs-notification-bg);
   cursor: pointer;
 
   &.is-unread {
@@ -60,9 +142,4 @@
       background: var(--ngs-notification-is-unread-hover-bg);
     }
   }
-}
-
-:host-context(html.dark) {
-  --ngs-notification-is-unread-bg: var(--ngs-color-neutral-950);
-  --ngs-notification-is-unread-hover-bg: var(--ngs-color-neutral-900);
 }

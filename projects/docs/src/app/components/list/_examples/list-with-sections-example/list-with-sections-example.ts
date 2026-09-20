@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, signal, ChangeDetectionStrategy} from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { DatePipe } from '@angular/common';
 import { List, ListItem, ListItemIcon, ListItemLine, ListItemTitle, Subheader } from '@ngstarter-ui/components/list';
@@ -23,6 +23,7 @@ export interface Section {
     List
   ],
   templateUrl: './list-with-sections-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './list-with-sections-example.scss'
 })
 export class ListWithSectionsExample {

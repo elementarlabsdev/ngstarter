@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 import { Autocomplete, AutocompleteTrigger, Option } from '@ngstarter-ui/components/autocomplete';
@@ -19,6 +19,7 @@ import { AsyncPipe } from '@angular/common';
     AsyncPipe
   ],
   templateUrl: './autocomplete-filter-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './autocomplete-filter-example.scss'
 })
 export class AutocompleteFilterExample {

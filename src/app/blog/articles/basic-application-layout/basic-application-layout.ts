@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardContent } from '@ngstarter-ui/components/card';
@@ -29,6 +29,7 @@ import {
     ScrollSpyTitle,
   ],
   templateUrl: './basic-application-layout.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-application-layout.scss',
 })
 export class BasicApplicationLayout {

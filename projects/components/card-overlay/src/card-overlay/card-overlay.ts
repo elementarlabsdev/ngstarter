@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, input } from '@angular/core';
+import { booleanAttribute, Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-card-overlay',
@@ -6,6 +6,7 @@ import { booleanAttribute, Component, input } from '@angular/core';
   imports: [],
   templateUrl: './card-overlay.html',
   styleUrl: './card-overlay.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-card-overlay',
     '[class.with-translate]': 'withTranslate()',

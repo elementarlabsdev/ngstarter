@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { ThumbnailMaker } from '@ngstarter-ui/components/thumbnail-maker';
 import { UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter-ui/components/upload';
@@ -11,6 +11,7 @@ import { UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter-ui/c
     UploadTriggerDirective
   ],
   templateUrl: './thumbnail-maker-with-file-select-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './thumbnail-maker-with-file-select-example.scss'
 })
 export class ThumbnailMakerWithFileSelectExample {

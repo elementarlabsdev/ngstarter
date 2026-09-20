@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
@@ -21,6 +21,7 @@ import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
     ReactiveFormsModule
   ],
   templateUrl: './linear-headless-stepper-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './linear-headless-stepper-example.scss'
 })
 export class LinearHeadlessStepperExample {

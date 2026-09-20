@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   DIALOG_DATA,
   DialogActions,
@@ -26,6 +26,7 @@ import { FormField, Label } from '@ngstarter-ui/components/form-field';
     FormsModule
   ],
   templateUrl: './link.dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './link.dialog.scss'
 })
 export class LinkDialog {

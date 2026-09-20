@@ -8,11 +8,7 @@
   background: var(--ngs-menu-background, var(--ngs-dropdown-bg));
   box-shadow: var(--ngs-menu-shadow, var(--ngs-dropdown-shadow));
   border-radius: var(--ngs-dropdown-radius);
-  max-height: var(--ngs-menu-max-height, 90vh);
-
-  @media (min-height: 640px) {
-    max-height: var(--ngs-menu-max-height, 65vh);
-  }
+  max-height: var(--ngs-menu-max-height, var(--ngs-dropdown-max-height, 16rem));
 
   display: flex;
   flex-direction: column;

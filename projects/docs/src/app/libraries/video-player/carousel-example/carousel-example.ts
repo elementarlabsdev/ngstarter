@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { VideoPlayer } from "@ngstarter-ui/components/video-player";
 import {
   Carousel,
@@ -28,6 +28,7 @@ import {PageTitleDirective} from "@meta/page/page-title.directive";
     PageContentDirective,
     PageTitleDirective,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './carousel-example.html',
 })
 export class CarouselExample {

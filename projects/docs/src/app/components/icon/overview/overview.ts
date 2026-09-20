@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { CircleFlagsExample } from '../_examples/circle-flags-example/circle-flags-example';
 import {
@@ -14,6 +14,7 @@ import { PhosphorIconsExample } from '../_examples/phosphor-icons-example/phosph
     PhosphorIconsExample
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

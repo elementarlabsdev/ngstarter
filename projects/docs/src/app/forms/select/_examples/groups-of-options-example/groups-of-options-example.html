@@ -1,6 +1,6 @@
 <ngs-form-field class="w-1/2">
   <ngs-label>Pokemon</ngs-label>
-  <ngs-select [formControl]="pokemonControl">
+  <ngs-select [formControl]="pokemonControl" placeholder="Select a Pokémon">
     <ngs-option>-- None --</ngs-option>
     @for (group of pokemonGroups; track group) {
       <ngs-optgroup [label]="group.name" [disabled]="group.disabled">

@@ -11,6 +11,7 @@ import {
   model,
   input,
   DestroyRef, viewChild, Renderer2, booleanAttribute, output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -52,6 +53,7 @@ export type CountrySelectValue = string | string[] | null;
       useExisting: forwardRef(() => CountrySelect),
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-country-select',
     '[class.floating]': 'shouldLabelFloat',

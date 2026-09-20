@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicTreeExample } from '../_examples/basic-tree-example/basic-tree-example';
 import { CheckableTreeExample } from '../_examples/checkable-tree-example/checkable-tree-example';
@@ -21,6 +21,7 @@ import {
     TreeWithDynamicDataExample
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

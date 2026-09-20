@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
 
@@ -9,6 +9,7 @@ import { Tooltip } from '@ngstarter-ui/components/tooltip';
     Tooltip
   ],
   templateUrl: './tooltip-manually-show-hide-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tooltip-manually-show-hide-example.scss',
 })
 export class TooltipManuallyShowHideExample {

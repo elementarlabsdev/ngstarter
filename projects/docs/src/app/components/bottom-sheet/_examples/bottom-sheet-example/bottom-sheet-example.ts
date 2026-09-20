@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { List, ListItem, ListItemLine, ListItemTitle } from '@ngstarter-ui/components/list';
 import { BottomSheetRef } from '@ngstarter-ui/components/bottom-sheet';
 
@@ -11,6 +11,7 @@ import { BottomSheetRef } from '@ngstarter-ui/components/bottom-sheet';
     List
   ],
   templateUrl: './bottom-sheet-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './bottom-sheet-example.scss'
 })
 export class BottomSheetExample {

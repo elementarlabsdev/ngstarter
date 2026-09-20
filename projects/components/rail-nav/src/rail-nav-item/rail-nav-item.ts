@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { v7 as uuid } from 'uuid';
 import { RAIL_NAV, RailNavComponent } from '../types';
 import { Ripple } from '@ngstarter-ui/components/core';
@@ -11,6 +11,7 @@ import { Ripple } from '@ngstarter-ui/components/core';
   imports: [
     Ripple
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-rail-nav-item',
     '[class.is-active]': 'isActive',

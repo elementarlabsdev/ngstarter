@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Tab, TabGroup, TabLabel } from '@ngstarter-ui/components/tabs';
 
@@ -12,6 +12,7 @@ import { Tab, TabGroup, TabLabel } from '@ngstarter-ui/components/tabs';
     TabLabel
   ],
     templateUrl: './sortable-tabs-example.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './sortable-tabs-example.scss'
 })
 export class SortableTabsExample {

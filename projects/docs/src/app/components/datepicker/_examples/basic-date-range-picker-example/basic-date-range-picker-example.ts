@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Hint, IconButtonSuffix, Label } from '@ngstarter-ui/components/form-field';
 import { FormField } from '@ngstarter-ui/components/form-field';
 import {
@@ -25,6 +25,7 @@ import { provideNativeDateAdapter } from '@ngstarter-ui/components/datepicker';
   ],
   templateUrl: './basic-date-range-picker-example.html',
   styleUrl: './basic-date-range-picker-example.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     provideNativeDateAdapter()
   ]

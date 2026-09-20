@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   LayoutAside,
   LayoutContent,
@@ -18,6 +18,7 @@ import { SidePanel, SidePanelTab } from '@ngstarter-ui/components/side-panel';
     SidePanelTab
   ],
   templateUrl: './basic-side-panel-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-side-panel-example.scss'
 })
 export class BasicSidePanelExample {

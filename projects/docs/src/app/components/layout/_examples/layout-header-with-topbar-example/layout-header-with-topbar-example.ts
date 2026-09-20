@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   LayoutContent,
   Layout,
@@ -17,6 +17,7 @@ import { Announcement } from '@ngstarter-ui/components/announcement';
     Announcement
   ],
   templateUrl: './layout-header-with-topbar-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './layout-header-with-topbar-example.scss'
 })
 export class LayoutHeaderWithTopbarExample {

@@ -4,7 +4,8 @@ import {
   contentChildren,
   ElementRef, input,
   output, signal,
-  viewChild
+  viewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { CAROUSEL, CAROUSEL_CARD, CarouselApiInterface, CarouselCardInterface } from '../types';
 import { DraggableCarouselDirective } from '../draggable-carousel.directive';
@@ -24,6 +25,7 @@ import { DraggableCarouselDirective } from '../draggable-carousel.directive';
   imports: [
     DraggableCarouselDirective
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-carousel',
     '[class.fade]': 'fade()',

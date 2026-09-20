@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, signal, ChangeDetectionStrategy} from '@angular/core';
 import { ListOption, SelectionList } from '@ngstarter-ui/components/list';
 import { Divider } from '@ngstarter-ui/components/divider';
 
@@ -10,6 +10,7 @@ import { Divider } from '@ngstarter-ui/components/divider';
     Divider
   ],
   templateUrl: './list-with-single-selection-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './list-with-single-selection-example.scss'
 })
 export class ListWithSingleSelectionExample {

@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Button } from '@ngstarter-ui/components/button';
 
@@ -11,6 +11,7 @@ import { Button } from '@ngstarter-ui/components/button';
   ],
   templateUrl: './action-required.html',
   styleUrl: './action-required.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-action-required',
   }

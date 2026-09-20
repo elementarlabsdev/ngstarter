@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Toolbar, ToolbarTitle, ToolbarSpacer, ToolbarNav, ToolbarNavLink } from '@ngstarter-ui/components/toolbar';
 
@@ -7,6 +7,7 @@ import { Toolbar, ToolbarTitle, ToolbarSpacer, ToolbarNav, ToolbarNavLink } from
   templateUrl: './toolbar-nav-example.html',
   styleUrl: './toolbar-nav-example.scss',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [Toolbar, ToolbarTitle, ToolbarSpacer, ToolbarNav, ToolbarNavLink, RouterLink],
 })
 export class ToolbarNavExample {}

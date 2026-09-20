@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Drawer } from '@ngstarter-ui/components/drawer';
 import {
@@ -19,6 +19,7 @@ import {
     PanelFooter
   ],
   templateUrl: './basic-drawer-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-drawer-example.scss'
 })
 export class BasicDrawerExample {

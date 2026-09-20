@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, signal, ChangeDetectionStrategy} from '@angular/core';
 import {
   AssetsDataSource,
   ImageDesigner,
@@ -13,6 +13,7 @@ import {
     ImageDesigner
   ],
   templateUrl: './basic-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-example.scss',
 })
 export class BasicExample {

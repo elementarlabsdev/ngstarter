@@ -4,7 +4,8 @@ import {
   inject,
   input,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { ContentFadePosition } from '../types';
 
@@ -13,6 +14,7 @@ import { ContentFadePosition } from '../types';
   exportAs: 'ngsContentFade',
   templateUrl: './content-fade.html',
   styleUrl: './content-fade.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-content-fade',
     '[class.position-both]': 'position() === "both"',

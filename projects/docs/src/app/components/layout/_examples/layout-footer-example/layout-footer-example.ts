@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { LayoutContent, Layout, LayoutFooter } from '@ngstarter-ui/components/layout';
 
 @Component({
@@ -9,6 +9,7 @@ import { LayoutContent, Layout, LayoutFooter } from '@ngstarter-ui/components/la
     LayoutFooter
   ],
   templateUrl: './layout-footer-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './layout-footer-example.scss'
 })
 export class LayoutFooterExample {

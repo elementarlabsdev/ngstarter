@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, input, TemplateRef } from '@angular/core';
+import { booleanAttribute, Component, input, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 import { NgTemplateOutlet } from '@angular/common';
 
@@ -11,6 +11,7 @@ import { NgTemplateOutlet } from '@angular/common';
   ],
   templateUrl: './screen-loader.html',
   styleUrl: './screen-loader.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-screen-loader not-prose',
     '[class.is-opened]': 'opened()'

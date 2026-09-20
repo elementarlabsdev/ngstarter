@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicAvatarExample } from '../_examples/basic-avatar-example/basic-avatar-example';
 import { AvatarSizesExample } from '../_examples/avatar-sizes-example/avatar-sizes-example';
@@ -37,6 +37,7 @@ import { AvatarVariantsExample } from '../_examples/avatar-variants-example/avat
     AvatarGeneratedExample,
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

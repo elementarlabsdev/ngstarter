@@ -5,7 +5,8 @@ import {
   inject,
   input,
   output,
-  Renderer2
+  Renderer2,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { AnnouncementLinkTo, AnnouncementVariant } from '../types';
@@ -20,6 +21,7 @@ import { Button } from '@ngstarter-ui/components/button';
   ],
   templateUrl: './announcement.html',
   styleUrl: './announcement.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-announcement',
   }

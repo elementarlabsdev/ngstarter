@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
@@ -11,6 +11,7 @@ import { Tooltip } from '@ngstarter-ui/components/tooltip';
     Tooltip
   ],
   templateUrl: './tonal-buttons-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tonal-buttons-example.scss',
 })
 export class TonalButtonsExample {

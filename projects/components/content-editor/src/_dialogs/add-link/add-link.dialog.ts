@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   DialogActions,
   DialogContent,
@@ -25,6 +25,7 @@ import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
     SlideToggle
   ],
   templateUrl: './add-link.dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './add-link.dialog.css'
 })
 export class AddLinkDialog {

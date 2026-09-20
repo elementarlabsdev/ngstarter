@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   ContentEditorBlock,
   ContentEditorRenderer,
@@ -29,6 +29,7 @@ export interface ContentBuilderPreviewDialogData {
     EmptyState,
   ],
   templateUrl: './content-builder-preview-dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './content-builder-preview-dialog.scss',
 })
 export class ContentBuilderPreviewDialog {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Split, SplitPane } from '@ngstarter-ui/components/split';
 
 @Component({
@@ -7,6 +7,7 @@ import { Split, SplitPane } from '@ngstarter-ui/components/split';
     SplitPane,
     Split
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './basic-split-example.html',
 })
 export class BasicSplitExample {

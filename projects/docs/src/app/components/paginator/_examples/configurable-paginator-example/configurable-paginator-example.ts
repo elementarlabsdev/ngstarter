@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { JsonPipe } from '@angular/common';
 import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
@@ -18,6 +18,7 @@ import { Input } from '@ngstarter-ui/components/input';
     FormField,
   ],
   templateUrl: './configurable-paginator-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './configurable-paginator-example.scss'
 })
 export class ConfigurablePaginatorExample {

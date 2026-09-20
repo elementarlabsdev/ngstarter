@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   TextEditorBubbleMenu,
   TextEditorCommandBlockquoteDirective,
@@ -51,6 +51,7 @@ import { Tooltip } from '@ngstarter-ui/components/tooltip';
     Tooltip
   ],
   templateUrl: './basic-text-editor-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-text-editor-example.scss'
 })
 export class BasicTextEditorExample {

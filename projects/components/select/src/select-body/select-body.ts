@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject } from '@angular/core';
+import { Component, ElementRef, inject, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-select-body',
@@ -6,6 +6,7 @@ import { Component, ElementRef, inject } from '@angular/core';
   imports: [],
   template: '<ng-content/>',
   styleUrl: './select-body.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-select-body'
   }

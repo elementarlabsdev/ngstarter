@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Button } from '@ngstarter-ui/components/button';
 import { Chip, ChipSet } from '@ngstarter-ui/components/chips';
@@ -26,6 +26,7 @@ import {
     ScrollSpyTitle,
   ],
   templateUrl: './form-builder-external-stepper.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './form-builder-external-stepper.scss',
 })
 export class FormBuilderExternalStepperArticle {

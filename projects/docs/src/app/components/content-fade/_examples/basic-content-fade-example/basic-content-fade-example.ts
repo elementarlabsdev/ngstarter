@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ContentFade } from '@ngstarter-ui/components/content-fade';
 
 @Component({
@@ -7,6 +7,7 @@ import { ContentFade } from '@ngstarter-ui/components/content-fade';
     ContentFade
   ],
   templateUrl: './basic-content-fade-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-content-fade-example.scss'
 })
 export class BasicContentFadeExample {

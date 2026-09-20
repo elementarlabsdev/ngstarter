@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, input } from '@angular/core';
+import { booleanAttribute, Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { Divider } from '@ngstarter-ui/components/divider';
 
 @Component({
@@ -8,6 +8,7 @@ import { Divider } from '@ngstarter-ui/components/divider';
     Divider
   ],
   templateUrl: './suggestion-block.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './suggestion-block.scss'
 })
 export class SuggestionBlock {

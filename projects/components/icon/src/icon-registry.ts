@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { getIcon, IconifyIconName, loadIcons } from 'iconify-icon';
 
 export type IconData = NonNullable<ReturnType<typeof getIcon>>;
@@ -12,6 +13,7 @@ interface QueuedIcon {
   providedIn: 'root',
 })
 export class IconRegistry {
+  private readonly _platformId = inject(PLATFORM_ID);
   private readonly _cache = new Map<string, IconData>();
   private readonly _pending = new Map<string, Promise<IconData>>();
   private readonly _queue = new Map<string, QueuedIcon[]>();
@@ -29,6 +31,14 @@ export class IconRegistry {
     if (iconifyCached) {
       this._cache.set(name, iconifyCached);
       return Promise.resolve(iconifyCached);
+    }
+
+    // Iconify's fallback loader uses fetch(). During server rendering, Node's
+    // HTTP client can keep Angular unstable with connection timers while a
+    // remote icon request is pending. Cached/preloaded icons are still
+    // returned above; uncached icons are loaded after hydration in the browser.
+    if (!isPlatformBrowser(this._platformId)) {
+      return Promise.reject(new Error(`Icon "${name}" is not available during server rendering.`));
     }
 
     const pending = this._pending.get(name);

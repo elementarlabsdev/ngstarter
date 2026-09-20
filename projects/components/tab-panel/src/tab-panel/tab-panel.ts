@@ -4,7 +4,8 @@ import {
   inject,
   input,
   OnChanges, OnInit, output,
-  SimpleChanges
+  SimpleChanges,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { TabPanelApiService } from '../tab-panel-api.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -17,6 +18,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   providers: [
     TabPanelApiService
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-tab-panel',
     '[class.is-hide-content-if-tab-not-selected]': 'hideContentIfTabNotSelected()',

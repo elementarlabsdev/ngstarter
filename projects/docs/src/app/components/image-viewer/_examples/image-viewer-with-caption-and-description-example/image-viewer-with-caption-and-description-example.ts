@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   ImageViewerDirective,
   ImageViewerPictureCaptionDirective, ImageViewerPictureDescriptionDirective,
@@ -14,6 +14,7 @@ import {
     ImageViewerPictureDescriptionDirective
   ],
   templateUrl: './image-viewer-with-caption-and-description-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './image-viewer-with-caption-and-description-example.scss'
 })
 export class ImageViewerWithCaptionAndDescriptionExample {

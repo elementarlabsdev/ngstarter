@@ -13,7 +13,7 @@ import {
     'class': 'ngs-footer-row',
     'role': 'row',
   },
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   imports: [CdkCellOutlet],
   providers: [{provide: CdkFooterRow, useExisting: forwardRef(() => FooterRow)}],

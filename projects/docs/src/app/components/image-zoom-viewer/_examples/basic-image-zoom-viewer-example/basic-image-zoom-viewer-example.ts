@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ImageZoomViewer, ImageZoomViewerImage } from '@ngstarter-ui/components/image-zoom-viewer';
 
 @Component({
@@ -6,6 +6,7 @@ import { ImageZoomViewer, ImageZoomViewerImage } from '@ngstarter-ui/components/
   standalone: true,
   imports: [ImageZoomViewer, ImageZoomViewerImage],
   templateUrl: './basic-image-zoom-viewer-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-image-zoom-viewer-example.scss',
 })
 export class BasicImageZoomViewerExample {

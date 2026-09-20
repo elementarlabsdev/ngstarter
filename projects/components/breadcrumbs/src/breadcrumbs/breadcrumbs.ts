@@ -1,4 +1,4 @@
-import { Component, TemplateRef, input, booleanAttribute, contentChild } from '@angular/core';
+import { Component, TemplateRef, input, booleanAttribute, contentChild, ChangeDetectionStrategy } from '@angular/core';
 import { BreadcrumbItemDefDirective } from '../breadcrumb-item-def.directive';
 import { BreadcrumbSeparatorDefDirective } from '../breadcrumb-separator-def.directive';
 import { BreadcrumbActiveItemDefDirective } from '../breadcrumb-active-item-def.directive';
@@ -13,6 +13,7 @@ import { NgTemplateOutlet } from '@angular/common';
     'class': 'ngs-breadcrumbs',
     '[class.last-item-as-link]': 'lastItemAsLink()'
   },
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [NgTemplateOutlet]
 })
 export class Breadcrumbs<T> {

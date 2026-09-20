@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { SnackBar } from '@ngstarter-ui/components/snack-bar';
@@ -10,6 +10,7 @@ import { SnackBar } from '@ngstarter-ui/components/snack-bar';
     Button,
     Icon,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './hero.component.html'
 })
 export class HeroComponent {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { BasicSidebarExample } from '../_examples/basic-sidebar-example/basic-sidebar-example';
 import { Playground } from '@meta/playground/playground';
 import {
@@ -23,6 +23,7 @@ import {
     OnlyCompactSidebarExample,
     SidebarWithCustomIconsExample,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './overview.html',
 })
 export class Overview {

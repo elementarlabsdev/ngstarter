@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Button } from '@ngstarter-ui/components/button';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -17,6 +17,7 @@ import { Ripple } from '@ngstarter-ui/components/core';
     Ripple
   ],
   templateUrl: './exchange-widget.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './exchange-widget.scss'
 })
 export class ExchangeWidget implements OnInit {

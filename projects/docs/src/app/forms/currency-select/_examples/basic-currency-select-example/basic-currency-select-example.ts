@@ -1,4 +1,4 @@
-import { Component, model } from '@angular/core';
+import { Component, model, ChangeDetectionStrategy } from '@angular/core';
 import { CurrencySelect } from '@ngstarter-ui/components/currency-select';
 import { FormsModule } from '@angular/forms';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
@@ -12,6 +12,7 @@ import { FormField, Label } from '@ngstarter-ui/components/form-field';
     Label
   ],
   templateUrl: './basic-currency-select-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-currency-select-example.scss'
 })
 export class BasicCurrencySelectExample {

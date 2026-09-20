@@ -1,10 +1,11 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { GRID, Grid } from '@ngstarter-ui/components/grid';
 
 @Component({
   selector: 'app-analytics-conversion-rate-content',
   imports: [],
   templateUrl: './analytics-conversion-rate-widget.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './analytics-conversion-rate-widget.scss'
 })
 export class AnalyticsConversionRateWidget implements OnInit {

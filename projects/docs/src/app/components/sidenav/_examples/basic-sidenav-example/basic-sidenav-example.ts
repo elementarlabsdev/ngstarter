@@ -1,4 +1,4 @@
-import { Component, viewChild } from '@angular/core';
+import { Component, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Sidenav, SidenavContainer, SidenavContent } from '@ngstarter-ui/components/sidenav';
 import { Button } from '@ngstarter-ui/components/button';
@@ -16,6 +16,7 @@ import { RadioButton, RadioGroup } from '@ngstarter-ui/components/radio';
     RadioButton
   ],
   templateUrl: './basic-sidenav-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-sidenav-example.scss'
 })
 export class BasicSidenavExample {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Step, StepLabel, Stepper, StepperNext, StepperPrevious } from '@ngstarter-ui/components/stepper';
 import { Button } from '@ngstarter-ui/components/button';
@@ -21,6 +21,7 @@ import { Input } from '@ngstarter-ui/components/input';
     StepperPrevious,
   ],
   templateUrl: './basic-stepper-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-stepper-example.scss'
 })
 export class BasicStepperExample {

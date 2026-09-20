@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FilterTrigger, FilterTriggerValueDirective, Option, Select } from '@ngstarter-ui/components/select';
 
@@ -17,6 +17,7 @@ interface StatusOption {
     Option,
     Select
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './custom-value-filter-trigger-example.html'
 })
 export class CustomValueFilterTriggerExample {

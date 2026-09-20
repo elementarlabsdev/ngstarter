@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormRenderer, FormBuilderSchema, FormBuilderUploadCallback } from '@ngstarter-ui/components/form-builder';
 import { Card, CardContent, CardHeader, CardTitle } from '@ngstarter-ui/components/card';
 
@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@ngstarter-ui/componen
     FormRenderer
   ],
   templateUrl: './form-builder-renderer-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './form-builder-renderer-example.scss'
 })
 export class FormBuilderRendererExample {

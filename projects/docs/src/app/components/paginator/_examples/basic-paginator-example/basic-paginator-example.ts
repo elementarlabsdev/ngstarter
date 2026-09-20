@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Paginator } from '@ngstarter-ui/components/paginator';
 
 @Component({
@@ -7,6 +7,7 @@ import { Paginator } from '@ngstarter-ui/components/paginator';
     Paginator
   ],
     templateUrl: './basic-paginator-example.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './basic-paginator-example.scss'
 })
 export class BasicPaginatorExample {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   LayoutContent,
   Layout,
@@ -15,6 +15,7 @@ import {
     LayoutHeader
   ],
   templateUrl: './layout-header-with-footer-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './layout-header-with-footer-example.scss'
 })
 export class LayoutHeaderWithFooterExample {

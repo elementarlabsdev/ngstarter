@@ -1,4 +1,4 @@
-import { Component, effect, input, output, signal } from '@angular/core';
+import { Component, effect, input, output, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Menu, MenuTrigger } from '@ngstarter-ui/components/menu';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Avatar } from '@ngstarter-ui/components/avatar';
@@ -18,6 +18,7 @@ import { Ripple } from '@ngstarter-ui/components/core';
     Ripple,
   ],
   templateUrl: './workspaces-select.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './workspaces-select.scss'
 })
 export class WorkspacesSelect {

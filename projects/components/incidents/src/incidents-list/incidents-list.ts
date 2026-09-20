@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, inject, input } from '@angular/core';
+import { booleanAttribute, Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { Incidents } from '../incidents/incidents';
 import { INCIDENTS } from '../properties';
 
@@ -7,6 +7,7 @@ import { INCIDENTS } from '../properties';
   exportAs: 'ngs-incidents-list',
   templateUrl: './incidents-list.html',
   styleUrl: './incidents-list.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-incidents-list',
     '[class.is-fixed]': 'fixed()',

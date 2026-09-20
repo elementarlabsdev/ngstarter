@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   DIALOG_DATA,
@@ -31,6 +31,7 @@ export interface DialogData {
     FormField
   ],
   templateUrl: './basic.dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic.dialog.scss'
 })
 export class BasicDialog {

@@ -6,7 +6,8 @@ import {
   inject,
   input,
   numberAttribute,
-  Renderer2
+  Renderer2,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { getState } from '@ngrx/signals';
 import { SplashScreenState, SplashScreenStore } from '../splash-screen.store';
@@ -19,6 +20,7 @@ import { NavigationEnd, Router } from '@angular/router';
   imports: [],
   templateUrl: './splash-screen.html',
   styleUrl: './splash-screen.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-splash-screen',
   }

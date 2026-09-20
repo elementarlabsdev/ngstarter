@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Grid, GRID } from '@ngstarter-ui/components/grid';
 
@@ -8,6 +8,7 @@ import { Grid, GRID } from '@ngstarter-ui/components/grid';
     Icon,
   ],
   templateUrl: './total-revenue-widget.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './total-revenue-widget.scss'
 })
 export class TotalRevenueWidget implements OnInit {

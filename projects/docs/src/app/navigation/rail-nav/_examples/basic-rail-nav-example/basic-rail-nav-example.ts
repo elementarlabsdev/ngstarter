@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RailNav, RailNavItem } from '@ngstarter-ui/components/rail-nav';
 import { Icon } from '@ngstarter-ui/components/icon';
 
@@ -10,6 +10,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     Icon
   ],
   templateUrl: './basic-rail-nav-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-rail-nav-example.scss'
 })
 export class BasicRailNavExample {

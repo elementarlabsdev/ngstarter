@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngs-mchart-tooltip-title',
   exportAs: 'ngsMchartTooltipTitle',
   templateUrl: './mchart-tooltip-title.html',
   styleUrl: './mchart-tooltip-title.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-mchart-tooltip-title'
   }

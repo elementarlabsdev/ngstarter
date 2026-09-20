@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, input, numberAttribute } from '@angular/core';
+import { booleanAttribute, Component, input, numberAttribute, ChangeDetectionStrategy } from '@angular/core';
 import { DataViewActionBarAPI } from '../types';
 
 @Component({
@@ -6,6 +6,7 @@ import { DataViewActionBarAPI } from '../types';
   exportAs: 'ngsDataViewActionBar',
   templateUrl: './data-view-action-bar.html',
   styleUrl: './data-view-action-bar.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-data-view-action-bar',
     '[class.force-visible]': 'forceVisible() || _forceVisible'

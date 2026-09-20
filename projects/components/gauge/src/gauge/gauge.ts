@@ -1,7 +1,8 @@
 import {
   Component, input,
   numberAttribute,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 @Component({
@@ -9,6 +10,7 @@ import {
   exportAs: 'ngsGauge',
   templateUrl: './gauge.html',
   styleUrl: './gauge.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-gauge'
   }

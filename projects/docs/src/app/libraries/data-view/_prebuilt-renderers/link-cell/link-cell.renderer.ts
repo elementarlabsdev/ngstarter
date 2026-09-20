@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { DataViewCellRenderer } from '@ngstarter-ui/components/data-view';
 import { ContentFade } from '@ngstarter-ui/components/content-fade';
 
@@ -8,6 +8,7 @@ import { ContentFade } from '@ngstarter-ui/components/content-fade';
     ContentFade
   ],
   templateUrl: './link-cell.renderer.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './link-cell.renderer.scss'
 })
 export class LinkCellRenderer {

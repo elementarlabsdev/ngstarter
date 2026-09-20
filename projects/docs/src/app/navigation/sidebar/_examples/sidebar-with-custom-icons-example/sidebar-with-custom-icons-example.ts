@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { v7 as uuid } from 'uuid';
 import {
   SidebarBody,
@@ -34,6 +34,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     SidebarDivider
   ],
   templateUrl: './sidebar-with-custom-icons-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './sidebar-with-custom-icons-example.scss'
 })
 export class SidebarWithCustomIconsExample {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Marquee } from '@ngstarter-ui/components/marquee';
 
 @Component({
@@ -7,6 +7,7 @@ import { Marquee } from '@ngstarter-ui/components/marquee';
     Marquee
   ],
   templateUrl: './basic-marquee-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-marquee-example.scss'
 })
 export class BasicMarqueeExample {

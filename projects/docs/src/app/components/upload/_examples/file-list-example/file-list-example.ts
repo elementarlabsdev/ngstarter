@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { File, FileControl, FileList } from '@ngstarter-ui/components/upload';
 
@@ -22,6 +22,7 @@ export interface FileInterface {
     FileControl
   ],
   templateUrl: './file-list-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './file-list-example.scss'
 })
 export class FileListExample {

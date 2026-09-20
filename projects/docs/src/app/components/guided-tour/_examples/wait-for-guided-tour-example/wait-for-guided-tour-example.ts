@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { TourService, TourAnchorDirective } from '@ngstarter-ui/components/guided-tour';
 import { Button } from '@ngstarter-ui/components/button';
 
@@ -6,6 +6,7 @@ import { Button } from '@ngstarter-ui/components/button';
   selector: 'app-wait-for-guided-tour-example',
   standalone: true,
   imports: [TourAnchorDirective, Button],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './wait-for-guided-tour-example.html',
 })
 export class WaitForGuidedTourExample {

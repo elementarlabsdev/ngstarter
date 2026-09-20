@@ -1,6 +1,8 @@
 @reference 'tailwindcss';
 
 :host {
+  display: block;
   font-size: var(--ngs-font-size-xs);
+  line-height: 1.125rem;
   color: var(--ngs-color-on-surface-variant);
 }

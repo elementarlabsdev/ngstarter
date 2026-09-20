@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   LayoutAside,
   LayoutContent,
@@ -15,6 +15,7 @@ import {
     LayoutAside
   ],
   templateUrl: './layout-aside-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './layout-aside-example.scss'
 })
 export class LayoutAsideExample {

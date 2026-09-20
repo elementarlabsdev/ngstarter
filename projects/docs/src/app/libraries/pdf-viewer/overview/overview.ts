@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicPdfViewerExample } from '../_examples/basic-pdf-viewer-example/basic-pdf-viewer-example';
 
@@ -9,6 +9,7 @@ import { BasicPdfViewerExample } from '../_examples/basic-pdf-viewer-example/bas
     BasicPdfViewerExample,
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss',
 })
 export class Overview {

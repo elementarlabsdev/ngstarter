@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
@@ -7,6 +7,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     Icon
   ],
   templateUrl: './circle-flags-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './circle-flags-example.scss'
 })
 export class CircleFlagsExample {

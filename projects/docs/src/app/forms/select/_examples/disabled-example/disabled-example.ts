@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Checkbox } from '@ngstarter-ui/components/checkbox';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Option, Select } from '@ngstarter-ui/components/select';
@@ -17,6 +17,7 @@ import { FormField } from '@ngstarter-ui/components/form-field';
   ],
   templateUrl: './disabled-example.html',
   styleUrl: './disabled-example.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     ngSkipHydration: 'true'
   }

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { DialogWithConfirmation } from '../dialog-with-confirmation/dialog-with-confirmation';
 import { Button } from '@ngstarter-ui/components/button';
 import { Dialog } from '@ngstarter-ui/components/dialog';
@@ -9,6 +9,7 @@ import { Dialog } from '@ngstarter-ui/components/dialog';
     Button
   ],
   templateUrl: './confirm-form-modal-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './confirm-form-modal-example.scss'
 })
 export class ConfirmFormModalExample {

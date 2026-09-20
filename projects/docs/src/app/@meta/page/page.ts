@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, input } from '@angular/core';
+import { booleanAttribute, Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { DocsNavigationService, DocsRelatedLink } from '../../navigation/docs-navigation.service';
 
@@ -7,6 +7,7 @@ import { DocsNavigationService, DocsRelatedLink } from '../../navigation/docs-na
   imports: [RouterLink],
   templateUrl: './page.html',
   styleUrl: './page.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true
 })
 export class Page {

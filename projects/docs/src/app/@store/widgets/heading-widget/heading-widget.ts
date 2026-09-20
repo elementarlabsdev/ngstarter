@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GRID, Grid } from '@ngstarter-ui/components/grid';
 
@@ -17,6 +17,7 @@ export interface HeadingWidget {
     RouterLink
   ],
   templateUrl: './heading-widget.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './heading-widget.css'
 })
 export class HeadingWidget implements OnInit {

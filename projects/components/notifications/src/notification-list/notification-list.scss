@@ -1,7 +1,9 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-notification-list-gap: --spacing(6);
+  --ngs-notification-list-gap: 0;
+  --ngs-notification-list-divider-color: var(--ngs-color-border);
+  --ngs-notification-list-divider-inset: --spacing(17);
 
   display: flex;
   flex-direction: column;
@@ -9,6 +11,19 @@
 
   .notification {
     position: relative;
+
+    &:not(:last-child) {
+      &::after {
+        position: absolute;
+        inset-inline-start: var(--ngs-notification-list-divider-inset);
+        inset-inline-end: 0;
+        bottom: 0;
+        height: 1px;
+        background: var(--ngs-notification-list-divider-color);
+        content: '';
+        pointer-events: none;
+      }
+    }
 
     &.is-interactive {
       outline: none;
@@ -19,11 +34,37 @@
         border-radius: var(--ngs-notification-radius, var(--ngs-radius-xl));
       }
     }
+
+    &:hover,
+    &:focus-within {
+      .controls {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
   }
 
   .controls {
     position: absolute;
-    inset-inline-end: --spacing(1);
-    top: --spacing(1);
+    z-index: 1;
+    top: 50%;
+    inset-inline-end: --spacing(2);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-50%);
+    transition: opacity 120ms ease;
+  }
+
+  &.has-controls {
+    .notification {
+      --ngs-notification-action-space: --spacing(11);
+    }
+  }
+
+  @media (hover: none) {
+    .controls {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MchartPie } from '@ngstarter-ui/components/micro-chart';
 import { ShuffleArrayPipe } from '@meta/shuffle-array.pipe';
 import { Button } from '@ngstarter-ui/components/button';
@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule
   ],
   templateUrl: './mchart-pie-basic-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './mchart-pie-basic-example.scss'
 })
 export class MchartPieBasicExample {

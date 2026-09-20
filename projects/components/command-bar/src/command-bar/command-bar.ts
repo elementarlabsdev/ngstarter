@@ -5,7 +5,8 @@ import {
   ElementRef,
   inject,
   input,
-  Renderer2
+  Renderer2,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { CommandBarPosition } from '../types';
 
@@ -14,6 +15,7 @@ import { CommandBarPosition } from '../types';
   exportAs: 'ngsCommandBar',
   templateUrl: './command-bar.html',
   styleUrl: './command-bar.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-command-bar',
     '[class.is-open]': 'open()',

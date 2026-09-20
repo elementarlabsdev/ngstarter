@@ -1,10 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Calendar, CalendarEvent } from '@ngstarter-ui/components/calendar';
 
 @Component({
   selector: 'app-calendar-with-events-example',
   imports: [Calendar],
   templateUrl: './calendar-with-events-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './calendar-with-events-example.scss',
 })
 export class CalendarWithEventsExample {

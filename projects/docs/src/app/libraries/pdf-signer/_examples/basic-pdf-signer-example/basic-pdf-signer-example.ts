@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   PDF_BUILDER_DEFAULT_FIELD_METRICS,
   type PdfBuilderField,
@@ -13,6 +13,7 @@ import { Button } from '@ngstarter-ui/components/button';
 @Component({
   selector: 'app-basic-pdf-signer-example',
   imports: [Button, PdfSigner],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './basic-pdf-signer-example.html',
 })
 export class BasicPdfSignerExample {

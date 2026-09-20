@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ColorSwitcher } from '@ngstarter-ui/components/color-switcher';
 import { FormsModule } from '@angular/forms';
 
@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule
   ],
   templateUrl: './brand-colors-as-form-control-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './brand-colors-as-form-control-example.scss'
 })
 export class BrandColorsAsFormControlExample {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
 import { map, Observable } from 'rxjs';
@@ -26,6 +26,7 @@ import { StepperOrientation } from '@angular/cdk/stepper';
     StepperPrevious,
   ],
   templateUrl: './stepper-responsive-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './stepper-responsive-example.scss'
 })
 export class StepperResponsiveExample {

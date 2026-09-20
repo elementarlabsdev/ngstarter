@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Chip, ChipSet } from '@ngstarter-ui/components/chips';
 
 @Component({
@@ -8,6 +8,7 @@ import { Chip, ChipSet } from '@ngstarter-ui/components/chips';
     ChipSet
   ],
   templateUrl: './chips-with-icons-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './chips-with-icons-example.scss'
 })
 export class ChipsWithIconsExample {

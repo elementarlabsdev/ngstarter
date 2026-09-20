@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, input } from '@angular/core';
+import { booleanAttribute, Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { LAYOUT } from '../types';
 
 let nextId = 0;
@@ -15,6 +15,7 @@ let nextId = 0;
       useExisting: Layout
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-layout',
     '[class.is-root]': 'root()'

@@ -1,4 +1,4 @@
-import { Component, input, TemplateRef, viewChild } from '@angular/core';
+import { Component, input, TemplateRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
 
 
 @Component({
@@ -7,6 +7,7 @@ import { Component, input, TemplateRef, viewChild } from '@angular/core';
   standalone: true,
   templateUrl: './side-panel-tab.html',
   styleUrl: './side-panel-tab.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-side-panel-tab',
   },

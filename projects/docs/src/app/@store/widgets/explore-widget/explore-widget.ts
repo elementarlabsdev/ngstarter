@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { GRID, Grid } from '@ngstarter-ui/components/grid';
 import { Ripple } from '@ngstarter-ui/components/core';
@@ -17,6 +17,7 @@ export interface ExploreWidget {
     Ripple,
   ],
   templateUrl: './explore-widget.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './explore-widget.css'
 })
 export class ExploreWidget implements OnInit {

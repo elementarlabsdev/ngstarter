@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   Cell,
@@ -48,6 +48,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
     HeaderRowDef,
   ],
   templateUrl: './table-with-sticky-header-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './table-with-sticky-header-example.scss'
 })
 export class TableWithStickyHeaderExample {

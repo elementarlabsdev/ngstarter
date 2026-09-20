@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   Cell,
   CellDef,
@@ -42,6 +42,7 @@ type ApiRow = {
     Row
   ],
   templateUrl: './content-editor-renderer-api.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './content-editor-renderer-api.scss',
 })
 export class ContentEditorRendererApi {

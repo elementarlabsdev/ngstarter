@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ImageDesignerService } from '../image-designer.service';
 import { LayerConfig } from '../types';
@@ -38,6 +38,7 @@ import { ColorPickerTriggerForDirective } from '@ngstarter-ui/components/color-p
     ColorPickerTriggerForDirective
   ],
   templateUrl: './effects.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './effects.scss',
 })
 export class Effects {

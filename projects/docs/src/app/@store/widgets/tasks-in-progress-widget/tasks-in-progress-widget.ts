@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 import { GRID, Grid } from '@ngstarter-ui/components/grid';
@@ -12,6 +12,7 @@ import { Button } from '@ngstarter-ui/components/button';
     Button
   ],
   templateUrl: './tasks-in-progress-widget.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tasks-in-progress-widget.scss'
 })
 export class TasksInProgressWidget implements OnInit {

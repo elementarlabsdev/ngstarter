@@ -1,4 +1,4 @@
-import { booleanAttribute, ChangeDetectorRef, Component, DestroyRef, inject, input, OnInit } from '@angular/core';
+import { booleanAttribute, ChangeDetectorRef, Component, DestroyRef, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { map, take } from 'rxjs/operators';
@@ -13,6 +13,7 @@ import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
   ],
   templateUrl: './page-loading-bar.html',
   styleUrl: './page-loading-bar.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs--page-loading-bar',
     '[class.is-visible]': 'visible',

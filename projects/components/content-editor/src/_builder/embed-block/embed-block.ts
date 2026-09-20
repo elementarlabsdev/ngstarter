@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, input, signal } from '@angular/core';
+import { Component, DestroyRef, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ContentBuilderStore } from '../../content-builder.store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Icon } from '@ngstarter-ui/components/icon';
@@ -37,6 +37,7 @@ import { ContentBuilderComponent } from '../../content-builder/content-builder.c
   providers: [EmbedService],
   templateUrl: './embed-block.html',
   styleUrl: './embed-block.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-embed-block',
     '[class.is-empty]': 'isEmpty()'

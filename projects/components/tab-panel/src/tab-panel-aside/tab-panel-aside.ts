@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { TAB_PANEL_ASIDE } from '../types';
 
 @Component({
@@ -12,6 +12,7 @@ import { TAB_PANEL_ASIDE } from '../types';
       useExisting: TabPanelAside
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-tab-panel-aside'
   }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 let nextUniqueId = 0;
 
@@ -11,6 +11,7 @@ let nextUniqueId = 0;
     'role': 'tabpanel',
     '[attr.id]': 'id'
   },
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<ng-content/>'
 })
 export class TabNavPanel {

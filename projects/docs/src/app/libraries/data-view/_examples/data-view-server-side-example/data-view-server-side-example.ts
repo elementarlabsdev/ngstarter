@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   DataViewColumnDef,
   DataView,
@@ -47,6 +47,7 @@ const DATA: PeriodicElement[] = [
     FormField,
     Input
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './data-view-server-side-example.html',
 })
 export class DataViewServerSideExample {

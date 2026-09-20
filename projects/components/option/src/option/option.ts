@@ -7,7 +7,8 @@ import {
   signal,
   inject,
   forwardRef,
-  AfterViewInit, OnDestroy, ChangeDetectorRef
+  AfterViewInit, OnDestroy, ChangeDetectorRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { OPTION, OPTION_PARENT, _Option, _OptionParent } from './option-tokens';
 import { Checkbox } from '@ngstarter-ui/components/checkbox';
@@ -30,6 +31,7 @@ import { Highlightable } from '@angular/cdk/a11y';
       useExisting: forwardRef(() => Option)
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'role': 'option',
     '[attr.tabindex]': '-1',

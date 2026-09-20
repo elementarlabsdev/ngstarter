@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Error, FormField, Label } from '@ngstarter-ui/components/form-field';
 import { PhoneInput, phoneValidator } from '@ngstarter-ui/components/phone-input';
@@ -14,6 +14,7 @@ import { PhoneInput, phoneValidator } from '@ngstarter-ui/components/phone-input
     ReactiveFormsModule
   ],
   templateUrl: './phone-input-only-countries-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './phone-input-only-countries-example.scss'
 })
 export class PhoneInputOnlyCountriesExample {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DataViewColumnDef, DataView } from '@ngstarter-ui/components/data-view';
 import { Card, CardHeader, CardTitle } from '@ngstarter-ui/components/card';
 
@@ -25,6 +25,7 @@ const DATA: PeriodicElement[] = [
     CardTitle,
     CardHeader
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './data-view-embedded-example.html'
 })
 export class DataViewEmbeddedExample {

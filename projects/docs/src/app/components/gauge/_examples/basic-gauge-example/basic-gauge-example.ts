@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Gauge } from '@ngstarter-ui/components/gauge';
 
 @Component({
@@ -7,6 +7,7 @@ import { Gauge } from '@ngstarter-ui/components/gauge';
     Gauge
   ],
   templateUrl: './basic-gauge-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-gauge-example.scss'
 })
 export class BasicGaugeExample {

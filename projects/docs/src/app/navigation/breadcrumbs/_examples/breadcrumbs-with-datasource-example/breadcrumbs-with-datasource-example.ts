@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   BreadcrumbActiveItemDefDirective,
@@ -19,6 +19,7 @@ import {
     Breadcrumbs
   ],
   templateUrl: './breadcrumbs-with-datasource-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './breadcrumbs-with-datasource-example.scss'
 })
 export class BreadcrumbsWithDatasourceExample {

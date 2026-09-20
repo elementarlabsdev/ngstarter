@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { BasicTableExample } from '../_examples/basic-table-example/basic-table-example';
 import { Playground } from '@meta/playground/playground';
 import {
@@ -39,6 +39,7 @@ import { StaticTableExample } from '../_examples/static-table-example/static-tab
     StaticTableExample
   ],
     templateUrl: './overview.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './overview.scss'
 })
 export class Overview {

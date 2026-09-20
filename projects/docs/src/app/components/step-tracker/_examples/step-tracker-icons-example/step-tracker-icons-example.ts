@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
   StepTracker,
@@ -16,6 +16,7 @@ import {
     StepTrackerErrorIcon,
     StepTrackerItem,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './step-tracker-icons-example.html',
 })
 export class StepTrackerIconsExample {}

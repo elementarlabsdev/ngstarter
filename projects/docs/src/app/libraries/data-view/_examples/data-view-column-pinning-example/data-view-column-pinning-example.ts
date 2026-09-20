@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DataViewColumnDef, DataView } from '@ngstarter-ui/components/data-view';
 
 export interface ExtendedPeriodicElement {
@@ -44,6 +44,7 @@ const generateData = (count: number): ExtendedPeriodicElement[] => {
   imports: [
     DataView
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './data-view-column-pinning-example.html',
 })
 export class DataViewColumnPinningExample {

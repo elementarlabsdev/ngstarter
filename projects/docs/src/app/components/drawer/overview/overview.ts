@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Playground } from '@meta/playground/playground';
 import { BasicDrawerExample } from '../_examples/basic-drawer-example/basic-drawer-example';
 import {
@@ -13,6 +13,7 @@ import {
     DrawerWithoutBackdropExample
   ],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.scss'
 })
 export class Overview {

@@ -1,4 +1,4 @@
-import { Component, inject, signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, inject, signal, TemplateRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
 import {
@@ -29,6 +29,7 @@ import { Step, StepLabel, Stepper } from '@ngstarter-ui/components/stepper';
     Stepper,
   ],
   templateUrl: './stepper-in-dialog-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './stepper-in-dialog-example.scss',
 })
 export class StepperInDialogExample {

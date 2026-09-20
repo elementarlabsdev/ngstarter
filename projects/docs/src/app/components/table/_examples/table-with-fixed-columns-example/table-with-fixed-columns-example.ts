@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { Icon } from '@ngstarter-ui/components/icon';
 import {
@@ -50,6 +50,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
     RowDef
   ],
   templateUrl: './table-with-fixed-columns-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './table-with-fixed-columns-example.scss'
 })
 export class TableWithFixedColumnsExample {

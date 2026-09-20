@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { TourService } from '@ngstarter-ui/components/guided-tour';
 import { Button } from '@ngstarter-ui/components/button';
 
@@ -6,6 +6,7 @@ import { Button } from '@ngstarter-ui/components/button';
   selector: 'app-route-navigation-guided-tour-example',
   standalone: true,
   imports: [Button],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './route-navigation-guided-tour-example.html',
 })
 export class RouteNavigationGuidedTourExample {

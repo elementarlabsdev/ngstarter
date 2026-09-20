@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   ImageResizedEvent,
   ImageResizer,
@@ -14,6 +14,7 @@ import { JsonPipe } from '@angular/common';
     ImageResizerImageDirective
   ],
   templateUrl: './basic-image-resizer-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-image-resizer-example.scss'
 })
 export class BasicImageResizerExample {

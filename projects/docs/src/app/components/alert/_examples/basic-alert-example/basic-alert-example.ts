@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Alert } from '@ngstarter-ui/components/alert';
 
 @Component({
@@ -7,6 +7,7 @@ import { Alert } from '@ngstarter-ui/components/alert';
     Alert
   ],
   templateUrl: './basic-alert-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-alert-example.scss'
 })
 export class BasicAlertExample {

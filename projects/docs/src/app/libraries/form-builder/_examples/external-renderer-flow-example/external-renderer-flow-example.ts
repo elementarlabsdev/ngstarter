@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Card, CardContent, CardHeader, CardTitle } from '@ngstarter-ui/components/card';
 import { FormBuilderFlow, FormBuilderSchema, FormRenderer } from '@ngstarter-ui/components/form-builder';
 import { Button } from '@ngstarter-ui/components/button';
@@ -41,6 +41,7 @@ function createRendererFlowFromSchema(schema: FormBuilderSchema): FormBuilderFlo
     Stepper
   ],
   templateUrl: './external-renderer-flow-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './external-renderer-flow-example.scss'
 })
 export class ExternalRendererFlowExample {

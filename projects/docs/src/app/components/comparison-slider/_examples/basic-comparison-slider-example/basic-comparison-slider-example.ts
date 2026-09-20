@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   ComparisonSliderAfterImageDirective,
   ComparisonSliderBeforeImageDirective,
@@ -13,6 +13,7 @@ import {
     ComparisonSliderAfterImageDirective
   ],
   templateUrl: './basic-comparison-slider-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-comparison-slider-example.scss'
 })
 export class BasicComparisonSliderExample {

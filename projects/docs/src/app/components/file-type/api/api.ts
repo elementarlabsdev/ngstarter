@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   Cell,
   CellDef,
@@ -27,6 +27,7 @@ import {
     Row
   ],
   templateUrl: './api.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './api.scss',
 })
 export class Api {

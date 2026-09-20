@@ -39,7 +39,7 @@
              autocomplete="off"
              [ngModel]="searchTerm()"
              (ngModelChange)="onCurrencySearch($event)"
-             class="w-full text-sm focus:outline-none border-b border-surface-container-high focus:border-b-primary h-14 px-3">
+             class="h-10 w-full border-b border-surface-container-high px-3 text-sm focus:border-b-primary focus:outline-none">
       @if (searchTerm().trim()) {
         <div class="absolute end-1 top-1/2 -translate-y-1/2">
           <button
@@ -57,8 +57,8 @@
 
   @for (currency of visibleCurrencies(); track currency.code) {
     <ngs-option [value]="currency.code">
-      <div class="flex items-center gap-2">
-        <span class="select-option-icon text-2xl" aria-hidden="true">{{ currency.flag }}</span>
+      <div class="select-option-content">
+        <span class="flag-icon" aria-hidden="true">{{ currency.flag }}</span>
         <span class="select-option-text">
           <span class="currency-code">
             {{ currency.code }}

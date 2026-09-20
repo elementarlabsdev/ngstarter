@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Alert, AlertIconDirective } from '@ngstarter-ui/components/alert';
 
@@ -10,6 +10,7 @@ import { Alert, AlertIconDirective } from '@ngstarter-ui/components/alert';
     Alert
   ],
   templateUrl: './alert-with-icon-example.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './alert-with-icon-example.scss'
 })
 export class AlertWithIconExample {

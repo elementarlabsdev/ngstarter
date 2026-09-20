@@ -1,4 +1,4 @@
-import { Component, forwardRef, inject } from '@angular/core';
+import { Component, forwardRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import { TEXT_EDITOR, TEXT_EDITOR_BUBBLE_MENU, TextEditorInterface } from '../types';
 
 @Component({
@@ -12,6 +12,7 @@ import { TEXT_EDITOR, TEXT_EDITOR_BUBBLE_MENU, TextEditorInterface } from '../ty
     }
   ],
   templateUrl: './text-editor-bubble-menu.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './text-editor-bubble-menu.scss'
 })
 export class TextEditorBubbleMenu {

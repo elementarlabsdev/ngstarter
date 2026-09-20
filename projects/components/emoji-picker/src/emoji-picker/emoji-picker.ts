@@ -1,4 +1,4 @@
-import { Component, inject, input, LOCALE_ID, OnInit, output, signal } from '@angular/core';
+import { Component, inject, input, LOCALE_ID, OnInit, output, signal, ChangeDetectionStrategy } from '@angular/core';
 import { EMOJI_PICKER_TRIGGER_FOR } from '../types';
 import { Skeleton } from '@ngstarter-ui/components/skeleton';
 
@@ -83,6 +83,7 @@ const loadData = (language: string) => {
   imports: [
     Skeleton
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-emoji-picker',
   }

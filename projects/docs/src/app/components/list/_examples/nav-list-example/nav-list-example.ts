@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { NavList, ListItem, ListItemIcon } from '@ngstarter-ui/components/list';
 import { Icon } from '@ngstarter-ui/components/icon';
 
@@ -11,6 +11,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
     ListItemIcon,
     Icon
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './nav-list-example.html',
 })
 export class NavListExample {
