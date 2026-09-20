@@ -20,7 +20,6 @@ import { Badge } from '@ngstarter-ui/components/badge';
   styleUrl: './toolbar.scss'
 })
 export class Toolbar {
-  subscription = 'Free';
   email = 'elementarlabs@gmail.com';
   name = 'Pavel Salauyou';
 }

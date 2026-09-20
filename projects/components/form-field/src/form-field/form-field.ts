@@ -15,6 +15,7 @@ import { FORM_FIELD } from '../form-field-token';
 import { Prefix, Suffix, TextPrefix, TextSuffix, IconPrefix, IconButtonPrefix, IconSuffix, IconButtonSuffix } from '../prefix-suffix/prefix-suffix';
 import { Hint } from '../hint/hint';
 import { Error } from '../error/error';
+import { FORM_FIELD_CONFIG, FormFieldLabelMode } from '../config';
 
 @Component({
   selector: 'ngs-form-field',
@@ -33,6 +34,8 @@ import { Error } from '../error/error';
     '[class.ngs-form-field-disabled]': 'control()?.disabled',
     '[class.ngs-form-field-invalid]': 'control()?.errorState',
     '[class.ngs-form-field-should-float]': 'shouldLabelFloat()',
+    '[class.ngs-form-field-label-external]': 'labelMode() === "external"',
+    '[class.ngs-form-field-label-floating]': 'labelMode() === "floating"',
     '[class.ngs-form-field-has-label]': 'labelChild()',
     '[class.ngs-form-field-empty]': 'control()?.empty',
     '[class.ngs-form-field-focused]': 'control()?.focused',
@@ -48,7 +51,9 @@ import { Error } from '../error/error';
 })
 export class FormField {
   readonly elementRef = inject(ElementRef);
+  private readonly config = inject(FORM_FIELD_CONFIG);
 
+  labelMode = input<FormFieldLabelMode>(this.config.labelMode);
   subscriptHiddenIfEmpty = input(false, {
     transform: booleanAttribute
   });
@@ -91,7 +96,7 @@ export class FormField {
   });
 
   shouldLabelFloat(): boolean {
-    return !!this.control()?.shouldLabelFloat;
+    return this.labelMode() === 'floating' && !!this.control()?.shouldLabelFloat;
   }
 
   protected _onClick(event: MouseEvent): void {

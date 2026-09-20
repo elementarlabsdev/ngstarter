@@ -10,7 +10,6 @@ import {
   HOME_SEO,
   LICENSE_SEO,
   PANEL_LAYOUT_ARTICLE_SEO,
-  PRICING_SEO,
   PRIVACY_SEO,
   SELECT_DATA_SOURCE_ARTICLE_SEO,
   TEMPLATES_SEO,
@@ -26,14 +25,6 @@ export const routes: Routes = [
       seo: HOME_SEO,
     },
     loadComponent: () => import('./pages/home/home').then(c => c.Home),
-  },
-  {
-    path: 'pricing',
-    title: PRICING_SEO.title,
-    data: {
-      seo: PRICING_SEO,
-    },
-    loadComponent: () => import('./pages/pricing/pricing').then(c => c.Pricing),
   },
   {
     path: 'templates',

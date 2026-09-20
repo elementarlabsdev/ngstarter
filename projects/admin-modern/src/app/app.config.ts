@@ -19,7 +19,7 @@ export const appConfig: ApplicationConfig = {
       theme: 'default',
       colorScheme: 'light',
       radius: 'medium',
-      primaryColor: '#8bc96f',
+      colorPreset: 'default',
       persist: false,
     }),
     provideAppInitializer(() => {

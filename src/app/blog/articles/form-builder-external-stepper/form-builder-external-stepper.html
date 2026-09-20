@@ -34,7 +34,7 @@
           <h2>The problem</h2>
           <p>
             A large schema often starts as one flat form. Later it needs to become a guided flow:
-            Client, Invoice, Review, Payment, or any other sequence that makes the form easier to
+            Profile, Details, Review, Approval, or any other sequence that makes the form easier to
             complete. The first idea is usually to place a <code>ngs-stepper</code> around several
             renderers and render one part of the schema per step.
           </p>
@@ -54,15 +54,13 @@
             <code>flow</code> input. The saved <code>FormBuilderSchema</code> can stay reusable and
             flat, while a specific screen decides how to split it into steps.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="rendererFlowCode"
             language="typescript"
             title="runtime-flow.ts"
             showCopyButton
           />
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="rendererFlowTemplateCode"
             language="html"
             title="renderer-flow.html"
@@ -82,8 +80,7 @@
             current renderer contract. Each renderer creates a separate form group because there is
             no shared form context.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="separateFormsCode"
             language="html"
             title="separate-renderers.html"
@@ -104,8 +101,7 @@
             <code>ngs-stepper</code>, and the renderer becomes a partial schema renderer. It needs
             to accept the list of top-level items to render for that step.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="externalStepperCode"
             language="html"
             title="external-stepper.html"
@@ -124,8 +120,7 @@
             same Angular <code>FormGroup</code>. The host form owns submit, while each renderer
             only projects a subset of fields into that shared form.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="oneFormCode"
             language="html"
             title="one-form-external-stepper.html"
@@ -137,8 +132,7 @@
             value object, validators, calculated fields, and submission lifecycle would then span
             every step.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="futureInputsCode"
             language="typescript"
             title="renderer-contract.ts"
@@ -154,8 +148,7 @@
             the schema. Use a true external stepper only when the parent screen must control the
             stepper header, actions, route synchronization, analytics, or cross-step navigation.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="decisionCode"
             language="html"
             title="decision.html"

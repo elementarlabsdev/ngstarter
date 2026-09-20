@@ -5,11 +5,18 @@
 <h3 id="basic-inputs">Basic Inputs</h3>
 <p class="mb-4 text-secondary">
   Use <code>ngsInput</code> on native text inputs and textareas, usually inside one
-  <code>ngs-form-field</code> per control.
+  <code>ngs-form-field</code> per control. Labels render above the field by default. Set
+  <code>labelMode="floating"</code> on a field when the label should move inside the control.
 </p>
 <ngs-playground exampleUrl="_docs/forms/input/_examples" exampleName="basic-inputs-example">
   <app-basic-inputs-example/>
 </ngs-playground>
+
+<p class="mb-4 text-secondary">
+  To change the application-wide behavior, register
+  <code>provideFormField(&#123; labelMode: 'floating' &#125;)</code> in the application providers.
+  A local <code>labelMode</code> input takes precedence over that setting.
+</p>
 
 <h3 id="disabled-inputs">Disabled Inputs</h3>
 <p class="mb-4 text-secondary">

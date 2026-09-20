@@ -55,7 +55,7 @@ export class EventsDashboardWidget {
 
   protected readonly signalColumns = ['signal', 'source', 'priority', 'owner', 'action'];
   protected readonly signals: readonly ResearchSignalRow[] = [
-    { signal: 'Pricing confusion', source: 'Support chat', priority: 'High', owner: 'Mira', tone: 'warm' },
+    { signal: 'Setup confusion', source: 'Support chat', priority: 'High', owner: 'Mira', tone: 'warm' },
     { signal: 'Template request', source: 'Beta survey', priority: 'Medium', owner: 'Anton', tone: 'blue' },
     { signal: 'Proof gap', source: 'Sales call', priority: 'High', owner: 'Lena', tone: 'warm' },
     { signal: 'Setup praise', source: 'Onboarding poll', priority: 'Low', owner: 'Noah', tone: 'green' },

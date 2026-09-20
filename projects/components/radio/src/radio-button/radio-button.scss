@@ -1,7 +1,7 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-radio-button-size: 19px;
+  --ngs-radio-button-size: 20px;
   --ngs-radio-button-inner-circle-size: 10px;
   --ngs-radio-button-border-width: 1px;
   --ngs-radio-button-unchecked-color: var(--ngs-field-border-color);
@@ -65,14 +65,19 @@
     transition-duration: 200ms;
     border-width: var(--ngs-radio-button-border-width);
     border-color: var(--ngs-radio-button-unchecked-color);
+    box-sizing: border-box;
   }
 
   .ngs-radio-button-inner-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
     border-radius: 9999px;
     transition-property: transform;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 200ms;
-    transform: scale(0);
+    transform: translate(-50%, -50%) scale(0);
+    transform-origin: center;
     width: var(--ngs-radio-button-inner-circle-size);
     height: var(--ngs-radio-button-inner-circle-size);
     background: var(--ngs-radio-button-checked-color);
@@ -84,7 +89,7 @@
     }
 
     .ngs-radio-button-inner-circle {
-      transform: scale(1);
+      transform: translate(-50%, -50%) scale(1);
     }
   }
 

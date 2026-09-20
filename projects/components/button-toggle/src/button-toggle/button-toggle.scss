@@ -1,85 +1,115 @@
 @reference 'tailwindcss';
 
 :host {
-  display: inline-block;
   position: relative;
+  display: inline-flex;
   box-sizing: border-box;
+  min-width: 0;
+  height: var(--ngs-button-toggle-button-height);
+  border-radius: var(--ngs-button-toggle-button-border-radius);
   -webkit-tap-highlight-color: transparent;
 
   .ngs-button-toggle-button {
-    display: flex;
+    position: relative;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: var(--ngs-button-toggle-button-padding);
-    cursor: pointer;
-    font-size: var(--ngs-button-toggle-button-font-size);
-    line-height: 1.25rem;
-    font-weight: var(--ngs-button-toggle-button-font-weight);
-    border: none;
-    background: none;
-    color: var(--ngs-button-toggle-text-color);
+    gap: var(--ngs-button-toggle-button-gap);
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
+    min-width: 0;
+    padding: var(--ngs-button-toggle-button-padding);
+    border: none;
+    border-radius: inherit;
+    color: var(--ngs-button-toggle-text-color);
+    background: transparent;
     outline: none;
+    font: inherit;
+    font-size: var(--ngs-button-toggle-button-font-size);
+    font-weight: var(--ngs-button-toggle-button-font-weight);
+    line-height: 1.25rem;
+    cursor: pointer;
+    transition:
+      color 140ms ease,
+      background-color 140ms ease,
+      box-shadow 140ms ease;
 
     &:hover:not(:disabled) {
       background: var(--ngs-button-toggle-hover-bg-color);
     }
 
+    &:focus-visible {
+      z-index: 1;
+      outline: 2px solid var(--ngs-button-toggle-focus-ring-color);
+      outline-offset: 1px;
+    }
+
     &:disabled {
       cursor: not-allowed;
-      color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%);
+      color: var(--ngs-button-toggle-disabled-text-color);
       background: transparent;
 
       .ngs-button-toggle-selection-indicator {
-        color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%);
+        color: var(--ngs-button-toggle-disabled-text-color);
       }
     }
 
     .ngs-button-toggle-selection-indicator {
+      flex: none;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
+      width: 1rem;
+      height: 1rem;
       color: var(--ngs-button-toggle-selection-indicator-color);
-      margin-right: 8px;
-      animation: ngs-button-toggle-indicator-fade-in 200ms cubic-bezier(0, 0, 0.2, 1);
+      font-size: 1rem;
+      opacity: 0;
+      transform: scale(0.75);
+      transition:
+        opacity 120ms ease,
+        transform 120ms ease;
     }
   }
 
   &.only-icon {
-    padding: var(--ngs-button-toggle-button-only-icon-padding);
-  }
-
-  &:has(.ngs-button-toggle-label-content:has(ngs-icon)) {
-    padding: 0 12px;
+    .ngs-button-toggle-button {
+      padding: var(--ngs-button-toggle-button-only-icon-padding);
+    }
   }
 
   &.ngs-button-toggle-checked {
     .ngs-button-toggle-button {
       background: var(--ngs-button-toggle-checked-bg-color);
       color: var(--ngs-button-toggle-checked-text-color);
+      box-shadow: var(--ngs-button-toggle-checked-shadow);
+
+      &:hover:not(:disabled) {
+        background: var(--ngs-button-toggle-checked-bg-color);
+      }
 
       &:disabled {
-        background: color-mix(in srgb, var(--ngs-color-on-surface), transparent 88%);
-        color: color-mix(in srgb, var(--ngs-color-on-surface), transparent 62%);
+        color: var(--ngs-button-toggle-disabled-text-color);
+        background: var(--ngs-button-toggle-disabled-bg-color);
+        box-shadow: none;
       }
+    }
+
+    .ngs-button-toggle-selection-indicator {
+      opacity: 1;
+      transform: scale(1);
     }
   }
 
   .ngs-button-toggle-label-content {
-    line-height: 0;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1.25rem;
   }
 }
 
 :host-context(ngs-button-toggle-group.only-icon) {
   .ngs-button-toggle-button {
     padding: var(--ngs-button-toggle-button-only-icon-padding);
-
-    ::ng-deep {
-      ngs-icon {
-      }
-    }
   }
 }
-

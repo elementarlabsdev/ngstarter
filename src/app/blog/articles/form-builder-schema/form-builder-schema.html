@@ -79,8 +79,7 @@
             <code>sections</code>; top-level <code>fields</code> and <code>layout</code> are
             optional, but useful when a form mixes standalone fields and sections.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="schemaCode"
             language="typescript"
             title="form-builder-schema.ts"
@@ -121,8 +120,7 @@
             <code>type</code> must match a registered field definition, either one of the built-in
             fields or a custom field registered with <code>provideFormBuilderField</code>.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="fieldCode"
             language="typescript"
             title="field.ts"
@@ -137,8 +135,7 @@
             stored inside each section's <code>fields</code> array, and nested container order is
             stored inside <code>children</code>.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="layoutCode"
             language="typescript"
             title="layout.ts"
@@ -153,8 +150,7 @@
             it exists; otherwise selected options become the initial value for select, radio, and
             multiple-choice fields.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="optionCode"
             language="typescript"
             title="options.ts"
@@ -188,8 +184,7 @@
             <code>children</code>. Groups flatten child controls into the current form group.
             Repeaters create a <code>FormArray</code> of row groups from their child fields.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="nestedCode"
             language="typescript"
             title="nested-fields.ts"

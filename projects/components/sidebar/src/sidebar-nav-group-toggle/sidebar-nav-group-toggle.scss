@@ -91,6 +91,7 @@
   &.is-active:hover {
     background: var(--ngs-sidebar-nav-group-toggle-active-bg);
     color: var(--ngs-sidebar-nav-group-toggle-active-color);
+    font-weight: var(--ngs-sidebar-nav-item-active-font-weight);
   }
 
   &:not(.is-active):hover .icon {

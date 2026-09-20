@@ -25,7 +25,7 @@
         The easiest option is a Google Fonts link in <code>src/index.html</code>; self-hosted
         fonts work the same way through <code>@font-face</code>.
       </p>
-      <ngs-code-highlighter [code]="fontLink()" language="html"/>
+      <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden" [code]="fontLink()" language="html"/>
 
       <h3>Changing the app font</h3>
       <p>
@@ -33,13 +33,13 @@
         NgStarter theme. Components, form controls, tables, menus, overlays, and the mapped
         Tailwind <code>--font-sans</code> alias will inherit the new family.
       </p>
-      <ngs-code-highlighter [code]="themeFontToken()" language="scss"/>
+      <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden" [code]="themeFontToken()" language="scss"/>
 
       <p>
         For a custom theme, put the same token inside that theme selector. Keep the fallback stack so
         the interface remains readable while the web font is loading or if the font request fails.
       </p>
-      <ngs-code-highlighter [code]="customThemeFont()" language="scss"/>
+      <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden" [code]="customThemeFont()" language="scss"/>
 
       <h4>Inline text elements</h4>
       <div class="border border-muted p-7 rounded-xl">

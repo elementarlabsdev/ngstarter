@@ -1,11 +1,11 @@
-<form class="w-1/2">
+<form class="flex w-1/2 flex-col gap-6">
   <ngs-form-field class="w-full">
-    <ngs-label>Favorite food</ngs-label>
+    <ngs-label>External label</ngs-label>
     <input ngsInput placeholder="Ex. Pizza" value="Sushi" required>
   </ngs-form-field>
 
-  <ngs-form-field class="w-full">
-    <ngs-label>Leave a comment</ngs-label>
-    <textarea ngsInput placeholder="Ex. It makes me feel..."></textarea>
+  <ngs-form-field class="w-full" labelMode="floating">
+    <ngs-label>Floating label</ngs-label>
+    <input ngsInput placeholder="Ex. Ramen" value="Ramen">
   </ngs-form-field>
 </form>

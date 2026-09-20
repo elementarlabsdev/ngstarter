@@ -448,11 +448,10 @@ import { provideNgsTheme } from '@ngstarter-ui/components/core';
 export const appConfig = {
   providers: [
     provideNgsTheme({
-      theme: 'modern',
+      theme: 'default',
       colorScheme: 'auto',
-      density: 'compact',
       radius: 'small',
-      primaryColor: '#155eef',
+      colorPreset: 'default',
     }),
   ],
 };

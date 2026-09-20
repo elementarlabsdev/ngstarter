@@ -1,5 +1,8 @@
 # NgStarter UI
 
+NgStarter UI components and admin templates are free and open source under the [MIT License](LICENSE.md).
+Use, modify, and distribute them in your projects while retaining the copyright and permission notice.
+
 NgStarter UI is an Angular component kit for admin panels and product dashboards. The
 component package is published as `@ngstarter-ui/components` and is organized around
 secondary entry points such as `@ngstarter-ui/components/button`,
@@ -45,26 +48,19 @@ import { Input } from '@ngstarter-ui/components/input';
 
 ## Theming
 
-Import one theme stylesheet once in your app styles:
+NgStarter ships one theme. Import the default stylesheet once in your app styles:
 
 ```scss
 @use '@ngstarter-ui/components/styles/themes/default';
 ```
 
-Other presets are available for faster admin styling:
-
-```scss
-@use '@ngstarter-ui/components/styles/themes/modern';
-@use '@ngstarter-ui/components/styles/themes/compact';
-```
-
-Themes are driven by `--ngs-*` design tokens. The main layers are:
+The theme uses fixed light and dark color tokens. Its main layers are:
 
 - primitive tokens: spacing, radius, font sizes, shadows
 - semantic tokens: `--ngs-color-primary`, `--ngs-color-surface`, `--ngs-color-danger`
 - component tokens: `--ngs-button-height`, `--ngs-field-radius`, `--ngs-table-row-height`
 
-You can switch theme, density, radius, and color scheme at runtime:
+Configure the color scheme and radius at runtime. The theme and color preset remain `default`:
 
 ```ts
 import { provideNgsTheme } from '@ngstarter-ui/components/core';
@@ -72,30 +68,26 @@ import { provideNgsTheme } from '@ngstarter-ui/components/core';
 export const appConfig = {
   providers: [
     provideNgsTheme({
-      theme: 'modern',
+      theme: 'default',
       colorScheme: 'auto',
-      density: 'compact',
-      radius: 'small',
-      primaryColor: '#155eef',
+      radius: 'medium',
+      colorPreset: 'default',
     }),
   ],
 };
 ```
 
-For user preferences or tenant branding, inject `ThemeManagerService`:
+For user display preferences, inject `ThemeManagerService`:
 
 ```ts
-themeManager.setTheme('modern');
-themeManager.setDensity('spacious');
 themeManager.setRadius('large');
-themeManager.setPrimaryColor('#7c3aed');
 themeManager.changeColorScheme('dark');
 ```
 
-The same values can be controlled with document attributes:
+The same values can be represented with document attributes:
 
 ```html
-<html data-ngs-theme="modern" data-ngs-density="compact" data-ngs-radius="small">
+<html data-ngs-theme="default" data-ngs-color-scheme="dark" data-ngs-radius="large">
 ```
 
 ## Component Demos

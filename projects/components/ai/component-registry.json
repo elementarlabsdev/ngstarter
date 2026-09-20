@@ -717,6 +717,9 @@
       "outputs": [],
       "cssTokens": [
         "--ngs-block-loader-bg",
+        "--ngs-block-loader-color",
+        "--ngs-color-on-surface-loading",
+        "--ngs-color-surface-loading",
         "--ngs-font-size-sm"
       ],
       "example": null
@@ -1060,25 +1063,40 @@
       ],
       "cssTokens": [
         "--ngs-button-height",
-        "--ngs-button-radius",
+        "--ngs-button-toggle-button-border-radius",
         "--ngs-button-toggle-button-font-size",
         "--ngs-button-toggle-button-font-weight",
+        "--ngs-button-toggle-button-gap",
+        "--ngs-button-toggle-button-height",
         "--ngs-button-toggle-button-only-icon-padding",
         "--ngs-button-toggle-button-padding",
         "--ngs-button-toggle-checked-bg-color",
+        "--ngs-button-toggle-checked-shadow",
         "--ngs-button-toggle-checked-text-color",
+        "--ngs-button-toggle-disabled-bg-color",
+        "--ngs-button-toggle-disabled-text-color",
+        "--ngs-button-toggle-focus-ring-color",
         "--ngs-button-toggle-group-bg",
         "--ngs-button-toggle-group-border-color",
         "--ngs-button-toggle-group-border-radius",
+        "--ngs-button-toggle-group-border-width",
+        "--ngs-button-toggle-group-gap",
+        "--ngs-button-toggle-group-padding",
         "--ngs-button-toggle-hover-bg-color",
         "--ngs-button-toggle-selection-indicator-color",
         "--ngs-button-toggle-text-color",
-        "--ngs-color-on-surface",
+        "--ngs-color-border",
+        "--ngs-color-neutral-500",
+        "--ngs-color-on-primary-container",
         "--ngs-color-on-surface-variant",
         "--ngs-color-primary",
+        "--ngs-color-primary-300",
+        "--ngs-color-primary-container",
         "--ngs-color-surface-container",
         "--ngs-color-surface-container-high",
-        "--ngs-color-surface-container-highest"
+        "--ngs-radius-lg",
+        "--ngs-radius-sm",
+        "--ngs-state-focus-ring"
       ],
       "example": null
     },
@@ -1723,25 +1741,25 @@
         "Code highlighter highlight lines",
         "Code highlighter full"
       ],
-      "minimalExample": "<div class=\"mb-5\">\n  <ngs-segmented [(ngModel)]=\"appearance\">\n    <ngs-segmented-button value=\"bordered\">Bordered</ngs-segmented-button>\n    <ngs-segmented-button value=\"none\">None</ngs-segmented-button>\n  </ngs-segmented>\n</div>\n<ngs-code-highlighter [code]=\"sampleTs\" language=\"ts\" [appearance]=\"appearance()\" />",
+      "minimalExample": "<ngs-code-highlighter class=\"border border-border rounded-lg overflow-hidden\"\n  [code]=\"sampleTs\"\n  language=\"ts\"\n/>",
       "exampleFiles": [
         {
           "name": "basic-code-highlighter-example",
           "title": "Basic code highlighter",
           "file": "projects/docs/src/app/components/code-highlighter/_examples/basic-code-highlighter-example/basic-code-highlighter-example.html",
-          "source": "<div class=\"mb-5\">\n  <ngs-segmented [(ngModel)]=\"appearance\">\n    <ngs-segmented-button value=\"bordered\">Bordered</ngs-segmented-button>\n    <ngs-segmented-button value=\"none\">None</ngs-segmented-button>\n  </ngs-segmented>\n</div>\n<ngs-code-highlighter [code]=\"sampleTs\" language=\"ts\" [appearance]=\"appearance()\" />"
+          "source": "<ngs-code-highlighter class=\"border border-border rounded-lg overflow-hidden\"\n  [code]=\"sampleTs\"\n  language=\"ts\"\n/>"
         },
         {
           "name": "code-highlighter-diff-example",
           "title": "Code highlighter diff",
           "file": "projects/docs/src/app/components/code-highlighter/_examples/code-highlighter-diff-example/code-highlighter-diff-example.html",
-          "source": "<ngs-code-highlighter [code]=\"diffSample\"\n                      language=\"typescript\"\n                      [diff]=\"true\"\n                      title=\"Changes in app.component.ts\" />"
+          "source": "<ngs-code-highlighter class=\"border border-border rounded-lg overflow-hidden\" [code]=\"diffSample\"\n                      language=\"typescript\"\n                      [diff]=\"true\"\n                      title=\"Changes in app.component.ts\" />"
         },
         {
           "name": "code-highlighter-full-example",
           "title": "Code highlighter full",
           "file": "projects/docs/src/app/components/code-highlighter/_examples/code-highlighter-full-example/code-highlighter-full-example.html",
-          "source": "<ngs-code-highlighter\n  [code]=\"code\"\n  language=\"typescript\"\n  title=\"app.component.ts\"\n  showLanguage\n  showCopyButton\n/>"
+          "source": "<ngs-code-highlighter class=\"border border-border rounded-lg overflow-hidden\"\n  [code]=\"code\"\n  language=\"typescript\"\n  title=\"app.component.ts\"\n  showLanguage\n  showCopyButton\n/>"
         }
       ],
       "previewAsset": "projects/components/code-highlighter/preview.svg",
@@ -1752,7 +1770,6 @@
         "CodeHighlighter"
       ],
       "inputs": [
-        "appearance",
         "code",
         "diff",
         "disableOverflow",
@@ -1766,21 +1783,17 @@
       "outputs": [],
       "cssTokens": [
         "--ngs-code-highlighter-bg",
-        "--ngs-code-highlighter-border",
         "--ngs-code-highlighter-margin",
         "--ngs-code-highlighter-padding",
-        "--ngs-code-highlighter-radius",
         "--ngs-code-highlighter-title-color",
         "--ngs-code-highlighter-title-padding",
         "--ngs-color-background",
-        "--ngs-color-border",
         "--ngs-color-danger",
         "--ngs-color-neutral-500",
         "--ngs-color-primary",
         "--ngs-color-success",
         "--ngs-font-size-sm",
-        "--ngs-font-size-xs",
-        "--ngs-radius-xl"
+        "--ngs-font-size-xs"
       ],
       "example": null
     },
@@ -2745,7 +2758,7 @@
       "docsPath": null,
       "docsOverviewSource": null,
       "purpose": "Provide infrastructure primitives, theme setup, services, directives, pipes, tokens, and low-level utilities.",
-      "useWhen": "Use @ngstarter-ui/components/core for infrastructure, not for building screens directly. Use provideNgsTheme in app config to set theme, colorScheme, radius, primaryColor, persistence, and storageKey. Inject ThemeManagerService for runtime theme, color scheme, radius, and primary color changes. Use utility directives such as ngsRipple, ngsAutoFocus, ngsFocusElement, ngsTextareaAutoSize, and ngsDebounceTime when a specific low-level behavior is needed. Use pipes such as InitialsPipe, FormatFileSizePipe, SafeHtmlPipe, SafeResourceUrlPipe, OrderByPipe, FilterByPropertyPipe, and SearchByPropertyPipe when they fit. Use ErrorStateMatcher or ShowOnDirtyErrorStateMatcher for form error behavior, and observer/services/utils only for low-level infrastructure. Do not use core as a replacement for real UI components. Do not build admin screens from core primitives; choose concrete components such as Button, Card, DataView, Table, FormField, Dialog, Navigation, Layout, or other component entry points. Do not import Option from core directly for ordinary option lists when Select, Autocomplete, or another component owns the option pattern.",
+      "useWhen": "Use @ngstarter-ui/components/core for infrastructure, not for building screens directly. Use provideNgsTheme in app config to set theme, colorScheme, radius, colorPreset, persistence, and storageKey. Inject ThemeManagerService for runtime theme, color scheme, radius, and preset changes. Use utility directives such as ngsRipple, ngsAutoFocus, ngsFocusElement, ngsTextareaAutoSize, and ngsDebounceTime when a specific low-level behavior is needed. Use pipes such as InitialsPipe, FormatFileSizePipe, SafeHtmlPipe, SafeResourceUrlPipe, OrderByPipe, FilterByPropertyPipe, and SearchByPropertyPipe when they fit. Use ErrorStateMatcher or ShowOnDirtyErrorStateMatcher for form error behavior, and observer/services/utils only for low-level infrastructure. Do not use core as a replacement for real UI components. Do not build admin screens from core primitives; choose concrete components such as Button, Card, DataView, Table, FormField, Dialog, Navigation, Layout, or other component entry points. Do not import Option from core directly for ordinary option lists when Select, Autocomplete, or another component owns the option pattern.",
       "exampleTopics": [],
       "minimalExample": null,
       "exampleFiles": [],
@@ -2776,9 +2789,10 @@
         "FilterByPropertyPipe",
         "FocusElementDirective",
         "FormatFileSizePipe",
-        "generateNgsThemeCssText",
-        "generateNgsThemeProperties",
         "getActualTarget",
+        "getNgsThemePreset",
+        "getNgsThemePresetCssText",
+        "getNgsThemePresetProperties",
         "GlobalState",
         "GlobalStore",
         "InactivityTrackerService",
@@ -2786,11 +2800,15 @@
         "injectElement",
         "isElement",
         "MutationObserverService",
-        "NGS_GENERATED_THEME_PROPERTY_NAMES",
+        "NGS_THEME_COLOR_PRESET_IDS",
+        "NGS_THEME_COLOR_PRESETS",
         "NGS_THEME_OPTIONS",
+        "NGS_THEME_PRESET_PROPERTY_NAMES",
         "NgsColorScheme",
-        "NgsGeneratedThemeColorScheme",
         "NgsRadius",
+        "NgsThemeColorPreset",
+        "NgsThemeColorPresetDefinition",
+        "NgsThemeColorScheme",
         "NgsThemeCssProperties",
         "NgsThemeName",
         "NgsThemeOptions",
@@ -4212,13 +4230,13 @@
         "File type sizes",
         "File type mime"
       ],
-      "minimalExample": "<div class=\"flex items-center gap-4\">\n  <ngs-file-type fileName=\"contract.pdf\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">contract.pdf</div>\n    <div class=\"text-xs text-secondary\">Resolved from fileName</div>\n  </div>\n</div>\n<div class=\"flex items-center gap-4 mt-5\">\n  <ngs-file-type extension=\"xlsx\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">Financial model</div>\n    <div class=\"text-xs text-secondary\">Resolved from extension</div>\n  </div>\n</div>",
+      "minimalExample": "<div class=\"flex items-center gap-3\">\n  <ngs-file-type fileName=\"contract.pdf\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">contract.pdf</div>\n    <div class=\"text-xs text-secondary\">Resolved from fileName</div>\n  </div>\n</div>\n<div class=\"mt-5 flex items-center gap-3\">\n  <ngs-file-type extension=\"xlsx\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">Financial model</div>\n    <div class=\"text-xs text-secondary\">Resolved from extension</div>\n  </div>\n</div>",
       "exampleFiles": [
         {
           "name": "basic-file-type-example",
           "title": "Basic file type",
           "file": "projects/docs/src/app/components/file-type/_examples/basic-file-type-example/basic-file-type-example.html",
-          "source": "<div class=\"flex items-center gap-4\">\n  <ngs-file-type fileName=\"contract.pdf\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">contract.pdf</div>\n    <div class=\"text-xs text-secondary\">Resolved from fileName</div>\n  </div>\n</div>\n<div class=\"flex items-center gap-4 mt-5\">\n  <ngs-file-type extension=\"xlsx\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">Financial model</div>\n    <div class=\"text-xs text-secondary\">Resolved from extension</div>\n  </div>\n</div>"
+          "source": "<div class=\"flex items-center gap-3\">\n  <ngs-file-type fileName=\"contract.pdf\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">contract.pdf</div>\n    <div class=\"text-xs text-secondary\">Resolved from fileName</div>\n  </div>\n</div>\n<div class=\"mt-5 flex items-center gap-3\">\n  <ngs-file-type extension=\"xlsx\" class=\"size-14\"/>\n  <div>\n    <div class=\"text-sm\">Financial model</div>\n    <div class=\"text-xs text-secondary\">Resolved from extension</div>\n  </div>\n</div>"
         },
         {
           "name": "file-type-gallery-example",
@@ -4230,7 +4248,7 @@
           "name": "file-type-mime-example",
           "title": "File type mime",
           "file": "projects/docs/src/app/components/file-type/_examples/file-type-mime-example/file-type-mime-example.html",
-          "source": "<div class=\"grid gap-4 sm:grid-cols-2\">\n  @for (file of files(); track file.name) {\n    <div class=\"flex items-center gap-4 rounded-lg border border-border p-4\">\n      <ngs-file-type [mimeType]=\"file.mimeType\" [fallback]=\"file.fallback\" class=\"size-12\"/>\n      <div class=\"min-w-0\">\n        <div class=\"truncate text-sm\">{{ file.name }}</div>\n        <div class=\"truncate text-xs text-secondary\">{{ file.mimeType }}</div>\n      </div>\n    </div>\n  }\n</div>"
+          "source": "<div class=\"grid gap-4 sm:grid-cols-2\">\n  @for (file of files(); track file.name) {\n    <div class=\"flex items-center gap-3 rounded-lg border border-border p-4\">\n      <ngs-file-type [mimeType]=\"file.mimeType\" [fallback]=\"file.fallback\" class=\"size-12\"/>\n      <div class=\"min-w-0\">\n        <div class=\"truncate text-sm\">{{ file.name }}</div>\n        <div class=\"truncate text-xs text-secondary\">{{ file.mimeType }}</div>\n      </div>\n    </div>\n  }\n</div>"
         }
       ],
       "previewAsset": "projects/components/file-type/preview.svg",
@@ -4421,13 +4439,13 @@
         "External renderer flow",
         "Form builder renderer"
       ],
-      "minimalExample": "<div class=\"flex flex-col gap-6\">\n  <ngs-form-builder [(schema)]=\"schema\"/>\n  <ngs-card>\n    <ngs-card-header>\n      <ngs-card-title>Current schema</ngs-card-title>\n    </ngs-card-header>\n    <ngs-card-content>\n      <ngs-code-highlighter\n        [code]=\"schemaCode()\"\n        language=\"json\"\n        appearance=\"none\"\n        disableOverflow/>\n    </ngs-card-content>\n  </ngs-card>\n</div>",
+      "minimalExample": "<div class=\"flex flex-col gap-6\">\n  <ngs-form-builder [(schema)]=\"schema\"/>\n  <ngs-card>\n    <ngs-card-header>\n      <ngs-card-title>Current schema</ngs-card-title>\n    </ngs-card-header>\n    <ngs-card-content>\n      <ngs-code-highlighter class=\"border border-border rounded-lg overflow-hidden\"\n        [code]=\"schemaCode()\"\n        language=\"json\"\n        appearance=\"none\"\n        disableOverflow/>\n    </ngs-card-content>\n  </ngs-card>\n</div>",
       "exampleFiles": [
         {
           "name": "basic-form-builder-example",
           "title": "Basic form builder",
           "file": "projects/docs/src/app/libraries/form-builder/_examples/basic-form-builder-example/basic-form-builder-example.html",
-          "source": "<div class=\"flex flex-col gap-6\">\n  <ngs-form-builder [(schema)]=\"schema\"/>\n  <ngs-card>\n    <ngs-card-header>\n      <ngs-card-title>Current schema</ngs-card-title>\n    </ngs-card-header>\n    <ngs-card-content>\n      <ngs-code-highlighter\n        [code]=\"schemaCode()\"\n        language=\"json\"\n        appearance=\"none\"\n        disableOverflow/>\n    </ngs-card-content>\n  </ngs-card>\n</div>"
+          "source": "<div class=\"flex flex-col gap-6\">\n  <ngs-form-builder [(schema)]=\"schema\"/>\n  <ngs-card>\n    <ngs-card-header>\n      <ngs-card-title>Current schema</ngs-card-title>\n    </ngs-card-header>\n    <ngs-card-content>\n      <ngs-code-highlighter class=\"border border-border rounded-lg overflow-hidden\"\n        [code]=\"schemaCode()\"\n        language=\"json\"\n        appearance=\"none\"\n        disableOverflow/>\n    </ngs-card-content>\n  </ngs-card>\n</div>"
         },
         {
           "name": "custom-field-registration-example",
@@ -4647,10 +4665,14 @@
       "exportedSymbols": [
         "Error",
         "FORM_FIELD",
+        "FORM_FIELD_CONFIG",
+        "FORM_FIELD_DEFAULT_CONFIG",
         "FORM_FIELD_DEFAULT_OPTIONS",
         "FormField",
+        "FormFieldConfig",
         "FormFieldControl",
         "FormFieldDefaultOptions",
+        "FormFieldLabelMode",
         "Hint",
         "IconButtonPrefix",
         "IconButtonSuffix",
@@ -4658,18 +4680,21 @@
         "IconSuffix",
         "Label",
         "Prefix",
+        "provideFormField",
         "Suffix",
         "TextPrefix",
         "TextSuffix"
       ],
       "inputs": [
         "align",
+        "labelMode",
         "sameHeightAsButton",
         "subscriptHiddenIfEmpty"
       ],
       "outputs": [],
       "cssTokens": [
         "--ngs-button-height",
+        "--ngs-color-on-surface",
         "--ngs-field-bg",
         "--ngs-field-border-color",
         "--ngs-field-border-focus-color",
@@ -4678,6 +4703,7 @@
         "--ngs-field-container-height",
         "--ngs-field-disabled-bg",
         "--ngs-field-error-color",
+        "--ngs-field-floating-container-height",
         "--ngs-field-font-size",
         "--ngs-field-height",
         "--ngs-field-infix-padding-bottom",
@@ -4698,6 +4724,11 @@
         "--ngs-form-field-container-min-height",
         "--ngs-form-field-disabled-bg",
         "--ngs-form-field-error-color",
+        "--ngs-form-field-external-label-color",
+        "--ngs-form-field-external-label-font-size",
+        "--ngs-form-field-external-label-font-weight",
+        "--ngs-form-field-external-label-gap",
+        "--ngs-form-field-external-label-line-height",
         "--ngs-form-field-icon-affix-padding-x",
         "--ngs-form-field-icon-button-affix-padding-x",
         "--ngs-form-field-infix-padding-bottom",
@@ -5550,13 +5581,13 @@
         "Disabled",
         "Prefixes and suffixes"
       ],
-      "minimalExample": "<form class=\"w-1/2\">\n  <ngs-form-field class=\"w-full\">\n    <ngs-label>Favorite food</ngs-label>\n    <input ngsInput placeholder=\"Ex. Pizza\" value=\"Sushi\" required>\n  </ngs-form-field>\n  <ngs-form-field class=\"w-full\">\n    <ngs-label>Leave a comment</ngs-label>\n    <textarea ngsInput placeholder=\"Ex. It makes me feel...\"></textarea>\n  </ngs-form-field>\n</form>",
+      "minimalExample": "<form class=\"flex w-1/2 flex-col gap-6\">\n  <ngs-form-field class=\"w-full\">\n    <ngs-label>External label</ngs-label>\n    <input ngsInput placeholder=\"Ex. Pizza\" value=\"Sushi\" required>\n  </ngs-form-field>\n  <ngs-form-field class=\"w-full\" labelMode=\"floating\">\n    <ngs-label>Floating label</ngs-label>\n    <input ngsInput placeholder=\"Ex. Ramen\" value=\"Ramen\">\n  </ngs-form-field>\n</form>",
       "exampleFiles": [
         {
           "name": "basic-inputs-example",
           "title": "Basic inputs",
           "file": "projects/docs/src/app/forms/input/_examples/basic-inputs-example/basic-inputs-example.html",
-          "source": "<form class=\"w-1/2\">\n  <ngs-form-field class=\"w-full\">\n    <ngs-label>Favorite food</ngs-label>\n    <input ngsInput placeholder=\"Ex. Pizza\" value=\"Sushi\" required>\n  </ngs-form-field>\n  <ngs-form-field class=\"w-full\">\n    <ngs-label>Leave a comment</ngs-label>\n    <textarea ngsInput placeholder=\"Ex. It makes me feel...\"></textarea>\n  </ngs-form-field>\n</form>"
+          "source": "<form class=\"flex w-1/2 flex-col gap-6\">\n  <ngs-form-field class=\"w-full\">\n    <ngs-label>External label</ngs-label>\n    <input ngsInput placeholder=\"Ex. Pizza\" value=\"Sushi\" required>\n  </ngs-form-field>\n  <ngs-form-field class=\"w-full\" labelMode=\"floating\">\n    <ngs-label>Floating label</ngs-label>\n    <input ngsInput placeholder=\"Ex. Ramen\" value=\"Ramen\">\n  </ngs-form-field>\n</form>"
         },
         {
           "name": "clear-button-example",
@@ -7190,11 +7221,18 @@
         "ngs-pdf-builder-stamp-dialog"
       ],
       "exportedSymbols": [
+        "PDF_BUILDER_DEFAULT_FIELD_METRICS",
+        "PDF_BUILDER_DEFAULT_TEXT_FONT_COLOR",
+        "PDF_BUILDER_DEFAULT_TEXT_FONT_FAMILY",
+        "PDF_BUILDER_DEFAULT_TEXT_FONT_SIZE",
+        "PDF_BUILDER_MAX_TEXT_FONT_SIZE",
+        "PDF_BUILDER_MIN_TEXT_FONT_SIZE",
         "PdfBuilder",
         "PdfBuilderCanvasTool",
         "PdfBuilderDrawnSignatureUploadCallback",
         "PdfBuilderDrawnSignatureUploadContext",
         "PdfBuilderField",
+        "PdfBuilderFieldMetrics",
         "PdfBuilderFieldSigner",
         "PdfBuilderFieldSlot",
         "PdfBuilderFieldType",
@@ -7386,8 +7424,12 @@
         "--ngs-color-surface",
         "--ngs-color-warning",
         "--ngs-color-warning-container",
+        "--ngs-color-white",
+        "--ngs-font-size-2xl",
         "--ngs-font-size-lg",
         "--ngs-font-size-md",
+        "--ngs-font-size-sm",
+        "--ngs-font-size-xl",
         "--ngs-font-size-xs",
         "--ngs-pdf-viewer-height",
         "--ngs-pdf-viewer-min-height",
@@ -7499,6 +7541,7 @@
       ],
       "cssTokens": [
         "--ngs-color-primary",
+        "--ngs-color-white",
         "--ngs-pdf-viewer-aside-width",
         "--ngs-pdf-viewer-height",
         "--ngs-pdf-viewer-min-height",
@@ -8752,6 +8795,7 @@
         "--ngs-sidebar-nav-heading-text-transform",
         "--ngs-sidebar-nav-item-active-bg",
         "--ngs-sidebar-nav-item-active-color",
+        "--ngs-sidebar-nav-item-active-font-weight",
         "--ngs-sidebar-nav-item-active-icon-color",
         "--ngs-sidebar-nav-item-bg",
         "--ngs-sidebar-nav-item-border-color",
@@ -9152,11 +9196,11 @@
         "--ngs-color-on-surface",
         "--ngs-color-on-surface-variant",
         "--ngs-color-primary",
-        "--ngs-color-primary-100",
         "--ngs-color-surface",
         "--ngs-color-surface-container-high",
         "--ngs-slider-thumb-color",
         "--ngs-slider-thumb-ripple-color",
+        "--ngs-slider-thumb-ripple-width",
         "--ngs-slider-thumb-size",
         "--ngs-slider-tick-mark-active-color",
         "--ngs-slider-tick-mark-color",

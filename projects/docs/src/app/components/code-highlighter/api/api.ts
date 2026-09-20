@@ -52,12 +52,6 @@ export class Api {
       default: 'null'
     },
     {
-      name: 'appearance',
-      description: 'The visual appearance of the code block.',
-      type: "'none' | 'bordered'",
-      default: 'bordered'
-    },
-    {
       name: 'diff',
       description: 'Whether to enable diff mode highlighting.',
       type: 'boolean',

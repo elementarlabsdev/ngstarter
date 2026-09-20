@@ -33,10 +33,10 @@ import { provideNgsTheme } from '@ngstarter-ui/components/core';
 export const appConfig = {
   providers: [
     provideNgsTheme({
-      theme: 'enterprise',
+      theme: 'default',
       colorScheme: 'auto',
-      density: 'compact',
       radius: 'small',
+      colorPreset: 'default',
     }),
   ],
 };

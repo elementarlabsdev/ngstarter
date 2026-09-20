@@ -14,9 +14,6 @@ export type SeoData = {
 export const SITE_URL = 'https://ngstarter.com';
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og/ngstarter-og.png`;
 
-const merchantReturnPolicyId = `${SITE_URL}/terms#return-policy`;
-const shippingServiceId = `${SITE_URL}/terms#digital-delivery`;
-
 const organizationSchema: JsonLdObject = {
   '@type': 'Organization',
   '@id': `${SITE_URL}/#organization`,
@@ -24,12 +21,6 @@ const organizationSchema: JsonLdObject = {
   url: SITE_URL,
   logo: `${SITE_URL}/favicon.ico`,
   sameAs: ['https://x.com/elementarlabs'],
-  hasMerchantReturnPolicy: {
-    '@id': merchantReturnPolicyId,
-  },
-  hasShippingService: {
-    '@id': shippingServiceId,
-  },
 };
 
 const websiteSchema: JsonLdObject = {
@@ -43,66 +34,6 @@ const websiteSchema: JsonLdObject = {
   inLanguage: 'en',
 };
 
-const merchantReturnPolicySchema: JsonLdObject = {
-  '@type': 'MerchantReturnPolicy',
-  '@id': merchantReturnPolicyId,
-  merchantReturnLink: `${SITE_URL}/terms`,
-};
-
-const shippingServiceSchema: JsonLdObject = {
-  '@type': 'ShippingService',
-  '@id': shippingServiceId,
-  name: 'Digital delivery',
-  description: 'NgStarter licenses, source code, and updates are delivered online after purchase.',
-  shippingConditions: {
-    '@type': 'ShippingConditions',
-    shippingRate: {
-      '@type': 'MonetaryAmount',
-      value: '0',
-      currency: 'USD',
-    },
-  },
-};
-
-const offers = [
-  {
-    '@type': 'Offer',
-    name: 'Standard',
-    price: '29',
-    priceCurrency: 'USD',
-    url: `${SITE_URL}/pricing`,
-    availability: 'https://schema.org/InStock',
-    category: 'Standard License',
-    hasMerchantReturnPolicy: {
-      '@id': merchantReturnPolicyId,
-    },
-    shippingDetails: {
-      '@type': 'OfferShippingDetails',
-      hasShippingService: {
-        '@id': shippingServiceId,
-      },
-    },
-  },
-  {
-    '@type': 'Offer',
-    name: 'Professional',
-    price: '299',
-    priceCurrency: 'USD',
-    url: `${SITE_URL}/pricing`,
-    availability: 'https://schema.org/InStock',
-    category: 'Professional License',
-    hasMerchantReturnPolicy: {
-      '@id': merchantReturnPolicyId,
-    },
-    shippingDetails: {
-      '@type': 'OfferShippingDetails',
-      hasShippingService: {
-        '@id': shippingServiceId,
-      },
-    },
-  },
-];
-
 const softwareSchema: JsonLdObject = {
   '@type': 'SoftwareApplication',
   '@id': `${SITE_URL}/#software`,
@@ -114,7 +45,8 @@ const softwareSchema: JsonLdObject = {
   softwareHelp: 'https://docs.ngstarter.com/',
   description:
     'AI-friendly Angular UI components library for admin dashboards, product interfaces, and enterprise Angular apps.',
-  offers,
+  isAccessibleForFree: true,
+  license: `${SITE_URL}/license`,
 };
 
 const productSchema: JsonLdObject = {
@@ -130,68 +62,53 @@ const productSchema: JsonLdObject = {
   description:
     'Standalone Angular UI components, admin dashboard templates, source code, and themes for production Angular applications.',
   image: DEFAULT_OG_IMAGE,
-  offers,
+  isAccessibleForFree: true,
+  license: `${SITE_URL}/license`,
 };
 
-export const pricingFaqItems = [
+export const faqItems = [
   {
     question: 'Is NgStarter open source?',
     answer:
-      'NgStarter is a commercial Angular UI components library. Purchases include private source code access according to the selected license, but the source code may not be published publicly.',
-  },
-  {
-    question: 'Can I use NgStarter in commercial projects?',
-    answer:
-      'Yes. NgStarter can be used in commercial applications, SaaS products, internal tools, and client projects under the purchased license terms.',
+      'Yes. NgStarter UI components and admin templates are free and open source under the MIT License.',
   },
   {
     question: 'Do I get the source code?',
     answer:
-      'Yes. Standard and Professional both include source code for the NgStarter UI components and admin dashboard templates for private licensed use. Public source code publishing is not allowed.',
+      'Yes. The full source code is available on GitHub. You may use, modify, publish, redistribute, and sublicense under MIT.',
   },
   {
     question: 'Are updates included?',
-    answer: 'Yes. Product updates are included according to the purchased plan and license scope.',
+    answer:
+      'Yes. Published updates are freely available through npm and GitHub.',
   },
   {
-    question: 'What support is included?',
+    question: 'What support is available?',
     answer:
-      'Standard includes GitHub ticket support. Professional includes priority GitHub ticket support for multi-project usage.',
+      'Community support and issue reporting are available through GitHub. Support and future updates are not guaranteed.',
   },
   {
-    question: 'How long does trial mode last?',
+    question: 'What does the MIT License require?',
     answer:
-      'Trial mode is available for 3 months. After the trial period ends, you need to purchase a valid Standard or Professional license.',
-  },
-  {
-    question: 'What is included in Standard and Professional?',
-    answer:
-      'Standard includes unlimited developers, one project, and one domain. Professional includes unlimited developers, unlimited projects, and unlimited domains.',
-  },
-  {
-    question: 'Can I use one license for multiple client projects?',
-    answer:
-      'Use Professional when you need unlimited projects, domains, or agency client work. Standard is limited to one project and one domain.',
+      'Include the copyright notice and permission notice in all copies or substantial portions of the software. The software is provided as is, without warranty.',
   },
 ];
-
-export const faqItems = pricingFaqItems;
 
 export const templatesFaqItems = [
   {
     question: 'Can I customize the Angular admin dashboard templates?',
     answer:
-      'Yes. The templates include source code through the NgStarter license, so you can adapt layouts, widgets, routes, styles, and data integration for your product. The source code may not be published publicly.',
+      'Yes. The templates are free under MIT. You may adapt and publish layouts, widgets, routes, styles, and integrations while retaining the copyright and permission notice.',
   },
   {
     question: 'Are the templates included in the NgStarter license?',
     answer:
-      'Yes. Standard and Professional both include the Angular admin dashboard templates. Choose Professional for unlimited projects and domains.',
+      'Yes. All NgStarter admin templates are free under the MIT License, with unlimited projects and domains.',
   },
   {
     question: 'Do the templates include source code?',
     answer:
-      'Yes. Template source code is included together with the NgStarter UI component source code under the selected commercial license for private use, and it may not be published publicly.',
+      'Yes. Component and template source code is freely available on GitHub under MIT, including permission to modify and redistribute it.',
   },
   {
     question: 'Are the admin templates responsive?',
@@ -204,19 +121,6 @@ export const templatesFaqItems = [
       'Yes. NgStarter templates are designed around theme tokens and can be used with dark-mode compatible NgStarter themes.',
   },
 ];
-
-const pricingFaqSchema: JsonLdObject = {
-  '@type': 'FAQPage',
-  '@id': `${SITE_URL}/pricing#faq`,
-  mainEntity: pricingFaqItems.map((item) => ({
-    '@type': 'Question',
-    name: item.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: item.answer,
-    },
-  })),
-};
 
 const homeFaqSchema: JsonLdObject = {
   '@type': 'FAQPage',
@@ -264,17 +168,15 @@ function webPageSchema(path: string, name: string, description: string): JsonLdO
 }
 
 const homeDescription =
-  'NgStarter is an AI-friendly Angular components library for admin dashboards, product interfaces, and enterprise Angular apps with standalone, signal-based UI components.';
-const pricingDescription =
-  'Compare NgStarter Standard and Professional pricing for Angular UI components, admin templates, source code, commercial licenses, support, updates, and trial access.';
+  'NgStarter is a free, MIT-licensed, AI-friendly Angular components library for admin dashboards, product interfaces, and enterprise Angular apps with standalone, signal-based UI components.';
 const templatesDescription =
   'Explore Angular admin dashboard templates built with NgStarter UI for SaaS, CRM, analytics, and internal tools with source code, charts, responsive layouts, and dark mode.';
 const licenseDescription =
-  'Read the NgStarter commercial license terms for Standard and Professional Angular UI component library plans.';
+  'Read the MIT License for the free, open-source NgStarter Angular UI components and admin templates.';
 const privacyDescription =
-  'Read the NgStarter privacy policy for data collection, payments, analytics, and contact information.';
+  'Read the NgStarter privacy policy for data collection, analytics, and contact information.';
 const termsDescription =
-  'Read the NgStarter terms of service for purchases, product access, acceptable use, and support.';
+  'Read the NgStarter terms of service for free product access, acceptable use, and support.';
 const blogDescription =
   'Read practical NgStarter tutorials for building angular admin applications, product dashboards, app layouts, and reusable UI foundations.';
 const basicLayoutArticleDescription =
@@ -301,8 +203,6 @@ export const HOME_SEO: SeoData = {
   structuredData: [
     organizationSchema,
     websiteSchema,
-    merchantReturnPolicySchema,
-    shippingServiceSchema,
     softwareSchema,
     productSchema,
     homeFaqSchema,
@@ -310,26 +210,6 @@ export const HOME_SEO: SeoData = {
       '/',
       'NgStarter - AI-Friendly Angular Components Library for Admin Apps',
       homeDescription,
-    ),
-  ],
-};
-
-export const PRICING_SEO: SeoData = {
-  title: 'NgStarter Pricing | Angular UI Components & Admin Templates',
-  description: pricingDescription,
-  canonicalPath: '/pricing',
-  structuredData: [
-    organizationSchema,
-    websiteSchema,
-    merchantReturnPolicySchema,
-    shippingServiceSchema,
-    softwareSchema,
-    productSchema,
-    pricingFaqSchema,
-    webPageSchema(
-      '/pricing',
-      'NgStarter Pricing - Angular UI Components & Admin Templates',
-      pricingDescription,
     ),
   ],
 };
@@ -389,8 +269,6 @@ export const LICENSE_SEO: SeoData = {
   structuredData: [
     organizationSchema,
     websiteSchema,
-    merchantReturnPolicySchema,
-    shippingServiceSchema,
     webPageSchema('/license', 'License | NgStarter', licenseDescription),
   ],
 };

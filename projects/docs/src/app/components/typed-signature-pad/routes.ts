@@ -13,11 +13,6 @@ export const routes: Routes = [
         title: 'Typed Signature Pad / Overview'
       },
       {
-        path: 'examples',
-        loadComponent: () => import('./examples/examples').then(c => c.Examples),
-        title: 'Typed Signature Pad / Examples'
-      },
-      {
         path: 'api',
         loadComponent: () => import('./api/api').then(c => c.Api),
         title: 'Typed Signature Pad / Api'

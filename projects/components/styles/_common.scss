@@ -80,26 +80,26 @@
   --color-state-disabled: var(--ngs-state-disabled-bg);
 
   /* --- PALETTE HELPERS (Legacy support & shortcuts) --- */
-  --color-primary-100: color-mix(in srgb, var(--color-primary), transparent 90%);
-  --color-primary-200: color-mix(in srgb, var(--color-primary), transparent 80%);
-  --color-primary-300: color-mix(in srgb, var(--color-primary), transparent 70%);
-  --color-primary-400: color-mix(in srgb, var(--color-primary), transparent 60%);
-  --color-primary-500: color-mix(in srgb, var(--color-primary), transparent 50%);
-  --color-primary-600: color-mix(in srgb, var(--color-primary), transparent 40%);
+  --color-primary-100: var(--ngs-color-primary-100);
+  --color-primary-200: var(--ngs-color-primary-200);
+  --color-primary-300: var(--ngs-color-primary-300);
+  --color-primary-400: var(--ngs-color-primary-400);
+  --color-primary-500: var(--ngs-color-primary-500);
+  --color-primary-600: var(--ngs-color-primary-600);
 
-  --color-secondary-100: color-mix(in srgb, var(--color-secondary), transparent 90%);
-  --color-secondary-200: color-mix(in srgb, var(--color-secondary), transparent 80%);
-  --color-secondary-300: color-mix(in srgb, var(--color-secondary), transparent 70%);
-  --color-secondary-400: color-mix(in srgb, var(--color-secondary), transparent 60%);
-  --color-secondary-500: color-mix(in srgb, var(--color-secondary), transparent 50%);
-  --color-secondary-600: color-mix(in srgb, var(--color-secondary), transparent 40%);
+  --color-secondary-100: var(--ngs-color-secondary-100);
+  --color-secondary-200: var(--ngs-color-secondary-200);
+  --color-secondary-300: var(--ngs-color-secondary-300);
+  --color-secondary-400: var(--ngs-color-secondary-400);
+  --color-secondary-500: var(--ngs-color-secondary);
+  --color-secondary-600: var(--ngs-color-secondary);
 
-  --color-tertiary-100: color-mix(in srgb, var(--color-tertiary), transparent 90%);
-  --color-tertiary-200: color-mix(in srgb, var(--color-tertiary), transparent 80%);
-  --color-tertiary-300: color-mix(in srgb, var(--color-tertiary), transparent 70%);
-  --color-tertiary-400: color-mix(in srgb, var(--color-tertiary), transparent 60%);
-  --color-tertiary-500: color-mix(in srgb, var(--color-tertiary), transparent 50%);
-  --color-tertiary-600: color-mix(in srgb, var(--color-tertiary), transparent 40%);
+  --color-tertiary-100: var(--ngs-color-tertiary-100);
+  --color-tertiary-200: var(--ngs-color-tertiary-200);
+  --color-tertiary-300: var(--ngs-color-tertiary-300);
+  --color-tertiary-400: var(--ngs-color-tertiary);
+  --color-tertiary-500: var(--ngs-color-tertiary);
+  --color-tertiary-600: var(--ngs-color-tertiary);
 
   --color-neutral-50: var(--ngs-color-neutral-50);
   --color-neutral-100: var(--ngs-color-neutral-100);

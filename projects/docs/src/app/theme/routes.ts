@@ -14,22 +14,6 @@ export const routes: Routes = [
   {
     path: 'playground',
     loadComponent: () => import('./playground/playground').then(c => c.ThemePlayground),
-    title: 'Theme Playground'
-  },
-  {
-    path: 'generator',
-    loadComponent: () => import('./generator/generator').then(c => c.ThemeGenerator),
-    title: 'Theme Generator'
-  },
-  {
-    path: 'customize',
-    loadComponent: () => import('./customize/customize').then(c => c.Customize),
-    title: 'Customize Theme'
-  },
-  {
-    path: 'customize-theme',
-    redirectTo: 'customize',
-    pathMatch: 'full',
-    title: 'Customize Theme'
+    title: 'Default Theme Playground'
   },
 ];

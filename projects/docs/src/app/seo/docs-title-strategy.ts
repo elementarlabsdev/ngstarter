@@ -367,14 +367,6 @@ export class DocsTitleStrategy extends TitleStrategy {
   }
 
   private themeMetadata(slug: string | undefined): SeoMetadata {
-    if (slug === 'customize' || slug === 'customize-theme') {
-      return this.metadata(
-        'Customize Angular Themes',
-        'Design Tokens and Runtime Theming',
-        'Customize NgStarter Angular themes with design tokens, runtime providers, color schemes, radius settings, and standalone Angular usage.',
-      );
-    }
-
     if (slug === 'colors') {
       return this.metadata(
         'Angular Theme Colors',
@@ -394,16 +386,8 @@ export class DocsTitleStrategy extends TitleStrategy {
     if (slug === 'playground') {
       return this.metadata(
         'Angular Theme Playground',
-        'Preview Tokens and Component Styles',
-        'Use the NgStarter Angular theme playground to preview tokens, component styles, colors, density, and runtime theme changes.',
-      );
-    }
-
-    if (slug === 'generator') {
-      return this.metadata(
-        'Angular Theme Generator',
-        'Seed Colors and CSS Color Mix',
-        'Use the NgStarter Angular theme generator to create tokenized palettes from seed colors and export CSS custom properties.',
+        'Preview the Default Component Styles',
+        'Use the NgStarter Angular theme playground to preview the default tokens, component styles, light and dark color schemes, and radius settings.',
       );
     }
 

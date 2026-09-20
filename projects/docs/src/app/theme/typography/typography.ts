@@ -23,7 +23,7 @@ export class Typography {
   --ngs-font-family-base: "DM Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }`);
 
-  customThemeFont = signal(`[data-ngs-theme='acme'] {
+  customThemeFont = signal(`[data-ngs-theme='default'] {
   --ngs-font-family-base: "DM Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }`);
 }

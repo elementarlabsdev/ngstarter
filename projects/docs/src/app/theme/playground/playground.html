@@ -1,22 +1,11 @@
 <app-page>
-  <h1 appPageTitle>Theme Playground</h1>
+  <h1 appPageTitle>Default Theme Playground</h1>
 
   <div appPageContent>
     <section class="theme-playground">
       <ngs-card appearance="outlined" class="control-panel" aria-label="Theme controls">
         <ngs-card-content>
           <div class="control-grid">
-            <div class="control-group">
-              <div class="control-label">Theme</div>
-              <div class="segmented-control">
-                @for (item of themes; track item) {
-                  <button type="button" [ngsButton]="theme() === item ? 'filled' : 'tonal'" (click)="setTheme(item)">
-                    {{ item }}
-                  </button>
-                }
-              </div>
-            </div>
-
             <div class="control-group">
               <div class="control-label">Scheme</div>
               <div class="segmented-control">

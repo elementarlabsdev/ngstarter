@@ -77,6 +77,12 @@ export class Api {
 
   formFieldProperties = [
     {
+      name: 'labelMode',
+      description: 'Places the label above the field or uses the floating label behavior inside the control.',
+      type: "'external' | 'floating'",
+      default: "'external'"
+    },
+    {
       name: 'subscriptHiddenIfEmpty',
       description: 'Hides the subscript area when there are no hints or errors. Useful for compact toolbar and filter fields.',
       type: 'boolean',

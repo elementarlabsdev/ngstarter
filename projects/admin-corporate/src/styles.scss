@@ -1,6 +1,5 @@
 @use "tailwindcss";
 @use "../../components/styles/themes/default";
-@use "./corporate-theme";
 
 * {
   box-sizing: border-box;
@@ -25,6 +24,23 @@ input {
 }
 
 .corporate-root {
+  --corporate-stage-bg: #ffffff;
+  --corporate-shell-bg: #ffffff;
+  --corporate-sidebar-bg: var(--ngs-color-surface-container);
+  --corporate-panel-bg: var(--ngs-color-surface);
+  --corporate-input-bg: var(--ngs-color-surface-container-highest);
+  --corporate-muted: var(--ngs-color-on-surface-variant);
+  --corporate-soft: var(--ngs-color-surface-container-low);
+  --corporate-border: var(--ngs-color-border);
+  --corporate-border-strong: var(--ngs-color-outline-variant);
+  --corporate-text: var(--ngs-color-on-surface);
+  --corporate-primary: var(--ngs-color-primary);
+  --corporate-primary-soft: var(--ngs-color-primary-container);
+  --corporate-green: var(--ngs-color-success);
+  --corporate-blue: var(--ngs-color-info);
+  --corporate-orange: #ec6d28;
+  --corporate-gold: #f1bd28;
+  --corporate-shadow: var(--ngs-shadow-lg);
   min-height: 100dvh;
   color: var(--corporate-text);
   font-family: var(--ngs-font-family-base);
@@ -233,13 +249,6 @@ ngs-form-field.search-field.ngs-form-field-focused .ngs-form-field-container {
   justify-content: flex-end;
   align-items: center;
   gap: 0.75rem;
-}
-
-.upgrade-button {
-  --ngs-button-height: 2.375rem;
-  --ngs-button-outlined-border: var(--corporate-border);
-  --ngs-button-outlined-color: var(--corporate-text);
-  background: #ffffff;
 }
 
 .notification-button {

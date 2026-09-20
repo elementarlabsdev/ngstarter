@@ -85,6 +85,7 @@
     .inner {
       background: var(--ngs-sidebar-nav-item-active-bg);
       color: var(--ngs-sidebar-nav-item-active-color);
+      font-weight: var(--ngs-sidebar-nav-item-active-font-weight);
     }
   }
 
@@ -143,6 +144,7 @@
   &.is-active:hover .inner {
     background: var(--ngs-sidebar-nav-nested-item-active-bg);
     color: var(--ngs-sidebar-nav-nested-item-active-color);
+    font-weight: var(--ngs-sidebar-nav-item-active-font-weight);
   }
 
   &:not(:last-child){

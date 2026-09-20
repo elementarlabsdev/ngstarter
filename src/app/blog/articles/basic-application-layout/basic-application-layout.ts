@@ -45,11 +45,11 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideNgsTheme({
-      theme: 'modern',
+      theme: 'default',
       colorScheme: 'auto',
       density: 'compact',
       radius: 'small',
-      primaryColor: '#155eef',
+      colorPreset: 'default',
     }),
   ],
 };`;

@@ -51,6 +51,7 @@
     "serve:ssr:admin-modern": "node dist/admin-modern/server/server.mjs",
     "serve:ssr:admin-classic": "node dist/admin-classic/server/server.mjs"
   },
+  "license": "MIT",
   "private": true,
   "prettier": {
     "printWidth": 100,

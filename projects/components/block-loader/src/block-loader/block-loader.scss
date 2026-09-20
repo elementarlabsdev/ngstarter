@@ -1,11 +1,13 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-block-loader-bg: rgba(255, 255, 255, 0.5);
+  --ngs-block-loader-bg: var(--ngs-color-surface-loading, rgba(255, 255, 255, 0.96));
+  --ngs-block-loader-color: var(--ngs-color-on-surface-loading, #12203b);
 
   position: absolute;
   inset: 0;
   background: var(--ngs-block-loader-bg);
+  color: var(--ngs-block-loader-color);
   visibility: hidden;
   z-index: -99;
   pointer-events: none;
@@ -32,8 +34,4 @@
     text-align: center;
     max-width: 800px;
   }
-}
-
-:host-context(html.dark) {
-  --ngs-block-loader-bg: rgba(0, 0, 0, 0.7);
 }

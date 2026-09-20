@@ -44,6 +44,8 @@ export const appConfig: ApplicationConfig = {
       theme: 'default',
       colorScheme: 'auto',
       radius: 'medium',
+      colorPreset: 'default',
+      storageKey: 'ngs-docs-default-v1',
     }),
     provideAppInitializer(() => {
       const envService = inject(EnvironmentService);

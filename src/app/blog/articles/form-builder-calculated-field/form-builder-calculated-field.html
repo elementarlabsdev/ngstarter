@@ -99,8 +99,7 @@
             <code>settings</code>. The <code>name</code> remains the submitted value key, just like
             every other Form Builder control.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="minimalFieldCode"
             language="typescript"
             title="calculated-field.ts"
@@ -118,8 +117,7 @@
             decimal places. <code>settings.emptyValue</code> is used when the expression is empty or
             the result cannot be converted to the requested value type.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="settingsCode"
             language="typescript"
             title="calculated-settings.ts"
@@ -134,8 +132,7 @@
             <code>quantity</code> or <code>unit_price</code>, the renderer recomputes
             <code>line_total</code> immediately.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="invoiceSchemaCode"
             language="typescript"
             title="invoice.schema.ts"
@@ -146,8 +143,7 @@
             the schema, creates a control for <code>line_total</code>, subscribes to form changes,
             and keeps that control synchronized with the expression result.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="rendererCode"
             language="html"
             title="invoice-form.html"
@@ -189,8 +185,7 @@
             <code>id</code>. This is useful for summary labels, repeater totals, and dynamic
             confirmation copy that should not become part of <code>form.getRawValue()</code>.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="plainTextCode"
             language="typescript"
             title="plain-text-expression.ts"
@@ -205,8 +200,7 @@
             <code>=</code> prefix. You can write arithmetic, grouped subexpressions, comparisons,
             string literals, field references, and a small set of built-in functions.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="formulaExamplesCode"
             language="text"
             title="formula-examples.txt"
@@ -251,8 +245,7 @@
             named <code>invoice_items</code> appears as
             <code>invoice_items.item_description</code>.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="valueCode"
             language="typescript"
             title="raw-value.ts"
@@ -308,8 +301,7 @@
             for dependencies, builds a dependency order, and evaluates upstream calculations before
             downstream calculations. This makes chained formulas work without manual subscriptions.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="dependencyCode"
             language="typescript"
             title="dependency-order.ts"
@@ -332,8 +324,7 @@
             This is the right model for line item totals where each row has its own
             <code>quantity</code>, <code>unit_price</code>, and <code>line_total</code>.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="repeaterCode"
             language="typescript"
             title="repeater-calculation.ts"
@@ -346,8 +337,7 @@
             <code>SUM</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code>,
             <code>COUNT</code>, and <code>COUNTA</code> can consume it directly.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="aggregateCode"
             language="typescript"
             title="repeater-aggregate.ts"
@@ -395,8 +385,7 @@
             <code>FormBuilderCalculationEngine</code> with <code>evaluate</code> and optionally
             <code>dependencies</code>. The renderer will use it for every calculated field.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="customEngineCode"
             language="typescript"
             title="custom-calculation-engine.ts"

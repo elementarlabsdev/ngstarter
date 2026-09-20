@@ -35,7 +35,7 @@ AI registry: https://ngstarter.com/ai/component-registry.json
 import { provideNgsTheme } from '@ngstarter-ui/components/core';
 
 export const appConfig = {
-  providers: [provideNgsTheme({ theme: 'modern', colorScheme: 'auto' })],
+  providers: [provideNgsTheme({ theme: 'default', colorScheme: 'auto', colorPreset: 'default' })],
 };
 ```
 

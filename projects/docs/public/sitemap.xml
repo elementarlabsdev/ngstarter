@@ -1331,16 +1331,6 @@
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://docs.ngstarter.com/theme/customize</loc>
-    <lastmod>2026-06-18</lastmod>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://docs.ngstarter.com/theme/generator</loc>
-    <lastmod>2026-06-18</lastmod>
-    <priority>0.75</priority>
-  </url>
-  <url>
     <loc>https://docs.ngstarter.com/theme/playground</loc>
     <lastmod>2026-06-18</lastmod>
     <priority>0.75</priority>

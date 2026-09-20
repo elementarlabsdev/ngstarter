@@ -12,35 +12,13 @@ import { DocsNavigationService, DocsRelatedLink } from '../../navigation/docs-na
 export class Page {
   readonly wide = input(false, { transform: booleanAttribute });
 
-  private readonly productionDocsSections = new Set([
-    'components',
-    'forms',
-    'libraries',
-    'micro-charts',
-    'navigation',
-  ]);
-
   constructor(
     private readonly router: Router,
     private readonly docsNavigation: DocsNavigationService
   ) {}
 
-  protected get showProductionLinks(): boolean {
-    const [section, slug] = this.pathSegments;
-
-    return Boolean(slug && this.productionDocsSections.has(section));
-  }
-
   protected get relatedLinks(): readonly DocsRelatedLink[] {
     return this.docsNavigation.relatedLinksForUrl(this.router.url);
-  }
-
-  private get pathSegments(): string[] {
-    return this.router.url
-      .split(/[?#]/)[0]
-      .replace(/^\/+|\/+$/g, '')
-      .split('/')
-      .filter(Boolean);
   }
 
 }

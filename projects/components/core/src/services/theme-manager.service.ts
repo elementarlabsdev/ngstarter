@@ -7,14 +7,16 @@ import {
   NgsThemeOptions,
 } from '../tokens/theme.token';
 import {
-  NGS_GENERATED_THEME_PROPERTY_NAMES,
-} from '../theming/theme-generator';
+  getNgsThemePresetProperties,
+  NGS_THEME_PRESET_PROPERTY_NAMES,
+  NgsThemeColorPreset,
+} from '../theming/theme-presets';
 
 interface StoredThemeState {
   theme?: NgsThemeName;
   colorScheme?: NgsColorScheme;
   radius?: NgsRadius;
-  primaryColor?: string;
+  colorPreset?: NgsThemeColorPreset;
 }
 
 @Injectable({
@@ -28,12 +30,12 @@ export class ThemeManagerService {
   private readonly _theme = signal<NgsThemeName>('default');
   private readonly _colorScheme = signal<Exclude<NgsColorScheme, 'auto'>>('light');
   private readonly _radius = signal<NgsRadius>('medium');
-  private readonly _primaryColor = signal<string | null>(null);
+  private readonly _colorPreset = signal<NgsThemeColorPreset>('default');
 
   readonly theme = this._theme.asReadonly();
   readonly colorScheme = this._colorScheme.asReadonly();
   readonly radius = this._radius.asReadonly();
-  readonly primaryColor = this._primaryColor.asReadonly();
+  readonly colorPreset = this._colorPreset.asReadonly();
 
   constructor() {
     this.applyTheme(this._getInitialState());
@@ -74,9 +76,9 @@ export class ThemeManagerService {
     this.setColorScheme(colorScheme);
   }
 
-  setTheme(theme: NgsThemeName, persist = true): void {
-    this._theme.set(theme);
-    this._persist({ theme }, persist);
+  setTheme(_theme: NgsThemeName = 'default', persist = true): void {
+    this._theme.set('default');
+    this._persist({ theme: 'default' }, persist);
   }
 
   setRadius(radius: NgsRadius, persist = true): void {
@@ -84,26 +86,22 @@ export class ThemeManagerService {
     this._persist({ radius }, persist);
   }
 
-  setPrimaryColor(primaryColor: string | null, persist = true): void {
-    this._primaryColor.set(primaryColor);
-    this._persist({ primaryColor: primaryColor || undefined }, persist);
+  setColorPreset(_colorPreset: NgsThemeColorPreset = 'default', persist = true): void {
+    this._colorPreset.set('default');
+    this._persist({ colorPreset: 'default' }, persist);
   }
 
   applyTheme(options: NgsThemeOptions, persist = false): void {
-    if (options.theme) {
-      this._theme.set(options.theme);
-    }
+    this._theme.set('default');
 
     if (options.radius) {
       this._radius.set(options.radius);
     }
 
-    if (options.primaryColor !== undefined) {
-      this._primaryColor.set(options.primaryColor || null);
-    }
+    this._colorPreset.set('default');
 
     this.setColorScheme(options.colorScheme || 'auto', persist);
-    this._persist(options, persist);
+    this._persist({ ...options, theme: 'default', colorPreset: 'default' }, persist);
   }
 
   private _getStoredColorScheme() {
@@ -171,12 +169,15 @@ export class ThemeManagerService {
     return {
       ...this._options,
       ...this._getStoredState(),
+      theme: 'default',
+      colorPreset: 'default',
     };
   }
 
   private _syncDocumentAttributes(): void {
     const root = this._document.documentElement;
-    const primaryColor = this._primaryColor();
+    const colorPreset = this._colorPreset();
+    const colorScheme = this._colorScheme();
 
     if (!root) {
       return;
@@ -186,21 +187,20 @@ export class ThemeManagerService {
     root.setAttribute('data-ngs-theme', this._theme());
     root.setAttribute('data-ngs-color-scheme', this._colorScheme());
     root.setAttribute('data-ngs-radius', this._radius());
+    root.setAttribute('data-ngs-color-preset', colorPreset);
 
     if (!root.style) {
       return;
     }
 
-    if (primaryColor) {
-      for (const name of NGS_GENERATED_THEME_PROPERTY_NAMES) {
-        root.style.removeProperty(name);
-      }
+    for (const name of NGS_THEME_PRESET_PROPERTY_NAMES) {
+      root.style.removeProperty(name);
+    }
 
-      root.style.setProperty('--ngs-color-primary-seed', primaryColor);
-    } else {
-      for (const name of NGS_GENERATED_THEME_PROPERTY_NAMES) {
-        root.style.removeProperty(name);
-      }
+    for (const [name, value] of Object.entries(
+      getNgsThemePresetProperties(colorPreset, colorScheme),
+    )) {
+      root.style.setProperty(name, value);
     }
   }
 

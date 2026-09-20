@@ -2,25 +2,14 @@ import { Component } from '@angular/core';
 import { HeroComponent } from '../../components/hero/hero.component';
 import { FeaturesComponent } from '../../components/features/features.component';
 import { PreviewComponent } from '../../components/preview/preview.component';
-import { PricingComponent } from '../../components/pricing/pricing.component';
-import { UpgradeComponent } from '../../components/upgrade/upgrade.component';
 import { FaqComponent } from '../../components/faq/faq.component';
-import { Button } from '@ngstarter-ui/components/button';
-import { Card, CardContent } from '@ngstarter-ui/components/card';
-import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'app-home',
   imports: [
-    Button,
-    Card,
-    CardContent,
     HeroComponent,
     FeaturesComponent,
-    Icon,
     PreviewComponent,
-    PricingComponent,
-    UpgradeComponent,
     FaqComponent,
   ],
   templateUrl: './home.html',

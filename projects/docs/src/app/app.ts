@@ -10,12 +10,12 @@ import { AnnouncementGlobal } from '@ngstarter-ui/components/announcement';
 import { IncidentsContainer } from '@ngstarter-ui/components/incidents';
 import {
   LayoutContent,
-  Layout, LayoutHeader,
+  Layout,
   LayoutTopbar
 } from '@ngstarter-ui/components/layout';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
-import { Logo, LogoDescription, LogoShape, LogoText } from '@ngstarter-ui/components/logo';
+import { Logo, LogoDescription, LogoShape } from '@ngstarter-ui/components/logo';
 import { SplashScreen } from '@ngstarter-ui/components/splash-screen';
 import {
   ColorScheme,
@@ -47,7 +47,7 @@ import { Location } from '@angular/common';
 import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
 import { FormsModule } from '@angular/forms';
 import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
-import {Toolbar, ToolbarItem, ToolbarNav, ToolbarNavLink, ToolbarSpacer} from '@ngstarter-ui/components/toolbar';
+import { Toolbar, ToolbarItem, ToolbarSpacer } from '@ngstarter-ui/components/toolbar';
 import { DocsNavigationService } from './navigation/docs-navigation.service';
 
 interface DocsNavItem {
@@ -158,19 +158,15 @@ function sortDocsNavItems(items: readonly DocsNavItem[], preserveSections = fals
     ScrollbarArea,
     SidenavCollapsed,
     SidenavExpanded,
-    LogoText,
     LogoShape,
     LogoDescription,
     SplashScreen,
     Toolbar,
     ToolbarSpacer,
     ToolbarItem,
-    ToolbarNav,
-    ToolbarNavLink,
     // SplashScreen,
   ],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  templateUrl: './app.html'
 })
 export class App implements OnInit {
   private _analyticsService = inject(AnalyticsService);
@@ -227,18 +223,6 @@ export class App implements OnInit {
           type: 'link',
           name: 'Playground',
           link: '/theme/playground'
-        },
-        {
-          key: 'theme-generator',
-          type: 'link',
-          name: 'Theme Generator',
-          link: '/theme/generator'
-        },
-        {
-          type: 'link',
-          name: 'Customize Theme',
-          key: 'customize',
-          link: '/theme/customize'
         },
       ]
     },

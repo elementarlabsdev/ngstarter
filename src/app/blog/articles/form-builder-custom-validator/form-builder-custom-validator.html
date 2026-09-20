@@ -90,8 +90,7 @@
             Validator definitions and provider helpers are exported from the Form Builder secondary
             entry point. The validator itself can use the normal Angular forms types.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="importsCode"
             language="typescript"
             title="imports.ts"
@@ -106,8 +105,7 @@
             appears as <strong>SKU prefix</strong>, asks for one text value, and uses
             <code>defaultMessage</code> when a field rule does not provide its own message.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="validatorCode"
             language="typescript"
             title="sku-prefix.validator.ts"
@@ -134,8 +132,7 @@
             can show it in the field Validators tab and every renderer can resolve it when the
             schema is rendered.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="appConfigCode"
             language="typescript"
             title="app.config.ts"
@@ -150,8 +147,7 @@
             catalog of project-specific validators. This is useful for product codes, internal IDs,
             domain-specific ranges, and other rules that should be available to form authors.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="multipleProvidersCode"
             language="typescript"
             title="validators.provider.ts"
@@ -166,8 +162,7 @@
             <code>provideFormBuilder</code> alongside custom fields, settings, select data sources,
             and upload callbacks.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="provideFormBuilderCode"
             language="typescript"
             title="form-builder.providers.ts"
@@ -182,8 +177,7 @@
             <code>message</code>. This message is shown below the field when the control is dirty or
             touched and the Angular validator reports the matching error key.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="schemaCode"
             language="typescript"
             title="product-form.schema.ts"
@@ -198,8 +192,7 @@
             configure the validator in the builder, save the schema, and the renderer will apply the
             same Angular validation behavior.
           </p>
-          <ngs-code-highlighter
-            class="mb-10"
+          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="templateCode"
             language="html"
             title="product-form.html"

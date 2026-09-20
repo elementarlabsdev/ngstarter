@@ -52,8 +52,6 @@ const diffTransformer: ShikiTransformer = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-code-highlighter not-prose',
-    '[class.appearance-bordered]': 'appearance() === "bordered"',
-    '[class.appearance-none]': 'appearance() === "none"',
     '[class.overflow-disabled]': 'disableOverflow()',
   }
 })
@@ -64,7 +62,6 @@ export class CodeHighlighter implements OnChanges {
   language = input<string>('none');
   theme = input<string>('github-light');
   title = input<string | null>(null);
-  appearance = input<'none' | 'bordered'>('bordered');
   diff = input<boolean>(false);
   highlightLines = input<number[] | number[][]>([]);
   showLanguage = input(false, { transform: booleanAttribute });

@@ -3,10 +3,8 @@
 
 :host {
   --ngs-code-highlighter-bg: var(--ngs-color-background);
-  --ngs-code-highlighter-radius: var(--ngs-radius-xl);
   --ngs-code-highlighter-padding: --spacing(5);
   --ngs-code-highlighter-margin: --spacing(5);
-  --ngs-code-highlighter-border: 1px solid var(--ngs-color-border);
   --ngs-code-highlighter-title-padding: --spacing(2) --spacing(3) --spacing(1) --spacing(3);
   --ngs-code-highlighter-title-color: var(--ngs-color-neutral-500);
 
@@ -121,43 +119,6 @@
       code {
         width: max-content;
         min-width: 100%;
-      }
-    }
-  }
-
-  &.appearance-bordered {
-    figcaption {
-      border: var(--ngs-code-highlighter-border);
-      border-bottom: none;
-      border-top-left-radius: var(--ngs-radius-xl);
-      border-top-right-radius: var(--ngs-radius-xl);
-      width: max-content;
-    }
-
-    .content {
-      border: var(--ngs-code-highlighter-border);
-      border-radius: var(--ngs-code-highlighter-radius);
-      z-index: 0;
-    }
-
-    &:has(figcaption) {
-      .content {
-        border-top-left-radius: 0;
-      }
-    }
-  }
-
-  &.appearance-none {
-    .content {
-      border: none;
-      background-color: transparent !important;
-      border-radius: 0;
-    }
-
-    ::ng-deep {
-      pre {
-        padding-left: 0;
-        padding-right: 0;
       }
     }
   }

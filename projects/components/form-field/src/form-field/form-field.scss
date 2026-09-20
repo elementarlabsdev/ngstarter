@@ -18,6 +18,11 @@
   --ngs-form-field-infix-padding-top: var(--ngs-field-infix-padding-top);
   --ngs-form-field-infix-padding-bottom: var(--ngs-field-infix-padding-bottom);
   --ngs-form-field-no-label-padding-y: var(--ngs-field-no-label-padding-y);
+  --ngs-form-field-external-label-gap: --spacing(2);
+  --ngs-form-field-external-label-line-height: 1.25rem;
+  --ngs-form-field-external-label-font-size: var(--ngs-field-font-size);
+  --ngs-form-field-external-label-font-weight: 500;
+  --ngs-form-field-external-label-color: var(--ngs-color-on-surface);
 
   display: block;
   width: var(--ngs-form-field-width, 100%);
@@ -192,6 +197,68 @@
     }
   }
 
+  &.ngs-form-field-label-floating {
+    --ngs-form-field-container-min-height: var(
+      --ngs-field-height,
+      var(--ngs-field-floating-container-height, 3.125rem)
+    );
+  }
+
+  &.ngs-form-field-label-external.ngs-form-field-has-label {
+    --ngs-form-field-infix-padding-top: var(--ngs-form-field-no-label-padding-y);
+    --ngs-form-field-infix-padding-bottom: var(--ngs-form-field-no-label-padding-y);
+
+    .ngs-form-field-wrapper {
+      height: calc(
+        var(--ngs-form-field-container-min-height) +
+        var(--ngs-form-field-external-label-line-height) +
+        var(--ngs-form-field-external-label-gap)
+      );
+    }
+
+    .ngs-form-field-container {
+      margin-top: calc(
+        var(--ngs-form-field-external-label-line-height) +
+        var(--ngs-form-field-external-label-gap)
+      );
+    }
+
+    .ngs-form-field-infix {
+      justify-content: center;
+      overflow: visible;
+      position: static;
+    }
+
+    .ngs-form-field-label {
+      left: 0;
+      right: 0;
+      width: auto;
+      max-width: none;
+      top: calc(
+        (var(--ngs-form-field-external-label-line-height) +
+        var(--ngs-form-field-external-label-gap)) * -1
+      );
+      transform: none;
+      color: var(--ngs-form-field-external-label-color);
+      font-size: var(--ngs-form-field-external-label-font-size);
+      font-weight: var(--ngs-form-field-external-label-font-weight);
+      line-height: var(--ngs-form-field-external-label-line-height);
+      transition: color 0.2s ease;
+    }
+
+    &.ngs-form-field-invalid {
+      .ngs-form-field-label {
+        color: var(--ngs-form-field-error-color);
+      }
+    }
+
+    &.ngs-form-field-disabled {
+      .ngs-form-field-label {
+        color: var(--ngs-state-disabled-color);
+      }
+    }
+  }
+
   ::ng-deep {
     input {
       font-size: var(--ngs-field-font-size);
@@ -281,7 +348,7 @@
     }
   }
 
-  &.ngs-form-field-has-label:not(.ngs-form-field-should-float) {
+  &.ngs-form-field-label-floating.ngs-form-field-has-label:not(.ngs-form-field-should-float) {
     ::ng-deep .ngs-input,
     ::ng-deep .ngs-chip-input,
     ::ng-deep .ngs-phone-input,
@@ -347,7 +414,14 @@
   }
 
   &.same-height-as-button {
-    --ngs-form-field-input-height: var(--ngs-button-height);
+    --ngs-form-field-input-height: var(--ngs-field-input-height);
     --ngs-form-field-container-min-height: var(--ngs-button-height);
+
+    &.ngs-form-field-label-floating {
+      --ngs-form-field-container-min-height: max(
+        var(--ngs-button-height),
+        var(--ngs-field-floating-container-height, 3.125rem)
+      );
+    }
   }
 }

@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { ButtonToggleGroup } from '../button-toggle-group/button-toggle-group';
-import {Ripple} from "@ngstarter-ui/components/core";
+import { Ripple } from '@ngstarter-ui/components/core';
 
 let nextId = 0;
 
@@ -59,16 +59,8 @@ export class ButtonToggle implements OnInit {
     return this.disabled() || (this.buttonToggleGroup && this.buttonToggleGroup.disabled());
   }
 
-  get _shouldShowSelectionIndicator(): boolean {
-    if (!this.isChecked) {
-      return false;
-    }
-
-    if (!this.buttonToggleGroup) {
-      return false;
-    }
-
-    return !this.buttonToggleGroup.hideSelectionIndicator();
+  get _hasSelectionIndicator(): boolean {
+    return !!this.buttonToggleGroup && !this.buttonToggleGroup.hideSelectionIndicator();
   }
 
   ngOnInit() {

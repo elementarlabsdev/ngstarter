@@ -1,40 +1,43 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-button-toggle-group-border-color: var(--ngs-color-surface-container-highest);
+  --ngs-button-toggle-group-border-color: var(--ngs-color-border);
   --ngs-button-toggle-group-bg: var(--ngs-color-surface-container);
   --ngs-button-toggle-text-color: var(--ngs-color-on-surface-variant);
   --ngs-button-toggle-hover-bg-color: var(--ngs-color-surface-container-high);
-  --ngs-button-toggle-checked-bg-color: var(--ngs-color-surface-container-highest);
-  --ngs-button-toggle-checked-text-color: var(--ngs-color-on-surface);
+  --ngs-button-toggle-checked-bg-color: var(--ngs-color-primary-container);
+  --ngs-button-toggle-checked-text-color: var(--ngs-color-on-primary-container);
   --ngs-button-toggle-selection-indicator-color: var(--ngs-color-primary);
-  --ngs-button-toggle-button-padding: 0 --spacing(4);
-  --ngs-button-toggle-button-only-icon-padding: 0 --spacing(2.5);
+  --ngs-button-toggle-focus-ring-color: var(--ngs-state-focus-ring);
+  --ngs-button-toggle-disabled-bg-color: var(--ngs-color-surface-container-high);
+  --ngs-button-toggle-disabled-text-color: var(--ngs-color-neutral-500);
+  --ngs-button-toggle-group-border-width: 1px;
+  --ngs-button-toggle-group-padding: --spacing(0.75);
+  --ngs-button-toggle-group-gap: --spacing(0.5);
+  --ngs-button-toggle-group-border-radius: var(--ngs-radius-lg);
+  --ngs-button-toggle-button-height: 2rem;
+  --ngs-button-toggle-button-border-radius: var(--ngs-radius-sm);
+  --ngs-button-toggle-button-padding: 0 --spacing(3);
+  --ngs-button-toggle-button-only-icon-padding: 0 --spacing(2);
+  --ngs-button-toggle-button-gap: --spacing(1.5);
   --ngs-button-toggle-button-font-size: 0.875rem;
   --ngs-button-toggle-button-font-weight: 500;
+  --ngs-button-toggle-checked-shadow: inset 0 0 0 1px var(--ngs-color-primary-300);
 
   display: inline-flex;
   flex-direction: row;
+  align-items: center;
+  gap: var(--ngs-button-toggle-group-gap);
+  box-sizing: border-box;
+  min-height: var(--ngs-button-height);
+  padding: var(--ngs-button-toggle-group-padding);
   white-space: nowrap;
-  overflow: hidden;
-  border-radius: var(--ngs-button-toggle-group-border-radius, var(--ngs-button-radius));
+  border: var(--ngs-button-toggle-group-border-width) solid var(--ngs-button-toggle-group-border-color);
+  border-radius: var(--ngs-button-toggle-group-border-radius);
   background: var(--ngs-button-toggle-group-bg);
-  height: var(--ngs-button-height);
-
-  ::ng-deep {
-    .ngs-button-toggle + .ngs-button-toggle {
-      border-left: 1px solid var(--ngs-button-toggle-group-border-color);
-    }
-  }
 
   &.ngs-button-toggle-group-vertical {
+    align-items: stretch;
     flex-direction: column;
-
-    ::ng-deep {
-      .ngs-button-toggle + .ngs-button-toggle {
-        border-top: 1px solid var(--ngs-button-toggle-group-border-color);
-        border-left: none;
-      }
-    }
   }
 }

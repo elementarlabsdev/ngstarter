@@ -7,7 +7,8 @@
   --ngs-slider-track-active-color: var(--ngs-color-primary);
   --ngs-slider-thumb-size: 20px;
   --ngs-slider-thumb-color: var(--ngs-color-primary);
-  --ngs-slider-thumb-ripple-color: var(--ngs-color-primary-100);
+  --ngs-slider-thumb-ripple-color: rgba(36, 91, 255, 0.5);
+  --ngs-slider-thumb-ripple-width: 6px;
   --ngs-slider-tick-mark-color: var(--ngs-color-on-surface-variant);
   --ngs-slider-tick-mark-active-color: color-mix(in srgb, var(--ngs-color-on-primary), transparent 40%);
   --ngs-slider-value-indicator-color: var(--ngs-color-on-surface);
@@ -157,7 +158,7 @@
       }
 
       &:focus + .ngs-slider-visual-thumbs .ngs-slider-thumb-knob {
-        box-shadow: 0 0 0 10px var(--ngs-slider-thumb-ripple-color);
+        box-shadow: 0 0 0 var(--ngs-slider-thumb-ripple-width) var(--ngs-slider-thumb-ripple-color);
       }
     }
   }
