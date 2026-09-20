@@ -72,7 +72,6 @@ const NGS_THEME_IMPORT = '@use "@ngstarter-ui/components/styles/themes/default";
 const NGS_THEME_PROVIDER = `provideNgsTheme({
   theme: 'default',
   colorScheme: 'auto',
-  radius: 'medium',
 }),`;
 const AGENTS_START_MARKER = '<!-- ngstarter-ui:start -->';
 const AGENTS_END_MARKER = '<!-- ngstarter-ui:end -->';

@@ -133,6 +133,14 @@ describe('ChipGrid', () => {
     expect(styles.width).not.toBe('auto');
   });
 
+  it('keeps the chip input inside an external-label form field', () => {
+    const container = fixture.nativeElement.querySelector('.ngs-form-field-container') as HTMLElement;
+    const containerBounds = container.getBoundingClientRect();
+    const inputBounds = input().getBoundingClientRect();
+
+    expect(inputBounds.bottom).toBeLessThanOrEqual(containerBounds.bottom);
+  });
+
   it('keeps the chip input text vertically aligned like a form field input', () => {
     fixture.componentInstance.fruits.set([]);
     fixture.detectChanges();

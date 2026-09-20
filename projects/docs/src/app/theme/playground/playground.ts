@@ -6,7 +6,7 @@ import { Badge } from '@ngstarter-ui/components/badge';
 import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardActions, CardContent, CardHeader, CardSubtitle, CardTitle } from '@ngstarter-ui/components/card';
 import { Checkbox } from '@ngstarter-ui/components/checkbox';
-import { ThemeManagerService } from '@ngstarter-ui/components/core';
+import { NgsThemeName, ThemeManagerService } from '@ngstarter-ui/components/core';
 import { FormField, Hint, Label } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
@@ -15,7 +15,6 @@ import { Select, Option } from '@ngstarter-ui/components/select';
 import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
 import { NativeTable } from '@ngstarter-ui/components/table';
 
-type RadiusName = 'none' | 'small' | 'medium' | 'large';
 type SchemeName = 'light' | 'dark' | 'auto';
 
 @Component({
@@ -56,17 +55,20 @@ type SchemeName = 'light' | 'dark' | 'auto';
 export class ThemePlayground {
   private readonly themeManager = inject(ThemeManagerService);
 
-  readonly colorScheme = this.themeManager.colorScheme;
-  readonly radius = this.themeManager.radius;
+  readonly theme = this.themeManager.theme;
+  readonly colorScheme = this.themeManager.selectedColorScheme;
 
+  readonly themes: ReadonlyArray<{ value: NgsThemeName; label: string }> = [
+    { value: 'default', label: 'Default' },
+    { value: 'chalk', label: 'Chalk' },
+  ];
   readonly schemes: SchemeName[] = ['light', 'dark', 'auto'];
-  readonly radii: RadiusName[] = ['none', 'small', 'medium', 'large'];
+
+  setTheme(theme: NgsThemeName): void {
+    this.themeManager.setTheme(theme);
+  }
 
   setColorScheme(colorScheme: SchemeName): void {
     this.themeManager.setColorScheme(colorScheme);
-  }
-
-  setRadius(radius: RadiusName): void {
-    this.themeManager.setRadius(radius);
   }
 }

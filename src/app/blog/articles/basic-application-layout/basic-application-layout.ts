@@ -49,7 +49,6 @@ export const appConfig: ApplicationConfig = {
       theme: 'default',
       colorScheme: 'auto',
       density: 'compact',
-      radius: 'small',
       colorPreset: 'default',
     }),
   ],

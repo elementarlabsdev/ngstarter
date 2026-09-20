@@ -97,7 +97,6 @@ Must use:
 - comparison-slider: `@ngstarter-ui/components/comparison-slider` docs: /components/comparison-slider
 - confirm: `@ngstarter-ui/components/confirm` docs: /components/confirm
 - content-editor: `@ngstarter-ui/components/content-editor` docs: /libraries/content-editor
-- content-fade: `@ngstarter-ui/components/content-fade` docs: /components/content-fade
 - cookie-popup: `@ngstarter-ui/components/cookie-popup` docs: /components/cookie-popup
 - country-select: `@ngstarter-ui/components/country-select` docs: /forms/country
 - crop: `@ngstarter-ui/components/crop` docs: /components/crop

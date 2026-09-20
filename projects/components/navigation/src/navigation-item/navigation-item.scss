@@ -62,8 +62,8 @@
     .badge {
       font-weight: 600;
       font-size: var(--ngs-font-size-xs);
-      background: var(--ngs-color-primary);
-      color: var(--ngs-color-on-primary);
+      background: var(--ngs-nav-badge-bg, var(--ngs-color-primary));
+      color: var(--ngs-nav-badge-color, var(--ngs-color-on-primary));
     }
   }
 

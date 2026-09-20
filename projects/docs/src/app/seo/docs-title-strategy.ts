@@ -42,7 +42,6 @@ const COMPONENT_TITLES: Record<string, SeoTitleConfig> = {
   'comment-editor': { label: 'Comment Editor', detail: 'Rich Comment Input' },
   'comparison-slider': { label: 'Comparison Slider', detail: 'Before and After Views' },
   confirm: { label: 'Confirm', detail: 'Confirmation Dialogs' },
-  'content-fade': { label: 'Content Fade', detail: 'Scrollable Content Fades' },
   'cookie-popup': { label: 'Cookie Popup', detail: 'Consent Banners' },
   crop: { label: 'Crop', detail: 'Image Cropping' },
   datepicker: {

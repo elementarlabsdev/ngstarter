@@ -251,6 +251,17 @@
       transition: color 0.2s ease;
     }
 
+    &.ngs-form-field-multiline {
+      .ngs-form-field-wrapper {
+        height: auto;
+        min-height: calc(
+          var(--ngs-form-field-container-min-height) +
+          var(--ngs-form-field-external-label-line-height) +
+          var(--ngs-form-field-external-label-gap)
+        );
+      }
+    }
+
     &.ngs-form-field-invalid {
       .ngs-form-field-label {
         color: var(--ngs-form-field-error-color);

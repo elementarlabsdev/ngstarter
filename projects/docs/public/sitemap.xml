@@ -211,16 +211,6 @@
     <priority>0.60</priority>
   </url>
   <url>
-    <loc>https://docs.ngstarter.com/components/content-fade</loc>
-    <lastmod>2026-06-18</lastmod>
-    <priority>0.70</priority>
-  </url>
-  <url>
-    <loc>https://docs.ngstarter.com/components/content-fade/api</loc>
-    <lastmod>2026-06-18</lastmod>
-    <priority>0.60</priority>
-  </url>
-  <url>
     <loc>https://docs.ngstarter.com/components/cookie-popup</loc>
     <lastmod>2026-06-18</lastmod>
     <priority>0.70</priority>

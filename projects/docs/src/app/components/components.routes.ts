@@ -121,11 +121,6 @@ export const routes: Routes = [
     title: 'Divider'
   },
   {
-    path: 'content-fade',
-    loadChildren: () => import('./content-fade/routes').then(m => m.routes),
-    title: 'Content Fade'
-  },
-  {
     path: 'expansion-panel',
     loadChildren: () => import('./expansion-panel/routes').then(m => m.routes),
     title: 'Expansion Panel'

@@ -1,5 +1,5 @@
 <app-page>
-  <h1 appPageTitle>Default Theme Playground</h1>
+  <h1 appPageTitle>Theme Playground</h1>
 
   <div appPageContent>
     <section class="theme-playground">
@@ -7,21 +7,29 @@
         <ngs-card-content>
           <div class="control-grid">
             <div class="control-group">
-              <div class="control-label">Scheme</div>
+              <div class="control-label">Theme</div>
               <div class="segmented-control">
-                @for (item of schemes; track item) {
-                  <button type="button" [ngsButton]="colorScheme() === item ? 'filled' : 'tonal'" (click)="setColorScheme(item)">
-                    {{ item }}
+                @for (item of themes; track item.value) {
+                  <button
+                    type="button"
+                    [ngsButton]="theme() === item.value ? 'filled' : 'tonal'"
+                    (click)="setTheme(item.value)"
+                  >
+                    {{ item.label }}
                   </button>
                 }
               </div>
             </div>
 
             <div class="control-group">
-              <div class="control-label">Radius</div>
+              <div class="control-label">Scheme</div>
               <div class="segmented-control">
-                @for (item of radii; track item) {
-                  <button type="button" [ngsButton]="radius() === item ? 'filled' : 'tonal'" (click)="setRadius(item)">
+                @for (item of schemes; track item) {
+                  <button
+                    type="button"
+                    [ngsButton]="colorScheme() === item ? 'filled' : 'tonal'"
+                    (click)="setColorScheme(item)"
+                  >
                     {{ item }}
                   </button>
                 }

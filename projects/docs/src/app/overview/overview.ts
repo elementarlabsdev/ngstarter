@@ -171,11 +171,6 @@ export class Overview {
       name: 'Content Editor'
     },
     {
-      routerLink: '/components/content-fade',
-      imageUrl: 'assets/overview/content-fade.svg',
-      name: 'Content Fade'
-    },
-    {
       routerLink: '/components/cookie-popup',
       imageUrl: 'assets/overview/cookie-popup.svg',
       name: 'Cookie Popup'

@@ -222,7 +222,7 @@ Required admin mappings:
   `ImageZoomViewer`, `Crop`, `Carousel`, `ComparisonSlider`, `ThumbnailMaker`, and `VideoPlayer`.
 - Resizable split panes and spatial layout editing: `Split`, `SplitArea`, `SplitPane`, and
   `VisualBuilder`.
-- Content affordances and utilities: `ContentFade`, `Expand`, `Marquee`, `Suggestions`,
+- Content affordances and utilities: `Expand`, `Marquee`, `Suggestions`,
   `ScrollSpy`, `ScrollSpyNav`, `ScrollSpyContainerDirective`, `GuidedTour`/`TourService` via
   `@ngstarter-ui/components/guided-tour`, `ColorSwitcher`, `CookiePopup`, `Logo`, `Tiles`, and
   `ResizableContainer`.

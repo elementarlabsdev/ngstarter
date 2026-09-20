@@ -1,0 +1,400 @@
+@use "../_common";
+@use "../_global";
+@use "./default-components" as components;
+
+// Chalk is a light, editorial business theme: warm white work surfaces,
+// graphite typography, fine neutral rules, compact square geometry, and a
+// single high-visibility chartreuse accent.
+@mixin chalk-shape {
+  --ngs-font-family-base: "DM Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  --ngs-radius-xs: 0.125rem;
+  --ngs-radius-sm: 0.25rem;
+  --ngs-radius-md: 0.25rem;
+  --ngs-radius-lg: 0.25rem;
+  --ngs-radius-xl: 0.25rem;
+  --ngs-control-radius: var(--ngs-radius-md);
+  --ngs-radius-current: var(--ngs-control-radius);
+
+  --ngs-button-radius: var(--ngs-radius-md);
+  --ngs-field-radius: var(--ngs-radius-md);
+  --ngs-dropdown-radius: var(--ngs-radius-md);
+  --ngs-dialog-radius: var(--ngs-radius-md);
+  --ngs-card-radius: var(--ngs-radius-md);
+  --ngs-nav-item-radius: var(--ngs-radius-sm);
+  --ngs-menu-item-radius: var(--ngs-radius-xs);
+  --ngs-dropdown-item-radius: var(--ngs-radius-xs);
+  --ngs-nav-badge-bg: var(--ngs-color-primary-500);
+  --ngs-nav-badge-color: var(--ngs-color-on-primary-500);
+  --ngs-chip-radius: var(--ngs-radius-md);
+  --ngs-segmented-radius: var(--ngs-radius-md);
+  --ngs-segmented-button-radius: var(--ngs-radius-xs);
+}
+
+@mixin chalk-light {
+  color-scheme: light;
+
+  --ngs-shadow-sm: 0 1px 2px rgba(15, 15, 13, 0.04);
+  --ngs-shadow-md: 0 10px 24px rgba(15, 15, 13, 0.09), 0 2px 5px rgba(15, 15, 13, 0.04);
+  --ngs-shadow-lg: 0 20px 48px rgba(15, 15, 13, 0.14);
+
+  --ngs-color-primary-seed: #edf16e;
+  // Chalk uses graphite for active text, icons, and lines. The brighter
+  // chartreuse remains available as primary-500 for filled controls.
+  --ngs-color-primary: #11110f;
+  --ngs-color-on-primary: #ffffff;
+  --ngs-color-on-primary-500: #11110f;
+  --ngs-color-primary-container: #f5f7b8;
+  --ngs-color-on-primary-container: #24250f;
+  --ngs-color-secondary: #6f7075;
+  --ngs-color-on-secondary: #ffffff;
+  --ngs-color-secondary-container: #efefed;
+  --ngs-color-on-secondary-container: #282827;
+  --ngs-color-secondary-fixed: #efefed;
+  --ngs-color-on-secondary-fixed: #282827;
+  --ngs-color-tertiary: #30302d;
+  --ngs-color-on-tertiary: #ffffff;
+  --ngs-color-tertiary-container: #f1f1df;
+  --ngs-color-on-tertiary-container: #282817;
+
+  --ngs-color-danger: #dc2435;
+  --ngs-color-on-danger: #ffffff;
+  --ngs-color-danger-container: #fbe7e9;
+  --ngs-color-on-danger-container: #8b1722;
+  --ngs-color-danger-container-lowest: #fff7f7;
+  --ngs-color-danger-container-low: #fff1f2;
+  --ngs-color-danger-container-high: #f8ccd1;
+  --ngs-color-danger-container-highest: #f2aab2;
+  --ngs-color-info: #405fc7;
+  --ngs-color-on-info: #ffffff;
+  --ngs-color-info-container: #e9edfb;
+  --ngs-color-on-info-container: #283b7d;
+  --ngs-color-success: #25704e;
+  --ngs-color-on-success: #ffffff;
+  --ngs-color-success-container: #e4f1e9;
+  --ngs-color-on-success-container: #184a34;
+  --ngs-color-warning: #9a651a;
+  --ngs-color-on-warning: #ffffff;
+  --ngs-color-warning-container: #f8eedc;
+  --ngs-color-on-warning-container: #623f0f;
+
+  --ngs-color-background: #fbfaf9;
+  --ngs-color-on-background: #11110f;
+  --ngs-color-surface: #fbfaf9;
+  --ngs-color-surface-bright: #ffffff;
+  --ngs-color-surface-loading: rgba(251, 250, 249, 0.96);
+  --ngs-color-on-surface-loading: #11110f;
+  --ngs-color-on-surface: #11110f;
+  --ngs-color-on-surface-variant: #727278;
+  --ngs-color-neutral-50: #ffffff;
+  --ngs-color-neutral-100: #fbfaf9;
+  --ngs-color-neutral-200: #f8f8f7;
+  --ngs-color-neutral-300: #efefed;
+  --ngs-color-neutral-400: #d0d0d2;
+  --ngs-color-neutral-500: #afb0b2;
+  --ngs-color-neutral-600: #909093;
+  --ngs-color-neutral-650: #727278;
+  --ngs-color-neutral-700: #535150;
+  --ngs-color-neutral-800: #302d2d;
+  --ngs-color-neutral-900: #11110f;
+  --ngs-color-neutral-950: #070505;
+  --ngs-color-neutral: var(--ngs-color-neutral-500);
+  --ngs-color-black: #070505;
+  --ngs-color-white: #ffffff;
+  --ngs-color-surface-container-lowest: #ffffff;
+  --ngs-color-surface-container-low: #f8f8f7;
+  --ngs-color-surface-container: #f2f2f0;
+  --ngs-color-surface-container-high: #ebebe9;
+  --ngs-color-surface-container-highest: #e2e2e0;
+  --ngs-color-outline: #909093;
+  --ngs-color-outline-variant: #d0d0d2;
+  --ngs-color-border: #d0d0d2;
+  --ngs-color-faint: #f8f8f7;
+  --ngs-color-subtle: #f2f2f0;
+  --ngs-color-muted: #ebebe9;
+  --ngs-color-emphasis: #909093;
+  --ngs-color-strong: #535150;
+
+  --ngs-state-hover-bg: #f2f2f0;
+  --ngs-state-active-bg: #e9e9e6;
+  --ngs-state-selected-bg: var(--ngs-color-primary-500);
+  --ngs-state-selected-color: #11110f;
+  --ngs-state-focus-ring: #11110f;
+  --ngs-state-disabled-bg: #efefed;
+  --ngs-state-disabled-color: #909093;
+  --ngs-state-disabled-border: #d0d0d2;
+
+  --ngs-color-primary-100: #fcfdeb;
+  --ngs-color-primary-200: #f8facd;
+  --ngs-color-primary-300: #f5f7b8;
+  --ngs-color-primary-400: #f1f48f;
+  --ngs-color-primary-500: #edf16e;
+  --ngs-color-primary-600: #11110f;
+  --ngs-color-secondary-100: #ffffff;
+  --ngs-color-secondary-200: #f8f8f7;
+  --ngs-color-secondary-300: #efefed;
+  --ngs-color-secondary-400: #d0d0d2;
+  --ngs-color-tertiary-100: #fbfaf9;
+  --ngs-color-tertiary-200: #f2f2f0;
+  --ngs-color-tertiary-300: #f1f1df;
+  --ngs-color-tertiary-700: #30302d;
+  --ngs-color-tertiary-800: #201f1d;
+
+  --ngs-loader-overlay-bg: var(--ngs-color-surface-loading);
+  --ngs-screen-loader-overlay-bg: rgba(251, 250, 249, 0.96);
+
+  --ngs-button-filled-bg: var(--ngs-color-primary-500);
+  --ngs-button-filled-color: var(--ngs-color-on-primary-500);
+  --ngs-button-tonal-bg: var(--ngs-color-primary-container);
+  --ngs-button-tonal-color: var(--ngs-color-on-primary-container);
+  --ngs-button-outlined-border: var(--ngs-color-outline-variant);
+  --ngs-button-outlined-color: var(--ngs-color-on-surface);
+  --ngs-button-text-color: var(--ngs-color-on-surface);
+
+  --ngs-field-bg: var(--ngs-color-surface-container-lowest);
+  --ngs-field-disabled-bg: var(--ngs-color-surface-container);
+  --ngs-field-text: var(--ngs-color-on-surface);
+  --ngs-field-caret-color: var(--ngs-color-on-surface);
+  --ngs-field-label-color: var(--ngs-color-on-surface-variant);
+  --ngs-field-label-focus-color: var(--ngs-color-on-surface);
+  --ngs-field-border-color: var(--ngs-color-outline-variant);
+  --ngs-field-border-focus-color: var(--ngs-color-primary-600);
+  --ngs-field-outlined-border: var(--ngs-color-outline-variant);
+  --ngs-field-outlined-border-focus: var(--ngs-color-primary-600);
+
+  --ngs-dropdown-bg: var(--ngs-color-surface-container-lowest);
+  --ngs-dropdown-shadow: var(--ngs-shadow-md);
+  --ngs-dropdown-border: 1px solid var(--ngs-color-border);
+  --ngs-dropdown-item-hover-bg: var(--ngs-color-surface-container);
+  --ngs-dropdown-item-active-bg: var(--ngs-color-primary-500);
+  --ngs-dropdown-item-selected-bg: var(--ngs-color-primary-500);
+  --ngs-dropdown-item-selected-color: var(--ngs-color-on-primary-500);
+
+  --ngs-overlay-backdrop-bg: rgba(17, 17, 15, 0.28);
+  --ngs-overlay-backdrop-blur: 2px;
+  --ngs-table-bg: var(--ngs-color-surface);
+  --ngs-table-header-bg: var(--ngs-color-surface);
+  --ngs-table-row-bg: var(--ngs-color-surface);
+  --ngs-table-border-color: var(--ngs-color-border);
+  --ngs-table-header-cell-font-weight: 400;
+}
+
+// Dark remains available for consumers that explicitly request it, while the
+// light scheme above is the defining Chalk art direction.
+@mixin chalk-dark {
+  color-scheme: dark;
+
+  --ngs-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.28);
+  --ngs-shadow-md: 0 12px 28px rgba(0, 0, 0, 0.42);
+  --ngs-shadow-lg: 0 22px 52px rgba(0, 0, 0, 0.56);
+
+  --ngs-color-primary-seed: #edf16e;
+  --ngs-color-primary: #edf16e;
+  --ngs-color-on-primary: #11110f;
+  --ngs-color-primary-container: #45470f;
+  --ngs-color-on-primary-container: #f8facd;
+  --ngs-color-secondary: #c4c4c0;
+  --ngs-color-on-secondary: #1b1b19;
+  --ngs-color-secondary-container: #30302d;
+  --ngs-color-on-secondary-container: #efefed;
+  --ngs-color-secondary-fixed: #30302d;
+  --ngs-color-on-secondary-fixed: #efefed;
+  --ngs-color-tertiary: #d0d0c7;
+  --ngs-color-on-tertiary: #1b1b18;
+  --ngs-color-tertiary-container: #383821;
+  --ngs-color-on-tertiary-container: #f1f1df;
+
+  --ngs-color-danger: #ff8d98;
+  --ngs-color-on-danger: #4a0008;
+  --ngs-color-danger-container: #71262e;
+  --ngs-color-on-danger-container: #fbe7e9;
+  --ngs-color-danger-container-lowest: #1d1416;
+  --ngs-color-danger-container-low: #281719;
+  --ngs-color-danger-container-high: #5d232a;
+  --ngs-color-danger-container-highest: #71262e;
+  --ngs-color-info: #aebcf4;
+  --ngs-color-on-info: #172650;
+  --ngs-color-info-container: #283b7d;
+  --ngs-color-on-info-container: #e9edfb;
+  --ngs-color-success: #83c7a2;
+  --ngs-color-on-success: #0d3523;
+  --ngs-color-success-container: #24573e;
+  --ngs-color-on-success-container: #e4f1e9;
+  --ngs-color-warning: #e8bd79;
+  --ngs-color-on-warning: #412900;
+  --ngs-color-warning-container: #624711;
+  --ngs-color-on-warning-container: #f8eedc;
+
+  --ngs-color-background: #121210;
+  --ngs-color-on-background: #f7f6f2;
+  --ngs-color-surface: #191917;
+  --ngs-color-surface-bright: #21211e;
+  --ngs-color-surface-loading: rgba(251, 250, 249, 0.94);
+  --ngs-color-on-surface-loading: #11110f;
+  --ngs-color-on-surface: #f7f6f2;
+  --ngs-color-on-surface-variant: #c4c4c0;
+  --ngs-color-neutral-50: #121210;
+  --ngs-color-neutral-100: #191917;
+  --ngs-color-neutral-200: #21211e;
+  --ngs-color-neutral-300: #292926;
+  --ngs-color-neutral-400: #393936;
+  --ngs-color-neutral-500: #727278;
+  --ngs-color-neutral-600: #909093;
+  --ngs-color-neutral-650: #afb0b2;
+  --ngs-color-neutral-700: #c4c4c0;
+  --ngs-color-neutral-800: #dfdfda;
+  --ngs-color-neutral-900: #f7f6f2;
+  --ngs-color-neutral-950: #ffffff;
+  --ngs-color-neutral: var(--ngs-color-neutral-500);
+  --ngs-color-black: #070505;
+  --ngs-color-white: #ffffff;
+  --ngs-color-surface-container-lowest: #191917;
+  --ngs-color-surface-container-low: #21211e;
+  --ngs-color-surface-container: #292926;
+  --ngs-color-surface-container-high: #30302d;
+  --ngs-color-surface-container-highest: #393936;
+  --ngs-color-outline: #727278;
+  --ngs-color-outline-variant: #393936;
+  --ngs-color-border: #393936;
+  --ngs-color-faint: #21211e;
+  --ngs-color-subtle: #292926;
+  --ngs-color-muted: #30302d;
+  --ngs-color-emphasis: #727278;
+  --ngs-color-strong: #c4c4c0;
+
+  --ngs-state-hover-bg: #292926;
+  --ngs-state-active-bg: #30302d;
+  --ngs-state-selected-bg: #edf16e;
+  --ngs-state-selected-color: #11110f;
+  --ngs-state-focus-ring: #edf16e;
+  --ngs-state-disabled-bg: #21211e;
+  --ngs-state-disabled-color: #727278;
+  --ngs-state-disabled-border: #393936;
+
+  --ngs-color-primary-100: #20210d;
+  --ngs-color-primary-200: #31330e;
+  --ngs-color-primary-300: #45470f;
+  --ngs-color-primary-400: #a9ad36;
+  --ngs-color-primary-500: #d5da45;
+  --ngs-color-primary-600: #edf16e;
+  --ngs-color-secondary-100: #191917;
+  --ngs-color-secondary-200: #21211e;
+  --ngs-color-secondary-300: #292926;
+  --ngs-color-secondary-400: #393936;
+  --ngs-color-tertiary-100: #191917;
+  --ngs-color-tertiary-200: #21211e;
+  --ngs-color-tertiary-300: #292926;
+  --ngs-color-tertiary-700: #c4c4c0;
+  --ngs-color-tertiary-800: #dfdfda;
+
+  --ngs-loader-overlay-bg: var(--ngs-color-surface-loading);
+  --ngs-screen-loader-overlay-bg: rgba(18, 18, 16, 0.96);
+  --ngs-button-filled-bg: var(--ngs-color-primary);
+  --ngs-button-filled-color: var(--ngs-color-on-primary);
+  --ngs-button-tonal-bg: var(--ngs-color-primary-container);
+  --ngs-button-tonal-color: var(--ngs-color-on-primary-container);
+  --ngs-button-outlined-border: var(--ngs-color-outline);
+  --ngs-button-outlined-color: var(--ngs-color-on-surface);
+  --ngs-button-text-color: var(--ngs-color-primary);
+  --ngs-field-bg: var(--ngs-color-surface-container-lowest);
+  --ngs-field-border-color: var(--ngs-color-outline-variant);
+  --ngs-field-border-focus-color: var(--ngs-color-primary);
+  --ngs-field-outlined-border: var(--ngs-color-outline);
+  --ngs-field-outlined-border-focus: var(--ngs-color-primary);
+  --ngs-dropdown-bg: var(--ngs-color-surface-container-lowest);
+  --ngs-dropdown-shadow: var(--ngs-shadow-md);
+  --ngs-dropdown-border: 1px solid var(--ngs-color-border);
+  --ngs-dropdown-item-hover-bg: var(--ngs-color-surface-container);
+  --ngs-dropdown-item-active-bg: var(--ngs-color-primary);
+  --ngs-dropdown-item-selected-bg: var(--ngs-color-primary);
+  --ngs-dropdown-item-selected-color: var(--ngs-color-on-primary);
+  --ngs-overlay-backdrop-bg: rgba(0, 0, 0, 0.68);
+  --ngs-table-border-color: var(--ngs-color-border);
+}
+
+:root[data-ngs-theme='chalk'],
+[data-ngs-theme='chalk'] {
+  @include chalk-shape;
+  @include components.default-components;
+
+  ngs-slider {
+    --ngs-slider-thumb-ripple-color: rgba(237, 241, 110, 0.48);
+    --ngs-slider-track-active-color: var(--ngs-color-primary-500);
+    --ngs-slider-thumb-color: var(--ngs-color-primary-500);
+  }
+
+  ngs-chip,
+  ngs-chip-option,
+  ngs-chip-row {
+    --ngs-chip-radius: var(--ngs-radius-md);
+    --ngs-chip-selected-background: var(--ngs-color-primary-500);
+    --ngs-chip-selected-color: var(--ngs-color-on-primary-500);
+  }
+
+  ngs-checkbox,
+  ngs-checkbox-group {
+    --ngs-checkbox-checked-color: var(--ngs-color-primary-500);
+    --ngs-checkbox-checkmark-color: var(--ngs-color-on-primary-500);
+  }
+
+  ngs-radio-button,
+  ngs-radio-group {
+    --ngs-radio-button-checked-color: var(--ngs-color-primary);
+  }
+
+  ngs-slide-toggle,
+  ngs-slide-toggle-group {
+    --ngs-slide-toggle-bar-checked-color: var(--ngs-color-primary-500);
+    --ngs-slide-toggle-thumb-checked-color: var(--ngs-color-on-primary-500);
+  }
+
+  ngs-select,
+  ngs-country-select,
+  ngs-currency-select,
+  ngs-phone-input,
+  ngs-number-input,
+  ngs-date-range-input {
+    --ngs-number-input-control-bg: var(--ngs-color-primary-500);
+    --ngs-number-input-control-color: var(--ngs-color-on-primary-500);
+    --ngs-number-input-control-hover-bg: var(--ngs-color-primary-500);
+    --ngs-number-input-control-hover-color: var(--ngs-color-on-primary-500);
+    --ngs-number-input-control-active-bg: var(--ngs-color-primary-500);
+    --ngs-number-input-control-active-color: var(--ngs-color-on-primary-500);
+  }
+
+  ngs-badge-content,
+  [ngsBadge] {
+    --ngs-badge-background: var(--ngs-color-primary-500);
+    --ngs-badge-text-color: var(--ngs-color-on-primary-500);
+  }
+
+  ngs-stepper {
+    --ngs-stepper-icon-active-bg: var(--ngs-color-primary-500);
+    --ngs-stepper-icon-active-color: var(--ngs-color-on-primary-500);
+  }
+
+  ngs-avatar,
+  [ngs-avatar],
+  ngs-avatar-more,
+  ngs-avatar-total {
+    --ngs-avatar-border-radius: var(--ngs-radius-md);
+  }
+}
+
+:root[data-ngs-theme='chalk']:not([data-ngs-color-scheme='dark']):not(.dark),
+[data-ngs-theme='chalk']:not([data-ngs-color-scheme='dark']):not(.dark) {
+  @include chalk-light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-ngs-theme='chalk']:not([data-ngs-color-scheme='light']) {
+    @include chalk-dark;
+  }
+}
+
+:root.dark[data-ngs-theme='chalk'],
+:root[data-ngs-theme='chalk'][data-ngs-color-scheme='dark'],
+.dark[data-ngs-theme='chalk'],
+[data-ngs-theme='chalk'][data-ngs-color-scheme='dark'] {
+  @include chalk-dark;
+}

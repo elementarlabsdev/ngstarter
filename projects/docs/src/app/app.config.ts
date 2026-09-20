@@ -43,7 +43,6 @@ export const appConfig: ApplicationConfig = {
     provideNgsTheme({
       theme: 'default',
       colorScheme: 'auto',
-      radius: 'medium',
       colorPreset: 'default',
       storageKey: 'ngs-docs-default-v1',
     }),

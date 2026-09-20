@@ -1,4 +1,5 @@
 @use "../../components/styles/themes/default";
+@use "../../components/styles/themes/chalk";
 
 .prose {
   div:has(> table.ngs-table) {

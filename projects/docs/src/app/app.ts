@@ -507,12 +507,6 @@ export class App implements OnInit {
         {
           key: uuid(),
           type: 'link',
-          name: 'Content Fade',
-          link: '/components/content-fade'
-        },
-        {
-          key: uuid(),
-          type: 'link',
           name: 'Icon',
           link: '/components/icon'
         },

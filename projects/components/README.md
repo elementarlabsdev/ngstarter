@@ -48,19 +48,20 @@ import { Input } from '@ngstarter-ui/components/input';
 
 ## Theming
 
-NgStarter ships one theme. Import the default stylesheet once in your app styles:
+NgStarter ships Default and Chalk themes. Import the stylesheets you make available at runtime:
 
 ```scss
 @use '@ngstarter-ui/components/styles/themes/default';
+@use '@ngstarter-ui/components/styles/themes/chalk';
 ```
 
-The theme uses fixed light and dark color tokens. Its main layers are:
+Themes use fixed light and dark color tokens. Their main layers are:
 
 - primitive tokens: spacing, radius, font sizes, shadows
 - semantic tokens: `--ngs-color-primary`, `--ngs-color-surface`, `--ngs-color-danger`
 - component tokens: `--ngs-button-height`, `--ngs-field-radius`, `--ngs-table-row-height`
 
-Configure the color scheme and radius at runtime. The theme and color preset remain `default`:
+Configure the theme and color scheme at runtime:
 
 ```ts
 import { provideNgsTheme } from '@ngstarter-ui/components/core';
@@ -70,7 +71,6 @@ export const appConfig = {
     provideNgsTheme({
       theme: 'default',
       colorScheme: 'auto',
-      radius: 'medium',
       colorPreset: 'default',
     }),
   ],
@@ -80,14 +80,14 @@ export const appConfig = {
 For user display preferences, inject `ThemeManagerService`:
 
 ```ts
-themeManager.setRadius('large');
+themeManager.setTheme('chalk');
 themeManager.changeColorScheme('dark');
 ```
 
 The same values can be represented with document attributes:
 
 ```html
-<html data-ngs-theme="default" data-ngs-color-scheme="dark" data-ngs-radius="large">
+<html data-ngs-theme="chalk" data-ngs-color-scheme="dark">
 ```
 
 ## Component Demos
@@ -160,7 +160,6 @@ The documentation site includes live demos and API examples for each component:
 - [Comment Editor](https://docs.ngstarter.com/components/comment-editor)
 - [Comparison Slider](https://docs.ngstarter.com/components/comparison-slider)
 - [Confirm](https://docs.ngstarter.com/components/confirm)
-- [Content Fade](https://docs.ngstarter.com/components/content-fade)
 - [Cookie Popup](https://docs.ngstarter.com/components/cookie-popup)
 - [Crop](https://docs.ngstarter.com/components/crop)
 - [Datepicker](https://docs.ngstarter.com/components/datepicker)

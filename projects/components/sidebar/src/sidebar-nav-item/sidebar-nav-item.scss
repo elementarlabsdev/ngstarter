@@ -53,8 +53,8 @@
     justify-content: center;
     font-size: var(--ngs-font-size-xs);
     padding: var(--ngs-nav-badge-padding);
-    background: var(--ngs-color-primary);
-    color: var(--ngs-color-on-primary);
+    background: var(--ngs-nav-badge-bg, var(--ngs-color-primary));
+    color: var(--ngs-nav-badge-color, var(--ngs-color-on-primary));
   }
 
   .icon {

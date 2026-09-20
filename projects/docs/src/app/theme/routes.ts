@@ -14,6 +14,6 @@ export const routes: Routes = [
   {
     path: 'playground',
     loadComponent: () => import('./playground/playground').then(c => c.ThemePlayground),
-    title: 'Default Theme Playground'
+    title: 'Theme Playground'
   },
 ];
