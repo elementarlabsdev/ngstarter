@@ -27,27 +27,23 @@
         <ng-container ngsColumnDef="name">
           <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Input</th>
           <td ngs-cell *ngsCellDef="let element">
-            <code class="text-xs">{{ element.name }}</code>
+            <div>{{ element.name }}</div>
             <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
           </td>
         </ng-container>
 
         <ng-container ngsColumnDef="type">
           <th ngs-header-cell *ngsHeaderCellDef>Type</th>
-          <td ngs-cell *ngsCellDef="let element">
-            <code class="text-xs">{{ element.type }}</code>
-          </td>
+          <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
         </ng-container>
 
         <ng-container ngsColumnDef="default">
           <th ngs-header-cell *ngsHeaderCellDef>Default</th>
-          <td ngs-cell *ngsCellDef="let element">
-            <code class="text-xs">{{ element.default }}</code>
-          </td>
+          <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
         </ng-container>
 
-        <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
-        <tr ngs-row *ngsRowDef="let row; columns: displayedColumns;"></tr>
+        <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
+        <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
       </table>
     </div>
 
@@ -57,16 +53,14 @@
         <ng-container ngsColumnDef="name">
           <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">API</th>
           <td ngs-cell *ngsCellDef="let element">
-            <code class="text-xs">{{ element.name }}</code>
+            <div>{{ element.name }}</div>
             <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
           </td>
         </ng-container>
 
         <ng-container ngsColumnDef="type">
           <th ngs-header-cell *ngsHeaderCellDef>Type</th>
-          <td ngs-cell *ngsCellDef="let element">
-            <code class="text-xs">{{ element.type }}</code>
-          </td>
+          <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
         </ng-container>
 
         <ng-container ngsColumnDef="default">
@@ -74,8 +68,8 @@
           <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
         </ng-container>
 
-        <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
-        <tr ngs-row *ngsRowDef="let row; columns: displayedColumns;"></tr>
+        <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
+        <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
       </table>
     </div>
 
@@ -85,16 +79,14 @@
         <ng-container ngsColumnDef="name">
           <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Property</th>
           <td ngs-cell *ngsCellDef="let element">
-            <code class="text-xs">{{ element.name }}</code>
+            <div>{{ element.name }}</div>
             <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
           </td>
         </ng-container>
 
         <ng-container ngsColumnDef="type">
           <th ngs-header-cell *ngsHeaderCellDef>Type</th>
-          <td ngs-cell *ngsCellDef="let element">
-            <code class="text-xs">{{ element.type }}</code>
-          </td>
+          <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
         </ng-container>
 
         <ng-container ngsColumnDef="default">
@@ -102,8 +94,8 @@
           <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
         </ng-container>
 
-        <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
-        <tr ngs-row *ngsRowDef="let row; columns: displayedColumns;"></tr>
+        <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
+        <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
       </table>
     </div>
 
@@ -119,27 +111,23 @@
         <ng-container ngsColumnDef="name">
           <th ngs-header-cell *ngsHeaderCellDef class="w-1/2">Input</th>
           <td ngs-cell *ngsCellDef="let element">
-            <code class="text-xs">{{ element.name }}</code>
+            <div>{{ element.name }}</div>
             <div class="text-xs text-neutral-600 mt-0.5">{{ element.description }}</div>
           </td>
         </ng-container>
 
         <ng-container ngsColumnDef="type">
           <th ngs-header-cell *ngsHeaderCellDef>Type</th>
-          <td ngs-cell *ngsCellDef="let element">
-            <code class="text-xs">{{ element.type }}</code>
-          </td>
+          <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
         </ng-container>
 
         <ng-container ngsColumnDef="default">
           <th ngs-header-cell *ngsHeaderCellDef>Default</th>
-          <td ngs-cell *ngsCellDef="let element">
-            <code class="text-xs">{{ element.default }}</code>
-          </td>
+          <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
         </ng-container>
 
-        <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
-        <tr ngs-row *ngsRowDef="let row; columns: displayedColumns;"></tr>
+        <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default']"></tr>
+        <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default'];"></tr>
       </table>
     </div>
   </div>

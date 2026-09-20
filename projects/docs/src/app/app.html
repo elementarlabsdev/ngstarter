@@ -93,7 +93,15 @@
               <button ngsIconButton (click)="sidenav.toggle()">
                 <ngs-icon name="fluent:navigation-24-regular"/>
               </button>
-              <ngs-toolbar-item class="text-sm font-medium text-on-surface-variant">Component library</ngs-toolbar-item>
+              <ngs-toolbar-nav>
+                <a ngs-toolbar-nav-link
+                   href="https://github.com/elementarlabsdev/ngstarter"
+                   target="_blank"
+                   rel="noopener noreferrer">GitHub</a>
+                <a ngs-toolbar-nav-link href="https://ngstarter.com">Home</a>
+                <a ngs-toolbar-nav-link href="https://ngstarter.com/templates" target="_blank" rel="noopener noreferrer">Templates</a>
+                <a ngs-toolbar-nav-link href="https://ngstarter.com/license" target="_blank" rel="noopener noreferrer">License</a>
+              </ngs-toolbar-nav>
               <ngs-toolbar-spacer/>
               <ngs-toolbar-item class="flex items-center gap-2">
                 <ngs-color-scheme-switcher ngsTooltip="Color Theme"

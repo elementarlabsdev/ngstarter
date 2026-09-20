@@ -246,7 +246,7 @@
     --ngs-sidebar-nav-group-toggle-active-bg: var(--ngs-state-selected-bg);
     --ngs-sidebar-nav-group-toggle-active-color: var(--ngs-color-on-surface);
     --ngs-sidebar-nav-group-active-bg: transparent;
-    --ngs-sidebar-nav-group-tree-lines-color: transparent;
+    --ngs-sidebar-nav-group-tree-lines-color: var(--ngs-color-outline-variant);
   }
 
   ngs-navigation,

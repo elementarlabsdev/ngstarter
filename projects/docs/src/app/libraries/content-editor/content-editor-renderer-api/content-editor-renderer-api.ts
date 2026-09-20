@@ -46,8 +46,6 @@ type ApiRow = {
   styleUrl: './content-editor-renderer-api.scss',
 })
 export class ContentEditorRendererApi {
-  readonly displayedColumns = ['name', 'type', 'default'];
-
   readonly importExample = `import {
   ContentEditorRenderer,
   provideContentEditorRenderer,

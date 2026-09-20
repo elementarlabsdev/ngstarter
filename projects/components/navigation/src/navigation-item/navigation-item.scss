@@ -134,7 +134,7 @@
       content: '';
       position: absolute;
       top: 0;
-      left: 20px;
+      inset-inline-start: --spacing(2);
       bottom: -10px;
       width: 1px;
       background: var(--ngs-navigation-group-tree-lines-color);
@@ -146,8 +146,8 @@
     content: '';
     position: absolute;
     top: 0;
-    left: 20px;
-    width: calc(var(--ngs-navigation-nested-item-height) / 1.5);
+    inset-inline-start: --spacing(2);
+    width: calc(var(--ngs-navigation-nested-item-height) / 1.5 - --spacing(2));
     height: calc(var(--ngs-navigation-nested-item-height) / 2);
     border-bottom-left-radius: calc(var(--ngs-navigation-nested-item-height) / 4);
     border-left: 1px solid var(--ngs-navigation-group-tree-lines-color);
