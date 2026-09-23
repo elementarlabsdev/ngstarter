@@ -45,6 +45,12 @@ input {
   color: var(--corporate-text);
   font-family: var(--ngs-font-family-base);
   background: var(--corporate-sidebar-bg);
+
+  ngs-scrollbar-area {
+    --ngs-scrollbar-area-thumb-bg: rgba(60, 58, 74, 0.28);
+    --ngs-scrollbar-area-thumb-hover-bg: rgba(60, 58, 74, 0.38);
+    --ngs-scrollbar-area-thumb-active-bg: rgba(60, 58, 74, 0.48);
+  }
 }
 
 .corporate-stage {
@@ -55,6 +61,7 @@ input {
 }
 
 .corporate-shell {
+  --ngs-sidenav-width: min(280px, 100%);
   width: 100%;
   height: 100dvh !important;
   min-height: 0;
@@ -69,6 +76,16 @@ input {
 
 .corporate-sidebar {
   background: var(--corporate-sidebar-bg);
+
+  &.is-collapsed:not(:hover) {
+    .sidebar-panel {
+      padding-inline: --spacing(3);
+    }
+
+    .corporate-nav {
+      --ngs-sidebar-nav-item-padding: 0 --spacing(4);
+    }
+  }
 }
 
 .corporate-shell > ngs-sidenav-content {
@@ -78,7 +95,6 @@ input {
 }
 
 .corporate-scrollbar {
-  --ngs-scrollbar-area-thumb-bg: rgba(60, 58, 74, 0.16);
   height: 100%;
 }
 
@@ -104,14 +120,21 @@ ngs-sidebar.sidebar-panel.ngs-sidebar {
 }
 
 .sidebar-collapse,
-.notification-button,
-.chat-button {
+.sidebar-expand-control,
+.notification-button {
   --ngs-button-height: 2.5rem;
   --ngs-button-border-radius: 0.5rem;
   color: var(--corporate-text);
   background: #ffffff !important;
   border: 1px solid var(--corporate-border) !important;
   border-radius: 0.5rem !important;
+}
+
+.sidebar-expand-control {
+  position: fixed !important;
+  inset-block-start: 1rem;
+  inset-inline-start: 1.25rem;
+  z-index: 20;
 }
 
 .nav-heading {
@@ -136,25 +159,26 @@ ngs-sidebar.sidebar-panel.ngs-sidebar {
 }
 
 .corporate-nav {
-  --ngs-color-primary: #ecebf1;
-  --ngs-color-on-primary: #757783;
-  --ngs-nav-items-gap: 0.28rem;
-  --ngs-nav-item-height: 2.5rem;
-  --ngs-nav-item-padding: 0 0.7rem;
-  --ngs-nav-item-radius: var(--ngs-control-radius);
-  --ngs-nav-item-font-size: 0.95rem;
-  --ngs-nav-item-font-weight: 400;
-  --ngs-nav-item-gap: 0.7rem;
-  --ngs-nav-item-color: #59677e;
-  --ngs-nav-item-icon-color: #6d7d97;
-  --ngs-nav-item-icon-width: 1.25rem;
-  --ngs-nav-item-icon-size: 1.2rem;
-  --ngs-nav-item-hover-bg: #ffffff;
-  --ngs-nav-item-hover-color: var(--corporate-text);
-  --ngs-nav-item-hover-icon-color: var(--corporate-primary);
-  --ngs-nav-item-active-bg: #ffffff;
-  --ngs-nav-item-active-color: var(--corporate-primary);
-  --ngs-nav-item-active-icon-color: var(--corporate-primary);
+  --ngs-sidebar-nav-items-gap: 0.28rem;
+  --ngs-sidebar-nav-item-width: 100%;
+  --ngs-sidebar-nav-item-height: 2.5rem;
+  --ngs-sidebar-nav-item-padding: 0 0.7rem;
+  --ngs-sidebar-nav-item-radius: var(--ngs-control-radius);
+  --ngs-sidebar-nav-item-font-size: 0.95rem;
+  --ngs-sidebar-nav-item-font-weight: 400;
+  --ngs-sidebar-nav-item-gap: 0.7rem;
+  --ngs-sidebar-nav-item-color: #59677e;
+  --ngs-sidebar-nav-item-icon-color: #6d7d97;
+  --ngs-sidebar-nav-item-icon-width: 1.25rem;
+  --ngs-sidebar-nav-item-icon-size: 1.2rem;
+  --ngs-sidebar-nav-item-hover-bg: var(--ngs-color-surface-container-lowest);
+  --ngs-sidebar-nav-item-hover-color: var(--corporate-text);
+  --ngs-sidebar-nav-item-hover-icon-color: var(--corporate-primary);
+  --ngs-sidebar-nav-item-active-bg: var(--ngs-color-surface-container-lowest);
+  --ngs-sidebar-nav-item-active-color: var(--corporate-primary);
+  --ngs-sidebar-nav-item-active-icon-color: var(--corporate-primary);
+  --ngs-nav-badge-bg: #ecebf1;
+  --ngs-nav-badge-color: #757783;
   --ngs-sidebar-nav-padding: --spacing(3) 0;
   flex-grow: 0;
 }
@@ -172,9 +196,7 @@ ngs-sidebar.sidebar-panel.ngs-sidebar {
 }
 
 .corporate-nav .badge {
-  color: #757783 !important;
-  background: #ecebf1 !important;
-  font-weight: 400 !important;
+  font-weight: 400;
 }
 
 ngs-panel.workspace-panel {
@@ -1395,9 +1417,12 @@ ngs-card.metric-card .metric-card-footer {
   bottom: 1.5rem !important;
   z-index: 20;
   --ngs-button-height: 3.25rem;
-  color: #ffffff;
-  --ngs-button-border-radius: 999px;
-  background: linear-gradient(180deg, #46a1ff, #036fe3);
+  --ngs-button-color: var(--corporate-primary);
+  --ngs-button-border-radius: 50%;
+  color: var(--ngs-color-primary) !important;
+  background: var(--ngs-color-surface-container-lowest) !important;
+  border: 1px solid var(--corporate-border) !important;
+  border-radius: 50% !important;
   box-shadow: 0 10px 22px rgba(3, 111, 227, 0.28);
 }
 
@@ -1453,6 +1478,10 @@ ngs-icon svg {
   }
 
   .corporate-sidebar {
+    display: none !important;
+  }
+
+  .sidebar-expand-control {
     display: none !important;
   }
 

@@ -23,7 +23,12 @@ import {
   SidebarNavItemBadgeDirective,
   SidebarNavItemIconDirective,
 } from '@ngstarter-ui/components/sidebar';
-import { Sidenav, SidenavContainer, SidenavContent } from '@ngstarter-ui/components/sidenav';
+import {
+  Sidenav,
+  SidenavContainer,
+  SidenavContent,
+  SidenavExpanded,
+} from '@ngstarter-ui/components/sidenav';
 import { Toolbar, ToolbarItem, ToolbarSpacer, ToolbarTitle } from '@ngstarter-ui/components/toolbar';
 import {Logo} from "@ngstarter-ui/components/logo";
 import {SplashScreen} from "@ngstarter-ui/components/splash-screen";
@@ -122,6 +127,7 @@ interface TeamUpdate {
     Sidenav,
     SidenavContainer,
     SidenavContent,
+    SidenavExpanded,
     Toolbar,
     ToolbarItem,
     ToolbarSpacer,
@@ -138,6 +144,7 @@ export class App {
 
   protected readonly brandName = signal('Corporate');
   protected readonly userName = signal('Pavel Sal');
+  protected readonly sidebarCollapsed = signal(false);
 
   constructor() {
     this._breadcrumbsStore.setBreadcrumbs([
@@ -153,6 +160,10 @@ export class App {
         type: null,
       },
     ]);
+  }
+
+  protected toggleSidebar(): void {
+    this.sidebarCollapsed.update((collapsed) => !collapsed);
   }
 
   protected readonly navSections = signal<readonly NavSection[]>([

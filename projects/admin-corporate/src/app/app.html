@@ -6,20 +6,45 @@
 <ngs-layout root class="corporate-root">
   <ngs-layout-content>
     <div class="corporate-stage">
+      @if (sidebarCollapsed()) {
+        <button
+          ngsIconButton
+          type="button"
+          aria-label="Expand sidebar"
+          aria-expanded="false"
+          class="sidebar-expand-control"
+          (click)="toggleSidebar()"
+        >
+          <ngs-icon name="fluent:panel-left-expand-24-regular" />
+        </button>
+      }
       <ngs-sidenav-container autosize autoFocus="false" hasBackdrop="false" class="corporate-shell">
         <ngs-sidenav
           [opened]="true"
           mode="side"
-          [fixedWidth]="292"
+          [collapsed]="sidebarCollapsed()"
           [adaptive]="false"
           class="corporate-sidebar"
         >
           <ngs-sidebar class="sidebar-panel" aria-label="Corporate navigation">
-            <ngs-sidebar-header class="justify-between">
-              <img src="/corporate-logo.png" [alt]="brandName()" class="brand-logo" />
-              <button ngsIconButton aria-label="Collapse sidebar" class="sidebar-collapse">
-                <ngs-icon name="fluent:panel-left-contract-24-regular" />
-              </button>
+            <ngs-sidebar-header class="min-h-10 justify-between">
+              <ng-container *ngsSidenavExpanded>
+                @if (!sidebarCollapsed()) {
+                  <div class="flex w-full items-center justify-between">
+                    <img src="/corporate-logo.png" [alt]="brandName()" class="brand-logo" />
+                    <button
+                      ngsIconButton
+                      type="button"
+                      aria-label="Collapse sidebar"
+                      aria-expanded="true"
+                      class="sidebar-collapse"
+                      (click)="toggleSidebar()"
+                    >
+                      <ngs-icon name="fluent:panel-left-contract-24-regular" />
+                    </button>
+                  </div>
+                }
+              </ng-container>
             </ngs-sidebar-header>
 
             <ngs-sidebar-body class="sidebar-body">
@@ -28,7 +53,7 @@
                   @for (section of navSections(); track section.label ?? section.items[0].key) {
                     @if (!section.stickToBottom) {
                       @if (section.label) {
-                        <ngs-sidebar-heading class="nav-heading">
+                        <ngs-sidebar-heading *ngsSidenavExpanded class="nav-heading">
                           {{ section.label }}
                         </ngs-sidebar-heading>
                       }

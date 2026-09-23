@@ -34,6 +34,12 @@
     --ngs-side-panel-button-active-color: var(--ngs-color-on-surface);
   }
 
+  ngs-scrollbar-area {
+    --ngs-scrollbar-area-thumb-bg: #e4e8ee;
+    --ngs-scrollbar-area-thumb-hover-bg: #d2d8e2;
+    --ngs-scrollbar-area-thumb-active-bg: #c2cad6;
+  }
+
   ngs-tab-panel {
     --ngs-tab-panel-item-border-radius: var(--ngs-radius-md);
     --ngs-tab-panel-item-color: var(--ngs-color-on-surface-variant);
@@ -365,7 +371,12 @@
     --ngs-alert-action-border-radius: var(--ngs-radius-md);
   }
 
-  ngs-action-required,
+  ngs-action-required {
+    --ngs-action-required-bg: var(--ngs-color-danger-container);
+    --ngs-action-text-color: var(--ngs-color-on-danger-container);
+    --ngs-action-action-text-bg: var(--ngs-color-surface);
+  }
+
   ngs-empty-state,
   ngs-announcement,
   ngs-announcement-global {
