@@ -36,14 +36,14 @@
     "@types/jsdom": "^21.1.7"
   },
   "peerDependencies": {
-    "@angular/cdk": "^22.1.7",
-    "@angular/common": "^22.1.7",
-    "@angular/compiler": "^22.1.7",
-    "@angular/core": "^22.1.7",
-    "@angular/forms": "^22.1.7",
-    "@angular/localize": "^22.1.7",
-    "@angular/router": "^22.1.7",
-    "@angular/ssr": "^22.1.8"
+    "@angular/cdk": "^22.0.0",
+    "@angular/common": "^22.0.0",
+    "@angular/compiler": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "@angular/forms": "^22.0.0",
+    "@angular/localize": "^22.0.0",
+    "@angular/router": "^22.0.0",
+    "@angular/ssr": "^22.0.0"
   },
   "dependencies": {
     "@codemirror/lang-angular": "^0.1.4",
