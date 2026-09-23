@@ -1,6 +1,5 @@
 @use "../_common";
 @use "../_global";
-@use "./default-components" as components;
 
 // Chalk is a light, editorial business theme: warm white work surfaces,
 // graphite typography, fine neutral rules, compact square geometry, and a
@@ -315,7 +314,6 @@
 :root[data-ngs-theme='chalk'],
 [data-ngs-theme='chalk'] {
   @include chalk-shape;
-  @include components.default-components;
 
   ngs-slider {
     --ngs-slider-thumb-ripple-color: rgba(237, 241, 110, 0.48);

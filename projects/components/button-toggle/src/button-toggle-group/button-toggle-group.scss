@@ -14,15 +14,15 @@
   --ngs-button-toggle-group-border-width: 1px;
   --ngs-button-toggle-group-padding: --spacing(0.75);
   --ngs-button-toggle-group-gap: --spacing(0.5);
-  --ngs-button-toggle-group-border-radius: var(--ngs-radius-lg);
+  --ngs-button-toggle-group-border-radius: var(--ngs-button-radius);
   --ngs-button-toggle-button-height: 2rem;
-  --ngs-button-toggle-button-border-radius: var(--ngs-radius-sm);
+  --ngs-button-toggle-button-border-radius: var(--ngs-button-radius);
   --ngs-button-toggle-button-padding: 0 --spacing(3);
   --ngs-button-toggle-button-only-icon-padding: 0 --spacing(2);
   --ngs-button-toggle-button-gap: --spacing(1.5);
   --ngs-button-toggle-button-font-size: 0.875rem;
   --ngs-button-toggle-button-font-weight: 500;
-  --ngs-button-toggle-checked-shadow: inset 0 0 0 1px var(--ngs-color-primary-300);
+  --ngs-button-toggle-checked-shadow: none;
 
   display: inline-flex;
   flex-direction: row;

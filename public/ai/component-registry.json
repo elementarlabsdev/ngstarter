@@ -1065,6 +1065,7 @@
       ],
       "cssTokens": [
         "--ngs-button-height",
+        "--ngs-button-radius",
         "--ngs-button-toggle-button-border-radius",
         "--ngs-button-toggle-button-font-size",
         "--ngs-button-toggle-button-font-weight",
@@ -1092,12 +1093,9 @@
         "--ngs-color-on-primary-container",
         "--ngs-color-on-surface-variant",
         "--ngs-color-primary",
-        "--ngs-color-primary-300",
         "--ngs-color-primary-container",
         "--ngs-color-surface-container",
         "--ngs-color-surface-container-high",
-        "--ngs-radius-lg",
-        "--ngs-radius-sm",
         "--ngs-state-focus-ring"
       ],
       "example": null

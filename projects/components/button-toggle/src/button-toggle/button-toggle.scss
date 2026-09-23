@@ -64,17 +64,18 @@
       height: 1rem;
       color: var(--ngs-button-toggle-selection-indicator-color);
       font-size: 1rem;
-      opacity: 0;
-      transform: scale(0.75);
-      transition:
-        opacity 120ms ease,
-        transform 120ms ease;
     }
   }
 
   &.only-icon {
     .ngs-button-toggle-button {
       padding: var(--ngs-button-toggle-button-only-icon-padding);
+    }
+  }
+
+  &:not(.ngs-button-toggle-checked) {
+    .ngs-button-toggle-selection-indicator {
+      display: none;
     }
   }
 
@@ -93,11 +94,6 @@
         background: var(--ngs-button-toggle-disabled-bg-color);
         box-shadow: none;
       }
-    }
-
-    .ngs-button-toggle-selection-indicator {
-      opacity: 1;
-      transform: scale(1);
     }
   }
 

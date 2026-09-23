@@ -1,6 +1,5 @@
 @use "../_common";
 @use "../_global";
-@use "./default-components" as components;
 
 // Default is the only NgStarter preset: cool gray work surfaces, a clear
 // cobalt accent, and compact product UI geometry.
@@ -212,11 +211,6 @@
   --ngs-nav-item-active-icon-color: var(--ngs-color-primary);
   --ngs-nav-item-border-width: 0;
   --ngs-nav-item-border-color: transparent;
-}
-
-:root,
-[data-ngs-theme='default'] {
-  @include components.default-components;
 }
 
 @mixin default-dark {
