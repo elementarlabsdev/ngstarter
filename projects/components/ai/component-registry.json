@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate-ai-metadata.mjs",
   "package": "@ngstarter-ui/components",
   "description": "AI-readable registry for NgStarter UI Angular secondary entry points.",
-  "componentCount": 127,
+  "componentCount": 126,
   "conventions": {
     "importPattern": "@ngstarter-ui/components/<component>",
     "selectorPrefix": "ngs",
@@ -6328,36 +6328,6 @@
         "--ngs-radius-lg",
         "--ngs-shadow-sm"
       ],
-      "example": null
-    },
-    {
-      "name": "motion",
-      "title": "Motion",
-      "overviewName": "Motion",
-      "category": null,
-      "package": "@ngstarter-ui/components",
-      "importPath": "@ngstarter-ui/components/motion",
-      "publicApi": "projects/components/motion/public-api.ts",
-      "sourceRoot": "projects/components/motion/src",
-      "docsPath": null,
-      "docsOverviewSource": null,
-      "purpose": "Use Motion when an Angular admin or dashboard screen needs this UI pattern.",
-      "useWhen": "Use Motion as the standard NgStarter component for this UI need.",
-      "exampleTopics": [],
-      "minimalExample": null,
-      "exampleFiles": [],
-      "previewAsset": null,
-      "selectors": [
-        "ngs-motion-player",
-        "ngs-motion-studio"
-      ],
-      "exportedSymbols": [
-        "MotionPlayer",
-        "MotionStudio"
-      ],
-      "inputs": [],
-      "outputs": [],
-      "cssTokens": [],
       "example": null
     },
     {
