@@ -1,9 +1,9 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-scrollbar-area-thumb-bg: var(--ngs-color-neutral-200);
-  --ngs-scrollbar-area-thumb-hover-bg: var(--ngs-color-neutral-300);
-  --ngs-scrollbar-area-thumb-active-bg: var(--ngs-color-neutral-300);
+  --ngs-scrollbar-area-thumb-bg: var(--ngs-scrollbar-thumb-bg);
+  --ngs-scrollbar-area-thumb-hover-bg: var(--ngs-scrollbar-thumb-hover-bg);
+  --ngs-scrollbar-area-thumb-active-bg: var(--ngs-scrollbar-thumb-active-bg);
   --ngs-scrollbar-area-width: 10px;
   --ngs-scrollbar-area-scroll-track-bg: transparent;
 

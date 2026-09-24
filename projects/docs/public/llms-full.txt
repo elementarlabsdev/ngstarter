@@ -866,7 +866,7 @@ Typography:
   exports: `ScrollbarArea`, `ScrollContainerFixed`
   inputs: `absolute`, `autoHide`, `ngsScrollContainerFixed`, `ngsScrollContainerFixedBottomOffset`, `ngsScrollContainerFixedMinHeight`, `scrollbarWidth`
   outputs: `scrolled`
-  tokens: `--ngs-color-neutral-200`, `--ngs-color-neutral-300`, `--ngs-radius-sm`, `--ngs-scrollbar-area-scroll-track-bg`, `--ngs-scrollbar-area-thumb-active-bg`, `--ngs-scrollbar-area-thumb-bg`, `--ngs-scrollbar-area-thumb-hover-bg`, `--ngs-scrollbar-area-width`
+  tokens: `--ngs-radius-sm`, `--ngs-scrollbar-area-scroll-track-bg`, `--ngs-scrollbar-area-thumb-active-bg`, `--ngs-scrollbar-area-thumb-bg`, `--ngs-scrollbar-area-thumb-hover-bg`, `--ngs-scrollbar-area-width`, `--ngs-scrollbar-thumb-active-bg`, `--ngs-scrollbar-thumb-bg`, `--ngs-scrollbar-thumb-hover-bg`
 - segmented: `@ngstarter-ui/components/segmented` docs: /forms/segmented
   purpose: Let users choose one value from a compact set of mutually exclusive modes or options.
   use when: Use ngs-segmented with ngs-segmented-button when a short set of options should stay visible and only one value can be selected. Good for view modes, time ranges, display density, selection mode, chart or table mode, compact filters, and short settings. It works as an Angular form control through value, valueChange, ngModel, or formControlName, supports disabled state, sizes, text buttons, icons with ngsSegmentedIcon, and iconOnly buttons. Do not use Segmented for route or page navigation; use Tabs, Navigation, Sidebar, Sidenav, or RailNav. Do not use for independent on/off toggles; use ButtonToggle or SlideToggle. Do not use for long lists, rich option cards, dropdown choices, or fixed color palettes; use Radio, RadioCard, Select, Autocomplete, or ColorSwitcher.

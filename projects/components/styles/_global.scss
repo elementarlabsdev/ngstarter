@@ -6,6 +6,8 @@ html {
   -moz-osx-font-smoothing: grayscale;
 
   * {
+    scrollbar-color: var(--ngs-scrollbar-thumb-bg) transparent;
+
     &::-webkit-scrollbar {
       width: 10px;
       height: 10px;
@@ -16,12 +18,12 @@ html {
     }
 
     &::-webkit-scrollbar-thumb {
-      background: var(--ngs-color-neutral-200);
+      background: var(--ngs-scrollbar-thumb-bg);
       border-radius: 10px;
       background-clip: content-box;
 
       &:hover {
-        background: var(--ngs-color-neutral-300);
+        background: var(--ngs-scrollbar-thumb-hover-bg);
       }
     }
   }

@@ -8206,14 +8206,15 @@
         "scrolled"
       ],
       "cssTokens": [
-        "--ngs-color-neutral-200",
-        "--ngs-color-neutral-300",
         "--ngs-radius-sm",
         "--ngs-scrollbar-area-scroll-track-bg",
         "--ngs-scrollbar-area-thumb-active-bg",
         "--ngs-scrollbar-area-thumb-bg",
         "--ngs-scrollbar-area-thumb-hover-bg",
-        "--ngs-scrollbar-area-width"
+        "--ngs-scrollbar-area-width",
+        "--ngs-scrollbar-thumb-active-bg",
+        "--ngs-scrollbar-thumb-bg",
+        "--ngs-scrollbar-thumb-hover-bg"
       ],
       "example": null
     },
