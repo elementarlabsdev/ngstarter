@@ -49,23 +49,6 @@ const softwareSchema: JsonLdObject = {
   license: `${SITE_URL}/license`,
 };
 
-const productSchema: JsonLdObject = {
-  '@type': 'Product',
-  '@id': `${SITE_URL}/#product`,
-  name: 'NgStarter',
-  brand: {
-    '@type': 'Brand',
-    name: 'NgStarter',
-    url: SITE_URL,
-  },
-  category: 'Angular UI components library',
-  description:
-    'Standalone Angular UI components, admin dashboard templates, source code, and themes for production Angular applications.',
-  image: DEFAULT_OG_IMAGE,
-  isAccessibleForFree: true,
-  license: `${SITE_URL}/license`,
-};
-
 export const faqItems = [
   {
     question: 'Is NgStarter open source?',
@@ -160,9 +143,6 @@ function webPageSchema(path: string, name: string, description: string): JsonLdO
     isPartOf: {
       '@id': `${SITE_URL}/#website`,
     },
-    about: {
-      '@id': `${SITE_URL}/#product`,
-    },
     inLanguage: 'en',
   };
 }
@@ -204,7 +184,6 @@ export const HOME_SEO: SeoData = {
     organizationSchema,
     websiteSchema,
     softwareSchema,
-    productSchema,
     homeFaqSchema,
     webPageSchema(
       '/',
@@ -222,7 +201,6 @@ export const TEMPLATES_SEO: SeoData = {
   structuredData: [
     organizationSchema,
     websiteSchema,
-    productSchema,
     templatesFaqSchema,
     webPageSchema(
       '/templates',
@@ -240,9 +218,6 @@ export const TEMPLATES_SEO: SeoData = {
       programmingLanguage: 'TypeScript',
       image: `${SITE_URL}/templates/admin-corporate-dashboard.png`,
       url: 'https://admin-corporate.ngstarter.com',
-      isPartOf: {
-        '@id': `${SITE_URL}/#product`,
-      },
     },
     {
       '@type': 'SoftwareSourceCode',
@@ -255,9 +230,6 @@ export const TEMPLATES_SEO: SeoData = {
       programmingLanguage: 'TypeScript',
       image: `${SITE_URL}/templates/admin-modern-dashboard.png`,
       url: 'https://admin-modern.ngstarter.com',
-      isPartOf: {
-        '@id': `${SITE_URL}/#product`,
-      },
     },
   ],
 };
