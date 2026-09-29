@@ -1,0 +1,51 @@
+<p>
+  Import the primitives from <code class="code">@ngstarter-ui/components/editor</code>.
+  A custom editor starts with a scoped <code class="code">NgsEditor</code> provider and one
+  element carrying <code class="code">ngsEditorSurface</code>.
+</p>
+
+<section>
+  <h3>Bare editor without styles</h3>
+  <p class="mb-4 text-neutral-600">
+    This example has no component stylesheet, toolbar, wrapper, or opinionated editor UI.
+    The surface renders the JSON document and writes browser input back into signal state.
+  </p>
+  <ngs-playground
+    exampleUrl="_docs/components/editor/_examples"
+    exampleName="bare-editor-example">
+    @defer (on viewport) {
+      <app-bare-editor-example/>
+    } @placeholder {
+      <div>Loading...</div>
+    }
+  </ngs-playground>
+</section>
+
+<section>
+  <h3>Custom plugin and toolbar</h3>
+  <p class="mb-4 text-neutral-600">
+    Plugins are plain typed objects. This example adds an underline mark, command, and keyboard
+    shortcut, connects the built-in color plugin, and passes color values to typed commands from
+    normal Angular buttons.
+  </p>
+  <ngs-playground
+    exampleUrl="_docs/components/editor/_examples"
+    exampleName="plugin-editor-example">
+    @defer (on viewport) {
+      <app-plugin-editor-example/>
+    } @placeholder {
+      <div>Loading...</div>
+    }
+  </ngs-playground>
+</section>
+
+<section class="mt-12">
+  <h3>Composition model</h3>
+  <ol class="mt-4 flex list-decimal flex-col gap-3 ps-5">
+    <li><code class="code">provideNgsEditor()</code> creates an editor instance scoped to the host.</li>
+    <li><code class="code">withEditorPlugin()</code> installs the required blocks, marks, commands, and services.</li>
+    <li><code class="code">ngsEditorSurface</code> synchronizes the JSON model with contenteditable and native selection.</li>
+    <li><code class="code">ngsEditorCommand</code> binds typed commands to toolbar controls without losing selection.</li>
+    <li>The host reads signals or calls commands directly; the core does not own layout or visual styling.</li>
+  </ol>
+</section>

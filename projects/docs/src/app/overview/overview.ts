@@ -156,6 +156,11 @@ export class Overview {
       name: 'Comment Editor'
     },
     {
+      routerLink: '/components/editor',
+      imageUrl: 'assets/overview/comment-editor.svg',
+      name: 'Editor'
+    },
+    {
       routerLink: '/components/comparison-slider',
       imageUrl: 'assets/overview/comparison-slider.svg',
       name: 'Comparison Slider'
@@ -544,11 +549,6 @@ export class Overview {
       routerLink: '/components/tabs',
       imageUrl: 'assets/overview/tabs.svg',
       name: 'Tabs'
-    },
-    {
-      routerLink: '/components/text-editor',
-      imageUrl: 'assets/overview/text-editor.svg',
-      name: 'Text Editor'
     },
     {
       routerLink: '/components/thumbnail-maker',

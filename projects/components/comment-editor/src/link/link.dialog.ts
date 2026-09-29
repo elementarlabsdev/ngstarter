@@ -1,4 +1,6 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Button } from '@ngstarter-ui/components/button';
 import {
   DIALOG_DATA,
   DialogActions,
@@ -6,39 +8,36 @@ import {
   DialogRef,
   DialogTitle
 } from '@ngstarter-ui/components/dialog';
-import { Input } from '@ngstarter-ui/components/input';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Button } from '@ngstarter-ui/components/button';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
 
 @Component({
-  selector: 'ngs-link',
+  selector: 'ngs-comment-editor-link-dialog',
   imports: [
+    FormsModule,
     Button,
     DialogActions,
     DialogContent,
     DialogTitle,
     FormField,
-    Input,
     Label,
-    ReactiveFormsModule,
-    FormsModule
+    Input
   ],
   templateUrl: './link.dialog.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './link.dialog.scss'
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LinkDialog {
-  private _dialogRef = inject(DialogRef);
-  private _data = inject(DIALOG_DATA);
-  linkUrl = this._data.linkUrl || '';
-  isUpdate = !!this._data.linkUrl;
+  private readonly dialogRef = inject(DialogRef);
+  private readonly data = inject<{ linkUrl?: string }>(DIALOG_DATA);
 
-  onSubmit(): void {
-    this._dialogRef.close(this.linkUrl);
+  linkUrl = this.data.linkUrl ?? '';
+  readonly isUpdate = !!this.data.linkUrl;
+
+  submit(): void {
+    this.dialogRef.close(this.linkUrl.trim());
   }
 
-  _onNoClick(): void {
-    this._dialogRef.close();
+  cancel(): void {
+    this.dialogRef.close();
   }
 }

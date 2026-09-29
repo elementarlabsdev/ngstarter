@@ -5,9 +5,9 @@
   padding: 0 --spacing(2);
 
   .divider {
+    width: 1px;
     height: --spacing(6);
     background: var(--ngs-color-neutral-300);
-    width: 1px;
   }
 }
 

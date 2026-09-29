@@ -1,0 +1,34 @@
+<div class="mb-3 flex flex-wrap gap-2">
+  <button ngsButton="outlined" [ngsEditorCommand]="toggleUnderline">
+    Underline
+  </button>
+  <button ngsButton="outlined" [ngsEditorCommand]="setTextColor" commandData="#dc2626">
+    Red text
+  </button>
+  <button ngsButton="outlined" [ngsEditorCommand]="unsetTextColor">
+    Clear text color
+  </button>
+  <button ngsButton="outlined" [ngsEditorCommand]="setBackgroundColor" commandData="#fef08a">
+    Yellow highlight
+  </button>
+  <button ngsButton="outlined" [ngsEditorCommand]="unsetBackgroundColor">
+    Clear highlight
+  </button>
+  <button ngsButton="outlined" [disabled]="!editor.canUndo()" (click)="editor.undo()">
+    Undo
+  </button>
+  <button ngsButton="outlined" [disabled]="!editor.canRedo()" (click)="editor.redo()">
+    Redo
+  </button>
+</div>
+
+<div
+  ngsEditorSurface
+  ariaLabel="Editor with an underline plugin"
+  placeholder="Start typing…">
+</div>
+
+<details class="mt-4">
+  <summary>Current JSON document</summary>
+  <pre>{{ editor.document() | json }}</pre>
+</details>

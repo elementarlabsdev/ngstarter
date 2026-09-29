@@ -1,333 +1,522 @@
 import {
+  afterNextRender,
   booleanAttribute,
-  ChangeDetectorRef,
+  ChangeDetectionStrategy,
   Component,
-  ElementRef, forwardRef,
-  inject, Injector,
+  computed,
+  DestroyRef,
+  DOCUMENT,
+  effect,
+  ElementRef,
+  forwardRef,
+  inject,
   input,
-  OnDestroy, OnInit,
-  output, PLATFORM_ID,
-  viewChild,
-  DOCUMENT, signal,
-  ChangeDetectionStrategy
+  model,
+  output,
+  Renderer2,
+  signal,
+  untracked,
+  viewChild
 } from '@angular/core';
-import { Editor } from '@tiptap/core';
-import Document from '@tiptap/extension-document';
-import Paragraph from '@tiptap/extension-paragraph';
-import Text from '@tiptap/extension-text';
-import Bold from '@tiptap/extension-bold';
-import Italic from '@tiptap/extension-italic';
-import Strike from '@tiptap/extension-strike';
-import CodeBlock from '@tiptap/extension-code-block';
-import { Blockquote } from '@tiptap/extension-blockquote';
-import BulletList from '@tiptap/extension-bullet-list';
-import OrderedList from '@tiptap/extension-ordered-list';
-import ListItem from '@tiptap/extension-list-item';
-import Link from '@tiptap/extension-link';
-import Placeholder from '@tiptap/extension-placeholder';
-import Youtube from '@tiptap/extension-youtube';
-import BubbleMenu from '@tiptap/extension-bubble-menu';
-import Code from '@tiptap/extension-code';
-import History from '@tiptap/extension-history';
-import Dropcursor from '@tiptap/extension-dropcursor';
-import Image from '@tiptap/extension-image';
-import { isPlatformServer } from '@angular/common';
 import { Button } from '@ngstarter-ui/components/button';
+import {
+  basicTextEditorPlugin,
+  colorEditorPlugin,
+  createNgsEditorDocument,
+  createNgsEditorParagraph,
+  getNgsEditorBlockText,
+  getNgsEditorDocumentText,
+  NGS_EDITOR_TOGGLE_BOLD,
+  NGS_EDITOR_TOGGLE_CODE,
+  NGS_EDITOR_TOGGLE_ITALIC,
+  NGS_EDITOR_TOGGLE_STRIKE,
+  NGS_EDITOR_SET_BACKGROUND_COLOR,
+  NGS_EDITOR_SET_TEXT_COLOR,
+  NGS_EDITOR_UNSET_BACKGROUND_COLOR,
+  NGS_EDITOR_UNSET_TEXT_COLOR,
+  NgsEditor,
+  NgsEditorCommand,
+  NgsEditorDocument,
+  NgsEditorPlugin,
+  NgsEditorSurface,
+  ngsEditorDocumentsEqual,
+  provideNgsEditor
+} from '@ngstarter-ui/components/editor';
+import {
+  commentEditorPlugin,
+  createCommentEditorMediaBlock,
+  NGS_COMMENT_EDITOR_SET_LINK,
+  NGS_COMMENT_EDITOR_TOGGLE_BLOCKQUOTE,
+  NGS_COMMENT_EDITOR_TOGGLE_BULLET_LIST,
+  NGS_COMMENT_EDITOR_TOGGLE_CODE_BLOCK,
+  NGS_COMMENT_EDITOR_TOGGLE_ORDERED_LIST,
+  NGS_COMMENT_EDITOR_UNSET_LINK,
+  normalizeYoutubeUrl
+} from '../comment-editor.plugin';
+import { serializeCommentEditorDocument } from '../comment-editor-serializer';
 import { COMMENT_EDITOR, CommentEditorAPI } from '../types';
-import ImageUploadingPlaceholderExtension from '../extensions/image-uploading-placeholder';
-import { SingleEmoji } from '../extensions/single-emoji';
 
 @Component({
   selector: 'ngs-comment-editor',
   exportAs: 'ngsCommentEditor',
-  imports: [
-    Button
-  ],
-  templateUrl: './comment-editor.html',
-  styleUrl: './comment-editor.scss',
+  imports: [Button, NgsEditorSurface],
   providers: [
+    provideNgsEditor(),
     {
       provide: COMMENT_EDITOR,
       useExisting: forwardRef(() => CommentEditor)
     }
   ],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  templateUrl: './comment-editor.html',
+  styleUrl: './comment-editor.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-comment-editor',
-    '[class.full-view]': 'isFullViewVisible || fullViewMode()',
+    '[class.full-view]': 'isEditorActivated()',
+    '[class.ngs-comment-editor-disabled]': 'disabled()',
     '(click)': 'activateFullView($event)'
   }
 })
-export class CommentEditor implements OnInit, OnDestroy {
-  private _platformId = inject(PLATFORM_ID);
-  private _document = inject(DOCUMENT);
-  private _cdr = inject(ChangeDetectorRef);
-  private _injector = inject(Injector);
-  private _content = viewChild.required<ElementRef>('content');
-  private _bubbleMenu = viewChild.required<ElementRef>('bubbleMenu');
-  private _imageBubbleMenu = viewChild.required<ElementRef>('imageBubbleMenu');
-  protected _value = '';
-  protected editor: Editor;
-  protected isToolbarVisible = false;
-  protected isFullViewVisible = false;
+export class CommentEditor {
+  readonly editor = inject(NgsEditor);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly renderer = inject(Renderer2);
+  private readonly documentRef = inject(DOCUMENT);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly surface = viewChild.required(NgsEditorSurface);
+  private readonly bubbleMenuLayer = viewChild<ElementRef<HTMLElement>>('bubbleMenuLayer');
+  private readonly basicPlugin = basicTextEditorPlugin();
+  private readonly colorPlugin = colorEditorPlugin();
+  private readonly commentPlugin = commentEditorPlugin();
+  private readonly toolbarActive = signal(false);
+  private readonly fullViewActive = signal(false);
+  private bubbleMenuFrame: number | null = null;
 
-  contentMaxHeight = input<number>();
-  buttonCancelLabel = input<string>('Cancel');
-  buttonSendLabel = input<string>('Send');
-  placeholder = input('Write something …');
-  toolbarAlwaysVisible = input(false, {
-    transform: booleanAttribute
-  });
-  fullViewMode = input(false, {
-    transform: booleanAttribute
-  });
-  cancelButtonAlwaysVisible = input(false, {
-    transform: booleanAttribute
-  });
-  allowEmptyContent = input(false, {
-    transform: booleanAttribute
-  });
-  autoClear = input(true, {
-    transform: booleanAttribute
-  });
-  loading = input(false);
-  imageUploadFn = input<(file: Blob) => Promise<string>>();
+  readonly value = model<NgsEditorDocument>(createNgsEditorDocument());
+  readonly plugins = input<readonly NgsEditorPlugin[]>([]);
+  readonly contentMaxHeight = input<number>();
+  readonly buttonCancelLabel = input('Cancel');
+  readonly buttonSendLabel = input('Send');
+  readonly buttonSubmitLabel = input<string>();
+  readonly placeholder = input('Write something …');
+  readonly ariaLabel = input('Comment editor');
+  readonly toolbarAlwaysVisible = input(false, { transform: booleanAttribute });
+  readonly fullViewMode = input(false, { transform: booleanAttribute });
+  readonly cancelButtonAlwaysVisible = input(false, { transform: booleanAttribute });
+  readonly allowEmptyContent = input(false, { transform: booleanAttribute });
+  readonly allowEmpty = input(false, { transform: booleanAttribute });
+  readonly autoClear = input(true, { transform: booleanAttribute });
+  readonly loading = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly readOnly = input(false, { transform: booleanAttribute });
+  readonly imageUploadFn = input<(file: Blob) => Promise<string>>();
 
+  readonly submitted = output<NgsEditorDocument>();
   readonly sent = output<string>();
   readonly canceled = output<void>();
 
-  ngOnInit() {
-    this._init();
-  }
+  readonly isEditorActivated = computed(() => this.fullViewActive() || this.fullViewMode());
+  readonly isToolbarVisible = computed(() => (
+    (this.toolbarActive() || this.toolbarAlwaysVisible()) && this.isEditorActivated()
+  ));
+  readonly isBubbleMenuVisible = computed(() => {
+    const selection = this.editor.selection();
+    return this.editor.focused() && !!selection && (
+      selection.anchor.blockId !== selection.focus.blockId ||
+      selection.anchor.offset !== selection.focus.offset
+    );
+  });
+  readonly isCancelVisible = computed(() => (
+    (this.fullViewActive() && !this.fullViewMode()) || this.cancelButtonAlwaysVisible()
+  ));
+  readonly sendLabel = computed(() => this.buttonSubmitLabel() ?? this.buttonSendLabel());
+  readonly sendDisabled = computed(() => (
+    this.disabled() ||
+    this.loading() ||
+    (!(this.allowEmpty() || this.allowEmptyContent()) && this.editor.empty())
+  ));
 
-  get api(): CommentEditorAPI {
-    return {
-      isCommandDisabled: (command: string) => this.isCommandDisabled(command),
-      isActive: (command: string) => this.editor?.isActive(command),
-      runCommand: (command: string) => this._runCommand(command),
-      editor: () => this.editor,
-      isToolbarActive: () => this.isToolbarVisible,
-      toggleToolbar: () => this.toggleToolbar(),
-      showToolbar: () => this.showToolbar(),
-      hideToolbar: () => this.hideToolbar(),
-      isEditorActivated: () => this.isFullViewVisible || this.fullViewMode(),
-      showFullView: () => this.showFullView(),
-      hideFullView: () => this.hideFullView(),
-      insertText: (text: string) => this.insertText(text),
-      clear: () => this.clear()
-    }
+  private readonly commands = new Map<string, NgsEditorCommand<any>>([
+    ['toggleBold', NGS_EDITOR_TOGGLE_BOLD],
+    ['toggleItalic', NGS_EDITOR_TOGGLE_ITALIC],
+    ['toggleStrike', NGS_EDITOR_TOGGLE_STRIKE],
+    ['toggleCode', NGS_EDITOR_TOGGLE_CODE],
+    ['toggleBlockquote', NGS_COMMENT_EDITOR_TOGGLE_BLOCKQUOTE],
+    ['toggleCodeBlock', NGS_COMMENT_EDITOR_TOGGLE_CODE_BLOCK],
+    ['toggleBulletList', NGS_COMMENT_EDITOR_TOGGLE_BULLET_LIST],
+    ['toggleOrderedList', NGS_COMMENT_EDITOR_TOGGLE_ORDERED_LIST]
+  ]);
+
+  readonly api: CommentEditorAPI = {
+    isCommandDisabled: command => this.isCommandDisabled(command),
+    isActive: command => this.isActive(command),
+    runCommand: command => this.runCommand(command),
+    editor: () => this.editor,
+    document: () => this.editor.document(),
+    isToolbarActive: () => this.toolbarActive(),
+    toggleToolbar: () => this.toggleToolbar(),
+    showToolbar: () => this.showToolbar(),
+    hideToolbar: () => this.hideToolbar(),
+    isEditorActivated: () => this.isEditorActivated(),
+    showFullView: () => this.showFullView(),
+    hideFullView: () => this.hideFullView(),
+    insertText: text => this.insertText(text),
+    insertImage: file => this.insertImage(file),
+    insertYoutube: url => this.insertYoutube(url),
+    getMarkAttributes: type => this.editor.getActiveMark(type)?.attrs,
+    setTextColor: color => this.setTextColor(color),
+    unsetTextColor: () => this.unsetTextColor(),
+    setBackgroundColor: color => this.setBackgroundColor(color),
+    unsetBackgroundColor: () => this.unsetBackgroundColor(),
+    setLink: url => this.setLink(url),
+    unsetLink: () => this.unsetLink(),
+    clear: () => this.clear(),
+    focus: () => this.focus()
+  };
+
+  constructor() {
+    effect(() => {
+      this.editor.setPlugins([
+        this.basicPlugin,
+        this.colorPlugin,
+        this.commentPlugin,
+        ...this.plugins()
+      ]);
+    });
+
+    effect(() => {
+      const value = this.value();
+      untracked(() => {
+        if (!ngsEditorDocumentsEqual(value, this.editor.document())) {
+          this.editor.setDocument(value);
+        }
+      });
+    });
+
+    effect(() => {
+      const document = this.editor.document();
+      if (this.editor.origin() !== 'external' && !ngsEditorDocumentsEqual(document, this.value())) {
+        this.value.set(document);
+      }
+    });
+
+    effect(() => {
+      this.editor.setReadOnly(this.disabled() || this.readOnly());
+    });
+
+    effect(() => {
+      const maxHeight = this.contentMaxHeight();
+      if (typeof maxHeight === 'number') {
+        this.renderer.setStyle(
+          this.host.nativeElement,
+          '--ngs-comment-editor-content-max-height',
+          `${Math.max(0, maxHeight)}px`
+        );
+      } else {
+        this.renderer.removeStyle(this.host.nativeElement, '--ngs-comment-editor-content-max-height');
+      }
+    });
+
+    effect(() => {
+      this.editor.selection();
+      this.editor.focused();
+      this.editor.revision();
+      const layer = this.bubbleMenuLayer();
+      if (layer && this.isBubbleMenuVisible()) {
+        untracked(() => this.scheduleBubbleMenuPosition());
+      }
+    });
+
+    afterNextRender(() => {
+      const windowRef = this.documentRef.defaultView;
+      if (!windowRef) {
+        return;
+      }
+      const reposition = () => this.scheduleBubbleMenuPosition();
+      windowRef.addEventListener('resize', reposition);
+      this.documentRef.addEventListener('scroll', reposition, true);
+      this.destroyRef.onDestroy(() => {
+        windowRef.removeEventListener('resize', reposition);
+        this.documentRef.removeEventListener('scroll', reposition, true);
+        if (this.bubbleMenuFrame !== null) {
+          windowRef.cancelAnimationFrame(this.bubbleMenuFrame);
+        }
+      });
+    });
   }
 
   insertText(text: string): void {
-    if (!this.editor) {
+    if (!text || this.disabled() || this.readOnly()) {
       return;
     }
 
-    const isOnlyEmoji = (str: string) => {
-      if (!str) {
-        return false;
-      }
-      const emojiRegex = /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/;
-      return emojiRegex.test(str.trim());
-    };
-
-    if (this.editor.isFocused) {
-      const { selection } = this.editor.state;
-      const isParentEmpty = selection.$from.parent.content.size === 0;
-
-      if (isOnlyEmoji(text) && isParentEmpty) {
-        this.editor.chain().focus().insertContent({
-          type: 'text',
-          text,
-          marks: [{ type: 'singleEmoji' }]
-        }).run();
+    if (!this.editor.focused()) {
+      const lastTextBlock = [...this.editor.document().blocks]
+        .reverse()
+        .find(block => Array.isArray(block.content));
+      if (lastTextBlock) {
+        const offset = getNgsEditorBlockText(lastTextBlock).length;
+        this.editor.setSelection({
+          anchor: { blockId: lastTextBlock.id, offset },
+          focus: { blockId: lastTextBlock.id, offset }
+        });
       } else {
-        this.editor.chain().focus().insertContent(text).run();
+        const paragraph = createNgsEditorParagraph();
+        this.editor.insertBlock(paragraph, true);
       }
-    } else {
-      const content = this.editor.getText();
-      let textToInsert: any = text;
-      if (content.length > 0) {
-        textToInsert = ` ${text} `;
-      }
-      const lastNode = this.editor.state.doc.lastChild;
-      if (lastNode && lastNode.type.name === 'paragraph') {
-        const isLastNodeEmpty = lastNode.content.size === 0;
-        const pos = this.editor.state.doc.content.size - 1;
-
-        if (isOnlyEmoji(text) && isLastNodeEmpty) {
-          this.editor.chain().focus().insertContentAt(pos, {
-            type: 'text',
-            text,
-            marks: [{ type: 'singleEmoji' }]
-          }).run();
-        } else {
-          this.editor.chain().focus().insertContentAt(pos, textToInsert).run();
-        }
-      } else {
-        this.editor.chain().focus().insertContentAt(this.editor.state.doc.content.size, textToInsert).run();
-      }
-      this.activateFullView();
     }
+
+    const value = getNgsEditorDocumentText(this.editor.document()).length > 0 && !this.editor.focused()
+      ? ` ${text} `
+      : text;
+    const singleEmoji = isOnlyEmoji(text) && this.currentBlockIsEmpty();
+    if (singleEmoji) {
+      this.editor.setMark('singleEmoji');
+    }
+    this.editor.insertText(value, 'api');
+    if (singleEmoji) {
+      this.editor.unsetMark('singleEmoji');
+    }
+    this.showFullView();
+    queueMicrotask(() => this.focus());
   }
 
   isCommandDisabled(command: string): boolean | null {
-    if (!this.editor) {
-      return true;
+    if (command === 'toggleLink') {
+      const selection = this.editor.selection();
+      const collapsed = !selection || (
+        selection.anchor.blockId === selection.focus.blockId &&
+        selection.anchor.offset === selection.focus.offset
+      );
+      return this.editor.readOnly() || collapsed ? true : null;
     }
+    const resolved = this.commands.get(command);
+    return !resolved || !this.editor.isCommandEnabled(resolved) ? true : null;
+  }
 
-    try {
-      const canFocus = this.editor.can().chain().focus() as any;
-      return !canFocus[command]().run() || null;
-    } catch (e) {
-      return true;
+  isActive(command: string): boolean {
+    const markAliases: Record<string, string> = {
+      bold: 'bold',
+      italic: 'italic',
+      strike: 'strike',
+      code: 'code',
+      link: 'link'
+    };
+    if (markAliases[command]) {
+      return this.editor.isMarkActive(markAliases[command]);
+    }
+    const resolved = this.commands.get(command);
+    return resolved ? this.editor.isCommandActive(resolved) : false;
+  }
+
+  runCommand(command: string): void {
+    const resolved = this.commands.get(command);
+    if (resolved) {
+      this.editor.execute(resolved);
+      this.focus();
     }
   }
 
-  ngOnDestroy() {
-    this.editor?.destroy();
-  }
+  send(event?: Event): void {
+    event?.stopPropagation();
+    event?.preventDefault();
+    if (this.sendDisabled()) {
+      return;
+    }
 
-  send(event: MouseEvent): void {
-    event.stopPropagation();
-    event.preventDefault();
-    this.sent.emit(this._value);
+    const document = this.editor.document();
+    this.submitted.emit(document);
+    this.sent.emit(serializeCommentEditorDocument(document));
 
     if (this.autoClear()) {
-      this.isToolbarVisible = false;
-      this.isFullViewVisible = false;
+      this.toolbarActive.set(false);
+      this.fullViewActive.set(false);
       this.clear();
     }
   }
 
-  clear(): void {
-    this._value = '';
-    this.editor?.commands.clearContent(true);
+  submit(event?: Event): void {
+    this.send(event);
   }
 
-  activateFullView(event?: MouseEvent): void {
-    if (event) {
-      const target = event.target as HTMLElement;
-      if (target.closest('button')) {
-        return;
-      }
-    }
-
-    this.showFullView();
-  }
-
-  showFullView(): void {
-    this.isFullViewVisible = true;
-  }
-
-  hideFullView(): void {
-    this.isFullViewVisible = false;
-  }
-
-  toggleToolbar(): void {
-    this.isToolbarVisible = !this.isToolbarVisible;
-  }
-
-  showToolbar(): void {
-    this.isToolbarVisible = true;
-  }
-
-  hideToolbar(): void {
-    this.isToolbarVisible = false;
-  }
-
-  cancel(event: MouseEvent): void {
-    event.stopPropagation();
-    event.preventDefault();
-    this.isToolbarVisible = false;
-    this.isFullViewVisible = false;
+  cancel(event?: Event): void {
+    event?.stopPropagation();
+    event?.preventDefault();
+    this.toolbarActive.set(false);
+    this.fullViewActive.set(false);
     this.clear();
     this.canceled.emit();
   }
 
-  private _runCommand(command: string): void {
-    if (!this.editor) {
-      return;
-    }
-
-    const chainFocus = this.editor.chain().focus() as any;
-    chainFocus[command]().run();
+  clear(): void {
+    this.editor.clear();
   }
 
-  private _init(): void {
-    if (isPlatformServer(this._platformId)) {
-      return;
-    }
-
-    this.editor = new Editor({
-      element: this._content().nativeElement,
-      extensions: [
-        Document,
-        Paragraph,
-        Text,
-        Bold,
-        Italic,
-        Strike,
-        Blockquote,
-        CodeBlock,
-        BulletList,
-        OrderedList,
-        ListItem,
-        Code,
-        History,
-        Dropcursor,
-        Youtube.configure({
-          controls: false,
-          nocookie: true,
-        }),
-        ImageUploadingPlaceholderExtension(this._injector, {
-          uploadFn: this.imageUploadFn(),
-        }),
-        Image.configure({
-          inline: true,
-          allowBase64: true
-        }),
-        SingleEmoji,
-        Link.configure({
-          openOnClick: false,
-          defaultProtocol: 'https',
-        }),
-        Placeholder.configure({
-          placeholder: this.placeholder()
-        }),
-        // FloatingMenu.configure({
-        //   element: this._floatingMenu().nativeElement
-        // }),
-        BubbleMenu.configure({
-          pluginKey: 'imageBubbleMenu',
-          element: this._imageBubbleMenu().nativeElement,
-          shouldShow: ({ editor, view, state, oldState, from, to }) => {
-            // return editor.isActive('image');
-            return false;
-          },
-        }),
-        BubbleMenu.configure({
-          pluginKey: 'bubbleMenu',
-          element: this._bubbleMenu().nativeElement,
-          tippyOptions: {
-            appendTo: this._document.body,
-            zIndex: 999
-          },
-          shouldShow: ({ editor, view, state, oldState, from, to }) => {
-            return !editor.isActive('image') &&
-              !editor.isActive('youtube') &&
-              !editor.isActive('imageUploadingPlaceholder') &&
-              !editor.view.state.selection.empty
-            ;
-          },
-        })
-      ],
-      content: '',
-      onUpdate: ({ editor }) => {
-        this._value = !editor.isEmpty ? editor.getHTML() : '';
-        this._cdr.markForCheck();
+  activateFullView(event?: Event): void {
+    if (event) {
+      const target = event.target as HTMLElement;
+      if (target.closest('button, a')) {
+        return;
       }
-    });
-    this._cdr.detectChanges();
+    }
+    this.showFullView();
   }
+
+  showFullView(): void {
+    this.fullViewActive.set(true);
+  }
+
+  hideFullView(): void {
+    this.fullViewActive.set(false);
+  }
+
+  toggleToolbar(): void {
+    this.toolbarActive.update(visible => !visible);
+  }
+
+  showToolbar(): void {
+    this.toolbarActive.set(true);
+  }
+
+  hideToolbar(): void {
+    this.toolbarActive.set(false);
+  }
+
+  focus(): void {
+    this.surface().focus();
+  }
+
+  setLink(url: string): boolean {
+    if (!url.trim()) {
+      return this.unsetLink();
+    }
+    return this.editor.execute(NGS_COMMENT_EDITOR_SET_LINK, url);
+  }
+
+  setTextColor(color: string): boolean {
+    return this.editor.execute(NGS_EDITOR_SET_TEXT_COLOR, color);
+  }
+
+  unsetTextColor(): boolean {
+    return this.editor.execute(NGS_EDITOR_UNSET_TEXT_COLOR);
+  }
+
+  setBackgroundColor(color: string): boolean {
+    return this.editor.execute(NGS_EDITOR_SET_BACKGROUND_COLOR, color);
+  }
+
+  unsetBackgroundColor(): boolean {
+    return this.editor.execute(NGS_EDITOR_UNSET_BACKGROUND_COLOR);
+  }
+
+  unsetLink(): boolean {
+    return this.editor.execute(NGS_COMMENT_EDITOR_UNSET_LINK);
+  }
+
+  insertYoutube(url: string): boolean {
+    const src = normalizeYoutubeUrl(url);
+    if (!src) {
+      return false;
+    }
+    const inserted = this.editor.insertBlock(createCommentEditorMediaBlock('youtube', { src }));
+    if (inserted) {
+      this.showFullView();
+    }
+    return inserted;
+  }
+
+  insertImage(file: File): void {
+    if (this.disabled() || this.readOnly()) {
+      return;
+    }
+    void this.readFile(file).then(preview => {
+      const block = createCommentEditorMediaBlock('imageUpload', {
+        src: preview,
+        status: 'uploading'
+      });
+      if (!this.editor.insertBlock(block)) {
+        return;
+      }
+      this.showFullView();
+      const upload = this.imageUploadFn();
+      const result = upload ? upload(file) : Promise.resolve(preview);
+      result.then(
+        src => this.editor.updateBlock(block.id, {
+          type: 'image',
+          attrs: { src, alt: file.name }
+        }),
+        error => this.editor.updateBlock(block.id, {
+          attrs: {
+            src: preview,
+            status: 'error',
+            error: error instanceof Error ? error.message : String(error)
+          }
+        })
+      );
+    });
+  }
+
+  private currentBlockIsEmpty(): boolean {
+    const selection = this.editor.selection();
+    const block = this.editor.document().blocks.find(item => item.id === selection?.focus.blockId);
+    return !!block && getNgsEditorBlockText(block).length === 0;
+  }
+
+  private readFile(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result ?? ''));
+      reader.onerror = () => reject(reader.error ?? new Error('Unable to read image'));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  private scheduleBubbleMenuPosition(): void {
+    const windowRef = this.documentRef.defaultView;
+    if (!windowRef) {
+      return;
+    }
+    if (this.bubbleMenuFrame !== null) {
+      windowRef.cancelAnimationFrame(this.bubbleMenuFrame);
+    }
+    this.bubbleMenuFrame = windowRef.requestAnimationFrame(() => {
+      this.bubbleMenuFrame = null;
+      this.positionBubbleMenu();
+    });
+  }
+
+  private positionBubbleMenu(): void {
+    const layer = this.bubbleMenuLayer()?.nativeElement;
+    if (!layer) {
+      return;
+    }
+    const selectionRect = this.surface().getSelectionRect();
+    if (!selectionRect || !this.isBubbleMenuVisible()) {
+      this.renderer.removeClass(layer, 'bubble-menu-positioned');
+      return;
+    }
+
+    const viewportWidth = this.documentRef.documentElement.clientWidth;
+    const layerWidth = layer.getBoundingClientRect().width;
+    const edge = 8;
+    const halfWidth = layerWidth / 2;
+    const selectionCenter = selectionRect.left + selectionRect.width / 2;
+    const x = layerWidth + edge * 2 >= viewportWidth
+      ? viewportWidth / 2
+      : Math.min(
+        Math.max(selectionCenter, edge + halfWidth),
+        viewportWidth - edge - halfWidth
+      );
+
+    this.renderer.setStyle(layer, 'left', `${x}px`);
+    this.renderer.setStyle(layer, 'top', `${selectionRect.top}px`);
+    this.renderer.addClass(layer, 'bubble-menu-positioned');
+  }
+}
+
+function isOnlyEmoji(value: string): boolean {
+  if (!value.trim()) {
+    return false;
+  }
+  return /^(?:\p{Extended_Pictographic}|\p{Emoji_Presentation}|[\u200d\ufe0f])+$/u.test(value.trim());
 }

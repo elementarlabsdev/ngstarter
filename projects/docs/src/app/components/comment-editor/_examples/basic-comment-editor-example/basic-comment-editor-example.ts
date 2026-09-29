@@ -1,92 +1,77 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Button } from '@ngstarter-ui/components/button';
 import {
+  CommentEditor,
+  CommentEditorBubbleMenu,
   CommentEditorCommandBlockquoteDirective,
   CommentEditorCommandBoldDirective,
   CommentEditorCommandBulletListDirective,
   CommentEditorCommandCodeBlockDirective,
+  CommentEditorCommandCodeDirective,
   CommentEditorCommandDirective,
+  CommentEditorCommandEditLinkDirective,
   CommentEditorCommandImageDirective,
   CommentEditorCommandItalicDirective,
+  CommentEditorCommandLinkDirective,
   CommentEditorCommandOrderedListDirective,
   CommentEditorCommandStrikeDirective,
-  CommentEditorCommandYoutubeDirective,
-  CommentEditor,
-  CommentEditorDivider,
-  CommentEditorToolbar,
-  CommentEditorCommandLinkDirective,
-  CommentEditorBubbleMenu,
-  CommentEditorCommandCodeDirective,
+  CommentEditorCommandToggleToolbarDirective,
   CommentEditorCommandUnsetLinkDirective,
-  CommentEditorCommandEditLinkDirective,
-  CommentEditorCommandToggleToolbarDirective, CommentEditorFooterBar
+  CommentEditorCommandYoutubeDirective,
+  CommentEditorDivider,
+  CommentEditorFooterBar,
+  CommentEditorToolbar
 } from '@ngstarter-ui/components/comment-editor';
 import { SafeHtmlPipe } from '@ngstarter-ui/components/core';
+import { NgsEditorDocument } from '@ngstarter-ui/components/editor';
 import { Icon } from '@ngstarter-ui/components/icon';
-import { Button } from '@ngstarter-ui/components/button';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
 
 @Component({
   selector: 'app-basic-comment-editor-example',
   imports: [
-    CommentEditor,
-    CommentEditorDivider,
-    CommentEditorBubbleMenu,
-    SafeHtmlPipe,
-    Icon,
-    CommentEditorCommandDirective,
-    CommentEditorCommandBoldDirective,
-    CommentEditorCommandItalicDirective,
-    CommentEditorCommandStrikeDirective,
-    CommentEditorCommandBulletListDirective,
-    CommentEditorCommandOrderedListDirective,
-    CommentEditorCommandBlockquoteDirective,
-    CommentEditorCommandCodeBlockDirective,
-    CommentEditorCommandImageDirective,
-    CommentEditorCommandYoutubeDirective,
-    CommentEditorToolbar,
-    CommentEditorCommandLinkDirective,
-    CommentEditorCommandCodeDirective,
-    CommentEditorCommandUnsetLinkDirective,
-    CommentEditorCommandEditLinkDirective,
-    CommentEditorFooterBar,
-    CommentEditorCommandToggleToolbarDirective,
     Button,
+    CommentEditor,
+    CommentEditorBubbleMenu,
+    CommentEditorCommandBlockquoteDirective,
+    CommentEditorCommandBoldDirective,
+    CommentEditorCommandBulletListDirective,
+    CommentEditorCommandCodeBlockDirective,
+    CommentEditorCommandCodeDirective,
+    CommentEditorCommandDirective,
+    CommentEditorCommandEditLinkDirective,
+    CommentEditorCommandImageDirective,
+    CommentEditorCommandItalicDirective,
+    CommentEditorCommandLinkDirective,
+    CommentEditorCommandOrderedListDirective,
+    CommentEditorCommandStrikeDirective,
+    CommentEditorCommandToggleToolbarDirective,
+    CommentEditorCommandUnsetLinkDirective,
+    CommentEditorCommandYoutubeDirective,
+    CommentEditorDivider,
+    CommentEditorFooterBar,
+    CommentEditorToolbar,
+    Icon,
+    SafeHtmlPipe,
     Tooltip
   ],
   templateUrl: './basic-comment-editor-example.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './basic-comment-editor-example.scss'
+  styleUrl: './basic-comment-editor-example.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BasicCommentEditorExample {
-  comments: string[] = [];
+  protected readonly comments: string[] = [];
+  protected submittedDocument: NgsEditorDocument | null = null;
 
-  uploadFn = (file: Blob): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('/assets/image-viewer/1.jpg');
-      }, 3000);
-    });
+  protected readonly uploadImage = (_file: Blob): Promise<string> => (
+    Promise.resolve('/assets/image-viewer/1.jpg')
+  );
 
-    // return new Promise((resolve, reject) => {
-    //   setTimeout(() => {
-    //     reject('Upload Error');
-    //   }, 3000);
-    // });
-
-    // upload to a server
-    // return new Promise((resolve, reject) => {
-    //   const formData = new FormData();
-    //   formData.append('image', file);
-    //   this._api
-    //     .post(`upload`, formData)
-    //     .subscribe((res: any) => {
-    //       resolve(res.url);
-    //     })
-    //   ;
-    // });
+  protected onSubmitted(document: NgsEditorDocument): void {
+    this.submittedDocument = document;
   }
 
-  onSent(content: string): void {
-    this.comments.unshift(content);
+  protected onSent(html: string): void {
+    this.comments.unshift(html);
   }
 }

@@ -108,6 +108,7 @@ Must use:
 - digit-roller: `@ngstarter-ui/components/digit-roller` docs: /components/digit-roller
 - divider: `@ngstarter-ui/components/divider` docs: /components/divider
 - drawer: `@ngstarter-ui/components/drawer` docs: /components/drawer
+- editor: `@ngstarter-ui/components/editor` docs: /components/editor
 - emoji-picker: `@ngstarter-ui/components/emoji-picker` docs: /components/emoji-picker
 - empty-state: `@ngstarter-ui/components/empty-state` docs: /components/empty-state
 - events: `@ngstarter-ui/components/events` docs: /components/events
@@ -174,7 +175,6 @@ Must use:
 - tab-panel: `@ngstarter-ui/components/tab-panel` docs: /navigation/tab-panel
 - table: `@ngstarter-ui/components/table` docs: /components/table
 - tabs: `@ngstarter-ui/components/tabs` docs: /components/tabs
-- text-editor: `@ngstarter-ui/components/text-editor` docs: /components/text-editor
 - thumbnail-maker: `@ngstarter-ui/components/thumbnail-maker` docs: /components/thumbnail-maker
 - tiles: `@ngstarter-ui/components/tiles` docs: /components/tiles
 - timeline: `@ngstarter-ui/components/timeline` docs: /components/timeline

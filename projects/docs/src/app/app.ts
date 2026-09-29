@@ -839,8 +839,8 @@ export class App implements OnInit {
         {
           key: uuid(),
           type: 'link',
-          name: 'Text Editor',
-          link: '/components/text-editor'
+          name: 'Editor',
+          link: '/components/editor'
         },
         {
           key: uuid(),

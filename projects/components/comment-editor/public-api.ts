@@ -18,4 +18,6 @@ export * from './src/_commands/comment-editor-command-code.directive';
 export * from './src/_commands/comment-editor-command-edit-link.directive';
 export * from './src/_commands/comment-editor-command-unset-link.directive';
 export * from './src/_commands/comment-editor-command-toggle-toolbar.directive';
+export * from './src/comment-editor.plugin';
+export * from './src/comment-editor-serializer';
 export * from './src/types';

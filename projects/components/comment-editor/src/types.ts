@@ -1,25 +1,40 @@
 import { InjectionToken } from '@angular/core';
-import { Editor } from '@tiptap/core';
+import {
+  NgsEditor,
+  NgsEditorDocument,
+  NgsEditorMarkAttributes
+} from '@ngstarter-ui/components/editor';
 
 export interface CommentEditorInterface {
-  api: CommentEditorAPI;
+  readonly api: CommentEditorAPI;
 }
 
 export interface CommentEditorAPI {
-  isCommandDisabled: (command: string) => boolean | null;
-  isActive: (command: string) => boolean | null;
-  runCommand: (command: string) => void;
-  editor: () => Editor;
-  isToolbarActive: () => boolean;
-  toggleToolbar: () => void;
-  isEditorActivated: () => boolean;
-  showToolbar: () => void;
-  hideToolbar: () => void;
-  showFullView: () => void;
-  hideFullView: () => void;
-  insertText: (text: string) => void;
-  clear: () => void;
+  isCommandDisabled(command: string): boolean | null;
+  isActive(command: string): boolean;
+  runCommand(command: string): void;
+  editor(): NgsEditor;
+  document(): NgsEditorDocument;
+  isToolbarActive(): boolean;
+  toggleToolbar(): void;
+  showToolbar(): void;
+  hideToolbar(): void;
+  isEditorActivated(): boolean;
+  showFullView(): void;
+  hideFullView(): void;
+  insertText(text: string): void;
+  insertImage(file: File): void;
+  insertYoutube(url: string): boolean;
+  getMarkAttributes(type: string): NgsEditorMarkAttributes | undefined;
+  setTextColor(color: string): boolean;
+  unsetTextColor(): boolean;
+  setBackgroundColor(color: string): boolean;
+  unsetBackgroundColor(): boolean;
+  setLink(url: string): boolean;
+  unsetLink(): boolean;
+  clear(): void;
+  focus(): void;
 }
 
-export const COMMENT_EDITOR = new InjectionToken('COMMENT_EDITOR');
+export const COMMENT_EDITOR = new InjectionToken<CommentEditorInterface>('COMMENT_EDITOR');
 export const COMMENT_EDITOR_BUBBLE_MENU = new InjectionToken('COMMENT_EDITOR_BUBBLE_MENU');

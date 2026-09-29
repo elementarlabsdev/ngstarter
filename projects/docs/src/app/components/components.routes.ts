@@ -191,6 +191,11 @@ export const routes: Routes = [
     title: 'Comment Editor'
   },
   {
+    path: 'editor',
+    loadChildren: () => import('./editor/routes').then(m => m.routes),
+    title: 'Editor'
+  },
+  {
     path: 'table',
     loadChildren: () => import('./table/routes').then(m => m.routes),
     title: 'Table'
@@ -339,11 +344,6 @@ export const routes: Routes = [
     path: 'marquee',
     loadChildren: () => import('./marquee/routes').then(m => m.routes),
     title: 'Marquee'
-  },
-  {
-    path: 'text-editor',
-    loadChildren: () => import('./text-editor/routes').then(m => m.routes),
-    title: 'Text Editor'
   },
   {
     path: 'screen-loader',

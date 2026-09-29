@@ -1,5 +1,9 @@
+// Base tokens are declared on every theme scope, not only on :root. Custom
+// properties that reference other tokens (var(...)) are resolved where they are
+// declared, so a nested [data-ngs-theme='chalk'] scope must re-declare them to
+// pick up its own palette instead of inheriting values resolved for :root.
 :root,
-[data-ngs-theme='default'] {
+[data-ngs-theme] {
   color-scheme: light;
   --ngs-font-family-base: "DM Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --ngs-font-size-xs: 0.75rem;
@@ -222,7 +226,7 @@
   --ngs-overlay-backdrop-bg: rgba(18, 32, 59, 0.30);
   --ngs-overlay-backdrop-blur: 3px;
   --ngs-table-bg: var(--ngs-color-surface);
-  --ngs-table-border-color: #dce2eb;
+  --ngs-table-border-color: var(--ngs-color-border);
   --ngs-table-header-color: var(--ngs-color-on-surface-variant);
   --ngs-table-header-bg: var(--ngs-color-surface);
   --ngs-table-row-bg: var(--ngs-color-surface);
@@ -285,6 +289,17 @@
   --ngs-nav-divider-height: 1px;
   --ngs-nav-divider-margin: --spacing(6) 0;
   --ngs-sidebar-width: var(--ngs-sidenav-width, 17.5rem);
+
+  --ngs-loader-overlay-bg: var(--ngs-color-surface-loading);
+  --ngs-chip-radius: var(--ngs-radius-full);
+  --ngs-chip-selected-background: var(--ngs-color-primary-container);
+  --ngs-chip-selected-color: var(--ngs-color-primary);
+  --ngs-segmented-bg: var(--ngs-color-surface-container-high);
+  --ngs-segmented-button-selected-bg: var(--ngs-color-surface);
+  --ngs-segmented-button-selected-shadow: var(--ngs-shadow-sm);
+  --ngs-card-bg: var(--ngs-color-surface);
+  --ngs-card-border-color: var(--ngs-color-border);
+  --ngs-card-radius: var(--ngs-radius-lg);
 }
 
 :root,

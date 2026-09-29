@@ -1,75 +1,27 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import {
-  CommentEditorDivider,
-  CommentEditorCommandBlockquoteDirective,
-  CommentEditorCommandBoldDirective,
-  CommentEditorCommandBulletListDirective,
-  CommentEditorCommandCodeBlockDirective,
-  CommentEditorCommandDirective,
-  CommentEditorCommandImageDirective,
-  CommentEditorCommandItalicDirective,
-  CommentEditorCommandOrderedListDirective,
-  CommentEditorCommandStrikeDirective,
-  CommentEditorCommandYoutubeDirective,
-  CommentEditor,
-  CommentEditorToolbar,
-  CommentEditorBubbleMenu,
-  CommentEditorCommandCodeDirective,
-  CommentEditorCommandEditLinkDirective,
-  CommentEditorCommandLinkDirective,
-  CommentEditorCommandUnsetLinkDirective,
-  CommentEditorCommandToggleToolbarDirective,
-  CommentEditorFooterBar
-} from '@ngstarter-ui/components/comment-editor';
-import { SafeHtmlPipe } from '@ngstarter-ui/components/core';
-import { Icon } from '@ngstarter-ui/components/icon';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
-import { Tooltip } from '@ngstarter-ui/components/tooltip';
+import {
+  CommentEditor,
+  CommentEditorCommandDirective,
+  CommentEditorCommandToggleToolbarDirective,
+  CommentEditorFooterBar,
+  CommentEditorToolbar
+} from '@ngstarter-ui/components/comment-editor';
+import { Icon } from '@ngstarter-ui/components/icon';
 
 @Component({
   selector: 'app-comment-editor-with-custom-icons-example',
   imports: [
-    CommentEditorDivider,
-    CommentEditorCommandBlockquoteDirective,
-    CommentEditorCommandBoldDirective,
-    CommentEditorCommandBulletListDirective,
-    CommentEditorCommandCodeBlockDirective,
-    CommentEditorCommandDirective,
-    CommentEditorCommandImageDirective,
-    CommentEditorCommandItalicDirective,
-    CommentEditorCommandOrderedListDirective,
-    CommentEditorCommandStrikeDirective,
-    CommentEditorCommandYoutubeDirective,
+    Button,
     CommentEditor,
-    SafeHtmlPipe,
-    Icon,
-    CommentEditorToolbar,
-    CommentEditorBubbleMenu,
-    CommentEditorCommandCodeDirective,
-    CommentEditorCommandEditLinkDirective,
-    CommentEditorCommandLinkDirective,
-    CommentEditorCommandUnsetLinkDirective,
+    CommentEditorCommandDirective,
     CommentEditorCommandToggleToolbarDirective,
     CommentEditorFooterBar,
-    Button,
-    Tooltip
+    CommentEditorToolbar,
+    Icon
   ],
   templateUrl: './comment-editor-with-custom-icons-example.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './comment-editor-with-custom-icons-example.scss'
+  styleUrl: './comment-editor-with-custom-icons-example.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CommentEditorWithCustomIconsExample {
-  comments: string[] = [];
-
-  uploadFn = (file: Blob): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('/assets/image-viewer/1.jpg');
-      }, 3000);
-    });
-  }
-
-  onSent(content: string): void {
-    this.comments.unshift(content);
-  }
-}
+export class CommentEditorWithCustomIconsExample {}
