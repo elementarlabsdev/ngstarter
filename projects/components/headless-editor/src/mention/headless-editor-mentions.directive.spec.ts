@@ -5,7 +5,7 @@ import { Menu, MenuItem } from '@ngstarter-ui/components/menu';
 import { basicTextEditorPlugin } from '../basic-text.plugin';
 import { NgsHeadlessEditor, provideNgsHeadlessEditor } from '../headless-editor';
 import { NgsHeadlessEditorSurface } from '../headless-editor-surface.directive';
-import { getNgsHeadlessEditorDocumentText } from '../model';
+import { createNgsHeadlessEditorDocument, getNgsHeadlessEditorDocumentText } from '../model';
 import { withHeadlessEditorPlugin } from '../plugin';
 import { tableEditorPlugin, NGS_HEADLESS_EDITOR_INSERT_TABLE } from '../table/table.plugin';
 import { getNgsHeadlessEditorTableData } from '../table/table.model';
@@ -20,6 +20,21 @@ const people: readonly Person[] = [
   { id: 'sam', label: 'Sam Rivera', team: 'Product' }
 ];
 let searchPeople: NgsHeadlessEditorMentionSearch<Person>;
+interface Emoji extends NgsHeadlessEditorMentionOption { readonly glyph: string; }
+const emoji: readonly Emoji[] = [{ id: 'anna', label: 'smile', glyph: '😊', text: '😊' }];
+let searchEmoji: NgsHeadlessEditorMentionSearch<Emoji>;
+
+@Component({ selector: 'test-emoji-option', template: '<span class="emoji-option">{{ option().glyph }} {{ option().label }}</span>' })
+class EmojiOption {
+  readonly option = input.required<Emoji>();
+  readonly active = input(false);
+}
+
+@Component({ selector: 'test-command-option', template: '<span class="command-option">/{{ option().label }}</span>' })
+class CommandOption {
+  readonly option = input.required<NgsHeadlessEditorMentionOption>();
+  readonly active = input(false);
+}
 
 function deferredSearch() {
   let resolve!: (options: readonly Person[]) => void;
@@ -43,7 +58,12 @@ class CustomOption {
   providers: [provideNgsHeadlessEditor(
     withHeadlessEditorPlugin(basicTextEditorPlugin()),
     withHeadlessEditorPlugin(tableEditorPlugin()),
-    withHeadlessEditorPlugin(mentionEditorPlugin({ options: query => searchPeople(query), optionComponent: CustomOption }))
+    withHeadlessEditorPlugin(mentionEditorPlugin([
+      { trigger: '@', options: query => searchPeople(query), optionComponent: CustomOption },
+      { trigger: ':', options: query => searchEmoji(query), optionComponent: EmojiOption },
+      { trigger: '/', options: async () => [{ id: 'anna', label: 'assign' }], optionComponent: CommandOption },
+      { trigger: '::', options: async () => [{ id: 'rocket', label: 'rocket', glyph: '🚀', text: '🚀' }], optionComponent: EmojiOption }
+    ]))
   )],
   template: `
     <div ngsHeadlessEditorSurface [disabled]="disabled()" [ngsHeadlessEditorMentions]="custom ? menu : null" #mentions="ngsHeadlessEditorMentions"></div>
@@ -75,6 +95,7 @@ describe('NgsHeadlessEditorMentions', () => {
 
   beforeEach(async () => {
     searchPeople = async query => people.filter(person => person.label.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
+    searchEmoji = async () => emoji;
     TestBed.configureTestingModule({ imports: [MentionsHost] });
     fixture = TestBed.createComponent(MentionsHost);
     document.body.append(fixture.nativeElement);
@@ -184,6 +205,66 @@ describe('NgsHeadlessEditorMentions', () => {
     expect(items()[0].textContent).toContain('Alex Morgan');
   });
 
+  it('routes each symbol to its own search and option component, even for identical option ids', async () => {
+    const userSearch = vi.fn(searchPeople);
+    const emojiSearch = vi.fn(searchEmoji);
+    searchPeople = userSearch;
+    searchEmoji = emojiSearch;
+    await userEvent.keyboard('@a');
+    await settle();
+    expect(items()[0].querySelector('.custom-option')).not.toBeNull();
+    expect(emojiSearch).not.toHaveBeenCalled();
+    await userEvent.keyboard('{Escape} :a');
+    await settle();
+    expect(host.mentions().activeTrigger()).toBe(':');
+    expect(host.mentions().registration()?.optionComponent).toBe(EmojiOption);
+    expect(items()[0].querySelector('.emoji-option')?.textContent).toBe('😊 smile');
+    expect(items()[0].querySelector('.custom-option')).toBeNull();
+    expect(emojiSearch).toHaveBeenLastCalledWith('a');
+    expect(userSearch).toHaveBeenLastCalledWith('a');
+    await userEvent.keyboard('{Enter}');
+    await settle();
+    await userEvent.keyboard('/a');
+    await settle();
+    expect(items()[0].querySelector('.command-option')?.textContent).toBe('/assign');
+    await userEvent.keyboard('{Enter}');
+    await settle();
+    expect(getNgsHeadlessEditorDocumentText(host.editor.document())).toBe('@a 😊 /assign ');
+    expect([...surface.querySelectorAll<HTMLElement>('.ngs-headless-editor-mention')].map(el => el.dataset['mentionTrigger'])).toEqual([':', '/']);
+  });
+
+  it('invalidates pending responses when the trigger changes but query and caret range stay the same', async () => {
+    const pending = deferredSearch();
+    searchPeople = () => pending.promise;
+    await userEvent.keyboard('@a');
+    await settle();
+    const blockId = host.editor.document().blocks[0].id;
+    const next = createNgsHeadlessEditorDocument(':a');
+    host.editor.setDocument({ ...next, blocks: [{ ...next.blocks[0], id: blockId }] });
+    const point = { blockId: host.editor.document().blocks[0].id, offset: 2 };
+    host.editor.setSelection({ anchor: point, focus: point });
+    await settle();
+    expect(host.mentions().query()).toBe('a');
+    expect(host.mentions().suggestions()).toEqual(emoji);
+    pending.resolve(people);
+    await settle();
+    expect(host.mentions().suggestions()).toEqual(emoji);
+    expect(items()[0].querySelector('.emoji-option')).not.toBeNull();
+  });
+
+  it('prefers the longest matching trigger and resets dismissed state when the trigger changes', async () => {
+    await userEvent.keyboard(':a{Escape}');
+    await settle();
+    expect(items()).toHaveLength(0);
+    await userEvent.keyboard('{Backspace}{Backspace}::a');
+    await settle();
+    expect(host.mentions().activeTrigger()).toBe('::');
+    expect(items()[0].querySelector('.emoji-option')?.textContent).toBe('🚀 rocket');
+    await userEvent.keyboard('{Tab}');
+    await settle();
+    expect(getNgsHeadlessEditorDocumentText(host.editor.document())).toBe('🚀 ');
+  });
+
   it('selects by keyboard, preserves plain typing and undoes insertion in one step', async () => {
     await userEvent.keyboard('@{ArrowDown}{Enter}');
     await settle();
@@ -197,6 +278,38 @@ describe('NgsHeadlessEditorMentions', () => {
     host.editor.undo();
     await settle();
     expect(getNgsHeadlessEditorDocumentText(host.editor.document())).toBe('@');
+  });
+
+  it('renders an indivisible mention, deletes it with Backspace and restores it with undo', async () => {
+    await userEvent.keyboard('@ann{Enter}');
+    await settle();
+    expect(surface.querySelector('.ngs-headless-editor-mention')?.getAttribute('contenteditable')).toBe('false');
+    await userEvent.keyboard('{Backspace}{Backspace}');
+    await settle();
+    expect(getNgsHeadlessEditorDocumentText(host.editor.document())).toBe('');
+    expect(surface.querySelector('.ngs-headless-editor-mention')).toBeNull();
+    host.editor.undo();
+    await settle();
+    expect(surface.querySelector('.ngs-headless-editor-mention')?.textContent).toBe('@Anna Chen');
+    await userEvent.keyboard('{Home}{Delete}');
+    await settle();
+    expect(getNgsHeadlessEditorDocumentText(host.editor.document())).toBe(' ');
+    expect(surface.querySelector('.ngs-headless-editor-mention')).toBeNull();
+  });
+
+  it('inserts an emoji glyph and keeps neighboring text outside the token', async () => {
+    await userEvent.keyboard(':sm{Enter}');
+    await settle();
+    const token = () => surface.querySelector('.ngs-headless-editor-mention');
+    expect(token()?.textContent).toBe('😊');
+    await userEvent.keyboard('{Backspace}next');
+    await settle();
+    expect(getNgsHeadlessEditorDocumentText(host.editor.document())).toBe('😊next');
+    expect(token()?.textContent).toBe('😊');
+    await userEvent.keyboard('{Home}before');
+    await settle();
+    expect(getNgsHeadlessEditorDocumentText(host.editor.document())).toBe('before😊next');
+    expect(token()?.textContent).toBe('😊');
   });
 
   it('accepts a custom menu template and pointer selection without losing the caret', async () => {
@@ -267,6 +380,22 @@ describe('NgsHeadlessEditorMentions', () => {
     await settle();
     fixture.destroy();
     expect(items()).toHaveLength(0);
+  });
+
+  it('routes non-default triggers inside a table cell and preserves the trigger through undo', async () => {
+    host.editor.execute(NGS_HEADLESS_EDITOR_INSERT_TABLE, { rows: 1, columns: 1, header: false });
+    await settle();
+    await userEvent.keyboard(':sm');
+    await settle();
+    expect(items()[0].querySelector('.emoji-option')).not.toBeNull();
+    await userEvent.keyboard('{Enter}');
+    await settle();
+    const cell = () => getNgsHeadlessEditorTableData(host.editor.document().blocks.find(block => block.type === 'table')!).rows[0][0];
+    expect(cell().map(run => run.text).join('')).toBe('😊 ');
+    expect(cell()[0].marks[0].attrs?.['trigger']).toBe(':');
+    host.editor.undo();
+    await settle();
+    expect(cell().map(run => run.text).join('')).toBe(':sm');
   });
 
   it('closes for a disabled surface and restores consumer ARIA attributes', async () => {

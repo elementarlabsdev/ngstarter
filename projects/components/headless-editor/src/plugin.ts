@@ -24,6 +24,8 @@ export interface NgsHeadlessEditorMarkDefinition {
    * Default: true. Set false for marks that only make sense in the main text.
    */
   readonly nested?: boolean;
+  /** An indivisible inline token: its text cannot be edited and deletion removes the whole token. */
+  readonly atomic?: boolean;
   applyAttributes?(element: HTMLElement, mark: NgsHeadlessEditorMark): void;
   readAttributes?(element: HTMLElement): NgsHeadlessEditorMark['attrs'];
 }

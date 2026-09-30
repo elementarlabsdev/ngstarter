@@ -814,6 +814,13 @@ export class NgsHeadlessEditorSurface {
     while (textNode) {
       const length = textNode.textContent?.length ?? 0;
       if (remaining <= length) {
+        const atomic = textNode.parentElement?.closest('[data-ngs-headless-editor-atomic]');
+        if (atomic?.parentNode) {
+          return {
+            node: atomic.parentNode,
+            offset: [...atomic.parentNode.childNodes].indexOf(atomic) + (remaining === 0 ? 0 : 1)
+          };
+        }
         return { node: textNode, offset: remaining };
       }
       remaining -= length;

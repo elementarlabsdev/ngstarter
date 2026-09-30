@@ -18,16 +18,27 @@ export class Mentions {
   NgsHeadlessEditorSurface, provideNgsHeadlessEditor, withHeadlessEditorPlugin
 } from '@ngstarter-ui/components/headless-editor';
 
+const emoji = [{ id: 'rocket', label: 'rocket:', text: '🚀' }];
+
 @Component({
   imports: [NgsHeadlessEditorSurface, NgsHeadlessEditorMentions],
   providers: [provideNgsHeadlessEditor(
     withHeadlessEditorPlugin(basicTextEditorPlugin()),
-    withHeadlessEditorPlugin(mentionEditorPlugin({
+    withHeadlessEditorPlugin(mentionEditorPlugin([{
+      trigger: '@',
       options: async query => users.filter(user =>
         user.label.toLocaleLowerCase().includes(query.toLocaleLowerCase())
       ),
       optionComponent: UserMentionOption
-    }))
+    }, {
+      trigger: ':',
+      options: async query => emoji.filter(item => item.label.includes(query)),
+      optionComponent: EmojiMentionOption
+    }, {
+      trigger: '/',
+      options: async query => commands.filter(item => item.label.includes(query)),
+      optionComponent: CommandMentionOption
+    }]))
   )],
   template: '<div ngsHeadlessEditorSurface ngsHeadlessEditorMentions></div>'
 })
@@ -61,18 +72,24 @@ export class UserMentionOption implements NgsHeadlessEditorMentionOptionComponen
   readonly active = input(false);
 }`;
 
-  readonly templateCode = `<div ngsHeadlessEditorSurface
+  readonly templateCode = `<!-- Import NgComponentOutlet, Menu and MenuItem in the host component. -->
+<div ngsHeadlessEditorSurface
   [ngsHeadlessEditorMentions]="mentionMenu"
   #mentions="ngsHeadlessEditorMentions">
 </div>
 
 <ngs-menu #mentionMenu>
-  @for (user of mentions.suggestions(); track user.id; let index = $index) {
+  @for (option of mentions.suggestions(); track option.id; let index = $index) {
     <ngs-menu-item
       [attr.id]="mentions.optionId(index)"
       [selected]="mentions.activeIndex() === index"
-      (click)="mentions.select(user)">
-      <app-user-mention-option [option]="user" [active]="mentions.activeIndex() === index"/>
+      (click)="mentions.select(option)">
+      @if (mentions.optionComponent(); as component) {
+        <ng-container [ngComponentOutlet]="component"
+          [ngComponentOutletInputs]="{ option: option, active: mentions.activeIndex() === index }"/>
+      } @else {
+        {{ option.label }}
+      }
     </ngs-menu-item>
   }
 </ngs-menu>`;
@@ -80,6 +97,6 @@ export class UserMentionOption implements NgsHeadlessEditorMentionOptionComponen
   readonly jsonCode = `{
   "type": "text",
   "text": "@Anna Chen",
-  "marks": [{ "type": "mention", "attrs": { "id": "anna", "label": "Anna Chen" } }]
+  "marks": [{ "type": "mention", "attrs": { "id": "anna", "label": "Anna Chen", "trigger": "@", "tokenId": "mention-1" } }]
 }`;
 }

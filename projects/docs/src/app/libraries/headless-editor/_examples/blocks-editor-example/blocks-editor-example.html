@@ -11,23 +11,26 @@
 
 <div class="surface" ngsHeadlessEditorSurface ariaLabel="Checklist editor"></div>
 
-<table class="blocks">
-  <thead>
-    <tr>
-      <th>Type</th>
-      <th>Text</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    @for (block of editor.document().blocks; track block.id) {
-      <tr>
-        <td><code>{{ block.type }}</code></td>
-        <td>{{ blockText(block) || '—' }}</td>
-        <td>
-          <button ngsButton="text" (click)="remove(block)">Remove</button>
-        </td>
-      </tr>
-    }
-  </tbody>
-</table>
+<div class="mt-4 overflow-x-auto rounded-xl border border-border">
+  <table ngs-table [dataSource]="editor.document().blocks" [trackBy]="trackBlock">
+    <ng-container ngsColumnDef="type">
+      <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+      <td ngs-cell *ngsCellDef="let block"><code>{{ block.type }}</code></td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="text">
+      <th ngs-header-cell *ngsHeaderCellDef>Text</th>
+      <td ngs-cell *ngsCellDef="let block">{{ blockText(block) || '—' }}</td>
+    </ng-container>
+
+    <ng-container ngsColumnDef="actions">
+      <th ngs-header-cell *ngsHeaderCellDef><span class="sr-only">Actions</span></th>
+      <td ngs-cell *ngsCellDef="let block">
+        <button ngsButton="text" (click)="remove(block)">Remove</button>
+      </td>
+    </ng-container>
+
+    <tr ngs-header-row *ngsHeaderRowDef="displayedColumns"></tr>
+    <tr ngs-row *ngsRowDef="let block; columns: displayedColumns"></tr>
+  </table>
+</div>

@@ -4,7 +4,7 @@
       [attr.id]="mentions().optionId(index)"
       [selected]="mentions().activeIndex() === index"
       (click)="mentions().select(option)">
-      @if (optionComponent) {
+      @if (mentions().optionComponent(); as optionComponent) {
         <ng-container
           [ngComponentOutlet]="optionComponent"
           [ngComponentOutletInputs]="{ option: option, active: mentions().activeIndex() === index }"/>

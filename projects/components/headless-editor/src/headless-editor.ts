@@ -210,7 +210,7 @@ export class NgsHeadlessEditor {
   }
 
   setSelection(selection: NgsHeadlessEditorSelection | null): void {
-    const next = selection ? clampSelection(this._document(), selection) : null;
+    const next = selection ? clampSelection(this._document(), selection, this.marks) : null;
     if (!selectionsEqual(this._selection(), next)) {
       // Moving the caret discards pending marks and starts a new undo step.
       this._storedMarks.set(null);
@@ -292,7 +292,8 @@ export class NgsHeadlessEditor {
     }
 
     const lines = text.replace(/\r\n?/g, '\n').split('\n');
-    const marks = this._storedMarks() ?? marksAtOffset(block.content, point.offset);
+    const marks = (this._storedMarks() ?? marksAtOffset(block.content, point.offset))
+      .filter(mark => !this.marks.get(mark.type)?.atomic);
     const before = sliceTextContent(block.content, 0, point.offset);
     const after = sliceTextContent(block.content, point.offset, textContentLength(block.content));
     const blocks = [...base.document.blocks];
@@ -352,8 +353,7 @@ export class NgsHeadlessEditor {
 
     const selection = this.ensureSelection();
     if (!isCollapsed(selection)) {
-      const deleted = deleteSelectedRange(this._document(), selection);
-      return this.commit(deleted.document, deleted.selection, 'keyboard');
+      return this.deleteRange(selection, 'keyboard');
     }
 
     const point = selection.focus;
@@ -456,7 +456,7 @@ export class NgsHeadlessEditor {
     if (this._readOnly()) {
       return false;
     }
-    const deleted = deleteSelectedRange(this._document(), selection);
+    const deleted = deleteSelectedRange(this._document(), clampSelection(this._document(), selection, this.marks));
     if (ngsHeadlessEditorDocumentsEqual(deleted.document, this._document())) {
       return false;
     }
@@ -849,7 +849,7 @@ export class NgsHeadlessEditor {
     const selection = this.ensureSelection();
     const block = this._document().blocks.find(item => item.id === selection.focus.blockId);
     return block && isNgsHeadlessEditorTextContent(block.content)
-      ? marksAtOffset(block.content, selection.focus.offset)
+      ? marksAtOffset(block.content, selection.focus.offset).filter(mark => !this.marks.get(mark.type)?.atomic)
       : [];
   }
 
@@ -876,7 +876,7 @@ export class NgsHeadlessEditor {
   }
 
   private ensureSelection(): NgsHeadlessEditorSelection {
-    return this._selection() ?? firstSelection(this._document());
+    return clampSelection(this._document(), this._selection() ?? firstSelection(this._document()), this.marks);
   }
 
   private commit(
@@ -898,7 +898,7 @@ export class NgsHeadlessEditor {
       selection: this._selection()
     }, historyGroup);
     this._document.set(normalized);
-    this._selection.set(selection ? clampSelection(normalized, selection) : firstSelection(normalized));
+    this._selection.set(selection ? clampSelection(normalized, selection, this.marks) : firstSelection(normalized));
     this._storedMarks.set(null);
     this._origin.set(origin);
     this._revision.update(revision => revision + 1);
@@ -907,7 +907,7 @@ export class NgsHeadlessEditor {
 
   private restoreSnapshot(document: NgsHeadlessEditorDocument, selection: NgsHeadlessEditorSelection | null): void {
     this._document.set(document);
-    this._selection.set(selection ? clampSelection(document, selection) : firstSelection(document));
+    this._selection.set(selection ? clampSelection(document, selection, this.marks) : firstSelection(document));
     this._storedMarks.set(null);
     this._origin.set('history');
     this._revision.update(revision => revision + 1);
@@ -1041,11 +1041,52 @@ function isCollapsed(selection: NgsHeadlessEditorSelection): boolean {
   return selection.anchor.blockId === selection.focus.blockId && selection.anchor.offset === selection.focus.offset;
 }
 
-function clampSelection(document: NgsHeadlessEditorDocument, selection: NgsHeadlessEditorSelection): NgsHeadlessEditorSelection {
-  return {
+function clampSelection(
+  document: NgsHeadlessEditorDocument,
+  selection: NgsHeadlessEditorSelection,
+  marks: ReadonlyMap<string, NgsHeadlessEditorMarkDefinition>
+): NgsHeadlessEditorSelection {
+  const clamped = {
     anchor: clampPoint(document, selection.anchor),
     focus: clampPoint(document, selection.focus)
   };
+  if (isCollapsed(clamped)) {
+    const point = snapAtomicPoint(document, clamped.focus, marks, 'nearest');
+    return { anchor: point, focus: point };
+  }
+  const ordered = orderSelection(document, clamped);
+  const start = snapAtomicPoint(document, ordered.start, marks, 'start');
+  const end = snapAtomicPoint(document, ordered.end, marks, 'end');
+  return ordered.start === clamped.anchor ? { anchor: start, focus: end } : { anchor: end, focus: start };
+}
+
+/** Adjacent runs may share one token while having different surrounding formatting. */
+function snapAtomicPoint(
+  document: NgsHeadlessEditorDocument,
+  point: NgsHeadlessEditorPoint,
+  definitions: ReadonlyMap<string, NgsHeadlessEditorMarkDefinition>,
+  bias: 'start' | 'end' | 'nearest'
+): NgsHeadlessEditorPoint {
+  const block = document.blocks.find(item => item.id === point.blockId);
+  if (!block || !isNgsHeadlessEditorTextContent(block.content)) return point;
+  const tokens: { from: number; to: number; mark: NgsHeadlessEditorMark }[] = [];
+  let offset = 0;
+  for (const run of block.content) {
+    const mark = run.marks.find(item => definitions.get(item.type)?.atomic);
+    if (mark) {
+      const previous = tokens.at(-1);
+      if (previous?.to === offset && ngsHeadlessEditorMarksEqual([previous.mark], [mark])) {
+        previous.to += run.text.length;
+      } else {
+        tokens.push({ from: offset, to: offset + run.text.length, mark });
+      }
+    }
+    offset += run.text.length;
+  }
+  const token = tokens.find(item => item.from < point.offset && point.offset < item.to);
+  if (!token) return point;
+  const toStart = bias === 'start' || (bias === 'nearest' && point.offset - token.from < token.to - point.offset);
+  return { ...point, offset: toStart ? token.from : token.to };
 }
 
 function clampPoint(document: NgsHeadlessEditorDocument, point: NgsHeadlessEditorPoint): NgsHeadlessEditorPoint {

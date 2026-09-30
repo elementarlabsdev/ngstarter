@@ -2,167 +2,177 @@
 <p>The <code>Dialog</code> service is used to open modal dialogs.</p>
 
 <h4 class="mt-4">Methods</h4>
-<table class="w-full border-collapse border border-slate-400 my-4">
-  <thead>
-    <tr class="bg-slate-100">
-      <th class="border border-slate-300 p-2 text-left">Name</th>
-      <th class="border border-slate-300 p-2 text-left">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>open(componentOrTemplateRef, config?)</code></td>
-      <td class="border border-slate-300 p-2">Opens a dialog with the specified component or template.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>closeAll()</code></td>
-      <td class="border border-slate-300 p-2">Closes all open dialogs.</td>
-    </tr>
-  </tbody>
-</table>
+<div class="my-6 overflow-x-auto rounded-xl border border-border">
+  <table ngs-native-table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>open(componentOrTemplateRef, config?)</code></td>
+        <td>Opens a dialog with the specified component or template.</td>
+      </tr>
+      <tr>
+        <td><code>closeAll()</code></td>
+        <td>Closes all open dialogs.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <h3 class="mt-8">Dialog Configuration</h3>
 <p>
   The <code>DialogConfig</code> object configures dialog behavior, accessibility, sizing, and
   container affordances such as the built-in close button.
 </p>
-<table class="w-full border-collapse border border-slate-400 my-4">
-  <thead>
-    <tr class="bg-slate-100">
-      <th class="border border-slate-300 p-2 text-left">Property</th>
-      <th class="border border-slate-300 p-2 text-left">Type</th>
-      <th class="border border-slate-300 p-2 text-left">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>data</code></td>
-      <td class="border border-slate-300 p-2"><code>any</code></td>
-      <td class="border border-slate-300 p-2">Data passed to the dialog component.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>width</code></td>
-      <td class="border border-slate-300 p-2"><code>string</code></td>
-      <td class="border border-slate-300 p-2">Dialog width.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>height</code></td>
-      <td class="border border-slate-300 p-2"><code>string</code></td>
-      <td class="border border-slate-300 p-2">Dialog height.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>minWidth</code> / <code>minHeight</code></td>
-      <td class="border border-slate-300 p-2"><code>string | number</code></td>
-      <td class="border border-slate-300 p-2">Minimum dialog dimensions. Numeric values are treated as pixels.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>maxWidth</code> / <code>maxHeight</code></td>
-      <td class="border border-slate-300 p-2"><code>string | number</code></td>
-      <td class="border border-slate-300 p-2">Maximum dialog dimensions. Numeric values are treated as pixels.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>hasBackdrop</code></td>
-      <td class="border border-slate-300 p-2"><code>boolean</code></td>
-      <td class="border border-slate-300 p-2">Controls whether the dialog opens with a backdrop.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>backdropClass</code> / <code>panelClass</code></td>
-      <td class="border border-slate-300 p-2"><code>string | string[]</code></td>
-      <td class="border border-slate-300 p-2">Additional classes applied to the backdrop or overlay panel.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>disableClose</code></td>
-      <td class="border border-slate-300 p-2"><code>boolean</code></td>
-      <td class="border border-slate-300 p-2">Prevents the dialog from closing when the backdrop is clicked or Escape is pressed.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>autoFocus</code></td>
-      <td class="border border-slate-300 p-2"><code>boolean | string</code></td>
-      <td class="border border-slate-300 p-2">Controls which element receives focus when the dialog opens.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>restoreFocus</code></td>
-      <td class="border border-slate-300 p-2"><code>boolean</code></td>
-      <td class="border border-slate-300 p-2">Restores focus to the previously focused element when the dialog closes.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>ariaLabel</code> / <code>ariaLabelledBy</code> / <code>ariaDescribedBy</code></td>
-      <td class="border border-slate-300 p-2"><code>string | null</code></td>
-      <td class="border border-slate-300 p-2">Accessible labeling and description options for the dialog.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>role</code></td>
-      <td class="border border-slate-300 p-2"><code>'dialog' | 'alertdialog'</code></td>
-      <td class="border border-slate-300 p-2">ARIA role for the dialog container.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>closeOnNavigation</code></td>
-      <td class="border border-slate-300 p-2"><code>boolean</code></td>
-      <td class="border border-slate-300 p-2">Controls whether the dialog closes when browser navigation occurs.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>showCloseButton</code></td>
-      <td class="border border-slate-300 p-2"><code>boolean</code></td>
-      <td class="border border-slate-300 p-2">Shows the built-in icon close button in the dialog container. Defaults to <code>false</code>.</td>
-    </tr>
-  </tbody>
-</table>
+<div class="my-6 overflow-x-auto rounded-xl border border-border">
+  <table ngs-native-table>
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>data</code></td>
+        <td><code>any</code></td>
+        <td>Data passed to the dialog component.</td>
+      </tr>
+      <tr>
+        <td><code>width</code></td>
+        <td><code>string</code></td>
+        <td>Dialog width.</td>
+      </tr>
+      <tr>
+        <td><code>height</code></td>
+        <td><code>string</code></td>
+        <td>Dialog height.</td>
+      </tr>
+      <tr>
+        <td><code>minWidth</code> / <code>minHeight</code></td>
+        <td><code>string | number</code></td>
+        <td>Minimum dialog dimensions. Numeric values are treated as pixels.</td>
+      </tr>
+      <tr>
+        <td><code>maxWidth</code> / <code>maxHeight</code></td>
+        <td><code>string | number</code></td>
+        <td>Maximum dialog dimensions. Numeric values are treated as pixels.</td>
+      </tr>
+      <tr>
+        <td><code>hasBackdrop</code></td>
+        <td><code>boolean</code></td>
+        <td>Controls whether the dialog opens with a backdrop.</td>
+      </tr>
+      <tr>
+        <td><code>backdropClass</code> / <code>panelClass</code></td>
+        <td><code>string | string[]</code></td>
+        <td>Additional classes applied to the backdrop or overlay panel.</td>
+      </tr>
+      <tr>
+        <td><code>disableClose</code></td>
+        <td><code>boolean</code></td>
+        <td>Prevents the dialog from closing when the backdrop is clicked or Escape is pressed.</td>
+      </tr>
+      <tr>
+        <td><code>autoFocus</code></td>
+        <td><code>boolean | string</code></td>
+        <td>Controls which element receives focus when the dialog opens.</td>
+      </tr>
+      <tr>
+        <td><code>restoreFocus</code></td>
+        <td><code>boolean</code></td>
+        <td>Restores focus to the previously focused element when the dialog closes.</td>
+      </tr>
+      <tr>
+        <td><code>ariaLabel</code> / <code>ariaLabelledBy</code> / <code>ariaDescribedBy</code></td>
+        <td><code>string | null</code></td>
+        <td>Accessible labeling and description options for the dialog.</td>
+      </tr>
+      <tr>
+        <td><code>role</code></td>
+        <td><code>'dialog' | 'alertdialog'</code></td>
+        <td>ARIA role for the dialog container.</td>
+      </tr>
+      <tr>
+        <td><code>closeOnNavigation</code></td>
+        <td><code>boolean</code></td>
+        <td>Controls whether the dialog closes when browser navigation occurs.</td>
+      </tr>
+      <tr>
+        <td><code>showCloseButton</code></td>
+        <td><code>boolean</code></td>
+        <td>Shows the built-in icon close button in the dialog container. Defaults to <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <h3 class="mt-8">Directives & Components</h3>
 
 <h4 class="mt-4">DialogTitle</h4>
 <p>Dialog title. Automatically generates a unique ID for ARIA.</p>
-<table class="w-full border-collapse border border-slate-400 my-4">
-  <thead>
-    <tr class="bg-slate-100">
-      <th class="border border-slate-300 p-2 text-left">Input</th>
-      <th class="border border-slate-300 p-2 text-left">Type</th>
-      <th class="border border-slate-300 p-2 text-left">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>id</code></td>
-      <td class="border border-slate-300 p-2"><code>string</code></td>
-      <td class="border border-slate-300 p-2">Unique title identifier.</td>
-    </tr>
-  </tbody>
-</table>
+<div class="my-6 overflow-x-auto rounded-xl border border-border">
+  <table ngs-native-table>
+    <thead>
+      <tr>
+        <th>Input</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><code>string</code></td>
+        <td>Unique title identifier.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <h4 class="mt-8">DialogActions</h4>
 <p>Container for action buttons at the bottom of the dialog.</p>
-<table class="w-full border-collapse border border-slate-400 my-4">
-  <thead>
-    <tr class="bg-slate-100">
-      <th class="border border-slate-300 p-2 text-left">Input</th>
-      <th class="border border-slate-300 p-2 text-left">Type</th>
-      <th class="border border-slate-300 p-2 text-left">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>align</code></td>
-      <td class="border border-slate-300 p-2"><code>'start' | 'center' | 'end'</code></td>
-      <td class="border border-slate-300 p-2">Action button alignment. Defaults to <code>'end'</code>.</td>
-    </tr>
-  </tbody>
-</table>
+<div class="my-6 overflow-x-auto rounded-xl border border-border">
+  <table ngs-native-table>
+    <thead>
+      <tr>
+        <th>Input</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>align</code></td>
+        <td><code>'start' | 'center' | 'end'</code></td>
+        <td>Action button alignment. Defaults to <code>'end'</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <h4 class="mt-8">DialogClose</h4>
 <p>Directive for buttons that close the dialog.</p>
-<table class="w-full border-collapse border border-slate-400 my-4">
-  <thead>
-    <tr class="bg-slate-100">
-      <th class="border border-slate-300 p-2 text-left">Input</th>
-      <th class="border border-slate-300 p-2 text-left">Type</th>
-      <th class="border border-slate-300 p-2 text-left">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>ngsDialogClose</code></td>
-      <td class="border border-slate-300 p-2"><code>any</code></td>
-      <td class="border border-slate-300 p-2">Result used when closing the dialog.</td>
-    </tr>
-  </tbody>
-</table>
+<div class="my-6 overflow-x-auto rounded-xl border border-border">
+  <table ngs-native-table>
+    <thead>
+      <tr>
+        <th>Input</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>ngsDialogClose</code></td>
+        <td><code>any</code></td>
+        <td>Result used when closing the dialog.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

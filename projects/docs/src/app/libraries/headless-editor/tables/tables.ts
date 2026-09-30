@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { NativeTable } from '@ngstarter-ui/components/table';
 import { RouterLink } from '@angular/router';
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
@@ -9,6 +10,7 @@ import { TableEditorExample } from '../_examples/table-editor-example/table-edit
 
 @Component({
   imports: [
+    NativeTable,
     RouterLink,
     Page,
     PageContentDirective,

@@ -18,15 +18,17 @@
     <section>
       <h2>The command contract</h2>
       <ngs-code-highlighter class="code-block" [code]="contractCode" language="typescript"/>
-      <table>
-        <thead><tr><th>Member</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>id</code></td><td>Unique id. Registered commands can be executed and bound by id.</td></tr>
-          <tr><td><code>execute(editor, payload)</code></td><td>Performs the change and returns whether it did anything.</td></tr>
-          <tr><td><code>enabled(editor, payload)</code></td><td>Optional. When it returns <code>false</code>, <code>execute</code> is not called and bound controls are disabled.</td></tr>
-          <tr><td><code>active(editor, payload)</code></td><td>Optional. Drives the pressed state of toggle controls.</td></tr>
-        </tbody>
-      </table>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Member</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>id</code></td><td>Unique id. Registered commands can be executed and bound by id.</td></tr>
+            <tr><td><code>execute(editor, payload)</code></td><td>Performs the change and returns whether it did anything.</td></tr>
+            <tr><td><code>enabled(editor, payload)</code></td><td>Optional. When it returns <code>false</code>, <code>execute</code> is not called and bound controls are disabled.</td></tr>
+            <tr><td><code>active(editor, payload)</code></td><td>Optional. Drives the pressed state of toggle controls.</td></tr>
+          </tbody>
+        </table>
+      </div>
       <p>
         Predicates read editor signals, so the state of every bound control updates automatically when the
         selection or the document changes. All commands are disabled while the editor is read-only. Use
@@ -85,19 +87,21 @@
 
     <section>
       <h2>Built-in commands</h2>
-      <table>
-        <thead><tr><th>Command</th><th>Plugin</th><th>Shortcut</th></tr></thead>
-        <tbody>
-          <tr><td><code>NGS_HEADLESS_EDITOR_TOGGLE_BOLD</code></td><td>basicTextEditorPlugin</td><td>Mod-b</td></tr>
-          <tr><td><code>NGS_HEADLESS_EDITOR_TOGGLE_ITALIC</code></td><td>basicTextEditorPlugin</td><td>Mod-i</td></tr>
-          <tr><td><code>NGS_HEADLESS_EDITOR_TOGGLE_STRIKE</code></td><td>basicTextEditorPlugin</td><td>Mod-Shift-x</td></tr>
-          <tr><td><code>NGS_HEADLESS_EDITOR_TOGGLE_CODE</code></td><td>basicTextEditorPlugin</td><td>Mod-e</td></tr>
-          <tr><td><code>NGS_HEADLESS_EDITOR_SET_TEXT_COLOR</code></td><td>colorEditorPlugin</td><td>payload: CSS color</td></tr>
-          <tr><td><code>NGS_HEADLESS_EDITOR_UNSET_TEXT_COLOR</code></td><td>colorEditorPlugin</td><td>—</td></tr>
-          <tr><td><code>NGS_HEADLESS_EDITOR_SET_BACKGROUND_COLOR</code></td><td>colorEditorPlugin</td><td>payload: CSS color</td></tr>
-          <tr><td><code>NGS_HEADLESS_EDITOR_UNSET_BACKGROUND_COLOR</code></td><td>colorEditorPlugin</td><td>—</td></tr>
-        </tbody>
-      </table>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Command</th><th>Plugin</th><th>Shortcut</th></tr></thead>
+          <tbody>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TOGGLE_BOLD</code></td><td>basicTextEditorPlugin</td><td>Mod-b</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TOGGLE_ITALIC</code></td><td>basicTextEditorPlugin</td><td>Mod-i</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TOGGLE_STRIKE</code></td><td>basicTextEditorPlugin</td><td>Mod-Shift-x</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TOGGLE_CODE</code></td><td>basicTextEditorPlugin</td><td>Mod-e</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_SET_TEXT_COLOR</code></td><td>colorEditorPlugin</td><td>payload: CSS color</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_UNSET_TEXT_COLOR</code></td><td>colorEditorPlugin</td><td>—</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_SET_BACKGROUND_COLOR</code></td><td>colorEditorPlugin</td><td>payload: CSS color</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_UNSET_BACKGROUND_COLOR</code></td><td>colorEditorPlugin</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
       <p>Undo and redo are handled by the editor itself: Mod-z, Mod-Shift-z, and Mod-y.</p>
     </section>
   </div>

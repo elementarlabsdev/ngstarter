@@ -12,15 +12,20 @@ export type NgsHeadlessEditorMentionSearch<TOption extends NgsHeadlessEditorMent
   (query: string) => Promise<readonly TOption[]>;
 
 export interface NgsHeadlessEditorMentionPluginOptions<TOption extends NgsHeadlessEditorMentionOption = NgsHeadlessEditorMentionOption> {
-  /** Async search callback. A surface can override it with mentionOptions. */
+  /** Async search callback for this registration. */
   readonly options?: NgsHeadlessEditorMentionSearch<TOption>;
   /** Angular component receiving `option` and `active` inputs for every candidate. */
   readonly optionComponent?: Type<NgsHeadlessEditorMentionOptionComponent<TOption>>;
-  /** Trigger text. Default: @. A surface can override it with mentionTrigger. */
+  /** Unique trigger text for this registration. Default: @. */
   readonly trigger?: string;
 }
 
-/** Scoped through provideNgsHeadlessEditor(withHeadlessEditorPlugin(mentionEditorPlugin(options))). */
-export const NGS_HEADLESS_EDITOR_MENTION_OPTIONS = new InjectionToken<NgsHeadlessEditorMentionPluginOptions>(
-  'NGS_HEADLESS_EDITOR_MENTION_OPTIONS', { factory: () => ({}) }
+/** One normalized trigger configuration inside the mention plugin. */
+export interface NgsHeadlessEditorMentionRegistration extends NgsHeadlessEditorMentionPluginOptions {
+  readonly trigger: string;
+}
+
+/** Editor-scoped configurations installed together by mentionEditorPlugin(). */
+export const NGS_HEADLESS_EDITOR_MENTION_OPTIONS = new InjectionToken<readonly NgsHeadlessEditorMentionRegistration[]>(
+  'NGS_HEADLESS_EDITOR_MENTION_OPTIONS', { factory: () => [] }
 );

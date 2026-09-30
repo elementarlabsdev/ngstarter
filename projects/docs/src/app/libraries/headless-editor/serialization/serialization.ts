@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
@@ -9,7 +8,6 @@ import { FormsSerializationExample } from '../_examples/forms-serialization-exam
 
 @Component({
   imports: [
-    RouterLink,
     Page,
     PageContentDirective,
     PageTitleDirective,

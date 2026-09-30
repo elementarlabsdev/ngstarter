@@ -4970,7 +4970,7 @@
           "name": "blocks-editor-example",
           "title": "Blocks editor",
           "file": "projects/docs/src/app/libraries/headless-editor/_examples/blocks-editor-example/blocks-editor-example.html",
-          "source": "<div class=\"toolbar\">\n  @for (item of types; track item.type) {\n    <button ngsButton=\"outlined\" [ngsHeadlessEditorCommand]=\"setBlockType\" [commandData]=\"item.type\">\n      {{ item.label }}\n    </button>\n  }\n  <button ngsButton=\"outlined\" (mousedown)=\"$event.preventDefault()\" (click)=\"insertDivider()\">\n    Insert divider\n  </button>\n</div>\n<div class=\"surface\" ngsHeadlessEditorSurface ariaLabel=\"Checklist editor\"></div>\n<table class=\"blocks\">\n  <thead>\n    <tr>\n      <th>Type</th>\n      <th>Text</th>\n      <th></th>\n    </tr>\n  </thead>\n  <tbody>\n    @for (block of editor.document().blocks; track block.id) {\n      <tr>\n        <td><code>{{ block.type }}</code></td>\n        <td>{{ blockText(block) || '—' }}</td>\n        <td>\n          <button ngsButton=\"text\" (click)=\"remove(block)\">Remove</button>\n        </td>\n      </tr>\n    }\n  </tbody>\n</table>"
+          "source": "<div class=\"toolbar\">\n  @for (item of types; track item.type) {\n    <button ngsButton=\"outlined\" [ngsHeadlessEditorCommand]=\"setBlockType\" [commandData]=\"item.type\">\n      {{ item.label }}\n    </button>\n  }\n  <button ngsButton=\"outlined\" (mousedown)=\"$event.preventDefault()\" (click)=\"insertDivider()\">\n    Insert divider\n  </button>\n</div>\n<div class=\"surface\" ngsHeadlessEditorSurface ariaLabel=\"Checklist editor\"></div>\n<div class=\"mt-4 overflow-x-auto rounded-xl border border-border\">\n  <table ngs-table [dataSource]=\"editor.document().blocks\" [trackBy]=\"trackBlock\">\n    <ng-container ngsColumnDef=\"type\">\n      <th ngs-header-cell *ngsHeaderCellDef>Type</th>\n      <td ngs-cell *ngsCellDef=\"let block\"><code>{{ block.type }}</code></td>\n    </ng-container>\n    <ng-container ngsColumnDef=\"text\">\n      <th ngs-header-cell *ngsHeaderCellDef>Text</th>\n      <td ngs-cell *ngsCellDef=\"let block\">{{ blockText(block) || '—' }}</td>\n    </ng-container>\n    <ng-container ngsColumnDef=\"actions\">\n      <th ngs-header-cell *ngsHeaderCellDef><span class=\"sr-only\">Actions</span></th>\n      <td ngs-cell *ngsCellDef=\"let block\">\n        <button ngsButton=\"text\" (click)=\"remove(block)\">Remove</button>\n      </td>\n    </ng-container>\n    <tr ngs-header-row *ngsHeaderRowDef=\"displayedColumns\"></tr>\n    <tr ngs-row *ngsRowDef=\"let block; columns: displayedColumns\"></tr>\n  </table>\n</div>"
         },
         {
           "name": "bubble-menu-example",
@@ -5068,6 +5068,7 @@
         "NgsHeadlessEditorMentionOptionComponent",
         "NgsHeadlessEditorMentionPluginOptions",
         "NgsHeadlessEditorMentionQuery",
+        "NgsHeadlessEditorMentionRegistration",
         "NgsHeadlessEditorMentions",
         "NgsHeadlessEditorMentionSearch",
         "NgsHeadlessEditorPlugin",

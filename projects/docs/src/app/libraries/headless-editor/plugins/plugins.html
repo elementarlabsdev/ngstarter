@@ -19,19 +19,21 @@
 
     <section>
       <h2>Anatomy</h2>
-      <table>
-        <thead><tr><th>Member</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>id</code></td><td>Unique plugin id.</td></tr>
-          <tr><td><code>blocks</code></td><td>Block definitions. See <a routerLink="/libraries/headless-editor/blocks">Blocks</a>.</td></tr>
-          <tr><td><code>marks</code></td><td>Mark definitions. See <a routerLink="/libraries/headless-editor/marks">Marks</a>.</td></tr>
-          <tr><td><code>commands</code></td><td>Commands registered by id. See <a routerLink="/libraries/headless-editor/commands">Commands</a>.</td></tr>
-          <tr><td><code>keymap</code></td><td>Key bindings to command objects or ids, with optional payloads.</td></tr>
-          <tr><td><code>providers</code></td><td>Angular providers added to the editor scope.</td></tr>
-          <tr><td><code>handlePaste(event, editor)</code></td><td>Handles a paste and returns <code>true</code>, or returns <code>false</code> to pass it on.</td></tr>
-          <tr><td><code>setup(editor)</code></td><td>Runs when the plugin is installed. May return a cleanup function.</td></tr>
-        </tbody>
-      </table>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Member</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>id</code></td><td>Unique plugin id.</td></tr>
+            <tr><td><code>blocks</code></td><td>Block definitions. See <a routerLink="/libraries/headless-editor/blocks">Blocks</a>.</td></tr>
+            <tr><td><code>marks</code></td><td>Mark definitions. See <a routerLink="/libraries/headless-editor/marks">Marks</a>.</td></tr>
+            <tr><td><code>commands</code></td><td>Commands registered by id. See <a routerLink="/libraries/headless-editor/commands">Commands</a>.</td></tr>
+            <tr><td><code>keymap</code></td><td>Key bindings to command objects or ids, with optional payloads.</td></tr>
+            <tr><td><code>providers</code></td><td>Angular providers added to the editor scope.</td></tr>
+            <tr><td><code>handlePaste(event, editor)</code></td><td>Handles a paste and returns <code>true</code>, or returns <code>false</code> to pass it on.</td></tr>
+            <tr><td><code>setup(editor)</code></td><td>Runs when the plugin is installed. May return a cleanup function.</td></tr>
+          </tbody>
+        </table>
+      </div>
       <ngs-code-highlighter class="code-block" [code]="pluginCode" language="typescript"/>
     </section>
 

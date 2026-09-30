@@ -30,6 +30,10 @@ export function renderNgsHeadlessEditorTextRun(
     const wrapper = document.createElement(definition?.tagName ?? 'span');
     wrapper.setAttribute(NGS_HEADLESS_EDITOR_MARK_ATTRIBUTE, mark.type);
     definition?.applyAttributes?.(wrapper, mark);
+    if (definition?.atomic) {
+      wrapper.contentEditable = 'false';
+      wrapper.setAttribute('data-ngs-headless-editor-atomic', '');
+    }
     wrapper.append(node);
     node = wrapper;
   }

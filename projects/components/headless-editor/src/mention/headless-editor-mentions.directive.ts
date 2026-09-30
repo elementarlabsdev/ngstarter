@@ -16,7 +16,7 @@ import { NGS_HEADLESS_EDITOR_MENTION_OPTIONS, NgsHeadlessEditorMentionSearch } f
 import { NgsHeadlessEditorMentionMenu } from './mention-menu/mention-menu';
 
 /**
- * Opens a consumer-defined ngs-menu at @query. Focus stays in the editor;
+ * Routes trigger/query to the matching mention plugin registration. Focus stays in the editor;
  * ArrowUp/Down, Enter/Tab and Escape control the suggestions. Works in nested
  * inline editors too. The menu owns its option templates; call select(option)
  * on click and use optionId(index) / activeIndex() for accessible highlighting.
@@ -47,20 +47,39 @@ export class NgsHeadlessEditorMentions<TOption extends NgsHeadlessEditorMentionO
   private menuClosed: OutputRefSubscription | null = null;
 
   readonly menu = input<Menu | '' | null>(null, { alias: 'ngsHeadlessEditorMentions' });
-  readonly options = input<NgsHeadlessEditorMentionSearch<TOption>>(
-    (this.config.options ?? (async () => [])) as NgsHeadlessEditorMentionSearch<TOption>,
-    { alias: 'mentionOptions' }
-  );
-  readonly trigger = input(this.config.trigger ?? '@', { alias: 'mentionTrigger' });
+  /** Single-configuration compatibility override. Configure multiple triggers in the plugin's array. */
+  readonly options = input<NgsHeadlessEditorMentionSearch<TOption> | null>(null, { alias: 'mentionOptions' });
+  /** Single-configuration compatibility override. */
+  readonly trigger = input<string | null>(null, { alias: 'mentionTrigger' });
   readonly selected = output<TOption>({ alias: 'mentionSelected' });
   readonly queryChange = output<string | null>({ alias: 'mentionQueryChange' });
   private readonly target = computed(() => this.editor.inlineTarget() ?? this.editor);
-  private readonly match = computed(() => {
-    const target = this.target();
-    return this.initialized() && !this.surface.disabled() && !this.editor.readOnly() && target.focused()
-      ? findNgsHeadlessEditorMentionQuery(target, this.trigger())
-      : null;
+  private readonly registrations = computed(() => {
+    const options = this.options();
+    const trigger = this.trigger();
+    if (this.config.length > 1 && (options !== null || trigger !== null)) {
+      throw new Error('[NgsHeadlessEditor] Configure mention options and triggers in the plugin configurations when using multiple triggers.');
+    }
+    return this.config.map(config => ({
+      ...config,
+      options: options ?? config.options,
+      trigger: trigger ?? config.trigger
+    })).sort((left, right) => right.trigger.length - left.trigger.length);
   });
+  private readonly session = computed(() => {
+    const target = this.target();
+    if (!this.initialized() || this.surface.disabled() || this.editor.readOnly() || !target.focused()) return null;
+    for (const registration of this.registrations()) {
+      const match = findNgsHeadlessEditorMentionQuery(target, registration.trigger);
+      if (match) return { registration, match };
+    }
+    return null;
+  });
+  private readonly match = computed(() => this.session()?.match ?? null);
+  /** Settings of the plugin handling the current query, or null outside a query. */
+  readonly registration = computed(() => this.session()?.registration ?? null);
+  readonly activeTrigger = computed(() => this.match()?.trigger ?? null);
+  readonly optionComponent = computed(() => this.registration()?.optionComponent);
   readonly query = computed(() => this.match()?.query ?? null);
   private readonly results = signal<readonly TOption[]>([]);
   private readonly searching = signal(false);
@@ -77,7 +96,7 @@ export class NgsHeadlessEditorMentions<TOption extends NgsHeadlessEditorMentionO
   constructor() {
     effect(onCleanup => {
       const query = this.query();
-      const search = this.options();
+      const search = this.registration()?.options;
       // Changing the nested editor invalidates a request even for the same query.
       this.target();
       let cancelled = false;
@@ -86,11 +105,14 @@ export class NgsHeadlessEditorMentions<TOption extends NgsHeadlessEditorMentionO
         this.results.set([]);
         this.searchError.set(null);
         this.searching.set(query !== null);
-        if (query === null) return;
+        if (query === null || !search) {
+          this.searching.set(false);
+          return;
+        }
         void (async () => {
           try {
             const options = await search(query);
-            if (!cancelled) this.results.set(options);
+            if (!cancelled) this.results.set(options as readonly TOption[]);
           } catch (error: unknown) {
             if (!cancelled) this.searchError.set(error);
           } finally {
@@ -107,7 +129,7 @@ export class NgsHeadlessEditorMentions<TOption extends NgsHeadlessEditorMentionO
       const target = this.target();
       const match = this.match();
       const count = this.suggestions().length;
-      const key = match ? `${match.blockId}:${match.from}:${match.to}:${match.query}` : '';
+      const key = match ? `${match.trigger}:${match.blockId}:${match.from}:${match.to}:${match.query}` : '';
       untracked(() => {
         if (target !== this.previousEditor || key !== this.previousQuery) {
           this.activeIndex.set(0);

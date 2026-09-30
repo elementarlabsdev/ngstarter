@@ -3,8 +3,9 @@
   <div appPageContent>
     <section>
       <p>
-        Add teammate mentions with a menu anchored to the text caret. Configure an Angular option component
-        once in the plugin, or supply a custom menu template for an individual surface. The editor keeps focus
+        Configure one mention plugin for teammates, emoji, commands, or other suggestions.
+        Each configuration has its own trigger, async search callback and Angular option component.
+        The editor keeps focus
         while the menu is open, so typing continues to filter suggestions.
       </p>
       <ngs-playground exampleUrl="_docs/libraries/headless-editor/_examples" exampleName="mentions-editor-example">
@@ -20,8 +21,11 @@
       <p>
         Import from <code>&#64;ngstarter-ui/components/headless-editor</code> and install
         <code>mentionEditorPlugin()</code> through <code>withHeadlessEditorPlugin()</code>.
-        This provides its options in the editor's injector scope. All mention surfaces in that scope share
-        the configured component and search callback; separate editors can use different configurations.
+        Pass an array of configurations for triggers such as <code>&#64;</code>, <code>:</code> and <code>/</code>.
+        A single configuration object is also supported. One surface directive automatically
+        selects the matching configuration and renders its option component. Triggers must be unique,
+        non-empty and contain no whitespace. If triggers overlap, the longest matching trigger wins.
+        All registrations use the same <code>mention</code> mark; these are not separate document mark types.
       </p>
       <ngs-code-highlighter class="code-block" [code]="setupCode" language="typescript"/>
     </section>
@@ -29,7 +33,10 @@
       <h2>Custom option component</h2>
       <p>
         Candidates require an <code>id</code> and <code>label</code> and may include any presentation data.
-        The component receives <code>option</code> and <code>active</code> inputs. Place avatars, descriptions,
+        Set <code>text</code> to insert a different value, such as an emoji glyph. When omitted,
+        the inserted text is the trigger followed by the label.
+        Set <code>optionComponent</code> separately in each configuration. The component receives
+        that configuration's <code>option</code> and <code>active</code> inputs. Place avatars, descriptions,
         or other content inside it. The surrounding <code>MenuItem</code> handles selection and highlighting.
       </p>
       <ngs-code-highlighter class="code-block" [code]="componentCode" language="typescript"/>
@@ -41,6 +48,9 @@
         Import <code>Menu</code> and <code>MenuItem</code> from <code>&#64;ngstarter-ui/components/menu</code>.
         Render <code>suggestions()</code>, give each item its <code>optionId(index)</code>, highlight
         <code>activeIndex()</code>, and call <code>select(option)</code> when an item is clicked.
+        Use <code>optionComponent()</code> to render the active configuration's component with
+        <code>NgComponentOutlet</code>, or inspect <code>activeTrigger()</code> and <code>registration()</code>
+        when your custom menu needs the active configuration's settings.
       </p>
       <ngs-code-highlighter class="code-block" [code]="templateCode" language="html"/>
     </section>
@@ -49,7 +59,7 @@
       <p>
         Set <code>options</code> to a callback with the signature
         <code>(query: string) =&gt; Promise&lt;readonly User[]&gt;</code>. It receives the search text without
-        the trigger, including an empty string when the user types only <code>&#64;</code>.
+        the trigger, including an empty string when the user types only the configured symbol.
         Filter a local array as shown above, or return results from your backend. Returned candidates
         keep their order and are not filtered again by the plugin.
       </p>
@@ -58,14 +68,16 @@
         The directive clears previous suggestions while searching and ignores outdated responses.
         Rejected searches leave the menu closed and expose the error through <code>error()</code>;
         <code>loading()</code> reports a pending search. A new query starts another search.
-        To use a different callback on one surface, bind <code>[mentionOptions]="searchUsers"</code>.
+        Switching triggers starts the new configuration's search even when the query text stays the same.
+        The <code>mentionOptions</code> and <code>mentionTrigger</code> surface overrides are supported
+        for a single configuration. With multiple triggers, configure these values in the plugin's array.
         Ignoring an outdated response does not cancel its network request.
       </p>
     </section>
     <section>
       <h2>Search and keyboard behavior</h2>
       <ul>
-        <li>Type <code>&#64;</code> at the start of text or after whitespace or an opening bracket. E-mail addresses do not open the menu.</li>
+        <li>Type a registered trigger at the start of text or after whitespace or an opening bracket. E-mail addresses do not open the menu.</li>
         <li>Arrow keys choose a suggestion; Enter or Tab inserts it; Escape dismisses the current query.</li>
         <li>The directive also handles mentions inside table cells when their marks allow mentions.</li>
         <li>No menu opens during composition, for read-only editors, or when no candidates match.</li>
@@ -74,14 +86,20 @@
     <section>
       <h2>Document value and undo</h2>
       <p>
-        Selecting a candidate replaces the trigger and query with its label and a trailing space in one undo
+        Selecting a candidate replaces the trigger and query with its insertion text and a trailing space in one undo
         step. Formatting around the query is preserved, and the space has no mention mark. The selected
         candidate is emitted through <code>mentionSelected</code>.
+        The mark stores the trigger alongside its id and label, so different registrations can use the
+        same candidate id. Each insertion gets a <code>tokenId</code>, so adjacent identical mentions
+        remain independently deletable. Older documents without these attributes remain supported.
       </p>
       <ngs-code-highlighter class="code-block" [code]="jsonCode" language="json"/>
       <p>
-        Mentions are editable text marks. They are not atomic tokens: users can edit their text and delete
-        individual characters. Style <code>.ngs-headless-editor-mention</code> through the surface class
+        Mentions are indivisible inline tokens. Users can delete the whole token and insert a new one;
+        they cannot change individual characters. Backspace, Delete and replacing a selection that
+        overlaps a token remove the entire token. Typing next to it creates ordinary text.
+        The example uses no background highlight after insertion.
+        Style <code>.ngs-headless-editor-mention</code> through the surface class
         with <code>::ng-deep</code> or global styles, and map the mark explicitly in your HTML serializer.
       </p>
     </section>

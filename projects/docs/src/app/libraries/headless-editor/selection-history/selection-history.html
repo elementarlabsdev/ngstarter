@@ -33,16 +33,18 @@
 
     <section>
       <h2>Editing at the selection</h2>
-      <table>
-        <thead><tr><th>Method</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>insertText(text, origin?)</code></td><td>Replaces the selection with text; line breaks create paragraphs.</td></tr>
-          <tr><td><code>deleteBackward()</code>, <code>deleteForward()</code></td><td>Delete the selection, one character, or merge blocks at a boundary.</td></tr>
-          <tr><td><code>deleteRange(selection, origin, group?)</code></td><td>Deletes an explicit range.</td></tr>
-          <tr><td><code>splitBlock()</code></td><td>Splits the block at the caret.</td></tr>
-          <tr><td><code>clear()</code></td><td>Replaces the content with an empty paragraph and clears history.</td></tr>
-        </tbody>
-      </table>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Method</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>insertText(text, origin?)</code></td><td>Replaces the selection with text; line breaks create paragraphs.</td></tr>
+            <tr><td><code>deleteBackward()</code>, <code>deleteForward()</code></td><td>Delete the selection, one character, or merge blocks at a boundary.</td></tr>
+            <tr><td><code>deleteRange(selection, origin, group?)</code></td><td>Deletes an explicit range.</td></tr>
+            <tr><td><code>splitBlock()</code></td><td>Splits the block at the caret.</td></tr>
+            <tr><td><code>clear()</code></td><td>Replaces the content with an empty paragraph and clears history.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section>
@@ -67,18 +69,20 @@
         <code>revision</code> increases with every document change. <code>origin</code> tells where the last
         change came from:
       </p>
-      <table>
-        <thead><tr><th>Origin</th><th>Source</th></tr></thead>
-        <tbody>
-          <tr><td><code>external</code></td><td><code>setDocument()</code>: content loaded by the application.</td></tr>
-          <tr><td><code>keyboard</code></td><td>Typing, deleting, and Enter in the surface.</td></tr>
-          <tr><td><code>paste</code></td><td>Plain-text paste.</td></tr>
-          <tr><td><code>composition</code></td><td>IME composition, drag and drop, and other DOM read-backs.</td></tr>
-          <tr><td><code>command</code></td><td>Formatting and block operations.</td></tr>
-          <tr><td><code>history</code></td><td>Undo and redo.</td></tr>
-          <tr><td><code>api</code></td><td>Your own calls that pass <code>'api'</code>, and <code>clear()</code>.</td></tr>
-        </tbody>
-      </table>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Origin</th><th>Source</th></tr></thead>
+          <tbody>
+            <tr><td><code>external</code></td><td><code>setDocument()</code>: content loaded by the application.</td></tr>
+            <tr><td><code>keyboard</code></td><td>Typing, deleting, and Enter in the surface.</td></tr>
+            <tr><td><code>paste</code></td><td>Plain-text paste.</td></tr>
+            <tr><td><code>composition</code></td><td>IME composition, drag and drop, and other DOM read-backs.</td></tr>
+            <tr><td><code>command</code></td><td>Formatting and block operations.</td></tr>
+            <tr><td><code>history</code></td><td>Undo and redo.</td></tr>
+            <tr><td><code>api</code></td><td>Your own calls that pass <code>'api'</code>, and <code>clear()</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
       <p>Use it to avoid writing loaded documents straight back to where they came from.</p>
     </section>
   </div>

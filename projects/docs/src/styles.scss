@@ -2,7 +2,7 @@
 @use "../../components/styles/themes/chalk";
 
 .prose {
-  div:has(> table.ngs-table) {
+  div:has(> table.ngs-table, > table.ngs-native-table) {
     margin-block: 1.5rem;
     overflow-x: auto;
     border: 1px solid var(--ngs-color-border);
@@ -11,7 +11,8 @@
     box-shadow: var(--ngs-shadow-sm);
   }
 
-  table.ngs-table {
+  table.ngs-table,
+  table.ngs-native-table {
     --ngs-table-bg: var(--ngs-color-surface);
     --ngs-table-background: var(--ngs-table-bg);
     --ngs-table-header-bg: var(--ngs-color-surface-container-low);
@@ -28,52 +29,7 @@
     margin-block: 0;
   }
 
-  table:not(.ngs-table) {
-    width: 100%;
-    min-width: 100%;
-    margin-block: 1.5rem;
-    overflow: hidden;
-    border: 1px solid var(--ngs-color-border);
-    border-collapse: separate;
-    border-spacing: 0;
-    border-radius: var(--ngs-radius-lg);
-    background: var(--ngs-color-surface);
-    box-shadow: var(--ngs-shadow-sm);
-    color: var(--ngs-color-on-surface);
-    font-size: 0.875rem;
-    line-height: 1.5;
-  }
-
-  table:not(.ngs-table) thead tr {
-    background: var(--ngs-color-surface-container-low);
-    color: var(--ngs-color-on-surface-variant);
-  }
-
-  table:not(.ngs-table) th {
-    padding: 0.875rem 1rem;
-    border: 0;
-    border-bottom: 1px solid var(--ngs-color-border);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0;
-    text-align: left;
-    text-transform: uppercase;
-    vertical-align: middle;
-  }
-
-  table:not(.ngs-table) td {
-    padding: 0.875rem 1rem;
-    border: 0;
-    border-bottom: 1px solid var(--ngs-color-border);
-    color: var(--ngs-color-on-surface);
-    vertical-align: middle;
-  }
-
-  table:not(.ngs-table) tbody tr:last-child td {
-    border-bottom: 0;
-  }
-
-  table:not(.ngs-table) code,
+  table.ngs-native-table code,
   table.ngs-table code {
     border-radius: var(--ngs-radius-sm);
     background: var(--ngs-color-surface-container);

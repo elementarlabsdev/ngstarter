@@ -18,41 +18,47 @@
 
     <section>
       <h2>Inputs</h2>
-      <table>
-        <thead><tr><th>Input</th><th>Default</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>placeholder</code></td><td>Write something…</td><td>Text written to the placeholder attribute of the first empty block while the document is empty.</td></tr>
-          <tr><td><code>ariaLabel</code></td><td>Rich text editor</td><td>Accessible name of the textbox.</td></tr>
-          <tr><td><code>disabled</code></td><td>false</td><td>Makes the surface non-editable and ignores input. The editor itself stays writable through its API; use <code>editor.setReadOnly()</code> to lock the document.</td></tr>
-          <tr><td><code>spellcheck</code></td><td>true</td><td>Native spellcheck attribute.</td></tr>
-        </tbody>
-      </table>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Input</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>placeholder</code></td><td>Write something…</td><td>Text written to the placeholder attribute of the first empty block while the document is empty.</td></tr>
+            <tr><td><code>ariaLabel</code></td><td>Rich text editor</td><td>Accessible name of the textbox.</td></tr>
+            <tr><td><code>disabled</code></td><td>false</td><td>Makes the surface non-editable and ignores input. The editor itself stays writable through its API; use <code>editor.setReadOnly()</code> to lock the document.</td></tr>
+            <tr><td><code>spellcheck</code></td><td>true</td><td>Native spellcheck attribute.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section>
       <h2>Host attributes</h2>
       <p>The surface element exposes its state as attributes you can style and test against.</p>
-      <table>
-        <thead><tr><th>Attribute</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>class="ngs-headless-editor-surface"</code></td><td>Stable class hook. No styles are attached to it.</td></tr>
-          <tr><td><code>role="textbox"</code>, <code>aria-multiline</code></td><td>Accessibility role of the editing area.</td></tr>
-          <tr><td><code>contenteditable</code></td><td><code>false</code> while the surface is disabled or the editor is read-only.</td></tr>
-          <tr><td><code>aria-disabled</code></td><td>Mirrors the effective disabled state.</td></tr>
-          <tr><td><code>data-empty</code></td><td>Present while the document has no content.</td></tr>
-          <tr><td><code>data-placeholder</code></td><td>The placeholder text, for host-level placeholder styles.</td></tr>
-        </tbody>
-      </table>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Attribute</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>class="ngs-headless-editor-surface"</code></td><td>Stable class hook. No styles are attached to it.</td></tr>
+            <tr><td><code>role="textbox"</code>, <code>aria-multiline</code></td><td>Accessibility role of the editing area.</td></tr>
+            <tr><td><code>contenteditable</code></td><td><code>false</code> while the surface is disabled or the editor is read-only.</td></tr>
+            <tr><td><code>aria-disabled</code></td><td>Mirrors the effective disabled state.</td></tr>
+            <tr><td><code>data-empty</code></td><td>Present while the document has no content.</td></tr>
+            <tr><td><code>data-placeholder</code></td><td>The placeholder text, for host-level placeholder styles.</td></tr>
+          </tbody>
+        </table>
+      </div>
       <p>Rendered content carries attributes that connect the DOM to the model:</p>
-      <table>
-        <thead><tr><th>Attribute</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>data-ngs-headless-editor-block-id</code></td><td>Block id on every block element.</td></tr>
-          <tr><td><code>data-ngs-headless-editor-block-type</code></td><td>Block type on every block element.</td></tr>
-          <tr><td><code>data-ngs-headless-editor-placeholder</code></td><td>Placeholder text on the first empty text block of an empty document.</td></tr>
-          <tr><td><code>data-ngs-headless-editor-mark</code></td><td>Mark type on every mark wrapper element.</td></tr>
-        </tbody>
-      </table>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Attribute</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>data-ngs-headless-editor-block-id</code></td><td>Block id on every block element.</td></tr>
+            <tr><td><code>data-ngs-headless-editor-block-type</code></td><td>Block type on every block element.</td></tr>
+            <tr><td><code>data-ngs-headless-editor-placeholder</code></td><td>Placeholder text on the first empty text block of an empty document.</td></tr>
+            <tr><td><code>data-ngs-headless-editor-mark</code></td><td>Mark type on every mark wrapper element.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section>
@@ -71,21 +77,23 @@
         The surface handles <code>beforeinput</code> and applies the matching editor operation instead of
         letting the browser edit the DOM. The resulting change is rendered from the model.
       </p>
-      <table>
-        <thead><tr><th>Input type</th><th>Operation</th></tr></thead>
-        <tbody>
-          <tr><td><code>insertText</code></td><td><code>insertText()</code> at the selection, with stored marks.</td></tr>
-          <tr><td><code>insertReplacementText</code></td><td>Replaces the range reported by the browser (spellcheck and autocorrect).</td></tr>
-          <tr><td><code>insertParagraph</code>, <code>insertLineBreak</code></td><td><code>splitBlock()</code>.</td></tr>
-          <tr><td><code>deleteContentBackward</code>, <code>deleteContentForward</code></td><td>Deletes one user-perceived character or merges blocks at a boundary.</td></tr>
-          <tr><td><code>deleteWord*</code>, <code>deleteSoftLine*</code>, <code>deleteHardLine*</code></td><td>Deletes the target range reported by the browser (for example Ctrl+Backspace or Cmd+Backspace).</td></tr>
-          <tr><td><code>deleteByCut</code></td><td>Deletes the selection after the browser copied it.</td></tr>
-          <tr><td><code>historyUndo</code>, <code>historyRedo</code></td><td><code>undo()</code>, <code>redo()</code>.</td></tr>
-          <tr><td><code>formatBold</code>, <code>formatItalic</code>, <code>formatStrikeThrough</code></td><td>Toggles the corresponding mark.</td></tr>
-          <tr><td>other <code>format*</code>, list, rule, and link commands</td><td>Blocked: the model only contains what plugins define.</td></tr>
-          <tr><td>composition, drop, and unknown insertions</td><td>The browser edits the DOM; the touched blocks are read back into the model and re-rendered.</td></tr>
-        </tbody>
-      </table>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Input type</th><th>Operation</th></tr></thead>
+          <tbody>
+            <tr><td><code>insertText</code></td><td><code>insertText()</code> at the selection, with stored marks.</td></tr>
+            <tr><td><code>insertReplacementText</code></td><td>Replaces the range reported by the browser (spellcheck and autocorrect).</td></tr>
+            <tr><td><code>insertParagraph</code>, <code>insertLineBreak</code></td><td><code>splitBlock()</code>.</td></tr>
+            <tr><td><code>deleteContentBackward</code>, <code>deleteContentForward</code></td><td>Deletes one user-perceived character or merges blocks at a boundary.</td></tr>
+            <tr><td><code>deleteWord*</code>, <code>deleteSoftLine*</code>, <code>deleteHardLine*</code></td><td>Deletes the target range reported by the browser (for example Ctrl+Backspace or Cmd+Backspace).</td></tr>
+            <tr><td><code>deleteByCut</code></td><td>Deletes the selection after the browser copied it.</td></tr>
+            <tr><td><code>historyUndo</code>, <code>historyRedo</code></td><td><code>undo()</code>, <code>redo()</code>.</td></tr>
+            <tr><td><code>formatBold</code>, <code>formatItalic</code>, <code>formatStrikeThrough</code></td><td>Toggles the corresponding mark.</td></tr>
+            <tr><td>other <code>format*</code>, list, rule, and link commands</td><td>Blocked: the model only contains what plugins define.</td></tr>
+            <tr><td>composition, drop, and unknown insertions</td><td>The browser edits the DOM; the touched blocks are read back into the model and re-rendered.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section>
@@ -133,14 +141,16 @@
     <section>
       <h2>Methods</h2>
       <p>Get the directive with <code>viewChild(NgsHeadlessEditorSurface)</code> or a template reference with <code>#surface="ngsHeadlessEditorSurface"</code>.</p>
-      <table>
-        <thead><tr><th>Method</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>focus()</code></td><td>Focuses the surface and applies the model selection to the DOM. Call it after changing the selection programmatically.</td></tr>
-          <tr><td><code>getSelectionRect()</code></td><td>Bounding rectangle of a non-collapsed selection inside the surface, or <code>null</code>. Use it to position bubble menus.</td></tr>
-          <tr><td><code>getBlockElement(blockId)</code></td><td>The element currently rendering a block, for overlays such as drag handles or comments.</td></tr>
-        </tbody>
-      </table>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Method</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>focus()</code></td><td>Focuses the surface and applies the model selection to the DOM. Call it after changing the selection programmatically.</td></tr>
+            <tr><td><code>getSelectionRect()</code></td><td>Bounding rectangle of a non-collapsed selection inside the surface, or <code>null</code>. Use it to position bubble menus.</td></tr>
+            <tr><td><code>getBlockElement(blockId)</code></td><td>The element currently rendering a block, for overlays such as drag handles or comments.</td></tr>
+          </tbody>
+        </table>
+      </div>
       <ngs-code-highlighter class="code-block" [code]="bubbleCode" language="typescript"/>
     </section>
 

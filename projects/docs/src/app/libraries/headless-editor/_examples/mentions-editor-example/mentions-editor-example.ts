@@ -6,16 +6,20 @@ import {
   NgsHeadlessEditor, NgsHeadlessEditorMentionOption, NgsHeadlessEditorMentions,
   NgsHeadlessEditorSurface, provideNgsHeadlessEditor, withHeadlessEditorPlugin
 } from '@ngstarter-ui/components/headless-editor';
-import { Menu, MenuItem } from '@ngstarter-ui/components/menu';
 import { MentionOption } from './mention-option/mention-option';
 import { MENTION_USERS } from './mention-user';
+import { EmojiOption } from './emoji-option/emoji-option';
+import { CommandOption } from './command-option/command-option';
+import { MENTION_EMOJI } from './mention-emoji';
+import { MENTION_COMMANDS } from './mention-command';
 
 @Component({
   selector: 'app-mentions-editor-example',
-  imports: [JsonPipe, Button, NgsHeadlessEditorSurface, NgsHeadlessEditorMentions, Menu, MenuItem],
+  imports: [JsonPipe, Button, NgsHeadlessEditorSurface, NgsHeadlessEditorMentions],
   providers: [provideNgsHeadlessEditor(
     withHeadlessEditorPlugin(basicTextEditorPlugin()),
-    withHeadlessEditorPlugin(mentionEditorPlugin({
+    withHeadlessEditorPlugin(mentionEditorPlugin([{
+      trigger: '@',
       options: async query => {
         const search = query.toLocaleLowerCase();
         return MENTION_USERS.filter(user =>
@@ -23,7 +27,19 @@ import { MENTION_USERS } from './mention-user';
         );
       },
       optionComponent: MentionOption
-    }))
+    }, {
+      trigger: ':',
+      options: async query => MENTION_EMOJI.filter(emoji =>
+        `${emoji.label} ${emoji.description}`.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+      ),
+      optionComponent: EmojiOption
+    }, {
+      trigger: '/',
+      options: async query => MENTION_COMMANDS.filter(command =>
+        `${command.label} ${command.description}`.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+      ),
+      optionComponent: CommandOption
+    }]))
   )],
   templateUrl: './mentions-editor-example.html',
   styleUrl: './mentions-editor-example.scss',
@@ -32,7 +48,6 @@ import { MENTION_USERS } from './mention-user';
 export class MentionsEditorExample {
   readonly editor = inject(NgsHeadlessEditor);
   readonly selected = signal<NgsHeadlessEditorMentionOption | null>(null);
-  readonly customMenu = signal(false);
 
   constructor() {
     this.editor.setDocument(createNgsHeadlessEditorDocument('Ask a teammate: '));

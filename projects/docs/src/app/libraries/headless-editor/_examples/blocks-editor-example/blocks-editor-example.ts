@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import {
+  Cell, CellDef, ColumnDef, HeaderCell, HeaderCellDef,
+  HeaderRow, HeaderRowDef, Row, RowDef, Table
+} from '@ngstarter-ui/components/table';
+import {
   basicTextEditorPlugin,
   createNgsHeadlessEditorId,
   createNgsHeadlessEditorParagraph,
@@ -64,7 +68,11 @@ const documentBlocksPlugin = defineNgsHeadlessEditorPlugin({
 
 @Component({
   selector: 'app-blocks-editor-example',
-  imports: [Button, NgsHeadlessEditorSurface, NgsHeadlessEditorCommandDirective],
+  imports: [
+    Button, NgsHeadlessEditorSurface, NgsHeadlessEditorCommandDirective,
+    Table, ColumnDef, HeaderCell, HeaderCellDef, Cell, CellDef,
+    HeaderRow, HeaderRowDef, Row, RowDef
+  ],
   providers: [
     provideNgsHeadlessEditor(
       withHeadlessEditorPlugin(basicTextEditorPlugin()),
@@ -79,6 +87,8 @@ export class BlocksEditorExample {
   readonly editor = inject(NgsHeadlessEditor);
   readonly setBlockType = setBlockType;
   readonly blockText = getNgsHeadlessEditorBlockText;
+  readonly displayedColumns = ['type', 'text', 'actions'];
+  readonly trackBlock = (_index: number, block: NgsHeadlessEditorBlock) => block.id;
   readonly types = [
     { type: 'paragraph', label: 'Paragraph' },
     { type: 'heading', label: 'Heading' },

@@ -18,16 +18,18 @@
     <section>
       <h2>Mark definitions</h2>
       <ngs-code-highlighter class="code-block" [code]="definitionCode" language="typescript"/>
-      <table>
-        <thead><tr><th>Member</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>type</code></td><td>Unique mark type stored in the document.</td></tr>
-          <tr><td><code>tagName</code></td><td>Element used to wrap marked text.</td></tr>
-          <tr><td><code>parseTags</code></td><td>Extra tag names recognized when browser-owned DOM (composition, drop) is read back.</td></tr>
-          <tr><td><code>applyAttributes(element, mark)</code></td><td>Writes mark attributes to the element. Validate values here.</td></tr>
-          <tr><td><code>readAttributes(element)</code></td><td>Reads attributes back from the DOM.</td></tr>
-        </tbody>
-      </table>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Member</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>type</code></td><td>Unique mark type stored in the document.</td></tr>
+            <tr><td><code>tagName</code></td><td>Element used to wrap marked text.</td></tr>
+            <tr><td><code>parseTags</code></td><td>Extra tag names recognized when browser-owned DOM (composition, drop) is read back.</td></tr>
+            <tr><td><code>applyAttributes(element, mark)</code></td><td>Writes mark attributes to the element. Validate values here.</td></tr>
+            <tr><td><code>readAttributes(element)</code></td><td>Reads attributes back from the DOM.</td></tr>
+          </tbody>
+        </table>
+      </div>
       <p>
         A run with several marks is rendered as nested wrappers, one per mark, in the order of mark types.
         Each wrapper carries <code>data-ngs-headless-editor-mark</code>.
@@ -36,16 +38,18 @@
 
     <section>
       <h2>Applying marks</h2>
-      <table>
-        <thead><tr><th>Method</th><th>With a selection</th><th>At a caret</th></tr></thead>
-        <tbody>
-          <tr><td><code>toggleMark(type, attrs?)</code></td><td>Adds the mark to the range, or removes it if the whole range already has it.</td><td>Toggles the mark for the next typed text.</td></tr>
-          <tr><td><code>setMark(type, attrs?)</code></td><td>Applies or replaces the mark and its attributes.</td><td>Arms the mark for the next typed text.</td></tr>
-          <tr><td><code>unsetMark(type)</code></td><td>Removes the mark from the range.</td><td>Disarms the mark for the next typed text.</td></tr>
-          <tr><td><code>isMarkActive(type)</code></td><td>True when the whole range has the mark.</td><td>True when the next typed text will have it.</td></tr>
-          <tr><td><code>getActiveMark(type)</code></td><td colspan="2">The mark with its attributes at the selection, for example the current link href.</td></tr>
-        </tbody>
-      </table>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Method</th><th>With a selection</th><th>At a caret</th></tr></thead>
+          <tbody>
+            <tr><td><code>toggleMark(type, attrs?)</code></td><td>Adds the mark to the range, or removes it if the whole range already has it.</td><td>Toggles the mark for the next typed text.</td></tr>
+            <tr><td><code>setMark(type, attrs?)</code></td><td>Applies or replaces the mark and its attributes.</td><td>Arms the mark for the next typed text.</td></tr>
+            <tr><td><code>unsetMark(type)</code></td><td>Removes the mark from the range.</td><td>Disarms the mark for the next typed text.</td></tr>
+            <tr><td><code>isMarkActive(type)</code></td><td>True when the whole range has the mark.</td><td>True when the next typed text will have it.</td></tr>
+            <tr><td><code>getActiveMark(type)</code></td><td colspan="2">The mark with its attributes at the selection, for example the current link href.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section>

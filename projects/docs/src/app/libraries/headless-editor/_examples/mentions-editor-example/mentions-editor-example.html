@@ -1,43 +1,26 @@
 <p class="mb-3 text-sm opacity-70">
-  Type @ to mention a teammate. Use ↑ / ↓ to choose, Enter or Tab to insert, and Escape to dismiss.
+  Type &#64; for teammates, : for emoji, or / for commands. Each configuration has its own option component.
+  Use ↑ / ↓ to choose, Enter or Tab to insert, and Escape to dismiss.
 </p>
 <div class="mb-3 flex flex-wrap gap-2">
-  <button ngsButton="outlined" (click)="customMenu.set(!customMenu())">
-    {{ customMenu() ? 'Use plugin option component' : 'Use custom menu template' }}
-  </button>
   <button ngsButton="text" [disabled]="!editor.canUndo()" (mousedown)="$event.preventDefault()" (click)="editor.undo()">Undo</button>
   <button ngsButton="text" [disabled]="!editor.canRedo()" (mousedown)="$event.preventDefault()" (click)="editor.redo()">Redo</button>
 </div>
 
 <div class="surface block min-h-36 whitespace-pre-wrap rounded-md border p-4 leading-relaxed outline-none"
   ngsHeadlessEditorSurface
-  [ngsHeadlessEditorMentions]="customMenu() ? teamMenu : null"
+  ngsHeadlessEditorMentions
   #mentions="ngsHeadlessEditorMentions"
   (mentionSelected)="selected.set($event)"
-  ariaLabel="Message with teammate mentions"
-  placeholder="Write a message and type @…">
+  ariaLabel="Message with teammate, emoji and command suggestions"
+  placeholder="Write a message and type @, : or /…">
 </div>
 
 @if (mentions.loading()) {
-  <p class="mt-3 text-sm opacity-70" role="status">Searching teammates…</p>
+  <p class="mt-3 text-sm opacity-70" role="status">Searching {{ mentions.activeTrigger() }} suggestions…</p>
 } @else if (mentions.error()) {
-  <p class="mt-3 text-sm opacity-70" role="status">Could not load teammates. Update your search to try again.</p>
+  <p class="mt-3 text-sm opacity-70" role="status">Could not load suggestions. Update your search to try again.</p>
 }
-
-<!-- Optional per-surface override. The plugin component is used when this is null. -->
-<ngs-menu #teamMenu classList="min-w-64">
-  @for (user of mentions.suggestions(); track user.id; let index = $index) {
-    <ngs-menu-item
-      [attr.id]="mentions.optionId(index)"
-      [selected]="mentions.activeIndex() === index"
-      (click)="mentions.select(user)">
-      <div class="flex items-center justify-between gap-6 py-1">
-        <span>{{ user.label }}</span>
-        <span class="text-xs opacity-70">@{{ user.id }}</span>
-      </div>
-    </ngs-menu-item>
-  }
-</ngs-menu>
 
 @if (selected(); as user) {
   <p class="mt-3 text-sm opacity-70" role="status">Last mention: {{ user.label }} ({{ user.id }})</p>

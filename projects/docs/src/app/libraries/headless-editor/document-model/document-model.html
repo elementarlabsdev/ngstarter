@@ -19,17 +19,19 @@
     <section>
       <h2>Structure</h2>
       <ngs-code-highlighter class="code-block" [code]="structureCode" language="typescript"/>
-      <table>
-        <thead><tr><th>Type</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>NgsHeadlessEditorDocument</code></td><td>Root object with <code>version: 1</code> and an ordered, non-empty list of blocks.</td></tr>
-          <tr><td><code>NgsHeadlessEditorBlock</code></td><td>Addressable unit with a stable <code>id</code>, a <code>type</code> registered by a plugin, <code>content</code>, and optional <code>attrs</code>.</td></tr>
-          <tr><td><code>NgsHeadlessEditorText</code></td><td>A text run inside a text block: a string and the marks applied to all of it.</td></tr>
-          <tr><td><code>NgsHeadlessEditorMark</code></td><td>Inline annotation with a <code>type</code> and optional serializable <code>attrs</code> (string, number, boolean, or null values).</td></tr>
-          <tr><td><code>NgsHeadlessEditorPoint</code></td><td>A position: block id plus a text offset inside that block.</td></tr>
-          <tr><td><code>NgsHeadlessEditorSelection</code></td><td>An <code>anchor</code> and a <code>focus</code> point. The focus can be before the anchor for backward selections.</td></tr>
-        </tbody>
-      </table>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>NgsHeadlessEditorDocument</code></td><td>Root object with <code>version: 1</code> and an ordered, non-empty list of blocks.</td></tr>
+            <tr><td><code>NgsHeadlessEditorBlock</code></td><td>Addressable unit with a stable <code>id</code>, a <code>type</code> registered by a plugin, <code>content</code>, and optional <code>attrs</code>.</td></tr>
+            <tr><td><code>NgsHeadlessEditorText</code></td><td>A text run inside a text block: a string and the marks applied to all of it.</td></tr>
+            <tr><td><code>NgsHeadlessEditorMark</code></td><td>Inline annotation with a <code>type</code> and optional serializable <code>attrs</code> (string, number, boolean, or null values).</td></tr>
+            <tr><td><code>NgsHeadlessEditorPoint</code></td><td>A position: block id plus a text offset inside that block.</td></tr>
+            <tr><td><code>NgsHeadlessEditorSelection</code></td><td>An <code>anchor</code> and a <code>focus</code> point. The focus can be before the anchor for backward selections.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section>

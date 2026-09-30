@@ -157,7 +157,38 @@ describe('headless editor docs', () => {
     expect(el.querySelectorAll('.surface ul > li').length).toBe(2);
     expect(el.querySelector('.surface pre > code')?.textContent).toBe('npm run build:prod');
     expect(el.querySelector('.surface hr')).not.toBeNull();
-    expect(el.querySelectorAll('.blocks tbody tr').length).toBe(6);
+    expect(el.querySelectorAll('table[ngs-table] tbody tr').length).toBe(6);
+    const removeButton = el.querySelector('table[ngs-table] tbody button') as HTMLButtonElement;
+    await userEvent.click(removeButton);
+    await fixture.whenStable();
+    expect(el.querySelectorAll('table[ngs-table] tbody tr').length).toBe(5);
+    expect(el.querySelector('table[ngs-table]')?.textContent).not.toContain('Deployment checklist');
+    expect(el.querySelector('.surface h3')).toBeNull();
+  });
+
+  it('mentions example renders teammates, emoji and commands through one plugin', async () => {
+    const fixture = await render(MentionsEditorExample);
+    const component = fixture.componentInstance;
+    const surface = fixture.nativeElement.querySelector('[ngsHeadlessEditorSurface]') as HTMLElement;
+    for (const [query, selector, expected] of [
+      ['@ann', 'app-mention-option', '@Anna Chen '],
+      [':smi', 'app-emoji-option', '😊 '],
+      ['/sum', 'app-command-option', '/summarize ']
+    ]) {
+      component.editor.setDocument(createNgsHeadlessEditorDocument(''));
+      await fixture.whenStable();
+      await userEvent.click(surface);
+      await userEvent.keyboard(query);
+      await fixture.whenStable();
+      await new Promise(resolve => setTimeout(resolve, 50));
+      expect(document.querySelector(`.cdk-overlay-container ${selector}`)).not.toBeNull();
+      await userEvent.keyboard('{Enter}');
+      await fixture.whenStable();
+      expect(getNgsHeadlessEditorDocumentText(component.editor.document())).toBe(expected);
+      const token = surface.querySelector<HTMLElement>('.ngs-headless-editor-mention')!;
+      expect(token.contentEditable).toBe('false');
+      expect(getComputedStyle(token).backgroundColor).toBe('rgba(0, 0, 0, 0)');
+    }
   });
 
   it('component block: typing in textarea updates attrs, read-only swaps renderer', async () => {

@@ -50,20 +50,22 @@
 
     <section>
       <h2>Editing cells</h2>
-      <table>
-        <thead><tr><th>Key</th><th>Action</th></tr></thead>
-        <tbody>
-          <tr><td>click or focus a cell</td><td>Opens the cell in the cell editor, with the caret at the click position.</td></tr>
-          <tr><td>typing</td><td>Edits the cell. Consecutive typing in one cell is one undo step.</td></tr>
-          <tr><td>formatting shortcuts</td><td>Mod-b, Mod-i, and every other key binding of the editor's mark plugins.</td></tr>
-          <tr><td>Enter</td><td>Inserts a line break inside the cell.</td></tr>
-          <tr><td>Tab, Shift+Tab</td><td>Moves to the next or previous cell.</td></tr>
-          <tr><td>Tab in the last cell</td><td>Appends a row and moves into it.</td></tr>
-          <tr><td>Escape</td><td>Leaves the cell editor and keeps focus on the cell.</td></tr>
-          <tr><td>Mod-z, Mod-Shift-z</td><td>Undo and redo in the document history, the same as outside the table.</td></tr>
-          <tr><td>paste in a cell</td><td>Inserts the clipboard as plain text.</td></tr>
-        </tbody>
-      </table>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Key</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>click or focus a cell</td><td>Opens the cell in the cell editor, with the caret at the click position.</td></tr>
+            <tr><td>typing</td><td>Edits the cell. Consecutive typing in one cell is one undo step.</td></tr>
+            <tr><td>formatting shortcuts</td><td>Mod-b, Mod-i, and every other key binding of the editor's mark plugins.</td></tr>
+            <tr><td>Enter</td><td>Inserts a line break inside the cell.</td></tr>
+            <tr><td>Tab, Shift+Tab</td><td>Moves to the next or previous cell.</td></tr>
+            <tr><td>Tab in the last cell</td><td>Appends a row and moves into it.</td></tr>
+            <tr><td>Escape</td><td>Leaves the cell editor and keeps focus on the cell.</td></tr>
+            <tr><td>Mod-z, Mod-Shift-z</td><td>Undo and redo in the document history, the same as outside the table.</td></tr>
+            <tr><td>paste in a cell</td><td>Inserts the clipboard as plain text.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section>
@@ -98,20 +100,22 @@
         disabled when no table cell has focus, so toolbars bound with <code>ngsHeadlessEditorCommand</code> enable
         themselves automatically.
       </p>
-      <table>
-        <thead><tr><th>Command</th><th>Action</th></tr></thead>
-        <tbody>
-          <tr><td><code>NGS_HEADLESS_EDITOR_INSERT_TABLE</code></td><td>Inserts a table. Payload: rows, columns, header.</td></tr>
-          <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_ADD_ROW_BEFORE</code></td><td>Adds a row above the cell.</td></tr>
-          <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_ADD_ROW_AFTER</code></td><td>Adds a row below the cell.</td></tr>
-          <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_ADD_COLUMN_BEFORE</code></td><td>Adds a column to the left.</td></tr>
-          <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_ADD_COLUMN_AFTER</code></td><td>Adds a column to the right.</td></tr>
-          <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_DELETE_ROW</code></td><td>Deletes the row; disabled for the last row.</td></tr>
-          <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_DELETE_COLUMN</code></td><td>Deletes the column; disabled for the last column.</td></tr>
-          <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_TOGGLE_HEADER</code></td><td>Turns the header row on or off; active while it is on.</td></tr>
-          <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_DELETE</code></td><td>Removes the table.</td></tr>
-        </tbody>
-      </table>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Command</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td><code>NGS_HEADLESS_EDITOR_INSERT_TABLE</code></td><td>Inserts a table. Payload: rows, columns, header.</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_ADD_ROW_BEFORE</code></td><td>Adds a row above the cell.</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_ADD_ROW_AFTER</code></td><td>Adds a row below the cell.</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_ADD_COLUMN_BEFORE</code></td><td>Adds a column to the left.</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_ADD_COLUMN_AFTER</code></td><td>Adds a column to the right.</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_DELETE_ROW</code></td><td>Deletes the row; disabled for the last row.</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_DELETE_COLUMN</code></td><td>Deletes the column; disabled for the last column.</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_TOGGLE_HEADER</code></td><td>Turns the header row on or off; active while it is on.</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_DELETE</code></td><td>Removes the table.</td></tr>
+          </tbody>
+        </table>
+      </div>
       <ngs-code-highlighter class="code-block" [code]="commandsCode" language="html"/>
       <p>
         <code>ngsHeadlessEditorActiveTableCell(editor)</code> returns a signal with the active cell, for example to
