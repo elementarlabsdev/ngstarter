@@ -9,133 +9,147 @@
   overflow: hidden;
   background: var(--ngs-comment-editor-bg);
 
-  .floating-menu {
-    box-shadow: var(--ngs-shadow-sm);
-    background: var(--ngs-dropdown-bg);
-    padding-top: --spacing(1.5);
-    padding-bottom: --spacing(1.5);
-    padding-inline-start: --spacing(2);
-    padding-inline-end: --spacing(2);
-    border: 1px solid var(--ngs-color-border);
-    border-radius: calc(infinity * 1px);
-
-    .button {
-      &:hover {
-        color: var(--ngs-color-primary);
-        border-radius: calc(infinity * 1px);
-      }
-
-      ngs-icon {
-        width: --spacing(6);
-        height: --spacing(6);
-        font-size: var(--ngs-font-size-xl);
-        line-height: 1.25;
-      }
-
-      &:disabled {
-        pointer-events: none;
-        opacity: 70%;
-      }
-    }
-  }
-
   .content {
+    box-sizing: border-box;
     position: absolute;
     inset: 0;
     height: --spacing(14);
+    min-height: --spacing(10);
+    padding: --spacing(4);
+    outline: none;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    font-size: var(--ngs-font-size-sm);
+    line-height: var(--ngs-line-height-base);
 
+    // The editor document is rendered imperatively, so its nodes do not receive
+    // Angular's emulated-encapsulation attribute. Keep document styles scoped by
+    // the host-owned `.content` boundary while allowing them to reach those nodes.
     ::ng-deep {
-      .single-emoji {
-        font-size: 1.875rem;
-      }
+      [data-ngs-headless-editor-placeholder] {
+        position: relative;
 
-      .tiptap {
-        padding: --spacing(4);
-        min-height: --spacing(10);
-
-        &:focus {
-          outline: none;
-        }
-
-        div[data-youtube-video] {
-          cursor: move;
-          background: var(--ngs-color-neutral-100);
-          padding: --spacing(6);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          iframe {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            border: none;
-            display: block;
-            min-height: 200px;
-            min-width: 200px;
-            outline: none;
-          }
-
-          &.ProseMirror-selectednode {
-            iframe {
-              outline: var(--sys-tertiary) solid 4px;
-              transition-property: all;
-              transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-              transition-duration: 150ms;
-            }
-          }
-        }
-
-        img {
-          display: block;
-          height: auto;
-          margin: --spacing(6) 0;
-          max-width: 100%;
-
-          &.ProseMirror-selectednode {
-            outline: var(--sys-tertiary) solid 4px;
-            transition-property: all;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-            transition-duration: 150ms;
-          }
-        }
-
-        p.is-editor-empty:first-child {
-          &::before {
-            content: attr(data-placeholder);
-            color: var(--ngs-color-neutral-500);
-            float: left;
-            height: 0;
-            pointer-events: none;
-            font-size: 14px;
-          }
-        }
-
-        &.ProseMirror-focused {
-          p.is-editor-empty:first-child {
-            &::before {
-              content: none;
-            }
-          }
-        }
-
-        p.is-empty::before {
-          content: attr(data-placeholder);
+        &::before {
+          content: attr(data-ngs-headless-editor-placeholder);
           color: var(--ngs-color-neutral-500);
-          float: left;
-          height: 0;
           pointer-events: none;
-          font-size: 14px;
+          position: absolute;
+          inset-block-start: 0;
+          inset-inline-start: 0;
+          font: inherit;
         }
       }
 
       p,
+      blockquote,
+      pre,
+      ul,
+      ol {
+        margin: 0;
+        min-height: 1.5em;
+
+        & + p,
+        & + blockquote,
+        & + pre,
+        & + ul,
+        & + ol {
+          margin-top: --spacing(2);
+        }
+      }
+
+      blockquote {
+        padding-inline-start: --spacing(3);
+        border-inline-start: 3px solid var(--ngs-color-border);
+        color: var(--ngs-color-neutral-600);
+      }
+
       pre {
-        &:first-child {
-          margin-top: 0;
+        padding: --spacing(3);
+        border-radius: var(--ngs-radius-md);
+        background: var(--ngs-color-surface-container-high);
+        font-family: var(--ngs-font-family-mono);
+        white-space: pre-wrap;
+      }
+
+      ul {
+        list-style: disc;
+        padding-inline-start: --spacing(6);
+      }
+
+      ol {
+        list-style: decimal;
+        padding-inline-start: --spacing(6);
+      }
+
+      code {
+        padding: 0 --spacing(1);
+        border-radius: var(--ngs-radius-xs);
+        background: var(--ngs-color-surface-container-high);
+        font-family: var(--ngs-font-family-mono);
+      }
+
+      a[data-ngs-headless-editor-mark='link'] {
+        color: var(--ngs-color-primary);
+        text-decoration-line: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.15em;
+        cursor: pointer;
+      }
+
+      .single-emoji {
+        font-size: var(--ngs-font-size-3xl);
+      }
+
+      .ngs-comment-editor-media {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: --spacing(6) 0;
+        max-width: 100%;
+
+        img {
+          display: block;
+          height: auto;
+          max-width: 100%;
+        }
+      }
+
+      .ngs-comment-editor-image-upload {
+        img {
+          opacity: 0.7;
         }
 
-        &:last-child {
-          margin-bottom: 0;
+        .ngs-comment-editor-upload-status {
+          position: absolute;
+          inset-inline: --spacing(3);
+          top: --spacing(3);
+          padding: --spacing(2) --spacing(3);
+          border-radius: var(--ngs-radius-sm);
+          background: var(--ngs-color-surface-container-highest);
+          color: var(--ngs-color-on-surface);
+          font-size: var(--ngs-font-size-xs);
+          box-shadow: var(--ngs-shadow-sm);
+
+          &[role='alert'] {
+            background: var(--ngs-color-danger);
+            color: var(--ngs-color-on-danger);
+          }
+        }
+      }
+
+      .ngs-comment-editor-youtube {
+        background: var(--ngs-color-neutral-100);
+        padding: --spacing(3);
+
+        iframe {
+          display: block;
+          width: 100%;
+          min-width: 200px;
+          min-height: 200px;
+          aspect-ratio: 16 / 9;
+          border: 0;
         }
       }
     }
@@ -149,6 +163,65 @@
     }
   }
 
+  .footer {
+    height: --spacing(14);
+    padding: 0 --spacing(2.5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-tools {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-inline-end: --spacing(3);
+  }
+
+  .footer-actions {
+    display: flex;
+    align-items: center;
+    flex: none;
+    gap: --spacing(2);
+  }
+
+  .toolbar {
+    height: --spacing(14);
+    padding: 0 --spacing(3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--ngs-color-border);
+  }
+
+  .bubble-menu-layer {
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    transform: translate(-50%, calc(-100% - --spacing(2)));
+
+    &.bubble-menu-positioned {
+      visibility: visible;
+    }
+  }
+
+  .button {
+    &.active {
+      background: var(--ngs-color-neutral-200);
+    }
+  }
+
+  ::ng-deep {
+    .button {
+      &.active {
+        background: var(--ngs-color-neutral-200);
+      }
+    }
+  }
+
   &.full-view {
     .content {
       position: static;
@@ -159,37 +232,31 @@
     }
   }
 
-  .footer {
-    height: --spacing(14);
-    padding: 0 --spacing(2.5);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .toolbar {
-    border-bottom: 1px solid var(--ngs-color-border);
-    height: --spacing(14);
-    padding: 0 --spacing(3);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .button,
-  ::ng-deep .button {
-    &.active {
-      background: var(--ngs-color-neutral-200);
-    }
+  &.ngs-comment-editor-disabled {
+    opacity: 0.7;
   }
 }
 
 :host-context(html.dark) {
-  .button,
-  ::ng-deep .button {
+  .button {
     &.active {
       background: var(--ngs-color-neutral-650);
       color: var(--ngs-color-neutral-200);
+    }
+  }
+
+  ::ng-deep {
+    .button {
+      &.active {
+        background: var(--ngs-color-neutral-650);
+        color: var(--ngs-color-neutral-200);
+      }
+    }
+  }
+
+  .content {
+    .ngs-comment-editor-youtube {
+      background: var(--ngs-color-neutral-800);
     }
   }
 }

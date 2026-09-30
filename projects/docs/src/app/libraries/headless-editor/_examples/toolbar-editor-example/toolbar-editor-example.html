@@ -1,0 +1,43 @@
+<div class="toolbar" role="toolbar" aria-label="Formatting">
+  <button ngsIconButton ngsTooltip="Bold (Ctrl/Cmd+B)" aria-label="Bold" [ngsHeadlessEditorCommand]="bold">
+    <ngs-icon name="fluent:text-bold-24-regular"/>
+  </button>
+  <button ngsIconButton ngsTooltip="Italic (Ctrl/Cmd+I)" aria-label="Italic" [ngsHeadlessEditorCommand]="italic">
+    <ngs-icon name="fluent:text-italic-24-regular"/>
+  </button>
+  <button ngsIconButton ngsTooltip="Strikethrough (Ctrl/Cmd+Shift+X)" aria-label="Strikethrough" [ngsHeadlessEditorCommand]="strike">
+    <ngs-icon name="fluent:text-strikethrough-24-regular"/>
+  </button>
+  <button ngsIconButton ngsTooltip="Inline code (Ctrl/Cmd+E)" aria-label="Inline code" [ngsHeadlessEditorCommand]="code">
+    <ngs-icon name="fluent:code-24-regular"/>
+  </button>
+
+  <span class="separator" aria-hidden="true"></span>
+
+  <button ngsIconButton ngsTooltip="Heading (Ctrl/Cmd+Alt+2)" aria-label="Heading" [ngsHeadlessEditorCommand]="heading">
+    <ngs-icon name="fluent:text-header-2-24-regular"/>
+  </button>
+  <button ngsIconButton ngsTooltip="Quote (Ctrl/Cmd+Shift+9)" aria-label="Quote" [ngsHeadlessEditorCommand]="quote">
+    <ngs-icon name="fluent:text-quote-24-regular"/>
+  </button>
+
+  <span class="separator" aria-hidden="true"></span>
+
+  <button ngsIconButton ngsTooltip="Undo (Ctrl/Cmd+Z)" aria-label="Undo" [ngsHeadlessEditorCommand]="undo">
+    <ngs-icon name="fluent:arrow-undo-24-regular"/>
+  </button>
+  <button ngsIconButton ngsTooltip="Redo (Ctrl/Cmd+Shift+Z)" aria-label="Redo" [ngsHeadlessEditorCommand]="redo">
+    <ngs-icon name="fluent:arrow-redo-24-regular"/>
+  </button>
+</div>
+
+<div
+  class="surface"
+  ngsHeadlessEditorSurface
+  ariaLabel="Release notes"
+  placeholder="Write release notes…">
+</div>
+
+<p class="status">
+  Revision {{ editor.revision() }} · last change: {{ editor.origin() }}
+</p>

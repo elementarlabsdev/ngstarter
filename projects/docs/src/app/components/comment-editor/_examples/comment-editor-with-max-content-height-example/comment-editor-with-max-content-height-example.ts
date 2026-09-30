@@ -1,92 +1,11 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import {
-  CommentEditorBubbleMenu,
-  CommentEditorCommandBlockquoteDirective,
-  CommentEditorCommandBoldDirective,
-  CommentEditorCommandBulletListDirective,
-  CommentEditorCommandCodeBlockDirective,
-  CommentEditorCommandCodeDirective,
-  CommentEditorCommandDirective,
-  CommentEditorCommandEditLinkDirective,
-  CommentEditorCommandImageDirective,
-  CommentEditorCommandItalicDirective,
-  CommentEditorCommandLinkDirective,
-  CommentEditorCommandOrderedListDirective,
-  CommentEditorCommandStrikeDirective,
-  CommentEditorCommandToggleToolbarDirective,
-  CommentEditorCommandUnsetLinkDirective,
-  CommentEditorCommandYoutubeDirective,
-  CommentEditor,
-  CommentEditorDivider,
-  CommentEditorFooterBar, CommentEditorToolbar
-} from '@ngstarter-ui/components/comment-editor';
-import { Icon } from '@ngstarter-ui/components/icon';
-import { SafeHtmlPipe } from '@ngstarter-ui/components/core';
-import { Button } from '@ngstarter-ui/components/button';
-import { Tooltip } from '@ngstarter-ui/components/tooltip';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommentEditor } from '@ngstarter-ui/components/comment-editor';
 
 @Component({
   selector: 'app-comment-editor-with-max-content-height-example',
-  imports: [
-    CommentEditorBubbleMenu,
-    CommentEditorCommandBlockquoteDirective,
-    CommentEditorCommandBoldDirective,
-    CommentEditorCommandBulletListDirective,
-    CommentEditorCommandCodeBlockDirective,
-    CommentEditorCommandCodeDirective,
-    CommentEditorCommandDirective,
-    CommentEditorCommandEditLinkDirective,
-    CommentEditorCommandImageDirective,
-    CommentEditorCommandItalicDirective,
-    CommentEditorCommandLinkDirective,
-    CommentEditorCommandOrderedListDirective,
-    CommentEditorCommandStrikeDirective,
-    CommentEditorCommandToggleToolbarDirective,
-    CommentEditorCommandUnsetLinkDirective,
-    CommentEditorCommandYoutubeDirective,
-    CommentEditor,
-    CommentEditorDivider,
-    CommentEditorFooterBar,
-    CommentEditorToolbar,
-    Icon,
-    SafeHtmlPipe,
-    Button,
-    Tooltip
-  ],
+  imports: [CommentEditor],
   templateUrl: './comment-editor-with-max-content-height-example.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './comment-editor-with-max-content-height-example.scss'
+  styleUrl: './comment-editor-with-max-content-height-example.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CommentEditorWithMaxContentHeightExample {
-  comments: string[] = [];
-
-  uploadFn = (file: Blob): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('/assets/image-viewer/1.jpg');
-      }, 3000);
-    });
-
-    // return new Promise((resolve, reject) => {
-    //   setTimeout(() => {
-    //     reject('Upload Error');
-    //   }, 3000);
-    // });
-
-    // upload to a server
-    // return new Promise((resolve, reject) => {
-    //   const formData = new FormData();
-    //   formData.append('image', file);
-    //   this._api
-    //     .post(`upload`, formData)
-    //     .subscribe((res: any) => {
-    //       resolve(res.url);
-    //     })
-    //   ;
-    // });
-  }
-
-  onSent(content: string): void {
-    this.comments.unshift(content);
-  }
-}
+export class CommentEditorWithMaxContentHeightExample {}

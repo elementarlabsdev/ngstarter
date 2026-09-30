@@ -1,0 +1,62 @@
+<app-page>
+  <h1 appPageTitle>Forms and Serialization</h1>
+  <div appPageContent>
+    <section>
+      <p>
+        The JSON document is the value you store. It is versioned, independent of the DOM, and safe to render
+        on any platform. HTML and plain text are derived outputs for previews, e-mails, and search.
+      </p>
+      <ngs-playground exampleUrl="_docs/libraries/headless-editor/_examples" exampleName="forms-serialization-example">
+    @defer (on viewport) {
+      <app-forms-serialization-example/>
+    } @placeholder {
+      <div class="example-placeholder">Loading example…</div>
+    }
+  </ngs-playground>
+    </section>
+
+    <section>
+      <h2>Storing and loading</h2>
+      <ngs-code-highlighter class="code-block" [code]="storeCode" language="typescript"/>
+      <ul>
+        <li>Store the whole document, including <code>version</code>, so future migrations can recognize it.</li>
+        <li><code>setDocument()</code> normalizes input and resets history; pass <code>false</code> as the second argument to keep it.</li>
+        <li>Loading an equal document is a no-op, which prevents feedback loops.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Reactive forms</h2>
+      <p>
+        Wrap the editor in a component that implements <code>ControlValueAccessor</code>. Each instance provides
+        its own editor. Forward user changes with an effect that skips <code>external</code> changes, so values
+        written by the form are not echoed back.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="cvaCode" language="typescript"/>
+      <p>
+        Validate with <code>isNgsHeadlessEditorDocumentEmpty()</code>: a document with only whitespace counts as
+        empty, while atomic blocks can opt out through <code>isEmpty</code>.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="validatorCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>Signals</h2>
+      <ngs-code-highlighter class="code-block" [code]="signalCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>HTML and text</h2>
+      <p>
+        Write a serializer that maps your block and mark types to tags. Escape all text and attribute values,
+        drop unknown types, and validate attributes such as URLs again, because stored documents can be edited
+        outside the editor.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="htmlCode" language="typescript"/>
+      <p>
+        <code>getNgsHeadlessEditorDocumentText()</code> returns the text of all blocks separated by newlines,
+        useful for search indexes, notifications, and character limits.
+      </p>
+    </section>
+  </div>
+</app-page>

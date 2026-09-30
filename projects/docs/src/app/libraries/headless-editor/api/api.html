@@ -1,0 +1,48 @@
+<app-page>
+  <h1 appPageTitle>Headless Editor API</h1>
+  <div appPageContent>
+    <p>
+      Guides explain these APIs with examples: start with
+      <a routerLink="/libraries/headless-editor/getting-started">Getting Started</a>.
+      All APIs on this page are exported from
+      <code class="code">&#64;ngstarter-ui/components/headless-editor</code>. The editor service must be scoped
+      with <code class="code">provideNgsHeadlessEditor()</code>; it is intentionally not a root singleton.
+    </p>
+
+    @for (section of sections; track section.title) {
+      <section>
+        <h3>{{ section.title }}</h3>
+        <p>{{ section.description }}</p>
+
+        <div class="my-6 overflow-hidden rounded-xl border border-border shadow-sm">
+          <table ngs-table [dataSource]="section.rows">
+            <ng-container ngsColumnDef="name">
+              <th ngs-header-cell *ngsHeaderCellDef>Name</th>
+              <td ngs-cell *ngsCellDef="let element">
+                <code class="code">{{ element.name }}</code>
+              </td>
+            </ng-container>
+
+            <ng-container ngsColumnDef="type">
+              <th ngs-header-cell *ngsHeaderCellDef>Type</th>
+              <td ngs-cell *ngsCellDef="let element">{{ element.type }}</td>
+            </ng-container>
+
+            <ng-container ngsColumnDef="default">
+              <th ngs-header-cell *ngsHeaderCellDef>Default</th>
+              <td ngs-cell *ngsCellDef="let element">{{ element.default }}</td>
+            </ng-container>
+
+            <ng-container ngsColumnDef="description">
+              <th ngs-header-cell *ngsHeaderCellDef>Description</th>
+              <td ngs-cell *ngsCellDef="let element">{{ element.description }}</td>
+            </ng-container>
+
+            <tr ngs-header-row *ngsHeaderRowDef="['name', 'type', 'default', 'description']"></tr>
+            <tr ngs-row *ngsRowDef="let row; columns: ['name', 'type', 'default', 'description'];"></tr>
+          </table>
+        </div>
+      </section>
+    }
+  </div>
+</app-page>

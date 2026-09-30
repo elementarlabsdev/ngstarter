@@ -1,0 +1,10 @@
+<div class="flex min-w-64 items-center gap-3 py-1">
+  <ngs-avatar appearance="initials" [key]="option().id" [label]="option().label"/>
+  <div class="flex min-w-0 flex-1 flex-col">
+    <span class="text-sm font-medium">{{ option().label }}</span>
+    <span class="text-xs opacity-70">{{ option().role }} · {{ option().team }}</span>
+  </div>
+  @if (active()) {
+    <span class="text-xs opacity-70" aria-hidden="true">↵</span>
+  }
+</div>

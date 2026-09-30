@@ -1,0 +1,19 @@
+<div class="layout">
+  <div class="surface" ngsHeadlessEditorSurface ariaLabel="Document model editor"></div>
+
+  <div class="json">
+    <textarea
+      aria-label="Document JSON"
+      spellcheck="false"
+      [value]="draft() ?? json()"
+      (input)="onDraft($event)">
+    </textarea>
+    <div class="actions">
+      <button ngsButton="outlined" [disabled]="draft() === null" (click)="apply()">Apply JSON</button>
+      <button ngsButton="text" [disabled]="draft() === null" (click)="draft.set(null); error.set(null)">Discard</button>
+      @if (error()) {
+        <span class="error">{{ error() }}</span>
+      }
+    </div>
+  </div>
+</div>

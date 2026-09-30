@@ -1,11 +1,16 @@
 <p>
-  The NgStarter Angular Comment Editor component lets you provide a simplified text editor for quick messages, comments, threads, and replies. Use in tasks, projects, activity feeds, reviews, support threads, and conversation replies where users write a short or medium message and send it immediately. It includes examples for Basic Comment Editor, Toolbar Always Visible, Cancel Button Always Visible, and Custom Button Labels.
+  Comment Editor is an Angular-native composer for comments, messages, replies, and activity
+  feeds. It keeps its original product behavior—compact and expanded states, projected toolbar,
+  bubble menu, footer actions, links, lists, media uploads, YouTube embeds, cancel/send flows—and
+  now runs on the signal-based <a routerLink="/libraries/headless-editor">Headless Editor</a> foundation. JSON is the
+  source of truth; send can also emit serialized HTML.
 </p>
 
 <section>
   <h3>Basic Comment Editor</h3>
   <p class="mb-4 text-neutral-600">
-    Use Comment Editor as a compact composer for quick comments, messages, thread replies, and activity feed responses.
+    The complete example shows projected controls, text and block formatting, links, image upload,
+    YouTube embeds, programmatic insertion, JSON submission, and HTML output.
   </p>
   <ngs-playground exampleUrl="_docs/components/comment-editor/_examples"
                   exampleName="basic-comment-editor-example">
@@ -20,7 +25,7 @@
 <section>
   <h3>Toolbar Always Visible</h3>
   <p class="mb-4 text-neutral-600">
-    Keep the toolbar visible when formatting is a normal part of the message or reply workflow.
+    Keep projected formatting controls visible when formatting is part of the normal workflow.
   </p>
   <ngs-playground exampleUrl="_docs/components/comment-editor/_examples"
                   exampleName="comment-editor-with-toolbar-example">
@@ -33,9 +38,24 @@
 </section>
 
 <section>
+  <h3>Full View Mode</h3>
+  <p class="mb-4 text-neutral-600">
+    Start expanded for longer replies instead of waiting for the first interaction.
+  </p>
+  <ngs-playground exampleUrl="_docs/components/comment-editor/_examples"
+                  exampleName="comment-editor-with-full-view-mode-example">
+    @defer (on viewport) {
+      <app-comment-editor-with-full-view-mode-example/>
+    } @placeholder {
+      <div>Loading...</div>
+    }
+  </ngs-playground>
+</section>
+
+<section>
   <h3>Cancel Button Always Visible</h3>
   <p class="mb-4 text-neutral-600">
-    Show cancel when users may abandon a draft reply or close an active comment composer.
+    Keep cancel available even when the composer was not expanded interactively.
   </p>
   <ngs-playground exampleUrl="_docs/components/comment-editor/_examples"
                   exampleName="comment-editor-cancel-button-always-visible-example">
@@ -50,7 +70,7 @@
 <section>
   <h3>Custom Button Labels</h3>
   <p class="mb-4 text-neutral-600">
-    Customize button labels when the composer sends a reply, note, review comment, or other message type.
+    Adapt the composer to replies, reviews, notes, or another domain action.
   </p>
   <ngs-playground exampleUrl="_docs/components/comment-editor/_examples"
                   exampleName="comment-editor-custom-button-labels-example">
@@ -63,24 +83,9 @@
 </section>
 
 <section>
-  <h3>Full View Mode</h3>
-  <p class="mb-4 text-neutral-600">
-    Use full view mode when the comment composer should stay expanded while users write a longer reply.
-  </p>
-  <ngs-playground exampleUrl="_docs/components/comment-editor/_examples"
-                  exampleName="comment-editor-with-full-view-mode-example">
-    @defer (on viewport) {
-      <app-comment-editor-with-full-view-mode-example/>
-    } @placeholder {
-      <div>Loading...</div>
-    }
-  </ngs-playground>
-</section>
-
-<section>
   <h3>Upload Error</h3>
   <p class="mb-4 text-neutral-600">
-    Handle upload errors when comments allow images or media attachments.
+    Upload placeholders retain their preview and expose the rejected upload state in the document.
   </p>
   <ngs-playground exampleUrl="_docs/components/comment-editor/_examples"
                   exampleName="comment-editor-with-upload-error-example">
@@ -95,7 +100,7 @@
 <section>
   <h3>Max Content Height</h3>
   <p class="mb-4 text-neutral-600">
-    Limit the editor height when the compose box should stay compact inside a thread or feed.
+    Constrain long drafts while keeping the toolbar and actions fixed around the editing surface.
   </p>
   <ngs-playground exampleUrl="_docs/components/comment-editor/_examples"
                   exampleName="comment-editor-with-max-content-height-example">
@@ -108,9 +113,9 @@
 </section>
 
 <section>
-  <h3>Custom Icons</h3>
+  <h3>Custom Projected Controls</h3>
   <p class="mb-4 text-neutral-600">
-    Use custom toolbar icons when the comment composer needs to match a product action style.
+    The component supplies behavior while the application chooses its toolbar and footer controls.
   </p>
   <ngs-playground exampleUrl="_docs/components/comment-editor/_examples"
                   exampleName="comment-editor-with-custom-icons-example">

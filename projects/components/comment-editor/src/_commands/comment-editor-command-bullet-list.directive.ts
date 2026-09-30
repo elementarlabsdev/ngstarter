@@ -1,18 +1,13 @@
-import { Directive, inject } from '@angular/core';
-import { COMMENT_EDITOR, CommentEditorInterface } from '../types';
+import { Directive } from '@angular/core';
+import { CommentEditorCommandBase } from './comment-editor-command-base';
 
 @Directive({
   selector: '[ngsCommentEditorCommandBulletList]',
   host: {
-    '[attr.disabled]': `(commentEditor && commentEditor.api.isCommandDisabled('toggleBulletList')) ? '' : null`,
-    '[class.active]': `commentEditor && commentEditor.api.isActive('bulletList')`,
-    '(click)': `onClick()`
+    '[attr.disabled]': 'commentEditor.api.isCommandDisabled("toggleBulletList") ? "" : null',
+    '[class.active]': 'commentEditor.api.isActive("toggleBulletList")',
+    '(mousedown)': 'preserveSelection($event)',
+    '(click)': 'run("toggleBulletList", $event)'
   }
 })
-export class CommentEditorCommandBulletListDirective {
-  protected commentEditor = inject<CommentEditorInterface>(COMMENT_EDITOR);
-
-  protected onClick() {
-    this.commentEditor.api.runCommand('toggleBulletList');
-  }
-}
+export class CommentEditorCommandBulletListDirective extends CommentEditorCommandBase {}

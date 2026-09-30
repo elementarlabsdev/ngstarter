@@ -341,11 +341,6 @@ export const routes: Routes = [
     title: 'Marquee'
   },
   {
-    path: 'text-editor',
-    loadChildren: () => import('./text-editor/routes').then(m => m.routes),
-    title: 'Text Editor'
-  },
-  {
     path: 'screen-loader',
     loadChildren: () => import('./screen-loader/routes').then(m => m.routes),
     title: 'Screen Loader'

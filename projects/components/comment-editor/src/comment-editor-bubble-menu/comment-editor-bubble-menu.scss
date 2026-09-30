@@ -2,58 +2,74 @@
 
 :host {
   display: block;
-  box-shadow: var(--ngs-shadow-sm);
+  min-height: --spacing(12);
+  padding-inline: --spacing(2);
+  border-radius: var(--ngs-radius-xl);
   background: var(--ngs-color-neutral-950);
   color: var(--ngs-color-neutral-200);
-  min-height: --spacing(12);
-  border-radius: var(--ngs-radius-xl);
-  top: 1px;
-  padding-inline-start: --spacing(2);
-  padding-inline-end: --spacing(2);
+  box-shadow: var(--ngs-shadow-sm);
 
-  .button,
-  ::ng-deep .button {
-    width: --spacing(10);
-    height: --spacing(10);
+  .link-row {
+    display: flex;
+    align-items: center;
+    gap: --spacing(1);
+    height: --spacing(11);
+    border-bottom: 1px solid var(--ngs-color-neutral-700);
+  }
+
+  .link-value {
+    flex: 1 1 auto;
+    width: 116px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--ngs-font-size-sm);
+  }
+
+  .link-actions {
+    display: flex;
+    align-items: center;
+    flex: none;
+  }
+
+  .commands-row {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: calc(infinity * 1px);
-
-    --ngs-icon-size: var(--ngs-font-size-xl);
-
-    &:hover {
-      color: var(--ngs-color-tertiary-300);
-      background: var(--ngs-color-neutral-700);
-      border-radius: calc(infinity * 1px);
-      padding: --spacing(1.5);
-    }
-
-    &.active {
-      color: var(--ngs-color-tertiary-300);
-      background: var(--ngs-color-neutral-700);
-    }
-
-    ngs-icon {
-      width: --spacing(6);
-      height: --spacing(6);
-      font-size: var(--ngs-font-size-xl);
-      line-height: 1.25;
-    }
-
-    &:disabled {
-      pointer-events: none;
-      opacity: 70%;
-    }
+    height: --spacing(12);
+    gap: --spacing(0.5);
   }
 
   .link {
-    color: var(--ngs-color-tertiary-300);
     position: relative;
     top: 1px;
+    color: var(--ngs-color-tertiary-300);
 
     &:hover {
       color: var(--ngs-color-tertiary-100);
+    }
+  }
+
+  ::ng-deep {
+    .button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: --spacing(10);
+      height: --spacing(10);
+      border-radius: calc(infinity * 1px);
+      --ngs-icon-size: var(--ngs-font-size-xl);
+
+      &:hover,
+      &.active {
+        color: var(--ngs-color-tertiary-300);
+        background: var(--ngs-color-neutral-700);
+      }
+
+      &:disabled {
+        pointer-events: none;
+        opacity: 0.7;
+      }
     }
   }
 }

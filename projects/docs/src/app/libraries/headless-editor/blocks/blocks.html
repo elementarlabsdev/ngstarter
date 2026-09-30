@@ -1,0 +1,93 @@
+<app-page>
+  <h1 appPageTitle>Blocks</h1>
+  <div appPageContent>
+    <section>
+      <p>
+        Blocks are the top-level units of a document. Plugins register block types; the document stores only
+        the type name and data, and the definition decides how the block is rendered and edited.
+      </p>
+      <ngs-playground exampleUrl="_docs/libraries/headless-editor/_examples" exampleName="blocks-editor-example">
+    @defer (on viewport) {
+      <app-blocks-editor-example/>
+    } @placeholder {
+      <div class="example-placeholder">Loading example…</div>
+    }
+  </ngs-playground>
+    </section>
+
+    <section>
+      <h2>Block definitions</h2>
+      <ngs-code-highlighter class="code-block" [code]="definitionCode" language="typescript"/>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Member</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>type</code></td><td>Unique block type stored in the document.</td></tr>
+            <tr><td><code>tagName</code></td><td>Element that represents the block.</td></tr>
+            <tr><td><code>contentTagName</code></td><td>Optional nested element that holds the text, for example <code>ul</code> with <code>li</code> or <code>pre</code> with <code>code</code>.</td></tr>
+            <tr><td><code>editable</code></td><td>Set to <code>false</code> for atomic blocks the browser must not edit.</td></tr>
+            <tr><td><code>create()</code></td><td>Creates an empty block of this type. Enter in a non-empty block uses it for the block that follows: return a paragraph to leave the type after one Enter (headings), or the same type to continue it (quotes, list items, code lines).</td></tr>
+            <tr><td><code>exitOnEmptyEnter</code></td><td>Enter in an empty block of this type replaces the empty line with a block of <code>exitType</code>, so pressing Enter twice leaves a quote, list, or code block. Defaults to <code>true</code> for text blocks; set <code>false</code> to keep creating empty blocks.</td></tr>
+            <tr><td><code>exitType</code></td><td>Block type used when leaving. Defaults to <code>paragraph</code>.</td></tr>
+            <tr><td><code>render(element, block)</code></td><td>Optional custom rendering into the block element, for atomic or non-text blocks.</td></tr>
+            <tr><td><code>read(element, previous)</code></td><td>Optional parser used when browser-owned DOM of this block is read back.</td></tr>
+            <tr><td><code>isEmpty(block)</code></td><td>Optional. Atomic blocks usually return <code>false</code> so a document that contains them is not considered empty.</td></tr>
+            <tr><td><code>editorComponent</code>, <code>rendererComponent</code></td><td>Angular components that render the block. See <a routerLink="/libraries/headless-editor/component-blocks">Component Blocks</a>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        The <code>paragraph</code> type comes from <code>basicTextEditorPlugin()</code>. Blocks without a
+        registered definition are rendered as <code>div</code> elements.
+      </p>
+    </section>
+
+    <section>
+      <h2>Text blocks are lines</h2>
+      <p>
+        Every text block holds one line. Lists, quotes, and code are sequences of blocks of the same type, which
+        keeps the model flat and the operations simple. Style consecutive blocks so they read as one list or
+        one code listing, for example by removing margins between adjacent <code>ul</code> elements.
+      </p>
+    </section>
+
+    <section>
+      <h2>Leaving a block</h2>
+      <p>
+        The first Enter at the end of a quote, list item, or code line continues the block with the type returned
+        by <code>create()</code>. A second Enter on the resulting empty line removes it and puts the caret in a
+        new paragraph below the block. The exit is one undo step. Headings leave after a single Enter because
+        their <code>create()</code> returns a paragraph.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="exitCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>Block operations</h2>
+      <ngs-code-highlighter class="code-block" [code]="operationsCode" language="typescript"/>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Method</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>toggleBlock(type, fallback?)</code></td><td>Switches the selected blocks to a type, or back to the fallback (paragraph) when all of them already have it. Text and marks are kept.</td></tr>
+            <tr><td><code>isBlockActive(type)</code></td><td>True when every selected block has the type.</td></tr>
+            <tr><td><code>insertBlock(block, select?)</code></td><td>Inserts a block after the block that holds the caret.</td></tr>
+            <tr><td><code>updateBlock(id, patch, origin?)</code></td><td>Replaces <code>type</code>, <code>content</code>, or <code>attrs</code> of a block by id. Recorded in history.</td></tr>
+            <tr><td><code>removeBlock(id)</code></td><td>Removes a block; an empty paragraph is created if it was the last one.</td></tr>
+            <tr><td><code>splitBlock()</code></td><td>Splits the text block at the caret, like Enter.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Atomic blocks</h2>
+      <p>
+        Atomic blocks have non-text content and are handled as a unit: Backspace at the start of the next text
+        block or Delete at the end of the previous one removes them, and a selection that crosses them removes
+        them when it is replaced. A selection that only ends at an atomic block keeps it.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="atomicCode" language="typescript"/>
+    </section>
+  </div>
+</app-page>

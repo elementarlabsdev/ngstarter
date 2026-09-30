@@ -1,0 +1,27 @@
+<div class="options">
+  <button ngsButton="outlined" (click)="disabled.set(!disabled())">
+    {{ disabled() ? 'Enable surface' : 'Disable surface' }}
+  </button>
+  <button ngsButton="outlined" (click)="spellcheck.set(!spellcheck())">
+    Spellcheck: {{ spellcheck() ? 'on' : 'off' }}
+  </button>
+</div>
+
+<div #container class="container">
+  <div
+    class="surface"
+    ngsHeadlessEditorSurface
+    ariaLabel="Editor with a bubble menu"
+    placeholder="Write, then select text…"
+    [disabled]="disabled()"
+    [spellcheck]="spellcheck()">
+  </div>
+
+  @if (position(); as position) {
+    <div class="bubble" role="toolbar" aria-label="Selection formatting" [style.top.px]="position.top" [style.left.px]="position.left">
+      <button ngsButton="text" [ngsHeadlessEditorCommand]="bold">Bold</button>
+      <button ngsButton="text" [ngsHeadlessEditorCommand]="italic">Italic</button>
+      <button ngsButton="text" [ngsHeadlessEditorCommand]="code">Code</button>
+    </div>
+  }
+</div>

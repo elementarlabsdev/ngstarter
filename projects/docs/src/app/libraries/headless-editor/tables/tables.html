@@ -1,0 +1,183 @@
+<app-page>
+  <h1 appPageTitle>Tables</h1>
+  <div appPageContent>
+    <section>
+      <p>
+        <code>tableEditorPlugin()</code> adds a <code>table</code> block. Tables are
+        <a routerLink="/libraries/headless-editor/component-blocks">component blocks</a>: the grid is stored in the
+        block attributes and edited by a built-in Angular component, with commands for rows, columns, and the
+        header row, and pasting of spreadsheet ranges. Cells hold rich text: the formatting toolbar and shortcuts
+        of the editor work inside a focused cell.
+      </p>
+      <ngs-playground exampleUrl="_docs/libraries/headless-editor/_examples" exampleName="table-editor-example">
+    @defer (on viewport) {
+      <app-table-editor-example/>
+    } @placeholder {
+      <div class="example-placeholder">Loading example…</div>
+    }
+  </ngs-playground>
+    </section>
+
+    <section>
+      <h2>Enable tables</h2>
+      <ngs-code-highlighter class="code-block" [code]="setupCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>Data model</h2>
+      <p>
+        A table is an atomic block. Its <code>attrs</code> hold the cells by row and column and whether the first
+        row is a header. Each cell is a list of text runs with marks, like a paragraph; a line break inside a cell
+        is a newline character. Plain strings are accepted wherever cells are created and are converted to runs.
+        Rows are always rectangular: missing cells are filled with empty cells when the block is read.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="modelCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>Inserting tables</h2>
+      <p>
+        <code>NGS_HEADLESS_EDITOR_INSERT_TABLE</code> takes an optional size; without one it inserts a 3 × 3 table
+        with a header row.
+      </p>
+      <ul>
+        <li>An empty paragraph at the caret is replaced by the table; otherwise the table goes after the current block.</li>
+        <li>When the table would be the last block, an empty paragraph is added after it, so you can keep writing below.</li>
+        <li>Focus moves to the first cell. The insertion is one undo step.</li>
+      </ul>
+      <ngs-code-highlighter class="code-block" [code]="insertCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>Editing cells</h2>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Key</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>click or focus a cell</td><td>Opens the cell in the cell editor, with the caret at the click position.</td></tr>
+            <tr><td>typing</td><td>Edits the cell. Consecutive typing in one cell is one undo step.</td></tr>
+            <tr><td>formatting shortcuts</td><td>Mod-b, Mod-i, and every other key binding of the editor's mark plugins.</td></tr>
+            <tr><td>Enter</td><td>Inserts a line break inside the cell.</td></tr>
+            <tr><td>Tab, Shift+Tab</td><td>Moves to the next or previous cell.</td></tr>
+            <tr><td>Tab in the last cell</td><td>Appends a row and moves into it.</td></tr>
+            <tr><td>Escape</td><td>Leaves the cell editor and keeps focus on the cell.</td></tr>
+            <tr><td>Mod-z, Mod-Shift-z</td><td>Undo and redo in the document history, the same as outside the table.</td></tr>
+            <tr><td>paste in a cell</td><td>Inserts the clipboard as plain text.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Formatting in cells</h2>
+      <p>
+        While a cell is being edited it is the editor's <em>inline target</em>: formatting commands, mark state,
+        stored marks, and <code>insertText()</code> of the document editor act on the cell. Your toolbar does not
+        change; a Bold button bound with <code>ngsHeadlessEditorCommand</code> shows and toggles the state of the
+        cell. Block commands such as headings are disabled inside a cell.
+      </p>
+      <p>
+        Every mark of the editor is available in cells unless it is switched off explicitly:
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="formattingCode" language="typescript"/>
+      <ul>
+        <li><code>formatting: false</code> keeps cells plain text; formatting commands are disabled in cells.</li>
+        <li>A list of mark types allows only those marks in cells.</li>
+        <li>A mark definition with <code>nested: false</code> is never available in cells or other nested editors.</li>
+      </ul>
+      <p>
+        Cells use the mark definitions of your plugins, so custom marks render and behave the same inside and
+        outside tables. Commands should use <code>enabled: editor => editor.canApplyMark(type)</code> so buttons
+        disable themselves where a mark is not allowed; see
+        <a routerLink="/libraries/headless-editor/marks">Marks and Formatting</a>.
+      </p>
+    </section>
+
+    <section>
+      <h2>Commands</h2>
+      <p>
+        Table commands act on the focused cell, or the last focused one while a toolbar button is pressed. They are
+        disabled when no table cell has focus, so toolbars bound with <code>ngsHeadlessEditorCommand</code> enable
+        themselves automatically.
+      </p>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Command</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td><code>NGS_HEADLESS_EDITOR_INSERT_TABLE</code></td><td>Inserts a table. Payload: rows, columns, header.</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_ADD_ROW_BEFORE</code></td><td>Adds a row above the cell.</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_ADD_ROW_AFTER</code></td><td>Adds a row below the cell.</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_ADD_COLUMN_BEFORE</code></td><td>Adds a column to the left.</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_ADD_COLUMN_AFTER</code></td><td>Adds a column to the right.</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_DELETE_ROW</code></td><td>Deletes the row; disabled for the last row.</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_DELETE_COLUMN</code></td><td>Deletes the column; disabled for the last column.</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_TOGGLE_HEADER</code></td><td>Turns the header row on or off; active while it is on.</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TABLE_DELETE</code></td><td>Removes the table.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ngs-code-highlighter class="code-block" [code]="commandsCode" language="html"/>
+      <p>
+        <code>ngsHeadlessEditorActiveTableCell(editor)</code> returns a signal with the active cell, for example to
+        show contextual table controls. <code>focusNgsHeadlessEditorTableCell(editor, cell)</code> moves focus to a
+        cell once its table is rendered.
+      </p>
+    </section>
+
+    <section>
+      <h2>Pasting from spreadsheets</h2>
+      <p>
+        Pasting a range copied from Excel, Google Sheets, or Numbers into the editor text creates a table. Both the
+        tab-separated text and the HTML table of the clipboard are recognized.
+      </p>
+      <ul>
+        <li>Text becomes a table only when every line has the same number of cells, at least two, so tab-indented code stays text.</li>
+        <li>HTML becomes a table only when the clipboard contains nothing but the table, so copying an article that includes a table pastes text.</li>
+        <li>Formatting such as bold, italic, and links is kept for marks that are allowed in cells; other markup is discarded.</li>
+        <li>Disable it with <code>tableEditorPlugin(&#123; paste: false &#125;)</code>.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Changing tables from code</h2>
+      <p>
+        Table data is plain JSON, so it can be generated, validated, and changed with ordinary functions. The pure
+        helpers never mutate their input.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="programmaticCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>Styling</h2>
+      <p>
+        The table components only set structural styles. Style them from the surface with
+        <code>::ng-deep</code> or global styles through these hooks:
+      </p>
+      <ul>
+        <li><code>.ngs-headless-editor-table</code> on the table, with <code>.has-header</code> when the header row is on;</li>
+        <li><code>.ngs-headless-editor-table-cell</code> on every cell, <code>th</code> for header cells;</li>
+        <li><code>.active</code> on the focused cell while editing;</li>
+        <li><code>.ngs-headless-editor-table-cell-content</code> for the static content of a cell and
+          <code>.ngs-headless-editor-table-cell-editor</code> for the editor of the focused cell.</li>
+      </ul>
+      <ngs-code-highlighter class="code-block" [code]="styleCode" language="scss"/>
+    </section>
+
+    <section>
+      <h2>Read-only rendering</h2>
+      <p>
+        While the surface is disabled or the editor is read-only, tables are rendered by a static component with a
+        real <code>thead</code> for the header row.
+      </p>
+    </section>
+
+    <section>
+      <h2>Limitations</h2>
+      <ul>
+        <li>A selection cannot start in text and end inside a table cell; the table is selected and deleted as one block.</li>
+        <li>Backspace at the start of the paragraph after a table removes the whole table, like any atomic block. Undo restores it.</li>
+        <li>Merged cells are not supported. Tables are limited to 500 rows and 50 columns.</li>
+      </ul>
+    </section>
+  </div>
+</app-page>

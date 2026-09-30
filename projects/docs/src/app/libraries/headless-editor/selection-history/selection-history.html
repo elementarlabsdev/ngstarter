@@ -1,0 +1,89 @@
+<app-page>
+  <h1 appPageTitle>Selection and History</h1>
+  <div appPageContent>
+    <section>
+      <p>
+        Selection and history are part of the editor state and available as signals. Selection is expressed in
+        model coordinates, so it survives re-rendering and can be set from code.
+      </p>
+      <ngs-playground exampleUrl="_docs/libraries/headless-editor/_examples" exampleName="selection-history-example">
+    @defer (on viewport) {
+      <app-selection-history-example/>
+    } @placeholder {
+      <div class="example-placeholder">Loading example…</div>
+    }
+  </ngs-playground>
+    </section>
+
+    <section>
+      <h2>Selection</h2>
+      <p>
+        A selection has an <code>anchor</code>, where it started, and a <code>focus</code>, where it ends. Both are
+        block id and offset pairs; the focus can come first for backward selections. A collapsed selection, with
+        equal points, is the caret.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="selectionCode" language="typescript"/>
+      <ul>
+        <li>The surface updates the selection from the DOM on <code>selectionchange</code>, focus, and before input.</li>
+        <li><code>setSelection()</code> clamps offsets to the block text and stores the selection in the model. Call the surface <code>focus()</code> to apply it to the DOM.</li>
+        <li>Moving the selection drops stored marks and starts a new undo step.</li>
+        <li>Buttons that change the document through editor methods should prevent <code>mousedown</code> so the DOM selection is not lost; <code>ngsHeadlessEditorCommand</code> does this for you.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Editing at the selection</h2>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Method</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>insertText(text, origin?)</code></td><td>Replaces the selection with text; line breaks create paragraphs.</td></tr>
+            <tr><td><code>deleteBackward()</code>, <code>deleteForward()</code></td><td>Delete the selection, one character, or merge blocks at a boundary.</td></tr>
+            <tr><td><code>deleteRange(selection, origin, group?)</code></td><td>Deletes an explicit range.</td></tr>
+            <tr><td><code>splitBlock()</code></td><td>Splits the block at the caret.</td></tr>
+            <tr><td><code>clear()</code></td><td>Replaces the content with an empty paragraph and clears history.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>History</h2>
+      <p>
+        Every change records a snapshot of the previous document and selection. Snapshots share unchanged blocks
+        with the live document, so history is cheap even for long documents.
+      </p>
+      <ul>
+        <li>Typing single characters is grouped into one undo step; a space, another kind of change, a caret move, or a pause of one second starts a new step.</li>
+        <li>Deleting character by character is grouped the same way.</li>
+        <li>Everything else, such as formatting, paste, block changes, and API edits, is its own step.</li>
+        <li>The history keeps the last 200 steps (<code>NGS_HEADLESS_EDITOR_HISTORY_LIMIT</code>); the grouping delay is <code>NGS_HEADLESS_EDITOR_HISTORY_GROUP_DELAY</code>.</li>
+        <li>Mod-z undoes, Mod-Shift-z and Mod-y redo. Any new change clears the redo stack.</li>
+      </ul>
+      <ngs-code-highlighter class="code-block" [code]="historyCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>Revision and origin</h2>
+      <p>
+        <code>revision</code> increases with every document change. <code>origin</code> tells where the last
+        change came from:
+      </p>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Origin</th><th>Source</th></tr></thead>
+          <tbody>
+            <tr><td><code>external</code></td><td><code>setDocument()</code>: content loaded by the application.</td></tr>
+            <tr><td><code>keyboard</code></td><td>Typing, deleting, and Enter in the surface.</td></tr>
+            <tr><td><code>paste</code></td><td>Plain-text paste.</td></tr>
+            <tr><td><code>composition</code></td><td>IME composition, drag and drop, and other DOM read-backs.</td></tr>
+            <tr><td><code>command</code></td><td>Formatting and block operations.</td></tr>
+            <tr><td><code>history</code></td><td>Undo and redo.</td></tr>
+            <tr><td><code>api</code></td><td>Your own calls that pass <code>'api'</code>, and <code>clear()</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Use it to avoid writing loaded documents straight back to where they came from.</p>
+    </section>
+  </div>
+</app-page>

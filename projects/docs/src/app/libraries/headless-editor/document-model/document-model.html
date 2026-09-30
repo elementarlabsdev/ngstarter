@@ -1,0 +1,97 @@
+<app-page>
+  <h1 appPageTitle>Document Model</h1>
+  <div appPageContent>
+    <section>
+      <p>
+        An editor document is plain, versioned JSON. It is the only source of truth: the DOM is rendered from
+        it, and browser input is translated into changes of it. You can store it, send it over the network,
+        diff it, and render it anywhere.
+      </p>
+      <ngs-playground exampleUrl="_docs/libraries/headless-editor/_examples" exampleName="json-inspector-example">
+    @defer (on viewport) {
+      <app-json-inspector-example/>
+    } @placeholder {
+      <div class="example-placeholder">Loading example…</div>
+    }
+  </ngs-playground>
+    </section>
+
+    <section>
+      <h2>Structure</h2>
+      <ngs-code-highlighter class="code-block" [code]="structureCode" language="typescript"/>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>NgsHeadlessEditorDocument</code></td><td>Root object with <code>version: 1</code> and an ordered, non-empty list of blocks.</td></tr>
+            <tr><td><code>NgsHeadlessEditorBlock</code></td><td>Addressable unit with a stable <code>id</code>, a <code>type</code> registered by a plugin, <code>content</code>, and optional <code>attrs</code>.</td></tr>
+            <tr><td><code>NgsHeadlessEditorText</code></td><td>A text run inside a text block: a string and the marks applied to all of it.</td></tr>
+            <tr><td><code>NgsHeadlessEditorMark</code></td><td>Inline annotation with a <code>type</code> and optional serializable <code>attrs</code> (string, number, boolean, or null values).</td></tr>
+            <tr><td><code>NgsHeadlessEditorPoint</code></td><td>A position: block id plus a text offset inside that block.</td></tr>
+            <tr><td><code>NgsHeadlessEditorSelection</code></td><td>An <code>anchor</code> and a <code>focus</code> point. The focus can be before the anchor for backward selections.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Text blocks and atomic blocks</h2>
+      <p>
+        A block whose content is an array of text runs is a text block: the caret can move through it and the
+        user can type into it. Any other content, commonly <code>null</code> with data in <code>attrs</code>,
+        makes an atomic block such as a divider, an image, or an Angular component. Atomic blocks are selected
+        and deleted as a whole. Each text block is one line of the document; lists, quotes, and code are
+        sequences of blocks of the same type. See <a routerLink="/libraries/headless-editor/blocks">Blocks</a>.
+      </p>
+    </section>
+
+    <section>
+      <h2>Normalization</h2>
+      <p>Every document that enters the editor is normalized. After normalization:</p>
+      <ul>
+        <li>The document has at least one block; an empty document becomes a single empty paragraph.</li>
+        <li>Block ids are present and unique; missing or duplicate ids are regenerated.</li>
+        <li>Text runs are never empty, except a single empty run that represents an empty block.</li>
+        <li>Adjacent runs with equal marks are merged.</li>
+        <li>Marks are unique by type and sorted by type, so equal formatting always has one representation.</li>
+      </ul>
+      <p>
+        <code>setDocument()</code> copies its input before normalizing, so later mutations of your object do not
+        leak into the editor.
+      </p>
+    </section>
+
+    <section>
+      <h2>Immutability and identity</h2>
+      <p>
+        Documents, blocks, runs, and selections are never mutated. Every change produces a new document that
+        reuses the unchanged blocks. The surface relies on this identity to re-render only changed blocks, and
+        the history stores snapshots that share structure instead of copying the document.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="immutableCode" language="typescript"/>
+      <p class="note">
+        Never mutate a document you got from the editor. Create a new object, or use
+        <code>updateBlock()</code>, <code>insertBlock()</code>, and the other editing methods.
+      </p>
+    </section>
+
+    <section>
+      <h2>Offsets</h2>
+      <p>
+        Offsets count UTF-16 code units, like JavaScript string indexes, and are clamped to the block text
+        length. Deleting a character removes a whole user-perceived character, so emoji with skin tones, family
+        sequences, and flags are removed in one step.
+      </p>
+    </section>
+
+    <section>
+      <h2>Helpers</h2>
+      <ngs-code-highlighter class="code-block" [code]="helpersCode" language="typescript"/>
+      <p>
+        Equality helpers compare structure, ignore object key order, and treat keys with
+        <code>undefined</code> values as absent. They short-circuit on shared blocks, which makes comparing two
+        revisions of a large document cheap.
+      </p>
+    </section>
+  </div>
+</app-page>

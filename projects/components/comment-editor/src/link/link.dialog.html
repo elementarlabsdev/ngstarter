@@ -1,10 +1,5 @@
-<form class="w-[500px]" (ngSubmit)="onSubmit()">
-  <h3 ngs-dialog-title>
-    @if (isUpdate) {
-      Update Link
-    } @else {
-      Add Link
-    }</h3>
+<form class="w-[500px] max-w-full" (ngSubmit)="submit()">
+  <h3 ngs-dialog-title>{{ isUpdate ? 'Update Link' : 'Add Link' }}</h3>
   <ngs-dialog-content>
     <div class="pt-4">
       <ngs-form-field class="w-full">
@@ -14,14 +9,9 @@
     </div>
   </ngs-dialog-content>
   <div ngs-dialog-actions align="end">
-    <button ngsButton (click)="_onNoClick()">Cancel</button>
-    <button type="submit" ngsButton="filled" color="primary"
-            cdkFocusInitial [disabled]="!linkUrl.trim() || null">
-      @if (isUpdate) {
-        Save
-      } @else {
-        Add link
-      }
+    <button type="button" ngsButton (click)="cancel()">Cancel</button>
+    <button type="submit" ngsButton="filled" [disabled]="!linkUrl.trim()">
+      {{ isUpdate ? 'Save' : 'Add link' }}
     </button>
   </div>
 </form>

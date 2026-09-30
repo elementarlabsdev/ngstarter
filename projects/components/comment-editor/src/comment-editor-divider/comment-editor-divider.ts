@@ -1,12 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'ngs-comment-editor-divider',
-  imports: [],
   templateUrl: './comment-editor-divider.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './comment-editor-divider.scss'
+  styleUrl: './comment-editor-divider.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CommentEditorDivider {
-
-}
+export class CommentEditorDivider {}

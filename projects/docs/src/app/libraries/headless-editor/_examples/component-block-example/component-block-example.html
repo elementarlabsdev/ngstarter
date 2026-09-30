@@ -1,0 +1,15 @@
+<div class="toolbar">
+  <button ngsButton="outlined" [disabled]="readOnly()" (mousedown)="$event.preventDefault()" (click)="insertCallout()">
+    Insert callout
+  </button>
+  <button ngsButton="outlined" (click)="toggleReadOnly()">
+    {{ readOnly() ? 'Edit' : 'Read-only preview' }}
+  </button>
+</div>
+
+<div class="surface" ngsHeadlessEditorSurface ariaLabel="Announcement editor"></div>
+
+<details class="mt-4">
+  <summary>Current JSON document</summary>
+  <pre>{{ editor.document() | json }}</pre>
+</details>

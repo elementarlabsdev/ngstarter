@@ -546,11 +546,6 @@ export class Overview {
       name: 'Tabs'
     },
     {
-      routerLink: '/components/text-editor',
-      imageUrl: 'assets/overview/text-editor.svg',
-      name: 'Text Editor'
-    },
-    {
       routerLink: '/components/thumbnail-maker',
       imageUrl: 'assets/overview/thumbnail-maker.svg',
       name: 'Thumbnail Maker'

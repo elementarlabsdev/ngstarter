@@ -1,0 +1,108 @@
+<app-page>
+  <h1 appPageTitle>Commands and Toolbar</h1>
+  <div appPageContent>
+    <section>
+      <p>
+        A command is a typed object that performs an editing operation and reports whether it is enabled and
+        active. Commands drive toolbars, menus, and key bindings in the same way.
+      </p>
+      <ngs-playground exampleUrl="_docs/libraries/headless-editor/_examples" exampleName="toolbar-editor-example">
+    @defer (on viewport) {
+      <app-toolbar-editor-example/>
+    } @placeholder {
+      <div class="example-placeholder">Loading example…</div>
+    }
+  </ngs-playground>
+    </section>
+
+    <section>
+      <h2>The command contract</h2>
+      <ngs-code-highlighter class="code-block" [code]="contractCode" language="typescript"/>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Member</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>id</code></td><td>Unique id. Registered commands can be executed and bound by id.</td></tr>
+            <tr><td><code>execute(editor, payload)</code></td><td>Performs the change and returns whether it did anything.</td></tr>
+            <tr><td><code>enabled(editor, payload)</code></td><td>Optional. When it returns <code>false</code>, <code>execute</code> is not called and bound controls are disabled.</td></tr>
+            <tr><td><code>active(editor, payload)</code></td><td>Optional. Drives the pressed state of toggle controls.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Predicates read editor signals, so the state of every bound control updates automatically when the
+        selection or the document changes. All commands are disabled while the editor is read-only. Use
+        <code>editor.canApplyMark(type)</code> in <code>enabled</code> for formatting commands and
+        <code>editor.canEditBlocks()</code> for block commands: formatting commands also work inside nested editors
+        such as table cells, block commands do not. See
+        <a routerLink="/libraries/headless-editor/marks">Formatting everywhere</a>.
+      </p>
+    </section>
+
+    <section>
+      <h2>Payloads</h2>
+      <p>
+        The second type parameter describes the payload. Pass it with <code>commandData</code> in templates, as
+        the second argument of <code>execute()</code>, or as <code>payload</code> in a key binding.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="payloadCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>Toolbar controls</h2>
+      <p><code>ngsHeadlessEditorCommand</code> turns any element into a command control:</p>
+      <ul>
+        <li>prevents the default <code>mousedown</code>, so the text selection is kept when the control is pressed;</li>
+        <li>executes the command on click;</li>
+        <li>adds the <code>active</code> class and <code>aria-pressed</code> from <code>active()</code>;</li>
+        <li>sets <code>disabled</code> from <code>enabled()</code> and the read-only state.</li>
+      </ul>
+      <ngs-code-highlighter class="code-block" [code]="toolbarCode" language="html"/>
+      <p>
+        Controls that call editor methods directly, instead of a command, should prevent
+        <code>mousedown</code> themselves to keep the selection.
+      </p>
+    </section>
+
+    <section>
+      <h2>Running commands from code</h2>
+      <ngs-code-highlighter class="code-block" [code]="executeCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>Key bindings</h2>
+      <p>
+        Plugins declare <code>keymap</code> entries. A key is written as modifiers followed by the key, joined by
+        dashes: <code>Mod</code> (Ctrl or Cmd), <code>Alt</code>, <code>Shift</code>, then a character or a key
+        name such as <code>Enter</code> or <code>ArrowUp</code>. Matching is case-insensitive.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="keymapCode" language="typescript"/>
+      <p>
+        Bindings are matched against the typed character first and the physical key second, so
+        <code>Mod-b</code> works on a Cyrillic layout, <code>Mod-Shift-7</code> works although Shift+7 types
+        an ampersand, and <code>Mod-Alt-c</code> works on macOS where Option+C types a different character.
+        The first binding found in plugin order wins.
+      </p>
+    </section>
+
+    <section>
+      <h2>Built-in commands</h2>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Command</th><th>Plugin</th><th>Shortcut</th></tr></thead>
+          <tbody>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TOGGLE_BOLD</code></td><td>basicTextEditorPlugin</td><td>Mod-b</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TOGGLE_ITALIC</code></td><td>basicTextEditorPlugin</td><td>Mod-i</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TOGGLE_STRIKE</code></td><td>basicTextEditorPlugin</td><td>Mod-Shift-x</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_TOGGLE_CODE</code></td><td>basicTextEditorPlugin</td><td>Mod-e</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_SET_TEXT_COLOR</code></td><td>colorEditorPlugin</td><td>payload: CSS color</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_UNSET_TEXT_COLOR</code></td><td>colorEditorPlugin</td><td>—</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_SET_BACKGROUND_COLOR</code></td><td>colorEditorPlugin</td><td>payload: CSS color</td></tr>
+            <tr><td><code>NGS_HEADLESS_EDITOR_UNSET_BACKGROUND_COLOR</code></td><td>colorEditorPlugin</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Undo and redo are handled by the editor itself: Mod-z, Mod-Shift-z, and Mod-y.</p>
+    </section>
+  </div>
+</app-page>

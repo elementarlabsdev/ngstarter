@@ -1,6 +1,6 @@
 import { Directive, inject } from '@angular/core';
-import { COMMENT_EDITOR, CommentEditorInterface } from '../types';
 import { UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter-ui/components/upload';
+import { COMMENT_EDITOR, CommentEditorInterface } from '../types';
 
 @Directive({
   selector: '[ngsCommentEditorCommandImage]',
@@ -12,19 +12,16 @@ import { UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter-ui/c
   ],
   host: {
     '[attr.accept]': '"image/*"',
-    '(fileSelected)': `onImageSelected($event)`
+    '(fileSelected)': 'selectImage($event)'
   }
 })
 export class CommentEditorCommandImageDirective {
-  protected commentEditor = inject<CommentEditorInterface>(COMMENT_EDITOR);
+  protected readonly commentEditor = inject<CommentEditorInterface>(COMMENT_EDITOR);
 
-  protected onImageSelected(event: UploadFileSelectedEvent): void {
+  protected selectImage(event: UploadFileSelectedEvent): void {
     const file = event.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      const src = reader.result as string;
-      this.commentEditor.api.editor().chain().focus().addImageUploadingPlaceholder({ src, file }).run();
-    };
+    if (file) {
+      this.commentEditor.api.insertImage(file);
+    }
   }
 }

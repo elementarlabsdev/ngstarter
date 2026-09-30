@@ -1,0 +1,21 @@
+<ngs-icon class="icon" [name]="icons[attrs().tone]"/>
+<textarea
+  class="text"
+  rows="2"
+  aria-label="Callout text"
+  [value]="attrs().text"
+  (input)="setText($event)">
+</textarea>
+<div class="actions">
+  @for (tone of tones; track tone) {
+    <button
+      ngsButton="text"
+      [class.selected]="attrs().tone === tone"
+      (click)="setTone(tone)">
+      {{ tone }}
+    </button>
+  }
+  <button ngsIconButton aria-label="Remove callout" (click)="remove()">
+    <ngs-icon name="fluent:delete-24-regular"/>
+  </button>
+</div>

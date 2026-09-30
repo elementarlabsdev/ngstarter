@@ -2,9 +2,6 @@ import { Directive } from '@angular/core';
 
 @Directive({
   selector: '[ngsCommentEditorCommand]',
-  host: {
-    '[class.button]': 'true'
-  }
+  host: { '[class.button]': 'true' }
 })
-export class CommentEditorCommandDirective {
-}
+export class CommentEditorCommandDirective {}

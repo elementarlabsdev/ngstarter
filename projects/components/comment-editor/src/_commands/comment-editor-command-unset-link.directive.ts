@@ -5,13 +5,21 @@ import { COMMENT_EDITOR, CommentEditorInterface } from '../types';
   selector: '[ngsCommentEditorCommandUnsetLink]',
   host: {
     '[class.button]': 'true',
-    '(click)': `onClick()`
+    '(mousedown)': 'preserveSelection($event)',
+    '(click)': 'unset($event)'
   }
 })
 export class CommentEditorCommandUnsetLinkDirective {
-  protected commentEditor = inject<CommentEditorInterface>(COMMENT_EDITOR);
+  protected readonly commentEditor = inject<CommentEditorInterface>(COMMENT_EDITOR);
 
-  protected onClick() {
-    this.commentEditor.api.editor().commands.unsetLink();
+  protected preserveSelection(event: MouseEvent): void {
+    event.preventDefault();
+  }
+
+  protected unset(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.commentEditor.api.unsetLink();
+    this.commentEditor.api.focus();
   }
 }

@@ -1,0 +1,31 @@
+<div class="toolbar" role="toolbar" aria-label="Formatting">
+  <button ngsButton="text" [ngsHeadlessEditorCommand]="bold"><b>B</b></button>
+  <button ngsButton="text" [ngsHeadlessEditorCommand]="italic"><i>I</i></button>
+  <button ngsButton="text" [ngsHeadlessEditorCommand]="strike"><s>S</s></button>
+  <button ngsButton="text" [ngsHeadlessEditorCommand]="code">Code</button>
+  <button ngsButton="text" [ngsHeadlessEditorCommand]="highlight" commandData="#fef08a">Highlight</button>
+  <button ngsButton="text" [ngsHeadlessEditorCommand]="unhighlight">No highlight</button>
+</div>
+
+<div class="toolbar" role="toolbar" aria-label="Table">
+  <button ngsButton="outlined" [ngsHeadlessEditorCommand]="insertTable" [commandData]="size">Insert table</button>
+  <span class="separator" aria-hidden="true"></span>
+  <button ngsButton="text" [ngsHeadlessEditorCommand]="rowBefore">Row above</button>
+  <button ngsButton="text" [ngsHeadlessEditorCommand]="rowAfter">Row below</button>
+  <button ngsButton="text" [ngsHeadlessEditorCommand]="columnBefore">Column left</button>
+  <button ngsButton="text" [ngsHeadlessEditorCommand]="columnAfter">Column right</button>
+  <button ngsButton="text" [ngsHeadlessEditorCommand]="deleteRow">Delete row</button>
+  <button ngsButton="text" [ngsHeadlessEditorCommand]="deleteColumn">Delete column</button>
+  <button ngsButton="text" [ngsHeadlessEditorCommand]="toggleHeader">Header row</button>
+  <button ngsButton="text" [ngsHeadlessEditorCommand]="deleteTable">Delete table</button>
+</div>
+
+<div class="surface" ngsHeadlessEditorSurface ariaLabel="Document with tables"></div>
+
+<p class="status">
+  @if (activeCell(); as cell) {
+    Editing row {{ cell.row + 1 }}, column {{ cell.column + 1 }}: formatting applies to this cell.
+  } @else {
+    Focus a cell to enable the table commands.
+  }
+</p>

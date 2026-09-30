@@ -1,0 +1,21 @@
+<div class="toolbar">
+  <button ngsButton="outlined" (mousedown)="$event.preventDefault()" (click)="selectAll()">Select all</button>
+  <button ngsButton="outlined" (mousedown)="$event.preventDefault()" (click)="caretToEnd()">Caret to end</button>
+  <button ngsButton="outlined" (mousedown)="$event.preventDefault()" (click)="insertTimestamp()">Insert timestamp</button>
+  <button ngsButton="outlined" [ngsHeadlessEditorCommand]="bold">Bold</button>
+  <button ngsButton="outlined" [disabled]="!editor.canUndo()" (mousedown)="$event.preventDefault()" (click)="editor.undo()">Undo</button>
+  <button ngsButton="outlined" [disabled]="!editor.canRedo()" (mousedown)="$event.preventDefault()" (click)="editor.redo()">Redo</button>
+  <button ngsButton="outlined" (click)="loadKeepingHistory()">Load, keep history</button>
+  <button ngsButton="outlined" (click)="editor.clear()">Clear</button>
+</div>
+
+<div class="surface" ngsHeadlessEditorSurface ariaLabel="Selection and history playground"></div>
+
+<dl class="state">
+  <div><dt>focused</dt><dd>{{ editor.focused() }}</dd></div>
+  <div><dt>revision</dt><dd>{{ editor.revision() }}</dd></div>
+  <div><dt>origin</dt><dd>{{ editor.origin() }}</dd></div>
+  <div><dt>canUndo / canRedo</dt><dd>{{ editor.canUndo() }} / {{ editor.canRedo() }}</dd></div>
+  <div><dt>storedMarks</dt><dd>{{ editor.storedMarks() | json }}</dd></div>
+</dl>
+<pre class="selection">selection: {{ editor.selection() | json }}</pre>

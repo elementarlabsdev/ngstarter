@@ -7,36 +7,30 @@ import { YoutubeDialog } from '../youtube/youtube.dialog';
 @Directive({
   selector: '[ngsCommentEditorCommandYoutube]',
   host: {
-    '[attr.disabled]': `(commentEditor && commentEditor.api.isCommandDisabled('toggleBlockquote')) ? '' : null`,
-    '[class.active]': `commentEditor && commentEditor.api.isActive('blockquote')`,
-    '(click)': `onClick()`
+    '(mousedown)': 'preserveSelection($event)',
+    '(click)': 'open($event)'
   }
 })
 export class CommentEditorCommandYoutubeDirective {
-  protected commentEditor = inject<CommentEditorInterface>(COMMENT_EDITOR);
-  private _dialog = inject(Dialog);
-  private _destroyRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly dialog = inject(Dialog);
+  protected readonly commentEditor = inject<CommentEditorInterface>(COMMENT_EDITOR);
 
-  protected onClick(): void {
-    const dialogRef = this._dialog.open(YoutubeDialog, {
-      data: {
-        linkUrl: (this.commentEditor.api.editor().getAttributes('iframe') as HTMLIFrameElement).src
-      }
-    });
-    dialogRef
+  protected preserveSelection(event: MouseEvent): void {
+    event.preventDefault();
+  }
+
+  protected open(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.dialog.open(YoutubeDialog, { data: { linkUrl: '' } })
       .afterClosed()
-      .pipe(
-        takeUntilDestroyed(this._destroyRef)
-      )
-      .subscribe((linkUrl: string) => {
-        if (typeof linkUrl === 'undefined') {
-          return;
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(linkUrl => {
+        if (typeof linkUrl === 'string' && linkUrl) {
+          this.commentEditor.api.insertYoutube(linkUrl);
+          this.commentEditor.api.focus();
         }
-
-        this.commentEditor.api.editor().commands.setYoutubeVideo({
-          src: linkUrl
-        });
-      })
-    ;
+      });
   }
 }

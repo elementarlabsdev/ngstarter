@@ -839,12 +839,6 @@ export class App implements OnInit {
         {
           key: uuid(),
           type: 'link',
-          name: 'Text Editor',
-          link: '/components/text-editor'
-        },
-        {
-          key: uuid(),
-          type: 'link',
           name: 'Screen Loader',
           link: '/components/screen-loader'
         },
@@ -1151,6 +1145,27 @@ export class App implements OnInit {
           name: 'Content Editor Renderer API',
           link: '/libraries/content-editor/content-editor-renderer-api'
         },
+      ]
+    },
+    {
+      key: 'headless-editor',
+      type: 'group',
+      name: 'Headless Editor',
+      children: [
+        { key: uuid(), type: 'link', name: 'Overview', link: '/libraries/headless-editor' },
+        { key: uuid(), type: 'link', name: 'Getting Started', link: '/libraries/headless-editor/getting-started' },
+        { key: uuid(), type: 'link', name: 'Document Model', link: '/libraries/headless-editor/document-model' },
+        { key: uuid(), type: 'link', name: 'Surface and Input', link: '/libraries/headless-editor/surface' },
+        { key: uuid(), type: 'link', name: 'Commands and Toolbar', link: '/libraries/headless-editor/commands' },
+        { key: uuid(), type: 'link', name: 'Marks and Formatting', link: '/libraries/headless-editor/marks' },
+        { key: uuid(), type: 'link', name: 'Blocks', link: '/libraries/headless-editor/blocks' },
+        { key: uuid(), type: 'link', name: 'Component Blocks', link: '/libraries/headless-editor/component-blocks' },
+        { key: uuid(), type: 'link', name: 'Tables', link: '/libraries/headless-editor/tables' },
+        { key: uuid(), type: 'link', name: 'Plugins', link: '/libraries/headless-editor/plugins' },
+        { key: uuid(), type: 'link', name: 'Mentions', link: '/libraries/headless-editor/mentions' },
+        { key: uuid(), type: 'link', name: 'Selection and History', link: '/libraries/headless-editor/selection-history' },
+        { key: uuid(), type: 'link', name: 'Forms and Serialization', link: '/libraries/headless-editor/serialization' },
+        { key: uuid(), type: 'link', name: 'Api', link: '/libraries/headless-editor/api' },
       ]
     },
     {

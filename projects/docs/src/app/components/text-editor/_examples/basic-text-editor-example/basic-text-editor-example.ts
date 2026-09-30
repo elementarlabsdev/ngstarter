@@ -1,83 +1,8 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import {
-  TextEditorBubbleMenu,
-  TextEditorCommandBlockquoteDirective,
-  TextEditorCommandBoldDirective,
-  TextEditorCommandBulletListDirective,
-  TextEditorCommandCodeBlockDirective,
-  TextEditorCommandCodeDirective,
-  TextEditorCommandDirective,
-  TextEditorCommandEditLinkDirective, TextEditorCommandHeadingDirective, TextEditorCommandHorizontalRuleDirective,
-  TextEditorCommandImageDirective,
-  TextEditorCommandItalicDirective,
-  TextEditorCommandLinkDirective,
-  TextEditorCommandOrderedListDirective,
-  TextEditorCommandStrikeDirective,
-  TextEditorCommandUnsetLinkDirective,
-  TextEditorCommandYoutubeDirective,
-  TextEditor,
-  TextEditorDivider,
-  TextEditorToolbar
-} from '@ngstarter-ui/components/text-editor';
-import { Icon } from '@ngstarter-ui/components/icon';
-import { Button } from '@ngstarter-ui/components/button';
-import { Tooltip } from '@ngstarter-ui/components/tooltip';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-basic-text-editor-example',
-  imports: [
-    TextEditor,
-    Icon,
-    TextEditorBubbleMenu,
-    TextEditorDivider,
-    TextEditorToolbar,
-    TextEditorCommandDirective,
-    TextEditorCommandBoldDirective,
-    TextEditorCommandItalicDirective,
-    TextEditorCommandStrikeDirective,
-    TextEditorCommandBulletListDirective,
-    TextEditorCommandOrderedListDirective,
-    TextEditorCommandBlockquoteDirective,
-    TextEditorCommandCodeBlockDirective,
-    TextEditorCommandImageDirective,
-    TextEditorCommandYoutubeDirective,
-    TextEditorCommandEditLinkDirective,
-    TextEditorCommandUnsetLinkDirective,
-    TextEditorCommandLinkDirective,
-    TextEditorCommandCodeDirective,
-    TextEditorCommandHeadingDirective,
-    TextEditorCommandHorizontalRuleDirective,
-    Button,
-    Tooltip
-  ],
-  templateUrl: './basic-text-editor-example.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './basic-text-editor-example.scss'
+  template: '<p>The previous Text Editor has been removed in favor of the Angular editor foundation.</p>',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BasicTextEditorExample {
-  uploadFn = (file: Blob): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('/assets/image-viewer/1.jpg');
-      }, 3000);
-    });
-
-    // return new Promise((resolve, reject) => {
-    //   setTimeout(() => {
-    //     reject('Upload Error');
-    //   }, 3000);
-    // });
-
-    // upload to a server
-    // return new Promise((resolve, reject) => {
-    //   const formData = new FormData();
-    //   formData.append('image', file);
-    //   this._api
-    //     .post(`upload`, formData)
-    //     .subscribe((res: any) => {
-    //       resolve(res.url);
-    //     })
-    //   ;
-    // });
-  }
-}
+export class BasicTextEditorExample {}

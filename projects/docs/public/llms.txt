@@ -119,6 +119,7 @@ Must use:
 - gauge: `@ngstarter-ui/components/gauge` docs: /components/gauge
 - grid: `@ngstarter-ui/components/grid` docs: /components/grid
 - guided-tour: `@ngstarter-ui/components/guided-tour` docs: /components/guided-tour
+- headless-editor: `@ngstarter-ui/components/headless-editor` docs: /libraries/headless-editor
 - headless-stepper: `@ngstarter-ui/components/headless-stepper` docs: /components/headless-stepper
 - icon: `@ngstarter-ui/components/icon` docs: /components/icon
 - image-designer: `@ngstarter-ui/components/image-designer` docs: /libraries/image-designer
@@ -174,7 +175,6 @@ Must use:
 - tab-panel: `@ngstarter-ui/components/tab-panel` docs: /navigation/tab-panel
 - table: `@ngstarter-ui/components/table` docs: /components/table
 - tabs: `@ngstarter-ui/components/tabs` docs: /components/tabs
-- text-editor: `@ngstarter-ui/components/text-editor` docs: /components/text-editor
 - thumbnail-maker: `@ngstarter-ui/components/thumbnail-maker` docs: /components/thumbnail-maker
 - tiles: `@ngstarter-ui/components/tiles` docs: /components/tiles
 - timeline: `@ngstarter-ui/components/timeline` docs: /components/timeline

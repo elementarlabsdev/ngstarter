@@ -1,0 +1,105 @@
+<app-page>
+  <h1 appPageTitle>Marks and Formatting</h1>
+  <div appPageContent>
+    <section>
+      <p>
+        Marks annotate ranges of text: bold, links, colors, comments, mentions. A mark has a
+        <code>type</code> and optional serializable <code>attrs</code>. Plugins decide how marks render.
+      </p>
+      <ngs-playground exampleUrl="_docs/libraries/headless-editor/_examples" exampleName="plugin-editor-example">
+    @defer (on viewport) {
+      <app-plugin-editor-example/>
+    } @placeholder {
+      <div class="example-placeholder">Loading example…</div>
+    }
+  </ngs-playground>
+    </section>
+
+    <section>
+      <h2>Mark definitions</h2>
+      <ngs-code-highlighter class="code-block" [code]="definitionCode" language="typescript"/>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Member</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>type</code></td><td>Unique mark type stored in the document.</td></tr>
+            <tr><td><code>tagName</code></td><td>Element used to wrap marked text.</td></tr>
+            <tr><td><code>parseTags</code></td><td>Extra tag names recognized when browser-owned DOM (composition, drop) is read back.</td></tr>
+            <tr><td><code>applyAttributes(element, mark)</code></td><td>Writes mark attributes to the element. Validate values here.</td></tr>
+            <tr><td><code>readAttributes(element)</code></td><td>Reads attributes back from the DOM.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        A run with several marks is rendered as nested wrappers, one per mark, in the order of mark types.
+        Each wrapper carries <code>data-ngs-headless-editor-mark</code>.
+      </p>
+    </section>
+
+    <section>
+      <h2>Applying marks</h2>
+      <div class="my-6 overflow-x-auto rounded-xl border border-border">
+        <table ngs-native-table>
+          <thead><tr><th>Method</th><th>With a selection</th><th>At a caret</th></tr></thead>
+          <tbody>
+            <tr><td><code>toggleMark(type, attrs?)</code></td><td>Adds the mark to the range, or removes it if the whole range already has it.</td><td>Toggles the mark for the next typed text.</td></tr>
+            <tr><td><code>setMark(type, attrs?)</code></td><td>Applies or replaces the mark and its attributes.</td><td>Arms the mark for the next typed text.</td></tr>
+            <tr><td><code>unsetMark(type)</code></td><td>Removes the mark from the range.</td><td>Disarms the mark for the next typed text.</td></tr>
+            <tr><td><code>isMarkActive(type)</code></td><td>True when the whole range has the mark.</td><td>True when the next typed text will have it.</td></tr>
+            <tr><td><code>getActiveMark(type)</code></td><td colspan="2">The mark with its attributes at the selection, for example the current link href.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Stored marks</h2>
+      <p>
+        By default, text typed at a caret inherits the marks of the text before it. Toggling a mark at a caret
+        stores an explicit set of marks for the next insertion, exposed as the <code>storedMarks</code> signal.
+        Stored marks are dropped when the caret moves, after text is inserted, and on undo or redo. Toggling
+        bold off at the end of bold text therefore continues in plain text.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="storedCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>Formatting everywhere</h2>
+      <p>
+        Formatting commands work wherever text is edited: in the document and in nested editors such as table
+        cells. A nested editor registers itself as the editor's <code>inlineTarget</code> while it has focus;
+        <code>toggleMark()</code>, <code>setMark()</code>, <code>unsetMark()</code>, <code>isMarkActive()</code>,
+        <code>getActiveMark()</code>, <code>storedMarks</code>, <code>selection</code>, and
+        <code>insertText()</code> of the document editor then act on it. Commands and toolbars written against the
+        document editor need no changes.
+      </p>
+      <ul>
+        <li>Use <code>canApplyMark(type)</code> in a command's <code>enabled</code> predicate, so controls disable themselves where the mark is not allowed or the editor is read-only.</li>
+        <li>Use <code>canEditBlocks()</code> for block commands; it is false while a nested editor is active.</li>
+        <li>Set <code>nested: false</code> on a mark definition to keep it out of nested editors.</li>
+        <li>Nested editors can restrict marks further, for example <code>tableEditorPlugin(&#123; formatting: ['bold'] &#125;)</code>.</li>
+      </ul>
+      <ngs-code-highlighter class="code-block" [code]="everywhereCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>Colors</h2>
+      <p>
+        <code>colorEditorPlugin()</code> adds the <code>textColor</code> and <code>backgroundColor</code> marks
+        and four commands. Values are checked with <code>normalizeNgsHeadlessEditorColor()</code>, which accepts
+        hex, named, functional (rgb, hsl, oklch, color), and <code>var(--token)</code> colors and rejects anything
+        that could escape a style declaration.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="colorCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>Attribute safety</h2>
+      <p class="note warning">
+        Mark attributes come from documents that may be stored or edited elsewhere. Validate them in
+        <code>applyAttributes</code> before writing to the DOM, for example accept only http and https URLs for
+        links, and validate again when you serialize to HTML.
+      </p>
+    </section>
+  </div>
+</app-page>

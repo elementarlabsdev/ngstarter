@@ -7,80 +7,82 @@
 &lt;/ngs-select&gt;</code></pre>
 
 <h4>Inputs</h4>
-<table class="w-full border-collapse border border-slate-400 my-4">
-  <thead>
-    <tr class="bg-slate-100">
-      <th class="border border-slate-300 p-2 text-left">Name</th>
-      <th class="border border-slate-300 p-2 text-left">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>id</code></td>
-      <td class="border border-slate-300 p-2">Unique identifier for the select component.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>placeholder</code></td>
-      <td class="border border-slate-300 p-2">Placeholder text to display when no value is selected.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>disabled</code></td>
-      <td class="border border-slate-300 p-2">Whether the select is disabled.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>required</code></td>
-      <td class="border border-slate-300 p-2">Whether the select is required.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>multiple</code></td>
-      <td class="border border-slate-300 p-2">Whether the user can select multiple options.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>hideCheckIcon</code></td>
-      <td class="border border-slate-300 p-2">Whether to hide the check icon for selected options.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>clearable</code></td>
-      <td class="border border-slate-300 p-2">Whether to show a clear button next to the arrow when a value is selected. Clearing emits <code>selectionChange</code> and writes <code>null</code> for single select or an empty array for multiple select.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>dataSource</code></td>
-      <td class="border border-slate-300 p-2">Async option source for server-backed select values. Receives paging, search, selected values, request reason, and an optional abort signal.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>pageSize</code></td>
-      <td class="border border-slate-300 p-2">Number of async options requested per page. Defaults to <code>25</code>.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>searchable</code></td>
-      <td class="border border-slate-300 p-2">Shows the async search input in the panel. Search requests are sent to <code>dataSource</code>.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>searchDebounce</code></td>
-      <td class="border border-slate-300 p-2">Debounce in milliseconds before sending a search request. Defaults to <code>250</code>.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>minSearchLength</code></td>
-      <td class="border border-slate-300 p-2">Minimum number of typed characters before remote search runs. Defaults to <code>0</code>.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>loadOnOpen</code></td>
-      <td class="border border-slate-300 p-2">Loads async options when the select panel opens. Defaults to <code>true</code>.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>ariaLabel</code></td>
-      <td class="border border-slate-300 p-2">Aria-label for the select.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>tabIndex</code></td>
-      <td class="border border-slate-300 p-2">TabIndex for the select.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>aria-describedby</code></td>
-      <td class="border border-slate-300 p-2">Aria-describedby for the select.</td>
-    </tr>
-  </tbody>
-</table>
+<div class="my-6 overflow-x-auto rounded-xl border border-border">
+  <table ngs-native-table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td>Unique identifier for the select component.</td>
+      </tr>
+      <tr>
+        <td><code>placeholder</code></td>
+        <td>Placeholder text to display when no value is selected.</td>
+      </tr>
+      <tr>
+        <td><code>disabled</code></td>
+        <td>Whether the select is disabled.</td>
+      </tr>
+      <tr>
+        <td><code>required</code></td>
+        <td>Whether the select is required.</td>
+      </tr>
+      <tr>
+        <td><code>multiple</code></td>
+        <td>Whether the user can select multiple options.</td>
+      </tr>
+      <tr>
+        <td><code>hideCheckIcon</code></td>
+        <td>Whether to hide the check icon for selected options.</td>
+      </tr>
+      <tr>
+        <td><code>clearable</code></td>
+        <td>Whether to show a clear button next to the arrow when a value is selected. Clearing emits <code>selectionChange</code> and writes <code>null</code> for single select or an empty array for multiple select.</td>
+      </tr>
+      <tr>
+        <td><code>dataSource</code></td>
+        <td>Async option source for server-backed select values. Receives paging, search, selected values, request reason, and an optional abort signal.</td>
+      </tr>
+      <tr>
+        <td><code>pageSize</code></td>
+        <td>Number of async options requested per page. Defaults to <code>25</code>.</td>
+      </tr>
+      <tr>
+        <td><code>searchable</code></td>
+        <td>Shows the async search input in the panel. Search requests are sent to <code>dataSource</code>.</td>
+      </tr>
+      <tr>
+        <td><code>searchDebounce</code></td>
+        <td>Debounce in milliseconds before sending a search request. Defaults to <code>250</code>.</td>
+      </tr>
+      <tr>
+        <td><code>minSearchLength</code></td>
+        <td>Minimum number of typed characters before remote search runs. Defaults to <code>0</code>.</td>
+      </tr>
+      <tr>
+        <td><code>loadOnOpen</code></td>
+        <td>Loads async options when the select panel opens. Defaults to <code>true</code>.</td>
+      </tr>
+      <tr>
+        <td><code>ariaLabel</code></td>
+        <td>Aria-label for the select.</td>
+      </tr>
+      <tr>
+        <td><code>tabIndex</code></td>
+        <td>TabIndex for the select.</td>
+      </tr>
+      <tr>
+        <td><code>aria-describedby</code></td>
+        <td>Aria-describedby for the select.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <h4>Async data source</h4>
 <p>
@@ -118,40 +120,42 @@ readonly usersDataSource: SelectDataSource&lt;User&gt; = async request =&gt; &#1
 &lt;/ngs-select&gt;</code></pre>
 
 <h4>SelectDataSourceRequest</h4>
-<table class="w-full border-collapse border border-slate-400 my-4">
-  <thead>
-    <tr class="bg-slate-100">
-      <th class="border border-slate-300 p-2 text-left">Name</th>
-      <th class="border border-slate-300 p-2 text-left">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>search</code></td>
-      <td class="border border-slate-300 p-2">Current search text. Empty for initial and open requests.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>page</code></td>
-      <td class="border border-slate-300 p-2">One-based page number requested by the select.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>pageSize</code></td>
-      <td class="border border-slate-300 p-2">Configured page size passed from the select.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>selectedValues</code></td>
-      <td class="border border-slate-300 p-2">Current selected value or values. Return matching options on the first request.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>reason</code></td>
-      <td class="border border-slate-300 p-2">Why the request was made: <code>initial</code>, <code>open</code>, <code>search</code>, or <code>page</code>.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>signal</code></td>
-      <td class="border border-slate-300 p-2">Optional abort signal for cancelling stale remote requests.</td>
-    </tr>
-  </tbody>
-</table>
+<div class="my-6 overflow-x-auto rounded-xl border border-border">
+  <table ngs-native-table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>search</code></td>
+        <td>Current search text. Empty for initial and open requests.</td>
+      </tr>
+      <tr>
+        <td><code>page</code></td>
+        <td>One-based page number requested by the select.</td>
+      </tr>
+      <tr>
+        <td><code>pageSize</code></td>
+        <td>Configured page size passed from the select.</td>
+      </tr>
+      <tr>
+        <td><code>selectedValues</code></td>
+        <td>Current selected value or values. Return matching options on the first request.</td>
+      </tr>
+      <tr>
+        <td><code>reason</code></td>
+        <td>Why the request was made: <code>initial</code>, <code>open</code>, <code>search</code>, or <code>page</code>.</td>
+      </tr>
+      <tr>
+        <td><code>signal</code></td>
+        <td>Optional abort signal for cancelling stale remote requests.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <h4>Async templates</h4>
 <p>
@@ -169,69 +173,75 @@ readonly usersDataSource: SelectDataSource&lt;User&gt; = async request =&gt; &#1
 &lt;/ng-template&gt;</code></pre>
 
 <h4>Outputs</h4>
-<table class="w-full border-collapse border border-slate-400 my-4">
-  <thead>
-    <tr class="bg-slate-100">
-      <th class="border border-slate-300 p-2 text-left">Name</th>
-      <th class="border border-slate-300 p-2 text-left">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>selectionChange</code></td>
-      <td class="border border-slate-300 p-2">Event emitted when the selected value changes.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>opened</code></td>
-      <td class="border border-slate-300 p-2">Event emitted when the select panel is opened.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>closed</code></td>
-      <td class="border border-slate-300 p-2">Event emitted when the select panel is closed.</td>
-    </tr>
-  </tbody>
-</table>
+<div class="my-6 overflow-x-auto rounded-xl border border-border">
+  <table ngs-native-table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>selectionChange</code></td>
+        <td>Event emitted when the selected value changes.</td>
+      </tr>
+      <tr>
+        <td><code>opened</code></td>
+        <td>Event emitted when the select panel is opened.</td>
+      </tr>
+      <tr>
+        <td><code>closed</code></td>
+        <td>Event emitted when the select panel is closed.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <h4>Public Properties</h4>
-<table class="w-full border-collapse border border-slate-400 my-4">
-  <thead>
-    <tr class="bg-slate-100">
-      <th class="border border-slate-300 p-2 text-left">Name</th>
-      <th class="border border-slate-300 p-2 text-left">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>hasValue</code></td>
-      <td class="border border-slate-300 p-2">Computed signal that returns <code>true</code> when the select currently has a selected value. It is <code>false</code> for <code>null</code>, <code>undefined</code>, an empty string, or an empty array.</td>
-    </tr>
-  </tbody>
-</table>
+<div class="my-6 overflow-x-auto rounded-xl border border-border">
+  <table ngs-native-table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>hasValue</code></td>
+        <td>Computed signal that returns <code>true</code> when the select currently has a selected value. It is <code>false</code> for <code>null</code>, <code>undefined</code>, an empty string, or an empty array.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <h4>ngs-option Inputs</h4>
-<table class="w-full border-collapse border border-slate-400 my-4">
-  <thead>
-    <tr class="bg-slate-100">
-      <th class="border border-slate-300 p-2 text-left">Name</th>
-      <th class="border border-slate-300 p-2 text-left">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>value</code></td>
-      <td class="border border-slate-300 p-2">Value written to the parent select control when this option is selected.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>data</code></td>
-      <td class="border border-slate-300 p-2">Optional full option payload, such as an object or typed status. The select value still uses <code>value</code>, while filter trigger custom value templates receive <code>data</code> for rendering richer selected values.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>disabled</code></td>
-      <td class="border border-slate-300 p-2">Whether the option is disabled.</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-300 p-2"><code>selected</code></td>
-      <td class="border border-slate-300 p-2">Whether the option starts selected.</td>
-    </tr>
-  </tbody>
-</table>
+<div class="my-6 overflow-x-auto rounded-xl border border-border">
+  <table ngs-native-table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>value</code></td>
+        <td>Value written to the parent select control when this option is selected.</td>
+      </tr>
+      <tr>
+        <td><code>data</code></td>
+        <td>Optional full option payload, such as an object or typed status. The select value still uses <code>value</code>, while filter trigger custom value templates receive <code>data</code> for rendering richer selected values.</td>
+      </tr>
+      <tr>
+        <td><code>disabled</code></td>
+        <td>Whether the option is disabled.</td>
+      </tr>
+      <tr>
+        <td><code>selected</code></td>
+        <td>Whether the option starts selected.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

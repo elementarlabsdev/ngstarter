@@ -40,6 +40,12 @@ const COMPONENT_TITLES: Record<string, SeoTitleConfig> = {
   'color-switcher': { label: 'Color Switcher', detail: 'Theme Color Controls' },
   'command-bar': { label: 'Command Bar', detail: 'Keyboard Commands' },
   'comment-editor': { label: 'Comment Editor', detail: 'Rich Comment Input' },
+  editor: {
+    label: 'Editor',
+    detail: 'Angular Rich Text Foundation',
+    job: 'build custom signal-based rich text editors with JSON documents and plugins',
+    apiDetail: 'Core, Surface, Plugins, Commands, Model and History'
+  },
   'comparison-slider': { label: 'Comparison Slider', detail: 'Before and After Views' },
   confirm: { label: 'Confirm', detail: 'Confirmation Dialogs' },
   'cookie-popup': { label: 'Cookie Popup', detail: 'Consent Banners' },
@@ -117,7 +123,6 @@ const COMPONENT_TITLES: Record<string, SeoTitleConfig> = {
     job: 'build static data grids for admin dashboards',
   },
   tabs: { label: 'Tabs', detail: 'Tabbed Interfaces' },
-  'text-editor': { label: 'Text Editor', detail: 'Rich Text Editing' },
   'thumbnail-maker': { label: 'Thumbnail Maker', detail: 'Media Thumbnails' },
   tiles: { label: 'Tiles', detail: 'Visual Tile Layouts' },
   timeline: { label: 'Timeline', detail: 'Activity History' },

@@ -1,5 +1,9 @@
-<ngs-comment-editor #editor [imageUploadFn]="uploadFn" (sent)="onSent($event)"
-                    class="rounded-xl border border-border">
+<ngs-comment-editor
+  #editor
+  class="rounded-xl border border-border"
+  [imageUploadFn]="uploadImage"
+  (submitted)="onSubmitted($event)"
+  (sent)="onSent($event)">
   <ngs-comment-editor-toolbar>
     <button ngsIconButton ngsTooltip="Bold"
             ngsCommentEditorCommand ngsCommentEditorCommandBold>
@@ -13,12 +17,12 @@
             ngsCommentEditorCommand ngsCommentEditorCommandStrike>
       <ngs-icon name="fluent:text-strikethrough-24-regular"/>
     </button>
-    <ngs-comment-editor-divider />
-    <button ngsIconButton ngsTooltip="Bullet List"
+    <ngs-comment-editor-divider/>
+    <button ngsIconButton ngsTooltip="Bullet list"
             ngsCommentEditorCommand ngsCommentEditorCommandBulletList>
       <ngs-icon name="fluent:text-bullet-list-ltr-24-regular"/>
     </button>
-    <button ngsIconButton ngsTooltip="Ordered List"
+    <button ngsIconButton ngsTooltip="Ordered list"
             ngsCommentEditorCommand ngsCommentEditorCommandOrderedList>
       <ngs-icon name="fluent:text-number-list-ltr-24-regular"/>
     </button>
@@ -26,64 +30,68 @@
             ngsCommentEditorCommand ngsCommentEditorCommandBlockquote>
       <ngs-icon name="fluent:text-quote-24-regular"/>
     </button>
-    <button ngsIconButton ngsTooltip="Code Block"
+    <button ngsIconButton ngsTooltip="Code block"
             ngsCommentEditorCommand ngsCommentEditorCommandCodeBlock>
       <ngs-icon name="fluent:code-block-24-regular"/>
     </button>
-    <ngs-comment-editor-divider />
-    <button ngsIconButton ngsTooltip="Upload Image"
+    <ngs-comment-editor-divider/>
+    <button ngsIconButton ngsTooltip="Upload image"
             ngsCommentEditorCommand ngsCommentEditorCommandImage>
       <ngs-icon name="fluent:image-24-regular"/>
     </button>
-    <button ngsIconButton ngsTooltip="Add Youtube"
+    <button ngsIconButton ngsTooltip="Add YouTube video"
             ngsCommentEditorCommand ngsCommentEditorCommandYoutube>
       <ngs-icon name="fluent:video-24-regular"/>
     </button>
   </ngs-comment-editor-toolbar>
+
   <ngs-comment-editor-bubble-menu>
-    <button ngsCommentEditorCommandEditLink>
+    <button ngsCommentEditorCommandEditLink aria-label="Edit link">
       <ngs-icon name="fluent:edit-24-regular"/>
     </button>
-    <button ngsCommentEditorCommandUnsetLink>
+    <button ngsCommentEditorCommandUnsetLink aria-label="Remove link">
       <ngs-icon name="fluent:link-dismiss-24-regular"/>
     </button>
-    <button ngsCommentEditorCommand ngsCommentEditorCommandLink>
+    <button ngsCommentEditorCommand ngsCommentEditorCommandLink aria-label="Add link">
       <ngs-icon name="fluent:link-24-regular"/>
     </button>
-    <button ngsCommentEditorCommand ngsCommentEditorCommandBold>
+    <button ngsCommentEditorCommand ngsCommentEditorCommandBold aria-label="Bold">
       <ngs-icon name="fluent:text-bold-24-regular"/>
     </button>
-    <button ngsCommentEditorCommand ngsCommentEditorCommandItalic>
+    <button ngsCommentEditorCommand ngsCommentEditorCommandItalic aria-label="Italic">
       <ngs-icon name="fluent:text-italic-24-regular"/>
     </button>
-    <button ngsCommentEditorCommand ngsCommentEditorCommandStrike>
+    <button ngsCommentEditorCommand ngsCommentEditorCommandStrike aria-label="Strike">
       <ngs-icon name="fluent:text-strikethrough-24-regular"/>
     </button>
-    <button ngsCommentEditorCommand ngsCommentEditorCommandCode>
+    <button ngsCommentEditorCommand ngsCommentEditorCommandCode aria-label="Inline code">
       <ngs-icon name="fluent:code-24-regular"/>
     </button>
   </ngs-comment-editor-bubble-menu>
+
   <ngs-comment-editor-footer-bar>
-    <button ngsIconButton ngsTooltip="Toggle Toolbar"
+    <button ngsIconButton ngsTooltip="Toggle toolbar"
             ngsCommentEditorCommand ngsCommentEditorCommandToggleToolbar>
       <ngs-icon name="fluent:text-header-1-24-regular"/>
     </button>
   </ngs-comment-editor-footer-bar>
 </ngs-comment-editor>
 
-<div class="mt-5 flex gap-2">
-  <button ngsButton (click)="editor.api.insertText('Hello World')">
-    Insert "Hello World"
-  </button>
-  <button ngsButton (click)="editor.api.insertText('🔥')">
-    Insert Emoji
-  </button>
+<div class="mt-5 flex flex-wrap gap-2">
+  <button ngsButton (click)="editor.api.insertText('Hello World')">Insert text</button>
+  <button ngsButton (click)="editor.api.insertText('🔥')">Insert emoji</button>
 </div>
 
+@if (submittedDocument) {
+  <p class="mt-4 text-sm text-neutral-600">
+    Submitted {{ submittedDocument.blocks.length }} JSON block(s); the same send also emitted HTML.
+  </p>
+}
+
 @if (comments.length > 0) {
-  <div class="mt-10 flex flex-col gap-7">
+  <div class="mt-8 flex flex-col gap-4">
     @for (comment of comments; track comment) {
-      <div class="border border-border  rounded-xl p-5" [innerHTML]="comment | safeHtml"></div>
+      <div class="rounded-xl border border-border p-5" [innerHTML]="comment | safeHtml"></div>
     }
   </div>
 }

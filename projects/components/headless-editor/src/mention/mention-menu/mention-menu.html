@@ -1,0 +1,16 @@
+<ngs-menu classList="max-h-72 min-w-64 overflow-y-auto" >
+  @for (option of mentions().suggestions(); track option.id; let index = $index) {
+    <ngs-menu-item
+      [attr.id]="mentions().optionId(index)"
+      [selected]="mentions().activeIndex() === index"
+      (click)="mentions().select(option)">
+      @if (mentions().optionComponent(); as optionComponent) {
+        <ng-container
+          [ngComponentOutlet]="optionComponent"
+          [ngComponentOutletInputs]="{ option: option, active: mentions().activeIndex() === index }"/>
+      } @else {
+        {{ option.label }}
+      }
+    </ngs-menu-item>
+  }
+</ngs-menu>

@@ -1,5 +1,6 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Button } from '@ngstarter-ui/components/button';
 import {
   DIALOG_DATA,
   DialogActions,
@@ -7,12 +8,11 @@ import {
   DialogRef,
   DialogTitle
 } from '@ngstarter-ui/components/dialog';
-import { Input } from '@ngstarter-ui/components/input';
-import { Button } from '@ngstarter-ui/components/button';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
 
 @Component({
-  selector: 'ngs-youtube',
+  selector: 'ngs-comment-editor-youtube-dialog',
   imports: [
     FormsModule,
     Button,
@@ -20,25 +20,24 @@ import { FormField, Label } from '@ngstarter-ui/components/form-field';
     DialogContent,
     DialogTitle,
     FormField,
-    Input,
     Label,
-    ReactiveFormsModule
+    Input
   ],
   templateUrl: './youtube.dialog.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './youtube.dialog.scss'
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class YoutubeDialog {
-  private _dialogRef = inject(DialogRef);
-  private _data = inject(DIALOG_DATA);
-  linkUrl = this._data.linkUrl || '';
-  isUpdate = !!this._data.linkUrl;
+  private readonly dialogRef = inject(DialogRef);
+  private readonly data = inject<{ linkUrl?: string }>(DIALOG_DATA);
 
-  onSubmit(): void {
-    this._dialogRef.close(this.linkUrl);
+  linkUrl = this.data.linkUrl ?? '';
+  readonly isUpdate = !!this.data.linkUrl;
+
+  submit(): void {
+    this.dialogRef.close(this.linkUrl.trim());
   }
 
-  _onNoClick(): void {
-    this._dialogRef.close();
+  cancel(): void {
+    this.dialogRef.close();
   }
 }

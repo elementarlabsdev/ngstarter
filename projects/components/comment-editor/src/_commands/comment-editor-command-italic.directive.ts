@@ -1,18 +1,13 @@
-import { Directive, inject } from '@angular/core';
-import { COMMENT_EDITOR, CommentEditorInterface } from '../types';
+import { Directive } from '@angular/core';
+import { CommentEditorCommandBase } from './comment-editor-command-base';
 
 @Directive({
   selector: '[ngsCommentEditorCommandItalic]',
   host: {
-    '[attr.disabled]': `(commentEditor && commentEditor.api.isCommandDisabled('toggleItalic')) ? '' : null`,
-    '[class.active]': `commentEditor && commentEditor.api.isActive('italic')`,
-    '(click)': `onClick()`
+    '[attr.disabled]': 'commentEditor.api.isCommandDisabled("toggleItalic") ? "" : null',
+    '[class.active]': 'commentEditor.api.isActive("toggleItalic")',
+    '(mousedown)': 'preserveSelection($event)',
+    '(click)': 'run("toggleItalic", $event)'
   }
 })
-export class CommentEditorCommandItalicDirective {
-  protected commentEditor = inject<CommentEditorInterface>(COMMENT_EDITOR);
-
-  protected onClick() {
-    this.commentEditor.api.runCommand('toggleItalic');
-  }
-}
+export class CommentEditorCommandItalicDirective extends CommentEditorCommandBase {}
