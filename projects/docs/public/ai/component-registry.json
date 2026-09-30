@@ -9163,25 +9163,29 @@
       "docsPath": "/components/skeleton",
       "docsOverviewSource": "projects/docs/src/app/components/skeleton/overview/overview.html",
       "purpose": "Show placeholder blocks for loading content when the final layout is already known.",
-      "useWhen": "Use ngs-skeleton to preserve layout while cards, lists, table rows, dashboard widgets, chart areas, avatars, text lines, or media blocks are loading. Shape and size each skeleton with TailwindCSS utilities such as h-*, w-*, size-*, flex, grid, gap, and wrapper layouts so it roughly matches the UI that will replace it. Use roundedFull for circular placeholders such as avatars or icon circles. Do not use Skeleton for unknown long operations where progress matters; use ProgressBar. Do not use for global route or app loading; use PageLoadingBar or ScreenLoader. Do not use for blocking a local section; use BlockLoader. Do not use for empty results; use EmptyState. Do not use for image fallback after load failure; use ImagePlaceholder. Do not use random grey blocks that do not resemble the final content.",
+      "useWhen": "Use ngs-skeleton to preserve layout while cards, lists, table rows, dashboard widgets, chart areas, avatars, text lines, or media blocks are loading. Shape and size each skeleton with TailwindCSS utilities such as h-*, w-*, size-*, flex, grid, gap, and wrapper layouts so it roughly matches the UI that will replace it. Use ngs-skeleton-circle for avatars or icon circles and ngs-skeleton-rectangle for card or media blocks. Import SkeletonCircle and SkeletonRectangle from @ngstarter-ui/components/skeleton. Size circles with size-* and rectangles with h-* and w-* utilities. Rectangular corners use --ngs-skeleton-item-border-radius, which follows --ngs-radius-xl (1rem in default and 0.25rem in chalk); circles stay fully round. The existing ngs-skeleton roundedFull input remains supported. Do not use Skeleton for unknown long operations where progress matters; use ProgressBar. Do not use for global route or app loading; use PageLoadingBar or ScreenLoader. Do not use for blocking a local section; use BlockLoader. Do not use for empty results; use EmptyState. Do not use for image fallback after load failure; use ImagePlaceholder. Do not use random grey blocks that do not resemble the final content.",
       "exampleTopics": [
         "Basic Skeleton"
       ],
-      "minimalExample": "<div class=\"flex flex-col gap-8\">\n  <div class=\"w-1/2 flex flex-col gap-5\">\n    <ngs-skeleton roundedFull class=\"size-24\"/>\n    <ngs-skeleton class=\"h-5\"/>\n    <ngs-skeleton class=\"h-5\"/>\n    <ngs-skeleton class=\"h-5\"/>\n    <ngs-skeleton class=\"h-5\"/>\n  </div>\n  <div class=\"flex gap-5\">\n    <ngs-skeleton class=\"h-7 w-24\"/>\n    <ngs-skeleton class=\"h-7 w-20\"/>\n    <ngs-skeleton class=\"h-7 w-28\"/>\n    <ngs-skeleton class=\"h-7 w-16\"/>\n  </div>\n</div>",
+      "minimalExample": "<div class=\"flex flex-col gap-8\">\n  <div class=\"w-1/2 flex flex-col gap-5\">\n    <ngs-skeleton-circle class=\"size-24\"/>\n    <ngs-skeleton class=\"h-5\"/>\n    <ngs-skeleton class=\"h-5\"/>\n    <ngs-skeleton class=\"h-5\"/>\n    <ngs-skeleton class=\"h-5\"/>\n  </div>\n  <div class=\"flex gap-5\">\n    <ngs-skeleton class=\"h-7 w-24\"/>\n    <ngs-skeleton class=\"h-7 w-20\"/>\n    <ngs-skeleton class=\"h-7 w-28\"/>\n    <ngs-skeleton class=\"h-7 w-16\"/>\n  </div>\n  <div class=\"flex items-center gap-5\">\n    <ngs-skeleton-circle class=\"size-10\"/>\n    <ngs-skeleton-circle class=\"size-14\"/>\n    <ngs-skeleton-circle class=\"size-20\"/>\n  </div>\n  <ngs-skeleton-rectangle class=\"h-32 w-full max-w-sm\"/>\n</div>",
       "exampleFiles": [
         {
           "name": "basic-skeleton-example",
           "title": "Basic skeleton",
           "file": "projects/docs/src/app/components/skeleton/_examples/basic-skeleton-example/basic-skeleton-example.html",
-          "source": "<div class=\"flex flex-col gap-8\">\n  <div class=\"w-1/2 flex flex-col gap-5\">\n    <ngs-skeleton roundedFull class=\"size-24\"/>\n    <ngs-skeleton class=\"h-5\"/>\n    <ngs-skeleton class=\"h-5\"/>\n    <ngs-skeleton class=\"h-5\"/>\n    <ngs-skeleton class=\"h-5\"/>\n  </div>\n  <div class=\"flex gap-5\">\n    <ngs-skeleton class=\"h-7 w-24\"/>\n    <ngs-skeleton class=\"h-7 w-20\"/>\n    <ngs-skeleton class=\"h-7 w-28\"/>\n    <ngs-skeleton class=\"h-7 w-16\"/>\n  </div>\n</div>"
+          "source": "<div class=\"flex flex-col gap-8\">\n  <div class=\"w-1/2 flex flex-col gap-5\">\n    <ngs-skeleton-circle class=\"size-24\"/>\n    <ngs-skeleton class=\"h-5\"/>\n    <ngs-skeleton class=\"h-5\"/>\n    <ngs-skeleton class=\"h-5\"/>\n    <ngs-skeleton class=\"h-5\"/>\n  </div>\n  <div class=\"flex gap-5\">\n    <ngs-skeleton class=\"h-7 w-24\"/>\n    <ngs-skeleton class=\"h-7 w-20\"/>\n    <ngs-skeleton class=\"h-7 w-28\"/>\n    <ngs-skeleton class=\"h-7 w-16\"/>\n  </div>\n  <div class=\"flex items-center gap-5\">\n    <ngs-skeleton-circle class=\"size-10\"/>\n    <ngs-skeleton-circle class=\"size-14\"/>\n    <ngs-skeleton-circle class=\"size-20\"/>\n  </div>\n  <ngs-skeleton-rectangle class=\"h-32 w-full max-w-sm\"/>\n</div>"
         }
       ],
       "previewAsset": "projects/components/skeleton/preview.svg",
       "selectors": [
-        "ngs-skeleton"
+        "ngs-skeleton",
+        "ngs-skeleton-circle",
+        "ngs-skeleton-rectangle"
       ],
       "exportedSymbols": [
-        "Skeleton"
+        "Skeleton",
+        "SkeletonCircle",
+        "SkeletonRectangle"
       ],
       "inputs": [
         "roundedFull"
@@ -9192,6 +9196,7 @@
         "--ngs-color-neutral-300",
         "--ngs-color-neutral-500",
         "--ngs-color-neutral-600",
+        "--ngs-radius-full",
         "--ngs-radius-xl",
         "--ngs-skeleton-from-bg",
         "--ngs-skeleton-item-border-radius",

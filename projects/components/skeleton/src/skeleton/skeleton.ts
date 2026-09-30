@@ -6,10 +6,10 @@ import { booleanAttribute, Component, input, ChangeDetectionStrategy } from '@an
   imports: [],
   template: '',
   styleUrl: './skeleton.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'ngs-skeleton',
-    '[class.rounded-full]': 'roundedFull'
+    '[class.rounded-full]': 'roundedFull()'
   }
 })
 export class Skeleton {

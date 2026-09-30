@@ -1,10 +1,17 @@
 <p>
-  The NgStarter Angular Skeleton component lets you show placeholder blocks for loading content when the final layout is already known. Use ngs-skeleton to preserve layout while cards, lists, table rows, dashboard widgets, chart areas, avatars, text lines, or media blocks are loading. It includes examples for Basic Skeleton.
+  The NgStarter Angular Skeleton components preserve layout while content is loading. Import
+  Skeleton, SkeletonCircle, and SkeletonRectangle from
+  <code>@ngstarter-ui/components/skeleton</code> for text lines, avatars, cards, and media blocks.
 </p>
 
 <h3 id="basic-skeleton">Basic Skeleton</h3>
 <p>
   Use Skeleton blocks to approximate the loaded layout with TailwindCSS size and layout utilities.
+  Use <code>ngs-skeleton-circle</code> with a <code>size-*</code> class for avatars and icons,
+  and <code>ngs-skeleton-rectangle</code> with <code>h-*</code> and <code>w-*</code> classes
+  for cards and media. All variants share the same loading animation and theme colors.
+  Rectangular corners follow the theme radius: <code>1rem</code> in default and
+  <code>0.25rem</code> in chalk. Circle placeholders remain fully round in both themes.
 </p>
 <ngs-playground exampleUrl="_docs/components/skeleton/_examples" exampleName="basic-skeleton-example">
   <app-basic-skeleton-example/>

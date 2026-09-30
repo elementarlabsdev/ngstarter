@@ -1,15 +1,19 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   Skeleton,
+  SkeletonCircle,
+  SkeletonRectangle,
 } from '@ngstarter-ui/components/skeleton';
 
 @Component({
   selector: 'app-basic-skeleton-example',
   imports: [
-    Skeleton
+    Skeleton,
+    SkeletonCircle,
+    SkeletonRectangle
   ],
   templateUrl: './basic-skeleton-example.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './basic-skeleton-example.scss'
 })
 export class BasicSkeletonExample {

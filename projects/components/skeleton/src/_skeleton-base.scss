@@ -1,0 +1,28 @@
+@mixin skeleton-base {
+  :host {
+    --ngs-skeleton-item-border-radius: var(--ngs-radius-xl);
+    --ngs-skeleton-from-bg: var(--ngs-color-neutral-200);
+    --ngs-skeleton-to-bg: var(--ngs-color-neutral-300);
+
+    display: block;
+    background: linear-gradient(90deg, var(--ngs-skeleton-from-bg), var(--ngs-skeleton-to-bg));
+    border-radius: var(--ngs-skeleton-item-border-radius);
+    flex: none;
+    animation: ngs-skeleton-loading 1s linear infinite alternate;
+
+    @keyframes ngs-skeleton-loading {
+      0% {
+        background: var(--ngs-skeleton-from-bg);
+      }
+
+      100% {
+        background: var(--ngs-skeleton-to-bg);
+      }
+    }
+  }
+
+  :host-context(html.dark) {
+    --ngs-skeleton-from-bg: var(--ngs-color-neutral-500);
+    --ngs-skeleton-to-bg: var(--ngs-color-neutral-600);
+  }
+}

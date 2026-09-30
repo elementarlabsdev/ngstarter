@@ -1,0 +1,9 @@
+@use '../skeleton-base';
+
+@include skeleton-base.skeleton-base;
+
+:host {
+  --ngs-skeleton-item-border-radius: var(--ngs-radius-full);
+
+  aspect-ratio: 1;
+}
