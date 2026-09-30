@@ -1,0 +1,155 @@
+<app-page>
+  <h1 appPageTitle>Surface and Input</h1>
+  <div appPageContent>
+    <section>
+      <p>
+        <code>ngsHeadlessEditorSurface</code> connects an editor to a <code>contenteditable</code> element. It
+        renders the document, maps native selection to model points, and turns browser input into editor
+        operations. You own everything around it: container, toolbars, menus, and styles.
+      </p>
+      <ngs-playground exampleUrl="_docs/libraries/headless-editor/_examples" exampleName="bubble-menu-example">
+    @defer (on viewport) {
+      <app-bubble-menu-example/>
+    } @placeholder {
+      <div class="example-placeholder">Loading example…</div>
+    }
+  </ngs-playground>
+    </section>
+
+    <section>
+      <h2>Inputs</h2>
+      <table>
+        <thead><tr><th>Input</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>placeholder</code></td><td>Write something…</td><td>Text written to the placeholder attribute of the first empty block while the document is empty.</td></tr>
+          <tr><td><code>ariaLabel</code></td><td>Rich text editor</td><td>Accessible name of the textbox.</td></tr>
+          <tr><td><code>disabled</code></td><td>false</td><td>Makes the surface non-editable and ignores input. The editor itself stays writable through its API; use <code>editor.setReadOnly()</code> to lock the document.</td></tr>
+          <tr><td><code>spellcheck</code></td><td>true</td><td>Native spellcheck attribute.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Host attributes</h2>
+      <p>The surface element exposes its state as attributes you can style and test against.</p>
+      <table>
+        <thead><tr><th>Attribute</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>class="ngs-headless-editor-surface"</code></td><td>Stable class hook. No styles are attached to it.</td></tr>
+          <tr><td><code>role="textbox"</code>, <code>aria-multiline</code></td><td>Accessibility role of the editing area.</td></tr>
+          <tr><td><code>contenteditable</code></td><td><code>false</code> while the surface is disabled or the editor is read-only.</td></tr>
+          <tr><td><code>aria-disabled</code></td><td>Mirrors the effective disabled state.</td></tr>
+          <tr><td><code>data-empty</code></td><td>Present while the document has no content.</td></tr>
+          <tr><td><code>data-placeholder</code></td><td>The placeholder text, for host-level placeholder styles.</td></tr>
+        </tbody>
+      </table>
+      <p>Rendered content carries attributes that connect the DOM to the model:</p>
+      <table>
+        <thead><tr><th>Attribute</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>data-ngs-headless-editor-block-id</code></td><td>Block id on every block element.</td></tr>
+          <tr><td><code>data-ngs-headless-editor-block-type</code></td><td>Block type on every block element.</td></tr>
+          <tr><td><code>data-ngs-headless-editor-placeholder</code></td><td>Placeholder text on the first empty text block of an empty document.</td></tr>
+          <tr><td><code>data-ngs-headless-editor-mark</code></td><td>Mark type on every mark wrapper element.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Styling</h2>
+      <p>
+        Blocks and marks are created by the directive, outside your template, so emulated component styles do
+        not reach them. Scope styles by the surface class and use <code>::ng-deep</code>, put them in a global
+        stylesheet, or use <code>ViewEncapsulation.None</code> on the host component.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="styleCode" language="scss"/>
+    </section>
+
+    <section>
+      <h2>Browser input</h2>
+      <p>
+        The surface handles <code>beforeinput</code> and applies the matching editor operation instead of
+        letting the browser edit the DOM. The resulting change is rendered from the model.
+      </p>
+      <table>
+        <thead><tr><th>Input type</th><th>Operation</th></tr></thead>
+        <tbody>
+          <tr><td><code>insertText</code></td><td><code>insertText()</code> at the selection, with stored marks.</td></tr>
+          <tr><td><code>insertReplacementText</code></td><td>Replaces the range reported by the browser (spellcheck and autocorrect).</td></tr>
+          <tr><td><code>insertParagraph</code>, <code>insertLineBreak</code></td><td><code>splitBlock()</code>.</td></tr>
+          <tr><td><code>deleteContentBackward</code>, <code>deleteContentForward</code></td><td>Deletes one user-perceived character or merges blocks at a boundary.</td></tr>
+          <tr><td><code>deleteWord*</code>, <code>deleteSoftLine*</code>, <code>deleteHardLine*</code></td><td>Deletes the target range reported by the browser (for example Ctrl+Backspace or Cmd+Backspace).</td></tr>
+          <tr><td><code>deleteByCut</code></td><td>Deletes the selection after the browser copied it.</td></tr>
+          <tr><td><code>historyUndo</code>, <code>historyRedo</code></td><td><code>undo()</code>, <code>redo()</code>.</td></tr>
+          <tr><td><code>formatBold</code>, <code>formatItalic</code>, <code>formatStrikeThrough</code></td><td>Toggles the corresponding mark.</td></tr>
+          <tr><td>other <code>format*</code>, list, rule, and link commands</td><td>Blocked: the model only contains what plugins define.</td></tr>
+          <tr><td>composition, drop, and unknown insertions</td><td>The browser edits the DOM; the touched blocks are read back into the model and re-rendered.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Keyboard</h2>
+      <p>
+        On <code>keydown</code> the surface asks the editor to resolve plugin key bindings. When no binding
+        matches, <code>Mod-z</code> undoes and <code>Mod-Shift-z</code> or <code>Mod-y</code> redoes, because
+        the browser has no native undo stack for model-driven edits. <code>Mod</code> is Ctrl or Cmd. See
+        <a routerLink="/libraries/headless-editor/commands">key bindings</a>.
+      </p>
+    </section>
+
+    <section>
+      <h2>Paste</h2>
+      <ol>
+        <li>Plugins with <code>handlePaste</code> run in registration order; the first that returns <code>true</code> wins.</li>
+        <li>Otherwise the plain-text clipboard content is inserted. Line breaks create new paragraphs.</li>
+      </ol>
+      <p>HTML from the clipboard is never inserted as-is.</p>
+    </section>
+
+    <section>
+      <h2>IME composition</h2>
+      <p>
+        While an input method composes text (Chinese, Japanese, Korean, and others), the browser owns the DOM and
+        the surface does not re-render. On <code>compositionend</code> the touched blocks are read back into the
+        model as one change.
+      </p>
+    </section>
+
+    <section>
+      <h2>Rendering</h2>
+      <p>
+        Rendering is keyed by block id. Blocks whose object did not change keep their DOM elements, so typing in
+        one paragraph does not touch the others, and spellcheck marks and component blocks survive edits
+        elsewhere. Browser-made DOM changes are tracked with a <code>MutationObserver</code>, read back only for
+        the touched blocks, and replaced by the canonical rendering, which also removes markup the browser may
+        have inserted.
+      </p>
+      <p class="note warning">
+        Do not change the surface DOM yourself. Change the document through the editor; the DOM follows.
+      </p>
+    </section>
+
+    <section>
+      <h2>Methods</h2>
+      <p>Get the directive with <code>viewChild(NgsHeadlessEditorSurface)</code> or a template reference with <code>#surface="ngsHeadlessEditorSurface"</code>.</p>
+      <table>
+        <thead><tr><th>Method</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>focus()</code></td><td>Focuses the surface and applies the model selection to the DOM. Call it after changing the selection programmatically.</td></tr>
+          <tr><td><code>getSelectionRect()</code></td><td>Bounding rectangle of a non-collapsed selection inside the surface, or <code>null</code>. Use it to position bubble menus.</td></tr>
+          <tr><td><code>getBlockElement(blockId)</code></td><td>The element currently rendering a block, for overlays such as drag handles or comments.</td></tr>
+        </tbody>
+      </table>
+      <ngs-code-highlighter class="code-block" [code]="bubbleCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>Server-side rendering</h2>
+      <p>
+        The surface starts rendering and listening to the document in <code>afterNextRender()</code>, so it
+        does nothing on the server. Wrap heavy editors in <code>&#64;defer</code> if they are below the fold.
+      </p>
+    </section>
+  </div>
+</app-page>

@@ -23,7 +23,7 @@ import {
   CommentEditorToolbar
 } from '@ngstarter-ui/components/comment-editor';
 import { SafeHtmlPipe } from '@ngstarter-ui/components/core';
-import { NgsEditorDocument } from '@ngstarter-ui/components/editor';
+import { NgsHeadlessEditorDocument } from '@ngstarter-ui/components/headless-editor';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
 
@@ -61,13 +61,13 @@ import { Tooltip } from '@ngstarter-ui/components/tooltip';
 })
 export class BasicCommentEditorExample {
   protected readonly comments: string[] = [];
-  protected submittedDocument: NgsEditorDocument | null = null;
+  protected submittedDocument: NgsHeadlessEditorDocument | null = null;
 
   protected readonly uploadImage = (_file: Blob): Promise<string> => (
     Promise.resolve('/assets/image-viewer/1.jpg')
   );
 
-  protected onSubmitted(document: NgsEditorDocument): void {
+  protected onSubmitted(document: NgsHeadlessEditorDocument): void {
     this.submittedDocument = document;
   }
 

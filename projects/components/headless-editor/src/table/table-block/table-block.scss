@@ -1,0 +1,27 @@
+// Structural styles only: the headless editor leaves the visual design to the host.
+:host {
+  display: block;
+  overflow-x: auto;
+}
+
+.ngs-headless-editor-table {
+  border-collapse: collapse;
+}
+
+.ngs-headless-editor-table-cell {
+  min-width: 3rem;
+  vertical-align: top;
+}
+
+.ngs-headless-editor-table-cell-content,
+.ngs-headless-editor-table-cell-editor {
+  display: block;
+  min-height: 1.5em;
+  outline: none;
+  cursor: text;
+}
+
+// Lines of the cell editor are paragraphs rendered by the nested surface.
+:host ::ng-deep .ngs-headless-editor-table-cell-editor > * {
+  margin: 0;
+}

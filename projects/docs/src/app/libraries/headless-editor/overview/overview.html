@@ -1,0 +1,92 @@
+<app-page>
+  <h1 appPageTitle>Headless Editor</h1>
+  <div appPageContent>
+    <section>
+      <p>
+        Headless Editor is the rich text engine behind NgStarter editors. It gives you a signal-based
+        editor service, a versioned JSON document, a <code>contenteditable</code> surface that keeps the
+        DOM and native selection in sync with that document, undo history, and a small plugin contract.
+        It ships no visual design: layout, toolbars, menus, and styles belong to your application.
+      </p>
+      <p>
+        Everything is exported from <code>&#64;ngstarter-ui/components/headless-editor</code>.
+      </p>
+    </section>
+
+    <section>
+      <h2>Live example</h2>
+      <p>
+        A formatting toolbar, block types, undo and redo, and keyboard shortcuts, all built from plain
+        Angular markup on top of the headless core.
+      </p>
+      <ngs-playground exampleUrl="_docs/libraries/headless-editor/_examples" exampleName="toolbar-editor-example">
+    @defer (on viewport) {
+      <app-toolbar-editor-example/>
+    } @placeholder {
+      <div class="example-placeholder">Loading example…</div>
+    }
+  </ngs-playground>
+    </section>
+
+    <section>
+      <h2>When to use it</h2>
+      <ul>
+        <li>You need an editing experience with your own layout, toolbar, and styling.</li>
+        <li>Content must be stored and exchanged as structured JSON rather than HTML strings.</li>
+        <li>You want to add custom inline formats, block types, or embedded Angular components.</li>
+        <li>You are building a product-specific editor: notes, announcements, task descriptions, templates.</li>
+      </ul>
+      <p>
+        If a finished comment composer is enough, use
+        <a routerLink="/components/comment-editor">Comment Editor</a>, which is built on this engine.
+        For page-like documents assembled from rich blocks, see
+        <a routerLink="/libraries/content-editor/overview">Content Editor</a>.
+      </p>
+    </section>
+
+    <section>
+      <h2>How it fits together</h2>
+      <ol>
+        <li><strong>Document model</strong>: immutable, versioned JSON made of blocks, text runs, and marks.</li>
+        <li><strong>NgsHeadlessEditor</strong>: a scoped service holding the document, selection, and history as signals, with editing operations.</li>
+        <li><strong>Plugins</strong>: typed objects that register blocks, marks, commands, key bindings, paste handling, services, and lifecycle hooks.</li>
+        <li><strong>ngsHeadlessEditorSurface</strong>: turns browser input into editor operations and renders the document, re-rendering only the blocks that changed.</li>
+        <li><strong>ngsHeadlessEditorCommand</strong>: binds commands to toolbar controls with active and disabled state.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Features</h2>
+      <ul>
+        <li>Signals for document, selection, focus, read-only, history, and change origin.</li>
+        <li>Inline marks with attributes: bold, italic, strike, code, text and background color, or your own.</li>
+        <li>Text blocks and atomic blocks, including blocks rendered by Angular components.</li>
+        <li>Tables with formatted cells, row, column, and header commands, and paste from spreadsheets.</li>
+        <li>Undo and redo with word-level grouping and keyboard shortcuts.</li>
+        <li>Word and line deletion, spellcheck replacements, IME composition, drag and drop, and plain-text paste.</li>
+        <li>Layout-independent shortcuts: bindings resolve on non-Latin keyboard layouts too.</li>
+        <li>Keyed rendering that keeps unchanged blocks untouched while typing.</li>
+        <li>SSR-safe: DOM work starts after the first browser render.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Guides</h2>
+      <div class="cards">
+        <a routerLink="/libraries/headless-editor/getting-started"><strong>Getting Started</strong><span>Create an editor, render it, and read its value.</span></a>
+        <a routerLink="/libraries/headless-editor/document-model"><strong>Document Model</strong><span>Blocks, text runs, marks, selections, and normalization.</span></a>
+        <a routerLink="/libraries/headless-editor/surface"><strong>Surface and Input</strong><span>Browser input, rendering, styling, and floating menus.</span></a>
+        <a routerLink="/libraries/headless-editor/commands"><strong>Commands and Toolbar</strong><span>Typed commands, toolbar state, and key bindings.</span></a>
+        <a routerLink="/libraries/headless-editor/marks"><strong>Marks and Formatting</strong><span>Inline formats, attributes, and stored marks.</span></a>
+        <a routerLink="/libraries/headless-editor/blocks"><strong>Blocks</strong><span>Headings, lists, code lines, and atomic blocks.</span></a>
+        <a routerLink="/libraries/headless-editor/component-blocks"><strong>Component Blocks</strong><span>Embed Angular components in the document.</span></a>
+        <a routerLink="/libraries/headless-editor/tables"><strong>Tables</strong><span>Tables with row and column commands and spreadsheet paste.</span></a>
+        <a routerLink="/libraries/headless-editor/plugins"><strong>Plugins</strong><span>Paste handling, services, lifecycle, and runtime plugins.</span></a>
+        <a routerLink="/libraries/headless-editor/mentions"><strong>Mentions</strong><span>Caret menus with custom Angular option components.</span></a>
+        <a routerLink="/libraries/headless-editor/selection-history"><strong>Selection and History</strong><span>Programmatic selection and undo grouping.</span></a>
+        <a routerLink="/libraries/headless-editor/serialization"><strong>Forms and Serialization</strong><span>Reactive forms, validation, JSON, HTML, and text.</span></a>
+        <a routerLink="/libraries/headless-editor/api"><strong>Api</strong><span>Reference for every exported symbol.</span></a>
+      </div>
+    </section>
+  </div>
+</app-page>

@@ -7,7 +7,7 @@ export const routes: Routes = [
     loadComponent: () => import('../@meta/category-overview/category-overview').then(c => c.CategoryOverview),
     title: 'Angular UI Libraries',
     data: {
-      seoIntro: 'The NgStarter Angular UI libraries documentation covers advanced components for data grids, form builders, Kanban boards, visual builders, content editors, image design, PDF viewing, and video playback in complex admin and product workflows.'
+      seoIntro: 'The NgStarter Angular UI libraries documentation covers advanced components for data grids, form builders, Kanban boards, visual builders, content editors, a headless rich text editor, image design, PDF viewing, and video playback in complex admin and product workflows.'
     }
   },
   {
@@ -49,6 +49,11 @@ export const routes: Routes = [
     path: 'content-editor',
     loadChildren: () => import('./content-editor/routes').then(m => m.routes),
     title: 'Content Editor'
+  },
+  {
+    path: 'headless-editor',
+    loadChildren: () => import('./headless-editor/routes').then(m => m.routes),
+    title: 'Headless Editor'
   },
   {
     path: 'visual-builder',

@@ -1,0 +1,33 @@
+@reference 'tailwindcss';
+
+:host {
+  .surface {
+    border-color: var(--ngs-color-border);
+    background: var(--ngs-color-surface);
+    color: var(--ngs-color-on-surface);
+
+    &:focus {
+      outline: 2px solid var(--ngs-color-primary);
+      outline-offset: 2px;
+    }
+
+    ::ng-deep {
+      .ngs-headless-editor-mention {
+        border-radius: var(--ngs-radius-xs);
+        background: var(--ngs-state-selected-bg);
+        color: var(--ngs-color-primary);
+      }
+
+      [data-ngs-headless-editor-placeholder] {
+        position: relative;
+
+        &::before {
+          content: attr(data-ngs-headless-editor-placeholder);
+          position: absolute;
+          color: var(--ngs-color-on-surface-variant);
+          pointer-events: none;
+        }
+      }
+    }
+  }
+}

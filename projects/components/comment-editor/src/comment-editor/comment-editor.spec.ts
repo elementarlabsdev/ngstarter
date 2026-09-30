@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
-  createNgsEditorDocument,
-  getNgsEditorDocumentText,
-  NgsEditorSurface
-} from '@ngstarter-ui/components/editor';
+  createNgsHeadlessEditorDocument,
+  getNgsHeadlessEditorDocumentText,
+  NgsHeadlessEditorSurface
+} from '@ngstarter-ui/components/headless-editor';
 import { serializeCommentEditorDocument } from '../comment-editor-serializer';
 import { CommentEditor } from './comment-editor';
 
@@ -38,7 +38,7 @@ describe('CommentEditor', () => {
 
   it('aligns the empty placeholder block with the collapsed footer controls', () => {
     const surface = fixture.nativeElement.querySelector('.content') as HTMLElement;
-    const paragraph = surface.querySelector('[data-ngs-editor-placeholder]') as HTMLElement;
+    const paragraph = surface.querySelector('[data-ngs-headless-editor-placeholder]') as HTMLElement;
     const surfaceStyles = getComputedStyle(surface);
     const paragraphStyles = getComputedStyle(paragraph);
     const expectedTop = Number.parseFloat(surfaceStyles.paddingTop);
@@ -53,7 +53,7 @@ describe('CommentEditor', () => {
     fixture.detectChanges();
 
     const surface = fixture.nativeElement.querySelector('.content') as HTMLElement;
-    const paragraph = surface.querySelector('[data-ngs-editor-placeholder]') as HTMLElement;
+    const paragraph = surface.querySelector('[data-ngs-headless-editor-placeholder]') as HTMLElement;
     const surfaceRect = surface.getBoundingClientRect();
     const paragraphRect = paragraph.getBoundingClientRect();
     const styles = getComputedStyle(surface);
@@ -91,13 +91,13 @@ describe('CommentEditor', () => {
     const sent: string[] = [];
     component.submitted.subscribe(value => submitted.push(value));
     component.sent.subscribe(value => sent.push(value));
-    component.editor.setDocument(createNgsEditorDocument('Hello'));
+    component.editor.setDocument(createNgsHeadlessEditorDocument('Hello'));
 
     component.send();
 
     expect(submitted).toHaveLength(1);
     expect(sent).toEqual(['<p>Hello</p>']);
-    expect(getNgsEditorDocumentText(component.editor.document())).toBe('');
+    expect(getNgsHeadlessEditorDocumentText(component.editor.document())).toBe('');
   });
 
   it('keeps the legacy empty HTML output when empty content is explicitly allowed', () => {
@@ -110,8 +110,8 @@ describe('CommentEditor', () => {
     expect(sent).toEqual(['']);
   });
 
-  it('runs restored block commands through NgsEditor', () => {
-    component.editor.setDocument(createNgsEditorDocument('Quote'));
+  it('runs restored block commands through NgsHeadlessEditor', () => {
+    component.editor.setDocument(createNgsHeadlessEditorDocument('Quote'));
 
     component.api.runCommand('toggleBlockquote');
     expect(component.editor.document().blocks[0].type).toBe('blockquote');
@@ -122,7 +122,7 @@ describe('CommentEditor', () => {
   });
 
   it('positions the floating menu from the current selection rectangle', () => {
-    component.editor.setDocument(createNgsEditorDocument('Selected'));
+    component.editor.setDocument(createNgsHeadlessEditorDocument('Selected'));
     const block = component.editor.document().blocks[0];
     component.editor.setSelection({
       anchor: { blockId: block.id, offset: 0 },
@@ -131,7 +131,7 @@ describe('CommentEditor', () => {
     component.editor.setFocused(true);
     fixture.detectChanges();
 
-    const surface = (component as any).surface() as NgsEditorSurface;
+    const surface = (component as any).surface() as NgsHeadlessEditorSurface;
     vi.spyOn(surface, 'getSelectionRect').mockReturnValue(new DOMRect(100, 200, 80, 20));
     (component as any).positionBubbleMenu();
 
@@ -143,7 +143,7 @@ describe('CommentEditor', () => {
   });
 
   it('renders visible links without a Tiptap adapter and serializes their attributes', async () => {
-    component.editor.setDocument(createNgsEditorDocument('NgStarter'));
+    component.editor.setDocument(createNgsHeadlessEditorDocument('NgStarter'));
     const block = component.editor.document().blocks[0];
     component.editor.setSelection({
       anchor: { blockId: block.id, offset: 0 },
@@ -155,7 +155,7 @@ describe('CommentEditor', () => {
     await fixture.whenStable();
 
     const anchor = fixture.nativeElement.querySelector(
-      '.content a[data-ngs-editor-mark="link"]'
+      '.content a[data-ngs-headless-editor-mark="link"]'
     ) as HTMLAnchorElement;
     const click = new MouseEvent('click', { bubbles: true, cancelable: true });
 
@@ -171,8 +171,26 @@ describe('CommentEditor', () => {
     );
   });
 
+  it('never serializes an unsafe href from stored JSON', () => {
+    const html = serializeCommentEditorDocument({
+      version: 1,
+      blocks: [{
+        id: 'paragraph-unsafe-link',
+        type: 'paragraph',
+        content: [{
+          type: 'text',
+          text: 'Click',
+          marks: [{ type: 'link', attrs: { href: 'javascript:alert(1)' } }]
+        }]
+      }]
+    });
+
+    expect(html).not.toContain('href="javascript:');
+    expect(html).toContain('href="https://javascript:alert(1)"');
+  });
+
   it('renders, serializes, and removes text and background colors', async () => {
-    component.editor.setDocument(createNgsEditorDocument('Colored'));
+    component.editor.setDocument(createNgsHeadlessEditorDocument('Colored'));
     const block = component.editor.document().blocks[0];
     component.editor.setSelection({
       anchor: { blockId: block.id, offset: 0 },
@@ -185,10 +203,10 @@ describe('CommentEditor', () => {
     await fixture.whenStable();
 
     const textColor = fixture.nativeElement.querySelector(
-      '.content [data-ngs-editor-mark="textColor"]'
+      '.content [data-ngs-headless-editor-mark="textColor"]'
     ) as HTMLElement;
     const backgroundColor = fixture.nativeElement.querySelector(
-      '.content [data-ngs-editor-mark="backgroundColor"]'
+      '.content [data-ngs-headless-editor-mark="backgroundColor"]'
     ) as HTMLElement;
     const html = serializeCommentEditorDocument(component.editor.document());
 
@@ -202,8 +220,8 @@ describe('CommentEditor', () => {
     expect(component.api.unsetBackgroundColor()).toBe(true);
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('[data-ngs-editor-mark="textColor"]')).toBeNull();
-    expect(fixture.nativeElement.querySelector('[data-ngs-editor-mark="backgroundColor"]')).toBeNull();
+    expect(fixture.nativeElement.querySelector('[data-ngs-headless-editor-mark="textColor"]')).toBeNull();
+    expect(fixture.nativeElement.querySelector('[data-ngs-headless-editor-mark="backgroundColor"]')).toBeNull();
   });
 
   it('inserts YouTube as a JSON media block', () => {

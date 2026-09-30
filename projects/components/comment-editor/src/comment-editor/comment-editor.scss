@@ -27,11 +27,11 @@
     // Angular's emulated-encapsulation attribute. Keep document styles scoped by
     // the host-owned `.content` boundary while allowing them to reach those nodes.
     ::ng-deep {
-      [data-ngs-editor-placeholder] {
+      [data-ngs-headless-editor-placeholder] {
         position: relative;
 
         &::before {
-          content: attr(data-ngs-editor-placeholder);
+          content: attr(data-ngs-headless-editor-placeholder);
           color: var(--ngs-color-neutral-500);
           pointer-events: none;
           position: absolute;
@@ -89,7 +89,7 @@
         font-family: var(--ngs-font-family-mono);
       }
 
-      a[data-ngs-editor-mark='link'] {
+      a[data-ngs-headless-editor-mark='link'] {
         color: var(--ngs-color-primary);
         text-decoration-line: underline;
         text-decoration-thickness: 1px;

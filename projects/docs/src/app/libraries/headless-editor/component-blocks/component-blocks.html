@@ -1,0 +1,82 @@
+<app-page>
+  <h1 appPageTitle>Component Blocks</h1>
+  <div appPageContent>
+    <section>
+      <p>
+        A block can be rendered by an Angular component. Use component blocks for embeds, callouts, images with
+        captions, charts, checklists, or anything with its own controls.
+      </p>
+      <ngs-playground exampleUrl="_docs/libraries/headless-editor/_examples" exampleName="component-block-example">
+    @defer (on viewport) {
+      <app-component-block-example/>
+    } @placeholder {
+      <div class="example-placeholder">Loading example…</div>
+    }
+  </ngs-playground>
+    </section>
+
+    <section>
+      <h2>Registering a component</h2>
+      <ngs-code-highlighter class="code-block" [code]="pluginCode" language="typescript"/>
+      <ul>
+        <li><code>editorComponent</code> renders the block while the surface is editable.</li>
+        <li><code>rendererComponent</code> renders it while the surface is disabled or the editor is read-only.</li>
+        <li>If only one of them is defined, it is used in both modes.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Writing the component</h2>
+      <ngs-code-highlighter class="code-block" [code]="componentCode" language="typescript"/>
+      <ul>
+        <li>The block element (<code>tagName</code>) becomes the component host and is not editable by the browser.</li>
+        <li>The block is passed to a <code>block</code> input when the component declares one. Implement <code>NgsHeadlessEditorBlockComponent</code> to get the shape checked.</li>
+        <li>The component runs in the injector of the surface, so it can inject <code>NgsHeadlessEditor</code> and services provided by plugins.</li>
+        <li>Write changes with <code>updateBlock()</code> or <code>removeBlock()</code>; they are recorded in history and can be undone.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Lifecycle</h2>
+      <ul>
+        <li>The instance is created when the block is first rendered.</li>
+        <li>When the block changes but keeps its id and type, the same instance receives the new <code>block</code> input; its DOM, focus, and internal state are kept.</li>
+        <li>When the block is removed, its type changes, the plugin set changes, or the read-only mode switches components, the instance is destroyed.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Inputs inside blocks</h2>
+      <p>
+        Events that start inside a component block, such as typing in a textarea, pressing shortcuts in an
+        input, or composing text with an IME, belong to that control. The surface ignores them, so the editor does
+        not intercept typing, Ctrl+Z works natively in the field, and the component decides when to call
+        <code>updateBlock()</code>.
+      </p>
+    </section>
+
+    <section>
+      <h2>Rich text inside a block</h2>
+      <p>
+        For formatted text inside a component, such as a caption, a callout body, or a table cell, use a nested
+        editor instead of a plain field. <code>provideNgsHeadlessEditorInlineRegion()</code> gives the component
+        its own small editor that reuses the marks, commands, and shortcuts of the document editor and records
+        changes in the document history. While active it is the document editor's inline target, so the regular
+        toolbar formats it. The table plugin is built this way.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="regionCode" language="typescript"/>
+      <p>
+        Content is exchanged as text runs. Render inactive content with <code>ngsHeadlessEditorRuns</code>, which
+        uses the same mark definitions as the surface.
+      </p>
+    </section>
+
+    <section>
+      <h2>Styling</h2>
+      <p>
+        Component styles are encapsulated as usual. The host element is created by the surface, so style it from
+        the surface with <code>::ng-deep</code> or from the component with <code>:host</code>.
+      </p>
+    </section>
+  </div>
+</app-page>

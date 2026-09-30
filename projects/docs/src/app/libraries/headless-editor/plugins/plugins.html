@@ -1,0 +1,93 @@
+<app-page>
+  <h1 appPageTitle>Plugins</h1>
+  <div appPageContent>
+    <section>
+      <p>
+        Everything an editor can do beyond plain paragraphs comes from plugins. A plugin is a typed object; the
+        built-in text and color features are plugins too. This example adds links with paste handling, a
+        shortcut that targets another plugin, a plugin-scoped statistics service, and a draft storage plugin that is
+        installed and removed at runtime.
+      </p>
+      <ngs-playground exampleUrl="_docs/libraries/headless-editor/_examples" exampleName="custom-plugin-example">
+    @defer (on viewport) {
+      <app-custom-plugin-example/>
+    } @placeholder {
+      <div class="example-placeholder">Loading example…</div>
+    }
+  </ngs-playground>
+    </section>
+
+    <section>
+      <h2>Anatomy</h2>
+      <table>
+        <thead><tr><th>Member</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>id</code></td><td>Unique plugin id.</td></tr>
+          <tr><td><code>blocks</code></td><td>Block definitions. See <a routerLink="/libraries/headless-editor/blocks">Blocks</a>.</td></tr>
+          <tr><td><code>marks</code></td><td>Mark definitions. See <a routerLink="/libraries/headless-editor/marks">Marks</a>.</td></tr>
+          <tr><td><code>commands</code></td><td>Commands registered by id. See <a routerLink="/libraries/headless-editor/commands">Commands</a>.</td></tr>
+          <tr><td><code>keymap</code></td><td>Key bindings to command objects or ids, with optional payloads.</td></tr>
+          <tr><td><code>providers</code></td><td>Angular providers added to the editor scope.</td></tr>
+          <tr><td><code>handlePaste(event, editor)</code></td><td>Handles a paste and returns <code>true</code>, or returns <code>false</code> to pass it on.</td></tr>
+          <tr><td><code>setup(editor)</code></td><td>Runs when the plugin is installed. May return a cleanup function.</td></tr>
+        </tbody>
+      </table>
+      <ngs-code-highlighter class="code-block" [code]="pluginCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>Installing plugins</h2>
+      <ngs-code-highlighter class="code-block" [code]="installCode" language="typescript"/>
+      <p>
+        <code>withHeadlessEditorPlugin()</code> is the only way to contribute <code>providers</code>: they are
+        added next to the editor, so components and services in the editor scope can inject them.
+      </p>
+      <p>
+        Plugin ids, command ids, mark types, and block types must be unique across the installed set. A conflict
+        throws an error that names the duplicate.
+      </p>
+    </section>
+
+    <section>
+      <h2>Changing plugins at runtime</h2>
+      <p>
+        <code>setPlugins()</code> replaces the whole set atomically. Cleanups of the previous set run, then
+        <code>setup()</code> runs for every plugin of the new set, and the surface re-renders because block and
+        mark definitions may have changed. Passing the same plugins in the same order does nothing.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="runtimeCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>Paste handlers</h2>
+      <p>
+        Handlers run in plugin order before the plain-text fallback. Read the clipboard, change the document
+        through the editor, and return <code>true</code> to stop further handling.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="pasteCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>Lifecycle</h2>
+      <ngs-code-highlighter class="code-block" [code]="setupCode" language="typescript"/>
+      <p class="note warning">
+        <code>setup()</code> also runs during server-side rendering when the editor is created there, so guard
+        browser APIs. Prefer event listeners over timers: a repeating <code>setInterval</code> started inside
+        Angular's zone keeps the application from ever becoming stable, which blocks SSR and tests. If a plugin
+        needs a timer, run it outside the zone.
+      </p>
+    </section>
+
+    <section>
+      <h2>Configurable plugins</h2>
+      <p>
+        Export a factory function instead of a constant when a plugin has options, and keep command objects as
+        exported constants so toolbars can import them.
+      </p>
+      <p>
+        For a plugin with custom Angular menu content, see <a routerLink="/libraries/headless-editor/mentions">Mentions</a>.
+        Its <code>optionComponent</code> setting supplies a shared option renderer for the editor scope.
+      </p>
+    </section>
+  </div>
+</app-page>

@@ -1,0 +1,33 @@
+<div class="toolbar">
+  @for (item of types; track item.type) {
+    <button ngsButton="outlined" [ngsHeadlessEditorCommand]="setBlockType" [commandData]="item.type">
+      {{ item.label }}
+    </button>
+  }
+  <button ngsButton="outlined" (mousedown)="$event.preventDefault()" (click)="insertDivider()">
+    Insert divider
+  </button>
+</div>
+
+<div class="surface" ngsHeadlessEditorSurface ariaLabel="Checklist editor"></div>
+
+<table class="blocks">
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Text</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (block of editor.document().blocks; track block.id) {
+      <tr>
+        <td><code>{{ block.type }}</code></td>
+        <td>{{ blockText(block) || '—' }}</td>
+        <td>
+          <button ngsButton="text" (click)="remove(block)">Remove</button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

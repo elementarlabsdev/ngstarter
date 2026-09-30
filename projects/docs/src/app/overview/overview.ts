@@ -156,11 +156,6 @@ export class Overview {
       name: 'Comment Editor'
     },
     {
-      routerLink: '/components/editor',
-      imageUrl: 'assets/overview/comment-editor.svg',
-      name: 'Editor'
-    },
-    {
       routerLink: '/components/comparison-slider',
       imageUrl: 'assets/overview/comparison-slider.svg',
       name: 'Comparison Slider'

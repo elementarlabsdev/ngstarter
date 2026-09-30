@@ -191,11 +191,6 @@ export const routes: Routes = [
     title: 'Comment Editor'
   },
   {
-    path: 'editor',
-    loadChildren: () => import('./editor/routes').then(m => m.routes),
-    title: 'Editor'
-  },
-  {
     path: 'table',
     loadChildren: () => import('./table/routes').then(m => m.routes),
     title: 'Table'

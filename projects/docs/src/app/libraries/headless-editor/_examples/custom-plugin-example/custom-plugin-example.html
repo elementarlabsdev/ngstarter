@@ -1,0 +1,30 @@
+<div class="toolbar">
+  <ngs-form-field class="href-field">
+    <input ngsInput aria-label="Link URL" [ngModel]="href()" (ngModelChange)="href.set($event)">
+  </ngs-form-field>
+  <button ngsButton="outlined" [ngsHeadlessEditorCommand]="setLink" [commandData]="href()">
+    Apply link
+  </button>
+  <button ngsButton="outlined" [ngsHeadlessEditorCommand]="unsetLink">
+    Remove link
+  </button>
+</div>
+
+<div class="surface" ngsHeadlessEditorSurface ariaLabel="Editor with a link plugin"></div>
+
+<dl class="stats">
+  <div><dt>Words</dt><dd>{{ stats.words() }}</dd></div>
+  <div><dt>Characters</dt><dd>{{ stats.characters() }}</dd></div>
+  <div><dt>Linked runs</dt><dd>{{ stats.links() }}</dd></div>
+  <div><dt>Plugins</dt><dd>{{ editor.plugins().length }}</dd></div>
+  <div><dt>Draft</dt><dd>{{ restored() ? 'restored from a previous visit' : 'new' }}</dd></div>
+</dl>
+
+<div class="toolbar draft">
+  @if (draftInstalled) {
+    <button ngsButton="outlined" (click)="removeDraftPlugin()">Remove draft plugin (saves)</button>
+  } @else {
+    <button ngsButton="outlined" (click)="installDraftPlugin()">Install draft plugin (restores)</button>
+  }
+  <button ngsButton="text" (click)="forgetDraft()">Forget saved draft</button>
+</div>

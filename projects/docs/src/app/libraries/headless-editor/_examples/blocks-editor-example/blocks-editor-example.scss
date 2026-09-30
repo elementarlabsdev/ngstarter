@@ -1,0 +1,101 @@
+.surface {
+  display: block;
+  min-height: 9rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--ngs-color-border);
+  border-radius: var(--ngs-radius-md);
+  background: var(--ngs-color-surface);
+  color: var(--ngs-color-on-surface);
+  line-height: 1.6;
+  outline: none;
+
+  &:focus {
+    border-color: var(--ngs-color-primary);
+    box-shadow: 0 0 0 1px var(--ngs-color-primary);
+  }
+
+  // Blocks are created by the surface directive outside this template, so they
+  // do not carry Angular's emulated-encapsulation attribute: style them through
+  // ::ng-deep scoped by the surface class (or with global styles).
+  ::ng-deep {
+    > * {
+      margin: 0 0 0.5rem;
+    }
+
+    > :last-child {
+      margin-block-end: 0;
+    }
+
+    [data-ngs-headless-editor-placeholder] {
+      position: relative;
+
+      &::before {
+        content: attr(data-ngs-headless-editor-placeholder);
+        position: absolute;
+        inset-block-start: 0;
+        inset-inline-start: 0;
+        color: var(--ngs-color-neutral-500);
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-block-end: 0.75rem;
+
+  .active {
+    background: var(--ngs-state-selected-bg);
+    border-color: var(--ngs-color-primary);
+  }
+}
+
+.surface ::ng-deep {
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  // Each bullet item is its own <ul>: remove the gap so consecutive items read as one list.
+  ul {
+    margin-block: 0;
+    padding-inline-start: 1.25rem;
+    list-style: disc;
+  }
+
+  pre {
+    margin-block: 0;
+    padding: 0.125rem 0.75rem;
+    background: var(--ngs-color-surface-container);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.875rem;
+  }
+
+  hr {
+    margin-block: 0.75rem;
+    border: 0;
+    border-block-start: 1px solid var(--ngs-color-border);
+  }
+}
+
+.blocks {
+  width: 100%;
+  margin-block-start: 1rem;
+  font-size: 0.875rem;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 0.25rem 0.5rem;
+    border-block-end: 1px solid var(--ngs-color-border);
+    text-align: start;
+  }
+
+  th {
+    color: var(--ngs-color-on-surface-variant);
+    font-weight: 500;
+  }
+}

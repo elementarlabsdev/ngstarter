@@ -22,26 +22,26 @@ import { Button } from '@ngstarter-ui/components/button';
 import {
   basicTextEditorPlugin,
   colorEditorPlugin,
-  createNgsEditorDocument,
-  createNgsEditorParagraph,
-  getNgsEditorBlockText,
-  getNgsEditorDocumentText,
-  NGS_EDITOR_TOGGLE_BOLD,
-  NGS_EDITOR_TOGGLE_CODE,
-  NGS_EDITOR_TOGGLE_ITALIC,
-  NGS_EDITOR_TOGGLE_STRIKE,
-  NGS_EDITOR_SET_BACKGROUND_COLOR,
-  NGS_EDITOR_SET_TEXT_COLOR,
-  NGS_EDITOR_UNSET_BACKGROUND_COLOR,
-  NGS_EDITOR_UNSET_TEXT_COLOR,
-  NgsEditor,
-  NgsEditorCommand,
-  NgsEditorDocument,
-  NgsEditorPlugin,
-  NgsEditorSurface,
-  ngsEditorDocumentsEqual,
-  provideNgsEditor
-} from '@ngstarter-ui/components/editor';
+  createNgsHeadlessEditorDocument,
+  createNgsHeadlessEditorParagraph,
+  getNgsHeadlessEditorBlockText,
+  getNgsHeadlessEditorDocumentText,
+  NGS_HEADLESS_EDITOR_TOGGLE_BOLD,
+  NGS_HEADLESS_EDITOR_TOGGLE_CODE,
+  NGS_HEADLESS_EDITOR_TOGGLE_ITALIC,
+  NGS_HEADLESS_EDITOR_TOGGLE_STRIKE,
+  NGS_HEADLESS_EDITOR_SET_BACKGROUND_COLOR,
+  NGS_HEADLESS_EDITOR_SET_TEXT_COLOR,
+  NGS_HEADLESS_EDITOR_UNSET_BACKGROUND_COLOR,
+  NGS_HEADLESS_EDITOR_UNSET_TEXT_COLOR,
+  NgsHeadlessEditor,
+  NgsHeadlessEditorCommand,
+  NgsHeadlessEditorDocument,
+  NgsHeadlessEditorPlugin,
+  NgsHeadlessEditorSurface,
+  ngsHeadlessEditorDocumentsEqual,
+  provideNgsHeadlessEditor
+} from '@ngstarter-ui/components/headless-editor';
 import {
   commentEditorPlugin,
   createCommentEditorMediaBlock,
@@ -59,9 +59,9 @@ import { COMMENT_EDITOR, CommentEditorAPI } from '../types';
 @Component({
   selector: 'ngs-comment-editor',
   exportAs: 'ngsCommentEditor',
-  imports: [Button, NgsEditorSurface],
+  imports: [Button, NgsHeadlessEditorSurface],
   providers: [
-    provideNgsEditor(),
+    provideNgsHeadlessEditor(),
     {
       provide: COMMENT_EDITOR,
       useExisting: forwardRef(() => CommentEditor)
@@ -78,12 +78,12 @@ import { COMMENT_EDITOR, CommentEditorAPI } from '../types';
   }
 })
 export class CommentEditor {
-  readonly editor = inject(NgsEditor);
+  readonly editor = inject(NgsHeadlessEditor);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly renderer = inject(Renderer2);
   private readonly documentRef = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly surface = viewChild.required(NgsEditorSurface);
+  private readonly surface = viewChild.required(NgsHeadlessEditorSurface);
   private readonly bubbleMenuLayer = viewChild<ElementRef<HTMLElement>>('bubbleMenuLayer');
   private readonly basicPlugin = basicTextEditorPlugin();
   private readonly colorPlugin = colorEditorPlugin();
@@ -92,8 +92,8 @@ export class CommentEditor {
   private readonly fullViewActive = signal(false);
   private bubbleMenuFrame: number | null = null;
 
-  readonly value = model<NgsEditorDocument>(createNgsEditorDocument());
-  readonly plugins = input<readonly NgsEditorPlugin[]>([]);
+  readonly value = model<NgsHeadlessEditorDocument>(createNgsHeadlessEditorDocument());
+  readonly plugins = input<readonly NgsHeadlessEditorPlugin[]>([]);
   readonly contentMaxHeight = input<number>();
   readonly buttonCancelLabel = input('Cancel');
   readonly buttonSendLabel = input('Send');
@@ -111,7 +111,7 @@ export class CommentEditor {
   readonly readOnly = input(false, { transform: booleanAttribute });
   readonly imageUploadFn = input<(file: Blob) => Promise<string>>();
 
-  readonly submitted = output<NgsEditorDocument>();
+  readonly submitted = output<NgsHeadlessEditorDocument>();
   readonly sent = output<string>();
   readonly canceled = output<void>();
 
@@ -136,11 +136,11 @@ export class CommentEditor {
     (!(this.allowEmpty() || this.allowEmptyContent()) && this.editor.empty())
   ));
 
-  private readonly commands = new Map<string, NgsEditorCommand<any>>([
-    ['toggleBold', NGS_EDITOR_TOGGLE_BOLD],
-    ['toggleItalic', NGS_EDITOR_TOGGLE_ITALIC],
-    ['toggleStrike', NGS_EDITOR_TOGGLE_STRIKE],
-    ['toggleCode', NGS_EDITOR_TOGGLE_CODE],
+  private readonly commands = new Map<string, NgsHeadlessEditorCommand<any>>([
+    ['toggleBold', NGS_HEADLESS_EDITOR_TOGGLE_BOLD],
+    ['toggleItalic', NGS_HEADLESS_EDITOR_TOGGLE_ITALIC],
+    ['toggleStrike', NGS_HEADLESS_EDITOR_TOGGLE_STRIKE],
+    ['toggleCode', NGS_HEADLESS_EDITOR_TOGGLE_CODE],
     ['toggleBlockquote', NGS_COMMENT_EDITOR_TOGGLE_BLOCKQUOTE],
     ['toggleCodeBlock', NGS_COMMENT_EDITOR_TOGGLE_CODE_BLOCK],
     ['toggleBulletList', NGS_COMMENT_EDITOR_TOGGLE_BULLET_LIST],
@@ -187,7 +187,7 @@ export class CommentEditor {
     effect(() => {
       const value = this.value();
       untracked(() => {
-        if (!ngsEditorDocumentsEqual(value, this.editor.document())) {
+        if (!ngsHeadlessEditorDocumentsEqual(value, this.editor.document())) {
           this.editor.setDocument(value);
         }
       });
@@ -195,7 +195,7 @@ export class CommentEditor {
 
     effect(() => {
       const document = this.editor.document();
-      if (this.editor.origin() !== 'external' && !ngsEditorDocumentsEqual(document, this.value())) {
+      if (this.editor.origin() !== 'external' && !ngsHeadlessEditorDocumentsEqual(document, this.value())) {
         this.value.set(document);
       }
     });
@@ -255,18 +255,18 @@ export class CommentEditor {
         .reverse()
         .find(block => Array.isArray(block.content));
       if (lastTextBlock) {
-        const offset = getNgsEditorBlockText(lastTextBlock).length;
+        const offset = getNgsHeadlessEditorBlockText(lastTextBlock).length;
         this.editor.setSelection({
           anchor: { blockId: lastTextBlock.id, offset },
           focus: { blockId: lastTextBlock.id, offset }
         });
       } else {
-        const paragraph = createNgsEditorParagraph();
+        const paragraph = createNgsHeadlessEditorParagraph();
         this.editor.insertBlock(paragraph, true);
       }
     }
 
-    const value = getNgsEditorDocumentText(this.editor.document()).length > 0 && !this.editor.focused()
+    const value = getNgsHeadlessEditorDocumentText(this.editor.document()).length > 0 && !this.editor.focused()
       ? ` ${text} `
       : text;
     const singleEmoji = isOnlyEmoji(text) && this.currentBlockIsEmpty();
@@ -394,19 +394,19 @@ export class CommentEditor {
   }
 
   setTextColor(color: string): boolean {
-    return this.editor.execute(NGS_EDITOR_SET_TEXT_COLOR, color);
+    return this.editor.execute(NGS_HEADLESS_EDITOR_SET_TEXT_COLOR, color);
   }
 
   unsetTextColor(): boolean {
-    return this.editor.execute(NGS_EDITOR_UNSET_TEXT_COLOR);
+    return this.editor.execute(NGS_HEADLESS_EDITOR_UNSET_TEXT_COLOR);
   }
 
   setBackgroundColor(color: string): boolean {
-    return this.editor.execute(NGS_EDITOR_SET_BACKGROUND_COLOR, color);
+    return this.editor.execute(NGS_HEADLESS_EDITOR_SET_BACKGROUND_COLOR, color);
   }
 
   unsetBackgroundColor(): boolean {
-    return this.editor.execute(NGS_EDITOR_UNSET_BACKGROUND_COLOR);
+    return this.editor.execute(NGS_HEADLESS_EDITOR_UNSET_BACKGROUND_COLOR);
   }
 
   unsetLink(): boolean {
@@ -459,7 +459,7 @@ export class CommentEditor {
   private currentBlockIsEmpty(): boolean {
     const selection = this.editor.selection();
     const block = this.editor.document().blocks.find(item => item.id === selection?.focus.blockId);
-    return !!block && getNgsEditorBlockText(block).length === 0;
+    return !!block && getNgsHeadlessEditorBlockText(block).length === 0;
   }
 
   private readFile(file: File): Promise<string> {

@@ -108,7 +108,6 @@ Must use:
 - digit-roller: `@ngstarter-ui/components/digit-roller` docs: /components/digit-roller
 - divider: `@ngstarter-ui/components/divider` docs: /components/divider
 - drawer: `@ngstarter-ui/components/drawer` docs: /components/drawer
-- editor: `@ngstarter-ui/components/editor` docs: /components/editor
 - emoji-picker: `@ngstarter-ui/components/emoji-picker` docs: /components/emoji-picker
 - empty-state: `@ngstarter-ui/components/empty-state` docs: /components/empty-state
 - events: `@ngstarter-ui/components/events` docs: /components/events
@@ -120,6 +119,7 @@ Must use:
 - gauge: `@ngstarter-ui/components/gauge` docs: /components/gauge
 - grid: `@ngstarter-ui/components/grid` docs: /components/grid
 - guided-tour: `@ngstarter-ui/components/guided-tour` docs: /components/guided-tour
+- headless-editor: `@ngstarter-ui/components/headless-editor` docs: /libraries/headless-editor
 - headless-stepper: `@ngstarter-ui/components/headless-stepper` docs: /components/headless-stepper
 - icon: `@ngstarter-ui/components/icon` docs: /components/icon
 - image-designer: `@ngstarter-ui/components/image-designer` docs: /libraries/image-designer

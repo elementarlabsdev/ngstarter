@@ -1,0 +1,81 @@
+<app-page>
+  <h1 appPageTitle>Getting Started</h1>
+  <div appPageContent>
+    <section>
+      <p>
+        Headless Editor is part of <code>&#64;ngstarter-ui/components</code>. After
+        <a routerLink="/installation">installing NgStarter UI</a>, import the editor from its secondary entry point.
+      </p>
+    </section>
+
+    <section>
+      <h2>1. Provide an editor</h2>
+      <p>
+        <code>provideNgsHeadlessEditor()</code> creates an editor instance for the component that declares it
+        and for its children. The editor is deliberately not a root singleton: every editor on a page has its
+        own provider scope. Plugins are passed as features; <code>basicTextEditorPlugin()</code> registers
+        paragraphs and the bold, italic, strike, and inline code marks.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="provideCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>2. Render a surface</h2>
+      <p>
+        Put <code>ngsHeadlessEditorSurface</code> on any element inside the same injector scope. The directive
+        makes it editable, renders the document into it, and keeps native selection and the model in sync.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="surfaceCode" language="html"/>
+      <ngs-playground exampleUrl="_docs/libraries/headless-editor/_examples" exampleName="bare-editor-example">
+    @defer (on viewport) {
+      <app-bare-editor-example/>
+    } @placeholder {
+      <div class="example-placeholder">Loading example…</div>
+    }
+  </ngs-playground>
+    </section>
+
+    <section>
+      <h2>3. Load and read content</h2>
+      <p>
+        The value of an editor is its JSON document. Load one with <code>setDocument()</code> and read the
+        current one from the <code>document</code> signal. Use <code>origin</code> to tell user edits apart
+        from documents you loaded yourself.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="valueCode" language="typescript"/>
+    </section>
+
+    <section>
+      <h2>4. Style it</h2>
+      <p>
+        The surface has no styles. Block and mark elements are created by the directive, outside your
+        component template, so they do not receive Angular emulated-encapsulation attributes. Style them from a
+        class on the surface with <code>::ng-deep</code>, from global styles, or with
+        <code>ViewEncapsulation.None</code>. The placeholder is exposed as an attribute on the first empty block.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="styleCode" language="scss"/>
+    </section>
+
+    <section>
+      <h2>5. Add a toolbar</h2>
+      <p>
+        Bind any button to a command with <code>ngsHeadlessEditorCommand</code>. The directive keeps the text
+        selection when the button is pressed and reflects the command state with the <code>active</code> class,
+        <code>aria-pressed</code>, and <code>disabled</code>. See
+        <a routerLink="/libraries/headless-editor/commands">Commands and Toolbar</a>.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="toolbarCode" language="html"/>
+    </section>
+
+    <section>
+      <h2>Checklist</h2>
+      <ul>
+        <li>Provide the editor at component level, not in the application config.</li>
+        <li>Keep the surface and command buttons inside the providing component.</li>
+        <li>Register a plugin for every block and mark type your documents contain.</li>
+        <li>Treat documents as immutable: create new objects instead of mutating existing ones.</li>
+        <li>Style blocks through the surface class with <code>::ng-deep</code> or global styles.</li>
+      </ul>
+    </section>
+  </div>
+</app-page>

@@ -1,0 +1,22 @@
+<table class="ngs-headless-editor-table" [class.has-header]="data().header">
+  @if (data().header) {
+    <thead>
+      <tr>
+        @for (cell of data().rows[0]; track $index) {
+          <th scope="col" class="ngs-headless-editor-table-cell" [ngsHeadlessEditorRuns]="cell"></th>
+        }
+      </tr>
+    </thead>
+  }
+  <tbody>
+    @for (row of data().rows; track $index; let rowIndex = $index) {
+      @if (!data().header || rowIndex > 0) {
+        <tr>
+          @for (cell of row; track $index) {
+            <td class="ngs-headless-editor-table-cell" [ngsHeadlessEditorRuns]="cell"></td>
+          }
+        </tr>
+      }
+    }
+  </tbody>
+</table>

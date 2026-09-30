@@ -1,0 +1,53 @@
+<table class="ngs-headless-editor-table" [class.has-header]="data().header">
+  <tbody>
+    @for (row of data().rows; track $index; let rowIndex = $index) {
+      <tr>
+        @for (cell of row; track $index; let columnIndex = $index) {
+          @if (data().header && rowIndex === 0) {
+            <th
+              scope="col"
+              class="ngs-headless-editor-table-cell"
+              [attr.data-row]="rowIndex"
+              [attr.data-column]="columnIndex"
+              [class.active]="isActive(rowIndex, columnIndex)"
+              (keydown)="onKeydown($event, rowIndex, columnIndex)">
+              <ng-container
+                [ngTemplateOutlet]="cellTemplate"
+                [ngTemplateOutletContext]="{ $implicit: cell, row: rowIndex, column: columnIndex }"/>
+            </th>
+          } @else {
+            <td
+              class="ngs-headless-editor-table-cell"
+              [attr.data-row]="rowIndex"
+              [attr.data-column]="columnIndex"
+              [class.active]="isActive(rowIndex, columnIndex)"
+              (keydown)="onKeydown($event, rowIndex, columnIndex)">
+              <ng-container
+                [ngTemplateOutlet]="cellTemplate"
+                [ngTemplateOutletContext]="{ $implicit: cell, row: rowIndex, column: columnIndex }"/>
+            </td>
+          }
+        }
+      </tr>
+    }
+  </tbody>
+</table>
+
+<ng-template #cellTemplate let-cell let-row="row" let-column="column">
+  @if (isEditing(row, column)) {
+    <div
+      class="ngs-headless-editor-table-cell-editor"
+      ngsHeadlessEditorSurface
+      placeholder=""
+      [ariaLabel]="'Row ' + (row + 1) + ', column ' + (column + 1)">
+    </div>
+  } @else {
+    <div
+      class="ngs-headless-editor-table-cell-content"
+      tabindex="0"
+      [ngsHeadlessEditorRuns]="cell"
+      (pointerdown)="onContentPointerDown($event, row, column)"
+      (focus)="onContentFocus(row, column)">
+    </div>
+  }
+</ng-template>

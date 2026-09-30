@@ -1,0 +1,45 @@
+// The surface uses the block element (<aside>) as the component host, so the
+// callout is styled through :host like any other component.
+:host {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 0.75rem;
+  align-items: start;
+  padding: 0.75rem;
+  border-radius: var(--ngs-radius-md);
+  background: var(--ngs-color-info-container);
+  color: var(--ngs-color-on-info-container);
+}
+
+:host([data-tone='success']) {
+  background: var(--ngs-color-success-container);
+  color: var(--ngs-color-on-success-container);
+}
+
+:host([data-tone='warning']) {
+  background: var(--ngs-color-warning-container);
+  color: var(--ngs-color-on-warning-container);
+}
+
+.text {
+  width: 100%;
+  resize: vertical;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  outline: none;
+}
+
+.actions {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  text-transform: capitalize;
+}
+
+.selected {
+  font-weight: 600;
+  text-decoration: underline;
+}

@@ -1,0 +1,10 @@
+<div class="toolbar" role="toolbar" [attr.aria-label]="label() + ' formatting'">
+  <button type="button" aria-label="Bold" [ngsHeadlessEditorCommand]="bold"><b>B</b></button>
+  <button type="button" aria-label="Italic" [ngsHeadlessEditorCommand]="italic"><i>I</i></button>
+</div>
+<div
+  class="surface"
+  ngsHeadlessEditorSurface
+  [ariaLabel]="label()"
+  [placeholder]="placeholder()">
+</div>

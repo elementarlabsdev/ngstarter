@@ -406,13 +406,6 @@ Typography:
   inputs: `isOpen`, `showBackdrop`
   outputs: `closed`, `opened`
   tokens: `--ngs-color-surface-container-lowest`, `--ngs-drawer-transition`, `--ngs-drawer-transition-duration`, `--ngs-dropdown-border`
-- editor: `@ngstarter-ui/components/editor` docs: /components/editor
-  purpose: Import the primitives from @ngstarter-ui/components/editor .
-  use when: Choose Editor when the workflow matches examples such as Bare editor without styles, Custom plugin and toolbar, Composition model, Bare editor, Plugin editor.
-  example topics: Bare editor without styles, Custom plugin and toolbar, Composition model, Bare editor, Plugin editor
-  selectors: `[ngsEditorCommand]`, `[ngsEditorSurface]`
-  exports: `basicTextEditorPlugin`, `cloneNgsEditorDocument`, `colorEditorPlugin`, `createNgsEditorDocument`, `createNgsEditorId`, `createNgsEditorParagraph`, `createNgsEditorText`, `defineNgsEditorPlugin`, `getNgsEditorBlockText`, `getNgsEditorDocumentText`, `isNgsEditorDocumentEmpty`, `isNgsEditorTextContent`
-  inputs: `ariaLabel`, `commandData`, `disabled`, `placeholder`, `spellcheck`
 - emoji-picker: `@ngstarter-ui/components/emoji-picker` docs: /components/emoji-picker
   purpose: Let users choose one Unicode emoji from an overlay picker.
   use when: Use in comments, chats, quick messages, reactions, comment/editor toolbars, social features, and any text entry flow where users need to insert or choose an emoji. Open from a button or toolbar action with [ngsEmojiPickerTriggerFor], then handle emojiSelected as the selected emoji string. It supports categorized emoji data, language from LOCALE_ID or the language input, hover preview, and loading skeletons. Do not use for interface icons; use Icon. Do not use for normal action menus; use Menu. Do not use as a full editor; use CommentEditor or TextEditor. Do not use for custom stickers, GIFs, or media pickers unless the value is a Unicode emoji.
@@ -523,6 +516,14 @@ Typography:
   inputs: `animateEnterClass`, `animateLeaveClass`, `isFirst`, `isLast`, `ngsTourAnchor`, `position`, `step`
   outputs: `backdropClick`
   tokens: `--ngs-button-height`, `--ngs-button-padding`, `--ngs-color-primary`, `--ngs-color-subtle`, `--ngs-color-surface-container-lowest`, `--ngs-guided-tour-arrow-border-color`, `--ngs-guided-tour-step-bg`, `--ngs-guided-tour-step-border`, `--ngs-guided-tour-step-max-width`, `--ngs-guided-tour-step-radius`, `--ngs-guided-tour-step-shadow`, `--ngs-guided-tour-step-step-padding`, `--ngs-overlay-backdrop-bg`, `--ngs-radius-xl`, `--ngs-shadow-lg`
+- headless-editor: `@ngstarter-ui/components/headless-editor` docs: /libraries/headless-editor
+  purpose: Headless Editor is the rich text engine behind NgStarter editors.
+  use when: Choose Headless Editor when the workflow matches examples such as Headless Editor, Live example, When to use it, How it fits together, Features.
+  example topics: Headless Editor, Live example, When to use it, How it fits together, Features, Guides, Toolbar editor, Bare editor
+  selectors: `[ngsHeadlessEditorCommand]`, `[ngsHeadlessEditorRuns]`, `[ngsHeadlessEditorSurface]`, `[ngsHeadlessEditorSurface][ngsHeadlessEditorMentions]`, `ngs-headless-editor-mention-menu`, `ngs-headless-editor-table-editor`, `ngs-headless-editor-table-view`
+  exports: `basicTextEditorPlugin`, `cloneNgsHeadlessEditorDocument`, `colorEditorPlugin`, `createNgsHeadlessEditorDocument`, `createNgsHeadlessEditorId`, `createNgsHeadlessEditorParagraph`, `createNgsHeadlessEditorTable`, `createNgsHeadlessEditorText`, `defineNgsHeadlessEditorPlugin`, `findNgsHeadlessEditorMarkDefinition`, `findNgsHeadlessEditorMentionQuery`, `focusNgsHeadlessEditorTableCell`
+  inputs: `ariaLabel`, `commandData`, `disabled`, `mentions`, `mentionTrigger`, `ngsHeadlessEditorMentions`, `ngsHeadlessEditorRuns`, `placeholder`, `spellcheck`
+  outputs: `mentionQueryChange`, `mentionSelected`
 - headless-stepper: `@ngstarter-ui/components/headless-stepper` docs: /components/headless-stepper
   purpose: Provide stepper state and validation logic without rendering a fixed visual stepper UI.
   use when: Use for custom multi-step workflows where the product needs its own header, progress indicator, buttons, layout, or responsive presentation while keeping standard NgStarter step behavior. Use ngs-headless-stepper with ngs-headless-step when you need selectedIndex, selected step state, progressPercent, canMoveNext, next(), previous(), reset(), linear mode, optional steps, and stepControl validation. Good for custom wizards, onboarding forms, checkout flows, setup flows, and complex forms with a bespoke layout. Do not use when the standard visual Stepper fits; use Stepper. Do not use for guided tours over existing UI; use GuidedTour. Do not use as Tabs, Accordion, or for a simple single-page form without steps.

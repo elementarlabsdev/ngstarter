@@ -1,0 +1,71 @@
+// The field owns its styles: the host is the bordered control, the toolbar and
+// surface are regular template elements, and ::ng-deep reaches the blocks that
+// the surface directive renders.
+:host {
+  display: block;
+  border: 1px solid var(--ngs-color-border);
+  border-radius: var(--ngs-radius-md);
+  background: var(--ngs-color-surface);
+
+  &:focus-within {
+    border-color: var(--ngs-color-primary);
+    box-shadow: 0 0 0 1px var(--ngs-color-primary);
+  }
+}
+
+.toolbar {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-block-end: 1px solid var(--ngs-color-border);
+
+  button {
+    min-width: 2rem;
+    height: 2rem;
+    border-radius: var(--ngs-radius-sm);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+
+    &.active {
+      background: var(--ngs-state-selected-bg);
+      color: var(--ngs-color-primary);
+    }
+
+    &[disabled] {
+      opacity: 0.4;
+      cursor: default;
+    }
+  }
+}
+
+.surface {
+  display: block;
+  min-height: 7rem;
+  padding: 0.75rem 1rem;
+  line-height: 1.6;
+  outline: none;
+
+  &[contenteditable='false'] {
+    color: var(--ngs-color-on-surface-variant);
+  }
+
+  ::ng-deep {
+    > * {
+      margin: 0 0 0.5rem;
+    }
+
+    [data-ngs-headless-editor-placeholder] {
+      position: relative;
+
+      &::before {
+        content: attr(data-ngs-headless-editor-placeholder);
+        position: absolute;
+        inset-block-start: 0;
+        inset-inline-start: 0;
+        color: var(--ngs-color-neutral-500);
+        pointer-events: none;
+      }
+    }
+  }
+}

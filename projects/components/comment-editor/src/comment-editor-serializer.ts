@@ -1,15 +1,16 @@
 import {
-  isNgsEditorTextContent,
-  normalizeNgsEditorColor,
-  NgsEditorBlock,
-  NgsEditorDocument,
-  NgsEditorMark,
-  NgsEditorText
-} from '@ngstarter-ui/components/editor';
+  isNgsHeadlessEditorTextContent,
+  normalizeNgsHeadlessEditorColor,
+  NgsHeadlessEditorBlock,
+  NgsHeadlessEditorDocument,
+  NgsHeadlessEditorMark,
+  NgsHeadlessEditorText
+} from '@ngstarter-ui/components/headless-editor';
+import { normalizeLinkUrl } from './comment-editor.plugin';
 
-export function serializeCommentEditorDocument(document: NgsEditorDocument): string {
+export function serializeCommentEditorDocument(document: NgsHeadlessEditorDocument): string {
   if (document.blocks.every(block => (
-    isNgsEditorTextContent(block.content) &&
+    isNgsHeadlessEditorTextContent(block.content) &&
     block.content.every(run => run.text.trim().length === 0)
   ))) {
     return '';
@@ -17,8 +18,8 @@ export function serializeCommentEditorDocument(document: NgsEditorDocument): str
   return document.blocks.map(serializeBlock).filter(Boolean).join('');
 }
 
-function serializeBlock(block: NgsEditorBlock): string {
-  const text = isNgsEditorTextContent(block.content)
+function serializeBlock(block: NgsHeadlessEditorBlock): string {
+  const text = isNgsHeadlessEditorTextContent(block.content)
     ? block.content.map(serializeText).join('')
     : '';
 
@@ -47,11 +48,11 @@ function serializeBlock(block: NgsEditorBlock): string {
     case 'imageUpload':
       return '';
     default:
-      return text ? `<div data-ngs-editor-block-type="${escapeAttribute(block.type)}">${text}</div>` : '';
+      return text ? `<div data-ngs-headless-editor-block-type="${escapeAttribute(block.type)}">${text}</div>` : '';
   }
 }
 
-function serializeText(run: NgsEditorText): string {
+function serializeText(run: NgsHeadlessEditorText): string {
   let value = escapeHtml(run.text);
   for (const mark of run.marks) {
     value = wrapMark(value, mark);
@@ -59,7 +60,7 @@ function serializeText(run: NgsEditorText): string {
   return value;
 }
 
-function wrapMark(value: string, mark: NgsEditorMark): string {
+function wrapMark(value: string, mark: NgsHeadlessEditorMark): string {
   switch (mark.type) {
     case 'bold':
       return `<strong>${value}</strong>`;
@@ -72,17 +73,18 @@ function wrapMark(value: string, mark: NgsEditorMark): string {
     case 'singleEmoji':
       return `<span class="single-emoji">${value}</span>`;
     case 'textColor': {
-      const color = normalizeNgsEditorColor(String(mark.attrs?.['color'] ?? ''));
+      const color = normalizeNgsHeadlessEditorColor(String(mark.attrs?.['color'] ?? ''));
       return color ? `<span style="color: ${escapeAttribute(color)}">${value}</span>` : value;
     }
     case 'backgroundColor': {
-      const color = normalizeNgsEditorColor(String(mark.attrs?.['color'] ?? ''));
+      const color = normalizeNgsHeadlessEditorColor(String(mark.attrs?.['color'] ?? ''));
       return color
         ? `<span style="background-color: ${escapeAttribute(color)}">${value}</span>`
         : value;
     }
     case 'link': {
-      const href = escapeAttribute(String(mark.attrs?.['href'] ?? ''));
+      // The document may come from storage or an API: never trust the raw href.
+      const href = escapeAttribute(normalizeLinkUrl(String(mark.attrs?.['href'] ?? '')));
       return href
         ? `<a href="${href}" target="_blank" rel="noopener noreferrer">${value}</a>`
         : value;

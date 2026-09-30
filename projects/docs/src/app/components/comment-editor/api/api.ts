@@ -49,8 +49,8 @@ export class Api {
       title: 'Inputs',
       description: 'JSON state, editor behavior, labels, layout, and integration callbacks.',
       rows: [
-        { name: 'value', type: 'ModelSignal<NgsEditorDocument>', default: 'empty document', description: 'Two-way bound versioned JSON document. This is the canonical content value.' },
-        { name: 'plugins', type: 'readonly NgsEditorPlugin[]', default: '[]', description: 'Additional editor plugins installed after the basic text, color, and Comment Editor feature plugins.' },
+        { name: 'value', type: 'ModelSignal<NgsHeadlessEditorDocument>', default: 'empty document', description: 'Two-way bound versioned JSON document. This is the canonical content value.' },
+        { name: 'plugins', type: 'readonly NgsHeadlessEditorPlugin[]', default: '[]', description: 'Additional editor plugins installed after the basic text, color, and Comment Editor feature plugins.' },
         { name: 'contentMaxHeight', type: 'number | undefined', default: 'undefined', description: 'Maximum expanded content height in pixels before the editing surface scrolls.' },
         { name: 'placeholder', type: 'string', default: 'Write something …', description: 'Placeholder rendered while the JSON document is empty.' },
         { name: 'ariaLabel', type: 'string', default: 'Comment editor', description: 'Accessible label for the contenteditable surface.' },
@@ -73,7 +73,7 @@ export class Api {
       title: 'Outputs',
       description: 'JSON-first submission with an HTML compatibility output.',
       rows: [
-        { name: 'submitted', type: 'NgsEditorDocument', default: '—', description: 'Emits the canonical JSON document on send.' },
+        { name: 'submitted', type: 'NgsHeadlessEditorDocument', default: '—', description: 'Emits the canonical JSON document on send.' },
         { name: 'sent', type: 'string', default: '—', description: 'Emits escaped serialized HTML generated from the same JSON document.' },
         { name: 'canceled', type: 'void', default: '—', description: 'Emits after cancel clears content and transient toolbar/full-view state.' }
       ]
@@ -82,7 +82,7 @@ export class Api {
       title: 'Component methods and signals',
       description: 'Public surface available through a template reference such as #editor.',
       rows: [
-        { name: 'editor', type: 'NgsEditor', default: 'scoped instance', description: 'Signal-based editor service owned by this Comment Editor.' },
+        { name: 'editor', type: 'NgsHeadlessEditor', default: 'scoped instance', description: 'Signal-based editor service owned by this Comment Editor.' },
         { name: 'api', type: 'CommentEditorAPI', default: 'scoped facade', description: 'Stable facade used by command directives and application code.' },
         { name: 'isEditorActivated', type: 'Signal<boolean>', default: 'computed', description: 'Whether the expanded editor layout is active.' },
         { name: 'isToolbarVisible', type: 'Signal<boolean>', default: 'computed', description: 'Whether the projected toolbar is currently rendered.' },
@@ -138,9 +138,9 @@ export class Api {
       title: 'Comment Editor plugin and serialization',
       description: 'Public building blocks used by the prebuilt component and available to custom Angular shells.',
       rows: [
-        { name: 'colorEditorPlugin()', type: 'NgsEditorPlugin', default: 'installed by CommentEditor', description: 'Adds text and background color marks and their set/unset commands.' },
-        { name: 'commentEditorPlugin()', type: 'NgsEditorPlugin', default: 'installed by CommentEditor', description: 'Adds blockquote, code block, list, image, upload, YouTube, link, and single-emoji definitions and commands.' },
-        { name: 'createCommentEditorMediaBlock(type, attrs)', type: 'NgsEditorBlock<null>', default: '—', description: 'Creates a serializable image, upload-placeholder, or YouTube block.' },
+        { name: 'colorEditorPlugin()', type: 'NgsHeadlessEditorPlugin', default: 'installed by CommentEditor', description: 'Adds text and background color marks and their set/unset commands.' },
+        { name: 'commentEditorPlugin()', type: 'NgsHeadlessEditorPlugin', default: 'installed by CommentEditor', description: 'Adds blockquote, code block, list, image, upload, YouTube, link, and single-emoji definitions and commands.' },
+        { name: 'createCommentEditorMediaBlock(type, attrs)', type: 'NgsHeadlessEditorBlock<null>', default: '—', description: 'Creates a serializable image, upload-placeholder, or YouTube block.' },
         { name: 'normalizeLinkUrl(value)', type: 'string', default: '—', description: 'Normalizes HTTP(S), mailto, and tel destinations and prefixes plain hosts with HTTPS.' },
         { name: 'normalizeYoutubeUrl(value)', type: 'string | null', default: '—', description: 'Accepts watch, short, shorts, or embed URLs and returns a youtube-nocookie embed URL.' },
         { name: 'serializeCommentEditorDocument(document)', type: 'string', default: '—', description: 'Serializes supported JSON blocks and marks to escaped HTML. Unresolved upload placeholders are omitted.' }

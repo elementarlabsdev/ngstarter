@@ -1,0 +1,89 @@
+<app-page>
+  <h1 appPageTitle>Mentions</h1>
+  <div appPageContent>
+    <section>
+      <p>
+        Add teammate mentions with a menu anchored to the text caret. Configure an Angular option component
+        once in the plugin, or supply a custom menu template for an individual surface. The editor keeps focus
+        while the menu is open, so typing continues to filter suggestions.
+      </p>
+      <ngs-playground exampleUrl="_docs/libraries/headless-editor/_examples" exampleName="mentions-editor-example">
+        @defer (on viewport) {
+          <app-mentions-editor-example/>
+        } @placeholder {
+          <div class="example-placeholder">Loading example…</div>
+        }
+      </ngs-playground>
+    </section>
+    <section>
+      <h2>Register the plugin</h2>
+      <p>
+        Import from <code>&#64;ngstarter-ui/components/headless-editor</code> and install
+        <code>mentionEditorPlugin()</code> through <code>withHeadlessEditorPlugin()</code>.
+        This provides its options in the editor's injector scope. All mention surfaces in that scope share
+        the configured component and search callback; separate editors can use different configurations.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="setupCode" language="typescript"/>
+    </section>
+    <section>
+      <h2>Custom option component</h2>
+      <p>
+        Candidates require an <code>id</code> and <code>label</code> and may include any presentation data.
+        The component receives <code>option</code> and <code>active</code> inputs. Place avatars, descriptions,
+        or other content inside it. The surrounding <code>MenuItem</code> handles selection and highlighting.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="componentCode" language="typescript"/>
+    </section>
+    <section>
+      <h2>Per-surface menu template</h2>
+      <p>
+        Pass a <code>Menu</code> to <code>ngsHeadlessEditorMentions</code> to override the default menu.
+        Import <code>Menu</code> and <code>MenuItem</code> from <code>&#64;ngstarter-ui/components/menu</code>.
+        Render <code>suggestions()</code>, give each item its <code>optionId(index)</code>, highlight
+        <code>activeIndex()</code>, and call <code>select(option)</code> when an item is clicked.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="templateCode" language="html"/>
+    </section>
+    <section>
+      <h2>Async search callback</h2>
+      <p>
+        Set <code>options</code> to a callback with the signature
+        <code>(query: string) =&gt; Promise&lt;readonly User[]&gt;</code>. It receives the search text without
+        the trigger, including an empty string when the user types only <code>&#64;</code>.
+        Filter a local array as shown above, or return results from your backend. Returned candidates
+        keep their order and are not filtered again by the plugin.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="remoteCode" language="typescript"/>
+      <p>
+        The directive clears previous suggestions while searching and ignores outdated responses.
+        Rejected searches leave the menu closed and expose the error through <code>error()</code>;
+        <code>loading()</code> reports a pending search. A new query starts another search.
+        To use a different callback on one surface, bind <code>[mentionOptions]="searchUsers"</code>.
+        Ignoring an outdated response does not cancel its network request.
+      </p>
+    </section>
+    <section>
+      <h2>Search and keyboard behavior</h2>
+      <ul>
+        <li>Type <code>&#64;</code> at the start of text or after whitespace or an opening bracket. E-mail addresses do not open the menu.</li>
+        <li>Arrow keys choose a suggestion; Enter or Tab inserts it; Escape dismisses the current query.</li>
+        <li>The directive also handles mentions inside table cells when their marks allow mentions.</li>
+        <li>No menu opens during composition, for read-only editors, or when no candidates match.</li>
+      </ul>
+    </section>
+    <section>
+      <h2>Document value and undo</h2>
+      <p>
+        Selecting a candidate replaces the trigger and query with its label and a trailing space in one undo
+        step. Formatting around the query is preserved, and the space has no mention mark. The selected
+        candidate is emitted through <code>mentionSelected</code>.
+      </p>
+      <ngs-code-highlighter class="code-block" [code]="jsonCode" language="json"/>
+      <p>
+        Mentions are editable text marks. They are not atomic tokens: users can edit their text and delete
+        individual characters. Style <code>.ngs-headless-editor-mention</code> through the surface class
+        with <code>::ng-deep</code> or global styles, and map the mark explicitly in your HTML serializer.
+      </p>
+    </section>
+  </div>
+</app-page>

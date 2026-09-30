@@ -1,9 +1,9 @@
 import { InjectionToken } from '@angular/core';
 import {
-  NgsEditor,
-  NgsEditorDocument,
-  NgsEditorMarkAttributes
-} from '@ngstarter-ui/components/editor';
+  NgsHeadlessEditor,
+  NgsHeadlessEditorDocument,
+  NgsHeadlessEditorMarkAttributes
+} from '@ngstarter-ui/components/headless-editor';
 
 export interface CommentEditorInterface {
   readonly api: CommentEditorAPI;
@@ -13,8 +13,8 @@ export interface CommentEditorAPI {
   isCommandDisabled(command: string): boolean | null;
   isActive(command: string): boolean;
   runCommand(command: string): void;
-  editor(): NgsEditor;
-  document(): NgsEditorDocument;
+  editor(): NgsHeadlessEditor;
+  document(): NgsHeadlessEditorDocument;
   isToolbarActive(): boolean;
   toggleToolbar(): void;
   showToolbar(): void;
@@ -25,7 +25,7 @@ export interface CommentEditorAPI {
   insertText(text: string): void;
   insertImage(file: File): void;
   insertYoutube(url: string): boolean;
-  getMarkAttributes(type: string): NgsEditorMarkAttributes | undefined;
+  getMarkAttributes(type: string): NgsHeadlessEditorMarkAttributes | undefined;
   setTextColor(color: string): boolean;
   unsetTextColor(): boolean;
   setBackgroundColor(color: string): boolean;

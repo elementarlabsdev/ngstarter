@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Playground } from '@meta/playground/playground';
 import { BasicCommentEditorExample } from '../_examples/basic-comment-editor-example/basic-comment-editor-example';
 import { CommentEditorCancelButtonAlwaysVisibleExample } from '../_examples/comment-editor-cancel-button-always-visible-example/comment-editor-cancel-button-always-visible-example';
@@ -11,7 +12,7 @@ import { CommentEditorWithUploadErrorExample } from '../_examples/comment-editor
 
 @Component({
   selector: 'app-overview',
-  imports: [
+  imports: [RouterLink, 
     Playground,
     BasicCommentEditorExample,
     CommentEditorCancelButtonAlwaysVisibleExample,

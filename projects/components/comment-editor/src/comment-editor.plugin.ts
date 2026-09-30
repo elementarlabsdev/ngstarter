@@ -1,11 +1,11 @@
 import {
-  createNgsEditorId,
-  createNgsEditorText,
-  defineNgsEditorPlugin,
-  NgsEditorBlock,
-  NgsEditorCommand,
-  NgsEditorPlugin
-} from '@ngstarter-ui/components/editor';
+  createNgsHeadlessEditorId,
+  createNgsHeadlessEditorText,
+  defineNgsHeadlessEditorPlugin,
+  NgsHeadlessEditorBlock,
+  NgsHeadlessEditorCommand,
+  NgsHeadlessEditorPlugin
+} from '@ngstarter-ui/components/headless-editor';
 
 export interface CommentEditorMediaAttributes {
   readonly src: string;
@@ -14,37 +14,37 @@ export interface CommentEditorMediaAttributes {
   readonly error?: string;
 }
 
-export const NGS_COMMENT_EDITOR_TOGGLE_BLOCKQUOTE: NgsEditorCommand<void> = toggleBlockCommand(
+export const NGS_COMMENT_EDITOR_TOGGLE_BLOCKQUOTE: NgsHeadlessEditorCommand<void> = toggleBlockCommand(
   'toggle-blockquote',
   'blockquote'
 );
-export const NGS_COMMENT_EDITOR_TOGGLE_CODE_BLOCK: NgsEditorCommand<void> = toggleBlockCommand(
+export const NGS_COMMENT_EDITOR_TOGGLE_CODE_BLOCK: NgsHeadlessEditorCommand<void> = toggleBlockCommand(
   'toggle-code-block',
   'codeBlock'
 );
-export const NGS_COMMENT_EDITOR_TOGGLE_BULLET_LIST: NgsEditorCommand<void> = toggleBlockCommand(
+export const NGS_COMMENT_EDITOR_TOGGLE_BULLET_LIST: NgsHeadlessEditorCommand<void> = toggleBlockCommand(
   'toggle-bullet-list',
   'bulletList'
 );
-export const NGS_COMMENT_EDITOR_TOGGLE_ORDERED_LIST: NgsEditorCommand<void> = toggleBlockCommand(
+export const NGS_COMMENT_EDITOR_TOGGLE_ORDERED_LIST: NgsHeadlessEditorCommand<void> = toggleBlockCommand(
   'toggle-ordered-list',
   'orderedList'
 );
-export const NGS_COMMENT_EDITOR_SET_LINK: NgsEditorCommand<string> = {
+export const NGS_COMMENT_EDITOR_SET_LINK: NgsHeadlessEditorCommand<string> = {
   id: 'set-link',
   execute: (editor, href) => editor.setMark('link', { href: normalizeLinkUrl(href) }),
   enabled: (_editor, href) => !!href?.trim(),
   active: editor => editor.isMarkActive('link')
 };
-export const NGS_COMMENT_EDITOR_UNSET_LINK: NgsEditorCommand<void> = {
+export const NGS_COMMENT_EDITOR_UNSET_LINK: NgsHeadlessEditorCommand<void> = {
   id: 'unset-link',
   execute: editor => editor.unsetMark('link'),
   enabled: editor => editor.isMarkActive('link'),
   active: editor => editor.isMarkActive('link')
 };
 
-export function commentEditorPlugin(): NgsEditorPlugin {
-  return defineNgsEditorPlugin({
+export function commentEditorPlugin(): NgsHeadlessEditorPlugin {
+  return defineNgsHeadlessEditorPlugin({
     id: 'comment-editor-features',
     blocks: [
       textBlock('blockquote', 'blockquote'),
@@ -94,9 +94,9 @@ export function commentEditorPlugin(): NgsEditorPlugin {
 export function createCommentEditorMediaBlock(
   type: 'image' | 'imageUpload' | 'youtube',
   attrs: CommentEditorMediaAttributes
-): NgsEditorBlock<null> {
+): NgsHeadlessEditorBlock<null> {
   return {
-    id: createNgsEditorId(type),
+    id: createNgsHeadlessEditorId(type),
     type,
     content: null,
     attrs: { ...attrs }
@@ -139,7 +139,7 @@ export function normalizeYoutubeUrl(value: string): string | null {
   }
 }
 
-function toggleBlockCommand(id: string, type: string): NgsEditorCommand<void> {
+function toggleBlockCommand(id: string, type: string): NgsHeadlessEditorCommand<void> {
   return {
     id,
     execute: editor => editor.toggleBlock(type),
@@ -152,10 +152,10 @@ function textBlock(type: string, tagName: string, contentTagName?: string) {
     type,
     tagName,
     contentTagName,
-    create: (): NgsEditorBlock => ({
-      id: createNgsEditorId(type),
+    create: (): NgsHeadlessEditorBlock => ({
+      id: createNgsHeadlessEditorId(type),
       type,
-      content: [createNgsEditorText()]
+      content: [createNgsHeadlessEditorText()]
     })
   };
 }
@@ -163,14 +163,14 @@ function textBlock(type: string, tagName: string, contentTagName?: string) {
 function mediaBlock(
   type: string,
   tagName: string,
-  render: (element: HTMLElement, block: NgsEditorBlock<null>) => void
+  render: (element: HTMLElement, block: NgsHeadlessEditorBlock<null>) => void
 ) {
   return {
     type,
     tagName,
     editable: false,
-    create: (): NgsEditorBlock<null> => ({
-      id: createNgsEditorId(type),
+    create: (): NgsHeadlessEditorBlock<null> => ({
+      id: createNgsHeadlessEditorId(type),
       type,
       content: null
     }),
@@ -179,7 +179,7 @@ function mediaBlock(
   };
 }
 
-function renderImage(element: HTMLElement, block: NgsEditorBlock<null>): void {
+function renderImage(element: HTMLElement, block: NgsHeadlessEditorBlock<null>): void {
   element.classList.add('ngs-comment-editor-media', 'ngs-comment-editor-image');
   const image = element.ownerDocument.createElement('img');
   image.src = String(block.attrs?.['src'] ?? '');
@@ -188,7 +188,7 @@ function renderImage(element: HTMLElement, block: NgsEditorBlock<null>): void {
   element.append(image);
 }
 
-function renderImageUpload(element: HTMLElement, block: NgsEditorBlock<null>): void {
+function renderImageUpload(element: HTMLElement, block: NgsHeadlessEditorBlock<null>): void {
   element.classList.add('ngs-comment-editor-media', 'ngs-comment-editor-image-upload');
   const image = element.ownerDocument.createElement('img');
   image.src = String(block.attrs?.['src'] ?? '');
@@ -203,7 +203,7 @@ function renderImageUpload(element: HTMLElement, block: NgsEditorBlock<null>): v
   element.append(status);
 }
 
-function renderYoutube(element: HTMLElement, block: NgsEditorBlock<null>): void {
+function renderYoutube(element: HTMLElement, block: NgsHeadlessEditorBlock<null>): void {
   element.classList.add('ngs-comment-editor-media', 'ngs-comment-editor-youtube');
   const iframe = element.ownerDocument.createElement('iframe');
   iframe.src = String(block.attrs?.['src'] ?? '');
