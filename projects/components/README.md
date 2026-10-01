@@ -10,6 +10,9 @@ secondary entry points such as `@ngstarter-ui/components/button`,
 
 ## Installation
 
+The current package targets Angular 22 and Angular CDK 22. Use SCSS for the application's
+global styles.
+
 For a new Angular 22 project, create the app with SCSS and add NgStarter UI:
 
 ```bash
@@ -24,8 +27,14 @@ For an existing Angular 22 app, run the same schematic from your project root:
 npx ng add @ngstarter-ui/components
 ```
 
-The `ng add` schematic also creates NgStarter Codex guidance in `AGENTS.md` and installs a local
-Codex skill at `.codex/skills/ngstarter-ui` by default. To skip that setup, run:
+The `ng add` schematic installs the required dependencies, configures Tailwind CSS 4 and
+PostCSS, imports the Default theme, adds `provideNgsTheme` to the application config, and
+adds the DM Sans font to the application HTML. In a workspace with multiple applications,
+select the target with `--project=your-app`.
+
+The schematic also adds NgStarter guidance to `AGENTS.md` and installs a local Codex skill at
+`.codex/skills/ngstarter-ui` by default. To skip the local skill installation while keeping
+the `AGENTS.md` guidance, run:
 
 ```bash
 npx ng add @ngstarter-ui/components --codex-skill=false
@@ -37,23 +46,45 @@ If NgStarter UI is already installed and you only want to add or refresh the Cod
 npx ng generate @ngstarter-ui/components:codex-skill
 ```
 
+### Basic Usage
+
 NgStarter components are standalone Angular components. Import each component from its
-secondary entry point:
+public secondary entry point and include it in the component's `imports`:
 
 ```ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
-import { Dialog } from '@ngstarter-ui/components/dialog';
-import { Input } from '@ngstarter-ui/components/input';
+
+@Component({
+  selector: 'app-example',
+  standalone: true,
+  imports: [Button],
+  template: `<button ngsButton="filled">Save</button>`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Example {}
 ```
+
+Other entry points follow the same pattern, such as `@ngstarter-ui/components/dialog`,
+`@ngstarter-ui/components/form-field`, and `@ngstarter-ui/components/input`.
 
 ## Theming
 
-NgStarter ships Default and Chalk themes. Import the stylesheets you make available at runtime:
+NgStarter ships Default and Chalk themes, each with light and dark colors. Import the Default
+theme once in the application's global `styles.scss`:
 
 ```scss
 @use '@ngstarter-ui/components/styles/themes/default';
+```
+
+If the application uses Chalk or lets users switch to it at runtime, also import:
+
+```scss
 @use '@ngstarter-ui/components/styles/themes/chalk';
 ```
+
+The theme includes Tailwind CSS and shared base styles; an additional Tailwind import or a
+duplicate CSS reset is not needed.
 
 Themes use fixed light and dark color tokens. Their main layers are:
 
@@ -64,27 +95,55 @@ Themes use fixed light and dark color tokens. Their main layers are:
 Configure the theme and color scheme at runtime:
 
 ```ts
+import { ApplicationConfig } from '@angular/core';
 import { provideNgsTheme } from '@ngstarter-ui/components/core';
 
-export const appConfig = {
+export const appConfig: ApplicationConfig = {
   providers: [
     provideNgsTheme({
       theme: 'default',
       colorScheme: 'auto',
-      colorPreset: 'default',
     }),
   ],
 };
 ```
 
-For user display preferences, inject `ThemeManagerService`:
+`theme` accepts `'default'` or `'chalk'`. `colorScheme` accepts `'light'`, `'dark'`, or
+`'auto'`; auto follows the operating system preference. These options default to `'default'`
+and `'auto'`, respectively.
+
+`colorPreset` is optional and currently supports only `'default'`. The theme manager always
+uses that value, so it can be omitted. Customize colors and geometry through CSS tokens.
+
+Preferences are stored in localStorage under `ngs-admin` by default. Set `persist: false` to
+disable persistence or use `storageKey` to choose another key. Stored preferences take
+precedence over the initial theme and color scheme when persistence is enabled.
+
+Use `ThemeManagerService` to change preferences from a component:
 
 ```ts
-themeManager.setTheme('chalk');
-themeManager.changeColorScheme('dark');
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Button } from '@ngstarter-ui/components/button';
+import { ThemeManagerService } from '@ngstarter-ui/components/core';
+
+@Component({
+  selector: 'app-theme-preferences',
+  standalone: true,
+  imports: [Button],
+  template: `
+    <button ngsButton (click)="themeManager.setTheme('chalk')">Chalk</button>
+    <button ngsButton (click)="themeManager.setColorScheme('auto')">System theme</button>
+    <button ngsButton (click)="themeManager.setColorScheme('dark')">Dark mode</button>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ThemePreferences {
+  readonly themeManager = inject(ThemeManagerService);
+}
 ```
 
-The same values can be represented with document attributes:
+The service synchronizes document attributes and the `dark` class. Without the runtime
+service, the imported stylesheets can also be controlled with document attributes:
 
 ```html
 <html data-ngs-theme="chalk" data-ngs-color-scheme="dark">
@@ -96,7 +155,12 @@ The documentation site includes live demos and API examples for each component:
 
 - [Documentation](https://docs.ngstarter.com)
 - [Installation](https://docs.ngstarter.com/installation)
+- [Theming](https://docs.ngstarter.com/theme)
 - [AI component registry](https://docs.ngstarter.com/ai/component-registry.json)
+
+The package also includes the registry at
+`node_modules/@ngstarter-ui/components/ai/component-registry.json` for local component
+discovery and AI-assisted development.
 
 ### Forms
 
@@ -107,6 +171,7 @@ The documentation site includes live demos and API examples for each component:
 - [Country Select](https://docs.ngstarter.com/forms/country)
 - [Currency Select](https://docs.ngstarter.com/forms/currency-select)
 - [Date Format Select](https://docs.ngstarter.com/forms/date-format-select)
+- [Filter Select](https://docs.ngstarter.com/forms/filter-select)
 - [Inline Text Edit](https://docs.ngstarter.com/forms/inline-text-edit)
 - [Input](https://docs.ngstarter.com/forms/input)
 - [Input Mask](https://docs.ngstarter.com/forms/input-mask)
@@ -134,9 +199,17 @@ The documentation site includes live demos and API examples for each component:
 
 - [Content Editor](https://docs.ngstarter.com/libraries/content-editor)
 - [Data View](https://docs.ngstarter.com/libraries/data-view)
+- [Form Builder](https://docs.ngstarter.com/libraries/form-builder)
+- [Headless Editor](https://docs.ngstarter.com/libraries/headless-editor)
 - [Image Designer](https://docs.ngstarter.com/libraries/image-designer)
 - [Kanban Board](https://docs.ngstarter.com/libraries/kanban-board)
 - [Micro Charts](https://docs.ngstarter.com/micro-charts)
+- [Bar Chart](https://docs.ngstarter.com/micro-charts/bar-chart)
+- [Line Chart](https://docs.ngstarter.com/micro-charts/line-chart)
+- [Pie Chart](https://docs.ngstarter.com/micro-charts/pie-chart)
+- [PDF Builder](https://docs.ngstarter.com/libraries/pdf-builder)
+- [PDF Signer](https://docs.ngstarter.com/libraries/pdf-signer)
+- [PDF Viewer](https://docs.ngstarter.com/libraries/pdf-viewer)
 - [Video Player](https://docs.ngstarter.com/libraries/video-player)
 - [Visual Builder](https://docs.ngstarter.com/libraries/visual-builder)
 
@@ -149,6 +222,7 @@ The documentation site includes live demos and API examples for each component:
 - [Badge](https://docs.ngstarter.com/components/badge)
 - [Block Loader](https://docs.ngstarter.com/components/block-loader)
 - [Bottom Sheet](https://docs.ngstarter.com/components/bottom-sheet)
+- [Calendar](https://docs.ngstarter.com/components/calendar)
 - [Card](https://docs.ngstarter.com/components/card)
 - [Card Overlay](https://docs.ngstarter.com/components/card-overlay)
 - [Carousel](https://docs.ngstarter.com/components/carousel)
@@ -163,17 +237,21 @@ The documentation site includes live demos and API examples for each component:
 - [Cookie Popup](https://docs.ngstarter.com/components/cookie-popup)
 - [Crop](https://docs.ngstarter.com/components/crop)
 - [Datepicker](https://docs.ngstarter.com/components/datepicker)
+- [Digit Roller](https://docs.ngstarter.com/components/digit-roller)
 - [Dialog](https://docs.ngstarter.com/components/dialog)
 - [Divider](https://docs.ngstarter.com/components/divider)
 - [Drawer](https://docs.ngstarter.com/components/drawer)
 - [Emoji Picker](https://docs.ngstarter.com/components/emoji-picker)
 - [Empty State](https://docs.ngstarter.com/components/empty-state)
+- [Events](https://docs.ngstarter.com/components/events)
 - [Expand](https://docs.ngstarter.com/components/expand)
 - [Expansion Panel](https://docs.ngstarter.com/components/expansion-panel)
+- [File Type](https://docs.ngstarter.com/components/file-type)
 - [Filter Builder](https://docs.ngstarter.com/components/filter-builder)
 - [Gauge](https://docs.ngstarter.com/components/gauge)
 - [Grid](https://docs.ngstarter.com/components/grid)
 - [Guided Tour](https://docs.ngstarter.com/components/guided-tour)
+- [Headless Stepper](https://docs.ngstarter.com/components/headless-stepper)
 - [Icon](https://docs.ngstarter.com/components/icon)
 - [Image Placeholder](https://docs.ngstarter.com/components/image-placeholder)
 - [Image Resizer](https://docs.ngstarter.com/components/image-resizer)
@@ -198,12 +276,13 @@ The documentation site includes live demos and API examples for each component:
 - [Skeleton](https://docs.ngstarter.com/components/skeleton)
 - [Slider](https://docs.ngstarter.com/components/slider)
 - [Snack Bar](https://docs.ngstarter.com/components/snackbar)
+- [Sort](https://docs.ngstarter.com/components/sort)
 - [Split Pane](https://docs.ngstarter.com/components/split-pane)
+- [Step Tracker](https://docs.ngstarter.com/components/step-tracker)
 - [Stepper](https://docs.ngstarter.com/components/stepper)
 - [Suggestions](https://docs.ngstarter.com/components/suggestions)
 - [Table](https://docs.ngstarter.com/components/table)
 - [Tabs](https://docs.ngstarter.com/components/tabs)
-- [Text Editor](https://docs.ngstarter.com/components/text-editor)
 - [Thumbnail Maker](https://docs.ngstarter.com/components/thumbnail-maker)
 - [Tiles](https://docs.ngstarter.com/components/tiles)
 - [Timeline](https://docs.ngstarter.com/components/timeline)
@@ -211,5 +290,46 @@ The documentation site includes live demos and API examples for each component:
 - [Toolbar](https://docs.ngstarter.com/components/toolbar)
 - [Tooltip](https://docs.ngstarter.com/components/tooltip)
 - [Tree](https://docs.ngstarter.com/components/tree)
+- [Typed Signature Pad](https://docs.ngstarter.com/components/typed-signature-pad)
 - [Upload](https://docs.ngstarter.com/components/upload)
 - [Video Viewer](https://docs.ngstarter.com/components/video-viewer)
+
+## Repository Development
+
+Clone the repository and install its dependencies to run the docs locally:
+
+```bash
+git clone https://github.com/elementarlabsdev/ngstarter.git
+cd ngstarter
+npm ci
+npm run start:docs
+```
+
+The workspace contains:
+
+| Directory | Purpose |
+| --- | --- |
+| `projects/components` | Publishable library, secondary entry points, themes, and schematics |
+| `projects/docs` | Documentation application and live component examples |
+| `projects/admin` | Admin demo application |
+| `projects/admin-modern` | Modern admin application |
+| `projects/admin-corporate` | Corporate admin application |
+| `projects/admin-classic` | Placeholder for a future admin application |
+
+Use the relevant command for the part of the workspace you are changing:
+
+| Command | Purpose |
+| --- | --- |
+| `npm run build:components:prod` | Build the library, AI metadata, and schematics |
+| `npm run verify:components:package` | Validate the generated package after building it |
+| `npm run build:docs:prod` | Build the documentation application |
+| `npm run start:admin:modern` | Run the Modern admin application |
+| `npm run start:admin:corporate` | Run the Corporate admin application |
+| `npm run verify:admin:components` | Check admin composition against NgStarter conventions |
+| `npm run test:components` | Run library unit tests |
+| `npm run test:docs` | Run documentation application tests |
+| `npm run test` | Run all configured unit test targets |
+| `npm run generate:ai` | Regenerate the AI component registry and usage guidance |
+
+Follow `AGENTS.md` for component structure, public imports, admin composition, and validation.
+Keep changes in source files; do not edit generated files under `dist/`.
