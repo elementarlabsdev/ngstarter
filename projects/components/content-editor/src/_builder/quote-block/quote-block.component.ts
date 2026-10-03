@@ -1,6 +1,9 @@
+import { NgsHeadlessEditorText } from '@ngstarter-ui/components/headless-editor';
+import { ContentEditorText } from '../../types';
+import { contentEditorText, cloneContentEditorValue } from '../../document';
 import {
   ChangeDetectionStrategy,
-  Component, computed,
+  Component, computed, effect, untracked,
   DestroyRef,
   ElementRef,
   inject,
@@ -22,11 +25,11 @@ import { ContentBuilderComponent } from '../../content-builder/content-builder.c
 
 export interface ContentEditorQuoteBlockContent {
   cite: {
-    content: string;
+    content: ContentEditorText;
     props: ContentEditorItemProperty[];
   };
   caption?: {
-    content: string;
+    content: ContentEditorText;
     props: ContentEditorItemProperty[];
   }
 }
@@ -64,28 +67,42 @@ export class QuoteBlockComponent implements OnInit, ContentEditorDataBlock {
   content = input.required<ContentEditorQuoteBlockContent>();
   settings = input.required<any>();
   index = input.required<number>();
+  props = input<ContentEditorItemProperty[]>([]);
   placeholder = input('Enter quote here');
   captionPlaceholder = input('Enter caption here');
 
-  protected _citeContent = signal<string>('');
+  protected _citeContent = signal<ContentEditorText>([]);
   protected _citeProps = signal<ContentEditorItemProperty[]>([]);
-  protected _captionContent = signal<string>('');
+  protected _captionContent = signal<ContentEditorText>([]);
   protected _captionProps = signal<ContentEditorItemProperty[]>([]);
   protected _isEmpty = signal<boolean>(true);
   readonly initialized = signal(false);
 
   citeOriginalContent = computed(() => {
-    return this.content().cite.content || '';
+    return this.content().cite.content || [];
   });
   citeOriginalProps = computed(() => {
     return this.content().cite.props || [];
   });
   captionOriginalContent = computed(() => {
-    return this.content().caption?.content || '';
+    return this.content().caption?.content || [];
   });
   captionOriginalProps = computed(() => {
     return this.content().caption?.props || [];
   });
+
+  constructor() {
+    effect(() => {
+      const content = this.content();
+      untracked(() => {
+        this._citeContent.set(content.cite.content);
+        this._citeProps.set(cloneContentEditorValue(content.cite.props));
+        this._captionContent.set(content.caption?.content ?? []);
+        this._captionProps.set(cloneContentEditorValue(content.caption?.props ?? []));
+        this._isEmpty.set(!contentEditorText(content.cite.content).trim());
+      });
+    });
+  }
 
   ngOnInit() {
     this._citeContent.set(this.citeOriginalContent());
@@ -132,25 +149,25 @@ export class QuoteBlockComponent implements OnInit, ContentEditorDataBlock {
   }
 
   isEmpty(): boolean {
-    return this.getData().content.cite.content.trim().length === 0;
+    return !contentEditorText(this._citeContent()).trim();
   }
 
-  protected onCiteContentChanged(content: string) {
+  protected onCiteContentChanged(content: readonly NgsHeadlessEditorText[]) {
     if (!this.initialized()) {
       return;
     }
 
-    this._isEmpty.set(content.trim().length === 0);
-    this._citeContent.set(content.trim());
+    this._isEmpty.set(!contentEditorText(content).trim());
+    this._citeContent.set(content);
     this.update();
   }
 
-  protected onCaptionContentChanged(content: string) {
+  protected onCaptionContentChanged(content: readonly NgsHeadlessEditorText[]) {
     if (!this.initialized()) {
       return;
     }
 
-    this._captionContent.set(content.trim());
+    this._captionContent.set(content);
     this.update();
   }
 

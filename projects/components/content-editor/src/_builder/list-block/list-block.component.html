@@ -9,7 +9,8 @@
 <ng-template #listTpl let-list let-level="level" let-parentItem="parentItem" let-parentList="parentList">
   @for (item of list; track $index; let index = $index) {
     <li #listItem class="list-item" [attr.id]="getId(level, index)">
-      <div [ngsContentEditorContentEditable]="item.content"
+      <div [singleLine]="true"
+           [ngsContentEditorContentEditable]="item.content"
            [props]="item.props"
            (propsChanged)="onPropsChanged($event, item)"
            #contentEditable="ngsContentEditorContentEditable"

@@ -1,3 +1,4 @@
+import { NgsHeadlessEditorDocument, NgsHeadlessEditorText, NgsHeadlessEditorBlock } from '@ngstarter-ui/components/headless-editor';
 import { InjectionToken, InputSignal, Signal, Type } from '@angular/core';
 
 export const CONTENT_BUILDER = new InjectionToken('CONTENT_BUILDER');
@@ -18,11 +19,32 @@ export interface ContentEditorBlockEmpty {
   }
 }
 
-export interface ContentEditorBlock {
+export type ContentEditorDocument = NgsHeadlessEditorDocument;
+export type ContentEditorBlock<TContent = unknown> = NgsHeadlessEditorBlock<TContent>;
+export type ContentEditorText = readonly NgsHeadlessEditorText[];
+
+export type ContentEditorCalloutVariant = 'note' | 'tip' | 'warning' | 'danger';
+export interface ContentEditorCalloutSettings { variant: ContentEditorCalloutVariant; }
+export interface ContentEditorToggleContent { title: ContentEditorText; blocks: readonly ContentEditorBlock[]; }
+export interface ContentEditorToggleSettings { expanded: boolean; }
+export interface ContentEditorAttachmentContent { url: string; name: string; size: number; mimeType: string; }
+export interface ContentEditorGalleryImage { id: string; src: string; alt: string; caption: ContentEditorText; }
+export interface ContentEditorGalleryContent { images: readonly ContentEditorGalleryImage[]; }
+export interface ContentEditorColumn { id: string; blocks: readonly ContentEditorBlock[]; }
+export interface ContentEditorColumnsContent { columns: readonly ContentEditorColumn[]; }
+/** A block collection in the root document, a toggle, or a column. */
+export interface ContentEditorBlockScope { parentId?: string; columnId?: string; }
+/** Destination passed to the shared block menu; omission of afterId appends to the collection. */
+export interface ContentEditorBlockInsertionTarget { scope: ContentEditorBlockScope; afterId?: string; }
+export type ContentEditorUploadFn = (file: File, dataUrl: string) => Promise<string>;
+
+/** UI input view of a native document block. Never used as the saved document. */
+export interface ContentEditorBlockView {
   id: string;
   type: string;
   content: any;
   isEmpty: boolean;
+  attrs?: Readonly<Record<string, unknown>>;
   props?: ContentEditorItemProperty[],
   settings: any;
 }
@@ -94,7 +116,7 @@ export interface ContentEditorEmbedBlockSettings {
 }
 
 export interface ContentEditorListItem {
-  content: string;
+  content: ContentEditorText;
   props?: ContentEditorItemProperty[];
   children: ContentEditorListItem[];
   [prop: string]: any;
@@ -122,7 +144,7 @@ export interface ContentEditorBlockRendererDef {
 }
 
 export interface ContentEditorBlockRendererInputs<TContent = unknown, TSettings = unknown> extends Record<string, unknown> {
-  block: ContentEditorBlock | null;
+  block: NgsHeadlessEditorBlock | null;
   id: string;
   type: string;
   content: TContent;
@@ -132,7 +154,7 @@ export interface ContentEditorBlockRendererInputs<TContent = unknown, TSettings 
 }
 
 export interface ContentEditorBlockRendererInputSignals<TContent = unknown, TSettings = unknown> {
-  block: InputSignal<ContentEditorBlock | null>;
+  block: InputSignal<NgsHeadlessEditorBlock | null>;
   id: InputSignal<string>;
   type: InputSignal<string>;
   content: InputSignal<TContent>;

@@ -1,6 +1,8 @@
+import { NgsHeadlessEditorText } from '@ngstarter-ui/components/headless-editor';
+import { contentEditorText, cloneContentEditorValue } from '../../document';
 import {
   ChangeDetectionStrategy,
-  Component,
+  Component, effect, untracked,
   DestroyRef,
   ElementRef,
   inject,
@@ -52,21 +54,33 @@ export class HeadingBlockComponent implements OnInit, ContentEditorDataBlock {
   private _contentRef = viewChild.required<ElementRef<HTMLParagraphElement>>('contentRef');
 
   id = input.required<string>();
-  content = input.required<string>();
+  content = input.required<readonly NgsHeadlessEditorText[]>();
   settings = input.required<ContentEditorHeadingBlockSettings>();
   props = input<ContentEditorItemProperty[]>([]);
   index = input.required<number>();
   placeholder = input('Heading');
 
-  protected _content = signal<string>('')
+  protected _content = signal<readonly NgsHeadlessEditorText[]>([])
   protected _isEmpty = signal<boolean>(true);
   protected _props = signal<ContentEditorItemProperty[]>([]);
   readonly initialized = signal(false);
 
+  constructor() {
+    effect(() => {
+      const content = this.content();
+      const props = this.props();
+      untracked(() => {
+        this._content.set(content);
+        this._props.set(cloneContentEditorValue(props));
+        this._isEmpty.set(!contentEditorText(content).trim());
+      });
+    });
+  }
+
   ngOnInit() {
     this._content.set(this.content());
     this._props.set(this.props());
-    this._isEmpty.set(this.content().length === 0);
+    this._isEmpty.set(!contentEditorText(this.content()).trim());
     this._contentBuilder
       .focusChanged
       .pipe(takeUntilDestroyed(this._destroyRef))
@@ -84,8 +98,7 @@ export class HeadingBlockComponent implements OnInit, ContentEditorDataBlock {
   }
 
   onPropsChanged(props: ContentEditorItemProperty[]) {
-    this._contentBuilder.setBlockProps(this.id(), props);
-    this._store.updateBlock(this.id(), this.getData());
+    this._props.set(props);
     this.update();
   }
 
@@ -100,16 +113,16 @@ export class HeadingBlockComponent implements OnInit, ContentEditorDataBlock {
   }
 
   isEmpty(): boolean {
-    return this.getData().content.trim().length === 0;
+    return !contentEditorText(this._content()).trim();
   }
 
-  protected onContentChanged(content: string) {
+  protected onContentChanged(content: readonly NgsHeadlessEditorText[]) {
     if (!this.initialized()) {
       return;
     }
 
     this._content.set(content);
-    this._isEmpty.set(content.length === 0);
+    this._isEmpty.set(!contentEditorText(content).trim());
 
     this.update();
   }
@@ -129,7 +142,7 @@ export class HeadingBlockComponent implements OnInit, ContentEditorDataBlock {
   }
 
   protected _onKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Backspace' && !this._content()) {
+    if (event.key === 'Backspace' && !contentEditorText(this._content())) {
       this._contentBuilder.deleteBlock(this.id());
     }
   }

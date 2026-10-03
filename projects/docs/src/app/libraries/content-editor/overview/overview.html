@@ -10,21 +10,57 @@
         Use <code class="code">ngs-content-editor-builder</code> for articles, pages, documentation, knowledge base entries, rich notes,
         editable descriptions, landing content, and CMS-like editing workflows.
       </p>
+      <h2 class="mt-7 mb-3 text-lg font-semibold">Document model</h2>
+      <p class="mb-4">
+        Content Editor uses the Headless Editor document: <code class="code">&#123; version: 1, blocks &#125;</code>.
+        Text fields contain text runs with marks, including bold, italic, links and colors.
+        Block settings and properties are stored in <code class="code">attrs.settings</code> and
+        <code class="code">attrs.props</code>. Lists keep their nested items, and tables use
+        <code class="code">attrs.rows</code> for text runs, with column spans, row spans and widths in
+        <code class="code">attrs.cellMetadata</code>. Text edits, formatting and block
+        operations share one undo/redo history. HTML is not stored in text fields.
+      </p>
+      <ngs-code-highlighter [code]="documentExample" language="typescript"/>
+      <div class="mt-4">
+        <ngs-code-highlighter [code]="templateExample" language="html"/>
+      </div>
+      <h2 class="mt-7 mb-3 text-lg font-semibold">Content and layout blocks</h2>
+      <ul class="mb-4 list-disc ps-4 flex flex-col gap-2">
+        <li><code class="code">callout</code>: text runs with note, tip, warning or danger in <code class="code">attrs.settings.variant</code>.</li>
+        <li><code class="code">toggle</code>: rich title and nested <code class="code">content.blocks</code>; <code class="code">attrs.settings.expanded</code> controls the initial reader state.</li>
+        <li><code class="code">attachment</code>: URL, name, size in bytes and MIME type.</li>
+        <li><code class="code">gallery</code>: image carousel with IDs, alt text and plain text captions. Select a thumbnail to edit that image; drag its handle to reorder. The preview menu can replace, move or remove the selected image.</li>
+        <li><code class="code">columns</code>: two or three collections in <code class="code">content.columns</code>, each with its own ID and nested blocks. Columns stack on smaller screens.</li>
+      </ul>
+      <p class="mb-4">Nested blocks use the same formatting and undo/redo history. Drag blocks between collections using their handles.
+        Reducing the column count moves the removed columns’ blocks into the last remaining column.</p>
+      <p class="mb-4">Empty nested collections show a paragraph. Typing stays in that paragraph; press Enter to add the next one.
+        Use the plus control beside a block to open the shared block menu.</p>
+      <p class="mb-4">All Add block controls share the root builder’s <code class="code">blockMenu()</code>.
+        Custom blocks can reuse it with <code class="code">ngsMenuTriggerFor</code> and pass
+        <code class="code">&#123; target: &#123; scope, afterId &#125; &#125;</code> through <code class="code">ngsMenuTriggerData</code>.
+        Resolve the root through <code class="code">inject(CONTENT_BUILDER).rootBuilder</code>.
+        Use an empty scope for the root document, <code class="code">parentId</code> for a toggle,
+        or <code class="code">parentId</code> and <code class="code">columnId</code> for a column.
+        Omit <code class="code">afterId</code> to append to the collection.</p>
+      <p class="mb-4">Configure <code class="code">options.attachment.uploadFn</code> and <code class="code">options.gallery.uploadFn</code>
+        as <code class="code">(file, dataUrl) =&gt; Promise&lt;string&gt;</code> returning a persistent URL from your storage.
+        The default saves a data URL in the document. Upload failures can be retried, and cancelling prevents a pending result from changing the document.</p>
       <div class="my-7">
         <div>Use it for:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            Building content from blocks such as paragraph, heading, list, quote, code, divider, table, image, video, and embed.
+            Building content from blocks such as paragraph, heading, list, quote, code, divider, table, image, video, embed, callout, toggle, attachment, gallery, and columns.
           </li>
           <li>
             Reordering, duplicating, deleting, and multi-selecting blocks inside an editor surface.
           </li>
           <li>
-            Persisting structured <code class="code">ContentEditorBlock[]</code> data through the
+            Persisting structured <code class="code">ContentEditorDocument</code> data through the
             <code class="code">contentChanged</code> event.
           </li>
           <li>
-            Passing block options such as image and video upload functions.
+            Passing block options such as image, video, attachment and gallery upload functions.
           </li>
           <li>
             Rendering saved blocks with <code class="code">ngs-content-editor-renderer</code>

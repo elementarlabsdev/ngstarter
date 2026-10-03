@@ -1,10 +1,13 @@
+import { contentEditorText } from '../../document';
+import { NgsHeadlessEditorBlock } from '@ngstarter-ui/components/headless-editor';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { SafeHtmlPipe } from '@ngstarter-ui/components/core';
-import { ContentEditorBlock, ContentEditorBlockRendererInputSignals, ContentEditorItemProperty } from '../../types';
-import { getHtmlContent, getTextAlignment } from '../renderer-utils';
+import { NgsHeadlessEditorRuns } from '@ngstarter-ui/components/headless-editor';
+import { ContentEditorText } from '../../types';
+import { ContentEditorBlockRendererInputSignals, ContentEditorItemProperty } from '../../types';
+import { getTextAlignment } from '../renderer-utils';
 
 export interface ContentEditorQuoteRendererContentPart {
-  content?: string;
+  content?: ContentEditorText;
   props?: ContentEditorItemProperty[];
 }
 
@@ -16,7 +19,7 @@ export interface ContentEditorQuoteRendererContent {
 @Component({
   selector: 'ngs-content-editor-quote-renderer',
   imports: [
-    SafeHtmlPipe,
+    NgsHeadlessEditorRuns,
   ],
   templateUrl: './quote-renderer.html',
   styleUrl: './quote-renderer.scss',
@@ -29,7 +32,7 @@ export class ContentEditorQuoteRenderer implements ContentEditorBlockRendererInp
   ContentEditorQuoteRendererContent | null,
   Record<string, unknown>
 > {
-  block = input<ContentEditorBlock | null>(null);
+  block = input<NgsHeadlessEditorBlock | null>(null);
   id = input<string>('');
   type = input<string>('');
   content = input<ContentEditorQuoteRendererContent | null>(null);
@@ -37,8 +40,9 @@ export class ContentEditorQuoteRenderer implements ContentEditorBlockRendererInp
   settings = input<Record<string, unknown>>({});
   index = input<number>(0);
 
-  protected readonly quoteHtml = computed(() => getHtmlContent(this.content()?.cite?.content));
-  protected readonly captionHtml = computed(() => getHtmlContent(this.content()?.caption?.content));
+  protected readonly quoteRuns = computed(() => this.content()?.cite?.content ?? []);
+  protected readonly captionRuns = computed(() => this.content()?.caption?.content ?? []);
+  protected readonly hasCaption = computed(() => !!contentEditorText(this.captionRuns()).trim());
   protected readonly quoteAlignment = computed(() => getTextAlignment(this.content()?.cite?.props));
   protected readonly captionAlignment = computed(() => getTextAlignment(this.content()?.caption?.props));
 }

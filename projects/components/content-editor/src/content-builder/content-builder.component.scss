@@ -4,21 +4,14 @@
   --ngs-content-editor-builder-content-width: 704px;
   outline: none;
 
-  ::ng-deep {
-    .link-selection,
-    .text-selection {
-      display: inline-block;
-      background: var(--ngs-color-secondary-fixed);
-    }
-  }
-
   &.is-block-dragging {
     cursor: grabbing;
   }
 
   .container {
     display: flex;
-    width: 820px;
+    width: 100%;
+    max-width: 820px;
     min-height: 200px;
     height: 100%;
     padding: --spacing(5) --spacing(5) --spacing(5) 0;
@@ -28,7 +21,8 @@
 
   .content {
     flex-grow: 1;
-    width: calc(var(--ngs-content-editor-builder-content-width) + --spacing(10));
+    width: 100%;
+    min-width: 0;
   }
 
   .block {
@@ -59,6 +53,7 @@
   .block-content {
     position: relative;
     flex-grow: 1;
+    min-width: 0;
     padding: --spacing(3);
 
     &.is-selected {
@@ -76,6 +71,24 @@
 
     .ngs-content-editor-content-editable {
       user-select: text;
+
+      a[data-ngs-headless-editor-mark='link'] {
+        color: var(--ngs-color-primary);
+        text-decoration: underline;
+        text-underline-offset: 0.15em;
+      }
+
+      &.align-center { text-align: center; }
+      &.align-right { text-align: right; }
+      &.align-justify { text-align: justify; }
+      > p { margin: 0; }
+      &[data-empty]::before {
+        content: attr(data-empty-placeholder);
+        display: block;
+        height: 0;
+        color: var(--ngs-color-neutral-500);
+        pointer-events: none;
+      }
     }
   }
 

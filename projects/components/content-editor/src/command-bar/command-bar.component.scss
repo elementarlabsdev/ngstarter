@@ -1,15 +1,20 @@
 @reference 'tailwindcss';
 
 :host {
-  background: var(--ngs-color-surface-container);
+  background: var(--ngs-color-on-surface);
+  color: var(--ngs-color-surface);
   border-radius: --spacing(3);
   padding: --spacing(1);
   box-shadow: var(--ngs-shadow-lg);
 
-  button {
+  button[ngsIconButton] {
+    --ngs-button-color: var(--ngs-color-surface);
+    --ngs-button-hover-bg: color-mix(in srgb, var(--ngs-color-surface) 12%, transparent);
+    --ngs-state-focus-ring: color-mix(in srgb, var(--ngs-color-surface) 40%, transparent);
+
     &.is-active {
-      background: var(--ngs-color-surface-container-highest);
-      color: var(--ngs-color-primary);
+      --ngs-button-bg: color-mix(in srgb, var(--ngs-color-surface) 20%, transparent);
+      --ngs-button-hover-bg: color-mix(in srgb, var(--ngs-color-surface) 28%, transparent);
     }
   }
 }

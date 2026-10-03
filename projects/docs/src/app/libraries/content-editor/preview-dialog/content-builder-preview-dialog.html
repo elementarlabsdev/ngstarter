@@ -1,8 +1,8 @@
 <h3 ngs-dialog-title>Preview</h3>
 <ngs-dialog-content>
-  <div class="preview-content">
-    @if (data.blocks.length > 0) {
-      <ngs-content-editor-renderer [content]="data.blocks"/>
+  <div class="min-h-40 w-full min-w-0">
+    @if (data.document.blocks.length > 0) {
+      <ngs-content-editor-renderer [content]="data.document"/>
     } @else {
       <ngs-empty-state>Nothing to preview</ngs-empty-state>
     }

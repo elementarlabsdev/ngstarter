@@ -1,6 +1,7 @@
 <div #contentRef
      class="content"
-     [ngsContentEditorContentEditable]="_content()"
+     [singleLine]="true"
+   [ngsContentEditorContentEditable]="_content()"
      [props]="props()"
      (propsChanged)="onPropsChanged($event)"
      [attr.data-empty-placeholder]="placeholder()"

@@ -1,8 +1,9 @@
+import { contentEditorText, cloneContentEditorValue } from '../../document';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component,
+  Component, effect, untracked,
   ElementRef,
   inject,
   input, OnInit, PLATFORM_ID, signal,
@@ -64,6 +65,7 @@ export class TableBlockComponent implements OnInit, AfterViewInit, ContentEditor
   content = input.required<any[]>();
   settings = input.required<ContentEditorTableBlockSettings>();
   index = input.required<number>();
+  props = input<unknown[]>([]);
 
   _content = signal<any[]>([]);
   _columnManaging = signal(false);
@@ -72,8 +74,25 @@ export class TableBlockComponent implements OnInit, AfterViewInit, ContentEditor
   _resizeManging = signal(false);
   readonly initialized = signal(false);
 
+  constructor() {
+    effect(() => {
+      const content = this.content();
+      untracked(() => this._content.set(cloneContentEditorValue(content)));
+    });
+  }
+
+  onCellContentChanged(cell: any, content: unknown): void {
+    cell.content = content;
+    this.update();
+  }
+
+  onCellPropsChanged(cell: any, props: unknown): void {
+    cell.props = props;
+    this.update();
+  }
+
   ngOnInit() {
-    this._content.set(this.content());
+    this._content.set(cloneContentEditorValue(this.content()));
   }
 
   ngAfterViewInit() {
@@ -129,7 +148,7 @@ export class TableBlockComponent implements OnInit, AfterViewInit, ContentEditor
     this._content.update((content: any[]) => {
       content.forEach((row: any) => {
         row.push({
-          content: '',
+          content: [],
           props: [],
           styles: {},
           options: {
@@ -152,7 +171,7 @@ export class TableBlockComponent implements OnInit, AfterViewInit, ContentEditor
     let isLastColEmpty = false;
 
     this._content().forEach((row: any) => {
-      if (row[row.length - 1].content) {
+      if (contentEditorText(row[row.length - 1].content)) {
         isLastColEmpty = true;
       }
     });
@@ -177,7 +196,7 @@ export class TableBlockComponent implements OnInit, AfterViewInit, ContentEditor
 
       for (let i = 0; i < content[0].length; i++) {
         row.push({
-          content: '',
+          content: [],
           props: [],
           styles: {},
           options: {
@@ -202,7 +221,7 @@ export class TableBlockComponent implements OnInit, AfterViewInit, ContentEditor
     let isLastRowEmpty = false;
 
     this._content()[this._content().length - 1].forEach((cell: any) => {
-      if (cell.content) {
+      if (contentEditorText(cell.content)) {
         isLastRowEmpty = true;
       }
     });

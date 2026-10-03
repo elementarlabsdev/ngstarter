@@ -1,8 +1,9 @@
+import { NgsHeadlessEditorBlock } from '@ngstarter-ui/components/headless-editor';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { NativeTable } from '@ngstarter-ui/components/table';
-import { SafeHtmlPipe } from '@ngstarter-ui/components/core';
+import { NgsHeadlessEditorRuns } from '@ngstarter-ui/components/headless-editor';
+import { ContentEditorText } from '../../types';
 import {
-  ContentEditorBlock,
   ContentEditorBlockRendererInputSignals,
   ContentEditorItemProperty,
   ContentEditorTableBlockSettings,
@@ -10,7 +11,7 @@ import {
 import { getDimensionAttribute } from '../renderer-utils';
 
 export interface ContentEditorTableCell {
-  content?: string;
+  content?: ContentEditorText;
   props?: unknown[];
   styles?: Record<string, unknown>;
   options?: {
@@ -24,7 +25,7 @@ export interface ContentEditorTableCell {
   selector: 'ngs-content-editor-table-renderer',
   imports: [
     NativeTable,
-    SafeHtmlPipe,
+    NgsHeadlessEditorRuns,
   ],
   templateUrl: './table-renderer.html',
   styleUrl: './table-renderer.scss',
@@ -37,7 +38,7 @@ export class ContentEditorTableRenderer implements ContentEditorBlockRendererInp
   ContentEditorTableCell[][],
   ContentEditorTableBlockSettings
 > {
-  block = input<ContentEditorBlock | null>(null);
+  block = input<NgsHeadlessEditorBlock | null>(null);
   id = input<string>('');
   type = input<string>('');
   content = input<ContentEditorTableCell[][]>([]);
@@ -45,6 +46,7 @@ export class ContentEditorTableRenderer implements ContentEditorBlockRendererInp
   settings = input<ContentEditorTableBlockSettings>({});
   index = input<number>(0);
 
+  protected readonly header = computed(() => this.block()?.attrs?.['header'] === true);
   protected readonly rows = computed(() => this.content() || []);
   protected readonly firstRow = computed(() => this.rows()[0] || []);
 

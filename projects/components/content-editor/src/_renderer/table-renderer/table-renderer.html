@@ -7,14 +7,22 @@
         }
       </colgroup>
       <tbody>
-        @for (row of rows(); track $index) {
+        @for (row of rows(); track $index; let rowIndex = $index) {
           <tr>
             @for (cell of row; track $index) {
-              <td
-                [attr.colspan]="colSpan(cell)"
-                [attr.rowspan]="rowSpan(cell)"
-                [innerHTML]="(cell.content || '') | safeHtml"
-              ></td>
+              @if (rowIndex === 0 && header()) {
+                <th
+                  [attr.colspan]="colSpan(cell)"
+                  [attr.rowspan]="rowSpan(cell)"
+                  [ngsHeadlessEditorRuns]="cell.content || []"
+                ></th>
+              } @else {
+                <td
+                  [attr.colspan]="colSpan(cell)"
+                  [attr.rowspan]="rowSpan(cell)"
+                  [ngsHeadlessEditorRuns]="cell.content || []"
+                ></td>
+              }
             }
           </tr>
         }

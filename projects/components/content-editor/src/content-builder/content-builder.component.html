@@ -1,6 +1,9 @@
 <div class="container py-4">
   <div class="content"
        cdkDropList
+       [cdkDropListData]="{}"
+       [cdkDropListConnectedTo]="connectedDropLists()"
+       [cdkDropListEnterPredicate]="canEnterRoot"
        ngsTextSelectionPopup
        closestContentObserverClass="ngs-content-editor-content-editable"
        [targetComponent]="commandBar"
@@ -12,19 +15,18 @@
            [class.is-focused]="isBlockFocused(contentBlock.id)"
            [class.is-active]="isActiveBlock(contentBlock.id)"
            cdkDrag
-           cdkDragLockAxis="y"
+           [cdkDragData]="contentBlock.id"
            cdkMonitorSubtreeFocus
            (cdkDragStarted)="onDragStarted($event, contentBlock)"
            (cdkDragEnded)="onDragEnded($event, contentBlock)"
            (cdkFocusChange)="onFocusChange($event, contentBlock)">
         <div class="block-controls" [class.is-settings-popover-open]="settingsTrigger.api.isOpen()">
-          <button class="block-control">
-            <ngs-icon name="fluent:add-24-regular"
-                      (mousedown)="setActiveBlockId($event, contentBlock.id)"
-                      [ngsMenuTriggerFor]="suggestionsMenu"
-                      [ngsMenuTriggerRestoreFocus]="false"
-                      (menuOpened)="onSuggestionsMenuOpen()"
-                      (menuClosed)="onSuggestionsMenuClose($event)"/>
+          <button class="block-control" aria-label="Add block"
+                  (mousedown)="setActiveBlockId($event, contentBlock.id)"
+                  [ngsMenuTriggerFor]="suggestionsMenu"
+                  [ngsMenuTriggerData]="{target: {scope: {}, afterId: contentBlock.id}}"
+                  [ngsMenuTriggerRestoreFocus]="false">
+            <ngs-icon name="fluent:add-24-regular"/>
           </button>
           <div class="block-control block-control-drag"
                (click)="selectBlock(contentBlock.id)"
@@ -63,6 +65,7 @@
                           id: contentBlock.id,
                           content: contentBlock.content,
                           settings: contentBlock.settings,
+                          props: contentBlock.props,
                           index: $index
                         }"/>
         </div>
@@ -86,22 +89,24 @@
   </div>
 </ngs-popover>
 
-<ngs-menu #suggestionsMenu="ngsMenu">
-  <div (click)="preventMenuClose($event)">
+<ngs-menu #suggestionsMenu="ngsMenu" classList="min-h-[70vh] max-h-[70vh]!" pushIntoViewport (closed)="onSuggestionsMenuClose($event)">
+  <ng-template ngsMenuContent let-target="target">
+    <div (click)="preventMenuClose($event)">
     @for (suggestionItem of suggestions(); track $index; let first = $first) {
       @switch (suggestionItem.type) {
         @case ('heading') {
           <ngs-menu-heading>{{ suggestionItem.title }}</ngs-menu-heading>
         }
         @case ('item') {
-          <button ngs-menu-item (click)="addBlockFromSuggestionMenu(suggestionsMenu, suggestionItem.blockType, suggestionItem.blockOptions)">
+          <button ngs-menu-item
+            (click)="addBlockFromSuggestionMenu(suggestionsMenu, target, suggestionItem.blockType, suggestionItem.blockSettings)">
             <div class="h-full flex items-center gap-3 py-2">
               <div class="size-9 flex items-center rounded-lg justify-center bg-surface-container">
                 <ngs-icon [name]="suggestionItem.iconName" class="!me-0"/>
               </div>
               <div class="grow min-w-[200px]">
                 <div>{{ suggestionItem.title }}</div>
-                <div class="text-2xs text-neutral-500">{{ suggestionItem.description }}</div>
+                <div class="text-2xs text-neutral-600">{{ suggestionItem.description }}</div>
               </div>
               @if (suggestionItem.hotKeys) {
                 <div class="ms-auto bg-surface-container-highest rounded-full h-5
@@ -112,5 +117,6 @@
         }
       }
     }
-  </div>
+    </div>
+  </ng-template>
 </ngs-menu>

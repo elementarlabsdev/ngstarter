@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, forwardRef, inject, input, model, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, untracked, forwardRef, inject, input, model, OnInit, signal } from '@angular/core';
 import { UploadArea, UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter-ui/components/upload';
 import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 import { Button } from '@ngstarter-ui/components/button';
@@ -53,6 +53,7 @@ export class ImageBlockComponent implements OnInit, ContentEditorDataBlock {
   content = input.required<ContentEditorImageContent>();
   settings = input.required<ContentEditorImageBlockSettings>();
   index = input.required<number>();
+  props = input<unknown[]>([]);
 
   uploading = signal(false);
   selectedImage = signal<string>('');
@@ -61,6 +62,18 @@ export class ImageBlockComponent implements OnInit, ContentEditorDataBlock {
   protected _alt = model<string>('');
   protected _settings = model<ContentEditorImageBlockSettings>({});
   readonly initialized = signal(false);
+
+  constructor() {
+    effect(() => {
+      const content = this.content();
+      const settings = this.settings();
+      untracked(() => {
+        this._src.set(content.src);
+        this._alt.set(content.alt);
+        this._settings.set({ ...settings });
+      });
+    });
+  }
 
   ngOnInit() {
     this._src.set(this.content().src);

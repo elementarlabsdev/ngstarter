@@ -1,4 +1,6 @@
+/// <reference path="./menu.spec.d.ts" />
 import '@angular/compiler';
+import '../../../../../node_modules/@angular/cdk/overlay-prebuilt.css';
 import { Component, Type, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
@@ -23,7 +25,7 @@ import { Menu } from './menu';
   template: `
     <button type="button" [ngsMenuTriggerFor]="menu">Open menu</button>
 
-    <ngs-menu #menu="ngsMenu" classList="custom-menu-panel">
+    <ngs-menu #menu="ngsMenu" classList="custom-menu-panel" [pushIntoViewport]="push()">
       <ngs-menu-header>
         <div class="header-marker">Header content</div>
       </ngs-menu-header>
@@ -38,6 +40,7 @@ import { Menu } from './menu';
   `
 })
 class MenuProjectionHost {
+  readonly push = signal(false);
 }
 
 @Component({
@@ -132,6 +135,27 @@ afterEach(() => {
 });
 
 describe('Menu', () => {
+  it('keeps a tall menu inside the viewport without shrinking its panel', async () => {
+    const fixture = await createHost(MenuProjectionHost);
+    fixture.componentInstance.push.set(true);
+    fixture.detectChanges();
+    getTrigger(fixture).style.position = 'fixed';
+    getTrigger(fixture).style.top = '50vh';
+    const styles = document.createElement('style');
+    styles.textContent = '.custom-menu-panel { min-height: 70vh; max-height: 70vh !important; }';
+    document.head.appendChild(styles);
+    try {
+      openMenu(fixture);
+      await fixture.whenStable();
+      await expect.poll(() => getPanel().getBoundingClientRect().height).toBeCloseTo(window.innerHeight * 0.7, 0);
+      const bounds = getPanel().getBoundingClientRect();
+      expect(bounds.top).toBeGreaterThanOrEqual(7);
+      expect(bounds.bottom).toBeLessThanOrEqual(window.innerHeight - 7);
+    } finally {
+      styles.remove();
+    }
+  });
+
   it('projects menu header and footer outside the scrollable content container', async () => {
     const fixture = await createHost(MenuProjectionHost);
 

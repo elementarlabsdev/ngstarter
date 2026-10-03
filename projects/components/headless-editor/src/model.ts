@@ -79,7 +79,7 @@ export function cloneNgsHeadlessEditorDocument(document: NgsHeadlessEditorDocume
     version: 1,
     blocks: document.blocks.map(block => ({
       ...block,
-      attrs: block.attrs ? { ...block.attrs } : undefined,
+      attrs: block.attrs ? cloneBlockValue(block.attrs) : undefined,
       content: isNgsHeadlessEditorTextContent(block.content)
         ? block.content.map(run => ({
           type: 'text' as const,
@@ -89,7 +89,7 @@ export function cloneNgsHeadlessEditorDocument(document: NgsHeadlessEditorDocume
             attrs: mark.attrs ? { ...mark.attrs } : undefined
           }))
         }))
-        : block.content
+        : cloneBlockValue(block.content)
     }))
   };
 }
@@ -299,4 +299,12 @@ export function getNgsHeadlessEditorDocumentText(document: NgsHeadlessEditorDocu
 
 export function isNgsHeadlessEditorDocumentEmpty(document: NgsHeadlessEditorDocument): boolean {
   return getNgsHeadlessEditorDocumentText(document).trim().length === 0;
+}
+
+function cloneBlockValue<T>(value: T): T {
+  if (Array.isArray(value)) return value.map(item => cloneBlockValue(item)) as T;
+  if (value !== null && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, cloneBlockValue(item)])) as T;
+  }
+  return value;
 }

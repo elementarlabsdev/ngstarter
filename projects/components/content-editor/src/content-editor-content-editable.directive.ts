@@ -1,151 +1,100 @@
 import {
-  Directive,
-  ElementRef,
-  inject,
-  input,
-  OnDestroy,
-  OnInit,
-  output,
-  PLATFORM_ID,
-  Renderer2,
-  signal
+  afterNextRender, Directive, effect, ElementRef, inject, input, OnDestroy, output, untracked
 } from '@angular/core';
-import { ContentEditorItemProperty } from './types';
-import { isPlatformServer } from '@angular/common';
+import {
+  NgsHeadlessEditorInlineRegion, NgsHeadlessEditorSurface,
+  NgsHeadlessEditorText, provideNgsHeadlessEditorInlineRegion
+} from '@ngstarter-ui/components/headless-editor';
+import { ContentBuilderStore } from './content-builder.store';
+import { createNgsHeadlessEditorId } from '@ngstarter-ui/components/headless-editor';
+import { ContentEditorItemProperty, ContentEditorText } from './types';
 
+const regions = new WeakMap<HTMLElement, ContentEditorContentEditableDirective>();
+
+/** A headless inline editor bound to a text field in a content block. */
 @Directive({
   selector: '[ngsContentEditorContentEditable]',
   exportAs: 'ngsContentEditorContentEditable',
+  providers: [provideNgsHeadlessEditorInlineRegion()],
+  hostDirectives: [NgsHeadlessEditorSurface],
   host: {
-    '[class.ngs-content-editor-content-editable]': 'true',
-    '(blur)': '_handleBlur($event)',
-    '(input)': '_handleInput($event)',
-    '(keypress)': '_handleKeyPress($event)',
+    'class': 'ngs-content-editor-content-editable',
+    '[class.align-left]': 'alignment() === "left"',
+    '[class.align-center]': 'alignment() === "center"',
+    '[class.align-right]': 'alignment() === "right"',
+    '[class.align-justify]': 'alignment() === "justify"',
+    '(focus)': 'activate()'
   }
 })
-export class ContentEditorContentEditableDirective implements OnInit, OnDestroy {
-  private _platformId = inject(PLATFORM_ID);
-  private _elementRef = inject(ElementRef);
-  private _renderer = inject(Renderer2);
-  readonly contentChanged = output<string>();
+export class ContentEditorContentEditableDirective implements OnDestroy {
+  readonly region = inject(NgsHeadlessEditorInlineRegion);
+  private readonly surface = inject(NgsHeadlessEditorSurface);
+  private readonly store = inject(ContentBuilderStore, { optional: true });
+  private readonly historyGroup = createNgsHeadlessEditorId('content-region');
+  private readonly element = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  readonly content = input<ContentEditorText>([], { alias: 'ngsContentEditorContentEditable' });
+  readonly settings = input<unknown>({});
+  readonly props = input<ContentEditorItemProperty[]>([]);
+  readonly singleLine = input(false);
+  readonly contentChanged = output<readonly NgsHeadlessEditorText[]>();
+  readonly propsChanged = output<ContentEditorItemProperty[]>();
   readonly pressedEnter = output<KeyboardEvent>();
   readonly initialized = output<void>();
-  private _observer!: MutationObserver;
 
-  content = input<string>('', {
-    alias: 'ngsContentEditorContentEditable'
-  });
-  settings = input<any>({});
-  props = input<ContentEditorItemProperty[]>([]);
+  static forElement(element: HTMLElement | null): ContentEditorContentEditableDirective | undefined {
+    return element ? regions.get(element) : undefined;
+  }
 
-  _props = signal<ContentEditorItemProperty[]>([]);
-
-  readonly propsChanged = output<ContentEditorItemProperty[]>();
-
-  private _isAlreadyRendered = false;
-
-  ngOnInit() {
-    this._props.set(this.props() || []);
-    (this.props() || []).forEach(prop => {
-      this._renderer.setAttribute(this._elementRef.nativeElement, `data-props-${prop.name}`, prop.value);
+  constructor() {
+    regions.set(this.element, this);
+    effect(() => {
+      const content = this.content();
+      untracked(() => this.region.load(content));
     });
-    this._renderer.setAttribute(this._elementRef.nativeElement, 'contenteditable', 'true');
-
-    if (this._isAlreadyRendered) {
-      return;
-    }
-
-    if (this.content()) {
-      this._elementRef.nativeElement.innerHTML = this.content();
-    }
-
-    this._isAlreadyRendered = true;
-    this.initialized.emit();
-
-    let prevContent = this.getContent();
-
-    if (isPlatformServer(this._platformId)) {
-      return;
-    }
-
-    const config = { attributes: true, childList: true, subtree: true };
-    const callback = (mutationList: any, observer: any) => {
-      for (const mutation of mutationList) {
-        if (mutation.type === 'attributes') {
-          if (mutation.attributeName.startsWith('data-props-')) {
-            const prevPropsHash = JSON.stringify(this._props());
-            const propName = mutation.attributeName.replace('data-props-', '');
-            const propValue = mutation.target.getAttribute(mutation.attributeName);
-            const propIndex = this._props().findIndex(p => p.name === propName);
-
-            if (propIndex >= 0) {
-              this._props.update((props: ContentEditorItemProperty[]) => {
-                props[propIndex].value = propValue;
-                return props;
-              });
-            } else {
-              this._props.update((props: ContentEditorItemProperty[]) => {
-                props.push({
-                  name: propName,
-                  value: propValue,
-                })
-                return props;
-              });
-            }
-
-            const updatedPropsHash = JSON.stringify(this._props());
-
-            if (prevPropsHash !== updatedPropsHash) {
-              this.propsChanged.emit(this._props());
-            }
-          }
-        } else {
-          const currentContent = this.getContent();
-
-          if (prevContent !== currentContent) {
-            prevContent = currentContent;
-            this._raiseUpdateEvent();
-          }
-        }
+    effect(() => {
+      const content = this.region.content();
+      const origin = this.region.editor.origin();
+      if (origin !== 'external' && origin !== 'history') {
+        untracked(() => {
+          if (this.store) this.store.withTextEdit(origin, this.historyGroup, () => this.contentChanged.emit(content));
+          else this.contentChanged.emit(content);
+        });
       }
-    };
-    this._observer = new MutationObserver(callback);
-    this._observer.observe(this._elementRef.nativeElement, config);
+    });
+    // Capture before the surface and the block's own listeners. Structural Enter
+    // stays with the content builder; multiline fields use the headless surface.
+    this.element.addEventListener('keydown', this.onKeydown, true);
+    this.element.addEventListener('beforeinput', this.onBeforeInput, true);
+    afterNextRender(() => this.initialized.emit());
   }
 
-  ngOnDestroy() {
-    this._observer?.disconnect();
+  activate(): void { this.region.activate(); }
+  focus(): void { this.activate(); this.surface.focus(); }
+  getContent(): readonly NgsHeadlessEditorText[] { return this.region.content(); }
+  alignment(): string { return this.props().find(prop => prop.name === 'text-alignment')?.value ?? 'left'; }
+  setAlignment(value: string): void {
+    this.propsChanged.emit([
+      ...this.props().filter(prop => prop.name !== 'text-alignment'),
+      { name: 'text-alignment', value }
+    ]);
   }
-
-  getContent(): string {
-    let content = this._elementRef.nativeElement.innerHTML as string;
-    content = content.replaceAll('<br>', '').replaceAll(/&nbsp;/g, ' ').trim();
-
-    if (content.length === 0) {
-      this._elementRef.nativeElement.innerHTML = '';
-    }
-
-    return content;
-  }
-
-  protected _handleBlur(event: Event) {
-  }
-
-  protected _handleInput(event: Event) {
-    if (!this._isAlreadyRendered) {
-      return;
-    }
-
-    this._raiseUpdateEvent();
-  }
-
-  protected _raiseUpdateEvent() {
-    this.contentChanged.emit(this.getContent());
-  }
-
-  protected _handleKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
+  private readonly onKeydown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter' && this.singleLine() && !event.shiftKey && !event.isComposing) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
       this.pressedEnter.emit(event);
     }
+  };
+  private readonly onBeforeInput = (event: InputEvent) => {
+    if (event.inputType === 'insertParagraph' && this.singleLine() && !event.isComposing) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      this.pressedEnter.emit(new KeyboardEvent('keydown', { key: 'Enter' }));
+    }
+  };
+  ngOnDestroy(): void {
+    regions.delete(this.element);
+    this.element.removeEventListener('keydown', this.onKeydown, true);
+    this.element.removeEventListener('beforeinput', this.onBeforeInput, true);
   }
 }

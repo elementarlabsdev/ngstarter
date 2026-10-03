@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, forwardRef, inject, input, model, OnInit, signal, viewChild, ElementRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, untracked, forwardRef, inject, input, model, OnInit, signal, viewChild, ElementRef } from '@angular/core';
 import { UploadArea, UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter-ui/components/upload';
 import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
 import { Button } from '@ngstarter-ui/components/button';
@@ -53,6 +53,7 @@ export class VideoBlockComponent implements OnInit, ContentEditorDataBlock {
   content = input.required<ContentEditorVideoContent>();
   settings = input.required<ContentEditorVideoBlockSettings>();
   index = input.required<number>();
+  props = input<unknown[]>([]);
 
   uploading = signal(false);
   selectedVideo = signal<string>('');
@@ -66,6 +67,19 @@ export class VideoBlockComponent implements OnInit, ContentEditorDataBlock {
   readonly videoElement = viewChild<ElementRef<HTMLVideoElement>>('videoPlayer');
 
   private _aspectRatio = 16 / 9;
+
+  constructor() {
+    effect(() => {
+      const content = this.content();
+      const settings = this.settings();
+      untracked(() => {
+        this._src.set(content.src);
+        this._caption.set(content.caption);
+        this._orientation.set(content.orientation || 'landscape');
+        this._settings.set({ ...settings });
+      });
+    });
+  }
 
   ngOnInit() {
     this._src.set(this.content().src);

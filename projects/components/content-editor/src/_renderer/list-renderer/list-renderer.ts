@@ -1,8 +1,9 @@
+import { NgsHeadlessEditorBlock } from '@ngstarter-ui/components/headless-editor';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { SafeHtmlPipe } from '@ngstarter-ui/components/core';
+import { NgsHeadlessEditorRuns } from '@ngstarter-ui/components/headless-editor';
+import { ContentEditorText } from '../../types';
 import {
-  ContentEditorBlock,
   ContentEditorBlockRendererInputSignals,
   ContentEditorItemProperty,
   ContentEditorListItem,
@@ -13,7 +14,7 @@ import {
   selector: 'ngs-content-editor-list-renderer',
   imports: [
     NgTemplateOutlet,
-    SafeHtmlPipe,
+    NgsHeadlessEditorRuns,
   ],
   templateUrl: './list-renderer.html',
   styleUrl: './list-renderer.scss',
@@ -28,7 +29,7 @@ export class ContentEditorListRenderer implements ContentEditorBlockRendererInpu
   ContentEditorListItem[],
   Partial<ContentEditorListSettings>
 > {
-  block = input<ContentEditorBlock | null>(null);
+  block = input<NgsHeadlessEditorBlock | null>(null);
   id = input<string>('');
   type = input<string>('');
   content = input<ContentEditorListItem[]>([]);

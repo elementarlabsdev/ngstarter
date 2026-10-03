@@ -1,6 +1,7 @@
+import { NgsHeadlessEditorBlock } from '@ngstarter-ui/components/headless-editor';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Divider } from '@ngstarter-ui/components/divider';
-import { ContentEditorBlock, ContentEditorBlockRendererInputSignals, ContentEditorItemProperty } from '../../types';
+import { ContentEditorBlockRendererInputSignals, ContentEditorItemProperty } from '../../types';
 
 @Component({
   selector: 'ngs-content-editor-divider-renderer',
@@ -15,7 +16,7 @@ import { ContentEditorBlock, ContentEditorBlockRendererInputSignals, ContentEdit
   },
 })
 export class ContentEditorDividerRenderer implements ContentEditorBlockRendererInputSignals<unknown, Record<string, unknown>> {
-  block = input<ContentEditorBlock | null>(null);
+  block = input<NgsHeadlessEditorBlock | null>(null);
   id = input<string>('');
   type = input<string>('');
   content = input<unknown>(null);

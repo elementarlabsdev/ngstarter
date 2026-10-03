@@ -1,6 +1,7 @@
 <blockquote #contentRef
             #contentEditableRef="ngsContentEditorContentEditable"
             class="content"
+            [singleLine]="true"
             [ngsContentEditorContentEditable]="citeOriginalContent()"
             [props]="citeOriginalProps()"
             (propsChanged)="onCitePropsChanged($event)"
@@ -11,7 +12,8 @@
 <div class="caption"
      #captionRef
      #captionEditableRef="ngsContentEditorContentEditable"
-     [ngsContentEditorContentEditable]="captionOriginalContent()"
+     [singleLine]="true"
+            [ngsContentEditorContentEditable]="captionOriginalContent()"
      [props]="captionOriginalProps()"
      (propsChanged)="onCaptionPropsChanged($event)"
      [attr.data-empty-placeholder]="placeholder()"

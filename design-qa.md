@@ -111,3 +111,72 @@ None for the approved light direction. The dark scheme has no matching source vi
 None required for the selected light direction.
 
 final result: passed
+
+
+---
+
+# Content Editor Carousel design QA — 2026-10-03
+
+**Findings**
+
+No actionable P0/P1/P2 findings remain after the final comparison. The library's existing DM Sans font, regular field labels, semantic outline colors, and theme radii are intentional adaptations of the mock. The demo retains its two real project images and existing captions/alt descriptions; the reference illustrates three images with different copy.
+
+**Evidence**
+
+- Source visual truth: `/Users/developer/.codex/generated_images/01a0fded-01bd-74f2-acae-57a18c11deaf/exec-a4a6036e-4e52-4178-82d1-f9ef2118afba.png`.
+- Implementation: `http://127.0.0.1:4318/libraries/content-editor/content-builder`.
+- Final implementation: `/Users/developer/.codex/visualizations/2026/10/02/01a0fded-01bd-74f2-acae-57a18c11deaf/carousel/carousel-implementation.png`.
+- Combined final comparison: `/Users/developer/.codex/visualizations/2026/10/02/01a0fded-01bd-74f2-acae-57a18c11deaf/carousel/carousel-comparison.png`.
+- Surrounding docs context: same directory, `carousel-context.png`.
+- Mobile evidence: same directory, `carousel-mobile.png`.
+- Viewports: default desktop 1280 × 720; responsive checks at 800 × 720 and 390 × 720 CSS px, device scale factor 1. Temporary overrides reset.
+- Source: 1254 × 1254 pixels, component crop 1063 × 1119 normalized to 704 × 741. Implementation component: 704 × 776.875 CSS px, captured as 704 × 777 pixels by joining two overlapping real browser captures. No CSS resizing was used to fit the block into a screenshot.
+- State: light theme, first image selected, fields unfocused; additional selected-thumbnail, field editing, action menu, replacement upload, drag, undo and image-viewer states inspected.
+
+**Full-view comparison evidence**
+
+The source and implementation are displayed together in `carousel-comparison.png`. Both use one outlined surface with a title/count and Add images action, a large preview with overlaid navigation and counter, the reorder helper directly above a filmstrip below the preview, then ordinary Caption and Alt text fields. No Grid controls or per-image inline rich-text editors are present.
+
+**Focused region comparison evidence**
+
+The same comparison is readable at 704 px per component. The helper/filmstrip and fields were specifically inspected: thumbnails now use 128 × 72 image previews, selection is outlined in primary blue, a distinct drag handle avoids accidental dragging while selecting, and the caption's unused subscript area has been removed. Alt retains the screen-reader hint. Overlay navigation stays inside the preview.
+
+**Required fidelity surfaces**
+
+- Fonts/typography: existing DM Sans/system stack, 16 px semibold title and regular library field/body typography retained. Caption and alt are single-line inputs; long input text scrolls normally instead of expanding the block.
+- Spacing/layout rhythm: 16 px desktop padding, 12 px compact padding, 16:9 preview, 16 px main gaps, and a compact consecutive field pair. The slightly taller implementation accommodates actual NgStarter control metrics.
+- Colors/tokens: surface, outline, primary selection/action, and on-surface colors use existing semantic tokens. The preview counter remains dark with white text; focused inputs retain the library's primary outline.
+- Image quality/assets: existing project photographs and Fluent icons retained. Images use object-fit cover in previews and thumbnails, with the existing ImageViewer available for full inspection. Different supplementary photos in the generated reference are illustrative content rather than new required assets.
+- Copy/content: Carousel, Add images, Drag to reorder, Caption, Alt text, and Describe the image for screen readers match the selected flow. Caption/alt content belongs to each selected image.
+
+**Comparison history**
+
+1. Initial implementation review found preview actions displaced below the image by Button's host positioning. Explicit absolute positioning restored the overlaid navigation/menu; reviewed in the browser before the first saved combined comparison.
+2. The first combined comparison (`ngs-carousel-redesign-comparison-before.png` in the evidence directory) found P2 gaps: an unused caption subscript area separated the two fields, and undersized thumbnails made the filmstrip denser than the selected design. Removed empty subscript space and increased thumbnail/Add tile widths. The preview menu also received a rounded-square theme radius. Final combined evidence shows the corrected field spacing and thumbnail scale.
+3. At 390 px, the flex item's automatic minimum width stretched the block beyond the viewport (P2). Added `min-width: 0` to the builder's block-content flex item. Final mobile evidence shows a 259 px block with clientWidth/scrollWidth both 257 px, and a 233 px filmstrip viewport with independently scrollable 488 px content. Preview, Add action and fields fit inside the block.
+4. Rebuilt both targets, recaptured the desktop at its original viewport, and compared the final source/implementation together. No actionable P0/P1/P2 findings remain.
+
+**Interaction and validation evidence**
+
+17 targeted tests pass across extra-blocks and content-editor-renderer. Tests cover selected-image caption/alt updates, reorder selection stability, root history, replacement preservation, cancelled uploads and removal during an upload. Browser checks cover thumbnail selection, input updates, keyboard undo, pointer drag/reorder, replacement through the preview menu and image viewer. Console error log is empty. Production component and docs builds pass.
+
+**Open Questions**
+
+None. The reference has no empty/uploading/error or dark-theme visual target; those use existing NgStarter UploadArea, ProgressBar, Alert, and theme tokens. Empty/upload race handling is covered by tests.
+
+**Implementation Checklist**
+
+- [x] Preview with overlaid navigation, counter and image menu
+- [x] Filmstrip below preview; Drag to reorder label above thumbnails
+- [x] Stable selection when reordering/removing images
+- [x] Ordinary per-image Caption and Alt text inputs
+- [x] Add, replace, remove, accessible menu reorder, and root undo/redo
+- [x] Mobile fitting and independent thumbnail scrolling
+- [x] Source/implementation combined comparison and console check
+- [x] 17 tests and both production builds
+
+**Follow-up Polish**
+
+No required polish remains. Existing theme-dependent font, border and corner metrics are accepted library adaptations.
+
+final result: passed

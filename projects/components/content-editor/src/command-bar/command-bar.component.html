@@ -37,7 +37,8 @@
       <ngs-icon name="fluent:link-add-24-regular"/>
     </button>
   }
-  <button ngsIconButton [ngsMenuTriggerFor]="alignMenu">
+  <button ngsIconButton [ngsMenuTriggerFor]="alignMenu"
+          (menuOpened)="retainSelection()" (menuClosed)="restoreSelectionAfterOverlay()">
     @switch (alignment()) {
       @case ('left') {
         <ngs-icon name="fluent:text-align-left-24-regular"/>
@@ -50,7 +51,8 @@
       }
     }
   </button>
-  <button ngsIconButton [ngsMenuTriggerFor]="formatColorText" (menuOpened)="onMenuOpen()">
+  <button ngsIconButton [ngsMenuTriggerFor]="formatColorText"
+          (menuOpened)="retainSelection()" (menuClosed)="restoreSelectionAfterOverlay()">
     <ngs-icon name="fluent:text-color-24-regular"/>
   </button>
 </div>
@@ -78,7 +80,7 @@
   </button>
 </ngs-menu>
 
-<ngs-menu #formatColorText="ngsMenu" (closed)="onMenuClose()">
+<ngs-menu #formatColorText="ngsMenu">
   <div class="px-4 py-3" (mousedown)="preventMenuClose($event)">
     <ngs-text-color (textColorChanged)="onTextColorChanged($event)"
                     (backgroundColorChanged)="onBackgroundColorChanged($event)"/>

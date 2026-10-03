@@ -1,5 +1,6 @@
 import {
   Component,
+  booleanAttribute,
   ChangeDetectionStrategy,
   viewChild,
   TemplateRef,
@@ -41,6 +42,8 @@ export class Menu implements OnDestroy {
   readonly classList = input<string>('');
   readonly xPosition = input<'before' | 'after'>('after');
   readonly yPosition = input<'above' | 'below'>('below');
+  /** Keep the panel's own dimensions and shift it inside the viewport when needed. */
+  readonly pushIntoViewport = input(false, { transform: booleanAttribute });
 
   protected readonly _panelClasses = signal<string[]>([]);
   readonly closed = output<MenuCloseReason>();

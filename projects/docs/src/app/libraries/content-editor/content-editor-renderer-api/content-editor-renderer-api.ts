@@ -54,19 +54,19 @@ export class ContentEditorRendererApi {
   ContentEditorBlockRendererInputSignals
 } from '@ngstarter-ui/components/content-editor';`;
 
-  readonly selectorExample = `<ngs-content-editor-renderer [content]="blocks"/>`;
+  readonly selectorExample = `<ngs-content-editor-renderer [content]="document"/>`;
 
   readonly inputs: ApiRow[] = [
     {
       name: 'content',
-      description: 'Saved content editor blocks to render. Use this for persisted block JSON and preview data.',
-      type: 'ReadonlyArray<ContentEditorBlock>',
-      default: '[]'
+      description: 'Headless editor document to render. Text content uses runs with marks; block settings and properties live in attrs.',
+      type: 'ContentEditorDocument',
+      default: 'Empty headless document'
     },
     {
       name: 'blocks',
-      description: 'Alternative input for the same block array. When provided, it takes precedence over content.',
-      type: 'ReadonlyArray<ContentEditorBlock> | null',
+      description: 'Native block array. When provided, it takes precedence over content.blocks.',
+      type: 'ReadonlyArray<NgsHeadlessEditorBlock> | null',
       default: 'null'
     },
   ];
@@ -111,7 +111,7 @@ export class ContentEditorRendererApi {
     {
       name: 'block',
       description: 'Original block object passed to the renderer.',
-      type: 'ContentEditorBlock | null',
+      type: 'NgsHeadlessEditorBlock | null',
       default: 'null'
     },
     {

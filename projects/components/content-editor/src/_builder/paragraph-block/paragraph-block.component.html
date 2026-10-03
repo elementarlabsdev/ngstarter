@@ -1,5 +1,6 @@
-<p #contentRef
+<div #contentRef
    class="content"
+   [singleLine]="true"
    [ngsContentEditorContentEditable]="_content()"
    [settings]="settings()"
    [props]="props()"
@@ -8,4 +9,4 @@
    (contentChanged)="onContentChanged($event)"
    (pressedEnter)="onPressedEnter($event)"
    (keydown)="_onKeyDown($event)"
-   (initialized)="onContentEditableInitialized()"></p>
+   (initialized)="onContentEditableInitialized()"></div>

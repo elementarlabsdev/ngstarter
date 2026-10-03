@@ -6,18 +6,25 @@ import {
   inject,
   input, numberAttribute, booleanAttribute,
   OnInit, OnDestroy, output, PLATFORM_ID,
-  signal,
+  signal, untracked,
   ElementRef,
-  AfterViewInit,
+  AfterViewInit, viewChild,
   effect, EffectRef, runInInjectionContext, EnvironmentInjector, ChangeDetectorRef
 } from '@angular/core';
 import {
   CONTENT_BUILDER,
-  ContentEditorBlock,
+  ContentEditorBlockView,
   ContentEditorBlockDef,
   ContentEditorItemProperty,
   ContentEditorOptions,
+  ContentEditorBlockInsertionTarget,
 } from '../types';
+import { DOCUMENT } from '@angular/common';
+import { NgsHeadlessEditor, createNgsHeadlessEditorDocument, createNgsHeadlessEditorText, readNgsHeadlessEditorInlineContent } from '@ngstarter-ui/components/headless-editor';
+import { provideContentEditor } from '../content-editor.plugin';
+import { contentEditorText, contentEditorChildCollections, contentEditorCollection } from '../document';
+import { CONTENT_EDITOR_EXTRA_BLOCK_DEFS, CONTENT_EDITOR_EXTRA_SUGGESTIONS } from '../extra-block-defs';
+import { ContentEditorDocument, ContentEditorBlock } from '../types';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { AsyncPipe, isPlatformServer, NgComponentOutlet } from '@angular/common';
 import { v7 as uuid } from 'uuid';
@@ -29,9 +36,8 @@ import {
   CdkDragPlaceholder,
   CdkDragStart,
   CdkDropList,
-  moveItemInArray
 } from '@angular/cdk/drag-drop';
-import { Menu, MenuItem, MenuTrigger, MenuCloseReason, MenuHeading } from '@ngstarter-ui/components/menu';
+import { Menu, MenuItem, MenuTrigger, MenuCloseReason, MenuHeading, MenuContent } from '@ngstarter-ui/components/menu';
 import { ConfirmManager } from '@ngstarter-ui/components/confirm';
 import { CdkMonitorFocus } from '@angular/cdk/a11y';
 import { ContentEditorQuoteBlock } from '../_builder/quote-block/quote-block.component';
@@ -66,7 +72,8 @@ import { List, ListItem, ListItemIcon, ListItemTitle } from '@ngstarter-ui/compo
     ListItemIcon,
     ListItem,
     List,
-    MenuHeading
+    MenuHeading,
+    MenuContent
   ],
   hostDirectives: [
     {
@@ -78,6 +85,7 @@ import { List, ListItem, ListItemIcon, ListItemTitle } from '@ngstarter-ui/compo
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
+    provideContentEditor(),
     ContentBuilderStore,
     {
       provide: CONTENT_BUILDER,
@@ -100,8 +108,17 @@ import { List, ListItem, ListItemIcon, ListItemTitle } from '@ngstarter-ui/compo
 export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy {
   private static readonly DRAFT_STORAGE_PREFIX = 'ngs-content-editor-builder:draft';
 
+  readonly editor = inject(NgsHeadlessEditor);
+  /** One insertion menu shared by root controls, nested collections and custom blocks. */
+  readonly blockMenu = viewChild.required<Menu>('suggestionsMenu');
+  private readonly document = inject(DOCUMENT);
+  private loaded = false;
+  private lastInput: ContentEditorDocument | null = null;
+
   private _platformId = inject(PLATFORM_ID);
   private _store = inject(ContentBuilderStore);
+  private readonly dropList = viewChild.required(CdkDropList);
+  readonly connectedDropLists = this._store.dropLists;
   private elRef = inject(ElementRef<HTMLElement>);
   private envInjector = inject(EnvironmentInjector);
   private cdr = inject(ChangeDetectorRef);
@@ -120,6 +137,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   private blockDefs = signal<ContentEditorBlockDef[]>([
+    ...CONTENT_EDITOR_EXTRA_BLOCK_DEFS,
     {
       component: () => import('../_builder/divider-block/divider-block.component').then(c => c.DividerBlockComponent),
       type: 'divider',
@@ -137,7 +155,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
       options: {},
       empty: () => {
         return {
-          content: '',
+          content: [createNgsHeadlessEditorText()],
           props: [],
           settings: {}
         };
@@ -149,7 +167,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
       options: {},
       empty: () => {
         return {
-          content: '',
+          content: [createNgsHeadlessEditorText()],
           settings: {
             language: 'none',
           }
@@ -162,7 +180,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
       options: {},
       empty: () => {
         return {
-          content: '',
+          content: [createNgsHeadlessEditorText()],
           props: [],
           settings: {
             level: 2
@@ -260,7 +278,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
           content: [
             [
               {
-                content: '',
+                content: [createNgsHeadlessEditorText()],
                 props: [],
                 styles: {},
                 options: {
@@ -269,7 +287,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
                 },
               },
               {
-                content: '',
+                content: [createNgsHeadlessEditorText()],
                 props: [],
                 styles: {},
                 options: {
@@ -278,7 +296,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
                 }
               },
               {
-                content: '',
+                content: [createNgsHeadlessEditorText()],
                 props: [],
                 styles: {},
                 options: {
@@ -289,7 +307,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
             ],
             [
               {
-                content: '',
+                content: [createNgsHeadlessEditorText()],
                 props: [],
                 styles: {},
                 options: {
@@ -298,7 +316,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
                 }
               },
               {
-                content: '',
+                content: [createNgsHeadlessEditorText()],
                 props: [],
                 options: {
                   colspan: 1,
@@ -306,7 +324,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
                 }
               },
               {
-                content: '',
+                content: [createNgsHeadlessEditorText()],
                 props: [],
                 styles: {},
                 options: {
@@ -328,11 +346,11 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
         return {
           content: {
             cite: {
-              content: '',
+              content: [createNgsHeadlessEditorText()],
               props: []
             },
             caption: {
-              content: '',
+              content: [createNgsHeadlessEditorText()],
               props: []
             }
           },
@@ -356,7 +374,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     },
   ]);
 
-  content = input<ContentEditorBlock[]>([]);
+  content = input<ContentEditorDocument>(createNgsHeadlessEditorDocument());
   contentChangedDelay = input(500, {
     transform: numberAttribute
   });
@@ -364,6 +382,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     transform: booleanAttribute
   });
   suggestions = input<any>([
+    ...CONTENT_EDITOR_EXTRA_SUGGESTIONS,
     {
       type: 'heading',
       title: 'Headings',
@@ -510,16 +529,15 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   options = input<ContentEditorOptions>({});
   scrollContainer = input<string>();
 
-  readonly contentChanged = output<ContentEditorBlock[]>();
+  readonly contentChanged = output<ContentEditorDocument>();
 
   readonly focusChanged = new EventEmitter<void>();
-  protected _content = signal<ContentEditorBlock[]>([]);
+  protected readonly _content = this._store.blocks;
   protected blockDefsMap = new Map<string, any>();
   protected blockDefsOptionsMap = new Map<string, any>();
   protected _blockDragging = signal(false);
   public isSelectionOfBlocksActive = signal(false);
 
-  _oldContent = signal({});
   readonly selectedBlocksModel = new SelectionModel(true);
 
   commandBar = CommandBarComponent;
@@ -548,45 +566,57 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     });
   }
 
+  /** Shared by nested block collections; all edits use this root editor. */
+  get rootBuilder(): ContentBuilderComponent { return this; }
+  getBlockComponent(type: string): any { return this.blockDefsMap.get(type); }
+  createBlockView(type: string, settings = {}, content?: any): ContentEditorBlockView { return this._createBlock(type, settings, content); }
+
   getBlockDefOption(type: string, key: string): any {
     return this.blockDefsOptionsMap.get(type)[key];
   }
 
   ngOnInit() {
-    const draftContent = this._getDraftContent();
-    const content = draftContent || this.content();
-
-    if (content.length > 0) {
-      const lastItem = content[content.length - 1];
-
-      if (lastItem.type !== 'paragraph' || (lastItem.type === 'paragraph' && lastItem.content !== '')) {
-        content.push(this._createBlock('paragraph'));
-      }
-    } else {
-      content.push(this._createBlock('paragraph'));
-    }
-
-    this._content.set(content);
-    this._oldContent.set(this._content());
-
-    // Build block component map and merged options map
+    this.lastInput = this.content();
+    const document = this._getDraftContent() ?? this.lastInput;
+    const last = document.blocks.at(-1);
+    const blocks = last && (last.type !== 'paragraph' || contentEditorText(last.content).length > 0)
+      ? [...document.blocks, { id: uuid(), type: 'paragraph', content: [createNgsHeadlessEditorText()] }]
+      : document.blocks;
+    this._store.setBlocks({ version: 1, blocks });
     this.buildBlockDefMaps();
-
-    this._store.setBlocks(JSON.parse(JSON.stringify(content)));
-
-    if (isPlatformServer(this._platformId)) {
-      return;
+    this.loaded = true;
+    if (!isPlatformServer(this._platformId) && this._content().length === 1) {
+      this.focusBlock(this._content()[0].id);
     }
+  }
 
-    if (content.length === 1) {
-      this.focusBlock(content[0].id);
-    }
+  constructor() {
+    effect(() => {
+      const value = this.content();
+      untracked(() => {
+        if (this.loaded && value !== this.lastInput) {
+          this.lastInput = value;
+          this._store.setBlocks(value);
+        }
+      });
+    });
+    effect(() => {
+      const document = this.editor.document();
+      const origin = this.editor.origin();
+      if (this.loaded && origin !== 'external') {
+        untracked(() => {
+          this._saveDraft(document);
+          this.contentChanged.emit(document);
+        });
+      }
+    });
   }
 
   ngAfterViewInit(): void {
     if (isPlatformServer(this._platformId)) {
       return;
     }
+    this._store.registerDropList(this.dropList());
     // Initial resolve after view init
     this._resolvedScrollContainer = this._computeScrollContainer();
     // Bind the scroll subscription to the current container
@@ -706,7 +736,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     this.insertBlock(type, this._content().length, {}, focus);
   }
 
-  insertBlock(type: string, index: number, options?: object, focus: boolean = true, content?: any): any {
+  insertBlock(type: string, index: number, options?: object, focus: boolean = true, content?: any): ContentEditorBlock {
     const isLastIndex = index === this._content().length;
     const newBlock = this._createBlock(type, options, content);
 
@@ -714,9 +744,6 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
       this.focusBlock(newBlock.id);
     }
 
-    this._content.update((data: ContentEditorBlock[]) => {
-      return [...data.slice(0, index), newBlock, ...data.slice(index)];
-    });
     this._store.addBlock(newBlock, index);
 
     if (isLastIndex && this._content()[index].type !== 'paragraph') {
@@ -725,10 +752,10 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
 
     this.emitContentChangeEvent();
 
-    return newBlock;
+    return this.editor.document().blocks.find(block => block.id === newBlock.id)!;
   }
 
-  private _createBlock(type: string, settings = {}, content?: any): ContentEditorBlock {
+  private _createBlock(type: string, settings = {}, content?: any): ContentEditorBlockView {
     const blockDef = this.blockDefs().find(
       blockDefItem => blockDefItem.type === type
     ) as ContentEditorBlockDef;
@@ -748,7 +775,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     return {
       id: uuid(),
       type: blockDef.type,
-      isEmpty: content === undefined || content === '' || (Array.isArray(content) && content.length === 0),
+      isEmpty: content === undefined || (Array.isArray(content) && !contentEditorText(content)),
       ...empty
     };
   }
@@ -778,24 +805,29 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     const clonedSettings = original.settings != null ? JSON.parse(JSON.stringify(original.settings)) : original.settings;
     const clonedProps = original.props != null ? JSON.parse(JSON.stringify(original.props)) : original.props;
 
-    const duplicated: ContentEditorBlock = {
+    const duplicated: ContentEditorBlockView = {
       ...original,
       id: uuid(),
       isEmpty: false,
       content: clonedContent,
       settings: clonedSettings,
       props: clonedProps,
-    } as ContentEditorBlock;
+    } as ContentEditorBlockView;
 
+    this.regenerateChildIds(duplicated);
     const insertIndex = index + 1;
-    this._content.update((data: ContentEditorBlock[]) => {
-      data.splice(insertIndex, 0, duplicated);
-      return data;
-    });
     this._store.addBlock(duplicated, insertIndex);
 
     this.focusBlock(duplicated.id);
     this.emitContentChangeEvent();
+  }
+
+  private regenerateChildIds(block: any): void {
+    for (const children of contentEditorChildCollections(block)) {
+      for (const child of children) { (child as any).id = uuid(); this.regenerateChildIds(child); }
+    }
+    if (block.type === 'columns') for (const column of block.content.columns) column.id = uuid();
+    if (block.type === 'gallery') for (const image of block.content.images) image.id = uuid();
   }
 
   duplicateSelectedBlocks(popover: Popover) {
@@ -841,10 +873,6 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     const index = this._content().findIndex(dataBlock => dataBlock.id === blockId);
 
     if (index !== -1) {
-      this._content.update(data => {
-        data.splice(index, 1);
-        return data;
-      });
       this._store.deleteBlock(blockId, index);
 
       const prevBlock = this._content()[index - 1];
@@ -858,15 +886,25 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   setBlockProps(id: string, props: ContentEditorItemProperty[]) {
-    const data: ContentEditorBlock[] = this._content();
-    const index = data.findIndex((dataBlock) => dataBlock.id === id);
-    data[index].props = props;
+    this._store.updateBlock(id, { props });
     this.emitContentChangeEvent();
   }
 
   insertEmptyBlock(index: number) {
     this.insertBlock('paragraph', index + 1);
     this.emitContentChangeEvent();
+  }
+  updateParagraph(id: string, data: Partial<ContentEditorBlockView>): void { this._store.updateBlock(id, data); }
+  chooseBlock(target: ContentEditorBlockInsertionTarget, type: string, options: object): void {
+    const collection = contentEditorCollection(this.editor.document().blocks, target.scope);
+    const afterIndex = target.afterId ? collection.findIndex(block => block.id === target.afterId) : -1;
+    const index = afterIndex < 0 ? collection.length : afterIndex + 1;
+    if (!target.scope.parentId) this.insertBlock(type, index, options);
+    else {
+      const block = this.createBlockView(type, options);
+      this._store.addBlock(block, index, target.scope);
+      this.focusBlock(block.id);
+    }
   }
 
   focusBlock(id: string | null) {
@@ -882,27 +920,33 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     return this._store.activeBlockId() === id;
   }
 
-  drop(event: CdkDragDrop<ContentEditorBlock[]>) {
-    moveItemInArray(this._content(), event.previousIndex, event.currentIndex);
-    this._store.moveBlock(event.previousIndex, event.currentIndex);
+  drop(event: CdkDragDrop<import('../types').ContentEditorBlockScope>) {
+    this._store.moveBetweenCollections(event.previousIndex, event.currentIndex, event.previousContainer.data, event.container.data);
     this.emitContentChangeEvent();
   }
+
+  readonly canEnterRoot = (_drag: CdkDrag, drop: CdkDropList): boolean => {
+    const pointer = this._store.dragPointer();
+    // Connected parent lists must yield to the nested collection under the pointer.
+    // Otherwise CDK selects the outer list before considering any of its children.
+    const nearest = pointer ? this.document.elementFromPoint(pointer.x, pointer.y)?.closest('.cdk-drop-list') : null;
+    return !nearest || nearest.id === drop.id;
+  };
 
   onTagSelected(tagName: string | null): void {
     // console.log('Tag selected event received:', tagName);
   }
 
   getData() {
-    return this._store.blocks();
+    return this.editor.document();
   }
 
   emitContentChangeEvent() {
-    const data = this.getData();
-    this._saveDraft(data);
-    this.contentChanged.emit(data);
+    // Document changes, including undo/redo, are emitted by the root effect.
   }
 
   selectBlock(blockId: string, multiple = false) {
+    if (!this._content().some(block => block.id === blockId)) return;
     if (!multiple) {
       this.selectedBlocksModel.clear();
     }
@@ -932,7 +976,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
 
     const confirmRef = this.confirmManager.open({
       title: 'Delete blocks',
-      description: 'This action cannot be undone. Selected blocks will be deleted.'
+      description: 'Selected blocks will be deleted.'
     });
 
     confirmRef.confirmed.subscribe(() => {
@@ -951,6 +995,12 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   protected _onKeyDown(event: KeyboardEvent) {
+    if (event.defaultPrevented) return;
+    if (!event.defaultPrevented && (event.ctrlKey || event.metaKey) && ['z', 'y'].includes(event.key.toLowerCase())) {
+      const redo = event.key.toLowerCase() === 'y' || event.shiftKey;
+      if (redo ? this.editor.redo() : this.editor.undo()) event.preventDefault();
+      return;
+    }
     if ((event.key === 'Delete' || event.key === 'Backspace') && this.selectedBlocksModel.hasValue()) {
       const target = event.target as HTMLElement;
       const isInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable;
@@ -970,17 +1020,19 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     }
   }
 
-  protected onDragStarted(event: CdkDragStart, block: ContentEditorBlock) {
+  protected onDragStarted(event: CdkDragStart, block: ContentEditorBlockView) {
     this._blockDragging.set(true);
+    this._store.setDragging(true);
   }
 
-  protected onDragEnded(event: CdkDragStart, block: ContentEditorBlock) {
+  protected onDragEnded(event: CdkDragStart, block: ContentEditorBlockView) {
     this._blockDragging.set(false);
+    this._store.setDragging(false);
   }
 
-  protected addBlockFromSuggestionMenu(suggestionsMenu: Menu, type: string, options: object) {
+  protected addBlockFromSuggestionMenu(suggestionsMenu: Menu, target: ContentEditorBlockInsertionTarget, type: string, options: object) {
     suggestionsMenu.closed.emit('click');
-    this.addBlock(type, options);
+    this.chooseBlock(target, type, options);
   }
 
   protected preventMenuClose(event: Event) {
@@ -996,10 +1048,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     this.focusChanged.emit();
   }
 
-  protected onFocusChange(origin: string | null, dataBlock: ContentEditorBlock) {
-  }
-
-  protected onSuggestionsMenuOpen() {
+  protected onFocusChange(origin: string | null, dataBlock: ContentEditorBlockView) {
   }
 
   protected onSuggestionsMenuClose(reason: MenuCloseReason) {
@@ -1016,6 +1065,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     if (isPlatformServer(this._platformId)) {
       return;
     }
+    this._store.unregisterDropList(this.dropList());
 
     if (this._scrollBindSub) {
       try {
@@ -1041,7 +1091,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     this._scroll$ = null;
   }
 
-  private _getDraftContent(): ContentEditorBlock[] | null {
+  private _getDraftContent(): ContentEditorDocument | null {
     if (!this._canUseDraftStorage()) {
       return null;
     }
@@ -1053,14 +1103,14 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
         return null;
       }
 
-      const content = JSON.parse(draft) as ContentEditorBlock[];
-      return Array.isArray(content) ? content : null;
+      const content = JSON.parse(draft);
+      return content?.version === 1 && Array.isArray(content.blocks) ? content : null;
     } catch {
       return null;
     }
   }
 
-  private _saveDraft(content: ContentEditorBlock[]) {
+  private _saveDraft(content: ContentEditorDocument) {
     if (!this._canUseDraftStorage()) {
       return;
     }
@@ -1096,7 +1146,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
                             target.classList.contains('cm-content') ||
                             target.classList.contains('cm-line');
 
-    if (isInsideCodeBlock) {
+    if (event.defaultPrevented || target.closest('input, textarea, ngs-content-editor-nested-blocks, .ngs-headless-editor-surface') || isInsideCodeBlock) {
       return;
     }
 
@@ -1139,27 +1189,26 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   private _handleTextPaste(text: string, index: number) {
     const lines = text.split(/\r?\n/);
     if (lines.length === 1) {
-      this.insertBlock('paragraph', index, {}, false, text);
+      this.insertBlock('paragraph', index, {}, false, [createNgsHeadlessEditorText(text)]);
     } else {
       // If it looks like code (has indentation or common code characters), insert as a single code block
       const isCodeLike = text.includes('{') || text.includes('}') || text.includes(';') || text.includes('  ') || text.includes('\t');
       if (isCodeLike) {
-        this.insertBlock('code', index, { language: 'none' }, false, text);
+        this.insertBlock('code', index, { language: 'none' }, false, [createNgsHeadlessEditorText(text)]);
         return;
       }
 
       lines.forEach((line, i) => {
         if (line.trim().length > 0) {
-          this.insertBlock('paragraph', index + i, {}, false, line);
+          this.insertBlock('paragraph', index + i, {}, false, [createNgsHeadlessEditorText(line)]);
         }
       });
     }
   }
 
   private _handleHtmlPaste(html: string, index: number) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    const body = doc.body;
+    const body = this.document.createElement('div');
+    body.innerHTML = html;
 
     let currentIndex = index;
     Array.from(body.children).forEach(node => {
@@ -1184,13 +1233,13 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
         return {
           type: 'heading',
           settings: { level: parseInt(tag.substring(1)) },
-          content: node.innerHTML
+          content: readNgsHeadlessEditorInlineContent(node, this.editor, { lineBreaks: true })
         };
       case 'p':
         return {
           type: 'paragraph',
           settings: {},
-          content: node.innerHTML
+          content: readNgsHeadlessEditorInlineContent(node, this.editor, { lineBreaks: true })
         };
       case 'ul':
         return {
@@ -1226,7 +1275,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
         return {
           type: 'quote',
           settings: {},
-          content: node.innerHTML
+          content: { cite: { content: readNgsHeadlessEditorInlineContent(node, this.editor, { lineBreaks: true }), props: [] }, caption: { content: [], props: [] } }
         };
       case 'pre':
         const codeNode = node.querySelector('code');
@@ -1234,7 +1283,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
         return {
           type: 'code',
           settings: { language: 'none' },
-          content: content.replace(/\r\n/g, '\n').replace(/\r/g, '\n').trimEnd()
+          content: [createNgsHeadlessEditorText(content.replace(/\r\n?/g, '\n').trimEnd())]
         };
       case 'hr':
         return {
@@ -1246,7 +1295,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
           return {
             type: 'paragraph',
             settings: {},
-            content: node.innerHTML
+            content: readNgsHeadlessEditorInlineContent(node, this.editor, { lineBreaks: true })
           };
         }
         return null;
@@ -1256,9 +1305,12 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   private _mapListItems(node: Element): any[] {
     return Array.from(node.children)
       .filter(child => child.tagName.toLowerCase() === 'li')
-      .map(li => ({
-        content: li.innerHTML,
-        children: []
-      }));
+      .map(li => {
+        const inline = li.cloneNode(true) as Element;
+        const nested = Array.from(inline.children).filter(child => ['ul', 'ol'].includes(child.tagName.toLowerCase()));
+        const children = nested.flatMap(list => this._mapListItems(list));
+        nested.forEach(list => list.remove());
+        return { content: readNgsHeadlessEditorInlineContent(inline, this.editor, { lineBreaks: true }), props: [], children };
+      });
   }
 }

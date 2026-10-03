@@ -32,7 +32,3 @@ export function getDimensionAttribute(value: unknown): number | null {
 
   return null;
 }
-
-export function getHtmlContent(value: unknown): string {
-  return typeof value === 'string' ? value : '';
-}

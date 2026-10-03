@@ -249,7 +249,9 @@ export class MenuTrigger implements OnDestroy {
         .withLockedPosition(false)
         .withTransformOriginOn('.ngs-menu-panel')
         .withPositions(this._getPositions())
-        .withPush(false),
+        .withFlexibleDimensions(!this.menu()?.pushIntoViewport())
+        .withPush(this.menu()?.pushIntoViewport() ?? false)
+        .withViewportMargin(this.menu()?.pushIntoViewport() ? 8 : 0),
       scrollStrategy: this._overlay.scrollStrategies.block(),
       hasBackdrop: !this._parentMenu,
       backdropClass: 'cdk-overlay-transparent-backdrop'

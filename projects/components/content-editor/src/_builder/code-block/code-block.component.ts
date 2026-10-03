@@ -1,6 +1,8 @@
+import { NgsHeadlessEditorText, createNgsHeadlessEditorText } from '@ngstarter-ui/components/headless-editor';
+import { contentEditorText } from '../../document';
 import {
   ChangeDetectionStrategy,
-  Component,
+  Component, effect, untracked,
   DestroyRef,
   ElementRef, forwardRef,
   inject,
@@ -18,7 +20,7 @@ import { ContentBuilderStore } from '../../content-builder.store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EditorView, keymap, ViewUpdate } from '@codemirror/view';
 import { basicSetup } from 'codemirror';
-import { Compartment } from '@codemirror/state';
+import { Compartment, Prec } from '@codemirror/state';
 import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
 import { Button } from '@ngstarter-ui/components/button';
 import { githubLight } from '@uiw/codemirror-theme-github';
@@ -67,9 +69,10 @@ export class CodeBlockComponent implements OnInit, OnDestroy, ContentEditorDataB
   private _contentRef = viewChild.required<ElementRef<HTMLParagraphElement>>('contentRef');
 
   id = input.required<string>();
-  content = input.required<string>();
+  content = input.required<readonly NgsHeadlessEditorText[]>();
   settings = input.required<ContentEditorCodeBlockSettings>();
   index = input.required<number>();
+  props = input<unknown[]>([]);
   placeholder = input('Write your code here');
 
   protected _languageList = signal<ContentEditorCodeLanguage[]>([
@@ -122,6 +125,29 @@ export class CodeBlockComponent implements OnInit, OnDestroy, ContentEditorDataB
   private _editorLanguage = new Compartment();
   readonly initialized = signal(false);
 
+  private restoring = false;
+
+  constructor() {
+    effect(() => {
+      const content = this.content();
+      const settings = this.settings();
+      untracked(() => {
+        if (!this._editorView) return;
+        const code = contentEditorText(content);
+        this.restoring = true;
+        try {
+          if (this._editorView.state.doc.toString() !== code) {
+            this._editorView.dispatch({ changes: { from: 0, to: this._editorView.state.doc.length, insert: code } });
+          }
+          const language = this._languageList().find(item => item.language === settings.language);
+          if (language && this._language().language !== language.language) {
+            void this.selectLanguage(language, false);
+          }
+        } finally { this.restoring = false; }
+      });
+    });
+  }
+
   async ngOnInit() {
     const codeLanguage = this._languageList().find(
       codeLanguage => codeLanguage.language === this.settings().language
@@ -131,7 +157,7 @@ export class CodeBlockComponent implements OnInit, OnDestroy, ContentEditorDataB
       this._language.set(codeLanguage);
     }
 
-    this._code.set(this.content() || '');
+    this._code.set(contentEditorText(this.content()));
     this._isEmpty.set(this._code().trim().length === 0);
     this._contentBuilder
       .focusChanged
@@ -147,16 +173,21 @@ export class CodeBlockComponent implements OnInit, OnDestroy, ContentEditorDataB
       extensions: [
         basicSetup,
         githubLight,
-        keymap.of([indentWithTab]),
+        Prec.highest(keymap.of([
+          { key: 'Mod-z', run: () => this._store.editor.undo() },
+          { key: 'Mod-Shift-z', run: () => this._store.editor.redo() },
+          { key: 'Mod-y', run: () => this._store.editor.redo() },
+          indentWithTab
+        ])),
         this._editorLanguage.of([]),
         EditorView.updateListener.of((v: ViewUpdate) => {
-          if (v.docChanged) {
-            this.update();
+          if (v.docChanged && !this.restoring) {
+            this._store.withTextEdit('keyboard', `code:${this.id()}`, () => this.update());
           }
         })
       ],
     });
-    await this.selectLanguage(this._language());
+    await this.selectLanguage(this._language(), false);
     this._editorView.contentDOM.style.width = '0';
     this._editorView.focus();
     this.initialized.set(true);
@@ -172,7 +203,7 @@ export class CodeBlockComponent implements OnInit, OnDestroy, ContentEditorDataB
 
   getData(): any {
     return {
-      content: this._editorView.state.doc.toString(),
+      content: [createNgsHeadlessEditorText(this._editorView.state.doc.toString())],
       settings: {
         ...this.settings(),
         language: this._language().language
@@ -184,7 +215,7 @@ export class CodeBlockComponent implements OnInit, OnDestroy, ContentEditorDataB
     return this._editorView.state.doc.toString().trim().length === 0;
   }
 
-  protected async selectLanguage(codeLanguage: ContentEditorCodeLanguage) {
+  protected async selectLanguage(codeLanguage: ContentEditorCodeLanguage, persist = true) {
     this._language.set(codeLanguage);
 
     if (codeLanguage.language === 'none') {
@@ -198,7 +229,7 @@ export class CodeBlockComponent implements OnInit, OnDestroy, ContentEditorDataB
       });
     }
 
-    this.update();
+    if (persist) this.update();
   }
 
   private update() {

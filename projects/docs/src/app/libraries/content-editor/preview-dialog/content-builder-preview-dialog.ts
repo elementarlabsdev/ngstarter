@@ -1,6 +1,6 @@
 import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import {
-  ContentEditorBlock,
+  ContentEditorDocument,
   ContentEditorRenderer,
 } from '@ngstarter-ui/components/content-editor';
 import {
@@ -14,7 +14,7 @@ import { Button } from '@ngstarter-ui/components/button';
 import { EmptyState } from '@ngstarter-ui/components/empty-state';
 
 export interface ContentBuilderPreviewDialogData {
-  blocks: ContentEditorBlock[];
+  document: ContentEditorDocument;
 }
 
 @Component({

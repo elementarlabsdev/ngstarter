@@ -1,17 +1,18 @@
+import { NgsHeadlessEditorBlock } from '@ngstarter-ui/components/headless-editor';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { SafeHtmlPipe } from '@ngstarter-ui/components/core';
+import { NgsHeadlessEditorRuns } from '@ngstarter-ui/components/headless-editor';
+import { ContentEditorText } from '../../types';
 import {
-  ContentEditorBlock,
   ContentEditorBlockRendererInputSignals,
   ContentEditorHeadingBlockSettings,
   ContentEditorItemProperty,
 } from '../../types';
-import { getHtmlContent, getTextAlignment } from '../renderer-utils';
+import { getTextAlignment } from '../renderer-utils';
 
 @Component({
   selector: 'ngs-content-editor-heading-renderer',
   imports: [
-    SafeHtmlPipe,
+    NgsHeadlessEditorRuns,
   ],
   templateUrl: './heading-renderer.html',
   styleUrl: './heading-renderer.scss',
@@ -24,18 +25,18 @@ import { getHtmlContent, getTextAlignment } from '../renderer-utils';
   },
 })
 export class ContentEditorHeadingRenderer implements ContentEditorBlockRendererInputSignals<
-  unknown,
+  ContentEditorText,
   Partial<ContentEditorHeadingBlockSettings>
 > {
-  block = input<ContentEditorBlock | null>(null);
+  block = input<NgsHeadlessEditorBlock | null>(null);
   id = input<string>('');
   type = input<string>('');
-  content = input<unknown>('');
+  content = input<ContentEditorText>([]);
   settings = input<Partial<ContentEditorHeadingBlockSettings>>({});
   props = input<ContentEditorItemProperty[]>([]);
   index = input<number>(0);
 
-  protected readonly html = computed(() => getHtmlContent(this.content()));
+  protected readonly runs = computed(() => this.content());
   protected readonly level = computed(() => {
     const level = this.settings()?.level;
     return level === 1 || level === 2 || level === 3 ? level : 2;

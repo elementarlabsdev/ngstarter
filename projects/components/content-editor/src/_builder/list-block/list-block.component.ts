@@ -1,7 +1,9 @@
+import { NgsHeadlessEditorText } from '@ngstarter-ui/components/headless-editor';
+import { contentEditorText, cloneContentEditorValue } from '../../document';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  Component,
+  Component, effect, untracked,
   DestroyRef,
   ElementRef,
   inject,
@@ -54,11 +56,12 @@ export class ListBlockComponent implements OnInit, ContentEditorDataBlock, After
   content = input.required<ContentEditorListItem[]>();
   settings = input.required<ContentEditorListSettings>();
   index = input.required<number>();
+  props = input<ContentEditorItemProperty[]>([]);
 
   protected _placeholder = signal<string>('List item');
   protected _content = signal<ContentEditorListItem[]>([
     {
-      content: '',
+      content: [],
       props: [],
       children: []
     }
@@ -66,11 +69,22 @@ export class ListBlockComponent implements OnInit, ContentEditorDataBlock, After
   protected _listStyle = signal('');
   readonly initialized = signal(false);
 
+  constructor() {
+    effect(() => {
+      const content = this.content();
+      const settings = this.settings();
+      untracked(() => {
+        this._content.set(cloneContentEditorValue(content.length ? content : [{ content: [], props: [], children: [] }]));
+        this._listStyle.set(settings.listStyle);
+      });
+    });
+  }
+
   ngOnInit() {
     this._listStyle.set(this.settings().listStyle);
 
     if (this.content().length !== 0) {
-      this._content.set(this.content());
+      this._content.set(cloneContentEditorValue(this.content()));
     }
   }
 
@@ -81,7 +95,7 @@ export class ListBlockComponent implements OnInit, ContentEditorDataBlock, After
   focus() {
   }
 
-  protected onContentChanged(content: string, list: ContentEditorListItem[], index: number) {
+  protected onContentChanged(content: readonly NgsHeadlessEditorText[], list: ContentEditorListItem[], index: number) {
     if (!list[index]) {
       return;
     }
@@ -105,9 +119,9 @@ export class ListBlockComponent implements OnInit, ContentEditorDataBlock, After
     if (level === 0) {
       const content = contentEditable.getContent();
 
-      if (content) {
+      if (contentEditorText(content)) {
         list.splice(index + 1, 0, {
-          content: '',
+          content: [],
           props: [],
           styles: {},
           children: []
@@ -122,17 +136,17 @@ export class ListBlockComponent implements OnInit, ContentEditorDataBlock, After
         this._contentBuilder.insertEmptyBlock(this.index());
       }
     } else {
-      if (list[index] && !list[index].content) {
+      if (list[index] && !contentEditorText(list[index].content)) {
         list.splice(index, 1);
         const parentIndex = parentList.findIndex(item => item === parentItem);
         parentList.splice(parentIndex + 1, 0, {
-          content: '',
+          content: [],
           props: [],
           children: []
         });
       } else {
         list.splice(index + 1, 0, {
-          content: '',
+          content: [],
           props: [],
           styles: {},
           children: []
@@ -157,7 +171,7 @@ export class ListBlockComponent implements OnInit, ContentEditorDataBlock, After
   }
 
   isEmpty(): boolean {
-    return this.getData().content.find((item: any) => item.content.trim().length > 0);
+    return !this._content().some(item => contentEditorText(item.content).trim() || item.children.length > 0);
   }
 
   protected _onNodeAdded(node: HTMLElement) {
@@ -179,7 +193,7 @@ export class ListBlockComponent implements OnInit, ContentEditorDataBlock, After
     parentList: ContentEditorListItem[],
     listItem: HTMLElement
   ) {
-    if (event.key === 'Backspace' && !contentEditable.getContent()) {
+    if (event.key === 'Backspace' && !contentEditorText(contentEditable.getContent())) {
       const latestElementInParentList = (listItem.closest('.list') as HTMLElement)?.parentNode;
       list.splice(index, 1);
       const prevElement = listItem.previousSibling as HTMLElement;

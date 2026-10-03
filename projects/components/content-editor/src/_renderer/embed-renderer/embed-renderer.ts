@@ -1,7 +1,7 @@
+import { NgsHeadlessEditorBlock } from '@ngstarter-ui/components/headless-editor';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { SafeResourceUrlPipe } from '@ngstarter-ui/components/core';
 import {
-  ContentEditorBlock,
   ContentEditorBlockRendererInputSignals,
   ContentEditorEmbedBlockSettings,
   ContentEditorEmbedContent,
@@ -25,7 +25,7 @@ export class ContentEditorEmbedRenderer implements ContentEditorBlockRendererInp
   Partial<ContentEditorEmbedContent> | null,
   Partial<ContentEditorEmbedBlockSettings>
 > {
-  block = input<ContentEditorBlock | null>(null);
+  block = input<NgsHeadlessEditorBlock | null>(null);
   id = input<string>('');
   type = input<string>('');
   content = input<Partial<ContentEditorEmbedContent> | null>(null);

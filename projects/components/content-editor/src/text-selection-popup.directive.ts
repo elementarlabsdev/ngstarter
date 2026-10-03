@@ -26,10 +26,11 @@ import { Subject, Subscription } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 
 export interface ISelectionPopupComponent {
-  observedElement?: HTMLElement | null;
+  observedElement?: unknown;
 }
 
 const POPUP_VERTICAL_OFFSET = 8;
+const POPUP_VIEWPORT_MARGIN = 8;
 
 @Directive({
   selector: '[ngsTextSelectionPopup]',
@@ -46,6 +47,7 @@ export class TextSelectionPopupDirective implements OnDestroy {
   private documentClickListener: (() => void) | null = null;
   private positionStrategy: GlobalPositionStrategy | null = null;
   private scrollListener: (() => void) | null = null;
+  private popupResizeObserver: ResizeObserver | null = null;
   private scrollSubject = new Subject<void>();
   private scrollSubscription: Subscription | null = null;
 
@@ -61,7 +63,7 @@ export class TextSelectionPopupDirective implements OnDestroy {
     this.scrollSubscription = this.scrollSubject.pipe(
       throttleTime(50, undefined, { leading: true, trailing: true })
     ).subscribe(() => {
-      this.updatePopupPositionOnScroll();
+      this.updatePopupPosition();
     });
   }
 
@@ -77,7 +79,7 @@ export class TextSelectionPopupDirective implements OnDestroy {
   @HostListener('document:keydown', ['$event'])
   onDocumentKeyDown(event: KeyboardEvent): void {
     if (!this.overlayRef) return;
-    if (this.isEventInsidePopup(event)) return;
+    if ((event.target as HTMLElement).closest('.cdk-overlay-container')) return;
     const ignoredKeys = [
       'Shift', 'Control', 'Alt', 'Meta', 'CapsLock',
       'Escape', 'Tab',
@@ -99,6 +101,10 @@ export class TextSelectionPopupDirective implements OnDestroy {
   }
 
   private processSelection(): void {
+    // Menus, popovers and dialogs opened from the toolbar live in sibling
+    // overlay panes. Their controls must be able to take focus without disposing
+    // the toolbar or discarding the editor's saved range.
+    if (this.overlayRef && this.isFocusInsidePopup()) return;
     const selection = window.getSelection();
 
     if (!selection || selection.isCollapsed || selection.rangeCount === 0) {
@@ -119,7 +125,8 @@ export class TextSelectionPopupDirective implements OnDestroy {
     let observedElement: HTMLElement | null = null;
     if (this.closestContentObserverClass) {
       observedElement = this.findClosestElementWithClass(range.startContainer, this.closestContentObserverClass);
-      if (!observedElement) {
+      const endElement = this.findClosestElementWithClass(range.endContainer, this.closestContentObserverClass);
+      if (!observedElement || endElement !== observedElement) {
         this.closePopupIfNeeded();
         this.currentSelectionRange = null;
         return;
@@ -130,37 +137,23 @@ export class TextSelectionPopupDirective implements OnDestroy {
     if (selectedText) {
       const selectionRects = range.getClientRects();
       if (selectionRects.length > 0) {
-        const startRect = selectionRects[0];
-        const lastRect = selectionRects[selectionRects.length - 1];
-        const hostRect = this.hostElement.getBoundingClientRect();
-        const hostCenterX = hostRect.left + hostRect.width / 2;
-        const selectionStartX = startRect.left;
-        const selectionEndX = lastRect.right;
-        const selectionCenterX = selectionStartX + (selectionEndX - selectionStartX) / 2;
-        const alignRight = selectionCenterX >= hostCenterX;
-        const scrollX = document.body.scrollLeft;
-        const scrollY = document.body.scrollTop;
-        const anchorX = selectionStartX + scrollX;
-        const endX = selectionEndX + scrollX;
-        const anchorY = startRect.top + scrollY;
         const containingTagName = this.getContainingTagName(range);
         const newRange = range.cloneRange();
 
         if (!this.overlayRef || !this.areRangesEqual(this.currentSelectionRange, newRange)) {
           this.closePopupIfNeeded();
           this.currentSelectionRange = newRange;
-          this.showPopup({ x: anchorX, y: anchorY }, endX, alignRight, observedElement);
+          this.showPopup(observedElement);
           this.tagSelected.emit(containingTagName);
         }
       } else { this.closePopupIfNeeded(); this.currentSelectionRange = null; }
     } else { this.closePopupIfNeeded(); this.currentSelectionRange = null; }
   }
 
-  private showPopup(anchorPosition: { x: number; y: number }, selectionEndX: number, alignRight: boolean, observedElement: HTMLElement | null): void {
+  private showPopup(observedElement: HTMLElement | null): void {
     if (!this.targetComponent || this.overlayRef) return;
 
     this.positionStrategy = this.overlay.position().global();
-    this.positionStrategy.left(`${anchorPosition.x}px`).top(`${anchorPosition.y}px`);
 
     this.overlayRef = this.overlay.create({
       positionStrategy: this.positionStrategy,
@@ -172,23 +165,15 @@ export class TextSelectionPopupDirective implements OnDestroy {
     const componentRef = this.overlayRef.attach(portal);
 
     if (componentRef.instance && 'observedElement' in componentRef.instance) {
-      componentRef.instance.observedElement = observedElement;
+      componentRef.setInput('observedElement', observedElement);
     }
 
     if (this.overlayRef) {
       Promise.resolve().then(() => {
         if (this.overlayRef && this.positionStrategy) {
-          try {
-            const overlayElement = this.overlayRef.overlayElement;
-            const popupHeight = overlayElement.offsetHeight;
-            const popupWidth = overlayElement.offsetWidth;
-            if (popupHeight > 0 && popupWidth > 0) {
-              const correctTop = anchorPosition.y - popupHeight - POPUP_VERTICAL_OFFSET;
-              const correctLeft = alignRight ? selectionEndX - popupWidth : anchorPosition.x;
-              this.positionStrategy.left(`${correctLeft}px`).top(`${correctTop}px`);
-              this.overlayRef.updatePosition();
-            }
-          } catch(e) { console.error("Error correcting initial popup position:", e); }
+          this.updatePopupPosition();
+          this.popupResizeObserver = new ResizeObserver(() => this.updatePopupPosition());
+          this.popupResizeObserver.observe(this.overlayRef.overlayElement);
           this.addDocumentClickListener();
           this.addScrollListener();
         }
@@ -204,6 +189,8 @@ export class TextSelectionPopupDirective implements OnDestroy {
 
   private closePopup(): void {
     if (!this.overlayRef) return;
+    this.popupResizeObserver?.disconnect();
+    this.popupResizeObserver = null;
     this.overlayRef.dispose(); this.overlayRef = null;
     this.positionStrategy = null; this.currentSelectionRange = null;
     this.removeDocumentClickListener();
@@ -223,32 +210,20 @@ export class TextSelectionPopupDirective implements OnDestroy {
     if (this.scrollListener) { this.scrollListener(); this.scrollListener = null; }
   }
 
-  private updatePopupPositionOnScroll(): void {
+  private updatePopupPosition(): void {
     if (!this.overlayRef || !this.positionStrategy || !this.currentSelectionRange) return;
     try {
       const selectionRects = this.currentSelectionRange.getClientRects();
       if (selectionRects.length > 0) {
-        const startRect = selectionRects[0];
-        const lastRect = selectionRects[selectionRects.length - 1];
-        const hostRect = this.hostElement.getBoundingClientRect();
-        const hostCenterX = hostRect.left + hostRect.width / 2;
-        const selectionStartX = startRect.left;
-        const selectionEndX = lastRect.right;
-        const selectionCenterX = selectionStartX + (selectionEndX - selectionStartX) / 2;
-        const alignRight = selectionCenterX >= hostCenterX;
-        const scrollX = document.body.scrollLeft;
-        const scrollY = document.body.scrollTop;
-        const textTop = startRect.top + scrollY;
+        const selectionBounds = this.currentSelectionRange.getBoundingClientRect();
         const popupElement = this.overlayRef.overlayElement;
         const popupHeight = popupElement.offsetHeight;
         const popupWidth = popupElement.offsetWidth;
-        let newX: number;
-        if (alignRight) {
-          newX = (lastRect.right + scrollX) - popupWidth;
-        } else {
-          newX = startRect.left + scrollX;
-        }
-        const newY = textTop - popupHeight - POPUP_VERTICAL_OFFSET;
+        const viewportWidth = this.hostElement.ownerDocument.documentElement.clientWidth;
+        const centeredLeft = selectionBounds.left + (selectionBounds.width - popupWidth) / 2;
+        const newX = Math.max(POPUP_VIEWPORT_MARGIN,
+          Math.min(centeredLeft, viewportWidth - popupWidth - POPUP_VIEWPORT_MARGIN));
+        const newY = selectionBounds.top - popupHeight - POPUP_VERTICAL_OFFSET;
         this.ngZone.run(() => {
           if (this.overlayRef && this.positionStrategy) {
             this.positionStrategy.left(`${newX}px`).top(`${newY}px`);
@@ -257,7 +232,7 @@ export class TextSelectionPopupDirective implements OnDestroy {
         });
       } else { this.ngZone.run(() => this.closePopup()); }
     } catch(e) {
-      console.error("Error updating popup position on scroll:", e);
+      console.error("Error updating popup position:", e);
       this.ngZone.run(() => this.closePopup());
     }
   }
@@ -316,7 +291,7 @@ export class TextSelectionPopupDirective implements OnDestroy {
 
   private isFocusInsidePopup(): boolean {
     if (!this.overlayRef?.overlayElement || !document.activeElement) return false;
-    return this.overlayRef.overlayElement.contains(document.activeElement);
+    return this.overlayContainer.getContainerElement().contains(document.activeElement);
   }
 
   private areRangesEqual(r1: Range | null, r2: Range | null): boolean {

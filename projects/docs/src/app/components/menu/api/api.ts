@@ -34,6 +34,7 @@ export class Api {
     { name: 'classList', description: 'Classes to be passed to the menu panel.', type: 'string', default: "''" },
     { name: 'xPosition', description: 'Position of the menu in the X axis.', type: "'before' | 'after'", default: 'after' },
     { name: 'yPosition', description: 'Position of the menu in the Y axis.', type: "'above' | 'below'", default: 'below' },
+    { name: 'pushIntoViewport', description: 'Preserves the panel size and shifts the menu inside the viewport when needed.', type: 'boolean', default: 'false' },
   ];
 
   readonly triggerProperties = [

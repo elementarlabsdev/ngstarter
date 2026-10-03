@@ -21,10 +21,11 @@
           @for (row of _content(); track $index) {
             <tr>
               @for (cell of row; track $index) {
-                <td #cell
+                <td
                     [ngsContentEditorContentEditable]="cell.content"
                     [props]="cell.props"
-                    (contentChanged)="cell.content = $event"
+                    (contentChanged)="onCellContentChanged(cell, $event)"
+                    (propsChanged)="onCellPropsChanged(cell, $event)"
                     (blur)="clearCellsSelection()"
                     [rowSpan]="cell.options.rowspan"
                     [colSpan]="cell.options.colspan"></td>

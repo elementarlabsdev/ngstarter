@@ -34,7 +34,7 @@ export function renderNgsHeadlessEditorTextRun(
       wrapper.contentEditable = 'false';
       wrapper.setAttribute('data-ngs-headless-editor-atomic', '');
     }
-    wrapper.append(node);
+    wrapper.appendChild(node);
     node = wrapper;
   }
   return node;
@@ -50,12 +50,16 @@ export function renderNgsHeadlessEditorRuns(
   const fragment = document.createDocumentFragment();
   if (runs.some(run => run.text.length > 0)) {
     for (const run of runs) {
-      fragment.append(renderNgsHeadlessEditorTextRun(document, run.text, run.marks, registry));
+      fragment.appendChild(renderNgsHeadlessEditorTextRun(document, run.text, run.marks, registry));
     }
   } else {
-    fragment.append(document.createElement('br'));
+    fragment.appendChild(document.createElement('br'));
   }
-  target.replaceChildren(fragment);
+  // Angular's server DOM implements Node methods, but not all ParentNode methods.
+  while (target.firstChild) {
+    target.removeChild(target.firstChild);
+  }
+  target.appendChild(fragment);
 }
 
 /** Finds the mark definition that produced (or matches) an element. */
@@ -102,6 +106,7 @@ export function readNgsHeadlessEditorInlineContent(
       return;
     }
     const tag = node.tagName.toLowerCase();
+    if (['script', 'style', 'iframe', 'object'].includes(tag)) return;
     if (tag === 'br') {
       if (options.lineBreaks) {
         runs.push(createNgsHeadlessEditorText('\n', marks));
@@ -113,8 +118,9 @@ export function readNgsHeadlessEditorInlineContent(
       newline();
     }
     const definition = node instanceof HTMLElement ? findNgsHeadlessEditorMarkDefinition(node, registry) : undefined;
-    const nextMarks = definition
-      ? [...marks, { type: definition.type, attrs: definition.readAttributes?.(node as HTMLElement) }]
+    const attrs = definition?.readAttributes?.(node as HTMLElement);
+    const nextMarks = definition && (!definition.readAttributes || attrs)
+      ? [...marks, { type: definition.type, attrs }]
       : marks;
     for (const child of node.childNodes) {
       visit(child, nextMarks);

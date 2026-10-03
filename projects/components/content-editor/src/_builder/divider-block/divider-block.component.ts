@@ -17,6 +17,7 @@ export class DividerBlockComponent implements ContentEditorDataBlock {
   content = input.required<string>();
   settings = input.required<ContentEditorCodeBlockSettings>();
   index = input.required<number>();
+  props = input<unknown[]>([]);
 
   readonly initialized = signal(true);
 

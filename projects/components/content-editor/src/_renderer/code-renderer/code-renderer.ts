@@ -1,7 +1,8 @@
+import { contentEditorText } from '../../document';
+import { NgsHeadlessEditorBlock } from '@ngstarter-ui/components/headless-editor';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
-import { ContentEditorBlock, ContentEditorBlockRendererInputSignals, ContentEditorItemProperty } from '../../types';
-import { getHtmlContent } from '../renderer-utils';
+import { ContentEditorBlockRendererInputSignals, ContentEditorItemProperty } from '../../types';
 
 export interface ContentEditorCodeRendererSettings {
   language?: string;
@@ -20,7 +21,7 @@ export interface ContentEditorCodeRendererSettings {
   },
 })
 export class ContentEditorCodeRenderer implements ContentEditorBlockRendererInputSignals<unknown, ContentEditorCodeRendererSettings> {
-  block = input<ContentEditorBlock | null>(null);
+  block = input<NgsHeadlessEditorBlock | null>(null);
   id = input<string>('');
   type = input<string>('');
   content = input<unknown>('');
@@ -28,6 +29,6 @@ export class ContentEditorCodeRenderer implements ContentEditorBlockRendererInpu
   settings = input<ContentEditorCodeRendererSettings>({});
   index = input<number>(0);
 
-  protected readonly code = computed(() => getHtmlContent(this.content()));
-  protected readonly language = computed(() => this.settings()?.language || 'none');
+  protected readonly code = computed(() => contentEditorText(this.content()));
+  protected readonly language = computed(() => this.settings()?.language && this.settings().language !== 'none' ? this.settings().language! : 'text');
 }

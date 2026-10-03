@@ -793,6 +793,12 @@ export class NgsHeadlessEditor {
     return found && this.commit({ version: 1, blocks }, this._selection(), origin, historyGroup);
   }
 
+  /** Applies a document edit as one undo step without resetting history. */
+  updateDocument(document: NgsHeadlessEditorDocument): boolean {
+    if (this._readOnly()) return false;
+    return this.commit(cloneNgsHeadlessEditorDocument(document), this._selection(), 'command');
+  }
+
   removeBlock(blockId: string): boolean {
     if (this._readOnly()) {
       return false;

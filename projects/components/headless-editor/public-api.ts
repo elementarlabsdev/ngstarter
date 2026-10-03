@@ -19,3 +19,4 @@ export * from './src/mention/mention.plugin';
 export * from './src/mention/headless-editor-mentions.directive';
 export * from './src/mention/mention.options';
 export * from './src/mention/mention-menu/mention-menu';
+export * from './src/link.plugin';

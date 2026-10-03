@@ -1,3 +1,8 @@
+import { ContentEditorColumnsRenderer } from './columns-renderer/columns-renderer';
+import { ContentEditorGalleryRenderer } from './gallery-renderer/gallery-renderer';
+import { ContentEditorAttachmentRenderer } from './attachment-renderer/attachment-renderer';
+import { ContentEditorToggleRenderer } from './toggle-renderer/toggle-renderer';
+import { ContentEditorCalloutRenderer } from './callout-renderer/callout-renderer';
 import { ContentEditorBlockRendererDef } from '../types';
 import { ContentEditorCodeRenderer } from './code-renderer/code-renderer';
 import { ContentEditorDividerRenderer } from './divider-renderer/divider-renderer';
@@ -11,6 +16,11 @@ import { ContentEditorTableRenderer } from './table-renderer/table-renderer';
 import { ContentEditorVideoRenderer } from './video-renderer/video-renderer';
 
 export const CONTENT_EDITOR_DEFAULT_RENDERERS: ReadonlyArray<ContentEditorBlockRendererDef> = [
+  { type: 'columns', component: ContentEditorColumnsRenderer },
+  { type: 'gallery', component: ContentEditorGalleryRenderer },
+  { type: 'attachment', component: ContentEditorAttachmentRenderer },
+  { type: 'toggle', component: ContentEditorToggleRenderer },
+  { type: 'callout', component: ContentEditorCalloutRenderer },
   {
     type: 'paragraph',
     component: ContentEditorParagraphRenderer,

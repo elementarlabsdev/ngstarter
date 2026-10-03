@@ -1,6 +1,8 @@
+import { NgsHeadlessEditorText } from '@ngstarter-ui/components/headless-editor';
+import { contentEditorText, cloneContentEditorValue } from '../../document';
 import {
   ChangeDetectionStrategy,
-  Component, DestroyRef,
+  Component, effect, untracked, DestroyRef,
   ElementRef, forwardRef,
   inject,
   input,
@@ -47,21 +49,33 @@ export class ParagraphBlockComponent implements OnInit, ContentEditorDataBlock {
   private _contentRef = viewChild.required<ElementRef<HTMLParagraphElement>>('contentRef');
 
   id = input.required<string>();
-  content = input.required<string>();
+  content = input.required<readonly NgsHeadlessEditorText[]>();
   settings = input.required<any>();
   props = input<ContentEditorItemProperty[]>([]);
   index = input.required<number>();
   placeholder = input('Enter text here');
 
-  protected _content = signal<string>('');
+  protected _content = signal<readonly NgsHeadlessEditorText[]>([]);
   protected _props = signal<ContentEditorItemProperty[]>([]);
   protected _isEmpty = signal<boolean>(true);
   readonly initialized = signal(false);
 
+  constructor() {
+    effect(() => {
+      const content = this.content();
+      const props = this.props();
+      untracked(() => {
+        this._content.set(content);
+        this._props.set(cloneContentEditorValue(props));
+        this._isEmpty.set(!contentEditorText(content).trim());
+      });
+    });
+  }
+
   ngOnInit() {
     this._content.set(this.content());
     this._props.set(this.props());
-    this._isEmpty.set(this.content().length === 0);
+    this._isEmpty.set(!contentEditorText(this.content()).trim());
     this._contentBuilder
       .focusChanged
       .pipe(takeUntilDestroyed(this._destroyRef))
@@ -89,22 +103,23 @@ export class ParagraphBlockComponent implements OnInit, ContentEditorDataBlock {
   }
 
   isEmpty(): boolean {
-    return this.getData().content.trim().length === 0;
+    return !contentEditorText(this._content()).trim();
   }
 
-  protected onContentChanged(content: string) {
+  protected onContentChanged(content: readonly NgsHeadlessEditorText[]) {
     if (!this.initialized()) {
       return;
     }
 
     this._content.set(content);
-    this._isEmpty.set(content.trim().length === 0);
+    this._isEmpty.set(!contentEditorText(content).trim());
 
     this.update();
   }
 
   protected onPropsChanged(props: ContentEditorItemProperty[]) {
-    this._contentBuilder.setBlockProps(this.id(), props);
+    this._props.set(props);
+    this.update();
   }
 
   protected onPressedEnter(event: KeyboardEvent) {
@@ -122,13 +137,13 @@ export class ParagraphBlockComponent implements OnInit, ContentEditorDataBlock {
   }
 
   protected _onKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Backspace' && !this._content()) {
+    if (event.key === 'Backspace' && !contentEditorText(this._content())) {
       this._contentBuilder.deleteBlock(this.id());
     }
   }
 
   private update() {
-    this._store.updateBlock(this.id(), {...this.getData(), isEmpty: this.isEmpty()});
+    this._contentBuilder.updateParagraph(this.id(), {...this.getData(), isEmpty: this.isEmpty()});
     this._contentBuilder.emitContentChangeEvent();
   }
 }

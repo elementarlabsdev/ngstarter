@@ -1,6 +1,6 @@
+import { NgsHeadlessEditorBlock } from '@ngstarter-ui/components/headless-editor';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import {
-  ContentEditorBlock,
   ContentEditorBlockRendererInputSignals,
   ContentEditorItemProperty,
   ContentEditorVideoBlockSettings,
@@ -22,7 +22,7 @@ export class ContentEditorVideoRenderer implements ContentEditorBlockRendererInp
   Partial<ContentEditorVideoContent> | null,
   Partial<ContentEditorVideoBlockSettings>
 > {
-  block = input<ContentEditorBlock | null>(null);
+  block = input<NgsHeadlessEditorBlock | null>(null);
   id = input<string>('');
   type = input<string>('');
   content = input<Partial<ContentEditorVideoContent> | null>(null);

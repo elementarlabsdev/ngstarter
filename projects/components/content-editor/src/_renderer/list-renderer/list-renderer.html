@@ -17,7 +17,7 @@
 <ng-template #listTpl let-list let-ordered="ordered">
   @for (item of list; track $index) {
     <li>
-      <span class="content-html" [innerHTML]="item.content | safeHtml"></span>
+      <span class="content-html" [ngsHeadlessEditorRuns]="item.content"></span>
       @if (childItems(item).length > 0) {
         @if (ordered) {
           <ol class="list">

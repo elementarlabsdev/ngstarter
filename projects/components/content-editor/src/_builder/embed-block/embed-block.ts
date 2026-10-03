@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, effect, untracked, DestroyRef, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ContentBuilderStore } from '../../content-builder.store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Icon } from '@ngstarter-ui/components/icon';
@@ -86,6 +86,19 @@ export class EmbedBlock {
   });
   protected _props = signal<ContentEditorItemProperty[]>([]);
   readonly initialized = signal(false);
+
+  constructor() {
+    effect(() => {
+      const content = this.content();
+      const settings = this.settings();
+      const props = this.props();
+      untracked(() => {
+        this._content.set({ ...content });
+        this._settings.set({ ...settings });
+        this._props.set([...props]);
+      });
+    });
+  }
 
   ngOnInit() {
     this._content.set(this.content());

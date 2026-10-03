@@ -10,4 +10,12 @@
   .block {
     min-width: 0;
   }
+
+  ::ng-deep {
+    a[data-ngs-headless-editor-mark='link'] {
+      color: var(--ngs-color-primary);
+      text-decoration: underline;
+      text-underline-offset: 0.15em;
+    }
+  }
 }
