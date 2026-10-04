@@ -7,6 +7,8 @@ import { NgComponentOutlet } from '@angular/common';
 import { CONTENT_EDITOR_BLOCK_RENDERERS } from '../_renderer/content-editor-renderer.config';
 import { CONTENT_EDITOR_DEFAULT_RENDERERS } from '../_renderer/default-renderers';
 import { ContentEditorBlockRendererDef, ContentEditorBlockRendererInputs } from '../types';
+import { ContentEditorConfig, mergeContentEditorConfig } from '../config';
+import { ContentEditorHtmlSerializer } from '../html/html-serializer';
 
 interface ContentEditorRenderItem {
   block: NgsHeadlessEditorBlock;
@@ -17,7 +19,7 @@ interface ContentEditorRenderItem {
 @Component({
   selector: 'ngs-content-editor-renderer',
   exportAs: 'ngsContentEditorRenderer',
-  providers: [provideContentEditor()],
+  providers: [provideContentEditor(), ContentEditorHtmlSerializer],
   imports: [
     NgComponentOutlet,
   ],
@@ -29,12 +31,18 @@ interface ContentEditorRenderItem {
   },
 })
 export class ContentEditorRenderer {
+  private readonly htmlSerializer = inject(ContentEditorHtmlSerializer);
+  readonly config = input<ContentEditorConfig>({});
   private readonly providedRendererGroups = inject(CONTENT_EDITOR_BLOCK_RENDERERS, {
     optional: true,
   }) || [];
 
   content = input<ContentEditorDocument>(createNgsHeadlessEditorDocument());
   blocks = input<readonly NgsHeadlessEditorBlock[] | null>(null);
+
+  toHtml(config: ContentEditorConfig = {}): string {
+    return this.htmlSerializer.toHtml({ version: 1, blocks: this.blocks() ?? this.content().blocks }, mergeContentEditorConfig(this.config(), config));
+  }
 
   readonly rendererMap = computed(() => {
     const renderers: ContentEditorBlockRendererDef[] = [

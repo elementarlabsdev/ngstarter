@@ -1,0 +1,62 @@
+<div class="flex min-w-0 flex-col gap-4 p-3 sm:p-4">
+  <div class="flex flex-wrap items-center gap-3">
+    <span class="text-base font-semibold">Carousel</span>
+    <span class="text-sm text-on-surface-variant">{{ images().length }} {{ images().length === 1 ? 'image' : 'images' }}</span>
+  </div>
+  @if (selectedImage(); as image) {
+    <div class="gallery-preview relative overflow-hidden rounded-lg" ngsImageViewer>
+      <button ngsButton class="gallery-picture block w-full" [fullWidth]="true" ngsImageViewerPicture [sourceUrl]="image.src" [caption]="captionText(image.caption)" [attr.aria-label]="image.alt || 'View image'">
+        <img class="block aspect-video w-full object-cover" [src]="image.src" [alt]="image.alt" draggable="false">
+      </button>
+      <button ngsIconButton class="preview-action image-actions absolute right-3 top-3" aria-label="Image actions" [ngsMenuTriggerFor]="imageMenu"><ngs-icon name="fluent:more-horizontal-24-regular"/></button>
+      @if (images().length > 1) {
+        <button ngsIconButton class="preview-action absolute left-3 top-1/2 -translate-y-1/2" aria-label="Previous image" [disabled]="selectedIndex() === 0" (click)="previousImage()"><ngs-icon name="fluent:chevron-left-24-regular"/></button>
+        <button ngsIconButton class="preview-action absolute right-3 top-1/2 -translate-y-1/2" aria-label="Next image" [disabled]="selectedIndex() === images().length - 1" (click)="nextImage()"><ngs-icon name="fluent:chevron-right-24-regular"/></button>
+      }
+      <span class="image-counter absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-sm" aria-live="polite">{{ selectedIndex() + 1 }} / {{ images().length }}</span>
+    </div>
+    <div class="flex min-w-0 flex-col gap-2">
+      <span class="flex items-center gap-2 text-xs text-on-surface-variant"><ngs-icon name="fluent:re-order-24-regular" class="size-4"/>Drag to reorder</span>
+      <div class="thumbnail-strip flex min-w-0 gap-3 overflow-x-auto pb-2">
+        <div cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="images()" (cdkDropListDropped)="dropImage($event)" class="flex shrink-0 gap-3">
+          @for (thumbnail of images(); track thumbnail.id) {
+            <div cdkDrag [cdkDragData]="thumbnail.id" class="gallery-thumbnail flex shrink-0 items-center gap-1 rounded-lg p-1" [attr.data-image-id]="thumbnail.id">
+              <div cdkDragHandle class="thumbnail-handle flex w-5 shrink-0 self-stretch items-center justify-center select-none touch-none" [attr.title]="'Drag to reorder image ' + ($index + 1)"><ngs-icon name="fluent:re-order-dots-vertical-24-regular"/></div>
+              <button ngsButton class="thumbnail-picture" [class.is-selected]="selectedId() === thumbnail.id" [attr.aria-label]="'Select image ' + ($index + 1)" [attr.aria-pressed]="selectedId() === thumbnail.id" (click)="selectImage(thumbnail.id)">
+                <img class="block h-18 w-32 rounded-md object-cover" [src]="thumbnail.src" [alt]="thumbnail.alt" draggable="false" loading="lazy">
+              </button>
+            </div>
+          }
+        </div>
+        <button ngsButton class="add-image-tile flex shrink-0 flex-col justify-center gap-1 rounded-lg" ngsUploadTrigger accept="image/*" [multiple]="true" [disabled]="uploading()" (fileSelected)="upload($event)"><ngs-icon name="fluent:add-24-regular"/>Add images</button>
+      </div>
+    </div>
+    <div class="flex flex-col gap-3">
+      <ngs-form-field labelMode="external" subscriptHiddenIfEmpty class="gallery-field">
+        <ngs-label>Caption</ngs-label>
+        <input ngsInput [value]="captionText(image.caption)" placeholder="Add a caption" (input)="changeCaption(image.id, $any($event.target).value)">
+      </ngs-form-field>
+      <ngs-form-field labelMode="external" class="gallery-field">
+        <ngs-label>Alt text</ngs-label>
+        <input ngsInput [value]="image.alt" placeholder="Describe this image" (input)="changeAlt(image.id, $event)">
+        <ngs-hint>Describe the image for screen readers</ngs-hint>
+      </ngs-form-field>
+    </div>
+    <ngs-menu #imageMenu>
+      <button ngs-menu-item [disabled]="uploading()" (click)="requestReplacement(image.id, replaceUpload)">Replace image</button>
+      <button ngs-menu-item [disabled]="selectedIndex() === 0" (click)="moveImage(selectedIndex(), -1)">Move image earlier</button>
+      <button ngs-menu-item [disabled]="selectedIndex() === images().length - 1" (click)="moveImage(selectedIndex(), 1)">Move image later</button>
+      <ngs-menu-divider/>
+      <button ngs-menu-item (click)="removeImage(image.id)">Remove image</button>
+    </ngs-menu>
+  } @else {
+    <ngs-upload-area ngsUploadTrigger accept="image/*" [multiple]="true" (fileSelected)="!uploading() && upload($event)">
+      <div class="flex flex-col items-center gap-2 py-8"><ngs-icon name="fluent:image-multiple-24-regular" class="size-8"/><span>Add images to your carousel</span><span class="text-xs text-on-surface-variant">Click or drop images here</span></div>
+    </ngs-upload-area>
+  }
+  <button ngsButton hidden ngsUploadTrigger accept="image/*" #replaceUpload="ngsUploadTrigger" (fileSelected)="upload($event, replacementId())" aria-label="Replace selected image"></button>
+  @if (uploading()) {
+    <ngs-progress-bar mode="indeterminate"/><button ngsButton (click)="cancelUpload()">Cancel upload</button>
+  }
+  @if (error()) { <ngs-alert variant="negative">{{error()}}</ngs-alert> }
+</div>

@@ -58,6 +58,12 @@ export class ContentEditorRendererApi {
 
   readonly inputs: ApiRow[] = [
     {
+      name: 'config',
+      description: 'Instance HTML export overrides, merged over the environment configuration. Does not replace Angular renderer components.',
+      type: 'ContentEditorConfig',
+      default: '{}'
+    },
+    {
       name: 'content',
       description: 'Headless editor document to render. Text content uses runs with marks; block settings and properties live in attrs.',
       type: 'ContentEditorDocument',
@@ -72,6 +78,12 @@ export class ContentEditorRendererApi {
   ];
 
   readonly providers: ApiRow[] = [
+    {
+      name: 'provideContentEditorConfig(config)',
+      description: 'Configures shared block HTML converters, text marks and block options through environment providers. Renderer.toHtml(config) can override them for one call.',
+      type: 'EnvironmentProviders',
+      default: 'Built-in HTML converters'
+    },
     {
       name: 'provideContentEditorRenderers(renderers)',
       description: 'Registers multiple custom block renderer definitions through an environment provider.',

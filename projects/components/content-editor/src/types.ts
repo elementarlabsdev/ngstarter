@@ -1,5 +1,6 @@
 import { NgsHeadlessEditorDocument, NgsHeadlessEditorText, NgsHeadlessEditorBlock } from '@ngstarter-ui/components/headless-editor';
 import { InjectionToken, InputSignal, Signal, Type } from '@angular/core';
+import type { ContentEditorBlockHtmlConverter } from './html/types';
 
 export const CONTENT_BUILDER = new InjectionToken('CONTENT_BUILDER');
 export const CONTENT_EDITOR_BLOCK = new InjectionToken<ReadonlyArray<ContentEditorDataBlock>>('CONTENT_EDITOR_BLOCK');
@@ -30,10 +31,12 @@ export interface ContentEditorToggleSettings { expanded: boolean; }
 export interface ContentEditorAttachmentContent { url: string; name: string; size: number; mimeType: string; }
 export interface ContentEditorGalleryImage { id: string; src: string; alt: string; caption: ContentEditorText; }
 export interface ContentEditorGalleryContent { images: readonly ContentEditorGalleryImage[]; }
-export interface ContentEditorColumn { id: string; blocks: readonly ContentEditorBlock[]; }
-export interface ContentEditorColumnsContent { columns: readonly ContentEditorColumn[]; }
-/** A block collection in the root document, a toggle, or a column. */
-export interface ContentEditorBlockScope { parentId?: string; columnId?: string; }
+export interface ContentEditorGridCell { id: string; blocks: readonly ContentEditorBlock[]; }
+export interface ContentEditorGridContent { cells: readonly ContentEditorGridCell[]; }
+export type ContentEditorGridGap = 'small' | 'medium' | 'large';
+export interface ContentEditorGridSettings { columns: 2 | 3 | 4; gap: ContentEditorGridGap; stackOnMobile: boolean; }
+/** A block collection in the root document, a toggle, or a cell. */
+export interface ContentEditorBlockScope { parentId?: string; cellId?: string; }
 /** Destination passed to the shared block menu; omission of afterId appends to the collection. */
 export interface ContentEditorBlockInsertionTarget { scope: ContentEditorBlockScope; afterId?: string; }
 export type ContentEditorUploadFn = (file: File, dataUrl: string) => Promise<string>;
@@ -53,6 +56,7 @@ export interface ContentEditorBlockDef {
   component: () => any,
   type: string,
   empty: () => ContentEditorBlockEmpty,
+  toHtml?: ContentEditorBlockHtmlConverter;
   options: {
     [prop: string]: any;
   }

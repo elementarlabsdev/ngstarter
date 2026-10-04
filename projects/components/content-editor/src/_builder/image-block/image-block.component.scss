@@ -2,6 +2,7 @@
 
 :host {
   @apply block;
+  min-width: 0;
 
   ngs-upload-area {
     --ngs-upload-area-padding: --spacing(6) --spacing(10);
@@ -25,7 +26,7 @@
   }
 
   .uploaded-image {
-    @apply w-[704px] flex items-center justify-center;
+    @apply w-full max-w-[704px] flex items-center justify-center;
   }
 
   .upload-overlay-text {

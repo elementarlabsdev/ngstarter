@@ -1,0 +1,59 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  min-width: 0;
+  background: var(--ngs-color-surface);
+  border: 1px solid var(--ngs-color-outline-variant);
+  border-radius: var(--ngs-radius-lg);
+
+  button[hidden] { display: none; }
+
+  .gallery-picture, .thumbnail-picture {
+    --ngs-button-height: auto;
+    --ngs-button-padding: 0;
+    --ngs-button-content-gap: 0;
+    ::ng-deep .content { display: block; width: 100%; }
+  }
+  .preview-action {
+    position: absolute;
+    --ngs-button-height: --spacing(8);
+    background: var(--ngs-color-surface);
+    color: var(--ngs-color-on-surface);
+    box-shadow: var(--ngs-shadow-sm);
+    border-radius: var(--ngs-radius-full);
+    &.image-actions { border-radius: var(--ngs-radius-lg); }
+  }
+  .image-counter {
+    background: var(--ngs-color-black);
+    color: var(--ngs-color-white);
+  }
+  .gallery-thumbnail { background: var(--ngs-color-surface-container-low); }
+  .thumbnail-handle {
+    cursor: grab;
+    &:active { cursor: grabbing; }
+  }
+  .thumbnail-picture {
+    border-radius: var(--ngs-radius-md);
+    &.is-selected { outline: 2px solid var(--ngs-color-primary); outline-offset: 1px; }
+  }
+  .add-image-tile {
+    --ngs-button-height: auto;
+    --ngs-button-padding: --spacing(3);
+    --ngs-button-content-gap: --spacing(1);
+    width: --spacing(36);
+    border: 1px dashed var(--ngs-color-outline-variant);
+    ::ng-deep {
+      .icon { left: auto; right: auto; }
+      .content { line-height: normal; }
+    }
+  }
+  ngs-form-field {
+    --ngs-form-field-border-width: 1px;
+    --ngs-form-field-border-color: var(--ngs-color-outline-variant);
+    --ngs-form-field-container-min-height: --spacing(9);
+    --ngs-form-field-input-height: --spacing(9);
+  }
+  .cdk-drag-placeholder { opacity: 0.25; }
+  .cdk-drag-animating { transition: transform 180ms ease; }
+}

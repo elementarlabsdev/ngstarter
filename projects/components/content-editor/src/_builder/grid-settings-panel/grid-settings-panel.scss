@@ -1,0 +1,18 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  ngs-segmented {
+    --ngs-segmented-button-selected-bg: var(--ngs-color-primary);
+    --ngs-segmented-button-selected-color: var(--ngs-color-on-primary);
+    // The popover's content exists before it has measurable dimensions.
+    // Paint selection directly instead of relying on its measured thumb.
+    ::ng-deep { .ngs-segmented-thumb { display: none; } }
+    button[ngs-segmented-button] {
+      flex: 1;
+      &.is-selected { background: var(--ngs-color-primary); }
+    }
+  }
+  ngs-slide-toggle { display: block; ::ng-deep { .ngs-slide-toggle-content { flex: 1; } } }
+  .add-cell { justify-content: flex-start; }
+}

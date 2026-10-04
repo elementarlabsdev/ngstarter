@@ -1,0 +1,21 @@
+@reference 'tailwindcss';
+
+:host {
+  container-type: inline-size;
+
+  .grid-cells {
+    display: grid;
+    min-width: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: --spacing(6);
+
+    &.columns-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    &.columns-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    &.gap-small { gap: --spacing(3); }
+    &.gap-large { gap: --spacing(9); }
+
+    @container (max-width: 480px) {
+      &.stack-on-mobile { grid-template-columns: minmax(0, 1fr); }
+    }
+  }
+}

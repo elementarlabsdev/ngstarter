@@ -1,0 +1,38 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  min-width: 0;
+
+  ngs-alert {
+    ::ng-deep {
+      > .content {
+        flex: 1;
+        min-width: 0;
+      }
+    }
+
+    button[ngsAlertAction] {
+      --ngs-button-height: --spacing(8);
+      --ngs-button-color: inherit;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    &:hover,
+    &:focus-within,
+    &.settings-open {
+      button[ngsAlertAction] {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+
+    @media (hover: none) {
+      button[ngsAlertAction] {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+  }
+}

@@ -24,6 +24,9 @@ import { NgsHeadlessEditor, createNgsHeadlessEditorDocument, createNgsHeadlessEd
 import { provideContentEditor } from '../content-editor.plugin';
 import { contentEditorText, contentEditorChildCollections, contentEditorCollection } from '../document';
 import { CONTENT_EDITOR_EXTRA_BLOCK_DEFS, CONTENT_EDITOR_EXTRA_SUGGESTIONS } from '../extra-block-defs';
+import { CONTENT_EDITOR_CONFIG, ContentEditorConfig, mergeContentEditorConfig } from '../config';
+import { ContentEditorHtmlSerializer } from '../html/html-serializer';
+import { CONTENT_EDITOR_DEFAULT_HTML_CONVERTERS } from '../html/default-converters';
 import { ContentEditorDocument, ContentEditorBlock } from '../types';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { AsyncPipe, isPlatformServer, NgComponentOutlet } from '@angular/common';
@@ -86,6 +89,7 @@ import { List, ListItem, ListItemIcon, ListItemTitle } from '@ngstarter-ui/compo
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     provideContentEditor(),
+    ContentEditorHtmlSerializer,
     ContentBuilderStore,
     {
       provide: CONTENT_BUILDER,
@@ -109,6 +113,9 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   private static readonly DRAFT_STORAGE_PREFIX = 'ngs-content-editor-builder:draft';
 
   readonly editor = inject(NgsHeadlessEditor);
+  private readonly globalConfig = inject(CONTENT_EDITOR_CONFIG);
+  private readonly htmlSerializer = inject(ContentEditorHtmlSerializer);
+  readonly config = input<ContentEditorConfig>({});
   /** One insertion menu shared by root controls, nested collections and custom blocks. */
   readonly blockMenu = viewChild.required<Menu>('suggestionsMenu');
   private readonly document = inject(DOCUMENT);
@@ -372,7 +379,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
         };
       }
     },
-  ]);
+  ].map(def => ({ ...def, toHtml: CONTENT_EDITOR_DEFAULT_HTML_CONVERTERS[def.type] })));
 
   content = input<ContentEditorDocument>(createNgsHeadlessEditorDocument());
   contentChangedDelay = input(500, {
@@ -551,7 +558,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   // Build helper maps: component map and merged options map
   private buildBlockDefMaps() {
     const overrides = this.options() || {} as ContentEditorOptions;
-    this.blockDefsMap = new Map<string, any>();
+    const config = mergeContentEditorConfig(this.globalConfig, this.config());
     this.blockDefsOptionsMap = new Map<string, any>();
 
     this.blockDefs().forEach((def) => {
@@ -560,6 +567,9 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
       }
       const merged = {
         ...(def.options || {}),
+        toHtml: def.toHtml,
+        ...config.blocks?.[def.type]?.options,
+        ...(config.blocks?.[def.type]?.toHtml ? { toHtml: config.blocks[def.type].toHtml } : {}),
         ...(overrides[def.type] || {})
       };
       this.blockDefsOptionsMap.set(def.type, merged);
@@ -591,6 +601,11 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   constructor() {
+    effect(() => {
+      this.config();
+      this.options();
+      untracked(() => { if (this.loaded) this.buildBlockDefMaps(); });
+    });
     effect(() => {
       const value = this.content();
       untracked(() => {
@@ -826,7 +841,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     for (const children of contentEditorChildCollections(block)) {
       for (const child of children) { (child as any).id = uuid(); this.regenerateChildIds(child); }
     }
-    if (block.type === 'columns') for (const column of block.content.columns) column.id = uuid();
+    if (block.type === 'grid') for (const cell of block.content.cells) cell.id = uuid();
     if (block.type === 'gallery') for (const image of block.content.images) image.id = uuid();
   }
 
@@ -939,6 +954,16 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
 
   getData() {
     return this.editor.document();
+  }
+
+  /** Exports the live document, including nested blocks, through the configured converters. */
+  toHtml(config: ContentEditorConfig = {}): string {
+    const defaults: ContentEditorConfig = { blocks: Object.fromEntries(this.blockDefs().map(def => [def.type, { toHtml: def.toHtml }])) };
+    return this.htmlSerializer.toHtml(this.getData(), mergeContentEditorConfig(defaults, this.globalConfig, this.config(), config));
+  }
+
+  blockToHtml(block: ContentEditorBlock, config: ContentEditorConfig = {}): string {
+    return this.htmlSerializer.blockToHtml(block, mergeContentEditorConfig(this.config(), config));
   }
 
   emitContentChangeEvent() {

@@ -1,0 +1,21 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-content-editor-nested-controls-offset: 0px;
+  display: block;
+  min-width: 0;
+  .nested-controls {
+    --ngs-button-height: --spacing(7);
+    right: 100%;
+    width: calc(--spacing(18) + var(--ngs-content-editor-nested-controls-offset));
+    padding-left: --spacing(2);
+    padding-right: calc(--spacing(2) + var(--ngs-content-editor-nested-controls-offset));
+    opacity: 0;
+    pointer-events: none;
+
+    &.is-menu-open { opacity: 1; pointer-events: auto; }
+  }
+  .nested-block {
+    &:hover, &:focus-within { .nested-controls { opacity: 1; pointer-events: auto; } }
+  }
+}

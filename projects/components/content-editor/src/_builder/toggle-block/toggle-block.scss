@@ -1,0 +1,19 @@
+@reference 'tailwindcss';
+
+:host {
+  ngs-expansion-panel {
+    --ngs-expansion-panel-content-padding: 3px --spacing(6) --spacing(4) --spacing(6);
+
+    &.ngs-expanded { overflow: visible; }
+  }
+
+  ngs-content-editor-nested-blocks {
+    --ngs-content-editor-nested-controls-offset: calc(--spacing(6) + 1px);
+  }
+
+  ::ng-deep > ngs-expansion-panel.ngs-expanded > .ngs-expansion-panel-content.ngs-expanded {
+    overflow: visible;
+
+    > .ngs-expansion-panel-body { overflow: visible; }
+  }
+}

@@ -22,16 +22,21 @@ export class ContentBuilder {
     { id: 'intro', type: 'heading', content: [createNgsHeadlessEditorText('Build a richer document')], attrs: { settings: { level: 2 } } },
     { id: 'note', type: 'callout', content: [createNgsHeadlessEditorText('Select text to add bold, links or colors.')], attrs: { settings: { variant: 'tip' } } },
     { id: 'details', type: 'toggle', content: { title: [createNgsHeadlessEditorText('More details')], blocks: [
-      { id: 'details-text', type: 'paragraph', content: [createNgsHeadlessEditorText('Add any block here, or drag it into a column.')] }
+      { id: 'details-text', type: 'paragraph', content: [createNgsHeadlessEditorText('Add any block here, or drag it into a grid cell.')] }
     ] }, attrs: { settings: { expanded: true } } },
     { id: 'file', type: 'attachment', content: { url: 'data:text/plain;base64,TmdTdGFydGVyIENvbnRlbnQgRWRpdG9y', name: 'readme.txt', size: 27, mimeType: 'text/plain' } },
     { id: 'photos', type: 'gallery', content: { images: [
       { id: 'photo-1', src: '/assets/chairs.jpg', alt: 'Chairs', caption: [createNgsHeadlessEditorText('Image captions support rich text.')] },
       { id: 'photo-2', src: '/assets/chairs2.jpg', alt: 'More chairs', caption: [] }
     ] } },
-    { id: 'layout', type: 'columns', content: { columns: [
-      { id: 'left', blocks: [{ id: 'left-text', type: 'paragraph', content: [createNgsHeadlessEditorText('Left column')] }] },
-      { id: 'right', blocks: [{ id: 'right-text', type: 'paragraph', content: [createNgsHeadlessEditorText('Right column')] }] }
+    { id: 'layout', type: 'grid', attrs: { settings: { columns: 2, gap: 'medium', stackOnMobile: true } }, content: { cells: [
+      { id: 'overview-cell', blocks: [
+        { id: 'grid-heading', type: 'heading', content: [createNgsHeadlessEditorText('Overview')], attrs: { settings: { level: 3 } } },
+        { id: 'grid-description', type: 'paragraph', content: [createNgsHeadlessEditorText('Our team helps organizations turn ideas into impact. We combine strategy, design, and technology to build products people love.')] }
+      ] },
+      { id: 'image-cell', blocks: [{ id: 'grid-image', type: 'image', content: { src: '/assets/chairs.jpg', alt: 'A bright meeting room' }, attrs: { settings: {} } }] },
+      { id: 'note-cell', blocks: [{ id: 'grid-note', type: 'callout', content: [createNgsHeadlessEditorText('Good to know: use cells to group related content and keep a clear reading order.')], attrs: { settings: { variant: 'tip' } } }] },
+      { id: 'empty-cell', blocks: [] }
     ] } }
   ] });
   private readonly dialog = inject(Dialog);

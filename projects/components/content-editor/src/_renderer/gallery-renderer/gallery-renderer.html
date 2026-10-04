@@ -1,0 +1,39 @@
+@if (selectedImage(); as image) {
+  <figure class="gallery m-0 flex min-w-0 flex-col gap-4" ngsImageViewer role="region" aria-label="Image gallery" aria-roledescription="carousel" (keydown)="onKeydown($event)">
+    <div class="gallery-preview relative overflow-hidden rounded-lg">
+      <ngs-carousel tabindex="0" aria-label="Gallery images. Use arrow keys to navigate." (indexChange)="onIndexChange($event)">
+        @for (slide of images(); track slide.id) {
+          <ngs-carousel-card role="group" aria-roledescription="slide" [attr.aria-label]="($index + 1) + ' of ' + images().length" [attr.aria-hidden]="$index !== selectedIndex()">
+            <button ngsButton type="button" class="gallery-picture" [fullWidth]="true" [attr.tabindex]="$index === selectedIndex() ? 0 : -1" ngsImageViewerPicture [sourceUrl]="slide.src" [caption]="captionText(slide.caption)" [attr.aria-label]="slide.alt || 'View image'">
+              <img [src]="slide.src" [alt]="slide.alt" draggable="false">
+            </button>
+          </ngs-carousel-card>
+        }
+      </ngs-carousel>
+      <button ngsIconButton type="button" class="preview-action expand-action absolute right-3 top-3" aria-label="View full-size image" ngsImageViewerPicture [sourceUrl]="image.src" [caption]="captionText(image.caption)">
+        <ngs-icon name="fluent:arrow-expand-24-regular"/>
+      </button>
+      @if (images().length > 1) {
+        <button ngsIconButton type="button" class="preview-action absolute left-3 top-1/2 -translate-y-1/2" aria-label="Previous image" [disabled]="selectedIndex() === 0" (click)="selectImage(selectedIndex() - 1)"><ngs-icon name="fluent:chevron-left-24-regular"/></button>
+        <button ngsIconButton type="button" class="preview-action absolute right-3 top-1/2 -translate-y-1/2" aria-label="Next image" [disabled]="selectedIndex() === images().length - 1" (click)="selectImage(selectedIndex() + 1)"><ngs-icon name="fluent:chevron-right-24-regular"/></button>
+      }
+    </div>
+    @if (captionText(image.caption) || images().length > 1) {
+      <figcaption class="flex min-w-0 items-start justify-between gap-4">
+        <span class="gallery-caption min-w-0 flex-1 text-sm" [ngsHeadlessEditorRuns]="image.caption"></span>
+        @if (images().length > 1) {
+          <span class="gallery-counter shrink-0 text-sm" aria-live="polite" aria-atomic="true">{{ selectedIndex() + 1 }} of {{ images().length }}</span>
+        }
+      </figcaption>
+    }
+    @if (images().length > 1) {
+      <div class="thumbnail-strip relative flex min-w-0 gap-3 overflow-x-auto p-1" role="group" aria-label="Choose an image">
+        @for (thumbnail of images(); track thumbnail.id) {
+          <button #thumbnailButton ngsButton type="button" class="thumbnail-picture shrink-0" [class.is-selected]="$index === selectedIndex()" [attr.aria-label]="'Select image ' + ($index + 1)" [attr.aria-pressed]="$index === selectedIndex()" (click)="selectImage($index)">
+            <img [src]="thumbnail.src" alt="" draggable="false" loading="lazy">
+          </button>
+        }
+      </div>
+    }
+  </figure>
+}

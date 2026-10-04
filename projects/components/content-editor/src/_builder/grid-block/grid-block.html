@@ -1,0 +1,31 @@
+<div class="grid-tools mb-2 flex items-center justify-end gap-1" [class.is-open]="settingsTrigger.isOpen()">
+  <span class="grid-label rounded-md px-2 py-1 text-xs">Grid</span>
+  <button ngsIconButton #settingsTrigger="ngsPopoverTriggerFor" [ngsPopoverTriggerFor]="settingsPopover"
+    position="after-start" aria-label="Grid settings" [attr.aria-expanded]="settingsTrigger.isOpen()">
+    <ngs-icon name="fluent:more-horizontal-24-regular"/>
+  </button>
+</div>
+<div cdkDropList cdkDropListOrientation="mixed" [cdkDropListData]="content()" (cdkDropListDropped)="dropCell($event)"
+  class="grid-cells" [class.columns-3]="layout().columns === 3" [class.columns-4]="layout().columns === 4"
+  [class.gap-small]="layout().gap === 'small'" [class.gap-large]="layout().gap === 'large'" [class.stack-on-mobile]="layout().stackOnMobile">
+  @for (cell of content().cells; track cell.id) {
+    <div cdkDrag [cdkDragData]="cell.id" class="grid-cell relative flex min-w-0 flex-col rounded-lg p-4" [attr.data-cell-id]="cell.id"
+      [class.actions-open]="cellActions.menuOpen()">
+      <div cdkDragHandle class="cell-grip absolute top-3 flex w-4 items-center justify-center select-none touch-none"
+        [attr.title]="'Drag to reorder cell ' + ($index + 1)"><ngs-icon name="fluent:re-order-dots-vertical-24-regular"/></div>
+      <button ngsIconButton class="cell-actions absolute right-1 top-1" [ngsMenuTriggerFor]="cellMenu" #cellActions="ngsMenuTrigger"
+        [attr.aria-label]="'Cell ' + ($index + 1) + ' actions'"><ngs-icon name="fluent:more-horizontal-24-regular"/></button>
+      <ngs-content-editor-nested-blocks class="flex-1" [scope]="{parentId: id(), cellId: cell.id}"/>
+      <ngs-menu #cellMenu>
+        <button ngs-menu-item [disabled]="$first" (click)="moveCell($index, $index - 1)">Move cell earlier</button>
+        <button ngs-menu-item [disabled]="$last" (click)="moveCell($index, $index + 1)">Move cell later</button>
+        <ngs-menu-divider/>
+        <button ngs-menu-item [disabled]="content().cells.length === 1" (click)="removeCell(cell.id)">Delete cell</button>
+      </ngs-menu>
+    </div>
+  }
+</div>
+<ngs-popover #settingsPopover="ngsPopover">
+  <ngs-content-editor-grid-settings-panel [settings]="layout()" (settingsChanged)="changeSettings($event)"
+    (cellAdded)="settingsTrigger.close(); addCell()"/>
+</ngs-popover>

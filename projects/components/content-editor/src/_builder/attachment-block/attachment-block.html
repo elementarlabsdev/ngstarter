@@ -1,0 +1,19 @@
+<div class="flex flex-col gap-3">
+  @if (href()) {
+    <div class="flex items-center gap-3">
+      <ngs-icon name="fluent:document-24-regular"/>
+      <div class="min-w-0 flex-1"><div class="truncate">{{content().name}}</div><div class="text-xs">{{sizeLabel()}} · {{content().mimeType}}</div></div>
+      <a ngsButton [href]="href()" [attr.download]="content().name" target="_blank" rel="noopener noreferrer">Download</a>
+    </div>
+    <ngs-form-field><ngs-label>File name</ngs-label><input ngsInput [value]="content().name" (input)="changeName($event)"></ngs-form-field>
+  }
+  @if (uploading()) {
+    <ngs-progress-bar mode="indeterminate"/>
+    <button ngsButton (click)="cancelUpload()">Cancel upload</button>
+  } @else {
+    <ngs-upload-area ngsUploadTrigger [multiple]="false" (fileSelected)="upload($event)">
+      {{href() ? 'Click or drop a file to replace it' : 'Click or drop a file to attach it'}}
+    </ngs-upload-area>
+  }
+  @if (error()) { <ngs-alert variant="negative">{{error()}}</ngs-alert> }
+</div>

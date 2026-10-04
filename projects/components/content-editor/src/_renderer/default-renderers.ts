@@ -1,4 +1,4 @@
-import { ContentEditorColumnsRenderer } from './columns-renderer/columns-renderer';
+import { ContentEditorGridRenderer } from './grid-renderer/grid-renderer';
 import { ContentEditorGalleryRenderer } from './gallery-renderer/gallery-renderer';
 import { ContentEditorAttachmentRenderer } from './attachment-renderer/attachment-renderer';
 import { ContentEditorToggleRenderer } from './toggle-renderer/toggle-renderer';
@@ -16,7 +16,7 @@ import { ContentEditorTableRenderer } from './table-renderer/table-renderer';
 import { ContentEditorVideoRenderer } from './video-renderer/video-renderer';
 
 export const CONTENT_EDITOR_DEFAULT_RENDERERS: ReadonlyArray<ContentEditorBlockRendererDef> = [
-  { type: 'columns', component: ContentEditorColumnsRenderer },
+  { type: 'grid', component: ContentEditorGridRenderer },
   { type: 'gallery', component: ContentEditorGalleryRenderer },
   { type: 'attachment', component: ContentEditorAttachmentRenderer },
   { type: 'toggle', component: ContentEditorToggleRenderer },

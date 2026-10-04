@@ -1,0 +1,10 @@
+<ngs-expansion-panel [expanded]="true">
+  <ngs-expansion-panel-header><ngs-expansion-panel-title>
+    <div [ngsContentEditorContentEditable]="content().title" (contentChanged)="changeTitle($event)"
+      (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" data-empty-placeholder="Toggle title…"></div>
+  </ngs-expansion-panel-title></ngs-expansion-panel-header>
+  <div class="flex flex-col gap-3 py-3">
+    <ngs-slide-toggle [checked]="settings().expanded" (change)="changeExpanded($event.checked)">Expanded by default</ngs-slide-toggle>
+    <ngs-content-editor-nested-blocks [scope]="{parentId: id()}"/>
+  </div>
+</ngs-expansion-panel>

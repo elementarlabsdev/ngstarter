@@ -1,0 +1,24 @@
+<div cdkDropList [cdkDropListData]="scope()" [cdkDropListConnectedTo]="connectedDropLists()" [cdkDropListEnterPredicate]="canEnter" (cdkDropListDropped)="drop($event)" class="min-h-12">
+  @for (block of renderedBlocks(); track block.id) {
+    <div cdkDrag [cdkDragData]="block.id" (cdkDragStarted)="onDragStarted()" (cdkDragEnded)="onDragEnded()" class="nested-block relative min-w-0 py-2" [attr.data-block-id]="block.id">
+      <div class="nested-controls block-controls absolute top-1/2 z-10 flex -translate-y-1/2 items-center"
+        [class.is-menu-open]="addTrigger.menuOpen() || actionsTrigger.menuOpen()">
+        <button ngsIconButton aria-label="Add block" #addTrigger="ngsMenuTrigger"
+          [ngsMenuTriggerFor]="rootBuilder.blockMenu()" [ngsMenuTriggerRestoreFocus]="false"
+          [ngsMenuTriggerData]="{target: {scope: scope(), afterId: block.id}}">
+          <ngs-icon name="fluent:add-24-regular"/>
+        </button>
+        <button ngsIconButton cdkDragHandle [ngsMenuTriggerFor]="blockMenu"
+          #actionsTrigger="ngsMenuTrigger" aria-label="Move block"><ngs-icon name="fluent:re-order-dots-vertical-24-regular"/></button>
+        <ngs-menu #blockMenu>
+          <button ngs-menu-item (click)="duplicateBlock(block.id)">Duplicate</button>
+          <button ngs-menu-item (click)="deleteBlock(block.id)">Delete</button>
+        </ngs-menu>
+      </div>
+      <div class="min-w-0">
+        <ng-container [ngComponentOutlet]="getBlockComponent(block.type) | async"
+          [ngComponentOutletInputs]="{id: block.id, content: block.content, settings: block.settings, props: block.props, index: $index}"/>
+      </div>
+    </div>
+  }
+</div>

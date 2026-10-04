@@ -1,0 +1,53 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  min-width: 0;
+
+  .grid-tools {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 120ms;
+    --ngs-button-height: --spacing(8);
+    &.is-open { opacity: 1; pointer-events: auto; }
+  }
+  &:hover, &:focus-within { .grid-tools { opacity: 1; pointer-events: auto; } }
+  .grid-label { background: var(--ngs-color-surface-container); color: var(--ngs-color-on-surface-variant); }
+  .grid-cell {
+    min-height: --spacing(40);
+    outline: 1px dashed var(--ngs-color-outline-variant);
+    outline-offset: -1px;
+    &:focus-within { outline: 2px solid var(--ngs-color-primary); }
+    &:hover, &:focus-within, &.actions-open {
+      .cell-actions, .cell-grip { opacity: 1; pointer-events: auto; }
+    }
+  }
+  .cell-actions, .cell-grip { opacity: 0; pointer-events: none; }
+  .cell-actions {
+    position: absolute;
+    right: --spacing(1);
+    top: --spacing(1);
+    --ngs-button-height: --spacing(7);
+    z-index: 11;
+  }
+  .cell-grip {
+    top: calc(-1 * --spacing(5));
+    left: 0;
+    z-index: 12;
+    color: var(--ngs-color-on-surface-variant);
+    cursor: grab;
+  }
+  .cdk-drag-placeholder { opacity: 0.25; }
+  ngs-content-editor-nested-blocks {
+    --ngs-content-editor-nested-controls-offset: --spacing(4);
+    ::ng-deep {
+      .cdk-drop-list { min-height: --spacing(32); }
+      .nested-controls {
+        width: --spacing(7);
+        right: calc(100% + var(--ngs-content-editor-nested-controls-offset));
+        padding: 0;
+        flex-direction: column;
+      }
+    }
+  }
+}

@@ -1,0 +1,64 @@
+@reference 'tailwindcss';
+
+:host {
+  display: block;
+  min-width: 0;
+  .gallery { margin: 0; }
+  figcaption { margin: 0; }
+  // Keep reader images independent of surrounding prose/button theme metrics.
+  ngs-carousel {
+    --ngs-carousel-gap: 0px;
+    outline-offset: -3px;
+    &:focus-visible { outline: 2px solid var(--ngs-color-primary); }
+    ::ng-deep {
+      .content {
+        overflow-x: auto;
+        scrollbar-width: none;
+        scroll-snap-type: x mandatory;
+        &::-webkit-scrollbar { display: none; }
+      }
+    }
+  }
+  ngs-carousel-card {
+    width: 100%;
+    min-width: 0;
+    scroll-snap-align: center;
+  }
+  button[ngsButton] {
+    --ngs-button-height: auto;
+    --ngs-button-padding: 0;
+    --ngs-button-content-gap: 0;
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    line-height: 0;
+    img { display: block; width: 100%; margin: 0; object-fit: cover; }
+    ::ng-deep {
+      .content { display: block; width: 100%; }
+    }
+    &.gallery-picture {
+      width: 100%;
+      border-radius: 0;
+      img { aspect-ratio: 16 / 9; }
+    }
+    &.thumbnail-picture {
+      width: --spacing(32);
+      border-radius: var(--ngs-radius-md);
+      img { aspect-ratio: 16 / 9; }
+      &.is-selected { outline: 2px solid var(--ngs-color-primary); outline-offset: 2px; }
+    }
+  }
+  .gallery-preview { background: var(--ngs-color-surface-container-low); }
+  button[ngsIconButton].preview-action {
+    --ngs-button-height: --spacing(9);
+    --ngs-button-bg: var(--ngs-color-white);
+    --ngs-button-color: var(--ngs-color-black);
+    --ngs-button-hover-bg: color-mix(in srgb, var(--ngs-color-white), var(--ngs-color-black) 8%);
+    position: absolute;
+    box-shadow: var(--ngs-shadow-sm);
+    &.ngs-button-disabled { opacity: 0.55; background: var(--ngs-color-white); }
+  }
+  .gallery-caption, .gallery-counter { color: var(--ngs-color-on-surface-variant); }
+  .gallery-caption { overflow-wrap: anywhere; }
+  .thumbnail-strip { scrollbar-width: thin; }
+}

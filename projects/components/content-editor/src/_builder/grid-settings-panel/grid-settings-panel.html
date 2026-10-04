@@ -1,0 +1,21 @@
+<div class="flex w-64 max-w-[calc(100vw-48px)] flex-col gap-5 p-4" role="group" aria-label="Grid settings">
+  <span class="text-base font-semibold">Grid settings</span>
+  <div class="flex flex-col gap-2">
+    <span class="text-sm">Columns</span>
+    <ngs-segmented class="w-full!" [value]="settings().columns" (valueChange)="settingsChanged.emit({columns: $event})" aria-label="Grid columns">
+      @for (count of [2, 3, 4]; track count) { <button ngs-segmented-button class="flex-1" [value]="count" [attr.aria-label]="count + ' columns'">{{count}}</button> }
+    </ngs-segmented>
+  </div>
+  <ngs-form-field labelMode="external" subscriptHiddenIfEmpty>
+    <ngs-label>Gap</ngs-label>
+    <ngs-select [value]="settings().gap" (valueChange)="settingsChanged.emit({gap: $event})" aria-label="Grid gap">
+      <ngs-option value="small">Small</ngs-option><ngs-option value="medium">Medium</ngs-option><ngs-option value="large">Large</ngs-option>
+    </ngs-select>
+  </ngs-form-field>
+  <div class="flex flex-col gap-2">
+    <ngs-slide-toggle [checked]="settings().stackOnMobile" labelPosition="before" (change)="settingsChanged.emit({stackOnMobile: $event.checked})">Stack on mobile</ngs-slide-toggle>
+    <p class="text-xs text-on-surface-variant">Cells stack vertically on smaller screens in reading order.</p>
+  </div>
+  <ngs-divider/>
+  <button ngsButton class="add-cell" (click)="cellAdded.emit()"><ngs-icon name="fluent:add-24-regular"/>Add cell</button>
+</div>

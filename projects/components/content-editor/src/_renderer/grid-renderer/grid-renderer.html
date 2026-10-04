@@ -1,0 +1,6 @@
+@if (content(); as data) {
+  <div class="grid-cells" [class.columns-3]="layout().columns === 3" [class.columns-4]="layout().columns === 4"
+    [class.gap-small]="layout().gap === 'small'" [class.gap-large]="layout().gap === 'large'" [class.stack-on-mobile]="layout().stackOnMobile">
+    @for (cell of data.cells; track cell.id) { <ngs-content-editor-renderer class="min-w-0" [blocks]="cell.blocks"/> }
+  </div>
+}

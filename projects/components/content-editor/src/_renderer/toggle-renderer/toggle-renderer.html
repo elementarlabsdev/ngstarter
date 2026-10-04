@@ -1,0 +1,6 @@
+@if (content(); as data) {
+  <ngs-expansion-panel [expanded]="settings().expanded ?? false">
+    <ngs-expansion-panel-header><ngs-expansion-panel-title><span [ngsHeadlessEditorRuns]="data.title"></span></ngs-expansion-panel-title></ngs-expansion-panel-header>
+    <ngs-content-editor-renderer [blocks]="data.blocks"/>
+  </ngs-expansion-panel>
+}

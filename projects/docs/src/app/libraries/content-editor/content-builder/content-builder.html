@@ -9,5 +9,5 @@
       Preview
     </button>
   </div>
-  <ngs-content-editor-builder [content]="document()" (contentChanged)="document.set($event)" [options]="options"/>
+  <ngs-content-editor-builder [content]="document()" (contentChanged)="document.set($event)" [options]="options" [persistDraft]="false"/>
 </div>
