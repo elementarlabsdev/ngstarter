@@ -1,97 +1,54 @@
 import {
+  afterRenderEffect,
+  ElementRef,
+  inject,
+  Renderer2,
+  viewChild,
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
-  inject, input,
-  OnChanges, OnInit, output,
-  Renderer2, SimpleChanges,
-  viewChild
+  computed,
+  input,
+  output
 } from '@angular/core';
 import { BaseComponent } from '../base';
-import { NgStyle } from '@angular/common';
 import { TinyColor } from '@ctrl/tinycolor';
 
 @Component({
   selector: 'ngs-alpha',
   exportAs: 'ngsAlpha',
-  imports: [
-    NgStyle
-  ],
   templateUrl: './alpha.html',
   styleUrl: './alpha.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    'class': 'ngs-alpha'
-  }
+  host: { 'class': 'ngs-alpha' }
 })
-export class Alpha extends BaseComponent implements OnChanges, OnInit {
-  private _renderer = inject(Renderer2);
-  private _pointer = viewChild.required<ElementRef>('pointer');
-  private _pointerBg = viewChild.required<ElementRef>('pointerBg');
+export class Alpha extends BaseComponent {
+  private readonly pointer = viewChild.required<ElementRef<HTMLElement>>('pointer');
+  private readonly pointerBg = viewChild.required<ElementRef<HTMLElement>>('pointerBg');
+  private readonly gradientElement = viewChild.required<ElementRef<HTMLElement>>('gradient');
+
+  constructor() {
+    super();
+    const renderer = inject(Renderer2);
+    afterRenderEffect(() => {
+      renderer.setStyle(this.pointer().nativeElement, 'left', `${this.alpha() * 100}%`);
+      renderer.setStyle(this.pointerBg().nativeElement, 'background-color', this.pointerColor());
+      renderer.setStyle(this.gradientElement().nativeElement, 'background', this.gradient());
+    });
+  }
 
   tinyColor = input.required<TinyColor>();
   colorFromHue = input<TinyColor | undefined | null>();
+  readonly alphaChange = output<number>();
+  protected readonly alpha = computed(() => this.tinyColor().getAlpha());
+  protected readonly pointerColor = computed(() => this.tinyColor().toRgbString());
+  protected readonly gradient = computed(() => {
+    const { r, g, b } = this.tinyColor().toRgb();
+    return `linear-gradient(to right, rgba(${r}, ${g}, ${b}, 0) 0%, rgb(${r}, ${g}, ${b}) 100%)`;
+  });
 
-  private tmpColor!: TinyColor;
-  private alpha = 1;
-
-  readonly alphaChange = output<any>();
-
-  ngOnInit() {
-    this.tmpColor = this.tinyColor();
-    this.alpha = this.tmpColor.getAlpha();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['tinyColor'] && changes['tinyColor'].previousValue !== changes['tinyColor'].currentValue) {
-      if (!changes['tinyColor'].currentValue) {
-        return;
-      }
-
-      this.tmpColor = changes['tinyColor'].currentValue.clone();
-      this.alpha = this.tmpColor.getAlpha();
-      this.changePointerPosition(this.tmpColor.getAlpha());
-      this._setPointerBgColor(this.tmpColor);
+  movePointer({ x, width }: { x: number; y: number; height: number; width: number }): void {
+    if (width > 0) {
+      this.alphaChange.emit(Math.max(0, Math.min(x / width, 1)));
     }
-
-    if (changes['colorFromHue'] && changes['colorFromHue'].previousValue !== changes['colorFromHue'].currentValue) {
-      if (!changes['colorFromHue'].currentValue) {
-        return;
-      }
-
-      this.tmpColor = changes['colorFromHue'].currentValue.clone().setAlpha(this.alpha);
-      this._setPointerBgColor(this.tmpColor);
-    }
-  }
-
-  // @ts-ignore
-  movePointer({ x, y, height, width }): void {
-    const alpha = x / width;
-    this.changePointerPosition(alpha);
-    const newColor = this.tmpColor.clone().setAlpha(alpha);
-    this._renderer.setStyle(this._pointerBg().nativeElement, 'background-color', newColor.toRgbString());
-    this.alphaChange.emit(alpha);
-  }
-
-  get gradient(): string {
-    const rgba = this.tmpColor.toRgb();
-    const orientation = 'right';
-    return `linear-gradient(to ${orientation}, rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, 0) 0%, rgb(${rgba.r}, ${rgba.g}, ${rgba.b}) 100%)`;
-  }
-
-  /**
-   * hue value is in range from 0 to 360°
-   */
-  private changePointerPosition(alpha: number): void {
-    const x = alpha * 100;
-    const orientation = 'left';
-    this._renderer.setStyle(this._pointer().nativeElement, orientation, `${x}%`);
-    this.alpha = alpha;
-  }
-
-  private _setPointerBgColor(tinyColor: TinyColor) {
-    this._renderer.setStyle(
-      this._pointerBg().nativeElement, 'background-color', tinyColor.clone().setAlpha(this.alpha).toRgbString()
-    );
   }
 }

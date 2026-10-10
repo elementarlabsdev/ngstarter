@@ -1,10 +1,14 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
-  Component, ElementRef,
-  inject, input,
-  OnChanges, output,
-  Renderer2, SimpleChanges,
-  viewChild
+  afterRenderEffect,
+  ElementRef,
+  inject,
+  Renderer2,
+  viewChild,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  output
 } from '@angular/core';
 import { BaseComponent } from '../base';
 import { TinyColor } from '@ctrl/tinycolor';
@@ -15,51 +19,31 @@ import { TinyColor } from '@ctrl/tinycolor';
   templateUrl: './hue.html',
   styleUrl: './hue.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    'class': 'ngs-hue',
-  }
+  host: { 'class': 'ngs-hue' }
 })
-export class Hue extends BaseComponent implements OnChanges {
-  private cdr = inject(ChangeDetectorRef);
-  private _renderer = inject(Renderer2);
-  readonly pointer = viewChild.required<ElementRef>('pointer');
+export class Hue extends BaseComponent {
+  private readonly pointer = viewChild.required<ElementRef<HTMLElement>>('pointer');
+
+  constructor() {
+    super();
+    const renderer = inject(Renderer2);
+    afterRenderEffect(() => {
+      renderer.setStyle(this.pointer().nativeElement, 'left', `${this.hue() / 360 * 100}%`);
+      renderer.setStyle(this.pointer().nativeElement, 'background-color', this.pointerColor());
+    });
+  }
 
   tinyColor = input.required<TinyColor>();
-
   readonly colorChange = output<TinyColor>();
+  protected readonly hue = computed(() => this.tinyColor().toHsv().h);
+  protected readonly pointerColor = computed(() =>
+    new TinyColor({ h: this.hue(), s: 1, v: 1 }).toRgbString());
 
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['tinyColor'] && changes['tinyColor'].previousValue !== changes['tinyColor'].currentValue) {
-      this.changePointerPosition(changes['tinyColor'].currentValue);
-      this._setPointerBgColor(changes['tinyColor'].currentValue);
+  movePointer({ x, width }: { x: number; y: number; height: number; width: number }): void {
+    if (width <= 0) {
+      return;
     }
-  }
-
-  // @ts-ignore
-  public movePointer({ x, y, height, width }): void {
-    let h = (x / width) * 360;
-
-    if (h >= 360) {
-      h = 359;
-    }
-
-    const newColor = new TinyColor(`hsv(${h}, 100%, 100%)`).setAlpha(1);
-    this.changePointerPosition(newColor);
-    this._renderer.setStyle(this.pointer().nativeElement, 'background-color', newColor.toRgbString());
-    this.colorChange.emit(newColor);
-  }
-
-  /**
-   * hue value is in range from 0 to 360°
-   */
-  private changePointerPosition(tinyColor: TinyColor): void {
-    const x = tinyColor.toHsl().h / 360 * 100;
-    this._renderer.setStyle(this.pointer().nativeElement, 'left', `${x}%`);
-  }
-
-  private _setPointerBgColor(tinyColor: TinyColor) {
-    const hsv = tinyColor.toHsv();
-    const newColor = new TinyColor(`hsv(${hsv.h}, 100%, 100%)`).setAlpha(1);
-    this._renderer.setStyle(this.pointer().nativeElement, 'background-color', newColor.toRgbString());
+    const h = Math.max(0, Math.min((x / width) * 360, 359));
+    this.colorChange.emit(new TinyColor({ h, s: 1, v: 1 }));
   }
 }

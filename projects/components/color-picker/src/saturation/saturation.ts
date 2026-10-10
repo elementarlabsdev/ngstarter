@@ -1,14 +1,15 @@
 import {
-  ChangeDetectionStrategy,
-  Component,
+  afterRenderEffect,
   ElementRef,
   inject,
-  input, model,
-  OnInit,
-  output,
   Renderer2,
-  SimpleChanges,
-  viewChild
+  viewChild,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  model,
+  output
 } from '@angular/core';
 import { BaseComponent } from '../base';
 import { TinyColor } from '@ctrl/tinycolor';
@@ -23,121 +24,38 @@ import { TinyColor } from '@ctrl/tinycolor';
     'class': 'ngs-saturation'
   }
 })
-export class Saturation extends BaseComponent implements OnInit {
-  private _renderer = inject(Renderer2);
-  readonly pointer = viewChild.required<ElementRef>('pointer');
-
-  tinyColor = model.required<TinyColor>();
-  colorFromHue = input<TinyColor | undefined | null>();
-
-  private tmpColor!: TinyColor;
-  private pointerColor!: TinyColor;
-
-  readonly colorChange = output<any>();
+export class Saturation extends BaseComponent {
+  private readonly pointer = viewChild.required<ElementRef<HTMLElement>>('pointer');
 
   constructor() {
     super();
-  }
-
-  ngOnInit(): void {
-    this.tmpColor = this.tinyColor();
-    this._renderer.setStyle(
-      this.elementRef.nativeElement, 'background-color', this.getBackgroundColor(this.tinyColor())
-    );
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['colorFromHue']) {
-      const prevColor = changes['colorFromHue'].previousValue;
-      const currentColor = changes['colorFromHue'].currentValue;
-
-      if (!currentColor || prevColor?.equals(currentColor)) {
-        return;
-      }
-
-      const oldColorHsv = this.pointerColor ? this.pointerColor.toHsv() : this.tmpColor.toHsv();
-      const newColorHsv = currentColor.toHsv();
-      const newColor = new TinyColor({
-        h: newColorHsv.h,
-        s: oldColorHsv.s,
-        v: oldColorHsv.v,
-        a: 1,
-        format: 'hsv'
-      });
-      this.tmpColor = newColor;
-      this._renderer.setStyle(
-        this.elementRef.nativeElement, 'background-color', this.getBackgroundColor(changes['colorFromHue'].currentValue)
-      );
-      this._setPointerBgColor(newColor);
-      // Removed this.colorChange.emit(newColor) to prevent NG0100 error.
-      // Emitters in ngOnChanges can cause ExpressionChangedAfterItHasBeenCheckedError.
-      // ColorPicker already knows about colorFromHue changes.
-    }
-
-    if (changes['tinyColor']) {
-      const prevColor = changes['tinyColor'].previousValue;
-      const currentColor = changes['tinyColor'].currentValue;
-
-      if (prevColor?.equals(currentColor)) {
-        return;
-      }
-
-      this.tmpColor = currentColor.clone();
-      const hsv = this.tmpColor.toHsv();
-      this._renderer.setStyle(
-        this.elementRef.nativeElement, 'background-color', this.getBackgroundColor(this.tmpColor)
-      );
-      this.changePointerPosition(hsv.s * 100, hsv.v * 100);
-      this._setPointerBgColor(this.tmpColor);
-    }
-  }
-
-  // @ts-ignore
-  movePointer({ x, y, height, width }): void {
-    const saturationX = (x * 100) / width;
-    const bright = -((y * 100) / height) + 100;
-    this.changePointerPosition(saturationX, bright);
-    const hsv = this.tmpColor.toHsv();
-
-    const normalizedX = Math.max(0, Math.min(x / width, 1));
-    const normalizedY = Math.max(0, Math.min(y / height, 1));
-
-    const saturation = normalizedX;
-    const value = 1 - normalizedY; // Y=0 (верх) это Value=1, Y=height (низ) это Value=0
-
-    // Убедимся, что hue в пределах 0-360
-    const validHue = ((hsv.h % 360) + 360) % 360;
-    const newColor = new TinyColor({
-      h: validHue,
-      s: saturation,
-      v: value,
-      a: 1,
-      format: 'hsv'
+    const renderer = inject(Renderer2);
+    afterRenderEffect(() => {
+      renderer.setStyle(this.elementRef.nativeElement, 'background-color', this.backgroundColor());
+      renderer.setStyle(this.pointer().nativeElement, 'top', `${(1 - this.hsv().v) * 100}%`);
+      renderer.setStyle(this.pointer().nativeElement, 'left', `${this.hsv().s * 100}%`);
+      renderer.setStyle(this.pointer().nativeElement, 'background-color', this.pointerColor());
     });
-    this._renderer.setStyle(this.pointer().nativeElement, 'background-color', newColor.toRgbString());
-    this.pointerColor = newColor;
-    this.colorChange.emit(newColor);
   }
 
-  private getBackgroundColor(tinyColor: TinyColor) {
-    const hsl = tinyColor.toHsl();
-    return new TinyColor({
-      h: hsl.h,
-      s: 1,
-      l: 0.5,
-      a: 1,
-      format: 'hsl'
-    }).toRgbString();
-  }
+  tinyColor = model.required<TinyColor>();
+  colorFromHue = input<TinyColor | undefined | null>();
+  readonly colorChange = output<TinyColor>();
 
-  private changePointerPosition(x: number, y: number): void {
-    const pointer = this.pointer();
-    this._renderer.setStyle(pointer.nativeElement, 'top', `${100 - y}%`);
-    this._renderer.setStyle(pointer.nativeElement, 'left', `${x}%`);
-  }
+  protected readonly hsv = computed(() => this.tinyColor().toHsv());
+  protected readonly hue = computed(() => (this.colorFromHue() ?? this.tinyColor()).toHsv().h);
+  protected readonly backgroundColor = computed(() =>
+    new TinyColor({ h: this.hue(), s: 1, v: 1 }).toRgbString());
+  protected readonly pointerColor = computed(() => this.tinyColor().clone().setAlpha(1).toRgbString());
 
-  private _setPointerBgColor(tinyColor: TinyColor) {
-    this.pointerColor = tinyColor;
-    this._renderer.setStyle(this.pointer().nativeElement, 'background-color', tinyColor.toRgbString());
+  movePointer({ x, y, height, width }: { x: number; y: number; height: number; width: number }): void {
+    if (width <= 0 || height <= 0) {
+      return;
+    }
+    this.colorChange.emit(new TinyColor({
+      h: this.hue(),
+      s: Math.max(0, Math.min(x / width, 1)),
+      v: 1 - Math.max(0, Math.min(y / height, 1))
+    }));
   }
 }

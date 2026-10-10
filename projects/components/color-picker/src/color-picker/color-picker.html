@@ -1,7 +1,7 @@
 <ngs-saturation [colorFromHue]="_colorFromHue()"
                 [tinyColor]="_color()"
                 (colorChange)="onSaturationColorChange($event)"/>
-<ngs-hue [tinyColor]="_color()"
+<ngs-hue [tinyColor]="_colorFromHue() || _color()"
          (colorChange)="onHueColorChange($event)"/>
 @if (showOpacity()) {
   <ngs-alpha [colorFromHue]="_colorFromHue()"
@@ -14,10 +14,14 @@
          type="text"
          ngsInput
          maxlength="7"
+         [disabled]="_disabled()"
+         [ngModelOptions]="{standalone: true}"
          [(ngModel)]="hexColor"
          (ngModelChange)="onHexColorChange($event)"
          (blur)="onHexColorBlur()">
-  <button ngsIconButton
+  <button type="button" ngsIconButton
+          [disabled]="_disabled()"
+          aria-label="Copy HEX color"
           ngsIconButtonSuffix
           (mousedown)="copyToClipboard($event, hexInput)">
     <ngs-icon name="fluent:copy-24-regular"/>

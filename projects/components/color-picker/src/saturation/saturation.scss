@@ -1,6 +1,7 @@
 @reference 'tailwindcss';
 
 :host {
+  touch-action: none;
   display: block;
   flex: none;
   position: relative;

@@ -1,8 +1,8 @@
 import {
   booleanAttribute,
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy,
   Component,
-  forwardRef, inject,
+  forwardRef,
   input, OnChanges,
   OnInit, output, signal, SimpleChanges
 } from '@angular/core';
@@ -52,8 +52,6 @@ import { Input } from '@ngstarter-ui/components/input';
   }
 })
 export class ColorPicker implements OnInit, OnChanges, ControlValueAccessor {
-  private cdr = inject(ChangeDetectorRef);
-
   color = input<string>('');
   disabled = input(false, {
     transform: booleanAttribute
@@ -69,8 +67,8 @@ export class ColorPicker implements OnInit, OnChanges, ControlValueAccessor {
   readonly colorChange = output<string>();
   readonly rawColorChange = output<TinyColor>();
 
-  private tmpColor!: TinyColor;
-  protected hexColor!: string;
+  private tmpColor = new TinyColor('red');
+  protected hexColor = signal(this.tmpColor.toHexString());
 
   protected _color = signal<TinyColor>(new TinyColor('red'));
   protected _colorFromHue = signal<TinyColor | undefined | null>(null);
@@ -115,7 +113,7 @@ export class ColorPicker implements OnInit, OnChanges, ControlValueAccessor {
   protected async copyToClipboard(event: MouseEvent, hexInput: HTMLInputElement) {
     event.preventDefault();
     event.stopPropagation();
-    const color = new TinyColor(this.hexColor);
+    const color = new TinyColor(this.hexColor());
 
     if (color.isValid) {
       await navigator.clipboard.writeText(color.toHexString());
@@ -125,11 +123,7 @@ export class ColorPicker implements OnInit, OnChanges, ControlValueAccessor {
   }
 
   protected onSaturationColorChange(tinyColor: TinyColor) {
-    this.tmpColor = tinyColor.clone();
-    const newColor = tinyColor.clone().setAlpha(this.alpha());
-    this.rawColorChange.emit(newColor);
-    this.emitEvent(newColor);
-    this._setHexColor(newColor);
+    this.updateColor(tinyColor.clone().setAlpha(this.alpha()));
   }
 
   protected _handleContextMenu(event: Event) {
@@ -138,43 +132,38 @@ export class ColorPicker implements OnInit, OnChanges, ControlValueAccessor {
   }
 
   protected onAlphaChange(alpha: number) {
-    this.alpha.set(alpha);
-    const newColor = this.tmpColor.clone();
-    newColor.setAlpha(alpha);
-    this.rawColorChange.emit(newColor.clone().setAlpha(this.alpha()));
-    this.emitEvent(newColor);
+    this.updateColor(this.tmpColor.clone().setAlpha(alpha));
   }
 
   protected onHueColorChange(color: TinyColor) {
+    if (this._disabled()) {
+      return;
+    }
     this._colorFromHue.set(color);
-    const newColor = color.clone().setAlpha(this.alpha());
-    this.tmpColor = newColor.clone();
-    this.rawColorChange.emit(newColor);
-    this.emitEvent(newColor);
-    this._setHexColor(newColor);
+    const hsv = this.tmpColor.toHsv();
+    this.updateColor(new TinyColor({ ...hsv, h: color.toHsv().h, a: this.alpha() }));
   }
 
   protected onHexColorChange(color: string) {
-    if (!color.startsWith('#')) {
+    if (this._disabled() || !color.startsWith('#')) {
       return;
     }
 
     if (color.length === 4 || color.length === 7) {
       const hexColor = new TinyColor(color);
 
-      if (!hexColor.isValid || hexColor.equals(this._color())) {
+      if (!hexColor.isValid) {
         return;
       }
 
-      this._setColor(color, false);
-      this.emitEvent(hexColor);
+      this._colorFromHue.set(null);
+      this.updateColor(hexColor.setAlpha(this.alpha()));
     }
   }
 
   protected onHexColorBlur() {
-    if (!this.hexColor.trim()) {
-      this.hexColor = this.tmpColor.toHexString();
-    }
+    this.hexColor.set(this.tmpColor.toHexString());
+    this.onTouched();
   }
 
   protected _setHexColor(tinyColor: TinyColor) {
@@ -182,34 +171,44 @@ export class ColorPicker implements OnInit, OnChanges, ControlValueAccessor {
       return;
     }
 
-    const hexColor = new TinyColor(this.hexColor);
+    const hexColor = new TinyColor(this.hexColor());
 
     if (hexColor.isValid && hexColor.equals(tinyColor)) {
       return;
     }
 
-    this.hexColor = tinyColor.toHexString();
+    this.hexColor.set(tinyColor.toHexString());
   }
 
-  private _setColor(color: string, isSetHexColor = true) {
+  private _setColor(color: string) {
     if (!color) {
       color = 'red';
     }
 
-    let newColor = new TinyColor(color);
+    const newColor = new TinyColor(color);
 
     if (!newColor.isValid) {
       return;
     }
 
-    if (!newColor.equals(this._color())) {
-      this._color.set(newColor);
-      this.tmpColor = this._color().clone();
+    this._colorFromHue.set(null);
+    this._color.set(newColor);
+    this.tmpColor = newColor.clone();
+    this.alpha.set(newColor.getAlpha());
+    this.hexColor.set(newColor.toHexString());
+  }
 
-      if (isSetHexColor) {
-        this.hexColor = this.tmpColor.toHexString();
-      }
+  private updateColor(color: TinyColor) {
+    if (this._disabled()) {
+      return;
     }
+    this.tmpColor = color.clone();
+    this._color.set(color.clone());
+    this.alpha.set(color.getAlpha());
+    this._setHexColor(color);
+    this.rawColorChange.emit(color.clone());
+    this.emitEvent(color);
+    this.onTouched();
   }
 
   private emitEvent(newColor: TinyColor) {
