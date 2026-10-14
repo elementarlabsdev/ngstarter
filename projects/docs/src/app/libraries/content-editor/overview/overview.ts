@@ -3,13 +3,15 @@ import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 import {Page} from "@meta/page/page";
 import {PageContentDirective} from "@meta/page/page-content.directive";
 import {PageTitleDirective} from "@meta/page/page-title.directive";
+import { RouterLink } from '@angular/router';
 
 @Component({
     imports: [
         Page,
         PageContentDirective,
         PageTitleDirective,
-        CodeHighlighter
+        CodeHighlighter,
+        RouterLink
     ],
   templateUrl: './overview.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

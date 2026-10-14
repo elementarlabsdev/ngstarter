@@ -1,0 +1,411 @@
+{
+  "version": 1,
+  "blocks": [
+    {
+      "id": "paragraph",
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Hello ",
+          "marks": [
+            {
+              "type": "bold"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "world",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "https://example.com",
+                "target": "_blank"
+              }
+            }
+          ]
+        }
+      ],
+      "attrs": {
+        "props": [
+          {
+            "name": "text-alignment",
+            "value": "left"
+          }
+        ]
+      }
+    },
+    {
+      "id": "heading",
+      "type": "heading",
+      "content": [
+        {
+          "type": "text",
+          "text": "Section",
+          "marks": []
+        }
+      ],
+      "attrs": {
+        "settings": {
+          "level": 2
+        }
+      }
+    },
+    {
+      "id": "code",
+      "type": "code",
+      "content": [
+        {
+          "type": "text",
+          "text": "const answer = 42;\nconsole.log(answer);",
+          "marks": []
+        }
+      ],
+      "attrs": {
+        "settings": {
+          "language": "javascript"
+        }
+      }
+    },
+    {
+      "id": "divider",
+      "type": "divider",
+      "content": null
+    },
+    {
+      "id": "bullet-list",
+      "type": "bulletList",
+      "content": [
+        {
+          "content": [
+            {
+              "type": "text",
+              "text": "Parent",
+              "marks": []
+            }
+          ],
+          "children": [
+            {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Child",
+                  "marks": []
+                }
+              ],
+              "children": []
+            }
+          ]
+        }
+      ],
+      "attrs": {
+        "settings": {
+          "listStyle": "bullet"
+        }
+      }
+    },
+    {
+      "id": "ordered-list",
+      "type": "orderedList",
+      "content": [
+        {
+          "content": [
+            {
+              "type": "text",
+              "text": "First item",
+              "marks": []
+            }
+          ],
+          "children": []
+        }
+      ],
+      "attrs": {
+        "settings": {
+          "listStyle": "ordered"
+        }
+      }
+    },
+    {
+      "id": "quote",
+      "type": "quote",
+      "content": {
+        "cite": {
+          "content": [
+            {
+              "type": "text",
+              "text": "A quotation",
+              "marks": []
+            }
+          ],
+          "props": []
+        },
+        "caption": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Author",
+              "marks": []
+            }
+          ],
+          "props": []
+        }
+      }
+    },
+    {
+      "id": "table",
+      "type": "table",
+      "content": null,
+      "attrs": {
+        "rows": [
+          [
+            [
+              {
+                "type": "text",
+                "text": "Name",
+                "marks": []
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Value",
+                "marks": []
+              }
+            ]
+          ],
+          [
+            [
+              {
+                "type": "text",
+                "text": "Answer",
+                "marks": []
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "42",
+                "marks": []
+              }
+            ]
+          ]
+        ],
+        "header": true,
+        "cellMetadata": [
+          [
+            {
+              "props": [],
+              "options": {
+                "colspan": 1,
+                "rowspan": 1,
+                "width": 180
+              }
+            },
+            {
+              "props": [],
+              "options": {
+                "colspan": 1,
+                "rowspan": 1
+              }
+            }
+          ],
+          [
+            {
+              "props": [],
+              "options": {
+                "colspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "props": [],
+              "options": {
+                "colspan": 1,
+                "rowspan": 1
+              }
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "id": "image",
+      "type": "image",
+      "content": {
+        "src": "/assets/chairs.jpg",
+        "alt": "A meeting room"
+      },
+      "attrs": {
+        "settings": {
+          "width": 640,
+          "height": "auto"
+        }
+      }
+    },
+    {
+      "id": "video",
+      "type": "video",
+      "content": {
+        "src": "https://example.com/movie.mp4",
+        "caption": "Product demo",
+        "orientation": "landscape"
+      },
+      "attrs": {
+        "settings": {
+          "width": 640
+        }
+      }
+    },
+    {
+      "id": "embed",
+      "type": "embed",
+      "content": {
+        "url": "https://www.youtube.com/embed/example",
+        "type": "youtube"
+      },
+      "attrs": {
+        "settings": {
+          "width": 700,
+          "height": 400
+        }
+      }
+    },
+    {
+      "id": "callout",
+      "type": "callout",
+      "content": [
+        {
+          "type": "text",
+          "text": "Remember this",
+          "marks": []
+        }
+      ],
+      "attrs": {
+        "settings": {
+          "variant": "tip"
+        }
+      }
+    },
+    {
+      "id": "toggle",
+      "type": "toggle",
+      "content": {
+        "title": [
+          {
+            "type": "text",
+            "text": "Details",
+            "marks": []
+          }
+        ],
+        "blocks": [
+          {
+            "id": "toggle-paragraph",
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Nested content",
+                "marks": []
+              }
+            ]
+          }
+        ]
+      },
+      "attrs": {
+        "settings": {
+          "expanded": true
+        }
+      }
+    },
+    {
+      "id": "attachment",
+      "type": "attachment",
+      "content": {
+        "url": "https://example.com/guide.pdf",
+        "name": "guide.pdf",
+        "size": 2048,
+        "mimeType": "application/pdf"
+      }
+    },
+    {
+      "id": "gallery",
+      "type": "gallery",
+      "content": {
+        "images": [
+          {
+            "id": "photo-one",
+            "src": "/assets/chairs.jpg",
+            "alt": "Meeting room",
+            "caption": [
+              {
+                "type": "text",
+                "text": "A bright workspace",
+                "marks": []
+              }
+            ]
+          },
+          {
+            "id": "photo-two",
+            "src": "/assets/chairs2.jpg",
+            "alt": "Another room",
+            "caption": []
+          }
+        ]
+      }
+    },
+    {
+      "id": "grid",
+      "type": "grid",
+      "content": {
+        "cells": [
+          {
+            "id": "cell-one",
+            "blocks": [
+              {
+                "id": "grid-heading",
+                "type": "heading",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Overview",
+                    "marks": []
+                  }
+                ],
+                "attrs": {
+                  "settings": {
+                    "level": 3
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "cell-two",
+            "blocks": [
+              {
+                "id": "grid-paragraph",
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Grid content",
+                    "marks": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "attrs": {
+        "settings": {
+          "columns": 2,
+          "gap": "medium",
+          "stackOnMobile": true
+        }
+      }
+    }
+  ]
+}

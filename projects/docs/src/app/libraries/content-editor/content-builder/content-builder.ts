@@ -1,10 +1,12 @@
 import { createNgsHeadlessEditorText } from '@ngstarter-ui/components/headless-editor';
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, DestroyRef, inject, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ContentBuilderComponent, ContentEditorDocument, isContentEditorBlockEmpty } from '@ngstarter-ui/components/content-editor';
 import { Button } from '@ngstarter-ui/components/button';
 import { Dialog } from '@ngstarter-ui/components/dialog';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { ContentBuilderPreviewDialog } from '../preview-dialog/content-builder-preview-dialog';
+import { ContentImportDialog } from '../import-dialog/import-dialog';
 
 @Component({
   selector: 'app-content-builder',
@@ -40,6 +42,16 @@ export class ContentBuilder {
     ] } }
   ] });
   private readonly dialog = inject(Dialog);
+  private readonly destroyRef = inject(DestroyRef);
+  readonly builder = viewChild.required(ContentBuilderComponent);
+
+  openImport(): void {
+    this.dialog.open<ContentImportDialog, unknown, ContentEditorDocument>(ContentImportDialog, {
+      width: '720px', maxWidth: 'calc(100vw - 32px)', maxHeight: 'calc(100vh - 32px)'
+    }).afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(document => {
+      if (document) this.builder().importJson(document);
+    });
+  }
 
   options = {
     image: {

@@ -37,6 +37,16 @@
     "video.js"
   ],
   "assets": [
+    {
+      "glob": "document.schema.json",
+      "input": "content-editor",
+      "output": "content-editor"
+    },
+    {
+      "glob": "BLOCK_FORMAT.md",
+      "input": "content-editor",
+      "output": "content-editor"
+    },
     "ai",
     "styles",
     "LICENSE.md",

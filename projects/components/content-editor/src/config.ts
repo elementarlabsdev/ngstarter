@@ -1,9 +1,13 @@
 import { EnvironmentProviders, InjectionToken, inject, makeEnvironmentProviders } from '@angular/core';
 import { ContentEditorBlockHtmlConverter, ContentEditorMarkHtmlConverter } from './html/types';
 import { ContentEditorHtmlSerializer } from './html/html-serializer';
+import { ContentEditorImporter } from './import/content-importer';
+import type { ContentEditorBlockHtmlImporter, ContentEditorBlockImportValidator, ContentEditorImportMarkDefinition } from './import/types';
 
 export interface ContentEditorBlockConfig {
   toHtml?: ContentEditorBlockHtmlConverter;
+  fromHtml?: ContentEditorBlockHtmlImporter;
+  validateImport?: ContentEditorBlockImportValidator;
   options?: Readonly<Record<string, unknown>>;
 }
 
@@ -11,6 +15,8 @@ export interface ContentEditorConfig {
   blocks?: Readonly<Record<string, ContentEditorBlockConfig>>;
   marks?: Readonly<Record<string, ContentEditorMarkHtmlConverter>>;
   includeStyles?: boolean;
+  /** Additional or overridden mark definitions used when importing HTML. */
+  importMarks?: readonly ContentEditorImportMarkDefinition[];
   /** Unknown blocks throw by default to avoid silently losing saved content. */
   unknownBlockToHtml?: ContentEditorBlockHtmlConverter;
 }
@@ -31,6 +37,7 @@ export function mergeContentEditorConfig(...configs: readonly ContentEditorConfi
     }
     result.marks = { ...result.marks, ...config.marks };
     if (config.includeStyles !== undefined) result.includeStyles = config.includeStyles;
+    if (config.importMarks !== undefined) result.importMarks = config.importMarks;
     if (config.unknownBlockToHtml !== undefined) result.unknownBlockToHtml = config.unknownBlockToHtml;
   }
   return result;
@@ -43,6 +50,7 @@ export function provideContentEditorConfig(config: ContentEditorConfig = {}): En
       provide: CONTENT_EDITOR_CONFIG,
       useFactory: () => mergeContentEditorConfig(inject(CONTENT_EDITOR_CONFIG, { skipSelf: true, optional: true }) ?? {}, config)
     },
-    ContentEditorHtmlSerializer
+    ContentEditorHtmlSerializer,
+    ContentEditorImporter
   ]);
 }

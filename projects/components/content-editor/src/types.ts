@@ -23,6 +23,26 @@ export interface ContentEditorBlockEmpty {
 export type ContentEditorDocument = NgsHeadlessEditorDocument;
 export type ContentEditorBlock<TContent = unknown> = NgsHeadlessEditorBlock<TContent>;
 export type ContentEditorText = readonly NgsHeadlessEditorText[];
+export type ContentEditorBuiltinBlockType = 'paragraph' | 'heading' | 'code' | 'divider' | 'bulletList' | 'orderedList' |
+  'quote' | 'table' | 'image' | 'video' | 'embed' | 'callout' | 'toggle' | 'attachment' | 'gallery' | 'grid';
+export type ContentEditorDimension = number | 'auto' | null;
+export interface ContentEditorQuoteContent {
+  cite: { content: ContentEditorText; props?: ContentEditorItemProperty[] };
+  caption: { content: ContentEditorText; props?: ContentEditorItemProperty[] };
+}
+export interface ContentEditorTableCellMetadata {
+  props?: ContentEditorItemProperty[];
+  options?: { colspan?: number; rowspan?: number; width?: ContentEditorDimension };
+  styles?: Readonly<Record<string, unknown>>;
+  [key: string]: unknown;
+}
+export interface ContentEditorTableAttributes {
+  rows: readonly (readonly ContentEditorText[])[];
+  header?: boolean;
+  cellMetadata?: readonly (readonly ContentEditorTableCellMetadata[])[];
+  settings?: ContentEditorTableBlockSettings;
+  props?: ContentEditorItemProperty[];
+}
 
 export type ContentEditorCalloutVariant = 'note' | 'tip' | 'warning' | 'danger';
 export interface ContentEditorCalloutSettings { variant: ContentEditorCalloutVariant; }
@@ -101,22 +121,22 @@ export interface ContentEditorEmbedContent {
 
 export interface ContentEditorImageBlockSettings {
   // uploadFn: (file: File, base64: string | ArrayBuffer | null) => Promise<ContentEditorImageContent>;
-  width?: number;
-  height?: number;
-  actualWidth?: number;
-  actualHeight?: number;
+  width?: ContentEditorDimension;
+  height?: ContentEditorDimension;
+  actualWidth?: ContentEditorDimension;
+  actualHeight?: ContentEditorDimension;
 }
 
 export interface ContentEditorVideoBlockSettings {
-  width?: number;
-  height?: number;
-  actualWidth?: number;
-  actualHeight?: number;
+  width?: ContentEditorDimension;
+  height?: ContentEditorDimension;
+  actualWidth?: ContentEditorDimension;
+  actualHeight?: ContentEditorDimension;
 }
 
 export interface ContentEditorEmbedBlockSettings {
-  width: number | null;
-  height: number | null;
+  width?: ContentEditorDimension;
+  height?: ContentEditorDimension;
 }
 
 export interface ContentEditorListItem {

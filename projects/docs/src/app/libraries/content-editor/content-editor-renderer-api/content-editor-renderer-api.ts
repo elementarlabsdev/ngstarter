@@ -59,7 +59,7 @@ export class ContentEditorRendererApi {
   readonly inputs: ApiRow[] = [
     {
       name: 'config',
-      description: 'Instance HTML export overrides, merged over the environment configuration. Does not replace Angular renderer components.',
+      description: 'Instance HTML export overrides, merged over the environment configuration. Import configuration is used by the importer/builder; it does not replace Angular renderer components.',
       type: 'ContentEditorConfig',
       default: '{}'
     },
@@ -80,7 +80,7 @@ export class ContentEditorRendererApi {
   readonly providers: ApiRow[] = [
     {
       name: 'provideContentEditorConfig(config)',
-      description: 'Configures shared block HTML converters, text marks and block options through environment providers. Renderer.toHtml(config) can override them for one call.',
+      description: 'Configures block HTML exporters/importers, import validators, text marks and block options through environment providers. See Block format & import for the complete saved format and ContentEditorImporter API.',
       type: 'EnvironmentProviders',
       default: 'Built-in HTML converters'
     },

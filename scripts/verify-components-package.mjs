@@ -11,6 +11,8 @@ const require = createRequire(import.meta.url);
 const { SchematicTestRunner } = require('@angular-devkit/schematics/testing');
 
 const requiredFiles = [
+  'content-editor/document.schema.json',
+  'content-editor/BLOCK_FORMAT.md',
   'package.json',
   'schematics/package.json',
   'schematics/collection.json',

@@ -2,6 +2,11 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: 'block-format',
+    loadComponent: () => import('./block-format/block-format').then(c => c.ContentEditorBlockFormat),
+    title: 'Content Editor Block Format and Import'
+  },
+  {
     path: 'overview',
     loadComponent: () => import('./overview/overview').then(c => c.Overview),
     title: 'Content Editor'

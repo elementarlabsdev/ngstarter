@@ -1145,6 +1145,12 @@ export class App implements OnInit {
           name: 'Content Editor Renderer API',
           link: '/libraries/content-editor/content-editor-renderer-api'
         },
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Block Format & Import',
+          link: '/libraries/content-editor/block-format'
+        },
       ]
     },
     {

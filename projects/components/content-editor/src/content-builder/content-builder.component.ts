@@ -27,6 +27,8 @@ import { CONTENT_EDITOR_EXTRA_BLOCK_DEFS, CONTENT_EDITOR_EXTRA_SUGGESTIONS } fro
 import { CONTENT_EDITOR_CONFIG, ContentEditorConfig, mergeContentEditorConfig } from '../config';
 import { ContentEditorHtmlSerializer } from '../html/html-serializer';
 import { CONTENT_EDITOR_DEFAULT_HTML_CONVERTERS } from '../html/default-converters';
+import { ContentEditorImporter } from '../import/content-importer';
+import { ContentEditorHtmlImportOptions, ContentEditorImportOptions, ContentEditorImportError } from '../import/types';
 import { ContentEditorDocument, ContentEditorBlock } from '../types';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { AsyncPipe, isPlatformServer, NgComponentOutlet } from '@angular/common';
@@ -90,6 +92,7 @@ import { List, ListItem, ListItemIcon, ListItemTitle } from '@ngstarter-ui/compo
   providers: [
     provideContentEditor(),
     ContentEditorHtmlSerializer,
+    ContentEditorImporter,
     ContentBuilderStore,
     {
       provide: CONTENT_BUILDER,
@@ -115,6 +118,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   readonly editor = inject(NgsHeadlessEditor);
   private readonly globalConfig = inject(CONTENT_EDITOR_CONFIG);
   private readonly htmlSerializer = inject(ContentEditorHtmlSerializer);
+  private readonly importer = inject(ContentEditorImporter);
   readonly config = input<ContentEditorConfig>({});
   /** One insertion menu shared by root controls, nested collections and custom blocks. */
   readonly blockMenu = viewChild.required<Menu>('suggestionsMenu');
@@ -954,6 +958,25 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
 
   getData() {
     return this.editor.document();
+  }
+
+  /** Validates before replacing the document. Import is one undoable edit. */
+  importJson(source: unknown, config: ContentEditorConfig = {}, options: ContentEditorImportOptions = {}): ContentEditorDocument {
+    return this.applyImport(this.importer.fromJson(source, mergeContentEditorConfig(this.config(), config), options));
+  }
+
+  importHtml(html: string, config: ContentEditorConfig = {}, options: ContentEditorHtmlImportOptions = {}): ContentEditorDocument {
+    return this.applyImport(this.importer.fromHtml(html, mergeContentEditorConfig(this.config(), config), options));
+  }
+
+  private applyImport(document: ContentEditorDocument): ContentEditorDocument {
+    if (!this.loaded) throw new ContentEditorImportError('$editor', 'Initialize the builder before importing');
+    if (this.editor.readOnly()) throw new ContentEditorImportError('$editor', 'Cannot import into a read-only editor');
+    this.editor.updateDocument(document);
+    this.selectedBlocksModel.clear();
+    this._store.setFocusedBlockId(null);
+    this._store.setActiveBlockId(null);
+    return this.getData();
   }
 
   /** Exports the live document, including nested blocks, through the configured converters. */

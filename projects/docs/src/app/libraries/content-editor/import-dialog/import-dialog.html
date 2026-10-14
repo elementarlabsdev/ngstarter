@@ -1,0 +1,22 @@
+<h3 ngs-dialog-title>Import content</h3>
+<ngs-dialog-content>
+  <div class="flex flex-col gap-4">
+    <p class="text-sm text-neutral-600">Import replaces the current document. You can undo it in the editor.</p>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <ngs-segmented [value]="format()" (valueChange)="changeFormat($event)">
+        <button ngs-segmented-button value="json" type="button">JSON</button>
+        <button ngs-segmented-button value="html" type="button">HTML</button>
+      </ngs-segmented>
+      <button ngsButton="outlined" type="button" ngsUploadTrigger accept=".json,.html,.htm,application/json,text/html" [disabled]="reading()" (fileSelected)="readFile($event)">Choose file</button>
+    </div>
+    <ngs-form-field labelMode="external" subscriptHiddenIfEmpty>
+      <ngs-label>{{ format() === 'json' ? 'Document JSON' : 'HTML content' }}</ngs-label>
+      <textarea ngsInput rows="12" [value]="source()" (input)="changeSource($any($event.target).value)" placeholder="Paste your content here" class="font-mono text-sm"></textarea>
+    </ngs-form-field>
+    @if (error()) { <ngs-alert variant="negative">{{ error() }}</ngs-alert> }
+  </div>
+</ngs-dialog-content>
+<ngs-dialog-actions align="end">
+  <button ngsButton type="button" ngs-dialog-close>Cancel</button>
+  <button ngsButton="filled" type="button" [disabled]="!source().trim() || reading()" (click)="import()">Import</button>
+</ngs-dialog-actions>

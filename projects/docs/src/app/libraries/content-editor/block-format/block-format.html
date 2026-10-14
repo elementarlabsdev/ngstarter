@@ -1,0 +1,71 @@
+<app-page>
+  <h1 appPageTitle>Block format &amp; import</h1>
+  <div appPageContent>
+    <p class="mb-4">Export structured content from another system directly into Content Editor’s native version-1 JSON document. This reference describes every built-in block, its saved fields and its HTML import mapping.</p>
+    <div class="mb-8 flex flex-wrap gap-3">
+      <a ngsButton="outlined" href="/content-editor/document.schema.json" download>Download JSON Schema</a>
+      <a ngsButton="outlined" href="/content-editor/example.document.json" download>Download complete example</a>
+      <a ngsButton="text" routerLink="/libraries/content-editor/content-builder">Try import in the editor</a>
+    </div>
+    <h2 class="mb-3 text-xl font-semibold">Document envelope and common fields</h2>
+    <ngs-code-highlighter [code]="modelExample" language="typescript" showCopyButton/>
+    <ul class="my-5 flex list-disc flex-col gap-2 ps-5">
+      <li><code>version</code> must be 1. <code>blocks</code> is ordered and may be empty. Only these two document envelope fields are part of the format.</li>
+      <li>Every block requires a non-empty <code>id</code>, <code>type</code> and <code>content</code>. Block IDs are globally unique across the root, toggles and grid descendants.</li>
+      <li><code>attrs.settings</code> stores block settings; <code>attrs.props</code> stores properties. Alignment uses <code>&#123;name: 'text-alignment', value: 'left' | 'center' | 'right' | 'justify'&#125;</code>.</li>
+      <li>All text fields use text runs with an explicit <code>marks</code> array. Empty text is an empty array or a single empty run. Newlines are literal text; HTML is never stored inside text runs.</li>
+      <li>JSON import retains extra JSON fields inside block content/attrs and preserves valid IDs. Duplicate IDs, malformed fields, unsafe resource URLs, cycles and non-JSON values produce a structured error.</li>
+      <li>Do not serialize component instances, signals, runtime upload callbacks, <code>isEmpty</code> or builder view/cell objects. The builder may normalize empty root documents, text runs and table rows for editing.</li>
+    </ul>
+    <h2 class="mb-3 text-xl font-semibold">Text marks</h2>
+    @for (mark of marks; track mark.type) {
+      <section class="mb-5">
+        <h3 class="mb-2 font-semibold">{{ mark.type }}</h3>
+        <p>{{ mark.fields }}</p>
+        <p class="mt-2 text-sm text-neutral-600">HTML: {{ mark.html }}</p>
+      </section>
+    }
+    <p class="mb-8">Color marks accept supported CSS color strings, including hexadecimal, named colors, rgb/hsl expressions and safe CSS variable references. Links allow web, email, telephone and relative URLs. Media allows appropriate web/relative/data/blob resources; iframe embeds allow web/relative URLs only. The importer performs these semantic checks in addition to JSON Schema validation.</p>
+    <h2 class="mb-4 text-xl font-semibold">All built-in blocks</h2>
+    <nav aria-label="Block types" class="mb-6 flex flex-wrap gap-x-4 gap-y-2">
+      @for (block of blocks; track block.type) { <a [href]="'/libraries/content-editor/block-format#block-' + block.type" class="underline">{{ block.type }}</a> }
+    </nav>
+    @for (block of blocks; track block.type) {
+      <section [id]="'block-' + block.type" class="mb-10 scroll-mt-24">
+        <h3 class="mb-3 text-lg font-semibold">{{ block.title }} <code class="font-normal">{{ block.type }}</code></h3>
+        <p class="mb-3 font-mono text-sm">{{ block.fields }}</p>
+        <p class="mb-3">{{ block.notes }}</p>
+        <p class="mb-4 text-sm text-neutral-600">HTML import: {{ block.html }}</p>
+        <ngs-code-highlighter [code]="block.example" language="json" showCopyButton/>
+      </section>
+    }
+    <h2 class="mb-3 text-xl font-semibold">Import API</h2>
+    <ngs-code-highlighter [code]="importExample" language="typescript" showCopyButton/>
+    <ul class="my-5 flex list-disc flex-col gap-3 ps-5">
+      <li><code>contentEditorFromJson(source, config?, options?)</code> accepts JSON text or a native object, validates the whole nested document, and returns a detached <code>ContentEditorDocument</code>.</li>
+      <li><code>contentEditorFromHtml(html, config?, options?)</code> imports HTML text. Browser DOM is required; on the server supply a DOM document through <code>options.document</code>. It must support <code>implementation.createHTMLDocument()</code>.</li>
+      <li><code>ContentEditorImporter.fromJson/fromHtml</code> also reads the environment configuration and injected DOCUMENT. Standalone functions use only the explicitly supplied config.</li>
+      <li><code>builder.importJson/importHtml</code> use the same source/config/options arguments. They replace the initialized builder’s document as one undoable edit, clear stale block selection and emit <code>contentChanged</code>. They return the live document after normalization. Failed import does not alter content, history, selection or drafts.</li>
+      <li>Options default to <code>maxDepth: 64</code>, <code>maxBlocks: 10000</code>, <code>allowUnknownBlocks: false</code>. Limits must be positive integers and include descendants. The JSON Schema describes built-ins; use explicit custom config or <code>allowUnknownBlocks</code> to transport custom types.</li>
+      <li>Errors expose <code>ContentEditorImportError.path</code> and <code>message</code>, pointing at the first invalid field, for example <code>$.blocks[2].content.cells[0].blocks[1].id</code>.</li>
+    </ul>
+    <h2 class="mb-3 text-xl font-semibold">HTML fidelity</h2>
+    <p class="mb-4">Semantic blocks, supported marks, alignment, lists, table metadata, callouts, details and exported gallery/grid structures are converted into native blocks. Scripts, style sheets, executable resources, event handlers and arbitrary HTML/CSS are not stored. Unsafe links keep their visible text. Unsupported wrappers keep supported text/descendants; unsupported or unsafe media is omitted.</p>
+    <p class="mb-8">HTML cannot recover original IDs, upload metadata, custom attrs, video orientation, or attachment size/MIME. It generates fresh IDs and defaults. Mixed nested list styles map to the parent list type. Use native JSON for lossless transfer. No legacy-format migration is performed.</p>
+    <h2 class="mb-3 text-xl font-semibold">Custom import configuration</h2>
+    <p class="mb-4">Use <code>provideContentEditorConfig</code> in application or route environment providers. Child environments inherit parent defaults. Import priority is built-ins, environment config, builder instance config, then per-call config.</p>
+    <ngs-code-highlighter [code]="customExample" language="typescript" showCopyButton/>
+    <p class="my-4">A block’s <code>fromHtml</code> has a CSS <code>selector</code> and <code>parse(element, ctx)</code>. Overrides run before built-ins and may return one block, multiple blocks, or null. Context provides <code>createBlock</code>, <code>createId</code>, <code>parseText</code>, <code>parseBlocks</code>, <code>safeUrl</code> and <code>defaultFromHtml</code>. The latter calls the built-in parser without recursively invoking your override; nested <code>parseBlocks</code> calls keep configured handlers.</p>
+    <p class="mb-4"><code>validateImport(block)</code> returns undefined to accept or a message to reject the block. Built-in validation still runs first. Configure <code>importMarks</code> with extra Headless Editor mark definitions for HTML parsing; HTML export mark converters use <code>config.marks</code>. Custom callbacks are application-owned.</p>
+    <p class="mb-8">Import configuration alone does not create an editable block component. Custom types/marks need matching application renderer components or Headless Editor plugins. Refer to the <a routerLink="/libraries/content-editor/content-editor-renderer-api" class="underline">renderer API</a> for custom read-only block rendering.</p>
+    <h2 class="mb-3 text-xl font-semibold">Third-party exporter checklist</h2>
+    <ol class="flex list-decimal flex-col gap-3 ps-5">
+      <li>Emit UTF-8 JSON with <code>version: 1</code> and globally unique block IDs.</li>
+      <li>Use text runs with explicit marks, nested list children, toggle blocks and ordered grid cells.</li>
+      <li>Put table text in <code>attrs.rows</code>, metadata in <code>attrs.cellMetadata</code>, and settings/properties inside attrs.</li>
+      <li>Include required media fields and byte counts/MIME; use persistent URLs for production assets. Runtime uploadFn callbacks are not saved data.</li>
+      <li>Validate against the downloadable schema and call <code>contentEditorFromJson</code> for semantic checks before storing/importing.</li>
+      <li>Use JSON for exact round trips and HTML for interoperable display/conversion.</li>
+    </ol>
+  </div>
+</app-page>

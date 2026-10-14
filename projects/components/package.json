@@ -83,6 +83,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "exports": {
+    "./content-editor/document.schema.json": "./content-editor/document.schema.json",
+    "./content-editor/BLOCK_FORMAT.md": "./content-editor/BLOCK_FORMAT.md",
     "./ai/*": "./ai/*",
     "./styles/*": "./styles/*",
     "./styles/themes/*": "./styles/themes/*"
