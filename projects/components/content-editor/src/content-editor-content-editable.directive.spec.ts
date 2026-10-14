@@ -74,6 +74,23 @@ describe('Content editor headless inline region', () => {
     expect(surface.querySelector('a')?.getAttribute('rel')).toBe('noopener noreferrer');
   });
 
+  it('pastes HTML links and colors into a selected range and undoes it once', async () => {
+    surface.focus();
+    const text = surface.querySelector('p')!.firstChild!;
+    const range = document.createRange(); range.setStart(text, 0); range.setEnd(text, 5);
+    const selection = document.getSelection()!; selection.removeAllRanges(); selection.addRange(range);
+    const clipboardData = new DataTransfer();
+    clipboardData.setData('text/html', '<a href="https://example.com"><b style="color:#ff0000">Link</b></a>');
+    surface.dispatchEvent(new ClipboardEvent('paste', { clipboardData, bubbles: true, cancelable: true }));
+    await fixture.whenStable();
+    expect(surface.querySelector('a strong')?.textContent ?? surface.querySelector('a')?.textContent).toBe('Link');
+    const runs: any = fixture.componentInstance.editor.document().blocks[0].content;
+    expect(runs[0].marks.map((mark: any) => mark.type)).toEqual(['bold', 'link', 'textColor']);
+    fixture.componentInstance.editor.undo();
+    await fixture.whenStable();
+    expect(surface.textContent).toBe('Hello');
+  });
+
   it('persists alignment in the parent document and undoes it', async () => {
     directive.setAlignment('right');
     await fixture.whenStable();

@@ -715,3 +715,147 @@ Use `config.importMarks` for additional HTML mark definitions (type, tagName, pa
 4. Include all required media fields, including empty strings/arrays if unfilled, and attachment byte count/MIME type. Use persistent URLs for production assets. Runtime uploadFn callbacks do not belong in JSON.
 5. Validate against document.schema.json, then use contentEditorFromJson for semantic ID, URL and limit checks before storing/importing.
 6. Use native JSON for exact re-import. Treat HTML as an interoperable display/import representation with the documented metadata limitations.
+
+## Editing, insertion and application-defined blocks
+
+Builder import defaults to replacement. Insert mode copies the entire imported tree with fresh
+block, grid-cell and gallery-image IDs, leaving the source object untouched. A destination is a
+root collection, Toggle body, or Grid cell. Capture the destination before opening an overlay:
+
+```ts
+const target = builder.getInsertionTarget();
+// Root: { scope: {}, afterId: 'paragraph-id' }
+// Toggle: { scope: { parentId: 'toggle-id' }, afterId: 'child-id' }
+// Grid: { scope: { parentId: 'grid-id', cellId: 'cell-id' }, afterId: 'child-id' }
+builder.importHtml(html, {}, { mode: 'insert', target });
+builder.importJson(json, {}, { mode: 'insert', target });
+// Omit afterId to append to the collection; omit target to use the active destination.
+```
+
+The destination must still exist when importing. An invalid parent, cell, or `afterId` raises
+`ContentEditorImportError` without changing the document. Import remains one Undo/Redo operation.
+Paste uses the same HTML importer and configuration. Paragraph/Heading fields split around the current selection when pasting structured blocks, retaining lists/tables and surrounding marked text. Other inline text fields flatten supported HTML structure to text lines while retaining supported marks; code fields retain literal text.
+
+`builder.convertBlock(id, type, settings?)` converts `paragraph`, `heading`, `quote` and `callout`,
+including nested blocks. It retains ID, rich text, custom attrs and alignment. Quote attribution
+becomes a final text line when converting to another type. Unsupported source types return `false`.
+Use the block action menu's **Turn into** action. The heading default is level 2; callout defaults
+to `note`. Conversion is a single history operation and restores the active text range.
+
+### A single block registration
+
+Each `ContentEditorConfig.blocks[type]` entry may define all block behaviour:
+
+| Field | Contract |
+| --- | --- |
+| `editor` | Standalone Angular component with the standard editor inputs. |
+| `loadEditor` | `() => Promise<Type<unknown>>`; takes precedence over `editor`. |
+| `renderer` | Standalone preview component with the standard renderer inputs. |
+| `create` | `() => { content, attrs? }`; the builder supplies the new ID and type. |
+| `menu` | `{ title, description?, iconName?, settings? }`; registers a global menu item. |
+| `options` | Runtime editor options, including upload callbacks and maximum file size. |
+| `toHtml` | HTML converter; use `ctx.escape()` and `ctx.safeUrl()` for dynamic values. |
+| `fromHtml` | `{ selector, parse(element, context) }` importer. |
+| `validateImport` | Return an error string to reject imported block data; otherwise return `undefined`. |
+
+Provide the configuration globally with `provideContentEditorConfig(config)` or pass `[config]`
+to a builder/renderer. Nested editing uses the root builder's definitions. Nested preview renderers
+inherit instance configuration, so a custom block inside Grid/Toggle needs no additional provider.
+Environment defaults are merged first, then instance overrides; block fields and options merge
+individually. Legacy renderer providers remain supported; `blocks[type].renderer` takes precedence.
+
+```ts
+import { ContentEditorConfig, provideContentEditorConfig }
+  from '@ngstarter-ui/components/content-editor';
+
+const config: ContentEditorConfig = {
+  blocks: {
+    product: {
+      editor: ProductEditor,
+      renderer: ProductPreview,
+      create: () => ({ content: { productId: '' } }),
+      menu: { title: 'Product', description: 'A product card' },
+      validateImport: block =>
+        typeof (block.content as { productId?: unknown })?.productId === 'string'
+          ? undefined : 'productId must be a string',
+      fromHtml: {
+        selector: '[data-product-id]',
+        parse: (element, ctx) => ctx.createBlock('product', {
+          productId: element.getAttribute('data-product-id') ?? ''
+        })
+      },
+      toHtml: (block, ctx) =>
+        `<div data-product-id="${ctx.escape((block.content as { productId: string }).productId)}"></div>`
+    }
+  }
+};
+// Application/route providers: [provideContentEditorConfig(config)]
+// Or: <ngs-content-editor-builder [config]="config" ... />
+// And: <ngs-content-editor-renderer [config]="config" ... />
+```
+
+`ContentEditorBlockBase<TContent, TSettings>` supplies `id`, `content`, `settings`, `props`, `index`,
+`initialized`, focus and history integration. Extend it in an editor and call protected
+`save(nextContent, nextSettings?)`. `latestContent()` reads the current native value for edits that
+may race with another field. `ContentEditorRendererBase<TContent, TSettings>` supplies preview
+inputs, including the native `block`. Import both through the public `content-editor` entry point.
+The docs builder includes a working Bookmark registration using these APIs.
+
+A custom block entry explicitly permits its type during JSON import, and its `validateImport`
+checks its content. Extend the supplied built-in JSON Schema with your own block shape when external
+systems also validate custom documents. Unknown types without an explicit entry are rejected by
+default. Runtime components/callbacks never belong in the saved JSON.
+
+## Media upload contract
+
+Image, Video, Gallery and Attachment share progress, cancellation, visible errors and retry.
+Configure `options.uploadFn` and optionally `options.maxFileSize` (bytes) in their block entry:
+
+```ts
+import { ContentEditorUploadFn } from '@ngstarter-ui/components/content-editor';
+
+const uploadFn: ContentEditorUploadFn = async (file, dataUrl, context) => {
+  const form = new FormData();
+  form.append('file', file);
+  const response = await fetch('/api/uploads', { method: 'POST', body: form, signal: context.signal });
+  if (!response.ok) throw new Error('Upload failed');
+  const result = await response.json() as { url: string };
+  return result.url;
+};
+// For a transport supporting progress, call context.onProgress(percent), from 0 to 100.
+// Existing callbacks taking (file, dataUrl) continue to work.
+provideContentEditorConfig({ blocks: { image: { options: { uploadFn, maxFileSize: 10 * 1024 * 1024 } } } });
+```
+
+Cancellation aborts file reading and signals the transport. Late results never update a cancelled,
+removed, replaced or read-only block. Consumers must pass `context.signal` to their transport to
+stop its network request. Gallery keeps successful files and retry resends only failed files.
+MIME/size rejection requires choosing another file and is not automatically retried.
+Without transport progress the indicator is indeterminate. A successful upload returns a supported
+resource URL; callbacks must reject on failure. Default callbacks use data URLs.
+
+## Draft persistence
+
+Use a stable document ID for multiple editors or multiple documents on the same route:
+
+```html
+<ngs-content-editor-builder documentId="article-42" [content]="document"
+  [persistDraft]="true" [draftDebounceMs]="500" />
+```
+
+`persistDraft` defaults to true. Saves are delayed by 500ms by default and flushed on component
+destruction or document switch. `documentId` identifies the storage entry; when omitted, the
+existing route + element-ID storage key remains in use. Provide distinct IDs for independent editors.
+Drafts are validated with the same JSON importer and custom configuration before restoration.
+Malformed data falls back to the supplied document and exposes the error; it is not silently removed.
+
+The builder exposes `draftStatus` (`disabled`, `idle`, `saving`, `saved`, `error`), `draftError`,
+`draftSavedAt`, `saveDraftNow()` and `clearDraft()`. Status signals can drive an `aria-live` indicator
+and a retry action. `clearDraft()` removes persisted state without altering the current document.
+Storage/quota failures remain visible. No draft storage runs during SSR.
+
+Environment or instance config can set `draft.debounceMs` and `draft.storage`. A storage adapter
+implements synchronous `getItem(key): string | null`, `setItem(key, value): void`, and
+`removeItem(key): void`; it stores serialized native JSON. The default is browser `localStorage`.
+`[draftDebounceMs]` overrides the configured delay. Use `contentChanged` for asynchronous server
+persistence.

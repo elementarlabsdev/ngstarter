@@ -256,6 +256,7 @@ export class NgsHeadlessEditor {
     if (candidates.includes('mod-shift-z') || candidates.includes('mod-y')) {
       return !this._readOnly() && this.redo();
     }
+    if (event.ctrlKey && !event.metaKey && !event.altKey && event.key === 'Backspace') return this.deleteWordBackward();
     return false;
   }
 
@@ -344,6 +345,51 @@ export class NgsHeadlessEditor {
       collapsedSelection(last.id, lines.at(-1)?.length ?? 0),
       origin
     );
+  }
+
+  /** Inserts structured inline runs in one history step, preserving their marks. */
+  insertTextContent(content: readonly NgsHeadlessEditorText[], origin: NgsHeadlessEditorChangeOrigin = 'paste'): boolean {
+    const target = this._inlineTarget();
+    if (target) return target.insertTextContent(content, origin);
+    if (this._readOnly() || !content.length) return false;
+    const base = deleteSelectedRange(this._document(), this.ensureSelection());
+    const point = base.selection.focus;
+    const index = base.document.blocks.findIndex(block => block.id === point.blockId);
+    const block = base.document.blocks[index];
+    if (!block || !isNgsHeadlessEditorTextContent(block.content)) return false;
+    const before = sliceTextContent(block.content, 0, point.offset);
+    const after = sliceTextContent(block.content, point.offset, textContentLength(block.content));
+    const lines: NgsHeadlessEditorText[][] = [[]];
+    for (const run of content) run.text.replace(/\r\n?/g, '\n').split('\n').forEach((text, i) => {
+      if (i) lines.push([]);
+      if (text) lines.at(-1)!.push(createNgsHeadlessEditorText(text, run.marks));
+    });
+    const inserted = lines.map((line, i) => ({
+      ...(i === 0 ? block : createNgsHeadlessEditorParagraph()),
+      content: normalizeNgsHeadlessEditorTextContent([
+        ...(i === 0 ? before : []), ...line, ...(i === lines.length - 1 ? after : [])
+      ])
+    }));
+    const blocks = [...base.document.blocks];
+    blocks.splice(index, 1, ...inserted);
+    const offset = textContentLength(lines.at(-1)!) + (lines.length === 1 ? point.offset : 0);
+    return this.commit({ version: 1, blocks }, collapsedSelection(inserted.at(-1)!.id, offset), origin);
+  }
+
+  /** Word deletion is model-driven on every platform, including Ctrl+Backspace on macOS. */
+  deleteWordBackward(): boolean {
+    const target = this._inlineTarget();
+    if (target) return target.deleteWordBackward();
+    if (this._readOnly()) return false;
+    const selection = this.ensureSelection();
+    if (!isCollapsed(selection)) return this.deleteRange(selection, 'keyboard');
+    const point = selection.focus;
+    const block = this._document().blocks.find(item => item.id === point.blockId);
+    if (!block || !isNgsHeadlessEditorTextContent(block.content)) return false;
+    if (!point.offset) return this.deleteBackward();
+    const before = getNgsHeadlessEditorBlockText(block).slice(0, point.offset);
+    const match = /(?:[\p{L}\p{N}_]+|[^\p{L}\p{N}_\s]+)\s*$/u.exec(before) ?? /\s+$/u.exec(before);
+    return this.deleteRange({ anchor: { ...point, offset: match?.index ?? 0 }, focus: point }, 'keyboard');
   }
 
   deleteBackward(): boolean {

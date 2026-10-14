@@ -1,5 +1,5 @@
 import {
-  getNgsHeadlessEditorTableData, isNgsHeadlessEditorTextContent, NgsHeadlessEditorBlock
+  createNgsHeadlessEditorId, getNgsHeadlessEditorTableData, isNgsHeadlessEditorTextContent, NgsHeadlessEditorBlock
 } from '@ngstarter-ui/components/headless-editor';
 import { ContentEditorBlockScope, ContentEditorBlockView, ContentEditorText } from './types';
 
@@ -115,4 +115,42 @@ export function cloneContentEditorValue<T>(value: T): T {
     return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, cloneContentEditorValue(item)])) as T;
   }
   return value;
+}
+
+/** Locates the collection owning a block, including deeply nested Grid/Toggle blocks. */
+export function contentEditorBlockScope(blocks: readonly NgsHeadlessEditorBlock[], id: string, scope: ContentEditorBlockScope = {}): ContentEditorBlockScope | null {
+  for (const block of blocks) {
+    if (block.id === id) return scope;
+    if (block.type === 'toggle') {
+      const found = contentEditorBlockScope((block.content as any).blocks, id, { parentId: block.id });
+      if (found) return found;
+    }
+    if (block.type === 'grid') for (const cell of (block.content as any).cells) {
+      const found = contentEditorBlockScope(cell.blocks, id, { parentId: block.id, cellId: cell.id });
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
+/** Copies for insertion/duplication receive fresh ids throughout the tree. */
+export function contentEditorCopyBlocks(blocks: readonly NgsHeadlessEditorBlock[]): NgsHeadlessEditorBlock[] {
+  const copy = cloneContentEditorValue([...blocks]);
+  const visit = (block: any) => {
+    block.id = createNgsHeadlessEditorId(block.type);
+    for (const children of contentEditorChildCollections(block)) children.forEach(visit);
+    if (block.type === 'grid') block.content.cells.forEach((cell: any) => cell.id = createNgsHeadlessEditorId('cell'));
+    if (block.type === 'gallery') block.content.images.forEach((image: any) => image.id = createNgsHeadlessEditorId('image'));
+  };
+  copy.forEach(visit); return copy;
+}
+
+/** UTF-16 offsets match the editor selection model; marks remain on sliced runs. */
+export function contentEditorSliceText(content: ContentEditorText, start: number, end = Infinity): ContentEditorText {
+  let offset = 0;
+  return content.flatMap(run => {
+    const from = Math.max(0, start - offset); const to = Math.min(run.text.length, end - offset);
+    offset += run.text.length;
+    return to > from ? [{ ...run, text: run.text.slice(from, to) }] : [];
+  });
 }

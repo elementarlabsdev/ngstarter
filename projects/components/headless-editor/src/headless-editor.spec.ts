@@ -13,6 +13,7 @@ import {
 } from './color.plugin';
 import { NgsHeadlessEditor, provideNgsHeadlessEditor } from './headless-editor';
 import {
+  createNgsHeadlessEditorText,
   createNgsHeadlessEditorDocument,
   createNgsHeadlessEditorId,
   createNgsHeadlessEditorParagraph,
@@ -37,6 +38,20 @@ describe('NgsHeadlessEditor', () => {
   }
 
   afterEach(() => TestBed.resetTestingModule());
+
+  it('inserts marked multiline runs over a range in one history step', () => {
+    const editor = createEditor();
+    editor.setDocument({ version: 1, blocks: [{ id: 'p', type: 'paragraph', content: [createNgsHeadlessEditorText('Before after')] }] });
+    editor.setSelection({ anchor: { blockId: 'p', offset: 7 }, focus: { blockId: 'p', offset: 12 } });
+    editor.insertTextContent([createNgsHeadlessEditorText('Rich\nText', [{ type: 'bold' }])]);
+    expect(editor.document().blocks.map(block => (block.content as any).map((run: any) => run.text).join(''))).toEqual(['Before Rich', 'Text']);
+    expect((editor.document().blocks[1].content as any)[0].marks[0].type).toBe('bold');
+    expect(editor.selection()?.focus.offset).toBe(4);
+    editor.undo(); expect((editor.document().blocks[0].content as any)[0].text).toBe('Before after');
+    editor.redo(); expect(editor.document().blocks).toHaveLength(2);
+    editor.setReadOnly(true); expect(editor.insertTextContent([createNgsHeadlessEditorText('Ignored')])).toBe(false);
+  });
+
 
   it('edits a JSON document with signal state', () => {
     const editor = createEditor();

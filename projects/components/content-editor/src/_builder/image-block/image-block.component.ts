@@ -1,11 +1,9 @@
-import { ChangeDetectionStrategy, Component, effect, untracked, forwardRef, inject, input, model, OnInit, signal } from '@angular/core';
+import { ContentEditorUploadBlockBase } from '../upload-block-base';
+import { ContentEditorUploadStatus } from '../upload-status/upload-status';
+import { ChangeDetectionStrategy, Component, effect, untracked, forwardRef, model, OnInit, signal } from '@angular/core';
 import { UploadArea, UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter-ui/components/upload';
-import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
-import { Button } from '@ngstarter-ui/components/button';
-import { Icon } from '@ngstarter-ui/components/icon';
 import {
-  CONTENT_BUILDER,
-  CONTENT_EDITOR_BLOCK, ContentEditorDataBlock,
+  CONTENT_EDITOR_BLOCK,
   ContentEditorImageBlockSettings,
   ContentEditorImageContent
 } from '../../types';
@@ -13,17 +11,13 @@ import { ImageResizer, ImageResizerImageDirective } from '@ngstarter-ui/componen
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 import { FormsModule } from '@angular/forms';
-import { ContentBuilderStore } from '../../content-builder.store';
-import { ContentBuilderComponent } from '../../content-builder/content-builder.component';
 
 @Component({
   selector: 'ngs-image-block',
   imports: [
+    ContentEditorUploadStatus,
     UploadArea,
     UploadTriggerDirective,
-    ProgressBar,
-    Button,
-    Icon,
     ImageResizer,
     FormField,
     Input,
@@ -45,25 +39,14 @@ import { ContentBuilderComponent } from '../../content-builder/content-builder.c
     '(keypress)': 'handleKeyPress($event)',
   }
 })
-export class ImageBlockComponent implements OnInit, ContentEditorDataBlock {
-  private _store = inject(ContentBuilderStore);
-  private _contentBuilder = inject<ContentBuilderComponent>(CONTENT_BUILDER);
-
-  id = input.required<string>();
-  content = input.required<ContentEditorImageContent>();
-  settings = input.required<ContentEditorImageBlockSettings>();
-  index = input.required<number>();
-  props = input<unknown[]>([]);
-
-  uploading = signal(false);
-  selectedImage = signal<string>('');
+export class ImageBlockComponent extends ContentEditorUploadBlockBase<ContentEditorImageContent, ContentEditorImageBlockSettings> implements OnInit {
 
   protected _src = signal<string>('');
   protected _alt = model<string>('');
   protected _settings = model<ContentEditorImageBlockSettings>({});
-  readonly initialized = signal(false);
 
   constructor() {
+    super();
     effect(() => {
       const content = this.content();
       const settings = this.settings();
@@ -79,16 +62,15 @@ export class ImageBlockComponent implements OnInit, ContentEditorDataBlock {
     this._src.set(this.content().src);
     this._alt.set(this.content().alt);
     this._settings.set(this.settings() || {});
-    this.initialized.set(true);
   }
 
-  focus() {
+  override focus() {
     if (this._src()) {
-      this._contentBuilder.focusBlock(this.id());
+      this.builder.focusBlock(this.id());
     }
   }
 
-  getData(): any {
+  override getData(): any {
     return {
       content: {
         src: this._src(),
@@ -100,56 +82,16 @@ export class ImageBlockComponent implements OnInit, ContentEditorDataBlock {
     };
   }
 
-  isEmpty(): boolean {
+  override isEmpty(): boolean {
     const src = this.getData().content.src;
     return typeof src === 'string' ? src.trim().length === 0 : !src;
   }
 
-  protected cancelUploading() {
-    this.uploading.set(false);
-  }
-
-  protected onFileSelected(event: UploadFileSelectedEvent): void {
-    this.uploading.set(true);
-    const reader  = new FileReader();
-    reader.addEventListener('load', () => {
-      this.selectedImage.set(reader.result as string);
-
-      const img = new Image();
-      img.onload = () => {
-        let width = img.width;
-        let height = img.height;
-        const aspectRatio = width / height;
-
-        if (width > 704) {
-          width = 704;
-          height = Math.round(width / aspectRatio);
-        }
-
-        this._settings.update(s => ({
-          ...s,
-          width,
-          height
-        }));
-      };
-      img.src = reader.result as string;
-
-      const uploadFn = this._contentBuilder.getBlockDefOption('image', 'uploadFn');
-      uploadFn(event.files[0], reader.result)
-        .then((url: string) => {
-          if (!this.uploading()) {
-            this.selectedImage.set('');
-            return;
-          }
-
-          this._src.set(url);
-          this.selectedImage.set('');
-          this.uploading.set(false);
-          this.update();
-          this.focus();
-        });
-    }, false);
-    reader.readAsDataURL(event.files[0]);
+  protected onFileSelected(event: UploadFileSelectedEvent): Promise<void> {
+    return this.uploadFiles('image', { files: event.files.slice(0, 1), accept: file => file.type.startsWith('image/'), apply: results => {
+      this._src.set(results[0].url);
+      this.update();
+    } });
   }
 
   protected _onAltChange() {
@@ -165,12 +107,12 @@ export class ImageBlockComponent implements OnInit, ContentEditorDataBlock {
     if (event.key === 'Enter') {
       event.preventDefault();
       event.stopPropagation();
-      this._contentBuilder.insertEmptyBlock(this.index());
+      this.builder.insertEmptyBlock(this.index());
     }
   }
 
   private update() {
-    this._store.updateBlock(this.id(), {...this.getData(), isEmpty: this.isEmpty()});
-    this._contentBuilder.emitContentChangeEvent();
+    this.store.updateBlock(this.id(), {...this.getData(), isEmpty: this.isEmpty()});
+    this.builder.emitContentChangeEvent();
   }
 }

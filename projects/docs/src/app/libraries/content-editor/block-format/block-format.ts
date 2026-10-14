@@ -13,8 +13,34 @@ import { PageTitleDirective } from '@meta/page/page-title.directive';
 })
 export class ContentEditorBlockFormat {
   readonly modelExample = "type Document = { version: 1; blocks: Block[] };\ntype Block<T = unknown> = { id: string; type: string; content: T;\n  attrs?: { settings?: Record<string, unknown>; props?: Property[];\n    [key: string]: unknown } };\ntype Property = { name: string; value: string };\ntype TextRun = { type: 'text'; text: string; marks: Mark[] };\ntype Mark = { type: string;\n  attrs?: Record<string, string | number | boolean | null> };";
-  readonly importExample = "import { ContentEditorImporter, contentEditorFromJson, contentEditorFromHtml,\n  ContentEditorImportError } from '@ngstarter-ui/components/content-editor';\n\n// Pure functions: only the explicitly supplied configuration is used.\nconst fromJson = contentEditorFromJson(jsonStringOrObject);\nconst fromHtml = contentEditorFromHtml('<h2>Hello</h2><p><strong>World</strong></p>');\n\n// Injected service: environment defaults are inherited.\nreadonly importer = inject(ContentEditorImporter);\nconst parsed = this.importer.fromJson(source);\n\n// Builder methods replace the live document as one undoable edit.\nbuilder.importJson(jsonStringOrObject);\nbuilder.importHtml(html);\nconst nativeDocument = builder.getData();\nconst htmlExport = builder.toHtml();\n\ntry { builder.importJson(source); }\ncatch (error) {\n  if (error instanceof ContentEditorImportError) {\n    console.log(error.path, error.message);\n  }\n}";
+  readonly importExample = "import { ContentEditorImporter, contentEditorFromJson, contentEditorFromHtml,\n  ContentEditorImportError } from '@ngstarter-ui/components/content-editor';\n\n// Pure functions: only the explicitly supplied configuration is used.\nconst fromJson = contentEditorFromJson(jsonStringOrObject);\nconst fromHtml = contentEditorFromHtml('<h2>Hello</h2><p><strong>World</strong></p>');\n\n// Injected service: environment defaults are inherited.\nreadonly importer = inject(ContentEditorImporter);\nconst parsed = this.importer.fromJson(source);\n\n// Builder imports are one undoable edit; replacement is the default.\nbuilder.importJson(jsonStringOrObject);\nbuilder.importHtml(html);\nconst target = builder.getInsertionTarget();\nbuilder.importHtml(html, {}, { mode: 'insert', target });\nbuilder.convertBlock('paragraph-id', 'callout');\nconst nativeDocument = builder.getData();\nconst htmlExport = builder.toHtml();\n\ntry { builder.importJson(source); }\ncatch (error) {\n  if (error instanceof ContentEditorImportError) {\n    console.log(error.path, error.message);\n  }\n}";
   readonly customExample = "provideContentEditorConfig({\n  blocks: {\n    heading: {\n      fromHtml: {\n        selector: 'h1, h2, h3, h4, h5, h6',\n        parse: (element, ctx) => ctx.defaultFromHtml(element)\n      }\n    },\n    product: {\n      fromHtml: {\n        selector: '[data-product-id]',\n        parse: (element, ctx) => ctx.createBlock('product', {\n          productId: element.getAttribute('data-product-id')\n        })\n      },\n      validateImport: block => typeof (block.content as { productId?: unknown })?.productId === 'string'\n        ? undefined : 'productId must be a string',\n      toHtml: (block, ctx) => `<div data-product-id=\"${ctx.escape((block.content as { productId: string }).productId)}\"></div>`\n    }\n  }\n});";
+  readonly registrationExample = `import { ContentEditorBlockBase, ContentEditorRendererBase,
+  ContentEditorConfig, provideContentEditorConfig } from '@ngstarter-ui/components/content-editor';
+
+const config: ContentEditorConfig = { blocks: { product: {
+  editor: ProductEditor, renderer: ProductPreview,
+  create: () => ({ content: { productId: '' } }),
+  menu: { title: 'Product', description: 'Application-defined product card' },
+  validateImport: block => typeof (block.content as any)?.productId === 'string'
+    ? undefined : 'productId must be a string',
+  fromHtml: { selector: '[data-product-id]', parse: (element, ctx) =>
+    ctx.createBlock('product', { productId: element.getAttribute('data-product-id') }) },
+  toHtml: (block, ctx) => '<div data-product-id="' + ctx.escape((block.content as any).productId) + '"></div>'
+} } };
+// Global: providers: [provideContentEditorConfig(config)]
+// Instance: <ngs-content-editor-builder [config]="config" ... />
+// Preview: <ngs-content-editor-renderer [config]="config" ... />
+// Extend ContentEditorBlockBase and call save(nextContent) to use root history.
+// Extend ContentEditorRendererBase for the standard preview inputs.`;
+  readonly persistenceExample = `<ngs-content-editor-builder #editor="ngsContentEditorBuilder"
+  documentId="article-42" [content]="document" [persistDraft]="true" [draftDebounceMs]="500" />
+// editor.draftStatus(): disabled | idle | saving | saved | error
+// editor.draftError(), editor.draftSavedAt(), editor.saveDraftNow(), editor.clearDraft()
+// Config defaults: draft: { debounceMs: 500, storage: yourSynchronousStorageAdapter }
+// uploadFn(file, dataUrl, { signal, onProgress }) -> Promise<string>
+// Pass signal to fetch/XHR; report transport progress from 0 to 100 when supported.
+// blocks.image.options: { uploadFn, maxFileSize: 10 * 1024 * 1024 }`;
   readonly blocks = [
   {
     "type": "paragraph",

@@ -32,3 +32,11 @@ export * from './src/_renderer/toggle-renderer/toggle-renderer';
 export * from './src/_renderer/attachment-renderer/attachment-renderer';
 export * from './src/_renderer/gallery-renderer/gallery-renderer';
 export * from './src/_renderer/grid-renderer/grid-renderer';
+
+export * from './src/convert-block';
+export * from './src/upload-task';
+export * from './src/draft';
+export * from './src/_builder/block-base';
+export * from './src/_builder/upload-block-base';
+export * from './src/_renderer/renderer-base';
+export * from './src/upload';

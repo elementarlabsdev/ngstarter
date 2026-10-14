@@ -1,5 +1,5 @@
 import type { NgsHeadlessEditorMarkDefinition } from '@ngstarter-ui/components/headless-editor';
-import type { ContentEditorBlock, ContentEditorText } from '../types';
+import type { ContentEditorBlock, ContentEditorText, ContentEditorBlockInsertionTarget } from '../types';
 import type { ContentEditorHtmlUrlKind } from '../html/types';
 
 export interface ContentEditorImportOptions {
@@ -9,6 +9,13 @@ export interface ContentEditorImportOptions {
   maxBlocks?: number;
   /** Preserve application-defined JSON block types. Default: false. */
   allowUnknownBlocks?: boolean;
+}
+
+export interface ContentEditorImportPlacement {
+  /** Replace the document (default), or insert into a block collection. */
+  mode?: 'replace' | 'insert';
+  /** Defaults to the active collection and block when inserting. */
+  target?: ContentEditorBlockInsertionTarget;
 }
 
 export interface ContentEditorHtmlImportOptions extends ContentEditorImportOptions {

@@ -1,7 +1,11 @@
 <h3 ngs-dialog-title>Import content</h3>
 <ngs-dialog-content>
   <div class="flex flex-col gap-4">
-    <p class="text-sm text-neutral-600">Import replaces the current document. You can undo it in the editor.</p>
+    <ngs-segmented [value]="mode()" (valueChange)="mode.set($event)" aria-label="Import destination">
+      <button ngs-segmented-button value="replace" type="button">Replace document</button>
+      <button ngs-segmented-button value="insert" type="button">Insert at active block</button>
+    </ngs-segmented>
+    <p class="text-sm text-neutral-600">{{ mode() === 'replace' ? 'Replace the current document.' : 'Insert after the active block, including inside a grid cell or toggle.' }} You can undo this in the editor.</p>
     <div class="flex flex-wrap items-center justify-between gap-3">
       <ngs-segmented [value]="format()" (valueChange)="changeFormat($event)">
         <button ngs-segmented-button value="json" type="button">JSON</button>

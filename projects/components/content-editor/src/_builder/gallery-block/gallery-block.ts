@@ -2,8 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, linkedSignal, signal } fr
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { createNgsHeadlessEditorId, createNgsHeadlessEditorText } from '@ngstarter-ui/components/headless-editor';
 import { UploadArea, UploadTriggerDirective, UploadFileSelectedEvent } from '@ngstarter-ui/components/upload';
-import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
-import { Alert } from '@ngstarter-ui/components/alert';
 import { Button } from '@ngstarter-ui/components/button';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { FormField, Hint, Label } from '@ngstarter-ui/components/form-field';
@@ -11,13 +9,13 @@ import { Input } from '@ngstarter-ui/components/input';
 import { Menu, MenuDivider, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
 import { ImageViewerDirective, ImageViewerPictureDirective } from '@ngstarter-ui/components/image-viewer';
 import { ContentEditorUploadBlockBase } from '../upload-block-base';
-import { ContentEditorGalleryContent, ContentEditorGalleryImage, ContentEditorUploadFn } from '../../types';
+import { ContentEditorGalleryContent, ContentEditorGalleryImage } from '../../types';
 import { contentEditorText } from '../../document';
-import { contentEditorResourceUrl, readContentEditorFile } from '../../upload';
+import { ContentEditorUploadStatus } from '../upload-status/upload-status';
 
 @Component({
   selector: 'ngs-content-editor-gallery-block',
-  imports: [UploadArea, UploadTriggerDirective, ProgressBar, Alert, Button, Icon, FormField, Hint, Label, Input,
+  imports: [ContentEditorUploadStatus, UploadArea, UploadTriggerDirective, Button, Icon, FormField, Hint, Label, Input,
     CdkDrag, CdkDragHandle, CdkDropList, Menu, MenuDivider, MenuItem, MenuTrigger, ImageViewerDirective, ImageViewerPictureDirective],
   templateUrl: './gallery-block.html', styleUrl: './gallery-block.scss', changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -60,28 +58,11 @@ export class ContentEditorGalleryBlock extends ContentEditorUploadBlockBase<Cont
     trigger._handleClick();
   }
   async upload(event: UploadFileSelectedEvent, replaceId: string | null = null): Promise<void> {
-    const candidates = event.files.filter(file => file.type.startsWith('image/'));
-    const files = replaceId ? candidates.slice(0, 1) : candidates;
-    if (!files.length) { this.error.set('Choose image files.'); return; }
-    const request = this.beginUpload();
-    const uploadFn: ContentEditorUploadFn = this.builder.getBlockDefOption('gallery', 'uploadFn');
-    const results = await Promise.allSettled(files.map(async file => {
-      const dataUrl = await readContentEditorFile(file);
-      if (!this.isCurrentUpload(request)) throw new Error('Cancelled');
-      const src = await uploadFn(file, dataUrl);
-      if (typeof src !== 'string' || !contentEditorResourceUrl(src)) throw new Error('Invalid image URL');
-      return { id: createNgsHeadlessEditorId('image'), src, alt: file.name, caption: [] } satisfies ContentEditorGalleryImage;
-    }));
-    if (!this.isCurrentUpload(request)) return;
-    const images = results.flatMap(result => result.status === 'fulfilled' ? [result.value] : []);
-    if (images.length) {
+    const files = replaceId ? event.files.slice(0, 1) : event.files;
+    await this.uploadFiles('gallery', { files, accept: file => file.type.startsWith('image/'), apply: results => {
+      const images = results.map(({ url, file }) => ({ id: createNgsHeadlessEditorId('image'), src: url, alt: file.name, caption: [] } satisfies ContentEditorGalleryImage));
       if (replaceId) this.changeImage(replaceId, { src: images[0].src });
-      else {
-        this.save({ images: [...this.latestContent().images, ...images] });
-        this.selectImage(images[0].id);
-      }
-    }
-    if (images.length !== files.length) this.error.set(replaceId ? 'Could not replace the image. Please try again.' : 'Some images could not be uploaded. Please try again.');
-    this.uploading.set(false);
+      else { this.save({ images: [...this.latestContent().images, ...images] }); this.selectImage(images[0].id); }
+    } });
   }
 }

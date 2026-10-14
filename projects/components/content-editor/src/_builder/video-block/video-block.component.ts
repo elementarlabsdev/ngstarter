@@ -1,29 +1,23 @@
-import { ChangeDetectionStrategy, Component, effect, untracked, forwardRef, inject, input, model, OnInit, signal, viewChild, ElementRef } from '@angular/core';
+import { ContentEditorUploadBlockBase } from '../upload-block-base';
+import { ContentEditorUploadStatus } from '../upload-status/upload-status';
+import { ChangeDetectionStrategy, Component, effect, untracked, forwardRef, model, OnInit, signal, viewChild, ElementRef } from '@angular/core';
 import { UploadArea, UploadFileSelectedEvent, UploadTriggerDirective } from '@ngstarter-ui/components/upload';
-import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
-import { Button } from '@ngstarter-ui/components/button';
-import { Icon } from '@ngstarter-ui/components/icon';
 import {
-  CONTENT_BUILDER,
-  CONTENT_EDITOR_BLOCK, ContentEditorDataBlock,
+  CONTENT_EDITOR_BLOCK,
   ContentEditorVideoBlockSettings,
   ContentEditorVideoContent
 } from '../../types';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 import { FormsModule } from '@angular/forms';
-import { ContentBuilderStore } from '../../content-builder.store';
-import { ContentBuilderComponent } from '../../content-builder/content-builder.component';
 import { ResizableContainer } from '@ngstarter-ui/components/resizable-container';
 
 @Component({
   selector: 'ngs-video-block',
   imports: [
+    ContentEditorUploadStatus,
     UploadArea,
     UploadTriggerDirective,
-    ProgressBar,
-    Button,
-    Icon,
     FormField,
     Input,
     FormsModule,
@@ -45,30 +39,19 @@ import { ResizableContainer } from '@ngstarter-ui/components/resizable-container
     'class': 'block'
   }
 })
-export class VideoBlockComponent implements OnInit, ContentEditorDataBlock {
-  private _store = inject(ContentBuilderStore);
-  private _contentBuilder = inject<ContentBuilderComponent>(CONTENT_BUILDER);
-
-  id = input.required<string>();
-  content = input.required<ContentEditorVideoContent>();
-  settings = input.required<ContentEditorVideoBlockSettings>();
-  index = input.required<number>();
-  props = input<unknown[]>([]);
-
-  uploading = signal(false);
-  selectedVideo = signal<string>('');
+export class VideoBlockComponent extends ContentEditorUploadBlockBase<ContentEditorVideoContent, ContentEditorVideoBlockSettings> implements OnInit {
 
   protected _src = signal<string>('');
   protected _caption = model<string>('');
   protected _orientation = signal<'portrait' | 'landscape'>('landscape');
   protected _settings = model<ContentEditorVideoBlockSettings>({});
-  readonly initialized = signal(false);
 
   readonly videoElement = viewChild<ElementRef<HTMLVideoElement>>('videoPlayer');
 
   private _aspectRatio = 16 / 9;
 
   constructor() {
+    super();
     effect(() => {
       const content = this.content();
       const settings = this.settings();
@@ -86,16 +69,15 @@ export class VideoBlockComponent implements OnInit, ContentEditorDataBlock {
     this._caption.set(this.content().caption);
     this._orientation.set(this.content().orientation || 'landscape');
     this._settings.set(this.settings() || {});
-    this.initialized.set(true);
   }
 
-  focus() {
+  override focus() {
     if (this._src()) {
-      this._contentBuilder.focusBlock(this.id());
+      this.builder.focusBlock(this.id());
     }
   }
 
-  getData(): any {
+  override getData(): any {
     return {
       content: {
         src: this._src(),
@@ -108,69 +90,16 @@ export class VideoBlockComponent implements OnInit, ContentEditorDataBlock {
     };
   }
 
-  isEmpty(): boolean {
+  override isEmpty(): boolean {
     const src = this.getData().content.src;
     return typeof src === 'string' ? src.trim().length === 0 : !src;
   }
 
-  protected cancelUploading() {
-    this.uploading.set(false);
-  }
-
-  protected onFileSelected(event: UploadFileSelectedEvent): void {
-    this.uploading.set(true);
-    const reader  = new FileReader();
-    reader.addEventListener('load', () => {
-      this.selectedVideo.set(reader.result as string);
-
-      const video = document.createElement('video');
-      video.preload = 'metadata';
-      video.onloadedmetadata = () => {
-        window.URL.revokeObjectURL(video.src);
-        const orientation = video.videoWidth > video.videoHeight ? 'landscape' : 'portrait';
-        this._orientation.set(orientation);
-        this._aspectRatio = video.videoWidth / video.videoHeight;
-
-        let width = video.videoWidth;
-        let height = video.videoHeight;
-
-        if (width > 704) {
-          width = 704;
-          height = Math.round(width / this._aspectRatio);
-        }
-
-        if (height > 1000) {
-          width = Math.round(width / 2);
-          height = Math.round(height / 2);
-        }
-
-        // Initial settings based on video metadata
-        this._settings.update(s => ({
-          ...s,
-          actualWidth: video.videoWidth,
-          actualHeight: video.videoHeight,
-          width,
-          height
-        }));
-      };
-      video.src = URL.createObjectURL(event.files[0]);
-
-      const uploadFn = this._contentBuilder.getBlockDefOption('video', 'uploadFn');
-      uploadFn(event.files[0], reader.result)
-        .then((url: string) => {
-          if (!this.uploading()) {
-            this.selectedVideo.set('');
-            return;
-          }
-
-          this._src.set(url);
-          this.selectedVideo.set('');
-          this.uploading.set(false);
-          this.update();
-          this.focus();
-        });
-    }, false);
-    reader.readAsDataURL(event.files[0]);
+  protected onFileSelected(event: UploadFileSelectedEvent): Promise<void> {
+    return this.uploadFiles('video', { files: event.files.slice(0, 1), accept: file => file.type.startsWith('video/'), apply: results => {
+      this._src.set(results[0].url);
+      this.update();
+    } });
   }
 
   protected _onCaptionChange() {
@@ -202,12 +131,12 @@ export class VideoBlockComponent implements OnInit, ContentEditorDataBlock {
     if (event.key === 'Enter') {
       event.preventDefault();
       event.stopPropagation();
-      this._contentBuilder.insertEmptyBlock(this.index());
+      this.builder.insertEmptyBlock(this.index());
     }
   }
 
   private update() {
-    this._store.updateBlock(this.id(), {...this.getData(), isEmpty: this.isEmpty()});
-    this._contentBuilder.emitContentChangeEvent();
+    this.store.updateBlock(this.id(), {...this.getData(), isEmpty: this.isEmpty()});
+    this.builder.emitContentChangeEvent();
   }
 }

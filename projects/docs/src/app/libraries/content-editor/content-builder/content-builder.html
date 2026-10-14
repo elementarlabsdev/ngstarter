@@ -10,5 +10,15 @@
       Preview
     </button>
   </div>
-  <ngs-content-editor-builder [content]="document()" (contentChanged)="document.set($event)" [options]="options" [persistDraft]="false"/>
+  @if (builderRef; as editor) {
+    <div class="px-12 text-sm text-neutral-600" role="status" aria-live="polite">
+      @switch (editor.draftStatus()) {
+        @case ('saving') { Saving… }
+        @case ('saved') { Draft saved }
+        @case ('idle') { Ready to edit }
+        @case ('error') { <ngs-alert variant="negative">Draft could not be saved or restored: {{editor.draftError()}} <button ngsButton (click)="editor.saveDraftNow()">Retry save</button></ngs-alert> }
+      }
+    </div>
+  }
+  <ngs-content-editor-builder #builderRef="ngsContentEditorBuilder" [content]="document()" (contentChanged)="document.set($event)" [options]="options" [config]="config" documentId="content-editor-demo"/>
 </div>

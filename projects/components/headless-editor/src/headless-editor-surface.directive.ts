@@ -679,7 +679,8 @@ export class NgsHeadlessEditorSurface {
     return anchor && focus ? { anchor, focus } : null;
   }
 
-  private syncSelectionFromDom(): void {
+  /** Synchronizes the DOM range before an application handles a surface event. */
+  syncSelectionFromDom(): void {
     if (this.rendering) {
       return;
     }

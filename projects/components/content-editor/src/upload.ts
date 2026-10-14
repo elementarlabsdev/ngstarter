@@ -1,10 +1,17 @@
-/** Read files for the default data URL upload or a consumer's uploadFn. */
-export function readContentEditorFile(file: File): Promise<string> {
+import type { ContentEditorUploadContext } from './types';
+
+/** Read files with actual cancellation and progress. */
+export function readContentEditorFile(file: File, context?: ContentEditorUploadContext): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => typeof reader.result === 'string' ? resolve(reader.result) : reject(new Error('Could not read file'));
-    reader.onerror = () => reject(new Error('Could not read file'));
-    reader.onabort = () => reject(new Error('File reading cancelled'));
+    const abort = () => { reader.abort(); reject(new DOMException('Upload cancelled', 'AbortError')); cleanup(); };
+    const cleanup = () => context?.signal.removeEventListener('abort', abort);
+    if (context?.signal.aborted) { abort(); return; }
+    context?.signal.addEventListener('abort', abort, { once: true });
+    reader.onload = () => { cleanup(); typeof reader.result === 'string' ? resolve(reader.result) : reject(new Error('Could not read file')); };
+    reader.onerror = () => { cleanup(); reject(new Error('Could not read file')); };
+    reader.onabort = () => { cleanup(); reject(new DOMException('Upload cancelled', 'AbortError')); };
+    reader.onprogress = event => { if (event.lengthComputable) context?.onProgress(event.loaded / event.total * 100); };
     reader.readAsDataURL(file);
   });
 }

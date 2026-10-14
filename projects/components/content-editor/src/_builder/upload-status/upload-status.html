@@ -1,0 +1,17 @@
+@if (task().uploading()) {
+  <div class="flex flex-col gap-2" role="status" aria-live="polite">
+    <ngs-progress-bar [mode]="task().progress() === null ? 'indeterminate' : 'determinate'" [value]="task().progress() ?? 0"/>
+    <div class="flex items-center justify-between gap-3">
+      <span class="text-sm">Uploading{{ task().progress() === null ? '…' : ' ' + task().progress()!.toFixed(0) + '%' }}</span>
+      <button ngsButton type="button" (click)="task().cancel()">Cancel upload</button>
+    </div>
+  </div>
+}
+@if (task().error()) {
+  <ngs-alert variant="negative">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <span>{{ task().error() }}</span>
+      @if (task().canRetry()) { <button ngsButton type="button" (click)="task().retry()">Retry upload</button> }
+    </div>
+  </ngs-alert>
+}

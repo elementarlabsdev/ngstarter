@@ -7,13 +7,10 @@
     </div>
     <ngs-form-field><ngs-label>File name</ngs-label><input ngsInput [value]="content().name" (input)="changeName($event)"></ngs-form-field>
   }
-  @if (uploading()) {
-    <ngs-progress-bar mode="indeterminate"/>
-    <button ngsButton (click)="cancelUpload()">Cancel upload</button>
-  } @else {
+  <ngs-content-editor-upload-status [task]="uploadTask"/>
+  @if (!uploading()) {
     <ngs-upload-area ngsUploadTrigger [multiple]="false" (fileSelected)="upload($event)">
       {{href() ? 'Click or drop a file to replace it' : 'Click or drop a file to attach it'}}
     </ngs-upload-area>
   }
-  @if (error()) { <ngs-alert variant="negative">{{error()}}</ngs-alert> }
 </div>

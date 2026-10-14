@@ -1,5 +1,6 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
+  ContentEditorConfig,
   ContentEditorDocument,
   ContentEditorRenderer,
 } from '@ngstarter-ui/components/content-editor';
@@ -15,6 +16,7 @@ import { EmptyState } from '@ngstarter-ui/components/empty-state';
 
 export interface ContentBuilderPreviewDialogData {
   document: ContentEditorDocument;
+  config?: ContentEditorConfig;
 }
 
 @Component({
@@ -29,10 +31,9 @@ export interface ContentBuilderPreviewDialogData {
     EmptyState,
   ],
   templateUrl: './content-builder-preview-dialog.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './content-builder-preview-dialog.scss',
 })
 export class ContentBuilderPreviewDialog {
-  constructor(@Inject(DIALOG_DATA) public data: ContentBuilderPreviewDialogData) {
-  }
+  readonly data = inject<ContentBuilderPreviewDialogData>(DIALOG_DATA);
 }

@@ -544,7 +544,7 @@ describe('Content editor additional blocks', () => {
     expect(gallery.querySelectorAll('input[ngsInput]')).toHaveLength(2);
     expect(gallery.querySelector('button[aria-label="Next image"]')).toBeTruthy();
     expect(Array.from(gallery.querySelectorAll('button')).some(button => ['Grid', 'Carousel', '2 columns', '3 columns'].includes(button.textContent!.trim()))).toBe(false);
-    expect(component.error()).toContain('Some images');
+    expect(component.error()).toContain('Could not upload');
     component.changeCaption(images()[0].id, 'Caption');
     component.moveImage(0, 1);
     expect(contentEditorText(images()[1].caption)).toBe('Caption');

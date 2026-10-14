@@ -1,8 +1,8 @@
 import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { CdkDropList } from '@angular/cdk/drag-drop';
-import { NgsHeadlessEditor, NgsHeadlessEditorChangeOrigin } from '@ngstarter-ui/components/headless-editor';
-import { ContentEditorBlockScope, ContentEditorBlockView, ContentEditorDocument } from './types';
+import { NgsHeadlessEditor, NgsHeadlessEditorChangeOrigin, NgsHeadlessEditorSelection } from '@ngstarter-ui/components/headless-editor';
+import { ContentEditorBlockInsertionTarget, ContentEditorBlockScope, ContentEditorBlockView, ContentEditorDocument } from './types';
 import { cloneContentEditorValue, contentEditorBlockView, contentEditorNativeBlock, contentEditorCollection, findContentEditorBlock, replaceContentEditorCollection, contentEditorChildCollections } from './document';
 
 /** UI state and block operations. The headless document is the only content store. */
@@ -34,6 +34,8 @@ export class ContentBuilderStore {
     this.textEdit = { origin, group };
     try { edit(); } finally { this.textEdit = previous; }
   }
+  readonly insertionTarget = signal<ContentEditorBlockInsertionTarget>({ scope: {} });
+  readonly restoreTextSelection = signal<{ blockId: string; selection: NgsHeadlessEditorSelection } | null>(null);
   readonly focusedBlockId = signal<string | null>(null);
   readonly activeBlockId = signal<string | null>(null);
   readonly dragPointer = signal<{ x: number; y: number } | null>(null);
@@ -63,14 +65,19 @@ export class ContentBuilderStore {
     replaceContentEditorCollection(blocks, scope, collection);
     this.editor.updateDocument({ version: 1, blocks });
   }
-  deleteBlock(id: string, _index: number): void {
+  deleteBlock(id: string, _index: number): void { this.deleteBlocks([id]); }
+  deleteBlocks(ids: readonly string[]): void {
+    const selected = new Set(ids);
     const blocks = cloneContentEditorValue([...this.editor.document().blocks]);
-    const remove = (items: any[]): boolean => {
-      const index = items.findIndex(block => block.id === id);
-      if (index !== -1) { items.splice(index, 1); return true; }
-      return items.some(block => contentEditorChildCollections(block).some(children => remove(children as any[])));
+    let changed = false;
+    const remove = (items: any[]): void => {
+      for (let index = items.length - 1; index >= 0; index--) {
+        if (selected.has(items[index].id)) { items.splice(index, 1); changed = true; }
+        else for (const children of contentEditorChildCollections(items[index])) remove(children as any[]);
+      }
     };
-    if (remove(blocks)) this.editor.updateDocument({ version: 1, blocks });
+    remove(blocks);
+    if (changed) this.editor.updateDocument({ version: 1, blocks });
   }
   updateBlock(id: string, data: Partial<ContentEditorBlockView>): void {
     const blocks = cloneContentEditorValue([...this.editor.document().blocks]);

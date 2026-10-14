@@ -119,7 +119,7 @@ describe('Content editor toolbar overlays', () => {
     await userEvent.click(toolbarButton(9));
     await fixture.whenStable();
     const palette = overlays.querySelector('ngs-text-color')!;
-    const color = palette.querySelectorAll<HTMLElement>('button')[1];
+    const color = [...palette.querySelectorAll<HTMLElement>('button')].find(button => button.style.color === 'rgb(127, 127, 127)')!;
     color.focus();
     // A sibling overlay can collapse the native selection inside the surface.
     const range = document.createRange();

@@ -6,10 +6,10 @@ import {
   inject,
   input, numberAttribute, booleanAttribute,
   OnInit, OnDestroy, output, PLATFORM_ID,
-  signal, untracked,
+  signal, computed, untracked,
   ElementRef,
   AfterViewInit, viewChild,
-  effect, EffectRef, runInInjectionContext, EnvironmentInjector, ChangeDetectorRef
+  effect, DestroyRef, EffectRef, runInInjectionContext, EnvironmentInjector, ChangeDetectorRef
 } from '@angular/core';
 import {
   CONTENT_BUILDER,
@@ -20,16 +20,20 @@ import {
   ContentEditorBlockInsertionTarget,
 } from '../types';
 import { DOCUMENT } from '@angular/common';
-import { NgsHeadlessEditor, createNgsHeadlessEditorDocument, createNgsHeadlessEditorText, readNgsHeadlessEditorInlineContent } from '@ngstarter-ui/components/headless-editor';
+import { NgsHeadlessEditor, createNgsHeadlessEditorDocument, createNgsHeadlessEditorText } from '@ngstarter-ui/components/headless-editor';
 import { provideContentEditor } from '../content-editor.plugin';
-import { contentEditorText, contentEditorChildCollections, contentEditorCollection } from '../document';
+import { contentEditorText, contentEditorChildCollections, contentEditorCollection, cloneContentEditorValue, replaceContentEditorCollection, contentEditorCopyBlocks, contentEditorBlockScope, contentEditorSliceText } from '../document';
 import { CONTENT_EDITOR_EXTRA_BLOCK_DEFS, CONTENT_EDITOR_EXTRA_SUGGESTIONS } from '../extra-block-defs';
+import { ContentEditorDraftController } from '../draft';
 import { CONTENT_EDITOR_CONFIG, ContentEditorConfig, mergeContentEditorConfig } from '../config';
 import { ContentEditorHtmlSerializer } from '../html/html-serializer';
 import { CONTENT_EDITOR_DEFAULT_HTML_CONVERTERS } from '../html/default-converters';
+import { contentEditorConvertBlock, ContentEditorConvertibleBlockType, CONTENT_EDITOR_CONVERTIBLE_BLOCKS } from '../convert-block';
+import { ContentEditorContentEditableDirective } from '../content-editor-content-editable.directive';
+import { findContentEditorBlock } from '../document';
 import { ContentEditorImporter } from '../import/content-importer';
-import { ContentEditorHtmlImportOptions, ContentEditorImportOptions, ContentEditorImportError } from '../import/types';
-import { ContentEditorDocument, ContentEditorBlock } from '../types';
+import { ContentEditorHtmlImportOptions, ContentEditorImportOptions, ContentEditorImportError, ContentEditorImportPlacement } from '../import/types';
+import { ContentEditorDocument, ContentEditorBlock, ContentEditorText } from '../types';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { AsyncPipe, isPlatformServer, NgComponentOutlet } from '@angular/common';
 import { v7 as uuid } from 'uuid';
@@ -121,8 +125,17 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   private readonly importer = inject(ContentEditorImporter);
   readonly config = input<ContentEditorConfig>({});
   /** One insertion menu shared by root controls, nested collections and custom blocks. */
+  readonly conversionMenu = viewChild.required<Menu>('conversionMenu');
+  readonly conversionTypes = CONTENT_EDITOR_CONVERTIBLE_BLOCKS;
   readonly blockMenu = viewChild.required<Menu>('suggestionsMenu');
   private readonly document = inject(DOCUMENT);
+  private readonly drafts = new ContentEditorDraftController();
+  readonly draftStatus = this.drafts.status;
+  readonly draftError = this.drafts.error;
+  readonly draftSavedAt = this.drafts.savedAt;
+  readonly documentId = input<string>();
+  readonly draftDebounceMs = input<number | undefined, unknown>(undefined, { transform: numberAttribute });
+  private draftKey = '';
   private loaded = false;
   private lastInput: ContentEditorDocument | null = null;
 
@@ -130,7 +143,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   private _store = inject(ContentBuilderStore);
   private readonly dropList = viewChild.required(CdkDropList);
   readonly connectedDropLists = this._store.dropLists;
-  private elRef = inject(ElementRef<HTMLElement>);
+  private elRef: ElementRef<HTMLElement> = inject(ElementRef);
   private envInjector = inject(EnvironmentInjector);
   private cdr = inject(ChangeDetectorRef);
   private confirmManager = inject(ConfirmManager);
@@ -549,7 +562,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   protected _blockDragging = signal(false);
   public isSelectionOfBlocksActive = signal(false);
 
-  readonly selectedBlocksModel = new SelectionModel(true);
+  readonly selectedBlocksModel = new SelectionModel<string>(true);
 
   commandBar = CommandBarComponent;
 
@@ -560,25 +573,52 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   // Build helper maps: component map and merged options map
+  readonly insertionSuggestions = computed(() => {
+    const config = mergeContentEditorConfig(this.globalConfig, this.config());
+    const custom = Object.entries(config.blocks ?? {}).flatMap(([type, definition]) => definition.menu ? [{
+      type: 'item', title: definition.menu.title, description: definition.menu.description ?? '',
+      iconName: definition.menu.iconName ?? 'fluent:document-24-regular', blockType: type,
+      blockSettings: definition.menu.settings ?? {}, hotKeys: ''
+    }] : []);
+    const replaced = new Set(custom.map(item => item.blockType));
+    return [...this.suggestions().filter((item: any) => !replaced.has(item.blockType)), ...custom];
+  });
+  private readonly componentSources = new Map<string, unknown>();
+
   private buildBlockDefMaps() {
     const overrides = this.options() || {} as ContentEditorOptions;
     const config = mergeContentEditorConfig(this.globalConfig, this.config());
     this.blockDefsOptionsMap = new Map<string, any>();
 
-    this.blockDefs().forEach((def) => {
-      if (!this.blockDefsMap.has(def.type)) {
-        this.blockDefsMap.set(def.type, def.component());
-      }
-      const merged = {
-        ...(def.options || {}),
-        toHtml: def.toHtml,
-        ...config.blocks?.[def.type]?.options,
-        ...(config.blocks?.[def.type]?.toHtml ? { toHtml: config.blocks[def.type].toHtml } : {}),
-        ...(overrides[def.type] || {})
-      };
-      this.blockDefsOptionsMap.set(def.type, merged);
+    const definitions = new Map(this.blockDefs().map(def => [def.type, def]));
+    for (const [type, block] of Object.entries(config.blocks ?? {})) {
+      const previous = definitions.get(type);
+      if (!previous && !(block.editor || block.loadEditor)) continue;
+      const component = block.loadEditor ?? (block.editor ? () => Promise.resolve(block.editor!) : previous!.component);
+      definitions.set(type, { ...previous, type, component,
+        empty: block.create ? () => {
+          const initial = block.create!();
+          return { content: initial.content, settings: initial.attrs?.['settings'] ?? {}, props: initial.attrs?.['props'] ?? [], attrs: initial.attrs };
+        } : previous?.empty ?? (() => ({ content: null, settings: {} })),
+        toHtml: block.toHtml ?? previous?.toHtml, options: previous?.options ?? {}
+      });
+      const source = block.loadEditor ?? block.editor ?? previous?.component;
+      if (this.componentSources.get(type) !== source) this.blockDefsMap.delete(type);
+      this.componentSources.set(type, source);
+    }
+    for (const type of this.blockDefsMap.keys()) if (!definitions.has(type)) this.blockDefsMap.delete(type);
+    definitions.forEach(def => {
+      const configured = config.blocks?.[def.type];
+      const source = configured?.loadEditor ?? configured?.editor ?? def.component;
+      if (this.componentSources.get(def.type) !== source) this.blockDefsMap.delete(def.type);
+      this.componentSources.set(def.type, source);
+      if (!this.blockDefsMap.has(def.type)) this.blockDefsMap.set(def.type, def.component());
+      this.blockDefsOptionsMap.set(def.type, { ...def.options, toHtml: def.toHtml,
+        ...config.blocks?.[def.type]?.options, ...(overrides[def.type] || {}) });
     });
+    this.resolvedBlockDefs = definitions;
   }
+  private resolvedBlockDefs = new Map<string, ContentEditorBlockDef>();
 
   /** Shared by nested block collections; all edits use this root editor. */
   get rootBuilder(): ContentBuilderComponent { return this; }
@@ -586,11 +626,13 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   createBlockView(type: string, settings = {}, content?: any): ContentEditorBlockView { return this._createBlock(type, settings, content); }
 
   getBlockDefOption(type: string, key: string): any {
-    return this.blockDefsOptionsMap.get(type)[key];
+    return this.blockDefsOptionsMap.get(type)?.[key];
   }
 
   ngOnInit() {
     this.lastInput = this.content();
+    this.buildBlockDefMaps();
+    this.configureDraft();
     const document = this._getDraftContent() ?? this.lastInput;
     const last = document.blocks.at(-1);
     const blocks = last && (last.type !== 'paragraph' || contentEditorText(last.content).length > 0)
@@ -605,6 +647,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   constructor() {
+    inject(DestroyRef).onDestroy(() => this.drafts.flush());
     effect(() => {
       this.config();
       this.options();
@@ -612,10 +655,14 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     });
     effect(() => {
       const value = this.content();
+      this.documentId(); this.persistDraft(); this.draftDebounceMs(); this.config();
       untracked(() => {
-        if (this.loaded && value !== this.lastInput) {
+        if (!this.loaded) return;
+        const previousKey = this.draftKey;
+        this.configureDraft();
+        if (value !== this.lastInput || previousKey !== this.draftKey) {
           this.lastInput = value;
-          this._store.setBlocks(value);
+          this._store.setBlocks(previousKey !== this.draftKey ? this._getDraftContent() ?? value : value);
         }
       });
     });
@@ -775,9 +822,8 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   private _createBlock(type: string, settings = {}, content?: any): ContentEditorBlockView {
-    const blockDef = this.blockDefs().find(
-      blockDefItem => blockDefItem.type === type
-    ) as ContentEditorBlockDef;
+    const blockDef = this.resolvedBlockDefs.get(type) ?? this.blockDefs().find(item => item.type === type);
+    if (!blockDef) throw new Error(`No Content Editor definition for "${type}"`);
     const empty = blockDef.empty();
 
     if (settings) {
@@ -809,6 +855,42 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     this.insertBlock(type, index, options);
+  }
+
+  canConvertBlock(id: string): boolean {
+    const block = findContentEditorBlock(this.editor.document().blocks, id);
+    return !!block && this.conversionTypes.includes(block.type as ContentEditorConvertibleBlockType) && !this.editor.readOnly();
+  }
+
+  convertBlock(id: string, type: ContentEditorConvertibleBlockType, settings: Readonly<Record<string, unknown>> = {}): boolean {
+    if (!this.canConvertBlock(id)) return false;
+    const regions = Array.from(this.elRef.nativeElement.querySelectorAll<HTMLElement>('.ngs-content-editor-content-editable'));
+    const activeElement = regions.find(element => element.closest('[data-block-id]')?.getAttribute('data-block-id') === id && ContentEditorContentEditableDirective.forElement(element)?.region.active());
+    const region = ContentEditorContentEditableDirective.forElement(activeElement ?? null);
+    let selection = region?.region.editor.selection();
+    const source = findContentEditorBlock(this.editor.document().blocks, id)!;
+    if (selection && source.type === 'quote' && type !== 'quote' && activeElement?.classList.contains('caption')) {
+      const quote: any = source.content;
+      const caption = contentEditorText(quote.caption?.content);
+      const text = contentEditorText(quote.cite.content) + (caption ? '\n' + caption : '');
+      const shift = contentEditorText(quote.cite.content).length + (caption ? 1 : 0);
+      const lines = text.split('\n');
+      const point = (value: { blockId: string; offset: number }) => {
+        const regionLines = region!.region.editor.document().blocks;
+        const index = regionLines.findIndex(line => line.id === value.blockId);
+        let offset = shift + regionLines.slice(0, index).reduce((sum, line) => sum + contentEditorText(line.content).length + 1, 0) + value.offset;
+        let line = 0;
+        while (line < lines.length - 1 && offset > lines[line].length) { offset -= lines[line].length + 1; line++; }
+        return { blockId: `line-${line}`, offset };
+      };
+      selection = { anchor: point(selection.anchor), focus: point(selection.focus) };
+    }
+    const blocks = cloneContentEditorValue([...this.editor.document().blocks]);
+    const block = findContentEditorBlock(blocks, id)!;
+    Object.assign(block, contentEditorConvertBlock(block, type, settings));
+    this.editor.updateDocument({ version: 1, blocks });
+    if (selection) this._store.restoreTextSelection.set({ blockId: id, selection });
+    return true;
   }
 
   duplicateBlock(blockId: string) {
@@ -960,19 +1042,80 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     return this.editor.document();
   }
 
+  /** Structural HTML paste splits the active text block without flattening lists/tables. */
+  pasteBlocksAtSelection(id: string, imported: ContentEditorDocument, start: number, end: number): boolean {
+    if (this.editor.readOnly() || !imported.blocks.length) return false;
+    const blocks = cloneContentEditorValue([...this.editor.document().blocks]);
+    const source = findContentEditorBlock(blocks, id);
+    const scope = contentEditorBlockScope(blocks, id) ?? this._store.insertionTarget().scope;
+    if (!source) {
+      // The empty nested paragraph is a UI placeholder until its first edit.
+      const collection = contentEditorCollection(blocks, scope);
+      if (collection.length) return false;
+      this.applyImport(imported, { mode: 'insert', target: { scope } }); return true;
+    }
+    if (!['paragraph', 'heading'].includes(source.type)) return false;
+    const text = source.content as ContentEditorText;
+    const before = contentEditorSliceText(text, 0, Math.min(start, end));
+    const after = contentEditorSliceText(text, Math.max(start, end));
+    const insertion = contentEditorCopyBlocks(imported.blocks);
+    if (contentEditorText(before)) {
+      if (source.type === 'paragraph' && insertion[0].type === 'paragraph') insertion[0] = {
+        ...source, content: [...before, ...insertion[0].content as ContentEditorText]
+      };
+      else insertion.unshift({ ...source, content: before });
+    }
+    const last = insertion.at(-1)!;
+    const textLast = ['paragraph', 'heading'].includes(last.type);
+    const caretLines = textLast ? contentEditorText(last.content).split('\n') : [''];
+    const caretPoint = { blockId: `line-${caretLines.length - 1}`, offset: caretLines.at(-1)!.length };
+    if (textLast) insertion[insertion.length - 1] = { ...last, content: [...last.content as ContentEditorText, ...after] };
+    else if (contentEditorText(after)) insertion.push({ id: uuid(), type: 'paragraph', content: after, attrs: { props: source.attrs?.['props'] ?? [] } });
+    const items = [...contentEditorCollection(blocks, scope)];
+    items.splice(items.findIndex(block => block.id === id), 1, ...insertion);
+    replaceContentEditorCollection(blocks, scope, items);
+    this.editor.updateDocument({ version: 1, blocks });
+    if (textLast) this._store.restoreTextSelection.set({ blockId: last.id, selection: { anchor: caretPoint, focus: caretPoint } });
+    return true;
+  }
+
   /** Validates before replacing the document. Import is one undoable edit. */
-  importJson(source: unknown, config: ContentEditorConfig = {}, options: ContentEditorImportOptions = {}): ContentEditorDocument {
-    return this.applyImport(this.importer.fromJson(source, mergeContentEditorConfig(this.config(), config), options));
+  importJson(source: unknown, config: ContentEditorConfig = {}, options: ContentEditorImportOptions & ContentEditorImportPlacement = {}): ContentEditorDocument {
+    return this.applyImport(this.importer.fromJson(source, mergeContentEditorConfig(this.config(), config), options), options);
   }
 
-  importHtml(html: string, config: ContentEditorConfig = {}, options: ContentEditorHtmlImportOptions = {}): ContentEditorDocument {
-    return this.applyImport(this.importer.fromHtml(html, mergeContentEditorConfig(this.config(), config), options));
+  importHtml(html: string, config: ContentEditorConfig = {}, options: ContentEditorHtmlImportOptions & ContentEditorImportPlacement = {}): ContentEditorDocument {
+    return this.applyImport(this.importer.fromHtml(html, mergeContentEditorConfig(this.config(), config), options), options);
   }
 
-  private applyImport(document: ContentEditorDocument): ContentEditorDocument {
+  getInsertionTarget(): ContentEditorBlockInsertionTarget {
+    const saved = this._store.insertionTarget();
+    const id = saved.afterId ?? this._store.activeBlockId() ?? this._store.focusedBlockId();
+    const scope = id ? contentEditorBlockScope(this.editor.document().blocks, id) : null;
+    if (scope) return { scope, afterId: id! };
+    return { scope: saved.scope };
+  }
+
+  private applyImport(document: ContentEditorDocument, placement: ContentEditorImportPlacement = {}): ContentEditorDocument {
     if (!this.loaded) throw new ContentEditorImportError('$editor', 'Initialize the builder before importing');
     if (this.editor.readOnly()) throw new ContentEditorImportError('$editor', 'Cannot import into a read-only editor');
-    this.editor.updateDocument(document);
+    if (placement.mode === 'insert') {
+      const target = placement.target ?? this.getInsertionTarget();
+      const blocks = cloneContentEditorValue([...this.editor.document().blocks]);
+      if (target.scope.parentId) {
+        const parent = findContentEditorBlock(blocks, target.scope.parentId);
+        if (!parent || !['toggle', 'grid'].includes(parent.type) ||
+          (parent.type === 'grid' && !(parent.content as any).cells.some((cell: any) => cell.id === target.scope.cellId))) {
+          throw new ContentEditorImportError('$target.scope', 'Insertion collection does not exist');
+        }
+      }
+      const items = [...contentEditorCollection(blocks, target.scope)];
+      const index = target.afterId ? items.findIndex(block => block.id === target.afterId) : items.length - 1;
+      if (target.afterId && index < 0) throw new ContentEditorImportError('$target.afterId', 'Insertion block does not exist in this collection');
+      items.splice(index + 1, 0, ...contentEditorCopyBlocks(document.blocks));
+      replaceContentEditorCollection(blocks, target.scope, items);
+      this.editor.updateDocument({ version: 1, blocks });
+    } else this.editor.updateDocument(document);
     this.selectedBlocksModel.clear();
     this._store.setFocusedBlockId(null);
     this._store.setActiveBlockId(null);
@@ -1034,9 +1177,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
         .filter(x => x.index !== -1)
         .sort((a, b) => b.index - a.index);
 
-      for (const item of toDelete) {
-        this.deleteBlock(item.id);
-      }
+      this._store.deleteBlocks(toDelete.map(item => item.id));
 
       this.unselectSelectedBlocks();
     });
@@ -1139,41 +1280,23 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     this._scroll$ = null;
   }
 
+  private configureDraft(): void {
+    this.draftKey = this._getDraftStorageKey();
+    const config = mergeContentEditorConfig(this.globalConfig, this.config()).draft;
+    this.drafts.configure(this.draftKey, this._canUseDraftStorage(), {
+      ...config, ...(this.draftDebounceMs() === undefined ? {} : { debounceMs: this.draftDebounceMs() })
+    });
+  }
   private _getDraftContent(): ContentEditorDocument | null {
-    if (!this._canUseDraftStorage()) {
-      return null;
-    }
-
-    try {
-      const draft = localStorage.getItem(this._getDraftStorageKey());
-
-      if (!draft) {
-        return null;
-      }
-
-      const content = JSON.parse(draft);
-      return content?.version === 1 && Array.isArray(content.blocks) ? content : null;
-    } catch {
-      return null;
-    }
+    return this.drafts.read(source => this.importer.fromJson(source, this.config()));
   }
-
-  private _saveDraft(content: ContentEditorDocument) {
-    if (!this._canUseDraftStorage()) {
-      return;
-    }
-
-    try {
-      localStorage.setItem(this._getDraftStorageKey(), JSON.stringify(content));
-    } catch {
-    }
-  }
-
-  private _canUseDraftStorage(): boolean {
-    return !isPlatformServer(this._platformId) && this.persistDraft();
-  }
+  private _saveDraft(content: ContentEditorDocument): void { this.drafts.schedule(content); }
+  saveDraftNow(): void { this.drafts.schedule(this.getData()); this.drafts.flush(); }
+  clearDraft(): void { this.drafts.clear(); }
+  private _canUseDraftStorage(): boolean { return !isPlatformServer(this._platformId) && this.persistDraft(); }
 
   private _getDraftStorageKey(prefix = ContentBuilderComponent.DRAFT_STORAGE_PREFIX): string {
+    if (this.documentId()?.trim()) return `${prefix}:document:${encodeURIComponent(this.documentId()!)}`;
     const elementId = this.elRef.nativeElement.id;
     const locationKey = typeof window === 'undefined'
       ? 'server'
@@ -1228,7 +1351,8 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     if (html) {
-      this._handleHtmlPaste(html, index);
+      try { this._handleHtmlPaste(html, index); }
+      catch { if (text) this._handleTextPaste(text, index); }
     } else if (text) {
       this._handleTextPaste(text, index);
     }
@@ -1255,110 +1379,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   private _handleHtmlPaste(html: string, index: number) {
-    const body = this.document.createElement('div');
-    body.innerHTML = html;
-
-    let currentIndex = index;
-    Array.from(body.children).forEach(node => {
-      const block = this._mapNodeToBlock(node);
-      if (block) {
-        this.insertBlock(block.type, currentIndex, block.settings, false, block.content);
-        currentIndex++;
-      }
-    });
-  }
-
-  private _mapNodeToBlock(node: Element): { type: string, settings: any, content?: any } | null {
-    const tag = node.tagName.toLowerCase();
-
-    switch (tag) {
-      case 'h1':
-      case 'h2':
-      case 'h3':
-      case 'h4':
-      case 'h5':
-      case 'h6':
-        return {
-          type: 'heading',
-          settings: { level: parseInt(tag.substring(1)) },
-          content: readNgsHeadlessEditorInlineContent(node, this.editor, { lineBreaks: true })
-        };
-      case 'p':
-        return {
-          type: 'paragraph',
-          settings: {},
-          content: readNgsHeadlessEditorInlineContent(node, this.editor, { lineBreaks: true })
-        };
-      case 'ul':
-        return {
-          type: 'bulletList',
-          settings: { listStyle: 'bullet' },
-          content: this._mapListItems(node)
-        };
-      case 'ol':
-        return {
-          type: 'orderedList',
-          settings: { listStyle: 'ordered' },
-          content: this._mapListItems(node)
-        };
-      case 'img':
-        return {
-          type: 'image',
-          settings: {},
-          content: {
-            src: node.getAttribute('src') || '',
-            alt: node.getAttribute('alt') || ''
-          }
-        };
-      case 'video':
-        return {
-          type: 'video',
-          settings: {},
-          content: {
-            src: node.getAttribute('src') || '',
-            caption: node.getAttribute('title') || ''
-          }
-        };
-      case 'blockquote':
-        return {
-          type: 'quote',
-          settings: {},
-          content: { cite: { content: readNgsHeadlessEditorInlineContent(node, this.editor, { lineBreaks: true }), props: [] }, caption: { content: [], props: [] } }
-        };
-      case 'pre':
-        const codeNode = node.querySelector('code');
-        const content = (codeNode || node).textContent || '';
-        return {
-          type: 'code',
-          settings: { language: 'none' },
-          content: [createNgsHeadlessEditorText(content.replace(/\r\n?/g, '\n').trimEnd())]
-        };
-      case 'hr':
-        return {
-          type: 'divider',
-          settings: {}
-        };
-      default:
-        if (node.textContent?.trim()) {
-          return {
-            type: 'paragraph',
-            settings: {},
-            content: readNgsHeadlessEditorInlineContent(node, this.editor, { lineBreaks: true })
-          };
-        }
-        return null;
-    }
-  }
-
-  private _mapListItems(node: Element): any[] {
-    return Array.from(node.children)
-      .filter(child => child.tagName.toLowerCase() === 'li')
-      .map(li => {
-        const inline = li.cloneNode(true) as Element;
-        const nested = Array.from(inline.children).filter(child => ['ul', 'ol'].includes(child.tagName.toLowerCase()));
-        const children = nested.flatMap(list => this._mapListItems(list));
-        nested.forEach(list => list.remove());
-        return { content: readNgsHeadlessEditorInlineContent(inline, this.editor, { lineBreaks: true }), props: [], children };
-      });
+    const afterId = this.editor.document().blocks[index - 1]?.id;
+    this.importHtml(html, {}, { mode: 'insert', target: { scope: {}, afterId } });
   }
 }

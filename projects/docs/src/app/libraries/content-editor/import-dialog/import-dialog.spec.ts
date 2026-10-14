@@ -22,7 +22,7 @@ describe('Content Editor import dialog', () => {
     expect(fixture.componentInstance.format()).toBe('json');
     expect(fixture.componentInstance.reading()).toBe(false);
     fixture.componentInstance.import();
-    expect(close).toHaveBeenCalledWith(JSON.parse(source));
+    expect(close).toHaveBeenCalledWith({ document: JSON.parse(source), mode: 'replace' });
   });
 
   it('detects HTML files, converts markup, and keeps the dialog open on invalid JSON', async () => {
@@ -31,7 +31,7 @@ describe('Content Editor import dialog', () => {
     await fixture.componentInstance.readFile(fileEvent(new File(['<h2>From HTML</h2>'], 'document.html', { type: 'text/html' })));
     expect(fixture.componentInstance.format()).toBe('html');
     fixture.componentInstance.import();
-    expect(close.mock.calls[0][0].blocks[0].type).toBe('heading');
+    expect(close.mock.calls[0][0].document.blocks[0].type).toBe('heading');
     close.mockClear();
     fixture.componentInstance.changeFormat('json'); fixture.componentInstance.changeSource('{"version":2,"blocks":[]}');
     fixture.componentInstance.import();

@@ -1,0 +1,4 @@
+<div class="flex flex-col gap-3">
+  <ngs-form-field><ngs-label>Bookmark title</ngs-label><input ngsInput [value]="content().title" (input)="change('title', $any($event.target).value)"></ngs-form-field>
+  <ngs-form-field><ngs-label>URL</ngs-label><input ngsInput [value]="content().url" (input)="change('url', $any($event.target).value)"></ngs-form-field>
+</div>

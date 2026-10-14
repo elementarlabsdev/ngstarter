@@ -55,8 +55,5 @@
     </ngs-upload-area>
   }
   <button ngsButton hidden ngsUploadTrigger accept="image/*" #replaceUpload="ngsUploadTrigger" (fileSelected)="upload($event, replacementId())" aria-label="Replace selected image"></button>
-  @if (uploading()) {
-    <ngs-progress-bar mode="indeterminate"/><button ngsButton (click)="cancelUpload()">Cancel upload</button>
-  }
-  @if (error()) { <ngs-alert variant="negative">{{error()}}</ngs-alert> }
+  <ngs-content-editor-upload-status [task]="uploadTask"/>
 </div>

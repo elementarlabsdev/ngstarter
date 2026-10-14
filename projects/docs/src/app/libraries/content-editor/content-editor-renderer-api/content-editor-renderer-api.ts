@@ -59,7 +59,7 @@ export class ContentEditorRendererApi {
   readonly inputs: ApiRow[] = [
     {
       name: 'config',
-      description: 'Instance HTML export overrides, merged over the environment configuration. Import configuration is used by the importer/builder; it does not replace Angular renderer components.',
+      description: 'Instance block configuration, including Angular preview renderers and HTML converters. Overrides environment defaults and is inherited by nested Grid/Toggle renderers.',
       type: 'ContentEditorConfig',
       default: '{}'
     },

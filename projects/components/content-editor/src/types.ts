@@ -59,7 +59,13 @@ export interface ContentEditorGridSettings { columns: 2 | 3 | 4; gap: ContentEdi
 export interface ContentEditorBlockScope { parentId?: string; cellId?: string; }
 /** Destination passed to the shared block menu; omission of afterId appends to the collection. */
 export interface ContentEditorBlockInsertionTarget { scope: ContentEditorBlockScope; afterId?: string; }
-export type ContentEditorUploadFn = (file: File, dataUrl: string) => Promise<string>;
+export interface ContentEditorUploadContext {
+  /** Abort the transport when cancelled, replaced or the block is removed. */
+  signal: AbortSignal;
+  /** Report transport progress from 0 to 100; omit for indeterminate progress. */
+  onProgress(percent: number): void;
+}
+export type ContentEditorUploadFn = (file: File, dataUrl: string, context: ContentEditorUploadContext) => Promise<string>;
 
 /** UI input view of a native document block. Never used as the saved document. */
 export interface ContentEditorBlockView {

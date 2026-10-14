@@ -2,16 +2,19 @@ import { createNgsHeadlessEditorText } from '@ngstarter-ui/components/headless-e
 import { Component, DestroyRef, inject, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ContentBuilderComponent, ContentEditorDocument, isContentEditorBlockEmpty } from '@ngstarter-ui/components/content-editor';
+import { Alert } from '@ngstarter-ui/components/alert';
 import { Button } from '@ngstarter-ui/components/button';
 import { Dialog } from '@ngstarter-ui/components/dialog';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { ContentBuilderPreviewDialog } from '../preview-dialog/content-builder-preview-dialog';
-import { ContentImportDialog } from '../import-dialog/import-dialog';
+import { bookmarkConfig } from '../bookmark.config';
+import { ContentImportDialog, ContentImportResult } from '../import-dialog/import-dialog';
 
 @Component({
   selector: 'app-content-builder',
   imports: [
     Button,
+    Alert,
     ContentBuilderComponent,
     Icon
   ],
@@ -43,13 +46,15 @@ export class ContentBuilder {
   ] });
   private readonly dialog = inject(Dialog);
   private readonly destroyRef = inject(DestroyRef);
+  readonly config = bookmarkConfig;
   readonly builder = viewChild.required(ContentBuilderComponent);
 
   openImport(): void {
-    this.dialog.open<ContentImportDialog, unknown, ContentEditorDocument>(ContentImportDialog, {
-      width: '720px', maxWidth: 'calc(100vw - 32px)', maxHeight: 'calc(100vh - 32px)'
-    }).afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(document => {
-      if (document) this.builder().importJson(document);
+    const target = this.builder().getInsertionTarget();
+    this.dialog.open<ContentImportDialog, unknown, ContentImportResult>(ContentImportDialog, {
+      data: { config: this.config }, width: '720px', maxWidth: 'calc(100vw - 32px)', maxHeight: 'calc(100vh - 32px)'
+    }).afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(result => {
+      if (result) this.builder().importJson(result.document, this.config, { mode: result.mode, target });
     });
   }
 
@@ -80,6 +85,7 @@ export class ContentBuilder {
       maxWidth: 'calc(100vw - 32px)',
       maxHeight: 'calc(100vh - 32px)',
       data: {
+        config: this.config,
         document: { version: 1, blocks: document.blocks.filter(block => !(block.type === 'paragraph' && isContentEditorBlockEmpty(block))) }
       }
     });

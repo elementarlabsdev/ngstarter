@@ -11,6 +11,9 @@
         <button ngsIconButton cdkDragHandle [ngsMenuTriggerFor]="blockMenu"
           #actionsTrigger="ngsMenuTrigger" aria-label="Move block"><ngs-icon name="fluent:re-order-dots-vertical-24-regular"/></button>
         <ngs-menu #blockMenu>
+          @if (rootBuilder.canConvertBlock(block.id)) {
+            <button ngs-menu-item [ngsMenuTriggerFor]="rootBuilder.conversionMenu()" [ngsMenuTriggerData]="{blockId: block.id}" [ngsMenuTriggerRestoreFocus]="false">Turn into</button>
+          }
           <button ngs-menu-item (click)="duplicateBlock(block.id)">Duplicate</button>
           <button ngs-menu-item (click)="deleteBlock(block.id)">Delete</button>
         </ngs-menu>

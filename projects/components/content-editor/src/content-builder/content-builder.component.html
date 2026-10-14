@@ -77,6 +77,12 @@
 <ngs-popover #settingsPopover="ngsPopover">
   <div class="px-2 py-0 w-72 settings-popover">
     <ngs-list>
+      @if (selectedBlocksModel.selected.length === 1 && canConvertBlock(selectedBlocksModel.selected[0])) {
+        <ngs-list-item [ngsMenuTriggerFor]="conversionMenu" [ngsMenuTriggerData]="{blockId: selectedBlocksModel.selected[0]}" [ngsMenuTriggerRestoreFocus]="false">
+          <ngs-icon name="fluent:arrow-swap-24-regular" ngsListItemIcon/>
+          <div ngsListItemTitle>Turn into</div>
+        </ngs-list-item>
+      }
       <ngs-list-item (click)="duplicateSelectedBlocks(settingsPopover)">
         <ngs-icon name="fluent:copy-24-regular" ngsListItemIcon/>
         <div ngsListItemTitle>Duplicate</div>
@@ -92,7 +98,7 @@
 <ngs-menu #suggestionsMenu="ngsMenu" classList="min-h-[70vh] max-h-[70vh]!" pushIntoViewport (closed)="onSuggestionsMenuClose($event)">
   <ng-template ngsMenuContent let-target="target">
     <div (click)="preventMenuClose($event)">
-    @for (suggestionItem of suggestions(); track $index; let first = $first) {
+    @for (suggestionItem of insertionSuggestions(); track $index; let first = $first) {
       @switch (suggestionItem.type) {
         @case ('heading') {
           <ngs-menu-heading>{{ suggestionItem.title }}</ngs-menu-heading>
@@ -118,5 +124,13 @@
       }
     }
     </div>
+  </ng-template>
+</ngs-menu>
+
+<ngs-menu #conversionMenu>
+  <ng-template ngsMenuContent let-blockId="blockId">
+    @for (type of conversionTypes; track type) {
+      <button ngs-menu-item (click)="convertBlock(blockId, type); settingsPopover.close()">{{type}}</button>
+    }
   </ng-template>
 </ngs-menu>

@@ -2,7 +2,7 @@
 <ngs-dialog-content>
   <div class="min-h-40 w-full min-w-0">
     @if (data.document.blocks.length > 0) {
-      <ngs-content-editor-renderer [content]="data.document"/>
+      <ngs-content-editor-renderer [content]="data.document" [config]="data.config ?? {}"/>
     } @else {
       <ngs-empty-state>Nothing to preview</ngs-empty-state>
     }
