@@ -1,4 +1,5 @@
 <h2 class="text-xl font-bold mt-8 mb-4">Datepicker</h2>
+<p>DateRangeInput supports <code>[(range)]="dateRange"</code> with <code>DateRange&lt;D&gt; | null</code>. Both calendar selection and typed start/end values update this model; <code>[range]</code> restores the visible inputs. Invalid typed dates are represented by the configured DateAdapter invalid value, so consumers can validate them through <code>DateAdapter.isValid</code>.</p>
 <div class="border border-border rounded-xl shadow-sm overflow-hidden my-6">
   <table ngs-table [dataSource]="datepickerProperties">
     <ng-container ngsColumnDef="name">

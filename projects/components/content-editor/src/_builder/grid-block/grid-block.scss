@@ -43,7 +43,7 @@
     ::ng-deep {
       .cdk-drop-list { min-height: --spacing(32); }
       .nested-controls {
-        width: --spacing(7);
+        width: var(--ngs-content-editor-control-size, --spacing(8));
         right: calc(100% + var(--ngs-content-editor-nested-controls-offset));
         padding: 0;
         flex-direction: column;

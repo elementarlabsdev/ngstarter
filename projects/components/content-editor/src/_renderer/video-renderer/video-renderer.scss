@@ -15,7 +15,7 @@
 
   figcaption {
     margin-top: --spacing(2);
-    color: var(--ngs-color-neutral-600);
+    color: var(--ngs-content-editor-muted-color, var(--ngs-color-on-surface-variant));
     font-size: var(--ngs-font-size-sm);
     text-align: center;
   }

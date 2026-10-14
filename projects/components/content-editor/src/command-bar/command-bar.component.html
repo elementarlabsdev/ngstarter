@@ -57,7 +57,7 @@
   </button>
 </div>
 
-<ngs-menu #alignMenu="ngsMenu">
+<ngs-menu #alignMenu="ngsMenu" [themeSource]="observedElement()">
   <button class="[&.is-active]:!bg-secondary-container"
           [class.is-active]="isTextAlignment('left')"
           ngs-menu-item
@@ -80,7 +80,7 @@
   </button>
 </ngs-menu>
 
-<ngs-menu #formatColorText="ngsMenu">
+<ngs-menu #formatColorText="ngsMenu" [themeSource]="observedElement()">
   <div class="px-4 py-3" (mousedown)="preventMenuClose($event)">
     <ngs-text-color (textColorChanged)="onTextColorChanged($event)"
                     (backgroundColorChanged)="onBackgroundColorChanged($event)"/>

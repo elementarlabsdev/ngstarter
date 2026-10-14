@@ -58,6 +58,7 @@ export class TableDataSource<T> extends _DataSource<T> {
     return this._data.value;
   }
   set data(data: T[]) {
+    this.invalidateFilterCache();
     this._data.next(data);
     if (!this._renderChangesSubscription) {
       this._filterData(data);
@@ -180,6 +181,15 @@ export class TableDataSource<T> extends _DataSource<T> {
    * @param data
    * @private
    */
+  /** Call after mutating a row in place; assigning data also invalidates the cache. */
+  invalidateFilterCache(row?: T): void {
+    if (row !== undefined && typeof row === 'object' && row !== null) {
+      this._quickFilterCache.delete(row as T & object);
+    } else {
+      this._quickFilterCache = new WeakMap<T & object, string>();
+    }
+  }
+
   private _getQuickFilterString(data: T): string {
     if (typeof data !== 'object' || data === null) {
       return String(data).toLowerCase();

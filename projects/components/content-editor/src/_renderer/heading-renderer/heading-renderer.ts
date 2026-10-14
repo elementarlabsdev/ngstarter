@@ -22,6 +22,9 @@ import { getTextAlignment } from '../renderer-utils';
     '[class.level-1]': 'level() === 1',
     '[class.level-2]': 'level() === 2',
     '[class.level-3]': 'level() === 3',
+    '[class.level-6]': 'level() === 6',
+    '[class.level-5]': 'level() === 5',
+    '[class.level-4]': 'level() === 4',
   },
 })
 export class ContentEditorHeadingRenderer implements ContentEditorBlockRendererInputSignals<
@@ -39,7 +42,7 @@ export class ContentEditorHeadingRenderer implements ContentEditorBlockRendererI
   protected readonly runs = computed(() => this.content());
   protected readonly level = computed(() => {
     const level = this.settings()?.level;
-    return level === 1 || level === 2 || level === 3 ? level : 2;
+    return typeof level === 'number' && Number.isInteger(level) && level >= 1 && level <= 6 ? level : 2;
   });
   protected readonly alignment = computed(() => getTextAlignment(this.props()));
 }

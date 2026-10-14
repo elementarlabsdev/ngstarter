@@ -123,6 +123,37 @@ describe('Content editor user workflows in Chromium', () => {
     builder.editor.undo(); await fixture.whenStable(); expect(builder.getData()).toEqual(before);
   });
 
+  it('filters the shared block menu and inserts with Enter into the triggering grid cell', async () => {
+    const fixture = await create(); const builder = fixture.componentInstance;
+    const nested = fixture.debugElement.queryAll(By.directive(ContentEditorNestedBlocks)).find(item => item.componentInstance.scope().cellId === 'left')!;
+    const add = nested.nativeElement.querySelector('[aria-label="Add block"]') as HTMLElement;
+    add.focus(); await userEvent.keyboard('{Enter}'); await fixture.whenStable();
+    const search = document.querySelector<HTMLInputElement>('input[aria-label="Search blocks"]')!;
+    await userEvent.fill(search, 'callout'); await fixture.whenStable();
+    expect([...document.querySelectorAll('button[ngs-menu-item]')].map(item => item.textContent)).toHaveLength(1);
+    await userEvent.keyboard('{ArrowDown}'); await fixture.whenStable();
+    expect(document.activeElement?.matches('button[ngs-menu-item]')).toBe(true);
+    await userEvent.keyboard('{Enter}'); await fixture.whenStable();
+    expect(contentEditorCollection(builder.getData().blocks, { parentId: 'grid', cellId: 'left' }).map(block => block.type)).toEqual(['paragraph', 'callout']);
+    expect(builder.menuQuery()).toBe('');
+    builder.editor.undo(); await fixture.whenStable();
+    expect(contentEditorCollection(builder.getData().blocks, { parentId: 'grid', cellId: 'left' })).toHaveLength(1);
+  });
+
+  it('inherits local toolbar theme tokens and follows changes while the overlay is open', async () => {
+    const fixture = await create();
+    fixture.nativeElement.style.setProperty('--ngs-content-editor-toolbar-bg', '#112233');
+    fixture.nativeElement.style.setProperty('--ngs-content-editor-toolbar-color', '#ffffff');
+    selectedRegion(fixture); await fixture.whenStable();
+    await expect.poll(() => document.querySelector('ngs-command-bar')).toBeTruthy();
+    const toolbar = document.querySelector('ngs-command-bar') as HTMLElement;
+    expect(getComputedStyle(toolbar).backgroundColor).toBe('rgb(17, 34, 51)');
+    fixture.nativeElement.style.setProperty('--ngs-content-editor-toolbar-bg', '#eeeeee');
+    fixture.nativeElement.style.setProperty('--ngs-content-editor-toolbar-color', '#111111');
+    await expect.poll(() => getComputedStyle(toolbar).backgroundColor).toBe('rgb(238, 238, 238)');
+    expect(getComputedStyle(toolbar).color).toBe('rgb(17, 17, 17)');
+  });
+
   it('deletes a group in one history step', async () => {
     const fixture = await create(); const before = fixture.componentInstance.getData();
     const store = fixture.debugElement.injector.get(ContentBuilderStore);

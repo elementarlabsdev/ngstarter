@@ -1,5 +1,5 @@
 import { InjectionToken, makeEnvironmentProviders, EnvironmentProviders } from '@angular/core';
-import { DataViewColumnDef } from './types';
+import { DataViewColumnDef, DataViewViewStorage } from './types';
 
 export interface DataViewConfig {
   embedded?: boolean;
@@ -17,6 +17,8 @@ export interface DataViewConfig {
   minColumnWidth?: number;
   defaultColDef?: Partial<DataViewColumnDef>;
   autoHeight?: boolean;
+  withSavedViews?: boolean;
+  viewStorage?: DataViewViewStorage;
 }
 
 export const DATA_VIEW_CONFIG = new InjectionToken<DataViewConfig>('DATA_VIEW_CONFIG');

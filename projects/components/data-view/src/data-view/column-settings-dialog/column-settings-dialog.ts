@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { DIALOG_DATA, DialogRef, DialogTitle, DialogContent, DialogActions } from '@ngstarter-ui/components/dialog';
 import { Checkbox } from '@ngstarter-ui/components/checkbox';
 import { Button } from '@ngstarter-ui/components/button';
@@ -42,6 +42,14 @@ export class DataViewColumnSettingsDialog {
     .filter(c => c.withColumnSettings !== false)
     .map(c => ({ ...c }))
   );
+  readonly canApply = computed(() => this.columns().some(c => c.visible !== false)
+    || this._data.columns.some(c => c.withColumnSettings === false && c.visible !== false));
+
+  move(index: number, offset: number): void {
+    const updated = [...this.columns()]; const next = index + offset;
+    if (next < 0 || next >= updated.length) return;
+    moveItemInArray(updated, index, next); this.columns.set(updated);
+  }
 
   drop(event: CdkDragDrop<DataViewColumnDef[]>) {
     const updated = [...this.columns()];
@@ -66,6 +74,7 @@ export class DataViewColumnSettingsDialog {
   }
 
   apply() {
+    if (!this.canApply()) return;
     this._dialogRef.close({ columns: this.columns() });
   }
 

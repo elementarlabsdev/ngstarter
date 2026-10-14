@@ -43,6 +43,9 @@ import { CursorController } from '../../utils/cursor-controller';
     '[class.level-1]': 'settings().level === 1',
     '[class.level-2]': 'settings().level === 2',
     '[class.level-3]': 'settings().level === 3',
+    '[class.level-6]': 'settings().level === 6',
+    '[class.level-5]': 'settings().level === 5',
+    '[class.level-4]': 'settings().level === 4',
   },
   changeDetection: ChangeDetectionStrategy.OnPush
 })

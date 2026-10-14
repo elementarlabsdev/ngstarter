@@ -175,7 +175,8 @@ function sortDocsNavItems(items: readonly DocsNavItem[], preserveSections = fals
     // SplashScreen,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
-  templateUrl: './app.html'
+  templateUrl: './app.html',
+  styleUrl: './app.scss'
 })
 export class App implements OnInit {
   private _analyticsService = inject(AnalyticsService);
@@ -1179,6 +1180,7 @@ export class App implements OnInit {
       type: 'group',
       name: 'Data View',
       children: [
+        { key: uuid(), type: 'link', name: 'Workflows', link: '/libraries/data-view/workflows' },
         {
           key: uuid(),
           type: 'link',

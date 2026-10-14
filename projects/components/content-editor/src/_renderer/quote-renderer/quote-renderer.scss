@@ -10,7 +10,7 @@
   }
 
   .caption-html {
-    color: var(--ngs-color-neutral-600);
+    color: var(--ngs-content-editor-muted-color, var(--ngs-color-on-surface-variant));
     display: block;
     font-size: var(--ngs-font-size-sm);
   }

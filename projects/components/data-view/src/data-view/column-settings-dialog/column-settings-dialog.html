@@ -5,7 +5,7 @@
       <div class="flex items-center gap-1 px-1 py-2 bg-surface-container rounded-lg cursor-default"
            cdkDrag
            cdkDragLockAxis="y"
-           cdkDragBoundary="columns">
+           cdkDragBoundary=".columns">
         <div class="cursor-move text-[var(--ngs-text-secondary)] flex items-center" cdkDragHandle>
           <ngs-icon name="fluent:re-order-dots-vertical-24-regular"/>
         </div>
@@ -14,8 +14,11 @@
           {{ col.name }}
         </ngs-checkbox>
         <div class="grow"></div>
+        <button ngsIconButton type="button" [attr.aria-label]="'Move ' + col.name + ' up'" [disabled]="i === 0" (click)="move(i, -1)"><ngs-icon name="fluent:arrow-up-20-regular"/></button>
+        <button ngsIconButton type="button" [attr.aria-label]="'Move ' + col.name + ' down'" [disabled]="i === columns().length - 1" (click)="move(i, 1)"><ngs-icon name="fluent:arrow-down-20-regular"/></button>
         <button ngsIconButton
                 class="shrink-0"
+                [attr.aria-label]="'Pin ' + col.name"
                 [ngsMenuTriggerFor]="pinMenu"
                 [ngsMenuTriggerData]="{ col: col, index: i }">
           <ngs-icon [name]="col.pinned ? (col.pinAlign === 'end' ? 'fluent:pin-off-24-filled' : 'fluent:pin-24-filled') : 'fluent:pin-24-regular'"
@@ -27,25 +30,26 @@
 </div>
 
 <ngs-menu #pinMenu="ngsMenu">
-  <ng-template ngsMenuContent let-col="col">
+  <ng-template ngsMenuContent let-col="col" let-index="index">
     <button ngs-menu-item
             [selected]="!col.pinned"
-            (click)="pinColumn(col, null)">
+            (click)="pinColumn(index, null)">
       No Pin
     </button>
     <button ngs-menu-item
             [selected]="col.pinned && col.pinAlign === 'start'"
-            (click)="pinColumn(col, 'start')">
+            (click)="pinColumn(index, 'start')">
       Pin Left
     </button>
     <button ngs-menu-item
             [selected]="col.pinned && col.pinAlign === 'end'"
-            (click)="pinColumn(col, 'end')">
+            (click)="pinColumn(index, 'end')">
       Pin Right
     </button>
   </ng-template>
 </ngs-menu>
+@if (!canApply()) { <p class="px-6 text-sm text-error" role="alert">Keep at least one column visible.</p> }
 <div ngsDialogActions align="end">
   <button ngsButton (click)="cancel()">Cancel</button>
-  <button ngsButton="filled" (click)="apply()">Apply</button>
+  <button ngsButton="filled" [disabled]="!canApply()" (click)="apply()">Apply</button>
 </div>

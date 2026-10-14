@@ -1,0 +1,27 @@
+<app-page>
+  <h1 appPageTitle>Data View workflows</h1>
+  <div appPageContent>
+    <p class="mb-6 text-on-surface-variant">Try typed column filters, named views, stable row selection and keyboard navigation across 1,000 records. Enable server mode to test request cancellation, background refresh and error recovery.</p>
+    <ngs-toolbar class="mb-3" aria-label="Records toolbar">
+      <ngs-toolbar-item><ngs-form-field class="w-64"><input ngsInput placeholder="Search records…" aria-label="Search records" [(ngModel)]="search"></ngs-form-field></ngs-toolbar-item>
+      <ngs-toolbar-item><ngs-slide-toggle [(ngModel)]="serverSide">Server mode</ngs-slide-toggle></ngs-toolbar-item>
+      <ngs-toolbar-spacer/>
+      <ngs-toolbar-item><button ngsButton="outlined" type="button" (click)="replaceRecords()">Refresh records</button></ngs-toolbar-item>
+      @if (serverSide()) { <ngs-toolbar-item><button ngsButton="outlined" type="button" (click)="simulateError()">Simulate error</button></ngs-toolbar-item> }
+    </ngs-toolbar>
+    <ngs-data-view [data]="rows()" [columnDefs]="columns" [getRowId]="rowId" [(search)]="search"
+                   [rowModelType]="serverSide() ? 'serverSide' : 'clientSide'" [datasource]="serverSide() ? datasource : null"
+                   withSelection withPagination withColumnSettings withSavedViews hoverRows
+                   [pageSize]="20" [pageSizeOptions]="[10,20,50]" selectionScope="page" [savedViews]="initialViews"
+                   [viewStorageKey]="serverSide() ? 'docs-dataview-server-views' : 'docs-dataview-local-views'"
+                   ariaLabel="Example records" (selectionStateChanged)="selection.set($event)" (rowActivated)="activated.set($event.name)"/>
+    <div class="flex flex-wrap items-center gap-4 mt-3 text-sm text-on-surface-variant" role="status" aria-live="polite">
+      <span>{{ selection()?.rows?.length ?? 0 }} known rows selected</span>
+      @if (selection()?.allMatching) { <span>All matching server records selected, {{ selection()?.excludedRowIds?.length }} excluded</span> }
+      @if (activated()) { <span>Opened {{ activated() }}</span> }
+    </div>
+    <p class="my-6 text-sm text-on-surface-variant">Focus the table and use <ngs-kbd>↑ ↓ ← →</ngs-kbd> to navigate, <ngs-kbd>Space</ngs-kbd> to select, <ngs-kbd>Shift + ↓</ngs-kbd> to extend selection, and <ngs-kbd>Ctrl + End</ngs-kbd> to jump to the last row. Resize handles and sorting headers also support the keyboard.</p>
+    <ngs-code-highlighter [code]="usage" language="typescript" showCopyButton/>
+    <p class="mt-4">Use <code>selectionScope="page"</code>, <code>"filtered"</code> or <code>"all"</code> to define the header checkbox scope. Server-wide selection requires stable <code>getRowId</code>; the event contains query state and exclusions, while <code>rows</code> includes only known records.</p>
+  </div>
+</app-page>

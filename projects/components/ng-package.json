@@ -38,6 +38,11 @@
   ],
   "assets": [
     {
+      "glob": "API.md",
+      "input": "data-view",
+      "output": "data-view"
+    },
+    {
       "glob": "document.schema.json",
       "input": "content-editor",
       "output": "content-editor"

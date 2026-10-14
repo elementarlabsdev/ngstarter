@@ -122,6 +122,37 @@
   --ngs-color-on-orange-container: #000000;
   --ngs-color-green-500: #22c55e;
   --ngs-density-scale: -4;
+  // Semantic inverse surfaces follow both theme presets and color schemes.
+  --ngs-color-inverse-surface: var(--ngs-color-on-surface);
+  --ngs-color-inverse-on-surface: var(--ngs-color-surface);
+
+  // Content Editor: one visual contract shared by editing, preview and overlays.
+  --ngs-content-editor-content-width: 704px;
+  --ngs-content-editor-font-size: var(--ngs-font-size-md);
+  --ngs-content-editor-line-height: 1.6;
+  --ngs-content-editor-block-padding: --spacing(3);
+  --ngs-content-editor-block-radius: var(--ngs-control-radius);
+  --ngs-content-editor-muted-color: var(--ngs-color-on-surface-variant);
+  --ngs-content-editor-placeholder-color: var(--ngs-color-on-surface-variant);
+  --ngs-content-editor-hover-bg: var(--ngs-state-hover-bg);
+  --ngs-content-editor-selected-bg: var(--ngs-color-primary-container);
+  --ngs-content-editor-selected-color: var(--ngs-color-on-primary-container);
+  --ngs-content-editor-control-size: var(--ngs-control-height-sm);
+  --ngs-content-editor-toolbar-bg: var(--ngs-color-inverse-surface);
+  --ngs-content-editor-toolbar-color: var(--ngs-color-inverse-on-surface);
+  --ngs-content-editor-toolbar-radius: var(--ngs-control-radius);
+  --ngs-content-editor-surface: var(--ngs-color-surface);
+  --ngs-content-editor-border: var(--ngs-color-outline-variant);
+  --ngs-content-editor-field-border: var(--ngs-color-outline);
+  --ngs-content-editor-heading-weight: 650;
+  --ngs-content-editor-heading-line-height: 1.2;
+  --ngs-content-editor-heading-1-size: clamp(1.75rem, 1.4rem + 1vw, 2.5rem);
+  --ngs-content-editor-heading-2-size: clamp(1.5rem, 1.3rem + 0.7vw, 2rem);
+  --ngs-content-editor-heading-3-size: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
+  --ngs-content-editor-heading-4-size: 1.25rem;
+  --ngs-content-editor-heading-5-size: 1.125rem;
+  --ngs-content-editor-heading-6-size: 1rem;
+
   --ngs-control-height-sm: calc(2.25rem + var(--ngs-density-scale) * 1px);
   --ngs-control-height-md: calc(2.75rem + var(--ngs-density-scale) * 1px);
   --ngs-control-height-lg: calc(3.25rem + var(--ngs-density-scale) * 1px);
@@ -141,7 +172,7 @@
   --ngs-button-tonal-bg: var(--ngs-color-primary-container);
   --ngs-button-tonal-color: var(--ngs-color-on-primary-container);
   --ngs-button-outlined-border: var(--ngs-color-strong);
-  --ngs-button-outlined-color: #29364e;
+  --ngs-button-outlined-color: var(--ngs-color-on-surface);
   --ngs-button-text-color: var(--ngs-color-primary);
 
   --ngs-field-color: var(--ngs-color-primary);

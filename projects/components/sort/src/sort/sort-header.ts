@@ -51,6 +51,12 @@ export class SortHeader implements OnInit, OnDestroy {
     }
   }
 
+  _handleKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault(); event.stopPropagation(); this._handleClick();
+    }
+  }
+
   _getNextSortDirection(): string {
     if (!this._sort || this._isDisabled()) {
       return '';

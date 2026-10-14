@@ -5,7 +5,7 @@
 
   .content-html {
     margin: 0;
-    line-height: var(--leading-normal);
+    line-height: var(--ngs-content-editor-line-height, 1.6);
   }
 
   .align-left {

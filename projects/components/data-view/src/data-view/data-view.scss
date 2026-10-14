@@ -64,6 +64,17 @@
   }
 
   .grid-root {
+    &:focus-visible {
+      outline: 2px solid var(--ngs-color-primary);
+      outline-offset: -2px;
+    }
+    &:focus-within {
+      .ngs-data-view-column-settings-btn { visibility: visible; opacity: 1; pointer-events: auto; }
+      .cell.is-active {
+        outline: 2px solid var(--ngs-color-primary);
+        outline-offset: -2px;
+      }
+    }
     background-color: var(--ngs-data-view-body-bg);
     border: var(--ngs-data-view-root-border);
     border-radius: var(--ngs-data-view-radius);
@@ -89,7 +100,10 @@
       .ngs-data-view-column-settings-btn {
         z-index: 10;
         margin-inline-end: calc(--spacing(2.5) * -1);
-        display: none;
+        display: inline-flex;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
         transition: opacity 0.2s, color 0.2s;
 
         &:not(:hover) {
@@ -101,14 +115,21 @@
 
       &:hover {
         .ngs-data-view-column-settings-btn {
-          display: inline-flex;
+          visibility: visible; opacity: 1; pointer-events: auto;
         }
+      }
+      &:focus-within {
+        .ngs-data-view-column-settings-btn { visibility: visible; opacity: 1; pointer-events: auto; }
       }
 
       .ngs-data-view-column-settings-btn.is-menu-open {
-        display: inline-flex;
+        visibility: visible; opacity: 1; pointer-events: auto;
       }
     }
+  }
+
+  ngs-form-field.view-selector {
+    --ngs-form-field-width: --spacing(52);
   }
 
   ::ng-deep {

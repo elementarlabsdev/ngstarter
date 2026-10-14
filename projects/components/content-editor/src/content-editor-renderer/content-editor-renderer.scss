@@ -3,6 +3,8 @@
 :host {
   --ngs-content-editor-renderer-block-gap: --spacing(4);
 
+  font-size: var(--ngs-content-editor-font-size, var(--ngs-font-size-md));
+  line-height: var(--ngs-content-editor-line-height, 1.6);
   display: flex;
   flex-direction: column;
   gap: var(--ngs-content-editor-renderer-block-gap);

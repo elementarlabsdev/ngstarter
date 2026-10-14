@@ -3,9 +3,9 @@
 :host {
   display: block;
   min-width: 0;
-  background: var(--ngs-color-surface);
-  border: 1px solid var(--ngs-color-outline-variant);
-  border-radius: var(--ngs-radius-lg);
+  background: var(--ngs-content-editor-surface, var(--ngs-color-surface));
+  border: 1px solid var(--ngs-content-editor-border, var(--ngs-color-outline-variant));
+  border-radius: var(--ngs-control-radius);
 
   button[hidden] { display: none; }
 
@@ -18,11 +18,11 @@
   .preview-action {
     position: absolute;
     --ngs-button-height: --spacing(8);
-    background: var(--ngs-color-surface);
+    background: var(--ngs-content-editor-surface, var(--ngs-color-surface));
     color: var(--ngs-color-on-surface);
     box-shadow: var(--ngs-shadow-sm);
     border-radius: var(--ngs-radius-full);
-    &.image-actions { border-radius: var(--ngs-radius-lg); }
+    &.image-actions { border-radius: var(--ngs-control-radius); }
   }
   .image-counter {
     background: var(--ngs-color-black);
@@ -42,7 +42,7 @@
     --ngs-button-padding: --spacing(3);
     --ngs-button-content-gap: --spacing(1);
     width: --spacing(36);
-    border: 1px dashed var(--ngs-color-outline-variant);
+    border: 1px dashed var(--ngs-content-editor-border, var(--ngs-color-outline-variant));
     ::ng-deep {
       .icon { left: auto; right: auto; }
       .content { line-height: normal; }
@@ -50,7 +50,7 @@
   }
   ngs-form-field {
     --ngs-form-field-border-width: 1px;
-    --ngs-form-field-border-color: var(--ngs-color-outline-variant);
+    --ngs-form-field-border-color: var(--ngs-content-editor-field-border, var(--ngs-color-outline));
     --ngs-form-field-container-min-height: --spacing(9);
     --ngs-form-field-input-height: --spacing(9);
   }

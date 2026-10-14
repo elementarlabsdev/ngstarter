@@ -1,7 +1,9 @@
 <div class="ngs-sort-header-container"
      [class.ngs-sort-header-sorted]="_isSorted()">
   <div class="ngs-sort-header-button relative"
-          [attr.aria-label]="sortActionDescription()"
+          role="button" [attr.tabindex]="_isDisabled() ? -1 : 0" [attr.aria-disabled]="_isDisabled()"
+          [attr.aria-label]="sortActionDescription() || 'Sort by ' + id()"
+          (keydown)="_handleKeydown($event)"
           (click)="_handleClick()">
     <ng-content />
     <div class="ngs-sort-header-arrow"

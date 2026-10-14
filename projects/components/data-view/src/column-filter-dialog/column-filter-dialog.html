@@ -1,0 +1,46 @@
+<h3 ngsDialogTitle>Filter {{ column.name }}</h3>
+<form ngsDialogContent #filterForm="ngForm" (ngSubmit)="apply()" class="flex flex-col gap-4">
+  @if (error()) { <ngs-alert variant="negative" role="alert">{{ error() }}</ngs-alert> }
+  @if (invalidDate()) { <ngs-alert variant="negative" role="alert">Enter a valid calendar date.</ngs-alert> }
+  @switch (type) {
+    @case ('text') {
+      <ngs-form-field><ngs-label>Condition</ngs-label><ngs-select name="condition" [(ngModel)]="operator">
+        @for (item of textOperators; track item) { <ngs-option [value]="item.value">{{ item.label }}</ngs-option> }
+      </ngs-select></ngs-form-field>
+      <ngs-form-field><ngs-label>Text</ngs-label><input ngsInput name="text" [(ngModel)]="text"></ngs-form-field>
+    }
+    @case ('number') {
+      <ngs-form-field><ngs-label>Condition</ngs-label><ngs-select name="condition" [(ngModel)]="operator">
+        @for (item of numberOperators; track item) { <ngs-option [value]="item.value">{{ item.label }}</ngs-option> }
+      </ngs-select></ngs-form-field>
+      <ngs-form-field><ngs-label>{{ operator() === 'between' ? 'Minimum' : 'Value' }}</ngs-label><ngs-number-input name="value" [(ngModel)]="value"/></ngs-form-field>
+      @if (operator() === 'between') { <ngs-form-field><ngs-label>Maximum</ngs-label><ngs-number-input name="to" [(ngModel)]="to"/></ngs-form-field> }
+    }
+    @case ('date') {
+      <ngs-form-field>
+        <ngs-label>Date range</ngs-label>
+        <ngs-date-range-input [rangePicker]="picker" [(range)]="dateRange">
+          <input ngsStartDate placeholder="Start date" aria-label="Start date">
+          <input ngsEndDate placeholder="End date" aria-label="End date">
+        </ngs-date-range-input>
+        <ngs-datepicker-toggle ngsIconButtonSuffix [for]="picker"/>
+        <ngs-date-range-picker #picker/>
+      </ngs-form-field>
+    }
+    @case ('enum') {
+      <ngs-form-field><ngs-label>Values</ngs-label><ngs-select multiple name="enumValues" [(ngModel)]="enumValues">
+        @for (option of options; track option.value) { <ngs-option [value]="option.value">{{ option.label }}</ngs-option> }
+      </ngs-select></ngs-form-field>
+    }
+    @case ('boolean') {
+      <ngs-form-field><ngs-label>Value</ngs-label><ngs-select name="booleanValue" [(ngModel)]="booleanValue">
+        <ngs-option [value]="null">Any</ngs-option><ngs-option [value]="true">Yes</ngs-option><ngs-option [value]="false">No</ngs-option>
+      </ngs-select></ngs-form-field>
+    }
+  }
+</form>
+<div ngsDialogActions align="end">
+  <button ngsButton type="button" (click)="clear()">Clear</button>
+  <button ngsButton type="button" (click)="cancel()">Cancel</button>
+  <button ngsButton="filled" type="button" [disabled]="!!filterForm.invalid || invalidDate()" (click)="apply()">Apply filter</button>
+</div>

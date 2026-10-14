@@ -1,7 +1,9 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-content-editor-builder-content-width: 704px;
+  --ngs-content-editor-builder-content-width: var(--ngs-content-editor-content-width, 704px);
+  font-size: var(--ngs-content-editor-font-size, var(--ngs-font-size-md));
+  line-height: var(--ngs-content-editor-line-height, 1.6);
   outline: none;
 
   &.is-block-dragging {
@@ -34,7 +36,7 @@
 
     &:not(:has(.block-content.is-selected)):hover {
       .block-content {
-        background: var(--ngs-color-neutral-50);
+        background: var(--ngs-content-editor-hover-bg, var(--ngs-state-hover-bg));
       }
     }
   }
@@ -42,7 +44,8 @@
   &:not(.is-block-dragging) {
     .block {
       &:hover,
-      &.is-active {
+      &.is-active,
+      &:focus-within {
         .block-controls {
           opacity: 1;
         }
@@ -54,16 +57,18 @@
     position: relative;
     flex-grow: 1;
     min-width: 0;
-    padding: --spacing(3);
+    padding: var(--ngs-content-editor-block-padding, --spacing(3));
+    border-radius: var(--ngs-content-editor-block-radius, var(--ngs-control-radius));
 
     &.is-selected {
-      background: var(--ngs-color-primary-100);
+      background: var(--ngs-content-editor-selected-bg, var(--ngs-color-primary-container));
+      color: var(--ngs-content-editor-selected-color, var(--ngs-color-on-primary-container));
     }
   }
 
   ::ng-deep {
     .selection-area {
-      background: var(--ngs-color-primary-100);
+      background: var(--ngs-content-editor-selected-bg, var(--ngs-color-primary-container));
       opacity: 0.4;
       border: 1px solid var(--ngs-color-primary);
       border-radius: var(--ngs-radius-sm);
@@ -86,7 +91,7 @@
         content: attr(data-empty-placeholder);
         display: block;
         height: 0;
-        color: var(--ngs-color-neutral-500);
+        color: var(--ngs-content-editor-placeholder-color, var(--ngs-color-on-surface-variant));
         pointer-events: none;
       }
     }
@@ -105,8 +110,8 @@
     left: 0;
     display: flex;
     align-items: center;
-    color: var(--ngs-color-neutral-500);
-    width: --spacing(18);
+    color: var(--ngs-content-editor-muted-color, var(--ngs-color-on-surface-variant));
+    width: calc(2 * var(--ngs-content-editor-control-size, --spacing(8)) + --spacing(4));
     padding: 0 --spacing(2);
     opacity: 0;
     flex: none;
@@ -122,8 +127,8 @@
 
   .block-control {
     cursor: pointer;
-    width: --spacing(7);
-    height: --spacing(7);
+    width: var(--ngs-content-editor-control-size, --spacing(8));
+    height: var(--ngs-content-editor-control-size, --spacing(8));
     flex: none;
     border-radius: var(--ngs-radius-lg);
     display: inline-flex;
@@ -135,12 +140,15 @@
       color: var(--ngs-color-on-surface);
     }
 
+    &:focus-visible { outline: 2px solid var(--ngs-state-focus-ring); outline-offset: 2px; }
     &-drag {
       button {
         cursor: grab;
       }
     }
   }
+
+  @media (hover: none) { .block-controls { opacity: 1; } }
 
   .drag-placeholder {
     height: --spacing(8);
@@ -162,6 +170,15 @@
   }
 
   ::ng-deep {
+    ngs-form-field {
+      --ngs-form-field-border-radius: var(--ngs-control-radius);
+      --ngs-form-field-border-color: var(--ngs-content-editor-field-border, var(--ngs-color-outline));
+    }
+    ngs-upload-area {
+      --ngs-upload-area-color: var(--ngs-content-editor-muted-color, var(--ngs-color-on-surface-variant));
+      --ngs-upload-area-border: 1px solid var(--ngs-content-editor-field-border, var(--ngs-color-outline));
+      --ngs-upload-area-border-radius: var(--ngs-control-radius);
+    }
     code {
       color: var(--ngs-color-primary);
     }
@@ -172,13 +189,13 @@
   overflow: hidden;
   display: flex;
   align-items: center;
-  color: var(--ngs-color-neutral-500);
-  width: --spacing(18);
+  color: var(--ngs-content-editor-muted-color, var(--ngs-color-on-surface-variant));
+  width: calc(2 * var(--ngs-content-editor-control-size, --spacing(8)) + --spacing(4));
   padding: 0 --spacing(2);
 
   .block-control {
-    width: --spacing(7);
-    height: --spacing(7);
+    width: var(--ngs-content-editor-control-size, --spacing(8));
+    height: var(--ngs-content-editor-control-size, --spacing(8));
     flex: none;
     border-radius: var(--ngs-radius-lg);
     display: inline-flex;

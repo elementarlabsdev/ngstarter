@@ -41,6 +41,14 @@ export class Api {
   readonly displayedColumns = ['name', 'type', 'default'];
 
   readonly properties: ApiProperty[] = [
+    { name: 'getRowId', description: 'Stable row identity across immutable refresh and server pages.', type: '((row: T) => string | number) | null', default: 'null' },
+    { name: 'selectionScope', description: 'Scope of the header checkbox and selectAll(): page, filtered query, or entire dataset.', type: "'page' | 'filtered' | 'all'", default: "'filtered'" },
+    { name: 'columnFilters', description: 'Two-way typed column filter model, combined with quick search.', type: 'DataViewFilterModel', default: '{}' },
+    { name: 'sortState', description: 'Two-way sort state retained across empty and loading views.', type: 'Sort', default: "{ active: '', direction: '' }" },
+    { name: 'withSavedViews', description: 'Shows named views selector and save/update/rename/delete actions.', type: 'boolean', default: 'false' },
+    { name: 'savedViews', description: 'Two-way collection of named, versioned view states.', type: 'DataViewSavedView[]', default: '[]' },
+    { name: 'viewStorageKey', description: 'Opt-in storage key scoped to a user and dataset.', type: 'string | null', default: 'null' },
+    { name: 'ariaLabel', description: 'Accessible name of the data grid.', type: 'string', default: "'Data table'" },
     {
       name: 'columnDefs',
       description: 'Column definitions that describe visible fields, headers, sizing, sorting, pinning, and renderers.',
@@ -242,6 +250,11 @@ export class Api {
   ];
 
   readonly outputs: ApiProperty[] = [
+    { name: 'selectionStateChanged', description: 'Selection IDs, query and exclusions; includes unloaded server selection.', type: 'DataViewSelectionState<T>', default: 'Selection updates' },
+    { name: 'stateChanged', description: 'Serializable column order, visibility, widths, pinning, sort, search, filters and page size.', type: 'DataViewViewState', default: 'State updates' },
+    { name: 'viewApplied', description: 'Applied named view, or null when reset to initial state.', type: 'DataViewSavedView | null', default: 'View applied' },
+    { name: 'rowActivated', description: 'Active row opened through Enter while the grid is focused.', type: 'T', default: 'Keyboard activation' },
+    { name: 'loadError', description: 'Original datasource failure; error() supplies the visible message.', type: 'unknown', default: 'Request failure' },
     {
       name: 'rowSelectionChanged',
       description: 'Emits when a row checkbox changes or a row is selected by click.',
@@ -281,6 +294,7 @@ export class Api {
   ];
 
   readonly columnProperties: ApiProperty[] = [
+    { name: 'filter', description: 'Header filter type and enum options.', type: 'DataViewColumnFilterConfig', default: 'undefined' },
     {
       name: 'name',
       description: 'Human-readable column header.',
@@ -325,7 +339,7 @@ export class Api {
     },
     {
       name: 'valueGetter',
-      description: 'Transforms the cell value before sorting or rendering.',
+      description: 'Transforms the field value for client sorting. Custom renderers receive the original fieldData.',
       type: '(value: any) => any',
       default: '-'
     },
@@ -374,10 +388,12 @@ export class Api {
   ];
 
   readonly datasourceProperties: ApiProperty[] = [
+    { name: 'signal', description: 'AbortSignal cancelled when requests are replaced or the component is destroyed.', type: 'AbortSignal', default: 'Per request' },
+    { name: 'columnFilters', description: 'Same typed filter contract as client filtering.', type: 'DataViewFilterModel', default: '{}' },
     {
       name: 'DataViewDatasource.getItems(params)',
       description: 'Called by Data View whenever server-side rows need to be loaded.',
-      type: '(params: DataViewGetRowsParams) => void',
+      type: '(params: DataViewGetRowsParams) => void | (() => void) | { unsubscribe(): void }',
       default: 'Required for serverSide'
     },
     {
@@ -411,14 +427,19 @@ export class Api {
       default: 'Call on success'
     },
     {
-      name: 'failCallback()',
-      description: 'Ends the current loading cycle when a request fails.',
-      type: '() => void',
+      name: 'failCallback(error?)',
+      description: 'Displays a failure alert with Retry and emits loadError.',
+      type: '(error?: unknown) => void',
       default: 'Call on failure'
     }
   ];
 
   readonly publicApis: ApiProperty[] = [
+    { name: 'api.getSelection()', description: 'Returns explicit selection or a server query with exclusions.', type: '() => DataViewSelectionState<T>', default: 'Template reference API' },
+    { name: 'api.setColumnFilter(field, filter) / api.clearFilters()', description: 'Apply/remove one typed condition, or clear all conditions and quick search.', type: 'DataViewColumnFilter | null', default: 'Template reference API' },
+    { name: 'api.getState() / api.setState(state)', description: 'Read and restore complete versioned view state.', type: 'DataViewViewState', default: 'Template reference API' },
+    { name: 'api.saveView(name, id?) / api.applyView(id) / api.renameView(id, name) / api.deleteView(id)', description: 'Manage named view states; null applies default view.', type: 'DataViewSavedView', default: 'Template reference API' },
+    { name: 'error() / loadStatus() / refreshing() / viewStorageError() / activeViewId()', description: 'Reactive request, persistence and active view status.', type: 'Signals', default: 'Component reference' },
     {
       name: 'api.search(value)',
       description: 'Applies a search value to the underlying data source.',
@@ -426,8 +447,8 @@ export class Api {
       default: 'Template reference API'
     },
     {
-      name: 'api.selectAll() / api.unselectAll() / api.selectOne(row) / api.isSelected(row) / api.hasSelected()',
-      description: 'Selects all rendered rows, clears selection, selects one row, checks a row, or checks whether any row is selected.',
+      name: 'api.selectAll(scope?) / api.unselectAll() / api.selectOne(row) / api.isSelected(row) / api.hasSelected()',
+      description: 'Selects the configured or supplied scope, clears selection, selects one row, checks a row, or checks whether any row is selected.',
       type: '() => void / (row: T) => void / (row: T) => boolean / () => boolean',
       default: 'Template reference API'
     },

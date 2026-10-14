@@ -7,7 +7,8 @@
 @plugin '@tailwindcss/typography';
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme {
+// Resolve semantic utilities at the consuming element so nested themes inherit correctly.
+@theme inline {
   /* --- SYSTEM COLORS --- */
   --color-primary: var(--ngs-color-primary);
   --color-on-primary: var(--ngs-color-on-primary);

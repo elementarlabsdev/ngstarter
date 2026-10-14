@@ -15,6 +15,21 @@ export class ContentEditorBlockFormat {
   readonly modelExample = "type Document = { version: 1; blocks: Block[] };\ntype Block<T = unknown> = { id: string; type: string; content: T;\n  attrs?: { settings?: Record<string, unknown>; props?: Property[];\n    [key: string]: unknown } };\ntype Property = { name: string; value: string };\ntype TextRun = { type: 'text'; text: string; marks: Mark[] };\ntype Mark = { type: string;\n  attrs?: Record<string, string | number | boolean | null> };";
   readonly importExample = "import { ContentEditorImporter, contentEditorFromJson, contentEditorFromHtml,\n  ContentEditorImportError } from '@ngstarter-ui/components/content-editor';\n\n// Pure functions: only the explicitly supplied configuration is used.\nconst fromJson = contentEditorFromJson(jsonStringOrObject);\nconst fromHtml = contentEditorFromHtml('<h2>Hello</h2><p><strong>World</strong></p>');\n\n// Injected service: environment defaults are inherited.\nreadonly importer = inject(ContentEditorImporter);\nconst parsed = this.importer.fromJson(source);\n\n// Builder imports are one undoable edit; replacement is the default.\nbuilder.importJson(jsonStringOrObject);\nbuilder.importHtml(html);\nconst target = builder.getInsertionTarget();\nbuilder.importHtml(html, {}, { mode: 'insert', target });\nbuilder.convertBlock('paragraph-id', 'callout');\nconst nativeDocument = builder.getData();\nconst htmlExport = builder.toHtml();\n\ntry { builder.importJson(source); }\ncatch (error) {\n  if (error instanceof ContentEditorImportError) {\n    console.log(error.path, error.message);\n  }\n}";
   readonly customExample = "provideContentEditorConfig({\n  blocks: {\n    heading: {\n      fromHtml: {\n        selector: 'h1, h2, h3, h4, h5, h6',\n        parse: (element, ctx) => ctx.defaultFromHtml(element)\n      }\n    },\n    product: {\n      fromHtml: {\n        selector: '[data-product-id]',\n        parse: (element, ctx) => ctx.createBlock('product', {\n          productId: element.getAttribute('data-product-id')\n        })\n      },\n      validateImport: block => typeof (block.content as { productId?: unknown })?.productId === 'string'\n        ? undefined : 'productId must be a string',\n      toHtml: (block, ctx) => `<div data-product-id=\"${ctx.escape((block.content as { productId: string }).productId)}\"></div>`\n    }\n  }\n});";
+  readonly themeProviderExample = `import { provideNgsTheme } from '@ngstarter-ui/components/core';
+
+export const appConfig = {
+  providers: [provideNgsTheme({ theme: 'default', colorScheme: 'auto' })]
+};`;
+  readonly themeExample = `// Component/scope SCSS:
+.article-editor {
+  --ngs-content-editor-content-width: 760px;
+  --ngs-content-editor-font-size: var(--ngs-font-size-md);
+  --ngs-content-editor-line-height: 1.6;
+  --ngs-content-editor-heading-weight: 600;
+  --ngs-content-editor-block-radius: var(--ngs-radius-md);
+}
+// Floating toolbar and menus inherit editor tokens, including scoped overrides.
+// Shared surface/on-surface roles also follow Default/Chalk light/dark themes.`;
   readonly registrationExample = `import { ContentEditorBlockBase, ContentEditorRendererBase,
   ContentEditorConfig, provideContentEditorConfig } from '@ngstarter-ui/components/content-editor';
 

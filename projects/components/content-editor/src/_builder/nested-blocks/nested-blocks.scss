@@ -5,7 +5,7 @@
   display: block;
   min-width: 0;
   .nested-controls {
-    --ngs-button-height: --spacing(7);
+    --ngs-button-height: var(--ngs-content-editor-control-size, --spacing(8));
     right: 100%;
     width: calc(--spacing(18) + var(--ngs-content-editor-nested-controls-offset));
     padding-left: --spacing(2);
@@ -15,6 +15,7 @@
 
     &.is-menu-open { opacity: 1; pointer-events: auto; }
   }
+  @media (hover: none) { .nested-controls { opacity: 1; pointer-events: auto; } }
   .nested-block {
     &:hover, &:focus-within { .nested-controls { opacity: 1; pointer-events: auto; } }
   }

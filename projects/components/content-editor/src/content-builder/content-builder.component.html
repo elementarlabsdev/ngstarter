@@ -48,12 +48,12 @@
             </button>
           </div>
           <ng-template #dragControlTooltip>
-            <div class="bg-neutral-900 text-xs flex flex-col gap-0.5 rounded-lg items-center px-2 py-1.5 font-medium">
+            <div class="bg-on-surface text-xs flex flex-col gap-0.5 rounded-lg items-center px-2 py-1.5 font-medium">
               <div>
-                <div class="text-neutral-100">Drag <span class="text-neutral-400">to move</span></div>
+                <div class="text-surface">Drag <span class="text-surface/70">to move</span></div>
               </div>
               <div>
-                <div class="text-neutral-100">Click <span class="text-neutral-400">to open menu</span></div>
+                <div class="text-surface">Click <span class="text-surface/70">to open menu</span></div>
               </div>
             </div>
           </ng-template>
@@ -95,10 +95,18 @@
   </div>
 </ngs-popover>
 
-<ngs-menu #suggestionsMenu="ngsMenu" classList="min-h-[70vh] max-h-[70vh]!" pushIntoViewport (closed)="onSuggestionsMenuClose($event)">
+<ngs-menu #suggestionsMenu="ngsMenu" classList="min-h-[70vh] max-h-[70vh]! w-80 max-w-[calc(100vw-1rem)]!" [themeSource]="themeSource" pushIntoViewport (closed)="onSuggestionsMenuClose($event)">
+  <ngs-menu-header>
+    <div class="p-3">
+      <div class="mb-2 text-sm font-semibold text-on-surface">Insert block</div>
+      <ngs-form-field subscriptHiddenIfEmpty>
+        <input ngsInput aria-label="Search blocks" placeholder="Search blocks…" [value]="menuQuery()" (input)="menuQuery.set($any($event.target).value)" (keydown)="onMenuSearchKeydown($event, blockMenu().context()?.target ?? getInsertionTarget())">
+      </ngs-form-field>
+    </div>
+  </ngs-menu-header>
   <ng-template ngsMenuContent let-target="target">
     <div (click)="preventMenuClose($event)">
-    @for (suggestionItem of insertionSuggestions(); track $index; let first = $first) {
+    @for (suggestionItem of filteredInsertionSuggestions(); track $index; let first = $first) {
       @switch (suggestionItem.type) {
         @case ('heading') {
           <ngs-menu-heading>{{ suggestionItem.title }}</ngs-menu-heading>
@@ -112,7 +120,7 @@
               </div>
               <div class="grow min-w-[200px]">
                 <div>{{ suggestionItem.title }}</div>
-                <div class="text-2xs text-neutral-600">{{ suggestionItem.description }}</div>
+                <div class="text-xs text-on-surface-variant">{{ suggestionItem.description }}</div>
               </div>
               @if (suggestionItem.hotKeys) {
                 <div class="ms-auto bg-surface-container-highest rounded-full h-5
@@ -123,11 +131,12 @@
         }
       }
     }
+    @if (!filteredInsertionSuggestions().length) { <ngs-empty-state>No matching blocks</ngs-empty-state> }
     </div>
   </ng-template>
 </ngs-menu>
 
-<ngs-menu #conversionMenu>
+<ngs-menu #conversionMenu [themeSource]="themeSource">
   <ng-template ngsMenuContent let-blockId="blockId">
     @for (type of conversionTypes; track type) {
       <button ngs-menu-item (click)="convertBlock(blockId, type); settingsPopover.close()">{{type}}</button>

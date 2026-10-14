@@ -38,6 +38,8 @@ import type { MenuTrigger } from '../menu-trigger';
   }
 })
 export class Menu implements OnDestroy {
+  /** Optional scope whose tokens should follow this detached overlay. */
+  readonly themeSource = input<HTMLElement | null>(null);
   readonly role = input<'menu' | 'menubar'>('menu');
   readonly classList = input<string>('');
   readonly xPosition = input<'before' | 'after'>('after');
@@ -55,6 +57,7 @@ export class Menu implements OnDestroy {
 
   protected readonly _isNested = signal(false);
   protected readonly _context = signal<any>(undefined);
+  readonly context = this._context.asReadonly();
   private _parentMenu = inject(Menu, { optional: true, skipSelf: true });
   private _parentMenuTrigger = inject<MenuTrigger>(MENU_TRIGGER, { optional: true });
   private _itemSubscription = Subscription.EMPTY;

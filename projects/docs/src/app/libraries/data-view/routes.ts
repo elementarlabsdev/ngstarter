@@ -2,6 +2,11 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: 'workflows',
+    loadComponent: () => import('./workflows/workflows').then(c => c.DataViewWorkflows),
+    title: 'Data View / Workflows'
+  },
+  {
     path: 'basic-dataview',
     loadComponent: () => import('./basic-dataview/basic-dataview').then(c => c.BasicDataview),
     title: 'Data View / Basic Dataview'

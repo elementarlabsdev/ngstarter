@@ -1,0 +1,9 @@
+<h3 ngsDialogTitle>{{ title }}</h3>
+<form ngsDialogContent (ngSubmit)="save()" class="flex flex-col gap-4">
+  @if (error()) { <ngs-alert variant="negative" role="alert">{{ error() }}</ngs-alert> }
+  <ngs-form-field><ngs-label>View name</ngs-label><input ngsInput name="viewName" [(ngModel)]="name" required maxlength="100" autocomplete="off"></ngs-form-field>
+</form>
+<div ngsDialogActions align="end">
+  <button ngsButton type="button" (click)="cancel()">Cancel</button>
+  <button ngsButton="filled" type="button" (click)="save()">Save</button>
+</div>

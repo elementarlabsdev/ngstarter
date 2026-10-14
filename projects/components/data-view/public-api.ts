@@ -6,3 +6,5 @@ export * from './src/data-view-empty-filter-results.directive';
 export * from './src/types';
 export * from './src/cell-renderer';
 export * from './src/config';
+export * from './src/filters';
+export * from './src/view-state';

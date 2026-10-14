@@ -1,6 +1,6 @@
 <ngs-content-editor-upload-status [task]="uploadTask"/>
 @if (_src()) {
-  <div class="uploaded-image">
+  <div class="flex w-full items-center justify-center">
     <ngs-image-resizer (imageResized)="_onImageResized($event)" [imageMaxWidth]="704">
       <img [src]="_src()" [alt]="_alt()" ngsImageResizerImage [style.width.px]="_settings().width || null">
     </ngs-image-resizer>

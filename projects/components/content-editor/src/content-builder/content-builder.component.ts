@@ -1,3 +1,6 @@
+import { FormField } from '@ngstarter-ui/components/form-field';
+import { Input } from '@ngstarter-ui/components/input';
+import { EmptyState } from '@ngstarter-ui/components/empty-state';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -46,7 +49,7 @@ import {
   CdkDragStart,
   CdkDropList,
 } from '@angular/cdk/drag-drop';
-import { Menu, MenuItem, MenuTrigger, MenuCloseReason, MenuHeading, MenuContent } from '@ngstarter-ui/components/menu';
+import { Menu, MenuItem, MenuTrigger, MenuCloseReason, MenuHeading, MenuContent, MenuHeader } from '@ngstarter-ui/components/menu';
 import { ConfirmManager } from '@ngstarter-ui/components/confirm';
 import { CdkMonitorFocus } from '@angular/cdk/a11y';
 import { ContentEditorQuoteBlock } from '../_builder/quote-block/quote-block.component';
@@ -82,7 +85,7 @@ import { List, ListItem, ListItemIcon, ListItemTitle } from '@ngstarter-ui/compo
     ListItem,
     List,
     MenuHeading,
-    MenuContent
+    MenuContent, MenuHeader, FormField, Input, EmptyState
   ],
   hostDirectives: [
     {
@@ -144,6 +147,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   private readonly dropList = viewChild.required(CdkDropList);
   readonly connectedDropLists = this._store.dropLists;
   private elRef: ElementRef<HTMLElement> = inject(ElementRef);
+  readonly themeSource = this.elRef.nativeElement;
   private envInjector = inject(EnvironmentInjector);
   private cdr = inject(ChangeDetectorRef);
   private confirmManager = inject(ConfirmManager);
@@ -580,9 +584,35 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
       iconName: definition.menu.iconName ?? 'fluent:document-24-regular', blockType: type,
       blockSettings: definition.menu.settings ?? {}, hotKeys: ''
     }] : []);
-    const replaced = new Set(custom.map(item => item.blockType));
-    return [...this.suggestions().filter((item: any) => !replaced.has(item.blockType)), ...custom];
+    const defaults = this.suggestions();
+    const existingTypes = new Set(defaults.filter((item: any) => item.type === 'item').map((item: any) => item.blockType));
+    const extra = custom.filter(item => !existingTypes.has(item.blockType));
+    return [...defaults.map((item: any) => custom.find(entry => entry.blockType === item.blockType) ?? item),
+      ...(extra.length ? [{ type: 'heading', title: 'Custom blocks' }, ...extra] : [])];
   });
+  readonly menuQuery = signal('');
+  readonly filteredInsertionSuggestions = computed(() => {
+    const query = this.menuQuery().trim().toLocaleLowerCase();
+    if (!query) return this.insertionSuggestions();
+    const items: any[] = []; let heading: any = null;
+    for (const item of this.insertionSuggestions()) {
+      if (item.type === 'heading') { heading = item; continue; }
+      if (!`${item.title} ${item.description ?? ''} ${item.blockType}`.toLocaleLowerCase().includes(query)) continue;
+      if (heading) { items.push(heading); heading = null; }
+      items.push(item);
+    }
+    return items;
+  });
+  onMenuSearchKeydown(event: KeyboardEvent, target: ContentEditorBlockInsertionTarget): void {
+    event.stopPropagation();
+    if (event.key === 'ArrowDown') { event.preventDefault(); this.blockMenu().items()[0]?.focus(); }
+    if (event.key === 'Escape') this.blockMenu().closed.emit('keydown');
+    if (event.key === 'Enter') {
+      const first = this.filteredInsertionSuggestions().find(item => item.type === 'item');
+      if (first) { event.preventDefault(); this.addBlockFromSuggestionMenu(this.blockMenu(), target, first.blockType, first.blockSettings); }
+    }
+  }
+
   private readonly componentSources = new Map<string, unknown>();
 
   private buildBlockDefMaps() {
@@ -1241,6 +1271,7 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   protected onSuggestionsMenuClose(reason: MenuCloseReason) {
+    this.menuQuery.set('');
     if (!reason) {
       this._store.setFocusedBlockId(this._store.activeBlockId());
       this.focusChanged.emit();

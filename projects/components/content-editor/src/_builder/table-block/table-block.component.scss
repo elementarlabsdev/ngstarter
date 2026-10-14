@@ -18,7 +18,8 @@
     padding-bottom: 26px;
     overflow-y: hidden;
     overflow-x: auto;
-    width: var(--ngs-content-editor-builder-content-width);
+    max-width: 100%;
+    width: var(--ngs-content-editor-builder-content-width, 704px);
   }
 
   .table-container {
@@ -49,7 +50,7 @@
       }
 
       &.selected {
-        background: var(--ngs-color-neutral-200);
+        background: var(--ngs-content-editor-selected-bg, var(--ngs-color-primary-container));
       }
     }
   }

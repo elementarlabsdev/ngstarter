@@ -52,7 +52,11 @@
     <h2 class="mb-3 text-xl font-semibold">HTML fidelity</h2>
     <p class="mb-4">Semantic blocks, supported marks, alignment, lists, table metadata, callouts, details and exported gallery/grid structures are converted into native blocks. Scripts, style sheets, executable resources, event handlers and arbitrary HTML/CSS are not stored. Unsafe links keep their visible text. Unsupported wrappers keep supported text/descendants; unsupported or unsafe media is omitted.</p>
     <p class="mb-8">HTML cannot recover original IDs, upload metadata, custom attrs, video orientation, or attachment size/MIME. It generates fresh IDs and defaults. Mixed nested list styles map to the parent list type. Use native JSON for lossless transfer. No legacy-format migration is performed.</p>
-    <h2 class="mb-3 text-xl font-semibold">Unified custom blocks</h2>
+    <h2 class="mb-3 text-xl font-semibold">Design and theme tokens</h2>
+    <p class="mb-4">Editing and preview share body and heading typography. Placeholder, selection, field borders and floating toolbar use semantic theme roles. Use <code>--ngs-content-editor-*</code> tokens for scoped customization; detached toolbar/menu overlays inherit those values and follow theme changes.</p>
+    <ngs-code-highlighter [code]="themeProviderExample" language="typescript" showCopyButton/>
+    <ngs-code-highlighter class="mt-4 block" [code]="themeExample" language="scss" showCopyButton/>
+    <h2 class="mb-3 mt-8 text-xl font-semibold">Unified custom blocks</h2>
     <p class="mb-4">Register an editor, preview renderer, initial native content, menu item, validation and HTML import/export in a single block entry. Use <code>loadEditor</code> instead of <code>editor</code> for lazy components. Nested Grid/Toggle previews inherit the instance configuration. The editor demo includes a Bookmark block using this API.</p>
     <ngs-code-highlighter [code]="registrationExample" language="typescript" showCopyButton/>
     <h2 class="mb-3 mt-8 text-xl font-semibold">Drafts and media uploads</h2>

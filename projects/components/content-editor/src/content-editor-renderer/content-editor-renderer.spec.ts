@@ -30,6 +30,20 @@ describe('ContentEditorRenderer native document', () => {
     expect(element.querySelector('td strong')?.textContent).toBe('Marked');
     await expect.poll(() => element.querySelector('ngs-content-editor-code-renderer')?.textContent).toContain('<b>literal</b>');
   });
+  it('renders all six heading levels with native tags and preserved alignment', async () => {
+    TestBed.configureTestingModule({ imports: [ContentEditorRenderer] });
+    const fixture = TestBed.createComponent(ContentEditorRenderer);
+    fixture.componentRef.setInput('content', { version: 1, blocks: Array.from({ length: 6 }, (_, index) => ({
+      id: 'h' + (index + 1), type: 'heading', content: [createNgsHeadlessEditorText('Heading ' + (index + 1))],
+      attrs: { settings: { level: index + 1 }, props: [{ name: 'text-alignment', value: 'center' }] }
+    })) });
+    fixture.autoDetectChanges(); await fixture.whenStable();
+    for (let level = 1; level <= 6; level++) {
+      const heading = fixture.nativeElement.querySelector('h' + level);
+      expect(heading?.textContent).toBe('Heading ' + level);
+      expect(getComputedStyle(heading).textAlign).toBe('center');
+    }
+  });
   it('renders callouts, nested toggles, attachments, image carousels and grid cells', async () => {
     TestBed.configureTestingModule({ imports: [ContentEditorRenderer] });
     const fixture = TestBed.createComponent(ContentEditorRenderer);

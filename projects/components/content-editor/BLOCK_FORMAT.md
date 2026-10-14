@@ -859,3 +859,41 @@ implements synchronous `getItem(key): string | null`, `setItem(key, value): void
 `removeItem(key): void`; it stores serialized native JSON. The default is browser `localStorage`.
 `[draftDebounceMs]` overrides the configured delay. Use `contentChanged` for asynchronous server
 persistence.
+
+
+## Editor design tokens
+
+Editing and preview share typography and theme roles. Override the following CSS custom properties
+on the editor/renderer or a surrounding theme scope; do not store visual theme settings in document JSON.
+
+| Token | Purpose |
+| --- | --- |
+| `--ngs-content-editor-content-width` | Default text/table content width (704px). |
+| `--ngs-content-editor-font-size`, `--ngs-content-editor-line-height` | Body typography in editing and preview. |
+| `--ngs-content-editor-heading-1-size` … `--ngs-content-editor-heading-6-size` | Responsive heading scale shared by both surfaces. |
+| `--ngs-content-editor-heading-weight`, `--ngs-content-editor-heading-line-height` | Heading typography. |
+| `--ngs-content-editor-muted-color`, `--ngs-content-editor-placeholder-color` | Metadata and empty text fields. |
+| `--ngs-content-editor-hover-bg` | Hovered block background. |
+| `--ngs-content-editor-selected-bg`, `--ngs-content-editor-selected-color` | Selected block colors as a matching pair. |
+| `--ngs-content-editor-block-padding`, `--ngs-content-editor-block-radius` | Block geometry. |
+| `--ngs-content-editor-control-size` | Block actions; follows the shared small control size/density. |
+| `--ngs-content-editor-toolbar-bg`, `--ngs-content-editor-toolbar-color`, `--ngs-content-editor-toolbar-radius` | Floating toolbar appearance; inverse surface roles by default. |
+| `--ngs-content-editor-surface`, `--ngs-content-editor-border`, `--ngs-content-editor-field-border` | Media surfaces and visible field edges. |
+
+```scss
+.article-editor {
+  --ngs-content-editor-content-width: 760px;
+  --ngs-content-editor-heading-weight: 600;
+  --ngs-content-editor-block-radius: var(--ngs-radius-md);
+}
+```
+
+The floating toolbar and its menus copy the editor's NgStarter tokens into CDK overlay panes and
+follow changes to ancestor theme attributes, classes or inline token overrides while open.
+`Menu.themeSource` is an optional HTML element for the same behaviour in other menus.
+`bindNgsOverlayTheme(source, target)` from the public `core` entry point returns a cleanup function
+for custom overlays. Call cleanup when detaching/destroying the overlay.
+
+The insertion menu has a fixed search header, retains its 70vh size, filters block names/descriptions,
+and supports Enter to insert the first result into the triggering root/nested collection.
+ArrowDown moves from search to the first result; Escape closes the menu. Closing clears the query.

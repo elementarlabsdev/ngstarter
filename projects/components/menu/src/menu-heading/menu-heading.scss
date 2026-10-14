@@ -5,5 +5,5 @@
   font-size: var(--ngs-font-size-xs);
   margin: --spacing(2) 0;
   padding: 0 --spacing(3);
-  color: var(--ngs-color-neutral-700);
+  color: var(--ngs-menu-heading-color, var(--ngs-color-on-surface-variant));
 }

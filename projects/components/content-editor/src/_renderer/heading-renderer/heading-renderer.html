@@ -19,6 +19,15 @@
       [ngsHeadlessEditorRuns]="runs()"
     ></h3>
   }
+  @case (4) {
+    <h4 class="content-html" [class.align-left]="alignment() === 'left'" [class.align-center]="alignment() === 'center'" [class.align-right]="alignment() === 'right'" [class.align-justify]="alignment() === 'justify'" [ngsHeadlessEditorRuns]="runs()"></h4>
+  }
+  @case (5) {
+    <h5 class="content-html" [class.align-left]="alignment() === 'left'" [class.align-center]="alignment() === 'center'" [class.align-right]="alignment() === 'right'" [class.align-justify]="alignment() === 'justify'" [ngsHeadlessEditorRuns]="runs()"></h5>
+  }
+  @case (6) {
+    <h6 class="content-html" [class.align-left]="alignment() === 'left'" [class.align-center]="alignment() === 'center'" [class.align-right]="alignment() === 'right'" [class.align-justify]="alignment() === 'justify'" [ngsHeadlessEditorRuns]="runs()"></h6>
+  }
   @default {
     <h2
       class="content-html"

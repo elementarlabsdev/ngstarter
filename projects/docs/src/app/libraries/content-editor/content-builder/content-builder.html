@@ -1,8 +1,8 @@
 <div class="py-12">
   <div class="mb-4 px-12 flex flex-col items-center gap-4 md:flex-row md:justify-center">
-    <p class="text-center prose max-w-full md:mb-0">
-      Use <code>ngs-content-editor-builder</code> to compose a Headless Editor document, then preview or display it with
-      <code>ngs-content-editor-renderer</code>.
+    <p class="text-center text-on-surface-variant max-w-full md:mb-0">
+      Use <code class="font-mono text-on-surface">ngs-content-editor-builder</code> to compose a Headless Editor document, then preview or display it with
+      <code class="font-mono text-on-surface">ngs-content-editor-renderer</code>.
     </p>
     <button ngsButton="outlined" type="button" (click)="openImport()">Import</button>
     <button ngsButton="filled" type="button" (click)="openPreview(document())">
@@ -11,7 +11,7 @@
     </button>
   </div>
   @if (builderRef; as editor) {
-    <div class="px-12 text-sm text-neutral-600" role="status" aria-live="polite">
+    <div class="px-12 text-sm text-on-surface-variant" role="status" aria-live="polite">
       @switch (editor.draftStatus()) {
         @case ('saving') { Saving… }
         @case ('saved') { Draft saved }

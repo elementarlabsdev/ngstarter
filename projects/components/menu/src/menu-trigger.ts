@@ -1,3 +1,4 @@
+import { bindNgsOverlayTheme } from '@ngstarter-ui/components/core';
 import {
   Directive,
   inject,
@@ -70,6 +71,7 @@ export class MenuTrigger implements OnDestroy {
   readonly menuOpen = signal(false);
 
   ngOnDestroy() {
+    this.themeCleanup?.(); this.themeCleanup = null;
     if (this._overlayRef) {
       this._overlayRef.dispose();
       this._overlayRef = null;
@@ -111,6 +113,8 @@ export class MenuTrigger implements OnDestroy {
     }
   }
 
+  private themeCleanup: (() => void) | null = null;
+
   openMenu(): void {
     const menu = this.menu();
     if (this.menuOpen() || !menu) {
@@ -128,6 +132,9 @@ export class MenuTrigger implements OnDestroy {
     menu._setContext(this.menuData());
     this._portal = new TemplatePortal(menu.templateRef(), this._viewContainerRef, this._viewContainerRef.injector);
     overlayRef.attach(this._portal);
+    this.themeCleanup?.();
+    const themeSource = menu.themeSource();
+    this.themeCleanup = themeSource ? bindNgsOverlayTheme(themeSource, overlayRef.overlayElement) : null;
 
     if (overlayRef.hasAttached()) {
       this._setIsMenuOpen(true);
@@ -179,6 +186,7 @@ export class MenuTrigger implements OnDestroy {
       this._menu._triggerClosed(this);
     }
 
+    this.themeCleanup?.(); this.themeCleanup = null;
     this._overlayRef.detach();
     this._closingSubscription.unsubscribe();
     this._hoverSubscription.unsubscribe();

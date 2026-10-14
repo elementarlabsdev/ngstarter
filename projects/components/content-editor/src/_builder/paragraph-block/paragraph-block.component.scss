@@ -5,7 +5,7 @@
   position: relative;
 
   p {
-    line-height: var(--leading-normal);
+    line-height: var(--ngs-content-editor-line-height, 1.6);
   }
 
   .content {
@@ -19,7 +19,7 @@
     &:empty {
       &:before {
         content: attr(data-empty-placeholder);
-        color: var(--ngs-color-neutral-500);
+        color: var(--ngs-content-editor-placeholder-color, var(--ngs-color-on-surface-variant));
       }
     }
   }

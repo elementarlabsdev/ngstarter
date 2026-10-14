@@ -1,0 +1,9 @@
+:host {
+  .brand-wordmark {
+    display: block;
+    aspect-ratio: 1118 / 126;
+    // The transparent gap separates the wordmark from the original blue UI accent.
+    background: linear-gradient(to right, var(--ngs-color-on-surface) 85%, #1561ed 85%);
+    mask: url('/assets/brand/ngstarter-ui-logo.png') center / contain no-repeat;
+  }
+}

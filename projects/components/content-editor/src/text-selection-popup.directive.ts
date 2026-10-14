@@ -1,3 +1,4 @@
+import { bindNgsOverlayTheme } from '@ngstarter-ui/components/core';
 // src/app/text-selection-popup.directive.ts
 
 import {
@@ -41,6 +42,7 @@ export class TextSelectionPopupDirective implements OnDestroy {
   @Input() closestContentObserverClass: string | null = null;
   @Output() tagSelected = new EventEmitter<string | null>();
 
+  private themeCleanup: (() => void) | null = null;
   private overlayRef: OverlayRef | null = null;
   private hostElement: HTMLElement;
   private currentSelectionRange: Range | null = null;
@@ -161,6 +163,7 @@ export class TextSelectionPopupDirective implements OnDestroy {
       scrollStrategy: this.overlay.scrollStrategies.noop(),
     });
 
+    this.themeCleanup = bindNgsOverlayTheme(this.hostElement, this.overlayRef.overlayElement);
     const portal = new ComponentPortal(this.targetComponent, this.viewContainerRef);
     const componentRef = this.overlayRef.attach(portal);
 
@@ -191,6 +194,7 @@ export class TextSelectionPopupDirective implements OnDestroy {
     if (!this.overlayRef) return;
     this.popupResizeObserver?.disconnect();
     this.popupResizeObserver = null;
+    this.themeCleanup?.(); this.themeCleanup = null;
     this.overlayRef.dispose(); this.overlayRef = null;
     this.positionStrategy = null; this.currentSelectionRange = null;
     this.removeDocumentClickListener();

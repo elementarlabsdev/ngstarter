@@ -64,6 +64,15 @@ describe('Sort', () => {
     sort = fixture.debugElement.query(By.directive(SortDirective)).injector.get(SortDirective);
   });
 
+  it('sorts from keyboard and exposes a focusable labelled header', () => {
+    const button = fixture.nativeElement.querySelector('.ngs-sort-header-button') as HTMLElement;
+    expect(button.getAttribute('role')).toBe('button'); expect(button.getAttribute('tabindex')).toBe('0');
+    button.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })); fixture.detectChanges();
+    expect(sort.direction()).toBe('asc');
+    button.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true })); fixture.detectChanges(); expect(sort.direction()).toBe('desc');
+    host.nameDisabled.set(true); fixture.detectChanges(); expect(button.getAttribute('tabindex')).toBe('-1');
+  });
+
   it('should cycle a header through ascending, descending, and cleared states', () => {
     clickHeader('name');
     expect(sort.active()).toBe('name');

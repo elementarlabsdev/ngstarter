@@ -22,6 +22,7 @@ import {
   EmptyStateIcon
 } from '@ngstarter-ui/components/empty-state';
 import { Icon } from '@ngstarter-ui/components/icon';
+import { Alert } from '@ngstarter-ui/components/alert';
 import {
   DataViewInterface,
   DataViewAPI,
@@ -30,9 +31,18 @@ import {
   DataViewDatasource,
   DataViewGetRowsParams,
   DataViewRowModelType,
-  DataViewRowSelectionEvent, DATA_VIEW, DataViewState, DataViewPinAlign,
+  DataViewRowSelectionEvent, DATA_VIEW, DataViewState, DataViewPinAlign, DataViewRowId, DataViewSelectionScope, DataViewSelectionState, DataViewFilterModel, DataViewColumnFilter, DataViewViewState, DataViewSavedView,
 } from '../types';
-import { SelectionModel } from '@angular/cdk/collections';
+import { DataViewSelection } from '../selection';
+import { dataViewFilterLabel, matchesDataViewFilter, normalizeDataViewFilter, normalizeDataViewFilters } from '../filters';
+import { DataViewColumnFilterDialog } from '../column-filter-dialog/column-filter-dialog';
+import { Chip, ChipSet, ChipRemove } from '@ngstarter-ui/components/chips';
+import { normalizeDataViewState, normalizeDataViewSavedViews } from '../view-state';
+import { DataViewSavedViewDialog } from '../saved-view-dialog/saved-view-dialog';
+import { FormsModule } from '@angular/forms';
+import { FormField } from '@ngstarter-ui/components/form-field';
+import { Select, Option } from '@ngstarter-ui/components/select';
+import { Toolbar, ToolbarItem, ToolbarSpacer } from '@ngstarter-ui/components/toolbar';
 import { PageEvent, Paginator } from '@ngstarter-ui/components/paginator';
 import { SortDirective, SortHeader, Sort } from '@ngstarter-ui/components/sort';
 import { SortDirection } from '@ngstarter-ui/components/sort';
@@ -51,6 +61,8 @@ import { DataViewColumnSettingsDialog, ColumnSettingsDialogResult } from './colu
 import { DATA_VIEW_CONFIG } from '../config';
 import { fromEvent, takeUntil, finalize, take, timer, Subject, merge } from 'rxjs';
 
+let nextDataViewId = 0;
+
 @Component({
   selector: 'ngs-data-view',
   exportAs: 'ngsDataView',
@@ -67,6 +79,9 @@ import { fromEvent, takeUntil, finalize, take, timer, Subject, merge } from 'rxj
     EmptyStateIcon,
     EmptyStateContent,
     Icon,
+    Alert,
+    Chip, ChipSet, ChipRemove,
+    FormsModule, FormField, Select, Option, Toolbar, ToolbarItem, ToolbarSpacer,
     BlockLoader,
     BlockLoaderContainerDirective,
     Button,
@@ -90,7 +105,7 @@ import { fromEvent, takeUntil, finalize, take, timer, Subject, merge } from 'rxj
     '[class.highlight-header]': 'highlightHeader()',
     '[class.pinned-header]': 'stickyHeader()',
     '[class.hover-rows]': 'hoverRows()',
-    '[class.is-loading]': '_isLoading()',
+    '[class.is-loading]': 'blockingLoading()',
     '[class.embedded]': 'embedded()',
     '[class.has-horizontal-scroll]': 'hasHorizontalScroll()',
     '[class.is-browser]': 'isBrowser()',
@@ -101,6 +116,22 @@ import { fromEvent, takeUntil, finalize, take, timer, Subject, merge } from 'rxj
   }
 })
 export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> {
+  protected readonly gridId = `ngs-data-view-${nextDataViewId++}`;
+  ariaLabel = input('Data table');
+  readonly rowActivated = output<T>();
+  protected activeCell = signal({ row: 0, column: 0 });
+  private _selectionAnchor = 0;
+  protected logicalColumns = computed(() => [
+    ...(this.withSelection() ? ['__selection'] : []), ...this.pinnedLeftColumns().map(c => c.field),
+    ...this.centerColumns().map(c => c.field), ...this.pinnedRightColumns().map(c => c.field),
+    ...(this.actionBarTemplateRef ? ['__actions'] : [])
+  ]);
+  protected activeCellId = computed(() => {
+    const active = this.activeCell(); const field = this.logicalColumns()[active.column];
+    return field && this.visibleRows().some(row => row.index === active.row) ? this.cellId(active.row, field) : null;
+  });
+  protected ariaRowCount = computed(() => this.rowModelType() === 'serverSide'
+    ? this._serverCountKnown() ? this._serverSideRowCount() + 1 : -1 : this.effectivePaginatorLength() + 1);
   private _cdr = inject(ChangeDetectorRef);
   private _destroyRef = inject(DestroyRef);
   private _platformId = inject(PLATFORM_ID);
@@ -114,13 +145,55 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
 
   private _requestId = 0;
   private _lastRequestKey: string | null = null;
+  private _lastDatasource: DataViewDatasource | null = null;
+  private _lastRowModelType: DataViewRowModelType | null = null;
+  private _pendingRequestCleanup: (() => void) | null = null;
   private _refreshTrigger = signal(0);
   private _serverSideRowCount = signal(0);
+  private _serverCountKnown = signal(false);
   private _manualOrder = signal<string[] | null>(null);
   private _manualVisibility = signal<Record<string, boolean>>({});
   private _hasDataOnServer = signal<boolean | undefined>(undefined);
 
   private _internalLoading = signal(false);
+  readonly error = signal<string | null>(null);
+  readonly refreshing = computed(() => this._internalLoading() && this.loaded());
+  readonly loadStatus = computed(() => this.error() ? 'error' : this._internalLoading()
+    ? (this.loaded() ? 'refreshing' : 'loading') : this.loaded() ? 'ready' : 'idle');
+  readonly loadError = output<unknown>();
+  protected blockingLoading = computed(() => this.loading() || (this._internalLoading() && !this.loaded()));
+  sortState = model<Sort>({ active: '', direction: '' });
+  columnFilters = model<DataViewFilterModel>({});
+  withSavedViews = input(this._config?.withSavedViews ?? false, { transform: booleanAttribute });
+  savedViews = model<DataViewSavedView[]>([]);
+  viewStorageKey = input<string | null>(null);
+  private _activeViewId = signal<string | null>(null);
+  readonly activeViewId = this._activeViewId.asReadonly();
+  readonly viewStorageError = signal<string | null>(null);
+  readonly stateChanged = output<DataViewViewState>();
+  readonly viewApplied = output<DataViewSavedView | null>();
+  private _initialFullState: DataViewViewState | null = null;
+  private _storageReady = signal(false);
+  protected dirtyView = computed(() => {
+    const view = this.savedViews().find(v => v.id === this.activeViewId());
+    return !!view && JSON.stringify(normalizeDataViewState(view.state, this.normalizedColumns()))
+      !== JSON.stringify(normalizeDataViewState(this.getState(), this.normalizedColumns()));
+  });
+  protected normalizedFilters = computed(() => {
+    const filters = normalizeDataViewFilters(this.columnFilters());
+    const columns = new Map(this.columnDefs().map(column => [column.field, { ...this.defaultColDef(), ...column }]));
+    for (const field of Object.keys(filters)) {
+      const column = columns.get(field);
+      if (!column) delete filters[field];
+      else if (column.filter && column.filter.type !== filters[field].type) throw new Error(`Filter type must be ${column.filter.type}`);
+    }
+    return filters;
+  });
+  protected activeFilters = computed(() => Object.entries(this.normalizedFilters()).map(([field, filter]) => {
+    const column = this.normalizedColumns().find(c => c.field === field);
+    const detail = filter.type === 'enum' ? filter.values.map(value => column?.filter?.options?.find(o => o.value === value)?.label ?? value).join(', ') : dataViewFilterLabel(filter);
+    return { field, label: `${column?.name ?? field}: ${detail}` };
+  }));
   protected _isFiltering = signal(false);
   protected _isSorting = signal(false);
 
@@ -181,6 +254,8 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   withColumnSettings = input(false, { transform: booleanAttribute });
   embedded = input(this._config?.embedded ?? false, { transform: booleanAttribute });
   rowSelection = input<'single' | 'multiple'>(this._config?.rowSelection ?? 'multiple');
+  getRowId = input<((row: T) => DataViewRowId) | null>(null);
+  selectionScope = input<DataViewSelectionScope>('filtered');
   allowSingleRowSelectionByClick = input(this._config?.allowSingleRowSelectionByClick ?? false, { transform: booleanAttribute });
   selectionWidth = input(this._config?.selectionWidth ?? 52, { transform: (v: any) => parseInt(v, 10) || this._config?.selectionWidth || 52 });
   minColumnWidth = input(this._config?.minColumnWidth ?? 50, { transform: (v: any) => parseInt(v, 10) || this._config?.minColumnWidth || 40 });
@@ -666,6 +741,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
 
     return data.slice(start, end).map((item, index) => ({
       item,
+      key: this.getRowId()?.(item) ?? item,
       index: start + index,
       top: (start + index) * this.rowHeight(),
       isLast: (start + index) === data.length - 1
@@ -707,13 +783,15 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   private _syncEffect = effect(() => {
     const data = this.data();
     const search = this.search().trim().toLowerCase();
+    const filters = this.normalizedFilters();
     const rowModelType = this.rowModelType();
     const refreshTriggerValue = this._refreshTrigger();
+    untracked(() => this.beginRowModel(rowModelType));
     if (rowModelType === 'serverSide') {
       return;
     }
     untracked(() => {
-      this._dataSource.data = data;
+      this._dataSource.data = data.filter(row => Object.entries(filters).every(([field, filter]) => matchesDataViewFilter(this.getNestedValue(row, field), filter)));
       if (rowModelType === 'clientSide') {
         this._dataSource.filter = search;
       }
@@ -728,23 +806,26 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   private _loadDataEffect = effect(() => {
     const datasource = this.datasource();
     if (!datasource || this.rowModelType() !== 'serverSide' || this._isDestroyed) {
+      untracked(() => { this.cancelPendingRequest(); this._internalLoading.set(false); this._lastRequestKey = null; });
       return;
     }
 
+    if (datasource !== this._lastDatasource) { this._lastDatasource = datasource; this._lastRequestKey = null; }
     const pIndex = this.pageIndex();
     const pSize = this.pageSize();
     const search = this._debouncedSearch()?.trim() || '';
+    const columnFilters = this.normalizedFilters();
 
     // Capture sort params outside untracked but avoid triggering when sort is null due to @if toggling
-    const sort = this._ngsSort();
-    const sortActive = sort?.active();
-    const sortDirection = sort?.direction();
+    const sort = this.sortState();
+    const sortActive = sort.active;
+    const sortDirection = sort.direction;
     const sortModel = sortActive ? [{ colId: sortActive, sort: (sortDirection as any) || '' }] : [];
 
     const refreshTriggerValue = this._refreshTrigger();
 
     // Build a stable request key to avoid refetch loops when the view toggles (e.g. empty state removes ngsSort)
-    const requestKey = `${pIndex}|${pSize}|${JSON.stringify(sortModel)}|${search}|${refreshTriggerValue}`;
+    const requestKey = JSON.stringify([pIndex, pSize, sortModel, search, columnFilters, refreshTriggerValue]);
     if (this._lastRequestKey === requestKey) {
       return; // no meaningful params change — skip triggering a new request
     }
@@ -753,12 +834,21 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
     // but we ARE loading or in a state where we expect it to come back, we might want to wait.
     // However, the requestKey should handle it. If sortActive becomes undefined, requestKey changes.
 
-    const isFilterRequest = this._lastRequestKey !== null && this._lastRequestKey.split('|')[3] !== search;
-    const isSortRequest = this._lastRequestKey !== null && this._lastRequestKey.split('|')[2] !== JSON.stringify(sortModel);
+    const previousQuery = this._lastRequestKey ? JSON.parse(this._lastRequestKey) : null;
+    const isFilterRequest = previousQuery && (previousQuery[3] !== search || JSON.stringify(previousQuery[4]) !== JSON.stringify(columnFilters));
+    const isSortRequest = previousQuery && JSON.stringify(previousQuery[2]) !== JSON.stringify(sortModel);
     this._lastRequestKey = requestKey;
 
     untracked(() => {
+      this.cancelPendingRequest();
       const currentRequestId = ++this._requestId;
+      const controller = new AbortController();
+      let settled = false;
+      let dispose: void | (() => void) | { unsubscribe(): void };
+      this._pendingRequestCleanup = () => {
+        controller.abort();
+        if (typeof dispose === 'function') dispose(); else if (dispose && typeof dispose.unsubscribe === 'function') dispose.unsubscribe();
+      };
       if (isFilterRequest) {
         this._isFiltering.set(true);
       }
@@ -766,7 +856,10 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
         this._isSorting.set(true);
       }
       this._internalLoading.set(true);
+      this.error.set(null);
       const params: DataViewGetRowsParams = {
+        signal: controller.signal,
+        columnFilters,
         startRow: pIndex * pSize,
         endRow: (pIndex + 1) * pSize,
         page: pIndex,
@@ -775,22 +868,27 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
         filterModel: search,
         successCallback: (rows: any[], lastRow?: number) => {
           this._ngZone.run(() => {
-            if (this._isDestroyed || currentRequestId !== this._requestId) return;
+            if (settled || controller.signal.aborted || this._isDestroyed || currentRequestId !== this._requestId) return;
+            settled = true;
             this._dataSource.data = rows;
             if (lastRow !== undefined) {
-              this._serverSideRowCount.set(lastRow);
+              this._serverCountKnown.set(true);
+              const total = Math.max(0, lastRow);
+              this._serverSideRowCount.set(total);
+              const lastPage = Math.max(0, Math.ceil(total / Math.max(1, pSize)) - 1);
+              if (pIndex > lastPage) { this.pageIndex.set(lastPage); this.resetScroll(); }
 
               // Update _hasDataOnServer if we have any rows OR if we are doing a clean request (no filters)
               if (lastRow > 0) {
                 this._hasDataOnServer.set(true);
-              } else if (!search && !sortModel.length) {
+              } else if (!search && !Object.keys(columnFilters).length) {
                 this._hasDataOnServer.set(false);
               }
             } else {
               // If lastRow is not provided, we can only infer _hasDataOnServer if we actually got rows
               if (rows.length > 0) {
                 this._hasDataOnServer.set(true);
-              } else if (!search && !sortModel.length) {
+              } else if (!search && !Object.keys(columnFilters).length) {
                 this._hasDataOnServer.set(false);
               }
             }
@@ -806,9 +904,12 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
             this._cdr.markForCheck();
           });
         },
-        failCallback: () => {
+        failCallback: (error?: unknown) => {
           this._ngZone.run(() => {
-            if (this._isDestroyed || currentRequestId !== this._requestId) return;
+            if (settled || controller.signal.aborted || this._isDestroyed || currentRequestId !== this._requestId) return;
+            settled = true;
+            this.error.set(error instanceof Error ? error.message : typeof error === 'string' ? error : 'Could not load records. Please try again.');
+            this.loadError.emit(error);
             this.loaded.set(true);
             this._internalLoading.set(false);
             this._isFiltering.set(false);
@@ -823,7 +924,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
         }
       };
       this._ngZone.runOutsideAngular(() => {
-        datasource.getItems(params);
+        try { dispose = datasource.getItems(params); } catch (error) { params.failCallback(error); }
       });
     });
   });
@@ -846,7 +947,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   hoverRows = input(false, {
     transform: booleanAttribute
   });
-  search = input<string>('');
+  search = model<string>('');
   private _debouncedSearch = signal('');
 
   private _debounceSearchEffect = effect((onCleanup) => {
@@ -877,12 +978,17 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   protected shouldRenderGrid = computed(() => this.loaded() || this._isLoading());
 
   protected injector = inject(Injector);
-  protected selection = new SelectionModel<T>(this.rowSelection() === 'multiple', []);
+  protected selection = new DataViewSelection<T>(row => this.getRowId()?.(row) ?? row);
+  private _selectionTick = signal(0);
+  private _selectedScope: DataViewSelectionScope = 'filtered';
+  private _selectedSearch = '';
+  private _selectedFilters: DataViewFilterModel = {};
   protected cellRenderersMap = new Map<string, any>();
   protected loadingCellRenderers = signal(false);
 
   readonly rowSelectionChanged = output<DataViewRowSelectionEvent<T>>();
   readonly selectionChanged = output<T[]>();
+  readonly selectionStateChanged = output<DataViewSelectionState<T>>();
   readonly allRowsSelectionChanged = output<boolean>();
   readonly sortChange = output<Sort>();
   readonly loadEnd = output<void>();
@@ -891,10 +997,10 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   get api(): DataViewAPI<T> {
     return {
       search: (value: string): void => {
-        this.dataSource().filter = value.trim().toLowerCase();
+        this.search.set(value);
       },
-      selectAll: (): void => {
-        this.selectAll();
+      selectAll: (scope?: DataViewSelectionScope): void => {
+        this.selectAll(scope);
       },
       unselectAll: (): void => {
         this.unselectAll();
@@ -913,7 +1019,13 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
       },
       getSnapshot: (): DataViewState[] => {
         return this.getSnapshot();
-      }
+      },
+      getSelection: () => this.getSelection(),
+      setColumnFilter: (field, filter) => this.setColumnFilter(field, filter),
+      clearFilters: () => this.clearFilters(),
+      getState: () => this.getState(), setState: state => this.setState(state),
+      saveView: (name, id) => this.saveView(name, id), applyView: id => this.applyView(id),
+      renameView: (id, name) => this.renameView(id, name), deleteView: id => this.deleteView(id)
     }
   }
 
@@ -960,6 +1072,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   }
 
   protected get isNoResults(): boolean {
+    if (this.error()) return false;
     const dataSource = this.dataSource();
     const isClientSide = this.rowModelType() === 'clientSide';
     const rawDataLength = isClientSide ? this.data().length : (dataSource.data?.length ?? 0);
@@ -983,6 +1096,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   }
 
   protected get isNoData(): boolean {
+    if (this.error()) return false;
     const dataSource = this.dataSource();
     const isClientSide = this.rowModelType() === 'clientSide';
     const rawDataLength = isClientSide ? this.data().length : (dataSource.data?.length ?? 0);
@@ -1019,7 +1133,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   }
 
   protected get hasFilterValue(): boolean {
-    return !!this.search().trim();
+    return !!this.search().trim() || Object.keys(this.normalizedFilters()).length > 0;
   }
 
   getNestedValue(item: any, path: string): any {
@@ -1036,15 +1150,89 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
 
   constructor() {
     effect(() => {
-      const mode = this.rowSelection();
+      const length = this.effectiveDataLength(); const columns = this.logicalColumns().length;
       untracked(() => {
-        const currentSelection = this.selection.selected;
-        this.selection = new SelectionModel<T>(mode === 'multiple', currentSelection);
+        const active = this.activeCell(); const row = Math.max(0, Math.min(active.row, length - 1));
+        const column = Math.max(0, Math.min(active.column, columns - 1));
+        if (row !== active.row || column !== active.column) this.activeCell.set({ row, column });
+      });
+    });
+    let lastState = '';
+    effect(() => {
+      const state = this.getState(); const key = JSON.stringify(state);
+      if (key !== lastState) { lastState = key; untracked(() => this.stateChanged.emit(state)); }
+    });
+    let loadedStorageKey: string | null = null;
+    effect(() => {
+      const key = this.viewStorageKey(); const browser = this.isBrowser();
+      if (!browser || key === loadedStorageKey) return;
+      loadedStorageKey = key;
+      untracked(() => {
+        this._storageReady.set(false); this.viewStorageError.set(null);
+        if (!key) return;
+        try {
+          const raw = this.viewStorage()?.getItem(key);
+          if (raw) {
+            const payload = JSON.parse(raw);
+            if (payload.version !== 1) throw new Error('Unsupported saved view format');
+            this.savedViews.set(normalizeDataViewSavedViews(payload.views, this.normalizedColumns()));
+            if (typeof payload.activeViewId === 'string' && this.savedViews().some(v => v.id === payload.activeViewId)) this.applyView(payload.activeViewId);
+          }
+        } catch (error) { this.viewStorageError.set(error instanceof Error ? error.message : 'Could not restore saved views'); }
+        this._storageReady.set(true);
+      });
+    });
+    effect(() => {
+      const key = this.viewStorageKey(); const ready = this._storageReady();
+      const views = this.savedViews(); const activeViewId = this.activeViewId();
+      if (!key || !ready) return;
+      untracked(() => {
+        try { this.viewStorage()?.setItem(key, JSON.stringify({ version: 1, views, activeViewId })); }
+        catch (error) { this.viewStorageError.set(error instanceof Error ? error.message : 'Could not save views'); }
+      });
+    });
+    let previousSearch: string | undefined;
+    effect(() => {
+      const search = JSON.stringify([this.search().trim(), this.normalizedFilters()]);
+      if (previousSearch !== undefined && previousSearch !== search) {
+        untracked(() => {
+          this.pageIndex.set(0); this.resetScroll();
+          if (this.selection.allMatching && this._selectedScope === 'filtered') this.unselectAll();
+        });
+      }
+      previousSearch = search;
+    });
+    effect(() => {
+      this._dsRenderTick();
+      const length = this.effectivePaginatorLength();
+      const size = Math.max(1, this.pageSize());
+      const index = this.pageIndex();
+      if (this.rowModelType() === 'clientSide' && this.withPagination()) {
+        const lastPage = Math.max(0, Math.ceil(length / size) - 1);
+        if (index > lastPage || index < 0) untracked(() => {
+          this.pageIndex.set(Math.max(0, Math.min(index, lastPage))); this.resetScroll();
+        });
+      }
+    });
+    let previousRowId = this.getRowId();
+    effect(() => {
+      const key = this.getRowId();
+      const mode = this.rowSelection();
+      this._dsRenderTick();
+      const rows = this.rowModelType() === 'clientSide' ? this.data() : this.dataSource().data;
+      untracked(() => {
+        let changed = false;
+        if (key !== previousRowId) { this.selection.clear(); changed = true; previousRowId = key; }
+        if (mode === 'single' && (this.selection.allMatching || this.selection.selected.length > 1)) {
+          const first = this.selection.selected[0]; this.selection.clear(); if (first) this.selection.select(first); changed = true;
+        }
+        if (this.selection.reconcile(rows, this.rowModelType() === 'clientSide') || changed) this.emitSelection();
       });
     });
 
     this._destroyRef.onDestroy(() => {
       this._isDestroyed = true;
+      this.cancelPendingRequest();
     });
 
     // Reactively bind scroll-sync and ResizeObserver to the current ScrollbarArea,
@@ -1112,26 +1300,22 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
 
     effect(() => {
       const sort = this._ngsSort();
+      const state = this.sortState();
       const dataSource = this.dataSource();
       if (sort && dataSource && !this._isDestroyed && this.rowModelType() !== 'serverSide') {
-        dataSource.sort = sort;
-        dataSource._updateChangeSubscription();
+        untracked(() => {
+          sort.active.set(state.active); sort.direction.set(state.direction);
+          dataSource.sort = sort;
+        });
       }
     });
 
     effect(() => {
-      const active = this.paginator() ?? this._internalPaginator();
-      const dataSource = this.dataSource();
-    if (dataSource && !this._isDestroyed) {
-      if (this.withPagination() && this.rowModelType() !== 'serverSide' && active && this.isBrowser()) {
-        // We handle pagination manually in visibleRows to have better control over virtualization.
-        // If we assign it to dataSource.paginator, TableDataSource would also start paging data,
-        // which would cause issues when we also slice data in visibleRows (double paging).
-        dataSource.paginator = null as any;
-      } else {
-        dataSource.paginator = null as any;
-      }
-    }
+      const active = this.paginator(); const length = this.effectivePaginatorLength();
+      const index = this.pageIndex(); const size = this.pageSize();
+      if (active && this.withPagination()) untracked(() => {
+        active.length = length; active.pageIndex = index; active.pageSize = size;
+      });
     });
 
     // Sync external paginator page events with internal page state when provided
@@ -1181,15 +1365,18 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
 
   ngOnDestroy() {
     this._isDestroyed = true;
+    this.cancelPendingRequest();
+    this._dataSource.disconnect();
   }
 
   ngOnInit() {
+    this._initialFullState = this.getState();
     this._initialViewState.set(this.columnDefs().map(col => ({
       field: col.field,
       visible: col.visible ?? true,
       width: col.width,
-      pinned: col.pinned,
-      pinAlign: col.pinAlign
+      pinned: !!col.pinned,
+      pinAlign: col.pinned ? col.pinAlign : undefined
     })));
 
     const snapshot = this.snapshot();
@@ -1317,8 +1504,20 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   }
 
   isAllSelected(): boolean {
-    const data = this.rowModelType() === 'serverSide' ? this.dataSource().data : this.data();
-    return this.selection.selected.length === data.length;
+    this._selectionTick();
+    if (this.rowModelType() === 'serverSide' && this.selectionScope() !== 'page' && this.getRowId()) {
+      return this.selection.allMatching && this.selection.excluded.size === 0;
+    }
+    const data = this.selectionRows(this.selectionScope());
+    return data.length > 0 && data.every(row => this.selection.isSelected(row));
+  }
+
+  protected isPartiallySelected(): boolean {
+    this._selectionTick();
+    if (this.rowModelType() === 'serverSide' && this.selectionScope() !== 'page' && this.getRowId()) return this.hasSelected() && !this.isAllSelected();
+    const rows = this.selectionRows(this.selectionScope());
+    const selected = rows.filter(row => this.selection.isSelected(row)).length;
+    return selected > 0 && selected < rows.length;
   }
 
   toggleAllRows(): void {
@@ -1331,6 +1530,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
 
   rowSelectionToggle(event: CheckboxChange, row: T): void {
     if (event.checked) {
+      if (this.rowSelection() === 'single') this.selection.clear();
       this.selection.select(row);
     } else {
       this.selection.deselect(row);
@@ -1343,7 +1543,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
       checked: event.checked
     });
 
-    this.selectionChanged.emit(this.selection.selected);
+    this.emitSelection();
   }
 
   protected selectRowByClick(event: MouseEvent, row: T): void {
@@ -1383,15 +1583,32 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   onPageChange(event: PageEvent): void {
     this.pageIndex.set(event.pageIndex);
     this.pageSize.set(event.pageSize);
+    this.resetScroll();
+  }
+
+  private resetScroll(): void {
+    const scroller = this._scrollbarArea()?.scrollableContentRef().nativeElement;
+    if (scroller) scroller.scrollTop = 0;
+    this._scrollTop.set(0); this._lastScrollTop = 0; this._syncTransforms();
+    this.activeCell.update(cell => ({ ...cell, row: 0 })); this._selectionAnchor = 0;
+  }
+
+  private cancelPendingRequest(): void {
+    const cleanup = this._pendingRequestCleanup; this._pendingRequestCleanup = null; cleanup?.();
+  }
+
+  private beginRowModel(mode: DataViewRowModelType): void {
+    if (mode === this._lastRowModelType) return;
+    this._lastRowModelType = mode; this._lastRequestKey = null; this._requestId++;
+    this.cancelPendingRequest();
+    this._hasDataOnServer.set(undefined); this._serverCountKnown.set(false); this._serverSideRowCount.set(0);
+    this.error.set(null); this._isFiltering.set(false); this._isSorting.set(false);
+    this.loaded.set(mode === 'clientSide'); this._internalLoading.set(mode === 'serverSide');
+    this._dataSource.sort = null; this._dataSource.filter = ''; this._dataSource.data = [];
+    this.resetScroll();
   }
 
   protected sortColumn(col: DataViewColumnDef, direction: SortDirection): void {
-    const sort = this.ngsSort;
-    if (sort) {
-      sort.active.set(col.field);
-      sort.direction.set(direction);
-      sort.sortChange.emit({ active: col.field, direction });
-    }
     this.onSortChange({ active: col.field, direction });
   }
 
@@ -1400,19 +1617,21 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
       field: col.field,
       visible: col.visible ?? true,
       width: col.width,
-      pinned: col.pinned,
-      pinAlign: col.pinAlign
+      pinned: !!col.pinned,
+      pinAlign: col.pinned ? col.pinAlign : undefined
     }));
   }
 
   applyState(state: DataViewState[]): void {
     if (!state || state.length === 0) return;
 
-    const pinOverrides = { ...this._manualPinned() };
-    const widthOverrides = { ...this._manualWidths() };
+    const pinOverrides: Record<string, { pinned: boolean; pinAlign: DataViewPinAlign }> = {};
+    const widthOverrides: Record<string, DataViewColumnDef['width']> = {};
+    const visibility: Record<string, boolean> = {};
     this.columnDefs().forEach(col => {
       const colState = state.find(s => s.field === col.field);
       if (colState) {
+        visibility[col.field] = colState.visible !== false;
         if (colState.width !== undefined) {
           widthOverrides[col.field] = colState.width;
         }
@@ -1425,6 +1644,8 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
 
     this._manualPinned.set(pinOverrides);
     this._manualWidths.set(widthOverrides);
+    this._manualVisibility.set(visibility);
+    this._manualOrder.set(state.map(c => c.field));
     this._cdr.markForCheck();
   }
 
@@ -1487,26 +1708,10 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
       + 32; // extra space for sort icon and menu button
 
     let maxContentWidth = headerWidth;
-    const visibleCols = this.normalizedColumns().filter(c => c.visible);
-    const colIndex = visibleCols.indexOf(visibleCols.find(c => c.field === col.field)!);
-
-    if (colIndex !== -1) {
-      const rows = Array.from(gridRoot.querySelectorAll('.grid-row')) as HTMLElement[];
-      const rowsToMeasure = rows.slice(0, 50);
-
-      rowsToMeasure.forEach(row => {
-        const cells = Array.from(row.querySelectorAll('.cell')) as HTMLElement[];
-        const cell = cells[colIndex];
-        if (cell) {
-          const content = cell.firstElementChild as HTMLElement;
-          if (content) {
-            const width = content.scrollWidth + 32; // + padding
-            if (width > maxContentWidth) {
-              maxContentWidth = width;
-            }
-          }
-        }
-      });
+    const cells = Array.from(gridRoot.querySelectorAll<HTMLElement>('.cell')).filter(cell => cell.dataset['columnField'] === col.field).slice(0, 50);
+    for (const cell of cells) {
+      const content = cell.firstElementChild as HTMLElement | null;
+      if (content) maxContentWidth = Math.max(maxContentWidth, content.scrollWidth + 32);
     }
 
     return Math.min(Math.max(maxContentWidth, 60), 500);
@@ -1567,22 +1772,41 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   }
 
   protected onSortChange(event: Sort): void {
+    this.sortState.set(event);
+    this.pageIndex.set(0); this.resetScroll();
     if (this.rowModelType() !== 'serverSide') {
       this.dataSource().sort = this.ngsSort || null;
     }
     this.sortChange.emit(event);
   }
 
-  selectAll(): void {
-    const data = this.rowModelType() === 'serverSide' ? this.dataSource().data : this.data();
-    this.selection.select(...data);
-    this.selectionChanged.emit(data);
+  private selectionRows(scope: DataViewSelectionScope): T[] {
+    this._dsRenderTick();
+    if (this.rowModelType() === 'serverSide') return this.dataSource().data;
+    const rows = scope === 'all' ? this.data() : this.dataSource().sortedData;
+    return scope === 'page' && this.withPagination()
+      ? rows.slice(this.pageIndex() * this.pageSize(), (this.pageIndex() + 1) * this.pageSize()) : rows;
+  }
+
+  selectAll(scope: DataViewSelectionScope = this.selectionScope()): void {
+    const data = this.selectionRows(scope);
+    this._selectedScope = this.rowModelType() === 'serverSide' && !this.getRowId() ? 'page' : scope;
+    this._selectedSearch = scope === 'all' ? '' : this.search().trim();
+    this._selectedFilters = scope === 'all' ? {} : normalizeDataViewFilters(this.normalizedFilters());
+    if (this.rowSelection() === 'single') {
+      this.selection.clear(); if (data[0]) this.selection.select(data[0]);
+    } else if (this.rowModelType() === 'serverSide' && scope !== 'page' && this.getRowId()) {
+      this.selection.selectMatching(data);
+    } else {
+      this.selection.selectRows(data);
+    }
+    this.emitSelection();
     this.allRowsSelectionChanged.emit(true);
   }
 
   unselectAll(): void {
     this.selection.clear();
-    this.selectionChanged.emit([]);
+    this.emitSelection();
     this.allRowsSelectionChanged.emit(false);
   }
 
@@ -1599,14 +1823,203 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
       row,
       checked: true
     });
-    this.selectionChanged.emit(this.selection.selected);
+    this.emitSelection();
   }
 
   isSelected(row: T): boolean {
+    this._selectionTick();
     return this.selection.isSelected(row);
   }
 
   hasSelected(): boolean {
+    this._selectionTick();
     return this.selection.hasValue();
+  }
+
+  getSelection(): DataViewSelectionState<T> {
+    const isId = (value: unknown): value is DataViewRowId => typeof value === 'string' || typeof value === 'number';
+    return { scope: this._selectedScope, allMatching: this.selection.allMatching,
+      rowIds: this.selection.keys.filter(isId), excludedRowIds: [...this.selection.excluded].filter(isId),
+      rows: this.selection.selected, search: this._selectedSearch, columnFilters: normalizeDataViewFilters(this._selectedFilters) };
+  }
+
+  private emitSelection(): void {
+    this._selectionTick.update(value => value + 1);
+    this.selectionChanged.emit(this.selection.selected);
+    this.selectionStateChanged.emit(this.getSelection()); this._cdr.markForCheck();
+  }
+
+  getState(): DataViewViewState {
+    return { version: 1, columns: this.getSnapshot(), sort: { ...this.sortState() },
+      search: this.search(), columnFilters: normalizeDataViewFilters(this.normalizedFilters()), pageSize: this.pageSize() };
+  }
+
+  setState(value: DataViewViewState): void {
+    const state = normalizeDataViewState(value, this.normalizedColumns());
+    this.applyState(state.columns); this.sortState.set(state.sort); this.search.set(state.search);
+    this.columnFilters.set(state.columnFilters); this.pageSize.set(state.pageSize); this.pageIndex.set(0); this.resetScroll();
+  }
+
+  private validateViewName(name: string, id?: string): string {
+    const trimmed = name.trim();
+    if (!trimmed || trimmed.length > 100) throw new Error('View name must contain 1–100 characters');
+    if (this.savedViews().some(view => view.id !== id && view.name.toLocaleLowerCase() === trimmed.toLocaleLowerCase())) throw new Error('A view with this name already exists');
+    return trimmed;
+  }
+
+  saveView(name: string, id?: string): DataViewSavedView {
+    if (id && !this.savedViews().some(view => view.id === id)) throw new Error(`Unknown saved view: ${id}`);
+    const view = { id: id ?? crypto.randomUUID(), name: this.validateViewName(name, id), state: this.getState() };
+    this.savedViews.update(views => id ? views.map(item => item.id === id ? view : item) : [...views, view]);
+    this._activeViewId.set(view.id); return view;
+  }
+
+  applyView(id: string | null): void {
+    if (!id) {
+      if (this._initialFullState) this.setState(this._initialFullState);
+      this._activeViewId.set(null); this.viewApplied.emit(null); return;
+    }
+    const view = this.savedViews().find(item => item.id === id);
+    if (!view) throw new Error(`Unknown saved view: ${id}`);
+    this.setState(view.state); this._activeViewId.set(id); this.viewApplied.emit(view);
+  }
+
+  renameView(id: string, name: string): void {
+    if (!this.savedViews().some(view => view.id === id)) throw new Error(`Unknown saved view: ${id}`);
+    const trimmed = this.validateViewName(name, id);
+    this.savedViews.update(views => views.map(view => view.id === id ? { ...view, name: trimmed } : view));
+  }
+
+  deleteView(id: string): void {
+    this.savedViews.update(views => views.filter(view => view.id !== id));
+    if (this.activeViewId() === id) this.applyView(null);
+  }
+
+  protected updateCurrentView(): void {
+    const view = this.savedViews().find(v => v.id === this.activeViewId()); if (view) this.saveView(view.name, view.id);
+  }
+
+  protected openSavedViewDialog(rename = false): void {
+    const current = rename ? this.savedViews().find(v => v.id === this.activeViewId()) : undefined;
+    this._dialog.open<DataViewSavedViewDialog, unknown, string>(DataViewSavedViewDialog, {
+      width: '420px', maxWidth: 'calc(100vw - 32px)', showCloseButton: true,
+      data: { name: current?.name, existingNames: this.savedViews().filter(v => v.id !== current?.id).map(v => v.name) }
+    }).afterClosed().subscribe(name => { if (name) { if (current) this.renameView(current.id, name); else this.saveView(name); } });
+  }
+
+  private viewStorage() {
+    return this._config?.viewStorage ?? this._doc.defaultView?.localStorage;
+  }
+
+  protected headerId(field: string): string { return `${this.gridId}-header-${this.columnIndex(field)}`; }
+  protected cellId(row: number, field: string): string { return `${this.gridId}-row-${row}-cell-${this.columnIndex(field)}`; }
+  protected columnIndex(field: string): number { return this.logicalColumns().indexOf(field) + 1; }
+  protected rowOwnedCells(row: number): string { return this.logicalColumns().map(field => this.cellId(row, field)).join(' '); }
+  protected headerOwnedCells(): string { return this.logicalColumns().map(field => this.headerId(field)).join(' '); }
+  protected globalRowIndex(row: number): number { return row + (this.withPagination() || this.rowModelType() === 'serverSide' ? this.pageIndex() * this.pageSize() : 0); }
+  protected isActiveCell(row: number, field: string): boolean {
+    return this.activeCell().row === row && this.activeCell().column === this.columnIndex(field) - 1;
+  }
+
+  protected activateCell(event: MouseEvent, row: number, field: string): void {
+    this.activeCell.set({ row, column: this.columnIndex(field) - 1 });
+    if (!this._isInteractiveRowClick(event)) this._elRef.nativeElement.querySelector<HTMLElement>('[role="grid"]')?.focus({ preventScroll: true });
+  }
+
+  protected onGridKeydown(event: KeyboardEvent): void {
+    const target = event.target as HTMLElement;
+    if (target.closest('button, input, select, textarea, [contenteditable="true"], [role="combobox"], [role="separator"], [role="button"]')) return;
+    const active = this.activeCell(); let { row, column } = active;
+    const length = this.effectiveDataLength(); if (!length) return;
+    const maxCol = this.logicalColumns().length - 1;
+    const page = Math.max(1, Math.floor(this._viewportHeight() / this.rowHeight()));
+    const rtl = this._doc.defaultView?.getComputedStyle(this._elRef.nativeElement).direction === 'rtl';
+    switch (event.key) {
+      case 'ArrowDown': row++; break;
+      case 'ArrowUp': row--; break;
+      case 'ArrowRight': column += rtl ? -1 : 1; break;
+      case 'ArrowLeft': column += rtl ? 1 : -1; break;
+      case 'Home': column = 0; if (event.ctrlKey || event.metaKey) row = 0; break;
+      case 'End': column = maxCol; if (event.ctrlKey || event.metaKey) row = length - 1; break;
+      case 'PageDown': row += page; break;
+      case 'PageUp': row -= page; break;
+      case ' ': if (this.withSelection()) { this.selectKeyboardRange(row, event.shiftKey); event.preventDefault(); } return;
+      case 'a': if ((event.ctrlKey || event.metaKey) && this.withSelection()) { this.selectAll(); event.preventDefault(); } return;
+      case 'Escape': if (this.withSelection()) this.unselectAll(); return;
+      case 'Enter': { const record = this.pageRows()[row]; if (record) this.rowActivated.emit(record); return; }
+      default: return;
+    }
+    event.preventDefault(); row = Math.max(0, Math.min(row, length - 1)); column = Math.max(0, Math.min(column, maxCol));
+    this.activeCell.set({ row, column }); this.revealActiveCell();
+    if (event.shiftKey && this.withSelection() && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) this.selectKeyboardRange(row, true);
+  }
+
+  private pageRows(): T[] {
+    if (this.rowModelType() === 'serverSide') return this.dataSource().data;
+    const data = this.dataSource().sortedData;
+    return this.withPagination() ? data.slice(this.pageIndex() * this.pageSize(), (this.pageIndex() + 1) * this.pageSize()) : data;
+  }
+
+  private selectKeyboardRange(index: number, extend: boolean): void {
+    const rows = this.pageRows(); const record = rows[index]; if (!record) return;
+    if (this.rowSelection() === 'single') { this.selection.clear(); this.selection.select(record); }
+    else if (extend) this.selection.selectRows(rows.slice(Math.min(this._selectionAnchor, index), Math.max(this._selectionAnchor, index) + 1));
+    else {
+      this._selectionAnchor = index;
+      if (this.selection.isSelected(record)) this.selection.deselect(record); else this.selection.select(record);
+    }
+    this.rowSelectionChanged.emit({ source: 'keyboard', row: record, checked: this.selection.isSelected(record) }); this.emitSelection();
+  }
+
+  private revealActiveCell(): void {
+    const scroller = this._scrollbarArea()?.scrollableContentRef().nativeElement; if (!scroller) return;
+    const active = this.activeCell(); const top = active.row * this.rowHeight();
+    const next = top < scroller.scrollTop ? top : top + this.rowHeight() > scroller.scrollTop + scroller.clientHeight ? top + this.rowHeight() - scroller.clientHeight : scroller.scrollTop;
+    scroller.scrollTop = Math.max(0, next); this._scrollTop.set(scroller.scrollTop); this._lastScrollTop = scroller.scrollTop;
+    const field = this.logicalColumns()[active.column];
+    if (this.centerColumns().some(c => c.field === field)) {
+      const header = this._doc.getElementById(this.headerId(field)); const viewport = this._headerCenter()?.nativeElement;
+      if (header && viewport) {
+        const cellRect = header.getBoundingClientRect(); const viewportRect = viewport.getBoundingClientRect();
+        if (cellRect.left < viewportRect.left) scroller.scrollLeft -= viewportRect.left - cellRect.left;
+        else if (cellRect.right > viewportRect.right) scroller.scrollLeft += cellRect.right - viewportRect.right;
+      }
+    }
+    this._lastScrollLeft = scroller.scrollLeft; this._syncTransforms();
+  }
+
+  protected columnPixelWidth(col: DataViewColumnDef): number {
+    const header = this._doc.getElementById(this.headerId(col.field));
+    return Math.round(header?.getBoundingClientRect().width || parseFloat(String(col.width ?? this.minColumnWidth())));
+  }
+  protected columnMinWidth(col: DataViewColumnDef): number { return parseFloat(String(col.minWidth ?? this.minColumnWidth())); }
+  protected columnMaxWidth(col: DataViewColumnDef): number { return parseFloat(String(col.maxWidth ?? 2000)); }
+  protected resizeColumnWithKeyboard(event: KeyboardEvent, col: DataViewColumnDef): void {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault(); event.stopPropagation();
+    const min = parseFloat(String(col.minWidth ?? this.minColumnWidth()));
+    const max = parseFloat(String(col.maxWidth ?? 2000));
+    const width = event.key === 'Home' ? min : event.key === 'End' ? max : this.columnPixelWidth(col) + (event.key === 'ArrowRight' ? 1 : -1) * (event.shiftKey ? 1 : 10);
+    this._manualWidths.update(widths => ({ ...widths, [col.field]: `${Math.max(min, Math.min(max, width))}px` }));
+  }
+
+  setColumnFilter(field: string, filter: DataViewColumnFilter | null): void {
+    const column = this.normalizedColumns().find(c => c.field === field);
+    if (!column) throw new Error(`Unknown column: ${field}`);
+    if (filter && column.filter && filter.type !== column.filter.type) throw new Error(`Filter type must be ${column.filter.type}`);
+    const updated = { ...this.normalizedFilters() };
+    const normalized = filter ? normalizeDataViewFilter(filter) : null;
+    if (normalized) Object.defineProperty(updated, field, { value: normalized, enumerable: true, writable: true, configurable: true });
+    else delete updated[field];
+    this.columnFilters.set(updated);
+  }
+
+  clearFilters(): void { this.search.set(''); this.columnFilters.set({}); }
+
+  protected openColumnFilter(column: DataViewColumnDef): void {
+    this._dialog.open<DataViewColumnFilterDialog, unknown, { filter: DataViewColumnFilter | null }>(DataViewColumnFilterDialog, {
+      width: '420px', maxWidth: 'calc(100vw - 32px)', showCloseButton: true,
+      data: { column, filter: this.normalizedFilters()[column.field] }
+    }).afterClosed().subscribe(result => { if (result) this.setColumnFilter(column.field, result.filter); });
   }
 }

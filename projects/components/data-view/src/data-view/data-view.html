@@ -1,56 +1,109 @@
 <div class="flex flex-col h-full overflow-hidden relative"
      ngsBlockLoaderContainer>
-  <ngs-block-loader [loading]="_isLoading()"/>
+  @if (withSavedViews()) {
+    <ngs-toolbar class="shrink-0" aria-label="Table views">
+      <ngs-toolbar-item>
+        <ngs-form-field class="view-selector" aria-label="Saved view">
+          <ngs-select placeholder="Default view" aria-label="Saved view" [ngModel]="activeViewId()" (ngModelChange)="applyView($event)">
+            <ngs-option [value]="null">Default view</ngs-option>
+            @for (view of savedViews(); track view.id) { <ngs-option [value]="view.id">{{ view.name }}</ngs-option> }
+          </ngs-select>
+        </ngs-form-field>
+      </ngs-toolbar-item>
+      @if (dirtyView()) { <ngs-toolbar-item><span class="text-sm text-on-surface-variant" role="status">Unsaved changes</span></ngs-toolbar-item> }
+      <ngs-toolbar-spacer/>
+      <ngs-toolbar-item><button ngsButton type="button" [ngsMenuTriggerFor]="viewsMenu">View actions</button></ngs-toolbar-item>
+    </ngs-toolbar>
+    @if (viewStorageError()) { <ngs-alert variant="negative" role="alert">{{ viewStorageError() }}</ngs-alert> }
+  }
+  <ngs-block-loader [loading]="blockingLoading()"/>
+  @if (error()) {
+    <ngs-alert variant="negative" class="mb-3" role="alert">
+      {{ error() }}
+      <button ngsButton type="button" (click)="refresh()">Retry</button>
+    </ngs-alert>
+  }
+  @if (refreshing()) { <div class="px-4 py-2 text-sm text-on-surface-variant" role="status" aria-live="polite">Updating records…</div> }
+  @if (activeFilters().length || search().trim()) {
+    <div class="flex items-center gap-2 flex-wrap px-3 py-2 shrink-0" aria-label="Active filters">
+      <ngs-chip-set>
+        @if (search().trim()) {
+          <ngs-chip (removed)="search.set('')">Search: {{ search() }}<button ngsChipRemove type="button" aria-label="Remove search filter"><ngs-icon name="fluent:dismiss-16-regular"/></button></ngs-chip>
+        }
+        @for (filter of activeFilters(); track filter.field) {
+          <ngs-chip (removed)="setColumnFilter(filter.field, null)">{{ filter.label }}<button ngsChipRemove type="button" [attr.aria-label]="'Remove filter ' + filter.label"><ngs-icon name="fluent:dismiss-16-regular"/></button></ngs-chip>
+        }
+      </ngs-chip-set>
+      <button ngsButton type="button" (click)="clearFilters()">Clear all</button>
+    </div>
+  }
   @if (shouldRenderGrid()) {
-    @if (!noFilteredResults) {
-      <div class="grid-root flex flex-col grow overflow-hidden relative">
+      <div class="grid-root flex flex-col grow overflow-hidden relative" role="grid" tabindex="0"
+           [attr.aria-label]="ariaLabel()" [attr.aria-rowcount]="ariaRowCount()" [attr.aria-colcount]="logicalColumns().length"
+           [attr.aria-busy]="_isLoading()" [attr.aria-multiselectable]="withSelection() && rowSelection() === 'multiple'"
+           [attr.aria-activedescendant]="activeCellId()" [attr.aria-describedby]="noFilteredResults ? gridId + '-empty' : null" (keydown)="onGridKeydown($event)">
         @if (isResizing()) {
           <div class="ngs-data-view-resize-line" [style.left.px]="resizeLineLeft()"></div>
         }
 
         <!-- GRID HEADER -->
         <div class="grid-header pinned top-0 z-20 flex overflow-hidden shrink-0 font-medium"
+             role="row" aria-rowindex="1" [attr.aria-owns]="headerOwnedCells()"
              ngsSort
+             [ngsSortActive]="sortState().active"
+             [ngsSortDirection]="sortState().direction"
              [style.height.px]="headerHeight()"
-             [ngsSortDisabled]="!isSortingEnabled() || _isLoading() || _isFiltering()"
+             [ngsSortDisabled]="!isSortingEnabled() || blockingLoading()"
              (ngsSortChange)="onSortChange($event)">
           @if (pinnedLeftColumns().length > 0 || withSelection()) {
             <div class="grid-header-left shrink-0 flex z-30"
                  [ngStyle]="leftPinnedWidthStyles()">
               <div class="header-inner flex" [style.width.px]="leftPinnedWidth()">
                 @if (withSelection()) {
-                  <div class="header-cell cell-selection flex items-center justify-center shrink-0">
+                  <div class="header-cell cell-selection flex items-center justify-center shrink-0" role="columnheader"
+                       [attr.id]="headerId('__selection')" aria-colindex="1" aria-label="Row selection">
                     @if (rowSelection() === 'multiple') {
-                      <ngs-checkbox (change)="$event ? toggleAllRows() : null"
-                                    [checked]="selection.hasValue() && isAllSelected()"
-                                    [indeterminate]="selection.hasValue() && !isAllSelected()" />
+                      <ngs-checkbox aria-label="Select rows in current selection scope" (change)="$event ? toggleAllRows() : null"
+                                    [checked]="hasSelected() && isAllSelected()"
+                                    [indeterminate]="isPartiallySelected()" />
                     }
                   </div>
                 }
                 @for (col of pinnedLeftColumns(); track col.field) {
                   <div class="header-cell flex items-center truncate relative"
+                       [attr.id]="headerId(col.field)" role="columnheader" [attr.aria-labelledby]="headerId(col.field) + '-label'" [attr.aria-colindex]="columnIndex(col.field)"
+                       [attr.aria-sort]="sortState().active === col.field && sortState().direction ? (sortState().direction === 'asc' ? 'ascending' : 'descending') : 'none'"
                        [class.shrink-0]="!col.flex"
                        [style.flex]="col.flex"
                        [style.width]="col.width"
                        [style.min-width]="col.width"
                        [style.max-width]="col.width">
                     <div class="flex items-center grow truncate"
-                         [ngs-sort-header]="col.field"
+                         [ngs-sort-header]="col.field" [sortActionDescription]="'Sort by ' + col.name"
                          [disabled]="!col.sortable">
-                      <span class="truncate">{{ col.name }}</span>
+                      <span class="truncate" [attr.id]="headerId(col.field) + '-label'">{{ col.name }}</span>
                     </div>
+                    @if (col.filter) {
+                      <button ngsIconButton type="button" [attr.aria-label]="'Filter ' + col.name"
+                              [class.is-filter-active]="!!normalizedFilters()[col.field]" (click)="openColumnFilter(col)">
+                        <ngs-icon name="fluent:filter-20-regular"/>
+                      </button>
+                    }
                     @if (col.withColumnSettings !== false && withColumnSettings()) {
                       <button ngsIconButton
                               #menuTrigger="ngsMenuTrigger"
                               [ngsMenuTriggerFor]="columnMenu"
                               [ngsMenuTriggerData]="{ col: col }"
-                              class="ngs-data-view-column-settings-btn shrink-0"
+                              class="ngs-data-view-column-settings-btn shrink-0" [attr.aria-label]="col.name + ' column actions'"
                               [class.is-menu-open]="menuTrigger.menuOpen()">
                         <ngs-icon name="fluent:more-vertical-24-regular" size="20"/>
                       </button>
                     }
                     @if (col.resizable) {
-                      <div class="col-resize-handle" (mousedown)="onColumnResizeStart($event, col)"></div>
+                      <div class="col-resize-handle" role="separator" tabindex="0" aria-orientation="vertical"
+                           [attr.aria-label]="'Resize ' + col.name" [attr.aria-valuenow]="columnPixelWidth(col)"
+                           [attr.aria-valuemin]="columnMinWidth(col)" [attr.aria-valuemax]="columnMaxWidth(col)"
+                           (keydown)="resizeColumnWithKeyboard($event, col)" (mousedown)="onColumnResizeStart($event, col)"></div>
                     }
                   </div>
                 }
@@ -62,28 +115,39 @@
             <div #headerCenterInner class="flex header-inner" [style.width.px]="centerWidth()">
               @for (col of centerColumns(); track col.field) {
                 <div class="header-cell flex items-center truncate relative"
+                       [attr.id]="headerId(col.field)" role="columnheader" [attr.aria-labelledby]="headerId(col.field) + '-label'" [attr.aria-colindex]="columnIndex(col.field)"
+                       [attr.aria-sort]="sortState().active === col.field && sortState().direction ? (sortState().direction === 'asc' ? 'ascending' : 'descending') : 'none'"
                      [class.shrink-0]="!col.flex"
                      [style.flex]="col.flex"
                      [style.width]="col.width"
                      [style.min-width]="col.width"
                      [style.max-width]="col.width">
                     <div class="flex items-center grow truncate"
-                         [ngs-sort-header]="col.field"
+                         [ngs-sort-header]="col.field" [sortActionDescription]="'Sort by ' + col.name"
                          [disabled]="!col.sortable">
-                      <span class="truncate">{{ col.name }}</span>
+                      <span class="truncate" [attr.id]="headerId(col.field) + '-label'">{{ col.name }}</span>
                     </div>
+                    @if (col.filter) {
+                      <button ngsIconButton type="button" [attr.aria-label]="'Filter ' + col.name"
+                              [class.is-filter-active]="!!normalizedFilters()[col.field]" (click)="openColumnFilter(col)">
+                        <ngs-icon name="fluent:filter-20-regular"/>
+                      </button>
+                    }
                     @if (col.withColumnSettings !== false && withColumnSettings()) {
                       <button ngsIconButton
                               #menuTrigger="ngsMenuTrigger"
                               [ngsMenuTriggerFor]="columnMenu"
                               [ngsMenuTriggerData]="{ col: col }"
-                              class="ngs-data-view-column-settings-btn shrink-0"
+                              class="ngs-data-view-column-settings-btn shrink-0" [attr.aria-label]="col.name + ' column actions'"
                               [class.is-menu-open]="menuTrigger.menuOpen()">
                         <ngs-icon name="fluent:more-vertical-24-regular" size="20"/>
                       </button>
                     }
                     @if (col.resizable) {
-                      <div class="col-resize-handle" (mousedown)="onColumnResizeStart($event, col)"></div>
+                      <div class="col-resize-handle" role="separator" tabindex="0" aria-orientation="vertical"
+                           [attr.aria-label]="'Resize ' + col.name" [attr.aria-valuenow]="columnPixelWidth(col)"
+                           [attr.aria-valuemin]="columnMinWidth(col)" [attr.aria-valuemax]="columnMaxWidth(col)"
+                           (keydown)="resizeColumnWithKeyboard($event, col)" (mousedown)="onColumnResizeStart($event, col)"></div>
                     }
                 </div>
               }
@@ -96,33 +160,44 @@
               <div class="header-inner flex" [style.width.px]="rightPinnedWidth()">
                 @for (col of pinnedRightColumns(); track col.field) {
                   <div class="header-cell flex items-center truncate relative"
+                       [attr.id]="headerId(col.field)" role="columnheader" [attr.aria-labelledby]="headerId(col.field) + '-label'" [attr.aria-colindex]="columnIndex(col.field)"
+                       [attr.aria-sort]="sortState().active === col.field && sortState().direction ? (sortState().direction === 'asc' ? 'ascending' : 'descending') : 'none'"
                        [class.shrink-0]="!col.flex"
                        [style.flex]="col.flex"
                        [style.width]="col.width"
                        [style.min-width]="col.width"
                        [style.max-width]="col.width">
                     <div class="flex items-center grow truncate"
-                         [ngs-sort-header]="col.field"
+                         [ngs-sort-header]="col.field" [sortActionDescription]="'Sort by ' + col.name"
                          [disabled]="!col.sortable">
-                      <span class="truncate">{{ col.name }}</span>
+                      <span class="truncate" [attr.id]="headerId(col.field) + '-label'">{{ col.name }}</span>
                     </div>
+                    @if (col.filter) {
+                      <button ngsIconButton type="button" [attr.aria-label]="'Filter ' + col.name"
+                              [class.is-filter-active]="!!normalizedFilters()[col.field]" (click)="openColumnFilter(col)">
+                        <ngs-icon name="fluent:filter-20-regular"/>
+                      </button>
+                    }
                     @if (col.withColumnSettings !== false && withColumnSettings()) {
                       <button ngsIconButton
                               #menuTrigger="ngsMenuTrigger"
                               [ngsMenuTriggerFor]="columnMenu"
                               [ngsMenuTriggerData]="{ col: col }"
-                              class="ngs-data-view-column-settings-btn shrink-0"
+                              class="ngs-data-view-column-settings-btn shrink-0" [attr.aria-label]="col.name + ' column actions'"
                               [class.is-menu-open]="menuTrigger.menuOpen()">
                         <ngs-icon name="fluent:more-vertical-24-regular" size="20"/>
                       </button>
                     }
                     @if (col.resizable) {
-                      <div class="col-resize-handle" (mousedown)="onColumnResizeStart($event, col)"></div>
+                      <div class="col-resize-handle" role="separator" tabindex="0" aria-orientation="vertical"
+                           [attr.aria-label]="'Resize ' + col.name" [attr.aria-valuenow]="columnPixelWidth(col)"
+                           [attr.aria-valuemin]="columnMinWidth(col)" [attr.aria-valuemax]="columnMaxWidth(col)"
+                           (keydown)="resizeColumnWithKeyboard($event, col)" (mousedown)="onColumnResizeStart($event, col)"></div>
                     }
                   </div>
                 }
                 @if (actionBarTemplateRef) {
-                  <div class="header-cell flex items-center shrink-0"
+                  <div class="header-cell flex items-center shrink-0" role="columnheader" [attr.id]="headerId('__actions')" [attr.aria-colindex]="columnIndex('__actions')" aria-label="Row actions"
                        [style.width.px]="actionBarWidth()"
                        [style.min-width.px]="actionBarWidth()"
                        [style.max-width.px]="actionBarWidth()">
@@ -135,37 +210,47 @@
         </div>
 
         <div class="grid-body grow flex relative">
+          @if (noFilteredResults) {
+            <div class="grow flex items-center justify-center p-6" role="status" [attr.id]="gridId + '-empty'">
+              <ng-container [ngTemplateOutlet]="emptyContent"/>
+            </div>
+          } @else {
           @if (pinnedLeftColumns().length > 0 || withSelection()) {
             <div #bodyLeft class="grid-body-left pinned-viewport shrink-0 overflow-hidden z-10 pinned left-0"
                  [ngStyle]="leftPinnedWidthStyles()">
               <div #bodyLeftCanvas class="pinned-canvas">
                 <div #bodyLeftContent class="pinned-content relative" [style.height.px]="totalHeight()">
-                  @for (row of visibleRows(); track row.index) {
+                  @for (row of visibleRows(); track row.key) {
                     <div class="grid-row flex absolute left-0 right-0 hover:bg-[var(--ngs-data-view-row-hover-bg)]"
                          [style.top.px]="row.top"
                          [style.height.px]="rowHeight()"
-                         [attr.data-row-index]="row.index"
-                         [class.is-selected]="selection.isSelected(row.item)"
+                         role="presentation" [attr.data-row-index]="row.index"
+                         [class.is-selected]="isSelected(row.item)"
                          [class.is-hovered]="hoveredRowIndex() === row.index"
                          [class.is-last]="row.isLast"
                          (mouseenter)="hoveredRowIndex.set(row.index)"
                          (mouseleave)="hoveredRowIndex.set(null)"
                          (click)="selectRowByClick($event, row.item)">
                       @if (withSelection()) {
-                        <div class="cell cell-selection flex items-center justify-center shrink-0">
-                          <ngs-checkbox (click)="$event.stopPropagation()"
+                        <div class="cell cell-selection flex items-center justify-center shrink-0" role="gridcell"
+                             [attr.id]="cellId(row.index, '__selection')" aria-colindex="1" [class.is-active]="isActiveCell(row.index, '__selection')"
+                             (click)="activateCell($event, row.index, '__selection')">
+                          <ngs-checkbox [aria-label]="'Select row ' + (globalRowIndex(row.index) + 1)" (click)="$event.stopPropagation()"
                                         (change)="$event ? rowSelectionToggle($event, row.item) : null"
-                                        [checked]="selection.isSelected(row.item)" />
+                                        [checked]="isSelected(row.item)" />
                         </div>
                       }
                       @for (col of pinnedLeftColumns(); track col.field) {
-                        <div class="cell flex items-center truncate"
+                        <div class="cell flex items-center truncate" role="gridcell" [attr.id]="cellId(row.index, col.field)"
+                             [attr.aria-colindex]="columnIndex(col.field)" [attr.aria-labelledby]="headerId(col.field) + '-label ' + cellId(row.index, col.field) + '-value'"
+                             [attr.data-column-field]="col.field" [class.is-active]="isActiveCell(row.index, col.field)"
+                             (click)="activateCell($event, row.index, col.field)"
                              [class.shrink-0]="!col.flex"
                              [style.flex]="col.flex"
                              [style.width]="col.width"
                              [style.min-width]="col.width"
                              [style.max-width]="col.width">
-                          <ng-container *ngTemplateOutlet="cellContent; context: { row: row.item, col: col }"></ng-container>
+                          <ng-container *ngTemplateOutlet="cellContent; context: { row: row.item, col: col, index: row.index }"></ng-container>
                         </div>
                       }
                     </div>
@@ -178,26 +263,30 @@
           <div #bodyCenter class="grid-body-center grow overflow-hidden relative">
             <ngs-scrollbar-area>
               <div #bodyCenterContent class="rows-container">
-                @for (row of visibleRows(); track row.index) {
+                @for (row of visibleRows(); track row.key) {
                   <div class="grid-row flex absolute left-0 hover:bg-[var(--ngs-data-view-row-hover-bg)]"
                        [style.top.px]="row.top"
                        [style.height.px]="rowHeight()"
                        [style.width.px]="centerWidth()"
-                       [attr.data-row-index]="row.index"
-                       [class.is-selected]="selection.isSelected(row.item)"
+                       role="row" [attr.aria-rowindex]="globalRowIndex(row.index) + 2" [attr.aria-selected]="withSelection() ? isSelected(row.item) : null"
+                       [attr.aria-owns]="rowOwnedCells(row.index)" [attr.data-row-index]="row.index"
+                       [class.is-selected]="isSelected(row.item)"
                        [class.is-hovered]="hoveredRowIndex() === row.index"
                        [class.is-last]="row.isLast"
                        (mouseenter)="hoveredRowIndex.set(row.index)"
                        (mouseleave)="hoveredRowIndex.set(null)"
                        (click)="selectRowByClick($event, row.item)">
                     @for (col of centerColumns(); track col.field) {
-                      <div class="cell flex items-center truncate"
+                      <div class="cell flex items-center truncate" role="gridcell" [attr.id]="cellId(row.index, col.field)"
+                             [attr.aria-colindex]="columnIndex(col.field)" [attr.aria-labelledby]="headerId(col.field) + '-label ' + cellId(row.index, col.field) + '-value'"
+                             [attr.data-column-field]="col.field" [class.is-active]="isActiveCell(row.index, col.field)"
+                             (click)="activateCell($event, row.index, col.field)"
                            [class.shrink-0]="!col.flex"
                            [style.flex]="col.flex"
                            [style.width]="col.width"
                            [style.min-width]="col.width"
                            [style.max-width]="col.width">
-                        <ng-container *ngTemplateOutlet="cellContent; context: { row: row.item, col: col }"/>
+                        <ng-container *ngTemplateOutlet="cellContent; context: { row: row.item, col: col, index: row.index }"/>
                       </div>
                     }
                   </div>
@@ -212,29 +301,34 @@
                  [ngStyle]="rightPinnedWidthStyles()">
               <div #bodyRightCanvas class="pinned-canvas">
                 <div #bodyRightContent class="pinned-content relative" [style.height.px]="totalHeight()">
-                  @for (row of visibleRows(); track row.index) {
+                  @for (row of visibleRows(); track row.key) {
                     <div class="grid-row flex absolute left-0 right-0 hover:bg-[var(--ngs-data-view-row-hover-bg)]"
                          [style.top.px]="row.top"
                          [style.height.px]="rowHeight()"
-                         [attr.data-row-index]="row.index"
-                         [class.is-selected]="selection.isSelected(row.item)"
+                         role="presentation" [attr.data-row-index]="row.index"
+                         [class.is-selected]="isSelected(row.item)"
                          [class.is-hovered]="hoveredRowIndex() === row.index"
                          [class.is-last]="row.isLast"
                          (mouseenter)="hoveredRowIndex.set(row.index)"
                          (mouseleave)="hoveredRowIndex.set(null)"
                          (click)="selectRowByClick($event, row.item)">
                       @for (col of pinnedRightColumns(); track col.field) {
-                        <div class="cell flex items-center truncate"
+                        <div class="cell flex items-center truncate" role="gridcell" [attr.id]="cellId(row.index, col.field)"
+                             [attr.aria-colindex]="columnIndex(col.field)" [attr.aria-labelledby]="headerId(col.field) + '-label ' + cellId(row.index, col.field) + '-value'"
+                             [attr.data-column-field]="col.field" [class.is-active]="isActiveCell(row.index, col.field)"
+                             (click)="activateCell($event, row.index, col.field)"
                              [class.shrink-0]="!col.flex"
                              [style.flex]="col.flex"
                              [style.width]="col.width"
                              [style.min-width]="col.width"
                              [style.max-width]="col.width">
-                          <ng-container *ngTemplateOutlet="cellContent; context: { row: row.item, col: col }"></ng-container>
+                          <ng-container *ngTemplateOutlet="cellContent; context: { row: row.item, col: col, index: row.index }"></ng-container>
                         </div>
                       }
                       @if (actionBarTemplateRef) {
-                        <div class="cell flex items-center shrink-0"
+                        <div class="cell flex items-center shrink-0" role="gridcell" [attr.id]="cellId(row.index, '__actions')"
+                             [attr.aria-colindex]="columnIndex('__actions')" [class.is-active]="isActiveCell(row.index, '__actions')"
+                             (click)="activateCell($event, row.index, '__actions')"
                              [style.width.px]="actionBarWidth()"
                              [style.min-width.px]="actionBarWidth()"
                              [style.max-width.px]="actionBarWidth()">
@@ -247,48 +341,25 @@
               </div>
             </div>
           }
+          }
         </div>
 
+      </div>
         @if (withPagination() && !paginator()) {
           <ngs-paginator [pageSizeOptions]="pageSizeOptions()"
                          [showFirstLastButtons]="showFirstLastButtons()"
                          [pageSize]="pageSize()"
                          [pageIndex]="pageIndex()"
                          [length]="effectivePaginatorLength()"
-                         [disabled]="_isLoading() || _isFiltering()"
+                         [disabled]="blockingLoading()"
                          (page)="onPageChange($event)"/>
         }
-      </div>
-    } @else {
-      @if (isNoResults) {
-        @if (emptyFilterResultsTemplateRef) {
-          <ng-container [ngTemplateOutlet]="emptyFilterResultsTemplateRef"/>
-        } @else {
-          <ngs-empty-state>
-            <ngs-empty-state-icon>
-              <ngs-icon [name]="emptyFilterResultsIcon()"/>
-            </ngs-empty-state-icon>
-            <ngs-empty-state-content>{{ interpolatedEmptyFilterResultsText() }}</ngs-empty-state-content>
-          </ngs-empty-state>
-        }
-      } @else {
-        @if (emptyTemplateRef) {
-          <ng-container [ngTemplateOutlet]="emptyTemplateRef"/>
-        } @else {
-          <ngs-empty-state>
-            <ngs-empty-state-icon>
-              <ngs-icon [name]="emptyIcon()"/>
-            </ngs-empty-state-icon>
-            <ngs-empty-state-content>{{ emptyText() }}</ngs-empty-state-content>
-          </ngs-empty-state>
-        }
-      }
-    }
+
   }
 </div>
 
-<ng-template #cellContent let-row="row" let-col="col">
-  <div class="overflow-hidden w-full">
+<ng-template #cellContent let-row="row" let-col="col" let-index="index">
+  <div class="overflow-hidden w-full" [attr.id]="cellId(index, col.field) + '-value'">
     @if (col.cellRenderer && hasCellRenderer(col.cellRenderer)) {
       <ng-container [ngComponentOutlet]="getCellRenderer(col.cellRenderer)"
                     [ngComponentOutletInputs]="{ element: row, columnDef: col, fieldData: getNestedValue(row, col.field) }"
@@ -352,3 +423,38 @@
     </button>
   </ng-template>
 </ngs-menu>
+
+<ngs-menu #viewsMenu="ngsMenu">
+  <button ngs-menu-item (click)="openSavedViewDialog()">Save current view</button>
+  <button ngs-menu-item [disabled]="!activeViewId()" (click)="updateCurrentView()">Update current view</button>
+  <button ngs-menu-item [disabled]="!activeViewId()" (click)="openSavedViewDialog(true)">Rename view</button>
+  <button ngs-menu-item [disabled]="!activeViewId()" (click)="deleteView(activeViewId()!)">Delete view</button>
+  <ngs-menu-divider/>
+  <button ngs-menu-item (click)="applyView(null)">Reset to default view</button>
+</ngs-menu>
+
+<ng-template #emptyContent>
+      @if (isNoResults) {
+        @if (emptyFilterResultsTemplateRef) {
+          <ng-container [ngTemplateOutlet]="emptyFilterResultsTemplateRef"/>
+        } @else {
+          <ngs-empty-state>
+            <ngs-empty-state-icon>
+              <ngs-icon [name]="emptyFilterResultsIcon()"/>
+            </ngs-empty-state-icon>
+            <ngs-empty-state-content>{{ interpolatedEmptyFilterResultsText() }}</ngs-empty-state-content>
+          </ngs-empty-state>
+        }
+      } @else {
+        @if (emptyTemplateRef) {
+          <ng-container [ngTemplateOutlet]="emptyTemplateRef"/>
+        } @else {
+          <ngs-empty-state>
+            <ngs-empty-state-icon>
+              <ngs-icon [name]="emptyIcon()"/>
+            </ngs-empty-state-icon>
+            <ngs-empty-state-content>{{ emptyText() }}</ngs-empty-state-content>
+          </ngs-empty-state>
+        }
+      }
+</ng-template>

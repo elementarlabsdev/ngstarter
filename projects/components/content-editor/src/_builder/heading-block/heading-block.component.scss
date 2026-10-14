@@ -2,34 +2,15 @@
 
 :host {
   display: block;
-
   .content {
-    outline: none;
-    font-weight: 700;
-
-    &:empty {
-      &:before {
-        content: attr(data-empty-placeholder);
-        color: var(--ngs-color-neutral-500);
-      }
-    }
+    margin: 0; outline: none;
+    font-weight: var(--ngs-content-editor-heading-weight, 650);
+    line-height: var(--ngs-content-editor-heading-line-height, 1.2);
   }
-
-  &.level-1 {
-    .content {
-      font-size: 3rem;
-    }
-  }
-
-  &.level-2 {
-    .content {
-      font-size: 2.25rem;
-    }
-  }
-
-  &.level-3 {
-    .content {
-      font-size: 1.875rem;
-    }
-  }
+  &.level-1 { .content { font-size: var(--ngs-content-editor-heading-1-size, 2.5rem); } }
+  &.level-2 { .content { font-size: var(--ngs-content-editor-heading-2-size, 2rem); } }
+  &.level-3 { .content { font-size: var(--ngs-content-editor-heading-3-size, 1.5rem); } }
+  &.level-4 { .content { font-size: var(--ngs-content-editor-heading-4-size, 1.25rem); } }
+  &.level-5 { .content { font-size: var(--ngs-content-editor-heading-5-size, 1.125rem); } }
+  &.level-6 { .content { font-size: var(--ngs-content-editor-heading-6-size, 1rem); } }
 }
