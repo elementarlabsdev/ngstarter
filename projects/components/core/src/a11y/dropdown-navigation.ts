@@ -88,12 +88,17 @@ export function scrollDropdownItemIntoView(element: HTMLElement, panel: HTMLElem
   container ??= panel;
   const itemBounds = element.getBoundingClientRect();
   const bounds = container.getBoundingClientRect();
-  const top = bounds.top + container.clientTop;
-  const bottom = top + container.clientHeight;
+  // Popup opening animations scale visual bounds, but scrollTop/clientHeight stay in layout pixels.
+  const scaleY = container.offsetHeight > 0 ? bounds.height / container.offsetHeight : 1;
+  if (scaleY <= 0) {
+    return;
+  }
+  const top = bounds.top + container.clientTop * scaleY;
+  const bottom = top + container.clientHeight * scaleY;
   if (itemBounds.top < top) {
-    container.scrollTop += itemBounds.top - top;
+    container.scrollTop += (itemBounds.top - top) / scaleY;
   } else if (itemBounds.bottom > bottom) {
-    container.scrollTop += itemBounds.bottom - bottom;
+    container.scrollTop += (itemBounds.bottom - bottom) / scaleY;
   }
 }
 

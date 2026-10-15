@@ -311,6 +311,36 @@ describe('CountrySelect', () => {
     expect(getOptions().length).toBeGreaterThan(32);
   });
 
+  it('fully reveals the selected country below the search header on open and reopen', async () => {
+    const fixture = await createHost(CountrySelectHost);
+    fixture.componentInstance.country().setValue('EH');
+    fixture.detectChanges();
+
+    for (let attempt = 0; attempt < 2; attempt++) {
+      getSelect(fixture).dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }));
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const panel = getPanel();
+      const content = panel.querySelector('.ngs-select-content') as HTMLElement;
+      const selected = panel.querySelector('.ngs-option-selected') as HTMLElement;
+      const search = panel.querySelector('ngs-select-header') as HTMLElement;
+
+      expect(selected.textContent).toContain('Western Sahara');
+      expect(content.scrollTop).toBeGreaterThan(0);
+      expect(selected.getBoundingClientRect().top).toBeGreaterThanOrEqual(
+        search.getBoundingClientRect().bottom - 1
+      );
+      expect(selected.getBoundingClientRect().bottom).toBeLessThanOrEqual(
+        content.getBoundingClientRect().bottom + 1
+      );
+
+      getCountrySelect(fixture).ngsSelect().close();
+      fixture.detectChanges();
+    }
+  });
+
   it('loads countries progressively after opening', async () => {
     vi.useFakeTimers();
     const fixture = await createHost(CountrySelectHost);
