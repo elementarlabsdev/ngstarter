@@ -1,6 +1,11 @@
 import { InjectionToken, Signal, ElementRef, OutputEmitterRef, WritableSignal } from '@angular/core';
+import { Highlightable } from '@angular/cdk/a11y';
 
-export abstract class _Option {
+export abstract class _Option implements Highlightable {
+  abstract id: string;
+  abstract setActiveStyles(): void;
+  abstract setInactiveStyles(): void;
+  abstract getLabel(): string;
   abstract value: Signal<any>;
   abstract data?: Signal<any>;
   abstract elementRef: ElementRef<HTMLElement>;

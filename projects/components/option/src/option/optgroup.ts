@@ -5,7 +5,7 @@ import { Component, input, booleanAttribute, ChangeDetectionStrategy } from '@an
   exportAs: 'ngsOptgroup',
   standalone: true,
   template: `
-    <span class="ngs-optgroup-label">{{ label() }}</span>
+    <span class="ngs-optgroup-label" [id]="id">{{ label() }}</span>
     <ng-content select="ngs-option" />
   `,
   styles: [`

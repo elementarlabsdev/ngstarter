@@ -19,11 +19,11 @@
     @if (selectedCountries.length === 1) {
       @let selectedCountry = selectedCountries[0];
       <span class="ngs-select-trigger-content">
-        <span class="flag-icon" aria-hidden="true">{{ selectedCountry.flag }}</span>
+        <span class="flag-icon inline-flex size-5.5 flex-none items-center justify-center text-[22px] leading-none" aria-hidden="true">{{ selectedCountry.flag }}</span>
         <span class="ngs-select-trigger-text">
           {{ selectedCountry.name }}
           @if (showCountryCode()) {
-            <span class="code">({{ selectedCountry.code }})</span>
+            <span class="code uppercase text-neutral-500">({{ selectedCountry.code }})</span>
           }
         </span>
       </span>
@@ -63,12 +63,12 @@
 
   @for (country of visibleCountries(); track country.code) {
     <ngs-option [value]="country.code">
-      <div class="select-option-content">
-        <span class="flag-icon" aria-hidden="true">{{ country.flag }}</span>
-        <span class="select-option-text">
+      <div class="select-option-content flex h-full w-full min-w-0 items-center gap-(--ngs-dropdown-item-gap) overflow-hidden whitespace-nowrap">
+        <span class="flag-icon inline-flex size-5.5 flex-none items-center justify-center text-[22px] leading-none" aria-hidden="true">{{ country.flag }}</span>
+        <span class="select-option-text min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
         {{ country.name }}
           @if (showCountryCode()) {
-            <span class="code">({{ country.code }})</span>
+            <span class="code uppercase text-neutral-500">({{ country.code }})</span>
           }
       </span>
       </div>

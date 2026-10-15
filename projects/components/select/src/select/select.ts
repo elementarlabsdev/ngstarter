@@ -21,7 +21,9 @@ import {
   untracked,
   viewChildren,
   numberAttribute,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  Injector,
+  afterNextRender
 } from '@angular/core';
 import { outputToObservable } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
@@ -37,7 +39,10 @@ import { Subject, takeUntil } from 'rxjs';
 import { Optgroup, Option, _Option, OPTION, OPTION_PARENT, _OptionParent } from '@ngstarter-ui/components/option';
 import { FormFieldControl, FORM_FIELD } from '@ngstarter-ui/components/form-field';
 import { _Select, SELECT } from './select-token';
-import { AUTOFOCUSABLE } from '@ngstarter-ui/components/core';
+import {
+  AUTOFOCUSABLE, createDropdownActiveDescendantKeyManager, isDropdownItemHidden,
+  isDropdownTextInput, scrollDropdownItemIntoView
+} from '@ngstarter-ui/components/core';
 import { SelectDataSource, SelectDataSourceOption, SelectDataSourceResult } from './select-data-source';
 import { SelectOptionContentContext, SelectOptionContentDef } from './select-option-content-def.directive';
 import { SelectValueContext, SelectValueDef } from './select-value-def.directive';
@@ -85,6 +90,7 @@ export class SelectChange {
     '[attr.tabindex]': 'disabled ? -1 : tabIndex()',
     '[attr.aria-controls]': 'panelOpen() ? id + "-panel" : null',
     '[attr.aria-expanded]': 'panelOpen()',
+    '[attr.aria-activedescendant]': 'panelOpen() ? activeOptionId() : null',
     '[attr.aria-label]': 'ariaLabel()',
     '[attr.aria-required]': 'required',
     '[attr.aria-disabled]': 'disabled',
@@ -97,7 +103,7 @@ export class SelectChange {
     '[class.ngs-select-has-filter-trigger]': 'filterTrigger().length > 0',
     '[class.ngs-select-clearable]': 'clearable()',
     '[class.ngs-select-has-clear]': 'showClearButton()',
-    '(click)': 'toggle()',
+    '(click)': '_handleClick($event)',
     '(keydown)': '_handleKeydown($event)',
     '(focus)': '_onFocus()',
     '(blur)': '_onBlur()',
@@ -105,6 +111,7 @@ export class SelectChange {
 })
 export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit, DoCheck, FormFieldControl<any>, _Select, _OptionParent {
   private _elementRef = inject(ElementRef);
+  private _injector = inject(Injector);
   private _cdr = inject(ChangeDetectorRef);
   private _destroy = new Subject<void>();
   private _formField = inject(FORM_FIELD, { optional: true });
@@ -154,6 +161,11 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
     ...this.projectedOptions(),
     ...this.dataSourceOptions()
   ]);
+  private readonly _keyManager = createDropdownActiveDescendantKeyManager(this.options, this._injector, {
+    skip: option => option.disabled || isDropdownItemHidden(option.elementRef.nativeElement),
+  });
+  private readonly _keyboardNavigation = signal(false);
+  protected readonly activeOptionId = computed(() => this._keyManager.activeItem?.id ?? null);
   optionGroups = contentChildren(Optgroup, { descendants: true });
   customTrigger = contentChildren(SelectTrigger, { descendants: true });
   filterTrigger = contentChildren(FilterTrigger, { descendants: true });
@@ -178,6 +190,7 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
   }
 
   panelOpen = signal(false);
+  private _initialActiveEdge: 'first' | 'last' = 'first';
   _panelPosition = signal<'top' | 'bottom'>('bottom');
   private _selectionModel: SelectionModel<_Option>;
   private _selectionChanges = signal<number>(0);
@@ -242,6 +255,27 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
     }
 
     this._selectionModel = new SelectionModel<_Option>(this.multiple());
+    this._keyManager.change.pipe(takeUntil(this._destroy)).subscribe(() => {
+      this._scrollToActiveOption();
+      this._syncSearchAria();
+    });
+    effect(() => {
+      this.options();
+      const panel = this.panel();
+      const open = this.panelOpen();
+      const active = this._keyManager.activeItem;
+      const keyboard = this._keyboardNavigation();
+      untracked(() => {
+        if (open && panel) {
+          if (keyboard && (!active || !this.options().includes(active) || active.disabled ||
+              isDropdownItemHidden(active.elementRef.nativeElement))) {
+            this._activateInitialOption();
+          }
+          this._scrollToActiveOption();
+          this._syncSearchAria();
+        }
+      });
+    });
     const destroyRef = inject(DestroyRef);
     destroyRef.onDestroy(() => {
       this._selectionModelDestroy.next();
@@ -275,7 +309,7 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
 
         if (this.panelOpen()) {
           setTimeout(() => {
-            this._scrollToSelectedOption();
+            this._scrollToActiveOption();
           }, 10);
         }
       });
@@ -447,6 +481,7 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
 
   ngOnDestroy() {
     this._destroyed = true;
+    this._keyManager.destroy();
     this._asyncAbortController?.abort();
     this._destroy.next();
     this._destroy.complete();
@@ -467,22 +502,36 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
     }
   }
 
-  toggle(): void {
+  _handleClick(event: MouseEvent): void {
+    this.toggle(event.detail === 0 ? 'keyboard' : 'mouse');
+  }
+
+  toggle(origin: 'keyboard' | 'mouse' = 'mouse'): void {
     if (this.disabled) {
       return;
     }
-    this.panelOpen() ? this.close() : this.open();
+    this.panelOpen() ? this.close() : this.open('first', origin);
   }
 
-  open(): void {
+  open(edge: 'first' | 'last' = 'first', origin: 'keyboard' | 'mouse' = 'mouse'): void {
     if (this.disabled || this.panelOpen()) {
       return;
     }
     this._updateOverlayWidth();
+    this._initialActiveEdge = edge;
+    this._keyboardNavigation.set(origin === 'keyboard');
     this.panelOpen.set(true);
     this._focused.set(true);
     this.stateChanges.set(undefined);
     this.opened.emit();
+    afterNextRender(() => {
+      if (!this._destroyed && this.panelOpen()) {
+        this.panel()?.nativeElement.querySelector<HTMLInputElement>(
+          'ngs-select-header input:not([disabled]):not([readonly])'
+        )?.focus();
+        this._scrollToActiveOption();
+      }
+    }, { injector: this._injector });
 
     if (this.dataSource() && this.loadOnOpen() && !this.asyncLoading()) {
       const selectedValues = this._selectedValues(this.value());
@@ -505,7 +554,9 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
     }
 
     setTimeout(() => {
-      this._scrollToSelectedOption();
+      if (!this._destroyed) {
+        this._scrollToActiveOption();
+      }
     }, 10);
   }
 
@@ -530,7 +581,9 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
     if (this.panelOpen()) {
       this.panelOpen.set(false);
       this._panelPosition.set('bottom');
-      this._focused.set(false);
+      this._keyManager.setActiveItem(-1);
+      this._keyManager.cancelTypeahead();
+      this._focused.set(this._elementRef.nativeElement === document.activeElement);
       this.stateChanges.set(undefined);
       this.closed.emit();
       this._onTouched();
@@ -592,13 +645,102 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
 
   focus(): void {
     this._elementRef.nativeElement.focus();
-    this.open();
   }
 
   _handleKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Enter' || event.key === ' ') {
-      this.toggle();
+    if (this.disabled || event.defaultPrevented || event.isComposing || event.ctrlKey || event.metaKey) {
+      return;
+    }
+    const editable = isDropdownTextInput(event.target);
+    const interactiveChild = event.target !== this._elementRef.nativeElement && !editable &&
+      (event.target as HTMLElement)?.closest('button, a, [contenteditable]');
+    if (this.panelOpen()) {
+      if (event.key === 'Escape' || (event.altKey && event.key === 'ArrowUp')) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.close();
+        this.focus();
+      } else if (event.key === 'Tab') {
+        // The overlay lives at the end of the document; continue Tab from the trigger.
+        if (this.panel()?.nativeElement.contains(document.activeElement)) {
+          this.focus();
+        }
+        this.close();
+      } else if (interactiveChild) {
+        return;
+      } else if (!event.altKey && (event.key === 'Enter' || (!editable && event.key === ' '))) {
+        this._keyboardNavigation.set(true);
+        if (!this._keyManager.activeItem) {
+          this._activateInitialOption();
+        }
+        const option = this._keyManager.activeItem;
+        if (option && !option.disabled && !isDropdownItemHidden(option.elementRef.nativeElement)) {
+          this._onOptionClick(option);
+          if (!this.multiple()) {
+            this.focus();
+          }
+        }
+        event.preventDefault();
+      } else if (!editable || event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key) ||
+            (!editable && event.key.length === 1 && !event.altKey)) {
+          this._keyboardNavigation.set(true);
+        }
+        this._keyManager.onKeydown(event);
+      }
+    } else if (!editable && !interactiveChild && (event.key === 'Enter' || event.key === ' ' ||
+               event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
       event.preventDefault();
+      this.open(event.key === 'ArrowUp' ? 'last' : 'first', 'keyboard');
+    }
+  }
+
+  private _activateInitialOption(): void {
+    const selected = this.options().find(option => option.selected && !option.disabled &&
+      !isDropdownItemHidden(option.elementRef.nativeElement));
+    if (selected) {
+      this._keyManager.setActiveItem(selected);
+    } else if (this._initialActiveEdge === 'last') {
+      this._keyManager.setLastItemActive();
+    } else {
+      this._keyManager.setFirstItemActive();
+    }
+  }
+
+  private _scrollToActiveOption(): void {
+    const option = this._keyManager.activeItem ?? this.options().find(option => option.selected &&
+      !isDropdownItemHidden(option.elementRef.nativeElement));
+    const panel = this.panel()?.nativeElement;
+    if (option && panel) {
+      scrollDropdownItemIntoView(option.elementRef.nativeElement, panel);
+    }
+  }
+
+  protected _onPanelFocus(event: FocusEvent): void {
+    if (isDropdownTextInput(event.target)) {
+      this._syncSearchAria();
+    }
+  }
+
+  private _syncSearchAria(): void {
+    const target = document.activeElement;
+    if (target instanceof HTMLElement && isDropdownTextInput(target) &&
+        this.panel()?.nativeElement.contains(target)) {
+      target.setAttribute('role', 'combobox');
+      target.setAttribute('aria-autocomplete', 'list');
+      target.setAttribute('aria-haspopup', 'listbox');
+      target.setAttribute('aria-expanded', String(this.panelOpen()));
+      if (this.panelOpen()) {
+        target.setAttribute('aria-controls', this.id + '-panel');
+      } else {
+        target.removeAttribute('aria-controls');
+      }
+      const activeId = this.activeOptionId();
+      if (activeId) {
+        target.setAttribute('aria-activedescendant', activeId);
+      } else {
+        target.removeAttribute('aria-activedescendant');
+      }
     }
   }
 
@@ -736,105 +878,6 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
     this._cdr.markForCheck();
   }
 
-  private _scrollToSelectedOption(): void {
-    const selected = this._selectionModel.selected[0];
-
-    if (!selected) {
-      return;
-    }
-
-    const panel = this.panel()?.nativeElement;
-
-    if (!panel) {
-      return;
-    }
-
-    let scrollContainer: HTMLElement = panel;
-    const selectBody = this.selectBody()[0];
-
-    if (selectBody) {
-      scrollContainer = selectBody._elementRef.nativeElement;
-    } else {
-      const content = panel.querySelector('.ngs-select-content') as HTMLElement;
-
-      if (content) {
-        scrollContainer = content;
-      }
-    }
-
-    const option = selected.elementRef.nativeElement;
-    this._scrollOptionElementIntoContainer(option, scrollContainer);
-  }
-
-  private _scrollToAsyncOptionValue(value: unknown): void {
-    const panel = this.panel()?.nativeElement;
-
-    if (!panel) {
-      return;
-    }
-
-    const scrollContainer = panel.querySelector('.ngs-select-async-content') as HTMLElement | null;
-
-    if (!scrollContainer) {
-      return;
-    }
-
-    const option = this.dataSourceOptions()
-      .find(option => this._compareValues(option.value(), value));
-
-    if (!option) {
-      return;
-    }
-
-    this._scrollOptionElementIntoContainer(option.elementRef.nativeElement, scrollContainer);
-  }
-
-  private _scrollOptionElementIntoContainer(option: HTMLElement, scrollContainer: HTMLElement): void {
-    let offsetTop = 0;
-    let currentElement = option;
-
-    while (currentElement && currentElement !== scrollContainer && scrollContainer.contains(currentElement)) {
-      offsetTop += currentElement.offsetTop;
-      currentElement = currentElement.offsetParent as HTMLElement;
-    }
-
-    const optionHeight = option.offsetHeight;
-    const containerScrollTop = scrollContainer.scrollTop;
-    const containerHeight = scrollContainer.clientHeight;
-
-    if (offsetTop < containerScrollTop) {
-      this._setScrollTop(scrollContainer, offsetTop);
-    } else if (offsetTop + optionHeight > containerScrollTop + containerHeight) {
-      this._setScrollTop(scrollContainer, offsetTop - containerHeight + optionHeight);
-    }
-
-    // Дополнительная проверка: если скролл все еще не там, попробуем через getBoundingClientRect
-    // но только как fallback, так как offsetTop надежнее если offsetParent настроены верно.
-    const containerRect = scrollContainer.getBoundingClientRect();
-    const optionRect = option.getBoundingClientRect();
-
-    if (optionRect.top < containerRect.top || optionRect.bottom > containerRect.bottom) {
-      const relativeOffsetTop = optionRect.top - containerRect.top + scrollContainer.scrollTop;
-      if (relativeOffsetTop < scrollContainer.scrollTop) {
-        this._setScrollTop(scrollContainer, relativeOffsetTop);
-      } else if (relativeOffsetTop + optionHeight > scrollContainer.scrollTop + containerHeight) {
-        this._setScrollTop(scrollContainer, relativeOffsetTop - containerHeight + optionHeight);
-      }
-    }
-  }
-
-  private _setScrollTop(element: HTMLElement, value: number): void {
-    try {
-      element.scrollTop = value;
-    } catch {
-      // Some test DOM mocks expose scrollTop as read-only.
-    }
-  }
-
-  private _getOptionIndex(option: _Option): number {
-    return this.options().indexOf(option);
-  }
-
   private _getOptionData(option: _Option): any {
     const data = option.data?.();
 
@@ -883,8 +926,6 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
     this._asyncAbortController = abortController;
     const requestId = ++this._asyncRequestId;
     const nextPage = config.append ? this._asyncPage + 1 : 1;
-    let firstLoadedOptionValue: unknown;
-    let hasLoadedOptionToScroll = false;
 
     if (config.append) {
       this.asyncLoadingMore.set(true);
@@ -915,13 +956,6 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
       const items = config.append
         ? this._mergeAsyncOptions(this.asyncOptions(), normalized.items)
         : this._mergeAsyncOptions([], normalized.items);
-      const firstLoadedOption = normalized.items[0];
-
-      if (firstLoadedOption) {
-        firstLoadedOptionValue = firstLoadedOption.value;
-        hasLoadedOptionToScroll = true;
-      }
-
       this.asyncOptions.set(items);
       this._cacheAsyncSelectedOptions(normalized.items);
       this.asyncHasMore.set(!!normalized.hasMore);
@@ -941,9 +975,7 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
         if (!this._destroyed) {
           this._cdr.detectChanges();
 
-          if (hasLoadedOptionToScroll) {
-            this._scrollToAsyncOptionValue(firstLoadedOptionValue);
-          }
+          this._scrollToActiveOption();
 
           this._cdr.markForCheck();
         }

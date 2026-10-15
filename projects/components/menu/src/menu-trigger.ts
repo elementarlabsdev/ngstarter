@@ -28,9 +28,10 @@ import { MENU_TRIGGER, MENU_ITEM } from './menu-tokens';
   host: {
     'aria-haspopup': 'menu',
     '[attr.aria-expanded]': 'menuOpen()',
-    '[attr.aria-controls]': 'menuOpen() ? menu()?.templateRef() : null',
+    '[attr.aria-controls]': 'menuOpen() ? menu()?.id : null',
     '[class.ngs-menu-item-highlighted]': 'menuOpen()',
     '(click)': '_handleClick($event)',
+    '(keydown)': '_handleKeydown($event)',
     '(mouseenter)': '_handleMouseEnter()',
     '(mouseleave)': '_handleMouseLeave()',
   },
@@ -98,7 +99,31 @@ export class MenuTrigger implements OnDestroy {
       event.stopPropagation();
       event.stopImmediatePropagation();
     }
-    this.toggleMenu();
+    if (event.detail === 0 && !this.menuOpen()) {
+      this.openMenu('first');
+    } else {
+      this.toggleMenu();
+    }
+  }
+
+  _handleKeydown(event: KeyboardEvent): void {
+    if (event.defaultPrevented || this.menuDisabled() || event.target !== this._elementRef.nativeElement) {
+      return;
+    }
+    if (event.key === 'Tab' && this.menuOpen()) {
+      this.closeMenu('tab');
+      return;
+    }
+    if (event.key === 'Enter' || event.key === ' ' || event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      event.stopPropagation();
+      const edge = event.key === 'ArrowUp' ? 'last' : 'first';
+      if (this.menuOpen()) {
+        this.menu()?._focusPanel(edge);
+      } else {
+        this.openMenu(edge);
+      }
+    }
   }
 
   toggleMenu(): void {
@@ -115,9 +140,9 @@ export class MenuTrigger implements OnDestroy {
 
   private themeCleanup: (() => void) | null = null;
 
-  openMenu(): void {
+  openMenu(focus: 'first' | 'last' | null = null): void {
     const menu = this.menu();
-    if (this.menuOpen() || !menu) {
+    if (this.menuDisabled() || this._injector.get(MENU_ITEM, null)?.disabled() || this.menuOpen() || !menu) {
       return;
     }
 
@@ -138,6 +163,8 @@ export class MenuTrigger implements OnDestroy {
 
     if (overlayRef.hasAttached()) {
       this._setIsMenuOpen(true);
+      menu._openPanel(this._elementRef.nativeElement, this._menu ?? this._parentMenu, focus,
+        reason => this.closeMenu(reason));
 
       const overlayElement = overlayRef.overlayElement;
       this._hoverSubscription.unsubscribe();
@@ -177,10 +204,7 @@ export class MenuTrigger implements OnDestroy {
 
     this._setIsMenuOpen(false);
     const menu = this.menu();
-
-    if (menu) {
-      menu.close(reason);
-    }
+    menu?._closePanel(reason);
 
     if (this._menu) {
       this._menu._triggerClosed(this);
@@ -194,14 +218,15 @@ export class MenuTrigger implements OnDestroy {
     this._clearCloseTimeout();
     this.menuClosed.emit(reason);
 
-    if (this.restoreFocus() && this._previouslyFocusedElement) {
+    if (reason !== 'tab' && this.restoreFocus() && this._previouslyFocusedElement) {
       this._previouslyFocusedElement.focus();
     }
 
     this._previouslyFocusedElement = null;
 
-    if (reason === 'click' && this._parentMenu) {
-      this._parentMenu.close('click');
+    const parent = this._menu ?? this._parentMenu;
+    if (reason === 'click' && parent) {
+      parent.close('click');
     }
   }
 

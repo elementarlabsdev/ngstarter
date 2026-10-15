@@ -67,7 +67,7 @@
       ngs-menu-item
       [selected]="selectedCountry()?.shortCode === country.shortCode"
       (click)="onCountrySelect(country, focusable)">
-      <span class="inline-flex size-4 shrink-0 items-center justify-center text-base leading-4" aria-hidden="true">
+      <span class="inline-flex size-6 shrink-0 items-center justify-center text-2xl leading-none" aria-hidden="true">
         {{ countryFlagEmoji(country.shortCode) }}
       </span>
       <span class="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap">{{ country.name }}</span>
@@ -85,7 +85,7 @@
       ngs-menu-item
       [selected]="selectedCountry()?.shortCode === country.shortCode"
       (click)="onCountrySelect(country, focusable)">
-      <span class="inline-flex size-4 shrink-0 items-center justify-center text-base leading-4" aria-hidden="true">
+      <span class="inline-flex size-6 shrink-0 items-center justify-center text-2xl leading-none" aria-hidden="true">
         {{ countryFlagEmoji(country.shortCode) }}
       </span>
       <span class="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap">{{ country.name }}</span>

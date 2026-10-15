@@ -30,7 +30,8 @@
     background: var(--ngs-menu-item-hover-background, var(--ngs-dropdown-item-hover-bg, var(--ngs-color-surface-container-high)));
   }
 
-  &.ngs-menu-item-active:not([disabled]) {
+  &.ngs-menu-item-active:not([disabled]),
+  &:focus-visible:not([disabled]) {
     background: var(--ngs-menu-item-active-background, var(--ngs-dropdown-item-active-bg, var(--ngs-color-surface-container-highest)));
   }
 

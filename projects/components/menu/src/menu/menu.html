@@ -1,5 +1,7 @@
 <ng-template>
   <div
+    #panel
+    [id]="id"
     class="ngs-menu-panel"
     [class]="classList()"
     [class.ngs-menu-before]="_panelClasses().includes('ngs-menu-before')"
@@ -7,7 +9,8 @@
     [class.ngs-menu-above]="_panelClasses().includes('ngs-menu-above')"
     [class.ngs-menu-below]="_panelClasses().includes('ngs-menu-below')"
     tabindex="-1"
-    role="menu"
+    [attr.role]="role()"
+    (keydown)="_handleKeydown($event)"
   >
     <ng-content select="ngs-menu-header,[ngs-menu-header]"/>
     <div class="ngs-menu-content">

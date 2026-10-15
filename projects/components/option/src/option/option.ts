@@ -14,6 +14,7 @@ import { OPTION, OPTION_PARENT, _Option, _OptionParent } from './option-tokens';
 import { Checkbox } from '@ngstarter-ui/components/checkbox';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Highlightable } from '@angular/cdk/a11y';
+import { Optgroup } from './optgroup';
 
 @Component({
   selector: 'ngs-option',
@@ -34,6 +35,7 @@ import { Highlightable } from '@angular/cdk/a11y';
   changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'role': 'option',
+    '[attr.id]': 'id',
     '[attr.tabindex]': '-1',
     '[class.ngs-option-selected]': 'selected',
     '[class.ngs-option-disabled]': 'disabled',
@@ -45,7 +47,11 @@ import { Highlightable } from '@angular/cdk/a11y';
   }
 })
 export class Option implements AfterViewInit, OnDestroy, _Option, Highlightable {
+  private static _nextId = 0;
+  protected readonly _id = input(`ngs-option-${Option._nextId++}`, { alias: 'id' });
+  get id(): string { return this._id(); }
   private _parent = inject<_OptionParent>(OPTION_PARENT, { optional: true });
+  private _group = inject(Optgroup, { optional: true });
   private _cdr = inject(ChangeDetectorRef);
 
   value = input<any>();
@@ -54,7 +60,7 @@ export class Option implements AfterViewInit, OnDestroy, _Option, Highlightable 
   selectedInput = input(false, { alias: 'selected', transform: booleanAttribute });
 
   get disabled(): boolean {
-    return this.disabledSignal();
+    return this.disabledSignal() || (this._group?.disabled() ?? false);
   }
 
   readonly onSelectionChange = output<_Option>();
@@ -144,7 +150,7 @@ export class Option implements AfterViewInit, OnDestroy, _Option, Highlightable 
     return (element.textContent || '').trim();
   }
 
-  getLabel?(): string {
+  getLabel(): string {
     return this.viewValue;
   }
 }

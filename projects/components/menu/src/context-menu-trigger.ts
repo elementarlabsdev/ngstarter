@@ -29,6 +29,10 @@ import { outputToObservable } from '@angular/core/rxjs-interop';
   standalone: true,
   host: {
     '(contextmenu)': '_handleContextMenu($event)',
+    '(keydown)': '_handleKeydown($event)',
+    'aria-haspopup': 'menu',
+    '[attr.aria-expanded]': 'menuOpen()',
+    '[attr.aria-controls]': 'menuOpen() ? menu()?.id : null',
   }
 })
 export class ContextMenuTrigger implements OnDestroy {
@@ -57,7 +61,7 @@ export class ContextMenuTrigger implements OnDestroy {
     this._closingSubscription.unsubscribe();
   }
 
-  openMenu(x: number, y: number): void {
+  openMenu(x: number, y: number, focus: 'first' | null = null): void {
     const menu = this.menu();
     if (this.menuOpen() || !menu) {
       return;
@@ -76,6 +80,7 @@ export class ContextMenuTrigger implements OnDestroy {
 
     if (overlayRef.hasAttached()) {
       this._setIsMenuOpen(true);
+      menu._openPanel(this._elementRef.nativeElement, null, focus, reason => this.closeMenu(reason));
     }
 
     this._closingSubscription = this._menuClosingActions().subscribe(reason => this.closeMenu(reason));
@@ -90,13 +95,14 @@ export class ContextMenuTrigger implements OnDestroy {
     this._setIsMenuOpen(false);
     const menu = this.menu();
 
-    if (menu) {
-      menu.close(reason);
-    }
+    menu?._closePanel(reason);
 
     this._overlayRef.detach();
     this._closingSubscription.unsubscribe();
     this.menuClosed.emit(reason);
+    if (reason === 'keydown') {
+      this._elementRef.nativeElement.focus();
+    }
   }
 
   private _setIsMenuOpen(isOpen: boolean): void {
@@ -199,5 +205,18 @@ export class ContextMenuTrigger implements OnDestroy {
     }
 
     this.openMenu(event.clientX, event.clientY);
+  }
+
+  _handleKeydown(event: KeyboardEvent): void {
+    if (event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10')) {
+      event.preventDefault();
+      const bounds = this._elementRef.nativeElement.getBoundingClientRect();
+      this.openMenu(bounds.left, bounds.bottom, 'first');
+    } else if (this.menuOpen() && event.key === 'Tab') {
+      this.closeMenu('tab');
+    } else if (this.menuOpen() && ['Enter', ' ', 'ArrowDown', 'ArrowUp'].includes(event.key)) {
+      event.preventDefault();
+      this.menu()?._focusPanel(event.key === 'ArrowUp' ? 'last' : 'first');
+    }
   }
 }

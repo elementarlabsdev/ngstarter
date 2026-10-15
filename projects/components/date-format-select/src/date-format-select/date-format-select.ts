@@ -34,7 +34,6 @@ export type DateFormat = {
   changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[id]': 'id',
-    'role': 'combobox',
     '[attr.required]': 'required || null',
   },
 })
@@ -101,7 +100,7 @@ export class DateFormatSelect implements FormFieldControl<string>, ControlValueA
     outputToObservable(this.matSelect().closed)
       .pipe(takeUntil(this._destroy$))
       .subscribe(() => {
-        this._focused.set(false);
+        this._focused.set(this.matSelect().focused);
         this.onTouched();
         this.stateChanges.next();
       });

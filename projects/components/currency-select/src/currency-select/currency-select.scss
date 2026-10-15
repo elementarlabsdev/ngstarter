@@ -3,47 +3,8 @@
 :host {
   display: block;
 
-  .flag-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    flex: none;
-    font-size: 18px;
-    line-height: 20px;
-  }
-
-  .select-option-content {
-    display: flex;
-    align-items: center;
-    gap: var(--ngs-dropdown-item-gap, --spacing(2));
-    min-width: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .select-option-text {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
   .placeholder-text {
     color: var(--ngs-select-placeholder-color, var(--ngs-field-label-color));
-  }
-
-  .currency-code {
-    text-transform: uppercase;
-  }
-
-  .currency-symbol {
-    color: var(--ngs-color-neutral-500);
-    display: inline-block;
-    margin-inline-start: 0.125rem;
   }
 
   .select-loading {

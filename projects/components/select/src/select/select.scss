@@ -28,6 +28,12 @@
     --ngs-select-arrow-container-width: --spacing(7);
   }
 
+  &.ngs-select-has-filter-trigger:focus-visible:not(.ngs-select-disabled) {
+    outline: 2px solid var(--ngs-state-focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--ngs-field-radius, var(--ngs-radius-md, 0.5rem));
+  }
+
   &.ngs-select-has-clear {
     padding-inline-end: calc(
       var(--ngs-select-arrow-container-width) +

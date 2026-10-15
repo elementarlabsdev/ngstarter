@@ -54,7 +54,10 @@
     [class.ngs-select-panel-above]="_panelPosition() === 'top'"
     #panel
     [attr.id]="id + '-panel'"
+    role="listbox"
+    [attr.aria-multiselectable]="multiple()"
     (keydown)="_handleKeydown($event)"
+    (focusin)="_onPanelFocus($event)"
   >
     <ng-content select="ngs-select-header"/>
 
@@ -72,7 +75,6 @@
               aria-label="Search options"
               autocomplete="off"
               (click)="$event.stopPropagation()"
-              (keydown)="$event.stopPropagation()"
               (input)="onAsyncSearchInput($any($event.target).value)">
           </div>
         </ngs-select-header>

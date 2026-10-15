@@ -108,7 +108,8 @@ describe('CurrencySelect', () => {
     const host = getHost(fixture);
 
     expect(host.classList.contains('ngs-currency-select')).toBe(true);
-    expect(host.getAttribute('tabindex')).toBe('0');
+    expect(host.getAttribute('tabindex')).toBe('-1');
+    expect(getSelect(fixture).getAttribute('tabindex')).toBe('0');
     expect(getSelect(fixture).textContent).toContain('Select currency');
     expect(getCurrencySelect(fixture).empty).toBe(true);
 

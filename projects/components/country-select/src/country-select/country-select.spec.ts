@@ -4,6 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { userEvent } from 'vitest/browser';
 
 import { CountrySelect, CountrySelectValue } from './country-select';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
@@ -36,6 +37,18 @@ class CountrySelectHost {
   readonly showCountryCode = signal(false);
   readonly opened = signal(0);
   readonly closed = signal(0);
+}
+
+@Component({
+  imports: [CountrySelect, ReactiveFormsModule],
+  template: `
+    <button class="before">Before</button>
+    <ngs-country-select [formControl]="country" aria-label="Country" />
+    <button class="after">After</button>
+  `,
+})
+class KeyboardCountryHost {
+  readonly country = new FormControl<string | null>(null);
 }
 
 @Component({
@@ -181,13 +194,40 @@ describe('CountrySelect', () => {
     vi.useRealTimers();
   });
 
+  it('supports Tab, search, selection and leaving the dropdown using real keyboard input', async () => {
+    const fixture = await createHost(KeyboardCountryHost);
+    (fixture.nativeElement.querySelector('.before') as HTMLElement).focus();
+    await userEvent.tab();
+    const select = getSelect(fixture);
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(select);
+    expect(select.getAttribute('aria-expanded')).toBe('false');
+    await userEvent.keyboard('{Enter}');
+    fixture.detectChanges();
+    expect(select.getAttribute('aria-expanded')).toBe('true');
+    await expect.poll(() => document.activeElement?.tagName).toBe('INPUT');
+    const search = document.activeElement as HTMLInputElement;
+    await userEvent.keyboard('Poland');
+    fixture.detectChanges();
+    expect(search.value).toBe('Poland');
+    expect(getOptions()).toHaveLength(1);
+    expect(search.getAttribute('aria-activedescendant')).toBe(getOptions()[0].id);
+    await userEvent.keyboard('{ArrowDown}{Enter}');
+    fixture.detectChanges();
+    expect(fixture.componentInstance.country.value).toBe('PL');
+    expect(document.activeElement).toBe(select);
+    await userEvent.tab();
+    expect(document.activeElement).toBe(fixture.nativeElement.querySelector('.after'));
+  });
+
   it('renders host state and selected country with emoji flag', async () => {
     const fixture = await createHost(CountrySelectHost);
     const component = fixture.componentInstance;
     const host = getHost(fixture);
 
     expect(host.classList.contains('ngs-country-select')).toBe(true);
-    expect(host.getAttribute('tabindex')).toBe('0');
+    expect(host.getAttribute('tabindex')).toBe('-1');
+    expect(getSelect(fixture).getAttribute('tabindex')).toBe('0');
     expect(getSelect(fixture).textContent).not.toContain('Select country');
     expect(getCountrySelect(fixture).empty).toBe(true);
 
@@ -218,7 +258,7 @@ describe('CountrySelect', () => {
     const select = getSelect(fixture);
 
     expect(host.id).toBe('shipping-country');
-    expect(host.getAttribute('tabindex')).toBe('7');
+    expect(host.getAttribute('tabindex')).toBe('-1');
     expect(select.id).toBe('shipping-country-select');
     expect(select.getAttribute('tabindex')).toBe('7');
     expect(select.getAttribute('aria-label')).toBe('Shipping country');

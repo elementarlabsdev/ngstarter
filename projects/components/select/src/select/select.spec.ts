@@ -5,9 +5,11 @@ import { By } from '@angular/platform-browser';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { userEvent } from 'vitest/browser';
 
 import { FormField } from '../../../form-field/src/form-field/form-field';
 import { Option } from '../../../option/src/option/option';
+import { Optgroup } from '../../../option/src/option/optgroup';
 import { FilterTrigger } from '../filter-trigger/filter-trigger';
 import { FilterTriggerValueDirective } from '../filter-trigger/filter-trigger-value.directive';
 import { SelectBody } from '../select-body/select-body';
@@ -68,6 +70,44 @@ class SingleSelectHost {
 class MultipleSelectHost {
   readonly teams = signal(new FormControl<string[]>(['Design', 'Support']));
   readonly teamOptions = signal(['Design', 'Engineering', 'Product', 'Support']);
+}
+
+@Component({
+  imports: [Select, Option, Optgroup],
+  template: `
+    <ngs-select aria-label="Available options">
+      <ngs-optgroup label="Unavailable" disabled>
+        <ngs-option value="disabled">Disabled group option</ngs-option>
+      </ngs-optgroup>
+      <ngs-option value="hidden" hidden>Hidden option</ngs-option>
+      <ngs-option value="visible">Visible option</ngs-option>
+    </ngs-select>
+  `,
+})
+class UnavailableOptionsHost {}
+
+@Component({
+  imports: [Select, Option, FilterTrigger, FormField, ReactiveFormsModule],
+  template: `
+    <button class="before">Before</button>
+    <ngs-form-field>
+      <ngs-select class="ordinary" aria-label="Ordinary select" placeholder="Choose a value">
+        <ngs-option value="active">Active</ngs-option>
+      </ngs-select>
+    </ngs-form-field>
+    <ngs-select disabled aria-label="Disabled select">
+      <ngs-option value="disabled">Disabled</ngs-option>
+    </ngs-select>
+    <ngs-select class="filter" aria-label="Status filter" [formControl]="status">
+      <ngs-filter-trigger>Status</ngs-filter-trigger>
+      <ngs-option value="active">Active</ngs-option>
+      <ngs-option value="pending">Pending</ngs-option>
+    </ngs-select>
+    <button class="after">After</button>
+  `,
+})
+class KeyboardFocusHost {
+  readonly status = new FormControl<string | null>(null);
 }
 
 @Component({
@@ -240,7 +280,9 @@ class FallbackDataFilterTriggerHost {
       <ngs-select-body>
         <ngs-option value="inside-body">Inside body</ngs-option>
       </ngs-select-body>
-      <ngs-select-footer><div class="panel-footer">Footer</div></ngs-select-footer>
+      <ngs-select-footer>
+        <div class="panel-footer">Footer</div><button type="button">Footer action</button>
+      </ngs-select-footer>
     </ngs-select>
   `
 })
@@ -431,6 +473,19 @@ function getOverlayOptions(): HTMLElement[] {
   return Array.from(getOverlayRoot().querySelectorAll('ngs-option'));
 }
 
+function getPanel(): HTMLElement {
+  return getOverlayRoot().querySelector('.ngs-select-panel') as HTMLElement;
+}
+
+function keydown(element: HTMLElement, key: string): KeyboardEvent {
+  const codes: Record<string, number> = {
+    ArrowDown: 40, ArrowUp: 38, Home: 36, End: 35, Enter: 13, ' ': 32, Escape: 27, Tab: 9,
+  };
+  const event = new KeyboardEvent('keydown', { key, keyCode: codes[key], bubbles: true, cancelable: true });
+  element.dispatchEvent(event);
+  return event;
+}
+
 function openSelect(fixture: ComponentFixture<unknown>): void {
   getSelectHost(fixture).click();
   fixture.detectChanges();
@@ -455,6 +510,113 @@ afterEach(() => {
 describe('Select', () => {
   beforeEach(() => {
     vi.useRealTimers();
+  });
+
+  it('focuses ordinary and filter selects on Tab and opens only after a keyboard action', async () => {
+    const fixture = await createHost(KeyboardFocusHost);
+    const ordinary = fixture.nativeElement.querySelector('.ordinary') as HTMLElement;
+    const filter = fixture.nativeElement.querySelector('.filter') as HTMLElement;
+    (fixture.nativeElement.querySelector('.before') as HTMLElement).focus();
+    await userEvent.tab();
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(ordinary);
+    expect(ordinary.getAttribute('aria-expanded')).toBe('false');
+    expect(getPanel()).toBeNull();
+    await userEvent.keyboard('{Enter}');
+    fixture.detectChanges();
+    expect(ordinary.getAttribute('aria-expanded')).toBe('true');
+    await userEvent.keyboard('{Escape}');
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(ordinary);
+    expect(ordinary.getAttribute('aria-expanded')).toBe('false');
+    await userEvent.tab();
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(filter);
+    expect(filter.getAttribute('aria-expanded')).toBe('false');
+    expect(getPanel()).toBeNull();
+    await userEvent.keyboard('{Enter}');
+    fixture.detectChanges();
+    expect(filter.getAttribute('aria-expanded')).toBe('true');
+    await userEvent.keyboard('{ArrowDown}{Enter}');
+    fixture.detectChanges();
+    expect(fixture.componentInstance.status.value).toBe('pending');
+    expect(document.activeElement).toBe(filter);
+    expect(filter.getAttribute('aria-expanded')).toBe('false');
+    await userEvent.tab();
+    expect(document.activeElement).toBe(fixture.nativeElement.querySelector('.after'));
+    await userEvent.tab({ shift: true });
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(filter);
+    expect(filter.getAttribute('aria-expanded')).toBe('false');
+    expect(getPanel()).toBeNull();
+    await userEvent.keyboard('{Enter}');
+    fixture.detectChanges();
+    expect(filter.getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('keeps programmatic focus separate from opening and opens once on a mouse click', async () => {
+    const fixture = await createHost(KeyboardFocusHost);
+    const select = getSelect(fixture);
+    select.focus();
+    fixture.detectChanges();
+    expect(select.focused).toBe(true);
+    expect(select.panelOpen()).toBe(false);
+    await userEvent.click(getSelectHost(fixture));
+    fixture.detectChanges();
+    expect(select.panelOpen()).toBe(true);
+    expect(getSelectHost(fixture).getAttribute('aria-activedescendant')).toBeNull();
+    expect(getOverlayOptions().some(option => option.classList.contains('ngs-option-active'))).toBe(false);
+    await userEvent.keyboard('{ArrowDown}');
+    fixture.detectChanges();
+    expect(getSelectHost(fixture).getAttribute('aria-activedescendant')).toBe(getOverlayOptions()[0].id);
+    expect(getOverlayOptions()[0].classList.contains('ngs-option-active')).toBe(true);
+  });
+
+  it('does not highlight checked options when a multiple select is opened and used with the mouse', async () => {
+    const fixture = await createHost(MultipleSelectHost);
+    const styles = document.createElement('style');
+    styles.textContent = '.ngs-select-panel { --ngs-option-active-background: rgb(17, 34, 51); }';
+    document.head.appendChild(styles);
+    try {
+      await userEvent.click(getSelectHost(fixture));
+      fixture.detectChanges();
+      const options = getOverlayOptions();
+      expect(options[0].getAttribute('aria-selected')).toBe('true');
+      expect(options.some(option => option.classList.contains('ngs-option-active'))).toBe(false);
+      expect(getComputedStyle(options[0]).backgroundColor).not.toBe('rgb(17, 34, 51)');
+      expect(getSelectHost(fixture).getAttribute('aria-activedescendant')).toBeNull();
+      await userEvent.click(options[1]);
+      fixture.detectChanges();
+      expect(options[1].getAttribute('aria-selected')).toBe('true');
+      expect(options.some(option => option.classList.contains('ngs-option-active'))).toBe(false);
+      expect(getComputedStyle(options[1]).backgroundColor).not.toBe('rgb(17, 34, 51)');
+      expect(getSelect(fixture).panelOpen()).toBe(true);
+    } finally {
+      styles.remove();
+    }
+  });
+
+  it('shows a keyboard focus outline on Filter Select while keeping it closed on Tab', async () => {
+    const fixture = await createHost(KeyboardFocusHost);
+    const filter = fixture.nativeElement.querySelector('.filter') as HTMLElement;
+    filter.style.setProperty('--ngs-state-focus-ring', 'rgb(17, 34, 51)');
+    (fixture.nativeElement.querySelector('.before') as HTMLElement).focus();
+    await userEvent.tab();
+    await userEvent.tab();
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(filter);
+    expect(filter.getAttribute('aria-expanded')).toBe('false');
+    expect(getComputedStyle(filter).outlineStyle).toBe('solid');
+    expect(getComputedStyle(filter).outlineWidth).toBe('2px');
+    expect(getComputedStyle(filter).outlineColor).toBe('rgb(17, 34, 51)');
+    await userEvent.tab();
+    fixture.detectChanges();
+    expect(getComputedStyle(filter).outlineStyle).toBe('none');
+    await userEvent.tab({ shift: true });
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(filter);
+    expect(getComputedStyle(filter).outlineStyle).toBe('solid');
+    expect(filter.getAttribute('aria-expanded')).toBe('false');
   });
 
   it('renders combobox accessibility attributes, placeholder, and empty state', async () => {
@@ -591,7 +753,7 @@ describe('Select', () => {
     expect(select.triggerValue()).toBe('');
   });
 
-  it('toggles the panel from keyboard Enter and Space events', async () => {
+  it('opens with Enter and selects the active option with Space', async () => {
     const fixture = await createHost(SingleSelectHost);
     const select = getSelect(fixture);
     const host = getSelectHost(fixture);
@@ -607,6 +769,185 @@ describe('Select', () => {
     fixture.detectChanges();
     expect(space.defaultPrevented).toBe(true);
     expect(select.panelOpen()).toBe(false);
+    expect(fixture.componentInstance.status().value).toBe('active');
+  });
+
+  it('navigates with arrows and Home/End, skips disabled options, and exposes the active descendant', async () => {
+    const fixture = await createHost(SingleSelectHost);
+    const host = getSelectHost(fixture);
+    host.focus();
+    keydown(host, 'ArrowDown');
+    fixture.detectChanges();
+    expect(getPanel().getAttribute('role')).toBe('listbox');
+    expect(host.getAttribute('aria-activedescendant')).toBe(getOverlayOptions()[0].id);
+    keydown(host, 'ArrowDown');
+    fixture.detectChanges();
+    expect(host.getAttribute('aria-activedescendant')).toBe(getOverlayOptions()[1].id);
+    keydown(host, 'ArrowDown');
+    fixture.detectChanges();
+    expect(host.getAttribute('aria-activedescendant')).toBe(getOverlayOptions()[3].id);
+    keydown(host, 'Home');
+    fixture.detectChanges();
+    expect(host.getAttribute('aria-activedescendant')).toBe(getOverlayOptions()[0].id);
+    keydown(host, 'End');
+    fixture.detectChanges();
+    expect(host.getAttribute('aria-activedescendant')).toBe(getOverlayOptions()[3].id);
+    keydown(host, 'ArrowUp');
+    keydown(host, 'Enter');
+    fixture.detectChanges();
+    expect(fixture.componentInstance.status().value).toBe('pending');
+    expect(document.activeElement).toBe(host);
+    expect(host.getAttribute('aria-activedescendant')).toBeNull();
+  });
+
+  it('keeps the active option on reorder and replaces removed options without selecting them', async () => {
+    const fixture = await createHost(SingleSelectHost);
+    const host = getSelectHost(fixture);
+    openSelect(fixture);
+    keydown(host, 'ArrowDown');
+    fixture.detectChanges();
+    const activeId = host.getAttribute('aria-activedescendant');
+    fixture.componentInstance.options.update(options => [options[1], options[0], options[2], options[3]]);
+    fixture.detectChanges();
+    expect(host.getAttribute('aria-activedescendant')).toBe(activeId);
+    fixture.componentInstance.options.update(options => options.filter(option => option.value !== 'pending'));
+    fixture.detectChanges();
+    expect(host.getAttribute('aria-activedescendant')).toBe(getOverlayOptions()[0].id);
+    expect(fixture.componentInstance.status().value).toBeNull();
+  });
+
+  it('closes with Escape or Tab without changing the value', async () => {
+    const fixture = await createHost(SingleSelectHost);
+    const host = getSelectHost(fixture);
+    host.focus();
+    openSelect(fixture);
+    keydown(host, 'ArrowDown');
+    const escape = keydown(host, 'Escape');
+    fixture.detectChanges();
+    expect(escape.defaultPrevented).toBe(true);
+    expect(getSelect(fixture).panelOpen()).toBe(false);
+    expect(fixture.componentInstance.status().value).toBeNull();
+    expect(document.activeElement).toBe(host);
+    openSelect(fixture);
+    const tab = keydown(host, 'Tab');
+    fixture.detectChanges();
+    expect(tab.defaultPrevented).toBe(false);
+    expect(getSelect(fixture).panelOpen()).toBe(false);
+  });
+
+  it('toggles multiple options from the keyboard while keeping the panel open', async () => {
+    const fixture = await createHost(MultipleSelectHost);
+    const host = getSelectHost(fixture);
+    openSelect(fixture);
+    keydown(host, ' ');
+    fixture.detectChanges();
+    expect(fixture.componentInstance.teams().value).toEqual(['Support']);
+    expect(getSelect(fixture).panelOpen()).toBe(true);
+    keydown(host, 'ArrowDown');
+    keydown(host, 'Enter');
+    fixture.detectChanges();
+    expect(fixture.componentInstance.teams().value).toEqual(['Support', 'Engineering']);
+  });
+
+  it('keeps the active background on checked options while navigating and toggling selection', async () => {
+    const fixture = await createHost(MultipleSelectHost);
+    const styles = document.createElement('style');
+    styles.textContent = '.ngs-select-panel { --ngs-option-active-background: rgb(17, 34, 51); }';
+    document.head.appendChild(styles);
+    try {
+      getSelect(fixture).focus();
+      await userEvent.keyboard('{Enter}');
+      fixture.detectChanges();
+      const options = getOverlayOptions();
+      const checked = (index: number): boolean =>
+        (options[index].querySelector('input[type=checkbox]') as HTMLInputElement).checked;
+      expect(checked(0)).toBe(true);
+      expect(options[0].classList.contains('ngs-option-active')).toBe(true);
+      expect(getComputedStyle(options[0]).backgroundColor).toBe('rgb(17, 34, 51)');
+      expect(checked(3)).toBe(true);
+      expect(getComputedStyle(options[3]).backgroundColor).toBe('rgba(0, 0, 0, 0)');
+      await userEvent.keyboard('{ArrowDown}');
+      fixture.detectChanges();
+      expect(getComputedStyle(options[1]).backgroundColor).toBe('rgb(17, 34, 51)');
+      expect(getComputedStyle(options[0]).backgroundColor).toBe('rgba(0, 0, 0, 0)');
+      await userEvent.keyboard('{ArrowUp}');
+      fixture.detectChanges();
+      expect(checked(0)).toBe(true);
+      expect(getComputedStyle(options[0]).backgroundColor).toBe('rgb(17, 34, 51)');
+      await userEvent.keyboard(' ');
+      fixture.detectChanges();
+      expect(checked(0)).toBe(false);
+      expect(getComputedStyle(options[0]).backgroundColor).toBe('rgb(17, 34, 51)');
+      await userEvent.keyboard(' ');
+      fixture.detectChanges();
+      expect(checked(0)).toBe(true);
+      expect(getComputedStyle(options[0]).backgroundColor).toBe('rgb(17, 34, 51)');
+      expect(getSelect(fixture).panelOpen()).toBe(true);
+    } finally {
+      styles.remove();
+    }
+  });
+
+  it('skips hidden options and disabled groups, including when opening with ArrowUp', async () => {
+    const fixture = await createHost(UnavailableOptionsHost);
+    const host = getSelectHost(fixture);
+    keydown(host, 'ArrowUp');
+    fixture.detectChanges();
+    expect(host.getAttribute('aria-activedescendant')).toBe(getOverlayOptions()[2].id);
+    keydown(host, 'ArrowUp');
+    keydown(host, 'Enter');
+    fixture.detectChanges();
+    expect(getSelect(fixture).value()).toBe('visible');
+  });
+
+  it('finds options by typing their labels without selecting them', async () => {
+    const fixture = await createHost(SingleSelectHost);
+    const host = getSelectHost(fixture);
+    openSelect(fixture);
+    host.dispatchEvent(new KeyboardEvent('keydown', { key: 'p', keyCode: 80, bubbles: true }));
+    await new Promise(resolve => setTimeout(resolve, 250));
+    fixture.detectChanges();
+    expect(host.getAttribute('aria-activedescendant')).toBe(getOverlayOptions()[1].id);
+    expect(fixture.componentInstance.status().value).toBeNull();
+  });
+
+  it('uses keyboard navigation in the async search input without consuming editing keys', async () => {
+    const fixture = await createHost(AsyncSelectHost);
+    openSelect(fixture);
+    await flushAsyncSelect(fixture);
+    const search = getPanel().querySelector('input') as HTMLInputElement;
+    search.focus();
+    for (const key of [' ', 'Home', 'End']) {
+      expect(keydown(search, key).defaultPrevented).toBe(false);
+    }
+    search.value = 'Alan';
+    search.dispatchEvent(new Event('input', { bubbles: true }));
+    await fixture.whenStable();
+    fixture.detectChanges();
+    keydown(search, 'ArrowDown');
+    fixture.detectChanges();
+    expect(search.getAttribute('aria-activedescendant')).toBe(getOverlayOptions()[0].id);
+    keydown(search, 'Enter');
+    fixture.detectChanges();
+    expect(fixture.componentInstance.user().value).toBe('user_9');
+    expect(document.activeElement).toBe(getSelectHost(fixture));
+  });
+
+  it('handles Escape and Tab from interactive controls inside the panel', async () => {
+    const fixture = await createHost(PanelProjectionHost);
+    openSelect(fixture);
+    const button = getPanel().querySelector('button') as HTMLButtonElement;
+    button.focus();
+    keydown(button, 'Escape');
+    fixture.detectChanges();
+    expect(getSelect(fixture).panelOpen()).toBe(false);
+    expect(document.activeElement).toBe(getSelectHost(fixture));
+    openSelect(fixture);
+    const nextButton = getPanel().querySelector('button') as HTMLButtonElement;
+    nextButton.focus();
+    expect(keydown(nextButton, 'Tab').defaultPrevented).toBe(false);
+    fixture.detectChanges();
+    expect(getSelect(fixture).panelOpen()).toBe(false);
   });
 
   it('tracks focus, blur, touched state, and shouldLabelFloat', async () => {
@@ -1013,9 +1354,9 @@ describe('Select', () => {
     const formField = fixture.nativeElement.querySelector('ngs-form-field') as HTMLElement;
     const select = getSelect(fixture);
 
-    expect(select.overlayWidth).toBeTypeOf('number');
-
     openSelect(fixture);
+    // The trigger width is measured when the overlay opens.
+    expect(select.overlayWidth).toBeTypeOf('number');
     expect(formField.classList.contains('ngs-form-field-focused')).toBe(true);
 
     select.close();

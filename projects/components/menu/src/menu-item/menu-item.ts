@@ -9,7 +9,8 @@ import {
   signal,
   forwardRef,
   Injector,
-  OnInit
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 import { MENU_ITEM, MENU_TRIGGER } from '../menu-tokens';
 import type { MenuTrigger } from '../menu-trigger';
@@ -35,12 +36,14 @@ import { Menu } from '../menu/menu';
     '[class.ngs-menu-item-highlighted]': '_isHighlighted() || selected()',
     '[attr.disabled]': 'disabled() || null',
     '[attr.aria-disabled]': 'disabled()',
-    '[tabindex]': 'disabled() ? -1 : 0',
+    '[tabindex]': 'disabled() || (_menu && !_menu._isItemActive(this)) ? -1 : 0',
     '(click)': '_handleClick($event)',
+    '(keydown)': '_handleKeydown($event)',
+    '(focus)': '_handleFocus()',
     '(mouseenter)': '_handleMouseEnter()',
   }
 })
-export class MenuItem implements OnInit {
+export class MenuItem implements OnInit, OnDestroy {
   private _injector = inject(Injector);
   protected _menuTrigger: MenuTrigger | null = null;
   readonly disabled = input(false, { transform: booleanAttribute });
@@ -53,7 +56,16 @@ export class MenuItem implements OnInit {
   readonly _triggered = output<void>();
 
   private _elementRef = inject(ElementRef<HTMLElement>);
-  private _menu = inject(Menu, { optional: true });
+  protected _menu = inject(Menu, { optional: true });
+  /** Adapt signal-based inputs to the CDK FocusableOption contract. */
+  readonly _navigationItem: { item: MenuItem; disabled: boolean; getLabel(): string; focus(): void } = {
+    item: this,
+    get disabled(): boolean { return this.item.disabled(); },
+    getLabel(): string { return this.item.label; },
+    focus(): void { this.item.focus(); },
+  };
+
+  get element(): HTMLElement { return this._elementRef.nativeElement; }
 
   get label(): string {
     return this._elementRef.nativeElement.textContent?.trim() || '';
@@ -65,6 +77,33 @@ export class MenuItem implements OnInit {
 
   ngOnInit() {
     this._menuTrigger = this._injector.get(MENU_TRIGGER, null);
+    this._menu?._registerItem(this);
+  }
+
+  ngOnDestroy(): void {
+    this._menu?._unregisterItem(this);
+  }
+
+  _handleFocus(): void {
+    this._menu?._setActiveItem(this);
+  }
+
+  _handleKeydown(event: KeyboardEvent): void {
+    if (event.defaultPrevented || event.target !== this.element || this.disabled()) {
+      return;
+    }
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.element.click();
+    }
+  }
+
+  _openSubmenu(): boolean {
+    if (!this._menuTrigger || this.disabled()) {
+      return false;
+    }
+    this._menuTrigger.openMenu('first');
+    return true;
   }
 
   _handleClick(event: MouseEvent): void {

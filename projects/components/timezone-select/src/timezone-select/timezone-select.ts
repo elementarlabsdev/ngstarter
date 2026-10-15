@@ -41,7 +41,6 @@ let nextId = 0;
     {
       provide: FormFieldControl,
       useExisting: forwardRef(() => TimezoneSelect),
-      multi: true,
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,7 +49,7 @@ let nextId = 0;
   host: {
     'class': 'ngs-timezone-select',
     '[id]': 'id',
-    '[attr.tabindex]': 'disabled ? -1 : 0',
+    'tabindex': '-1',
     '(focus)': 'onFocusIn()',
     '(blur)': 'onFocusOut($event)',
   }
@@ -95,7 +94,7 @@ export class TimezoneSelect implements OnInit, FormFieldControl<any>, ControlVal
   onTouched = () => {};
 
   get focused(): boolean {
-    return this._focused() || (this.selectRef?.()?.panelOpen() ?? false);
+    return this._focused() || (this.selectRef?.()?.focused ?? false);
   }
 
   get empty() {
@@ -193,6 +192,7 @@ export class TimezoneSelect implements OnInit, FormFieldControl<any>, ControlVal
     }
 
     this.focus();
+    this.selectRef().open();
   }
 
   setDescribedByIds(ids: string[]) {
@@ -220,9 +220,6 @@ export class TimezoneSelect implements OnInit, FormFieldControl<any>, ControlVal
   }
 
   protected onSelectOpened(): void {
-    setTimeout(() => {
-      this.searchInput().nativeElement.focus();
-    });
     this.opened.emit();
   }
 
@@ -250,9 +247,6 @@ export class TimezoneSelect implements OnInit, FormFieldControl<any>, ControlVal
   }
 
   focus(): void {
-    this._elementRef.nativeElement.focus();
-    setTimeout(() => {
-      this.selectRef().open();
-    });
+    this.selectRef().focus();
   }
 }

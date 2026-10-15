@@ -29,7 +29,7 @@
     color: var(--ngs-option-selected-color, var(--ngs-dropdown-item-selected-color, var(--ngs-color-on-primary-container)));
   }
 
-  &.ngs-option-multiple.ngs-option-selected {
+  &.ngs-option-multiple.ngs-option-selected:not(.ngs-option-active) {
     background: transparent;
 
     &:hover:not(.ngs-option-disabled) {

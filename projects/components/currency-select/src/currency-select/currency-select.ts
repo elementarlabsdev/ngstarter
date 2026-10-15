@@ -43,7 +43,7 @@ import { Button } from '@ngstarter-ui/components/button';
     'class': 'ngs-currency-select',
     '[class.floating]': 'shouldLabelFloat',
     '[id]': 'id',
-    '[attr.tabindex]': 'disabled ? -1 : 0',
+    'tabindex': '-1',
     '(focus)': 'onFocusIn()',
     '(blur)': 'onFocusOut($event)',
   },
@@ -130,7 +130,6 @@ export class CurrencySelect
   private onChangeFn: (value: string | null) => void = () => {};
   private onTouchedFn: () => void = () => {};
   private _currencyRenderTimeout: ReturnType<typeof setTimeout> | undefined;
-  private _currencySearchFocusTimeout: ReturnType<typeof setTimeout> | undefined;
 
   constructor() {
     if (this.ngControl) {
@@ -189,7 +188,7 @@ export class CurrencySelect
   }
 
   get focused(): boolean {
-    return this._focusedSignal() || (this.ngsSelect?.()?.panelOpen() ?? false);
+    return this._focusedSignal() || (this.ngsSelect?.()?.focused ?? false);
   }
 
   onFocusIn() {
@@ -234,7 +233,7 @@ export class CurrencySelect
   }
 
   get shouldLabelFloat(): boolean {
-    return this._focusedSignal() || !this.empty;
+    return this.focused || !this.empty;
   }
 
   get errorState(): boolean {
@@ -302,9 +301,6 @@ export class CurrencySelect
   onSelectOpened(): void {
     this.visibleCurrencyCount.set(this.getInitialVisibleCurrencyCount());
     this.scheduleCurrencyRendering();
-    this._currencySearchFocusTimeout = setTimeout(() => {
-      this.searchInput()?.nativeElement.focus();
-    });
     this.opened.emit();
   }
 
@@ -364,7 +360,6 @@ export class CurrencySelect
 
   private clearCurrencySelectTimeouts(): void {
     this.clearCurrencyRenderTimeout();
-    this.clearCurrencySearchFocusTimeout();
   }
 
   private clearCurrencyRenderTimeout(): void {
@@ -376,12 +371,4 @@ export class CurrencySelect
     this._currencyRenderTimeout = undefined;
   }
 
-  private clearCurrencySearchFocusTimeout(): void {
-    if (!this._currencySearchFocusTimeout) {
-      return;
-    }
-
-    clearTimeout(this._currencySearchFocusTimeout);
-    this._currencySearchFocusTimeout = undefined;
-  }
 }

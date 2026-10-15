@@ -58,7 +58,7 @@ export type CountrySelectValue = string | string[] | null;
     'class': 'ngs-country-select',
     '[class.floating]': 'shouldLabelFloat',
     '[id]': 'id',
-    '[attr.tabindex]': 'disabled ? -1 : tabIndex()',
+    'tabindex': '-1',
     '(focus)': 'onFocusIn()',
     '(blur)': 'onFocusOut($event)',
   },
@@ -167,7 +167,6 @@ export class CountrySelect
   private onChangeFn: (value: CountrySelectValue) => void = () => {};
   private onTouchedFn: () => void = () => {};
   private _countryRenderTimeout: ReturnType<typeof setTimeout> | undefined;
-  private _countrySearchFocusTimeout: ReturnType<typeof setTimeout> | undefined;
 
   constructor() {
     if (this.ngControl) {
@@ -236,7 +235,7 @@ export class CountrySelect
   }
 
   get focused(): boolean {
-    return this._focusedSignal() || (this.ngsSelect?.()?.panelOpen() ?? false);
+    return this._focusedSignal() || (this.ngsSelect?.()?.focused ?? false);
   }
 
   onFocusIn() {
@@ -356,9 +355,6 @@ export class CountrySelect
   onSelectOpened(): void {
     this.visibleCountryCount.set(this.getInitialVisibleCountryCount());
     this.scheduleCountryRendering();
-    this._countrySearchFocusTimeout = setTimeout(() => {
-      this.searchInput().nativeElement.focus();
-    });
     this.opened.emit();
   }
 
@@ -419,7 +415,6 @@ export class CountrySelect
 
   private clearCountrySelectTimeouts(): void {
     this.clearCountryRenderTimeout();
-    this.clearCountrySearchFocusTimeout();
   }
 
   private clearCountryRenderTimeout(): void {
@@ -431,12 +426,4 @@ export class CountrySelect
     this._countryRenderTimeout = undefined;
   }
 
-  private clearCountrySearchFocusTimeout(): void {
-    if (!this._countrySearchFocusTimeout) {
-      return;
-    }
-
-    clearTimeout(this._countrySearchFocusTimeout);
-    this._countrySearchFocusTimeout = undefined;
-  }
 }

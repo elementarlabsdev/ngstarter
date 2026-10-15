@@ -7,13 +7,17 @@ import {
   ViewContainerRef,
   effect,
   Injector,
+  computed,
+  signal,
 } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Autocomplete } from './autocomplete/autocomplete';
 import { fromEvent, Subscription, merge } from 'rxjs';
-import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
+import {
+  createDropdownActiveDescendantKeyManager, isDropdownItemHidden, scrollDropdownItemIntoView
+} from '@ngstarter-ui/components/core';
 import { Option } from '@ngstarter-ui/components/option';
 import { FormField } from '@ngstarter-ui/components/form-field';
 import { ChipInput } from '@ngstarter-ui/components/chips';
@@ -25,6 +29,9 @@ import { ChipInput } from '@ngstarter-ui/components/chips';
     'role': 'combobox',
     'aria-autocomplete': 'list',
     'aria-haspopup': 'listbox',
+    '[attr.aria-expanded]': 'panelOpen',
+    '[attr.aria-controls]': 'panelOpen ? autocomplete().id : null',
+    '[attr.aria-activedescendant]': 'panelOpen ? activeOptionId() : null',
     '(input)': '_handleInput()',
     '(focusin)': '_handleFocus()',
     '(click)': '_handleClick()',
@@ -44,12 +51,22 @@ export class AutocompleteTrigger implements OnDestroy {
   private _overlayRef: OverlayRef | null = null;
   private _portal: TemplatePortal | null = null;
   private _closingSubscription = Subscription.EMPTY;
-  private _keyManager!: ActiveDescendantKeyManager<Option>;
+  private readonly _options = computed(() => this.autocomplete().options());
+  private readonly _keyManager = createDropdownActiveDescendantKeyManager(this._options, this._injector, {
+    typeahead: false,
+    homeAndEnd: false,
+    skip: option => option.disabled || isDropdownItemHidden(option.elementRef.nativeElement),
+  });
+  protected readonly activeOptionId = computed(() => this._keyManager.activeItem?.id ?? null);
+  private readonly _panelOpen = signal(false);
+  private _selectionSubscription = Subscription.EMPTY;
+  private _navigationSubscription = Subscription.EMPTY;
   private _canOpenOnInput = true;
   private _resizeObserver: ResizeObserver | null = null;
   private _optionsSubscription = Subscription.EMPTY;
 
   constructor() {
+    this._initKeyManager();
     effect(() => {
       const chipsLength = this._chipInput?.chipGrid?.chipsLength;
 
@@ -63,6 +80,9 @@ export class AutocompleteTrigger implements OnDestroy {
     this._destroyOverlay();
     this._stopResizeObserver();
     this._optionsSubscription.unsubscribe();
+    this._selectionSubscription.unsubscribe();
+    this._navigationSubscription.unsubscribe();
+    this._keyManager.destroy();
   }
 
   private _startResizeObserver() {
@@ -110,30 +130,40 @@ export class AutocompleteTrigger implements OnDestroy {
   }
 
   _handleKeydown(event: KeyboardEvent): void {
-    if (event.defaultPrevented) {
+    if (event.defaultPrevented || event.isComposing || this._elementRef.nativeElement.disabled) {
       return;
     }
 
     if (event.key === 'Escape' && this.panelOpen) {
       this.closePanel();
+      event.preventDefault();
       event.stopPropagation();
-    } else if (this._keyManager) {
-      const activeItemBefore = this._keyManager.activeItem;
-      this._keyManager.onKeydown(event);
-
-      if (event.key === 'Enter' && this._keyManager.activeItem && this._keyManager.activeItem === activeItemBefore) {
-        this._selectOption(this._keyManager.activeItem);
+    } else if (event.key === 'Tab') {
+      this.closePanel();
+    } else if (event.key === 'Enter' && this.panelOpen) {
+      const active = this._keyManager.activeItem;
+      if (active && !active.disabled && this._options().includes(active) &&
+          !isDropdownItemHidden(active.elementRef.nativeElement)) {
+        this._selectOption(active);
         event.preventDefault();
+      }
+    } else if (!event.altKey && !event.ctrlKey && !event.metaKey &&
+               (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
+      if (!this.panelOpen) {
+        this.openPanel();
+      }
+      if (this.panelOpen) {
+        this._keyManager.onKeydown(event);
       }
     }
   }
 
   get panelOpen(): boolean {
-    return !!this._overlayRef && this._overlayRef.hasAttached();
+    return this._panelOpen();
   }
 
   openPanel(): void {
-    if (this.panelOpen || !this.autocomplete().options().length) {
+    if (this.panelOpen || this._elementRef.nativeElement.disabled || !this.autocomplete().options().length) {
       return;
     }
 
@@ -146,13 +176,13 @@ export class AutocompleteTrigger implements OnDestroy {
     if (!this._overlayRef!.hasAttached()) {
       this._portal = new TemplatePortal(this.autocomplete().template(), this._viewContainerRef);
       this._overlayRef!.attach(this._portal);
+      this._panelOpen.set(true);
       this._closingSubscription = this._subscribeToClosingIndices();
       this._setupSelectionListeners();
       this._startResizeObserver();
       this.autocomplete().opened.emit();
     }
 
-    this._initKeyManager();
     this._setActiveItem();
   }
 
@@ -161,13 +191,14 @@ export class AutocompleteTrigger implements OnDestroy {
 
     if (this.autocomplete().options().length > 0) {
       const activeOption = this.autocomplete().options().find(option => {
-        return option.viewValue.toLowerCase() === value.toLowerCase();
+        return !option.disabled && !isDropdownItemHidden(option.elementRef.nativeElement) &&
+          option.viewValue.toLowerCase() === value.toLowerCase();
       });
 
       if (activeOption) {
         this._keyManager.setActiveItem(activeOption);
       } else {
-        if (value && this.autocomplete().autoActiveFirstOption()) {
+        if (this.autocomplete().autoActiveFirstOption()) {
           this._keyManager.setFirstItemActive();
         } else {
           this._keyManager.setActiveItem(-1);
@@ -179,29 +210,19 @@ export class AutocompleteTrigger implements OnDestroy {
   }
 
   private _scrollToOption(): void {
-    const index = this._keyManager.activeItemIndex || 0;
-    const option = this.autocomplete().options()[index];
-
+    const option = this._keyManager.activeItem;
     if (option && this.autocomplete().panel()) {
-      const panel = this.autocomplete().panel()!.nativeElement;
-      const optionElement = option.elementRef.nativeElement;
-      const panelTop = panel.scrollTop;
-      const panelBottom = panelTop + panel.clientHeight;
-      const optionTop = optionElement.offsetTop;
-      const optionBottom = optionTop + optionElement.clientHeight;
-
-      if (optionTop < panelTop) {
-        panel.scrollTop = optionTop;
-      } else if (optionBottom > panelBottom) {
-        panel.scrollTop = optionBottom - panel.clientHeight;
-      }
+      scrollDropdownItemIntoView(option.elementRef.nativeElement, this.autocomplete().panel()!.nativeElement);
     }
   }
 
   closePanel(): void {
     if (this.panelOpen) {
+      this._panelOpen.set(false);
       this._overlayRef!.detach();
       this._closingSubscription.unsubscribe();
+      this._selectionSubscription.unsubscribe();
+      this._keyManager.setActiveItem(-1);
       this._stopResizeObserver();
 
       if (this.autocomplete().requireSelection() && !this._elementRef.nativeElement.value) {
@@ -279,17 +300,14 @@ export class AutocompleteTrigger implements OnDestroy {
   }
 
   private _initKeyManager(): void {
-    if (this._keyManager) {
-      return;
-    }
-
-    this._keyManager = new ActiveDescendantKeyManager<Option>(this.autocomplete().options())
-      .withWrap()
-      .withTypeAhead();
-
-    this._optionsSubscription = toObservable(this.autocomplete().options, { injector: this._injector }).subscribe(() => {
-      this._setupSelectionListeners();
-      this._setActiveItem();
+    this._optionsSubscription = toObservable(this._options, { injector: this._injector }).subscribe(() => {
+      if (this.panelOpen) {
+        this._setupSelectionListeners();
+        const active = this._keyManager.activeItem;
+        if (!active || !this._options().includes(active) || active.disabled) {
+          this._setActiveItem();
+        }
+      }
       this._syncSelectedOption();
 
       if (this.autocomplete().options().length === 0 && this.panelOpen) {
@@ -299,10 +317,10 @@ export class AutocompleteTrigger implements OnDestroy {
       }
     });
 
-    this._keyManager.change.subscribe(() => {
+    this._navigationSubscription = this._keyManager.change.subscribe(() => {
       this._scrollToOption();
 
-      if (this.autocomplete().autoSelectActiveOption() && this._keyManager.activeItem) {
+      if (this.panelOpen && this.autocomplete().autoSelectActiveOption() && this._keyManager.activeItem) {
         this._selectOption(this._keyManager.activeItem);
       }
 
@@ -314,6 +332,8 @@ export class AutocompleteTrigger implements OnDestroy {
   }
 
   private _setupSelectionListeners(): void {
+    this._selectionSubscription.unsubscribe();
+    this._selectionSubscription = new Subscription();
     this.autocomplete().options().forEach(option => {
       // Prevent input from losing focus on mousedown, but do not select yet
       const mousedownSub = fromEvent<MouseEvent>(option.elementRef.nativeElement, 'mousedown').subscribe((event) => {
@@ -327,10 +347,8 @@ export class AutocompleteTrigger implements OnDestroy {
         }
         this._selectOption(option);
       });
-      if (this._closingSubscription && !this._closingSubscription.closed) {
-        this._closingSubscription.add(mousedownSub);
-        this._closingSubscription.add(clickSub);
-      }
+      this._selectionSubscription.add(mousedownSub);
+      this._selectionSubscription.add(clickSub);
     });
   }
 
