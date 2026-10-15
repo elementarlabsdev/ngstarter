@@ -31,6 +31,12 @@ import {
 export class Api {
   properties = [
     {
+      name: 'aria-label',
+      description: 'Accessible name forwarded to the native number input',
+      type: 'string | null',
+      default: 'null'
+    },
+    {
       name: 'min',
       description: 'Minimum value of the input',
       type: 'number',

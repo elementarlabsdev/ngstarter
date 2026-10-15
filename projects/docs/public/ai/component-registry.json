@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate-ai-metadata.mjs",
   "package": "@ngstarter-ui/components",
   "description": "AI-readable registry for NgStarter UI Angular secondary entry points.",
-  "componentCount": 126,
+  "componentCount": 127,
   "conventions": {
     "importPattern": "@ngstarter-ui/components/<component>",
     "selectorPrefix": "ngs",
@@ -7170,6 +7170,7 @@
         "NumberInputSuffixDirective"
       ],
       "inputs": [
+        "aria-label",
         "disabled",
         "max",
         "min",
@@ -11323,6 +11324,118 @@
         "--ngs-tree-node-padding",
         "--ngs-tree-node-radius",
         "--ngs-tree-node-title-font-size",
+        "--ngs-tree-padding"
+      ],
+      "example": null
+    },
+    {
+      "name": "tree-select",
+      "title": "Tree Select",
+      "overviewName": "Tree Select",
+      "category": "forms",
+      "package": "@ngstarter-ui/components",
+      "importPath": "@ngstarter-ui/components/tree-select",
+      "publicApi": "projects/components/tree-select/public-api.ts",
+      "sourceRoot": "projects/components/tree-select/src",
+      "docsPath": "/forms/tree-select",
+      "docsOverviewSource": "projects/docs/src/app/forms/tree-select/overview/overview.html",
+      "purpose": "Choose one or more hierarchical values in an Angular form.",
+      "useWhen": "Use for departments, categories, folders, and nested entity selection. Nodes have unique string or number values, labels, optional children, disabled, and hasChildren. Supports search retaining ancestors, single/multiple selection, leavesOnly, cascading selection of enabled loaded leaves, independent selection with cascade=false, lazy loadChildren, clear, and Angular forms inside FormField. Search and cascade operate on loaded nodes. Use Tree for navigation rather than form selection and Select for flat choices.",
+      "exampleTopics": [
+        "Single selection and reactive forms",
+        "Multiple selection",
+        "Load children on expansion",
+        "Basic tree select",
+        "Multiple tree select",
+        "Lazy tree select"
+      ],
+      "minimalExample": "<ngs-form-field class=\"w-full max-w-96\">\n  <ngs-label>Department</ngs-label>\n  <ngs-tree-select\n    [nodes]=\"nodes\"\n    [formControl]=\"department\"\n    leavesOnly\n    clearable\n    required\n    aria-label=\"Department\"\n  />\n  @if (department.touched && department.invalid) {\n    <ngs-error>Choose a department.</ngs-error>\n  }\n</ngs-form-field>\n<p class=\"mt-3 text-sm\">Selected: {{ department.value ?? 'None' }}</p>",
+      "exampleFiles": [
+        {
+          "name": "basic-tree-select-example",
+          "title": "Basic tree select",
+          "file": "projects/docs/src/app/forms/tree-select/_examples/basic-tree-select-example/basic-tree-select-example.html",
+          "source": "<ngs-form-field class=\"w-full max-w-96\">\n  <ngs-label>Department</ngs-label>\n  <ngs-tree-select\n    [nodes]=\"nodes\"\n    [formControl]=\"department\"\n    leavesOnly\n    clearable\n    required\n    aria-label=\"Department\"\n  />\n  @if (department.touched && department.invalid) {\n    <ngs-error>Choose a department.</ngs-error>\n  }\n</ngs-form-field>\n<p class=\"mt-3 text-sm\">Selected: {{ department.value ?? 'None' }}</p>"
+        },
+        {
+          "name": "lazy-tree-select-example",
+          "title": "Lazy tree select",
+          "file": "projects/docs/src/app/forms/tree-select/_examples/lazy-tree-select-example/lazy-tree-select-example.html",
+          "source": "<ngs-form-field class=\"w-full max-w-96\">\n  <ngs-label>Folder</ngs-label>\n  <ngs-tree-select\n    [nodes]=\"nodes\"\n    [loadChildren]=\"loadChildren\"\n    [(ngModel)]=\"selected\"\n    leavesOnly\n    clearable\n    aria-label=\"Folder\"\n  />\n</ngs-form-field>"
+        },
+        {
+          "name": "multiple-tree-select-example",
+          "title": "Multiple tree select",
+          "file": "projects/docs/src/app/forms/tree-select/_examples/multiple-tree-select-example/multiple-tree-select-example.html",
+          "source": "<ngs-form-field class=\"w-full max-w-96\">\n  <ngs-label>Permissions</ngs-label>\n  <ngs-tree-select\n    [nodes]=\"nodes\"\n    [(ngModel)]=\"selected\"\n    multiple\n    clearable\n    aria-label=\"Permissions\"\n  />\n</ngs-form-field>\n<p class=\"mt-3 text-sm\">Selected: {{ selected().join(', ') || 'None' }}</p>"
+        }
+      ],
+      "previewAsset": null,
+      "selectors": [
+        "ngs-tree-select",
+        "ngs-tree-select-panel"
+      ],
+      "exportedSymbols": [
+        "TreeSelect",
+        "TreeSelectChildrenLoader",
+        "TreeSelectKey",
+        "TreeSelectNode",
+        "TreeSelectPanel",
+        "TreeSelectValue"
+      ],
+      "inputs": [
+        "aria-label",
+        "cascade",
+        "clearable",
+        "disabled",
+        "emptyText",
+        "label",
+        "leavesOnly",
+        "loadChildren",
+        "multiple",
+        "nodes",
+        "panelId",
+        "placeholder",
+        "query",
+        "required",
+        "searchable",
+        "value"
+      ],
+      "outputs": [
+        "closed",
+        "dismiss",
+        "loadError",
+        "loadNode",
+        "opened",
+        "queryChange",
+        "selectionChange",
+        "selectNode"
+      ],
+      "cssTokens": [
+        "--ngs-button-height",
+        "--ngs-dropdown-item-padding-x",
+        "--ngs-field-font-size",
+        "--ngs-field-label-color",
+        "--ngs-field-padding-x",
+        "--ngs-icon-size",
+        "--ngs-option-active-background",
+        "--ngs-option-color",
+        "--ngs-option-font-size",
+        "--ngs-option-gap",
+        "--ngs-option-group-padding-start",
+        "--ngs-option-height",
+        "--ngs-option-padding",
+        "--ngs-option-radius",
+        "--ngs-option-selected-color",
+        "--ngs-select-font-size",
+        "--ngs-select-placeholder-color",
+        "--ngs-select-search-padding-inline",
+        "--ngs-tree-gap",
+        "--ngs-tree-node-color",
+        "--ngs-tree-node-font-size",
+        "--ngs-tree-node-gap",
+        "--ngs-tree-node-min-height",
+        "--ngs-tree-node-padding",
         "--ngs-tree-padding"
       ],
       "example": null

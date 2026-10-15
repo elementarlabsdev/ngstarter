@@ -1,0 +1,39 @@
+<p>
+  Import <code>TreeSelect</code> from <code>@ngstarter-ui/components/tree-select</code>. Each node
+  has a unique string or number <code>value</code>, a <code>label</code>, and optional
+  <code>children</code>. Use immutable node arrays. Search keeps ancestors visible.
+</p>
+<h3>Single selection and reactive forms</h3>
+<p>
+  Use <code>leavesOnly</code> to select categories at the last level. Open with Enter, Space, or an
+  arrow key. Inside the tree, arrows navigate and expand; Enter or Space selects. Escape or Tab
+  closes the popup and restores focus.
+</p>
+<ngs-playground
+  exampleUrl="_docs/forms/tree-select/_examples"
+  exampleName="basic-tree-select-example"
+  ><app-basic-tree-select-example
+/></ngs-playground>
+<h3>Multiple selection</h3>
+<p>
+  With <code>multiple</code>, the form value is an array. Cascading selection writes enabled loaded
+  leaf values, and parents show checked or mixed state. Disabled branches and their descendants
+  cannot be selected. Set <code>[cascade]="false"</code> for independent node selection.
+</p>
+<ngs-playground
+  exampleUrl="_docs/forms/tree-select/_examples"
+  exampleName="multiple-tree-select-example"
+  ><app-multiple-tree-select-example
+/></ngs-playground>
+<h3>Load children on expansion</h3>
+<p>
+  Mark unloaded branches with <code>hasChildren: true</code> and provide <code>loadChildren</code>.
+  It accepts arrays, promises, or observables. Errors show a Retry action and emit
+  <code>loadError</code>. Search and cascading selection operate on loaded nodes; expand branches
+  before selecting their descendants. No remote search is performed.
+</p>
+<ngs-playground
+  exampleUrl="_docs/forms/tree-select/_examples"
+  exampleName="lazy-tree-select-example"
+  ><app-lazy-tree-select-example
+/></ngs-playground>

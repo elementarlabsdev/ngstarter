@@ -1,0 +1,73 @@
+@use '../../../select/src/select-panel';
+@use '../../../option/src/option-styles';
+@reference 'tailwindcss';
+
+:host {
+  @include select-panel.panel;
+  min-width: 0;
+  color: var(--ngs-option-color);
+  font-size: var(--ngs-select-font-size, var(--ngs-field-font-size));
+
+  .ngs-select-search {
+    position: relative;
+  }
+  .ngs-tree-select-search-icon {
+    position: absolute;
+    inset-inline-start: var(--ngs-select-search-padding-inline, var(--ngs-field-padding-x));
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ngs-select-placeholder-color, var(--ngs-field-label-color));
+    pointer-events: none;
+  }
+  .ngs-select-search-input {
+    padding-inline-start: calc(
+      var(--ngs-select-search-padding-inline, var(--ngs-field-padding-x)) + var(--ngs-icon-size) +
+        var(--ngs-option-gap)
+    );
+  }
+  ngs-tree {
+    --ngs-tree-padding: 0;
+    --ngs-tree-gap: 0;
+  }
+  ngs-tree-node {
+    @include option-styles.option;
+    flex: none;
+    box-sizing: border-box;
+    --ngs-tree-node-min-height: var(--ngs-option-height);
+    --ngs-tree-node-padding: var(--ngs-option-padding);
+    --ngs-tree-node-gap: var(--ngs-option-gap);
+    --ngs-tree-node-color: var(--ngs-option-color);
+    --ngs-tree-node-font-size: var(--ngs-option-font-size);
+    border-radius: var(--ngs-option-radius);
+
+    &:focus-visible:not(.ngs-option-disabled) {
+      background: var(--ngs-option-active-background);
+    }
+    &.ngs-option-selected:not(.ngs-option-multiple) {
+      color: var(--ngs-option-selected-color);
+    }
+  }
+  .ngs-tree-select-indentation {
+    display: inline-flex;
+    flex: none;
+    margin-inline-end: calc(-1 * var(--ngs-option-gap));
+  }
+  .ngs-tree-select-indent {
+    width: calc(var(--ngs-option-group-padding-start) - var(--ngs-dropdown-item-padding-x));
+  }
+  button.ngs-tree-select-toggle,
+  .ngs-tree-select-toggle-space {
+    flex: none;
+    width: var(--ngs-icon-size);
+    --ngs-button-height: var(--ngs-icon-size);
+  }
+  .ngs-tree-select-node-label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ngs-tree-select-check {
+    flex: none;
+  }
+}

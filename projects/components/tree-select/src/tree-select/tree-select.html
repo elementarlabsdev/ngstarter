@@ -1,0 +1,73 @@
+<button
+  #trigger
+  type="button"
+  class="ngs-select-trigger"
+  cdkOverlayOrigin
+  #origin="cdkOverlayOrigin"
+  role="combobox"
+  aria-haspopup="tree"
+  [attr.aria-expanded]="panelOpen()"
+  [attr.aria-controls]="panelOpen() ? id + '-tree' : null"
+  [attr.aria-label]="ariaLabel() || placeholder"
+  [attr.aria-describedby]="describedBy() || null"
+  [attr.aria-required]="required"
+  [attr.aria-invalid]="errorState"
+  [disabled]="disabled"
+  (keydown)="onKeydown($event)"
+  (focus)="onFocus()"
+  (blur)="onBlur()"
+>
+  <span class="ngs-select-value">
+    @if (empty) {
+      <span class="ngs-select-placeholder">{{ placeholder }}</span>
+    } @else {
+      <span class="ngs-select-value-text">{{ displayValue() }}</span>
+    }
+  </span>
+</button>
+@if (clearable() && !empty) {
+  <button
+    type="button"
+    class="ngs-select-clear-button"
+    aria-label="Clear selection"
+    [disabled]="disabled"
+    (click)="clear($event)"
+  >
+    <ngs-icon name="fluent:dismiss-24-regular" class="ngs-select-clear-icon" />
+  </button>
+}
+<span class="ngs-select-arrow-wrapper" aria-hidden="true">
+  <ngs-icon name="fluent:chevron-down-24-regular" class="ngs-select-arrow" />
+</span>
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="overlayOrigin"
+  [cdkConnectedOverlayOpen]="panelOpen()"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  [cdkConnectedOverlayPositions]="overlayPositions"
+  [cdkConnectedOverlayViewportMargin]="8"
+  [cdkConnectedOverlayPush]="true"
+  [cdkConnectedOverlayWidth]="overlayWidth()"
+  cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  (backdropClick)="close()"
+  (detach)="close(false)"
+>
+  <ngs-tree-select-panel
+    [nodes]="resolvedNodes()"
+    [panelId]="id + '-tree'"
+    [label]="ariaLabel() || placeholder"
+    [multiple]="multiple()"
+    [searchable]="searchable()"
+    [query]="query()"
+    [emptyText]="emptyText()"
+    [isChecked]="isChecked"
+    [isIndeterminate]="isIndeterminate"
+    [canSelect]="canSelect"
+    [isLoading]="isLoading"
+    [hasError]="hasError"
+    (selectNode)="select($event)"
+    (loadNode)="load($event)"
+    (queryChange)="query.set($event)"
+    (dismiss)="close()"
+  />
+</ng-template>

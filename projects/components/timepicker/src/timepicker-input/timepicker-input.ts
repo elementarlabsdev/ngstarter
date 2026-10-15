@@ -58,7 +58,7 @@ export class TimepickerInput<D = any> implements ControlValueAccessor, OnDestroy
   private _localeId = inject(LOCALE_ID);
 
   private _disabledByCva = signal(false);
-  protected _disabledInput = input<boolean, unknown>(false, {
+  readonly _disabledInput = input<boolean, unknown>(false, {
     alias: 'disabled',
     transform: booleanAttribute
   });

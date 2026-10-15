@@ -1,0 +1,30 @@
+@use '../../../select/src/select-control';
+@reference 'tailwindcss';
+
+:host {
+  @include select-control.control;
+  display: block;
+  width: 100%;
+
+  button.ngs-select-trigger {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: inherit;
+    outline: none;
+  }
+
+  .ngs-select-arrow-wrapper {
+    pointer-events: none;
+  }
+}
+
+:host-context(.ngs-form-field-focused) {
+  .ngs-select-arrow-wrapper {
+    transform: rotate(180deg);
+  }
+}

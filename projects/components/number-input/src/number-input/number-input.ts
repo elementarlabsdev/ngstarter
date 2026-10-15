@@ -92,6 +92,7 @@ export class NumberInput implements FormFieldControl<any>, ControlValueAccessor,
   }
   private _required = signal(false);
 
+  readonly ariaLabel = input<string | null>(null, { alias: 'aria-label' });
   readonly valueChange = output<number|undefined>();
 
   static nextId = 0;
@@ -220,6 +221,7 @@ export class NumberInput implements FormFieldControl<any>, ControlValueAccessor,
   decrease(event: MouseEvent, input: HTMLInputElement) {
     event.preventDefault();
     event.stopPropagation();
+    if (this.disabled || this.readonly()) return;
     let value = this._value() ?? 0;
     value -= this.step();
     this._value.set(value);
@@ -229,6 +231,7 @@ export class NumberInput implements FormFieldControl<any>, ControlValueAccessor,
   increase(event: MouseEvent, input: HTMLInputElement) {
     event.preventDefault();
     event.stopPropagation();
+    if (this.disabled || this.readonly()) return;
     let value = this._value() ?? 0;
     value += this.step();
     this._value.set(value);
@@ -256,6 +259,7 @@ export class NumberInput implements FormFieldControl<any>, ControlValueAccessor,
   }
 
   inputChange(event: any) {
+    if (this.disabled || this.readonly()) return;
     const inputValue = event.target.value;
     const value = inputValue === '' ? undefined : +inputValue;
     this._value.set(value);

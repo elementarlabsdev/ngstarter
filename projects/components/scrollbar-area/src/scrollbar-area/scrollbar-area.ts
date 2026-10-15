@@ -53,7 +53,7 @@ export class ScrollbarArea {
   private readonly zone = inject(NgZone);
   private readonly renderer = inject(Renderer2);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly router = inject(Router);
+  private readonly router = inject(Router, { optional: true });
 
   readonly scrollableContentRef = viewChild.required<ElementRef<HTMLElement>>('scrollableContent');
   readonly scrollTrackRef = viewChild.required<ElementRef<HTMLElement>>('scrollTrack');
@@ -547,7 +547,7 @@ export class ScrollbarArea {
   }
 
   private setupRouteChanges() {
-    this.router.events
+    this.router?.events
       .pipe(
         filter(event=> event instanceof NavigationEnd),
         takeUntilDestroyed(this.destroyRef)

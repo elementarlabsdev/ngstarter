@@ -309,6 +309,12 @@ export class App implements OnInit {
         {
           key: uuid(),
           type: 'link',
+          name: 'Tree Select',
+          link: '/forms/tree-select'
+        },
+        {
+          key: uuid(),
+          type: 'link',
           name: 'Select',
           link: '/forms/select'
         },

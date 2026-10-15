@@ -2,6 +2,11 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: 'tree-select',
+    loadChildren: () => import('./tree-select/routes').then(m => m.routes),
+    title: 'Tree Select'
+  },
+  {
     path: '',
     pathMatch: 'full',
     loadComponent: () => import('../@meta/category-overview/category-overview').then(c => c.CategoryOverview),

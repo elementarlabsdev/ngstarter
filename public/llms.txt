@@ -183,6 +183,7 @@ Must use:
 - toolbar: `@ngstarter-ui/components/toolbar` docs: /components/toolbar
 - tooltip: `@ngstarter-ui/components/tooltip` docs: /components/tooltip
 - tree: `@ngstarter-ui/components/tree` docs: /components/tree
+- tree-select: `@ngstarter-ui/components/tree-select` docs: /forms/tree-select
 - upload: `@ngstarter-ui/components/upload` docs: /components/upload
 - video-player: `@ngstarter-ui/components/video-player` docs: /libraries/video-player
 - video-viewer: `@ngstarter-ui/components/video-viewer` docs: /components/video-viewer

@@ -107,6 +107,10 @@ const recipes = [
 ];
 
 const curatedGuidance = new Map(Object.entries({
+  'tree-select': {
+    purpose: 'Choose one or more hierarchical values in an Angular form.',
+    useWhen: 'Use for departments, categories, folders, and nested entity selection. Nodes have unique string or number values, labels, optional children, disabled, and hasChildren. Supports search retaining ancestors, single/multiple selection, leavesOnly, cascading selection of enabled loaded leaves, independent selection with cascade=false, lazy loadChildren, clear, and Angular forms inside FormField. Search and cascade operate on loaded nodes. Use Tree for navigation rather than form selection and Select for flat choices.',
+  },
   'action-required': {
     purpose: 'Prompt users to resolve required account, setup, billing, or workflow actions.',
     useWhen: 'Use for dashboard notices that require user action before work can continue.',

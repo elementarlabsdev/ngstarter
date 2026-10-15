@@ -314,3 +314,56 @@ None. Single-image and empty states have no independent source mock and use a re
 None required. Existing library type, radius and photograph crop are accepted product adaptations.
 
 final result: passed
+
+# TreeSelect design QA
+
+- Source visual truth: `/Users/developer/.codex/generated_images/01a1409f-f9bc-7ca0-bf45-7b9c61b4474b/exec-5866b95f-521c-478a-93b2-1b30b9b90b2c.png` (first displayed design).
+- User constraint: use the existing Select/Option styles and default theme dimensions rather than literal mockup sizes and colors.
+- Implementation: http://127.0.0.1:4300/forms/tree-select
+- Browser screenshot: `/Users/developer/.codex/visualizations/2026/10/15/01a1409f-f9bc-7ca0-bf45-7b9c61b4474b/tree-select-redesign/browser.jpg`.
+- Focused screenshot: `/Users/developer/.codex/visualizations/2026/10/15/01a1409f-f9bc-7ca0-bf45-7b9c61b4474b/tree-select-redesign/component.jpg`.
+- Combined comparison: `/Users/developer/.codex/visualizations/2026/10/15/01a1409f-f9bc-7ca0-bf45-7b9c61b4474b/tree-select-redesign/comparison.png`.
+- Viewport: 1280 × 720 CSS pixels, browser capture 1280 × 720 pixels (density 1).
+- Source: 1322 × 1190 pixels. The component crop was normalized from 983 × 885 pixels to 393 × 354 pixels so its field is approximately 384 CSS pixels wide. This is a component concept, not a literal full-page screenshot.
+- State: light default theme, Department = Frontend, Engineering expanded, search focused.
+
+## Findings
+
+No actionable P0/P1/P2 findings remain for the requested component scope.
+
+- Fonts and typography: DM Sans and the default 14px field/option typography are used. Existing library CSS controls line height and weights.
+- Spacing and layout: field and popup widths both measure 384px. Field/search height is 40px. Rows measure 37px from the existing 36px minimum plus theme padding/line height, exactly as the shared Option styling specifies. The collapsed two-row popup measures 126px; expanding nodes grows the content. SelectBody applies the theme's 256px maximum to the scrolling body. No empty fixed-height area or Done button remains.
+- Colors/tokens: selected, hover, focus, radius, border, shadow, padding, arrow and clear affordances reuse Select/Option CSS. The neutral selected background and search underline intentionally follow default.scss instead of the concept's blue tint and boxed search.
+- Image/icon quality: real NgStarter Icon/Fluent icons render the chevrons, magnifier, clear action and selected checkmark. No raster UI or handmade icon drawing is used.
+- Copy/content: the existing demo departments are preserved, so the implementation has four expanded rows versus six in the concept. This explains the shorter panel and is an accepted data difference, not missing UI.
+
+## Comparison history
+
+1. The supplied original implementation had fixed blank space, a footer action, an oversized trigger treatment, and insufficient selection emphasis. These issues were identified before implementation.
+2. Shared Select/Option mixins, SelectHeader/SelectBody, automatic content sizing, and a selected checkmark replaced that treatment. Browser measurements and the focused combined comparison above confirm the correction. The selected ancestor path is expanded on reopening.
+
+## Interaction checks
+
+- Single selection updates the form and closes the panel.
+- Reopening reveals the selected leaf and checkmark.
+- Search retains ancestors (covered by browser/unit checks).
+- Multiple selection updates Read to Read, Write with the expected parent state.
+- Escape closes and restores focus; Tab closes without a focus trap.
+- Lazy loading, disabled values, forms/reset and stale requests pass the scoped browser tests.
+- Browser console checked after the final component interactions: no errors.
+- Scoped tests: 14 passing in Chromium.
+- Existing Select and Option CSS before/after mixin extraction compiles byte-for-byte identically.
+
+## Implementation checklist
+
+- [x] Reuse existing Select/Option styles and default tokens.
+- [x] Remove fixed height, empty footer and disabled leaf buttons.
+- [x] Match popup width to the complete field.
+- [x] Verify selected, collapsed, expanded and multiple states.
+- [x] Compare source and browser evidence together.
+
+## Follow-up polish
+
+No P3 changes are required for this request. A separate mobile or dark-theme audit was not requested.
+
+final result: passed

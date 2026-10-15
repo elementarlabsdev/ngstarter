@@ -1,0 +1,100 @@
+@if (searchable()) {
+  <ngs-select-header>
+    <div class="ngs-select-search">
+      <ngs-icon name="fluent:search-24-regular" class="ngs-tree-select-search-icon" />
+      <input
+        ngsInput
+        class="ngs-select-search-input"
+        placeholder="Search…"
+        aria-label="Search tree"
+        [value]="query()"
+        (input)="queryChange.emit($any($event.target).value)"
+      />
+    </div>
+  </ngs-select-header>
+}
+<ngs-select-body>
+  <ngs-tree
+    #tree
+    [id]="panelId()"
+    [attr.aria-label]="label()"
+    [attr.aria-multiselectable]="multiple()"
+    [dataSource]="nodes()"
+    [childrenAccessor]="childrenAccessor"
+    [expansionKey]="expansionKey"
+    [filterValue]="query()"
+  >
+    <ngs-tree-node
+      *ngsTreeNodeDef="let node"
+      #treeNode="ngsTreeNode"
+      [isExpandable]="expandable(node)"
+      [disabled]="!!node.disabled"
+      [cdkTreeNodeTypeaheadLabel]="node.label"
+      [class.ngs-option-selected]="isChecked()(node)"
+      [class.ngs-option-multiple]="multiple()"
+      [class.ngs-option-disabled]="!!node.disabled"
+      [attr.aria-selected]="isChecked()(node)"
+      [attr.aria-checked]="
+        multiple() ? (isIndeterminate()(node) ? 'mixed' : isChecked()(node)) : null
+      "
+      (activation)="selectNode.emit(node)"
+      (click)="selectNode.emit(node)"
+      (expandedChange)="expanded(node, $event)"
+    >
+      <span class="ngs-tree-select-indentation" aria-hidden="true">
+        @for (level of levels(treeNode.level); track level) {
+          <span class="ngs-tree-select-indent"></span>
+        }
+      </span>
+      @if (expandable(node)) {
+        <button
+          ngsIconButton
+          type="button"
+          class="ngs-tree-select-toggle"
+          [tabIndex]="-1"
+          [disabled]="!!node.disabled || isLoading()(node)"
+          [attr.aria-label]="(tree.isExpanded(node) ? 'Collapse ' : 'Expand ') + node.label"
+          (keydown)="$event.stopPropagation()"
+          (click)="$event.stopPropagation(); tree.toggle(node)"
+        >
+          <ngs-icon
+            [name]="
+              tree.isExpanded(node)
+                ? 'fluent:chevron-down-24-regular'
+                : 'fluent:chevron-right-24-regular'
+            "
+          />
+        </button>
+      } @else {
+        <span class="ngs-tree-select-toggle-space" aria-hidden="true"></span>
+      }
+      @if (multiple()) {
+        <ngs-checkbox
+          [checked]="isChecked()(node)"
+          [indeterminate]="isIndeterminate()(node)"
+          [disabled]="!canSelect()(node)"
+          [tabIndex]="-1"
+          [aria-label]="node.label"
+          (keydown)="$event.stopPropagation()"
+          (click)="$event.stopPropagation()"
+          (change)="selectNode.emit(node)"
+        />
+      }
+      <span class="ngs-tree-select-node-label">{{ node.label }}</span>
+      @if (!multiple() && isChecked()(node)) {
+        <ngs-icon name="fluent:checkmark-24-regular" class="ngs-tree-select-check" />
+      }
+      @if (isLoading()(node)) {
+        <span class="ngs-select-state" role="status">Loading…</span>
+      }
+      @if (hasError()(node)) {
+        <button ngsButton type="button" (click)="$event.stopPropagation(); loadNode.emit(node)">
+          Retry
+        </button>
+      }
+    </ngs-tree-node>
+  </ngs-tree>
+  @if (!hasMatches()) {
+    <p class="ngs-select-state" role="status">{{ emptyText() }}</p>
+  }
+</ngs-select-body>

@@ -1,0 +1,11 @@
+<ngs-form-field class="w-full max-w-96">
+  <ngs-label>Folder</ngs-label>
+  <ngs-tree-select
+    [nodes]="nodes"
+    [loadChildren]="loadChildren"
+    [(ngModel)]="selected"
+    leavesOnly
+    clearable
+    aria-label="Folder"
+  />
+</ngs-form-field>

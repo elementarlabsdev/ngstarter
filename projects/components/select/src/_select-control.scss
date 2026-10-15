@@ -1,0 +1,206 @@
+@mixin control {
+  --ngs-select-arrow-color: var(--ngs-color-on-surface-variant);
+  --ngs-select-font-size: var(--ngs-field-font-size);
+  --ngs-select-placeholder-color: var(--ngs-field-label-color);
+  --ngs-select-border-color: var(--ngs-field-border-color);
+  --ngs-select-min-width: 120px;
+  --ngs-select-arrow-size: 18px;
+  --ngs-select-arrow-container-width: --spacing(5);
+  --ngs-select-clear-container-width: --spacing(6);
+  --ngs-select-clear-icon-size: 20px;
+  --ngs-select-clear-overlap: 0px;
+  --ngs-select-clear-color: var(--ngs-color-on-surface-variant);
+  --ngs-select-clear-hover-color: var(--ngs-color-danger);
+
+  display: inline-block;
+  box-sizing: border-box;
+  position: relative;
+  outline: none;
+  cursor: pointer;
+  font-size: var(--ngs-select-font-size);
+  min-width: var(--ngs-select-min-width);
+  padding-inline-end: var(--ngs-select-arrow-container-width);
+
+  &:has(ngs-filter-trigger) {
+    --ngs-select-min-width: 0;
+    --ngs-select-arrow-container-width: --spacing(7);
+  }
+
+  &.ngs-select-has-filter-trigger:focus-visible:not(.ngs-select-disabled) {
+    outline: 2px solid var(--ngs-state-focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--ngs-field-radius, var(--ngs-radius-md, 0.5rem));
+  }
+
+  &.ngs-select-has-clear {
+    padding-inline-end: calc(
+      var(--ngs-select-arrow-container-width) +
+        var(--ngs-select-clear-container-width) - var(--ngs-select-clear-overlap)
+    );
+  }
+
+  &.ngs-select-has-filter-trigger.ngs-select-has-clear {
+    --ngs-select-clear-overlap: --spacing(2);
+  }
+
+  &.ngs-select-panel-open.ngs-select-has-filter-trigger {
+    .ngs-select-arrow-wrapper {
+      transform: rotate(-180deg);
+    }
+  }
+
+  &.ngs-select-disabled {
+    cursor: default;
+    pointer-events: none;
+    --ngs-select-border-color: color-mix(in srgb, var(--ngs-color-outline), transparent 80%);
+
+    .ngs-select-trigger {
+      opacity: 0.38;
+    }
+  }
+
+  .ngs-select-value {
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+    min-width: 0;
+    height: 100%;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: var(--ngs-field-line-height);
+    font-size: var(--ngs-field-font-size);
+  }
+
+  .ngs-select-value-text {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ngs-select-placeholder {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--ngs-select-placeholder-color);
+  }
+
+  .ngs-form-field & {
+    min-width: 0;
+  }
+
+  .ngs-select-arrow {
+    width: var(--ngs-select-arrow-size);
+    height: var(--ngs-select-arrow-size);
+    display: flex;
+    color: var(--ngs-select-arrow-color);
+  }
+
+  .ngs-select-clear-button {
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    display: inline-flex;
+    position: absolute;
+    inset-inline-end: calc(
+      var(--ngs-select-arrow-container-width) - var(--ngs-select-clear-overlap)
+    );
+    top: 0;
+    bottom: 0;
+    width: var(--ngs-select-clear-container-width);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ngs-select-clear-color);
+    cursor: pointer;
+    outline: none;
+    transition: color 150ms ease;
+
+    &:hover {
+      color: var(--ngs-select-clear-hover-color);
+    }
+
+    &:focus-visible {
+      color: var(--ngs-select-clear-hover-color);
+    }
+
+    .ngs-form-field:not(.ngs-form-field-has-label) &,
+    .ngs-paginator & {
+      top: 0;
+    }
+  }
+
+  .ngs-select-clear-icon {
+    width: var(--ngs-select-clear-icon-size);
+    height: var(--ngs-select-clear-icon-size);
+    display: flex;
+  }
+
+  .ngs-select-arrow-wrapper {
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    display: inline-flex;
+    transition: transform 200ms ease;
+    position: absolute;
+    inset-inline-end: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--ngs-select-arrow-container-width);
+
+    .ngs-form-field:not(.ngs-form-field-has-label) &,
+    .ngs-paginator & {
+      top: 0;
+    }
+  }
+
+  .ngs-select-trigger {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    min-width: 0;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    line-height: var(--ngs-field-line-height);
+    font-size: var(--ngs-field-font-size);
+
+    .hidden {
+      display: none;
+    }
+  }
+
+  ::ng-deep {
+    ngs-select-trigger,
+    .ngs-select-trigger-content {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      max-width: 100%;
+      height: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .ngs-select-trigger-content {
+      gap: var(--ngs-select-trigger-gap, var(--ngs-dropdown-item-gap, --spacing(2)));
+    }
+
+    .ngs-select-trigger-icon {
+      flex: none;
+      line-height: 0;
+    }
+
+    .ngs-select-trigger-text {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}
