@@ -115,7 +115,7 @@ export class PinInput implements ControlValueAccessor, OnInit {
     for (let i = 0; i < value.length; i++) {
       const control = this.controls[i];
 
-      if (control && value[i].match(this.acceptOnly)) {
+      if (control && value[i].match(this.acceptOnly())) {
         control.setValue(value[i]);
       }
     }
