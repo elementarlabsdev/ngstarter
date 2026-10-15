@@ -114,17 +114,16 @@
         @case ('item') {
           <button ngs-menu-item
             (click)="addBlockFromSuggestionMenu(suggestionsMenu, target, suggestionItem.blockType, suggestionItem.blockSettings)">
-            <div class="h-full flex items-center gap-3 py-2">
-              <div class="size-9 flex items-center rounded-lg justify-center bg-surface-container">
+            <div class="h-full w-full min-w-0 flex items-center gap-3 py-2">
+              <div class="size-9 shrink-0 flex items-center rounded-lg justify-center bg-surface-container">
                 <ngs-icon [name]="suggestionItem.iconName" class="!me-0"/>
               </div>
-              <div class="grow min-w-[200px]">
+              <div class="flex-1 min-w-0 whitespace-normal break-words">
                 <div>{{ suggestionItem.title }}</div>
                 <div class="text-xs text-on-surface-variant">{{ suggestionItem.description }}</div>
               </div>
               @if (suggestionItem.hotKeys) {
-                <div class="ms-auto bg-surface-container-highest rounded-full h-5
-                  text-4xs px-2 flex items-center font-bold">{{ suggestionItem.hotKeys }}</div>
+                <ngs-kbd class="ms-auto shrink-0 whitespace-nowrap font-normal *:text-2xs! *:h-4! *:min-w-4! *:px-1.5! *:py-0!">{{ suggestionItem.hotKeys }}</ngs-kbd>
               }
             </div>
           </button>

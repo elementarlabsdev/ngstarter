@@ -61,6 +61,7 @@ export class ThemePlayground {
   readonly themes: ReadonlyArray<{ value: NgsThemeName; label: string }> = [
     { value: 'default', label: 'Default' },
     { value: 'chalk', label: 'Chalk' },
+    { value: 'mono', label: 'Mono' },
   ];
   readonly schemes: SchemeName[] = ['light', 'dark', 'auto'];
 

@@ -70,7 +70,7 @@ Other entry points follow the same pattern, such as `@ngstarter-ui/components/di
 
 ## Theming
 
-NgStarter ships Default and Chalk themes, each with light and dark colors. Import the Default
+NgStarter ships Default, Chalk, and Mono themes, each with light and dark colors. Import the Default
 theme once in the application's global `styles.scss`:
 
 ```scss
@@ -82,6 +82,21 @@ If the application uses Chalk or lets users switch to it at runtime, also import
 ```scss
 @use '@ngstarter-ui/components/styles/themes/chalk';
 ```
+
+For the Mono theme, import its stylesheet and select `theme: 'mono'`:
+
+```scss
+@use '@ngstarter-ui/components/styles/themes/mono';
+```
+
+```ts
+provideNgsTheme({ theme: 'mono', colorScheme: 'auto' });
+```
+
+Mono maps the [shadcn/ui Neutral palette](https://ui.shadcn.com/docs/theming)
+to NgStarter tokens, with monochrome actions, subtle borders, compact controls, and light/dark
+surfaces. It can also be imported on its own when the app only uses this theme. Select it before
+bootstrap with `data-ngs-theme="mono"` to avoid a flash of the default palette.
 
 The theme includes Tailwind CSS and shared base styles; an additional Tailwind import or a
 duplicate CSS reset is not needed.
@@ -108,7 +123,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-`theme` accepts `'default'` or `'chalk'`. `colorScheme` accepts `'light'`, `'dark'`, or
+`theme` accepts `'default'`, `'chalk'`, or `'mono'`. `colorScheme` accepts `'light'`, `'dark'`, or
 `'auto'`; auto follows the operating system preference. These options default to `'default'`
 and `'auto'`, respectively.
 

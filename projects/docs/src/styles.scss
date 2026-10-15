@@ -1,5 +1,6 @@
 @use "../../components/styles/themes/default";
 @use "../../components/styles/themes/chalk";
+@use "../../components/styles/themes/mono";
 
 .prose {
   div:has(> table.ngs-table, > table.ngs-native-table) {

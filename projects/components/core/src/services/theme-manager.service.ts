@@ -186,7 +186,7 @@ export class ThemeManagerService {
   }
 
   private _isThemeName(theme: NgsThemeName | undefined): theme is NgsThemeName {
-    return theme === 'default' || theme === 'chalk';
+    return theme === 'default' || theme === 'chalk' || theme === 'mono';
   }
 
   private get _storageKey(): string {

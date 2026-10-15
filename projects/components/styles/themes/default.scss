@@ -50,7 +50,7 @@
   --ngs-color-warning-container: #fff1d9;
   --ngs-color-on-warning-container: #71430c;
 
-  --ngs-color-background: #f7f9fc;
+  --ngs-color-background: #fdfdff;
   --ngs-color-on-background: #12203b;
   --ngs-color-surface: #ffffff;
   --ngs-color-surface-bright: #ffffff;
@@ -114,7 +114,7 @@
   --ngs-color-tertiary-700: #29364e;
   --ngs-color-tertiary-800: #1a2942;
   --ngs-loader-overlay-bg: var(--ngs-color-surface-loading);
-  --ngs-screen-loader-overlay-bg: rgba(247, 249, 252, 0.96);
+  --ngs-screen-loader-overlay-bg: rgba(253, 253, 255, 0.96);
 
   --ngs-density-scale: -4;
   --ngs-control-height-sm: calc(2.25rem + var(--ngs-density-scale) * 1px);

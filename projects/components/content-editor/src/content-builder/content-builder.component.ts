@@ -1,6 +1,7 @@
 import { FormField } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 import { EmptyState } from '@ngstarter-ui/components/empty-state';
+import { Kbd } from '@ngstarter-ui/components/kbd';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -85,7 +86,7 @@ import { List, ListItem, ListItemIcon, ListItemTitle } from '@ngstarter-ui/compo
     ListItem,
     List,
     MenuHeading,
-    MenuContent, MenuHeader, FormField, Input, EmptyState
+    MenuContent, MenuHeader, FormField, Input, EmptyState, Kbd
   ],
   hostDirectives: [
     {

@@ -1,7 +1,7 @@
 import { InjectionToken, Provider } from '@angular/core';
 import type { NgsThemeColorPreset } from '../theming/theme-presets';
 
-export type NgsThemeName = 'default' | 'chalk';
+export type NgsThemeName = 'default' | 'chalk' | 'mono';
 export type NgsColorScheme = 'light' | 'dark' | 'auto';
 
 export interface NgsThemeOptions {
