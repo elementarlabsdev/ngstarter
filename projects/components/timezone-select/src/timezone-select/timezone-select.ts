@@ -192,7 +192,7 @@ export class TimezoneSelect implements OnInit, FormFieldControl<any>, ControlVal
     }
 
     this.focus();
-    this.selectRef().open();
+    this.selectRef().onContainerClick(event);
   }
 
   setDescribedByIds(ids: string[]) {

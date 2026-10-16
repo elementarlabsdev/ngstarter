@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OverlayContainer } from '@angular/cdk/overlay';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { TreeSelect } from './tree-select';
 import { TreeSelectNode } from '../tree-select.types';
@@ -29,6 +30,17 @@ class FormHost {
   readonly control = new FormControl<string | null>(null, Validators.required);
 }
 
+@Component({
+  imports: [TreeSelect, FormField, Label, ReactiveFormsModule],
+  template: `
+    <ngs-form-field labelMode="floating">
+      <ngs-label>Department</ngs-label>
+      <ngs-tree-select [nodes]="nodes" [formControl]="control" clearable />
+    </ngs-form-field>
+  `,
+})
+class FormFieldHost extends FormHost {}
+
 describe('TreeSelect', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
   afterEach(() => TestBed.inject(OverlayContainer).ngOnDestroy());
@@ -39,6 +51,40 @@ describe('TreeSelect', () => {
     fixture.detectChanges();
     return fixture;
   }
+
+  it('handles padding and trigger clicks once through the form field', () => {
+    const fixture = TestBed.createComponent(FormFieldHost);
+    fixture.detectChanges();
+    const field = fixture.nativeElement.querySelector('.ngs-form-field-infix') as HTMLElement;
+    const trigger = fixture.nativeElement.querySelector('[role="combobox"]') as HTMLElement;
+    const isOpen = () => trigger.getAttribute('aria-expanded');
+
+    field.click();
+    fixture.detectChanges();
+    expect(isOpen()).toBe('true');
+    trigger.click();
+    fixture.detectChanges();
+    expect(isOpen()).toBe('false');
+    trigger.click();
+    fixture.detectChanges();
+    expect(isOpen()).toBe('true');
+    field.click();
+    fixture.detectChanges();
+    expect(isOpen()).toBe('false');
+
+    fixture.componentInstance.control.setValue('design');
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('.ngs-select-clear-button') as HTMLElement).click();
+    fixture.detectChanges();
+    expect(fixture.componentInstance.control.value).toBeNull();
+    expect(isOpen()).toBe('false');
+
+    fixture.componentInstance.control.disable();
+    fixture.detectChanges();
+    field.click();
+    fixture.detectChanges();
+    expect(isOpen()).toBe('false');
+  });
 
   it('does not emit form changes on writeValue and preserves numeric zero keys', () => {
     const fixture = create();

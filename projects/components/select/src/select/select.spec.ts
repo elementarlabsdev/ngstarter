@@ -1360,6 +1360,10 @@ describe('Select', () => {
     expect(formField.classList.contains('ngs-form-field-focused')).toBe(true);
 
     select.close();
+    fixture.detectChanges();
+    expect(formField.classList.contains('ngs-form-field-focused')).toBe(true);
+
+    getSelectHost(fixture).blur();
     component.status().markAsTouched();
     fixture.detectChanges();
 

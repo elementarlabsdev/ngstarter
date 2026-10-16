@@ -190,7 +190,7 @@ export class TreeSelect implements ControlValueAccessor, FormFieldControl<TreeSe
     return this.formField?.wrapper() || this.origin() || this.element;
   }
   onHostClick(): void {
-    if (!this.disabled) this.panelOpen() ? this.close() : this.open();
+    if (!this.formField) this.onContainerClick();
   }
   open(): void {
     if (this.disabled || this.panelOpen()) return;
@@ -340,6 +340,6 @@ export class TreeSelect implements ControlValueAccessor, FormFieldControl<TreeSe
     this.describedBy.set(ids.join(' '));
   }
   onContainerClick(): void {
-    this.open();
+    if (!this.disabled) this.panelOpen() ? this.close() : this.open();
   }
 }

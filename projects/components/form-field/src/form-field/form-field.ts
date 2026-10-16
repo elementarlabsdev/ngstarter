@@ -113,11 +113,23 @@ export class FormField {
     const isIconButton = !!target.closest('.ngs-icon-button') || !!target.closest('[ngsIconButton]');
     const isToggle = !!target.closest('ngs-datepicker-toggle') || !!target.closest('ngs-date-range-picker');
 
-    if (this.control()?.focused || isIconButton || isToggle) {
+    const control = this.control();
+
+    if (control?.disabled || isIconButton || isToggle) {
       return;
     }
 
-    this.focus();
+    if (control?.onContainerClick) {
+      this.focus();
+      control.onContainerClick(event);
+    } else {
+      if (control?.focused) {
+        return;
+      }
+
+      this.focus();
+    }
+
     event.stopPropagation();
   }
 

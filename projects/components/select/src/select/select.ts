@@ -503,6 +503,13 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
   }
 
   _handleClick(event: MouseEvent): void {
+    // Inside a form field, the field owns the entire click target.
+    if (!this._formField) {
+      this.onContainerClick(event);
+    }
+  }
+
+  onContainerClick(event: MouseEvent): void {
     this.toggle(event.detail === 0 ? 'keyboard' : 'mouse');
   }
 

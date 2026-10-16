@@ -157,9 +157,9 @@ export class DateFormatSelect implements FormFieldControl<string>, ControlValueA
     this._describedBy.set(ids.join(' '));
   }
 
-  onContainerClick(): void {
+  onContainerClick(event: MouseEvent): void {
     if (!this.disabled) {
-      this.matSelect().open();
+      this.matSelect().onContainerClick(event);
     }
   }
 

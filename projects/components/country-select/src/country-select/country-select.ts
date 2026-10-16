@@ -305,13 +305,13 @@ export class CountrySelect
     }
   }
 
-  onContainerClick(): void {
+  onContainerClick(event: MouseEvent): void {
     if (this.disabled) {
       return;
     }
 
     this._focusedSignal.set(true);
-    this.ngsSelect().open();
+    this.ngsSelect().onContainerClick(event);
   }
 
   writeValue(value: CountrySelectValue): void {

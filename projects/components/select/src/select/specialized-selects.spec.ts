@@ -37,7 +37,7 @@ class SpecializedSelectsHost {
     <button class="before">Before</button>
     <ngs-form-field class="ordinary" labelMode="floating">
       <ngs-label>Ordinary</ngs-label>
-      <ngs-select placeholder="Choose a value"><ngs-option value="one">One</ngs-option></ngs-select>
+      <ngs-select [formControl]="ordinary" placeholder="Choose a value"><ngs-option value="one">One</ngs-option></ngs-select>
     </ngs-form-field>
     <ngs-form-field class="country" labelMode="floating">
       <ngs-label>Country</ngs-label>
@@ -67,6 +67,7 @@ class SpecializedSelectsHost {
   }`],
 })
 class FocusedFieldsHost {
+  readonly ordinary = new FormControl<string | null>(null);
   readonly country = new FormControl<string | null>(null);
   readonly currency = new FormControl<string | null>(null);
   readonly format = new FormControl<string | null>(null);
@@ -77,6 +78,46 @@ let overlay: OverlayContainer;
 afterEach(() => overlay?.ngOnDestroy());
 
 describe('Specialized select keyboard access', () => {
+  for (const name of ['ordinary', 'country', 'currency', 'format', 'timezone'] as const) {
+    it(`opens ${name} from field padding, including while focused, without handling trigger clicks twice`, async () => {
+      await TestBed.configureTestingModule({ imports: [OverlayModule, FocusedFieldsHost] }).compileComponents();
+      const fixture = TestBed.createComponent(FocusedFieldsHost);
+      overlay = TestBed.inject(OverlayContainer);
+      fixture.detectChanges();
+      const field = fixture.nativeElement.querySelector(`.${name}`) as HTMLElement;
+      const select = field.querySelector('ngs-select') as HTMLElement;
+      const container = field.querySelector('.ngs-form-field-container') as HTMLElement;
+      const { width, height } = container.getBoundingClientRect();
+
+      for (const position of [
+        { x: width / 2, y: 2 },
+        { x: width / 2, y: height - 2 },
+        { x: 2, y: height / 2 },
+      ]) {
+        await userEvent.click(container, { position });
+        fixture.detectChanges();
+        expect(select.getAttribute('aria-expanded')).toBe('true');
+        expect(field.classList.contains('ngs-form-field-focused')).toBe(true);
+        await userEvent.keyboard('{Escape}');
+        fixture.detectChanges();
+        expect(document.activeElement).toBe(select);
+      }
+
+      await userEvent.click(select);
+      fixture.detectChanges();
+      expect(select.getAttribute('aria-expanded')).toBe('true');
+      select.click();
+      fixture.detectChanges();
+      expect(select.getAttribute('aria-expanded')).toBe('false');
+
+      fixture.componentInstance[name].disable();
+      fixture.detectChanges();
+      container.click();
+      fixture.detectChanges();
+      expect(select.getAttribute('aria-expanded')).toBe('false');
+    });
+  }
+
   it('shows the same field focus as an ordinary select on Tab without opening the panels', async () => {
     await TestBed.configureTestingModule({ imports: [OverlayModule, FocusedFieldsHost] }).compileComponents();
     const fixture = TestBed.createComponent(FocusedFieldsHost);

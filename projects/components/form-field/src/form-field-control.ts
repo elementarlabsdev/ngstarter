@@ -14,5 +14,6 @@ export abstract class FormFieldControl<T> {
   abstract readonly disabled: boolean;
   abstract readonly errorState: boolean;
   readonly multiline?: boolean;
+  onContainerClick?(event: MouseEvent): void;
   abstract focus(): void;
 }
