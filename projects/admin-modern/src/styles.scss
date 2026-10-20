@@ -68,8 +68,8 @@
   color: var(--modern-ink);
 
   ngs-sidenav-container.modern-shell,
-  ngs-panel.workspace-panel,
-  ngs-panel-header.workspace-header {
+  ngs-layout.workspace-panel,
+  ngs-layout-header.workspace-header {
     background: var(--modern-bg);
   }
 

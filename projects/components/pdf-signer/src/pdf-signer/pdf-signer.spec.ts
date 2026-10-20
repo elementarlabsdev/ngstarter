@@ -56,7 +56,7 @@ describe('PdfSigner', () => {
     setInputs(createSchema(), currentSigner);
 
     const element: HTMLElement = fixture.nativeElement;
-    const sidebar = element.querySelector<HTMLElement>('ngs-panel-sidebar');
+    const sidebar = element.querySelector<HTMLElement>('ngs-layout-sidebar');
     const pageButton = element.querySelector<HTMLButtonElement>('[data-ngs-pdf-page-button="1"]');
 
     expect(sidebar).not.toBeNull();
@@ -138,8 +138,8 @@ describe('PdfSigner', () => {
     expect(marker).not.toBeNull();
     expect(scrollContainer).not.toBeNull();
     expect(fieldElement).not.toBeNull();
-    expect(marker?.closest('ngs-panel-content')).not.toBeNull();
-    expect(marker?.closest('ngs-panel-sidebar')).toBeNull();
+    expect(marker?.closest('ngs-layout-content')).not.toBeNull();
+    expect(marker?.closest('ngs-layout-sidebar')).toBeNull();
 
     Object.defineProperties(scrollContainer!, {
       clientWidth: { configurable: true, value: 600 },

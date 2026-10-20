@@ -6,7 +6,7 @@ import { LayoutSidebarStore } from './layout.store';
   providedIn: 'root'
 })
 export class LayoutApiService {
-  private _layoutSidebarStore = inject<any>(LayoutSidebarStore);
+  private _layoutSidebarStore = inject(LayoutSidebarStore);
   readonly sidebarVisibility = new EventEmitter<LayoutSidebarVisibilityChange>();
 
   hideSidebar(layoutId: string): void {
@@ -30,6 +30,6 @@ export class LayoutApiService {
   }
 
   isSidebarShown(layoutId: string): boolean {
-    return this._layoutSidebarStore[layoutId]();
+    return this._layoutSidebarStore.isSidebarShown(layoutId);
   }
 }

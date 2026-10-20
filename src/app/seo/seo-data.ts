@@ -160,9 +160,9 @@ const termsDescription =
 const blogDescription =
   'Read practical NgStarter tutorials for building angular admin applications, product dashboards, app layouts, and reusable UI foundations.';
 const basicLayoutArticleDescription =
-  'Angular admin tutorial: create a basic application layout with NgStarter UI using Layout, Sidenav, Sidebar, Panel, and ScrollbarArea.';
+  'Angular admin tutorial: create a basic application layout with NgStarter UI using root and workspace layouts, Sidenav, Sidebar, and ScrollbarArea.';
 const panelLayoutArticleDescription =
-  'Angular panel layout tutorial: create practical admin workspace layouts with ngs-panel, PanelHeader, PanelContent, PanelSidebar, PanelAside, and PanelFooter.';
+  'Angular panel layout tutorial: create practical admin workspace layouts with ngs-layout, LayoutHeader, LayoutContent, LayoutSidebar, LayoutAside, and LayoutFooter.';
 const formBuilderCustomFieldArticleDescription =
   'NgStarter Form Builder tutorial: add a custom Angular field, register it with provideFormBuilderField, and configure schema-driven inspector settings.';
 const formBuilderCustomValidatorArticleDescription =
@@ -599,7 +599,7 @@ export const SELECT_DATA_SOURCE_ARTICLE_SEO: SeoData = {
 };
 
 export const PANEL_LAYOUT_ARTICLE_SEO: SeoData = {
-  title: 'Angular Panel Layout: Create Admin Workspaces with ngs-panel',
+  title: 'Angular Workspace Layout: Create Admin Workspaces with ngs-layout',
   description: panelLayoutArticleDescription,
   canonicalPath: '/blog/angular-panel-layout',
   ogType: 'article',
@@ -608,13 +608,13 @@ export const PANEL_LAYOUT_ARTICLE_SEO: SeoData = {
     websiteSchema,
     webPageSchema(
       '/blog/angular-panel-layout',
-      'Angular Panel Layout: Create Admin Workspaces with ngs-panel',
+      'Angular Workspace Layout: Create Admin Workspaces with ngs-layout',
       panelLayoutArticleDescription,
     ),
     {
       '@type': 'BlogPosting',
       '@id': `${SITE_URL}/blog/angular-panel-layout#article`,
-      headline: 'Angular Panel Layout: Create Admin Workspaces with ngs-panel',
+      headline: 'Angular Workspace Layout: Create Admin Workspaces with ngs-layout',
       description: panelLayoutArticleDescription,
       url: `${SITE_URL}/blog/angular-panel-layout`,
       datePublished: '2026-06-12',
@@ -631,7 +631,7 @@ export const PANEL_LAYOUT_ARTICLE_SEO: SeoData = {
       inLanguage: 'en',
       keywords: [
         'angular panel layout',
-        'ngs-panel',
+        'ngs-layout',
         'angular admin panel',
         'angular workspace layout',
         'NgStarter UI',

@@ -1,11 +1,11 @@
 <button ngsButton="filled" (click)="drawer.open()">Open Drawer</button>
 
 <ngs-drawer #drawer="ngsDrawer" [showBackdrop]="false">
-  <ngs-panel class="w-[460px]">
-    <ngs-panel-header class="px-5 py-3">Header</ngs-panel-header>
-    <ngs-panel-content class="p-5">
+  <ngs-layout class="w-[460px]">
+    <ngs-layout-header class="px-5 py-3">Header</ngs-layout-header>
+    <ngs-layout-content class="p-5">
       <button ngsButton="filled" (click)="drawer.close()">Close Drawer</button>
-    </ngs-panel-content>
-    <ngs-panel-footer class="px-5 py-3">Footer</ngs-panel-footer>
-  </ngs-panel>
+    </ngs-layout-content>
+    <ngs-layout-footer class="px-5 py-3">Footer</ngs-layout-footer>
+  </ngs-layout>
 </ngs-drawer>

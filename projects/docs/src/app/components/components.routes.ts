@@ -275,10 +275,11 @@ export const routes: Routes = [
     loadChildren: () => import('./filter-builder/routes').then(m => m.routes),
     title: 'Filter Builder'
   },
+  { path: 'panel/api', pathMatch: 'full', redirectTo: 'layout/api' },
   {
     path: 'panel',
-    loadChildren: () => import('./panel/routes').then(m => m.routes),
-    title: 'Panel'
+    pathMatch: 'full',
+    redirectTo: 'layout'
   },
   {
     path: 'incidents',

@@ -8,18 +8,18 @@
 
       <header class="mt-8 max-w-4xl">
         <ngs-chip-set>
-          <ngs-chip appearance="outlined">Angular Panel Layout</ngs-chip>
-          <ngs-chip appearance="outlined">ngs-panel</ngs-chip>
+          <ngs-chip appearance="outlined">Angular Workspace Layout</ngs-chip>
+          <ngs-chip appearance="outlined">ngs-layout</ngs-chip>
           <ngs-chip appearance="outlined">Admin UI</ngs-chip>
         </ngs-chip-set>
         <h1
           class="app-display-font mt-6 text-4xl font-bold tracking-normal text-on-surface sm:text-5xl"
         >
-          Angular Panel Layout: Create Admin Workspaces with ngs-panel
+          Angular Workspace Layout: Create Admin Workspaces with ngs-layout
         </h1>
         <p class="mt-6 text-lg leading-8 text-on-surface-variant">
           This angular panel layout guide shows how to create practical admin workspaces with the
-          NgStarter <code>ngs-panel</code> component. You will build single-column pages,
+          NgStarter <code>ngs-layout</code> component. You will build single-column pages,
           action-footer layouts, master-detail screens, side inspectors, and settings workspaces
           without inventing custom shell grids.
         </p>
@@ -31,10 +31,10 @@
 
       <div class="article-content mt-14 max-w-4xl">
         <section id="why-panel-layout">
-          <h2>Why angular panel layout starts with ngs-panel</h2>
+          <h2>Why angular panel layout starts with ngs-layout</h2>
           <p>
             An angular panel layout is the workspace layer inside your application shell. The root
-            layout and sidenav own the viewport, while <code>ngs-panel</code> owns the current page:
+            layout and sidenav own the viewport, while <code>ngs-layout</code> owns the current page:
             header, optional subheader, scrollable body, side navigation, inspector, and footer
             actions. This keeps admin pages predictable and prevents every screen from rebuilding
             its own layout primitives.
@@ -51,9 +51,9 @@
           <div class="related-links-grid">
             <ngs-card appearance="outlined" class="related-link-card">
               <div ngs-card-content>
-                <a href="https://docs.ngstarter.com/components/panel">
+                <a href="https://docs.ngstarter.com/components/layout">
                   <ngs-icon name="fluent:panel-right-24-regular" />
-                  <span>Panel component</span>
+                  <span>Layout component</span>
                 </a>
               </div>
             </ngs-card>
@@ -61,7 +61,7 @@
               <div ngs-card-content>
                 <a href="https://docs.ngstarter.com/components/layout">
                   <ngs-icon name="fluent:layout-column-two-24-regular" />
-                  <span>Layout component</span>
+                  <span>Workspace layout examples</span>
                 </a>
               </div>
             </ngs-card>
@@ -89,7 +89,7 @@
           <p>
             Start with the public panel entry point and add <code>ScrollbarArea</code> for any
             region that needs internal scrolling. For action rows, compose
-            <code>Toolbar</code> inside <code>ngs-panel-header</code>.
+            <code>Toolbar</code> inside <code>ngs-layout-header</code>.
           </p>
           <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="importCode"
@@ -104,7 +104,7 @@
           <p>
             Use this angular panel layout for list pages, dashboards, and route content where the
             screen only needs a header and one scrollable workspace. The important detail is that
-            <code>ngs-panel-content</code> contains the scroll host.
+            <code>ngs-layout-content</code> contains the scroll host.
           </p>
           <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="singleWorkspaceCode"
@@ -117,7 +117,7 @@
         <section id="footer-actions">
           <h2>Header, content, and footer actions</h2>
           <p>
-            Add <code>ngs-panel-footer</code> when the page has persistent actions, such as saving a
+            Add <code>ngs-layout-footer</code> when the page has persistent actions, such as saving a
             form or confirming an editor. The body can scroll independently while the footer stays
             reachable.
           </p>
@@ -133,8 +133,8 @@
           <h2>Master-detail panel layout</h2>
           <p>
             For records, inboxes, CRM objects, and operational queues, place the collection in
-            <code>ngs-panel-sidebar</code> and the selected record in
-            <code>ngs-panel-content</code>. This angular panel layout avoids manual split wrappers
+            <code>ngs-layout-sidebar</code> and the selected record in
+            <code>ngs-layout-content</code>. This angular panel layout avoids manual split wrappers
             while keeping both regions independently scrollable.
           </p>
           <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
@@ -148,7 +148,7 @@
         <section id="persistent-inspector">
           <h2>Content with a persistent inspector</h2>
           <p>
-            Use <code>ngs-panel-aside</code> for supporting context: activity feeds, comments,
+            Use <code>ngs-layout-aside</code> for supporting context: activity feeds, comments,
             selected filters, analytics insights, or AI assistant notes. The aside belongs to the
             panel because it is part of the current workspace, not the global application shell.
           </p>
@@ -193,13 +193,13 @@
         <section id="panel-layout-checklist">
           <h2>Angular panel layout checklist</h2>
           <ul>
-            <li>Use <code>ngs-panel-header</code> for page title, filters, and primary actions.</li>
-            <li>Use <code>ngs-panel-content</code> as the main scrollable workspace.</li>
+            <li>Use <code>ngs-layout-header</code> for page title, filters, and primary actions.</li>
+            <li>Use <code>ngs-layout-content</code> as the main scrollable workspace.</li>
             <li>
-              Use <code>ngs-panel-sidebar</code> for local record navigation or settings navigation.
+              Use <code>ngs-layout-sidebar</code> for local record navigation or settings navigation.
             </li>
-            <li>Use <code>ngs-panel-aside</code> for inspectors, details, help, or activity.</li>
-            <li>Use <code>ngs-panel-footer</code> for persistent confirmation actions.</li>
+            <li>Use <code>ngs-layout-aside</code> for inspectors, details, help, or activity.</li>
+            <li>Use <code>ngs-layout-footer</code> for persistent confirmation actions.</li>
           </ul>
           <p>
             Once the panel structure is stable, fill each region with NgStarter components such as
@@ -213,9 +213,9 @@
     <aside class="article-aside hidden lg:block">
       <nav ngs-scroll-spy-nav>
         <ngs-scroll-spy-title>On this page</ngs-scroll-spy-title>
-        <a ngs-scroll-spy-on targetId="why-panel-layout">Why ngs-panel</a>
+        <a ngs-scroll-spy-on targetId="why-panel-layout">Why ngs-layout</a>
         <a ngs-scroll-spy-on targetId="related-component-docs">Component docs</a>
-        <a ngs-scroll-spy-on targetId="panel-imports">Panel imports</a>
+        <a ngs-scroll-spy-on targetId="panel-imports">Layout imports</a>
         <a ngs-scroll-spy-on targetId="single-workspace">Single workspace</a>
         <a ngs-scroll-spy-on targetId="footer-actions">Footer actions</a>
         <a ngs-scroll-spy-on targetId="master-detail">Master-detail</a>

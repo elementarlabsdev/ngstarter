@@ -1,5 +1,5 @@
-<ngs-panel class="pdf-viewer-annotations bg-surface" aria-label="PDF annotations">
-  <ngs-panel-header class="p-0">
+<ngs-layout class="pdf-viewer-annotations bg-surface" aria-label="PDF annotations">
+  <ngs-layout-header class="p-0">
     <ngs-toolbar class="w-full py-0 pr-2 ps-4" aria-label="PDF annotations toolbar">
       <ngs-toolbar-title>
         Annotations
@@ -16,9 +16,9 @@
         </button>
       </ngs-toolbar-item>
     </ngs-toolbar>
-  </ngs-panel-header>
+  </ngs-layout-header>
 
-  <ngs-panel-subheader autoHeight class="px-4 pb-4">
+  <ngs-layout-subheader autoHeight class="px-4 pb-4">
     <ngs-form-field subscriptHiddenIfEmpty>
       <ngs-icon ngsIconPrefix name="fluent:search-24-regular" />
       <input
@@ -39,9 +39,9 @@
         </button>
       }
     </ngs-form-field>
-  </ngs-panel-subheader>
+  </ngs-layout-subheader>
 
-  <ngs-panel-content>
+  <ngs-layout-content>
     <div class="flex min-h-full flex-col">
       <div class="flex flex-1 flex-col gap-4 pb-4 px-4">
         <ng-template #defaultAnnotationTemplate let-annotation let-goToPage="goToPage">
@@ -96,5 +96,5 @@
         }
       </div>
     </div>
-  </ngs-panel-content>
-</ngs-panel>
+  </ngs-layout-content>
+</ngs-layout>

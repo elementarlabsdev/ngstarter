@@ -1,5 +1,5 @@
-<ngs-panel class="pdf-viewer-search" aria-label="PDF search">
-  <ngs-panel-header class="ps-4 pe-3">
+<ngs-layout class="pdf-viewer-search" aria-label="PDF search">
+  <ngs-layout-header class="ps-4 pe-3">
     <ngs-toolbar>
       <ngs-toolbar-title>Search</ngs-toolbar-title>
       <ngs-toolbar-spacer />
@@ -7,9 +7,9 @@
         <ngs-icon name="fluent:dismiss-24-regular" />
       </button>
     </ngs-toolbar>
-  </ngs-panel-header>
+  </ngs-layout-header>
 
-  <ngs-panel-subheader autoHeight class="px-4 pb-4">
+  <ngs-layout-subheader autoHeight class="px-4 pb-4">
     <ngs-form-field class="pdf-viewer-search__field" subscriptHiddenIfEmpty>
       <ngs-icon name="fluent:search-24-regular" ngsIconPrefix />
       <input
@@ -60,9 +60,9 @@
         </div>
       </div>
     }
-  </ngs-panel-subheader>
+  </ngs-layout-subheader>
 
-  <ngs-panel-content>
+  <ngs-layout-content>
     <div class="pdf-viewer-search__content flex min-h-full flex-col gap-4 px-4 pb-4">
       @if (hasQuery()) {
         <div class="pdf-viewer-search__results grid min-h-0 gap-4">
@@ -90,5 +90,5 @@
         </div>
       }
     </div>
-  </ngs-panel-content>
-</ngs-panel>
+  </ngs-layout-content>
+</ngs-layout>

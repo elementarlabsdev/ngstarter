@@ -174,27 +174,27 @@ export const appConfig = {
   `ngs-layout-footer`. Do not put arbitrary `div`, `main`, `section`, `body`, or `content` wrappers
   directly inside `ngs-layout`.
 - Compose admin shells as `ngs-layout[root]` > `ngs-layout-content` > `ngs-sidenav-container` >
-  `ngs-sidenav` + `ngs-sidenav-content` > `ngs-panel`.
+  `ngs-sidenav` + `ngs-sidenav-content` > `ngs-layout`.
 - Put compact primary app navigation inside `ngs-sidenav` with `ngs-sidebar` and
   `ngs-sidebar-nav`; do not use `ngs-navigation` for the primary sidebar rail.
-- Put workspace headers in `ngs-panel-header`, scrolling workspace bodies in `ngs-panel-content`,
+- Put workspace headers in `ngs-layout-header`, scrolling workspace bodies in `ngs-layout-content`,
   and persistent right columns such as AI assistants, inspectors, details panes, or feeds in
-  `ngs-panel-aside`. Do not wrap `ngs-panel-content` and a right aside in a hand-rolled outer grid
-  when `ngs-panel-aside` fits.
-- Use the standard admin recipes by default: list pages use `PanelHeader` for filters/actions and
-  `PanelContent` + `ScrollbarArea` for records; master/detail pages put the inspector in
-  `PanelAside` or `SidePanel`; dashboards use `Card` KPI blocks and NgStarter chart/progress
+  `ngs-layout-aside`. Do not wrap `ngs-layout-content` and a right aside in a hand-rolled outer grid
+  when `ngs-layout-aside` fits.
+- Use the standard admin recipes by default: list pages use `LayoutHeader` for filters/actions and
+  `LayoutContent` + `ScrollbarArea` for records; master/detail pages put the inspector in
+  `LayoutAside` or `SidePanel`; dashboards use `Card` KPI blocks and NgStarter chart/progress
   primitives; settings pages use one `FormField` per control; kanban pages use `KanbanBoard`; chat
-  assistants use fixed-height `PanelAside` + `CardFooter` composer; notification headers use
+  assistants use fixed-height `LayoutAside` + `CardFooter` composer; notification headers use
   `Popover` + `List`/`NotificationList`, while account actions use `Menu`.
-- Keep `ngs-panel-content` as the workspace scroll region, with `ngs-scrollbar-area` as the actual
+- Keep `ngs-layout-content` as the workspace scroll region, with `ngs-scrollbar-area` as the actual
   scroll container inside it. The root layout, sidenav container, and panel should stay at viewport
   height and must not grow taller than the screen.
-- Use `ngs-scrollbar-area` for scrollable regions inside sized admin surfaces. In `ngs-panel-content`
+- Use `ngs-scrollbar-area` for scrollable regions inside sized admin surfaces. In `ngs-layout-content`
   place `<ngs-scrollbar-area [absolute]="true">` as the direct scroll host and move padding to an
   inner content element. For flex regions such as chat messages, wrap the scrollbar area in a
   relative `min-height: 0; flex: 1` shell.
-- Do not nest a second `Layout` inside sidenav, sidenav content, sidebar, or panel.
+- Use non-root `Layout` for local workspaces; only the root layout owns viewport sizing.
 - Use `DataView` when the UI is a datatable or working data surface: records, row actions,
   selection, sorting, search, pagination, column sizing/settings, or server-driven data.
 - Use `Table` when the UI is static/read-only tabular content with known template columns and no

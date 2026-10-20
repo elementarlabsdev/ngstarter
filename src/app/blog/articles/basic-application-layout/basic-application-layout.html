@@ -36,7 +36,7 @@
             A basic angular admin layout should be composed from structural UI components instead of
             ad hoc wrappers. The outer viewport is handled by <code>ngs-layout</code>, the app
             navigation sits inside <code>ngs-sidenav-container</code>, and the main workspace lives
-            in <code>ngs-panel</code>. This gives the application stable viewport height, clear
+            in <code>ngs-layout</code>. This gives the application stable viewport height, clear
             regions, and scroll behavior only where it belongs.
           </p>
         </section>
@@ -59,9 +59,9 @@
             </ngs-card>
             <ngs-card appearance="outlined" class="related-link-card">
               <div ngs-card-content>
-                <a href="https://docs.ngstarter.com/components/panel">
+                <a href="https://docs.ngstarter.com/components/layout">
                   <ngs-icon name="fluent:panel-right-24-regular" />
-                  <span>Panel component</span>
+                  <span>Workspace layout examples</span>
                 </a>
               </div>
             </ngs-card>
@@ -136,7 +136,7 @@
             The important order is <code>ngs-layout</code>, then <code>ngs-layout-content</code>,
             then <code>ngs-sidenav-container</code>. Inside the container, place
             <code>ngs-sidenav</code> and <code>ngs-sidenav-content</code>, with the workspace inside
-            <code>ngs-panel</code>. Page content scrolls through <code>ngs-scrollbar-area</code>.
+            <code>ngs-layout</code>. Page content scrolls through <code>ngs-scrollbar-area</code>.
           </p>
           <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
             [code]="shellHtmlCode"
@@ -180,7 +180,7 @@
           <h2>What to check after building</h2>
           <ul>
             <li>The root shell fills the viewport and does not create a second document scroll.</li>
-            <li>Only the content inside <code>ngs-panel-content</code> is scrollable.</li>
+            <li>Only the content inside <code>ngs-layout-content</code> is scrollable.</li>
             <li>
               Primary navigation is composed with <code>ngs-sidebar</code> inside
               <code>ngs-sidenav</code>.

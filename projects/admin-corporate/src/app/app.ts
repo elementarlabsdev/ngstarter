@@ -8,9 +8,9 @@ import { FormField, IconPrefix } from '@ngstarter-ui/components/form-field';
 import { Grid, GridItem, GridItemConfig } from '@ngstarter-ui/components/grid';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
-import { Layout, LayoutContent } from '@ngstarter-ui/components/layout';
+import { Layout, LayoutContent, LayoutHeader } from '@ngstarter-ui/components/layout';
 import { Menu, MenuDivider, MenuHeading, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
-import { Panel, PanelContent, PanelHeader } from '@ngstarter-ui/components/panel';
+
 import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import {
   Sidebar,
@@ -111,9 +111,9 @@ interface TeamUpdate {
     MenuHeading,
     MenuItem,
     MenuTrigger,
-    Panel,
-    PanelContent,
-    PanelHeader,
+
+
+    LayoutHeader,
     ScrollbarArea,
     Sidebar,
     SidebarBody,

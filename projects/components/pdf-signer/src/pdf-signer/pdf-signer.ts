@@ -23,7 +23,7 @@ import {
 } from '@ngstarter-ui/components/datepicker';
 import { Dialog } from '@ngstarter-ui/components/dialog';
 import { Icon } from '@ngstarter-ui/components/icon';
-import { Panel, PanelContent, PanelHeader, PanelSidebar } from '@ngstarter-ui/components/panel';
+import { Layout, LayoutContent, LayoutHeader, LayoutSidebar } from '@ngstarter-ui/components/layout';
 import {
   PDF_BUILDER_DEFAULT_TEXT_FONT_COLOR,
   PDF_BUILDER_DEFAULT_TEXT_FONT_FAMILY,
@@ -97,10 +97,10 @@ export interface PdfSignerFieldValueChange {
     Datepicker,
     DatepickerInput,
     Icon,
-    Panel,
-    PanelContent,
-    PanelHeader,
-    PanelSidebar,
+    Layout,
+    LayoutContent,
+    LayoutHeader,
+    LayoutSidebar,
     PdfViewer,
     ScrollbarArea,
     Toolbar,

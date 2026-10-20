@@ -1,4 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { LayoutWorkspaceExample } from '../_examples/layout-workspace-example/layout-workspace-example';
+import { LayoutWithExtraColumnsExample } from '../_examples/layout-with-extra-columns-example/layout-with-extra-columns-example';
 import { Playground } from '@meta/playground/playground';
 import { LayoutHeaderExample } from '../_examples/layout-header-example/layout-header-example';
 import { LayoutSidebarExample } from '../_examples/layout-sidebar-example/layout-sidebar-example';
@@ -20,6 +22,8 @@ import { LayoutAsideExample } from '../_examples/layout-aside-example/layout-asi
 @Component({
   imports: [
     Playground,
+    LayoutWorkspaceExample,
+    LayoutWithExtraColumnsExample,
     LayoutHeaderExample,
     LayoutSidebarExample,
     LayoutHeaderWithSidebarExample,

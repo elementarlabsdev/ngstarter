@@ -18,7 +18,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { debounceTime, isObservable, Observable } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Panel, PanelContent, PanelHeader, PanelSidebar } from '@ngstarter-ui/components/panel';
+import { Layout, LayoutContent, LayoutHeader, LayoutSidebar } from '@ngstarter-ui/components/layout';
 import { Toolbar, ToolbarSpacer, ToolbarTitle } from '@ngstarter-ui/components/toolbar';
 import { Button } from '@ngstarter-ui/components/button';
 import { Divider } from '@ngstarter-ui/components/divider';
@@ -74,10 +74,10 @@ import { Effects } from '../effects/effects';
   selector: 'ngs-image-designer',
   exportAs: 'ngsImageDesigner',
   imports: [
-    Panel,
-    PanelSidebar,
-    PanelContent,
-    PanelHeader,
+    Layout,
+    LayoutSidebar,
+    LayoutContent,
+    LayoutHeader,
     Toolbar,
     Button,
     ToolbarSpacer,

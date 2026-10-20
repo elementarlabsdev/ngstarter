@@ -1,5 +1,5 @@
-<ngs-panel class="h-full">
-  <ngs-panel-sidebar class="border-r border-border h-full">
+<ngs-layout class="h-full">
+  <ngs-layout-sidebar class="border-r border-border h-full">
     <ngs-tab-panel hideContentIfTabNotSelected [activeItemId]="activeItemId()" class="h-full">
       <ngs-tab-panel-content>
         <ngs-tab-panel-nav>
@@ -35,9 +35,9 @@
       </ngs-tab-panel-content>
       <ngs-tab-panel-aside class="border-s border-border">
         <ng-template ngsTabPanelAsideContent="text">
-          <ngs-panel>
-            <ngs-panel-header class="border-b border-b-border flex items-center px-4">Text</ngs-panel-header>
-            <ngs-panel-content class="p-4 flex flex-col gap-4">
+          <ngs-layout>
+            <ngs-layout-header class="border-b border-b-border flex items-center px-4">Text</ngs-layout-header>
+            <ngs-layout-content class="p-4 flex flex-col gap-4">
               <div class="grid grid-cols-1 gap-4 mt-2">
                 <button (click)="addHeader()"
                         draggable="true"
@@ -58,12 +58,12 @@
                   <div class="text-base pointer-events-none">Add body text</div>
                 </button>
               </div>
-            </ngs-panel-content>
-          </ngs-panel>
+            </ngs-layout-content>
+          </ngs-layout>
         </ng-template>
         <ng-template ngsTabPanelAsideContent="photos">
-          <ngs-panel class="h-full flex flex-col">
-            <ngs-panel-header class="border-b border-b-border flex items-center px-4">
+          <ngs-layout class="h-full flex flex-col">
+            <ngs-layout-header class="border-b border-b-border flex items-center px-4">
 <!--              <ngs-form-field class="w-full" subscriptHiddenIfEmpty>-->
 <!--                <ngs-icon name="fluent:search-24-regular" ngsIconPrefix/>-->
 <!--                <input type="text"-->
@@ -73,8 +73,8 @@
 <!--                       (ngModelChange)="photosFilter.set($event)"/>-->
 <!--              </ngs-form-field>-->
               Photos
-            </ngs-panel-header>
-            <ngs-panel-content class="relative flex-1 p-0 overflow-hidden">
+            </ngs-layout-header>
+            <ngs-layout-content class="relative flex-1 p-0 overflow-hidden">
               <ngs-scrollbar-area (scrolled)="onPhotosScroll($event)" class="h-full">
                 <div class="p-4">
                     <div class="masonry-grid">
@@ -102,13 +102,13 @@
                   }
                 </div>
               </ngs-scrollbar-area>
-            </ngs-panel-content>
-          </ngs-panel>
+            </ngs-layout-content>
+          </ngs-layout>
         </ng-template>
         <ng-template ngsTabPanelAsideContent="elements">
-          <ngs-panel>
-            <ngs-panel-header class="border-b border-b-border flex items-center px-4">Elements</ngs-panel-header>
-            <ngs-panel-content class="p-4 overflow-y-auto">
+          <ngs-layout>
+            <ngs-layout-header class="border-b border-b-border flex items-center px-4">Elements</ngs-layout-header>
+            <ngs-layout-content class="p-4 overflow-y-auto">
               <div class="grid grid-cols-3 gap-3">
                 @for (element of elements(); track element.name) {
                   <button (click)="addShape(element)"
@@ -121,12 +121,12 @@
                   </button>
                 }
               </div>
-            </ngs-panel-content>
-          </ngs-panel>
+            </ngs-layout-content>
+          </ngs-layout>
         </ng-template>
         <ng-template ngsTabPanelAsideContent="upload">
-          <ngs-panel class="h-full flex flex-col">
-            <ngs-panel-header class="border-b border-b-border flex items-center px-4">
+          <ngs-layout class="h-full flex flex-col">
+            <ngs-layout-header class="border-b border-b-border flex items-center px-4">
               <ngs-toolbar>
                 <div>Upload</div>
                 <ngs-toolbar-spacer/>
@@ -139,8 +139,8 @@
                   Add Image
                 </button>
               </ngs-toolbar>
-            </ngs-panel-header>
-            <ngs-panel-content>
+            </ngs-layout-header>
+            <ngs-layout-content>
               @if (uploadedImages().length > 0 || assets().length > 0) {
                 <ngs-scrollbar-area (scrolled)="onAssetsScroll($event)">
                   <div class="p-4 flex flex-col gap-4 min-h-full">
@@ -211,13 +211,13 @@
                   <div class="text-sm text-neutral-500">No images uploaded yet.</div>
                 </div>
               }
-            </ngs-panel-content>
-          </ngs-panel>
+            </ngs-layout-content>
+          </ngs-layout>
         </ng-template>
         <ng-template ngsTabPanelAsideContent="background">
-          <ngs-panel>
-            <ngs-panel-header class="border-b border-b-border flex items-center px-4">Background</ngs-panel-header>
-            <ngs-panel-content>
+          <ngs-layout>
+            <ngs-layout-header class="border-b border-b-border flex items-center px-4">Background</ngs-layout-header>
+            <ngs-layout-content>
               <ngs-tab-group animationDuration="0" class="h-full">
                 <ngs-tab label="Color">
                   <div class="absolute inset-0">
@@ -267,13 +267,13 @@
                   </div>
                 </ngs-tab>
               </ngs-tab-group>
-            </ngs-panel-content>
-          </ngs-panel>
+            </ngs-layout-content>
+          </ngs-layout>
         </ng-template>
         <ng-template ngsTabPanelAsideContent="layers">
-          <ngs-panel>
-            <ngs-panel-header class="border-b border-b-border flex items-center px-4">Layers</ngs-panel-header>
-            <ngs-panel-content>
+          <ngs-layout>
+            <ngs-layout-header class="border-b border-b-border flex items-center px-4">Layers</ngs-layout-header>
+            <ngs-layout-content>
               @if (layersFromService().length > 0) {
                 <ngs-list cdkDropList (cdkDropListDropped)="drop($event)">
                   @for (layer of layersFromService(); track layer.id) {
@@ -311,13 +311,13 @@
               } @else {
                 <div class="text-sm p-4 h-full flex items-center justify-center">No layers available</div>
               }
-            </ngs-panel-content>
-          </ngs-panel>
+            </ngs-layout-content>
+          </ngs-layout>
         </ng-template>
         <ng-template ngsTabPanelAsideContent="resize">
-          <ngs-panel>
-            <ngs-panel-header class="border-b border-b-border flex items-center px-4">Resize</ngs-panel-header>
-            <ngs-panel-content>
+          <ngs-layout>
+            <ngs-layout-header class="border-b border-b-border flex items-center px-4">Resize</ngs-layout-header>
+            <ngs-layout-content>
               <ngs-scrollbar-area>
                 <div class="p-4 flex flex-col gap-4">
                   <div class="flex flex-col gap-4">
@@ -364,8 +364,8 @@
                   </div>
                 </div>
               </ngs-scrollbar-area>
-            </ngs-panel-content>
-          </ngs-panel>
+            </ngs-layout-content>
+          </ngs-layout>
         </ng-template>
 
         @if (effectsPortal()) {
@@ -375,10 +375,10 @@
         }
       </ngs-tab-panel-aside>
     </ngs-tab-panel>
-  </ngs-panel-sidebar>
-  <ngs-panel-content class="h-full">
-    <ngs-panel class="h-full">
-      <ngs-panel-header>
+  </ngs-layout-sidebar>
+  <ngs-layout-content class="h-full">
+    <ngs-layout class="h-full">
+      <ngs-layout-header>
         <ngs-toolbar class="h-full px-3 border-b border-border">
           <button ngsIconButton (click)="toggleAside()">
             <ngs-icon name="fluent:navigation-24-regular"/>
@@ -408,8 +408,8 @@
             <button ngsButton="filled" (click)="download()" class="mr-2">Download</button>
           }
         </ngs-toolbar>
-      </ngs-panel-header>
-      <ngs-panel-content class="bg-surface-container overflow-hidden h-full relative" (wheel)="onWheel($event)"
+      </ngs-layout-header>
+      <ngs-layout-content class="bg-surface-container overflow-hidden h-full relative" (wheel)="onWheel($event)"
                       (mousedown)="canvasContainer.focus()"
                       (dragover)="onDragOver($event)"
                       (drop)="onDrop($event)">
@@ -417,7 +417,7 @@
           <ng-container [cdkPortalOutlet]="settingsPortal()"/>
         }
         <div #canvasContainer class="w-full h-full outline-none" tabindex="0" (contextmenu)="$event.preventDefault()"></div>
-      </ngs-panel-content>
-    </ngs-panel>
-  </ngs-panel-content>
-</ngs-panel>
+      </ngs-layout-content>
+    </ngs-layout>
+  </ngs-layout-content>
+</ngs-layout>

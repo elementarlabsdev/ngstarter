@@ -1,20 +1,19 @@
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 
 type VisibilityState = {
-  [propName: string]: boolean;
-};
-
-const initialState: VisibilityState = {
-  root: true
+  visibility: Record<string, boolean>;
 };
 
 export const LayoutSidebarStore = signalStore(
   { providedIn: 'root' },
-  withState(initialState),
+  withState<VisibilityState>({ visibility: {} }),
   withMethods((store) => ({
+    isSidebarShown(layoutId: string): boolean {
+      return store.visibility()[layoutId] ?? true;
+    },
     showSidebarVisibility(layoutId: string, isShown: boolean): void {
       patchState(store, {
-        [layoutId]: isShown
+        visibility: { ...store.visibility(), [layoutId]: isShown }
       });
     }
   }))

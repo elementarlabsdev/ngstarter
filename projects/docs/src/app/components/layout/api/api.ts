@@ -30,6 +30,7 @@ import {
 })
 export class Api {
   layoutProperties = [
+    { name: 'absolute', description: 'Fill a positioned parent with absolute positioning', type: 'boolean', default: 'false' },
     {
       name: 'layoutId',
       description: 'Unique identifier for the layout',

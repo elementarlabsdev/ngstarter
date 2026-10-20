@@ -1,6 +1,7 @@
-import { booleanAttribute, Component, ElementRef, forwardRef, inject, input, OnInit, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
+import { booleanAttribute, Component, ElementRef, forwardRef, inject, input, DestroyRef, OnInit, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { filter } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { isPlatformServer } from '@angular/common';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { LAYOUT_CONTENT, LayoutContentInterface } from '../types';
@@ -19,13 +20,14 @@ import { LAYOUT_CONTENT, LayoutContentInterface } from '../types';
       useExisting: forwardRef(() => LayoutContent)
     }
   ],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-layout-content ngs-scroll-lg'
   }
 })
 export class LayoutContent implements OnInit, LayoutContentInterface {
-  private _router = inject(Router);
+  private _router = inject(Router, { optional: true });
+  private _destroyRef = inject(DestroyRef);
   private _elementRef = inject(ElementRef);
   private _platformId = inject(PLATFORM_ID);
   readonly scrollable = inject(CdkScrollable);
@@ -40,9 +42,10 @@ export class LayoutContent implements OnInit, LayoutContentInterface {
 
   ngOnInit() {
     // Scroll a page to top if url changed
-    this._router.events
+    this._router?.events
       .pipe(
-        filter(event=> event instanceof NavigationStart)
+        takeUntilDestroyed(this._destroyRef),
+        filter(event => event instanceof NavigationStart)
       )
       .subscribe(() => {
         if (!this.autoscrollToTop()) {

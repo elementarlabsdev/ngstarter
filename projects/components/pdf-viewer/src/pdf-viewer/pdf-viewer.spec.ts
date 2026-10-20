@@ -398,28 +398,28 @@ describe('PdfViewer', () => {
     fixture.detectChanges();
 
     expect(component.isPageListVisible()).toBe(true);
-    expect(fixture.nativeElement.querySelector('ngs-panel-sidebar')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('ngs-layout-sidebar')).not.toBeNull();
 
     component.searchPanelVisible.set(true);
     fixture.detectChanges();
 
     expect(component.isSearchPanelVisible()).toBe(true);
-    expect(fixture.nativeElement.querySelector('ngs-panel-aside')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('ngs-layout-aside')).not.toBeNull();
 
     component.searchPanelVisible.set(false);
     component.annotationsPanelVisible.set(true);
     fixture.detectChanges();
 
     expect(component.isAnnotationsPanelVisible()).toBe(true);
-    expect(fixture.nativeElement.querySelector('ngs-panel-aside')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('ngs-layout-aside')).not.toBeNull();
 
     component.pageCount.set(0);
     fixture.detectChanges();
 
     expect(component.isPageListVisible()).toBe(true);
     expect(component.isAnnotationsPanelVisible()).toBe(true);
-    expect(fixture.nativeElement.querySelector('ngs-panel-sidebar')).not.toBeNull();
-    expect(fixture.nativeElement.querySelector('ngs-panel-aside')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('ngs-layout-sidebar')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('ngs-layout-aside')).not.toBeNull();
   });
 
   it('should wait until the aside controls are interactive before opening panels', () => {

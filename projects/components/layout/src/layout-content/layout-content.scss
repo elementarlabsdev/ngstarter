@@ -2,11 +2,9 @@
 
 :host {
   display: block;
+  grid-area: content;
   position: relative;
-  overflow: hidden;
-  flex-grow: 1;
-
-  &:has(:not(.ngs-layout-content)) {
-    overflow: auto;
-  }
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
 }

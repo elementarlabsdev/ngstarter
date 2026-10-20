@@ -72,8 +72,8 @@ Required admin mappings:
 - Primary app navigation inside the sidenav: compact `Sidebar`, `SidebarHeader`, `SidebarBody`,
   `SidebarFooter`, `SidebarNav`, `SidebarNavItem`, `SidebarNavItemIconDirective`, and
   `SidebarNavItemBadgeDirective` from `@ngstarter-ui/components/sidebar`.
-- Local workspace surfaces: `Panel`, `PanelHeader`, `PanelContent`, `PanelAside`, `PanelSidebar`,
-  and `PanelFooter` from `@ngstarter-ui/components/panel`.
+- Local workspace surfaces: `Layout`, `LayoutHeader`, `LayoutContent`, `LayoutAside`, `LayoutSidebar`,
+  and `LayoutFooter` from `@ngstarter-ui/components/layout`.
 - Secondary workspaces, inspectors, and persistent tool tabs: `SidePanel` and `SidePanelTab` from
   `@ngstarter-ui/components/side-panel`; use `TabPanel`, `TabPanelHeader`, `TabPanelNav`,
   `TabPanelContent`, `TabPanelAside`, and related tab panel parts from
@@ -247,28 +247,28 @@ Admin shell defaults:
   viewport height with overflow hidden. Do not create the root `100vh` shell with a custom `main`,
   route wrapper, or page `div`.
 - Direct children of `ngs-layout` must be layout region components only: `ngs-layout-topbar`,
-  `ngs-layout-header`, `ngs-layout-sidebar`, `ngs-layout-content`, `ngs-layout-aside`, and
+  `ngs-layout-header`, `ngs-layout-subheader`, `ngs-layout-sidebar`, `ngs-layout-content`, `ngs-layout-aside`, and
   `ngs-layout-footer`. Do not put arbitrary `div`, `main`, `section`, `body`, or `content` wrappers
   directly inside `ngs-layout`.
 - Compose admin shells in this order: `ngs-layout[root]` > `ngs-layout-content` >
-  `ngs-sidenav-container` > `ngs-sidenav` + `ngs-sidenav-content` > `ngs-panel`.
-- Do not place another `Layout` inside `Sidenav`, `SidenavContent`, `Sidebar`, or `Panel`; the
-  single root `Layout` owns viewport sizing.
+  `ngs-sidenav-container` > `ngs-sidenav` + `ngs-sidenav-content` > `ngs-layout`.
+- Use non-root `Layout` for local workspaces inside `SidenavContent`; only the root
+  `Layout` owns viewport sizing.
 - Put the compact app rail inside `ngs-sidenav` with `ngs-sidebar`. Do not use `ngs-navigation` for
   the primary sidebar/rail.
 - When content inside `ngs-sidenav` or `ngs-sidebar` must render different blocks for expanded and
   compact states, use `*ngsSidenavExpanded` and `*ngsSidenavCollapsed` from
   `@ngstarter-ui/components/sidenav`. Do not use ad hoc CSS classes such as
   `.ngs-sidebar-full-view-mode` or `.ngs-sidebar-compact-view-mode` in docs or admin examples.
-- Put the page/workspace header in `ngs-panel-header`, the scrollable main body in
-  `ngs-panel-content`, and any persistent right column such as an assistant, inspector, details
-  pane, or activity feed in `ngs-panel-aside`. Do not build a manual outer CSS grid that wraps
-  content and right aside when `ngs-panel-aside` fits.
-- `ngs-panel-content` should own the workspace scroll region. The actual scroll container inside it
+- Put the page/workspace header in `ngs-layout-header`, the scrollable main body in
+  `ngs-layout-content`, and any persistent right column such as an assistant, inspector, details
+  pane, or activity feed in `ngs-layout-aside`. Do not build a manual outer CSS grid that wraps
+  content and right aside when `ngs-layout-aside` fits.
+- `ngs-layout-content` should own the workspace scroll region. The actual scroll container inside it
   should be `ngs-scrollbar-area`. The overall admin app, root layout, sidenav container, and panel
   should not become taller than the viewport.
 - Use `ngs-scrollbar-area` for actual scrollable regions inside sized admin surfaces. For
-  `ngs-panel-content`, put `<ngs-scrollbar-area [absolute]="true">` inside the panel content and
+  `ngs-layout-content`, put `<ngs-scrollbar-area [absolute]="true">` inside the panel content and
   move content padding to an inner element. For chat messages or other flex children, wrap the
   scrollbar area in a `position: relative; min-height: 0; flex: 1` shell.
 - Chat-like assistants should be structured as a fixed-height panel aside with a scrollable messages
@@ -278,22 +278,22 @@ Admin shell defaults:
 Admin generation recipes:
 
 - List page: `Layout` > `LayoutContent` > `SidenavContainer` > `Sidenav` with `Sidebar` +
-  `SidenavContent` > `Panel`; put filters/search/actions in `PanelHeader`, records in
-  `PanelContent` with `ScrollbarArea`, and use `DataView` for operational datasets or `Card` grids
+  `SidenavContent` > `Layout`; put filters/search/actions in `LayoutHeader`, records in
+  `LayoutContent` with `ScrollbarArea`, and use `DataView` for operational datasets or `Card` grids
   for browse-style records.
-- Master/detail page: keep the list in `PanelContent` and put the details inspector in
-  `PanelAside` or `SidePanel`; use `List`, `DataView`, `Tabs`/`TabPanel`, `Timeline`, and `Card`
+- Master/detail page: keep the list in `LayoutContent` and put the details inspector in
+  `LayoutAside` or `SidePanel`; use `List`, `DataView`, `Tabs`/`TabPanel`, `Timeline`, and `Card`
   rather than custom split panes unless the page is genuinely resizable.
-- Dashboard page: use `PanelHeader` for top controls, `PanelContent` with `ScrollbarArea`, `Grid`
+- Dashboard page: use `LayoutHeader` for top controls, `LayoutContent` with `ScrollbarArea`, `Grid`
   for fixed app-defined widget layouts, `Tiles`/`Tile` only for user-reorderable/customizable
   widget layouts, `Card` for KPI blocks, `ProgressBar`, `Gauge`, or micro charts for compact
   metrics, and `Table` or `DataView` for supporting records.
-- Settings/form page: use `Card` or `PanelContent` sections with one `FormField` per form control;
+- Settings/form page: use `Card` or `LayoutContent` sections with one `FormField` per form control;
   use `Select`, `Autocomplete`, `SlideToggle`, `ButtonToggle`, `Segmented`, `RadioCard`,
   `Checkbox`, and specialized inputs instead of custom controls.
 - Kanban/workflow page: use `KanbanBoard` for columns/cards and `Drawer`, `Popover`, `Menu`, or
   `SidePanel` for card actions and details.
-- Chat assistant page/aside: use a fixed-height `PanelAside`, `CardHeader`, scrollable
+- Chat assistant page/aside: use a fixed-height `LayoutAside`, `CardHeader`, scrollable
   `CardContent` with `ScrollbarArea`, and a `CardFooter` composer with `FormField`, `Input`, and
   an icon button suffix.
 - Notification/user header: use `Popover` + `List`/`NotificationList` for notification feeds, and

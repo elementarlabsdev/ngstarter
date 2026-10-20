@@ -5,7 +5,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   exportAs: 'ngsLayoutAside',
   templateUrl: './layout-aside.html',
   styleUrl: './layout-aside.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-layout-aside',
   }

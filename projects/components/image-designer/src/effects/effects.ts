@@ -2,7 +2,7 @@ import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@a
 import { CommonModule } from '@angular/common';
 import { ImageDesignerService } from '../image-designer.service';
 import { LayerConfig } from '../types';
-import { Panel, PanelContent, PanelHeader } from '@ngstarter-ui/components/panel';
+import { Layout, LayoutContent, LayoutHeader } from '@ngstarter-ui/components/layout';
 import { Button } from '@ngstarter-ui/components/button';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { IMAGE_DESIGNER } from '../tokens';
@@ -21,9 +21,9 @@ import { ColorPickerTriggerForDirective } from '@ngstarter-ui/components/color-p
   selector: 'ngs-effects',
   imports: [
     CommonModule,
-    Panel,
-    PanelHeader,
-    PanelContent,
+    Layout,
+    LayoutHeader,
+    LayoutContent,
     Button,
     Icon,
     SlideToggle,

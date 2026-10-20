@@ -118,7 +118,7 @@ export class Api {
     },
     {
       name: 'showAnnotationsPanel',
-      description: 'Enable the right annotations panel built with ngs-panel-aside.',
+      description: 'Enable the right annotations panel built with ngs-layout-aside.',
       type: 'boolean',
       default: 'false'
     },

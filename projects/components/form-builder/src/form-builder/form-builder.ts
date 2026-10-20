@@ -14,7 +14,7 @@ import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
 import { List, ListItem } from '@ngstarter-ui/components/list';
-import { Panel, PanelAside, PanelContent, PanelHeader, PanelSidebar } from '@ngstarter-ui/components/panel';
+import { Layout, LayoutAside, LayoutContent, LayoutHeader, LayoutSidebar } from '@ngstarter-ui/components/layout';
 import { RadioCard, RadioCardContent, RadioCardGroup, RadioCardTitle } from '@ngstarter-ui/components/radio-card';
 import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import { Step, Stepper } from '@ngstarter-ui/components/stepper';
@@ -312,11 +312,11 @@ const MIME_TYPE_OPTIONS = [
     List,
     ListItem,
     Option,
-    Panel,
-    PanelAside,
-    PanelContent,
-    PanelHeader,
-    PanelSidebar,
+    Layout,
+    LayoutAside,
+    LayoutContent,
+    LayoutHeader,
+    LayoutSidebar,
     RadioCard,
     RadioCardContent,
     RadioCardGroup,

@@ -8,11 +8,7 @@ import {
 } from '@ngstarter-ui/components/core';
 import { AnnouncementGlobal } from '@ngstarter-ui/components/announcement';
 import { IncidentsContainer } from '@ngstarter-ui/components/incidents';
-import {
-  LayoutContent,
-  Layout,
-  LayoutTopbar
-} from '@ngstarter-ui/components/layout';
+import { LayoutContent, Layout, LayoutTopbar, LayoutHeader } from '@ngstarter-ui/components/layout';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
 import { Logo, LogoDescription, LogoShape } from '@ngstarter-ui/components/logo';
@@ -32,7 +28,7 @@ import {
   SidenavContent,
   SidenavExpanded
 } from '@ngstarter-ui/components/sidenav';
-import { PanelContent, Panel, PanelHeader } from '@ngstarter-ui/components/panel';
+
 import { v7 as uuid } from 'uuid';
 import {
   SidebarBody,
@@ -143,9 +139,9 @@ function sortDocsNavItems(items: readonly DocsNavItem[], preserveSections = fals
     Sidenav,
     SidenavContainer,
     SidenavContent,
-    PanelContent,
-    PanelHeader,
-    Panel,
+
+    LayoutHeader,
+
     SidebarBody,
     Sidebar,
     SidebarHeader,
@@ -668,12 +664,6 @@ export class App implements OnInit {
           type: 'link',
           name: 'File Type',
           link: '/components/file-type'
-        },
-        {
-          key: uuid(),
-          type: 'link',
-          name: 'Panel',
-          link: '/components/panel'
         },
         {
           key: uuid(),
@@ -1391,7 +1381,7 @@ export class App implements OnInit {
     }
 
     document
-      .querySelectorAll<HTMLElement>('ngs-sidenav-content, ngs-panel-content, .ngs-sidenav-content, .ngs-panel-content')
+      .querySelectorAll<HTMLElement>('ngs-sidenav-content, ngs-layout-content, .ngs-sidenav-content, .ngs-layout-content')
       .forEach((element) => targets.add(element));
 
     for (const target of targets) {

@@ -1,5 +1,6 @@
 export * from './src/layout/layout';
 export * from './src/layout-header/layout-header';
+export * from './src/layout-subheader/layout-subheader';
 export * from './src/layout-content/layout-content';
 export * from './src/layout-footer/layout-footer';
 export * from './src/layout-topbar/layout-topbar';

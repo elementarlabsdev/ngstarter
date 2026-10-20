@@ -14,7 +14,7 @@ import { Icon } from '@ngstarter-ui/components/icon';
 import { Input } from '@ngstarter-ui/components/input';
 import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
 import { PageEvent, Paginator } from '@ngstarter-ui/components/paginator';
-import { Panel, PanelContent, PanelFooter, PanelHeader } from '@ngstarter-ui/components/panel';
+import { Layout, LayoutContent, LayoutFooter, LayoutHeader, LayoutSubheader } from '@ngstarter-ui/components/layout';
 import {
   FilterTrigger,
   FilterTriggerValueDirective,
@@ -25,7 +25,6 @@ import { Page } from '@meta/page/page';
 import { PageContentDirective } from '@meta/page/page-content.directive';
 import { PageTitleDirective } from '@meta/page/page-title.directive';
 import { STAFF_MEMBERS, STAFF_STATUSES, StaffMember, StaffStatus } from './staff-data';
-import {PanelSubheader} from "@ngstarter-ui/components/panel/src/panel-subheader/panel-subheader";
 import {Toolbar, ToolbarSpacer} from "@ngstarter-ui/components/toolbar";
 
 @Component({
@@ -44,13 +43,13 @@ import {Toolbar, ToolbarSpacer} from "@ngstarter-ui/components/toolbar";
     MenuTrigger,
     Option,
     Paginator,
-    Panel,
-    PanelContent,
-    PanelFooter,
-    PanelHeader,
+    Layout,
+    LayoutContent,
+    LayoutFooter,
+    LayoutHeader,
     ReactiveFormsModule,
     Select,
-    PanelSubheader,
+    LayoutSubheader,
     Toolbar,
     ToolbarSpacer
   ],

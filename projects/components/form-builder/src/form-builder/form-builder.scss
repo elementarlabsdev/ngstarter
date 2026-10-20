@@ -537,15 +537,15 @@
     }
   }
 
-  ngs-panel-aside.ngs-form-builder-inspector {
+  ngs-layout-aside.ngs-form-builder-inspector {
     display: flex;
     flex-direction: column;
 
-    > ngs-panel-header {
+    > ngs-layout-header {
       flex: none;
     }
 
-    > ngs-panel-content {
+    > ngs-layout-content {
       min-height: 0;
       flex: 1 1 auto;
       overflow: hidden;

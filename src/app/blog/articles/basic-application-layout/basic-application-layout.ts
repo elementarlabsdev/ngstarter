@@ -58,8 +58,8 @@ export const appConfig: ApplicationConfig = {
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Button } from '@ngstarter-ui/components/button';
 import { Icon } from '@ngstarter-ui/components/icon';
-import { Layout, LayoutContent } from '@ngstarter-ui/components/layout';
-import { Panel, PanelContent, PanelHeader } from '@ngstarter-ui/components/panel';
+import { Layout, LayoutContent, LayoutHeader } from '@ngstarter-ui/components/layout';
+
 import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
 import {
   Sidebar,
@@ -83,9 +83,7 @@ import { Toolbar, ToolbarSpacer, ToolbarTitle } from '@ngstarter-ui/components/t
     Icon,
     Layout,
     LayoutContent,
-    Panel,
-    PanelContent,
-    PanelHeader,
+    LayoutHeader,
     RouterLink,
     RouterLinkActive,
     RouterOutlet,
@@ -144,23 +142,23 @@ export class AppShell {
       </ngs-sidenav>
 
       <ngs-sidenav-content>
-        <ngs-panel>
-          <ngs-panel-header>
+        <ngs-layout>
+          <ngs-layout-header>
             <ngs-toolbar>
               <ngs-toolbar-title>Dashboard</ngs-toolbar-title>
               <ngs-toolbar-spacer />
               <button ngsButton="outlined">Invite user</button>
             </ngs-toolbar>
-          </ngs-panel-header>
+          </ngs-layout-header>
 
-          <ngs-panel-content>
+          <ngs-layout-content>
             <ngs-scrollbar-area>
               <div class="workspace-content">
                 <router-outlet />
               </div>
             </ngs-scrollbar-area>
-          </ngs-panel-content>
-        </ngs-panel>
+          </ngs-layout-content>
+        </ngs-layout>
       </ngs-sidenav-content>
     </ngs-sidenav-container>
   </ngs-layout-content>
@@ -187,7 +185,7 @@ export class AppShell {
   padding: 1.5rem;
 }
 
-ngs-panel {
+ngs-layout {
   height: 100%;
 }`;
 

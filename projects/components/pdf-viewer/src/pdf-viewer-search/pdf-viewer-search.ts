@@ -4,7 +4,7 @@ import { Checkbox } from '@ngstarter-ui/components/checkbox';
 import { FormField, IconButtonSuffix, IconPrefix } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input as NgsInput } from '@ngstarter-ui/components/input';
-import { Panel, PanelContent, PanelHeader, PanelSubheader } from '@ngstarter-ui/components/panel';
+import { Layout, LayoutContent, LayoutHeader, LayoutSubheader } from '@ngstarter-ui/components/layout';
 import { Toolbar, ToolbarSpacer, ToolbarTitle } from '@ngstarter-ui/components/toolbar';
 import type { PdfViewerSearchOptions, PdfViewerSearchResultView } from '../types';
 
@@ -32,13 +32,13 @@ interface PdfViewerSearchResultGroup {
     IconButtonSuffix,
     IconPrefix,
     NgsInput,
-    Panel,
-    PanelContent,
-    PanelHeader,
+    Layout,
+    LayoutContent,
+    LayoutHeader,
     Toolbar,
     ToolbarSpacer,
     ToolbarTitle,
-    PanelSubheader,
+    LayoutSubheader,
   ],
   templateUrl: './pdf-viewer-search.html',
   styleUrl: './pdf-viewer-search.scss',

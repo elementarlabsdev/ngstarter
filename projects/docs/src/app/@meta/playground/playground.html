@@ -15,8 +15,8 @@
 
 <ngs-drawer #sourceDrawer (closed)="onDrawerClosed()">
   <div class="playground-source-drawer h-full w-[90vw] max-w-[1200px] overflow-hidden lg:w-[60vw]">
-    <ngs-panel class="h-full">
-      <ngs-panel-header class="playground-source-toolbar flex h-12 items-center gap-3 border-b border-b-border px-4">
+    <ngs-layout class="h-full">
+      <ngs-layout-header class="playground-source-toolbar flex h-12 items-center gap-3 border-b border-b-border px-4">
         <div class="flex min-w-0 flex-1 items-center gap-2">
           <ngs-icon name="fluent:window-dev-tools-24-regular" class="size-5" />
           <span class="truncate text-sm font-medium">Example source</span>
@@ -24,8 +24,8 @@
         <button ngsIconButton aria-label="Close source drawer" (click)="sourceDrawer.close()" class="-me-2.5">
           <ngs-icon name="fluent:dismiss-24-regular" />
         </button>
-      </ngs-panel-header>
-      <ngs-panel-sidebar class="playground-source-sidebar w-72 border-e border-e-border p-2">
+      </ngs-layout-header>
+      <ngs-layout-sidebar class="playground-source-sidebar w-72 border-e border-e-border p-2">
         <div class="px-3 pb-2 pt-1 text-xs font-medium uppercase tracking-wide text-neutral-500">
           Files
         </div>
@@ -37,16 +37,16 @@
             </ngs-navigation-item>
           }
         </ngs-navigation>
-      </ngs-panel-sidebar>
-      <ngs-panel-content class="playground-source-main">
-        <ngs-panel absolute>
-          <ngs-panel-header class="border-b border-b-border">
+      </ngs-layout-sidebar>
+      <ngs-layout-content class="playground-source-main">
+        <ngs-layout absolute>
+          <ngs-layout-header class="border-b border-b-border">
             <div class="flex h-10 shrink-0 items-center gap-2 px-4">
               <ngs-icon [name]="currentSourceFile?.icon || 'fluent:code-24-regular'" />
               <span class="truncate text-sm">{{ currentFileName }}</span>
             </div>
-          </ngs-panel-header>
-          <ngs-panel-content class="playground-source-editor">
+          </ngs-layout-header>
+          <ngs-layout-content class="playground-source-editor">
             <ngs-scrollbar-area>
               @if (exampleLoading) {
                 <div class="p-5 text-sm text-neutral-500">Loading source...</div>
@@ -59,9 +59,9 @@
                                       appearance="none"/>
               }
             </ngs-scrollbar-area>
-          </ngs-panel-content>
-        </ngs-panel>
-      </ngs-panel-content>
-    </ngs-panel>
+          </ngs-layout-content>
+        </ngs-layout>
+      </ngs-layout-content>
+    </ngs-layout>
   </div>
 </ngs-drawer>

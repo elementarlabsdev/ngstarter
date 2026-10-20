@@ -5,7 +5,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   exportAs: 'ngsLayoutTopbar',
   templateUrl: './layout-topbar.html',
   styleUrl: './layout-topbar.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-layout-topbar'
   }

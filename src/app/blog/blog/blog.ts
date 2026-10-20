@@ -74,13 +74,13 @@ export class Blog {
       icon: 'fluent:document-data-24-regular',
     },
     {
-      title: 'Angular Panel Layout: Create Admin Workspaces with ngs-panel',
+      title: 'Angular Workspace Layout: Create Admin Workspaces with ngs-layout',
       description:
-        'Learn angular panel layout patterns for admin screens: single workspaces, master-detail pages, side inspectors, and footer actions with ngs-panel.',
+        'Learn angular panel layout patterns for admin screens: single workspaces, master-detail pages, side inspectors, and footer actions with ngs-layout.',
       href: '/blog/angular-panel-layout',
       date: 'June 12, 2026',
       readTime: '9 min',
-      category: 'Angular Panel Layout',
+      category: 'Angular Workspace Layout',
       icon: 'fluent:panel-right-24-regular',
     },
     {

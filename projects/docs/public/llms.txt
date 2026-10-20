@@ -127,7 +127,6 @@ Must use:
 - image-resizer: `@ngstarter-ui/components/image-resizer` docs: /components/image-resizer
 - image-viewer: `@ngstarter-ui/components/image-viewer` docs: /components/image-viewer
 - image-zoom-viewer: `@ngstarter-ui/components/image-zoom-viewer` docs: /components/image-zoom-viewer
-- incidents: `@ngstarter-ui/components/incidents` docs: /components/incidents
 - inline-text-edit: `@ngstarter-ui/components/inline-text-edit` docs: /forms/inline-text-edit
 - input: `@ngstarter-ui/components/input` docs: /forms/input
 - input-mask: `@ngstarter-ui/components/input-mask` docs: /forms/input-mask
@@ -143,7 +142,6 @@ Must use:
 - notifications: `@ngstarter-ui/components/notifications` docs: /components/notifications
 - number-input: `@ngstarter-ui/components/number-input` docs: /forms/number-input
 - paginator: `@ngstarter-ui/components/paginator` docs: /components/paginator
-- panel: `@ngstarter-ui/components/panel` docs: /components/panel
 - password-strength: `@ngstarter-ui/components/password-strength` docs: /forms/password-strength
 - pdf-builder: `@ngstarter-ui/components/pdf-builder` docs: /libraries/pdf-builder
 - pdf-signer: `@ngstarter-ui/components/pdf-signer` docs: /libraries/pdf-signer

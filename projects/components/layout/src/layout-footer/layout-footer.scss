@@ -1,7 +1,22 @@
 @reference 'tailwindcss';
 
 :host {
-  display: block;
   grid-area: footer;
+  min-width: 0;
   flex: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  &:not([class*="h-"]):not(.is-auto-height) {
+    height: var(--ngs-layout-footer-height, --spacing(14));
+  }
+
+  &.as-flex {
+    display: flex;
+  }
+
+  &.as-block {
+    display: block;
+  }
 }

@@ -1,5 +1,5 @@
-<ngs-panel class="h-full">
-  <ngs-panel-header class="header">
+<ngs-layout class="h-full">
+  <ngs-layout-header class="header">
     <div class="flex flex-nowrap h-full items-center header-container" #headerContainer>
       @for (column of columns(); track column; let index = $index) {
         <div class="h-full header-column relative flex gap-2 items-center justify-between flex-none">
@@ -35,8 +35,8 @@
         </div>
       }
     </div>
-  </ngs-panel-header>
-  <ngs-panel-content class="relative overflow-hidden">
+  </ngs-layout-header>
+  <ngs-layout-content class="relative overflow-hidden">
     <div #scrollContainer
          class="scroll-container h-full absolute overflow-auto inset-0 flex body items-baseline">
       <div #scrollContainerContent
@@ -64,5 +64,5 @@
         }
       </div>
     </div>
-  </ngs-panel-content>
-</ngs-panel>
+  </ngs-layout-content>
+</ngs-layout>

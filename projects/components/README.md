@@ -280,7 +280,6 @@ discovery and AI-assisted development.
 - [Menu](https://docs.ngstarter.com/components/menu)
 - [Notifications](https://docs.ngstarter.com/components/notifications)
 - [Paginator](https://docs.ngstarter.com/components/paginator)
-- [Panel](https://docs.ngstarter.com/components/panel)
 - [Popover](https://docs.ngstarter.com/components/popover)
 - [Progress Bar](https://docs.ngstarter.com/components/progress-bar)
 - [Progress Spinner](https://docs.ngstarter.com/components/progress-spinner)

@@ -145,8 +145,8 @@
       </ngs-sidenav>
 
       <ngs-sidenav-content>
-        <ngs-panel class="workspace-panel" [class.is-sidenav-closed]="!sidenavOpened()">
-          <ngs-panel-header autoHeight class="workspace-header">
+        <ngs-layout class="workspace-panel" [class.is-sidenav-closed]="!sidenavOpened()">
+          <ngs-layout-header autoHeight class="workspace-header">
             <ngs-toolbar>
               <ngs-toolbar-title>
                 <div class="page-title">
@@ -181,9 +181,9 @@
 
 <!--            <ngs-toolbar class="filter-toolbar">-->
 <!--            </ngs-toolbar>-->
-          </ngs-panel-header>
+          </ngs-layout-header>
 
-          <ngs-panel-content>
+          <ngs-layout-content>
             <ngs-scrollbar-area [absolute]="true" class="workspace-scrollbar">
               <div class="dashboard-stage">
                 <ngs-grid
@@ -194,8 +194,8 @@
                 />
               </div>
             </ngs-scrollbar-area>
-          </ngs-panel-content>
-        </ngs-panel>
+          </ngs-layout-content>
+        </ngs-layout>
       </ngs-sidenav-content>
     </ngs-sidenav-container>
   </ngs-layout-content>

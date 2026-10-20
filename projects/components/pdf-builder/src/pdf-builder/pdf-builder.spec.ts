@@ -312,7 +312,7 @@ describe('PdfBuilder', () => {
     const element: HTMLElement = fixture.nativeElement;
     const start = element.querySelector<HTMLElement>('.pdf-viewer-toolbar__start');
     const end = element.querySelector<HTMLElement>('.pdf-viewer-toolbar__end');
-    const aside = element.querySelector<HTMLElement>('ngs-panel-aside.builder-viewer-aside');
+    const aside = element.querySelector<HTMLElement>('ngs-layout-aside.builder-viewer-aside');
     const state = component as unknown as {
       pageCount: () => number;
     };
@@ -340,9 +340,9 @@ describe('PdfBuilder', () => {
 
   it('keeps fields and layers in the left panel sidebar', () => {
     const element: HTMLElement = fixture.nativeElement;
-    const sidebar = element.querySelector<HTMLElement>('ngs-panel-sidebar.builder-library');
+    const sidebar = element.querySelector<HTMLElement>('ngs-layout-sidebar.builder-library');
 
-    expect(element.querySelector('ngs-panel-aside.builder-library')).toBeNull();
+    expect(element.querySelector('ngs-layout-aside.builder-library')).toBeNull();
     expect(sidebar).not.toBeNull();
     expect(sidebar!.textContent).toContain('Fields');
     expect(sidebar!.textContent).toContain('Layers');
@@ -356,14 +356,14 @@ describe('PdfBuilder', () => {
 
     expect(searchButton).not.toBeNull();
     expect(annotationsButton).not.toBeNull();
-    expect(element.querySelector('ngs-panel-aside.builder-viewer-aside')).not.toBeNull();
+    expect(element.querySelector('ngs-layout-aside.builder-viewer-aside')).not.toBeNull();
     expect(element.querySelector('.pdf-viewer-toolbar__end .builder-field-count')).not.toBeNull();
     expect(element.querySelector('.field-sidebar-actions')).toBeNull();
 
     searchButton!.click();
     fixture.detectChanges();
 
-    const searchAside = element.querySelector<HTMLElement>('ngs-panel-aside.builder-viewer-aside');
+    const searchAside = element.querySelector<HTMLElement>('ngs-layout-aside.builder-viewer-aside');
 
     expect(searchAside).not.toBeNull();
     expect(searchAside!.classList.contains('border-l')).toBe(true);
@@ -375,7 +375,7 @@ describe('PdfBuilder', () => {
     annotationsButton!.click();
     fixture.detectChanges();
 
-    const annotationsAside = element.querySelector<HTMLElement>('ngs-panel-aside.builder-viewer-aside');
+    const annotationsAside = element.querySelector<HTMLElement>('ngs-layout-aside.builder-viewer-aside');
 
     expect(annotationsAside).not.toBeNull();
     expect(annotationsAside!.querySelector('ngs-pdf-viewer-annotations')).not.toBeNull();
@@ -401,7 +401,7 @@ describe('PdfBuilder', () => {
     annotationsButton!.click();
     fixture.detectChanges();
 
-    const annotationsAside = element.querySelector<HTMLElement>('ngs-panel-aside.builder-viewer-aside');
+    const annotationsAside = element.querySelector<HTMLElement>('ngs-layout-aside.builder-viewer-aside');
 
     expect(annotationsAside!.querySelector('ngs-pdf-viewer-annotations')).not.toBeNull();
     expect(annotationsAside!.textContent).toContain('No annotations found.');
@@ -433,7 +433,7 @@ describe('PdfBuilder', () => {
     annotationsButton!.click();
     fixture.detectChanges();
 
-    const annotationsAside = element.querySelector<HTMLElement>('ngs-panel-aside.builder-viewer-aside');
+    const annotationsAside = element.querySelector<HTMLElement>('ngs-layout-aside.builder-viewer-aside');
 
     expect(annotationsAside!.querySelector('ngs-pdf-viewer-annotations')).not.toBeNull();
     expect(annotationsAside!.textContent).toContain('Legal Team');
@@ -463,7 +463,7 @@ describe('PdfBuilder', () => {
     fixture.detectChanges();
 
     expect(state.fieldSettingsPanelVisible()).toBe(false);
-    expect(element.querySelector('ngs-panel.field-settings-panel')).toBeNull();
+    expect(element.querySelector('ngs-layout.field-settings-panel')).toBeNull();
     expect(element.querySelector('section.field-settings-panel')).toBeNull();
     expect(element.querySelector('.field-settings-summary')).toBeNull();
     expect(element.querySelector('.field-settings-summary-icon')).toBeNull();
@@ -471,7 +471,7 @@ describe('PdfBuilder', () => {
     state.closeFieldSettingsPanel();
     fixture.detectChanges();
 
-    const aside = element.querySelector<HTMLElement>('ngs-panel-aside.builder-viewer-aside');
+    const aside = element.querySelector<HTMLElement>('ngs-layout-aside.builder-viewer-aside');
 
     expect(aside).not.toBeNull();
     expect(element.querySelector('.field-settings-panel')).toBeNull();
@@ -509,7 +509,7 @@ describe('PdfBuilder', () => {
     const items = Array.from(element.querySelectorAll<HTMLElement>('.field-recipients-list ngs-list-item'));
 
     expect(panel).not.toBeNull();
-    expect(panel!.tagName.toLowerCase()).toBe('ngs-panel');
+    expect(panel!.tagName.toLowerCase()).toBe('ngs-layout');
     expect(panel!.textContent).toContain('Add recipients');
     expect(panel!.textContent).toContain('Who are you sending this document to?');
     expect(items).toHaveLength(2);

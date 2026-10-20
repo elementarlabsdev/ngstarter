@@ -386,11 +386,6 @@ export class Overview {
       name: 'Paginator'
     },
     {
-      routerLink: '/components/panel',
-      imageUrl: 'assets/overview/panel.svg',
-      name: 'Panel'
-    },
-    {
       routerLink: '/forms/password-strength',
       imageUrl: 'assets/overview/password-strength.svg',
       name: 'Password Strength'

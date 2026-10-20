@@ -23,7 +23,7 @@ import { Ripple } from '@ngstarter-ui/components/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Menu, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
-import { PanelContent, Panel, PanelHeader } from '@ngstarter-ui/components/panel';
+import { LayoutContent, Layout, LayoutHeader } from '@ngstarter-ui/components/layout';
 import { KanbanColumn, KanbanItem, KanbanItemSortedEvent, KanbanItemTransferredEvent } from '../types';
 import { KanbanItemDefDirective } from '../kanban-item-def.directive';
 import { fromEvent } from 'rxjs';
@@ -40,9 +40,9 @@ import { Button } from '@ngstarter-ui/components/button';
     Icon,
 
     Ripple,
-    PanelContent,
-    Panel,
-    PanelHeader,
+    LayoutContent,
+    Layout,
+    LayoutHeader,
     NgTemplateOutlet,
     FormsModule,
     Menu,

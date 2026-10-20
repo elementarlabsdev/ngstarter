@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate-ai-metadata.mjs",
   "package": "@ngstarter-ui/components",
   "description": "AI-readable registry for NgStarter UI Angular secondary entry points.",
-  "componentCount": 127,
+  "componentCount": 126,
   "conventions": {
     "importPattern": "@ngstarter-ui/components/<component>",
     "selectorPrefix": "ngs",
@@ -3919,19 +3919,19 @@
         "Basic drawer",
         "Drawer without backdrop"
       ],
-      "minimalExample": "<button ngsButton=\"filled\" (click)=\"drawer.open()\">Open Drawer</button>\n<ngs-drawer #drawer=\"ngsDrawer\">\n  <ngs-panel class=\"w-[460px]\">\n    <ngs-panel-header class=\"px-5 py-3\">Header</ngs-panel-header>\n    <ngs-panel-content class=\"p-5\">\n      <button ngsButton=\"filled\" (click)=\"drawer.close()\">Close Drawer</button>\n    </ngs-panel-content>\n    <ngs-panel-footer class=\"px-5 py-3\">Footer</ngs-panel-footer>\n  </ngs-panel>\n</ngs-drawer>",
+      "minimalExample": "<button ngsButton=\"filled\" (click)=\"drawer.open()\">Open Drawer</button>\n<ngs-drawer #drawer=\"ngsDrawer\">\n  <ngs-layout class=\"w-[460px]\">\n    <ngs-layout-header class=\"px-5 py-3\">Header</ngs-layout-header>\n    <ngs-layout-content class=\"p-5\">\n      <button ngsButton=\"filled\" (click)=\"drawer.close()\">Close Drawer</button>\n    </ngs-layout-content>\n    <ngs-layout-footer class=\"px-5 py-3\">Footer</ngs-layout-footer>\n  </ngs-layout>\n</ngs-drawer>",
       "exampleFiles": [
         {
           "name": "basic-drawer-example",
           "title": "Basic drawer",
           "file": "projects/docs/src/app/components/drawer/_examples/basic-drawer-example/basic-drawer-example.html",
-          "source": "<button ngsButton=\"filled\" (click)=\"drawer.open()\">Open Drawer</button>\n<ngs-drawer #drawer=\"ngsDrawer\">\n  <ngs-panel class=\"w-[460px]\">\n    <ngs-panel-header class=\"px-5 py-3\">Header</ngs-panel-header>\n    <ngs-panel-content class=\"p-5\">\n      <button ngsButton=\"filled\" (click)=\"drawer.close()\">Close Drawer</button>\n    </ngs-panel-content>\n    <ngs-panel-footer class=\"px-5 py-3\">Footer</ngs-panel-footer>\n  </ngs-panel>\n</ngs-drawer>"
+          "source": "<button ngsButton=\"filled\" (click)=\"drawer.open()\">Open Drawer</button>\n<ngs-drawer #drawer=\"ngsDrawer\">\n  <ngs-layout class=\"w-[460px]\">\n    <ngs-layout-header class=\"px-5 py-3\">Header</ngs-layout-header>\n    <ngs-layout-content class=\"p-5\">\n      <button ngsButton=\"filled\" (click)=\"drawer.close()\">Close Drawer</button>\n    </ngs-layout-content>\n    <ngs-layout-footer class=\"px-5 py-3\">Footer</ngs-layout-footer>\n  </ngs-layout>\n</ngs-drawer>"
         },
         {
           "name": "drawer-without-backdrop-example",
           "title": "Drawer without backdrop",
           "file": "projects/docs/src/app/components/drawer/_examples/drawer-without-backdrop-example/drawer-without-backdrop-example.html",
-          "source": "<button ngsButton=\"filled\" (click)=\"drawer.open()\">Open Drawer</button>\n<ngs-drawer #drawer=\"ngsDrawer\" [showBackdrop]=\"false\">\n  <ngs-panel class=\"w-[460px]\">\n    <ngs-panel-header class=\"px-5 py-3\">Header</ngs-panel-header>\n    <ngs-panel-content class=\"p-5\">\n      <button ngsButton=\"filled\" (click)=\"drawer.close()\">Close Drawer</button>\n    </ngs-panel-content>\n    <ngs-panel-footer class=\"px-5 py-3\">Footer</ngs-panel-footer>\n  </ngs-panel>\n</ngs-drawer>"
+          "source": "<button ngsButton=\"filled\" (click)=\"drawer.open()\">Open Drawer</button>\n<ngs-drawer #drawer=\"ngsDrawer\" [showBackdrop]=\"false\">\n  <ngs-layout class=\"w-[460px]\">\n    <ngs-layout-header class=\"px-5 py-3\">Header</ngs-layout-header>\n    <ngs-layout-content class=\"p-5\">\n      <button ngsButton=\"filled\" (click)=\"drawer.close()\">Close Drawer</button>\n    </ngs-layout-content>\n    <ngs-layout-footer class=\"px-5 py-3\">Footer</ngs-layout-footer>\n  </ngs-layout>\n</ngs-drawer>"
         }
       ],
       "previewAsset": "projects/components/drawer/preview.svg",
@@ -5798,35 +5798,18 @@
       "name": "incidents",
       "title": "Incidents",
       "overviewName": "Incidents",
-      "category": "components",
+      "category": null,
       "package": "@ngstarter-ui/components",
       "importPath": "@ngstarter-ui/components/incidents",
       "publicApi": "projects/components/incidents/public-api.ts",
       "sourceRoot": "projects/components/incidents/src",
-      "docsPath": "/components/incidents",
-      "docsOverviewSource": "projects/docs/src/app/components/incidents/overview/overview.html",
+      "docsPath": null,
+      "docsOverviewSource": null,
       "purpose": "Show an application-level service incident or operational notice with a compact bar and expandable incident updates.",
       "useWhen": "Use for service outages, degraded service, maintenance windows, global system status, and important operational notices that users should see across the app or portal. Compose manually with ngs-incidents, ngs-incidents-bar, ngs-incidents-title, ngs-incidents-description, ngs-incidents-list, ngs-incident, ngs-incident-title, ngs-incident-details, ngsIncidentIcon, ngsIncidentButton, and ngsIncidentClose. For global dynamic incidents, place ngs-incidents-global near the app root and call IncidentsStore.show({ title, description, incidents }) or hide(). Do not use for local inline messages; use Alert. Do not use for user-required critical actions; use ActionRequired. Do not use for toast notifications, table row statuses, empty states, or full incident management/history pages; use notification components, Badge, Status, EmptyState, Table, or DataView.",
-      "exampleTopics": [
-        "Basic Incidents",
-        "Show/Hide Dynamicly",
-        "Incidents show hide dynamicly"
-      ],
-      "minimalExample": "<div class=\"h-[400px] overflow-hidden\">\n  <ngs-incidents>\n    <ngs-incidents-bar>\n      <ngs-incidents-title>Maintenance work on the DNS</ngs-incidents-title>\n      <ngs-incidents-description>Description</ngs-incidents-description>\n      <ngs-icon name=\"fluent:chevron-down-24-regular\" ngsIncidentsToggleIcon/>\n    </ngs-incidents-bar>\n    <ngs-incidents-list>\n      @for (incident of incidents; track incident) {\n        <ngs-incident>\n          <ngs-icon name=\"fluent:info-24-regular\" ngsIncidentIcon/>\n          <ngs-icon name=\"fluent:dismiss-24-regular\" ngsIncidentClose/>\n          <ngs-incident-title>{{ incident.title }}</ngs-incident-title>\n          <ngs-incident-details>{{ incident.details }}</ngs-incident-details>\n        </ngs-incident>\n      }\n    </ngs-incidents-list>\n  </ngs-incidents>\n</div>",
-      "exampleFiles": [
-        {
-          "name": "basic-incidents-example",
-          "title": "Basic incidents",
-          "file": "projects/docs/src/app/components/incidents/_examples/basic-incidents-example/basic-incidents-example.html",
-          "source": "<div class=\"h-[400px] overflow-hidden\">\n  <ngs-incidents>\n    <ngs-incidents-bar>\n      <ngs-incidents-title>Maintenance work on the DNS</ngs-incidents-title>\n      <ngs-incidents-description>Description</ngs-incidents-description>\n      <ngs-icon name=\"fluent:chevron-down-24-regular\" ngsIncidentsToggleIcon/>\n    </ngs-incidents-bar>\n    <ngs-incidents-list>\n      @for (incident of incidents; track incident) {\n        <ngs-incident>\n          <ngs-icon name=\"fluent:info-24-regular\" ngsIncidentIcon/>\n          <ngs-icon name=\"fluent:dismiss-24-regular\" ngsIncidentClose/>\n          <ngs-incident-title>{{ incident.title }}</ngs-incident-title>\n          <ngs-incident-details>{{ incident.details }}</ngs-incident-details>\n        </ngs-incident>\n      }\n    </ngs-incidents-list>\n  </ngs-incidents>\n</div>"
-        },
-        {
-          "name": "incidents-show-hide-dynamicly-example",
-          "title": "Incidents show hide dynamicly",
-          "file": "projects/docs/src/app/components/incidents/_examples/incidents-show-hide-dynamicly-example/incidents-show-hide-dynamicly-example.html",
-          "source": "<button ngsButton=\"filled\" (click)=\"toggleIncidents()\">Show Incidents</button>"
-        }
-      ],
+      "exampleTopics": [],
+      "minimalExample": null,
+      "exampleFiles": [],
       "previewAsset": "projects/components/incidents/preview.svg",
       "selectors": [
         "[ngs-incident]",
@@ -6242,7 +6225,7 @@
       "docsPath": "/components/layout",
       "docsOverviewSource": "projects/docs/src/app/components/layout/overview/overview.html",
       "purpose": "Provide the base top-level shell for an application, admin area, dashboard, or large workspace page.",
-      "useWhen": "Use ngs-layout as the outer structural frame when the whole screen needs topbar, header, sidebar, scrollable content, aside, or footer regions. Use root for a full viewport application shell. Use ngs-layout-content for the main scroll container, and LayoutApiService with layoutId when the sidebar must be shown, hidden, or toggled. Nested layouts are appropriate when a large app shell contains another structured workspace with its own header/content/footer. Do not use Layout as a small wrapper, card, spacing helper, form grouping tool, or generic grid system. Use TailwindCSS grid, flex, and spacing classes inside layout regions. Use Grid for static dashboard widgets, Tiles for dashboards users can rearrange or customize, DataView or Table for datasets, Drawer for overlay side panels, and Navigation, Sidebar, or Sidenav components inside sidebars.",
+      "useWhen": "Use ngs-layout as the outer structural frame when the whole screen needs topbar, header, subheader, sidebar, scrollable content, aside, or footer regions. Use root only for a full viewport application shell; use nested non-root layouts for local workspaces and absolute to fill a positioned parent. Use ngs-layout-subheader for filters or secondary actions. LayoutHeader and LayoutSubheader support flex and autoHeight; LayoutFooter supports block and autoHeight. Use ngs-layout-content for the main scroll container, and LayoutApiService with layoutId when the sidebar must be shown, hidden, or toggled. Nested layouts are appropriate when a large app shell contains another structured workspace with its own header/content/footer. Do not use Layout as a small wrapper, card, spacing helper, form grouping tool, or generic grid system. Use TailwindCSS grid, flex, and spacing classes inside layout regions. Use Grid for static dashboard widgets, Tiles for dashboards users can rearrange or customize, DataView or Table for datasets, Drawer for overlay side panels, and Navigation, Sidebar, or Sidenav components inside sidebars.",
       "exampleTopics": [
         "Layout header",
         "Layout sidebar",
@@ -6252,7 +6235,11 @@
         "Layout header with footer",
         "Layout aside",
         "Layout with nested layouts example",
-        "Layout with nested layouts"
+        "Local workspace",
+        "Workspace with sidebar, subheader, and aside",
+        "Layout with nested layouts",
+        "Layout workspace",
+        "Layout with extra columns"
       ],
       "minimalExample": "<div class=\"h-[300px] border border-border\">\n  <ngs-layout>\n    <ngs-layout-sidebar>\n      <div class=\"p-6 border-r border-e-muted h-full w-[240px]\">Sidebar</div>\n    </ngs-layout-sidebar>\n    <ngs-layout-content class=\"p-6\">\n      Body\n    </ngs-layout-content>\n    <ngs-layout-aside>\n      <div class=\"p-6 border-s border-s-muted h-full w-[200px]\">Aside</div>\n    </ngs-layout-aside>\n  </ngs-layout>\n</div>",
       "exampleFiles": [
@@ -6266,13 +6253,13 @@
           "name": "layout-footer-example",
           "title": "Layout footer",
           "file": "projects/docs/src/app/components/layout/_examples/layout-footer-example/layout-footer-example.html",
-          "source": "<div class=\"h-[300px] border border-border\">\n  <ngs-layout>\n    <ngs-layout-content class=\"p-6\">\n      Body\n    </ngs-layout-content>\n    <ngs-layout-footer>\n      <div class=\"border-t border-t-muted px-6 h-10 flex items-center text-xs\">\n        This is footer example &copy; 2024\n      </div>\n    </ngs-layout-footer>\n  </ngs-layout>\n</div>"
+          "source": "<div class=\"h-[300px] border border-border\">\n  <ngs-layout>\n    <ngs-layout-content class=\"p-6\">\n      Body\n    </ngs-layout-content>\n    <ngs-layout-footer autoHeight>\n      <div class=\"border-t border-t-muted px-6 h-10 flex items-center text-xs\">\n        This is footer example &copy; 2024\n      </div>\n    </ngs-layout-footer>\n  </ngs-layout>\n</div>"
         },
         {
           "name": "layout-header-example",
           "title": "Layout header",
           "file": "projects/docs/src/app/components/layout/_examples/layout-header-example/layout-header-example.html",
-          "source": "<div class=\"h-[300px] border border-border\">\n  <ngs-layout>\n    <ngs-layout-header>\n      <div class=\"border-b border-b-muted px-6 h-14 flex items-center\">\n        Header\n      </div>\n    </ngs-layout-header>\n    <ngs-layout-content class=\"p-6\">\n      Body\n    </ngs-layout-content>\n  </ngs-layout>\n</div>"
+          "source": "<div class=\"h-[300px] border border-border\">\n  <ngs-layout>\n    <ngs-layout-header autoHeight>\n      <div class=\"border-b border-b-muted px-6 h-14 flex items-center\">\n        Header\n      </div>\n    </ngs-layout-header>\n    <ngs-layout-content class=\"p-6\">\n      Body\n    </ngs-layout-content>\n  </ngs-layout>\n</div>"
         }
       ],
       "previewAsset": "projects/components/layout/preview.svg",
@@ -6283,6 +6270,7 @@
         "ngs-layout-footer",
         "ngs-layout-header",
         "ngs-layout-sidebar",
+        "ngs-layout-subheader",
         "ngs-layout-topbar"
       ],
       "exportedSymbols": [
@@ -6298,16 +6286,24 @@
         "LayoutSidebar",
         "LayoutSidebarStore",
         "LayoutSidebarVisibilityChange",
+        "LayoutSubheader",
         "LayoutTopbar"
       ],
       "inputs": [
+        "absolute",
+        "autoHeight",
         "autoscrollToTop",
+        "block",
+        "flex",
         "layoutId",
         "root"
       ],
       "outputs": [],
       "cssTokens": [
-        "--ngs-layout-aside-width"
+        "--ngs-layout-aside-width",
+        "--ngs-layout-footer-height",
+        "--ngs-layout-header-height",
+        "--ngs-layout-subheader-height"
       ],
       "example": null
     },
@@ -7420,74 +7416,6 @@
       "example": null
     },
     {
-      "name": "panel",
-      "title": "Panel",
-      "overviewName": "Panel",
-      "category": "components",
-      "package": "@ngstarter-ui/components",
-      "importPath": "@ngstarter-ui/components/panel",
-      "publicApi": "projects/components/panel/public-api.ts",
-      "sourceRoot": "projects/components/panel/src",
-      "docsPath": "/components/panel",
-      "docsOverviewSource": "projects/docs/src/app/components/panel/overview/overview.html",
-      "purpose": "Create a local structured work area with header, subheader, sidebar, scrollable content, aside, and footer regions.",
-      "useWhen": "Use ngs-panel inside a page or workspace for admin modules, settings areas, editors, detail panes, inspectors, dashboard sections, and local surfaces that need their own header, footer, side columns, and scrollable body. Use ngs-panel-header for local title, toolbar, or actions; ngs-panel-subheader for filters or secondary status; ngs-panel-sidebar for a local left column; ngs-panel-content for the main scrollable area; ngs-panel-aside for a local right column; and ngs-panel-footer for local footer actions or status. Use absolute when the panel should fill the parent bounds. Use TailwindCSS classes for sizing, borders, spacing, and inner layout. Do not use Panel as the top-level application shell; use Layout. Do not use for small content blocks; use Card. Do not use for overlay side panels; use Drawer. Do not use as a generic spacing wrapper or form grid; use TailwindCSS grid/flex and FormField.",
-      "exampleTopics": [
-        "Basic panel",
-        "Basic with extra columns (sidebar and aside)",
-        "Panel with extra columns"
-      ],
-      "minimalExample": "<div class=\"h-[500px]\">\n  <ngs-panel class=\"border border-border\">\n    <ngs-panel-header class=\"bg-surface-container flex items-center px-6\">Header</ngs-panel-header>\n    <ngs-panel-content>\n      <ngs-scrollbar-area>\n        <div class=\"p-6 h-[1000px]\">Body</div>\n      </ngs-scrollbar-area>\n    </ngs-panel-content>\n    <ngs-panel-footer class=\"bg-surface-container-low flex items-center px-6\">Footer</ngs-panel-footer>\n  </ngs-panel>\n</div>",
-      "exampleFiles": [
-        {
-          "name": "basic-panel-example",
-          "title": "Basic panel",
-          "file": "projects/docs/src/app/components/panel/_examples/basic-panel-example/basic-panel-example.html",
-          "source": "<div class=\"h-[500px]\">\n  <ngs-panel class=\"border border-border\">\n    <ngs-panel-header class=\"bg-surface-container flex items-center px-6\">Header</ngs-panel-header>\n    <ngs-panel-content>\n      <ngs-scrollbar-area>\n        <div class=\"p-6 h-[1000px]\">Body</div>\n      </ngs-scrollbar-area>\n    </ngs-panel-content>\n    <ngs-panel-footer class=\"bg-surface-container-low flex items-center px-6\">Footer</ngs-panel-footer>\n  </ngs-panel>\n</div>"
-        },
-        {
-          "name": "panel-with-extra-columns-example",
-          "title": "Panel with extra columns",
-          "file": "projects/docs/src/app/components/panel/_examples/panel-with-extra-columns-example/panel-with-extra-columns-example.html",
-          "source": "<div class=\"h-[500px]\">\n  <ngs-panel class=\"border border-border\">\n    <ngs-panel-header class=\"bg-surface-container flex items-center px-6\">Header</ngs-panel-header>\n    <ngs-panel-sidebar class=\"border-r border-e-muted w-[200px]\">\n      <ngs-scrollbar-area>\n        <div class=\"p-6 h-[1000px]\" [style.width.px]=\"width()\" (click)=\"setSidebarLongWidth()\">Sidebar</div>\n      </ngs-scrollbar-area>\n    </ngs-panel-sidebar>\n    <ngs-panel-content>\n      <ngs-scrollbar-area>\n        <div class=\"p-6 h-[1000px] w-[1000px]\">Body</div>\n      </ngs-scrollbar-area>\n    </ngs-panel-content>\n    <ngs-panel-aside class=\"border-s border-s-muted w-[120px]\">\n      <div class=\"p-6\">Aside</div>\n    </ngs-panel-aside>\n    <ngs-panel-footer class=\"bg-surface-container-low flex items-center px-6\">Footer</ngs-panel-footer>\n  </ngs-panel>\n</div>"
-        }
-      ],
-      "previewAsset": "projects/components/panel/preview.svg",
-      "selectors": [
-        "ngs-panel",
-        "ngs-panel-aside",
-        "ngs-panel-content",
-        "ngs-panel-footer",
-        "ngs-panel-header",
-        "ngs-panel-sidebar",
-        "ngs-panel-subheader"
-      ],
-      "exportedSymbols": [
-        "Panel",
-        "PANEL_CONTENT",
-        "PanelAside",
-        "PanelContent",
-        "PanelContentInterface",
-        "PanelFooter",
-        "PanelHeader",
-        "PanelSidebar",
-        "PanelSubheader"
-      ],
-      "inputs": [
-        "absolute",
-        "autoHeight",
-        "block",
-        "flex"
-      ],
-      "outputs": [],
-      "cssTokens": [
-        "--ngs-panel-footer-height",
-        "--ngs-panel-header-height",
-        "--ngs-panel-subheader-height"
-      ],
-      "example": null
-    },
-    {
       "name": "password-strength",
       "title": "Password Strength",
       "overviewName": "Password Strength",
@@ -8565,7 +8493,7 @@
       "docsPath": null,
       "docsOverviewSource": null,
       "purpose": "Provide in-page navigation for sections inside a long scrollable page or local scroll container.",
-      "useWhen": "Use ScrollSpy when a long page or panel has stable section ids and needs a table-of-contents style navigation that highlights the active section while scrolling and smooth-scrolls to sections on click. Use ngs-scroll-spy-nav as the nav container, ngs-scroll-spy-on with targetId matching a section id, ngs-scroll-spy-title for the nav heading, and ngs-scroll-spy-back-to-top for a top shortcut. It uses ngs-layout-content or ngs-panel-content as the scroll container when present, otherwise document body. Good for docs pages, long settings pages, profile or detail pages with many sections, policy/help pages, long form review pages, and article-like admin pages. Do not use for primary product navigation; use Navigation, Sidebar, Sidenav, or RailNav. Do not use for tabs between views; use Tabs. Do not use for route breadcrumbs; use Breadcrumbs. Do not use for wizard steps; use Stepper or HeadlessStepper. Do not use on short pages without real scrolling or without stable section ids.",
+      "useWhen": "Use ScrollSpy when a long page or panel has stable section ids and needs a table-of-contents style navigation that highlights the active section while scrolling and smooth-scrolls to sections on click. Use ngs-scroll-spy-nav as the nav container, ngs-scroll-spy-on with targetId matching a section id, ngs-scroll-spy-title for the nav heading, and ngs-scroll-spy-back-to-top for a top shortcut. It uses ngs-layout-content as the scroll container when present, otherwise document body. Good for docs pages, long settings pages, profile or detail pages with many sections, policy/help pages, long form review pages, and article-like admin pages. Do not use for primary product navigation; use Navigation, Sidebar, Sidenav, or RailNav. Do not use for tabs between views; use Tabs. Do not use for route breadcrumbs; use Breadcrumbs. Do not use for wizard steps; use Stepper or HeadlessStepper. Do not use on short pages without real scrolling or without stable section ids.",
       "exampleTopics": [],
       "minimalExample": null,
       "exampleFiles": [],
@@ -8614,7 +8542,7 @@
       "docsPath": null,
       "docsOverviewSource": null,
       "purpose": "Provide a styled scroll container for bounded UI regions.",
-      "useWhen": "Use ngs-scrollbar-area when a sized panel, grid body, editor sidebar, asset list, menu, or similar surface needs consistent NgStarter scrollbars instead of native browser scrollbars. It hides native scrollbars, renders vertical and horizontal thumbs, supports auto-hide, thumb dragging, resize and mutation tracking, scrollbarWidth, autoHide, absolute fill mode, and scrolled output. Use [absolute]=\"true\" when the scroll area should fill a positioned parent region such as ngs-panel-content or a DataView viewport; make sure the parent already has a stable height and width. Do not use as a generic layout wrapper, spacing helper, page-level replacement for normal browser scrolling, carousel or scroll-snap component, virtualization engine, or a workaround for missing parent sizing.",
+      "useWhen": "Use ngs-scrollbar-area when a sized panel, grid body, editor sidebar, asset list, menu, or similar surface needs consistent NgStarter scrollbars instead of native browser scrollbars. It hides native scrollbars, renders vertical and horizontal thumbs, supports auto-hide, thumb dragging, resize and mutation tracking, scrollbarWidth, autoHide, absolute fill mode, and scrolled output. Use [absolute]=\"true\" when the scroll area should fill a positioned parent region such as ngs-layout-content or a DataView viewport; make sure the parent already has a stable height and width. Do not use as a generic layout wrapper, spacing helper, page-level replacement for normal browser scrolling, carousel or scroll-snap component, virtualization engine, or a workaround for missing parent sizing.",
       "exampleTopics": [],
       "minimalExample": null,
       "exampleFiles": [],
@@ -8953,17 +8881,17 @@
       "docsPath": "/navigation/side-panel",
       "docsOverviewSource": "projects/docs/src/app/navigation/side-panel/overview/overview.html",
       "purpose": "Provide an embedded side utility panel with tabbed tools beside the main content.",
-      "useWhen": "Use ngs-side-panel inside an app or workspace layout when the page needs persistent secondary tools or inspectors next to the primary content. Add ngs-side-panel-tab for each tab with tabId, label, and an optional Iconify icon name or custom icon TemplateRef. Good for info, outline, layers, activity, comments, assets, properties, preview settings, contextual inspectors, and quick tools in editors or admin workspaces. It can be positioned left or right and emits opened and closed. Do not use SidePanel as a temporary overlay; use Drawer. Do not use for modal workflows or confirmations; use Dialog or Confirm. Do not use as a generic page section; use Panel or Card. Do not use for primary app navigation; use Sidebar, Sidenav, Navigation, or RailNav. Do not use for tabs inside normal content; use Tabs. Do not use for simple action lists; use Menu.",
+      "useWhen": "Use ngs-side-panel inside an app or workspace layout when the page needs persistent secondary tools or inspectors next to the primary content. Add ngs-side-panel-tab for each tab with tabId, label, and an optional Iconify icon name or custom icon TemplateRef. Good for info, outline, layers, activity, comments, assets, properties, preview settings, contextual inspectors, and quick tools in editors or admin workspaces. It can be positioned left or right and emits opened and closed. Do not use SidePanel as a temporary overlay; use Drawer. Do not use for modal workflows or confirmations; use Dialog or Confirm. Do not use as a generic page section; use Layout or Card. Do not use for primary app navigation; use Sidebar, Sidenav, Navigation, or RailNav. Do not use for tabs inside normal content; use Tabs. Do not use for simple action lists; use Menu.",
       "exampleTopics": [
         "Basic side panel"
       ],
-      "minimalExample": "<div class=\"h-[700px] border border-border rounded-2xl overflow-hidden\">\n  <ngs-layout>\n    <ngs-layout-header>\n      <div class=\"h-14 px-5 flex items-center border-b border-b-muted\">Header</div>\n    </ngs-layout-header>\n    <ngs-layout-content>\n      <div class=\"absolute inset-y-5 start-5 end-0 p-5 border border-border rounded-2xl\"\n           [class.end-5]=\"sidePanel.isOpen()\">\n        Body content\n      </div>\n    </ngs-layout-content>\n    <ngs-layout-aside>\n      <ngs-side-panel #sidePanel class=\"overridable-side-panel\">\n        <ngs-side-panel-tab tabId=\"info\" label=\"Info\" icon=\"fluent:info-24-regular\">\n          <div class=\"p-5 border border-border rounded-2xl\">\n            <p>This is the contents of the first tab.</p>\n          </div>\n        </ngs-side-panel-tab>\n        <ngs-side-panel-tab tabId=\"list\" label=\"List\" icon=\"fluent:text-bullet-list-ltr-24-regular\">\n          <div class=\"p-5\">\n            <p>This is the contents of the second tab.</p>\n          </div>\n        </ngs-side-panel-tab>\n        <ngs-side-panel-tab tabId=\"svg\" label=\"Custom\" [icon]=\"customIconTpl\">\n          <div class=\"p-5\">\n            <p>Tab with custom SVG icon.</p>\n          </div>\n        </ngs-side-panel-tab>\n      </ngs-side-panel>\n    </ngs-layout-aside>\n  </ngs-layout>\n</div>\n<ng-template #customIconTpl>\n  OP\n</ng-template>",
+      "minimalExample": "<div class=\"h-[700px] border border-border rounded-2xl overflow-hidden\">\n  <ngs-layout>\n    <ngs-layout-header autoHeight>\n      <div class=\"h-14 px-5 flex items-center border-b border-b-muted\">Header</div>\n    </ngs-layout-header>\n    <ngs-layout-content>\n      <div class=\"absolute inset-y-5 start-5 end-0 p-5 border border-border rounded-2xl\"\n           [class.end-5]=\"sidePanel.isOpen()\">\n        Body content\n      </div>\n    </ngs-layout-content>\n    <ngs-layout-aside>\n      <ngs-side-panel #sidePanel class=\"overridable-side-panel\">\n        <ngs-side-panel-tab tabId=\"info\" label=\"Info\" icon=\"fluent:info-24-regular\">\n          <div class=\"p-5 border border-border rounded-2xl\">\n            <p>This is the contents of the first tab.</p>\n          </div>\n        </ngs-side-panel-tab>\n        <ngs-side-panel-tab tabId=\"list\" label=\"List\" icon=\"fluent:text-bullet-list-ltr-24-regular\">\n          <div class=\"p-5\">\n            <p>This is the contents of the second tab.</p>\n          </div>\n        </ngs-side-panel-tab>\n        <ngs-side-panel-tab tabId=\"svg\" label=\"Custom\" [icon]=\"customIconTpl\">\n          <div class=\"p-5\">\n            <p>Tab with custom SVG icon.</p>\n          </div>\n        </ngs-side-panel-tab>\n      </ngs-side-panel>\n    </ngs-layout-aside>\n  </ngs-layout>\n</div>\n<ng-template #customIconTpl>\n  OP\n</ng-template>",
       "exampleFiles": [
         {
           "name": "basic-side-panel-example",
           "title": "Basic side panel",
           "file": "projects/docs/src/app/navigation/side-panel/_examples/basic-side-panel-example/basic-side-panel-example.html",
-          "source": "<div class=\"h-[700px] border border-border rounded-2xl overflow-hidden\">\n  <ngs-layout>\n    <ngs-layout-header>\n      <div class=\"h-14 px-5 flex items-center border-b border-b-muted\">Header</div>\n    </ngs-layout-header>\n    <ngs-layout-content>\n      <div class=\"absolute inset-y-5 start-5 end-0 p-5 border border-border rounded-2xl\"\n           [class.end-5]=\"sidePanel.isOpen()\">\n        Body content\n      </div>\n    </ngs-layout-content>\n    <ngs-layout-aside>\n      <ngs-side-panel #sidePanel class=\"overridable-side-panel\">\n        <ngs-side-panel-tab tabId=\"info\" label=\"Info\" icon=\"fluent:info-24-regular\">\n          <div class=\"p-5 border border-border rounded-2xl\">\n            <p>This is the contents of the first tab.</p>\n          </div>\n        </ngs-side-panel-tab>\n        <ngs-side-panel-tab tabId=\"list\" label=\"List\" icon=\"fluent:text-bullet-list-ltr-24-regular\">\n          <div class=\"p-5\">\n            <p>This is the contents of the second tab.</p>\n          </div>\n        </ngs-side-panel-tab>\n        <ngs-side-panel-tab tabId=\"svg\" label=\"Custom\" [icon]=\"customIconTpl\">\n          <div class=\"p-5\">\n            <p>Tab with custom SVG icon.</p>\n          </div>\n        </ngs-side-panel-tab>\n      </ngs-side-panel>\n    </ngs-layout-aside>\n  </ngs-layout>\n</div>\n<ng-template #customIconTpl>\n  OP\n</ng-template>"
+          "source": "<div class=\"h-[700px] border border-border rounded-2xl overflow-hidden\">\n  <ngs-layout>\n    <ngs-layout-header autoHeight>\n      <div class=\"h-14 px-5 flex items-center border-b border-b-muted\">Header</div>\n    </ngs-layout-header>\n    <ngs-layout-content>\n      <div class=\"absolute inset-y-5 start-5 end-0 p-5 border border-border rounded-2xl\"\n           [class.end-5]=\"sidePanel.isOpen()\">\n        Body content\n      </div>\n    </ngs-layout-content>\n    <ngs-layout-aside>\n      <ngs-side-panel #sidePanel class=\"overridable-side-panel\">\n        <ngs-side-panel-tab tabId=\"info\" label=\"Info\" icon=\"fluent:info-24-regular\">\n          <div class=\"p-5 border border-border rounded-2xl\">\n            <p>This is the contents of the first tab.</p>\n          </div>\n        </ngs-side-panel-tab>\n        <ngs-side-panel-tab tabId=\"list\" label=\"List\" icon=\"fluent:text-bullet-list-ltr-24-regular\">\n          <div class=\"p-5\">\n            <p>This is the contents of the second tab.</p>\n          </div>\n        </ngs-side-panel-tab>\n        <ngs-side-panel-tab tabId=\"svg\" label=\"Custom\" [icon]=\"customIconTpl\">\n          <div class=\"p-5\">\n            <p>Tab with custom SVG icon.</p>\n          </div>\n        </ngs-side-panel-tab>\n      </ngs-side-panel>\n    </ngs-layout-aside>\n  </ngs-layout>\n</div>\n<ng-template #customIconTpl>\n  OP\n</ng-template>"
         }
       ],
       "previewAsset": "projects/components/side-panel/preview.svg",
@@ -9011,7 +8939,7 @@
       "docsPath": "/navigation/sidebar",
       "docsOverviewSource": "projects/docs/src/app/navigation/sidebar/overview/overview.html",
       "purpose": "Provide a complete vertical app or workspace sidebar with its own navigation system.",
-      "useWhen": "Use ngs-sidebar as the content inside a shell sidebar region, usually inside Sidenav or LayoutSidebar, when an admin app or workspace needs persistent sidebar navigation and supporting sidebar content. Compose it with ngs-sidebar-header, ngs-sidebar-body, ngs-sidebar-footer, ngs-sidebar-nav, ngs-sidebar-nav-item, ngs-sidebar-nav-group, ngs-sidebar-nav-group-toggle, ngs-sidebar-nav-group-menu, ngs-sidebar-heading, ngs-sidebar-divider, ngsSidebarNavItemIcon, ngsSidebarNavItemBadge, and ngsSidebarNavGroupToggleIcon. Good for brand or workspace header, main app navigation, grouped routes, badges, active item state through activeKey, autoScrollToActiveItem, and data-driven nav templates. Sidebar owns navigation; when ngs-sidebar is not used and persistent navigation is needed, use Navigation. Do not use Sidebar as a generic left column, card, drawer content, inspector, page section, tabs, menu, or compact icon rail. Use Sidenav for responsive open, collapse, or overlay shell behavior, RailNav for compact icon navigation, SidePanel for secondary tabbed tools, Drawer for temporary overlay side content, and Panel or Card for content grouping.",
+      "useWhen": "Use ngs-sidebar as the content inside a shell sidebar region, usually inside Sidenav or LayoutSidebar, when an admin app or workspace needs persistent sidebar navigation and supporting sidebar content. Compose it with ngs-sidebar-header, ngs-sidebar-body, ngs-sidebar-footer, ngs-sidebar-nav, ngs-sidebar-nav-item, ngs-sidebar-nav-group, ngs-sidebar-nav-group-toggle, ngs-sidebar-nav-group-menu, ngs-sidebar-heading, ngs-sidebar-divider, ngsSidebarNavItemIcon, ngsSidebarNavItemBadge, and ngsSidebarNavGroupToggleIcon. Good for brand or workspace header, main app navigation, grouped routes, badges, active item state through activeKey, autoScrollToActiveItem, and data-driven nav templates. Sidebar owns navigation; when ngs-sidebar is not used and persistent navigation is needed, use Navigation. Do not use Sidebar as a generic left column, card, drawer content, inspector, page section, tabs, menu, or compact icon rail. Use Sidenav for responsive open, collapse, or overlay shell behavior, RailNav for compact icon navigation, SidePanel for secondary tabbed tools, Drawer for temporary overlay side content, and Layout or Card for content grouping.",
       "exampleTopics": [
         "Basic sidebar",
         "Sidebar structure helpers",
@@ -9253,7 +9181,7 @@
       "docsPath": "/components/sidenav",
       "docsOverviewSource": "projects/docs/src/app/components/sidenav/overview/overview.html",
       "purpose": "Provide a responsive shell container for side surfaces that can open, close, collapse, overlay, or push content.",
-      "useWhen": "Use ngs-sidenav-container with ngs-sidenav and ngs-sidenav-content when a page or app shell needs a side region with behavior: opened state, open/close/toggle methods, mode over/push/side, position start/end, collapsed icon-width state, disableClose, backdrop and backdropClick, adaptive mobile mode through adaptive and adaptiveBreakpoint, fixedWidth, autosize, and autoFocus. Use ngsSidenavCollapsed and ngsSidenavExpanded templates to render different content while collapsed or expanded. In admin shells, put ngs-sidebar inside ngs-sidenav when the side region is primary navigation; Sidebar owns the actual navigation items. Do not use Sidenav as the navigation structure itself; use Sidebar or Navigation inside it. Do not use for temporary task panels; use Drawer. Do not use for persistent tabbed utility tools; use SidePanel. Do not use for static local columns or content sections; use LayoutSidebar, Panel, or Tailwind layout. Do not use for modal workflows, confirmations, or action menus; use Dialog, Confirm, or Menu.",
+      "useWhen": "Use ngs-sidenav-container with ngs-sidenav and ngs-sidenav-content when a page or app shell needs a side region with behavior: opened state, open/close/toggle methods, mode over/push/side, position start/end, collapsed icon-width state, disableClose, backdrop and backdropClick, adaptive mobile mode through adaptive and adaptiveBreakpoint, fixedWidth, autosize, and autoFocus. Use ngsSidenavCollapsed and ngsSidenavExpanded templates to render different content while collapsed or expanded. In admin shells, put ngs-sidebar inside ngs-sidenav when the side region is primary navigation; Sidebar owns the actual navigation items. Do not use Sidenav as the navigation structure itself; use Sidebar or Navigation inside it. Do not use for temporary task panels; use Drawer. Do not use for persistent tabbed utility tools; use SidePanel. Do not use for static local columns or content sections; use LayoutSidebar, Layout, or Tailwind layout. Do not use for modal workflows, confirmations, or action menus; use Dialog, Confirm, or Menu.",
       "exampleTopics": [
         "Basic sidenav"
       ],
@@ -9853,7 +9781,7 @@
       "docsPath": "/components/split-pane",
       "docsOverviewSource": "projects/docs/src/app/components/split-pane/overview/overview.html",
       "purpose": "Create a resizable multi-pane layout with draggable gutters between panes.",
-      "useWhen": "Use ngs-split with multiple ngs-split-pane regions when a workspace needs two or more panes that users can manually resize. Good for editors, IDE-like screens, analytics workspaces, master-detail-detail layouts, source and preview views, inspector plus canvas plus logs, and dense multi-pane tools. Supports horizontal or vertical direction, nested splits, unit percent or pixel, size, minSize, maxSize, lockSize, visible, order, withHandle dotted gutter affordance, restrictMove, disabled, gutterSize, gutterStep, dragStart, dragEnd, gutterClick, gutterDblClick, transitionEnd, getVisibleAreaSizes(), and setVisibleAreaSizes() for persistence. Do not use Split for ordinary responsive layout or static two-column admin pages; use TailwindCSS grid or flex. Do not use for one manually resized box; use ResizableContainer. Do not use for side navigation shells; use Sidenav or Sidebar. Do not use for temporary side overlays; use Drawer. Do not use for local structured page sections; use Panel. Do not use for table column resizing or image resizing; use table features or ImageResizer. The parent must have a stable height and width.",
+      "useWhen": "Use ngs-split with multiple ngs-split-pane regions when a workspace needs two or more panes that users can manually resize. Good for editors, IDE-like screens, analytics workspaces, master-detail-detail layouts, source and preview views, inspector plus canvas plus logs, and dense multi-pane tools. Supports horizontal or vertical direction, nested splits, unit percent or pixel, size, minSize, maxSize, lockSize, visible, order, withHandle dotted gutter affordance, restrictMove, disabled, gutterSize, gutterStep, dragStart, dragEnd, gutterClick, gutterDblClick, transitionEnd, getVisibleAreaSizes(), and setVisibleAreaSizes() for persistence. Do not use Split for ordinary responsive layout or static two-column admin pages; use TailwindCSS grid or flex. Do not use for one manually resized box; use ResizableContainer. Do not use for side navigation shells; use Sidenav or Sidebar. Do not use for temporary side overlays; use Drawer. Do not use for local structured page sections; use Layout. Do not use for table column resizing or image resizing; use table features or ImageResizer. The parent must have a stable height and width.",
       "exampleTopics": [
         "Basic Split Pane",
         "Split Pane with Handle",
@@ -10259,10 +10187,10 @@
       "docsPath": "/navigation/tab-panel",
       "docsOverviewSource": "projects/docs/src/app/navigation/tab-panel/overview/overview.html",
       "purpose": "Create a compact vertical tool or navigation panel with a linked aside content area.",
-      "useWhen": "Use ngs-tab-panel when a workspace or editor needs a vertical set of icon/text items that controls adjacent aside content. Use ngs-tab-panel-content with ngs-tab-panel-nav and ngs-tab-panel-item for the rail, bind items to content with matching for values and ngsTabPanelAsideContent ids inside ngs-tab-panel-aside, and use activeItemId to choose the active item. Good for image editors, design tools, asset panels, layers, inspectors, workspace switchers, tool palettes, and settings/tools inside dense work surfaces. Use compact for icon-only rails with tooltips, header/content/footer regions to group items, and ngs-tab-panel-custom-item for custom items such as avatars, workspaces, or add actions. Do not use TabPanel for ordinary horizontal page tabs; use Tabs. Do not use it for primary app navigation; use Sidebar, Navigation, Sidenav, or RailNav. Do not use it for temporary overlay side content; use Drawer. Do not use it for a structured page section; use Panel. Do not use it for workflow steps; use Stepper. Do not use it for contextual command lists; use Menu.",
+      "useWhen": "Use ngs-tab-panel when a workspace or editor needs a vertical set of icon/text items that controls adjacent aside content. Use ngs-tab-panel-content with ngs-tab-panel-nav and ngs-tab-panel-item for the rail, bind items to content with matching for values and ngsTabPanelAsideContent ids inside ngs-tab-panel-aside, and use activeItemId to choose the active item. Good for image editors, design tools, asset panels, layers, inspectors, workspace switchers, tool palettes, and settings/tools inside dense work surfaces. Use compact for icon-only rails with tooltips, header/content/footer regions to group items, and ngs-tab-panel-custom-item for custom items such as avatars, workspaces, or add actions. Do not use TabPanel for ordinary horizontal page tabs; use Tabs. Do not use it for primary app navigation; use Sidebar, Navigation, Sidenav, or RailNav. Do not use it for temporary overlay side content; use Drawer. Do not use it for a structured page section; use Layout. Do not use it for workflow steps; use Stepper. Do not use it for contextual command lists; use Menu.",
       "exampleTopics": [
         "Basic tab panel",
-        "Tab panel with panel inside",
+        "Tab panel with a workspace layout inside",
         "Tab panel compact state",
         "Tab panel with panels inside",
         "Tab panel compact"
@@ -10285,7 +10213,7 @@
           "name": "tab-panel-with-panels-inside-example",
           "title": "Tab panel with panels inside",
           "file": "projects/docs/src/app/navigation/tab-panel/_examples/tab-panel-with-panels-inside-example/tab-panel-with-panels-inside-example.html",
-          "source": "<div class=\"flex gap-10\">\n  <ngs-tab-panel activeItemId=\"home\" class=\"h-[500px]\">\n    <ngs-tab-panel-content>\n      <ngs-tab-panel-nav>\n        <ngs-tab-panel-item for=\"home\">\n          <ngs-icon name=\"fluent:home-24-regular\" ngsTabPanelItemIcon/>\n          <ngs-tab-panel-item-text>Home</ngs-tab-panel-item-text>\n        </ngs-tab-panel-item>\n        <ngs-tab-panel-item for=\"code\">\n          <ngs-icon name=\"fluent:code-24-regular\" ngsTabPanelItemIcon/>\n          <ngs-tab-panel-item-text>Code</ngs-tab-panel-item-text>\n        </ngs-tab-panel-item>\n      </ngs-tab-panel-nav>\n    </ngs-tab-panel-content>\n    <ngs-tab-panel-aside class=\"bg-surface-container-low rounded-xl\">\n      <ng-template ngsTabPanelAsideContent=\"home\">\n        <ngs-panel>\n          <ngs-panel-header class=\"border-b border-b-border flex items-center px-4\">Home Header</ngs-panel-header>\n          <ngs-panel-content class=\"p-4\">\n            <div class=\"h-[1000px]\">Home Content</div>\n          </ngs-panel-content>\n          <ngs-panel-footer class=\"border-t border-t-border flex items-center px-4\">Footer</ngs-panel-footer>\n        </ngs-panel>\n      </ng-template>\n      <ng-template ngsTabPanelAsideContent=\"code\">\n        <ngs-panel>\n          <ngs-panel-header class=\"border-b border-b-border flex items-center px-4\">Code Header</ngs-panel-header>\n          <ngs-panel-content class=\"p-4\">\n            <div class=\"h-[1000px]\">Code Content</div>\n          </ngs-panel-content>\n          <ngs-panel-footer class=\"border-t border-t-border flex items-center px-4\">Footer</ngs-panel-footer>\n        </ngs-panel>\n      </ng-\n..."
+          "source": "<div class=\"flex gap-10\">\n  <ngs-tab-panel activeItemId=\"home\" class=\"h-[500px]\">\n    <ngs-tab-panel-content>\n      <ngs-tab-panel-nav>\n        <ngs-tab-panel-item for=\"home\">\n          <ngs-icon name=\"fluent:home-24-regular\" ngsTabPanelItemIcon/>\n          <ngs-tab-panel-item-text>Home</ngs-tab-panel-item-text>\n        </ngs-tab-panel-item>\n        <ngs-tab-panel-item for=\"code\">\n          <ngs-icon name=\"fluent:code-24-regular\" ngsTabPanelItemIcon/>\n          <ngs-tab-panel-item-text>Code</ngs-tab-panel-item-text>\n        </ngs-tab-panel-item>\n      </ngs-tab-panel-nav>\n    </ngs-tab-panel-content>\n    <ngs-tab-panel-aside class=\"bg-surface-container-low rounded-xl\">\n      <ng-template ngsTabPanelAsideContent=\"home\">\n        <ngs-layout>\n          <ngs-layout-header class=\"border-b border-b-border flex items-center px-4\">Home Header</ngs-layout-header>\n          <ngs-layout-content class=\"p-4\">\n            <div class=\"h-[1000px]\">Home Content</div>\n          </ngs-layout-content>\n          <ngs-layout-footer class=\"border-t border-t-border flex items-center px-4\">Footer</ngs-layout-footer>\n        </ngs-layout>\n      </ng-template>\n      <ng-template ngsTabPanelAsideContent=\"code\">\n        <ngs-layout>\n          <ngs-layout-header class=\"border-b border-b-border flex items-center px-4\">Code Header</ngs-layout-header>\n          <ngs-layout-content class=\"p-4\">\n            <div class=\"h-[1000px]\">Code Content</div>\n          </ngs-layout-content>\n          <ngs-layout-footer class=\"border-t border-t-border flex items-center px-4\">Footer</ngs-layout-footer>\n        </ngs-lay\n..."
         }
       ],
       "previewAsset": "projects/components/tab-panel/preview.svg",

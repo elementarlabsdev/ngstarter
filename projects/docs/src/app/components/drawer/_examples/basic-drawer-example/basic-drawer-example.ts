@@ -2,21 +2,21 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '@ngstarter-ui/components/button';
 import { Drawer } from '@ngstarter-ui/components/drawer';
 import {
-  PanelContent,
-  Panel,
-  PanelFooter,
-  PanelHeader
-} from '@ngstarter-ui/components/panel';
+  LayoutContent,
+  Layout,
+  LayoutFooter,
+  LayoutHeader
+} from '@ngstarter-ui/components/layout';
 
 @Component({
   selector: 'app-basic-drawer-example',
   imports: [
     Button,
     Drawer,
-    Panel,
-    PanelHeader,
-    PanelContent,
-    PanelFooter
+    Layout,
+    LayoutHeader,
+    LayoutContent,
+    LayoutFooter
   ],
   templateUrl: './basic-drawer-example.html',
   changeDetection: ChangeDetectionStrategy.Eager,

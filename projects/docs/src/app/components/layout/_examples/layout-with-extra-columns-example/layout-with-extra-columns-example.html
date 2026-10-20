@@ -1,0 +1,20 @@
+<div class="h-[500px]">
+  <ngs-layout class="border border-border">
+    <ngs-layout-header class="bg-surface-container flex items-center px-6">Header</ngs-layout-header>
+    <ngs-layout-subheader flex class="px-6 border-b border-border">Filters and secondary actions</ngs-layout-subheader>
+    <ngs-layout-sidebar class="border-r border-e-muted w-[200px]">
+      <ngs-scrollbar-area absolute>
+        <div class="p-6 h-[1000px]" [class.w-[400px]]="wideSidebar()" (click)="wideSidebar.set(!wideSidebar())">Sidebar</div>
+      </ngs-scrollbar-area>
+    </ngs-layout-sidebar>
+    <ngs-layout-content>
+      <ngs-scrollbar-area absolute>
+        <div class="p-6 h-[1000px] w-[1000px]">Body</div>
+      </ngs-scrollbar-area>
+    </ngs-layout-content>
+    <ngs-layout-aside class="border-s border-s-muted w-[120px]">
+      <div class="p-6">Aside</div>
+    </ngs-layout-aside>
+    <ngs-layout-footer class="bg-surface-container-low flex items-center px-6">Footer</ngs-layout-footer>
+  </ngs-layout>
+</div>

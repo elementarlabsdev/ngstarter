@@ -55,12 +55,12 @@ import {
   MenuTrigger,
 } from '@ngstarter-ui/components/menu';
 import {
-  Panel,
-  PanelAside,
-  PanelContent,
-  PanelHeader,
-  PanelSidebar,
-} from '@ngstarter-ui/components/panel';
+  Layout,
+  LayoutAside,
+  LayoutContent,
+  LayoutHeader,
+  LayoutSidebar,
+} from '@ngstarter-ui/components/layout';
 import { Popover, PopoverContent } from '@ngstarter-ui/components/popover';
 import { NumberInput } from '@ngstarter-ui/components/number-input';
 import {
@@ -439,11 +439,11 @@ interface PdfBuilderFieldResize {
     MenuHeading,
     MenuItem,
     MenuTrigger,
-    Panel,
-    PanelAside,
-    PanelContent,
-    PanelHeader,
-    PanelSidebar,
+    Layout,
+    LayoutAside,
+    LayoutContent,
+    LayoutHeader,
+    LayoutSidebar,
     Popover,
     PopoverContent,
     NumberInput,

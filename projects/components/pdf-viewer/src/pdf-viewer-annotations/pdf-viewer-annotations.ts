@@ -4,7 +4,7 @@ import { Button } from '@ngstarter-ui/components/button';
 import { FormField, IconButtonSuffix, IconPrefix } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Input as NgsInput } from '@ngstarter-ui/components/input';
-import { Panel, PanelContent, PanelHeader, PanelSubheader } from '@ngstarter-ui/components/panel';
+import { Layout, LayoutContent, LayoutHeader, LayoutSubheader } from '@ngstarter-ui/components/layout';
 import {
   Toolbar,
   ToolbarItem,
@@ -28,14 +28,14 @@ import type {
     IconPrefix,
     NgsInput,
     NgTemplateOutlet,
-    Panel,
-    PanelContent,
-    PanelHeader,
+    Layout,
+    LayoutContent,
+    LayoutHeader,
     Toolbar,
     ToolbarItem,
     ToolbarSpacer,
     ToolbarTitle,
-    PanelSubheader,
+    LayoutSubheader,
   ],
   templateUrl: './pdf-viewer-annotations.html',
   styleUrl: './pdf-viewer-annotations.scss',

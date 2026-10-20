@@ -2,21 +2,21 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Drawer } from '@ngstarter-ui/components/drawer';
 import { Button } from '@ngstarter-ui/components/button';
 import {
-  PanelContent,
-  Panel,
-  PanelFooter,
-  PanelHeader
-} from '@ngstarter-ui/components/panel';
+  LayoutContent,
+  Layout,
+  LayoutFooter,
+  LayoutHeader
+} from '@ngstarter-ui/components/layout';
 
 @Component({
   selector: 'app-drawer-without-backdrop-example',
   imports: [
     Drawer,
     Button,
-    PanelContent,
-    Panel,
-    PanelFooter,
-    PanelHeader
+    LayoutContent,
+    Layout,
+    LayoutFooter,
+    LayoutHeader
   ],
   templateUrl: './drawer-without-backdrop-example.html',
   changeDetection: ChangeDetectionStrategy.Eager,

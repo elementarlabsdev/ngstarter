@@ -53,9 +53,12 @@
 <h3 class="text-xl font-bold mt-8 mb-4">Other Components</h3>
 <p class="mb-4">The following components do not have any specific inputs or outputs:</p>
 <ul class="list-disc ps-6 flex flex-col gap-2">
-  <li><code>ngs-layout-header</code></li>
-  <li><code>ngs-layout-footer</code></li>
+
+
   <li><code>ngs-layout-aside</code></li>
   <li><code>ngs-layout-sidebar</code></li>
   <li><code>ngs-layout-topbar</code></li>
 </ul>
+
+<h3 class="text-xl font-semibold mt-8 mb-4">Header, subheader, and footer</h3>
+<p><code>ngs-layout-header</code> and <code>ngs-layout-subheader</code> accept boolean <code>flex</code> and <code>autoHeight</code> inputs. <code>ngs-layout-footer</code> accepts <code>block</code> and <code>autoHeight</code>. These inputs default to false. Heights default to 3.5rem and can be overridden through height utility classes or <code>--ngs-layout-header-height</code>, <code>--ngs-layout-subheader-height</code>, and <code>--ngs-layout-footer-height</code>. Set <code>autoHeight</code> to size the region to its content.</p>

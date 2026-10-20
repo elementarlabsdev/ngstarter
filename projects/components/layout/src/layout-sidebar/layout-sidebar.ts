@@ -8,7 +8,7 @@ import { LayoutSidebarStore } from '../layout.store';
   exportAs: 'ngsLayoutSidebar',
   templateUrl: './layout-sidebar.html',
   styleUrl: './layout-sidebar.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-layout-sidebar',
     '[class.is-hidden]': '!_isShown()'
@@ -16,13 +16,9 @@ import { LayoutSidebarStore } from '../layout.store';
 })
 export class LayoutSidebar {
   private _parent = inject<Layout>(LAYOUT);
-  private _layoutSidebarStore = inject<any>(LayoutSidebarStore);
+  private _layoutSidebarStore = inject(LayoutSidebarStore);
 
-  protected _isShown = computed<boolean>(() => {
-    if (this._parent.layoutId() in this._layoutSidebarStore) {
-      return this._layoutSidebarStore[this._parent.layoutId()]();
-    }
-
-    return true;
-  });
+  protected _isShown = computed(() =>
+    this._layoutSidebarStore.isSidebarShown(this._parent.layoutId())
+  );
 }

@@ -8,11 +8,11 @@ import {
   TabPanelItemText, TabPanelNav
 } from '@ngstarter-ui/components/tab-panel';
 import {
-  PanelContent,
-  Panel,
-  PanelFooter,
-  PanelHeader
-} from '@ngstarter-ui/components/panel';
+  LayoutContent,
+  Layout,
+  LayoutFooter,
+  LayoutHeader
+} from '@ngstarter-ui/components/layout';
 
 @Component({
   selector: 'app-tab-panel-with-panels-inside-example',
@@ -22,10 +22,10 @@ import {
     TabPanelItemText,
     TabPanelItem,
     TabPanelAsideContentDirective,
-    PanelHeader,
-    PanelContent,
-    PanelFooter,
-    Panel,
+    LayoutHeader,
+    LayoutContent,
+    LayoutFooter,
+    Layout,
     TabPanelAside,
     TabPanelNav,
     TabPanelContent,

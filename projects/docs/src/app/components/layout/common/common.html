@@ -3,21 +3,21 @@
   <div appPageContent>
     <main class="mb-10">
       <p>
-        Layout is the base top-level shell for an application, admin area, dashboard, or large workspace page.
-        It defines the main screen regions: topbar, header, sidebar, content, aside, and footer.
+        Layout structures both full viewport application shells and local workspaces such as editors, settings, and detail pages.
+        It defines the main screen regions: topbar, header, subheader, sidebar, content, aside, and footer.
       </p>
       <p class="mt-3">
-        Use it when the whole screen needs a stable structural frame with managed height, nested layouts, scrollable content,
+        Use root for the application shell and non-root layouts for local workspaces with managed height, nested layouts, scrollable content,
         and an optional sidebar that can be shown, hidden, or toggled through LayoutApiService.
       </p>
       <div class="my-7">
         <div>Key Features:</div>
         <ul class="list-disc ps-4 flex flex-col gap-3 mt-3">
           <li>
-            Semantic regions for topbar, header, sidebar, content, aside, and footer.
+            Semantic regions for topbar, header, subheader, sidebar, content, aside, and footer.
           </li>
           <li>
-            A root mode for full viewport application shells.
+            Root mode for full viewport shells and absolute mode to fill a positioned parent.
           </li>
           <li>
             Nested layouts for complex admin and workspace screens.

@@ -245,8 +245,8 @@
   }
 </ng-template>
 
-<ngs-panel class="ngs-form-builder-shell">
-  <ngs-panel-header autoHeight class="border-b border-border px-5 py-3">
+<ngs-layout class="ngs-form-builder-shell">
+  <ngs-layout-header autoHeight class="border-b border-border px-5 py-3">
     <ngs-toolbar>
       <div class="min-w-0">
         <ngs-toolbar-subtitle>Form builder</ngs-toolbar-subtitle>
@@ -269,9 +269,9 @@
         </button>
       </ngs-toolbar-item>
     </ngs-toolbar>
-  </ngs-panel-header>
+  </ngs-layout-header>
 
-  <ngs-panel-sidebar class="ngs-form-builder-palette w-80 border-e border-border">
+  <ngs-layout-sidebar class="ngs-form-builder-palette w-80 border-e border-border">
     <ngs-tab-group
       animationDuration="0ms"
       [selectedIndex]="fieldsTabIndex()"
@@ -423,9 +423,9 @@
         </ngs-scrollbar-area>
       </ngs-tab>
     </ngs-tab-group>
-  </ngs-panel-sidebar>
+  </ngs-layout-sidebar>
 
-  <ngs-panel-content>
+  <ngs-layout-content>
     <ngs-scrollbar-area [absolute]="true">
       <div class="ngs-form-builder-canvas flex flex-col gap-5 p-6">
         @if (stepsMode()) {
@@ -505,11 +505,11 @@
         }
       </div>
     </ngs-scrollbar-area>
-  </ngs-panel-content>
+  </ngs-layout-content>
 
-  <ngs-panel-aside class="ngs-form-builder-inspector w-88 border-s border-border">
+  <ngs-layout-aside class="ngs-form-builder-inspector w-88 border-s border-border">
     @if (selectedField() || selectedSection() || selectedStep()) {
-      <ngs-panel-header class="ps-5 pe-2 border-b border-border">
+      <ngs-layout-header class="ps-5 pe-2 border-b border-border">
         <ngs-toolbar>
           <ngs-toolbar-title class="truncate">
             {{ inspectorTitle() }}
@@ -524,10 +524,10 @@
             </button>
           </ngs-toolbar-item>
         </ngs-toolbar>
-      </ngs-panel-header>
+      </ngs-layout-header>
     }
 
-    <ngs-panel-content>
+    <ngs-layout-content>
       @if (selectedField() || selectedSection() || selectedStep()) {
         <ngs-tab-group animationDuration="0ms" class="ngs-form-builder-inspector-tabs">
           <ngs-tab label="Settings">
@@ -658,9 +658,9 @@
           </ngs-empty-state-content>
         </ngs-empty-state>
       }
-    </ngs-panel-content>
-  </ngs-panel-aside>
-</ngs-panel>
+    </ngs-layout-content>
+  </ngs-layout-aside>
+</ngs-layout>
 
 <ng-template #previewDialog>
   <h3 ngs-dialog-title>{{ schema().title || 'Form preview' }}</h3>

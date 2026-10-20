@@ -4,7 +4,7 @@ import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 import { Button } from '@ngstarter-ui/components/button';
 import { Drawer } from '@ngstarter-ui/components/drawer';
 import { Navigation, NavigationItem, NavigationItemIconDirective } from '@ngstarter-ui/components/navigation';
-import { Panel, PanelContent, PanelHeader, PanelSidebar } from '@ngstarter-ui/components/panel';
+import { Layout, LayoutContent, LayoutHeader, LayoutSidebar } from '@ngstarter-ui/components/layout';
 import { ScrollbarArea, ScrollContainerFixed } from '@ngstarter-ui/components/scrollbar-area';
 
 type PlaygroundSourceTab = 'html' | 'ts' | 'scss';
@@ -25,10 +25,10 @@ type PlaygroundSourceFile = {
     Drawer,
     Navigation,
     NavigationItem,
-    Panel,
-    PanelContent,
-    PanelHeader,
-    PanelSidebar,
+    Layout,
+    LayoutContent,
+    LayoutHeader,
+    LayoutSidebar,
     ScrollbarArea,
   ],
   encapsulation: ViewEncapsulation.None,

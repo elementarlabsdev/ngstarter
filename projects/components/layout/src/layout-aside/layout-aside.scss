@@ -1,8 +1,12 @@
 @reference 'tailwindcss';
 
 :host {
+  grid-area: aside;
+  min-width: 0;
+  min-height: 0;
   display: block;
-  height: 100%;
+  overflow: hidden;
+  position: relative;
   flex: none;
   width: var(--ngs-layout-aside-width);
 }

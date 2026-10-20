@@ -16,7 +16,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SCROLL_SPY_NAV } from '../types';
 import { ScrollSpyOn } from '../scroll-spy-on/scroll-spy-on';
 import { LAYOUT_CONTENT } from '@ngstarter-ui/components/layout';
-import { PANEL_CONTENT } from '@ngstarter-ui/components/panel';
 
 @Component({
   selector: 'ngs-scroll-spy-nav,[ngs-scroll-spy-nav]',
@@ -40,7 +39,6 @@ export class ScrollSpyNav implements AfterContentInit {
   private platformId = inject(PLATFORM_ID);
   private zone = inject(NgZone);
   private destroyRef = inject(DestroyRef);
-  private panelBody = inject(PANEL_CONTENT, { optional: true });
   private layoutBody = inject(LAYOUT_CONTENT, { optional: true });
 
   readonly _items = contentChildren(ScrollSpyOn);
@@ -138,11 +136,6 @@ export class ScrollSpyNav implements AfterContentInit {
   }
 
   private _getScrollContainer(): HTMLElement {
-    if (this.panelBody) {
-      this.isDocumentScrollContainer = false;
-      return this.panelBody.scrollContainer();
-    }
-
     if (this.layoutBody) {
       this.isDocumentScrollContainer = false;
       return this.layoutBody.scrollContainer();

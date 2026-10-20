@@ -5,7 +5,7 @@
 <p class="mb-8 text-base leading-7 text-neutral-600">
   Building a full admin shell? Read the
   <a href="https://ngstarter.com/blog/basic-application-layout">Angular Admin Layout tutorial</a>
-  to see how Layout works together with Sidenav, Sidebar, Panel, and ScrollbarArea.
+  to see how root and workspace layouts work together with Sidenav, Sidebar, and ScrollbarArea.
 </p>
 
 <h3>Layout header</h3>
@@ -70,4 +70,15 @@
 </p>
 <ngs-playground exampleUrl="_docs/components/layout/_examples" exampleName="layout-with-nested-layouts-example">
   <app-layout-with-nested-layouts-example/>
+</ngs-playground>
+
+<h3>Local workspace</h3>
+<p>Use a non-root Layout for editors, detail pages, settings, and local workspaces. Add absolute to fill a positioned parent.</p>
+<ngs-playground exampleUrl="_docs/components/layout/_examples" exampleName="layout-workspace-example">
+  <app-layout-workspace-example />
+</ngs-playground>
+<h3>Workspace with sidebar, subheader, and aside</h3>
+<p>The subheader holds filters or secondary actions. Sidebar and aside flank the scrolling content while the header and footer span the workspace.</p>
+<ngs-playground exampleUrl="_docs/components/layout/_examples" exampleName="layout-with-extra-columns-example">
+  <app-layout-with-extra-columns-example />
 </ngs-playground>

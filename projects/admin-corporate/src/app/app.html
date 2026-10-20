@@ -91,8 +91,8 @@
         </ngs-sidenav>
 
         <ngs-sidenav-content>
-          <ngs-panel class="workspace-panel">
-            <ngs-panel-header autoHeight class="topbar">
+          <ngs-layout class="workspace-panel">
+            <ngs-layout-header autoHeight class="topbar">
               <ngs-toolbar>
                 <ngs-breadcrumbs-global class="topbar-breadcrumbs" />
                 <ngs-toolbar-spacer />
@@ -159,9 +159,9 @@
                   </ngs-menu>
                 </div>
               </ngs-toolbar>
-            </ngs-panel-header>
+            </ngs-layout-header>
 
-            <ngs-panel-content>
+            <ngs-layout-content>
               <ngs-scrollbar-area [absolute]="true" scrollbarWidth="6px" class="corporate-scrollbar">
               <section class="dashboard">
                 <ngs-toolbar class="dashboard-heading">
@@ -196,8 +196,8 @@
                 <ngs-icon name="fluent:chat-24-filled" />
               </button>
             </ngs-scrollbar-area>
-          </ngs-panel-content>
-        </ngs-panel>
+          </ngs-layout-content>
+        </ngs-layout>
         </ngs-sidenav-content>
       </ngs-sidenav-container>
     </div>

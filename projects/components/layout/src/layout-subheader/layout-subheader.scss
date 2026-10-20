@@ -1,16 +1,19 @@
 @reference 'tailwindcss';
 
 :host {
-  --ngs-panel-header-height: --spacing(14);
-
+  grid-area: subheader;
+  min-width: 0;
   flex: none;
-  grid-area: header;
   width: 100%;
-  display: flex;
+  display: block;
   align-items: center;
 
   &:not([class*="h-"]):not(.is-auto-height) {
-    height: var(--ngs-panel-header-height);
+    height: var(--ngs-layout-subheader-height, --spacing(14));
+  }
+
+  &.as-flex {
+    display: flex;
   }
 
   &.as-block {

@@ -1,9 +1,9 @@
-<ngs-panel
+<ngs-layout
   class="pdf-builder-shell pdf-viewer-panel"
   [class.is-library-collapsed]="libraryCollapsed()"
   [class.is-drag-cursor-active]="placementGhost() || fieldDrag()"
 >
-  <ngs-panel-header class="pdf-builder-header min-w-0 border-b border-border bg-surface" flex>
+  <ngs-layout-header class="pdf-builder-header min-w-0 border-b border-border bg-surface" flex>
     <ngs-toolbar class="pdf-viewer-toolbar flex h-14 w-full min-w-0 items-center gap-4 overflow-visible px-2 text-on-surface-variant" aria-label="PDF builder controls">
       <ngs-toolbar-item class="pdf-viewer-toolbar__start flex min-w-0 flex-none items-center gap-2 pl-4" aria-label="PDF builder document actions">
         <button
@@ -182,10 +182,10 @@
         <span>Fullscreen</span>
       </button>
     </ngs-menu>
-  </ngs-panel-header>
+  </ngs-layout-header>
 
   @if (pageStripVisible()) {
-    <ngs-panel-sidebar class="builder-pages w-[var(--ngs-pdf-viewer-sidebar-width)] min-w-[var(--ngs-pdf-viewer-sidebar-width)] border-r border-border bg-surface">
+    <ngs-layout-sidebar class="builder-pages w-[var(--ngs-pdf-viewer-sidebar-width)] min-w-[var(--ngs-pdf-viewer-sidebar-width)] border-r border-border bg-surface">
       <div class="pdf-viewer-sidebar flex h-full min-h-0 flex-col gap-2 overflow-auto p-3" aria-label="PDF pages">
         <div class="pdf-viewer-sidebar__title px-1 text-xs font-semibold text-on-surface-variant">Pages</div>
         <div class="pdf-viewer-sidebar__pages flex min-h-0 flex-col gap-2">
@@ -223,10 +223,10 @@
           }
         </div>
       </div>
-    </ngs-panel-sidebar>
+    </ngs-layout-sidebar>
   }
 
-  <ngs-panel-sidebar class="builder-library w-[var(--ngs-pdf-builder-library-width)] min-w-[var(--ngs-pdf-builder-library-width)] border-r border-border bg-surface" aria-label="PDF builder fields and layers">
+  <ngs-layout-sidebar class="builder-library w-[var(--ngs-pdf-builder-library-width)] min-w-[var(--ngs-pdf-builder-library-width)] border-r border-border bg-surface" aria-label="PDF builder fields and layers">
     <ngs-tab-group animationDuration="0ms" class="builder-tabs" [preserveContent]="true" (selectedIndexChange)="onLibraryTabChange($event)">
       <ngs-tab label="Fields">
         <ngs-scrollbar-area>
@@ -337,9 +337,9 @@
         </ngs-scrollbar-area>
       </ngs-tab>
     </ngs-tab-group>
-  </ngs-panel-sidebar>
+  </ngs-layout-sidebar>
 
-  <ngs-panel-content class="builder-workspace min-h-0 min-w-0 overflow-hidden bg-surface-container-low">
+  <ngs-layout-content class="builder-workspace min-h-0 min-w-0 overflow-hidden bg-surface-container-low">
     <ngs-scrollbar-area [absolute]="true" class="viewer-scrollbar" (scrolled)="onViewerScroll()">
       <div
         class="viewer-stage"
@@ -556,9 +556,9 @@
         }
       </div>
     }
-  </ngs-panel-content>
+  </ngs-layout-content>
 
-  <ngs-panel-aside class="builder-viewer-aside w-[var(--ngs-pdf-viewer-aside-width)] min-w-[var(--ngs-pdf-viewer-aside-width)] border-l border-border bg-surface">
+  <ngs-layout-aside class="builder-viewer-aside w-[var(--ngs-pdf-viewer-aside-width)] min-w-[var(--ngs-pdf-viewer-aside-width)] border-l border-border bg-surface">
     @if (isSearchPanelVisible()) {
       <ngs-pdf-viewer-search
         [query]="activeSearchQuery()"
@@ -572,8 +572,8 @@
         (closed)="closeAsidePanel()"
         (pageSelected)="selectAnnotationPage($event)" />
     } @else if (fieldSettingsPanelVisible() && selectedField(); as field) {
-      <ngs-panel class="field-settings-panel" aria-label="Field settings" absolute>
-        <ngs-panel-header class="field-settings-header" flex>
+      <ngs-layout class="field-settings-panel" aria-label="Field settings" absolute>
+        <ngs-layout-header class="field-settings-header" flex>
           <button
             ngsIconButton
             type="button"
@@ -586,9 +586,9 @@
           <div class="min-w-0">
             <h3>{{ field.label }}</h3>
           </div>
-        </ngs-panel-header>
+        </ngs-layout-header>
 
-        <ngs-panel-content class="field-settings-body">
+        <ngs-layout-content class="field-settings-body">
           @if (field.type === 'text') {
             <div class="text-field-settings" aria-label="Text appearance">
               <ngs-form-field>
@@ -699,18 +699,18 @@
               Delete
             </button>
           </div>
-        </ngs-panel-content>
-      </ngs-panel>
+        </ngs-layout-content>
+      </ngs-layout>
     } @else {
       @if (recipientItems().length) {
-        <ngs-panel aria-label="Document recipients">
-          <ngs-panel-header class="border-b border-b-border px-5">
+        <ngs-layout aria-label="Document recipients">
+          <ngs-layout-header class="border-b border-b-border px-5">
             <div>
               <div class="font-bold">Add recipients</div>
               <div class="text-sm">Who are you sending this document to?</div>
             </div>
-          </ngs-panel-header>
-          <ngs-panel-content>
+          </ngs-layout-header>
+          <ngs-layout-content>
             <ngs-scrollbar-area>
               <div class="px-2">
                 <ngs-list role="list">
@@ -806,11 +806,11 @@
                 </ng-template>
               </ngs-popover>
             </ngs-scrollbar-area>
-          </ngs-panel-content>
-        </ngs-panel>
+          </ngs-layout-content>
+        </ngs-layout>
       }
     }
-  </ngs-panel-aside>
+  </ngs-layout-aside>
 
   <ngs-menu #variableBindingMenu="ngsMenu">
     <ngs-menu-heading>Binding</ngs-menu-heading>
@@ -821,4 +821,4 @@
     }
   </ngs-menu>
 
-</ngs-panel>
+</ngs-layout>

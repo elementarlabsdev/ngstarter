@@ -1,5 +1,4 @@
 import { Component, DOCUMENT, inject, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
-import { PANEL_CONTENT } from '@ngstarter-ui/components/panel';
 import { LAYOUT_CONTENT } from '@ngstarter-ui/components/layout';
 import { isPlatformServer } from '@angular/common';
 import { Icon } from '@ngstarter-ui/components/icon';
@@ -20,7 +19,6 @@ import { Icon } from '@ngstarter-ui/components/icon';
 export class ScrollSpyBackToTop {
   private platformId = inject(PLATFORM_ID);
   private document = inject(DOCUMENT);
-  private panelBody = inject(PANEL_CONTENT, { optional: true });
   private layoutBody = inject(LAYOUT_CONTENT, { optional: true });
 
   private scrollContainer: HTMLElement;
@@ -30,9 +28,7 @@ export class ScrollSpyBackToTop {
       return;
     }
 
-    if (this.panelBody) {
-      this.scrollContainer = this.panelBody.scrollContainer();
-    } else if (this.layoutBody) {
+    if (this.layoutBody) {
       this.scrollContainer = this.layoutBody.scrollContainer();
     } else {
       this.scrollContainer = (this.document.scrollingElement as HTMLElement | null) ??

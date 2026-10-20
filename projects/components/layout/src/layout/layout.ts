@@ -15,14 +15,16 @@ let nextId = 0;
       useExisting: Layout
     }
   ],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-layout',
-    '[class.is-root]': 'root()'
+    '[class.is-root]': 'root()',
+    '[class.is-absolute]': 'absolute()'
   }
 })
 export class Layout {
   layoutId = input<string>(`layout-${nextId++}`);
+  absolute = input(false, { transform: booleanAttribute });
   root = input(false, {
     transform: booleanAttribute
   });

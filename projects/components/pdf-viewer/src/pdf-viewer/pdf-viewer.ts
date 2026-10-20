@@ -33,12 +33,12 @@ import {
   MenuTrigger,
 } from '@ngstarter-ui/components/menu';
 import {
-  Panel,
-  PanelAside,
-  PanelContent,
-  PanelHeader,
-  PanelSidebar,
-} from '@ngstarter-ui/components/panel';
+  Layout,
+  LayoutAside,
+  LayoutContent,
+  LayoutHeader,
+  LayoutSidebar,
+} from '@ngstarter-ui/components/layout';
 import {
   Toolbar,
   ToolbarItem,
@@ -124,11 +124,11 @@ interface PdfViewerZoomAnchor {
     MenuHeading,
     MenuItem,
     MenuTrigger,
-    Panel,
-    PanelAside,
-    PanelContent,
-    PanelHeader,
-    PanelSidebar,
+    Layout,
+    LayoutAside,
+    LayoutContent,
+    LayoutHeader,
+    LayoutSidebar,
     Toolbar,
     ToolbarItem,
     ToolbarSpacer,

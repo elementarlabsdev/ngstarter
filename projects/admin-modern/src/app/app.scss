@@ -110,23 +110,23 @@ ngs-sidebar-nav-group-toggle.is-active ngs-icon {
   color: var(--modern-ink);
 }
 
-ngs-panel.workspace-panel {
+ngs-layout.workspace-panel {
   height: 100%;
   border-radius: 0;
 }
 
-ngs-panel-header.workspace-header {
+ngs-layout-header.workspace-header {
   display: block;
   padding: --spacing(6) --spacing(12) --spacing(6) --spacing(12);
   border: 0;
   transition: padding-left 200ms ease;
 }
 
-ngs-panel.workspace-panel.is-sidenav-closed ngs-panel-header.workspace-header {
+ngs-layout.workspace-panel.is-sidenav-closed ngs-layout-header.workspace-header {
   padding-left: --spacing(24);
 }
 
-ngs-panel-content {
+ngs-layout-content {
   position: relative;
   min-height: 0;
 }
@@ -265,11 +265,11 @@ ngs-form-field.search-field {
 }
 
 @media (max-width: 760px) {
-  ngs-panel-header.workspace-header {
+  ngs-layout-header.workspace-header {
     padding: --spacing(5) --spacing(5) --spacing(4) --spacing(18);
   }
 
-  ngs-panel.workspace-panel.is-sidenav-closed ngs-panel-header.workspace-header {
+  ngs-layout.workspace-panel.is-sidenav-closed ngs-layout-header.workspace-header {
     padding-left: --spacing(18);
   }
 

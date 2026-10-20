@@ -95,7 +95,6 @@ const COMPONENT_TITLES: Record<string, SeoTitleConfig> = {
     job: 'render notification feeds and activity updates',
   },
   paginator: { label: 'Paginator', detail: 'Page Navigation' },
-  panel: { label: 'Panel', detail: 'Workspace Layouts' },
   popover: { label: 'Popover', detail: 'Click & Hover Overlay' },
   'progress-bar': { label: 'Progress Bar', detail: 'Progress Feedback' },
   'progress-spinner': { label: 'Progress Spinner', detail: 'Loading States' },

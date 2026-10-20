@@ -1,7 +1,12 @@
 @reference 'tailwindcss';
 
 :host {
+  grid-area: sidebar;
+  min-width: 0;
+  min-height: 0;
   display: block;
+  overflow: hidden;
+  position: relative;
   z-index: 101;
 
   &:has(.ngs-sidebar.compact) {

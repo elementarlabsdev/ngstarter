@@ -18,6 +18,7 @@ const hardFailures = [];
 const migrationWarnings = [];
 
 const universalTemplateRules = [
+  ['removed Panel components', /<ngs-panel(?:[\s>]|-(?:header|subheader|content|footer|sidebar|aside)\b)/],
   ['inline style attributes', /\sstyle\s*=/],
   ['Angular style bindings', /\[style(?:\.[^\]]+)?\]=/],
   ['Angular attr style bindings', /\[attr\.style\]=/],
@@ -35,6 +36,7 @@ const universalTemplateRules = [
 ];
 
 const universalSourceRules = [
+  ['removed Panel entry point', /@ngstarter-ui\/components\/panel(?:['"/])/],
   ['inline template style bindings', /\[style(?:\.[^\]]+)?\]=/],
   ['inline template ngStyle bindings', /\[ngStyle\]=/],
   ['custom inline chip span classes', /<span\b[^>]*class=["'][^"']*(?:chip|pill)[^"']*["']/],
@@ -46,9 +48,9 @@ const strictRequiredTemplateRules = [
   ['shell uses SidenavContainer', /<ngs-sidenav-container\b/],
   ['shell uses Sidenav', /<ngs-sidenav\b/],
   ['shell uses SidenavContent', /<ngs-sidenav-content\b/],
-  ['workspace uses Panel', /<ngs-panel\b/],
-  ['workspace header uses PanelHeader', /<ngs-panel-header\b/],
-  ['workspace body uses PanelContent', /<ngs-panel-content\b/],
+  ['workspace uses Layout', /<ngs-layout\b/],
+  ['workspace header uses LayoutHeader', /<ngs-layout-header\b/],
+  ['workspace body uses LayoutContent', /<ngs-layout-content\b/],
   ['scroll regions use ScrollbarArea', /<ngs-scrollbar-area\b/],
   ['primary rail uses Sidebar', /<ngs-sidebar\b/],
   ['primary rail uses SidebarNav', /<ngs-sidebar-nav\b/],
@@ -60,7 +62,6 @@ const strictRequiredTemplateRules = [
 const strictRequiredSourceRules = [
   ['Layout import', /from\s+['"]@ngstarter-ui\/components\/layout['"]/],
   ['Sidenav import', /from\s+['"]@ngstarter-ui\/components\/sidenav['"]/],
-  ['Panel import', /from\s+['"]@ngstarter-ui\/components\/panel['"]/],
   ['Sidebar import', /from\s+['"]@ngstarter-ui\/components\/sidebar['"]/],
   ['ScrollbarArea import', /from\s+['"]@ngstarter-ui\/components\/scrollbar-area['"]/],
   ['Button import', /from\s+['"]@ngstarter-ui\/components\/button['"]/],
@@ -93,48 +94,35 @@ function collectForbiddenHits(rules, content, prefix) {
 }
 
 function verifyLayoutChildren(appName, template, target) {
-  const layoutOpen = template.match(/<ngs-layout\b[^>]*>/);
-
-  if (!layoutOpen) {
-    return;
-  }
-
-  const start = layoutOpen.index + layoutOpen[0].length;
-  const end = template.indexOf('</ngs-layout>', start);
-  const body = end === -1 ? template.slice(start) : template.slice(start, end);
-  const withoutComments = body.replace(/<!--[\s\S]*?-->/g, '');
-  const tagPattern = /<\/?([a-zA-Z][\w-]*)([^>]*)>/g;
   const allowed = new Set([
     'ngs-layout-topbar',
     'ngs-layout-header',
+    'ngs-layout-subheader',
     'ngs-layout-sidebar',
     'ngs-layout-content',
     'ngs-layout-aside',
     'ngs-layout-footer',
   ]);
+  const voidTags = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr']);
+  const tags = template.replace(/<!--[\s\S]*?-->/g, '').matchAll(/<\/?([a-zA-Z][\w-]*)([^>]*)>/g);
+  const stack = [];
 
-  let depth = 0;
-
-  for (const match of withoutComments.matchAll(tagPattern)) {
+  for (const match of tags) {
     const fullTag = match[0];
     const tagName = match[1];
-    const isClosing = fullTag.startsWith('</');
-    const isSelfClosing = fullTag.endsWith('/>');
 
-    if (isClosing) {
-      depth = Math.max(0, depth - 1);
+    if (fullTag.startsWith('</')) {
+      const index = stack.lastIndexOf(tagName);
+      if (index !== -1) stack.length = index;
       continue;
     }
 
-    if (depth === 0 && !allowed.has(tagName)) {
-      target.push(
-        `${appName}: ngs-layout direct child must be a layout region, found <${tagName}>`,
-      );
-      break;
+    if (stack.at(-1) === 'ngs-layout' && !allowed.has(tagName)) {
+      target.push(`${appName}: ngs-layout direct child must be a layout region, found <${tagName}>`);
     }
 
-    if (!isSelfClosing) {
-      depth += 1;
+    if (!fullTag.endsWith('/>') && !voidTags.has(tagName)) {
+      stack.push(tagName);
     }
   }
 }
