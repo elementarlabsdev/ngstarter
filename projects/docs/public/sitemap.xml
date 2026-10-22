@@ -1146,6 +1146,11 @@
     <priority>0.60</priority>
   </url>
   <url>
+    <loc>https://docs.ngstarter.com/libraries/form-builder/external-renderer-flow</loc>
+    <lastmod>2026-10-22</lastmod>
+    <priority>0.55</priority>
+  </url>
+  <url>
     <loc>https://docs.ngstarter.com/libraries/form-builder/form-builder</loc>
     <lastmod>2026-06-18</lastmod>
     <priority>0.55</priority>

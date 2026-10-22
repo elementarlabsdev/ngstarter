@@ -3,8 +3,7 @@ import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router
 import { filter } from 'rxjs';
 import { PageLoadingBar } from '@ngstarter-ui/components/page-loading-bar';
 import {
-  AnalyticsService, EnvironmentService,
-  SeoService, SoundEffectDirective,
+  AnalyticsService, SoundEffectDirective,
 } from '@ngstarter-ui/components/core';
 import { AnnouncementGlobal } from '@ngstarter-ui/components/announcement';
 import { IncidentsContainer } from '@ngstarter-ui/components/incidents';
@@ -176,8 +175,6 @@ function sortDocsNavItems(items: readonly DocsNavItem[], preserveSections = fals
 })
 export class App implements OnInit {
   private _analyticsService = inject(AnalyticsService);
-  private _seoService = inject(SeoService);
-  private _envService = inject(EnvironmentService);
   private _router = inject(Router);
   private readonly docsNavigation = inject(DocsNavigationService);
 
@@ -1343,7 +1340,6 @@ export class App implements OnInit {
   }
 
   ngOnInit(): void {
-    this._seoService.trackCanonicalChanges(this._envService.getValue('siteUrl'));
     this._analyticsService.trackPageViews();
     this.navItems.forEach(navItem => {
       this.navItemLinks.push(navItem);

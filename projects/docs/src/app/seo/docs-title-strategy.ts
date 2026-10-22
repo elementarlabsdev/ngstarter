@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { DOCUMENT, inject, Injectable } from '@angular/core';
 import { RouterStateSnapshot, TitleStrategy } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { EnvironmentService } from '@ngstarter-ui/components/core';
@@ -192,6 +192,24 @@ const LIBRARY_TITLES: Record<string, SeoTitleConfig> = {
   'visual-builder': { label: 'Visual Builder', detail: 'Drag and Drop UI Building', apiKind: null },
 };
 
+const FORM_BUILDER_PAGE_TITLES: Record<string, SeoTitleConfig> = {
+  'form-builder': {
+    label: 'Form Builder',
+    detail: 'Visual Schema Editor',
+    job: 'compose form sections, fields, and workflow steps in a visual schema editor',
+  },
+  'form-renderer': {
+    label: 'Form Renderer',
+    detail: 'Render Saved Form Schemas',
+    job: 'render saved form schemas as Angular forms with validation and uploads',
+  },
+  'external-renderer-flow': {
+    label: 'Form Builder External Renderer Flow',
+    detail: 'Stepper Workflows from Saved Schemas',
+    job: 'render saved form schemas as multi-step workflows with an external stepper',
+  },
+};
+
 const DATA_VIEW_EXAMPLE_TITLES: Record<string, SeoTitleConfig> = {
   'basic-dataview': { label: 'Data View Basic', detail: 'Client-side Angular Data Grid' },
   'column-pinning': { label: 'Data View Column Pinning', detail: 'Pinned Columns for Wide Tables' },
@@ -231,16 +249,32 @@ const MICRO_CHART_TITLES: Record<string, SeoTitleConfig> = {
 export class DocsTitleStrategy extends TitleStrategy {
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
+  private readonly document = inject(DOCUMENT);
   private readonly environment = inject(EnvironmentService);
   private readonly detailSeparator = ' \u2013 ';
 
   override updateTitle(routerState: RouterStateSnapshot): void {
     const metadata = this.resolveMetadata(routerState);
+    const siteUrl = this.environment.getValue('siteUrl').replace(/\/+$/, '');
+    const path = routerState.url.split(/[?#]/)[0].replace(/\/+$/, '') || '/';
+    // Use the public origin, since SSR requests behind a proxy may use HTTP internally.
+    const canonicalUrl = `${siteUrl}${path}`;
+
+    let canonical = this.document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+
+    if (!canonical) {
+      canonical = this.document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      this.document.head.appendChild(canonical);
+    }
+
+    canonical.setAttribute('href', canonicalUrl);
 
     this.title.setTitle(metadata.title);
     this.meta.updateTag({ name: 'description', content: metadata.description });
     this.meta.updateTag({ property: 'og:title', content: metadata.title });
     this.meta.updateTag({ property: 'og:description', content: metadata.description });
+    this.meta.updateTag({ property: 'og:url', content: canonicalUrl });
     this.meta.updateTag({ name: 'twitter:title', content: metadata.title });
     this.meta.updateTag({ name: 'twitter:description', content: metadata.description });
   }
@@ -299,6 +333,10 @@ export class DocsTitleStrategy extends TitleStrategy {
 
       if (slug === 'data-view' && segments[2] && segments[2] !== 'api') {
         return this.catalogMetadata(segments[2], DATA_VIEW_EXAMPLE_TITLES, 'Example', false);
+      }
+
+      if (slug === 'form-builder' && segments[2] && FORM_BUILDER_PAGE_TITLES[segments[2]]) {
+        return this.catalogMetadata(segments[2], FORM_BUILDER_PAGE_TITLES, 'Example', false);
       }
 
       return this.catalogMetadata(slug, LIBRARY_TITLES, 'Library', isApi);
