@@ -21,6 +21,7 @@ import {
 } from 'rxjs';
 
 import { Tiles } from './tiles/tiles';
+import type { Tile } from './tile/tile';
 
 @Injectable()
 export class TileService implements OnDestroy {
@@ -32,8 +33,9 @@ export class TileService implements OnDestroy {
   private readonly resize$ = inject(ResizeObserverService).observe(this.el);
   private readonly mutations$ = inject(MutationObserverService).observe(this.el, {childList: true});
   private lastRect: DOMRect | null = null;
+  private lastOrder = new Map<Tile, number>();
 
-  private readonly position$: Observable<{offset: readonly [number, number], order: Map<any, number>}> = combineLatest([
+  private readonly position$: Observable<{offset: readonly [number, number], order: Map<Tile, number>}> = combineLatest([
     this.offset$.pipe(distinctUntilChanged(arrayShallowEquals)),
     this.resize$.pipe(startWith(null as any)),
     this.mutations$.pipe(startWith(null as any)),
@@ -47,7 +49,7 @@ export class TileService implements OnDestroy {
     if (this.isBrowser && element) {
       this.sub.add(
         this.position$.subscribe(({offset, order}) => {
-          this.animate(element);
+          this.animate(element, order);
           this.setPosition(element, offset);
           this.setRect(element, offset);
         }),
@@ -57,11 +59,16 @@ export class TileService implements OnDestroy {
     }
   }
 
-  private animate(element: HTMLElement): void {
+  private animate(element: HTMLElement, order: Map<Tile, number>): void {
     const isDragging = !Number.isNaN(this.offset$.value[0]);
     const currentRect = this.el.getBoundingClientRect();
+    // Initial placement and loading-related reflows are not tile reorders.
+    const reordered = [...order].some(([tile, index]) =>
+      this.lastOrder.has(tile) && this.lastOrder.get(tile) !== index,
+    );
+    this.lastOrder = order;
 
-    if (isDragging || (element.style.position === 'fixed' && !element.style.transition.includes('top'))) {
+    if (!reordered || isDragging || (element.style.position === 'fixed' && !element.style.transition.includes('top'))) {
       this.lastRect = currentRect;
       return;
     }
