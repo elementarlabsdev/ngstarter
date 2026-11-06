@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   contentChildren,
+  DestroyRef,
   effect,
   inject,
   input, numberAttribute,
@@ -9,8 +10,9 @@ import {
   signal,
 } from '@angular/core';
 import { injectElement, arrayShallowEquals } from '@ngstarter-ui/components/core';
-import { TILES_REORDER } from '../tiles.tokens';
+import { TILES_REORDER, tilesSwap } from '../tiles.tokens';
 import { Tile } from '../tile/tile';
+import { exchangeTileGroup, findTileGroup } from './tile-group';
 
 @Component({
   selector: 'ngs-tiles',
@@ -39,17 +41,15 @@ export class Tiles {
   readonly orderChanged = output<any[]>();
   readonly layoutChanged = output<any[]>();
 
-  private rearrangeTimer: any;
-  private lastSourceVisualIndex: number | null = null;
-  private lastTargetVisualIndex: number | null = null;
-  private lastSwapTime = 0;
-  private lastSwapX = 0;
-  private lastSwapY = 0;
+  private rearrangeTimer?: ReturnType<typeof setTimeout>;
+  private pendingTarget?: Tile;
+  private lastRearrange?: { x: number; y: number };
   private initialItems: any[] | null = null;
   private isInitialized = false;
   private isDragging = false;
 
   constructor() {
+    inject(DestroyRef).onDestroy(() => this.cancelPendingRearrange());
     effect(() => {
       const tiles = this.tiles();
       const currentOrder = this.order();
@@ -102,10 +102,7 @@ export class Tiles {
   }
 
   onDragEnd(tile: Tile): void {
-    if (this.rearrangeTimer) {
-      clearTimeout(this.rearrangeTimer);
-      this.rearrangeTimer = null;
-    }
+    this.cancelPendingRearrange();
 
     const currentItems = this.items();
     const currentOrder = this.order();
@@ -131,9 +128,7 @@ export class Tiles {
       }
     }
 
-    this.lastSourceVisualIndex = null;
-    this.lastTargetVisualIndex = null;
-    this.lastSwapTime = 0;
+    this.lastRearrange = undefined;
     this.initialItems = null;
     this.isDragging = false;
   }
@@ -168,10 +163,8 @@ export class Tiles {
       return;
     }
 
-    const isMovingForward = draggedVisualIndex < targetVisualIndex;
-    const areSameSize = draggedTile.width() === targetTile.width() && draggedTile.height() === targetTile.height();
     const columns = this.columns();
-    const isFullWidth = draggedTile.width() === columns || (draggedTile.width() === 1 && columns === 1);
+    const isFullWidth = draggedTile.width() === columns;
 
     // Get the actual floating element's position
     const draggedWrapper = (draggedTile as any).wrapper()?.nativeElement;
@@ -179,57 +172,51 @@ export class Tiles {
       return;
     }
     const floatingRect = draggedWrapper.getBoundingClientRect();
+    const sourceRect = draggedElement.getBoundingClientRect();
+    const hoveredRect = element.getBoundingClientRect();
+    const areSameSize = Math.abs(sourceRect.width - hoveredRect.width) < 1 &&
+      Math.abs(sourceRect.height - hoveredRect.height) < 1;
+    const canCoverGroup = !areSameSize && Math.abs(sourceRect.top - hoveredRect.top) >= 1 &&
+      hoveredRect.width <= sourceRect.width + 1 && hoveredRect.height <= sourceRect.height + 1;
+    const slots = canCoverGroup ? tiles.map(tile => ({ tile, rect: tile.element.getBoundingClientRect() })) : undefined;
+    const gridStyle = slots && getComputedStyle(this.el);
+    const group = slots && gridStyle && findTileGroup(slots, sourceRect, hoveredRect, floatingRect,
+      parseFloat(gridStyle.columnGap) || 0, parseFloat(gridStyle.rowGap) || 0);
 
-    // Check if the edge of the floating block has crossed the midpoint of the target tile
-    const targetRect = element.getBoundingClientRect();
-    const midX = targetRect.left + targetRect.width / 2;
-    const midY = targetRect.top + targetRect.height / 2;
-
-    const deltaX = Math.abs(targetRect.left - floatingRect.left);
-    const deltaY = Math.abs(targetRect.top - floatingRect.top);
-
-    let shouldRearrange = false;
-
-    if (isFullWidth && !isMovingForward) {
-      // Special logic for full-width tiles when moving up:
-      // if the top edge of the dragged tile has passed the bottom third of the target tile
-      if (floatingRect.top < targetRect.bottom - targetRect.height * 0.3) {
-        shouldRearrange = true;
-      }
-    } else if (isFullWidth && isMovingForward) {
-      // Special logic for full-width tiles when moving down:
-      // if the bottom edge of the dragged tile has passed the top third of the target tile
-      if (floatingRect.bottom > targetRect.top + targetRect.height * 0.3) {
-        shouldRearrange = true;
-      }
-    } else if (deltaX > deltaY) {
-      // Primarily horizontal movement
-      const edgeX = isMovingForward ? floatingRect.right : floatingRect.left;
-      const threshold = areSameSize ? (isMovingForward ? targetRect.left + targetRect.width * 0.2 : targetRect.right - targetRect.width * 0.2) : midX;
-      if (isMovingForward ? edgeX >= threshold : edgeX <= threshold) {
-        shouldRearrange = true;
-      }
-    } else {
-      // Primarily vertical movement
-      const edgeY = isMovingForward ? floatingRect.bottom : floatingRect.top;
-      const threshold = areSameSize ? (isMovingForward ? targetRect.top + targetRect.height * 0.2 : targetRect.bottom - targetRect.height * 0.2) : midY;
-      if (isMovingForward ? edgeY >= threshold : edgeY <= threshold) {
-        shouldRearrange = true;
-      }
-    }
-
-    if (!shouldRearrange) {
+    const targetRect = group?.rect ?? hoveredRect;
+    const vertical = Math.abs(sourceRect.top - targetRect.top) >= 1;
+    const forward = vertical ? sourceRect.top < targetRect.top : sourceRect.left < targetRect.left;
+    const start = vertical ? targetRect.top : targetRect.left;
+    const end = vertical ? targetRect.bottom : targetRect.right;
+    const fraction = isFullWidth ? 0.3 : group || areSameSize ? 0.2 : 0.5;
+    const edge = vertical
+      ? (forward ? floatingRect.bottom : floatingRect.top)
+      : (forward ? floatingRect.right : floatingRect.left);
+    const threshold = forward ? start + (end - start) * fraction : end - (end - start) * fraction;
+    if (forward ? edge < threshold : edge > threshold) {
+      this.cancelPendingRearrange();
       return;
     }
 
+    // After the layout changes, a different tile can move under the same pointer.
+    // Require the pointer to cross the new slot in the intended direction.
+    const last = this.lastRearrange;
+    if (last) {
+      const movement = vertical ? event.clientY - last.y : event.clientX - last.x;
+      if ((forward ? movement : -movement) < 10) {
+        this.cancelPendingRearrange();
+        return;
+      }
+    }
+
     // Adjustment for full-width tiles to displace the entire row
-    if (isFullWidth) {
+    if (isFullWidth && !group) {
       const targetTop = targetRect.top;
       let finalTargetVisualIndex = targetVisualIndex;
       tiles.forEach((t) => {
         const tIndex = order.get(t);
         if (tIndex !== undefined) {
-          if (isMovingForward ? tIndex > finalTargetVisualIndex : tIndex < finalTargetVisualIndex) {
+          if (forward ? tIndex > finalTargetVisualIndex : tIndex < finalTargetVisualIndex) {
             const r = t.element.getBoundingClientRect();
             if (Math.abs(r.top - targetTop) < 5) {
               finalTargetVisualIndex = tIndex;
@@ -246,58 +233,22 @@ export class Tiles {
       }
     }
 
-    // Recalculate size equality after potential adjustment
-    const areSameSizeNow = draggedTile.width() === targetTile.width() && draggedTile.height() === targetTile.height();
-
-    // Prevent bouncing: if we just swapped with this tile, don't swap back
-    // unless the pointer has moved significantly in the opposite direction.
-    const now = Date.now();
-    if (now - this.lastSwapTime < 500 && this.lastTargetVisualIndex === draggedVisualIndex && this.lastSourceVisualIndex === targetVisualIndex) {
-      const movementX = event.clientX - this.lastSwapX;
-      const movementY = event.clientY - this.lastSwapY;
-
-      // If we are moving in the same direction as the original swap, don't swap back
-      const wasMovingForward = (this.lastSourceVisualIndex ?? 0) < (this.lastTargetVisualIndex ?? 0);
-      if (deltaX > deltaY) {
-        if (wasMovingForward ? movementX > -10 : movementX < 10) {
-          return;
-        }
-      } else {
-        if (wasMovingForward ? movementY > -10 : movementY < 10) {
-          return;
-        }
-      }
-    }
-
-    // Skip if this is the exact same target we've already started to rearrange to
-    if (this.rearrangeTimer && this.lastTargetVisualIndex === targetVisualIndex) {
-      return;
-    }
-
-    if (this.rearrangeTimer) {
-      clearTimeout(this.rearrangeTimer);
-    }
-
-    this.lastSourceVisualIndex = draggedVisualIndex;
-    this.lastTargetVisualIndex = targetVisualIndex;
+    const pendingTarget = group?.anchor ?? targetTile;
+    if (this.pendingTarget === pendingTarget) return;
+    this.cancelPendingRearrange();
+    this.pendingTarget = pendingTarget;
+    const swap = (targetTile.element === element && areSameSize) ||
+      (isFullWidth && targetTile.width() === columns);
 
     this.rearrangeTimer = setTimeout(() => {
-      const orderAtTimeOfExecution = this.order();
-      let newOrder: Map<Tile, number>;
-
-      this.lastSwapTime = Date.now();
-      this.lastSwapX = event.clientX;
-      this.lastSwapY = event.clientY;
-
-      if (areSameSizeNow || (isFullWidth && targetTile.width() === 12)) {
-        // Use swap for tiles of the same size or full-width tiles swapping with other full-width tiles
-        newOrder = new Map(orderAtTimeOfExecution);
-        newOrder.set(draggedTile, targetVisualIndex);
-        newOrder.set(targetTile, draggedVisualIndex);
-      } else {
-        newOrder = this.reorder(orderAtTimeOfExecution, draggedVisualIndex, targetVisualIndex);
-      }
-
+      this.rearrangeTimer = undefined;
+      this.pendingTarget = undefined;
+      if (this.element() !== draggedElement || this.order() !== order) return;
+      const newOrder = group && slots
+        ? exchangeTileGroup(slots, draggedTile, sourceRect, group, gridStyle?.direction === 'rtl')
+        : (swap ? tilesSwap : this.reorder)(order, draggedVisualIndex, targetVisualIndex);
+      if (newOrder === order) return;
+      this.lastRearrange = { x: event.clientX, y: event.clientY };
       this.order.set(new Map(newOrder));
 
       const result = new Map<number, number>();
@@ -305,7 +256,12 @@ export class Tiles {
         result.set(index, newOrder.get(tile) ?? index);
       });
       this.orderChange.emit(result);
-      this.rearrangeTimer = null;
     }, 50);
+  }
+
+  private cancelPendingRearrange(): void {
+    clearTimeout(this.rearrangeTimer);
+    this.rearrangeTimer = undefined;
+    this.pendingTarget = undefined;
   }
 }

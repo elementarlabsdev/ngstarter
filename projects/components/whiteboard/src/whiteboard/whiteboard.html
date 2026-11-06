@@ -1,0 +1,238 @@
+<div #canvas class="canvas absolute inset-0" tabindex="0" role="region"
+     [attr.aria-label]="title() + '. ' + labels().canvasHelp"></div>
+
+@if (textEdit(); as element) {
+  @if (textEditorLayout(); as layout) {
+    <textarea #textEditor ngsInput class="text-editor" [attr.aria-label]="element.type === 'note' ? labels().noteText : labels().text"
+              [class.auto-height]="element.type === 'text'"
+              [attr.placeholder]="element.type === 'note' ? labels().notePlaceholder : null" [value]="textDraft()"
+              [style.transform]="textEditorTransform()" [style.width.px]="layout.width"
+              [style.height.px]="element.type === 'text' ? null : layout.height"
+              [style.padding.px]="layout.padding" [style.padding-top.px]="layout.paddingTop" [style.font-size.px]="element.fontSize"
+              [style.font-family]="typography().fontFamily" [style.line-height]="layout.lineHeight"
+              [style.text-align]="typography().textAlign" [style.color]="element.stroke" [style.opacity]="element.opacity"
+              (input)="textDraft.set(textEditor.value)" (blur)="finishTextEditing(textEditor.value)"
+              (keydown)="onTextKeydown($event, textEditor.value)"></textarea>
+  }
+}
+
+@if (showToolbar()) {
+  @let controls = propertyControls();
+  @let toolbarTooltipDelay = 1000;
+  <div class="pointer-events-none absolute inset-x-6 top-4 z-10 flex items-start justify-between gap-4">
+    <div class="flex min-w-0 items-center gap-2 @3xl/whiteboard:gap-4">
+      <button ngsIconButton type="button" class="board-mark pointer-events-auto shrink-0 rounded-2xl!" [attr.aria-label]="labels().properties"
+              [attr.aria-pressed]="!!controls && !readOnly() && showProperties()" [disabled]="!controls || readOnly()"
+              (click)="showProperties.set(!showProperties())">
+        <ngs-icon name="fluent:whiteboard-24-regular"/>
+      </button>
+      <div class="flex min-w-0 flex-col gap-1">
+        <span class="board-title truncate leading-6 font-bold">{{ title() }}</span>
+        @if (subtitle()) { <span class="board-subtitle truncate text-sm">{{ subtitle() }}</span> }
+      </div>
+    </div>
+    <div class="pointer-events-auto flex shrink-0 items-center gap-3 pt-1">
+      <button ngsButton="outlined" type="button" class="export-action" (click)="downloadPng()" [attr.aria-label]="labels().exportPng">
+        <ngs-icon name="fluent:arrow-export-up-24-regular"/>{{ labels().export }}
+      </button>
+      <button ngsIconButton type="button" class="more-action rounded-xl!" [ngsMenuTriggerFor]="fileMenu" [attr.aria-label]="labels().more">
+        <ngs-icon name="fluent:more-vertical-24-regular"/>
+      </button>
+    </div>
+  </div>
+  <div class="drawing-tools pointer-events-auto absolute inset-x-6 top-24 z-10 mx-auto h-16 w-max max-w-[calc(100%-3rem)] rounded-2xl @7xl/whiteboard:top-4 @7xl/whiteboard:h-[4.5rem]">
+    <ngs-scrollbar-area [absolute]="false" class="relative! h-full">
+      <ngs-toolbar class="h-full w-max! px-2" [attr.aria-label]="labels().properties">
+        <button ngsIconButton type="button" class="tool-lock" [attr.aria-label]="labels().lockTool"
+                [ngsTooltip]="labels().lockTool" [ngsTooltipShowDelay]="toolbarTooltipDelay"
+                [attr.aria-pressed]="toolLocked()" (click)="toolLocked.set(!toolLocked())" [disabled]="readOnly()">
+          <ngs-icon [name]="toolLocked() ? 'fluent:lock-closed-24-regular' : 'fluent:lock-open-24-regular'"/>
+        </button>
+        <ngs-button-toggle-group onlyIcon hideSelectionIndicator [value]="tool()" (valueChange)="selectTool($event)" (click)="focusCanvasFromPointer($event)">
+          @for (item of tools; track item.value) {
+            <ngs-button-toggle class="w-14" [value]="item.value" [disabled]="readOnly() && item.value !== 'hand' && item.value !== 'select'"
+                               [ngsTooltip]="labels().tools[item.value] + ' (' + item.shortcut + ')'" [ngsTooltipShowDelay]="toolbarTooltipDelay">
+              <span class="flex flex-col items-center gap-1.5" [attr.aria-label]="labels().tools[item.value]">
+                <ngs-icon [name]="item.icon" [class.tool-cursor-icon]="item.value === 'select'"/>
+                @if (item.value !== 'hand') { <span class="tool-shortcut text-[9px] leading-none" aria-hidden="true">{{ item.shortcut }}</span> }
+              </span>
+            </ngs-button-toggle>
+            @if (item.value === 'hand') { <ngs-divider vertical fixedHeight class="mx-2 h-9!"/> }
+          }
+        </ngs-button-toggle-group>
+      </ngs-toolbar>
+    </ngs-scrollbar-area>
+  </div>
+
+  @if (controls && showProperties() && !readOnly()) {
+    <ngs-card class="properties-panel absolute left-6 top-44 z-10 flex w-70 flex-col @7xl/whiteboard:top-28" appearance="outlined">
+      <ngs-card-header class="flex h-12.5 shrink-0 items-center justify-between px-4! py-0!">
+        <span class="text-lg font-semibold">{{ toolLabel() }}</span>
+        <ngs-card-aside>
+          <button ngsIconButton type="button" [attr.aria-label]="labels().closeProperties" (click)="showProperties.set(false)">
+            <ngs-icon name="fluent:dismiss-24-regular"/>
+          </button>
+        </ngs-card-aside>
+      </ngs-card-header>
+      <ngs-divider/>
+      <ngs-card-content class="grid! min-h-0 p-0!">
+        <ngs-scrollbar-area [absolute]="false" class="relative! grid! min-h-0">
+          <div class="flex flex-col gap-4 p-4">
+            <div class="flex flex-col gap-2.5">
+              <span class="property-label text-sm">{{ controls.colorLabel }}</span>
+              <div class="flex items-center gap-3">
+                <ngs-color-switcher [colors]="colors()" [selectedColor]="style().stroke" (colorChange)="updateStyle({stroke: $event})"/>
+                <button ngs-color-picker-thumbnail class="custom-color" [ngsColorPickerTriggerFor]="customColor"
+                        [attr.aria-label]="labels().customColor" [ngsTooltip]="labels().customColor"></button>
+              </div>
+            </div>
+            @if (controls.fillLabel) {
+              <div class="flex flex-col gap-2.5">
+                <span class="property-label text-sm">{{ controls.fillLabel }}</span>
+                <div class="flex items-center gap-3">
+                  <button ngs-color-picker-thumbnail [color]="controls.arrowhead ? style().stroke : 'transparent'" [class.is-selected]="style().fill === 'transparent'"
+                          [attr.aria-label]="controls.arrowhead ? labels().useStrokeColor : labels().noFill"
+                          [attr.aria-pressed]="style().fill === 'transparent'" (click)="updateStyle({fill: 'transparent'})"></button>
+                  <ngs-color-switcher [colors]="fills" [selectedColor]="style().fill" (colorChange)="updateStyle({fill: $event})"/>
+                </div>
+              </div>
+            }
+            @if (controls.strokeWidth) {
+              <div class="flex flex-col gap-2">
+                <span class="property-label text-sm">{{ labels().width }}</span>
+                <ngs-segmented class="stroke-options" [value]="style().strokeWidth" (valueChange)="updateStyle({strokeWidth: $event})" [attr.aria-label]="labels().width">
+                  @for (width of [1, 2, 4]; track width) {
+                    <button ngs-segmented-button iconOnly [value]="width" [attr.aria-label]="width + ' px'">
+                      <ngs-icon ngsSegmentedIcon name="fluent:line-horizontal-1-24-regular" [class.medium-stroke]="width === 2" [class.heavy-stroke]="width === 4"/>
+                    </button>
+                  }
+                </ngs-segmented>
+              </div>
+            }
+            @if (controls.lineStyle) {
+              <div class="flex flex-col gap-2">
+                <span class="property-label text-sm">{{ labels().lineStyle }}</span>
+                <ngs-segmented class="stroke-options" [value]="style().lineStyle" (valueChange)="updateStyle({lineStyle: $event})" [attr.aria-label]="labels().lineStyle">
+                  <button ngs-segmented-button iconOnly value="solid" [attr.aria-label]="labels().solid"><ngs-icon ngsSegmentedIcon name="fluent:line-horizontal-1-24-regular"/></button>
+                  <button ngs-segmented-button iconOnly value="dashed" [attr.aria-label]="labels().dashed"><ngs-icon ngsSegmentedIcon name="fluent:line-dashes-24-regular" class="rotate-45"/></button>
+                  <button ngs-segmented-button iconOnly value="dotted" [attr.aria-label]="labels().dotted"><ngs-icon ngsSegmentedIcon name="fluent:more-horizontal-24-regular"/></button>
+                </ngs-segmented>
+              </div>
+            }
+            @if (controls.typography) {
+              <div class="flex flex-col gap-2">
+                <span class="property-label text-sm">{{ labels().fontFamily }}</span>
+                <ngs-segmented class="typography-options" role="group" [attr.aria-label]="labels().fontFamily"
+                               [value]="typography().fontFamily" (valueChange)="updateTypography({fontFamily: $event})"
+                               (mousedown)="keepTextFocus($event)">
+                  @for (option of fontOptions; track option.key) {
+                    <button ngs-segmented-button iconOnly type="button" [value]="option.value"
+                            [attr.aria-label]="labels().fonts[option.key]" [attr.aria-pressed]="typography().fontFamily === option.value"
+                            [ngsTooltip]="labels().fonts[option.key]">
+                      @if ('icon' in option) {
+                        <ngs-icon ngsSegmentedIcon [name]="option.icon"/>
+                      } @else {
+                        <span ngsSegmentedIcon class="serif-sample" aria-hidden="true">A</span>
+                      }
+                    </button>
+                  }
+                </ngs-segmented>
+              </div>
+              <div class="flex flex-col gap-2">
+                <span class="property-label text-sm">{{ labels().fontSize }}</span>
+                <ngs-segmented class="typography-options" role="group" [attr.aria-label]="labels().fontSize"
+                               [value]="typography().fontSize" (valueChange)="updateTypography({fontSize: $event})"
+                               (mousedown)="keepTextFocus($event)">
+                  @for (size of fontSizes; track size.value) {
+                    <button ngs-segmented-button type="button" [value]="size.value"
+                            [attr.aria-label]="labels().fontSizes[size.label]" [attr.aria-pressed]="typography().fontSize === size.value">
+                      {{ size.label }}
+                    </button>
+                  }
+                </ngs-segmented>
+              </div>
+              <div class="flex flex-col gap-2">
+                <span class="property-label text-sm">{{ labels().textAlign }}</span>
+                <ngs-segmented class="typography-options" role="group" [attr.aria-label]="labels().textAlign"
+                               [value]="typography().textAlign" (valueChange)="updateTypography({textAlign: $event})"
+                               (mousedown)="keepTextFocus($event)">
+                  @for (align of textAlignments; track align) {
+                    <button ngs-segmented-button iconOnly type="button" [value]="align"
+                            [attr.aria-label]="labels().alignments[align]" [attr.aria-pressed]="typography().textAlign === align"
+                            [ngsTooltip]="labels().alignments[align]">
+                      <ngs-icon ngsSegmentedIcon [name]="'fluent:text-align-' + align + '-24-regular'"/>
+                    </button>
+                  }
+                </ngs-segmented>
+              </div>
+            }
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between text-sm"><span class="property-label">{{ labels().opacity }}</span><span>{{ (style().opacity * 100).toFixed(0) }}%</span></div>
+              <ngs-slider [min]="0" [max]="100" [step]="1" class="w-full!">
+                <input ngsSliderThumb [value]="style().opacity * 100" (valueChange)="updateStyle({opacity: $event / 100})" [attr.aria-label]="labels().opacity">
+              </ngs-slider>
+            </div>
+            @if (selectedElements().length) {
+              <ngs-divider/>
+              <div class="flex items-center gap-2">
+                <button ngsIconButton type="button" [attr.aria-label]="labels().duplicate" ngsTooltip="Duplicate (Ctrl+D)" (click)="duplicateSelection()"><ngs-icon name="fluent:copy-24-regular"/></button>
+                <button ngsIconButton type="button" [attr.aria-label]="labels().delete" ngsTooltip="Delete" (click)="deleteSelection()"><ngs-icon name="fluent:delete-24-regular"/></button>
+              </div>
+            }
+          </div>
+        </ngs-scrollbar-area>
+      </ngs-card-content>
+    </ngs-card>
+  }
+
+  <div class="pointer-events-none absolute inset-x-6 bottom-6 z-10 flex items-end gap-4">
+    <div class="pointer-events-auto flex flex-wrap gap-4">
+      <ngs-toolbar class="zoom-toolbar w-auto! gap-0! rounded-xl p-1" [attr.aria-label]="labels().resetZoom">
+        <button ngsIconButton type="button" [attr.aria-label]="labels().zoomOut" [ngsTooltip]="labels().zoomOut"
+                [ngsTooltipShowDelay]="toolbarTooltipDelay" (click)="zoomOut()"><ngs-icon name="fluent:subtract-24-regular"/></button>
+        <button ngsButton type="button" class="zoom-value" [ngsMenuTriggerFor]="zoomMenu" [attr.aria-label]="labels().resetZoom" reverse>
+          <ngs-icon name="fluent:chevron-down-16-regular"/>{{ zoomLabel() }}
+        </button>
+        <button ngsIconButton type="button" [attr.aria-label]="labels().zoomIn" [ngsTooltip]="labels().zoomIn"
+                [ngsTooltipShowDelay]="toolbarTooltipDelay" (click)="zoomIn()"><ngs-icon name="fluent:add-24-regular"/></button>
+        <ngs-divider vertical fixedHeight class="mx-1"/>
+        <button ngsIconButton type="button" [attr.aria-label]="labels().fit" [ngsTooltip]="labels().fit"
+                [ngsTooltipShowDelay]="toolbarTooltipDelay" (click)="fitToContent()"><ngs-icon name="fluent:arrow-expand-24-regular"/></button>
+      </ngs-toolbar>
+      @if (!readOnly()) {
+        <ngs-toolbar class="history-toolbar w-auto! gap-0! rounded-xl p-1" [attr.aria-label]="labels().undo">
+          <button ngsIconButton type="button" [attr.aria-label]="labels().undo" [ngsTooltip]="labels().undo"
+                  [ngsTooltipShowDelay]="toolbarTooltipDelay" [disabled]="!canUndo()" (click)="undo()"><ngs-icon name="fluent:arrow-undo-24-regular"/></button>
+          <button ngsIconButton type="button" [attr.aria-label]="labels().redo" [ngsTooltip]="labels().redo"
+                  [ngsTooltipShowDelay]="toolbarTooltipDelay" [disabled]="!canRedo()" (click)="redo()"><ngs-icon name="fluent:arrow-redo-24-regular"/></button>
+        </ngs-toolbar>
+      }
+    </div>
+    <span class="canvas-hint absolute bottom-1 left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-full px-4 py-2 text-sm @7xl/whiteboard:block">{{ labels().canvasHint }}</span>
+  </div>
+}
+
+@if (errorMessage()) {
+  <ngs-alert variant="negative" class="absolute inset-x-4 bottom-20 z-20 text-sm" role="alert">
+    {{ errorMessage() }}
+    <button ngsIconButton type="button" [attr.aria-label]="labels().dismiss" (click)="errorMessage.set('')"><ngs-icon name="fluent:dismiss-24-regular"/></button>
+  </ngs-alert>
+}
+
+<input #fileInput type="file" accept="application/json,.json" hidden (change)="importFile($event)">
+<ngs-menu #fileMenu="ngsMenu">
+  <button ngs-menu-item (click)="downloadPng()">{{ labels().exportPng }}</button>
+  <button ngs-menu-item (click)="downloadJson()">{{ labels().saveJson }}</button>
+  @if (!readOnly()) {
+    <button ngs-menu-item (click)="fileInput.click()">{{ labels().openJson }}</button>
+    <ngs-menu-divider/>
+    <button ngs-menu-item [disabled]="!value().elements.length" (click)="confirmClear()">{{ labels().clear }}</button>
+  }
+  <ngs-menu-divider/>
+  <button ngs-menu-item [selected]="showGrid()" (click)="showGrid.set(!showGrid())">{{ labels().grid }}</button>
+</ngs-menu>
+<ngs-menu #zoomMenu="ngsMenu">
+  <button ngs-menu-item (click)="resetView()">100%</button>
+  <button ngs-menu-item (click)="fitToContent()">{{ labels().fit }}</button>
+</ngs-menu>
+<ng-template #customColor><ngs-color-picker [ngModel]="style().stroke" (ngModelChange)="updateStyle({stroke: $event})"/></ng-template>

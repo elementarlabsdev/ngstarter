@@ -1,0 +1,56 @@
+<p>
+  The NgStarter Angular Whiteboard component is a Konva.js canvas for sketches, diagrams and idea boards.
+  Draw with mouse, touch or pen; add shapes, arrows, text and notes; select, move, resize and rotate objects.
+  Change stroke, fill, line style and opacity, then save the editable JSON document or export a PNG.
+  New objects are selected as soon as you finish drawing or save their text. The lock button keeps the drawing tool active.
+  Set <code class="code">pressureSensitive</code>
+  to vary pencil stroke width with pen pressure.
+</p>
+<h3 id="basic-whiteboard">Drawing and diagrams</h3>
+<p>
+  Use <code class="code">[(value)]</code> to own the portable document in your application. Coordinates
+  stay independent of pan and zoom. Replacing the document resets undo history. Use the menu to save
+  or open JSON. Click the canvas with the Text or Note tool to type directly on the board. With the Select tool active,
+  double-click a rectangle to add or edit its label, or double-click a text object or note to edit it.
+  Click outside or press Ctrl/Cmd+Enter to save, or press Escape to cancel.
+</p>
+<ngs-playground exampleUrl="_docs/components/whiteboard/_examples" exampleName="basic-whiteboard-example" fullscreen>
+  <app-basic-whiteboard-example/>
+</ngs-playground>
+<p>
+  Drag a line or arrow between blocks to attach its ends. A ring marks each attachment point as you draw.
+  Drag the middle handle of a selected line or arrow to bend it. Drag either end to reconnect it or release it
+  on the canvas. Hold Ctrl/Cmd
+  while drawing or dragging an end to keep it free. Straight connectors switch sides when their path would
+  cross an attached block. If overlapping blocks leave no clear segment, the connector reappears when they separate.
+  Connections are saved in the board's JSON.
+</p>
+<h3 id="keyboard-shortcuts">Keyboard shortcuts</h3>
+<p>
+  With the canvas or drawing toolbar focused, use V (select), H (hand), R (rectangle), D (diamond), O (ellipse),
+  A (arrow), L (line), P (pencil), T (text), N (note), E (eraser), or Q (tool lock). Hold Shift while drawing
+  to constrain proportions or snap a line or arrow angle. Shift-click or drag a box around objects to select
+  several at once. Use the arrow keys on the canvas to move the selection by 1 pixel, or by 10 with Shift.
+  Hold Space on the canvas or drag with the middle mouse button to pan. Scroll without modifiers to pan,
+  use Ctrl/Cmd + wheel or +/− to zoom, and press 0 to fit the content. Delete removes the selection,
+  Ctrl/Cmd+D duplicates it, Ctrl/Cmd+Z undoes an edit, and Ctrl/Cmd+Shift+Z or Ctrl/Cmd+Y redoes it.
+</p>
+<h3 id="integration">Integration</h3>
+<p>
+  Import <code class="code">Whiteboard</code> and <code class="code">WhiteboardDocument</code> from
+  <code class="code">&#64;ngstarter-ui/components/whiteboard</code>.
+  Set <code class="code">readonly</code> for a board that allows only pan, zoom and export.
+  Set <code class="code">showToolbar</code> to false to provide your own controls through the public methods.
+  The canvas initializes only in the browser and resizes with its container.
+</p>
+<p>
+  Line and arrow elements accept optional <code class="code">startBinding</code> and
+  <code class="code">endBinding</code> values. Each binding contains the target's
+  <code class="code">elementId</code> and an <code class="code">anchor</code> pair in local coordinates
+  from 0 to 1. For example, <code class="code">[1, 0.5]</code> is the midpoint of a rectangle's right edge.
+</p>
+<p>
+  The component stores local canvas objects; application code owns persistence and collaboration.
+  It does not provide realtime synchronization or rich text editing. For image composition use
+  ImageDesigner; for a signature field use SignaturePad.
+</p>

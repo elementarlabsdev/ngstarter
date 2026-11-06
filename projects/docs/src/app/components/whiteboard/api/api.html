@@ -1,0 +1,17 @@
+@for (section of [{title: 'Inputs and outputs', rows: properties}, {title: 'Methods', rows: methods}, {title: 'Theme tokens', rows: tokens}]; track section.title) {
+  <h3>{{ section.title }}</h3>
+  <div class="my-6 overflow-hidden rounded-xl border border-border">
+    <table ngs-table [dataSource]="section.rows">
+      <ng-container ngsColumnDef="name">
+        <th ngs-header-cell *ngsHeaderCellDef class="w-1/3">Name</th>
+        <td ngs-cell *ngsCellDef="let row"><code class="code">{{ row.name }}</code></td>
+      </ng-container>
+      <ng-container ngsColumnDef="description">
+        <th ngs-header-cell *ngsHeaderCellDef>Description</th>
+        <td ngs-cell *ngsCellDef="let row">{{ row.description }}</td>
+      </ng-container>
+      <tr ngs-header-row *ngsHeaderRowDef="columns"></tr>
+      <tr ngs-row *ngsRowDef="let row; columns: columns"></tr>
+    </table>
+  </div>
+}

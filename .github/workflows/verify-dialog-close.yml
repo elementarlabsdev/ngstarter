@@ -1,0 +1,24 @@
+name: Verify dialog buttons
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  dialog-close:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.15.0'
+          cache: npm
+      - run: npm ci
+      - run: npm run verify:dialog:close -- --base "$BASE_REF"
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.sha }}

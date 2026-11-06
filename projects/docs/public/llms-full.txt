@@ -263,7 +263,7 @@ Typography:
   exports: `ColorSwitcher`
   inputs: `colors`, `disabled`, `selectedColor`
   outputs: `colorChange`
-  tokens: `--ngs-brand-colors-color-size`, `--ngs-brand-colors-gap`, `--ngs-shadow-sm`
+  tokens: `--ngs-brand-colors-color-shadow`, `--ngs-brand-colors-color-size`, `--ngs-brand-colors-gap`, `--ngs-brand-colors-selected-dot-size`, `--ngs-brand-colors-selected-outline`, `--ngs-brand-colors-selected-outline-offset`, `--ngs-shadow-sm`
 - command-bar: `@ngstarter-ui/components/command-bar` docs: /components/command-bar
   purpose: Show a floating contextual action bar for selected items or temporary page state.
   use when: Use when rows, files, cards, canvas objects, or other page items are selected and users need quick actions such as edit, delete, archive, move, export, or share. Do not use it as a command palette, search UI, dropdown menu, header toolbar, navigation bar, autocomplete, or normal form action row.
@@ -1043,7 +1043,7 @@ Typography:
   use when: Use ngs-tiles with ngs-tile when users can rearrange dashboard cards or widgets, customize a dashboard, or save a changed widget order. Good for editable dashboards, portal home pages, workspace widgets, configurable analytics cards, media/card boards, and dashboard builders. Tiles can be the layout host for config-driven dashboard renderers: the app can render lazy widget components inside each ngs-tile, show Skeleton while widgets load, and persist the final item order from orderChanged or layoutChanged. Use width, height, width.sm/md/lg/xl, and height.sm/md/lg/xl to define responsive tile spans, and ngsTileHandle for drag handles. Provide items so reorder events can map visual order back to app data. Use Grid only for static predefined dashboard/widget layouts that users do not rearrange. Do not use Tiles for ordinary static responsive page layout; use TailwindCSS grid/flex. Do not use for split panes with gutters; use Split. Do not use for one manually resized box; use ResizableContainer. Do not use for simple cards, lists, tables, or datasets without tile reordering; use Card, List, Table, or DataView. Do not use for status-column workflows; use KanbanBoard.
   example topics: Basic tiles
   selectors: `[ngsTileHandle]`, `ngs-tile`, `ngs-tiles`
-  exports: `ReorderFunction`, `Tile`, `TileHandleDirective`, `Tiles`, `TILES_REORDER`, `TileService`, `tilesShift`, `tilesSwap`
+  exports: `exchangeTileGroup`, `findTileGroup`, `ReorderFunction`, `Tile`, `TileHandleDirective`, `Tiles`, `TILES_REORDER`, `TileService`, `TileSlot`, `tilesShift`, `tilesSwap`
   inputs: `columns`, `gap`, `height`, `height.lg`, `height.md`, `height.sm`, `height.xl`, `items`, `width`, `width.lg`, `width.md`, `width.sm`, `width.xl`
   outputs: `layoutChanged`, `orderChanged`
   tokens: `--ngs-color-border`, `--ngs-color-surface-container`, `--ngs-radius-xl`, `--ngs-tile-h`, `--ngs-tile-h-lg`, `--ngs-tile-h-md`, `--ngs-tile-h-sm`, `--ngs-tile-h-xl`, `--ngs-tile-w`, `--ngs-tile-w-lg`, `--ngs-tile-w-md`, `--ngs-tile-w-sm`, `--ngs-tile-w-xl`, `--ngs-tiles-columns`, `--ngs-tiles-gap`, `--ngs-tiles-row-height`
@@ -1136,3 +1136,12 @@ Typography:
   example topics: Visual Builder
   selectors: `ngs-visual-builder`
   exports: `VisualBuilder`
+- whiteboard: `@ngstarter-ui/components/whiteboard` docs: /components/whiteboard
+  purpose: Draw freehand sketches, shapes, diagrams, text and notes on a Konva.js canvas.
+  use when: Use ngs-whiteboard for editable idea boards, diagramming and sketches with selection, move/resize/rotate, stroke/fill controls, undo/redo, pan/zoom and PNG/JSON export. Bind value to a version 1 WhiteboardDocument, persist valueChange in application code, and use readonly for viewing. Use SignaturePad for signature fields, ImageDesigner for image composition and ContentEditor for rich document editing. Realtime collaboration and persistence belong to the consuming application.
+  example topics: Drawing and diagrams, Keyboard shortcuts, Integration, Basic whiteboard
+  selectors: `ngs-whiteboard`
+  exports: `bindingKey`, `connectorBendPoint`, `ConnectorEnd`, `connectorEndPoint`, `connectorEnds`, `connectorPath`, `findBinding`, `hasWhiteboardText`, `isConnector`, `isConnectorObscured`, `parseWhiteboardDocument`, `resolveBindings`
+  inputs: `colors`, `drawingStyle`, `locale`, `pressureSensitive`, `readonly`, `showGrid`, `showProperties`, `showToolbar`, `subtitle`, `title`, `tool`, `toolLocked`, `value`
+  outputs: `exported`, `importError`, `selectionChange`, `viewportChange`
+  tokens: `--ngs-brand-colors-color-shadow`, `--ngs-brand-colors-color-size`, `--ngs-brand-colors-gap`, `--ngs-brand-colors-selected-dot-size`, `--ngs-brand-colors-selected-outline`, `--ngs-brand-colors-selected-outline-offset`, `--ngs-button-bg`, `--ngs-button-color`, `--ngs-button-content-gap`, `--ngs-button-font-size`, `--ngs-button-height`, `--ngs-button-outlined-border`, `--ngs-button-padding`, `--ngs-button-radius`, `--ngs-button-toggle-button-border-radius`, `--ngs-button-toggle-button-height`

@@ -32,7 +32,7 @@ export class TileService implements OnDestroy {
   private readonly offset$ = new BehaviorSubject<readonly [number, number]>([NaN, NaN]);
   private readonly resize$ = inject(ResizeObserverService).observe(this.el);
   private readonly mutations$ = inject(MutationObserverService).observe(this.el, {childList: true});
-  private lastRect: DOMRect | null = null;
+  private lastPosition: { left: number; top: number } | null = null;
   private lastOrder = new Map<Tile, number>();
 
   private readonly position$: Observable<{offset: readonly [number, number], order: Map<Tile, number>}> = combineLatest([
@@ -61,7 +61,8 @@ export class TileService implements OnDestroy {
 
   private animate(element: HTMLElement, order: Map<Tile, number>): void {
     const isDragging = !Number.isNaN(this.offset$.value[0]);
-    const currentRect = this.el.getBoundingClientRect();
+    // Measure relative to the grid so scrolling does not look like a reorder.
+    const currentPosition = { left: this.el.offsetLeft, top: this.el.offsetTop };
     // Initial placement and loading-related reflows are not tile reorders.
     const reordered = [...order].some(([tile, index]) =>
       this.lastOrder.has(tile) && this.lastOrder.get(tile) !== index,
@@ -69,13 +70,13 @@ export class TileService implements OnDestroy {
     this.lastOrder = order;
 
     if (!reordered || isDragging || (element.style.position === 'fixed' && !element.style.transition.includes('top'))) {
-      this.lastRect = currentRect;
+      this.lastPosition = currentPosition;
       return;
     }
 
-    if (this.lastRect) {
-      const dx = this.lastRect.left - currentRect.left;
-      const dy = this.lastRect.top - currentRect.top;
+    if (this.lastPosition) {
+      const dx = this.lastPosition.left - currentPosition.left;
+      const dy = this.lastPosition.top - currentPosition.top;
 
       if (dx !== 0 || dy !== 0) {
         element.style.setProperty('transition', 'none');
@@ -88,7 +89,7 @@ export class TileService implements OnDestroy {
         element.style.removeProperty('transform');
       }
     }
-    this.lastRect = currentRect;
+    this.lastPosition = currentPosition;
   }
 
   public setOffset(offset: readonly [number, number]): void {

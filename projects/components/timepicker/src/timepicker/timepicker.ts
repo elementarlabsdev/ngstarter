@@ -123,6 +123,7 @@ export class Timepicker {
 
     const strategy = this._overlay.position()
       .flexibleConnectedTo(input.getConnectedOverlayOrigin())
+      .withTransformOriginOn('.ngs-timepicker-panel')
       .withPositions([
         { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top' },
         { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom' }

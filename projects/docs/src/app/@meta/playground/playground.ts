@@ -1,4 +1,5 @@
-import { Component, input, ViewEncapsulation, booleanAttribute, viewChild, ChangeDetectionStrategy } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, DestroyRef, effect, ElementRef, inject, input, signal, ViewEncapsulation, viewChild } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { CodeHighlighter } from '@ngstarter-ui/components/code-highlighter';
 import { Button } from '@ngstarter-ui/components/button';
@@ -32,15 +33,26 @@ type PlaygroundSourceFile = {
     ScrollbarArea,
   ],
   encapsulation: ViewEncapsulation.None,
+  host: {
+    '(document:fullscreenchange)': 'onFullscreenChange()',
+    '(document:keydown.escape)': 'onFullscreenEscape($event)',
+  },
   templateUrl: './playground.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: 'playground.scss'
 })
 export class Playground {
+  private readonly document = inject(DOCUMENT);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly previewFrame = viewChild<ElementRef<HTMLDivElement>>('previewFrame');
   private readonly sourceDrawer = viewChild<Drawer>('sourceDrawer');
+  private enteringFullscreen = false;
+  protected readonly fullscreenMode = signal<'native' | 'viewport' | null>(null);
+  protected readonly inlineHeight = signal(0);
 
   exampleUrl = input<string>();
   exampleName = input<string>();
+  readonly fullscreen = input(false, { transform: booleanAttribute });
   compact = input(false, {
     transform: booleanAttribute
   });
@@ -74,6 +86,58 @@ export class Playground {
   showSource = false;
   currentTab: PlaygroundSourceTab = 'html';
   exampleLoading = false;
+
+  constructor() {
+    effect(() => {
+      if (!this.fullscreen() && this.fullscreenMode()) void this.exitFullscreen();
+    });
+  }
+
+  protected async toggleFullscreen(): Promise<void> {
+    if (this.fullscreenMode()) {
+      await this.exitFullscreen();
+      return;
+    }
+
+    const frame = this.previewFrame()?.nativeElement;
+    if (!frame || !this.fullscreen() || this.enteringFullscreen) return;
+    this.inlineHeight.set(frame.offsetHeight);
+    this.enteringFullscreen = true;
+    try {
+      if (this.document.fullscreenEnabled && frame.requestFullscreen) {
+        await frame.requestFullscreen();
+        return;
+      }
+    } catch {
+      // Embedded docs may be denied native fullscreen. Expand within their viewport instead.
+    } finally {
+      this.enteringFullscreen = false;
+    }
+    if (this.fullscreen() && !this.destroyRef.destroyed) this.fullscreenMode.set('viewport');
+  }
+
+  protected onFullscreenChange(): void {
+    const frame = this.previewFrame()?.nativeElement;
+    if (frame && this.document.fullscreenElement === frame) {
+      this.fullscreenMode.set('native');
+    } else if (this.fullscreenMode() === 'native') {
+      this.fullscreenMode.set(null);
+    }
+  }
+
+  protected onFullscreenEscape(event: Event): void {
+    if (this.fullscreenMode() === 'viewport' && !event.defaultPrevented && !this.showSource) {
+      this.fullscreenMode.set(null);
+    }
+  }
+
+  private async exitFullscreen(): Promise<void> {
+    if (this.fullscreenMode() === 'viewport') {
+      this.fullscreenMode.set(null);
+    } else if (this.document.fullscreenElement === this.previewFrame()?.nativeElement) {
+      await this.document.exitFullscreen().catch(() => this.onFullscreenChange());
+    }
+  }
 
   get hasScr(): boolean {
     return !!this.htmlSrc || !!this.tsSrc || !!this.cssSrc;

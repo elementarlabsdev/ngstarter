@@ -1,22 +1,30 @@
-<div class="border border-border rounded-xl shadow-xs relative mb-0 mt-6 overflow-hidden bg-surface-container-lowest">
-  <div class="p-7">
-    <ng-content/>
-  </div>
+<div class="mt-6" [style.min-height.px]="fullscreenMode() ? inlineHeight() : null">
+  <div #previewFrame class="playground-frame group/playground relative overflow-hidden rounded-xl border border-border bg-surface-container-lowest shadow-xs"
+       [class.playground-expanded]="fullscreenMode() !== null">
+    <div class="playground-preview p-7">
+      <ng-content/>
+    </div>
 
-  <div class="border-t border-t-border h-12 relative flex items-center justify-center
-              gap-1 px-2 text-center bg-surface-container rounded-b-lg">
-    <button ngsIconButton (click)="toggleSource()"
-            [class.!bg-neutral-300]="showSource"
-            [class.dark:!bg-neutral-600]="showSource">
-      <ngs-icon name="fluent:code-24-regular"/>
-    </button>
+    <div class="relative flex h-12 shrink-0 items-center justify-center gap-1 border-t border-t-border bg-surface-container px-2">
+      <button ngsIconButton type="button" aria-label="Example source" (click)="toggleSource()"
+              [class.!bg-neutral-300]="showSource"
+              [class.dark:!bg-neutral-600]="showSource">
+        <ngs-icon name="fluent:code-24-regular"/>
+      </button>
+      @if (fullscreen() || fullscreenMode()) {
+        <button ngsButton type="button" (click)="toggleFullscreen()">
+          <ngs-icon [name]="fullscreenMode() ? 'fluent:full-screen-minimize-24-regular' : 'fluent:full-screen-maximize-24-regular'"/>
+          {{ fullscreenMode() ? 'Exit fullscreen' : 'Fullscreen' }}
+        </button>
+      }
+    </div>
   </div>
 </div>
 
 <ngs-drawer #sourceDrawer (closed)="onDrawerClosed()">
   <div class="playground-source-drawer h-full w-[90vw] max-w-[1200px] overflow-hidden lg:w-[60vw]">
     <ngs-layout class="h-full">
-      <ngs-layout-header class="playground-source-toolbar flex h-12 items-center gap-3 border-b border-b-border px-4">
+      <ngs-layout-header flex class="playground-source-toolbar h-12 items-center gap-3 border-b border-b-border px-4">
         <div class="flex min-w-0 flex-1 items-center gap-2">
           <ngs-icon name="fluent:window-dev-tools-24-regular" class="size-5" />
           <span class="truncate text-sm font-medium">Example source</span>

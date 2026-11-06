@@ -1,6 +1,7 @@
-import { afterNextRender, Component, inject, model, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { afterNextRender, Component, inject, model, OnInit, ChangeDetectionStrategy, viewChild } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
-import { filter } from 'rxjs';
+import { filter, map, startWith } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { PageLoadingBar } from '@ngstarter-ui/components/page-loading-bar';
 import {
   AnalyticsService, SoundEffectDirective,
@@ -180,6 +181,13 @@ export class App implements OnInit {
 
   router = inject(Router);
   location = inject(Location);
+  readonly docsSidenav = viewChild(Sidenav);
+  protected readonly standaloneWhiteboard = toSignal(this.router.events.pipe(
+    filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+    map(event => event.urlAfterRedirects.split(/[?#]/)[0] === '/components/whiteboard/demo'),
+    // Resolve the chrome before hydration; the route outlet always stays in one place.
+    startWith(this.location.path().split(/[?#]/)[0] === '/components/whiteboard/demo'),
+  ), { initialValue: false });
   height: string | null = '200px';
   compact = false;
   sidebarExpanded = model(true);
@@ -859,6 +867,12 @@ export class App implements OnInit {
           type: 'link',
           name: 'Signature Pad',
           link: '/components/signature-pad'
+        },
+        {
+          key: uuid(),
+          type: 'link',
+          name: 'Whiteboard',
+          link: '/components/whiteboard'
         },
         {
           key: uuid(),

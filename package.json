@@ -36,6 +36,7 @@
     "build:components:prod": "npm run sync:components:dependencies && npm run generate:ai && ng build components --configuration production && npm run build:components:schematics",
     "build:components:schematics": "tsc -p projects/components/tsconfig.schematics.json && copyfiles -u 3 \"projects/components/schematics/**/*.json\" dist/components/schematics",
     "generate:ai": "node scripts/generate-ai-metadata.mjs",
+    "verify:dialog:close": "node scripts/verify-dialog-close.mjs",
     "verify:admin:components": "node scripts/verify-admin-components.mjs",
     "verify:components:package": "node scripts/verify-components-package.mjs",
     "build:prod": "ng build --configuration production",

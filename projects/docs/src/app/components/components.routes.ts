@@ -2,6 +2,11 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: 'whiteboard',
+    loadChildren: () => import('./whiteboard/routes').then(m => m.routes),
+    title: 'Whiteboard'
+  },
+  {
     path: '',
     pathMatch: 'full',
     loadComponent: () => import('../@meta/category-overview/category-overview').then(c => c.CategoryOverview),

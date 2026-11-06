@@ -1,0 +1,187 @@
+@reference 'tailwindcss';
+
+:host {
+  --ngs-whiteboard-bg: var(--ngs-color-surface, #ffffff);
+  --ngs-whiteboard-grid-color: color-mix(in srgb, var(--ngs-color-primary) 16%, transparent);
+  --ngs-whiteboard-panel-bg: var(--ngs-color-surface, #ffffff);
+  --ngs-whiteboard-panel-shadow: 0 2px 5px color-mix(in srgb, var(--ngs-color-on-surface) 4%, transparent), 0 6px 18px color-mix(in srgb, var(--ngs-color-on-surface) 4%, transparent);
+  display: block;
+  position: relative;
+  isolation: isolate;
+  height: var(--ngs-whiteboard-height, 40rem);
+  min-height: --spacing(96);
+  overflow: hidden;
+  background: var(--ngs-whiteboard-bg);
+  color: var(--ngs-color-on-surface);
+  font-family: var(--ngs-font-family-base);
+  border: 1px solid var(--ngs-color-border);
+  border-radius: var(--ngs-radius-lg);
+
+  .canvas {
+    outline: none;
+    touch-action: none;
+    user-select: none;
+    &[data-tool='pencil'], &[data-tool='rectangle'], &[data-tool='diamond'], &[data-tool='ellipse'],
+    &[data-tool='line'], &[data-tool='arrow'] { cursor: crosshair; }
+    &[data-tool='hand'] { cursor: grab; &:active { cursor: grabbing; } }
+    &[data-tool='text'], &[data-tool='note'] { cursor: text; }
+    &[data-tool='eraser'] {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Ccircle cx='8' cy='8' r='5' fill='none' stroke='white' stroke-width='3'/%3E%3Ccircle cx='8' cy='8' r='5' fill='none' stroke='%234b4b4b'/%3E%3C/svg%3E") 8 8, cell;
+    }
+    &:focus-visible { outline: 2px solid var(--ngs-state-focus-ring); outline-offset: -2px; }
+  }
+  textarea.text-editor {
+    position: absolute;
+    inset: 0 auto auto 0;
+    z-index: 1;
+    box-sizing: border-box;
+    margin: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    resize: none;
+    overflow: auto;
+    overflow-wrap: break-word;
+    transform-origin: top left;
+
+    &.auto-height { overflow: hidden; }
+
+    &::placeholder {
+      color: currentColor;
+      opacity: 0.65;
+    }
+  }
+  &.ngs-whiteboard-grid {
+    .canvas {
+      background-image: radial-gradient(circle, var(--ngs-whiteboard-grid-color) 0.65px, transparent 0.85px);
+      background-size: --spacing(6) --spacing(6);
+    }
+  }
+  .drawing-tools, ngs-toolbar.zoom-toolbar, ngs-toolbar.history-toolbar {
+    background: var(--ngs-whiteboard-panel-bg);
+    box-shadow: var(--ngs-whiteboard-panel-shadow);
+    outline: 1px solid color-mix(in srgb, var(--ngs-color-border) 70%, transparent);
+  }
+  ngs-toolbar { --ngs-toolbar-gap: 0; }
+  ngs-button-toggle-group {
+    --ngs-button-toggle-button-height: --spacing(14);
+    --ngs-button-toggle-button-border-radius: --spacing(2.5);
+    --ngs-button-toggle-group-bg: transparent;
+    --ngs-button-toggle-group-border-width: 0;
+    --ngs-button-toggle-group-padding: 0;
+    --ngs-button-toggle-group-gap: 0;
+    --ngs-button-toggle-checked-bg-color: var(--ngs-color-primary-container);
+    --ngs-button-toggle-checked-text-color: var(--ngs-color-primary);
+    --ngs-icon-size: --spacing(5.5);
+  }
+  ngs-card.properties-panel {
+    --ngs-card-radius: --spacing(3.5);
+    --ngs-card-shadow: var(--ngs-whiteboard-panel-shadow);
+    --ngs-card-bg: var(--ngs-whiteboard-panel-bg);
+    --ngs-card-border-color: color-mix(in srgb, var(--ngs-color-border) 70%, transparent);
+    max-height: calc(100% - --spacing(64));
+  }
+  ngs-color-switcher {
+    --ngs-brand-colors-color-size: --spacing(7);
+    --ngs-brand-colors-gap: --spacing(3);
+    --ngs-brand-colors-color-shadow: none;
+    --ngs-brand-colors-selected-outline: 1.5px solid var(--ngs-color-primary);
+    --ngs-brand-colors-selected-outline-offset: 3px;
+    --ngs-brand-colors-selected-dot-size: --spacing(2);
+  }
+  button[ngs-color-picker-thumbnail] {
+    --ngs-color-picker-thumbnail-size: --spacing(7);
+    &.is-selected { outline: 1.5px solid var(--ngs-color-primary); outline-offset: 2px; }
+    &.custom-color {
+      --ngs-color-picker-thumbnail-bg: conic-gradient(#ed6278, #f6c84a, #87d68c, #55c9db, #6578e6, #bc7ada, #ed6278);
+      outline: 1px solid var(--ngs-color-border);
+      outline-offset: 1px;
+      &::after { box-shadow: inset 0 0 0 4px var(--ngs-color-surface); }
+    }
+  }
+  ngs-segmented.stroke-options, ngs-segmented.typography-options {
+    --ngs-segmented-bg: transparent;
+    --ngs-segmented-padding: 0;
+    --ngs-segmented-gap: --spacing(1.5);
+    --ngs-segmented-radius: --spacing(2.5);
+    --ngs-segmented-button-height: --spacing(9.5);
+    --ngs-segmented-button-radius: --spacing(2.5);
+    --ngs-segmented-button-selected-bg: var(--ngs-color-primary-container);
+    --ngs-segmented-button-selected-color: var(--ngs-color-primary);
+    --ngs-segmented-button-selected-shadow: none;
+    --ngs-icon-size: --spacing(6);
+    button[ngs-segmented-button] {
+      --ngs-segmented-button-min-width: --spacing(13);
+      background: var(--ngs-color-surface-container-low);
+      outline: 1px solid color-mix(in srgb, var(--ngs-color-border) 50%, transparent);
+      &.is-selected { background: transparent; }
+    }
+  }
+  ngs-segmented.typography-options {
+    --ngs-segmented-button-height: --spacing(8.5);
+    --ngs-icon-size: --spacing(4.5);
+    button[ngs-segmented-button] {
+      --ngs-segmented-button-min-width: --spacing(9);
+    }
+    .serif-sample { font: 1rem / 1 Georgia, serif; }
+  }
+  ngs-slider {
+    --ngs-slider-track-active-height: --spacing(1);
+    --ngs-slider-track-height: --spacing(1);
+    --ngs-slider-track-color: var(--ngs-color-surface-container-highest);
+    --ngs-slider-thumb-size: --spacing(5);
+    height: --spacing(8);
+    padding: --spacing(1) 0;
+  }
+  button[ngsIconButton], button[ngsButton] {
+    --ngs-button-height: --spacing(9);
+    --ngs-button-font-size: var(--ngs-font-size-sm);
+    --ngs-icon-size: --spacing(5);
+  }
+  button[ngsIconButton].board-mark {
+    --ngs-button-height: --spacing(14);
+    --ngs-icon-size: --spacing(7);
+    --ngs-button-bg: var(--ngs-color-primary-container);
+    --ngs-button-color: var(--ngs-color-primary);
+    --ngs-button-radius: --spacing(3.5);
+    box-shadow: var(--ngs-whiteboard-panel-shadow);
+    outline: 1px solid color-mix(in srgb, var(--ngs-color-border) 60%, transparent);
+  }
+  .board-title { font-size: --spacing(4.5); }
+  button[ngsButton].export-action, button[ngsIconButton].more-action {
+    --ngs-button-height: --spacing(10);
+    --ngs-button-font-size: --spacing(4);
+    --ngs-button-radius: --spacing(3);
+    --ngs-button-outlined-border: color-mix(in srgb, var(--ngs-color-border) 70%, transparent);
+    --ngs-button-bg: var(--ngs-whiteboard-panel-bg);
+    box-shadow: var(--ngs-whiteboard-panel-shadow);
+  }
+  button[ngsIconButton].more-action { outline: 1px solid var(--ngs-button-outlined-border); }
+  button[ngsIconButton].tool-lock { --ngs-button-height: --spacing(9); }
+  button[ngsButton].zoom-value { --ngs-button-padding: 0 --spacing(2); --ngs-button-content-gap: --spacing(1); --ngs-icon-size: --spacing(3); }
+  .board-subtitle { color: var(--ngs-color-on-surface-variant); }
+  .tool-shortcut {
+    color: var(--ngs-color-on-surface-variant);
+    color: oklch(from var(--ngs-color-on-surface-variant) l 0 0);
+  }
+  // The cursor path sits right of center inside its SVG viewBox.
+  ngs-icon.tool-cursor-icon { translate: -1.5px; }
+  .property-label { color: var(--ngs-color-on-surface); }
+  .canvas-hint {
+    background: color-mix(in srgb, var(--ngs-whiteboard-panel-bg) 92%, transparent);
+    color: var(--ngs-color-on-surface-variant);
+    outline: 1px solid color-mix(in srgb, var(--ngs-color-border) 70%, transparent);
+  }
+  ngs-icon.medium-stroke { filter: drop-shadow(0 0.4px currentColor); }
+  ngs-icon.heavy-stroke { filter: drop-shadow(0 1px currentColor) drop-shadow(0 -1px currentColor); }
+  @container whiteboard (width >= 80rem) {
+    ngs-card.properties-panel { max-height: calc(100% - --spacing(48)); }
+  }
+  @container whiteboard (width < 40rem) {
+    ngs-card.properties-panel { width: --spacing(64); }
+    ngs-color-switcher { --ngs-brand-colors-gap: --spacing(2); }
+    button[ngsIconButton].board-mark { --ngs-button-height: --spacing(10); --ngs-icon-size: --spacing(5); }
+    .board-title { font-size: --spacing(4); }
+    button[ngsButton].export-action { --ngs-button-padding: 0 --spacing(3); --ngs-button-font-size: var(--ngs-font-size-sm); }
+  }
+}

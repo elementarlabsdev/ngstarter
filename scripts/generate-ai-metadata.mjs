@@ -107,6 +107,10 @@ const recipes = [
 ];
 
 const curatedGuidance = new Map(Object.entries({
+  whiteboard: {
+    purpose: 'Draw freehand sketches, shapes, diagrams, text and notes on a Konva.js canvas.',
+    useWhen: 'Use ngs-whiteboard for editable idea boards, diagramming and sketches with selection, move/resize/rotate, stroke/fill controls, undo/redo, pan/zoom and PNG/JSON export. Bind value to a version 1 WhiteboardDocument, persist valueChange in application code, and use readonly for viewing. Use SignaturePad for signature fields, ImageDesigner for image composition and ContentEditor for rich document editing. Realtime collaboration and persistence belong to the consuming application.',
+  },
   'tree-select': {
     purpose: 'Choose one or more hierarchical values in an Angular form.',
     useWhen: 'Use for departments, categories, folders, and nested entity selection. Nodes have unique string or number values, labels, optional children, disabled, and hasChildren. Supports search retaining ancestors, single/multiple selection, leavesOnly, cascading selection of enabled loaded leaves, independent selection with cascade=false, lazy loadChildren, clear, and Angular forms inside FormField. Search and cascade operate on loaded nodes. Use Tree for navigation rather than form selection and Select for flat choices.',

@@ -6,6 +6,7 @@ import {
   provideZoneChangeDetection
 } from '@angular/core';
 import { provideRouter, TitleStrategy, withInMemoryScrolling, withViewTransitions } from '@angular/router';
+import { FullscreenOverlayContainer, OverlayContainer } from '@angular/cdk/overlay';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay, withNoIncrementalHydration } from '@angular/platform-browser';
@@ -25,6 +26,7 @@ import { DocsTitleStrategy } from './seo/docs-title-strategy';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    { provide: OverlayContainer, useClass: FullscreenOverlayContainer },
     ColorSchemeStore,
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),

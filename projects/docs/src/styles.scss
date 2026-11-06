@@ -2,6 +2,10 @@
 @use "../../components/styles/themes/chalk";
 @use "../../components/styles/themes/mono";
 
+code.code {
+  color: var(--ngs-color-primary);
+}
+
 .prose {
   div:has(> table.ngs-table, > table.ngs-native-table) {
     margin-block: 1.5rem;
@@ -32,10 +36,13 @@
 
   table.ngs-native-table code,
   table.ngs-table code {
-    border-radius: var(--ngs-radius-sm);
-    background: var(--ngs-color-surface-container);
-    color: var(--ngs-color-on-surface);
     font-size: 0.8125rem;
     font-weight: 500;
+
+    &:not(.code) {
+      border-radius: var(--ngs-radius-sm);
+      background: var(--ngs-color-surface-container);
+      color: var(--ngs-color-on-surface);
+    }
   }
 }

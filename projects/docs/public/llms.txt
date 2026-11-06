@@ -186,3 +186,4 @@ Must use:
 - video-player: `@ngstarter-ui/components/video-player` docs: /libraries/video-player
 - video-viewer: `@ngstarter-ui/components/video-viewer` docs: /components/video-viewer
 - visual-builder: `@ngstarter-ui/components/visual-builder` docs: /libraries/visual-builder
+- whiteboard: `@ngstarter-ui/components/whiteboard` docs: /components/whiteboard

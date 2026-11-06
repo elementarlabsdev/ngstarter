@@ -11,6 +11,7 @@
   </ngs-layout-topbar>
   <ngs-layout-content>
     <ngs-sidenav-container autosize autoFocus hasBackdrop="false">
+      @if (!standaloneWhiteboard()) {
       <ngs-sidenav #sidenav
                    [(opened)]="opened"
                    [mode]="sidebarExpanded() ? 'side' : 'over'"
@@ -86,11 +87,13 @@
           </ngs-sidebar-body>
         </ngs-sidebar>
       </ngs-sidenav>
+      }
       <ngs-sidenav-content>
         <ngs-layout>
+          @if (!standaloneWhiteboard()) {
           <ngs-layout-header class="h-18 border-b border-border bg-background">
             <ngs-toolbar class="h-full gap-3 ps-4 pe-4 md:pe-6">
-              <button ngsIconButton (click)="sidenav.toggle()">
+              <button ngsIconButton (click)="docsSidenav()?.toggle()">
                 <ngs-icon name="fluent:navigation-24-regular"/>
               </button>
               <ngs-toolbar-nav>
@@ -137,6 +140,7 @@
               </ngs-toolbar-item>
             </ngs-toolbar>
           </ngs-layout-header>
+          }
           <ngs-layout-content class="bg-background">
             <router-outlet/>
           </ngs-layout-content>

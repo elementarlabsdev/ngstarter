@@ -27,7 +27,7 @@
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    box-shadow: rgba(50, 50, 93, 0.15) 0 2px 8px 0 inset;
+    box-shadow: var(--ngs-brand-colors-color-shadow, rgba(50, 50, 93, 0.15) 0 2px 8px 0 inset);
 
     &:hover {
       scale: 1.05;
@@ -38,13 +38,15 @@
     }
 
     &.is-selected {
+      outline: var(--ngs-brand-colors-selected-outline, none);
+      outline-offset: var(--ngs-brand-colors-selected-outline-offset, 0);
       &:before {
         content: '';
         position: absolute;
         border-radius: calc(infinity * 1px);
         background: #fff;
-        width: --spacing(3);
-        height: --spacing(3);
+        width: var(--ngs-brand-colors-selected-dot-size, --spacing(3));
+        height: var(--ngs-brand-colors-selected-dot-size, --spacing(3));
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);

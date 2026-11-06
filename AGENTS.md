@@ -22,6 +22,8 @@ as `@ngstarter-ui/components/button`, `@ngstarter-ui/components/dialog`, and
 
 - `npm run build:components:prod` builds the publishable component package and schematics.
 - `npm run verify:components:package` validates the generated package.
+- `npm run verify:dialog:close` checks dialog buttons in local changes. Pass `-- --base <ref>` to
+  check changes against a different Git revision.
 - `npm run build:docs:prod` builds the docs app.
 - `npm run start:docs` runs the docs app locally.
 - `npm run test` runs the Angular unit test target.
@@ -50,6 +52,21 @@ Prefer the narrowest command that verifies the change. For component library cha
   unless existing local patterns or interoperability require the older API.
 - Keep `ChangeDetectionStrategy.OnPush` for UI components unless there is a specific reason not to.
 - Keep styles component-scoped unless a value belongs in shared theme tokens.
+
+## Dialog Construction Rules
+
+Before creating or editing an NgStarter Dialog, open the canonical
+[Dialog Close example](projects/docs/src/app/components/dialog/_examples/dialog-close-example/dialog-close-example.html)
+and its companion TypeScript. Use them to verify the structure and close behavior of your change.
+
+- Keep `ngs-dialog-title`, `ngs-dialog-content`, and `ngs-dialog-actions` as siblings in that order.
+- Enable the container's close icon with `showCloseButton: true` in `Dialog.open()`.
+- Import `DialogClose` and use `ngs-dialog-close` or `ngsDialogClose` on buttons that only close
+  the dialog, including custom close icons and Cancel. Bind `[ngsDialogClose]="result"` to return
+  a value from a synchronous action. Keep eligibility checks on the button's disabled binding.
+- Reserve `DialogRef.close()` for programmatic flows, such as closing after successful asynchronous
+  saving or after a confirmation.
+- Run `npm run verify:dialog:close` before finishing a dialog change. The same check runs in pull requests.
 
 ## Admin App Construction Rules
 
