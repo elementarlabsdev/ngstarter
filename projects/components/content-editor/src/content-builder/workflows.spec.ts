@@ -11,6 +11,7 @@ import { createNgsHeadlessEditorText } from '@ngstarter-ui/components/headless-e
 import { MenuTrigger } from '@ngstarter-ui/components/menu';
 import { ImageBlockComponent } from '../_builder/image-block/image-block.component';
 import { VideoBlockComponent } from '../_builder/video-block/video-block.component';
+import { ContentEditorTableAttributes } from '../types';
 import '../../../../../node_modules/@angular/cdk/overlay-prebuilt.css';
 
 const paragraph = (id: string, text: string) => ({ id, type: 'paragraph', content: [createNgsHeadlessEditorText(text)] });
@@ -41,6 +42,71 @@ function selectedRegion(fixture: any) {
 
 describe('Content editor user workflows in Chromium', () => {
   afterEach(() => TestBed.resetTestingModule());
+
+  it('fits the table by default and preserves manual column widths across mode changes', async () => {
+    const fixture = await create();
+    const builder = fixture.componentInstance;
+    const { id } = builder.insertBlock('table', 0, {}, false);
+    const attributes = () => findContentEditorBlock(builder.getData().blocks, id)?.attrs as Partial<ContentEditorTableAttributes> | undefined;
+    const columnWidth = () => attributes()?.cellMetadata?.[0]?.[0]?.options?.width;
+    const host = fixture.nativeElement as HTMLElement;
+    const tableBlock = () => host.querySelector<HTMLElement>(`[data-block-id="${id}"]`)!;
+    const table = () => tableBlock().querySelector('table')!;
+    const changeWidthMode = async (label: string) => {
+      tableBlock().querySelector<HTMLButtonElement>('button[cdkDragHandle]')!.click();
+      const action = () => [...document.querySelectorAll<HTMLButtonElement>('button[ngs-list-item]')]
+        .find(button => button.textContent?.trim() === label)!;
+      await expect.poll(action).toBeTruthy();
+      const button = action();
+      button.click();
+      await fixture.whenStable();
+      await expect.poll(() => button.isConnected).toBe(false);
+    };
+    const dragColumn = () => {
+      const cell = table().rows[0].cells[0];
+      const clientX = cell.getBoundingClientRect().right;
+      const clientY = cell.getBoundingClientRect().top + 10;
+      cell.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, clientX, clientY }));
+      cell.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, clientX, clientY }));
+      document.dispatchEvent(new MouseEvent('mousemove', { clientX: clientX + 50, clientY }));
+      document.dispatchEvent(new MouseEvent('mouseup'));
+    };
+    await expect.poll(table).toBeTruthy();
+    const fullWidth = table().getBoundingClientRect().width;
+    expect(fullWidth).toBeGreaterThan(500);
+    expect(table().rows[0].cells[0].getBoundingClientRect().width).toBeCloseTo(fullWidth / 3, 0);
+    dragColumn();
+    expect(columnWidth()).toBeUndefined();
+
+    await changeWidthMode('Use manual column widths');
+    expect(attributes()?.settings?.fullWidth).toBe(false);
+    expect(table().getBoundingClientRect().width).toBeLessThan(fullWidth);
+    const originalWidth = table().rows[0].cells[0].getBoundingClientRect().width;
+    dragColumn();
+    await fixture.whenStable();
+    const savedWidth = Number(columnWidth());
+    expect(savedWidth).toBeGreaterThan(originalWidth + 40);
+
+    await changeWidthMode('Fit to full width');
+    expect(table().getBoundingClientRect().width).toBeCloseTo(fullWidth, 0);
+    expect(columnWidth()).toBe(savedWidth);
+    builder.editor.undo();
+    await fixture.whenStable();
+    expect(attributes()?.settings?.fullWidth).toBe(false);
+    expect(table().rows[0].cells[0].getBoundingClientRect().width).toBeCloseTo(savedWidth, 0);
+
+    await changeWidthMode('Fit to full width');
+    const columnHandle = tableBlock().querySelector('.resize-end')!;
+    const edge = columnHandle.getBoundingClientRect().right;
+    columnHandle.dispatchEvent(new MouseEvent('mousedown'));
+    for (const distance of [100, 200, 200]) {
+      document.dispatchEvent(new MouseEvent('mousemove', { clientX: edge + distance }));
+      await fixture.whenStable();
+    }
+    document.dispatchEvent(new MouseEvent('mouseup'));
+    expect(table().rows[0].cells).toHaveLength(5);
+    expect(table().getBoundingClientRect().width).toBeCloseTo(fullWidth, 0);
+  });
 
   it('selects nested text, edits a link in an actual dialog, then restores both document and DOM with Undo/Redo', async () => {
     const fixture = await create(); const { surface } = selectedRegion(fixture);

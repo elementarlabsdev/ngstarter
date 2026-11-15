@@ -22,6 +22,7 @@ import {
   ContentEditorItemProperty,
   ContentEditorOptions,
   ContentEditorBlockInsertionTarget,
+  ContentEditorTableBlockSettings,
 } from '../types';
 import { DOCUMENT } from '@angular/common';
 import { NgsHeadlessEditor, createNgsHeadlessEditorDocument, createNgsHeadlessEditorText } from '@ngstarter-ui/components/headless-editor';
@@ -57,7 +58,7 @@ import { ContentEditorQuoteBlock } from '../_builder/quote-block/quote-block.com
 import { TextSelectionPopupDirective } from '../text-selection-popup.directive';
 import { CommandBarComponent } from '../command-bar/command-bar.component';
 import { BlockSelectionDirective } from '../directives/block-selection.directive';
-import { Popover, PopoverTriggerForDirective } from '@ngstarter-ui/components/popover';
+import { Popover, PopoverContent, PopoverTriggerForDirective } from '@ngstarter-ui/components/popover';
 import { fromEvent, Observable, Subject, Subscription } from 'rxjs';
 import { auditTime, distinctUntilChanged, map, startWith, shareReplay } from 'rxjs/operators';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -81,6 +82,7 @@ import { List, ListItem, ListItemIcon, ListItemTitle } from '@ngstarter-ui/compo
     TextSelectionPopupDirective,
     PopoverTriggerForDirective,
     Popover,
+    PopoverContent,
     ListItemTitle,
     ListItemIcon,
     ListItem,
@@ -1020,6 +1022,20 @@ export class ContentBuilderComponent implements OnInit, AfterViewInit, OnDestroy
   setBlockProps(id: string, props: ContentEditorItemProperty[]) {
     this._store.updateBlock(id, { props });
     this.emitContentChangeEvent();
+  }
+
+  tableWidthAction(id: string): string | null {
+    const block = findContentEditorBlock(this.editor.document().blocks, id);
+    if (block?.type !== 'table') return null;
+    const settings = block.attrs?.['settings'] as ContentEditorTableBlockSettings | undefined;
+    return settings?.fullWidth === false ? 'Fit to full width' : 'Use manual column widths';
+  }
+
+  toggleTableWidth(id: string): void {
+    const block = findContentEditorBlock(this.editor.document().blocks, id);
+    if (block?.type !== 'table') return;
+    const settings = block.attrs?.['settings'] as ContentEditorTableBlockSettings | undefined;
+    this._store.updateBlock(id, { settings: { ...settings, fullWidth: settings?.fullWidth === false } });
   }
 
   insertEmptyBlock(index: number) {

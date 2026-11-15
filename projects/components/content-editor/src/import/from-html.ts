@@ -158,12 +158,17 @@ export function contentEditorFromHtml(html: string, config: ContentEditorConfig 
     if (name === 'table') {
       const rows = Array.from(element.querySelectorAll('tr')).filter(row => row.closest('table') === element);
       const cells = rows.map(row => children(row).filter(cell => ['td', 'th'].includes(tag(cell))));
+      const manualWidth = element.getAttribute('data-content-editor-table-width') === 'manual';
       return [createBlock('table', null, {
         rows: cells.map(row => row.map(parseText)), header: !!cells[0]?.some(cell => tag(cell) === 'th'),
-        cellMetadata: cells.map(row => row.map(cell => ({ props: alignment(cell), options: {
-          colspan: Math.max(1, Math.floor(dimension(cell, 'colspan') ?? 1)), rowspan: Math.max(1, Math.floor(dimension(cell, 'rowspan') ?? 1)),
-          ...(dimension(cell, 'width') ? { width: dimension(cell, 'width') } : {})
-        } })))
+        ...(manualWidth ? { settings: { fullWidth: false } } : {}),
+        cellMetadata: cells.map(row => row.map(cell => {
+          const width = dimension(cell, 'width') ?? dimension(cell, 'data-content-editor-cell-width');
+          return { props: alignment(cell), options: {
+            colspan: Math.max(1, Math.floor(dimension(cell, 'colspan') ?? 1)), rowspan: Math.max(1, Math.floor(dimension(cell, 'rowspan') ?? 1)),
+            ...(width !== null ? { width } : {})
+          } };
+        }))
       })];
     }
     if (name === 'figure') {

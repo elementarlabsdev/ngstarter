@@ -7,6 +7,7 @@
                          (moveEnd)="onMoveEnd()">
       <table #table class="table"
              ngsResizableTable
+             [resizeEnabled]="!fullWidth()"
              cdkMonitorSubtreeFocus
              (cdkFocusChange)="onTableFocusChange($event)"
              (columnWidthChangeStart)="onColumnWidthChangeStart()"

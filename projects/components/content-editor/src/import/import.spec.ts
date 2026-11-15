@@ -77,10 +77,19 @@ describe('Content Editor import', () => {
     expect(imported.blocks.map(block => block.type)).toEqual(allBlocks().map(block => block.type));
     expect((imported.blocks[2].content as any)[0].text).toBe('let x = 1;\n<x>');
     expect(imported.blocks[7].attrs?.['cellMetadata']).toEqual([[{ props: [{ name: 'text-alignment', value: 'right' }], options: { colspan: 2, rowspan: 3, width: 120 } }]]);
+    expect(imported.blocks[7].attrs?.['settings']).toBeUndefined();
     expect(getNgsHeadlessEditorTableData(imported.blocks[7]).header).toBe(true);
     expect((imported.blocks[12].content as any).blocks[0].type).toBe('paragraph');
     expect(imported.blocks[15].attrs?.['settings']).toEqual({ columns: 3, gap: 'large', stackOnMobile: true });
     expect((imported.blocks[15].content as any).cells[0].blocks[0].type).toBe('paragraph');
+  });
+
+  it('keeps manual table width settings through an HTML round trip', () => {
+    const original = allBlocks()[7];
+    const table = { ...original, attrs: { ...original.attrs, settings: { fullWidth: false } } };
+    const imported = contentEditorFromHtml(contentEditorToHtml(doc(table))).blocks[0];
+    expect(imported.attrs?.['settings']).toEqual({ fullWidth: false });
+    expect(imported.attrs?.['cellMetadata']).toEqual(original.attrs?.['cellMetadata']);
   });
 
   it('imports root and inline formatting, colors, links, line breaks and supported descendant blocks', () => {

@@ -46,13 +46,16 @@ export const contentEditorQuoteToHtml: ContentEditorBlockHtmlConverter = (block,
 };
 export const contentEditorTableToHtml: ContentEditorBlockHtmlConverter = (block, ctx) => {
   const table = getNgsHeadlessEditorTableData(block);
+  const fullWidth = settings(block)['fullWidth'] !== false;
+  const widthAttribute = fullWidth ? 'data-content-editor-cell-width' : 'width';
   const metadata = block.attrs?.['cellMetadata'] as Array<Array<{ options?: Record<string, unknown>; props?: any }>> | undefined;
   const rows = table.rows.map((row, r) => `<tr>${row.map((runs, c) => {
     const tag = r === 0 && table.header ? 'th' : 'td';
     const cell = metadata?.[r]?.[c];
-    return `<${tag}${dimension('colspan', cell?.options?.['colspan'])}${dimension('rowspan', cell?.options?.['rowspan'])}${dimension('width', cell?.options?.['width'])}${alignment(cell?.props)}>${ctx.renderText(runs)}</${tag}>`;
+    return `<${tag}${dimension('colspan', cell?.options?.['colspan'])}${dimension('rowspan', cell?.options?.['rowspan'])}${dimension(widthAttribute, cell?.options?.['width'])}${alignment(cell?.props)}>${ctx.renderText(runs)}</${tag}>`;
   }).join('')}</tr>`).join('');
-  return `<table><tbody>${rows}</tbody></table>`;
+  const layout = fullWidth ? 'style="width:100%;table-layout:fixed"' : 'data-content-editor-table-width="manual" style="width:auto"';
+  return `<table ${layout}><tbody>${rows}</tbody></table>`;
 };
 export const contentEditorImageToHtml: ContentEditorBlockHtmlConverter = (block, ctx) => {
   const src = ctx.safeUrl(block.content?.src, 'image');

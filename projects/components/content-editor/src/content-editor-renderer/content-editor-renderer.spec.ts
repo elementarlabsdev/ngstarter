@@ -44,6 +44,31 @@ describe('ContentEditorRenderer native document', () => {
       expect(getComputedStyle(heading).textAlign).toBe('center');
     }
   });
+
+  it('fills the available width by default and uses saved column widths in manual mode', async () => {
+    TestBed.configureTestingModule({ imports: [ContentEditorRenderer] });
+    const fixture = TestBed.createComponent(ContentEditorRenderer);
+    const host = fixture.nativeElement as HTMLElement;
+    host.style.width = '480px';
+    const attrs = {
+      rows: [[ [createNgsHeadlessEditorText('A')], [createNgsHeadlessEditorText('B')] ]],
+      cellMetadata: [[{ options: { width: 120 } }, { options: { width: 180 } }]],
+    };
+    fixture.componentRef.setInput('blocks', [{ id: 'table', type: 'table', content: null, attrs }]);
+    fixture.autoDetectChanges();
+    await fixture.whenStable();
+    const table = host.querySelector('table')!;
+    expect(table.getBoundingClientRect().width).toBeCloseTo(480, 0);
+    expect(table.rows[0].cells[0].getBoundingClientRect().width).toBeCloseTo(240, 0);
+    expect(table.querySelector('col[width]')).toBeNull();
+
+    fixture.componentRef.setInput('blocks', [
+      { id: 'table', type: 'table', content: null, attrs: { ...attrs, settings: { fullWidth: false } } },
+    ]);
+    await fixture.whenStable();
+    expect(table.getBoundingClientRect().width).toBeCloseTo(300, 0);
+    expect(table.querySelector('col')?.getAttribute('width')).toBe('120');
+  });
   it('renders callouts, nested toggles, attachments, image carousels and grid cells', async () => {
     TestBed.configureTestingModule({ imports: [ContentEditorRenderer] });
     const fixture = TestBed.createComponent(ContentEditorRenderer);

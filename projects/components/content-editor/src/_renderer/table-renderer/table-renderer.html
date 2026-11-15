@@ -1,9 +1,9 @@
 @if (rows().length > 0) {
   <div class="table-overflow">
-    <table ngs-native-table>
+    <table ngs-native-table [class.is-full-width]="fullWidth()">
       <colgroup>
         @for (cell of firstRow(); track $index) {
-          <col [attr.width]="width(cell)">
+          <col [attr.width]="fullWidth() ? null : width(cell)">
         }
       </colgroup>
       <tbody>

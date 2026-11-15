@@ -26,7 +26,7 @@ describe('Content Editor HTML export', () => {
       { id: 'bulletList', type: 'bulletList', content: [{ content: text('Parent'), children: [{ content: text('Child'), children: [] }] }] },
       { id: 'orderedList', type: 'orderedList', content: [{ content: text('Numbered'), children: [] }] },
       { id: 'quote', type: 'quote', content: { cite: { content: text('Quote') }, caption: { content: text('Author') } } },
-      { id: 'table', type: 'table', content: null, attrs: { rows: [[text('Header')], [text('Cell')]], header: true, cellMetadata: [[{ options: { colspan: 2, rowspan: 3, width: 140 } }]] } },
+      { id: 'table', type: 'table', content: null, attrs: { rows: [[text('Header')], [text('Cell')]], header: true, settings: { fullWidth: false }, cellMetadata: [[{ options: { colspan: 2, rowspan: 3, width: 140 } }]] } },
       { id: 'image', type: 'image', content: { src: '/photo.png', alt: 'A photo' }, attrs: { settings: { width: 320 } } },
       { id: 'video', type: 'video', content: { src: '/movie.mp4', caption: 'Caption' } },
       { id: 'embed', type: 'embed', content: { url: 'https://example.com/embed', type: 'Example' } },
@@ -48,6 +48,7 @@ describe('Content Editor HTML export', () => {
     expect(doc.querySelector('th')?.getAttribute('colspan')).toBe('2');
     expect(doc.querySelector('th')?.getAttribute('rowspan')).toBe('3');
     expect(doc.querySelector('th')?.getAttribute('width')).toBe('140');
+    expect(doc.querySelector('table')?.getAttribute('data-content-editor-table-width')).toBe('manual');
     expect(doc.querySelector('td')?.textContent).toBe('Cell');
     expect(doc.querySelector('img')?.getAttribute('width')).toBe('320');
     expect(doc.querySelector('video')?.hasAttribute('controls')).toBe(true);

@@ -1,0 +1,10 @@
+@mixin mark {
+  code[data-ngs-headless-editor-mark='code'] {
+    padding: 0 --spacing(1);
+    border-radius: var(--ngs-radius-xs);
+    background-color: var(--ngs-color-surface-container-highest);
+    color: var(--ngs-color-on-surface);
+    font-family: var(--font-mono, ui-monospace, monospace);
+    box-decoration-break: clone;
+  }
+}

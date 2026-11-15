@@ -47,6 +47,7 @@ export class ContentEditorTableRenderer implements ContentEditorBlockRendererInp
   index = input<number>(0);
 
   protected readonly header = computed(() => this.block()?.attrs?.['header'] === true);
+  protected readonly fullWidth = computed(() => this.settings().fullWidth !== false);
   protected readonly rows = computed(() => this.content() || []);
   protected readonly firstRow = computed(() => this.rows()[0] || []);
 

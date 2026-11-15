@@ -7,7 +7,7 @@ import {
   NgZone,
   Input,
   AfterViewInit,
-  output, inject, PLATFORM_ID
+  effect, input, output, inject, PLATFORM_ID
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -26,6 +26,7 @@ export class ResizableTableDirective implements OnInit, AfterViewInit, OnDestroy
   @Input() resizeHandleWidth = 5;
   @Input() mutationObserverDebounceTime = 20;
 
+  readonly resizeEnabled = input(true);
   readonly columnWidthChange = output<{columnIndex: number, width: number}>();
   readonly columnWidthChangeStart = output<void>();
   readonly columnWidthChangeEnd = output<void>();
@@ -68,6 +69,12 @@ export class ResizableTableDirective implements OnInit, AfterViewInit, OnDestroy
         this.hideResizeHandle();
       }
     }, this.mutationObserverDebounceTime);
+    effect(() => {
+      if (!this.resizeEnabled()) {
+        if (this.isResizing) this.stopResizing(false);
+        else this.hideResizeHandle();
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -154,6 +161,7 @@ export class ResizableTableDirective implements OnInit, AfterViewInit, OnDestroy
   }
 
   private ensureColWidths(): void {
+    if (!this.resizeEnabled()) return;
     const referenceRow = this.table.querySelector('tbody > tr:first-child, thead > tr:first-child') as HTMLTableRowElement | null;
 
     if (!referenceRow || this.colElements.length !== referenceRow.cells.length) {
@@ -244,7 +252,7 @@ export class ResizableTableDirective implements OnInit, AfterViewInit, OnDestroy
   }
 
   private handleMouseMoveWrapper(event: MouseEvent): void {
-    if (this.isResizing || !this.wrapper) {
+    if (!this.resizeEnabled() || this.isResizing || !this.wrapper) {
       return;
     }
 
@@ -291,7 +299,7 @@ export class ResizableTableDirective implements OnInit, AfterViewInit, OnDestroy
   }
 
   private handleMouseDownWrapper(event: MouseEvent): void {
-    if (this.activeHoverColumnIndex !== -1 && this.isHandleVisible && this.wrapper) {
+    if (this.resizeEnabled() && this.activeHoverColumnIndex !== -1 && this.isHandleVisible && this.wrapper) {
       const targetCol = this.colElements[this.activeHoverColumnIndex];
       const firstRow = this.table.querySelector('tbody > tr:first-child, thead > tr:first-child') as HTMLTableRowElement | null;
 
@@ -299,6 +307,7 @@ export class ResizableTableDirective implements OnInit, AfterViewInit, OnDestroy
         return;
       }
 
+      this.ensureColWidths();
       this.isResizing = true;
       this.resizingColumnIndex = this.activeHoverColumnIndex;
       this.resizingColElement = targetCol;
@@ -357,7 +366,7 @@ export class ResizableTableDirective implements OnInit, AfterViewInit, OnDestroy
       fromEvent<MouseEvent>(document, 'mousemove')
         .pipe(takeUntil(this.destroy$))
         .subscribe(event => {
-          if (!this.isResizing || !this.resizingColElement || !this.wrapper || !this.resizeHandle) return;
+          if (!this.resizeEnabled() || !this.isResizing || !this.resizingColElement || !this.wrapper || !this.resizeHandle) return;
 
           if (!this.resizingColElement.parentElement) {
             this.stopResizing();
@@ -386,18 +395,22 @@ export class ResizableTableDirective implements OnInit, AfterViewInit, OnDestroy
         .subscribe(() => {
           if (this.isResizing) {
             this.ngZone.run(() => {
-              this.stopResizing();
+              this.stopResizing(this.resizeEnabled());
             });
           }
         });
     });
   }
 
-  private stopResizing(): void {
-    this.columnWidthChange.emit({
-      columnIndex: this.resizingColumnIndex,
-      width: this.resizingColElement?.getBoundingClientRect().width as number
-    });
+  private stopResizing(commit = true): void {
+    if (commit && this.resizingColElement) {
+      this.columnWidthChange.emit({
+        columnIndex: this.resizingColumnIndex,
+        width: this.resizingColElement.getBoundingClientRect().width
+      });
+    } else if (this.resizingColElement) {
+      this.renderer.setStyle(this.resizingColElement, 'width', `${this.startWidth}px`);
+    }
     this.renderer.removeClass(this.table, RESIZING_TABLE_CLASS);
     this.hideResizeHandle();
     this.isResizing = false;

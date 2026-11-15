@@ -28,7 +28,7 @@
   }
 
   table {
-    width: auto !important;
+    width: auto;
     word-break: break-word;
     border-collapse: collapse;
     table-layout: fixed;
@@ -51,6 +51,28 @@
 
       &.selected {
         background: var(--ngs-content-editor-selected-bg, var(--ngs-color-primary-container));
+      }
+    }
+  }
+
+  &.is-full-width {
+    .table-overflow {
+      width: auto;
+      padding-inline-end: --spacing(5);
+    }
+
+    .table-container,
+    table {
+      width: 100%;
+    }
+
+    table {
+      col {
+        width: auto !important;
+      }
+
+      td {
+        min-width: 0;
       }
     }
   }

@@ -162,6 +162,7 @@ export interface ContentEditorItemProperty {
 }
 
 export interface ContentEditorTableBlockSettings {
+  fullWidth?: boolean;
 }
 
 export interface ContentEditorOptions {

@@ -115,6 +115,7 @@ export function contentEditorFromJson(source: unknown, config: ContentEditorConf
             row.forEach((cell: any, col: number) => runs(cell, `${p}.attrs.rows[${r}][${col}]`));
           });
           enumValue(attrs['header'], [true, false], `${p}.attrs.header`);
+          enumValue(settings['fullWidth'], [true, false], `${sp}.fullWidth`);
           if (attrs['cellMetadata'] !== undefined) array(attrs['cellMetadata'], `${p}.attrs.cellMetadata`).forEach((row, r) => array(row, `${p}.attrs.cellMetadata[${r}]`).forEach((cell, col) => {
             const mp = `${p}.attrs.cellMetadata[${r}][${col}]`; object(cell, mp); props(cell.props, `${mp}.props`);
             if (cell.options !== undefined) {

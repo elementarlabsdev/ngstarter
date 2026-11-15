@@ -56,10 +56,10 @@ export class TableColumnsManagerDirective {
           const elementLeftPosition = elementRect.x;
 
           if (event.clientX > (this._elementPosition + this._cellWidth) && event.clientX > (elementRightPosition + this._cellWidth)) {
-            this._elementPosition = elementRightPosition + this._cellWidth;
+            this._elementPosition = Math.max(this._elementPosition, elementRightPosition) + this._cellWidth;
             this.columnAdded.emit();
           } else if (event.clientX < (this._elementPosition - this._cellWidth) && event.clientX < (elementLeftPosition - this._cellWidth)) {
-            this._elementPosition = elementLeftPosition - this._cellWidth;
+            this._elementPosition = Math.min(this._elementPosition, elementLeftPosition) - this._cellWidth;
             this.columnDeleted.emit();
           }
         }

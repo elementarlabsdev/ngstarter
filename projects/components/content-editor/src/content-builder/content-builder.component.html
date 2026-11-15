@@ -31,6 +31,7 @@
           <div class="block-control block-control-drag"
                (click)="selectBlock(contentBlock.id)"
                [ngsPopoverTriggerFor]="settingsPopover"
+               [ngsPopoverContext]="{ trigger: settingsTrigger }"
                (closed)="onSettingsPopoverClose()"
                #settingsTrigger="ngsPopoverTriggerFor"
                hasBackdrop
@@ -75,24 +76,31 @@
 </div>
 
 <ngs-popover #settingsPopover="ngsPopover">
-  <div class="px-2 py-0 w-72 settings-popover">
-    <ngs-list>
-      @if (selectedBlocksModel.selected.length === 1 && canConvertBlock(selectedBlocksModel.selected[0])) {
-        <ngs-list-item [ngsMenuTriggerFor]="conversionMenu" [ngsMenuTriggerData]="{blockId: selectedBlocksModel.selected[0]}" [ngsMenuTriggerRestoreFocus]="false">
-          <ngs-icon name="fluent:arrow-swap-24-regular" ngsListItemIcon/>
-          <div ngsListItemTitle>Turn into</div>
+  <ng-template ngsPopoverContent let-trigger="trigger">
+    <div class="px-2 py-0 w-72 settings-popover">
+      <ngs-list>
+        @if (selectedBlocksModel.selected.length === 1 && tableWidthAction(selectedBlocksModel.selected[0]); as action) {
+          <button ngs-list-item type="button" (click)="toggleTableWidth(selectedBlocksModel.selected[0]); trigger.close()">
+            <span ngsListItemTitle>{{ action }}</span>
+          </button>
+        }
+        @if (selectedBlocksModel.selected.length === 1 && canConvertBlock(selectedBlocksModel.selected[0])) {
+          <ngs-list-item [ngsMenuTriggerFor]="conversionMenu" [ngsMenuTriggerData]="{blockId: selectedBlocksModel.selected[0]}" [ngsMenuTriggerRestoreFocus]="false">
+            <ngs-icon name="fluent:arrow-swap-24-regular" ngsListItemIcon/>
+            <div ngsListItemTitle>Turn into</div>
+          </ngs-list-item>
+        }
+        <ngs-list-item (click)="duplicateSelectedBlocks(settingsPopover)">
+          <ngs-icon name="fluent:copy-24-regular" ngsListItemIcon/>
+          <div ngsListItemTitle>Duplicate</div>
         </ngs-list-item>
-      }
-      <ngs-list-item (click)="duplicateSelectedBlocks(settingsPopover)">
-        <ngs-icon name="fluent:copy-24-regular" ngsListItemIcon/>
-        <div ngsListItemTitle>Duplicate</div>
-      </ngs-list-item>
-      <ngs-list-item (click)="deleteSelectedBlocks(settingsPopover)">
-        <ngs-icon name="fluent:delete-24-regular" ngsListItemIcon/>
-        <div ngsListItemTitle>Delete</div>
-      </ngs-list-item>
-    </ngs-list>
-  </div>
+        <ngs-list-item (click)="deleteSelectedBlocks(settingsPopover)">
+          <ngs-icon name="fluent:delete-24-regular" ngsListItemIcon/>
+          <div ngsListItemTitle>Delete</div>
+        </ngs-list-item>
+      </ngs-list>
+    </div>
+  </ng-template>
 </ngs-popover>
 
 <ngs-menu #suggestionsMenu="ngsMenu" classList="min-h-[70vh] max-h-[70vh]! w-80 max-w-[calc(100vw-1rem)]!" [themeSource]="themeSource" pushIntoViewport (closed)="onSuggestionsMenuClose($event)">

@@ -3,7 +3,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component, effect, untracked,
+  Component, computed, effect, untracked,
   ElementRef,
   inject,
   input, OnInit, PLATFORM_ID, signal,
@@ -50,6 +50,7 @@ import { ContentBuilderComponent } from '../../content-builder/content-builder.c
   templateUrl: './table-block.component.html',
   styleUrl: './table-block.component.scss',
   host: {
+    '[class.is-full-width]': 'fullWidth()',
     '[class.is-column-managing]': '_columnManaging()',
     '[class.is-row-managing]': '_rowManaging()',
   }
@@ -66,6 +67,8 @@ export class TableBlockComponent implements OnInit, AfterViewInit, ContentEditor
   settings = input.required<ContentEditorTableBlockSettings>();
   index = input.required<number>();
   props = input<unknown[]>([]);
+
+  protected readonly fullWidth = computed(() => this.settings().fullWidth !== false);
 
   _content = signal<any[]>([]);
   _columnManaging = signal(false);
@@ -254,11 +257,12 @@ export class TableBlockComponent implements OnInit, AfterViewInit, ContentEditor
     this._rowManaging.set(false);
   }
 
-  onColumnWidthChange(event: any) {
+  onColumnWidthChange({ columnIndex, width }: { columnIndex: number; width: number }): void {
     this._content.update((content: any[]) => {
       content.forEach(row => {
-        row[event.columnIndex].options['width'] = event.width;
-      })
+        const cell = row[columnIndex];
+        if (cell) cell.options.width = width;
+      });
       return content;
     });
     this.update();
@@ -317,7 +321,7 @@ export class TableBlockComponent implements OnInit, AfterViewInit, ContentEditor
   }
 
   private update() {
-    this._store.updateBlock(this.id(), {...this.getData(), isEmpty: this.isEmpty()});
+    this._store.updateBlock(this.id(), { content: this._content(), isEmpty: this.isEmpty() });
     this._contentBuilder.emitContentChangeEvent();
   }
 }

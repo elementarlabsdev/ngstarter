@@ -286,11 +286,13 @@ HTML mapping: blockquote, or figure > blockquote plus figcaption.
 
 ### `table` — Table
 
-content: null. attrs.rows: TextRun[][][]. attrs.header?: boolean. attrs.cellMetadata?: CellMetadata[][]. CellMetadata = { props?: Property[], options?: { colspan?: positive integer, rowspan?: positive integer, width?: positive number | "auto" | null }, styles?: object }.
+content: null. attrs.rows: TextRun[][][]. attrs.header?: boolean. attrs.settings?: { fullWidth?: boolean }. attrs.cellMetadata?: CellMetadata[][]. CellMetadata = { props?: Property[], options?: { colspan?: positive integer, rowspan?: positive integer, width?: positive number | "auto" | null }, styles?: object }.
 
 Index rows[row][column] to get the text runs of one cell; metadata uses the same row/column indexes. header defaults to false. Spans default to 1. At most 500 rows and 50 columns; keep a consistent logical row width. Headless Editor pads ragged/empty rows on rendering. styles and other JSON metadata are retained, but only alignment/spans/width are used by built-in export. Never put builder UI cell objects in content.
 
 HTML mapping: table rows, th/td, colspan/rowspan/width and text-align. A th in the first row enables the header.
+
+Tables fill the available width by default. Set `attrs.settings.fullWidth` to `false` to apply saved cell widths and enable manual column resizing in the builder.
 
 ```json
 {

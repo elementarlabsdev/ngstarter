@@ -10,7 +10,12 @@
   }
 
   table {
-    min-width: 100%;
+    width: auto;
     word-break: break-word;
+
+    &.is-full-width {
+      width: 100%;
+      table-layout: fixed;
+    }
   }
 }

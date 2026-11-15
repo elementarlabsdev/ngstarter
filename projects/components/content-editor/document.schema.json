@@ -566,7 +566,12 @@
                 },
                 "settings": {
                   "type": "object",
-                  "properties": {},
+                  "properties": {
+                    "fullWidth": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  },
                   "required": [],
                   "additionalProperties": true
                 },

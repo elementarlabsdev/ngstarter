@@ -1,3 +1,4 @@
+@use '../inline-code';
 @reference 'tailwindcss';
 
 :host {
@@ -67,6 +68,8 @@
   }
 
   ::ng-deep {
+    @include inline-code.mark;
+
     .selection-area {
       background: var(--ngs-content-editor-selected-bg, var(--ngs-color-primary-container));
       opacity: 0.4;
@@ -178,9 +181,6 @@
       --ngs-upload-area-color: var(--ngs-content-editor-muted-color, var(--ngs-color-on-surface-variant));
       --ngs-upload-area-border: 1px solid var(--ngs-content-editor-field-border, var(--ngs-color-outline));
       --ngs-upload-area-border-radius: var(--ngs-control-radius);
-    }
-    code {
-      color: var(--ngs-color-primary);
     }
   }
 }
