@@ -187,9 +187,11 @@ export class CodeBlockComponent implements OnInit, OnDestroy, ContentEditorDataB
         })
       ],
     });
-    await this.selectLanguage(this._language(), false);
     this._editorView.contentDOM.style.width = '0';
-    this._editorView.focus();
+    if (this._store.focusedBlockId() === this.id()) {
+      this.focus();
+    }
+    await this.selectLanguage(this._language(), false);
     this.initialized.set(true);
   }
 
