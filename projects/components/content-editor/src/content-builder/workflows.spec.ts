@@ -11,10 +11,13 @@ import { createNgsHeadlessEditorText } from '@ngstarter-ui/components/headless-e
 import { MenuTrigger } from '@ngstarter-ui/components/menu';
 import { ImageBlockComponent } from '../_builder/image-block/image-block.component';
 import { VideoBlockComponent } from '../_builder/video-block/video-block.component';
-import { ContentEditorTableAttributes } from '../types';
+import { ContentEditorListItem, ContentEditorTableAttributes } from '../types';
 import '../../../../../node_modules/@angular/cdk/overlay-prebuilt.css';
 
 const paragraph = (id: string, text: string) => ({ id, type: 'paragraph', content: [createNgsHeadlessEditorText(text)] });
+const listItem = (text: string, children: ContentEditorListItem[] = []): ContentEditorListItem => ({
+  content: [createNgsHeadlessEditorText(text)], props: [], children,
+});
 async function create(options = {}) {
   await page.viewport(1100, 900);
   TestBed.configureTestingModule({ imports: [ContentBuilderComponent] });
@@ -42,6 +45,55 @@ function selectedRegion(fixture: any) {
 
 describe('Content editor user workflows in Chromium', () => {
   afterEach(() => TestBed.resetTestingModule());
+
+  it('keeps focus and scroll position when a document loads a list below the viewport', async () => {
+    const fixture = await create();
+    const host = fixture.nativeElement as HTMLElement;
+    host.style.height = '250px';
+    host.style.overflowY = 'auto';
+    const surface = host.querySelector<HTMLElement>('[data-block-id="left-text"] [contenteditable]')!;
+    surface.focus({ preventScroll: true });
+    host.scrollTop = 0;
+
+    const { blocks } = fixture.componentInstance.getData();
+    fixture.componentRef.setInput('content', { version: 1, blocks: [
+      ...blocks,
+      ...Array.from({ length: 20 }, (_, index) => paragraph(`line-${index}`, `Line ${index}`)),
+      { id: 'code', type: 'code', content: [createNgsHeadlessEditorText('const n = 1;')], attrs: { settings: { language: 'javascript' } } },
+      { id: 'list', type: 'bulletList', content: [listItem('First', [listItem('Nested')]), listItem('Last')], attrs: { settings: { listStyle: 'bullet' } } },
+    ] });
+    await expect.poll(() => host.querySelectorAll('ngs-list-block [contenteditable]').length).toBe(3);
+    await expect.poll(() => host.querySelector('.cm-content')?.textContent).toBe('const n = 1;');
+    await new Promise(requestAnimationFrame);
+
+    expect(host.scrollTop).toBe(0);
+    expect(document.activeElement).toBe(surface);
+    expect(host.querySelector('ngs-list-block')!.getBoundingClientRect().top).toBeGreaterThan(host.getBoundingClientRect().bottom);
+  });
+
+  it('moves focus to the edited list item when Enter or Tab changes the list', async () => {
+    const fixture = await create();
+    const { id } = fixture.componentInstance.insertBlock('bulletList', 0, {}, true, [listItem('First'), listItem('Last')]);
+    const host = fixture.nativeElement as HTMLElement;
+    const items = () => [...host.querySelectorAll<HTMLElement>(`[data-block-id="${id}"] .list-item-content`)];
+    await expect.poll(() => document.activeElement === items()[0]).toBe(true);
+
+    await userEvent.keyboard('{Enter}');
+    await expect.poll(() => items().map(item => item.textContent)).toEqual(['First', '', 'Last']);
+    expect(document.activeElement).toBe(items()[1]);
+    await userEvent.keyboard('Middle');
+    await expect.poll(() => items()[1].textContent).toBe('Middle');
+
+    const nested = () => host.querySelector(`[data-block-id="${id}"] ol .list-item-content`);
+    await userEvent.keyboard('{Tab}');
+    await expect.poll(() => nested()?.textContent).toBe('Middle');
+    expect(document.activeElement).toBe(nested());
+
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}');
+    await expect.poll(nested).toBeNull();
+    expect(items()[1].textContent).toBe('Middle');
+    expect(document.activeElement).toBe(items()[1]);
+  });
 
   it('fits the table by default and preserves manual column widths across mode changes', async () => {
     const fixture = await create();

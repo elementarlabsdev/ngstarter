@@ -1,7 +1,4 @@
-<ul class="list"
-    ngsContentObserver
-    detectAddedNode="list-item"
-    (nodeAdded)="_onNodeAdded($event)">
+<ul class="list">
   <ng-container [ngTemplateOutlet]="listTpl"
                 [ngTemplateOutletContext]="{ $implicit: _content(), level: 0, parentItem: null, parentList: [] }"/>
 </ul>
@@ -16,14 +13,11 @@
            #contentEditable="ngsContentEditorContentEditable"
            class="list-item-content"
            (contentChanged)="onContentChanged($event, list, index)"
-           (pressedEnter)="onPressedEnter($event, contentEditable, list, index, level, parentItem, parentList)"
+           (pressedEnter)="onPressedEnter($event, contentEditable, list, index, parentItem, parentList, listItem)"
            (keydown)="_onKeyDown($event, contentEditable, list, index, level, parentItem, parentList, listItem)"
            [attr.data-empty-placeholder]="_placeholder()"></div>
       @if (item.children.length > 0) {
-        <ol class="list"
-            ngsContentObserver
-            detectAddedNode="list-item"
-            (nodeAdded)="_onNodeAdded($event)">
+        <ol class="list">
           <ng-container [ngTemplateOutlet]="listTpl"
                         [ngTemplateOutletContext]="{ $implicit: item.children, level: level + 1, parentItem: item, parentList: list }"/>
         </ol>

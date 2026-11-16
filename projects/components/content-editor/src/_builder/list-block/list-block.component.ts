@@ -1,12 +1,13 @@
 import { NgsHeadlessEditorText } from '@ngstarter-ui/components/headless-editor';
 import { contentEditorText, cloneContentEditorValue } from '../../document';
 import {
+  afterNextRender,
   AfterViewInit,
   ChangeDetectionStrategy,
   Component, effect, untracked,
-  DestroyRef,
   ElementRef,
   inject,
+  Injector,
   input,
   OnInit,
   signal
@@ -20,8 +21,7 @@ import {
   ContentEditorListSettings
 } from '../../types';
 import { ContentEditorContentEditableDirective } from '../../content-editor-content-editable.directive';
-import { NgTemplateOutlet } from '@angular/common';
-import { ContentObserverDirective } from '../../content-observer.directive';
+import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { CursorController } from '../../utils/cursor-controller';
 import { ContentBuilderComponent } from '../../content-builder/content-builder.component';
 
@@ -30,8 +30,7 @@ import { ContentBuilderComponent } from '../../content-builder/content-builder.c
   exportAs: 'ngsListBlock',
   imports: [
     ContentEditorContentEditableDirective,
-    NgTemplateOutlet,
-    ContentObserverDirective
+    NgTemplateOutlet
   ],
   templateUrl: './list-block.component.html',
   styleUrl: './list-block.component.scss',
@@ -51,6 +50,9 @@ import { ContentBuilderComponent } from '../../content-builder/content-builder.c
 export class ListBlockComponent implements OnInit, ContentEditorDataBlock, AfterViewInit {
   private _store = inject(ContentBuilderStore);
   private _contentBuilder = inject<ContentBuilderComponent>(CONTENT_BUILDER);
+  private readonly document = inject(DOCUMENT);
+  private readonly element = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  private readonly injector = inject(Injector);
 
   id = input.required<string>();
   content = input.required<ContentEditorListItem[]>();
@@ -78,6 +80,9 @@ export class ListBlockComponent implements OnInit, ContentEditorDataBlock, After
         this._listStyle.set(settings.listStyle);
       });
     });
+    afterNextRender(() => {
+      if (this._store.focusedBlockId() === this.id()) this.focus();
+    });
   }
 
   ngOnInit() {
@@ -93,6 +98,7 @@ export class ListBlockComponent implements OnInit, ContentEditorDataBlock, After
   }
 
   focus() {
+    this.focusItem(this.element.querySelector(':scope > .list > .list-item'));
   }
 
   protected onContentChanged(content: readonly NgsHeadlessEditorText[], list: ContentEditorListItem[], index: number) {
@@ -109,48 +115,26 @@ export class ListBlockComponent implements OnInit, ContentEditorDataBlock, After
     contentEditable: ContentEditorContentEditableDirective,
     list: ContentEditorListItem[],
     index: number,
-    level: number,
     parentItem: ContentEditorListItem | null,
-    parentList: ContentEditorListItem[]
+    parentList: ContentEditorListItem[],
+    listItem: HTMLElement
   ) {
     event.preventDefault();
     event.stopPropagation();
 
-    if (level === 0) {
-      const content = contentEditable.getContent();
-
-      if (contentEditorText(content)) {
-        list.splice(index + 1, 0, {
-          content: [],
-          props: [],
-          styles: {},
-          children: []
-        });
-      } else {
-        list.splice(index, 1);
-
-        if (list.length === 0) {
-          this._contentBuilder.deleteBlock(this.id());
-        }
-
-        this._contentBuilder.insertEmptyBlock(this.index());
-      }
+    if (contentEditorText(contentEditable.getContent())) {
+      list.splice(index + 1, 0, { content: [], props: [], styles: {}, children: [] });
+      this.focusAfterEdit(listItem, () => listItem.nextElementSibling);
     } else {
-      if (list[index] && !contentEditorText(list[index].content)) {
-        list.splice(index, 1);
+      list.splice(index, 1);
+      if (parentItem) {
         const parentIndex = parentList.findIndex(item => item === parentItem);
-        parentList.splice(parentIndex + 1, 0, {
-          content: [],
-          props: [],
-          children: []
-        });
+        const parentElement = listItem.parentElement?.parentElement;
+        parentList.splice(parentIndex + 1, 0, { content: [], props: [], children: [] });
+        this.focusAfterEdit(listItem, () => parentElement?.nextElementSibling ?? null);
       } else {
-        list.splice(index + 1, 0, {
-          content: [],
-          props: [],
-          styles: {},
-          children: []
-        });
+        if (list.length === 0) this._contentBuilder.deleteBlock(this.id());
+        this._contentBuilder.insertEmptyBlock(this.index());
       }
     }
 
@@ -174,13 +158,18 @@ export class ListBlockComponent implements OnInit, ContentEditorDataBlock, After
     return !this._content().some(item => contentEditorText(item.content).trim() || item.children.length > 0);
   }
 
-  protected _onNodeAdded(node: HTMLElement) {
-    this._focusItem(node.querySelector('.list-item-content') as HTMLElement);
+  private focusAfterEdit(origin: HTMLElement, target: () => Element | null): void {
+    afterNextRender(() => {
+      const active = this.document.activeElement;
+      if (origin.contains(active) || (!origin.isConnected && active === this.document.body)) {
+        this.focusItem(target());
+      }
+    }, { injector: this.injector });
   }
 
-  protected _focusItem(element: HTMLElement) {
-    const cursorController = new CursorController(element);
-    cursorController.setToEnd();
+  private focusItem(item: Element | null): void {
+    const element = item?.querySelector<HTMLElement>(':scope > .list-item-content');
+    if (element) new CursorController(element).setToEnd();
   }
 
   protected _onKeyDown(
@@ -194,31 +183,28 @@ export class ListBlockComponent implements OnInit, ContentEditorDataBlock, After
     listItem: HTMLElement
   ) {
     if (event.key === 'Backspace' && !contentEditorText(contentEditable.getContent())) {
-      const latestElementInParentList = (listItem.closest('.list') as HTMLElement)?.parentNode;
+      const parentElement = parentItem ? listItem.parentElement?.parentElement : null;
+      const previous = listItem.previousElementSibling ?? parentElement ?? null;
       list.splice(index, 1);
-      const prevElement = listItem.previousSibling as HTMLElement;
-
-      if (prevElement) {
-        this._focusItem(prevElement.querySelector('.list-item-content') as HTMLElement);
-      } else {
-        if (latestElementInParentList) {
-          this._focusItem(latestElementInParentList.querySelector('.list-item-content') as HTMLElement);
-        }
-      }
+      this.focusAfterEdit(listItem, () => previous);
     } else if (event.key === 'Tab') {
       event.preventDefault();
       event.stopPropagation();
 
       if (event.shiftKey && parentItem) {
+        const parentElement = listItem.parentElement?.parentElement;
         const cached = JSON.parse(JSON.stringify(list[index]));
         list.splice(index, 1);
         const parentIndex = parentList.findIndex(item => item === parentItem);
         parentList.splice(parentIndex + 1, 0, cached);
+        this.focusAfterEdit(listItem, () => parentElement?.nextElementSibling ?? null);
       } else {
         if (list[index - 1]) {
+          const previous = listItem.previousElementSibling;
           const cached = JSON.parse(JSON.stringify(list[index]));
           list.splice(index, 1);
           list[index - 1].children.push(cached);
+          this.focusAfterEdit(listItem, () => previous?.querySelector(':scope > .list > .list-item:last-child') ?? null);
         }
       }
     }
