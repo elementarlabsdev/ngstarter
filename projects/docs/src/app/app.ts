@@ -464,13 +464,13 @@ export class App implements OnInit {
           key: uuid(),
           type: 'link',
           name: 'Card',
-          link: '/components/card'
+          link: '/components/card/overview'
         },
         {
           key: uuid(),
           type: 'link',
           name: 'Card Overlay',
-          link: '/components/card-overlay'
+          link: '/components/card-overlay/overview'
         },
         {
           key: uuid(),

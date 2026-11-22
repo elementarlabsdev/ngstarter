@@ -15,6 +15,7 @@ describe('Docs SEO metadata', () => {
       providers: [
         provideRouter([
           { path: 'old-example', redirectTo: 'libraries/form-builder/form-builder' },
+          { path: 'missing', title: 'Page Not Found', data: { notFound: true }, children: [] },
           { path: '**', children: [] },
         ]),
         { provide: ENVIRONMENT, useValue: { siteUrl: 'https://docs.ngstarter.com/', pageTitle: 'NgStarter' } },
@@ -72,6 +73,34 @@ describe('Docs SEO metadata', () => {
 
     await router.navigateByUrl('/?utm_source=test');
     expectCanonical('/');
+  });
+
+  it('removes indexable metadata for a missing page and restores it on navigation', async () => {
+    const meta = TestBed.inject(Meta);
+    await router.navigateByUrl('/');
+    await router.navigateByUrl('/missing');
+
+    expect(TestBed.inject(Title).getTitle()).toBe('Page Not Found | NgStarter');
+    expect(meta.getTag('name="robots"')?.content).toBe('noindex');
+    expect(meta.getTag('property="og:url"')).toBeNull();
+    expect(document.head.querySelector('link[rel="canonical"]')).toBeNull();
+
+    await router.navigateByUrl('/installation');
+    expectCanonical('/installation');
+    expect(meta.getTag('name="robots"')).toBeNull();
+  });
+
+  it('gives different Video Player examples distinct metadata', async () => {
+    const titles = new Set<string>();
+    const descriptions = new Set<string>();
+    for (const page of ['overview', 'basic-example', 'minimal-example', 'carousel-example']) {
+      await router.navigateByUrl(`/libraries/video-player/${page}`);
+      titles.add(TestBed.inject(Title).getTitle());
+      descriptions.add(TestBed.inject(Meta).getTag('name="description"')!.content);
+    }
+
+    expect(titles.size).toBe(4);
+    expect(descriptions.size).toBe(4);
   });
 
   it('gives the Form Builder overview and its distinct examples unique titles and descriptions', async () => {

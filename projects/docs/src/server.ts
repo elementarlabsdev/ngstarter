@@ -7,6 +7,8 @@ import {
 import express from 'express';
 import { join } from 'node:path';
 
+import { legacyDocsRedirects } from './app/legacy-docs-redirects';
+
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
@@ -34,6 +36,14 @@ app.use(
     redirect: false,
   }),
 );
+
+for (const [path, destination] of Object.entries(legacyDocsRedirects)) {
+  app.get(`/${path}`, (req, res) => {
+    const queryStart = req.originalUrl.indexOf('?');
+    const query = queryStart === -1 ? '' : req.originalUrl.slice(queryStart);
+    res.redirect(301, destination + query);
+  });
+}
 
 /**
  * Handle all other requests by rendering the Angular application.

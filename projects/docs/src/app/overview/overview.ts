@@ -106,12 +106,12 @@ export class Overview {
       name: 'Calendar'
     },
     {
-      routerLink: '/components/card',
+      routerLink: '/components/card/overview',
       imageUrl: 'assets/overview/card.svg',
       name: 'Card'
     },
     {
-      routerLink: '/components/card-overlay',
+      routerLink: '/components/card-overlay/overview',
       imageUrl: 'assets/overview/card-overlay.svg',
       name: 'Card Overlay'
     },

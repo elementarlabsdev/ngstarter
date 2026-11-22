@@ -110,16 +110,74 @@
       "prefix": "ngs",
       "architect": {
         "build": {
-          "builder": "@angular/build:ng-packagr",
+          "builder": "@angular/build:library",
           "options": {
-            "project": "projects/components/ng-package.json"
+            "tsConfig": "projects/components/tsconfig.lib.json",
+            "outputPath": "dist/components",
+            "assets": [
+              {
+                "glob": "API.md",
+                "input": "projects/components/data-view",
+                "output": "data-view"
+              },
+              {
+                "glob": "document.schema.json",
+                "input": "projects/components/content-editor",
+                "output": "content-editor"
+              },
+              {
+                "glob": "BLOCK_FORMAT.md",
+                "input": "projects/components/content-editor",
+                "output": "content-editor"
+              },
+              "projects/components/ai",
+              "projects/components/styles",
+              "projects/components/LICENSE.md",
+              {
+                "glob": "**/*.json",
+                "input": "projects/components/schematics",
+                "output": "schematics"
+              }
+            ],
+            "allowedNonPeerDependencies": [
+              "@codemirror/lang-angular",
+              "@codemirror/lang-css",
+              "@codemirror/lang-html",
+              "@codemirror/lang-javascript",
+              "@codemirror/lang-json",
+              "@codemirror/lang-sass",
+              "@ctrl/tinycolor",
+              "@embedpdf/core",
+              "@embedpdf/engines",
+              "@embedpdf/models",
+              "@ngrx/signals",
+              "@tailwindcss/postcss",
+              "@tailwindcss/typography",
+              "@uiw/codemirror-theme-github",
+              "@viselect/vanilla",
+              "autoprefixer",
+              "codemirror",
+              "d3",
+              "emojibase-data",
+              "iconify-icon",
+              "jsdom",
+              "konva",
+              "libphonenumber-js",
+              "postcss",
+              "rxjs",
+              "shiki",
+              "tailwindcss",
+              "tslib",
+              "uuid",
+              "video.js"
+            ]
           },
           "configurations": {
             "production": {
               "tsConfig": "projects/components/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/components/tsconfig.lib.json"
+              "compilationMode": "full"
             }
           },
           "defaultConfiguration": "production"
@@ -200,6 +258,11 @@
                   "maximumWarning": "24kb"
                 }
               ],
+              "optimization": {
+                "styles": {
+                  "inlineCritical": false
+                }
+              },
               "outputHashing": "all"
             },
             "development": {

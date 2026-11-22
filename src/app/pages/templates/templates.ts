@@ -122,7 +122,7 @@ export class Templates {
     },
     {
       title: 'Card',
-      href: 'https://docs.ngstarter.com/components/card',
+      href: 'https://docs.ngstarter.com/components/card/overview',
       icon: 'fluent:card-ui-24-regular',
       description: 'Metric panels, dashboard widgets, and repeated content surfaces.',
     },

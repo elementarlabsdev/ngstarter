@@ -22,12 +22,12 @@
     <section class="mt-32" aria-labelledby="template-gallery-title">
       @for (screenshot of screenshots; track screenshot.title) {
         <div class="mt-20 w-full">
-          <div class="template-copy flex items-center justify-between gap-4 sm:flex">
-            <div class="grow">
+          <div class="template-copy flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div class="min-w-0 grow">
               <h3>{{ screenshot.title }}</h3>
               <p>{{ screenshot.description }}</p>
             </div>
-            <div class="template-actions flex items-center gap-4">
+            <div class="template-actions flex flex-wrap items-center gap-4 sm:shrink-0">
               <a ngsButton="outlined" reverse [href]="screenshot.href" target="_blank" rel="noreferrer">
                 Live Demo
                 <ngs-icon name="fluent:open-24-regular" />
@@ -112,7 +112,7 @@
       </div>
     </section>
 
-    <section class="mt-20 grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+    <section class="mt-20 grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
       <ngs-card appearance="outlined" class="template-value-card">
         <div ngs-card-content>
           <p class="text-sm font-semibold uppercase tracking-wide text-primary">

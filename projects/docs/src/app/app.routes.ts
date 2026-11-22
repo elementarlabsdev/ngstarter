@@ -1,6 +1,13 @@
 import { Routes } from '@angular/router';
 
+import { legacyDocsRedirects } from './legacy-docs-redirects';
+
 export const routes: Routes = [
+  ...Object.entries(legacyDocsRedirects).map(([path, redirectTo]) => ({
+    path,
+    redirectTo,
+    pathMatch: 'full' as const,
+  })),
   {
     path: '',
     pathMatch: 'full',
@@ -45,6 +52,7 @@ export const routes: Routes = [
   {
     path: '**',
     title: 'Page Not Found',
+    data: { notFound: true },
     loadComponent: () => import('./error/not-found/not-found').then(c => c.NotFound)
   }
 ];

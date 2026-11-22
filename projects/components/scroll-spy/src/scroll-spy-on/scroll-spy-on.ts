@@ -1,4 +1,5 @@
-import { Component, ElementRef, inject, input, OnInit, Renderer2, DOCUMENT, ChangeDetectionStrategy } from '@angular/core';
+import { PlatformLocation } from '@angular/common';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { ScrollSpyNav } from '../scroll-spy-nav/scroll-spy-nav';
 import { SCROLL_SPY_NAV } from '../types';
@@ -11,21 +12,20 @@ import { SCROLL_SPY_NAV } from '../types';
   changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-scroll-spy-on',
+    '[attr.href]': 'href',
     '[class.is-active]': 'isActive',
     '(click)': '_handleClick($event)'
   }
 })
-export class ScrollSpyOn implements OnInit {
+export class ScrollSpyOn {
   private _parent = inject<ScrollSpyNav>(SCROLL_SPY_NAV);
-  private _elementRef = inject(ElementRef);
-  private _renderer = inject(Renderer2);
-  private _document = inject(DOCUMENT);
+  private _location = inject(PlatformLocation);
 
   targetId = input.required<string>();
 
-  ngOnInit() {
-    const fullUrl = this._document.location.origin + this._document.location.pathname;
-    this._renderer.setAttribute(this._elementRef.nativeElement, 'href', fullUrl + '#' + this.targetId());
+  protected get href(): string {
+    const { pathname, search } = this._location;
+    return `${pathname}${search}#${encodeURIComponent(this.targetId())}`;
   }
 
   protected get isActive() {

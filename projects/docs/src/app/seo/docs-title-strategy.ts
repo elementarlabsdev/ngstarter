@@ -179,6 +179,12 @@ const LIBRARY_TITLES: Record<string, SeoTitleConfig> = {
     apiKind: null,
   },
   'form-builder': { label: 'Form Builder', detail: 'Drag and Drop Schema Forms', apiKind: null },
+  'headless-editor': {
+    label: 'Headless Editor',
+    detail: 'Custom Rich Text Editing',
+    apiDetail: 'Commands, Plugins and Document Model',
+    apiKind: null,
+  },
   'image-designer': { label: 'Image Designer', detail: 'Visual Image Editing', apiKind: null },
   'kanban-board': { label: 'Kanban Board', detail: 'Workflow Boards', apiKind: null },
   'pdf-viewer': {
@@ -254,29 +260,38 @@ export class DocsTitleStrategy extends TitleStrategy {
   private readonly detailSeparator = ' \u2013 ';
 
   override updateTitle(routerState: RouterStateSnapshot): void {
-    const metadata = this.resolveMetadata(routerState);
+    const notFound = routerState.root.firstChild?.data['notFound'] === true;
+    const metadata = notFound
+      ? this.metadata('Page Not Found', '', 'The requested NgStarter documentation page could not be found.')
+      : this.resolveMetadata(routerState);
     const siteUrl = this.environment.getValue('siteUrl').replace(/\/+$/, '');
     const path = routerState.url.split(/[?#]/)[0].replace(/\/+$/, '') || '/';
     // Use the public origin, since SSR requests behind a proxy may use HTTP internally.
     const canonicalUrl = `${siteUrl}${path}`;
 
-    let canonical = this.document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    this.title.setTitle(metadata.title);
+    this.meta.updateTag({ name: 'description', content: metadata.description });
+    this.meta.updateTag({ property: 'og:title', content: metadata.title });
+    this.meta.updateTag({ property: 'og:description', content: metadata.description });
+    this.meta.updateTag({ name: 'twitter:title', content: metadata.title });
+    this.meta.updateTag({ name: 'twitter:description', content: metadata.description });
 
+    let canonical = this.document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (notFound) {
+      canonical?.remove();
+      this.meta.removeTag('property="og:url"');
+      this.meta.updateTag({ name: 'robots', content: 'noindex' });
+      return;
+    }
+
+    this.meta.removeTag('name="robots"');
     if (!canonical) {
       canonical = this.document.createElement('link');
       canonical.setAttribute('rel', 'canonical');
       this.document.head.appendChild(canonical);
     }
-
     canonical.setAttribute('href', canonicalUrl);
-
-    this.title.setTitle(metadata.title);
-    this.meta.updateTag({ name: 'description', content: metadata.description });
-    this.meta.updateTag({ property: 'og:title', content: metadata.title });
-    this.meta.updateTag({ property: 'og:description', content: metadata.description });
     this.meta.updateTag({ property: 'og:url', content: canonicalUrl });
-    this.meta.updateTag({ name: 'twitter:title', content: metadata.title });
-    this.meta.updateTag({ name: 'twitter:description', content: metadata.description });
   }
 
   private resolveMetadata(routerState: RouterStateSnapshot): SeoMetadata {
@@ -291,7 +306,7 @@ export class DocsTitleStrategy extends TitleStrategy {
       );
     }
 
-    const [section, slug] = segments;
+    const [section, slug, page] = segments;
     const isApi = segments.includes('api');
 
     if (section === 'components') {
@@ -337,6 +352,17 @@ export class DocsTitleStrategy extends TitleStrategy {
 
       if (slug === 'form-builder' && segments[2] && FORM_BUILDER_PAGE_TITLES[segments[2]]) {
         return this.catalogMetadata(segments[2], FORM_BUILDER_PAGE_TITLES, 'Example', false);
+      }
+
+      const library = LIBRARY_TITLES[slug];
+      if (library && page && page !== 'overview' && !isApi) {
+        const topic = this.toTitleCase(page.startsWith(`${slug}-`) ? page.slice(slug.length + 1) : page)
+          .replace(/\bApi\b/g, 'API');
+        return this.metadata(
+          `Angular ${library.label}`,
+          topic,
+          `Explore ${topic.toLowerCase().replace(/\bapi\b/g, 'API')} in the NgStarter Angular ${library.label} documentation.`,
+        );
       }
 
       return this.catalogMetadata(slug, LIBRARY_TITLES, 'Library', isApi);
