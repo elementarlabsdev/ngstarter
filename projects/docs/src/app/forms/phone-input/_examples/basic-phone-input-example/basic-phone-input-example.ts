@@ -1,6 +1,6 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { Error, FormField, Label } from '@ngstarter-ui/components/form-field';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form, validate } from '@angular/forms/signals';
 import { PhoneInput, phoneValidator } from '@ngstarter-ui/components/phone-input';
 
 @Component({
@@ -9,7 +9,7 @@ import { PhoneInput, phoneValidator } from '@ngstarter-ui/components/phone-input
     FormField,
     Label,
     Error,
-    ReactiveFormsModule,
+    SignalFormField,
     PhoneInput
   ],
   templateUrl: './basic-phone-input-example.html',
@@ -17,8 +17,9 @@ import { PhoneInput, phoneValidator } from '@ngstarter-ui/components/phone-input
   styleUrl: './basic-phone-input-example.scss'
 })
 export class BasicPhoneInputExample {
-  private _fb = inject(FormBuilder);
-  form: FormGroup = this._fb.group({
-    phone: ['+15165867279', [phoneValidator]]
+  form = form(signal({
+    phone: '+15165867279',
+  }), (path) => {
+    validate(path.phone, ({value}) => phoneValidator({ value: value() }) ? { kind: 'invalidPhone' } : null);
   });
 }

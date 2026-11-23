@@ -422,7 +422,7 @@ export class Api {
     },
     {
       name: 'successCallback(rowsThisBlock, lastRow?)',
-      description: 'Pass loaded rows and optional total row count back to Data View.',
+      description: 'Pass loaded rows and the total row count when available. Without a total, a full page enables Next and a short page ends pagination.',
       type: '(rowsThisBlock: any[], lastRow?: number) => void',
       default: 'Call on success'
     },

@@ -10,7 +10,7 @@ import {
   effect,
   contentChildren
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 import { RadioButton } from '../radio-button/radio-button';
 
 export type RadioGroupOrientation = 'horizontal' | 'vertical';
@@ -20,14 +20,9 @@ export type RadioGroupOrientation = 'horizontal' | 'vertical';
   exportAs: 'ngsRadioGroup',
   templateUrl: './radio-group.html',
   styleUrl: './radio-group.scss',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => RadioGroup),
-      multi: true
-    }
-  ],
   host: {
+    '(focusout)': 'onFocusOut($event)',
+    '[attr.aria-readonly]': 'readonly() || null',
     'class': 'ngs-radio-group',
     '[attr.role]': '"radiogroup"',
     '[attr.aria-disabled]': 'disabled()',
@@ -37,12 +32,21 @@ export type RadioGroupOrientation = 'horizontal' | 'vertical';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RadioGroup implements ControlValueAccessor, AfterContentInit {
+export class RadioGroup implements FormValueControl<any>, AfterContentInit {
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly touch = output<void>();
+
+  protected onFocusOut(event: FocusEvent): void {
+    if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null)) {
+      this.touch.emit();
+    }
+  }
+
   readonly _radios = contentChildren(forwardRef(() => RadioButton), { descendants: true });
 
-  disabled = model(false);
+  disabled = input(false, { transform: booleanAttribute });
 
-  name = input<string>();
+  name = input('');
   orientation = input<RadioGroupOrientation>('horizontal');
   value = model<any>();
 
@@ -54,35 +58,14 @@ export class RadioGroup implements ControlValueAccessor, AfterContentInit {
     });
     effect(() => {
       this._updateSelectedRadioFromValue();
-      this._onChange(this.value());
     });
   }
-
-  _onChange: (value: any) => void = () => {};
-  _onTouched: () => void = () => {};
 
   ngAfterContentInit() {
     this._updateSelectedRadioFromValue();
   }
 
-  writeValue(value: any): void {
-    this.value.set(value);
-  }
-
-  registerOnChange(fn: any): void {
-    this._onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this._onTouched = fn;
-  }
-
-  setDisabledState?(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
-  }
-
   _emitChangeEvent(value: any): void {
-    this._onChange(value);
     this.change.emit({ source: this, value });
   }
 
@@ -103,7 +86,7 @@ export class RadioGroup implements ControlValueAccessor, AfterContentInit {
   }
 
   _onRadioClick(radio: RadioButton) {
-    if (this.disabled() || radio.disabled()) {
+    if (this.disabled() || this.readonly() || radio.disabled()) {
       return;
     }
 

@@ -44,7 +44,8 @@ export class Api {
       description: 'The placeholder text for the input field',
       type: 'string',
       default: 'MM/YY'
-    }
+    },
+    { name: 'value', description: 'Expiry model containing MMYY digits. The input displays MM/YY.', type: 'string | null', default: 'null' },
   ];
 
   creditCardCvvProperties = [

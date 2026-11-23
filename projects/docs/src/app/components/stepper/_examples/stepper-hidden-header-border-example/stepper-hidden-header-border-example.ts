@@ -1,5 +1,5 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormField as SignalFormField, form, required } from '@angular/forms/signals';
 import { Button } from '@ngstarter-ui/components/button';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
@@ -14,7 +14,7 @@ import {
 @Component({
   selector: 'app-stepper-hidden-header-border-example',
   imports: [
-    ReactiveFormsModule,
+    SignalFormField,
     Button,
     FormField,
     Input,
@@ -29,13 +29,16 @@ import {
   templateUrl: './stepper-hidden-header-border-example.html',
 })
 export class StepperHiddenHeaderBorderExample {
-  private readonly _formBuilder = inject(FormBuilder);
 
-  readonly accountForm = this._formBuilder.group({
-    accountName: ['', Validators.required],
+  readonly accountForm = form(signal({
+    accountName: '',
+  }), (path) => {
+    required(path.accountName);
   });
 
-  readonly workspaceForm = this._formBuilder.group({
-    workspaceName: ['', Validators.required],
+  readonly workspaceForm = form(signal({
+    workspaceName: '',
+  }), (path) => {
+    required(path.workspaceName);
   });
 }

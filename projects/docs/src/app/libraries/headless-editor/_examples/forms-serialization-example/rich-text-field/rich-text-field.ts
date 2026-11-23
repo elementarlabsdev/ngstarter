@@ -2,12 +2,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   effect,
-  forwardRef,
+  model,
+  booleanAttribute,
+  output,
   inject,
   input,
   untracked
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 import {
   basicTextEditorPlugin,
   createNgsHeadlessEditorDocument,
@@ -29,56 +31,47 @@ import {
   selector: 'app-rich-text-field',
   imports: [NgsHeadlessEditorSurface, NgsHeadlessEditorCommandDirective],
   providers: [
-    provideNgsHeadlessEditor(withHeadlessEditorPlugin(basicTextEditorPlugin())),
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => RichTextField), multi: true }
+    provideNgsHeadlessEditor(withHeadlessEditorPlugin(basicTextEditorPlugin()))
   ],
   templateUrl: './rich-text-field.html',
   styleUrl: './rich-text-field.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RichTextField implements ControlValueAccessor {
+export class RichTextField implements FormValueControl<NgsHeadlessEditorDocument | null> {
   readonly editor = inject(NgsHeadlessEditor);
   readonly label = input('Rich text');
   readonly placeholder = input('Write something…');
   readonly bold = NGS_HEADLESS_EDITOR_TOGGLE_BOLD;
   readonly italic = NGS_HEADLESS_EDITOR_TOGGLE_ITALIC;
 
-  private onChange: (value: NgsHeadlessEditorDocument) => void = () => {};
-  private onTouched: () => void = () => {};
+  readonly value = model<NgsHeadlessEditorDocument | null>(null);
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly touch = output<void>();
   private wasFocused = false;
 
   constructor() {
+    effect(() => {
+      const value = this.value();
+      untracked(() => this.editor.setDocument(value ?? createNgsHeadlessEditorDocument()));
+    });
+    effect(() => this.editor.setReadOnly(this.disabled() || this.readonly()));
+
     // Propagate user edits. Documents written by the form arrive through
     // setDocument() with origin 'external' and are not echoed back.
     effect(() => {
       const document = this.editor.document();
       if (this.editor.origin() !== 'external') {
-        untracked(() => this.onChange(document));
+        untracked(() => this.value.set(document));
       }
     });
 
     effect(() => {
       const focused = this.editor.focused();
       if (this.wasFocused && !focused) {
-        untracked(() => this.onTouched());
+        untracked(() => this.touch.emit());
       }
       this.wasFocused = focused;
     });
-  }
-
-  writeValue(value: NgsHeadlessEditorDocument | null): void {
-    this.editor.setDocument(value ?? createNgsHeadlessEditorDocument());
-  }
-
-  registerOnChange(fn: (value: NgsHeadlessEditorDocument) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(disabled: boolean): void {
-    this.editor.setReadOnly(disabled);
   }
 }

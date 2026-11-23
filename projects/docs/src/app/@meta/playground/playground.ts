@@ -6,7 +6,9 @@ import { Button } from '@ngstarter-ui/components/button';
 import { Drawer } from '@ngstarter-ui/components/drawer';
 import { Navigation, NavigationItem, NavigationItemIconDirective } from '@ngstarter-ui/components/navigation';
 import { Layout, LayoutContent, LayoutHeader, LayoutSidebar } from '@ngstarter-ui/components/layout';
-import { ScrollbarArea, ScrollContainerFixed } from '@ngstarter-ui/components/scrollbar-area';
+import { ScrollbarArea } from '@ngstarter-ui/components/scrollbar-area';
+import { Toolbar, ToolbarItem } from '@ngstarter-ui/components/toolbar';
+import { Tooltip } from '@ngstarter-ui/components/tooltip';
 
 type PlaygroundSourceTab = 'html' | 'ts' | 'scss';
 
@@ -31,6 +33,9 @@ type PlaygroundSourceFile = {
     LayoutHeader,
     LayoutSidebar,
     ScrollbarArea,
+    Toolbar,
+    ToolbarItem,
+    Tooltip,
   ],
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -46,6 +51,7 @@ export class Playground {
   private readonly destroyRef = inject(DestroyRef);
   private readonly previewFrame = viewChild<ElementRef<HTMLDivElement>>('previewFrame');
   private readonly sourceDrawer = viewChild<Drawer>('sourceDrawer');
+  protected readonly sourceHighlighter = viewChild<CodeHighlighter>('sourceHighlighter');
   private enteringFullscreen = false;
   protected readonly fullscreenMode = signal<'native' | 'viewport' | null>(null);
   protected readonly inlineHeight = signal(0);
@@ -85,7 +91,7 @@ export class Playground {
 
   showSource = false;
   currentTab: PlaygroundSourceTab = 'html';
-  exampleLoading = false;
+  protected readonly exampleLoading = signal(false);
 
   constructor() {
     effect(() => {
@@ -184,7 +190,7 @@ export class Playground {
       return;
     }
 
-    this.exampleLoading = true;
+    this.exampleLoading.set(true);
 
     const [tsSrc, cssSrc, htmlSrc] = await Promise.all([
       this.fetchExampleFile('ts'),
@@ -195,8 +201,8 @@ export class Playground {
     this.tsSrc = tsSrc;
     this.cssSrc = cssSrc;
     this.htmlSrc = htmlSrc;
-    this.exampleLoading = false;
     this.alreadyLoaded = true;
+    this.exampleLoading.set(false);
   }
 
   isCurrentTab(tabId: PlaygroundSourceTab): boolean {

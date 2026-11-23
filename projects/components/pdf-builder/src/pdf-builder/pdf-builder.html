@@ -702,7 +702,7 @@
         </ngs-layout-content>
       </ngs-layout>
     } @else {
-      @if (recipientItems().length) {
+      @if (showRecipientPanel()) {
         <ngs-layout aria-label="Document recipients">
           <ngs-layout-header class="border-b border-b-border px-5">
             <div>
@@ -728,6 +728,9 @@
                       />
                       <span ngsListItemTitle>
                       {{ recipient.name }}
+                      @if (recipient.role) {
+                        <span class="ms-2 text-xs text-on-surface-variant">{{ recipient.role }}</span>
+                      }
                       @if (recipient.isCurrentUser) {
                         <span class="text-xs text-primary font-semibold">YOU</span>
                       }
@@ -762,19 +765,19 @@
                 </ngs-list>
               </div>
 
-<!--              <div class="px-4 pb-4">-->
-<!--                <button-->
-<!--                  ngsButton="outlined"-->
-<!--                  type="button"-->
-<!--                  [ngsPopoverTriggerFor]="addRecipientPopover"-->
-<!--                  position="below-end"-->
-<!--                  hasBackdrop-->
-<!--                  (opened)="requestAddRecipient()"-->
-<!--                >-->
-<!--                  <ngs-icon name="fluent:add-24-regular" />-->
-<!--                  <span>Add recipient</span>-->
-<!--                </button>-->
-<!--              </div>-->
+              <div class="px-4 pb-4">
+                <button
+                  ngsButton="outlined"
+                  type="button"
+                  [ngsPopoverTriggerFor]="addRecipientPopover"
+                  position="below-end"
+                  hasBackdrop
+                  (opened)="requestAddRecipient()"
+                >
+                  <ngs-icon name="fluent:add-24-regular" />
+                  <span>Add recipient</span>
+                </button>
+              </div>
 
               <ngs-popover #addRecipientPopover="ngsPopover">
                 <ng-template ngsPopoverContent>

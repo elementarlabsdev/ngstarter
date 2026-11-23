@@ -7,9 +7,8 @@
         <ngs-label>{{ field().label }}</ngs-label>
         <textarea ngsInput
                   rows="3"
-                  [formControl]="control()"
-                  [placeholder]="field().placeholder || ''"
-                  [readonly]="readonly() || field().readonly"></textarea>
+                  [formField]="$any(control())"
+                  [placeholder]="field().placeholder || ''"></textarea>
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
         }
@@ -20,7 +19,7 @@
     }
 
     @case ('hidden') {
-      <input type="hidden" [formControl]="control()">
+      <input type="hidden" [value]="controlValue() ?? ''">
     }
 
     @case ('calculated') {
@@ -28,22 +27,23 @@
         <ngs-label>{{ field().label }}</ngs-label>
         <input ngsInput
                [type]="calculatedInputType()"
-               [formControl]="control()"
-               [placeholder]="field().placeholder || ''"
-               readonly>
+               [value]="controlValue() ?? ''"
+               [attr.aria-invalid]="validationErrorMessage() ? true : null"
+               readonly
+               [placeholder]="field().placeholder || ''">
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
         }
-        @if (validationErrorMessage(); as errorMessage) {
-          <ngs-error>{{ errorMessage }}</ngs-error>
-        }
       </ngs-form-field>
+      @if (validationErrorMessage(); as errorMessage) {
+        <ngs-error>{{ errorMessage }}</ngs-error>
+      }
     }
 
     @case ('select') {
       <ngs-form-field>
         <ngs-label>{{ field().label }}</ngs-label>
-        <ngs-select [formControl]="control()"
+        <ngs-select [formField]="$any(control())"
                     [placeholder]="field().placeholder || ''"
                     [multiple]="field().multiple ?? false"
                     [clearable]="field().clearable ?? false"
@@ -101,8 +101,7 @@
     @case ('radio') {
       <div class="ngs-form-builder-choice-field">
         <span class="ngs-form-builder-choice-label">{{ field().label }}</span>
-        <ngs-radio-group [formControl]="control()"
-                         [name]="field().name"
+        <ngs-radio-group [formField]="$any(control())"
                          [orientation]="radioOrientation()">
           @for (option of field().options ?? []; track option.value) {
             <ngs-radio-button [value]="option.value">{{ option.label }}</ngs-radio-button>
@@ -120,8 +119,7 @@
     @case ('segmented') {
       <div class="ngs-form-builder-choice-field">
         <span class="ngs-form-builder-choice-label">{{ field().label }}</span>
-        <ngs-segmented [formControl]="control()"
-                       [disabled]="readonly() || !!field().readonly || !!field().disabled">
+        <ngs-segmented [formField]="$any(control())">
           @for (option of field().options ?? []; track option.value) {
             <button ngs-segmented-button type="button" [value]="option.value">{{ option.label }}</button>
           }
@@ -137,7 +135,7 @@
 
     @case ('checkbox') {
       <div class="ngs-form-builder-check-field">
-        <ngs-checkbox [formControl]="control()">
+        <ngs-checkbox [formField]="$any(control())">
           {{ field().label }}
         </ngs-checkbox>
         @if (field().hint) {
@@ -151,7 +149,7 @@
 
     @case ('toggle') {
       <div class="ngs-form-builder-check-field">
-        <ngs-slide-toggle [formControl]="control()">
+        <ngs-slide-toggle [formField]="$any(control())">
           {{ field().label }}
         </ngs-slide-toggle>
         @if (field().hint) {
@@ -166,9 +164,8 @@
     @case ('color-switcher') {
       <div class="ngs-form-builder-choice-field">
         <span class="ngs-form-builder-choice-label">{{ field().label }}</span>
-        <ngs-color-switcher [formControl]="control()"
-                            [colors]="colorSwitcherColors()"
-                            [disabled]="readonly() || !!field().readonly || !!field().disabled"/>
+        <ngs-color-switcher [formField]="$any(control())"
+                            [colors]="colorSwitcherColors()"/>
         @if (field().hint) {
           <span class="ngs-form-builder-choice-hint">{{ field().hint }}</span>
         }
@@ -239,9 +236,8 @@
         <ngs-datepicker #picker/>
         <input ngsInput
                [ngsDatepicker]="picker"
-               [formControl]="control()"
-               [placeholder]="field().placeholder || ''"
-               [readonly]="readonly() || field().readonly">
+               [formField]="$any(control())"
+               [placeholder]="field().placeholder || ''">
         <ngs-datepicker-toggle ngsIconButtonSuffix [for]="picker"/>
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
@@ -257,9 +253,8 @@
         <ngs-label>{{ field().label }}</ngs-label>
         <input ngsInput
                [ngsTimepicker]="timePicker"
-               [formControl]="control()"
-               [placeholder]="field().placeholder || ''"
-               [readonly]="readonly() || field().readonly">
+               [formField]="$any(control())"
+               [placeholder]="field().placeholder || ''">
         <ngs-timepicker-toggle ngsIconButtonSuffix [for]="timePicker"/>
         <ngs-timepicker #timePicker/>
         @if (field().hint) {
@@ -274,19 +269,11 @@
     @case ('date-range') {
       <ngs-form-field>
         <ngs-label>{{ field().label }}</ngs-label>
-        <ngs-date-range-input #rangeInput [rangePicker]="rangePicker">
+        <ngs-date-range-input [formField]="$any(control())" [rangePicker]="rangePicker">
           <input ngsStartDate
-                 [value]="dateRangeStartValue()"
-                 [placeholder]="field().placeholder || 'Start date'"
-                 [readonly]="readonly() || field().readonly"
-                 [disabled]="dateRangeDisabled()"
-                 (input)="onDateRangeChanged(rangeInput)">
+                 [placeholder]="field().placeholder || 'Start date'">
           <input ngsEndDate
-                 [value]="dateRangeEndValue()"
-                 placeholder="End date"
-                 [readonly]="readonly() || field().readonly"
-                 [disabled]="dateRangeDisabled()"
-                 (input)="onDateRangeChanged(rangeInput)">
+                 placeholder="End date">
         </ngs-date-range-input>
         <ngs-datepicker-toggle ngsIconButtonSuffix [for]="rangePicker"/>
         <ngs-date-range-picker #rangePicker/>
@@ -304,19 +291,18 @@
         <ngs-label>{{ field().label }}</ngs-label>
         <input ngsInput
                type="text"
-               [formControl]="control()"
-               [placeholder]="field().placeholder || 'Select color'"
-               readonly>
+               [value]="colorPickerValue()"
+               readonly
+               [placeholder]="field().placeholder || 'Select color'">
         <button ngs-color-picker-thumbnail
                 ngsSuffix
                 [color]="colorPickerValue()"
                 [disabled]="colorPickerDisabled()"
                 [ngsColorPickerTriggerFor]="colorPicker"></button>
         <ng-template #colorPicker>
-          <ngs-color-picker [formControl]="control()"
+          <ngs-color-picker [formField]="$any(control())"
                             [showOpacity]="colorPickerShowOpacity()"
-                            [resultFormat]="colorPickerResultFormat()"
-                            [disabled]="colorPickerDisabled()"/>
+                            [resultFormat]="colorPickerResultFormat()"/>
         </ng-template>
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
@@ -467,9 +453,8 @@
     @case ('timezone-select') {
       <ngs-form-field>
         <ngs-label>{{ field().label }}</ngs-label>
-        <ngs-timezone-select [formControl]="control()"
-                             [placeholder]="field().placeholder || ''"
-                             [required]="isRequired()"/>
+        <ngs-timezone-select [formField]="$any(control())"
+                             [placeholder]="field().placeholder || ''"/>
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
         }
@@ -485,9 +470,8 @@
         <input ngsInput
                type="number"
                inputmode="decimal"
-               [formControl]="control()"
-               [placeholder]="field().placeholder || ''"
-               [readonly]="readonly() || field().readonly">
+               [formField]="$any(control())"
+               [placeholder]="field().placeholder || ''">
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
         }
@@ -500,9 +484,8 @@
     @case ('currency-select') {
       <ngs-form-field>
         <ngs-label>{{ field().label }}</ngs-label>
-        <ngs-currency-select [formControl]="control()"
-                             [placeholder]="field().placeholder || ''"
-                             [required]="isRequired()"/>
+        <ngs-currency-select [formField]="$any(control())"
+                             [placeholder]="field().placeholder || ''"/>
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
         }
@@ -515,10 +498,9 @@
     @case ('country-select') {
       <ngs-form-field>
         <ngs-label>{{ field().label }}</ngs-label>
-        <ngs-country-select [formControl]="control()"
+        <ngs-country-select [formField]="$any(control())"
                             [placeholder]="field().placeholder || ''"
-                            [clearable]="field().clearable ?? false"
-                            [required]="isRequired()"/>
+                            [clearable]="field().clearable ?? false"/>
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
         }
@@ -533,9 +515,8 @@
         <ngs-label>{{ field().label }}</ngs-label>
         <input ngsInput
                [type]="textInputType()"
-               [formControl]="control()"
-               [placeholder]="field().placeholder || ''"
-               [readonly]="readonly() || field().readonly">
+               [formField]="$any(control())"
+               [placeholder]="field().placeholder || ''">
         @if (field().hint) {
           <ngs-hint>{{ field().hint }}</ngs-hint>
         }

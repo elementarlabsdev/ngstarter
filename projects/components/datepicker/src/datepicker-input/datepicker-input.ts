@@ -1,102 +1,86 @@
 import {
+  booleanAttribute,
   Directive,
+  effect,
   ElementRef,
-  forwardRef,
   inject,
   input,
-  untracked,
-  effect,
-  OnDestroy,
-  OnInit,
+  model,
+  output,
+  signal,
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { DateAdapter } from '../core/datetime/date-adapter';
-import { Subject } from 'rxjs';
-import type { Datepicker } from '../datepicker/datepicker';
+import { FormField as SignalFormField, FormValueControl, transformedValue } from '@angular/forms/signals';
+import { connectLegacyNativeFormControl } from '@ngstarter-ui/components/core';
 import { FormField } from '@ngstarter-ui/components/form-field';
+import { DateAdapter } from '../core/datetime/date-adapter';
+import type { Datepicker } from '../datepicker/datepicker';
 
 @Directive({
   selector: 'input[ngsDatepicker]',
   exportAs: 'ngsDatepickerInput',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DatepickerInput),
-      multi: true,
-    },
-  ],
   host: {
     'class': 'ngs-datepicker-input',
-    '(input)': '_onInput($any($event).target.value)',
-    '(blur)': '_onTouched()',
+    '[value]': 'rawValue()',
+    '[disabled]': 'isDisabled()',
+    '[readOnly]': 'readonly()',
+    '(input)': 'onInput($any($event.target).value)',
+    '(blur)': 'touch.emit()',
   },
 })
-export class DatepickerInput<D> implements ControlValueAccessor, OnDestroy, OnInit {
-  private _elementRef = inject(ElementRef);
-  private _formField = inject(FormField, { optional: true });
-  private _dateAdapter = inject<DateAdapter<D>>(DateAdapter);
+export class DatepickerInput<D> implements FormValueControl<D | null> {
+  private readonly elementRef = inject<ElementRef<HTMLInputElement>>(ElementRef);
+  private readonly formField = inject(FormField, { optional: true });
+  private readonly signalField = inject(SignalFormField, { self: true, optional: true });
+  private readonly dateAdapter = inject<DateAdapter<D>>(DateAdapter);
+  private readonly legacyDisabled = signal(false);
 
   readonly ngsDatepicker = input.required<Datepicker<D>>();
+  readonly value = model<D | null>(null);
+  readonly touch = output<void>();
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly readonly = input(false, { transform: booleanAttribute });
 
-  _value: D | null = null;
-  _onChange: (value: any) => void = () => {};
-  _onTouched: () => void = () => {};
-
-  readonly _valueChange = new Subject<D | null>();
+  protected readonly rawValue = transformedValue(this.value, {
+    parse: (raw: string) => {
+      if (!raw.trim()) return { value: null };
+      const date = this.dateAdapter.parse(raw, null);
+      return date && this.dateAdapter.isValid(date)
+        ? { value: date }
+        : { value: null, error: { kind: 'parse', message: 'Enter a valid date.' } };
+    },
+    format: date => date && this.dateAdapter.isDateInstance(date) && this.dateAdapter.isValid(date)
+      ? this.dateAdapter.format(date, { year: 'numeric', month: '2-digit', day: '2-digit' })
+      : '',
+  });
 
   constructor() {
-    effect(() => {
+    connectLegacyNativeFormControl(this.value, this.touch, value => this.value.set(value), this.legacyDisabled.set);
+    effect(onCleanup => {
       const picker = this.ngsDatepicker();
-      untracked(() => {
-        if (picker) {
-          picker._registerInput(this);
-        }
-      });
+      picker._registerInput(this);
+      onCleanup(() => picker._unregisterInput(this));
     });
   }
 
-  ngOnInit() {
+  protected onInput(raw: string): void {
+    if (!this.isDisabled() && !this.readonly()) this.rawValue.set(raw);
   }
 
-  ngOnDestroy() {
-    this._valueChange.complete();
+  isDisabled(): boolean {
+    return this.disabled() || this.legacyDisabled();
   }
 
-  writeValue(value: D | null): void {
-    this._value = value;
-    this._formatValue(value);
+  canSelectDate(): boolean {
+    return !this.isDisabled() && !(this.signalField && this.readonly());
   }
 
-  registerOnChange(fn: (value: any) => void): void {
-    this._onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this._onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this._elementRef.nativeElement.disabled = isDisabled;
-  }
-
-  _onInput(value: string) {
-    const date = this._dateAdapter.parse(value, null);
-    this._value = date;
-    this._onChange(date);
-    this._valueChange.next(date);
-  }
-
-  private _formatValue(value: D | null) {
-    this._elementRef.nativeElement.value = (value && this._dateAdapter.isDateInstance(value) && this._dateAdapter.isValid(value))
-      ? this._dateAdapter.format(value, { year: 'numeric', month: '2-digit', day: '2-digit' })
-      : '';
+  selectDate(date: D): void {
+    if (!this.canSelectDate()) return;
+    this.value.set(date);
+    this.elementRef.nativeElement.value = this.rawValue();
   }
 
   getConnectedOverlayOrigin(): ElementRef {
-    if (this._formField) {
-      return this._formField.container() as ElementRef;
-    }
-
-    return this._elementRef;
+    return this.formField?.container() ?? this.elementRef;
   }
 }

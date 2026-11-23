@@ -1,6 +1,6 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { Popover, PopoverPosition, PopoverTriggerForDirective } from '@ngstarter-ui/components/popover';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Option, Select } from '@ngstarter-ui/components/select';
 import { Button } from '@ngstarter-ui/components/button';
@@ -11,7 +11,7 @@ import { Button } from '@ngstarter-ui/components/button';
     FormField,
     Label,
     Select,
-    ReactiveFormsModule,
+    SignalFormField,
     Option,
     Popover,
     PopoverTriggerForDirective,
@@ -28,5 +28,5 @@ export class PopoverWithCustomPositionExample {
     'before-start', 'before-center', 'before-end',
     'after-start', 'after-center', 'after-end'
   ];
-  position = new FormControl(this.positionOptions[0]);
+  position = form(signal(this.positionOptions[0]));
 }

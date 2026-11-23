@@ -1,4 +1,4 @@
-<ngs-select [formControl]="statuses()" multiple aria-label="Status filter">
+<ngs-select [formField]="statuses" multiple aria-label="Status filter">
   <ngs-filter-trigger>Status</ngs-filter-trigger>
 
   @for (status of statusOptions(); track status) {

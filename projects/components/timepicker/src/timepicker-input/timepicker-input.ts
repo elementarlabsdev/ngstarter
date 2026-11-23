@@ -2,28 +2,25 @@ import {
   Directive,
   ElementRef,
   inject,
-  Input,
   OnDestroy,
-  Optional,
-  Self,
   LOCALE_ID,
   input,
+  model,
+  output,
   booleanAttribute,
-  computed,
   signal,
-  Signal,
-  forwardRef,
+  Injector,
   effect,
   untracked,
 } from '@angular/core';
 import {
   AbstractControl,
-  ControlValueAccessor,
   NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
   ValidationErrors,
   Validator
 } from '@angular/forms';
+import { FormValueControl, transformedValue } from '@angular/forms/signals';
+import { connectLegacyNativeFormControl } from '@ngstarter-ui/components/core';
 import { formatDate } from '@angular/common';
 import { Timepicker } from '../timepicker/timepicker';
 import { FormField } from '@ngstarter-ui/components/form-field';
@@ -33,42 +30,45 @@ import { FormField } from '@ngstarter-ui/components/form-field';
   standalone: true,
   providers: [
     {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => TimepickerInput),
-      multi: true
-    },
-    {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => TimepickerInput),
+      useFactory: (): Validator => {
+        const injector = inject(Injector);
+        return {
+          validate: control => injector.get(TimepickerInput).validate(control),
+          registerOnValidatorChange: callback => injector.get(TimepickerInput).registerOnValidatorChange(callback),
+        };
+      },
       multi: true
     }
   ],
   host: {
     'class': 'ngs-timepicker-input',
-    '[disabled]': 'disabled() || null',
+    '[disabled]': 'isDisabled()',
+    '[readOnly]': 'readonly()',
+    '[value]': 'rawValue()',
     '(input)': '_onInput($any($event.target).value)',
     '(blur)': '_onBlur()',
     '(focus)': '_onFocus()',
     '(click)': '_onClick()',
   }
 })
-export class TimepickerInput<D = any> implements ControlValueAccessor, OnDestroy, Validator {
+export class TimepickerInput<D = any> implements FormValueControl<D | string | null>, OnDestroy, Validator {
   private _elementRef = inject(ElementRef<HTMLInputElement>);
   private _formField = inject(FormField, { optional: true });
   private _localeId = inject(LOCALE_ID);
 
-  private _disabledByCva = signal(false);
-  readonly _disabledInput = input<boolean, unknown>(false, {
-    alias: 'disabled',
-    transform: booleanAttribute
-  });
-  readonly disabled: Signal<boolean> = computed(() => this._disabledInput() || this._disabledByCva());
-  readonly max = input<D | null, unknown>(null, {
-    transform: (value: unknown) => value as D | null
-  });
-  readonly min = input<D | null, unknown>(null, {
-    transform: (value: unknown) => value as D | null
-  });
+  private readonly legacyDisabled = signal(false);
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly min = input<NonNullable<D | string> | undefined, unknown>(undefined, { transform: value => (value ?? undefined) as NonNullable<D | string> | undefined });
+  readonly max = input<NonNullable<D | string> | undefined, unknown>(undefined, { transform: value => (value ?? undefined) as NonNullable<D | string> | undefined });
+  readonly value = model<D | string | null>(null);
+  readonly touch = output<void>();
+
+  isDisabled(): boolean {
+    return this.disabled() || this.legacyDisabled();
+  }
+
   readonly openOnClick = input<boolean, unknown>(true, {
     transform: booleanAttribute
   });
@@ -76,17 +76,36 @@ export class TimepickerInput<D = any> implements ControlValueAccessor, OnDestroy
   readonly ngsTimepicker = input.required<Timepicker>();
   private _timepicker: Timepicker;
 
-  private _onChange: (value: any) => void = () => {};
-  private _onTouched: () => void = () => {};
   private _validatorOnChange: () => void = () => {};
 
-  private _modelValue: string = '';
+  private _modelValue = '';
   private _timepickerOpenedSubscription?: { unsubscribe(): void };
   private _timepickerClosedSubscription?: { unsubscribe(): void };
   private _isTimepickerOpen = false;
   private _lastExternalDate: Date | null = null;
 
+  protected readonly rawValue = transformedValue(this.value, {
+    parse: (raw: string) => {
+      const time = this._parseValue(raw);
+      const value = this._lastExternalDate && this.isTimeString(time)
+        ? this._mergeTimeIntoDate(time, this._lastExternalDate) as D
+        : time;
+      return time && !this.isTimeString(time)
+        ? { value, error: { kind: 'ngsTimepickerParse', message: 'Enter a valid time.' } }
+        : { value };
+    },
+    format: value => {
+      this._modelValue = this._toTimeString(value);
+      this._lastExternalDate = value instanceof Date ? value : null;
+      return this._formatValue(value);
+    },
+  });
+
   constructor() {
+    connectLegacyNativeFormControl(this.value, this.touch, value => {
+      this.value.set(value);
+      this._elementRef.nativeElement.value = this.rawValue();
+    }, this.legacyDisabled.set);
     effect(() => {
       this.min();
       this.max();
@@ -128,20 +147,6 @@ export class TimepickerInput<D = any> implements ControlValueAccessor, OnDestroy
     this._timepickerClosedSubscription = undefined;
   }
 
-  writeValue(value: any): void {
-    this._modelValue = this._toTimeString(value);
-    this._lastExternalDate = value instanceof Date ? value : null;
-    this._elementRef.nativeElement.value = this._formatValue(value);
-  }
-
-  registerOnChange(fn: (value: any) => void): void {
-    this._onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this._onTouched = fn;
-  }
-
   registerOnValidatorChange(fn: () => void): void {
     this._validatorOnChange = fn;
   }
@@ -163,7 +168,7 @@ export class TimepickerInput<D = any> implements ControlValueAccessor, OnDestroy
     }
 
     const parsedValue = this._parseValue(value);
-    const isValid = /^\d{2}:\d{2}$/.test(parsedValue);
+    const isValid = this.isTimeString(parsedValue);
 
     if (!isValid) {
       return { 'ngsTimepickerParse': { text: value } };
@@ -207,29 +212,21 @@ export class TimepickerInput<D = any> implements ControlValueAccessor, OnDestroy
     }
   }
 
-  setDisabledState(isDisabled: boolean): void {
-    this._disabledByCva.set(isDisabled);
-  }
-
-  _onInput(value: string) {
+  _onInput(value: string): void {
+    if (this.isDisabled() || this.readonly()) return;
     this._modelValue = this._parseValue(value);
-
-    const originalValue = (this._lastExternalDate && /^\d{2}:\d{2}$/.test(this._modelValue))
-      ? this._mergeTimeIntoDate(this._modelValue, this._lastExternalDate)
-      : this._modelValue;
-
-    this._onChange(originalValue);
+    this.rawValue.set(value);
     this._formField?.control()?.stateChanges.set(undefined);
-
-    if (!this._isTimepickerOpen) {
-      this._updateNativeValidity(this._doValidate(this._modelValue));
-    }
+    if (!this._isTimepickerOpen) this._updateNativeValidity(this._doValidate(this._modelValue));
   }
 
-  _onBlur() {
-    this._onTouched();
-    // After blur, re-format the input field to a clean localized string if it's a valid time
+  _onBlur(): void {
     this._elementRef.nativeElement.value = this._formatValue(this._modelValue);
+    this.touch.emit();
+  }
+
+  private isTimeString(value: string): boolean {
+    return /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
   }
 
   private _toTimeString(value: any): string {
@@ -248,30 +245,21 @@ export class TimepickerInput<D = any> implements ControlValueAccessor, OnDestroy
   }
 
   _onFocus() {
-    if (this.openOnClick()) {
+    if (this.openOnClick() && !this.isDisabled() && !this.readonly()) {
       this.ngsTimepicker().open();
     }
   }
 
   _onClick() {
-    if (this.openOnClick()) {
+    if (this.openOnClick() && !this.isDisabled() && !this.readonly()) {
       this.ngsTimepicker().open();
     }
   }
 
-  _setValue(value: string) {
-    const originalValue = (this._lastExternalDate)
-      ? this._mergeTimeIntoDate(value, this._lastExternalDate)
-      : value;
-
-    this._modelValue = value;
+  _setValue(value: string): void {
+    if (this.isDisabled() || this.readonly()) return;
+    this._onInput(value);
     this._elementRef.nativeElement.value = this._formatValue(value);
-    this._onChange(originalValue);
-    this._formField?.control()?.stateChanges.set(undefined);
-
-    if (!this._isTimepickerOpen) {
-      this._updateNativeValidity(this._doValidate(value));
-    }
     this._elementRef.nativeElement.focus();
   }
 
@@ -287,7 +275,7 @@ export class TimepickerInput<D = any> implements ControlValueAccessor, OnDestroy
       return formatDate(value, 'shortTime', this._localeId);
     }
 
-    if (typeof value !== 'string' || !value || !value.includes(':')) {
+    if (typeof value !== 'string' || !this.isTimeString(value)) {
       return value || '';
     }
 
@@ -337,7 +325,7 @@ export class TimepickerInput<D = any> implements ControlValueAccessor, OnDestroy
     return value;
   }
 
-  get value(): string {
+  get currentTime(): string {
     return this._modelValue;
   }
 

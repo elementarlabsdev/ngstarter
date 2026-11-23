@@ -4,7 +4,7 @@
          placeholder="Pick one"
          aria-label="Number"
          ngsInput
-         [formControl]="myControl"
+         [formField]="myControl"
          [ngsAutocomplete]="auto">
   <ngs-autocomplete #auto="ngsAutocomplete">
     @for (option of filteredOptions | async; track option) {

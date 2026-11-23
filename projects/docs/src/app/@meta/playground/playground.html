@@ -48,23 +48,33 @@
       </ngs-layout-sidebar>
       <ngs-layout-content class="playground-source-main">
         <ngs-layout absolute>
-          <ngs-layout-header class="border-b border-b-border">
-            <div class="flex h-10 shrink-0 items-center gap-2 px-4">
-              <ngs-icon [name]="currentSourceFile?.icon || 'fluent:code-24-regular'" />
-              <span class="truncate text-sm">{{ currentFileName }}</span>
-            </div>
+          <ngs-layout-header flex class="border-b border-b-border">
+            <ngs-toolbar class="h-10 px-4">
+              <div class="flex min-w-0 flex-1 items-center gap-2">
+                <ngs-icon class="shrink-0" [name]="currentSourceFile?.icon || 'fluent:code-24-regular'" />
+                <span class="truncate text-sm">{{ currentFileName }}</span>
+              </div>
+              <ngs-toolbar-item>
+                @let copied = sourceHighlighter()?.copied();
+                <button ngsIconButton type="button" aria-label="Copy code"
+                        [ngsTooltip]="copied ? 'Copied' : 'Copy code'"
+                        [disabled]="exampleLoading() || !code"
+                        (click)="sourceHighlighter()?.copyCode()">
+                  <ngs-icon [name]="copied ? 'fluent:checkmark-24-regular' : 'fluent:copy-24-regular'"
+                            [class.text-positive]="copied" />
+                </button>
+              </ngs-toolbar-item>
+            </ngs-toolbar>
           </ngs-layout-header>
           <ngs-layout-content class="playground-source-editor">
             <ngs-scrollbar-area>
-              @if (exampleLoading) {
+              @if (exampleLoading()) {
                 <div class="p-5 text-sm text-neutral-500">Loading source...</div>
               } @else {
-                <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden h-full" [code]="code || ''"
+                <ngs-code-highlighter #sourceHighlighter class="h-full" [code]="code || ''"
                                       [language]="language"
                                       theme="github-light"
-                                      showCopyButton
-                                      disableOverflow
-                                      appearance="none"/>
+                                      disableOverflow/>
               }
             </ngs-scrollbar-area>
           </ngs-layout-content>

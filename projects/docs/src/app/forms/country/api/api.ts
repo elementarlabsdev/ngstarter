@@ -101,7 +101,10 @@ export class Api {
       description: 'Whether to show the country code in the trigger.',
       type: 'boolean',
       default: 'false'
-    }
+    },
+    { name: 'readonly', description: 'Prevents user edits while keeping the value visible.', type: 'boolean', default: 'false' },
+    { name: 'invalid', description: 'Invalid state supplied by the bound form field.', type: 'boolean', default: 'false' },
+    { name: 'touched', description: 'Touched state supplied by the bound form field.', type: 'boolean', default: 'false' },
   ];
   events = [
     {
@@ -115,6 +118,8 @@ export class Api {
     {
       name: 'closed',
       description: 'Event emitted when the select panel is closed.'
-    }
+    },
+    { name: 'valueChange', description: 'Emits the new value when the control updates its model.', type: 'CountrySelectValue' },
+    { name: 'touch', description: 'Reports when focus leaves the control.', type: 'void' },
   ];
 }

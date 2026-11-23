@@ -6,6 +6,7 @@ import {
   ElementRef,
   inject,
   input,
+  isSignal,
   viewChild,
   computed,
   ChangeDetectionStrategy
@@ -33,7 +34,7 @@ import { FORM_FIELD_CONFIG, FormFieldLabelMode } from '../config';
   changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'class': 'ngs-form-field',
-    '[class.ngs-form-field-disabled]': 'control()?.disabled',
+    '[class.ngs-form-field-disabled]': 'controlDisabled()',
     '[class.ngs-form-field-invalid]': 'control()?.errorState',
     '[class.ngs-form-field-should-float]': 'shouldLabelFloat()',
     '[class.ngs-form-field-label-external]': 'labelMode() === "external"',
@@ -76,13 +77,18 @@ export class FormField {
   textSuffixChildren = contentChildren(TextSuffix);
   hintChildren = contentChildren(Hint);
   errorChildren = contentChildren(Error);
+  protected readonly controlDisabled = computed(() => {
+    const disabled = this.control()?.disabled;
+    return isSignal(disabled) ? disabled() : !!disabled;
+  });
+
   isRequired = computed(() => {
     const control = this.control();
     if (!control) {
       return false;
     }
 
-    if (control.required) {
+    if (isSignal(control.required) ? control.required() : control.required) {
       return true;
     }
 
@@ -115,7 +121,7 @@ export class FormField {
 
     const control = this.control();
 
-    if (control?.disabled || isIconButton || isToggle) {
+    if (this.controlDisabled() || isIconButton || isToggle) {
       return;
     }
 
@@ -135,7 +141,7 @@ export class FormField {
 
   focus(): void {
     const control = this.control();
-    if (control && !control.disabled) {
+    if (control && !this.controlDisabled()) {
       control.focus();
     }
   }

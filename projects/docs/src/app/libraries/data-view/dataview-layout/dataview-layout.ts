@@ -1,7 +1,5 @@
 import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { startWith } from 'rxjs';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { Button } from '@ngstarter-ui/components/button';
 import {
   cellRenderer,
@@ -47,7 +45,7 @@ import {Toolbar, ToolbarSpacer} from "@ngstarter-ui/components/toolbar";
     LayoutContent,
     LayoutFooter,
     LayoutHeader,
-    ReactiveFormsModule,
+    SignalFormField,
     Select,
     LayoutSubheader,
     Toolbar,
@@ -64,27 +62,15 @@ export class DataViewLayout {
   readonly pageSize = signal(10);
   readonly pageIndex = signal(0);
 
-  readonly staffType = signal(new FormControl<string | null>(null));
-  readonly position = signal(new FormControl<string | null>(null));
-  readonly status = signal(new FormControl<StaffStatus['id'][]>([], { nonNullable: true }));
-  readonly search = signal(new FormControl('', { nonNullable: true }));
+  readonly staffType = form(signal<string | null>(null));
+  readonly position = form(signal<string | null>(null));
+  readonly status = form(signal<StaffStatus['id'][]>([]));
+  readonly search = form(signal(''));
 
-  private readonly staffTypeValue = toSignal(
-    this.staffType().valueChanges.pipe(startWith(this.staffType().value)),
-    { initialValue: this.staffType().value }
-  );
-  private readonly positionValue = toSignal(
-    this.position().valueChanges.pipe(startWith(this.position().value)),
-    { initialValue: this.position().value }
-  );
-  private readonly statusValue = toSignal(
-    this.status().valueChanges.pipe(startWith(this.status().value)),
-    { initialValue: this.status().value }
-  );
-  readonly searchValue = toSignal(
-    this.search().valueChanges.pipe(startWith(this.search().value)),
-    { initialValue: this.search().value }
-  );
+  private readonly staffTypeValue = this.staffType().value;
+  private readonly positionValue = this.position().value;
+  private readonly statusValue = this.status().value;
+  readonly searchValue = this.search().value;
 
   readonly columnDefs = signal<DataViewColumnDef[]>([
     {

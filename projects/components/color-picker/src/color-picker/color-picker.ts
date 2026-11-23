@@ -2,12 +2,12 @@ import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
-  forwardRef,
-  input, OnChanges,
-  OnInit, output, signal, SimpleChanges
+  effect,
+  model,
+  input, output, signal, untracked
 } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { FormsModule } from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 import { ColorPickerResultFormat } from '../properties';
 import { Saturation } from '../saturation/saturation';
 import { Hue } from '../hue/hue';
@@ -37,21 +37,25 @@ import { Input } from '@ngstarter-ui/components/input';
   templateUrl: './color-picker.html',
   styleUrl: './color-picker.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ColorPicker),
-      multi: true
-    }
-  ],
   host: {
+    '(focusout)': 'onFocusOut($event)',
+    '[attr.aria-readonly]': 'readonly() || null',
     'class': 'ngs-color-picker',
-    '[class.is-disabled]': '_disabled()',
+    '[class.is-disabled]': 'disabled()',
     '[class.as-dropdown]': 'asDropdown()',
     '(contextmenu)': '_handleContextMenu($event)'
   }
 })
-export class ColorPicker implements OnInit, OnChanges, ControlValueAccessor {
+export class ColorPicker implements FormValueControl<string | null> {
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly touch = output<void>();
+
+  protected onFocusOut(event: FocusEvent): void {
+    if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null)) {
+      this.touch.emit();
+    }
+  }
+
   color = input<string>('');
   disabled = input(false, {
     transform: booleanAttribute
@@ -72,42 +76,24 @@ export class ColorPicker implements OnInit, OnChanges, ControlValueAccessor {
 
   protected _color = signal<TinyColor>(new TinyColor('red'));
   protected _colorFromHue = signal<TinyColor | undefined | null>(null);
-  protected _disabled = signal(false);
   protected alpha = signal(1);
 
-  ngOnInit() {
-    if (this.color()) {
-      this._setColor(this.color());
-    }
-  }
+  readonly value = model<string | null>(null);
+  private lastColor?: string | null;
+  private lastPreset?: string;
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['color'] && changes['color'].previousValue !== changes['color'].currentValue) {
-      this._setColor(changes['color'].currentValue);
-    }
-
-    if (changes['disabled'] && changes['disabled'].previousValue !== changes['disabled'].currentValue) {
-      this._disabled.set(coerceBooleanProperty(changes['disabled'].currentValue));
-    }
-  }
-
-  onChange: any = () => {};
-  onTouched: any = () => {};
-
-  writeValue(color: string) {
-    this._setColor(color);
-  }
-
-  registerOnChange(fn: any) {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any) {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: BooleanInput) {
-    this._disabled.set(coerceBooleanProperty(isDisabled));
+  constructor() {
+    effect(() => {
+      const value = this.value();
+      const preset = this.color();
+      untracked(() => {
+        if (value !== this.lastColor || preset !== this.lastPreset) {
+          this._setColor(value !== this.lastColor ? value ?? preset : preset);
+          this.lastColor = value;
+          this.lastPreset = preset;
+        }
+      });
+    });
   }
 
   protected async copyToClipboard(event: MouseEvent, hexInput: HTMLInputElement) {
@@ -136,7 +122,7 @@ export class ColorPicker implements OnInit, OnChanges, ControlValueAccessor {
   }
 
   protected onHueColorChange(color: TinyColor) {
-    if (this._disabled()) {
+    if (this.disabled() || this.readonly()) {
       return;
     }
     this._colorFromHue.set(color);
@@ -145,7 +131,7 @@ export class ColorPicker implements OnInit, OnChanges, ControlValueAccessor {
   }
 
   protected onHexColorChange(color: string) {
-    if (this._disabled() || !color.startsWith('#')) {
+    if (this.disabled() || this.readonly() || !color.startsWith('#')) {
       return;
     }
 
@@ -163,7 +149,6 @@ export class ColorPicker implements OnInit, OnChanges, ControlValueAccessor {
 
   protected onHexColorBlur() {
     this.hexColor.set(this.tmpColor.toHexString());
-    this.onTouched();
   }
 
   protected _setHexColor(tinyColor: TinyColor) {
@@ -199,7 +184,7 @@ export class ColorPicker implements OnInit, OnChanges, ControlValueAccessor {
   }
 
   private updateColor(color: TinyColor) {
-    if (this._disabled()) {
+    if (this.disabled() || this.readonly()) {
       return;
     }
     this.tmpColor = color.clone();
@@ -208,7 +193,6 @@ export class ColorPicker implements OnInit, OnChanges, ControlValueAccessor {
     this._setHexColor(color);
     this.rawColorChange.emit(color.clone());
     this.emitEvent(color);
-    this.onTouched();
   }
 
   private emitEvent(newColor: TinyColor) {
@@ -222,7 +206,8 @@ export class ColorPicker implements OnInit, OnChanges, ControlValueAccessor {
       format = newColor.toHsvString();
     }
 
+    this.lastColor = format;
+    this.value.set(format);
     this.colorChange.emit(format);
-    this.onChange(format);
   }
 }

@@ -4,6 +4,7 @@ import {
   input,
   signal,
   inject,
+  forwardRef,
   viewChild,
   TemplateRef,
   OnDestroy,
@@ -21,6 +22,8 @@ import { DateAdapter } from '../core/datetime/date-adapter';
 import { DateRange } from '../core/datetime/date-range';
 import { DatepickerActions } from '../datepicker/datepicker-actions';
 import { DatepickerPreset } from '../core/datetime/datepicker-preset';
+import type { DateRangeInput } from '../datepicker-input/date-range-input/date-range-input';
+import { DATEPICKER_ACTION_TARGET } from '../datepicker-action-target';
 
 @Component({
   selector: 'ngs-date-range-picker',
@@ -29,6 +32,7 @@ import { DatepickerPreset } from '../core/datetime/datepicker-preset';
     OverlayModule,
     Calendar
   ],
+  providers: [{ provide: DATEPICKER_ACTION_TARGET, useExisting: forwardRef(() => DateRangePicker) }],
   templateUrl: './date-range-picker.html',
   styleUrl: './date-range-picker.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,7 +56,7 @@ export class DateRangePicker<D> implements OnDestroy {
   readonly _portalTemplate = viewChild.required<TemplateRef<any>>('portal');
   readonly actions = contentChild(DatepickerActions);
 
-  _datepickerInput!: any; // Will be DateRangeInput
+  _datepickerInput?: DateRangeInput<D>;
   _selectedRange = signal<DateRange<D>>(new DateRange<D>(null, null));
   _isAbove = signal(false);
 
@@ -101,13 +105,13 @@ export class DateRangePicker<D> implements OnDestroy {
     this.close();
   }
 
-  _registerInput(input: any) {
+  _registerInput(input: DateRangeInput<D>): void {
     this._datepickerInput = input;
-    // Assuming input will provide the range
   }
 
   open() {
-    if (this._overlayRef || !this._datepickerInput) return;
+    if (this._overlayRef || !this._datepickerInput || this._datepickerInput.disabled() || this._datepickerInput.readonly()) return;
+    this._selectedRange.set(this._datepickerInput._value ?? new DateRange<D>(null, null));
 
     const strategy = this._overlay
       .position()
@@ -138,6 +142,7 @@ export class DateRangePicker<D> implements OnDestroy {
       this._overlayRef.detach();
       this._overlayRef.dispose();
       this._overlayRef = null;
+      this._selectedRange.set(this._datepickerInput?._value ?? new DateRange<D>(null, null));
     }
   }
 
@@ -171,23 +176,22 @@ export class DateRangePicker<D> implements OnDestroy {
 
   private _updateSelectedRange(newRange: DateRange<D>) {
     this._selectedRange.set(newRange);
+    if (this.actions()) return;
 
-    if (this._datepickerInput) {
-      this._datepickerInput._rangeUpdated(newRange);
-    }
+    this._datepickerInput?._rangeUpdated(newRange);
 
-    if (!this.actions()) {
-      if (newRange.start && newRange.end) {
-        this.close();
-      }
+    if (newRange.start && newRange.end) {
+      this.close();
     }
   }
 
   apply() {
     const range = this._selectedRange();
-
-    if (this._datepickerInput && range.start && range.end) {
-      this._datepickerInput._rangeUpdated(range);
+    const input = this._datepickerInput;
+    const previous = input?._value;
+    if (input && (!this._dateAdapter.sameDate(range.start, previous?.start ?? null) ||
+                  !this._dateAdapter.sameDate(range.end, previous?.end ?? null))) {
+      input._rangeUpdated(range);
     }
     this.close();
   }

@@ -150,6 +150,7 @@ export class PdfSigner {
   readonly initialsTyped = output<PdfBuilderInitialsType>();
 
   protected readonly dateFieldPicker = viewChild<Datepicker<Date>>('dateFieldPicker');
+  private dateFieldSubscription?: { unsubscribe(): void };
   protected readonly dateFieldInput = viewChild<DatepickerInput<Date>>('dateFieldInput');
   protected readonly viewerScrollbar = viewChild<ScrollbarArea>('viewerScrollbar');
   protected readonly wasmUrl = '/assets/embedpdf/pdfium.wasm';
@@ -665,8 +666,9 @@ export class PdfSigner {
     this.setCssVar(anchor, '--pdf-signer-date-anchor-top', `${rect.top}px`);
     this.setCssVar(anchor, '--pdf-signer-date-anchor-width', `${rect.width}px`);
     this.setCssVar(anchor, '--pdf-signer-date-anchor-height', `${rect.height}px`);
-    input.registerOnChange((date: Date | null) => this.applyDateFieldValue(field.id, date));
-    input.writeValue(this.parseDateFieldValue(field.value));
+    this.dateFieldSubscription?.unsubscribe();
+    input.value.set(this.parseDateFieldValue(field.value));
+    this.dateFieldSubscription = input.value.subscribe((date: Date | null) => this.applyDateFieldValue(field.id, date));
     this.scheduleDomSync(() => picker.open());
   }
 

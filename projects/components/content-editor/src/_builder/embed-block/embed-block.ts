@@ -7,7 +7,7 @@ import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import { Button } from '@ngstarter-ui/components/button';
 import { Input } from '@ngstarter-ui/components/input';
 import { FormField, Suffix } from '@ngstarter-ui/components/form-field';
-import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormField as SignalFormField, form, required, validate } from '@angular/forms/signals';
 import { EmbedService } from './embed-service';
 import { SafeResourceUrlPipe } from '@ngstarter-ui/components/core';
 import {
@@ -30,8 +30,7 @@ import { ContentBuilderComponent } from '../../content-builder/content-builder.c
     FormField,
     Input,
     Suffix,
-    FormsModule,
-    ReactiveFormsModule,
+    SignalFormField,
     SafeResourceUrlPipe
   ],
   providers: [EmbedService],
@@ -47,7 +46,6 @@ export class EmbedBlock {
   private store = inject(ContentBuilderStore);
   private contentBuilder = inject<ContentBuilderComponent>(CONTENT_BUILDER);
   private destroyRef = inject(DestroyRef);
-  private formBuilder = inject(FormBuilder);
   private embedService = inject(EmbedService);
 
   id = input.required<string>();
@@ -56,24 +54,14 @@ export class EmbedBlock {
   props = input<ContentEditorItemProperty[]>([]);
   index = input.required<number>();
 
-  private readonly embedUrlValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-    const value = (control.value ?? '').toString();
-
-    if (!value.trim()) {
-      return null;
-    }
-
-    const { type } = this.embedService.parse(value);
-
-    if (!type || type === 'website') {
-      return { embedUrl: true };
-    }
-
-    return null;
-  };
-
-  protected form = this.formBuilder.nonNullable.group({
-    url: ['', [Validators.required, this.embedUrlValidator]],
+  protected readonly form = form(signal({ url: '' }), path => {
+    required(path.url);
+    validate(path.url, ({ value }) => {
+      const url = value().trim();
+      if (!url) return null;
+      const { type } = this.embedService.parse(url);
+      return !type || type === 'website' ? { kind: 'embedUrl' } : null;
+    });
   });
 
   protected _content = signal<ContentEditorEmbedContent>({
@@ -127,7 +115,7 @@ export class EmbedBlock {
   }
 
   embed(trigger: PopoverTriggerForDirective) {
-    this._content.set(this.embedService.parse(this.form.value.url || ''));
+    this._content.set(this.embedService.parse(this.form.url().value()));
     trigger.api.close();
     this.store.updateBlock(this.id(), {...this.getData(), isEmpty: this.isEmpty()});
     this.contentBuilder.emitContentChangeEvent();

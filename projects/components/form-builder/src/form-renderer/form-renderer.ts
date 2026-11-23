@@ -3,14 +3,35 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   effect,
   inject,
   input,
+  Injector,
+  linkedSignal,
+  resource,
   model,
   output,
-  signal
+  signal,
+  untracked
 } from '@angular/core';
-import { AbstractControl, FormArray, ReactiveFormsModule, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
+import { FormControl, ValidationErrors } from '@angular/forms';
+import {
+  applyEach,
+  disabled,
+  FieldTree,
+  form,
+  hidden,
+  readonly as fieldReadonly,
+  required,
+  SchemaPathTree,
+  PathKind,
+  validate,
+  validateAsync,
+  ValidationError
+} from '@angular/forms/signals';
+import { firstValueFrom, isObservable } from 'rxjs';
+import { normalizeFieldValue, runtimeFieldState, setRuntimeFieldError } from '../form-builder-field-state';
 import { Button } from '@ngstarter-ui/components/button';
 import { Step, Stepper } from '@ngstarter-ui/components/stepper';
 import {
@@ -28,6 +49,11 @@ import { FormBuilderCalculationEngine, FormBuilderField, FormBuilderFieldDefinit
 import { FormBuilderFieldHost } from '../field-host/field-host';
 import { DEFAULT_FORM_BUILDER_CALCULATION_ENGINE } from '../calculation-engine';
 import { DEFAULT_FORM_BUILDER_LOGIC_ENGINE } from '../logic-engine';
+
+type FormValues = Record<string, any>;
+type RenderForm = FieldTree<FormValues>;
+type RenderField = FieldTree<unknown>;
+type Repeater = FieldTree<FormValues[]>;
 
 interface FormRendererCanvasItem extends FormBuilderLayoutItem {
   field?: FormBuilderField;
@@ -48,7 +74,6 @@ interface PlainTextExpression {
   exportAs: 'ngsFormRenderer',
   imports: [
     NgTemplateOutlet,
-    ReactiveFormsModule,
     Button,
     Step,
     Stepper,
@@ -69,9 +94,12 @@ export class FormRenderer {
     DEFAULT_FORM_BUILDER_CALCULATION_ENGINE;
   private readonly logicEngine = inject(FORM_BUILDER_LOGIC_ENGINE, { optional: true }) ??
     DEFAULT_FORM_BUILDER_LOGIC_ENGINE;
-  private readonly orphanControls = new WeakMap<AbstractControl, Map<string, FormControl>>();
-  private readonly logicEvaluations = new WeakMap<AbstractControl, FormBuilderLogicEvaluation>();
+  private readonly orphanControls = new WeakMap<RenderForm, Map<string, RenderField>>();
+  private readonly logicEvaluations = new WeakMap<RenderForm, FormBuilderLogicEvaluation>();
   private readonly logicVersion = signal(0);
+  private readonly injector = inject(Injector);
+  private readonly destroyRef = inject(DestroyRef);
+  private formInjector?: ReturnType<typeof Injector.create>;
 
   readonly schema = input.required<FormBuilderSchema>();
   readonly flow = input<FormBuilderFlow | null | undefined>(undefined);
@@ -82,7 +110,7 @@ export class FormRenderer {
   readonly uploadCallback = input<FormBuilderUploadCallback | null | undefined>(undefined);
   readonly value = model<Record<string, any>>({});
   readonly formSubmit = output<Record<string, any>>();
-  readonly formReady = output<FormGroup>();
+  readonly formReady = output<RenderForm>();
 
   protected readonly definitions = computed<FormBuilderFieldDefinition[]>(() => [
     ...DEFAULT_FORM_BUILDER_ITEMS,
@@ -124,31 +152,51 @@ export class FormRenderer {
   protected readonly validatorDefinitions = computed(() =>
     mergeFormBuilderValidatorDefinitions(this.providedValidators)
   );
-  protected readonly formGroup = computed(() => this.createFormGroup());
+  private readonly fields = computed(() => [
+    ...(this.schema().fields ?? []),
+    ...this.schema().sections.flatMap(section => section.fields),
+  ]);
+  private publishedValue?: FormValues;
+  private evaluatedForm?: RenderForm;
+  private readonly formValues = linkedSignal<{ fields: FormBuilderField[]; value: FormValues }, FormValues>({
+    source: () => ({ fields: this.fields(), value: this.value() }),
+    computation: ({ fields, value }, previous) =>
+      previous && previous.source.fields === fields && value === this.publishedValue
+        ? previous.value
+        : this.initialValues(fields, value),
+  });
+  protected readonly formGroup = computed(() => {
+    const schema = this.schema();
+    return untracked(() => {
+      this.formInjector?.destroy();
+      this.formInjector = Injector.create({ parent: this.injector, providers: [] });
+      return form<FormValues>(this.formValues, path => {
+        this.configureFields(path, schema.fields ?? []);
+        for (const section of schema.sections) {
+          this.configureFields(path, section.fields, section);
+        }
+      }, { injector: this.formInjector });
+    });
+  });
 
   constructor() {
-    effect(onCleanup => {
-      const form = this.formGroup();
-
-      this.applyRuntime(form);
-      this.formReady.emit(form);
-      const subscription = form.valueChanges.subscribe(() => {
-        this.applyRuntime(form);
-        this.value.set(form.getRawValue());
-      });
-
-      onCleanup(() => subscription.unsubscribe());
+    this.destroyRef.onDestroy(() => this.formInjector?.destroy());
+    effect(() => {
+      const current = this.formGroup();
+      untracked(() => this.formReady.emit(current));
+    });
+    effect(() => {
+      const current = this.formGroup();
+      this.syncRuntime(current);
     });
   }
 
-  protected getControl(field: FormBuilderField, formGroup = this.formGroup()): FormControl {
-    const control = formGroup.controls[field.name];
+  protected getControl(field: FormBuilderField, formGroup = this.formGroup()): RenderField {
+    return this.fieldControl(formGroup, field.name) ?? this.getOrCreateOrphanControl(field, formGroup);
+  }
 
-    if (control instanceof FormControl) {
-      return control;
-    }
-
-    return this.getOrCreateOrphanControl(field, formGroup);
+  private fieldControl(group: RenderForm, name: string): RenderField | undefined {
+    return group[name] as RenderField | undefined;
   }
 
   protected isContainerField(field: FormBuilderField): boolean {
@@ -203,13 +251,13 @@ export class FormRenderer {
     return this.logicState(field, formGroup).readonly ?? false;
   }
 
-  private logicState(field: FormBuilderField, formGroup: AbstractControl): FormBuilderLogicFieldState {
+  private logicState(field: FormBuilderField, formGroup: RenderForm): FormBuilderLogicFieldState {
     this.logicVersion();
 
     return this.logicEvaluations.get(formGroup)?.fields[field.id] ?? {};
   }
 
-  private sectionLogicState(section: FormBuilderSection, formGroup: AbstractControl): FormBuilderLogicFieldState {
+  private sectionLogicState(section: FormBuilderSection, formGroup: RenderForm): FormBuilderLogicFieldState {
     this.logicVersion();
 
     return this.logicEvaluations.get(formGroup)?.sections[section.id] ?? {};
@@ -244,16 +292,13 @@ export class FormRenderer {
     return field.type === 'repeater';
   }
 
-  protected repeaterArray(field: FormBuilderField, formGroup = this.formGroup()): FormArray<FormGroup> {
-    const control = formGroup.controls[field.name];
-
-    return control instanceof FormArray
-      ? control as FormArray<FormGroup>
-      : new FormArray<FormGroup>([]);
+  private repeaterArray(field: FormBuilderField, group: RenderForm): Repeater | undefined {
+    return group[field.name] as Repeater | undefined;
   }
 
-  protected repeaterGroups(field: FormBuilderField, formGroup = this.formGroup()): FormGroup[] {
-    return this.repeaterArray(field, formGroup).controls;
+  protected repeaterGroups(field: FormBuilderField, group = this.formGroup()): RenderForm[] {
+    const array = this.repeaterArray(field, group);
+    return array ? Array.from(array).filter(row => row !== undefined) : [];
   }
 
   protected repeaterEmptyText(field: FormBuilderField): string {
@@ -269,8 +314,7 @@ export class FormRenderer {
 
     const array = this.repeaterArray(field, formGroup);
 
-    array.push(this.createRepeaterGroup(field));
-    array.updateValueAndValidity();
+    array?.().value.update(rows => [...rows, this.initialValues(field.children ?? [], {})]);
   }
 
   protected removeRepeaterItem(field: FormBuilderField, index: number, formGroup = this.formGroup()): void {
@@ -284,119 +328,142 @@ export class FormRenderer {
 
     const array = this.repeaterArray(field, formGroup);
 
-    array.removeAt(index);
-    array.updateValueAndValidity();
+    array?.().value.update(rows => rows.filter((_, row) => index !== row));
   }
 
   protected canRemoveRepeaterItem(field: FormBuilderField, formGroup = this.formGroup()): boolean {
-    return this.allowsNullValue(field) || this.repeaterArray(field, formGroup).length > 1;
+    return this.allowsNullValue(field) || (this.repeaterArray(field, formGroup)?.length ?? 0) > 1;
   }
 
-  submit(): void {
-    const form = this.formGroup();
-
-    if (form.invalid) {
-      form.markAllAsTouched();
-      return;
-    }
-
-    this.formSubmit.emit(form.getRawValue());
+  submit(event?: Event): void {
+    event?.preventDefault();
+    if (this.readonly()) return;
+    const tree = this.formGroup();
+    this.syncRuntime(tree);
+    if (this.isUploading(tree, this.fields())) return;
+    const state = tree();
+    state.markAsTouched();
+    if (state.valid()) this.formSubmit.emit(state.value());
   }
 
-  private createFormGroup(): FormGroup {
-    const controls: Record<string, AbstractControl> = {};
-    const value = this.value();
-
-    const fields = [
-      ...(this.schema().fields ?? []),
-      ...this.schema().sections.flatMap(section => section.fields)
-    ];
-
-    this.addFieldsToControls(controls, fields, value);
-
-    return new FormGroup(controls);
+  private isUploading(group: RenderForm, fields: FormBuilderField[]): boolean {
+    return this.scopeFields(fields).some(field => {
+      const control = this.fieldControl(group, field.name);
+      if (!control || control().hidden() || control().disabled()) return false;
+      if (this.isRepeaterField(field)) {
+        return this.repeaterGroups(field, group).some(row => this.isUploading(row, field.children ?? []));
+      }
+      return runtimeFieldState(control).uploading();
+    });
   }
 
-  private addFieldsToControls(
-    controls: Record<string, AbstractControl>,
-    fields: FormBuilderField[],
-    value: Record<string, any>
-  ): void {
-    for (const field of fields) {
+  private initialValues(fields: FormBuilderField[], previous: FormValues): FormValues {
+    const values: FormValues = {};
+    for (const field of this.scopeFields(fields)) {
       const definition = this.definitions().find(item => item.type === field.type);
+      if (definition?.kind === 'static' || field.kind === 'static') continue;
+      const current = previous[field.name];
+      if (this.isRepeaterField(field)) {
+        const canBeEmpty = this.allowsNullValue(field);
+        const rows = Array.isArray(current) && (current.length || canBeEmpty)
+          ? current
+          : canBeEmpty ? [] : [{}];
+        values[field.name] = rows.map(row => this.initialValues(field.children ?? [], isRecord(row) ? row : {}));
+      } else {
+        values[field.name] = normalizeFieldValue(field.type, current === undefined ? this.fieldInitialValue(field) : current);
+      }
+    }
+    return values;
+  }
+
+  private configureFields<K extends PathKind>(
+    path: SchemaPathTree<FormValues, K>, fields: FormBuilderField[], section?: FormBuilderSection
+  ): void {
+    const groupAt = (keys: readonly string[]) => keys.slice(0, -1).reduce<RenderForm>(
+      (parent, key) => parent[key] as RenderForm, this.formGroup()
+    );
+    for (const field of this.scopeFields(fields)) {
+      const definition = this.definitions().find(item => item.type === field.type);
+      if (definition?.kind === 'static' || field.kind === 'static') continue;
+      const logic = (keys: readonly string[]) => this.logicState(field, groupAt(keys));
+      const isHidden = (keys: readonly string[]) => {
+        const group = groupAt(keys);
+        return !!this.logicState(field, group).hidden || !!(section && this.sectionLogicState(section, group).hidden);
+      };
 
       if (this.isRepeaterField(field)) {
-        controls[field.name] = this.createRepeaterArray(field, value[field.name]);
+        const arrayPath = path[field.name] as SchemaPathTree<FormValues[], PathKind.Child>;
+        hidden(arrayPath, ({ pathKeys }) => isHidden(pathKeys()));
+        applyEach(arrayPath, row => this.configureFields(row, field.children ?? []));
+        if (!this.allowsNullValue(field)) {
+          validate(arrayPath, ({ value }) => value().length ? null : { kind: 'repeaterRequired' });
+        }
         continue;
       }
 
-      if (this.isContainerField(field)) {
-        this.addFieldsToControls(controls, field.children ?? [], value);
-        continue;
+      const fieldPath = path[field.name] as SchemaPathTree<unknown, PathKind.Child>;
+      const effective = (keys: readonly string[]) => this.effectiveFieldFromState(field, logic(keys));
+
+      hidden(fieldPath, ({ pathKeys }) => isHidden(pathKeys()));
+      disabled(fieldPath, ({ pathKeys }) => this.readonly() || !!effective(pathKeys()).disabled);
+      fieldReadonly(fieldPath, ({ pathKeys }) => field.type === 'calculated' || !!effective(pathKeys()).readonly);
+      if (field.type === 'calculated') {
+        // Signal Forms skips validation on readonly controls, so report formula errors on the group.
+        validate(path, ({ fieldTree }) => {
+          const control = fieldTree[field.name];
+          if (!control || control().disabled() || control().hidden()) return null;
+          return runtimeFieldState(control).errors().filter(error => error.kind === 'formBuilderCalculation');
+        });
       }
+      required(fieldPath, { when: ({ pathKeys }) => {
+        const config = effective(pathKeys());
+        return !!config.required || !!config.validation?.some(rule => rule.type === 'required' || rule.type === 'requiredTrue');
+      } });
+      validate(fieldPath, ({ value, fieldTree, pathKeys }) => {
+        const currentValue = value();
+        const validators = this.resolveValidators(effective(pathKeys()), definition);
+        const errors = untracked(() => {
+          const control = new FormControl(currentValue);
+          return validators.flatMap(validator => signalErrors(validator(control)));
+        });
+        return [...errors, ...runtimeFieldState(fieldTree).errors()];
+      });
 
-      if (definition?.kind === 'static' || field.kind === 'static') {
-        continue;
+      if (this.resolveAsyncValidators(field).length) {
+        validateAsync(fieldPath, {
+          params: ({ value }) => ({ value: value() }),
+          factory: params => resource({
+            params,
+            loader: async ({ params }) => {
+              const control = new FormControl(params.value);
+              const errors = await Promise.all(this.resolveAsyncValidators(field).map(validator => {
+                const result = validator(control);
+                return isObservable(result) ? firstValueFrom(result) : result;
+              }));
+              return errors.flatMap(signalErrors);
+            },
+          }),
+          onSuccess: errors => errors ?? [],
+          onError: () => ({ kind: 'validationUnavailable' }),
+        });
       }
-
-      const validators = this.resolveValidators(field, definition);
-      const asyncValidators = this.resolveAsyncValidators(field);
-      const control = new FormControl(
-        {
-          value: value[field.name] ?? this.fieldInitialValue(field),
-          disabled: field.disabled || this.readonly()
-        },
-        validators,
-        asyncValidators
-      );
-
-      controls[field.name] = control;
     }
   }
 
-  private createRepeaterArray(field: FormBuilderField, value: unknown): FormArray<FormGroup> {
-    const allowNullValue = this.allowsNullValue(field);
-    const rows = Array.isArray(value) && (allowNullValue || value.length > 0)
-      ? value
-      : allowNullValue
-        ? []
-        : [{}];
-    const validators = allowNullValue ? [] : [repeaterRequiredValidator];
+  private syncRuntime(formGroup: RenderForm): void {
+    if (formGroup().value() === this.publishedValue && this.evaluatedForm === formGroup) return;
 
-    return new FormArray(rows.map(row => this.createRepeaterGroup(field, row)), validators);
+    untracked(() => {
+      this.applyRuntime(formGroup);
+      this.evaluatedForm = formGroup;
+      const value = formGroup().value();
+      this.publishedValue = value;
+      this.value.set(value);
+    });
   }
 
-  private createRepeaterGroup(field: FormBuilderField, value: unknown = {}): FormGroup {
-    const controls: Record<string, AbstractControl> = {};
-    const rowValue = isRecord(value) ? value : {};
-
-    for (const child of flattenFields(field.children ?? [])) {
-      const definition = this.definitions().find(item => item.type === child.type);
-
-      if (this.isContainerField(child) || definition?.kind === 'static' || child.kind === 'static') {
-        continue;
-      }
-
-      const validators = this.resolveValidators(child, definition);
-      const asyncValidators = this.resolveAsyncValidators(child);
-      controls[child.name] = new FormControl(
-        {
-          value: rowValue[child.name] ?? this.fieldInitialValue(child),
-          disabled: child.disabled || this.readonly()
-        },
-        validators,
-        asyncValidators
-      );
-    }
-
-    return new FormGroup(controls);
-  }
-
-  private applyRuntime(formGroup: FormGroup): void {
-    const fields = [
-      ...(this.schema().fields ?? []),
-      ...this.schema().sections.flatMap(section => section.fields)
-    ];
+  private applyRuntime(formGroup: RenderForm): void {
+    const fields = this.fields();
     const scopeFields = this.scopeFields(fields);
 
     this.applyCalculatedFields(formGroup, scopeFields);
@@ -407,25 +474,16 @@ export class FormRenderer {
     this.logicVersion.update(version => version + 1);
   }
 
-  private applyRepeaterCalculations(formGroup: FormGroup, fields: FormBuilderField[]): void {
+  private applyRepeaterCalculations(formGroup: RenderForm, fields: FormBuilderField[]): void {
     for (const field of fields) {
       if (this.isRepeaterField(field)) {
-        const control = formGroup.controls[field.name];
-
-        if (control instanceof FormArray) {
-          const scopeFields = this.scopeFields(field.children ?? []);
-
-          control.controls.forEach(group => {
-            if (!(group instanceof FormGroup)) {
-              return;
-            }
-
-            this.applyCalculatedFields(group, scopeFields);
-            this.applyRepeaterCalculations(group, field.children ?? []);
-            this.applyLogic(group, field.children ?? []);
-            this.applyCalculatedFields(group, scopeFields);
-            this.applyPlainTextFields(group, scopeFields);
-          });
+        const scopeFields = this.scopeFields(field.children ?? []);
+        for (const group of this.repeaterGroups(field, formGroup)) {
+          this.applyCalculatedFields(group, scopeFields);
+          this.applyRepeaterCalculations(group, field.children ?? []);
+          this.applyLogic(group, field.children ?? []);
+          this.applyCalculatedFields(group, scopeFields);
+          this.applyPlainTextFields(group, scopeFields);
         }
 
         continue;
@@ -437,7 +495,7 @@ export class FormRenderer {
     }
   }
 
-  private applyLogic(formGroup: FormGroup, fields: FormBuilderField[]): void {
+  private applyLogic(formGroup: RenderForm, fields: FormBuilderField[]): void {
     const rules = this.schema().logic ?? [];
 
     if (!rules.length) {
@@ -450,7 +508,7 @@ export class FormRenderer {
     const evaluation = this.logicEngine.evaluate(rules, {
       fields: scopeFields,
       sections: this.schema().sections,
-      values: formGroup.getRawValue(),
+      values: formGroup().value(),
       calculationEngine: this.calculationEngine
     });
 
@@ -459,43 +517,29 @@ export class FormRenderer {
   }
 
   private applyLogicControlEffects(
-    formGroup: FormGroup,
+    formGroup: RenderForm,
     fields: FormBuilderField[],
     states: Record<string, FormBuilderLogicFieldState>
   ): void {
     for (const field of fields) {
-      const control = formGroup.controls[field.name];
+      const control = this.fieldControl(formGroup, field.name);
 
-      if (!(control instanceof FormControl)) {
+      if (!control) {
         continue;
       }
 
       const state = states[field.id] ?? {};
 
-      if (state.hasValue && control.value !== state.value) {
-        control.setValue(state.value, { emitEvent: false });
+      if (state.hasValue) {
+        const value = normalizeFieldValue(field.type, state.value);
+        if (!Object.is(control().value(), value)) control().value.set(value);
       }
-
-      const effectiveField = this.effectiveFieldFromState(field, state);
-      const definition = this.definitions().find(item => item.type === field.type);
-      control.setValidators(this.resolveValidators(effectiveField, definition));
-      control.setAsyncValidators(this.resolveAsyncValidators(effectiveField));
-
-      const disabled = this.readonly() || effectiveField.disabled === true || state.hidden === true;
-
-      if (disabled && control.enabled) {
-        control.disable({ emitEvent: false });
-      } else if (!disabled && control.disabled) {
-        control.enable({ emitEvent: false });
-      }
-
-      control.updateValueAndValidity({ emitEvent: false });
     }
   }
 
-  private applyCalculatedFields(formGroup: FormGroup, fields: FormBuilderField[]): void {
+  private applyCalculatedFields(formGroup: RenderForm, fields: FormBuilderField[]): void {
     const calculatedFields = fields.filter(field =>
-      field.type === 'calculated' && formGroup.controls[field.name] instanceof FormControl
+      field.type === 'calculated' && this.fieldControl(formGroup, field.name)
     );
 
     if (!calculatedFields.length) {
@@ -506,17 +550,17 @@ export class FormRenderer {
     const cyclicFields = new Set(calculatedFields.filter(field => !orderedFields.includes(field)).map(field => field.name));
 
     cyclicFields.forEach(fieldName => {
-      const control = formGroup.controls[fieldName];
+      const control = this.fieldControl(formGroup, fieldName);
 
-      if (control instanceof FormControl) {
+      if (control) {
         this.setCalculationError(control, 'Circular calculation dependency.');
       }
     });
 
     for (const field of orderedFields) {
-      const control = formGroup.controls[field.name];
+      const control = this.fieldControl(formGroup, field.name);
 
-      if (!(control instanceof FormControl)) {
+      if (!control) {
         continue;
       }
 
@@ -531,7 +575,7 @@ export class FormRenderer {
       const result = this.calculationEngine.evaluate(expression, {
         field,
         fields,
-        values: formGroup.getRawValue()
+        values: formGroup().value()
       });
 
       if (result.error) {
@@ -545,7 +589,7 @@ export class FormRenderer {
     }
   }
 
-  private applyPlainTextFields(formGroup: FormGroup, fields: FormBuilderField[]): void {
+  private applyPlainTextFields(formGroup: RenderForm, fields: FormBuilderField[]): void {
     const plainTextFields = fields.filter(field => field.type === 'plain-text');
 
     for (const field of plainTextFields) {
@@ -584,7 +628,7 @@ export class FormRenderer {
       const result = this.calculationEngine.evaluate(expression, {
         field,
         fields,
-        values: formGroup.getRawValue()
+        values: formGroup().value()
       });
 
       if (result.error) {
@@ -603,7 +647,7 @@ export class FormRenderer {
     expressions: PlainTextExpression[],
     field: FormBuilderField,
     fields: FormBuilderField[],
-    formGroup: FormGroup
+    formGroup: RenderForm
   ): { value: string; error?: string } {
     const values = new Map<string, string>();
     let error = '';
@@ -619,7 +663,7 @@ export class FormRenderer {
       const result = this.calculationEngine.evaluate(expression, {
         field,
         fields,
-        values: formGroup.getRawValue()
+        values: formGroup().value()
       });
 
       if (result.error) {
@@ -707,23 +751,23 @@ export class FormRenderer {
     return scoped;
   }
 
-  private writeCalculatedValue(control: FormControl, value: any): void {
-    if (control.value !== value) {
-      control.setValue(value, { emitEvent: false });
+  private writeCalculatedValue(control: RenderField, value: any): void {
+    if (!Object.is(control().value(), value)) {
+      control().value.set(value ?? null);
     }
   }
 
-  private writeDisplayValue(control: FormControl, value: any): void {
-    if (control.value !== value) {
-      control.setValue(value);
+  private writeDisplayValue(control: RenderField, value: any): void {
+    if (!Object.is(control().value(), value)) {
+      control().value.set(value ?? null);
     }
   }
 
-  private getOrCreateOrphanControl(field: FormBuilderField, formGroup: AbstractControl): FormControl {
+  private getOrCreateOrphanControl(field: FormBuilderField, formGroup: RenderForm): RenderField {
     let controls = this.orphanControls.get(formGroup);
 
     if (!controls) {
-      controls = new Map<string, FormControl>();
+      controls = new Map<string, RenderField>();
       this.orphanControls.set(formGroup, controls);
     }
 
@@ -733,10 +777,10 @@ export class FormRenderer {
       return existing;
     }
 
-    const control = new FormControl({
-      value: this.fieldInitialValue(field),
-      disabled: true
-    });
+    const control = untracked(() => form(signal<unknown>(this.fieldInitialValue(field)), path => {
+      disabled(path);
+      validate(path, ({ fieldTree }) => runtimeFieldState(fieldTree).errors());
+    }, { injector: this.formInjector }));
     controls.set(field.id, control);
     return control;
   }
@@ -755,7 +799,7 @@ export class FormRenderer {
         return this.emptyCalculatedValue(field);
       }
 
-      return decimalPlaces !== undefined && Number.isInteger(decimalPlaces) && decimalPlaces >= 0
+      return decimalPlaces !== undefined && Number.isInteger(decimalPlaces) && decimalPlaces >= 0 && decimalPlaces <= 100
         ? Number(numeric.toFixed(decimalPlaces))
         : numeric;
     }
@@ -775,23 +819,12 @@ export class FormRenderer {
     return field.settings?.['emptyValue'] ?? null;
   }
 
-  private setCalculationError(control: FormControl, message: string): void {
-    control.setErrors({
-      ...(control.errors ?? {}),
-      formBuilderCalculation: { message }
-    });
+  private setCalculationError(control: RenderField, message: string): void {
+    setRuntimeFieldError(control, 'formBuilderCalculation', message);
   }
 
-  private clearCalculationError(control: FormControl): void {
-    const errors = control.errors;
-
-    if (!errors?.['formBuilderCalculation']) {
-      return;
-    }
-
-    const nextErrors = { ...errors };
-    delete nextErrors['formBuilderCalculation'];
-    control.setErrors(Object.keys(nextErrors).length ? nextErrors : null);
+  private clearCalculationError(control: RenderField): void {
+    setRuntimeFieldError(control, 'formBuilderCalculation');
   }
 
   private resolveValidators(
@@ -963,10 +996,8 @@ function plainTextExpressions(value: unknown): PlainTextExpression[] {
     .filter(item => item.id || item.expression);
 }
 
-function repeaterRequiredValidator(control: AbstractControl): ValidationErrors | null {
-  return control instanceof FormArray && control.length === 0
-    ? { repeaterRequired: true }
-    : null;
+function signalErrors(errors: ValidationErrors | null): ValidationError.WithoutFieldTree[] {
+  return Object.entries(errors ?? {}).map(([kind, error]) => ({ kind, message: error?.message }));
 }
 
 function normalizedLayout(schema: FormBuilderSchema): FormBuilderLayoutItem[] {

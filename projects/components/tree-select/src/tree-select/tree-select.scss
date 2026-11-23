@@ -1,4 +1,5 @@
 @use '../../../select/src/select-control';
+@use '../../../select/src/select-panel';
 @reference 'tailwindcss';
 
 :host {
@@ -27,4 +28,8 @@
   .ngs-select-arrow-wrapper {
     transform: rotate(180deg);
   }
+}
+
+.ngs-select-panel-wrapper {
+  @include select-panel.panel-wrapper;
 }

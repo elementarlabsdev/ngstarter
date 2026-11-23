@@ -16,7 +16,7 @@ export class Blog {
     {
       title: 'Form Builder steps and external steppers',
       description:
-        'Understand renderer-owned steps, runtime flow config, external steppers, shared FormGroup requirements, and when a multi-step UI is still one form.',
+        'Understand renderer-owned steps, runtime flow config, external steppers, and how one Signal Forms field tree preserves values across steps.',
       href: '/blog/form-builder-external-stepper',
       date: 'July 1, 2026',
       readTime: '10 min',
@@ -56,7 +56,7 @@ export class Blog {
     {
       title: 'How to add and configure a custom field in Form Builder',
       description:
-        'Register a custom field, render it with Angular reactive forms, and expose schema-driven settings in the NgStarter Form Builder inspector.',
+        'Register a custom field, bind it to Angular Signal Forms, and expose schema-driven settings in the NgStarter Form Builder inspector.',
       href: '/blog/form-builder-custom-field',
       date: 'June 18, 2026',
       readTime: '10 min',

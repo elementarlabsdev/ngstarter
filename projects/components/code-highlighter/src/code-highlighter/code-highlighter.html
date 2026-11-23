@@ -26,12 +26,10 @@
       </span>
     }
 
-    <div>
-      @if (content()) {
-        <div [innerHTML]="content()"></div>
-      } @else if (isLoading()) {
-        <div class="loading">Loading…</div>
-      }
-    </div>
+    @if (content()) {
+      <div class="code-output" [innerHTML]="content()"></div>
+    } @else if (isLoading()) {
+      <div class="loading">Loading…</div>
+    }
   </div>
 </figure>

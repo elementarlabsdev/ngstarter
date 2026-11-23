@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 const workspaceRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const rootPackagePath = join(workspaceRoot, 'package.json');
 const componentsPackagePath = join(workspaceRoot, 'projects/components/package.json');
-const componentsNgPackagePath = join(workspaceRoot, 'projects/components/ng-package.json');
+const angularWorkspacePath = join(workspaceRoot, 'angular.json');
 const componentsRoot = join(workspaceRoot, 'projects/components');
 
 const ignoredImportPrefixes = [
@@ -22,7 +22,8 @@ const ignoredImportNames = new Set([
 
 const rootPackageJson = await readJson(rootPackagePath);
 const componentsPackageJson = await readJson(componentsPackagePath);
-const componentsNgPackageJson = await readJson(componentsNgPackagePath);
+const angularWorkspace = await readJson(angularWorkspacePath);
+const buildOptions = angularWorkspace.projects.components.architect.build.options;
 const rootDependencies = rootPackageJson.dependencies ?? {};
 const importedPackages = await collectImportedPackages(componentsRoot);
 const syncedDependencies = {};
@@ -40,16 +41,16 @@ componentsPackageJson.dependencies = sortObject({
   ...syncedDependencies,
 });
 
-componentsNgPackageJson.allowedNonPeerDependencies = [
+buildOptions.allowedNonPeerDependencies = [
   ...new Set([
-    ...(componentsNgPackageJson.allowedNonPeerDependencies ?? []),
+    ...(buildOptions.allowedNonPeerDependencies ?? []),
     ...Object.keys(componentsPackageJson.dependencies),
+    ...Object.keys(componentsPackageJson.optionalDependencies ?? {}),
   ]),
 ].sort();
 
-await writeJson(rootPackagePath, rootPackageJson);
 await writeJson(componentsPackagePath, componentsPackageJson);
-await writeJson(componentsNgPackagePath, componentsNgPackageJson);
+await writeJson(angularWorkspacePath, angularWorkspace);
 
 async function collectImportedPackages(root) {
   const files = await collectTypeScriptFiles(root);
@@ -112,7 +113,9 @@ async function readJson(path) {
 }
 
 async function writeJson(path, value) {
-  await writeFile(path, `${JSON.stringify(value, null, 2)}\n`);
+  if (JSON.stringify(await readJson(path)) !== JSON.stringify(value)) {
+    await writeFile(path, `${JSON.stringify(value, null, 2)}\n`);
+  }
 }
 
 function sortObject(value) {

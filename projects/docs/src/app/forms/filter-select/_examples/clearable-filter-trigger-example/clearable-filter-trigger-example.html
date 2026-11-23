@@ -1,4 +1,4 @@
-<ngs-select [formControl]="statuses()" multiple clearable aria-label="Clearable status filter">
+<ngs-select [formField]="statuses" multiple clearable aria-label="Clearable status filter">
   <ngs-filter-trigger>Status</ngs-filter-trigger>
 
   @for (status of statusOptions(); track status) {

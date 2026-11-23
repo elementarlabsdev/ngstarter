@@ -26,7 +26,8 @@ import {
   afterNextRender
 } from '@angular/core';
 import { outputToObservable } from '@angular/core/rxjs-interop';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { NgControl } from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 import { SelectTrigger } from '../select-trigger/select-trigger';
 import { FilterTrigger } from '../filter-trigger/filter-trigger';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -37,7 +38,7 @@ import { NgTemplateOutlet } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 
 import { Optgroup, Option, _Option, OPTION, OPTION_PARENT, _OptionParent } from '@ngstarter-ui/components/option';
-import { FormFieldControl, FORM_FIELD } from '@ngstarter-ui/components/form-field';
+import { FormFieldControl, FORM_FIELD, type FormField } from '@ngstarter-ui/components/form-field';
 import { _Select, SELECT } from './select-token';
 import {
   AUTOFOCUSABLE, createDropdownActiveDescendantKeyManager, isDropdownItemHidden,
@@ -83,21 +84,22 @@ export class SelectChange {
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   host: {
+    '[attr.aria-readonly]': 'readonly() || null',
     'role': 'combobox',
     'aria-autocomplete': 'none',
     'aria-haspopup': 'listbox',
     '[attr.id]': 'id',
-    '[attr.tabindex]': 'disabled ? -1 : tabIndex()',
+    '[attr.tabindex]': 'disabled() ? -1 : tabIndex()',
     '[attr.aria-controls]': 'panelOpen() ? id + "-panel" : null',
     '[attr.aria-expanded]': 'panelOpen()',
     '[attr.aria-activedescendant]': 'panelOpen() ? activeOptionId() : null',
     '[attr.aria-label]': 'ariaLabel()',
-    '[attr.aria-required]': 'required',
-    '[attr.aria-disabled]': 'disabled',
+    '[attr.aria-required]': 'required()',
+    '[attr.aria-disabled]': 'disabled()',
     '[attr.aria-invalid]': 'errorState',
-    '[class.ngs-select-disabled]': 'disabled',
+    '[class.ngs-select-disabled]': 'disabled()',
     '[class.ngs-select-invalid]': 'errorState',
-    '[class.ngs-select-required]': 'required',
+    '[class.ngs-select-required]': 'required()',
     '[class.ngs-select-empty]': 'empty',
     '[class.ngs-select-panel-open]': 'panelOpen()',
     '[class.ngs-select-has-filter-trigger]': 'filterTrigger().length > 0',
@@ -109,12 +111,16 @@ export class SelectChange {
     '(blur)': '_onBlur()',
   }
 })
-export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit, DoCheck, FormFieldControl<any>, _Select, _OptionParent {
+export class Select implements FormValueControl<any>, OnDestroy, AfterContentInit, DoCheck, FormFieldControl<any>, _Select, _OptionParent {
   private _elementRef = inject(ElementRef);
   private _injector = inject(Injector);
   private _cdr = inject(ChangeDetectorRef);
   private _destroy = new Subject<void>();
-  private _formField = inject(FORM_FIELD, { optional: true });
+  private _formField = inject<FormField>(FORM_FIELD, { optional: true });
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly invalid = input(false);
+  readonly touched = input(false);
+  readonly touch = output<void>();
   readonly ngControl = inject(NgControl, { optional: true, self: true });
 
   readonly stateChanges = signal<void>(undefined);
@@ -126,13 +132,8 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
   get id(): string { return this._id(); }
   _placeholder = input<string | undefined>(undefined, { alias: 'placeholder' });
   get placeholder(): string | undefined { return this._placeholder(); }
-  private _disabled = signal(false);
-  _disabledInput = input<boolean, any>(false, {
-    transform: (value: boolean | string | null) => booleanAttribute(value),
-    alias: 'disabled'
-  });
-  _required = input(false, { transform: booleanAttribute, alias: 'required' });
-  get required(): boolean { return this._required(); }
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly required = input(false, { transform: booleanAttribute });
   multiple = input(false, { transform: booleanAttribute });
   hideCheckIcon = input(false, { transform: booleanAttribute });
   clearable = input(false, { transform: booleanAttribute });
@@ -148,8 +149,7 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
   });
   ariaDescribedby = input<string | null>(null, { alias: 'aria-describedby' });
 
-  isDisabled = computed(() => this._disabledInput() || this._disabled());
-  get disabled(): boolean { return this.isDisabled(); }
+  readonly isDisabled = this.disabled;
 
   readonly selectionChange = output<any>();
   readonly opened = output<void>();
@@ -176,11 +176,7 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
   origin = viewChild<CdkOverlayOrigin>('origin');
 
   get overlayOrigin(): CdkOverlayOrigin | ElementRef {
-    if (this._formField) {
-      return this._formField.wrapper() || this._formField.elementRef;
-    }
-
-    return this.origin() || this._elementRef;
+    return this._formField?.container() ?? this.origin() ?? this._elementRef;
   }
 
   private readonly _overlayWidth = signal<string | number>('auto');
@@ -239,21 +235,14 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
   });
   get empty(): boolean { return this._empty(); }
   readonly hasValue = computed(() => !this._empty());
-  protected readonly showClearButton = computed(() => this.clearable() && this.hasValue() && !this.disabled);
+  protected readonly showClearButton = computed(() => this.clearable() && this.hasValue() && !this.disabled() && !this.readonly());
 
   private _shouldLabelFloat = computed(() => {
     return this.panelOpen() || !this.empty || this.focused;
   });
   get shouldLabelFloat(): boolean { return this._shouldLabelFloat(); }
 
-  _onChange: (value: any) => void = () => {};
-  _onTouched: () => void = () => {};
-
   constructor() {
-    if (this.ngControl) {
-      this.ngControl.valueAccessor = this;
-    }
-
     this._selectionModel = new SelectionModel<_Option>(this.multiple());
     this._keyManager.change.pipe(takeUntil(this._destroy)).subscribe(() => {
       this._scrollToActiveOption();
@@ -495,7 +484,7 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
 
   private updateErrorState() {
     const oldState = this.errorState;
-    const newState = !!(this.ngControl?.invalid && (this.ngControl?.touched || this.ngControl?.dirty));
+    const newState = !!((this.invalid() || this.ngControl?.invalid) && (this.touched() || this.ngControl?.dirty));
 
     if (newState !== oldState) {
       this._errorState.set(newState);
@@ -514,14 +503,14 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
   }
 
   toggle(origin: 'keyboard' | 'mouse' = 'mouse'): void {
-    if (this.disabled) {
+    if (this.disabled()) {
       return;
     }
     this.panelOpen() ? this.close() : this.open('first', origin);
   }
 
   open(edge: 'first' | 'last' = 'first', origin: 'keyboard' | 'mouse' = 'mouse'): void {
-    if (this.disabled || this.panelOpen()) {
+    if (this.disabled() || this.readonly() || this.panelOpen()) {
       return;
     }
     this._updateOverlayWidth();
@@ -573,12 +562,10 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
       return;
     }
 
-    const wrapper = this._formField.wrapper()?.nativeElement;
-    const element = wrapper || this._formField.elementRef.nativeElement;
-    const width = element.getBoundingClientRect?.().width;
+    const width = this._formField.container().nativeElement.getBoundingClientRect().width;
 
     this._overlayWidth.set(
-      typeof width === 'number' && Number.isFinite(width) && width > 0
+      Number.isFinite(width) && width > 0
         ? Math.round(width * 100) / 100
         : 'auto'
     );
@@ -593,7 +580,7 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
       this._focused.set(this._elementRef.nativeElement === document.activeElement);
       this.stateChanges.set(undefined);
       this.closed.emit();
-      this._onTouched();
+      this.touch.emit();
     }
   }
 
@@ -601,7 +588,7 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
     event?.preventDefault();
     event?.stopPropagation();
 
-    if (this.disabled || this.empty) {
+    if (this.disabled() || this.readonly() || this.empty) {
       return;
     }
 
@@ -616,7 +603,7 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
   }
 
   _onFocus() {
-    if (!this.disabled) {
+    if (!this.disabled()) {
       this._focused.set(true);
       this.stateChanges.set(undefined);
     }
@@ -625,29 +612,9 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
   _onBlur() {
     if (!this.panelOpen()) {
       this._focused.set(false);
-      this._onTouched();
+      this.touch.emit();
       this.stateChanges.set(undefined);
     }
-  }
-
-  writeValue(value: any): void {
-    this.value.set(value);
-    if (this.options()) {
-      this._setSelectionByValue(value);
-    }
-  }
-
-  registerOnChange(fn: any): void {
-    this._onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this._onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this._disabled.set(isDisabled);
-    this._cdr.markForCheck();
   }
 
   focus(): void {
@@ -655,7 +622,7 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
   }
 
   _handleKeydown(event: KeyboardEvent): void {
-    if (this.disabled || event.defaultPrevented || event.isComposing || event.ctrlKey || event.metaKey) {
+    if (this.disabled() || this.readonly() || event.defaultPrevented || event.isComposing || event.ctrlKey || event.metaKey) {
       return;
     }
     const editable = isDropdownTextInput(event.target);
@@ -849,7 +816,6 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
 
     this.value.set(nextValues);
     this._setSelectionByValue(nextValues);
-    this._onChange(nextValues);
     this.selectionChange.emit(new SelectChange(this, nextValues));
     this._cdr.markForCheck();
   }
@@ -868,7 +834,6 @@ export class Select implements ControlValueAccessor, OnDestroy, AfterContentInit
     }
 
     this.value.set(valueToEmit);
-    this._onChange(valueToEmit);
     this.selectionChange.emit(new SelectChange(this, valueToEmit));
     this._cdr.markForCheck();
   }

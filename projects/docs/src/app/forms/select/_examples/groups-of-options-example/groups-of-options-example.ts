@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { Option, Select, Optgroup } from '@ngstarter-ui/components/select';
 import { Label } from '@ngstarter-ui/components/form-field';
 import { FormField } from '@ngstarter-ui/components/form-field';
@@ -18,7 +18,7 @@ interface PokemonGroup {
 @Component({
   selector: 'app-groups-of-options-example',
   imports: [
-    ReactiveFormsModule,
+    SignalFormField,
     Option,
     Select,
     Optgroup,
@@ -30,7 +30,7 @@ interface PokemonGroup {
   styleUrl: './groups-of-options-example.scss'
 })
 export class GroupsOfOptionsExample {
-  pokemonControl = new FormControl('');
+  pokemonControl = form(signal(''));
   pokemonGroups: PokemonGroup[] = [
     {
       name: 'Grass',

@@ -57,7 +57,9 @@ export class Api {
       description: "The format of the color result ('rgb', 'hex', 'hsl', etc.).",
       type: 'ColorPickerResultFormat',
       default: "'rgb'"
-    }
+    },
+    { name: 'value', description: 'Selected color in the configured resultFormat. Supports [(value)] and [formField].', type: 'string | null', default: 'null' },
+    { name: 'readonly', description: 'Prevents user edits while keeping the value visible.', type: 'boolean', default: 'false' },
   ];
 
   colorPickerEvents = [
@@ -70,7 +72,9 @@ export class Api {
       name: 'rawColorChange',
       description: 'Emitted when the raw color (TinyColor) changes.',
       type: 'TinyColor'
-    }
+    },
+    { name: 'valueChange', description: 'Emits the new value when the control updates its model.', type: 'string | null' },
+    { name: 'touch', description: 'Reports when focus leaves the control.', type: 'void' },
   ];
 
   triggerProperties = [

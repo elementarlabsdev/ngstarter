@@ -1,7 +1,7 @@
 <div class="flex items-center gap-4">
   <ngs-form-field subscriptHiddenIfEmpty>
     <ngs-label>Tooltip position</ngs-label>
-    <ngs-select [formControl]="position">
+    <ngs-select [formField]="position">
       @for (positionOption of positionOptions; track positionOption) {
         <ngs-option [value]="positionOption">{{ positionOption }}</ngs-option>
       }
@@ -9,7 +9,7 @@
   </ngs-form-field>
   <button ngsButton="filled"
           ngsTooltip="Info about the action"
-          [ngsTooltipPosition]="position.value!"
+          [ngsTooltipPosition]="position().value()!"
           aria-label="Button that displays a tooltip in various positions">
     Action
   </button>

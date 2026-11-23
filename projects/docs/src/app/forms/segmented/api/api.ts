@@ -32,9 +32,9 @@ export class Api {
   segmentedProperties = [
     {
       name: 'value',
-      description: 'Sets a value, manually',
+      description: 'Selection model. Supports [(value)] and [formField].',
       type: 'any',
-      default: '–'
+      default: 'null'
     },
     {
       name: 'disabled',
@@ -47,14 +47,16 @@ export class Api {
       description: 'Control size',
       type: "SegmentedTriggerSize: 'sm' | 'default' | 'lg' | string",
       default: 'default'
-    }
+    },
+    { name: 'readonly', description: 'Prevents user edits while keeping the value visible.', type: 'boolean', default: 'false' },
   ];
 
   segmentedEvents = [
     {
       name: 'valueChange',
       description: 'Executed when a selected value changed'
-    }
+    },
+    { name: 'touch', description: 'Reports when focus leaves the control.', type: 'void' },
   ];
 
   segmentedButtonProperties = [

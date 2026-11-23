@@ -2,15 +2,18 @@ import {
   Component,
   inject,
   input,
+  model,
+  output,
+  booleanAttribute,
   OnDestroy,
   signal, viewChild, OnInit,
   ChangeDetectionStrategy
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { NgControl } from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 import { FormFieldControl } from '@ngstarter-ui/components/form-field';
 import { Select, Option, SelectChange } from '@ngstarter-ui/components/select';
 import { Subject, takeUntil } from 'rxjs';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { outputToObservable } from '@angular/core/rxjs-interop';
 
 export type DateFormat = {
@@ -33,11 +36,12 @@ export type DateFormat = {
   }],
   changeDetection: ChangeDetectionStrategy.Eager,
   host: {
+    '[attr.aria-readonly]': 'readonly() || null',
     '[id]': 'id',
-    '[attr.required]': 'required || null',
+    '[attr.required]': 'required() || null',
   },
 })
-export class DateFormatSelect implements FormFieldControl<string>, ControlValueAccessor, OnDestroy, OnInit {
+export class DateFormatSelect implements FormFieldControl<string>, FormValueControl<string | null>, OnDestroy, OnInit {
   private static nextId = 0;
 
   readonly matSelect = viewChild.required(Select);
@@ -48,7 +52,7 @@ export class DateFormatSelect implements FormFieldControl<string>, ControlValueA
     { value: 'yyyy-MM-dd', name: 'YYYY-MM-DD' },
   ]);
 
-  private readonly _value = signal<string | null>(null);
+  readonly value = model<string | null>(null);
   private readonly _focused = signal(false);
   readonly _describedBy = signal('');
 
@@ -62,7 +66,7 @@ export class DateFormatSelect implements FormFieldControl<string>, ControlValueA
   }
 
   get empty(): boolean {
-    return !this._value();
+    return !this.value();
   }
 
   get shouldLabelFloat(): boolean {
@@ -70,17 +74,13 @@ export class DateFormatSelect implements FormFieldControl<string>, ControlValueA
   }
 
   get errorState(): boolean {
-    return this.ngControl?.invalid === true && this.ngControl.touched === true;
+    return !!(this.invalid() || this.ngControl?.invalid) && this.touched();
   }
 
-  get value(): string | null {
-    return this._value();
-  }
-  set value(val: string | null) {
-    this._value.set(val);
-    this.stateChanges.next();
-  }
-
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly invalid = input(false);
+  readonly touched = input(false);
+  readonly touch = output<void>();
   readonly ngControl = inject(NgControl, { self: true, optional: true });
   readonly placeholderInput = input<string>('', { alias: 'placeholder' });
 
@@ -90,42 +90,17 @@ export class DateFormatSelect implements FormFieldControl<string>, ControlValueA
 
   private readonly _destroy$ = new Subject<void>();
 
-  constructor() {
-    if (this.ngControl) {
-      this.ngControl.valueAccessor = this;
-    }
-  }
-
   ngOnInit(): void {
     outputToObservable(this.matSelect().closed)
       .pipe(takeUntil(this._destroy$))
       .subscribe(() => {
         this._focused.set(this.matSelect().focused);
-        this.onTouched();
         this.stateChanges.next();
       });
   }
 
-  private _required = false;
-
-  get required(): boolean {
-    return this._required;
-  }
-  set required(value: boolean | string) {
-    this._required = coerceBooleanProperty(value);
-    this.stateChanges.next();
-  }
-
-  private _disabled = false;
-
-  get disabled(): boolean {
-    return this._disabled;
-  }
-  set disabled(value: boolean | string) {
-    this._disabled = coerceBooleanProperty(value);
-    this.matSelect().setDisabledState(this._disabled);
-    this.stateChanges.next();
-  }
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   ngOnDestroy(): void {
     this._destroy$.next();
@@ -143,14 +118,12 @@ export class DateFormatSelect implements FormFieldControl<string>, ControlValueA
   onBlur(): void {
     if (!this.matSelect().panelOpen()) {
       this._focused.set(false);
-      this.onTouched();
       this.stateChanges.next();
     }
   }
 
   onSelectionChange(event: SelectChange): void {
-    this.value = event.value;
-    this.onChange(this.value);
+    this.value.set(event.value);
   }
 
   setDescribedByIds(ids: string[]): void {
@@ -158,28 +131,9 @@ export class DateFormatSelect implements FormFieldControl<string>, ControlValueA
   }
 
   onContainerClick(event: MouseEvent): void {
-    if (!this.disabled) {
+    if (!this.disabled()) {
       this.matSelect().onContainerClick(event);
     }
-  }
-
-  private onChange: (value: unknown) => void = () => {};
-  private onTouched: () => void = () => {};
-
-  writeValue(value: string | null): void {
-    this.value = value;
-  }
-
-  registerOnChange(fn: (value: unknown) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
   }
 
   focus(): void {

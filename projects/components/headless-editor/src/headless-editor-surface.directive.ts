@@ -134,7 +134,10 @@ export class NgsHeadlessEditorSurface {
         this.removeSelectionListener = this.renderer.listen(
           this.documentRef,
           'selectionchange',
-          () => this.syncSelectionFromDom()
+          () => {
+            // Moving focus to a toolbar or menu can collapse the browser range.
+            if (this.editor.focused()) this.syncSelectionFromDom();
+          }
         );
         const MutationObserverRef = this.documentRef.defaultView?.MutationObserver;
         if (MutationObserverRef) {

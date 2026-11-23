@@ -1,10 +1,8 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { map, Observable, startWith } from 'rxjs';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Component, signal, computed, inject, ChangeDetectionStrategy } from '@angular/core';
+import { FormField as SignalFormField, form, required } from '@angular/forms/signals';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Autocomplete, AutocompleteTrigger, Option } from '@ngstarter-ui/components/autocomplete';
 import { Optgroup } from '@ngstarter-ui/components/select';
-import { AsyncPipe } from '@angular/common';
 import { Input } from '@ngstarter-ui/components/input';
 
 export interface StateGroup {
@@ -22,12 +20,11 @@ export const _filter = (opt: string[], value: string): string[] => {
   selector: 'app-option-groups-example',
   imports: [
     FormField,
-    ReactiveFormsModule,
+    SignalFormField,
     AutocompleteTrigger,
     Autocomplete,
     Optgroup,
     Option,
-    AsyncPipe,
     Input,
     Label
   ],
@@ -36,11 +33,8 @@ export const _filter = (opt: string[], value: string): string[] => {
   styleUrl: './option-groups-example.scss'
 })
 export class OptionGroupsExample {
-  private _formBuilder = inject(FormBuilder);
 
-  stateForm = this._formBuilder.group({
-    stateGroup: '',
-  });
+  readonly stateForm = form(signal({ stateGroup: '' }), path => required(path.stateGroup));
 
   stateGroups: StateGroup[] = [
     {
@@ -139,14 +133,7 @@ export class OptionGroupsExample {
     },
   ];
 
-  stateGroupOptions: Observable<StateGroup[]>;
-
-  ngOnInit() {
-    this.stateGroupOptions = this.stateForm.get('stateGroup')!.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filterGroup(value || '')),
-    );
-  }
+  readonly stateGroupOptions = computed(() => this._filterGroup(this.stateForm.stateGroup().value()));
 
   private _filterGroup(value: string): StateGroup[] {
     if (value) {

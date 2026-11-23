@@ -11,10 +11,9 @@ describe('Scoped overlay themes', () => {
     const cleanup = bindNgsOverlayTheme(source, target);
     expect(getComputedStyle(target).getPropertyValue('--ngs-content-editor-toolbar-bg').trim()).toBe('#112233');
     scope.style.setProperty('--ngs-color-on-surface', '#eeeeee');
-    await Promise.resolve();
-    expect(getComputedStyle(target).getPropertyValue('--ngs-content-editor-toolbar-bg').trim()).toBe('#eeeeee');
-    scope.style.removeProperty('--ngs-content-editor-toolbar-bg'); await Promise.resolve();
-    expect(target.style.getPropertyValue('--ngs-content-editor-toolbar-bg')).toBe('');
+    await expect.poll(() => getComputedStyle(target).getPropertyValue('--ngs-content-editor-toolbar-bg').trim()).toBe('#eeeeee');
+    scope.style.removeProperty('--ngs-content-editor-toolbar-bg');
+    await expect.poll(() => target.style.getPropertyValue('--ngs-content-editor-toolbar-bg')).toBe('');
     cleanup(); expect(target.style.getPropertyValue('--ngs-color-surface')).toBe('#abcdef');
     scope.style.setProperty('--ngs-color-surface', '#000000'); await Promise.resolve();
     expect(target.style.getPropertyValue('--ngs-color-surface')).toBe('#abcdef');

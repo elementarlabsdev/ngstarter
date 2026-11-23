@@ -6,9 +6,9 @@ import {
   inject,
   OnInit,
   contentChildren, signal, Signal, input, booleanAttribute, computed,
-  output
+  output, model, effect
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 import { SelectionModel } from '@angular/cdk/collections';
 import { defer, merge, Observable, Subject, switchMap, EMPTY, map, startWith } from 'rxjs';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
@@ -20,15 +20,13 @@ import { Menu } from './menu/menu';
 @Directive({
   selector: '[ngsMenuOptionGroup]',
   standalone: true,
+  host: {
+    '(focusout)': 'onFocusOut($event)',
+  },
   providers: [
     {
       provide: OPTION_PARENT_COMPONENT,
       useExisting: MenuOptionGroupDirective
-    },
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => MenuOptionGroupDirective),
-      multi: true
     },
     {
       provide: SELECT,
@@ -43,7 +41,7 @@ import { Menu } from './menu/menu';
     }
   ]
 })
-export class MenuOptionGroupDirective implements OptionParentComponent, OnInit, ControlValueAccessor, AfterContentInit {
+export class MenuOptionGroupDirective implements OptionParentComponent, OnInit, FormValueControl<any>, AfterContentInit {
   private _changeDetectorRef = inject(ChangeDetectorRef);
   private _destroyRef = inject(DestroyRef);
   private _menu = inject(Menu, { optional: true });
@@ -58,7 +56,10 @@ export class MenuOptionGroupDirective implements OptionParentComponent, OnInit, 
   readonly _optionsContentChanges = signal(0);
 
   _selectionModel: SelectionModel<any>;
-  private _value: any;
+  readonly value = model<any>();
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly touch = output<void>();
 
   readonly options = contentChildren(Option, { descendants: true });
   readonly ngsOptions = contentChildren(forwardRef(() => Option), { descendants: true });
@@ -68,7 +69,6 @@ export class MenuOptionGroupDirective implements OptionParentComponent, OnInit, 
 
   private _initialized = new Subject();
 
-  readonly valueChange = output<any>();
 
   readonly optionSelectionChanges: Observable<any> = merge(
     this._options$,
@@ -91,46 +91,33 @@ export class MenuOptionGroupDirective implements OptionParentComponent, OnInit, 
     })
   );
 
-  onChange: any = () => {};
-  onTouched: any = () => {};
+  constructor() {
+    effect(() => this._selectOptionByValue());
+  }
+
+  protected onFocusOut(event: FocusEvent): void {
+    if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null)) {
+      this.touch.emit();
+    }
+  }
 
   ngOnInit() {
     this._selectionModel = new SelectionModel<any>(this.multiple());
-  }
-
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
   }
 
   ngAfterContentInit() {
     this.optionSelectionChanges
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe((res: any) => {
-        let source: any;
-
-        if (res instanceof Option) {
-          source = res;
-        } else if (res && res.source instanceof Option) {
-          source = res.source;
-        } else {
-          source = res;
+        if (this.disabled() || this.readonly()) {
+          this._selectOptionByValue();
+          return;
         }
-
-        if (source instanceof Option) {
-          this._value = source.value();
-        } else if (source && typeof source.value === 'function') {
-          this._value = source.value();
-        } else {
-          this._value = source.value;
-        }
+        const source = res?.source ?? res;
+        this.value.set(typeof source.value === 'function' ? source.value() : source.value);
         this._selectOptionByValue();
-        this.onChange(this._value);
 
-        if (!this.multiple) {
+        if (!this.multiple()) {
           this._menu?.close('click');
         }
       })
@@ -154,7 +141,7 @@ export class MenuOptionGroupDirective implements OptionParentComponent, OnInit, 
     const ngsOptions = this.ngsOptions();
 
     options.forEach(option => {
-      if (option.value === this._value) {
+      if (option.value === this.value()) {
         option.select();
       } else {
         option.deselect();
@@ -162,7 +149,7 @@ export class MenuOptionGroupDirective implements OptionParentComponent, OnInit, 
     });
 
     ngsOptions.forEach(option => {
-      if (option.value() === this._value) {
+      if (option.value() === this.value()) {
         option.select();
       } else {
         option.deselect();
@@ -171,10 +158,5 @@ export class MenuOptionGroupDirective implements OptionParentComponent, OnInit, 
     this._changeDetectorRef.markForCheck();
   }
 
-  writeValue(newValue: any): void {
-    if (newValue !== this._value) {
-      this._value = newValue;
-      this._selectOptionByValue();
-    }
-  }
+
 }

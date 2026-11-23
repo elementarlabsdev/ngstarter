@@ -122,7 +122,7 @@ class TreeNodeCheckbox<T, K = T> {
 
     checkbox.checked.set(checked);
     checkbox.indeterminate.set(indeterminate);
-    checkbox.disabled.set(this._disabled());
+    checkbox.setInteractiveDisabled(this._disabled());
     this._componentRef?.changeDetectorRef.detectChanges();
   }
 

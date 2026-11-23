@@ -1,5 +1,6 @@
 import { Type } from '@angular/core';
-import { AsyncValidatorFn, FormControl, ValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
+import { FieldTree } from '@angular/forms/signals';
 import { SelectDataSource } from '@ngstarter-ui/components/select';
 
 export type FormBuilderFieldWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
@@ -156,13 +157,13 @@ export interface FormBuilderSchema {
 
 export interface FormBuilderFieldRenderContext {
   field: FormBuilderField;
-  control: FormControl;
+  control: FieldTree<unknown>;
   readonly: boolean;
 }
 
 export interface FormBuilderUploadContext {
   field: FormBuilderField;
-  control: FormControl;
+  control: FieldTree<unknown>;
   event: any;
   files: File[];
   fileList: FileList | null;

@@ -21,7 +21,7 @@
           Multi-step forms can mean two different things: a renderer-owned stepper configured by
           <code>FormBuilderFlow</code>, or a fully external <code>ngs-stepper</code> controlled by
           the host application. The difference matters because it decides whether the form is one
-          Angular <code>FormGroup</code> or several independent forms.
+          Signal Forms field tree or several independent forms.
         </p>
         <div class="mt-6 flex flex-wrap items-center gap-3 text-sm text-on-surface-variant">
           <span>July 1, 2026</span>
@@ -40,8 +40,8 @@
           </p>
           <p>
             That visual structure is simple, but the form model is not automatic. If every step
-            creates its own <code>ngs-form-renderer</code>, every renderer creates its own Angular
-            <code>FormGroup</code>. The UI looks like one flow, but validation, calculations,
+            creates its own <code>ngs-form-renderer</code>, every renderer creates its own Signal Forms
+            field tree. The UI looks like one flow, but validation, calculations,
             dirty state, touched state, and submit values are split across multiple form instances.
           </p>
         </section>
@@ -54,20 +54,20 @@
             <code>flow</code> input. The saved <code>FormBuilderSchema</code> can stay reusable and
             flat, while a specific screen decides how to split it into steps.
           </p>
-          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
+          <ngs-code-highlighter class="rounded-lg overflow-hidden mb-10"
             [code]="rendererFlowCode"
             language="typescript"
             title="runtime-flow.ts"
             showCopyButton
           />
-          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
+          <ngs-code-highlighter class="rounded-lg overflow-hidden mb-10"
             [code]="rendererFlowTemplateCode"
             language="html"
             title="renderer-flow.html"
             showCopyButton
           />
           <p>
-            In this mode the renderer still owns one form group. The stepper is internal, but the
+            In this mode the renderer still owns one field tree. The stepper is internal, but the
             step setup is external. Calculated fields, plain text expressions, validators, repeaters,
             and submit all operate against one form value.
           </p>
@@ -77,10 +77,10 @@
           <h2>What is not one form</h2>
           <p>
             The following pattern is visually tempting, but it does not produce one form with the
-            current renderer contract. Each renderer creates a separate form group because there is
+            current renderer contract. Each renderer creates a separate field tree because there is
             no shared form context.
           </p>
-          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
+          <ngs-code-highlighter class="rounded-lg overflow-hidden mb-10"
             [code]="separateFormsCode"
             language="html"
             title="separate-renderers.html"
@@ -101,7 +101,7 @@
             <code>ngs-stepper</code>, and the renderer becomes a partial schema renderer. It needs
             to accept the list of top-level items to render for that step.
           </p>
-          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
+          <ngs-code-highlighter class="rounded-lg overflow-hidden mb-10"
             [code]="externalStepperCode"
             language="html"
             title="external-stepper.html"
@@ -116,26 +116,14 @@
         <section id="one-form">
           <h2>External stepper as one form</h2>
           <p>
-            To make an external stepper behave as one form, all partial renderers must share the
-            same Angular <code>FormGroup</code>. The host form owns submit, while each renderer
-            only projects a subset of fields into that shared form.
+            Place a single renderer below the external stepper and pass the active step's items
+            through <code>[items]</code>. The renderer keeps one Signal Forms field tree for the
+            whole schema and validates it when the host calls <code>submit()</code>.
           </p>
-          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
+          <ngs-code-highlighter class="rounded-lg overflow-hidden mb-10"
             [code]="oneFormCode"
             language="html"
             title="one-form-external-stepper.html"
-            showCopyButton
-          />
-          <p>
-            That requires renderer inputs like <code>items</code> and <code>formGroup</code>. The
-            renderer would use the supplied group instead of creating its own. The same controls,
-            value object, validators, calculated fields, and submission lifecycle would then span
-            every step.
-          </p>
-          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
-            [code]="futureInputsCode"
-            language="typescript"
-            title="renderer-contract.ts"
             showCopyButton
           />
         </section>
@@ -148,7 +136,7 @@
             the schema. Use a true external stepper only when the parent screen must control the
             stepper header, actions, route synchronization, analytics, or cross-step navigation.
           </p>
-          <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden mb-10"
+          <ngs-code-highlighter class="rounded-lg overflow-hidden mb-10"
             [code]="decisionCode"
             language="html"
             title="decision.html"
@@ -162,8 +150,8 @@
             <li><code>schema.flow</code> stores step layout with the schema.</li>
             <li><code>&lt;ngs-form-renderer [flow]="flow"&gt;</code> keeps steps outside the schema.</li>
             <li>Both of those modes still let one renderer own one form.</li>
-            <li>Multiple renderer instances are multiple forms unless they share a <code>FormGroup</code>.</li>
-            <li>A true external stepper needs partial rendering with <code>items</code> plus shared <code>formGroup</code>.</li>
+            <li>Each renderer instance owns its own field tree.</li>
+            <li>Use one renderer with <code>[items]</code> to share values and validity across external steps.</li>
           </ul>
         </section>
       </div>

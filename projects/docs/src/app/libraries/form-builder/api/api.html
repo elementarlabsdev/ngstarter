@@ -70,12 +70,12 @@
   a single logo value for <code>logo-upload</code> and one or many file values for <code>upload</code>.
 </p>
 <div class="my-6 flex flex-col gap-4">
-  <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden"
+  <ngs-code-highlighter class="rounded-lg overflow-hidden"
     [code]="uploadCallbackTemplateExample"
     language="html"
     title="template.html"
     showCopyButton/>
-  <ngs-code-highlighter class="border border-border rounded-lg overflow-hidden"
+  <ngs-code-highlighter class="rounded-lg overflow-hidden"
     [code]="uploadCallbackTypeScriptExample"
     language="typescript"
     title="component.ts"
@@ -83,6 +83,13 @@
 </div>
 
 <h3>Renderer events</h3>
+<p>
+  <code>formReady</code> emits the root <code>FieldTree</code>. Read the current data with
+  <code>tree().value()</code> and check validity with <code>tree().valid()</code>.
+  Custom field renderers and <code>FormBuilderUploadContext</code> receive
+  <code>control</code> as a <code>FieldTree&lt;unknown&gt;</code>. Bind a custom renderer's
+  control with <code>[formField]="control()"</code>.
+</p>
 <div class="my-6 overflow-hidden rounded-xl border border-border shadow-sm">
   <table ngs-table [dataSource]="rendererEvents">
     <ng-container ngsColumnDef="name">

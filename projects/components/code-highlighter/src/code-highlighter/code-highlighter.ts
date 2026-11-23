@@ -320,6 +320,9 @@ export class CodeHighlighter implements OnChanges {
         {
           lang: this.language(),
           theme: this.theme(),
+          colorReplacements: {
+            'github-light': { '#fff': 'light-dark(var(--ngs-code-highlighter-bg), #f6f8fa)' }
+          },
           transformers: [diffTransformer, this.getHighlightTransformer()],
           diff: this.diff()
         } as any

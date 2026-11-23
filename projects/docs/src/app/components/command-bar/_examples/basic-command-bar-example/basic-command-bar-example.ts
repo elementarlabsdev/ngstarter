@@ -1,6 +1,8 @@
-import { Component, DestroyRef, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { Component, DestroyRef, inject, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { Checkbox } from '@ngstarter-ui/components/checkbox';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Option, Select } from '@ngstarter-ui/components/select';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -20,7 +22,7 @@ import {
     Label,
     Option,
     Select,
-    ReactiveFormsModule,
+    SignalFormField,
     CommandBarDivider,
     CommandBar,
     CommandBarCommand
@@ -33,11 +35,11 @@ export class BasicCommandBarExample implements OnInit {
   private _destroyRef = inject(DestroyRef);
   open = false;
   positionOptions: CommandBarPosition[] = ['top', 'bottom'];
-  position = new FormControl<CommandBarPosition>('bottom');
+  position = form(signal<CommandBarPosition>('bottom'));
+  private readonly positionChanges = toObservable(this.position().value);
 
   ngOnInit() {
-    this.position
-      .valueChanges
+    this.positionChanges
       .pipe(
         takeUntilDestroyed(this._destroyRef)
       )

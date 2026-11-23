@@ -351,6 +351,7 @@
                          [pageSize]="pageSize()"
                          [pageIndex]="pageIndex()"
                          [length]="effectivePaginatorLength()"
+                         [lengthKnown]="paginatorLengthKnown()"
                          [disabled]="blockingLoading()"
                          (page)="onPageChange($event)"/>
         }

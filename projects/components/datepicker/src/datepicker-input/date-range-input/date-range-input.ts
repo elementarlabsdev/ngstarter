@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   Component,
   Directive,
   ElementRef,
@@ -7,15 +8,16 @@ import {
   untracked,
   effect,
   OnDestroy,
-  OnInit,
   contentChild,
   ChangeDetectionStrategy,
   forwardRef,
   signal,
   computed,
   model,
+  output,
 } from '@angular/core';
 import { NgControl } from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 import { DateAdapter } from '../../core/datetime/date-adapter';
 import { Subject } from 'rxjs';
 import type { DateRangePicker } from '../../date-range-picker/date-range-picker';
@@ -29,15 +31,19 @@ import { FormFieldControl } from '@ngstarter-ui/components/form-field';
     'class': 'ngs-date-range-input-start',
     '(input)': '_onInput($any($event).target.value)',
     '(focus)': '_onFocus()',
-    '(blur)': '_onBlur()',
+    '(blur)': '_onBlur($event)',
+    '[disabled]': '_rangeInput.disabled()',
+    '[readOnly]': '_rangeInput.readonly()',
+    '[required]': '_rangeInput.required()',
   },
 })
 export class StartDate<D> {
   private _elementRef = inject(ElementRef);
   private _dateAdapter = inject<DateAdapter<D>>(DateAdapter);
-  _rangeInput!: DateRangeInput<D>;
+  protected readonly _rangeInput = inject<DateRangeInput<D>>(DateRangeInput);
 
   _onInput(value: string) {
+    if (this._rangeInput.disabled() || this._rangeInput.readonly()) return;
     let date: D | null;
     try { date = this._dateAdapter.parse(value, null); } catch { date = this._dateAdapter.invalid(); }
     this._rangeInput._startUpdated(date);
@@ -53,8 +59,8 @@ export class StartDate<D> {
     this._rangeInput._handleFocus();
   }
 
-  _onBlur() {
-    this._rangeInput._handleBlur();
+  _onBlur(event: FocusEvent) {
+    this._rangeInput._handleBlur(event);
   }
 
   isEmpty() {
@@ -72,15 +78,19 @@ export class StartDate<D> {
     'class': 'ngs-date-range-input-end',
     '(input)': '_onInput($any($event).target.value)',
     '(focus)': '_onFocus()',
-    '(blur)': '_onBlur()',
+    '(blur)': '_onBlur($event)',
+    '[disabled]': '_rangeInput.disabled()',
+    '[readOnly]': '_rangeInput.readonly()',
+    '[required]': '_rangeInput.required()',
   },
 })
 export class EndDate<D> {
   private _elementRef = inject(ElementRef);
   private _dateAdapter = inject<DateAdapter<D>>(DateAdapter);
-  _rangeInput!: DateRangeInput<D>;
+  protected readonly _rangeInput = inject<DateRangeInput<D>>(DateRangeInput);
 
   _onInput(value: string) {
+    if (this._rangeInput.disabled() || this._rangeInput.readonly()) return;
     let date: D | null;
     try { date = this._dateAdapter.parse(value, null); } catch { date = this._dateAdapter.invalid(); }
     this._rangeInput._endUpdated(date);
@@ -96,8 +106,8 @@ export class EndDate<D> {
     this._rangeInput._handleFocus();
   }
 
-  _onBlur() {
-    this._rangeInput._handleBlur();
+  _onBlur(event: FocusEvent) {
+    this._rangeInput._handleBlur(event);
   }
 
   isEmpty() {
@@ -128,23 +138,21 @@ export class EndDate<D> {
     }
   ]
 })
-export class DateRangeInput<D> implements OnDestroy, OnInit, FormFieldControl<DateRange<D>> {
+export class DateRangeInput<D> implements OnDestroy, FormFieldControl<DateRange<D>>, FormValueControl<DateRange<D> | null> {
   private _elementRef = inject(ElementRef);
   private _formField = inject(FormField, { optional: true });
   readonly rangePicker = input.required<DateRangePicker<D>>();
   readonly separator = input<string>('–');
-  /** Calendar range shared by typed inputs and picker selection. */
-  readonly range = model<DateRange<D> | null>(null);
+  readonly value = model<DateRange<D> | null>(null);
+  readonly range = input<DateRange<D> | null>();
+  readonly rangeChange = output<DateRange<D> | null>();
+  readonly touch = output<void>();
   readonly ngControl = inject(NgControl, { optional: true, self: true });
 
   _startInput = contentChild(StartDate);
   _endInput = contentChild(EndDate);
 
   _value: DateRange<D> | null = null;
-
-  get value() {
-    return this._value;
-  }
 
   private _focused = signal(false);
   get focused(): boolean {
@@ -174,26 +182,44 @@ export class DateRangeInput<D> implements OnDestroy, OnInit, FormFieldControl<Da
   private _inputStateChanges = signal(0);
   id = `ngs-date-range-input-${nextUniqueId++}`;
   placeholder = '';
-  required = false;
-  disabled = false;
-  errorState = false;
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly invalid = input(false);
+  readonly touched = input(false);
+
+  get errorState(): boolean {
+    return this.invalid() && this.touched();
+  }
 
   constructor() {
-    let previousStart = this._startInput();
-    let previousEnd = this._endInput();
+    let previousValue: DateRange<D> | null | undefined;
+    let previousRange: DateRange<D> | null | undefined;
+    let previousStart: StartDate<D> | undefined;
+    let previousEnd: EndDate<D> | undefined;
     effect(() => {
+      const value = this.value();
       const range = this.range();
       const start = this._startInput();
       const end = this._endInput();
       untracked(() => {
-        if (start) start._rangeInput = this;
-        if (end) end._rangeInput = this;
-        if (range !== this._value || start !== previousStart || end !== previousEnd) {
-          previousStart = start; previousEnd = end;
-          const value = range ?? new DateRange<D>(null, null);
-          this._rangeUpdated(value);
-          this.rangePicker()._selectedRange.set(value);
+        let next = this._value;
+        if (value !== previousValue) {
+          next = previousValue === undefined ? value ?? range ?? null : value;
+        } else if (range !== previousRange) {
+          next = range ?? value;
         }
+        previousValue = value;
+        previousRange = range;
+        const inputsChanged = start !== previousStart || end !== previousEnd;
+        previousStart = start;
+        previousEnd = end;
+        if (next === this._value && !inputsChanged) return;
+
+        this._value = next;
+        start?._formatValue(next?.start ?? null);
+        end?._formatValue(next?.end ?? null);
+        this.rangePicker()._selectedRange.set(next ?? new DateRange<D>(null, null));
       });
     });
     effect(() => {
@@ -207,30 +233,32 @@ export class DateRangeInput<D> implements OnDestroy, OnInit, FormFieldControl<Da
 
   }
 
-  ngOnInit() {}
-
   ngOnDestroy() {
     this.stateChanges.complete();
   }
 
   _startUpdated(date: D | null) {
     this._value = new DateRange<D>(date, this._value?.end || null);
-    this.range.set(this._value);
+    this.value.set(this._value);
+    this.rangeChange.emit(this._value);
     this.rangePicker()._selectedRange.set(this._value);
     this.stateChanges.next();
   }
 
   _endUpdated(date: D | null) {
     this._value = new DateRange<D>(this._value?.start || null, date);
-    this.range.set(this._value);
+    this.value.set(this._value);
+    this.rangeChange.emit(this._value);
     this.rangePicker()._selectedRange.set(this._value);
     this.stateChanges.next();
   }
 
   _rangeUpdated(range: DateRange<D>) {
+    if (this.disabled() || this.readonly()) return;
     const prevStart = this._value?.start;
     this._value = range;
-    this.range.set(range);
+    this.value.set(range);
+    this.rangeChange.emit(range);
     this._startInput()?._formatValue(range.start);
     this._endInput()?._formatValue(range.end);
     this.stateChanges.next();
@@ -247,14 +275,12 @@ export class DateRangeInput<D> implements OnDestroy, OnInit, FormFieldControl<Da
     }
   }
 
-  _handleBlur() {
-    // Use setTimeout to check if focus moved to another input within the same component
-    setTimeout(() => {
-      if (!this._elementRef.nativeElement.contains(document.activeElement)) {
-        this._focused.set(false);
-        this.stateChanges.next();
-      }
-    });
+  _handleBlur(event: FocusEvent): void {
+    if (!this._elementRef.nativeElement.contains(event.relatedTarget as Node | null)) {
+      this._focused.set(false);
+      this.touch.emit();
+      this.stateChanges.next();
+    }
   }
 
   _inputUpdated() {
@@ -272,7 +298,7 @@ export class DateRangeInput<D> implements OnDestroy, OnInit, FormFieldControl<Da
 
   focus(): void {
     const startInput = this._startInput();
-    if (startInput && !this.focused) {
+    if (startInput && !this.focused && !this.disabled()) {
       startInput.focus();
     }
   }

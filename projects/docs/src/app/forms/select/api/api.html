@@ -1,7 +1,12 @@
 <h3>Select API</h3>
 
 <h4>Clearable usage</h4>
-<pre><code class="code">&lt;ngs-select clearable [formControl]="status"&gt;
+<p>
+  Import Angular's <code>FormField</code> from <code>@angular/forms/signals</code> and pass the
+  field tree to <code>[formField]</code>. Declare the selected value in the form model.
+</p>
+<pre><code class="code">readonly status = form(signal&lt;string | null&gt;('active'));</code></pre>
+<pre><code class="code">&lt;ngs-select clearable [formField]="status"&gt;
   &lt;ngs-option value="active"&gt;Active&lt;/ngs-option&gt;
   &lt;ngs-option value="pending"&gt;Pending&lt;/ngs-option&gt;
 &lt;/ngs-select&gt;</code></pre>
@@ -23,6 +28,14 @@
       <tr>
         <td><code>placeholder</code></td>
         <td>Placeholder text to display when no value is selected.</td>
+      </tr>
+      <tr>
+        <td><code>value</code></td>
+        <td>Selection model. Use <code>[(value)]</code> to bind it directly.</td>
+      </tr>
+      <tr>
+        <td><code>readonly</code></td>
+        <td>Prevents editing the current selection.</td>
       </tr>
       <tr>
         <td><code>disabled</code></td>
@@ -92,6 +105,8 @@
 </p>
 <pre><code class="code">import &#123; SelectDataSource &#125; from '@ngstarter-ui/components/select';
 
+readonly owner = form(signal&lt;string | null&gt;(null));
+
 readonly usersDataSource: SelectDataSource&lt;User&gt; = async request =&gt; &#123;
   const response = await usersApi.search(&#123;
     search: request.search,
@@ -112,7 +127,7 @@ readonly usersDataSource: SelectDataSource&lt;User&gt; = async request =&gt; &#1
 &#125;;</code></pre>
 
 <pre><code class="code">&lt;ngs-select
-  [formControl]="owner"
+  [formField]="owner"
   [dataSource]="usersDataSource"
   [pageSize]="20"
   searchable
@@ -182,6 +197,14 @@ readonly usersDataSource: SelectDataSource&lt;User&gt; = async request =&gt; &#1
       </tr>
     </thead>
     <tbody>
+      <tr>
+        <td><code>valueChange</code></td>
+        <td>Emits the new value when the select updates its model.</td>
+      </tr>
+      <tr>
+        <td><code>touch</code></td>
+        <td>Reports when the selection interaction ends or focus leaves the control.</td>
+      </tr>
       <tr>
         <td><code>selectionChange</code></td>
         <td>Event emitted when the selected value changes.</td>

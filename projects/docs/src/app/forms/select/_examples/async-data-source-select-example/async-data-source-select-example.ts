@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import {
   Select,
@@ -13,7 +13,7 @@ import { USER_OPTIONS, UserOption } from './async-data-source-select-example-dat
 @Component({
   selector: 'app-async-data-source-select-example',
   imports: [
-    ReactiveFormsModule,
+    SignalFormField,
     FormField,
     Label,
     Select,
@@ -25,7 +25,7 @@ import { USER_OPTIONS, UserOption } from './async-data-source-select-example-dat
   styleUrl: './async-data-source-select-example.scss'
 })
 export class AsyncDataSourceSelectExample {
-  readonly owner = new FormControl<string | null>(null);
+  readonly owner = form(signal<string | null>(null));
   private readonly loadDelay = 800;
   private readonly users = USER_OPTIONS;
 

@@ -1,7 +1,7 @@
-import { Component, model, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { TimezoneSelect } from '@ngstarter-ui/components/timezone-select';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
-import { FormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-basic-timezone-select-example',
@@ -9,12 +9,12 @@ import { FormsModule } from '@angular/forms';
     TimezoneSelect,
     FormField,
     Label,
-    FormsModule
+    SignalFormField
   ],
   templateUrl: './basic-timezone-select-example.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-timezone-select-example.scss'
 })
 export class BasicTimezoneSelectExample {
-  selectedTimezone = model<string | null>(null);
+  readonly selectedTimezone = form(signal<string | null>(null));
 }

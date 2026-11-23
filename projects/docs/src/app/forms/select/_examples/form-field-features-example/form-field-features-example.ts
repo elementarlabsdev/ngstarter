@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormField as SignalFormField, form, required } from '@angular/forms/signals';
 import { Option, Select } from '@ngstarter-ui/components/select';
 import { Error, Hint, Label } from '@ngstarter-ui/components/form-field';
 import { FormField } from '@ngstarter-ui/components/form-field';
@@ -12,7 +12,7 @@ interface Animal {
 @Component({
   selector: 'app-form-field-features-example',
   imports: [
-    ReactiveFormsModule,
+    SignalFormField,
     Option,
     Select,
     Label,
@@ -25,8 +25,12 @@ interface Animal {
   styleUrl: './form-field-features-example.scss'
 })
 export class FormFieldFeaturesExample {
-  animalControl = new FormControl<Animal | null>(null, Validators.required);
-  selectFormControl = new FormControl('', Validators.required);
+  animalControl = form(signal<Animal | null>(null), path => {
+    required(path);
+  });
+  selectFormControl = form(signal(''), path => {
+    required(path);
+  });
   animals: Animal[] = [
     { name: 'Dog', sound: 'Woof!' },
     { name: 'Cat', sound: 'Meow!' },

@@ -1,11 +1,11 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { PinInput } from '@ngstarter-ui/components/pin-input';
 
 @Component({
   selector: 'app-basic-pin-input-example',
   imports: [
-    FormsModule,
+    SignalFormField,
     PinInput
   ],
   templateUrl: './basic-pin-input-example.html',
@@ -13,5 +13,5 @@ import { PinInput } from '@ngstarter-ui/components/pin-input';
   styleUrl: './basic-pin-input-example.scss'
 })
 export class BasicPinInputExample {
-  value = '';
+  readonly value = form(signal<number | null>(null));
 }

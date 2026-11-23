@@ -2,7 +2,7 @@
 @reference '../../../styles/_common.scss';
 
 :host {
-  --ngs-code-highlighter-bg: var(--ngs-color-background);
+  --ngs-code-highlighter-bg: var(--ngs-color-surface-container, #f6f8fa);
   --ngs-code-highlighter-padding: --spacing(5);
   --ngs-code-highlighter-margin: --spacing(5);
   --ngs-code-highlighter-title-padding: --spacing(2) --spacing(3) --spacing(1) --spacing(3);
@@ -11,7 +11,14 @@
   display: block;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
+  figure {
+    border-radius: var(--ngs-radius-lg, 0.75rem);
+  }
+
   figcaption {
+    border-radius: inherit;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
     font-size: var(--ngs-font-size-xs);
     font-weight: 500;
     padding: var(--ngs-code-highlighter-title-padding);
@@ -43,6 +50,7 @@
 
   ::ng-deep {
     pre {
+      border-radius: inherit;
       padding: var(--ngs-code-highlighter-padding) 0;
       line-height: 1.75;
       font-size: var(--ngs-font-size-sm);
@@ -98,7 +106,12 @@
 
   .content {
     overflow: auto;
+    border-radius: inherit;
     background: var(--ngs-code-highlighter-bg);
+
+    .code-output {
+      border-radius: inherit;
+    }
 
     button {
       color: inherit;
@@ -107,6 +120,11 @@
         color: var(--ngs-color-success) !important;
       }
     }
+  }
+
+  figcaption + .content {
+    border-start-start-radius: 0;
+    border-start-end-radius: 0;
   }
 
   &.overflow-disabled {

@@ -42,7 +42,7 @@ export class Api {
       type: 'TreeSelectKey | TreeSelectKey[] | null',
       default: 'null',
       description:
-        'Two-way binding. Also supports ngModel and reactive forms. External writes do not invoke the form change callback.',
+        'Selection model. Supports [(value)] and [formField]. Use selectionChange for user actions.',
     },
     { name: 'multiple', type: 'boolean', default: 'false', description: 'Select several values.' },
     {
@@ -81,7 +81,7 @@ export class Api {
       name: 'disabled / required',
       type: 'boolean',
       default: 'false',
-      description: 'Form field states. Disabled also follows the Angular form control.',
+      description: 'Form field states. Set them in the schema when using [formField].',
     },
     {
       name: 'aria-label',
@@ -102,5 +102,9 @@ export class Api {
       default: '—',
       description: 'Failed child load; the user can retry.',
     },
+    { name: 'readonly', description: 'Prevents user edits while keeping the value visible.', type: 'boolean', default: 'false' },
+    { name: 'invalid', description: 'Invalid state supplied by the bound form field.', type: 'boolean', default: 'false' },
+    { name: 'touched', description: 'Touched state supplied by the bound form field.', type: 'boolean', default: 'false' },
+    { name: 'touch', description: 'Reports when the selection interaction ends or focus leaves the control.', type: 'void', default: '—' },
   ];
 }

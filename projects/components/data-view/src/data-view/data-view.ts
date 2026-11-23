@@ -149,8 +149,10 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   private _lastRowModelType: DataViewRowModelType | null = null;
   private _pendingRequestCleanup: (() => void) | null = null;
   private _refreshTrigger = signal(0);
+  private _completedRefresh = 0;
   private _serverSideRowCount = signal(0);
   private _serverCountKnown = signal(false);
+  private _serverPageEnd: number | null = null;
   private _manualOrder = signal<string[] | null>(null);
   private _manualVisibility = signal<Record<string, boolean>>({});
   private _hasDataOnServer = signal<boolean | undefined>(undefined);
@@ -206,6 +208,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   private _internalPaginator = viewChild(Paginator);
   // Optional external paginator passed from parent. If provided, it overrides the internal one.
   paginator = input<Paginator | null>(null);
+  private readonly internalPaginator = viewChild(Paginator);
 
   private _dataSource = new TableDataSource<T>([]);
 
@@ -687,6 +690,9 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
     const ds = this.dataSource();
     return ds.filteredData?.length || 0;
   });
+  protected readonly paginatorLengthKnown = computed(() =>
+    this.rowModelType() !== 'serverSide' || this._serverCountKnown()
+  );
 
   protected totalHeight = computed(() => {
     return this.effectiveDataLength() * this.rowHeight();
@@ -795,22 +801,26 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
       if (rowModelType === 'clientSide') {
         this._dataSource.filter = search;
       }
-      if (refreshTriggerValue > 0) {
-        this.refreshEnd.emit();
-      } else {
-        this.loadEnd.emit();
-      }
+      this.emitLoadEnd(refreshTriggerValue);
     });
   });
 
   private _loadDataEffect = effect(() => {
-    const datasource = this.datasource();
-    if (!datasource || this.rowModelType() !== 'serverSide' || this._isDestroyed) {
+    const datasource = this.rowModelType() === 'serverSide' ? this.datasource() : null;
+    if (!this._isDestroyed && datasource !== this._lastDatasource) {
+      this._lastDatasource = datasource;
+      this._lastRequestKey = null;
+      untracked(() => {
+        this._hasDataOnServer.set(undefined);
+        this.resetServerCount();
+        if (this.selection.hasValue()) this.unselectAll();
+      });
+    }
+    if (!datasource || this._isDestroyed) {
       untracked(() => { this.cancelPendingRequest(); this._internalLoading.set(false); this._lastRequestKey = null; });
       return;
     }
 
-    if (datasource !== this._lastDatasource) { this._lastDatasource = datasource; this._lastRequestKey = null; }
     const pIndex = this.pageIndex();
     const pSize = this.pageSize();
     const search = this._debouncedSearch()?.trim() || '';
@@ -837,9 +847,11 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
     const previousQuery = this._lastRequestKey ? JSON.parse(this._lastRequestKey) : null;
     const isFilterRequest = previousQuery && (previousQuery[3] !== search || JSON.stringify(previousQuery[4]) !== JSON.stringify(columnFilters));
     const isSortRequest = previousQuery && JSON.stringify(previousQuery[2]) !== JSON.stringify(sortModel);
+    const resetCount = !previousQuery || isFilterRequest || previousQuery[1] !== pSize;
     this._lastRequestKey = requestKey;
 
     untracked(() => {
+      if (resetCount) this.resetServerCount();
       this.cancelPendingRequest();
       const currentRequestId = ++this._requestId;
       const controller = new AbortController();
@@ -870,37 +882,18 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
           this._ngZone.run(() => {
             if (settled || controller.signal.aborted || this._isDestroyed || currentRequestId !== this._requestId) return;
             settled = true;
+            this.updateServerPagination(pIndex, pSize, rows.length, lastRow);
             this._dataSource.data = rows;
-            if (lastRow !== undefined) {
-              this._serverCountKnown.set(true);
-              const total = Math.max(0, lastRow);
-              this._serverSideRowCount.set(total);
-              const lastPage = Math.max(0, Math.ceil(total / Math.max(1, pSize)) - 1);
-              if (pIndex > lastPage) { this.pageIndex.set(lastPage); this.resetScroll(); }
-
-              // Update _hasDataOnServer if we have any rows OR if we are doing a clean request (no filters)
-              if (lastRow > 0) {
-                this._hasDataOnServer.set(true);
-              } else if (!search && !Object.keys(columnFilters).length) {
-                this._hasDataOnServer.set(false);
-              }
-            } else {
-              // If lastRow is not provided, we can only infer _hasDataOnServer if we actually got rows
-              if (rows.length > 0) {
-                this._hasDataOnServer.set(true);
-              } else if (!search && !Object.keys(columnFilters).length) {
-                this._hasDataOnServer.set(false);
-              }
+            if (rows.length || this._serverSideRowCount() > 0) {
+              this._hasDataOnServer.set(true);
+            } else if (!search && !Object.keys(columnFilters).length) {
+              this._hasDataOnServer.set(false);
             }
             this.loaded.set(true);
             this._internalLoading.set(false);
             this._isFiltering.set(false);
             this._isSorting.set(false);
-            if (refreshTriggerValue > 0) {
-              this.refreshEnd.emit();
-            } else {
-              this.loadEnd.emit();
-            }
+            this.emitLoadEnd(refreshTriggerValue);
             this._cdr.markForCheck();
           });
         },
@@ -914,11 +907,7 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
             this._internalLoading.set(false);
             this._isFiltering.set(false);
             this._isSorting.set(false);
-            if (refreshTriggerValue > 0) {
-              this.refreshEnd.emit();
-            } else {
-              this.loadEnd.emit();
-            }
+            this.emitLoadEnd(refreshTriggerValue);
             this._cdr.markForCheck();
           });
         }
@@ -1032,6 +1021,15 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
   refresh(): void {
     this._lastRequestKey = null;
     this._refreshTrigger.update(v => v + 1);
+  }
+
+  private emitLoadEnd(refresh: number): void {
+    if (refresh === this._completedRefresh) {
+      this.loadEnd.emit();
+    } else {
+      this._completedRefresh = refresh;
+      this.refreshEnd.emit();
+    }
   }
 
   get noFilteredResults(): boolean {
@@ -1162,24 +1160,33 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
       const state = this.getState(); const key = JSON.stringify(state);
       if (key !== lastState) { lastState = key; untracked(() => this.stateChanged.emit(state)); }
     });
-    let loadedStorageKey: string | null = null;
+    let loadedStorageKey: string | null | undefined;
+    let initialSavedViews: DataViewSavedView[] | undefined;
     effect(() => {
       const key = this.viewStorageKey(); const browser = this.isBrowser();
       if (!browser || key === loadedStorageKey) return;
+      const switchingKey = loadedStorageKey !== undefined;
       loadedStorageKey = key;
       untracked(() => {
-        this._storageReady.set(false); this.viewStorageError.set(null);
-        if (!key) return;
+        this._storageReady.set(false);
+        this.viewStorageError.set(null);
+        initialSavedViews ??= this.savedViews();
+        let views = initialSavedViews;
+        let activeId: string | null = null;
         try {
-          const raw = this.viewStorage()?.getItem(key);
+          const raw = key ? this.viewStorage()?.getItem(key) : null;
           if (raw) {
             const payload = JSON.parse(raw);
             if (payload.version !== 1) throw new Error('Unsupported saved view format');
-            this.savedViews.set(normalizeDataViewSavedViews(payload.views, this.normalizedColumns()));
-            if (typeof payload.activeViewId === 'string' && this.savedViews().some(v => v.id === payload.activeViewId)) this.applyView(payload.activeViewId);
+            views = normalizeDataViewSavedViews(payload.views, this.normalizedColumns());
+            if (views.some(view => view.id === payload.activeViewId)) activeId = payload.activeViewId;
           }
-        } catch (error) { this.viewStorageError.set(error instanceof Error ? error.message : 'Could not restore saved views'); }
-        this._storageReady.set(true);
+        } catch (error) {
+          this.viewStorageError.set(error instanceof Error ? error.message : 'Could not restore saved views');
+        }
+        this.savedViews.set(views);
+        if (activeId || (switchingKey && this.activeViewId())) this.applyView(activeId);
+        this._storageReady.set(!!key && !this.viewStorageError());
       });
     });
     effect(() => {
@@ -1311,10 +1318,13 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
     });
 
     effect(() => {
-      const active = this.paginator(); const length = this.effectivePaginatorLength();
+      const active = this.paginator() ?? this.internalPaginator(); const length = this.effectivePaginatorLength();
       const index = this.pageIndex(); const size = this.pageSize();
-      if (active && this.withPagination()) untracked(() => {
+      const lengthKnown = this.paginatorLengthKnown();
+      const withPagination = this.withPagination();
+      if (active && withPagination) untracked(() => {
         active.length = length; active.pageIndex = index; active.pageSize = size;
+        active.lengthKnown = lengthKnown;
       });
     });
 
@@ -1323,7 +1333,10 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
       const ext = this.paginator();
       if (ext) {
         const sub = ext.page.subscribe(event => this.onPageChange(event));
-        onCleanup(() => sub.unsubscribe());
+        onCleanup(() => {
+          sub.unsubscribe();
+          ext.lengthKnown = ext.lengthKnownInput() ?? true;
+        });
       }
     });
 
@@ -1601,11 +1614,43 @@ export class DataView<T> implements OnInit, AfterViewInit, DataViewInterface<T> 
     if (mode === this._lastRowModelType) return;
     this._lastRowModelType = mode; this._lastRequestKey = null; this._requestId++;
     this.cancelPendingRequest();
-    this._hasDataOnServer.set(undefined); this._serverCountKnown.set(false); this._serverSideRowCount.set(0);
+    this._hasDataOnServer.set(undefined);
+    this.resetServerCount();
     this.error.set(null); this._isFiltering.set(false); this._isSorting.set(false);
     this.loaded.set(mode === 'clientSide'); this._internalLoading.set(mode === 'serverSide');
     this._dataSource.sort = null; this._dataSource.filter = ''; this._dataSource.data = [];
     this.resetScroll();
+  }
+
+  private resetServerCount(): void {
+    this._serverPageEnd = null;
+    this._serverCountKnown.set(false);
+    this._serverSideRowCount.set(0);
+  }
+
+  private updateServerPagination(page: number, pageSize: number, rows: number, total?: number): void {
+    if (total !== undefined) {
+      this._serverCountKnown.set(true);
+      this._serverSideRowCount.set(Math.max(0, total));
+    } else if (!this._serverCountKnown()) {
+      const endRow = page * pageSize + rows;
+      if (!rows) {
+        const confirmedEnd = this._serverPageEnd ?? Math.max(0, this._serverSideRowCount() - 1);
+        this._serverPageEnd = Math.min(endRow, confirmedEnd);
+      } else if (rows < pageSize) {
+        this._serverPageEnd = endRow;
+      } else if (this._serverPageEnd !== null && endRow > this._serverPageEnd) {
+        this._serverPageEnd = null;
+      }
+      // A full page can be followed by another. A short page bounds the list.
+      this._serverSideRowCount.set(this._serverPageEnd ?? Math.max(this._serverSideRowCount(), endRow + 1));
+    }
+
+    const lastPage = Math.max(0, Math.ceil(this._serverSideRowCount() / Math.max(1, pageSize)) - 1);
+    if (page > lastPage) {
+      this.pageIndex.set(lastPage);
+      this.resetScroll();
+    }
   }
 
   protected sortColumn(col: DataViewColumnDef, direction: SortDirection): void {

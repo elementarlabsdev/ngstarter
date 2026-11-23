@@ -5,13 +5,10 @@ import {
   signal,
   computed,
   effect,
-  inject,
-  DestroyRef
 } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { startWith } from 'rxjs/operators';
+import { ReadonlyFieldTree } from '@angular/forms/signals';
 
 @Component({
   selector: 'ngs-headless-step',
@@ -30,7 +27,7 @@ import { startWith } from 'rxjs/operators';
 })
 export class HeadlessStep {
   /** Form control associated with this step */
-  stepControl = input<AbstractControl | undefined>(undefined);
+  stepControl = input<ReadonlyFieldTree<unknown> | AbstractControl | undefined>(undefined);
   /** Whether the step is optional */
   optional = input(false, {
     transform: coerceBooleanProperty
@@ -43,29 +40,15 @@ export class HeadlessStep {
   /** Internal writable signal tracking the validity of the stepControl */
   private readonly _isValid = signal(true); // Default to true if no control
 
-  private _destroyRef = inject(DestroyRef); // Inject DestroyRef for automatic cleanup
-
   constructor() {
-    effect(() => {
-      const control = this.stepControl(); // Read the input signal
-
-      if (control) {
-        // Set initial validity based on the control's current state when the effect runs
-        this._isValid.set(control.valid);
-
-        // Subscribe to statusChanges and update the _isValid signal
-        // Use takeUntilDestroyed for automatic cleanup when the component is destroyed
-        control.statusChanges.pipe(
-          startWith(control.status), // Emit initial status immediately to sync _isValid
-          takeUntilDestroyed(this._destroyRef) // Automatically unsubscribe on component destroy
-        ).subscribe(() => {
-          // Update the internal validity signal whenever the control's status changes
-          this._isValid.set(control.valid);
-        });
-
+    effect(onCleanup => {
+      const control = this.stepControl();
+      if (typeof control === 'function') {
+        this._isValid.set(control().valid());
       } else {
-        // If no control is provided, consider the step inherently valid for completion
-        this._isValid.set(true);
+        this._isValid.set(control?.valid ?? true);
+        const subscription = control?.statusChanges.subscribe(() => this._isValid.set(control.valid));
+        if (subscription) onCleanup(() => subscription.unsubscribe());
       }
     });
   }

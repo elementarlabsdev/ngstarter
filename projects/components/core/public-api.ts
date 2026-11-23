@@ -8,3 +8,4 @@ export * from './src/global.state';
 export * from './src/utils';
 export * from './src/observables';
 export * from './src/a11y/dropdown-navigation';
+export * from './src/forms/native-form-control';

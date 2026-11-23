@@ -61,7 +61,7 @@ import {
   LayoutHeader,
   LayoutSidebar,
 } from '@ngstarter-ui/components/layout';
-import { Popover, PopoverContent } from '@ngstarter-ui/components/popover';
+import { Popover, PopoverContent, PopoverTriggerForDirective } from '@ngstarter-ui/components/popover';
 import { NumberInput } from '@ngstarter-ui/components/number-input';
 import {
   PdfViewer,
@@ -110,6 +110,7 @@ const PDF_BUILDER_PAGE_WIDTH = 595.276;
 const PDF_BUILDER_PAGE_HEIGHT = 841.89;
 const PDF_BUILDER_MAX_PORTRAIT_PAGE_WIDTH = 814;
 const PDF_BUILDER_FIXED_PAGE_SCALE = PDF_BUILDER_MAX_PORTRAIT_PAGE_WIDTH / PDF_BUILDER_PAGE_WIDTH;
+const DEFAULT_RECIPIENTS: readonly PdfBuilderRecipient[] = [];
 export const PDF_BUILDER_DEFAULT_TEXT_FONT_SIZE = 16;
 export const PDF_BUILDER_MIN_TEXT_FONT_SIZE = 8;
 export const PDF_BUILDER_MAX_TEXT_FONT_SIZE = 72;
@@ -446,6 +447,7 @@ interface PdfBuilderFieldResize {
     LayoutSidebar,
     Popover,
     PopoverContent,
+    PopoverTriggerForDirective,
     NumberInput,
     PdfViewer,
     PdfViewerAnnotations,
@@ -491,7 +493,7 @@ export class PdfBuilder {
 
   readonly schema = input<PdfBuilderSchema | null>(null);
   readonly annotations = input<readonly PdfViewerAnnotationView[]>([]);
-  readonly recipients = input<readonly PdfBuilderRecipient[]>([]);
+  readonly recipients = input(DEFAULT_RECIPIENTS);
   readonly signers = input<readonly PdfBuilderSigner[]>([]);
   readonly stamps = input<readonly PdfBuilderStampAsset[]>([]);
   readonly uploadedSignatures = input<readonly PdfBuilderSignatureAsset[]>([]);
@@ -521,6 +523,7 @@ export class PdfBuilder {
 
   protected readonly layersTree = viewChild<Tree<PdfBuilderLayerNode>>('layersTree');
   protected readonly dateFieldPicker = viewChild<Datepicker<Date>>('dateFieldPicker');
+  private dateFieldSubscription?: { unsubscribe(): void };
   protected readonly dateFieldInput = viewChild<DatepickerInput<Date>>('dateFieldInput');
   protected readonly documentName = signal('Untitled.pdf');
   protected readonly documentSource = signal<PdfViewerSource>(null);
@@ -647,6 +650,7 @@ export class PdfBuilder {
   protected readonly selectedField = computed(() =>
     this.fields().find(field => field.id === this.selectedFieldId()) ?? null,
   );
+  protected readonly showRecipientPanel = computed(() => this.recipients() !== DEFAULT_RECIPIENTS);
   protected readonly recipientItems = computed(() => this.recipients().filter(recipient => recipient.id && recipient.name));
   protected readonly signerItems = computed(() => this.getNormalizedSigners());
   protected readonly isSearchPanelVisible = computed(() => this.searchPanelVisible());
@@ -1334,8 +1338,9 @@ export class PdfBuilder {
     this.setCssVar(anchor, '--pdf-builder-date-anchor-width', `${rect.width}px`);
     this.setCssVar(anchor, '--pdf-builder-date-anchor-height', `${rect.height}px`);
 
-    input.registerOnChange((date: Date | null) => this.applyDateFieldValue(field.id, date));
-    input.writeValue(this.parseDateFieldValue(field.value));
+    this.dateFieldSubscription?.unsubscribe();
+    input.value.set(this.parseDateFieldValue(field.value));
+    this.dateFieldSubscription = input.value.subscribe((date: Date | null) => this.applyDateFieldValue(field.id, date));
     this.scheduleDomSync(() => picker.open());
   }
 

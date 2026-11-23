@@ -11,9 +11,10 @@ import {
 import { TimezoneGroup, TimezoneUtils } from '../timezone-utils';
 import { Select, Option, SelectHeader, SelectBody, Optgroup } from '@ngstarter-ui/components/select';
 import {
-  ControlValueAccessor, FormsModule,
+  FormsModule,
   NgControl
 } from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 import { FormFieldControl, FORM_FIELD } from '@ngstarter-ui/components/form-field';
 import { Subject } from 'rxjs';
 import { FocusMonitor } from '@angular/cdk/a11y';
@@ -47,6 +48,7 @@ let nextId = 0;
   templateUrl: './timezone-select.html',
   styleUrl: './timezone-select.scss',
   host: {
+    '[attr.aria-readonly]': 'readonly() || null',
     'class': 'ngs-timezone-select',
     '[id]': 'id',
     'tabindex': '-1',
@@ -54,7 +56,7 @@ let nextId = 0;
     '(blur)': 'onFocusOut($event)',
   }
 })
-export class TimezoneSelect implements OnInit, FormFieldControl<any>, ControlValueAccessor {
+export class TimezoneSelect implements OnInit, FormFieldControl<string>, FormValueControl<string | null> {
   protected localeId = inject(LOCALE_ID);
   protected renderer = inject(Renderer2);
   private readonly _focusMonitor = inject(FocusMonitor);
@@ -66,39 +68,31 @@ export class TimezoneSelect implements OnInit, FormFieldControl<any>, ControlVal
   private selectRef = viewChild.required<Select>('select');
 
   protected timezoneGroups = signal<TimezoneGroup[]>([]);
-  readonly touched = signal(false);
+  readonly touched = input(false);
+  readonly invalid = input(false);
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly touch = output<void>();
   readonly stateChanges = new Subject<void>();
   readonly controlType = 'ngs-timezone-select';
   readonly id = `ngs-timezone-select-${nextId++}`;
   readonly _userAriaDescribedBy = input<string>('', { alias: 'aria-describedby' });
   readonly locale = input<string>(this.localeId);
   readonly _placeholder = input<string>('', { alias: 'placeholder' });
-  readonly _required = input<boolean, unknown>(false, {
-    alias: 'required',
-    transform: booleanAttribute,
-  });
-  readonly _disabledByInput = input<boolean, unknown>(false, {
-    alias: 'disabled',
-    transform: booleanAttribute,
-  });
-  readonly _value = model<string | null>(null, { alias: 'value' });
-  protected searchTerm = model('');
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly value = model<string | null>(null);
+  readonly searchTerm = signal('');
   private readonly _focused = signal(false);
-  private readonly _disabledByCva = signal(false);
-  private readonly _disabled = computed(() => this._disabledByInput() || this._disabledByCva());
 
   readonly opened = output<void>();
   readonly closed = output<void>();
-
-  onChange = (_: any) => {};
-  onTouched = () => {};
 
   get focused(): boolean {
     return this._focused() || (this.selectRef?.()?.focused ?? false);
   }
 
   get empty() {
-    return !this._value() || this._value()?.trim() === '';
+    return !this.value() || this.value()?.trim() === '';
   }
 
   get shouldLabelFloat() {
@@ -113,43 +107,18 @@ export class TimezoneSelect implements OnInit, FormFieldControl<any>, ControlVal
     return this._placeholder();
   }
 
-  get required(): boolean {
-    return this._required();
-  }
-
-  get disabled(): boolean {
-    return this._disabled();
-  }
-
-  get value(): string | null {
-    return this._value();
-  }
-
   get errorState(): boolean {
-    // @ts-ignore
-    return this.ngControl?.invalid && this.touched();
+    return !!(this.invalid() || this.ngControl?.invalid) && this.touched();
   }
 
   constructor() {
-    if (this.ngControl != null) {
-      this.ngControl.valueAccessor = this;
-    }
-
-    effect(() => {
-      const value = this._value();
-      untracked(() => {
-        this.onChange(value);
-        this.stateChanges.next();
-      });
-    });
-
     effect(() => {
       // Read signals to trigger effect.
       this._placeholder();
-      this._required();
-      this._disabled();
+      this.required();
+      this.disabled();
       this._focused();
-      this._value();
+      this.value();
       this.selectRef()?.panelOpen();
       // Propagate state changes.
       untracked(() => this.stateChanges.next());
@@ -179,15 +148,13 @@ export class TimezoneSelect implements OnInit, FormFieldControl<any>, ControlVal
 
   onFocusOut(event: any) {
     if (!this._elementRef.nativeElement.contains(event.relatedTarget as Element)) {
-      this.touched.set(true);
       this._focused.set(false);
-      this.onTouched();
       this.stateChanges.next();
     }
   }
 
   onContainerClick(event: MouseEvent) {
-    if (this.disabled) {
+    if (this.disabled()) {
       return;
     }
 
@@ -201,22 +168,6 @@ export class TimezoneSelect implements OnInit, FormFieldControl<any>, ControlVal
     if (controlElement) {
       controlElement.setAttribute('aria-describedby', ids.join(' '));
     }
-  }
-
-  writeValue(timezone: string | null): void {
-    this._updateValue(timezone);
-  }
-
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this._disabledByCva.set(isDisabled);
   }
 
   protected onSelectOpened(): void {
@@ -234,16 +185,6 @@ export class TimezoneSelect implements OnInit, FormFieldControl<any>, ControlVal
     this.searchTerm.set('');
     this.closed.emit();
     this.stateChanges.next();
-  }
-
-  private _updateValue(value: string | null) {
-    const current = this._value();
-
-    if (current === value) {
-      return;
-    }
-
-    this._value.set(value);
   }
 
   focus(): void {

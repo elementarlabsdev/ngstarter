@@ -22,16 +22,16 @@
 
 <div class="mt-10">
   <p>Slide Toggle inside of a Reactive form</p>
-  <form class="w-full flex flex-col gap-3" [formGroup]="formGroup">
+  <form class="w-full flex flex-col gap-3">
     <div class="flex flex-col gap-3">
       <div>
-        <ngs-slide-toggle formControlName="enableWifi">Enable Wifi</ngs-slide-toggle>
+        <ngs-slide-toggle [formField]="formGroup.enableWifi">Enable Wifi</ngs-slide-toggle>
       </div>
       <div>
-        <ngs-slide-toggle formControlName="acceptTerms">Accept Terms of Service</ngs-slide-toggle>
+        <ngs-slide-toggle [formField]="formGroup.acceptTerms">Accept Terms of Service</ngs-slide-toggle>
       </div>
     </div>
-    <p>Form Group Status: {{ formGroup.status }}</p>
+    <p>Form Group Status: {{ formGroup().valid() ? 'VALID' : 'INVALID' }}</p>
     <button ngsButton="tonal" type="button" class="w-40">Save Settings</button>
   </form>
 </div>

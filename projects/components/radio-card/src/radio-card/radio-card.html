@@ -1,5 +1,5 @@
 <div class="button">
-  <ngs-radio-button [value]="value()" [checked]="isSelected()"/>
+  <ngs-radio-button [value]="value()" [checked]="isSelected()" [disabled]="parentGroup.disabled() || parentGroup.readonly()"/>
 </div>
 <div class="header">
   <ng-content select="ngs-radio-card-title"/>

@@ -7,7 +7,7 @@ import {
   forwardRef,
   inject, input,
   OnChanges,
-  OnInit, output,
+  OnInit, model, output,
   Renderer2, SimpleChanges,
   contentChildren,
   Signal,
@@ -15,10 +15,8 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 import { SegmentedTriggerSize, SEGMENTED } from '../types';
-import { SelectionModel } from '@angular/cdk/collections';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { SegmentedButton } from '../segmented-button/segmented-button';
 
 @Component({
@@ -28,29 +26,34 @@ import { SegmentedButton } from '../segmented-button/segmented-button';
   styleUrl: './segmented.scss',
   providers: [
     {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => Segmented),
-      multi: true
-    },
-    {
       provide: SEGMENTED,
       useExisting: forwardRef(() => Segmented)
     }
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   host: {
+    '(focusout)': 'onFocusOut($event)',
+    '[attr.aria-readonly]': 'readonly() || null',
     'class': 'ngs-segmented',
-    '[class.is-disabled]': 'disabled() || _disabled || null',
+    '[class.is-disabled]': 'disabled()',
     '(window:resize)': '_onResize()',
   },
 })
-export class Segmented implements OnInit, OnChanges, AfterContentInit, ControlValueAccessor {
+export class Segmented implements OnInit, OnChanges, AfterContentInit, FormValueControl<any> {
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly touch = output<void>();
+
+  protected onFocusOut(event: FocusEvent): void {
+    if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null)) {
+      this.touch.emit();
+    }
+  }
+
   private _elementRef = inject(ElementRef);
   private _renderer = inject(Renderer2);
   private _cdr = inject(ChangeDetectorRef);
   private _destroyRef = inject(DestroyRef);
   private _isDestroyed = false;
-  protected _disabled = false;
 
   readonly _buttons = contentChildren(forwardRef(() => SegmentedButton), { descendants: true });
 
@@ -60,22 +63,15 @@ export class Segmented implements OnInit, OnChanges, AfterContentInit, ControlVa
   _thumbLeft = 0;
   _thumbOpacity = 0;
 
-  value = input();
+  readonly value = model<any>(null);
   disabled = input(false, {
     transform: booleanAttribute
   });
   size = input<SegmentedTriggerSize>('default');
 
-  readonly valueChange = output<any>();
-
-  private _selectedValue = new SelectionModel<any>(false, []);
-
-  _onChange: any = () => {};
-  _onTouched: any = () => {};
-
   get api() {
     return {
-      isSelected: (value: any) => this._selectedValue.isSelected(value),
+      isSelected: (value: any) => this.isSelected(value),
       select: (value: any) => this._select(value)
     };
   }
@@ -86,15 +82,8 @@ export class Segmented implements OnInit, OnChanges, AfterContentInit, ControlVa
     });
 
     effect(() => {
-      const value = this.value();
-      if (value !== undefined) {
-        if (value !== null) {
-          this._selectedValue.setSelection(value);
-        } else {
-          this._selectedValue.clear();
-        }
-        this._updateThumb();
-      }
+      this.value();
+      this._updateThumb();
     });
 
     toObservable(this._buttons).pipe(takeUntilDestroyed()).subscribe(() => {
@@ -116,15 +105,6 @@ export class Segmented implements OnInit, OnChanges, AfterContentInit, ControlVa
       this._updateThumb();
     }
 
-    if (changes['value'] && changes['value'].currentValue !== undefined) {
-      const value = changes['value'].currentValue;
-      if (value !== null) {
-        this._selectedValue.setSelection(value);
-      } else {
-        this._selectedValue.clear();
-      }
-      this._updateThumb();
-    }
   }
 
   _onResize() {
@@ -155,37 +135,13 @@ export class Segmented implements OnInit, OnChanges, AfterContentInit, ControlVa
     });
   }
 
-  writeValue(value: any): void {
-    if (value !== undefined && value !== null) {
-      this._selectedValue.setSelection(value);
-    } else {
-      this._selectedValue.clear();
-    }
-    this._updateThumb();
-    this._cdr.markForCheck();
-  }
-
-  registerOnChange(fn: any): void {
-    this._onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this._onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: BooleanInput): void {
-    this._disabled = coerceBooleanProperty(isDisabled);
-  }
-
   private _select(value: any): void {
-    this._selectedValue.setSelection(value);
-    this.valueChange.emit(value);
-    this._onChange(value);
-    this._onTouched(value);
-    this._updateThumb();
+    if (!this.disabled() && !this.readonly()) {
+      this.value.set(value);
+    }
   }
 
   isSelected(value: any): boolean {
-    return this._selectedValue.isSelected(value);
+    return this.value() != null && Object.is(this.value(), value);
   }
 }

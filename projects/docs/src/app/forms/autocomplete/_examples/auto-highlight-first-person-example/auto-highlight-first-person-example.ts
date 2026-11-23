@@ -1,10 +1,11 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { Autocomplete, AutocompleteTrigger, Option } from '@ngstarter-ui/components/autocomplete';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 import { AsyncPipe } from '@angular/common';
 import { map, Observable, startWith } from 'rxjs';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-auto-highlight-first-person-example',
@@ -16,19 +17,20 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
     AutocompleteTrigger,
     AsyncPipe,
     Label,
-    ReactiveFormsModule
+    SignalFormField
   ],
   templateUrl: './auto-highlight-first-person-example.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './auto-highlight-first-person-example.scss'
 })
 export class AutoHighlightFirstPersonExample {
-  myControl = new FormControl('');
+  myControl = form(signal(''));
+  private readonly myControlChanges = toObservable(this.myControl().value);
   options: string[] = ['One', 'Two', 'Three'];
   filteredOptions: Observable<string[]>;
 
   ngOnInit() {
-    this.filteredOptions = this.myControl.valueChanges.pipe(
+    this.filteredOptions = this.myControlChanges.pipe(
       startWith(''),
       map(value => this._filter(value || '')),
     );

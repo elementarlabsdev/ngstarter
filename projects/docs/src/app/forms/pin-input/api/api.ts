@@ -53,6 +53,8 @@ export class Api {
       description: 'Disable control',
       type: 'boolean',
       default: 'false'
-    }
+    },
+    { name: 'value', description: 'PIN model. Accepts an initial string or number and emits a number or null for user edits.', type: 'number | string | null', default: 'null' },
+    { name: 'readonly', description: 'Prevents user edits while keeping the value visible.', type: 'boolean', default: 'false' },
   ];
 }

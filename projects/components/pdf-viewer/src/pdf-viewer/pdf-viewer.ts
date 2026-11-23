@@ -287,8 +287,7 @@ export class PdfViewer {
       this.disconnectPageObserver();
       this.revokeRenderedPages();
       this.revokeThumbnailPages();
-      void this.closeDocument();
-      void this.registry?.destroy();
+      void this.releaseDocument();
     });
 
     effect((onCleanup) => {
@@ -915,9 +914,9 @@ export class PdfViewer {
     this.revokeRenderedPages();
     this.revokeThumbnailPages();
 
-    await this.closeDocument();
-    await this.registry?.destroy();
-    this.registry = null;
+    await this.releaseDocument();
+
+    if (token !== this.loadToken) return;
 
     if (!source) {
       this.isLoading.set(false);
@@ -931,13 +930,15 @@ export class PdfViewer {
         return;
       }
 
-      this.engine = engine;
-      this.registry = await this.engineService.createRegistry(engine, this.zoom());
+      const registry = await this.engineService.createRegistry(engine, this.zoom());
 
       if (token !== this.loadToken) {
+        await registry.destroy();
         return;
       }
 
+      this.engine = engine;
+      this.registry = registry;
       const documentId = this.createDocumentId();
       const pdfDocument = await this.openSource(engine, documentId, source);
 
@@ -1631,6 +1632,17 @@ export class PdfViewer {
         }
       );
     });
+  }
+
+  private async releaseDocument(): Promise<void> {
+    const registry = this.registry;
+    this.registry = null;
+    await this.closeDocument();
+    try {
+      await registry?.destroy();
+    } catch {
+      // An unsuccessful cleanup must not block a subsequent document load.
+    }
   }
 
   private async closeDocument(): Promise<void> {

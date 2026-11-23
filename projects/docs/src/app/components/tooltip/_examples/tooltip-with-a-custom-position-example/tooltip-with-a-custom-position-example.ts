@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { Tooltip, TooltipPosition } from '@ngstarter-ui/components/tooltip';
 import { Option, Select } from '@ngstarter-ui/components/select';
 import { Label } from '@ngstarter-ui/components/form-field';
@@ -10,7 +11,7 @@ import { Button } from '@ngstarter-ui/components/button';
   selector: 'app-tooltip-with-a-custom-position-example',
   imports: [
     FormsModule,
-    ReactiveFormsModule,
+    SignalFormField,
     Button,
     Tooltip,
     Select,
@@ -24,5 +25,5 @@ import { Button } from '@ngstarter-ui/components/button';
 })
 export class TooltipWithACustomPositionExample {
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
-  position = new FormControl(this.positionOptions[0]);
+  position = form(signal(this.positionOptions[0]));
 }

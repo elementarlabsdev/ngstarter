@@ -1,53 +1,36 @@
-import { Component, forwardRef, signal, ChangeDetectionStrategy } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { booleanAttribute, Component, input, model, output, ChangeDetectionStrategy } from '@angular/core';
+import { FormValueControl } from '@angular/forms/signals';
 
 @Component({
   selector: 'ngs-radio-card-group',
   exportAs: 'ngsRadioCardGroup',
   templateUrl: './radio-card-group.html',
   styleUrl: './radio-card-group.scss',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => RadioCardGroup),
-      multi: true,
-    },
-  ],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
+    '(focusout)': 'onFocusOut($event)',
+    '[attr.aria-readonly]': 'readonly() || null',
     'class': 'ngs-radio-card-group',
     '[class.is-disabled]': 'disabled()'
   }
 })
-export class RadioCardGroup implements ControlValueAccessor {
-  readonly value = signal<any>(null);
-  readonly disabled = signal<boolean>(false);
+export class RadioCardGroup implements FormValueControl<any> {
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly touch = output<void>();
 
-  private onChange: (value: any) => void = () => {};
-  private onTouched: () => void = () => {};
-
-  writeValue(value: any): void {
-    this.value.set(value);
+  protected onFocusOut(event: FocusEvent): void {
+    if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null)) {
+      this.touch.emit();
+    }
   }
 
-  registerOnChange(fn: (value: any) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
-  }
+  readonly value = model<any>(null);
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   selectValue(value: any): void {
-    if (this.disabled()) {
+    if (this.disabled() || this.readonly()) {
       return;
     }
     this.value.set(value);
-    this.onChange(value);
-    this.onTouched();
   }
 }

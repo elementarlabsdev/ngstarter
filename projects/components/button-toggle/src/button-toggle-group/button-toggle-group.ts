@@ -10,7 +10,7 @@ import {
   model,
   output
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 import { ButtonToggle } from '../button-toggle/button-toggle';
 
 export type ButtonToggleAppearance = 'standard' | 'legacy';
@@ -20,15 +20,10 @@ export type ButtonToggleAppearance = 'standard' | 'legacy';
   exportAs: 'ngsButtonToggleGroup',
   templateUrl: './button-toggle-group.html',
   styleUrl: './button-toggle-group.scss',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ButtonToggleGroup),
-      multi: true
-    }
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
+    '(focusout)': 'onFocusOut($event)',
+    '[attr.aria-readonly]': 'readonly() || null',
     'class': 'ngs-button-toggle-group',
     '[class.ngs-button-toggle-group-vertical]': 'vertical()',
     '[attr.role]': 'multiple() ? "group" : "radiogroup"',
@@ -36,7 +31,16 @@ export type ButtonToggleAppearance = 'standard' | 'legacy';
     '[attr.aria-disabled]': 'disabled()',
   },
 })
-export class ButtonToggleGroup implements ControlValueAccessor, AfterContentInit {
+export class ButtonToggleGroup implements FormValueControl<any>, AfterContentInit {
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly touch = output<void>();
+
+  protected onFocusOut(event: FocusEvent): void {
+    if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null)) {
+      this.touch.emit();
+    }
+  }
+
   readonly _buttonToggles = contentChildren(forwardRef(() => ButtonToggle), { descendants: true });
 
   appearance = input<ButtonToggleAppearance>('standard');
@@ -48,9 +52,6 @@ export class ButtonToggleGroup implements ControlValueAccessor, AfterContentInit
   onlyIcon = input(false, { transform: booleanAttribute });
 
   readonly change = output<any>();
-
-  _onChange: (value: any) => void = () => {};
-  _onTouched: () => void = () => {};
 
   constructor() {
     effect(() => {
@@ -64,27 +65,7 @@ export class ButtonToggleGroup implements ControlValueAccessor, AfterContentInit
     this._updateSelectedButtonsFromValue();
   }
 
-  writeValue(value: any): void {
-    this.value.set(value);
-  }
-
-  registerOnChange(fn: any): void {
-    this._onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this._onTouched = fn;
-  }
-
-  setDisabledState?(isDisabled: boolean): void {
-    // Note: If we want to support setDisabledState with input signals,
-    // we might need a separate internal signal or just accept that it won't work well with reactive inputs
-    // but typically CVA's setDisabledState is for the form control to disable the component.
-    // For now, let's use a private signal if we need to combine them.
-  }
-
   _emitChangeEvent(value: any): void {
-    this._onChange(value);
     this.change.emit({ source: this, value });
   }
 
@@ -105,7 +86,7 @@ export class ButtonToggleGroup implements ControlValueAccessor, AfterContentInit
   }
 
   _onButtonClick(toggle: ButtonToggle) {
-    if (this.disabled() || toggle.disabled()) {
+    if (this.disabled() || this.readonly() || toggle.disabled()) {
       return;
     }
 

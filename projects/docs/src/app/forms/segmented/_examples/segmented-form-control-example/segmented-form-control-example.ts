@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { Segmented, SegmentedButton } from '@ngstarter-ui/components/segmented';
 import { Button } from '@ngstarter-ui/components/button';
 
@@ -7,7 +7,7 @@ import { Button } from '@ngstarter-ui/components/button';
   selector: 'app-segmented-form-control-example',
   standalone: true,
   imports: [
-    ReactiveFormsModule,
+    SignalFormField,
     Segmented,
     SegmentedButton,
     Button
@@ -17,5 +17,5 @@ import { Button } from '@ngstarter-ui/components/button';
   styleUrl: './segmented-form-control-example.scss'
 })
 export class SegmentedFormControlExample {
-  segmentedControl = new FormControl('daily');
+  segmentedControl = form(signal('daily'));
 }

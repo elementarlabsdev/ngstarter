@@ -1,14 +1,14 @@
 <h1 ngs-dialog-title>Edit link</h1>
-<ngs-dialog-content [formGroup]="form" class="!overflow-hidden">
+<ngs-dialog-content class="!overflow-hidden">
   <ngs-form-field class="w-full">
     <ngs-label>Href (Url, Tel or other)</ngs-label>
-    <input ngsInput type="text" formControlName="href">
+    <input ngsInput type="text" [formField]="form.href">
     <ngs-hint>To delete the link, clear this field and apply</ngs-hint>
   </ngs-form-field>
-  <ngs-slide-toggle formControlName="openInNewTab" class="mt-5">Open link in a new tab</ngs-slide-toggle>
+  <ngs-slide-toggle [formField]="form.openInNewTab" class="mt-5">Open link in a new tab</ngs-slide-toggle>
 </ngs-dialog-content>
 <ngs-dialog-actions>
-  <button ngsButton (click)="cancel()">Cancel</button>
+  <button ngsButton [ngsDialogClose]="false">Cancel</button>
   <button ngsButton="filled"
-          [disabled]="form.invalid" (click)="add()">Apply</button>
+          [disabled]="form().invalid()" [ngsDialogClose]="form().value()">Apply</button>
 </ngs-dialog-actions>

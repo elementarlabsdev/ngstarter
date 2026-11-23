@@ -1,8 +1,7 @@
-import { Component, DestroyRef, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component,  inject, input, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Button } from '@ngstarter-ui/components/button';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormField as SignalFormField, form, min } from '@angular/forms/signals';
 import { GRID, Grid } from '@ngstarter-ui/components/grid';
 import { Divider } from '@ngstarter-ui/components/divider';
 import { Ripple } from '@ngstarter-ui/components/core';
@@ -12,7 +11,7 @@ import { Ripple } from '@ngstarter-ui/components/core';
   imports: [
     Icon,
     Button,
-    ReactiveFormsModule,
+    SignalFormField,
     Divider,
     Ripple
   ],
@@ -21,8 +20,6 @@ import { Ripple } from '@ngstarter-ui/components/core';
   styleUrl: './exchange-widget.scss'
 })
 export class ExchangeWidget implements OnInit {
-  private _fb = inject(FormBuilder);
-  private _destroyRef = inject(DestroyRef);
   private _grid = inject<Grid>(GRID, { optional: true });
 
   id = input.required<any>();
@@ -34,44 +31,20 @@ export class ExchangeWidget implements OnInit {
   currencyFrom = 'GPB';
   currencyTo = 'USD';
 
-  form: FormGroup = this._fb.group({
-    from: [],
-    to: []
+  readonly form = form(signal<{ from: number | null; to: number | null }>({ from: null, to: null }), path => {
+    min(path.from, 0);
+    min(path.to, 0);
   });
 
-  ngOnInit() {
-    if (this._grid && this.widget()) {
-      this._grid.markItemAsLoaded(this.id());
-    }
+  ngOnInit(): void {
+    if (this._grid && this.widget()) this._grid.markItemAsLoaded(this.id());
+  }
 
-    this.form.get('from')
-      ?.valueChanges
-      .pipe(
-        takeUntilDestroyed(this._destroyRef)
-      )
-      .subscribe((value: number) => {
-        if (value !== null) {
-          const result = (value * this.currentConversionRate).toFixed(4);
-          this.form.get('to')?.setValue(result, {
-            emitEvent: false
-          });
-        }
-      })
-    ;
-    this.form.get('to')
-      ?.valueChanges
-      .pipe(
-        takeUntilDestroyed(this._destroyRef)
-      )
-      .subscribe((value: number) => {
-        if (value !== null) {
-          const result = (value / this.currentConversionRate).toFixed(4);
-          this.form.get('from')?.setValue(result, {
-            emitEvent: false
-          });
-        }
-      })
-    ;
+  protected convert(source: 'from' | 'to'): void {
+    const value = this.form[source]().controlValue();
+    if (value === null) return;
+    const converted = source === 'from' ? value * this.currentConversionRate : value / this.currentConversionRate;
+    this.form[source === 'from' ? 'to' : 'from']().value.set(Number(converted.toFixed(4)));
   }
 
   toggleCurrencies() {
@@ -84,6 +57,6 @@ export class ExchangeWidget implements OnInit {
     this.conversionFromRate = prevConversionToRate;
     this.currentConversionRate = this.conversionFromRate;
 
-    this.form.get('from')?.setValue(this.form.value['from']);
+    this.convert('from');
   }
 }

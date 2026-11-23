@@ -26,13 +26,13 @@
     </section>
 
     <section>
-      <h2>Reactive forms</h2>
+      <h2>Signal Forms</h2>
       <p>
-        Wrap the editor in a component that implements <code>ControlValueAccessor</code>. Each instance provides
+        Wrap the editor in a component that implements <code>FormValueControl</code>. Each instance provides
         its own editor. Forward user changes with an effect that skips <code>external</code> changes, so values
         written by the form are not echoed back.
       </p>
-      <ngs-code-highlighter class="code-block" [code]="cvaCode" language="typescript"/>
+      <ngs-code-highlighter class="code-block" [code]="formControlCode" language="typescript"/>
       <p>
         Validate with <code>isNgsHeadlessEditorDocumentEmpty()</code>: a document with only whitespace counts as
         empty, while atomic blocks can opt out through <code>isEmpty</code>.

@@ -1,6 +1,5 @@
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
-import { ReactiveFormsModule } from '@angular/forms';
 import { Button } from '@ngstarter-ui/components/button';
 import { DialogActions, DialogClose, DialogContent, DialogTitle } from '@ngstarter-ui/components/dialog';
 
@@ -8,7 +7,6 @@ import { DialogActions, DialogClose, DialogContent, DialogTitle } from '@ngstart
   selector: 'ngs-confirm',
   exportAs: 'ngsConfirm',
   imports: [
-    ReactiveFormsModule,
     Button,
     DialogClose,
     DialogActions,

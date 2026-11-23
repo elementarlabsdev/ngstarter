@@ -68,7 +68,7 @@ export class ChipInput implements DoCheck {
   }
 
   _onKeydown(event: any) {
-    if (event.defaultPrevented) {
+    if (event.defaultPrevented || this.chipGrid?.disabled() || this.chipGrid?.readonly()) {
       return;
     }
     const separatorKeyCodes = this.chipInputSeparatorKeyCodes();
@@ -88,7 +88,7 @@ export class ChipInput implements DoCheck {
 
   _onBlur() {
     this._focused.set(false);
-    if (this.chipInputAddOnBlur()) {
+    if (this.chipInputAddOnBlur() && !this.chipGrid?.disabled() && !this.chipGrid?.readonly()) {
       this.chipInputTokenEnd.emit({
         chipInput: this,
         value: this._elementRef.nativeElement.value,

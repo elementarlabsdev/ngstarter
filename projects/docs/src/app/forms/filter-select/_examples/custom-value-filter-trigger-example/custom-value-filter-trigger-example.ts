@@ -1,5 +1,5 @@
 import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { FilterTrigger, FilterTriggerValueDirective, Option, Select } from '@ngstarter-ui/components/select';
 
 interface StatusOption {
@@ -11,7 +11,7 @@ interface StatusOption {
 @Component({
   selector: 'app-custom-value-filter-trigger-example',
   imports: [
-    ReactiveFormsModule,
+    SignalFormField,
     FilterTrigger,
     FilterTriggerValueDirective,
     Option,
@@ -21,7 +21,7 @@ interface StatusOption {
   templateUrl: './custom-value-filter-trigger-example.html'
 })
 export class CustomValueFilterTriggerExample {
-  readonly status = signal(new FormControl('blocked'));
+  readonly status = form(signal('blocked'));
   readonly statuses = signal<StatusOption[]>([
     { id: 'active', label: 'Active', tone: 'success' },
     { id: 'pending', label: 'Pending', tone: 'warning' },

@@ -11,7 +11,8 @@ import {
   viewChild
 } from '@angular/core';
 import { NgComponentOutlet } from '@angular/common';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { FieldTree, FormField as SignalFormField } from '@angular/forms/signals';
+import { runtimeFieldState, setRuntimeFieldError } from '../form-builder-field-state';
 import { Alert } from '@ngstarter-ui/components/alert';
 import { Avatar } from '@ngstarter-ui/components/avatar';
 import { Button } from '@ngstarter-ui/components/button';
@@ -90,7 +91,7 @@ const DEFAULT_SIGNATURE_PAD_COLORS = ['#000', '#0059ff', '#ff0000'];
   selector: 'ngs-form-builder-field-host',
   exportAs: 'ngsFormBuilderFieldHost',
   imports: [
-    ReactiveFormsModule,
+    SignalFormField,
     Alert,
     Avatar,
     Button,
@@ -168,15 +169,14 @@ export class FormBuilderFieldHost {
   private readonly providedValidators = inject(FORM_BUILDER_VALIDATORS, { optional: true }) ?? [];
 
   readonly field = input.required<FormBuilderField>();
-  readonly control = input.required<FormControl>();
+  readonly control = input.required<FieldTree<unknown>>();
   readonly definitions = input<FormBuilderFieldDefinition[]>([]);
   readonly readonly = input(false);
   readonly editableCanvas = input(false);
   readonly uploadCallback = input<FormBuilderUploadCallback | null | undefined>(undefined);
 
   protected readonly customLoaded = signal(false);
-  protected readonly controlValue = signal<any>(null);
-  protected readonly controlStateVersion = signal(0);
+  protected readonly controlValue = computed<any>(() => this.control()().value());
   protected readonly logoUploadLocalPreview = signal('');
   protected readonly textInputType = computed(() => {
     const type = this.field().type;
@@ -211,7 +211,7 @@ export class FormBuilderFieldHost {
     return typeof value === 'string' ? value : '';
   });
   protected readonly colorPickerDisabled = computed(() =>
-    this.readonly() || !!this.field().readonly || !!this.field().disabled || this.control().disabled
+    this.readonly() || !!this.field().readonly || !!this.field().disabled || this.control()().disabled()
   );
   protected readonly colorSwitcherColors = computed(() => {
     const colors = this.field().settings?.['colors'];
@@ -241,18 +241,20 @@ export class FormBuilderFieldHost {
     normalizedString(this.field().settings?.['backgroundColor']) || 'transparent'
   );
   protected readonly signaturePadDisabled = computed(() =>
-    this.readonly() || !!this.field().readonly || !!this.field().disabled || this.control().disabled
+    this.readonly() || !!this.field().readonly || !!this.field().disabled || this.control()().disabled()
   );
   protected readonly uploadAccept = computed(() =>
     this.field().type === 'logo-upload'
       ? logoUploadAccept(this.field())
       : this.field().settings?.['accept'] || '*/*'
   );
-  protected readonly uploadDisabled = computed(() =>
-    this.readonly() || this.field().readonly || this.field().disabled || this.control().disabled
-  );
+  protected readonly uploadDisabled = computed(() => {
+    const control = this.control();
+    return this.readonly() || this.field().readonly || this.field().disabled ||
+      control().disabled() || runtimeFieldState(control).uploading();
+  });
   protected readonly dateRangeDisabled = computed(() =>
-    this.readonly() || this.field().readonly || this.field().disabled || this.control().disabled
+    this.readonly() || this.field().readonly || this.field().disabled || this.control()().disabled()
   );
   protected readonly uploadSelectedText = computed(() => {
     const value = this.controlValue();
@@ -322,8 +324,6 @@ export class FormBuilderFieldHost {
     const height = Number(this.field().settings?.['height'] ?? 24);
     return [8, 16, 24, 32, 48, 64].includes(height) ? height : 24;
   });
-  protected readonly dateRangeStartValue = computed(() => this.formatDateRangePart(this.controlValue()?.start));
-  protected readonly dateRangeEndValue = computed(() => this.formatDateRangePart(this.controlValue()?.end));
   protected readonly selectUsesDataSource = computed(() => {
     const field = this.field();
 
@@ -366,33 +366,20 @@ export class FormBuilderFieldHost {
       .filter(definition => !excluded.has(definition.type));
   });
   protected readonly validationErrorMessage = computed(() => {
-    this.controlValue();
-    this.controlStateVersion();
+    const field = this.control();
+    const control = field();
+    const runtimeErrors = runtimeFieldState(field).errors();
+    const calculationError = runtimeErrors.find(error => error.kind === 'formBuilderCalculation');
+    if (calculationError) return calculationError.message ?? 'Calculation failed.';
 
-    const control = this.control();
-    const calculationError = control.errors?.['formBuilderCalculation'];
-
-    if (calculationError) {
-      return typeof calculationError.message === 'string'
-        ? calculationError.message
-        : 'Calculation failed.';
-    }
-
-    if (!control.invalid || !(control.touched || control.dirty)) {
-      return '';
-    }
-
-    const errors = control.errors;
-
-    if (!errors) {
-      return '';
-    }
+    if (!(control.touched() || control.dirty())) return '';
+    const errors = [...runtimeErrors, ...control.errors()];
 
     for (const rule of this.fieldValidationRules()) {
       const definition = this.validationDefinitions().find(item => item.type === rule.type);
       const errorKey = definition?.errorKey ?? rule.type;
 
-      if (errors[errorKey]) {
+      if (errors.some(error => error.kind === errorKey)) {
         return this.interpolateValidationMessage(
           rule.message || definition?.defaultMessage || `${definition?.label ?? rule.type} is invalid.`,
           rule
@@ -400,7 +387,7 @@ export class FormBuilderFieldHost {
       }
     }
 
-    if (errors['formBuilderLogoUploadMaxFileSize']) {
+    if (errors.some(error => error.kind === 'formBuilderLogoUploadMaxFileSize')) {
       return `File must be ${this.logoUploadMaxFileSizeText()} or smaller.`;
     }
 
@@ -410,24 +397,6 @@ export class FormBuilderFieldHost {
   private readonly anchor = viewChild.required('anchor', { read: ViewContainerRef });
 
   constructor() {
-    effect(onCleanup => {
-      const control = this.control();
-
-      this.controlValue.set(control.value);
-      const subscription = control.valueChanges.subscribe(value => {
-        this.controlValue.set(value);
-        this.controlStateVersion.update(version => version + 1);
-      });
-      const statusSubscription = control.statusChanges.subscribe(() => {
-        this.controlStateVersion.update(version => version + 1);
-      });
-
-      onCleanup(() => {
-        subscription.unsubscribe();
-        statusSubscription.unsubscribe();
-      });
-    });
-
     effect(onCleanup => {
       let cancelled = false;
       const field = this.field();
@@ -471,10 +440,9 @@ export class FormBuilderFieldHost {
       return;
     }
 
-    this.control().setValue(signature);
-    this.control().markAsDirty();
-    this.control().markAsTouched();
-    this.control().updateValueAndValidity();
+    this.control()().value.set(signature);
+    this.control()().markAsDirty();
+    this.control()().markAsTouched();
   }
 
   protected onSignatureCleared(): void {
@@ -482,60 +450,55 @@ export class FormBuilderFieldHost {
       return;
     }
 
-    this.control().setValue(null);
-    this.control().markAsDirty();
-    this.control().markAsTouched();
-    this.control().updateValueAndValidity();
+    this.control()().value.set(null);
+    this.control()().markAsDirty();
+    this.control()().markAsTouched();
   }
 
   protected async onUploadFilesSelected(event: UploadFileSelectedEvent): Promise<void> {
-    if (this.uploadDisabled()) {
+    if (this.uploadDisabled()) return;
+
+    const control = this.control();
+    const runtime = runtimeFieldState(control);
+    const field = this.field();
+    const isLogo = field.type === 'logo-upload';
+
+    if (isLogo && this.logoUploadFileExceedsMaxSize(event.files[0])) {
+      setRuntimeFieldError(control, 'formBuilderLogoUploadMaxFileSize', `File must be ${this.logoUploadMaxFileSizeText()} or smaller.`);
+      control().markAsDirty();
+      control().markAsTouched();
       return;
-    }
-
-    if (this.field().type === 'logo-upload' && this.logoUploadFileExceedsMaxSize(event.files[0])) {
-      this.control().setErrors({
-        ...(this.control().errors ?? {}),
-        formBuilderLogoUploadMaxFileSize: true
-      });
-      this.control().markAsDirty();
-      this.control().markAsTouched();
-      this.controlStateVersion.update(version => version + 1);
-      return;
-    }
-
-    const fallbackValue = this.field().multiple
-      ? event.files
-      : event.files[0] ?? null;
-
-    if (this.field().type === 'logo-upload') {
-      this.logoUploadLocalPreview.set(await readFileAsDataUrl(event.files[0]));
     }
 
     const callback = this.uploadCallback() ?? this.providedUploadCallback;
-    let value = fallbackValue;
+    runtime.uploading.set(true);
+    try {
+      const preview = isLogo ? await readFileAsDataUrl(event.files[0]) : '';
+      if (this.control() !== control) return;
 
-    if (callback) {
-      this.control().markAsPending();
-      const uploadedValue = await callback({
-        field: this.field(),
-        control: this.control(),
-        event: event.event,
-        files: event.files,
-        fileList: event.fileList,
-        multiple: event.multiple
-      });
+      let value: unknown = field.multiple ? event.files : event.files[0] ?? null;
+      if (callback) {
+        const uploadedValue = await callback({
+          field,
+          control,
+          event: event.event,
+          files: event.files,
+          fileList: event.fileList,
+          multiple: event.multiple,
+        });
 
-      if (uploadedValue !== undefined) {
-        value = uploadedValue;
+        if (uploadedValue !== undefined) value = uploadedValue;
       }
-    }
 
-    this.control().setValue(value);
-    this.clearLogoUploadMaxSizeError();
-    this.control().markAsDirty();
-    this.control().markAsTouched();
-    this.control().updateValueAndValidity();
+      if (this.control() !== control) return;
+      if (isLogo) this.logoUploadLocalPreview.set(preview);
+      control().value.set(value);
+      this.clearLogoUploadMaxSizeError();
+      control().markAsDirty();
+      control().markAsTouched();
+    } finally {
+      runtime.uploading.set(false);
+    }
   }
 
   protected clearLogoUpload(event?: Event): void {
@@ -546,12 +509,11 @@ export class FormBuilderFieldHost {
       return;
     }
 
-    this.control().setValue(null);
+    this.control()().value.set(null);
     this.logoUploadLocalPreview.set('');
     this.clearLogoUploadMaxSizeError();
-    this.control().markAsDirty();
-    this.control().markAsTouched();
-    this.control().updateValueAndValidity();
+    this.control()().markAsDirty();
+    this.control()().markAsTouched();
   }
 
   private logoUploadFileExceedsMaxSize(file: File | undefined): boolean {
@@ -561,15 +523,7 @@ export class FormBuilderFieldHost {
   }
 
   private clearLogoUploadMaxSizeError(): void {
-    const errors = this.control().errors;
-
-    if (!errors?.['formBuilderLogoUploadMaxFileSize']) {
-      return;
-    }
-
-    const nextErrors = { ...errors };
-    delete nextErrors['formBuilderLogoUploadMaxFileSize'];
-    this.control().setErrors(Object.keys(nextErrors).length ? nextErrors : null);
+    setRuntimeFieldError(this.control(), 'formBuilderLogoUploadMaxFileSize');
   }
 
   protected hasValidationRule(type: string): boolean {
@@ -737,7 +691,7 @@ export class FormBuilderFieldHost {
   }
 
   private validationRules(): FormBuilderValidationRule[] {
-    const value = this.control().value;
+    const value = this.control()().value();
 
     return Array.isArray(value)
       ? value.filter(isValidationRule).map(rule => ({ ...rule }))
@@ -745,10 +699,9 @@ export class FormBuilderFieldHost {
   }
 
   private writeValidationRules(rules: FormBuilderValidationRule[]): void {
-    this.control().setValue(rules);
-    this.control().markAsDirty();
-    this.control().markAsTouched();
-    this.control().updateValueAndValidity();
+    this.control()().value.set(rules);
+    this.control()().markAsDirty();
+    this.control()().markAsTouched();
   }
 
   private fieldValidationRules(): FormBuilderValidationRule[] {
@@ -783,27 +736,7 @@ export class FormBuilderFieldHost {
     return message.split('{value}').join(rule.value === undefined || rule.value === null ? '' : String(rule.value));
   }
 
-  protected onDateRangeChanged(rangeInput: DateRangeInput<any>): void {
-    queueMicrotask(() => {
-      const range = rangeInput.value;
-      const nextRange = range ?? new DateRange(null, null);
-      this.control().setValue(nextRange);
-      this.control().markAsDirty();
-      this.control().markAsTouched();
-    });
-  }
 
-  private formatDateRangePart(value: unknown): string {
-    if (!value) {
-      return '';
-    }
-
-    if (value instanceof Date) {
-      return value.toLocaleDateString();
-    }
-
-    return String(value);
-  }
 }
 
 function isValidationRule(value: unknown): value is FormBuilderValidationRule {

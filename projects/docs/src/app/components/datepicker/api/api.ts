@@ -101,7 +101,10 @@ export class Api {
       description: 'The datepicker that this input is associated with.',
       type: 'Datepicker<D>',
       default: '-'
-    }
+    },
+    { name: 'value', description: 'Date model handled by the configured DateAdapter.', type: 'D | null', default: 'null' },
+    { name: 'disabled', description: 'Disables the date input and its picker.', type: 'boolean', default: 'false' },
+    { name: 'readonly', description: 'Prevents typing. When bound with [formField], also prevents calendar selection.', type: 'boolean', default: 'false' },
   ];
 
   datepickerToggleProperties = [

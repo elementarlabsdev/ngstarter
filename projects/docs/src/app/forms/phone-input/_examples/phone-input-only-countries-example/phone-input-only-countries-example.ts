@@ -1,5 +1,6 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form, validate } from '@angular/forms/signals';
 import { Error, FormField, Label } from '@ngstarter-ui/components/form-field';
 import { PhoneInput, phoneValidator } from '@ngstarter-ui/components/phone-input';
 
@@ -11,15 +12,16 @@ import { PhoneInput, phoneValidator } from '@ngstarter-ui/components/phone-input
     FormField,
     Label,
     PhoneInput,
-    ReactiveFormsModule
+    SignalFormField
   ],
   templateUrl: './phone-input-only-countries-example.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './phone-input-only-countries-example.scss'
 })
 export class PhoneInputOnlyCountriesExample {
-  private _fb = inject(FormBuilder);
-  form: FormGroup = this._fb.group({
-    phone: ['+447874482198', [phoneValidator]]
+  form = form(signal({
+    phone: '+447874482198',
+  }), (path) => {
+    validate(path.phone, ({value}) => phoneValidator({ value: value() }) ? { kind: 'invalidPhone' } : null);
   });
 }

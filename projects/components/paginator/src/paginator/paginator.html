@@ -25,7 +25,7 @@
 
   <div class="ngs-paginator-range-actions">
     <div class="ngs-paginator-range-label" aria-live="polite">
-      {{_intl.getRangeLabel(pageIndex, pageSize, length)}}
+      {{rangeLabel()}}
     </div>
 
     <div class="ngs-paginator-navigation">
@@ -58,7 +58,7 @@
         <ngs-icon name="fluent:chevron-right-24-regular" />
       </button>
 
-      @if (showFirstLastButtons()) {
+      @if (showFirstLastButtons() && lengthKnown) {
         <button ngsIconButton
                 type="button"
                 class="ngs-paginator-navigation-last"

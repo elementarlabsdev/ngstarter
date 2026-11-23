@@ -1,10 +1,10 @@
 <ngs-stepper hideHeaderBorder headerPosition="bottom" #stepper>
   <ngs-step [stepControl]="accountForm">
-    <form [formGroup]="accountForm">
+    <form novalidate>
       <ng-template ngsStepLabel>Account</ng-template>
       <ngs-form-field class="w-1/2 mt-2">
         <ngs-label>Account name</ngs-label>
-        <input ngsInput formControlName="accountName" placeholder="Acme Finance" required>
+        <input ngsInput [formField]="accountForm.accountName" placeholder="Acme Finance">
       </ngs-form-field>
       <div>
         <button ngsButton="filled" ngsStepperNext>Next</button>
@@ -13,11 +13,11 @@
   </ngs-step>
 
   <ngs-step [stepControl]="workspaceForm">
-    <form [formGroup]="workspaceForm">
+    <form novalidate>
       <ng-template ngsStepLabel>Workspace</ng-template>
       <ngs-form-field class="w-1/2 mt-2">
         <ngs-label>Workspace name</ngs-label>
-        <input ngsInput formControlName="workspaceName" placeholder="Revenue operations" required>
+        <input ngsInput [formField]="workspaceForm.workspaceName" placeholder="Revenue operations">
       </ngs-form-field>
       <div class="flex gap-3">
         <button ngsButton="outlined" ngsStepperPrevious>Back</button>

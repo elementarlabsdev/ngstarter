@@ -66,8 +66,8 @@ export class Api {
     {
       name: 'name',
       description: 'Name of the slide-toggle',
-      type: 'string | null',
-      default: 'null'
+      type: 'string',
+      default: "''"
     },
     {
       name: 'labelPosition',
@@ -131,10 +131,11 @@ export class Api {
     },
     {
       name: 'checked',
-      description: 'Whether the slide-toggle is checked',
+      description: 'Boolean model for the checked state. Supports [(checked)] and [formField].',
       type: 'boolean',
       default: 'false'
-    }
+    },
+    { name: 'readonly', description: 'Prevents user edits while keeping the value visible.', type: 'boolean', default: 'false' },
   ];
 
   events = [
@@ -145,6 +146,8 @@ export class Api {
     {
       name: 'toggleChange',
       description: 'Event emitted when the slide-toggle checked state will change'
-    }
+    },
+    { name: 'checkedChange', description: 'Emits the new checked state when the control updates its model.', type: 'boolean' },
+    { name: 'touch', description: 'Reports when focus leaves the control.', type: 'void' },
   ];
 }

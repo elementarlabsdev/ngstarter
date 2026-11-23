@@ -1,12 +1,12 @@
 import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Option, Select } from '@ngstarter-ui/components/select';
 
 @Component({
   selector: 'app-clearable-select-example',
   imports: [
-    ReactiveFormsModule,
+    SignalFormField,
     FormField,
     Label,
     Option,
@@ -17,7 +17,7 @@ import { Option, Select } from '@ngstarter-ui/components/select';
   styleUrl: './clearable-select-example.scss'
 })
 export class ClearableSelectExample {
-  readonly status = signal(new FormControl<string | null>('active'));
+  readonly status = form(signal<string | null>('active'));
   readonly statuses = signal([
     { value: 'active', label: 'Active' },
     { value: 'pending', label: 'Pending' },

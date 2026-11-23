@@ -1,10 +1,10 @@
 <ngs-stepper #stepper>
   <ngs-step [stepControl]="firstFormGroup" errorMessage="Name is required.">
-    <form [formGroup]="firstFormGroup">
+    <form novalidate>
       <ng-template ngsStepLabel>Fill out your name</ng-template>
       <ngs-form-field class="w-1/2 mt-2">
         <ngs-label>Name</ngs-label>
-        <input ngsInput placeholder="Last name, First name" formControlName="firstCtrl" required>
+        <input ngsInput placeholder="Last name, First name" [formField]="firstFormGroup.firstCtrl">
       </ngs-form-field>
       <div>
         <p>Go to a different step to see the error state</p>
@@ -13,11 +13,11 @@
     </form>
   </ngs-step>
   <ngs-step [stepControl]="secondFormGroup" errorMessage="Address is required.">
-    <form [formGroup]="secondFormGroup">
+    <form novalidate>
       <ng-template ngsStepLabel>Fill out your address</ng-template>
       <ngs-form-field class="w-1/2 mt-2">
         <ngs-label>Address</ngs-label>
-        <input ngsInput placeholder="Ex. 1 Main St, New York, NY" formControlName="secondCtrl" required>
+        <input ngsInput placeholder="Ex. 1 Main St, New York, NY" [formField]="secondFormGroup.secondCtrl">
       </ngs-form-field>
       <div>
         <p>Go to a different step to see the error state</p>

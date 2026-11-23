@@ -689,14 +689,14 @@ describe('Select', () => {
     fixture.detectChanges();
     openSelect(fixture);
 
-    expect(select.disabled).toBe(true);
+    expect(select.disabled()).toBe(true);
     expect(select.panelOpen()).toBe(false);
 
     component.status().enable();
     fixture.detectChanges();
     openSelect(fixture);
 
-    expect(select.disabled).toBe(false);
+    expect(select.disabled()).toBe(false);
     expect(select.panelOpen()).toBe(true);
   });
 

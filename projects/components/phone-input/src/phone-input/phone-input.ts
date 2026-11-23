@@ -1,20 +1,17 @@
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
   ChangeDetectorRef,
   Component,
   DoCheck,
   ElementRef,
-  Input as AngularInput,
   OnDestroy,
   OnInit,
-  Optional,
-  Self,
   booleanAttribute, inject,
   viewChild, input, effect, output, DestroyRef, computed, signal, AfterViewInit,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy, model, untracked
 } from '@angular/core';
-import { FormGroupDirective, NG_VALIDATORS, NgControl, NgForm, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormGroupDirective, NG_VALIDATORS, NgControl, NgForm, FormsModule } from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 import { ErrorStateMatcher, Ripple } from '@ngstarter-ui/components/core';
 import { FormFieldControl } from '@ngstarter-ui/components/form-field';
 import { Menu, MenuDivider, MenuHeader, MenuItem, MenuTrigger } from '@ngstarter-ui/components/menu';
@@ -44,7 +41,6 @@ import { Button } from '@ngstarter-ui/components/button';
     MenuTrigger,
     Icon,
     Menu,
-    ReactiveFormsModule,
     FormsModule,
     MenuHeader,
     MenuItem,
@@ -70,7 +66,7 @@ import { Button } from '@ngstarter-ui/components/button';
     '[class.is-floating]': 'shouldLabelFloat',
   }
 })
-export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, FormFieldControl<any> {
+export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, FormFieldControl<string>, FormValueControl<string | null> {
   private static readonly COUNTRY_RENDER_CHUNK_SIZE = 32;
   private static readonly COUNTRY_RENDER_CHUNK_DELAY = 50;
 
@@ -102,7 +98,12 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
   preferredCountriesInDropDown: Country[] = [];
   selectedCountry = signal<Country | null>(null);
   numberInstance?: PhoneNumber;
-  private _value: any;
+  readonly value = model<string | null>(null);
+  private displayedValue: string | null = null;
+  readonly invalid = input(false);
+  readonly touched = input(false);
+  readonly touch = output<void>();
+  readonly readonly = input(false, { transform: booleanAttribute });
   searchTerm = signal('');
   visibleCountryCount = signal(PhoneInput.COUNTRY_RENDER_CHUNK_SIZE);
   filteredCountries = computed(() => {
@@ -126,9 +127,6 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
   private _countryRenderTimeout: ReturnType<typeof setTimeout> | undefined;
   private _countrySearchFocusTimeout: ReturnType<typeof setTimeout> | undefined;
 
-  onTouched = () => {}
-  propagateChange = (_: any) => {}
-
   get focused(): boolean {
     return this._focused();
   }
@@ -145,13 +143,6 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
     return this._focused() || !this.empty;
   }
 
-  set value(value: any) {
-    this.writeValue(value);
-  }
-  get value(): any {
-    return this._value;
-  }
-
   autocomplete = input<AutoFill>('on');
   errorStateMatcher = input<ErrorStateMatcher>(this._errorStateMatcher);
   onlyCountries = input<string[]>([]);
@@ -160,40 +151,19 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
   defaultSelectedCountryCode = input<string>('us');
   readonly _placeholder = input<string>('', { alias: 'placeholder' });
 
-  @AngularInput({ alias: 'required', transform: booleanAttribute })
-  set required(value: boolean) {
-    this._required.set(coerceBooleanProperty(value));
-    this.stateChanges.next();
-  }
-  get required(): boolean {
-    return this._required();
-  }
-  private _required = signal(false);
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly ngControl = inject(NgControl, { self: true, optional: true });
 
-  phoneDisabled = input(false, {
-    alias: 'disabled',
-    transform: booleanAttribute
-  });
-
-  private _disabled = signal(false);
-
-  private _compositeDisabled = computed(() => {
-    return this._disabled() || this.phoneDisabled();
-  });
-  disabled = false;
-
-  constructor(
-    @Optional() @Self() public ngControl: NgControl,
-    @Optional() _parentForm: NgForm,
-    @Optional() _parentFormGroup: FormGroupDirective,
-    _defaultErrorStateMatcher: ErrorStateMatcher,
-  ) {
-    if (this.ngControl != null) {
-      this.ngControl.valueAccessor = this;
-    }
-
+  constructor() {
     effect(() => {
-      this.disabled = this._compositeDisabled();
+      const value = this.value();
+      untracked(() => {
+        if (value !== this.displayedValue) {
+          this.displayedValue = value;
+          this.formatExternalValue(value);
+        }
+      });
     });
     this._focusMonitor
       .monitor(this._elementRef, true)
@@ -202,7 +172,7 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
       )
       .subscribe((origin) => {
         if (this._focused() && !origin) {
-          this.onTouched();
+          this.touch.emit();
         }
 
         this._focused.set(!!origin);
@@ -264,7 +234,7 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
 
   ngDoCheck(): void {
     if (this.ngControl) {
-      const isInvalid = this.errorStateMatcher().isErrorState(
+      const isInvalid = (this.invalid() && this.touched()) || this.errorStateMatcher().isErrorState(
         this.ngControl.control,
         this._parentForm
       );
@@ -288,21 +258,23 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
   }
 
   public onPhoneNumberChange(): void {
+    if (this.disabled() || this.readonly()) return;
     if (!this.phoneNumber) {
-      this.clearValue('');
-      this.propagateChange(this.value);
+      this.clearDisplay();
+      this.commit('');
       this._changeDetectorRef.markForCheck();
       this.stateChanges.next();
       return;
     }
 
+    let value: string;
     try {
       this.numberInstance = parsePhoneNumberFromString(
         this.phoneNumber.toString(),
         this.selectedCountry()?.shortCode.toUpperCase() as CC,
       );
       this.formatAsYouTypeIfEnabled();
-      this._value = this.numberInstance?.number ?? this.phoneNumber.toString();
+      value = this.numberInstance?.number ?? this.phoneNumber.toString();
 
       if (this.numberInstance && this.numberInstance.isValid()) {
         if (this.phoneNumber !== this.formattedPhoneNumber) {
@@ -319,23 +291,19 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
     } catch (e) {
       // if no possible numbers are there,
       // then the full number is passed so that validator could be triggered and proper error could be shown
-      this._value = this.phoneNumber.toString();
+      value = this.phoneNumber.toString();
     }
 
-    this.propagateChange(this.value);
+    this.commit(value);
     this._changeDetectorRef.markForCheck();
     this.stateChanges.next();
   }
 
   public onCountrySelect(country: Country, el: any): void {
-    if (this.phoneNumber) {
-      this.phoneNumber = this.numberInstance?.nationalNumber;
-    }
-
+    if (this.disabled() || this.readonly()) return;
     if (this.selectedCountry() !== country) {
-      this.reset();
+      this.clearDisplay();
     }
-
     this.selectedCountry.set(country);
     this.countryChanged.emit(this.selectedCountry() as Country);
     this.onPhoneNumberChange();
@@ -448,29 +416,19 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
     this.allCountries = this.countryCodeData.allCountries;
   }
 
-  registerOnChange(fn: any): void {
-    this.propagateChange = fn;
+  private commit(value: string | null): void {
+    this.displayedValue = value;
+    this.value.set(value);
   }
 
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this._disabled.set(isDisabled);
-    this._changeDetectorRef.detectChanges();
-    this.stateChanges.next();
-  }
-
-  writeValue(value: any): void {
+  private formatExternalValue(value: string | null): void {
     if (!value) {
-      this.clearValue(value);
+      this.clearDisplay();
       this.stateChanges.next();
-      this._changeDetectorRef.detectChanges();
+      this._changeDetectorRef.markForCheck();
       return;
     }
 
-    this._value = value;
     this.numberInstance = parsePhoneNumberFromString(value);
 
     if (this.numberInstance) {
@@ -479,14 +437,14 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
 
       if (!countryCode) {
         this.stateChanges.next(undefined);
-        this._changeDetectorRef.detectChanges();
+        this._changeDetectorRef.markForCheck();
         return;
       }
 
       const country = this.getCountry(countryCode);
       this.selectedCountry.set(country);
       this.countryChanged.emit(country);
-      this._changeDetectorRef.detectChanges();
+      this._changeDetectorRef.markForCheck();
       this.stateChanges.next();
     } else {
       this.phoneNumber = value;
@@ -494,7 +452,7 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
 
     this.stateChanges.next(undefined);
     // Value is set from outside using setValue()
-    this._changeDetectorRef.detectChanges();
+    this._changeDetectorRef.markForCheck();
   }
 
   setDescribedByIds(ids: string[]): void {
@@ -512,14 +470,13 @@ export class PhoneInput implements OnInit, AfterViewInit, DoCheck, OnDestroy, Fo
   }
 
   reset(): void {
-    this.clearValue(null);
-    this.propagateChange(null);
+    this.clearDisplay();
+    this.commit(null);
     this._changeDetectorRef.markForCheck();
     this.stateChanges.next(undefined);
   }
 
-  private clearValue(value: any): void {
-    this._value = value ?? '';
+  private clearDisplay(): void {
     this.phoneNumber = '';
     this.numberInstance = undefined;
     this._previousFormattedNumber = undefined;

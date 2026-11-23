@@ -1,16 +1,13 @@
 import {
   Component,
-  OnChanges,
-  SimpleChanges,
   input,
   output,
-  forwardRef,
-  inject,
-  ChangeDetectorRef, booleanAttribute,
+  linkedSignal,
+  model,
+  booleanAttribute,
   ChangeDetectionStrategy
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { FormValueControl } from '@angular/forms/signals';
 
 const defaultColors = [
   '#35d1b3', '#08b0fe', '#8268f2', '#ae52d3', '#eb4ea3',
@@ -21,25 +18,27 @@ const defaultColors = [
   selector: 'ngs-color-switcher',
   exportAs: 'ngsColorSwitcher',
   imports: [],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ColorSwitcher),
-      multi: true
-    }
-  ],
   templateUrl: './color-switcher.html',
   styleUrl: './color-switcher.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
+    '(focusout)': 'onFocusOut($event)',
+    '[attr.aria-readonly]': 'readonly() || null',
     'class': 'ngs-brand-colors',
-    '[class.is-disabled]': 'disabled() || _disabled',
+    '[class.is-disabled]': 'disabled()',
   }
 })
-export class ColorSwitcher implements ControlValueAccessor, OnChanges {
-  private _cdr = inject(ChangeDetectorRef);
-  protected _disabled = false;
-  protected _selectedColor: string;
+export class ColorSwitcher implements FormValueControl<string | null> {
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly touch = output<void>();
+
+  protected onFocusOut(event: FocusEvent): void {
+    if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null)) {
+      this.touch.emit();
+    }
+  }
+
+  readonly value = model<string | null>(null);
 
   colors = input<string[]>(defaultColors);
   selectedColor = input<string>();
@@ -47,38 +46,21 @@ export class ColorSwitcher implements ControlValueAccessor, OnChanges {
     transform: booleanAttribute
   });
 
+  protected readonly currentColor = linkedSignal({
+    source: () => ({ value: this.value(), selectedColor: this.selectedColor() }),
+    computation: ({ value, selectedColor }, previous): string | null | undefined =>
+      !previous ? value ?? selectedColor
+        : value !== previous.source.value ? value
+        : selectedColor,
+  });
+
   readonly colorChange = output<string>();
 
-  _onChange: any = () => {};
-  _onTouched: any = () => {};
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['selectedColor']) {
-      this._selectedColor = changes['selectedColor'].currentValue;
-    }
-  }
-
   selectColor(color: string): void {
-    this._selectedColor = color;
+    if (this.disabled() || this.readonly()) {
+      return;
+    }
+    this.value.set(color);
     this.colorChange.emit(color);
-    this._onChange(color);
-    this._onTouched(color);
-  }
-
-  writeValue(_selectedColor: any) {
-    this._selectedColor = _selectedColor;
-    this._cdr.detectChanges();
-  }
-
-  registerOnChange(fn: any): void {
-    this._onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this._onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: BooleanInput): void {
-    this._disabled = coerceBooleanProperty(isDisabled);
   }
 }

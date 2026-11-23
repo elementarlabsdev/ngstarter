@@ -59,7 +59,7 @@ describe('headless editor docs', () => {
     ['forms', FormsSerializationExample, ''],
     ['bubble', BubbleMenuExample, 'floating formatting menu'],
     ['json', JsonInspectorExample, 'Text runs carry'],
-    ['plugin', PluginEditorExample, 'custom underline'],
+    ['plugin', PluginEditorExample, 'custom keyboard mark'],
     ['table', TableEditorExample, 'Pricing'],
     ['mentions', MentionsEditorExample, 'Ask a teammate']
   ];
@@ -237,11 +237,11 @@ describe('headless editor docs', () => {
     const fixture = await render(FormsSerializationExample);
     const el = fixture.nativeElement as HTMLElement;
     const component = fixture.componentInstance as FormsSerializationExample;
-    expect(component.form.controls.body.valid).toBe(false);
+    expect(component.form.body().valid()).toBe(false);
     await userEvent.click(el.querySelector('app-rich-text-field .surface')!);
     await userEvent.keyboard('Hello <world>');
     await fixture.whenStable();
-    expect(component.form.controls.body.valid).toBe(true);
+    expect(component.form.body().valid()).toBe(true);
     expect(component.html()).toBe('<p>Hello &lt;world&gt;</p>');
     component.loadSaved();
     await fixture.whenStable();

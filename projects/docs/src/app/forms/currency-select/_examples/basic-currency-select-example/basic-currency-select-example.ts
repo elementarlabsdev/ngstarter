@@ -1,13 +1,13 @@
-import { Component, model, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CurrencySelect } from '@ngstarter-ui/components/currency-select';
-import { FormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 
 @Component({
   selector: 'app-basic-currency-select-example',
   imports: [
     CurrencySelect,
-    FormsModule,
+    SignalFormField,
     FormField,
     Label
   ],
@@ -16,5 +16,5 @@ import { FormField, Label } from '@ngstarter-ui/components/form-field';
   styleUrl: './basic-currency-select-example.scss'
 })
 export class BasicCurrencySelectExample {
-  currency = model('USD');
+  readonly currency = form(signal<string | null>('USD'));
 }

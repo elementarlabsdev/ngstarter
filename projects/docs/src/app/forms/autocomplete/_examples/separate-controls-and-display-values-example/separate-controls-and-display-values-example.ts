@@ -1,8 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { AsyncPipe } from '@angular/common';
 import { Autocomplete, AutocompleteTrigger, Option } from '@ngstarter-ui/components/autocomplete';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { Input } from '@ngstarter-ui/components/input';
 import { map, Observable, startWith } from 'rxjs';
 
@@ -17,7 +18,7 @@ export interface User {
         AsyncPipe,
         Autocomplete,
         AutocompleteTrigger,
-        ReactiveFormsModule,
+        SignalFormField,
         Option,
         Input,
         Label
@@ -27,17 +28,15 @@ export interface User {
     styleUrl: './separate-controls-and-display-values-example.scss'
 })
 export class SeparateControlsAndDisplayValuesExample {
-  myControl = new FormControl<string | User>('');
+  myControl = form(signal(''));
+  private readonly myControlChanges = toObservable(this.myControl().value);
   options: User[] = [{name: 'Mary'}, {name: 'Shelley'}, {name: 'Igor'}];
   filteredOptions: Observable<User[]>;
 
   ngOnInit() {
-    this.filteredOptions = this.myControl.valueChanges.pipe(
+    this.filteredOptions = this.myControlChanges.pipe(
       startWith(''),
-      map(value => {
-        const name = typeof value === 'string' ? value : value?.name;
-        return name ? this._filter(name as string) : this.options.slice();
-      }),
+      map(name => name ? this._filter(name) : this.options.slice()),
     );
   }
 

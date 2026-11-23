@@ -46,6 +46,10 @@
 <h3 class="mt-10">NgsTimepickerInput</h3>
 <p class="mb-4">Directive applied to an <code>input</code> element to connect it with a <code>ngs-timepicker</code>.</p>
 
+<p>
+  Bind <code>[formField]</code> on <code>input[ngsTimepicker]</code>. The directive emits
+  <code>valueChange</code> for edits and <code>touch</code> on blur.
+</p>
 <div class="border border-border rounded-xl shadow-sm overflow-hidden my-6">
   <table ngs-table [dataSource]="inputProperties">
     <ng-container ngsColumnDef="name">

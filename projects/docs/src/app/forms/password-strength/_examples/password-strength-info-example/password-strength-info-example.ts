@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { FormField, Hint, Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 import { PasswordStrength, PasswordStrengthInfo } from '@ngstarter-ui/components/password-strength';
@@ -11,7 +12,7 @@ import { PasswordStrength, PasswordStrengthInfo } from '@ngstarter-ui/components
     FormField,
     Input,
     Label,
-    ReactiveFormsModule,
+    SignalFormField,
     Hint,
     PasswordStrengthInfo,
     PasswordStrength
@@ -21,5 +22,5 @@ import { PasswordStrength, PasswordStrengthInfo } from '@ngstarter-ui/components
   styleUrl: './password-strength-info-example.scss'
 })
 export class PasswordStrengthInfoExample {
-  password = new FormControl('');
+  password = form(signal(''));
 }

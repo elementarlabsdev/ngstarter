@@ -10,10 +10,12 @@ import {
   inject,
   ElementRef,
   contentChildren,
-  output
+  output,
+  model
 } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { NgControl } from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 import { ChipRow } from '../chip-row/chip-row';
 import { FormFieldControl } from '@ngstarter-ui/components/form-field';
 
@@ -27,8 +29,9 @@ let nextId = 0;
   host: {
     'class': 'ngs-chip-grid ngs-chip-set',
     'role': 'grid',
-    '[attr.aria-disabled]': 'disabled',
+    '[attr.aria-disabled]': 'disabled()',
     '[id]': 'id',
+    '[attr.aria-readonly]': 'readonly() || null',
   },
   providers: [
     {
@@ -38,7 +41,7 @@ let nextId = 0;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChipGrid implements ControlValueAccessor, AfterContentInit, FormFieldControl<any[]> {
+export class ChipGrid implements AfterContentInit, FormFieldControl<any[]>, FormValueControl<any[] | null> {
   readonly ngControl = inject(NgControl, { optional: true, self: true });
   readonly _elementRef = inject(ElementRef);
 
@@ -46,34 +49,30 @@ export class ChipGrid implements ControlValueAccessor, AfterContentInit, FormFie
   get id(): string { return this._id(); }
   _placeholder = input<string | undefined>(undefined, { alias: 'placeholder' });
   get placeholder(): string | undefined { return this._placeholder(); }
-  _required = input(false, { transform: booleanAttribute, alias: 'required' });
-  get required(): boolean { return this._required(); }
-  private _disabled = signal(false);
-  _disabledInput = input(false, {
-    transform: booleanAttribute,
-    alias: 'disabled'
-  });
-  isDisabled = computed(() => this._disabledInput() || this._disabled());
-  get disabled(): boolean { return this.isDisabled(); }
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly invalid = input(false);
+  readonly touched = input(false);
+  readonly touch = output<void>();
+  readonly isDisabled = this.disabled;
 
   readonly _chips = contentChildren(ChipRow, { descendants: true });
   private readonly _chips$ = toObservable(this._chips);
 
-  readonly valueChange = output<any>();
-
-  private _value = signal<any[]>([]);
+  readonly value = model<any[] | null>([]);
   readonly stateChanges = signal<void>(undefined);
   private _focused = signal(false);
   get focused(): boolean { return this._focused(); }
   get multiline(): boolean { return this._chipsLength() > 0; }
-  private _errorState = signal(false);
+  private _errorState = computed(() => this.touched() && (this.invalid() || !!this.ngControl?.invalid));
   get errorState(): boolean { return this._errorState(); }
 
   private _chipsLength = signal(0);
   get chipsLength(): number { return this._chipsLength(); }
 
   private _empty = computed(() => {
-    const value = this._value();
+    const value = this.value();
     return (!value || value.length === 0) &&
       this._chipsLength() === 0 &&
       !this._isInputFocused() &&
@@ -89,43 +88,6 @@ export class ChipGrid implements ControlValueAccessor, AfterContentInit, FormFie
   private _isInputFocused = signal(false);
   private _isInputEmpty = signal(true);
   private _chipInput: any;
-
-  onChange: (value: any) => void = () => {};
-  onTouched: () => void = () => {};
-
-  constructor() {
-    if (this.ngControl) {
-      this.ngControl.valueAccessor = this;
-    }
-  }
-
-  get value(): any[] {
-    return this._value();
-  }
-
-  set value(value: any[]) {
-    this._value.set(value);
-    this.onChange(value);
-    this.stateChanges.set(undefined);
-  }
-
-  writeValue(value: any): void {
-    this._value.set(value || []);
-    this.stateChanges.set(undefined);
-  }
-
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this._disabled.set(isDisabled);
-    this.stateChanges.set(undefined);
-  }
 
   ngAfterContentInit() {
     this._chips$.subscribe(() => {
@@ -145,6 +107,7 @@ export class ChipGrid implements ControlValueAccessor, AfterContentInit, FormFie
   _setInputFocused(focused: boolean) {
     this._isInputFocused.set(focused);
     this._setFocused(focused);
+    if (!focused) this.touch.emit();
   }
 
   _setInputEmpty(empty: boolean) {

@@ -88,6 +88,8 @@ export class Api {
       description: 'Whether focusing or clicking the input opens the timepicker panel.',
       type: 'boolean',
       default: 'true'
-    }
+    },
+    { name: 'value', description: 'Time as an HH:mm string or a date with the selected time.', type: 'D | string | null', default: 'null' },
+    { name: 'readonly', description: 'Prevents user edits while keeping the value visible.', type: 'boolean', default: 'false' },
   ];
 }

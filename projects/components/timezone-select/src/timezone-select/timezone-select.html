@@ -1,7 +1,9 @@
 <ngs-select #select="ngsSelect"
-            [(value)]="_value"
+            [(value)]="value"
             [aria-describedby]="_userAriaDescribedBy()"
-            [disabled]="disabled"
+            [disabled]="disabled()"
+            [readonly]="readonly()"
+            (touch)="touch.emit()"
             [placeholder]="_placeholder()"
             (opened)="onSelectOpened()"
             (closed)="onSelectClosed()">
@@ -43,8 +45,8 @@
         </div>
       }
     }
-    @if (_value()) {
-      <ngs-option [value]="_value()" class="hidden" style="display: none">{{ _value() }}</ngs-option>
+    @if (value()) {
+      <ngs-option [value]="value()" class="hidden" style="display: none">{{ value() }}</ngs-option>
     }
   </ngs-select-body>
 </ngs-select>

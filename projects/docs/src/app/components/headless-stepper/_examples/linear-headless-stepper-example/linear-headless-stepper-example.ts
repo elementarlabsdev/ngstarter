@@ -1,6 +1,6 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormField as SignalFormField, form, email, required } from '@angular/forms/signals';
 import { Button } from '@ngstarter-ui/components/button';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { HeadlessStep, HeadlessStepper } from '@ngstarter-ui/components/headless-stepper';
@@ -18,20 +18,24 @@ import { ProgressBar } from '@ngstarter-ui/components/progress-bar';
     Input,
     Label,
     ProgressBar,
-    ReactiveFormsModule
+    SignalFormField
   ],
   templateUrl: './linear-headless-stepper-example.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './linear-headless-stepper-example.scss'
 })
 export class LinearHeadlessStepperExample {
-  private readonly formBuilder = inject(FormBuilder);
 
-  readonly accountForm = this.formBuilder.group({
-    company: ['', Validators.required]
+  readonly accountForm = form(signal({
+    company: '',
+  }), (path) => {
+    required(path.company);
   });
 
-  readonly billingForm = this.formBuilder.group({
-    email: ['', [Validators.required, Validators.email]]
+  readonly billingForm = form(signal({
+    email: '',
+  }), (path) => {
+    required(path.email);
+    email(path.email);
   });
 }

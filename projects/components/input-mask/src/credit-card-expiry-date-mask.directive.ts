@@ -1,5 +1,6 @@
-import { Directive, ElementRef, inject, forwardRef, input } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Directive, ElementRef, inject, input, model, output } from '@angular/core';
+import { FormValueControl, transformedValue } from '@angular/forms/signals';
+import { connectLegacyNativeFormControl } from '@ngstarter-ui/components/core';
 
 const formatOnInput = (value: string): string => {
   const cleaned = value.replace(/\D/g, '').substring(0, 4);
@@ -30,40 +31,30 @@ const formatOnBlur = (value: string): string => {
 
 
 @Directive({
-  selector: '[ngsCreditCardExpiryDateMask]',
+  selector: 'input[ngsCreditCardExpiryDateMask]',
   exportAs: 'ngsCreditCardExpiryDateMask',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CreditCardExpiryDateMaskDirective),
-      multi: true,
-    },
-  ],
   host: {
     '(input)': 'onInput($event)',
     '(blur)': 'onBlur($event)',
     '[attr.placeholder]': 'placeholder()',
+    '[value]': 'rawValue()',
   }
 })
-export class CreditCardExpiryDateMaskDirective implements ControlValueAccessor {
+export class CreditCardExpiryDateMaskDirective implements FormValueControl<string | null> {
   private readonly elementRef = inject<ElementRef<HTMLInputElement>>(ElementRef);
 
   readonly placeholder = input('MM/YY');
 
-  onChange = (_: any) => {};
-  onTouched = () => {};
+  readonly value = model<string | null>(null);
+  readonly touch = output<void>();
+  protected readonly rawValue = transformedValue(this.value, {
+    parse: (raw: string) => ({ value: raw.replace(/\D/g, '') }),
+    format: value => formatOnInput(value ?? ''),
+  });
 
-  writeValue(value: string | null): void {
-    const formattedValue = formatOnInput(value || '');
-    this.elementRef.nativeElement.value = formattedValue;
-  }
-
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
+  constructor() {
+    connectLegacyNativeFormControl(this.value, this.touch, value => this.value.set(value),
+      disabled => { this.elementRef.nativeElement.disabled = disabled; });
   }
 
   protected onInput(event: Event): void {
@@ -74,7 +65,7 @@ export class CreditCardExpiryDateMaskDirective implements ControlValueAccessor {
     const previousValue = target.value;
     const formattedValue = formatOnInput(target.value);
 
-    this.onChange(formattedValue.replace(/\//g, ''));
+    this.rawValue.set(formattedValue);
     target.value = formattedValue;
 
     if (selectionStart !== null) {
@@ -84,15 +75,12 @@ export class CreditCardExpiryDateMaskDirective implements ControlValueAccessor {
   }
 
   onBlur(event: Event): void {
-    this.onTouched();
-
     const target = event.target as HTMLInputElement | null;
     if (!target) return;
 
     const formattedValue = formatOnBlur(target.value);
-    const modelValue = formattedValue.replace(/\//g, '');
-
-    this.onChange(modelValue);
+    this.rawValue.set(formattedValue);
+    this.touch.emit();
     target.value = formattedValue;
   }
 }

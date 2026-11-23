@@ -39,8 +39,8 @@ export class Api {
     {
       name: 'name',
       description: 'Name value will be applied to the input element.',
-      type: 'string | null',
-      default: 'null'
+      type: 'string',
+      default: "''"
     },
     {
       name: 'value',
@@ -50,7 +50,7 @@ export class Api {
     },
     {
       name: 'checked',
-      description: 'Whether the checkbox is checked.',
+      description: 'Boolean model for the checked state. Supports [(checked)] and [formField].',
       type: 'boolean',
       default: 'false'
     },
@@ -119,7 +119,8 @@ export class Api {
       description: 'Attached to the aria-describedby attribute of the host element.',
       type: 'string',
       default: "''"
-    }
+    },
+    { name: 'readonly', description: 'Prevents user edits while keeping the value visible.', type: 'boolean', default: 'false' },
   ];
 
   events = [
@@ -130,6 +131,8 @@ export class Api {
     {
       name: 'indeterminateChange',
       description: 'Event emitted when the checkbox\'s `indeterminate` value changes.'
-    }
+    },
+    { name: 'checkedChange', description: 'Emits the new checked state when the control updates its model.', type: 'boolean' },
+    { name: 'touch', description: 'Reports when focus leaves the control.', type: 'void' },
   ];
 }

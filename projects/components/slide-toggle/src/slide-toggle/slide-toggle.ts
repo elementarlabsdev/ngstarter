@@ -2,13 +2,14 @@ import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
-  forwardRef,
   input,
   model,
   numberAttribute,
-  output
+  output,
+  viewChild,
+  ElementRef
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormCheckboxControl } from '@angular/forms/signals';
 
 export class SlideToggleChange {
   constructor(
@@ -34,26 +35,19 @@ let nextId = 0;
     '[class.ngs-slide-toggle-label-before]': 'labelPosition() === "before"',
     '[attr.id]': 'id()',
   },
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SlideToggle),
-      multi: true
-    }
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SlideToggle implements ControlValueAccessor {
+export class SlideToggle implements FormCheckboxControl {
   private _uniqueId = `ngs-slide-toggle-${nextId++}`;
 
   id = input<string>(this._uniqueId);
-  name = input<string | null>(null);
+  name = input('');
   labelPosition = input<'before' | 'after'>('after');
   ariaLabel = input<string | null>(null, { alias: 'aria-label' });
   ariaLabelledby = input<string | null>(null, { alias: 'aria-labelledby' });
   ariaDescribedby = input<string | null>(null, { alias: 'aria-describedby' });
   required = input(false, { transform: booleanAttribute });
-  disabled = model(false);
+  disabled = input(false, { transform: booleanAttribute });
   disableRipple = input(false, { transform: booleanAttribute });
   tabIndex = input(0, { transform: numberAttribute });
   hideIcon = input(false, { transform: booleanAttribute });
@@ -64,35 +58,28 @@ export class SlideToggle implements ControlValueAccessor {
   change = output<SlideToggleChange>();
   toggleChange = output<void>();
 
-  private _onChange = (_: any) => {};
-  private _onTouched = () => {};
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly touch = output<void>();
+  private readonly nativeInput = viewChild.required<ElementRef<HTMLInputElement>>('input');
 
-  constructor() {}
-
-  writeValue(value: any): void {
-    this.checked.set(!!value);
-  }
-
-  registerOnChange(fn: any): void {
-    this._onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this._onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
+  focus(options?: FocusOptions): void {
+    this.nativeInput().nativeElement.focus(options);
   }
 
   toggle(): void {
+    if (this.disabled() || this.readonly()) {
+      return;
+    }
     this.checked.update(checked => !checked);
-    this._onChange(this.checked());
     this._emitChangeEvent();
   }
 
   _onInputClick(event: Event): void {
     event.stopPropagation();
+    if (this.readonly()) {
+      (event.target as HTMLInputElement).checked = this.checked();
+      return;
+    }
     this.toggle();
     this.toggleChange.emit();
   }
@@ -102,6 +89,6 @@ export class SlideToggle implements ControlValueAccessor {
   }
 
   _onInputBlur(): void {
-    this._onTouched();
+    this.touch.emit();
   }
 }

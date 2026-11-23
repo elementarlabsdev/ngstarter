@@ -16,10 +16,11 @@ import {
 } from '@angular/core';
 import { CdkOverlayOrigin, ConnectedPosition, OverlayModule } from '@angular/cdk/overlay';
 import { _IdGenerator } from '@angular/cdk/a11y';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { NgControl } from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { firstValueFrom, isObservable, Subject } from 'rxjs';
-import { FORM_FIELD, FormFieldControl } from '@ngstarter-ui/components/form-field';
+import { FORM_FIELD, FormFieldControl, type FormField } from '@ngstarter-ui/components/form-field';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { TreeSelectPanel } from '../tree-select-panel/tree-select-panel';
 import {
@@ -38,32 +39,37 @@ import {
   providers: [{ provide: FormFieldControl, useExisting: TreeSelect }],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
+    '[attr.aria-readonly]': 'readonly() || null',
     '[id]': 'id',
     class: 'ngs-tree-select',
-    '[class.ngs-select-disabled]': 'disabled',
+    '[class.ngs-select-disabled]': 'disabled()',
     '[class.ngs-select-has-clear]': 'clearable() && !empty',
     '(click)': 'onHostClick()',
   },
 })
-export class TreeSelect implements ControlValueAccessor, FormFieldControl<TreeSelectValue> {
+export class TreeSelect implements FormFieldControl<TreeSelectValue>, FormValueControl<TreeSelectValue> {
   private readonly destroyRef = inject(DestroyRef);
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly trigger = viewChild<ElementRef<HTMLButtonElement>>('trigger');
-  private readonly formField = inject(FORM_FIELD, { optional: true });
+  private readonly formField = inject<FormField>(FORM_FIELD, { optional: true });
   private readonly origin = viewChild<CdkOverlayOrigin>('origin');
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly invalid = input(false);
+  readonly touched = input(false);
+  readonly touch = output<void>();
   readonly ngControl = inject(NgControl, { self: true, optional: true });
   readonly id = inject(_IdGenerator).getId('ngs-tree-select-');
   readonly stateChanges = new Subject<void>();
   readonly nodes = input<readonly TreeSelectNode[]>([]);
-  readonly valueSignal = model<TreeSelectValue>(null, { alias: 'value' });
+  readonly value = model<TreeSelectValue>(null);
   readonly multiple = input(false, { transform: booleanAttribute });
   readonly leavesOnly = input(false, { transform: booleanAttribute });
   /** Cascading multiple selection writes enabled loaded leaf values. */
   readonly cascade = input(true, { transform: booleanAttribute });
   readonly searchable = input(true, { transform: booleanAttribute });
   readonly clearable = input(false, { transform: booleanAttribute });
-  readonly disabledInput = input(false, { alias: 'disabled', transform: booleanAttribute });
-  readonly requiredInput = input(false, { alias: 'required', transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly required = input(false, { transform: booleanAttribute });
   readonly placeholderInput = input('Choose an item', { alias: 'placeholder' });
   readonly ariaLabel = input<string | null>(null, { alias: 'aria-label' });
   readonly emptyText = input('No matching items');
@@ -80,7 +86,6 @@ export class TreeSelect implements ControlValueAccessor, FormFieldControl<TreeSe
     { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom' },
   ];
   readonly describedBy = signal('');
-  private readonly formDisabled = signal(false);
   private readonly focusedSignal = signal(false);
   private readonly loaded = signal(
     new Map<
@@ -92,10 +97,8 @@ export class TreeSelect implements ControlValueAccessor, FormFieldControl<TreeSe
       }
     >(),
   );
-  private readonly pending = signal(new Map<TreeSelectKey, object>());
-  private readonly errors = signal(new Map<TreeSelectKey, TreeSelectNode>());
-  private onChange: (value: TreeSelectValue) => void = () => {};
-  private onTouched: () => void = () => {};
+  private readonly loadPending = signal(new Map<TreeSelectKey, object>());
+  private readonly loadErrors = signal(new Map<TreeSelectKey, TreeSelectNode>());
 
   readonly resolvedNodes = computed(() => {
     const cache = this.loaded();
@@ -130,40 +133,32 @@ export class TreeSelect implements ControlValueAccessor, FormFieldControl<TreeSe
       .join(', '),
   );
   readonly selectedValues = computed<TreeSelectKey[]>(() => {
-    const value = this.valueSignal();
+    const value = this.value();
     return Array.isArray(value) ? value : value == null ? [] : [value];
   });
 
   constructor() {
-    if (this.ngControl) this.ngControl.valueAccessor = this;
     effect(() => {
       this.nodes();
       this.loadChildren();
       untracked(() => {
         this.loaded.set(new Map());
-        this.pending.set(new Map());
-        this.errors.set(new Map());
+        this.loadPending.set(new Map());
+        this.loadErrors.set(new Map());
       });
     });
     effect(() => {
-      this.valueSignal();
+      this.value();
       this.focusedSignal();
-      this.disabledInput();
-      this.formDisabled();
-      this.requiredInput();
+      this.disabled();
+      this.required();
       this.placeholderInput();
       this.stateChanges.next();
-      if (this.disabled && this.panelOpen()) this.close(false);
+      if ((this.disabled() || this.readonly()) && this.panelOpen()) this.close(false);
     });
     this.destroyRef.onDestroy(() => this.stateChanges.complete());
   }
 
-  get value(): TreeSelectValue {
-    return this.valueSignal();
-  }
-  set value(value: TreeSelectValue) {
-    this.valueSignal.set(value);
-  }
   get placeholder(): string {
     return this.placeholderInput();
   }
@@ -176,25 +171,19 @@ export class TreeSelect implements ControlValueAccessor, FormFieldControl<TreeSe
   get shouldLabelFloat(): boolean {
     return this.focused || !this.empty;
   }
-  get disabled(): boolean {
-    return this.disabledInput() || this.formDisabled();
-  }
-  get required(): boolean {
-    return this.requiredInput();
-  }
   get errorState(): boolean {
-    return !!this.ngControl?.invalid && !!this.ngControl?.touched;
+    return !!(this.invalid() || this.ngControl?.invalid) && this.touched();
   }
 
   get overlayOrigin(): CdkOverlayOrigin | ElementRef {
-    return this.formField?.wrapper() || this.origin() || this.element;
+    return this.formField?.container() ?? this.origin() ?? this.element;
   }
   onHostClick(): void {
     if (!this.formField) this.onContainerClick();
   }
   open(): void {
-    if (this.disabled || this.panelOpen()) return;
-    const anchor = this.formField?.wrapper()?.nativeElement ?? this.element.nativeElement;
+    if (this.disabled() || this.readonly() || this.panelOpen()) return;
+    const anchor = this.formField?.container().nativeElement ?? this.element.nativeElement;
     const width = anchor.getBoundingClientRect().width;
     this.overlayWidth.set(width > 0 ? Math.round(width * 100) / 100 : 'auto');
     this.query.set('');
@@ -204,19 +193,19 @@ export class TreeSelect implements ControlValueAccessor, FormFieldControl<TreeSe
   close(restoreFocus = true): void {
     if (!this.panelOpen()) return;
     this.panelOpen.set(false);
-    this.onTouched();
+    this.touch.emit();
     this.closed.emit();
     if (restoreFocus) this.focus();
   }
   focus(): void {
-    if (!this.disabled) this.trigger()?.nativeElement.focus();
+    if (!this.disabled()) this.trigger()?.nativeElement.focus();
   }
   onFocus(): void {
     this.focusedSignal.set(true);
   }
   onBlur(): void {
     this.focusedSignal.set(false);
-    if (!this.panelOpen()) this.onTouched();
+    if (!this.panelOpen()) this.touch.emit();
   }
   onKeydown(event: KeyboardEvent): void {
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
@@ -226,14 +215,13 @@ export class TreeSelect implements ControlValueAccessor, FormFieldControl<TreeSe
   }
   clear(event: Event): void {
     event.stopPropagation();
-    if (!this.disabled) {
+    if (!this.disabled() && !this.readonly()) {
       this.commit(this.multiple() ? [] : null);
-      this.onTouched();
+      this.touch.emit();
     }
   }
   private commit(value: TreeSelectValue): void {
-    this.valueSignal.set(value);
-    this.onChange(value);
+    this.value.set(value);
     this.selectionChange.emit(value);
     this.stateChanges.next();
   }
@@ -248,7 +236,7 @@ export class TreeSelect implements ControlValueAccessor, FormFieldControl<TreeSe
   readonly isBranch = (node: TreeSelectNode): boolean =>
     !!node.children?.length || !!node.hasChildren;
   readonly canSelect = (node: TreeSelectNode): boolean =>
-    this.targets(node).length > 0 && !this.disabled;
+    this.targets(node).length > 0 && !this.disabled() && !this.readonly();
   readonly isChecked = (node: TreeSelectNode): boolean => {
     const targets = this.targets(node);
     return (
@@ -260,8 +248,8 @@ export class TreeSelect implements ControlValueAccessor, FormFieldControl<TreeSe
     const count = targets.filter((item) => this.selectedValues().includes(item.value)).length;
     return count > 0 && count < targets.length;
   };
-  readonly isLoading = (node: TreeSelectNode): boolean => this.pending().has(node.value);
-  readonly hasError = (node: TreeSelectNode): boolean => this.errors().has(node.value);
+  readonly isLoading = (node: TreeSelectNode): boolean => this.loadPending().has(node.value);
+  readonly hasError = (node: TreeSelectNode): boolean => this.loadErrors().has(node.value);
 
   select(node: TreeSelectNode): void {
     if (!this.canSelect(node)) return;
@@ -280,7 +268,7 @@ export class TreeSelect implements ControlValueAccessor, FormFieldControl<TreeSe
 
   async load(node: TreeSelectNode): Promise<void> {
     const loader = this.loadChildren();
-    if (!loader || this.disabled || node.disabled || this.isLoading(node)) return;
+    if (!loader || this.disabled() || node.disabled || this.isLoading(node)) return;
     const roots = this.nodes();
     const find = (items: readonly TreeSelectNode[]): TreeSelectNode | undefined => {
       for (const item of items) {
@@ -293,8 +281,8 @@ export class TreeSelect implements ControlValueAccessor, FormFieldControl<TreeSe
     const original = find(roots);
     if (!original) return;
     const request = {};
-    this.pending.update((items) => new Map(items).set(node.value, request));
-    this.errors.update((items) => {
+    this.loadPending.update((items) => new Map(items).set(node.value, request));
+    this.loadErrors.update((items) => {
       const next = new Map(items);
       next.delete(node.value);
       return next;
@@ -311,35 +299,22 @@ export class TreeSelect implements ControlValueAccessor, FormFieldControl<TreeSe
       }
     } catch (error) {
       if (!this.destroyRef.destroyed && this.nodes() === roots && this.loadChildren() === loader) {
-        this.errors.update((items) => new Map(items).set(node.value, original));
+        this.loadErrors.update((items) => new Map(items).set(node.value, original));
         this.loadError.emit({ node: original, error });
       }
     } finally {
       if (!this.destroyRef.destroyed)
-        this.pending.update((items) => {
+        this.loadPending.update((items) => {
           const next = new Map(items);
           if (next.get(node.value) === request) next.delete(node.value);
           return next;
         });
     }
   }
-  writeValue(value: TreeSelectValue): void {
-    this.valueSignal.set(value ?? null);
-    this.stateChanges.next();
-  }
-  registerOnChange(fn: (value: TreeSelectValue) => void): void {
-    this.onChange = fn;
-  }
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-  setDisabledState(disabled: boolean): void {
-    this.formDisabled.set(disabled);
-  }
   setDescribedByIds(ids: string[]): void {
     this.describedBy.set(ids.join(' '));
   }
   onContainerClick(): void {
-    if (!this.disabled) this.panelOpen() ? this.close() : this.open();
+    if (!this.disabled()) this.panelOpen() ? this.close() : this.open();
   }
 }

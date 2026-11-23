@@ -1,11 +1,12 @@
-import { Component, ElementRef, inject, viewChild, ChangeDetectionStrategy } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { Component, ElementRef, inject, viewChild, ChangeDetectionStrategy, signal } from '@angular/core';
 import {
   Autocomplete,
   AutocompleteTrigger,
   Option,
   AutocompleteSelectedEvent
 } from '@ngstarter-ui/components/autocomplete';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { FormField } from '@ngstarter-ui/components/form-field';
 import { map, Observable, startWith } from 'rxjs';
@@ -19,7 +20,7 @@ import { Input } from '@ngstarter-ui/components/input';
 @Component({
   selector: 'app-chips-autocomplete-example',
   imports: [
-    ReactiveFormsModule,
+    SignalFormField,
     Icon,
     FormField,
     Label,
@@ -39,7 +40,8 @@ import { Input } from '@ngstarter-ui/components/input';
 })
 export class ChipsAutocompleteExample {
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  fruitCtrl = new FormControl('');
+  fruitCtrl = form(signal(''));
+  private readonly fruitCtrlChanges = toObservable(this.fruitCtrl().value);
   filteredFruits: Observable<string[]>;
   fruits: string[] = ['Lemon'];
   allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
@@ -49,7 +51,7 @@ export class ChipsAutocompleteExample {
   announcer = inject(LiveAnnouncer);
 
   constructor() {
-    this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
+    this.filteredFruits = this.fruitCtrlChanges.pipe(
       startWith(null),
       map((fruit: string | null) => (fruit ? this._filter(fruit) : this.allFruits.slice())),
     );
@@ -65,7 +67,7 @@ export class ChipsAutocompleteExample {
 
     // Clear the input value
     event.chipInput!.clear();
-    this.fruitCtrl.setValue(null);
+    this.fruitCtrl().value.set('');
   }
 
   remove(fruit: string): void {
@@ -80,7 +82,7 @@ export class ChipsAutocompleteExample {
   selected(event: AutocompleteSelectedEvent): void {
     this.fruits.push(event.option.viewValue);
     this.fruitInput().nativeElement.value = '';
-    this.fruitCtrl.setValue(null);
+    this.fruitCtrl().value.set('');
   }
 
   private _filter(value: string): string[] {

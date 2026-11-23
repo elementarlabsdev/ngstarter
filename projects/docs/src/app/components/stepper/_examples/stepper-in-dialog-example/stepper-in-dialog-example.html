@@ -10,99 +10,95 @@
     <ngs-stepper linear stickyHeader #stepper>
       <ngs-step [stepControl]="workspaceForm">
         <ng-template ngsStepLabel>Workspace</ng-template>
-        <form [formGroup]="workspaceForm" class="grid gap-4 md:grid-cols-2">
+        <form novalidate class="grid gap-4 md:grid-cols-2">
           <ngs-form-field>
             <ngs-label>Workspace name</ngs-label>
             <input
               ngsInput
-              formControlName="workspaceName"
+              [formField]="workspaceForm.workspaceName"
               placeholder="Atlas Operations"
-              required
             />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Workspace slug</ngs-label>
-            <input ngsInput formControlName="slug" placeholder="atlas-ops" required />
+            <input ngsInput [formField]="workspaceForm.slug" placeholder="atlas-ops" />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Region</ngs-label>
-            <input ngsInput formControlName="region" placeholder="Europe / Warsaw" required />
+            <input ngsInput [formField]="workspaceForm.region" placeholder="Europe / Warsaw" />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Owner</ngs-label>
-            <input ngsInput formControlName="owner" placeholder="Maya Chen" required />
+            <input ngsInput [formField]="workspaceForm.owner" placeholder="Maya Chen" />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Workspace type</ngs-label>
-            <input ngsInput formControlName="workspaceType" placeholder="Operations hub" required />
+            <input ngsInput [formField]="workspaceForm.workspaceType" placeholder="Operations hub" />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Environment</ngs-label>
-            <input ngsInput formControlName="environment" placeholder="Production" required />
+            <input ngsInput [formField]="workspaceForm.environment" placeholder="Production" />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Primary domain</ngs-label>
             <input
               ngsInput
-              formControlName="primaryDomain"
+              [formField]="workspaceForm.primaryDomain"
               placeholder="atlas.example.com"
-              required
             />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Default language</ngs-label>
-            <input ngsInput formControlName="defaultLanguage" placeholder="English" required />
+            <input ngsInput [formField]="workspaceForm.defaultLanguage" placeholder="English" />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Compliance tier</ngs-label>
-            <input ngsInput formControlName="complianceTier" placeholder="SOC 2" required />
+            <input ngsInput [formField]="workspaceForm.complianceTier" placeholder="SOC 2" />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Backup window</ngs-label>
-            <input ngsInput formControlName="backupWindow" placeholder="02:00-04:00 UTC" required />
+            <input ngsInput [formField]="workspaceForm.backupWindow" placeholder="02:00-04:00 UTC" />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Lifecycle stage</ngs-label>
             <input
               ngsInput
-              formControlName="lifecycleStage"
+              [formField]="workspaceForm.lifecycleStage"
               placeholder="Implementation"
-              required
             />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Analytics workspace</ngs-label>
-            <input ngsInput formControlName="analyticsWorkspace" placeholder="Atlas BI" required />
+            <input ngsInput [formField]="workspaceForm.analyticsWorkspace" placeholder="Atlas BI" />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Billing account</ngs-label>
-            <input ngsInput formControlName="billingAccount" placeholder="BA-1048" required />
+            <input ngsInput [formField]="workspaceForm.billingAccount" placeholder="BA-1048" />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Cost center</ngs-label>
-            <input ngsInput formControlName="costCenter" placeholder="OPS-240" required />
+            <input ngsInput [formField]="workspaceForm.costCenter" placeholder="OPS-240" />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Business unit</ngs-label>
             <input
               ngsInput
-              formControlName="businessUnit"
+              [formField]="workspaceForm.businessUnit"
               placeholder="Global Operations"
-              required
             />
           </ngs-form-field>
 
@@ -111,25 +107,23 @@
             <input
               ngsInput
               type="email"
-              formControlName="contactEmail"
+              [formField]="workspaceForm.contactEmail"
               placeholder="workspace-admin@example.com"
-              required
             />
           </ngs-form-field>
 
           <ngs-form-field class="md:col-span-2">
             <ngs-label>Escalation channel</ngs-label>
-            <input ngsInput formControlName="escalationChannel" placeholder="#atlas-escalations" />
+            <input ngsInput [formField]="workspaceForm.escalationChannel" placeholder="#atlas-escalations" />
           </ngs-form-field>
 
           <ngs-form-field class="md:col-span-2">
             <ngs-label>Description</ngs-label>
             <textarea
               ngsInput
-              formControlName="description"
+              [formField]="workspaceForm.description"
               placeholder="Describe what this workspace is used for"
               rows="4"
-              required
             ></textarea>
           </ngs-form-field>
         </form>
@@ -137,37 +131,36 @@
 
       <ngs-step [stepControl]="accessForm">
         <ng-template ngsStepLabel>Access</ng-template>
-        <form [formGroup]="accessForm" class="grid gap-4 md:grid-cols-2">
+        <form novalidate class="grid gap-4 md:grid-cols-2">
           <ngs-form-field>
             <ngs-label>Admin email</ngs-label>
             <input
               ngsInput
-              formControlName="adminEmail"
+              [formField]="accessForm.adminEmail"
               placeholder="maya.chen@example.com"
-              required
             />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Team</ngs-label>
-            <input ngsInput formControlName="team" placeholder="Operations" />
+            <input ngsInput [formField]="accessForm.team" placeholder="Operations" />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Seats</ngs-label>
-            <input ngsInput formControlName="seats" placeholder="24" required />
+            <input ngsInput [formField]="accessForm.seats" placeholder="24" />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Default role</ngs-label>
-            <input ngsInput formControlName="defaultRole" placeholder="Editor" required />
+            <input ngsInput [formField]="accessForm.defaultRole" placeholder="Editor" />
           </ngs-form-field>
 
           <ngs-form-field class="md:col-span-2">
             <ngs-label>Invitation note</ngs-label>
             <textarea
               ngsInput
-              formControlName="invitationNote"
+              [formField]="accessForm.invitationNote"
               placeholder="Add a short note for invited teammates"
               rows="4"
             ></textarea>
@@ -177,24 +170,23 @@
 
       <ngs-step [stepControl]="launchForm">
         <ng-template ngsStepLabel>Review</ng-template>
-        <form [formGroup]="launchForm" class="grid gap-4 md:grid-cols-2">
+        <form novalidate class="grid gap-4 md:grid-cols-2">
           <ngs-form-field>
             <ngs-label>Checklist owner</ngs-label>
-            <input ngsInput formControlName="checklistOwner" placeholder="Jordan Lee" required />
+            <input ngsInput [formField]="launchForm.checklistOwner" placeholder="Jordan Lee" />
           </ngs-form-field>
 
           <ngs-form-field>
             <ngs-label>Launch date</ngs-label>
-            <input ngsInput formControlName="launchDate" placeholder="2026-07-01" required />
+            <input ngsInput [formField]="launchForm.launchDate" placeholder="2026-07-01" />
           </ngs-form-field>
 
           <ngs-form-field class="md:col-span-2">
             <ngs-label>Support channel</ngs-label>
             <input
               ngsInput
-              formControlName="supportChannel"
+              [formField]="launchForm.supportChannel"
               placeholder="#atlas-support"
-              required
             />
           </ngs-form-field>
 
@@ -202,7 +194,7 @@
             <ngs-label>Review notes</ngs-label>
             <textarea
               ngsInput
-              formControlName="notes"
+              [formField]="launchForm.notes"
               placeholder="Add final launch notes"
               rows="4"
             ></textarea>

@@ -1,5 +1,5 @@
-import { Component, viewChild, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Component, viewChild, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { Sidenav, SidenavContainer, SidenavContent } from '@ngstarter-ui/components/sidenav';
 import { Button } from '@ngstarter-ui/components/button';
 import { RadioButton, RadioGroup } from '@ngstarter-ui/components/radio';
@@ -7,7 +7,7 @@ import { RadioButton, RadioGroup } from '@ngstarter-ui/components/radio';
 @Component({
   selector: 'app-basic-sidenav-example',
   imports: [
-    ReactiveFormsModule,
+    SignalFormField,
     SidenavContainer,
     Sidenav,
     Button,
@@ -23,7 +23,7 @@ export class BasicSidenavExample {
   readonly sidenav = viewChild.required(Sidenav);
 
   reason = '';
-  mode = new FormControl('push' as any);
+  mode = form(signal<'push' | 'over' | 'side'>('push'));
 
   async close(reason: string) {
     this.reason = reason;

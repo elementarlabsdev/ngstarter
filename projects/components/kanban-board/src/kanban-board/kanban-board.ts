@@ -95,6 +95,8 @@ export class KanbanBoard<T extends KanbanColumn<K>, K extends KanbanItem> implem
   }
 
   onDropped(event: CdkDragDrop<K[]>) {
+    if (!event.isPointerOverContainer) return;
+
     this.itemDropped.emit(event);
 
     if (event.previousContainer === event.container) {

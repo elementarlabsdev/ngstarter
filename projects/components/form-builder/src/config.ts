@@ -397,7 +397,8 @@ const CALCULATED_SETTINGS_SCHEMA: FormBuilderSchema = {
           type: 'number',
           label: 'Decimal places',
           defaultValue: null,
-          hint: 'Optional rounding for numeric results.'
+          hint: 'Optional rounding for numeric results, from 0 to 100 decimal places.',
+          validation: [{ type: 'min', value: 0 }, { type: 'max', value: 100 }]
         },
         {
           id: 'calculated-empty-value',

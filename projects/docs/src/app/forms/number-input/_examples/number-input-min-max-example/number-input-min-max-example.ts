@@ -1,6 +1,7 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form, max, min } from '@angular/forms/signals';
 import { NumberInput } from '@ngstarter-ui/components/number-input';
 
 @Component({
@@ -8,7 +9,7 @@ import { NumberInput } from '@ngstarter-ui/components/number-input';
   imports: [
     FormField,
     FormsModule,
-    ReactiveFormsModule,
+    SignalFormField,
     Label,
     NumberInput
   ],
@@ -17,8 +18,10 @@ import { NumberInput } from '@ngstarter-ui/components/number-input';
   styleUrl: './number-input-min-max-example.scss'
 })
 export class NumberInputMinMaxExample {
-  private _formBuilder = inject(FormBuilder);
-  form = this._formBuilder.group({
-    control: [3, [Validators.min(2), Validators.max(5)]]
+  form = form(signal({
+    control: 3,
+  }), (path) => {
+    min(path.control, 2);
+    max(path.control, 5);
   });
 }

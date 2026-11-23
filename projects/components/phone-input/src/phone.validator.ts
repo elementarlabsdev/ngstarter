@@ -1,7 +1,6 @@
-import { UntypedFormControl } from '@angular/forms';
 import { parsePhoneNumber, PhoneNumber } from 'libphonenumber-js';
 
-export const phoneValidator = (control: UntypedFormControl) => {
+export const phoneValidator = (control: { value: string | null }) => {
   const error = { invalidPhone: true };
   let numberInstance: PhoneNumber;
 

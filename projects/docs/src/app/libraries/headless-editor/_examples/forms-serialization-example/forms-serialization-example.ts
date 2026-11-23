@@ -1,7 +1,6 @@
 import { JsonPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { FormField as SignalFormField, disabled, form, required, validate } from '@angular/forms/signals';
 import { Button } from '@ngstarter-ui/components/button';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import {
@@ -32,19 +31,23 @@ const SAVED_DOCUMENT: NgsHeadlessEditorDocument = {
 
 @Component({
   selector: 'app-forms-serialization-example',
-  imports: [JsonPipe, ReactiveFormsModule, Button, FormField, Label, Input, RichTextField],
+  imports: [JsonPipe, SignalFormField, Button, FormField, Label, Input, RichTextField],
   templateUrl: './forms-serialization-example.html',
   styleUrl: './forms-serialization-example.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormsSerializationExample {
-  readonly form = new FormGroup({
-    title: new FormControl('Release announcement', { nonNullable: true, validators: Validators.required }),
-    body: new FormControl<NgsHeadlessEditorDocument | null>(null, richTextRequired)
+  private readonly bodyDisabled = signal(false);
+  readonly model = signal<{ title: string; body: NgsHeadlessEditorDocument | null }>({
+    title: 'Release announcement',
+    body: null
   });
-
-  private readonly body = toSignal(this.form.controls.body.valueChanges, { initialValue: null });
-  private readonly status = toSignal(this.form.statusChanges, { initialValue: this.form.status });
+  readonly form = form(this.model, path => {
+    required(path.title);
+    validate(path.body, ({ value }) => richTextRequired(value()));
+    disabled(path.body, () => this.bodyDisabled());
+  });
+  private readonly body = this.form.body().value;
   readonly html = computed(() => {
     const body = this.body();
     return body ? toHtml(body) : '';
@@ -53,18 +56,13 @@ export class FormsSerializationExample {
     const body = this.body();
     return body ? toPlainText(body) : '';
   });
-  readonly valid = computed(() => this.status() === 'VALID');
+  readonly valid = this.form().valid;
 
   loadSaved(): void {
-    this.form.patchValue({ body: SAVED_DOCUMENT });
+    this.form.body().value.set(SAVED_DOCUMENT);
   }
 
   toggleDisabled(): void {
-    const body = this.form.controls.body;
-    if (body.disabled) {
-      body.enable();
-    } else {
-      body.disable();
-    }
+    this.bodyDisabled.update(disabled => !disabled);
   }
 }

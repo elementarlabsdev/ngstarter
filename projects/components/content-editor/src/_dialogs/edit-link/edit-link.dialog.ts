@@ -1,11 +1,11 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { Button } from '@ngstarter-ui/components/button';
 import {
   DIALOG_DATA,
   DialogActions,
   DialogContent,
-  DialogRef,
+  DialogClose,
   DialogTitle
 } from '@ngstarter-ui/components/dialog';
 import { Input } from '@ngstarter-ui/components/input';
@@ -15,16 +15,16 @@ import { FormField, Hint, Label } from '@ngstarter-ui/components/form-field';
 @Component({
   selector: 'ngs-edit-link',
   imports: [
-    FormsModule,
     Button,
     DialogActions,
+    DialogClose,
     DialogContent,
     DialogTitle,
     FormField,
     Input,
     Label,
     SlideToggle,
-    ReactiveFormsModule,
+    SignalFormField,
     Hint
   ],
   templateUrl: './edit-link.dialog.html',
@@ -32,20 +32,7 @@ import { FormField, Hint, Label } from '@ngstarter-ui/components/form-field';
   styleUrl: './edit-link.dialog.css'
 })
 export class EditLinkDialog {
-  private _dialogRef = inject(DialogRef);
   private _dialogData = inject(DIALOG_DATA);
-  private _formBuilder = inject(FormBuilder);
 
-  form = this._formBuilder.group({
-    href: [this._dialogData.href],
-    openInNewTab: [this._dialogData.openInNewTab, [Validators.required]]
-  });
-
-  cancel() {
-    this._dialogRef.close(false);
-  }
-
-  add() {
-    this._dialogRef.close(this.form.value);
-  }
+  readonly form = form(signal({href: this._dialogData.href ?? '', openInNewTab: this._dialogData.openInNewTab ?? false}));
 }

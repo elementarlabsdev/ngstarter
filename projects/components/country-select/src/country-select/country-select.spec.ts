@@ -235,7 +235,7 @@ describe('CountrySelect', () => {
     component.country().setValue('PL');
     fixture.detectChanges();
 
-    expect(getCountrySelect(fixture).value).toBe('PL');
+    expect(getCountrySelect(fixture).value()).toBe('PL');
     expect(getCountrySelect(fixture).empty).toBe(false);
     expect(getSelect(fixture).textContent).toContain('🇵🇱');
     expect(getSelect(fixture).textContent).toContain('Poland');
@@ -270,7 +270,7 @@ describe('CountrySelect', () => {
     const fixture = await createHost(MultipleCountrySelectHost);
     const component = fixture.componentInstance;
 
-    expect(getCountrySelect(fixture).value).toEqual(['PL', 'DE']);
+    expect(getCountrySelect(fixture).value()).toEqual(['PL', 'DE']);
     expect(getSelect(fixture).textContent).toContain('Poland');
     expect(getSelect(fixture).textContent).toContain('Germany');
 
@@ -286,7 +286,7 @@ describe('CountrySelect', () => {
     const fixture = await createHost(CountrySelectValueHost);
     const component = fixture.componentInstance;
 
-    expect(getCountrySelect(fixture).value).toBe('PL');
+    expect(getCountrySelect(fixture).value()).toBe('PL');
     expect(getSelect(fixture).textContent).toContain('Poland');
 
     (getSelect(fixture).querySelector('.ngs-select-clear-button') as HTMLButtonElement).click();
@@ -400,7 +400,7 @@ describe('CountrySelect', () => {
     fixture.detectChanges();
 
     expect(component.country().value).toBe('PL');
-    expect(getCountrySelect(fixture).value).toBe('PL');
+    expect(getCountrySelect(fixture).value()).toBe('PL');
     expect(getSelect(fixture).textContent).toContain('🇵🇱');
     expect(getSelect(fixture).textContent).toContain('Poland');
     expect(component.closed()).toBe(1);

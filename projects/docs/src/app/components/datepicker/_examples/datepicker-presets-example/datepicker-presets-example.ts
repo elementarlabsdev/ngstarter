@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { FormField, IconButtonSuffix, Label } from '@ngstarter-ui/components/form-field';
 import {
   DateRangeInput,
@@ -15,7 +15,7 @@ import {
   selector: 'app-datepicker-presets-example',
   standalone: true,
   imports: [
-    ReactiveFormsModule,
+    SignalFormField,
     FormField,
     Label,
     DateRangeInput,
@@ -29,15 +29,9 @@ import {
   templateUrl: './datepicker-presets-example.html',
 })
 export class DatepickerPresetsExample {
-  range = new FormGroup({
-    start: new FormControl<Date | null>(null),
-    end: new FormControl<Date | null>(null),
-  });
+  readonly range = form(signal<DateRange<Date> | null>(null));
 
-  rangeCustom = new FormGroup({
-    start: new FormControl<Date | null>(null),
-    end: new FormControl<Date | null>(null),
-  });
+  readonly rangeCustom = form(signal<DateRange<Date> | null>(null));
 
   customPresets: DatepickerPreset<Date>[] = [
     {

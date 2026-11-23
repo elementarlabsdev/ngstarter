@@ -56,7 +56,7 @@ jobs:
             BEFORE="HEAD^"
           fi
 
-          if git diff --quiet "$BEFORE" "$AFTER" -- 'projects/components'; then
+          if git diff --quiet "$BEFORE" "$AFTER" -- 'projects/components' 'scripts/sync-components-dependencies.mjs'; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "changed=true" >> $GITHUB_OUTPUT

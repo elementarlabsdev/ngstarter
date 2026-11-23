@@ -133,7 +133,7 @@ private async uploadFile(file: File) {
   readonly rendererInputs = [
     {
       name: 'schema<sup>*</sup>',
-      description: 'Saved builder schema to render as an Angular reactive form.',
+      description: 'Saved builder schema to render as a Signal Forms field tree.',
       type: 'FormBuilderSchema',
       default: '–'
     },
@@ -189,8 +189,8 @@ private async uploadFile(file: File) {
     },
     {
       name: 'formReady',
-      description: 'Emitted after the renderer creates the FormGroup.',
-      type: 'FormGroup'
+      description: 'Emitted after the renderer creates the Signal Forms field tree.',
+      type: 'FieldTree<Record<string, any>>'
     }
   ];
 
@@ -308,13 +308,13 @@ private async uploadFile(file: File) {
 
   readonly fieldProperties = [
     { name: 'id', description: 'Stable unique id used by drag/drop layout and field selection.', type: 'string' },
-    { name: 'name', description: 'Reactive form control name and saved value key. The builder inspector shows the resulting field path for nested fields, for example invoice_items.item_description.', type: 'string' },
+    { name: 'name', description: 'Field name and saved value key. The builder inspector shows the resulting field path for nested fields, for example invoice_items.item_description.', type: 'string' },
     { name: 'type', description: 'Field type matched to a FormBuilderFieldDefinition.', type: 'string' },
     { name: 'kind', description: 'Optional item kind. Defaults to field; layout and static alter rendering and form control creation.', type: 'FormBuilderItemKind' },
     { name: 'label', description: 'Visible label used by the builder canvas, renderer, and default settings.', type: 'string' },
     { name: 'placeholder', description: 'Placeholder passed to input-like default renderers.', type: 'string' },
     { name: 'hint', description: 'Helper text shown by supported renderers.', type: 'string' },
-    { name: 'defaultValue', description: 'Initial value used when the renderer creates a FormControl.', type: 'any' },
+    { name: 'defaultValue', description: 'Initial value used when the renderer initializes a field.', type: 'any' },
     { name: 'multiple', description: 'Enables multi-value behavior for select and upload-like fields.', type: 'boolean' },
     { name: 'clearable', description: 'Enables clear action for supported select-like controls.', type: 'boolean' },
     { name: 'required', description: 'Adds required validation and updates built-in settings state.', type: 'boolean' },

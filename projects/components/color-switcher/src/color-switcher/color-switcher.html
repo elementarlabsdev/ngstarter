@@ -2,7 +2,8 @@
   <button class="color"
           type="button"
           [style.--color]="color"
-          [class.is-selected]="_selectedColor === color"
+          [class.is-selected]="currentColor() === color"
+          [disabled]="disabled()"
           (click)="selectColor(color)">
   </button>
 }

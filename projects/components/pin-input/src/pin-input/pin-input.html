@@ -1,16 +1,18 @@
-<div [formGroup]="form">
-  <div formArrayName="value" class="inputs">
-    @for (control of controls; track control) {
-      <ngs-form-field subscriptHiddenIfEmpty>
-        <input type="text"
-               ngsInput
-               ngsPinInput
-               [formControl]="control"
-               [acceptOnly]="acceptOnly()"
-               [placeholder]="placeholder()"
-               [attr.disabled]="isDisabled() || null"
-               maxlength="1" >
-      </ngs-form-field>
-    }
-  </div>
+<div class="inputs">
+  @for (digit of digits(); track $index) {
+    <ngs-form-field subscriptHiddenIfEmpty>
+      <input #digitInput
+             type="text"
+             ngsInput
+             ngsPinInput
+             [value]="digit"
+             [acceptOnly]="acceptOnly()"
+             [placeholder]="placeholder()"
+             [disabled]="disabled()"
+             [readOnly]="readonly()"
+             (input)="onInput(digitInput, $index)"
+             (keydown.backspace)="onBackspace(digitInput, $index)"
+             maxlength="1">
+    </ngs-form-field>
+  }
 </div>

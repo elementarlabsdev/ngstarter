@@ -83,7 +83,11 @@ export class Api {
       description: 'Whether the input is disabled',
       type: 'boolean',
       default: 'false'
-    }
+    },
+    { name: 'value', description: 'Phone number model. Valid numbers are stored in international E.164 format.', type: 'string | null', default: 'null' },
+    { name: 'readonly', description: 'Prevents user edits while keeping the value visible.', type: 'boolean', default: 'false' },
+    { name: 'invalid', description: 'Invalid state supplied by the bound form field.', type: 'boolean', default: 'false' },
+    { name: 'touched', description: 'Touched state supplied by the bound form field.', type: 'boolean', default: 'false' },
   ];
 
   events = [
@@ -91,6 +95,8 @@ export class Api {
       name: 'countryChanged',
       description: 'Executed when a country changed',
       type: 'EventEmitter&lt;Country&gt;'
-    }
+    },
+    { name: 'valueChange', description: 'Emits the new value when the control updates its model.', type: 'string | null' },
+    { name: 'touch', description: 'Reports when focus leaves the control.', type: 'void' },
   ];
 }

@@ -1,3 +1,11 @@
+@mixin panel-wrapper {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-block: var(--ngs-select-panel-gap);
+}
+
 @mixin panel {
   background: var(--ngs-select-panel-bg, var(--ngs-dropdown-bg));
   box-shadow: var(--ngs-select-panel-shadow, var(--ngs-dropdown-shadow));

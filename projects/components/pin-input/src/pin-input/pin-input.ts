@@ -1,196 +1,80 @@
 import {
   booleanAttribute,
-  Component, computed,
-  forwardRef,
-  inject, input,
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  linkedSignal,
+  model,
   numberAttribute,
-  OnInit,
+  output,
   viewChildren,
-  ChangeDetectionStrategy
 } from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  NG_VALUE_ACCESSOR,
-  Validators,
-  ReactiveFormsModule
-} from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 import { PinInputDirective } from '../pin-input.directive';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { FormField } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 
 @Component({
   selector: 'ngs-pin-input',
   exportAs: 'ngsPinInput',
-  imports: [
-    ReactiveFormsModule,
-    FormField,
-    Input,
-    PinInputDirective
-  ],
+  imports: [FormField, Input, PinInputDirective],
   templateUrl: './pin-input.html',
   styleUrl: './pin-input.scss',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PinInput),
-      multi: true
-    }
-  ],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'ngs-pin-input',
-    '[class.is-disabled]': 'isDisabled()',
-    '(paste)': '_valuePaste($event)',
-    '(keydown)': '_handleKeyDown($event)',
-    '(keyup)': '_handleKeyUp($event)',
-  }
+    '[class.is-disabled]': 'disabled()',
+    '(focusout)': 'onFocusOut($event)',
+  },
 })
-export class PinInput implements ControlValueAccessor, OnInit {
-  private _fb = inject(FormBuilder);
+export class PinInput implements FormValueControl<number | string | null> {
   readonly inputs = viewChildren(PinInputDirective);
+  readonly length = input(4, { transform: numberAttribute });
+  readonly placeholder = input('');
+  readonly acceptOnly = input(/^[0-9]+$/);
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly value = model<number | string | null>(null);
+  readonly touch = output<void>();
 
-  length = input(4, {
-    transform: numberAttribute
+  protected readonly digits = linkedSignal({
+    source: () => ({ value: this.value(), length: this.length() }),
+    computation: ({ value, length }) =>
+      Array.from({ length }, (_, index) => String(value ?? '')[index] ?? ''),
   });
-  placeholder = input('');
-  acceptOnly = input(/^[0-9]+$/);
-  disabled = input(false, {
-    transform: booleanAttribute
-  });
 
-  protected form: FormGroup;
-  private _disabled = false;
-  protected isDisabled = computed(() => {
-    return this._disabled || this.disabled();
-  })
-
-  onChange: any = () => {};
-  onTouched: any = () => {};
-
-  get controls(): any[] {
-    return (this.form.get('value') as FormArray).controls;
-  }
-
-  ngOnInit() {
-    const inputs = [];
-
-    for (let i = 0; i < this.length(); i++) {
-      inputs.push(
-        this._fb.control({ value: '', disabled: this.disabled() }, [Validators.required])
-      );
-    }
-
-    this.form = this._fb.group({
-      value: this._fb.array(inputs)
-    });
-  }
-
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this._disabled = coerceBooleanProperty(isDisabled);
-  }
-
-  writeValue(value: any): void {
-    if (!value) {
-      this.controls.forEach(control => {
-        control.setValue('');
-      });
-
+  protected onInput(input: HTMLInputElement, index: number): void {
+    if (this.disabled() || this.readonly()) return;
+    const character = input.value;
+    if (character && !this.acceptOnly().test(character)) {
+      input.value = this.digits()[index];
       return;
     }
+    this.updateDigits(index, character);
+    if (character) this.inputs()[index + 1]?.api.focus();
+  }
 
-    value = String(value);
-
-    for (let i = 0; i < value.length; i++) {
-      const control = this.controls[i];
-
-      if (control && value[i].match(this.acceptOnly())) {
-        control.setValue(value[i]);
-      }
+  protected onBackspace(input: HTMLInputElement, index: number): void {
+    if (!input.value && !this.disabled() && !this.readonly() && index > 0) {
+      this.inputs()[index - 1]?.api.focus();
     }
   }
 
-  protected _valuePaste(event: ClipboardEvent) {
-      event.preventDefault();
-      event.stopPropagation();
-      // const value = event.clipboardData?.getData('text/plain');
+  protected onFocusOut(event: FocusEvent): void {
+    if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null)) {
+      this.touch.emit();
+    }
   }
 
-  protected _handleKeyDown(event: KeyboardEvent) {
-    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
-      return;
-    }
-
-    if (event.key === 'Delete' || event.key === 'Backspace' || event.key === 'Tab') {
-      const element = event.target as HTMLInputElement;
-
-      if (event.key === 'Backspace' && !element.value) {
-        this.inputs().forEach((inputDirective, index) => {
-          const element = event.target as HTMLInputElement;
-
-          if (inputDirective.api.nativeElement === element) {
-            const prevControl = this.inputs().at(index - 1);
-
-            if (prevControl) {
-              prevControl.api.focus();
-            }
-          }
-        });
-      }
-
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
+  focus(): void {
+    this.inputs()[0]?.api.focus();
   }
 
-  protected _handleKeyUp(event: KeyboardEvent) {
-    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
-      return;
-    }
-
-    if (event.key === 'Shift' || (event.keyCode >= 112 && event.keyCode <= 123)) {
-      event.preventDefault();
-      event.stopPropagation();
-      return;
-    }
-
-    if (event.key === 'Delete' || event.key === 'Backspace' || event.key === 'Tab') {
-      this.onChange(+this.form.value.value.join(''));
-      return;
-    }
-
-    if (!event.key.match(this.acceptOnly())) {
-      event.preventDefault();
-      event.stopPropagation();
-      return;
-    }
-
-    this.inputs().forEach((inputDirective, index) => {
-      const element = event.target as HTMLInputElement;
-
-      if (inputDirective.api.nativeElement === element) {
-        const control = this.controls[index];
-        control.setValue(event.key);
-        const nextControl = this.inputs().at(index + 1);
-
-        if (nextControl) {
-          nextControl.api.focus();
-        }
-      }
-    });
-    this.onChange(+this.form.value.value.join(''));
+  private updateDigits(index: number, character: string): void {
+    const digits = [...this.digits()];
+    digits[index] = character;
+    const text = digits.join('');
+    this.value.set(text ? Number(text) : null);
+    this.digits.set(digits);
   }
 }

@@ -1,2 +1,2 @@
-<ngs-pin-input [(ngModel)]="value" class="mb-6"/>
-<p>Value: {{ value || '-' }}</p>
+<ngs-pin-input [formField]="value" class="mb-6"/>
+<p>Value: {{ value().value() ?? '–' }}</p>

@@ -4,7 +4,7 @@
     ngsRipple
     [ngsMenuTriggerFor]="menu"
     class="country-selector pe-1.5"
-    [disabled]="disabled"
+    [disabled]="disabled() || readonly()"
     (menuOpened)="openCountryMenu()"
     (menuClosed)="closeCountryMenu()">
     @if (selectedCountry()) {
@@ -22,15 +22,16 @@
     type="tel"
     inputmode="tel"
     [autocomplete]="autocomplete()"
-    (blur)="onTouched()"
     (keypress)="onInputKeyPress($event)"
     [(ngModel)]="phoneNumber"
     [ngModelOptions]="{standalone: true}"
     (ngModelChange)="onPhoneNumberChange()"
     [errorStateMatcher]="errorStateMatcher()"
     [placeholder]="_placeholder()"
-    [disabled]="disabled"
+    [disabled]="disabled()"
     class="grow"
+    [readOnly]="readonly()"
+    [required]="required()"
     #focusable>
 </div>
 

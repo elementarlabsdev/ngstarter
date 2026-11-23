@@ -1,65 +1,42 @@
-import { Directive, ElementRef, forwardRef, input, numberAttribute, Renderer2 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { DestroyRef, Directive, ElementRef, inject, input, model, numberAttribute, output } from '@angular/core';
+import { connectLegacyNativeFormControl } from '../forms/native-form-control';
 
+/** Debounces template-driven text fields. Use the debounce schema rule with Signal Forms. */
 @Directive({
-  selector: '[ngsDebounceTime][ngModel]',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DebounceTimeDirective),
-      multi: true,
-    },
-  ],
+  selector: 'input[ngsDebounceTime][ngModel], textarea[ngsDebounceTime][ngModel]',
   host: {
-    '(input)': 'handleInput($event)',
-    '(blur)': 'handleBlur()'
+    '(input)': 'handleInput()',
+    '(blur)': 'touch.emit()'
   }
 })
-export class DebounceTimeDirective implements ControlValueAccessor {
+export class DebounceTimeDirective {
+  private readonly element = inject<ElementRef<HTMLInputElement>>(ElementRef).nativeElement;
   private debounceTimer?: ReturnType<typeof setTimeout>;
 
   readonly debounceTime = input(300, { transform: numberAttribute });
+  readonly value = model<string | null>(null);
+  readonly touch = output<void>();
 
-  private onChange: (value: string) => void = () => {};
-  private onTouched: () => void = () => {};
-
-  constructor(
-    private elementRef: ElementRef<HTMLInputElement>,
-    private renderer: Renderer2
-  ) {}
-
-  writeValue(value: string): void {
-    this.renderer.setProperty(this.elementRef.nativeElement, 'value', value ?? '');
+  constructor() {
+    connectLegacyNativeFormControl(this.value, this.touch, value => {
+      clearTimeout(this.debounceTimer);
+      this.element.value = value ?? '';
+      this.value.set(value);
+    }, disabled => {
+      this.element.disabled = disabled;
+      if (disabled) clearTimeout(this.debounceTimer);
+    });
+    inject(DestroyRef).onDestroy(() => clearTimeout(this.debounceTimer));
   }
 
-  registerOnChange(fn: (value: string) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState?(isDisabled: boolean): void {
-    this.renderer.setProperty(this.elementRef.nativeElement, 'disabled', isDisabled);
-  }
-
-  protected handleInput(event: Event): void {
+  protected handleInput(): void {
     clearTimeout(this.debounceTimer);
-
-    const target = event.target as HTMLInputElement | null;
-    const value = target?.value ?? '';
-
-    if (!this.debounceTime()) {
-      this.onChange(value);
+    const value = this.element.value;
+    const delay = this.debounceTime();
+    if (delay) {
+      this.debounceTimer = setTimeout(() => this.value.set(value), delay);
     } else {
-      this.debounceTimer = setTimeout(() => {
-        this.onChange(value);
-      }, this.debounceTime());
+      this.value.set(value);
     }
-  }
-
-  protected handleBlur(): void {
-    this.onTouched();
   }
 }

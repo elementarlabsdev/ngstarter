@@ -1,11 +1,11 @@
 import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { FilterTrigger, Option, Select } from '@ngstarter-ui/components/select';
 
 @Component({
   selector: 'app-filter-trigger-example',
   imports: [
-    ReactiveFormsModule,
+    SignalFormField,
     FilterTrigger,
     Option,
     Select
@@ -15,6 +15,6 @@ import { FilterTrigger, Option, Select } from '@ngstarter-ui/components/select';
   styleUrl: './filter-trigger-example.scss'
 })
 export class FilterTriggerExample {
-  readonly statuses = signal(new FormControl<string[]>([]));
+  readonly statuses = form(signal<string[]>([]));
   readonly statusOptions = signal(['Active', 'Pending', 'Blocked', 'Archived']);
 }

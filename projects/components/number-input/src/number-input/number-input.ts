@@ -5,10 +5,10 @@ import {
   contentChild,
   DoCheck,
   ElementRef, forwardRef,
-  inject, Input, input,
+  inject, input, model,
   numberAttribute,
-  OnDestroy, Optional,
-  output, Self,
+  OnDestroy,
+  output,
   TemplateRef,
   viewChild,
   signal,
@@ -16,8 +16,8 @@ import {
   effect,
   HostListener,
 } from '@angular/core';
-import { ControlValueAccessor, FormGroupDirective, NgControl, NgForm } from '@angular/forms';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { FormGroupDirective, NgControl, NgForm } from '@angular/forms';
+import { FormValueControl, transformedValue } from '@angular/forms/signals';
 import { DecreaseControlDirective } from '../decrease-control.directive';
 import { IncreaseControlDirective } from '../increase-control.directive';
 import { FormFieldControl } from '@ngstarter-ui/components/form-field';
@@ -47,7 +47,7 @@ import { NgTemplateOutlet } from '@angular/common';
     'id': 'id'
   }
 })
-export class NumberInput implements FormFieldControl<any>, ControlValueAccessor, OnDestroy, DoCheck {
+export class NumberInput implements FormFieldControl<number | undefined>, FormValueControl<number | null | undefined>, OnDestroy, DoCheck {
   private _parentForm = inject(NgForm, {
     optional: true,
   });
@@ -61,11 +61,11 @@ export class NumberInput implements FormFieldControl<any>, ControlValueAccessor,
   readonly _decreaseControlRef = contentChild<DecreaseControlDirective>(DecreaseControlDirective);
   readonly _increaseControlRef = contentChild<IncreaseControlDirective>(IncreaseControlDirective);
 
-  min = input(undefined, {
-    transform: numberAttribute
+  min = input<number | undefined, unknown>(undefined, {
+    transform: value => value == null ? undefined : numberAttribute(value)
   });
-  max = input(undefined, {
-    transform: numberAttribute
+  max = input<number | undefined, unknown>(undefined, {
+    transform: value => value == null ? undefined : numberAttribute(value)
   });
   step = input(1, {
     transform: numberAttribute
@@ -74,36 +74,32 @@ export class NumberInput implements FormFieldControl<any>, ControlValueAccessor,
     transform: booleanAttribute
   });
 
-  disabledInput = input(false, {
-    transform: booleanAttribute,
-    alias: 'disabled'
-  });
-  get disabled(): boolean {
-    return this.disabledInput() || this._disabled();
-  }
-  private _disabled = signal(false);
-
-  requiredInput = input(false, {
-    transform: booleanAttribute,
-    alias: 'required'
-  });
-  get required(): boolean {
-    return this.requiredInput() || this._required();
-  }
-  private _required = signal(false);
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly invalid = input(false);
+  readonly touched = input(false);
+  readonly touch = output<void>();
+  readonly ngControl = inject(NgControl, { self: true, optional: true });
 
   readonly ariaLabel = input<string | null>(null, { alias: 'aria-label' });
-  readonly valueChange = output<number|undefined>();
 
   static nextId = 0;
-  private _value = signal<number | undefined>(undefined);
+  readonly value = model<number | null | undefined>(null);
+  protected readonly rawValue = transformedValue(this.value, {
+    parse: (value: string) => {
+      const number = Number(value);
+      return value === '' ? { value: null } : Number.isFinite(number)
+        ? { value: number }
+        : { error: { kind: 'parse', message: 'Enter a valid number.' } };
+    },
+    format: value => value?.toString() ?? '',
+  });
   controlType?: string | undefined;
   autofilled?: boolean | undefined;
   userAriaDescribedBy?: string | undefined;
   stateChanges = new Subject<void>();
   focused = false;
   private _focused = signal(false);
-  touched = false;
   errorState = false;
   private _errorState = signal(false);
 
@@ -117,8 +113,8 @@ export class NumberInput implements FormFieldControl<any>, ControlValueAccessor,
 
   empty = true;
   private _empty = computed(() => {
-    const value = this._value();
-    return value === undefined || value === null || value as any === '';
+    const value = this.value();
+    return value == null;
   });
 
   _placeholder = input<string>('', { alias: 'placeholder' });
@@ -126,16 +122,7 @@ export class NumberInput implements FormFieldControl<any>, ControlValueAccessor,
     return this._placeholder();
   }
 
-  constructor(
-    @Optional() @Self() public ngControl: NgControl,
-  ) {
-    // Replace the provider from above with this.
-    if (this.ngControl != null) {
-      // Setting the value accessor directly (instead of using
-      // the providers) to avoid running into a circular import.
-      this.ngControl.valueAccessor = this;
-    }
-
+  constructor() {
     effect(() => {
       this.id = this._id();
       this.focused = this._focused();
@@ -143,14 +130,6 @@ export class NumberInput implements FormFieldControl<any>, ControlValueAccessor,
       this.empty = this._empty();
       this.shouldLabelFloat = this._shouldLabelFloat();
       this.stateChanges.next();
-    });
-
-    effect(() => {
-      const value = this._value();
-
-      if (this._input()) {
-        this._input().nativeElement.value = (value === undefined || value === null) ? '' : value;
-      }
     });
   }
 
@@ -170,21 +149,10 @@ export class NumberInput implements FormFieldControl<any>, ControlValueAccessor,
   @HostListener('focusout', ['$event'])
   onFocusOut(event: FocusEvent) {
     if (!this._elementRef.nativeElement.contains(event.relatedTarget as Element)) {
-      this.touched = true;
       this._focused.set(false);
-      this.onTouched();
+      this.touch.emit();
       this.stateChanges.next();
     }
-  }
-
-  set value(value: number | undefined) {
-    if (value !== this._value()) {
-      this._value.set(value);
-      this.stateChanges.next();
-    }
-  }
-  get value(): number | undefined {
-    return this._value();
   }
 
   ngOnDestroy() {
@@ -199,79 +167,39 @@ export class NumberInput implements FormFieldControl<any>, ControlValueAccessor,
     return this._increaseControlRef()?.templateRef as TemplateRef<any>;
   }
 
-  onChange: any = () => {};
-  onTouched: any = () => {};
-
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this._disabled.set(coerceBooleanProperty(isDisabled));
-  }
-
-  writeValue(value: any): void {
-    this.value = value;
-  }
-
   decrease(event: MouseEvent, input: HTMLInputElement) {
     event.preventDefault();
     event.stopPropagation();
-    if (this.disabled || this.readonly()) return;
-    let value = this._value() ?? 0;
+    if (this.disabled() || this.readonly()) return;
+    let value = this.value() ?? 0;
     value -= this.step();
-    this._value.set(value);
-    this._emitEvent();
+    this.value.set(value);
   }
 
   increase(event: MouseEvent, input: HTMLInputElement) {
     event.preventDefault();
     event.stopPropagation();
-    if (this.disabled || this.readonly()) return;
-    let value = this._value() ?? 0;
+    if (this.disabled() || this.readonly()) return;
+    let value = this.value() ?? 0;
     value += this.step();
-    this._value.set(value);
-    this._emitEvent();
+    this.value.set(value);
   }
 
-  isDecreaseDisabled() {
-    const value = this._value();
-
-    if (this.min() === undefined) {
-      return false;
-    }
-
-    return (value !== undefined && value <= (this.min() as number)) || this.readonly() || this.disabled;
+  isDecreaseDisabled(): boolean {
+    const value = this.value();
+    const min = this.min();
+    return this.disabled() || this.readonly() || (value != null && min != null && value <= min);
   }
 
-  isIncreaseDisabled() {
-    const value = this._value();
-
-    if (this.max() === undefined) {
-      return false;
-    }
-
-    return (value !== undefined && value >= (this.max() as number)) || this.readonly() || this.disabled;
+  isIncreaseDisabled(): boolean {
+    const value = this.value();
+    const max = this.max();
+    return this.disabled() || this.readonly() || (value != null && max != null && value >= max);
   }
 
-  inputChange(event: any) {
-    if (this.disabled || this.readonly()) return;
-    const inputValue = event.target.value;
-    const value = inputValue === '' ? undefined : +inputValue;
-    this._value.set(value);
-    this._emitEvent();
-  }
-
-  private _emitEvent() {
-    const value = this._value();
-
-    this.onChange(value);
-    this.valueChange.emit(value);
-    this.updateErrorState();
+  protected inputChange(input: HTMLInputElement): void {
+    if (this.disabled() || this.readonly()) return;
+    this.rawValue.set(input.validity.badInput ? 'NaN' : input.value);
   }
 
   ngDoCheck() {
@@ -293,10 +221,10 @@ export class NumberInput implements FormFieldControl<any>, ControlValueAccessor,
   private updateErrorState() {
     const parent = this._parentFormGroup || this._parentForm;
     let oldState = this._errorState();
-    let newState = !!(this.ngControl?.invalid) && this.touched;
+    let newState = !!(this.invalid() || this.ngControl?.invalid) && this.touched();
 
     if (parent) {
-      newState = !!(this.ngControl?.invalid) && (this.touched || parent.submitted);
+      newState = !!(this.invalid() || this.ngControl?.invalid) && (this.touched() || parent.submitted);
     }
 
     if (oldState !== newState) {

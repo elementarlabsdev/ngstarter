@@ -119,6 +119,7 @@ describe('ImageZoomViewer', () => {
 
     setViewport(1200, 900);
     window.dispatchEvent(new Event('resize'));
+    fixture.detectChanges();
     detectOverlayChanges();
 
     expect(viewer.zoomedTransform()).toBe('translate(400px, 350px) scale(5.4)');
@@ -197,6 +198,7 @@ function mockImageRect(fixture: ComponentFixture<ImageZoomViewerHost>): void {
 
 function openZoom(fixture: ComponentFixture<ImageZoomViewerHost>): void {
   containerElement(fixture).click();
+  fixture.detectChanges();
   detectOverlayChanges();
 }
 

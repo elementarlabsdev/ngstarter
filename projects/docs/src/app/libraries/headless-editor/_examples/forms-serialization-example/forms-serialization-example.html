@@ -1,22 +1,22 @@
-<form class="form" [formGroup]="form">
+<form class="form" novalidate>
   <ngs-form-field>
     <ngs-label>Title</ngs-label>
-    <input ngsInput formControlName="title">
+    <input ngsInput [formField]="form.title">
   </ngs-form-field>
 
   <app-rich-text-field
-    formControlName="body"
+    [formField]="form.body"
     label="Announcement body"
-    placeholder="Announcement body is required"/>
+    placeholder="Announcement body is"/>
 
   <div class="actions">
     <button type="button" ngsButton="outlined" (click)="loadSaved()">Load saved JSON</button>
     <button type="button" ngsButton="outlined" (click)="toggleDisabled()">
-      {{ form.controls.body.disabled ? 'Enable body' : 'Disable body' }}
+      {{ form.body().disabled() ? 'Enable body' : 'Disable body' }}
     </button>
     <span class="validity" [class.invalid]="!valid()">
       {{ valid() ? 'Form is valid' : 'Body is required' }}
-      · touched: {{ form.controls.body.touched }}
+      · touched: {{ form.body().touched() }}
     </span>
   </div>
 </form>
@@ -24,7 +24,7 @@
 <div class="outputs">
   <section>
     <h4>JSON (store this)</h4>
-    <pre>{{ form.getRawValue().body | json }}</pre>
+    <pre>{{ model().body | json }}</pre>
   </section>
   <section>
     <h4>HTML (derived)</h4>

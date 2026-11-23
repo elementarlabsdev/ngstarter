@@ -58,6 +58,10 @@ export class RadioButton implements OnInit {
 
   _onInputClick(event: Event) {
     event.stopPropagation();
+    if (this.radioGroup?.readonly()) {
+      event.preventDefault();
+      return;
+    }
     if (this.radioGroup) {
       this.radioGroup._onRadioClick(this);
     } else {

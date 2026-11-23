@@ -1,6 +1,6 @@
 <label class="ngs-slide-toggle-label" [attr.for]="id() + '-input'">
   <div class="ngs-slide-toggle-bar">
-    <input
+    <input #input
       type="checkbox"
       role="switch"
       class="ngs-slide-toggle-input"
@@ -10,6 +10,7 @@
       [checked]="checked()"
       [disabled]="disabled()"
       [required]="required()"
+      [attr.aria-readonly]="readonly() || null"
       [attr.aria-label]="ariaLabel()"
       [attr.aria-labelledby]="ariaLabelledby()"
       [attr.aria-describedby]="ariaDescribedby()"

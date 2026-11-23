@@ -11,10 +11,10 @@
   </div>
 
   <ngs-headless-step [stepControl]="accountForm">
-    <form [formGroup]="accountForm" class="flex flex-col gap-4">
+    <form novalidate class="flex flex-col gap-4">
       <ngs-form-field>
         <ngs-label>Company</ngs-label>
-        <input ngsInput formControlName="company" placeholder="Acme Operations" required>
+        <input ngsInput [formField]="accountForm.company" placeholder="Acme Operations">
       </ngs-form-field>
       <p class="text-sm text-neutral-600">
         The next button becomes available when this form group is valid.
@@ -23,10 +23,10 @@
   </ngs-headless-step>
 
   <ngs-headless-step [stepControl]="billingForm">
-    <form [formGroup]="billingForm" class="flex flex-col gap-4">
+    <form novalidate class="flex flex-col gap-4">
       <ngs-form-field>
         <ngs-label>Billing email</ngs-label>
-        <input ngsInput formControlName="email" placeholder="billing@example.com" required>
+        <input ngsInput [formField]="billingForm.email" placeholder="billing@example.com">
       </ngs-form-field>
       <p class="text-sm text-neutral-600">
         Headless Stepper tracks the connected control status and uses it for linear navigation.

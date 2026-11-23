@@ -1,5 +1,5 @@
 <div class="toolbar">
-  <ngs-form-field class="href-field">
+  <ngs-form-field class="href-field" subscriptHiddenIfEmpty sameHeightAsButton>
     <input ngsInput aria-label="Link URL" [ngModel]="href()" (ngModelChange)="href.set($event)">
   </ngs-form-field>
   <button ngsButton="outlined" [ngsHeadlessEditorCommand]="setLink" [commandData]="href()">

@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form, required } from '@angular/forms/signals';
 import { FormField, Label, Suffix } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 import { PassToggleVisibility, PasswordStrength } from '@ngstarter-ui/components/password-strength';
@@ -11,7 +12,7 @@ import { PassToggleVisibility, PasswordStrength } from '@ngstarter-ui/components
     FormField,
     Input,
     Label,
-    ReactiveFormsModule,
+    SignalFormField,
     Suffix,
     PassToggleVisibility,
     PasswordStrength
@@ -21,5 +22,5 @@ import { PassToggleVisibility, PasswordStrength } from '@ngstarter-ui/components
   styleUrl: './password-toggle-visibility-example.scss'
 })
 export class PasswordToggleVisibilityExample {
-  password = new FormControl('');
+  password = form(signal(''), path => required(path));
 }

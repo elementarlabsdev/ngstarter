@@ -49,25 +49,16 @@ export class UploadArea {
     }
   }
 
-  protected handleDragOver(event: any) {
+  protected handleDragOver(event: DragEvent) {
     event.preventDefault();
   }
 
-  protected handleDragEnter(event: any) {
+  protected handleDragEnter(event: DragEvent) {
     if (event.dataTransfer) {
-      const items = event.dataTransfer.items;
-      let allFilesAreValid = true;
-
-      if (this.accept()) {
-        const accept = (this.accept() as string).split(',');
-
-        if (items && items.length > 0) {
-          const draggedItems = Array.from(items);
-          allFilesAreValid = draggedItems.every(
-            (item: any) => item.kind === 'file' && this.isMimeTypeAllowed(item.type, accept)
-          );
-        }
-      }
+      const accept = this.acceptedMimeTypes();
+      const allFilesAreValid = Array.from(event.dataTransfer.items).every(
+        item => item.kind === 'file' && this.isMimeTypeAllowed(item.type, accept)
+      );
 
       this.isDropActive.set(allFilesAreValid);
       this.isDropInvalid.set(!allFilesAreValid);
@@ -78,9 +69,8 @@ export class UploadArea {
   }
 
   protected handleDragLeave(event: DragEvent) {
-    const relatedTarget = event.relatedTarget as HTMLElement;
-
-    if (!relatedTarget.closest('.ngs-upload-area')) {
+    const { currentTarget, relatedTarget } = event;
+    if (!(currentTarget instanceof Node && relatedTarget instanceof Node && currentTarget.contains(relatedTarget))) {
       this.isDropActive.set(false);
       this.isDropInvalid.set(false);
     }
@@ -88,7 +78,7 @@ export class UploadArea {
     event.preventDefault();
   }
 
-  protected handleDragEnd(event: any) {
+  protected handleDragEnd(event: DragEvent) {
     this.isDropActive.set(false);
     this.isDropInvalid.set(false);
     event.preventDefault();
@@ -99,38 +89,45 @@ export class UploadArea {
     this.isDropActive.set(false);
     this.isDropInvalid.set(false);
 
-    if (event.dataTransfer) {
-      const accept = (this.accept() as string).split(',');
-      const files: File[] = Array.from(event.dataTransfer?.files).filter(file => this.isMimeTypeAllowed(file.type, accept));
+    const droppedFiles = event.dataTransfer?.files;
+    if (!droppedFiles) return;
 
-      if (files.length === 0) {
-        return;
-      }
+    const accept = this.acceptedMimeTypes();
+    const multiple = this.multiple();
+    const acceptedFiles = Array.from(droppedFiles).filter(file => this.isMimeTypeAllowed(file.type, accept));
+    const files = multiple ? acceptedFiles : acceptedFiles.slice(0, 1);
+    if (!files.length) return;
 
-      this.fileSelected.emit({
-        multiple: this.multiple(),
-        fileList: event.dataTransfer.files,
-        event,
-        files
-      });
+    let fileList = droppedFiles;
+    if (files.length !== droppedFiles.length) {
+      const acceptedTransfer = new DataTransfer();
+      for (const file of files) acceptedTransfer.items.add(file);
+      fileList = acceptedTransfer.files;
     }
+
+    this.fileSelected.emit({ multiple, fileList, event, files });
+  }
+
+  private acceptedMimeTypes(): string[] {
+    return (this.accept() ?? '').toLowerCase().split(',').map(type => type.trim()).filter(Boolean);
   }
 
   private isMimeTypeAllowed(
     fileMimeType: string,
     allowedMimeTypes: string[]
   ): boolean {
-    return allowedMimeTypes.some(allowedType => {
+    const mimeType = fileMimeType.toLowerCase();
+    return !allowedMimeTypes.length || allowedMimeTypes.some(allowedType => {
       if (allowedType === '*/*' || allowedType === '*') {
         return true;
       }
 
       if (allowedType.endsWith('/*')) {
         const baseType = allowedType.slice(0, -2);
-        return fileMimeType.startsWith(`${baseType}/`);
+        return mimeType.startsWith(`${baseType}/`);
       }
 
-      return fileMimeType === allowedType;
+      return mimeType === allowedType;
     });
   }
 }

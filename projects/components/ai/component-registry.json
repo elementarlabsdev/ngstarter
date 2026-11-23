@@ -399,25 +399,25 @@
         "Auto highlight first person",
         "Option groups"
       ],
-      "minimalExample": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Number</ngs-label>\n  <input type=\"text\"\n         placeholder=\"Pick one\"\n         aria-label=\"Number\"\n         ngsInput\n         [formControl]=\"myControl\"\n         [ngsAutocomplete]=\"auto\">\n  <ngs-autocomplete [autoActiveFirstOption]=\"true\" #auto=\"ngsAutocomplete\">\n    @for (option of filteredOptions | async; track option) {\n      <ngs-option [value]=\"option\">{{ option }}</ngs-option>\n    }\n  </ngs-autocomplete>\n</ngs-form-field>",
+      "minimalExample": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Number</ngs-label>\n  <input type=\"text\"\n         placeholder=\"Pick one\"\n         aria-label=\"Number\"\n         ngsInput\n         [formField]=\"myControl\"\n         [ngsAutocomplete]=\"auto\">\n  <ngs-autocomplete [autoActiveFirstOption]=\"true\" #auto=\"ngsAutocomplete\">\n    @for (option of filteredOptions | async; track option) {\n      <ngs-option [value]=\"option\">{{ option }}</ngs-option>\n    }\n  </ngs-autocomplete>\n</ngs-form-field>",
       "exampleFiles": [
         {
           "name": "auto-highlight-first-person-example",
           "title": "Auto highlight first person",
           "file": "projects/docs/src/app/forms/autocomplete/_examples/auto-highlight-first-person-example/auto-highlight-first-person-example.html",
-          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Number</ngs-label>\n  <input type=\"text\"\n         placeholder=\"Pick one\"\n         aria-label=\"Number\"\n         ngsInput\n         [formControl]=\"myControl\"\n         [ngsAutocomplete]=\"auto\">\n  <ngs-autocomplete [autoActiveFirstOption]=\"true\" #auto=\"ngsAutocomplete\">\n    @for (option of filteredOptions | async; track option) {\n      <ngs-option [value]=\"option\">{{ option }}</ngs-option>\n    }\n  </ngs-autocomplete>\n</ngs-form-field>"
+          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Number</ngs-label>\n  <input type=\"text\"\n         placeholder=\"Pick one\"\n         aria-label=\"Number\"\n         ngsInput\n         [formField]=\"myControl\"\n         [ngsAutocomplete]=\"auto\">\n  <ngs-autocomplete [autoActiveFirstOption]=\"true\" #auto=\"ngsAutocomplete\">\n    @for (option of filteredOptions | async; track option) {\n      <ngs-option [value]=\"option\">{{ option }}</ngs-option>\n    }\n  </ngs-autocomplete>\n</ngs-form-field>"
         },
         {
           "name": "autocomplete-filter-example",
           "title": "Autocomplete filter",
           "file": "projects/docs/src/app/forms/autocomplete/_examples/autocomplete-filter-example/autocomplete-filter-example.html",
-          "source": "<form>\n  <ngs-form-field class=\"w-1/2\">\n    <ngs-label>Number</ngs-label>\n    <input type=\"text\"\n           placeholder=\"Pick one\"\n           aria-label=\"Number\"\n           ngsInput\n           [formControl]=\"myControl\"\n           [ngsAutocomplete]=\"auto\">\n    <ngs-autocomplete #auto=\"ngsAutocomplete\">\n      @for (option of filteredOptions | async; track option) {\n        <ngs-option [value]=\"option\">{{ option }}</ngs-option>\n      }\n    </ngs-autocomplete>\n  </ngs-form-field>\n</form>"
+          "source": "<form>\n  <ngs-form-field class=\"w-1/2\">\n    <ngs-label>Number</ngs-label>\n    <input type=\"text\"\n           placeholder=\"Pick one\"\n           aria-label=\"Number\"\n           ngsInput\n           [formField]=\"myControl\"\n           [ngsAutocomplete]=\"auto\">\n    <ngs-autocomplete #auto=\"ngsAutocomplete\">\n      @for (option of filteredOptions | async; track option) {\n        <ngs-option [value]=\"option\">{{ option }}</ngs-option>\n      }\n    </ngs-autocomplete>\n  </ngs-form-field>\n</form>"
         },
         {
           "name": "option-groups-example",
           "title": "Option groups",
           "file": "projects/docs/src/app/forms/autocomplete/_examples/option-groups-example/option-groups-example.html",
-          "source": "<form [formGroup]=\"stateForm\">\n  <ngs-form-field class=\"w-1/2\">\n    <ngs-label>States Group</ngs-label>\n    <input type=\"text\"\n           ngsInput\n           formControlName=\"stateGroup\"\n           required\n           [ngsAutocomplete]=\"autoGroup\">\n    <ngs-autocomplete #autoGroup=\"ngsAutocomplete\">\n      @for (group of stateGroupOptions | async; track group) {\n        <ngs-optgroup [label]=\"group.letter\">\n          @for (name of group.names; track name) {\n            <ngs-option [value]=\"name\">{{name}}</ngs-option>\n          }\n        </ngs-optgroup>\n      }\n    </ngs-autocomplete>\n  </ngs-form-field>\n</form>"
+          "source": "<form>\n  <ngs-form-field class=\"w-1/2\">\n    <ngs-label>States Group</ngs-label>\n    <input type=\"text\"\n           ngsInput\n           [formField]=\"stateForm.stateGroup\"\n           [ngsAutocomplete]=\"autoGroup\">\n    <ngs-autocomplete #autoGroup=\"ngsAutocomplete\">\n      @for (group of stateGroupOptions(); track group) {\n        <ngs-optgroup [label]=\"group.letter\">\n          @for (name of group.names; track name) {\n            <ngs-option [value]=\"name\">{{name}}</ngs-option>\n          }\n        </ngs-optgroup>\n      }\n    </ngs-autocomplete>\n  </ngs-form-field>\n</form>"
         }
       ],
       "previewAsset": "projects/components/autocomplete/preview.svg",
@@ -1058,11 +1058,13 @@
         "multiple",
         "name",
         "onlyIcon",
+        "readonly",
         "value",
         "vertical"
       ],
       "outputs": [
-        "change"
+        "change",
+        "touch"
       ],
       "cssTokens": [
         "--ngs-button-height",
@@ -1554,13 +1556,15 @@
         "indeterminate",
         "labelPosition",
         "name",
+        "readonly",
         "required",
         "tabIndex",
         "value"
       ],
       "outputs": [
         "change",
-        "indeterminateChange"
+        "indeterminateChange",
+        "touch"
       ],
       "cssTokens": [
         "--ngs-checkbox-checked-color",
@@ -1628,7 +1632,7 @@
           "name": "chips-autocomplete-example",
           "title": "Chips autocomplete",
           "file": "projects/docs/src/app/components/chips/_examples/chips-autocomplete-example/chips-autocomplete-example.html",
-          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite Fruits</ngs-label>\n  <ngs-chip-grid #chipGrid aria-label=\"Fruit selection\">\n    @for (fruit of fruits; track fruit) {\n      <ngs-chip-row (removed)=\"remove(fruit)\">\n        {{fruit}}\n        <button ngsChipRemove>\n          <ngs-icon name=\"fluent:dismiss-20-regular\"/>\n        </button>\n      </ngs-chip-row>\n    }\n    <input ngsInput\n           placeholder=\"New Fruit...\" #fruitInput\n           [formControl]=\"fruitCtrl\"\n           [ngsChipInputFor]=\"chipGrid\"\n           [ngsAutocomplete]=\"auto\"\n           [ngsChipInputSeparatorKeyCodes]=\"separatorKeysCodes\"\n           (chipInputTokenEnd)=\"add($event)\">\n  </ngs-chip-grid>\n  <ngs-autocomplete #auto=\"ngsAutocomplete\" (optionSelected)=\"selected($event)\">\n    @for (fruit of filteredFruits | async; track fruit) {\n      <ngs-option [value]=\"fruit\">{{ fruit }}</ngs-option>\n    }\n  </ngs-autocomplete>\n</ngs-form-field>"
+          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Favorite Fruits</ngs-label>\n  <ngs-chip-grid #chipGrid aria-label=\"Fruit selection\">\n    @for (fruit of fruits; track fruit) {\n      <ngs-chip-row (removed)=\"remove(fruit)\">\n        {{fruit}}\n        <button ngsChipRemove>\n          <ngs-icon name=\"fluent:dismiss-20-regular\"/>\n        </button>\n      </ngs-chip-row>\n    }\n    <input ngsInput\n           placeholder=\"New Fruit...\" #fruitInput\n           [formField]=\"fruitCtrl\"\n           [ngsChipInputFor]=\"chipGrid\"\n           [ngsAutocomplete]=\"auto\"\n           [ngsChipInputSeparatorKeyCodes]=\"separatorKeysCodes\"\n           (chipInputTokenEnd)=\"add($event)\">\n  </ngs-chip-grid>\n  <ngs-autocomplete #auto=\"ngsAutocomplete\" (optionSelected)=\"selected($event)\">\n    @for (fruit of filteredFruits | async; track fruit) {\n      <ngs-option [value]=\"fruit\">{{ fruit }}</ngs-option>\n    }\n  </ngs-autocomplete>\n</ngs-form-field>"
         }
       ],
       "previewAsset": "projects/components/chips/preview.svg",
@@ -1671,12 +1675,15 @@
         "disabled",
         "editable",
         "id",
+        "invalid",
         "multiple",
         "ngsChipInputAddOnBlur",
         "ngsChipInputFor",
         "placeholder",
+        "readonly",
         "required",
         "selected",
+        "touched",
         "value"
       ],
       "outputs": [
@@ -1685,7 +1692,7 @@
         "edited",
         "removed",
         "selectionChange",
-        "valueChange"
+        "touch"
       ],
       "cssTokens": [
         "--ngs-avatar-size",
@@ -1742,25 +1749,25 @@
         "Code highlighter highlight lines",
         "Code highlighter full"
       ],
-      "minimalExample": "<ngs-code-highlighter class=\"border border-border rounded-lg overflow-hidden\"\n  [code]=\"sampleTs\"\n  language=\"ts\"\n/>",
+      "minimalExample": "<ngs-code-highlighter class=\"rounded-lg overflow-hidden\"\n  [code]=\"sampleTs\"\n  language=\"ts\"\n/>",
       "exampleFiles": [
         {
           "name": "basic-code-highlighter-example",
           "title": "Basic code highlighter",
           "file": "projects/docs/src/app/components/code-highlighter/_examples/basic-code-highlighter-example/basic-code-highlighter-example.html",
-          "source": "<ngs-code-highlighter class=\"border border-border rounded-lg overflow-hidden\"\n  [code]=\"sampleTs\"\n  language=\"ts\"\n/>"
+          "source": "<ngs-code-highlighter class=\"rounded-lg overflow-hidden\"\n  [code]=\"sampleTs\"\n  language=\"ts\"\n/>"
         },
         {
           "name": "code-highlighter-diff-example",
           "title": "Code highlighter diff",
           "file": "projects/docs/src/app/components/code-highlighter/_examples/code-highlighter-diff-example/code-highlighter-diff-example.html",
-          "source": "<ngs-code-highlighter class=\"border border-border rounded-lg overflow-hidden\" [code]=\"diffSample\"\n                      language=\"typescript\"\n                      [diff]=\"true\"\n                      title=\"Changes in app.component.ts\" />"
+          "source": "<ngs-code-highlighter class=\"rounded-lg overflow-hidden\" [code]=\"diffSample\"\n                      language=\"typescript\"\n                      [diff]=\"true\"\n                      title=\"Changes in app.component.ts\" />"
         },
         {
           "name": "code-highlighter-full-example",
           "title": "Code highlighter full",
           "file": "projects/docs/src/app/components/code-highlighter/_examples/code-highlighter-full-example/code-highlighter-full-example.html",
-          "source": "<ngs-code-highlighter class=\"border border-border rounded-lg overflow-hidden\"\n  [code]=\"code\"\n  language=\"typescript\"\n  title=\"app.component.ts\"\n  showLanguage\n  showCopyButton\n/>"
+          "source": "<ngs-code-highlighter class=\"rounded-lg overflow-hidden\"\n  [code]=\"code\"\n  language=\"typescript\"\n  title=\"app.component.ts\"\n  showLanguage\n  showCopyButton\n/>"
         }
       ],
       "previewAsset": "projects/components/code-highlighter/preview.svg",
@@ -1788,13 +1795,14 @@
         "--ngs-code-highlighter-padding",
         "--ngs-code-highlighter-title-color",
         "--ngs-code-highlighter-title-padding",
-        "--ngs-color-background",
         "--ngs-color-danger",
         "--ngs-color-neutral-500",
         "--ngs-color-primary",
         "--ngs-color-success",
+        "--ngs-color-surface-container",
         "--ngs-font-size-sm",
-        "--ngs-font-size-xs"
+        "--ngs-font-size-xs",
+        "--ngs-radius-lg"
       ],
       "example": null
     },
@@ -1871,9 +1879,11 @@
         "max",
         "min",
         "position",
+        "readonly",
         "resultFormat",
         "showOpacity",
-        "tinyColor"
+        "tinyColor",
+        "value"
       ],
       "outputs": [
         "alphaChange",
@@ -1881,7 +1891,8 @@
         "colorChange",
         "inputChange",
         "opened",
-        "rawColorChange"
+        "rawColorChange",
+        "touch"
       ],
       "cssTokens": [
         "--ngs-color-picker-alpha-height",
@@ -2012,10 +2023,13 @@
       "inputs": [
         "colors",
         "disabled",
-        "selectedColor"
+        "readonly",
+        "selectedColor",
+        "value"
       ],
       "outputs": [
-        "colorChange"
+        "colorChange",
+        "touch"
       ],
       "cssTokens": [
         "--ngs-brand-colors-color-shadow",
@@ -2044,13 +2058,13 @@
       "exampleTopics": [
         "Basic Command Bar"
       ],
-      "minimalExample": "<ngs-checkbox [(ngModel)]=\"open\">Show command bar</ngs-checkbox>\n<div>\n  <ngs-form-field class=\"w-1/2 mt-4\">\n    <ngs-label>Tooltip position</ngs-label>\n    <ngs-select [formControl]=\"position\">\n      @for (positionOption of positionOptions; track positionOption) {\n        <ngs-option [value]=\"positionOption\">{{ positionOption }}</ngs-option>\n      }\n    </ngs-select>\n  </ngs-form-field>\n</div>\n<ngs-command-bar [open]=\"open\" [position]=\"position.value!\">\n  2 selected\n  <ngs-command-bar-divider/>\n  <ngs-command-bar-command shortcut=\"e\">Edit</ngs-command-bar-command>\n  <ngs-command-bar-divider/>\n  <ngs-command-bar-command shortcut=\"d\">Delete</ngs-command-bar-command>\n</ngs-command-bar>",
+      "minimalExample": "<ngs-checkbox [(ngModel)]=\"open\">Show command bar</ngs-checkbox>\n<div>\n  <ngs-form-field class=\"w-1/2 mt-4\">\n    <ngs-label>Tooltip position</ngs-label>\n    <ngs-select [formField]=\"position\">\n      @for (positionOption of positionOptions; track positionOption) {\n        <ngs-option [value]=\"positionOption\">{{ positionOption }}</ngs-option>\n      }\n    </ngs-select>\n  </ngs-form-field>\n</div>\n<ngs-command-bar [open]=\"open\" [position]=\"position().value()!\">\n  2 selected\n  <ngs-command-bar-divider/>\n  <ngs-command-bar-command shortcut=\"e\">Edit</ngs-command-bar-command>\n  <ngs-command-bar-divider/>\n  <ngs-command-bar-command shortcut=\"d\">Delete</ngs-command-bar-command>\n</ngs-command-bar>",
       "exampleFiles": [
         {
           "name": "basic-command-bar-example",
           "title": "Basic command bar",
           "file": "projects/docs/src/app/components/command-bar/_examples/basic-command-bar-example/basic-command-bar-example.html",
-          "source": "<ngs-checkbox [(ngModel)]=\"open\">Show command bar</ngs-checkbox>\n<div>\n  <ngs-form-field class=\"w-1/2 mt-4\">\n    <ngs-label>Tooltip position</ngs-label>\n    <ngs-select [formControl]=\"position\">\n      @for (positionOption of positionOptions; track positionOption) {\n        <ngs-option [value]=\"positionOption\">{{ positionOption }}</ngs-option>\n      }\n    </ngs-select>\n  </ngs-form-field>\n</div>\n<ngs-command-bar [open]=\"open\" [position]=\"position.value!\">\n  2 selected\n  <ngs-command-bar-divider/>\n  <ngs-command-bar-command shortcut=\"e\">Edit</ngs-command-bar-command>\n  <ngs-command-bar-divider/>\n  <ngs-command-bar-command shortcut=\"d\">Delete</ngs-command-bar-command>\n</ngs-command-bar>"
+          "source": "<ngs-checkbox [(ngModel)]=\"open\">Show command bar</ngs-checkbox>\n<div>\n  <ngs-form-field class=\"w-1/2 mt-4\">\n    <ngs-label>Tooltip position</ngs-label>\n    <ngs-select [formField]=\"position\">\n      @for (positionOption of positionOptions; track positionOption) {\n        <ngs-option [value]=\"positionOption\">{{ positionOption }}</ngs-option>\n      }\n    </ngs-select>\n  </ngs-form-field>\n</div>\n<ngs-command-bar [open]=\"open\" [position]=\"position().value()!\">\n  2 selected\n  <ngs-command-bar-divider/>\n  <ngs-command-bar-command shortcut=\"e\">Edit</ngs-command-bar-command>\n  <ngs-command-bar-divider/>\n  <ngs-command-bar-command shortcut=\"d\">Delete</ngs-command-bar-command>\n</ngs-command-bar>"
         }
       ],
       "previewAsset": "projects/components/command-bar/preview.svg",
@@ -2918,12 +2932,13 @@
       "previewAsset": "projects/components/core/preview.svg",
       "selectors": [
         "[ngsAutoFocus]",
-        "[ngsDebounceTime][ngModel]",
         "[ngsFocusElement]",
         "[ngsRipple]",
         "[ngsSoundEffect]",
+        "input[ngsDebounceTime][ngModel]",
         "ngs-optgroup",
         "ngs-option",
+        "textarea[ngsDebounceTime][ngModel]",
         "textarea[ngsTextareaAutoSize]"
       ],
       "exportedSymbols": [
@@ -2935,6 +2950,7 @@
         "AUTOFOCUSABLE",
         "AutoFocusDirective",
         "bindNgsOverlayTheme",
+        "connectLegacyNativeFormControl",
         "createDropdownActiveDescendantKeyManager",
         "createDropdownFocusKeyManager",
         "DebounceTimeDirective",
@@ -3022,7 +3038,8 @@
       "outputs": [
         "elementBlurred",
         "elementFocused",
-        "onSelectionChange"
+        "onSelectionChange",
+        "touch"
       ],
       "cssTokens": [
         "--ngs-color-on-primary-container",
@@ -3079,13 +3096,13 @@
         "Basic country select",
         "Unselected country select"
       ],
-      "minimalExample": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Country</ngs-label>\n  <ngs-country-select [(ngModel)]=\"country\" placeholder=\"Select a country\" clearable/>\n</ngs-form-field>\n<p>\n  Selected country: {{ country() }}\n</p>",
+      "minimalExample": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Country</ngs-label>\n  <ngs-country-select [formField]=\"country\" placeholder=\"Select a country\" clearable/>\n</ngs-form-field>\n<p>\n  Selected country: {{ country().value() }}\n</p>",
       "exampleFiles": [
         {
           "name": "basic-country-select-example",
           "title": "Basic country select",
           "file": "projects/docs/src/app/forms/country/_examples/basic-country-select-example/basic-country-select-example.html",
-          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Country</ngs-label>\n  <ngs-country-select [(ngModel)]=\"country\" placeholder=\"Select a country\" clearable/>\n</ngs-form-field>\n<p>\n  Selected country: {{ country() }}\n</p>"
+          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Country</ngs-label>\n  <ngs-country-select [formField]=\"country\" placeholder=\"Select a country\" clearable/>\n</ngs-form-field>\n<p>\n  Selected country: {{ country().value() }}\n</p>"
         },
         {
           "name": "unselected-country-select-example",
@@ -3111,18 +3128,22 @@
         "disabled",
         "hideCheckIcon",
         "id",
+        "invalid",
         "multiple",
         "placeholder",
+        "readonly",
         "required",
         "searchTerm",
         "showCountryCode",
         "tabIndex",
+        "touched",
         "value"
       ],
       "outputs": [
         "closed",
         "opened",
-        "selectionChange"
+        "selectionChange",
+        "touch"
       ],
       "cssTokens": [
         "--ngs-color-on-surface-variant",
@@ -3192,13 +3213,13 @@
         "Currency select with country name",
         "Currency with country name"
       ],
-      "minimalExample": "<ngs-form-field class=\"w-48\">\n  <ngs-label>Currency</ngs-label>\n  <ngs-currency-select [(ngModel)]=\"currency\"/>\n</ngs-form-field>\n<p class=\"mt-5\">\n  Selected currency: {{ currency() }}\n</p>",
+      "minimalExample": "<ngs-form-field class=\"w-48\">\n  <ngs-label>Currency</ngs-label>\n  <ngs-currency-select [formField]=\"currency\"/>\n</ngs-form-field>\n<p class=\"mt-5\">\n  Selected currency: {{ currency().value() }}\n</p>",
       "exampleFiles": [
         {
           "name": "basic-currency-select-example",
           "title": "Basic currency select",
           "file": "projects/docs/src/app/forms/currency-select/_examples/basic-currency-select-example/basic-currency-select-example.html",
-          "source": "<ngs-form-field class=\"w-48\">\n  <ngs-label>Currency</ngs-label>\n  <ngs-currency-select [(ngModel)]=\"currency\"/>\n</ngs-form-field>\n<p class=\"mt-5\">\n  Selected currency: {{ currency() }}\n</p>"
+          "source": "<ngs-form-field class=\"w-48\">\n  <ngs-label>Currency</ngs-label>\n  <ngs-currency-select [formField]=\"currency\"/>\n</ngs-form-field>\n<p class=\"mt-5\">\n  Selected currency: {{ currency().value() }}\n</p>"
         },
         {
           "name": "currency-with-country-name-example",
@@ -3218,14 +3239,19 @@
       ],
       "inputs": [
         "disabled",
+        "invalid",
         "placeholder",
+        "readonly",
         "required",
         "searchTerm",
-        "showCountryName"
+        "showCountryName",
+        "touched",
+        "value"
       ],
       "outputs": [
         "closed",
-        "opened"
+        "opened",
+        "touch"
       ],
       "cssTokens": [
         "--ngs-color-on-surface-variant",
@@ -3454,13 +3480,13 @@
       "exampleTopics": [
         "Basic date format select"
       ],
-      "minimalExample": "<div [formGroup]=\"settingsForm\">\n  <ngs-form-field class=\"w-92\">\n    <ngs-label>Date Format</ngs-label>\n    <ngs-date-format-select formControlName=\"dateFormat\" required placeholder=\"Select a date format\"/>\n    @if (dateFormatControl?.hasError('required') && dateFormatControl?.touched) {\n      <ngs-error>Please select the date format.</ngs-error>\n    }\n  </ngs-form-field>\n</div>\n<div class=\"text-sm mt-2\">\n  @if (dateFormatControl?.value) {\n    <p>Selected date format: {{ dateFormatControl?.value }}</p>\n  } @else {\n    <p>No date format selected.</p>\n  }\n</div>",
+      "minimalExample": "<div>\n  <ngs-form-field class=\"w-92\">\n    <ngs-label>Date Format</ngs-label>\n    <ngs-date-format-select [formField]=\"settingsForm.dateFormat\" placeholder=\"Select a date format\"/>\n    @if (settingsForm.dateFormat().invalid() && settingsForm.dateFormat().touched()) {\n      <ngs-error>Please select the date format.</ngs-error>\n    }\n  </ngs-form-field>\n</div>\n<div class=\"text-sm mt-2\">\n  @if (settingsForm.dateFormat().value()) {\n    <p>Selected date format: {{ settingsForm.dateFormat().value() }}</p>\n  } @else {\n    <p>No date format selected.</p>\n  }\n</div>",
       "exampleFiles": [
         {
           "name": "basic-date-format-select-example",
           "title": "Basic date format select",
           "file": "projects/docs/src/app/forms/date-format-select/_examples/basic-date-format-select-example/basic-date-format-select-example.html",
-          "source": "<div [formGroup]=\"settingsForm\">\n  <ngs-form-field class=\"w-92\">\n    <ngs-label>Date Format</ngs-label>\n    <ngs-date-format-select formControlName=\"dateFormat\" required placeholder=\"Select a date format\"/>\n    @if (dateFormatControl?.hasError('required') && dateFormatControl?.touched) {\n      <ngs-error>Please select the date format.</ngs-error>\n    }\n  </ngs-form-field>\n</div>\n<div class=\"text-sm mt-2\">\n  @if (dateFormatControl?.value) {\n    <p>Selected date format: {{ dateFormatControl?.value }}</p>\n  } @else {\n    <p>No date format selected.</p>\n  }\n</div>"
+          "source": "<div>\n  <ngs-form-field class=\"w-92\">\n    <ngs-label>Date Format</ngs-label>\n    <ngs-date-format-select [formField]=\"settingsForm.dateFormat\" placeholder=\"Select a date format\"/>\n    @if (settingsForm.dateFormat().invalid() && settingsForm.dateFormat().touched()) {\n      <ngs-error>Please select the date format.</ngs-error>\n    }\n  </ngs-form-field>\n</div>\n<div class=\"text-sm mt-2\">\n  @if (settingsForm.dateFormat().value()) {\n    <p>Selected date format: {{ settingsForm.dateFormat().value() }}</p>\n  } @else {\n    <p>No date format selected.</p>\n  }\n</div>"
         }
       ],
       "previewAsset": "projects/components/date-format-select/preview.svg",
@@ -3473,9 +3499,17 @@
       ],
       "inputs": [
         "dateFormats",
-        "placeholder"
+        "disabled",
+        "invalid",
+        "placeholder",
+        "readonly",
+        "required",
+        "touched",
+        "value"
       ],
-      "outputs": [],
+      "outputs": [
+        "touch"
+      ],
       "cssTokens": [],
       "example": null
     },
@@ -3517,7 +3551,7 @@
           "name": "basic-datepicker-example",
           "title": "Basic datepicker",
           "file": "projects/docs/src/app/components/datepicker/_examples/basic-datepicker-example/basic-datepicker-example.html",
-          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Choose a date</ngs-label>\n  <input ngsInput [ngsDatepicker]=\"picker\">\n  <ngs-hint>MM/DD/YYYY</ngs-hint>\n  <ngs-datepicker-toggle ngsIconButtonSuffix [for]=\"picker\"/>\n  <ngs-datepicker #picker/>\n</ngs-form-field>"
+          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Choose a date</ngs-label>\n  <input ngsInput [formField]=\"date\" [ngsDatepicker]=\"picker\">\n  <ngs-hint>MM/DD/YYYY</ngs-hint>\n  <ngs-datepicker-toggle ngsIconButtonSuffix [for]=\"picker\"/>\n  <ngs-datepicker #picker/>\n</ngs-form-field>"
         },
         {
           "name": "custom-header",
@@ -3573,21 +3607,28 @@
       "inputs": [
         "activeDate",
         "calendarCount",
+        "disabled",
         "extended",
+        "invalid",
         "maxDate",
         "minDate",
         "rangePreviewDate",
+        "readonly",
+        "required",
         "selected",
         "separator",
         "sharedRangePreview",
         "showQuickPresets",
         "startAt",
+        "touched",
+        "value",
         "visibleCalendars"
       ],
       "outputs": [
         "monthSelected",
         "rangePreviewDateChange",
         "selectedChange",
+        "touch",
         "yearSelected"
       ],
       "cssTokens": [
@@ -4630,13 +4671,13 @@
         "External renderer flow",
         "Form builder renderer"
       ],
-      "minimalExample": "<div class=\"flex flex-col gap-6\">\n  <ngs-form-builder [(schema)]=\"schema\"/>\n  <ngs-card>\n    <ngs-card-header>\n      <ngs-card-title>Current schema</ngs-card-title>\n    </ngs-card-header>\n    <ngs-card-content>\n      <ngs-code-highlighter class=\"border border-border rounded-lg overflow-hidden\"\n        [code]=\"schemaCode()\"\n        language=\"json\"\n        appearance=\"none\"\n        disableOverflow/>\n    </ngs-card-content>\n  </ngs-card>\n</div>",
+      "minimalExample": "<div class=\"flex flex-col gap-6\">\n  <ngs-form-builder [(schema)]=\"schema\"/>\n  <ngs-card>\n    <ngs-card-header>\n      <ngs-card-title>Current schema</ngs-card-title>\n    </ngs-card-header>\n    <ngs-card-content>\n      <ngs-code-highlighter class=\"rounded-lg overflow-hidden\"\n        [code]=\"schemaCode()\"\n        language=\"json\"\n        appearance=\"none\"\n        disableOverflow/>\n    </ngs-card-content>\n  </ngs-card>\n</div>",
       "exampleFiles": [
         {
           "name": "basic-form-builder-example",
           "title": "Basic form builder",
           "file": "projects/docs/src/app/libraries/form-builder/_examples/basic-form-builder-example/basic-form-builder-example.html",
-          "source": "<div class=\"flex flex-col gap-6\">\n  <ngs-form-builder [(schema)]=\"schema\"/>\n  <ngs-card>\n    <ngs-card-header>\n      <ngs-card-title>Current schema</ngs-card-title>\n    </ngs-card-header>\n    <ngs-card-content>\n      <ngs-code-highlighter class=\"border border-border rounded-lg overflow-hidden\"\n        [code]=\"schemaCode()\"\n        language=\"json\"\n        appearance=\"none\"\n        disableOverflow/>\n    </ngs-card-content>\n  </ngs-card>\n</div>"
+          "source": "<div class=\"flex flex-col gap-6\">\n  <ngs-form-builder [(schema)]=\"schema\"/>\n  <ngs-card>\n    <ngs-card-header>\n      <ngs-card-title>Current schema</ngs-card-title>\n    </ngs-card-header>\n    <ngs-card-content>\n      <ngs-code-highlighter class=\"rounded-lg overflow-hidden\"\n        [code]=\"schemaCode()\"\n        language=\"json\"\n        appearance=\"none\"\n        disableOverflow/>\n    </ngs-card-content>\n  </ngs-card>\n</div>"
         },
         {
           "name": "custom-field-registration-example",
@@ -4741,6 +4782,7 @@
         "FormLogic",
         "FormRenderer",
         "mergeFormBuilderValidatorDefinitions",
+        "normalizeFieldValue",
         "PlainTextFormBuilderSettings",
         "provideFormBuilder",
         "provideFormBuilderField",
@@ -4749,11 +4791,12 @@
         "provideFormBuilderSelectDataSources",
         "provideFormBuilderValidator",
         "provideFormBuilderValidators",
+        "runtimeFieldState",
+        "setRuntimeFieldError",
         "validatorsFromRules"
       ],
       "inputs": [
         "canvasDropPlaceholderDelay",
-        "control",
         "definitions",
         "description",
         "editableCanvas",
@@ -5400,7 +5443,7 @@
           "name": "linear-headless-stepper-example",
           "title": "Linear headless stepper",
           "file": "projects/docs/src/app/components/headless-stepper/_examples/linear-headless-stepper-example/linear-headless-stepper-example.html",
-          "source": "<ngs-headless-stepper #stepper linear>\n  <div class=\"mb-5\">\n    <div class=\"flex items-center justify-between gap-4\">\n      <div>\n        <p class=\"text-sm text-neutral-600\">Linear setup</p>\n        <h4 class=\"mt-1 text-base font-semibold\">Step {{ stepper.selectedIndex() + 1 }} of {{ stepper.stepsCount() }}</h4>\n      </div>\n      <p class=\"text-sm text-neutral-600\">{{ stepper.progressPercent() | number: '1.0-0' }}%</p>\n    </div>\n    <ngs-progress-bar class=\"mt-4\" mode=\"determinate\" [value]=\"stepper.progressPercent()\"/>\n  </div>\n  <ngs-headless-step [stepControl]=\"accountForm\">\n    <form [formGroup]=\"accountForm\" class=\"flex flex-col gap-4\">\n      <ngs-form-field>\n        <ngs-label>Company</ngs-label>\n        <input ngsInput formControlName=\"company\" placeholder=\"Acme Operations\" required>\n      </ngs-form-field>\n      <p class=\"text-sm text-neutral-600\">\n        The next button becomes available when this form group is valid.\n      </p>\n    </form>\n  </ngs-headless-step>\n  <ngs-headless-step [stepControl]=\"billingForm\">\n    <form [formGroup]=\"billingForm\" class=\"flex flex-col gap-4\">\n      <ngs-form-field>\n        <ngs-label>Billing email</ngs-label>\n        <input ngsInput formControlName=\"email\" placeholder=\"billing@example.com\" required>\n      </ngs-form-field>\n      <p class=\"text-sm text-neutral-600\">\n        Headless Stepper tracks the connected control status and uses it for linear navigation.\n      </p>\n    </form>\n  </ngs-headless-step>\n  <ngs-headless-step optional>\n    <div class=\"rounded-lg border border-border p-5\">\n      <h5 class=\"text-base font-semibold\">\n..."
+          "source": "<ngs-headless-stepper #stepper linear>\n  <div class=\"mb-5\">\n    <div class=\"flex items-center justify-between gap-4\">\n      <div>\n        <p class=\"text-sm text-neutral-600\">Linear setup</p>\n        <h4 class=\"mt-1 text-base font-semibold\">Step {{ stepper.selectedIndex() + 1 }} of {{ stepper.stepsCount() }}</h4>\n      </div>\n      <p class=\"text-sm text-neutral-600\">{{ stepper.progressPercent() | number: '1.0-0' }}%</p>\n    </div>\n    <ngs-progress-bar class=\"mt-4\" mode=\"determinate\" [value]=\"stepper.progressPercent()\"/>\n  </div>\n  <ngs-headless-step [stepControl]=\"accountForm\">\n    <form novalidate class=\"flex flex-col gap-4\">\n      <ngs-form-field>\n        <ngs-label>Company</ngs-label>\n        <input ngsInput [formField]=\"accountForm.company\" placeholder=\"Acme Operations\">\n      </ngs-form-field>\n      <p class=\"text-sm text-neutral-600\">\n        The next button becomes available when this form group is valid.\n      </p>\n    </form>\n  </ngs-headless-step>\n  <ngs-headless-step [stepControl]=\"billingForm\">\n    <form novalidate class=\"flex flex-col gap-4\">\n      <ngs-form-field>\n        <ngs-label>Billing email</ngs-label>\n        <input ngsInput [formField]=\"billingForm.email\" placeholder=\"billing@example.com\">\n      </ngs-form-field>\n      <p class=\"text-sm text-neutral-600\">\n        Headless Stepper tracks the connected control status and uses it for linear navigation.\n      </p>\n    </form>\n  </ngs-headless-step>\n  <ngs-headless-step optional>\n    <div class=\"rounded-lg border border-border p-5\">\n      <h5 class=\"text-base font-semibold\">Optional review</h5>\n      <p cl\n..."
         }
       ],
       "previewAsset": "projects/components/headless-stepper/preview.svg",
@@ -5416,8 +5459,7 @@
       "inputs": [
         "linear",
         "optional",
-        "selectedIndex",
-        "stepControl"
+        "selectedIndex"
       ],
       "outputs": [],
       "cssTokens": [],
@@ -6062,8 +6104,8 @@
       "previewAsset": "projects/components/input-mask/preview.svg",
       "selectors": [
         "[ngsCreditCardCvvMask]",
-        "[ngsCreditCardExpiryDateMask]",
-        "[ngsCreditCardNumberMask]"
+        "[ngsCreditCardNumberMask]",
+        "input[ngsCreditCardExpiryDateMask]"
       ],
       "exportedSymbols": [
         "CreditCardCvvMaskDirective",
@@ -6071,9 +6113,12 @@
         "CreditCardNumberMaskDirective"
       ],
       "inputs": [
-        "placeholder"
+        "placeholder",
+        "value"
       ],
-      "outputs": [],
+      "outputs": [
+        "touch"
+      ],
       "cssTokens": [],
       "example": null
     },
@@ -6633,9 +6678,11 @@
         "ngsMenuTriggerFor",
         "ngsMenuTriggerRestoreFocus",
         "pushIntoViewport",
+        "readonly",
         "role",
         "selected",
         "themeSource",
+        "value",
         "xPosition",
         "yPosition"
       ],
@@ -6644,7 +6691,7 @@
         "closed",
         "menuClosed",
         "menuOpened",
-        "valueChange"
+        "touch"
       ],
       "cssTokens": [
         "--ngs-color-on-surface",
@@ -7128,7 +7175,7 @@
       "docsPath": "/forms/number-input",
       "docsOverviewSource": "projects/docs/src/app/forms/number-input/overview/overview.html",
       "purpose": "Capture a numeric form value with typing, stepper controls, min/max limits, and Angular forms integration.",
-      "useWhen": "Use ngs-number-input inside one ngs-form-field when users need to type a number or adjust it with increase/decrease controls. Good for quantities, limits, thresholds, durations, percentages, ratings, numeric settings, seat counts, day counts, and budget-like numeric values. Use ngModel or formControlName, min and max for allowed bounds, step for increment/decrement size, readonly/disabled/required as normal form states, and ngsDecreaseControl or ngsIncreaseControl only when custom control icons are needed. Use TailwindCSS classes on ngs-form-field or surrounding layout for width and grouping. Do not use for normal text; use ngsInput. Do not use for phone numbers; use PhoneInput. Do not use for OTP, MFA, passcodes, or invite codes; use PinInput. Do not use for selecting currency; use CurrencySelect plus a numeric amount field when needed. Do not use for sliders/ranges, display-only KPI values, progress, or charts; use the dedicated component such as Gauge, ProgressBar, MicroChart, or a text/KPI layout.",
+      "useWhen": "Use ngs-number-input inside one ngs-form-field when users need to type a number or adjust it with increase/decrease controls. Good for quantities, limits, thresholds, durations, percentages, ratings, numeric settings, seat counts, day counts, and budget-like numeric values. Bind [formField] with Signal Forms and set min and max in the form schema, step for increment/decrement size, readonly/disabled/required as normal form states, and ngsDecreaseControl or ngsIncreaseControl only when custom control icons are needed. Use TailwindCSS classes on ngs-form-field or surrounding layout for width and grouping. Do not use for normal text; use ngsInput. Do not use for phone numbers; use PhoneInput. Do not use for OTP, MFA, passcodes, or invite codes; use PinInput. Do not use for selecting currency; use CurrencySelect plus a numeric amount field when needed. Do not use for sliders/ranges, display-only KPI values, progress, or charts; use the dedicated component such as Gauge, ProgressBar, MicroChart, or a text/KPI layout.",
       "exampleTopics": [
         "Basic Number Input",
         "Custom Controls",
@@ -7154,7 +7201,7 @@
           "name": "number-input-min-max-example",
           "title": "Number input min max",
           "file": "projects/docs/src/app/forms/number-input/_examples/number-input-min-max-example/number-input-min-max-example.html",
-          "source": "<form [formGroup]=\"form\">\n  <ngs-form-field class=\"w-1/2\">\n    <ngs-label>Min 2, Max 5</ngs-label>\n    <ngs-number-input formControlName=\"control\" min=\"2\" max=\"5\"/>\n  </ngs-form-field>\n</form>\n<p>Value: {{ form.value.control }}</p>"
+          "source": "<form novalidate>\n  <ngs-form-field class=\"w-1/2\">\n    <ngs-label>Min 2, Max 5</ngs-label>\n    <ngs-number-input [formField]=\"form.control\"/>\n  </ngs-form-field>\n</form>\n<p>Value: {{ form.control().value() }}</p>"
         }
       ],
       "previewAsset": "projects/components/number-input/preview.svg",
@@ -7175,15 +7222,18 @@
       "inputs": [
         "aria-label",
         "disabled",
+        "invalid",
         "max",
         "min",
         "placeholder",
         "readonly",
         "required",
-        "step"
+        "step",
+        "touched",
+        "value"
       ],
       "outputs": [
-        "valueChange"
+        "touch"
       ],
       "cssTokens": [
         "--ngs-color-on-primary",
@@ -7440,25 +7490,25 @@
         "Password strength info",
         "Password toggle visibility"
       ],
-      "minimalExample": "<div class=\"w-1/2\">\n  <ngs-form-field class=\"w-full\">\n    <ngs-label>Password</ngs-label>\n    <input type=\"password\" ngsInput [formControl]=\"password\" autocomplete=\"off\">\n  </ngs-form-field>\n  <ngs-password-strength [password]=\"password.value\" class=\"relative -top-4\"/>\n</div>",
+      "minimalExample": "<div class=\"w-1/2\">\n  <ngs-form-field class=\"w-full\">\n    <ngs-label>Password</ngs-label>\n    <input type=\"password\" ngsInput [formField]=\"password\" autocomplete=\"off\">\n  </ngs-form-field>\n  <ngs-password-strength [password]=\"password().value()\" class=\"relative -top-4\"/>\n</div>",
       "exampleFiles": [
         {
           "name": "basic-password-strength-example",
           "title": "Basic password strength",
           "file": "projects/docs/src/app/forms/password-strength/_examples/basic-password-strength-example/basic-password-strength-example.html",
-          "source": "<div class=\"w-1/2\">\n  <ngs-form-field class=\"w-full\">\n    <ngs-label>Password</ngs-label>\n    <input type=\"password\" ngsInput [formControl]=\"password\" autocomplete=\"off\">\n  </ngs-form-field>\n  <ngs-password-strength [password]=\"password.value\" class=\"relative -top-4\"/>\n</div>"
+          "source": "<div class=\"w-1/2\">\n  <ngs-form-field class=\"w-full\">\n    <ngs-label>Password</ngs-label>\n    <input type=\"password\" ngsInput [formField]=\"password\" autocomplete=\"off\">\n  </ngs-form-field>\n  <ngs-password-strength [password]=\"password().value()\" class=\"relative -top-4\"/>\n</div>"
         },
         {
           "name": "password-strength-info-example",
           "title": "Password strength info",
           "file": "projects/docs/src/app/forms/password-strength/_examples/password-strength-info-example/password-strength-info-example.html",
-          "source": "<div class=\"w-1/2\">\n  <ngs-form-field class=\"w-full\">\n    <ngs-label>Password</ngs-label>\n    <input type=\"text\" ngsInput [formControl]=\"password\" autocomplete=\"off\">\n    <ngs-hint align=\"end\" aria-live=\"polite\">\n      {{ password.value?.length }} / 25\n    </ngs-hint>\n  </ngs-form-field>\n  <ngs-password-strength #passwordStrengthComponent [password]=\"password.value!\" />\n  <ngs-password-strength-info [passwordComponent]=\"passwordStrengthComponent\" />\n</div>"
+          "source": "<div class=\"w-1/2\">\n  <ngs-form-field class=\"w-full\">\n    <ngs-label>Password</ngs-label>\n    <input type=\"text\" ngsInput [formField]=\"password\" autocomplete=\"off\">\n    <ngs-hint align=\"end\" aria-live=\"polite\">\n      {{ password().value()?.length }} / 25\n    </ngs-hint>\n  </ngs-form-field>\n  <ngs-password-strength #passwordStrengthComponent [password]=\"password().value()!\" />\n  <ngs-password-strength-info [passwordComponent]=\"passwordStrengthComponent\" />\n</div>"
         },
         {
           "name": "password-toggle-visibility-example",
           "title": "Password toggle visibility",
           "file": "projects/docs/src/app/forms/password-strength/_examples/password-toggle-visibility-example/password-toggle-visibility-example.html",
-          "source": "<div class=\"w-1/2\">\n  <ngs-form-field class=\"w-full\">\n    <ngs-label>Password</ngs-label>\n    <ngs-pass-toggle-visibility #toggle ngsSuffix/>\n    <input [type]=\"toggle.type\" ngsInput [formControl]=\"password\" required autocomplete=\"off\">\n  </ngs-form-field>\n  <ngs-password-strength [password]=\"password.value!\" class=\"relative -top-4\"/>\n</div>"
+          "source": "<div class=\"w-1/2\">\n  <ngs-form-field class=\"w-full\">\n    <ngs-label>Password</ngs-label>\n    <ngs-pass-toggle-visibility #toggle ngsSuffix/>\n    <input [type]=\"toggle.type\" ngsInput [formField]=\"password\" autocomplete=\"off\">\n  </ngs-form-field>\n  <ngs-password-strength [password]=\"password().value()!\" class=\"relative -top-4\"/>\n</div>"
         }
       ],
       "previewAsset": "projects/components/password-strength/preview.svg",
@@ -7499,6 +7549,7 @@
         "specialCharsCriteriaMessage",
         "tabindex",
         "upperCaseCriteriaMessage",
+        "value",
         "visible",
         "warnThreshold"
       ],
@@ -7891,7 +7942,7 @@
       "docsPath": "/forms/phone-input",
       "docsOverviewSource": "projects/docs/src/app/forms/phone-input/overview/overview.html",
       "purpose": "Capture real phone numbers with country selection, flag, dial code, formatting, and libphonenumber-js validation.",
-      "useWhen": "Use ngs-phone-input inside one ngs-form-field for profile, contact, billing, onboarding, checkout, support, invite, and contact forms when the value must be a real phone number. Use formControlName or ngModel, show invalidPhone with ngs-error, set defaultSelectedCountryCode when the initial country should not be us, use onlyCountries to restrict available countries, preferredCountries to pin common countries to the top, format=\"default | national | international\" for display formatting, and countryChanged when the screen needs to react to country changes. Do not use plain ngsInput, NumberInput, or InputMask for country-aware phone numbers. Do not use CountrySelect instead of PhoneInput; CountrySelect chooses a country but does not capture a phone number. Do not use for OTP, MFA, passcodes, or invite codes; use PinInput.",
+      "useWhen": "Use ngs-phone-input inside one ngs-form-field for profile, contact, billing, onboarding, checkout, support, invite, and contact forms when the value must be a real phone number. Bind [formField] and validate phone values in the form schema, set defaultSelectedCountryCode when the initial country should not be us, use onlyCountries to restrict available countries, preferredCountries to pin common countries to the top, format=\"default | national | international\" for display formatting, and countryChanged when the screen needs to react to country changes. Do not use plain ngsInput, NumberInput, or InputMask for country-aware phone numbers. Do not use CountrySelect instead of PhoneInput; CountrySelect chooses a country but does not capture a phone number. Do not use for OTP, MFA, passcodes, or invite codes; use PinInput.",
       "exampleTopics": [
         "Basic phone input",
         "Phone input with custom country list",
@@ -7899,25 +7950,25 @@
         "Phone input only countries",
         "Phone input preferred countries"
       ],
-      "minimalExample": "<form [formGroup]=\"form\">\n  <ngs-form-field class=\"w-1/2\">\n    <ngs-label>Phone</ngs-label>\n    <ngs-phone-input formControlName=\"phone\"/>\n    @if (form.get('phone')?.hasError('invalidPhone')) {\n      <ngs-error>Invalid phone</ngs-error>\n    }\n  </ngs-form-field>\n</form>\n<p>\n  Value: {{ form.value['phone'] }}\n</p>",
+      "minimalExample": "<form novalidate>\n  <ngs-form-field class=\"w-1/2\">\n    <ngs-label>Phone</ngs-label>\n    <ngs-phone-input [formField]=\"form.phone\"/>\n    @if (form.phone().invalid()) {\n      <ngs-error>Invalid phone</ngs-error>\n    }\n  </ngs-form-field>\n</form>\n<p>\n  Value: {{ form.phone().value() }}\n</p>",
       "exampleFiles": [
         {
           "name": "basic-phone-input-example",
           "title": "Basic phone input",
           "file": "projects/docs/src/app/forms/phone-input/_examples/basic-phone-input-example/basic-phone-input-example.html",
-          "source": "<form [formGroup]=\"form\">\n  <ngs-form-field class=\"w-1/2\">\n    <ngs-label>Phone</ngs-label>\n    <ngs-phone-input formControlName=\"phone\"/>\n    @if (form.get('phone')?.hasError('invalidPhone')) {\n      <ngs-error>Invalid phone</ngs-error>\n    }\n  </ngs-form-field>\n</form>\n<p>\n  Value: {{ form.value['phone'] }}\n</p>"
+          "source": "<form novalidate>\n  <ngs-form-field class=\"w-1/2\">\n    <ngs-label>Phone</ngs-label>\n    <ngs-phone-input [formField]=\"form.phone\"/>\n    @if (form.phone().invalid()) {\n      <ngs-error>Invalid phone</ngs-error>\n    }\n  </ngs-form-field>\n</form>\n<p>\n  Value: {{ form.phone().value() }}\n</p>"
         },
         {
           "name": "phone-input-only-countries-example",
           "title": "Phone input only countries",
           "file": "projects/docs/src/app/forms/phone-input/_examples/phone-input-only-countries-example/phone-input-only-countries-example.html",
-          "source": "<form [formGroup]=\"form\">\n  <ngs-form-field class=\"w-1/2\">\n    <ngs-label>Phone</ngs-label>\n    <ngs-phone-input formControlName=\"phone\" [onlyCountries]=\"['gb', 'us']\"/>\n    @if (form.get('phone')?.hasError('invalidPhone')) {\n      <ngs-error>Invalid phone</ngs-error>\n    }\n  </ngs-form-field>\n</form>\n<p>\n  Value: {{ form.value['phone'] }}\n</p>"
+          "source": "<form novalidate>\n  <ngs-form-field class=\"w-1/2\">\n    <ngs-label>Phone</ngs-label>\n    <ngs-phone-input [formField]=\"form.phone\" [onlyCountries]=\"['gb', 'us']\"/>\n    @if (form.phone().invalid()) {\n      <ngs-error>Invalid phone</ngs-error>\n    }\n  </ngs-form-field>\n</form>\n<p>\n  Value: {{ form.phone().value() }}\n</p>"
         },
         {
           "name": "phone-input-preferred-countries-example",
           "title": "Phone input preferred countries",
           "file": "projects/docs/src/app/forms/phone-input/_examples/phone-input-preferred-countries-example/phone-input-preferred-countries-example.html",
-          "source": "<form [formGroup]=\"form\">\n  <ngs-form-field class=\"w-1/2\">\n    <ngs-label>Phone</ngs-label>\n    <ngs-phone-input formControlName=\"phone\" [preferredCountries]=\"['cn','it','pl']\"/>\n    @if (form.get('phone')?.hasError('invalidPhone')) {\n      <ngs-error>Invalid phone</ngs-error>\n    }\n  </ngs-form-field>\n</form>\n<p>\n  Value: {{ form.value['phone'] }}\n</p>"
+          "source": "<form novalidate>\n  <ngs-form-field class=\"w-1/2\">\n    <ngs-label>Phone</ngs-label>\n    <ngs-phone-input [formField]=\"form.phone\" [preferredCountries]=\"['cn','it','pl']\"/>\n    @if (form.phone().invalid()) {\n      <ngs-error>Invalid phone</ngs-error>\n    }\n  </ngs-form-field>\n</form>\n<p>\n  Value: {{ form.phone().value() }}\n</p>"
         }
       ],
       "previewAsset": "projects/components/phone-input/preview.svg",
@@ -7938,12 +7989,18 @@
         "disabled",
         "errorStateMatcher",
         "format",
+        "invalid",
         "onlyCountries",
         "placeholder",
-        "preferredCountries"
+        "preferredCountries",
+        "readonly",
+        "required",
+        "touched",
+        "value"
       ],
       "outputs": [
-        "countryChanged"
+        "countryChanged",
+        "touch"
       ],
       "cssTokens": [
         "--ngs-color-neutral-500",
@@ -7968,7 +8025,7 @@
       "docsPath": "/forms/pin-input",
       "docsOverviewSource": "projects/docs/src/app/forms/pin-input/overview/overview.html",
       "purpose": "Capture short one-character-per-cell codes for verification and secure access flows.",
-      "useWhen": "Use ngs-pin-input as a standalone form control for OTP, MFA, SMS or email verification codes, invite codes, passcodes, payment verification, and secure access codes. Use ngModel or formControlName, length for the number of cells, placeholder for the empty-cell hint, acceptOnly for allowed symbols with digits as the default, and disabled for disabled state. The component manages one-character cells and focus movement between them. Do not use PinInput for phone numbers; use PhoneInput. Do not use for creating or changing passwords; use ngsInput with PasswordStrength. Do not use for numeric settings or quantities; use NumberInput. Do not use for long codes, serial numbers, coupons, or arbitrary text; use a normal ngsInput. Do not wrap it in ngs-form-field as if it were a single text input; the component renders its own internal form fields.",
+      "useWhen": "Use ngs-pin-input as a standalone form control for OTP, MFA, SMS or email verification codes, invite codes, passcodes, payment verification, and secure access codes. Use [formField], length for the number of cells, placeholder for the empty-cell hint, acceptOnly for allowed symbols with digits as the default, and disabled for disabled state. The component manages one-character cells and focus movement between them. Do not use PinInput for phone numbers; use PhoneInput. Do not use for creating or changing passwords; use ngsInput with PasswordStrength. Do not use for numeric settings or quantities; use NumberInput. Do not use for long codes, serial numbers, coupons, or arbitrary text; use a normal ngsInput. Do not wrap it in ngs-form-field as if it were a single text input; the component renders its own internal form fields.",
       "exampleTopics": [
         "Basic Pin Input",
         "Placeholder",
@@ -7978,13 +8035,13 @@
         "Pin input length",
         "Pin input accept custom symbols"
       ],
-      "minimalExample": "<ngs-pin-input [(ngModel)]=\"value\" class=\"mb-6\"/>\n<p>Value: {{ value || '-' }}</p>",
+      "minimalExample": "<ngs-pin-input [formField]=\"value\" class=\"mb-6\"/>\n<p>Value: {{ value().value() ?? '–' }}</p>",
       "exampleFiles": [
         {
           "name": "basic-pin-input-example",
           "title": "Basic pin input",
           "file": "projects/docs/src/app/forms/pin-input/_examples/basic-pin-input-example/basic-pin-input-example.html",
-          "source": "<ngs-pin-input [(ngModel)]=\"value\" class=\"mb-6\"/>\n<p>Value: {{ value || '-' }}</p>"
+          "source": "<ngs-pin-input [formField]=\"value\" class=\"mb-6\"/>\n<p>Value: {{ value().value() ?? '–' }}</p>"
         },
         {
           "name": "pin-input-accept-custom-symbols-example",
@@ -8013,9 +8070,12 @@
         "disabled",
         "index",
         "length",
-        "placeholder"
+        "placeholder",
+        "readonly",
+        "value"
       ],
       "outputs": [
+        "touch",
         "valuePaste"
       ],
       "cssTokens": [
@@ -8195,7 +8255,7 @@
       "docsPath": "/forms/radio",
       "docsOverviewSource": "projects/docs/src/app/forms/radio/overview/overview.html",
       "purpose": "Let users choose exactly one option from a small visible set of mutually exclusive choices.",
-      "useWhen": "Use ngs-radio-group with ngs-radio-button for simple text options in forms, settings, filters, and preference screens where all options should be visible and the user can choose only one. Put value on each radio button and bind the group value with value, ngModel, or formControlName. Use name when native form grouping matters, disabled on the group or individual radio button when needed, and change when the screen must react to selection changes. Do not use Radio for multiple selection; use Checkbox. Do not use for long option lists; use Select or Autocomplete. Do not use for rich options with descriptions, icons, or large clickable blocks; use RadioCard. Do not use as a segmented view switcher; use Segmented or ButtonToggle. Do not use for yes/no boolean settings when SlideToggle or Checkbox better matches the meaning.",
+      "useWhen": "Use ngs-radio-group with ngs-radio-button for simple text options in forms, settings, filters, and preference screens where all options should be visible and the user can choose only one. Put value on each radio button and bind the group with [formField] or [(value)]. Use name when native form grouping matters, disabled on the group or individual radio button when needed, and change when the screen must react to selection changes. Do not use Radio for multiple selection; use Checkbox. Do not use for long option lists; use Select or Autocomplete. Do not use for rich options with descriptions, icons, or large clickable blocks; use RadioCard. Do not use as a segmented view switcher; use Segmented or ButtonToggle. Do not use for yes/no boolean settings when SlideToggle or Checkbox better matches the meaning.",
       "exampleTopics": [
         "Basic Radios",
         "Radio Orientation",
@@ -8214,7 +8274,7 @@
           "name": "radio-card-example",
           "title": "Radio card",
           "file": "projects/docs/src/app/forms/radio/_examples/radio-card-example/radio-card-example.html",
-          "source": "<form [formGroup]=\"form\">\n  <ngs-radio-card-group formControlName=\"privacy\" class=\"grid-cols-12\">\n    <ngs-radio-card value=\"open\" class=\"col-span-6\">\n      <ngs-radio-card-title>\n        <ngs-icon name=\"fluent:globe-24-regular\"/>\n        Open\n      </ngs-radio-card-title>\n      <ngs-radio-card-content>\n        Posts and community members are public and visible to search engines.\n      </ngs-radio-card-content>\n    </ngs-radio-card>\n    <ngs-radio-card value=\"closed\" class=\"col-span-6\">\n      <ngs-radio-card-title>\n        <ngs-icon name=\"fluent:lock-closed-24-regular\"/>\n        Closed\n      </ngs-radio-card-title>\n      <ngs-radio-card-content>\n        Only members can view community members and posts. Content is not visible to search engines.\n      </ngs-radio-card-content>\n    </ngs-radio-card>\n  </ngs-radio-card-group>\n</form>\n<div class=\"mt-10\">\n  <p>\n    <button ngsButton=\"filled\" (click)=\"toggleDisabled()\">\n      {{ form.get('privacy')?.disabled ? 'Enable' : 'Disable' }} Control\n    </button>\n  </p>\n  <p>Control value: {{ form.get('privacy')?.value }}</p>\n</div>"
+          "source": "<form>\n  <ngs-radio-card-group [formField]=\"form.privacy\" class=\"grid-cols-12\">\n    <ngs-radio-card value=\"open\" class=\"col-span-6\">\n      <ngs-radio-card-title>\n        <ngs-icon name=\"fluent:globe-24-regular\"/>\n        Open\n      </ngs-radio-card-title>\n      <ngs-radio-card-content>\n        Posts and community members are public and visible to search engines.\n      </ngs-radio-card-content>\n    </ngs-radio-card>\n    <ngs-radio-card value=\"closed\" class=\"col-span-6\">\n      <ngs-radio-card-title>\n        <ngs-icon name=\"fluent:lock-closed-24-regular\"/>\n        Closed\n      </ngs-radio-card-title>\n      <ngs-radio-card-content>\n        Only members can view community members and posts. Content is not visible to search engines.\n      </ngs-radio-card-content>\n    </ngs-radio-card>\n  </ngs-radio-card-group>\n</form>\n<div class=\"mt-10\">\n  <p>\n    <button ngsButton=\"filled\" (click)=\"toggleDisabled()\">\n      {{ form.privacy().disabled() ? 'Enable' : 'Disable' }} Control\n    </button>\n  </p>\n  <p>Control value: {{ form.privacy().value() }}</p>\n</div>"
         },
         {
           "name": "radio-orientation-example",
@@ -8239,10 +8299,12 @@
         "id",
         "name",
         "orientation",
+        "readonly",
         "value"
       ],
       "outputs": [
-        "change"
+        "change",
+        "touch"
       ],
       "cssTokens": [
         "--ngs-color-on-surface",
@@ -8274,7 +8336,7 @@
       "docsPath": null,
       "docsOverviewSource": null,
       "purpose": "Let users choose exactly one option from a small set of rich card-like choices.",
-      "useWhen": "Use ngs-radio-card-group as a form control group and ngs-radio-card for each option when every option needs a large clickable card with title, icon, description, or supporting content. Use ngs-radio-card-title for the option name and optional icon, ngs-radio-card-content for details, value on each card, and formControlName or ngModel on the group. Use TailwindCSS grid or flex around the group to lay cards out in columns or rows. Good for plan selection, privacy modes, template choices, payment methods, layout options, delivery methods, onboarding choices, and settings choices with explanation. Do not use for simple short text options; use Radio. Do not use for multiple selection; use Checkbox or a dedicated checkbox-card pattern when available. Do not use for long lists; use Select or Autocomplete. Do not use as a normal content card without selection; use Card. Do not use as a segmented mode switch; use Segmented or ButtonToggle.",
+      "useWhen": "Use ngs-radio-card-group as a form control group and ngs-radio-card for each option when every option needs a large clickable card with title, icon, description, or supporting content. Use ngs-radio-card-title for the option name and optional icon, ngs-radio-card-content for details, value on each card, and [formField] on the group. Use TailwindCSS grid or flex around the group to lay cards out in columns or rows. Good for plan selection, privacy modes, template choices, payment methods, layout options, delivery methods, onboarding choices, and settings choices with explanation. Do not use for simple short text options; use Radio. Do not use for multiple selection; use Checkbox or a dedicated checkbox-card pattern when available. Do not use for long lists; use Select or Autocomplete. Do not use as a normal content card without selection; use Card. Do not use as a segmented mode switch; use Segmented or ButtonToggle.",
       "exampleTopics": [],
       "minimalExample": null,
       "exampleFiles": [],
@@ -8292,9 +8354,13 @@
         "RadioCardTitle"
       ],
       "inputs": [
+        "disabled",
+        "readonly",
         "value"
       ],
-      "outputs": [],
+      "outputs": [
+        "touch"
+      ],
       "cssTokens": [
         "--ngs-color-border",
         "--ngs-color-neutral-600",
@@ -8598,14 +8664,14 @@
       "docsPath": "/forms/segmented",
       "docsOverviewSource": "projects/docs/src/app/forms/segmented/overview/overview.html",
       "purpose": "Let users choose one value from a compact set of mutually exclusive modes or options.",
-      "useWhen": "Use ngs-segmented with ngs-segmented-button when a short set of options should stay visible and only one value can be selected. Good for view modes, time ranges, display density, selection mode, chart or table mode, compact filters, and short settings. It works as an Angular form control through value, valueChange, ngModel, or formControlName, supports disabled state, sizes, text buttons, icons with ngsSegmentedIcon, and iconOnly buttons. Do not use Segmented for route or page navigation; use Tabs, Navigation, Sidebar, Sidenav, or RailNav. Do not use for independent on/off toggles; use ButtonToggle or SlideToggle. Do not use for long lists, rich option cards, dropdown choices, or fixed color palettes; use Radio, RadioCard, Select, Autocomplete, or ColorSwitcher.",
+      "useWhen": "Use ngs-segmented with ngs-segmented-button when a short set of options should stay visible and only one value can be selected. Good for view modes, time ranges, display density, selection mode, chart or table mode, compact filters, and short settings. It works as an Angular form control through [formField] or [(value)], supports disabled state, sizes, text buttons, icons with ngsSegmentedIcon, and iconOnly buttons. Do not use Segmented for route or page navigation; use Tabs, Navigation, Sidebar, Sidenav, or RailNav. Do not use for independent on/off toggles; use ButtonToggle or SlideToggle. Do not use for long lists, rich option cards, dropdown choices, or fixed color palettes; use Radio, RadioCard, Select, Autocomplete, or ColorSwitcher.",
       "exampleTopics": [
         "Basic segmented control",
         "Segmented control sizes",
         "Segmented control disabled",
         "Segmented control with icons",
         "Segmented control with icons only",
-        "Segmented control with FormControl",
+        "Segmented control with Signal Forms",
         "Segmented control with ngModel",
         "Basic segmented",
         "Segmented sizes",
@@ -8633,7 +8699,7 @@
           "name": "segmented-form-control-example",
           "title": "Segmented form control",
           "file": "projects/docs/src/app/forms/segmented/_examples/segmented-form-control-example/segmented-form-control-example.html",
-          "source": "<div class=\"flex flex-col gap-4\">\n  <ngs-segmented [formControl]=\"segmentedControl\">\n    <ngs-segmented-button value=\"daily\">Daily</ngs-segmented-button>\n    <ngs-segmented-button value=\"weekly\">Weekly</ngs-segmented-button>\n    <ngs-segmented-button value=\"monthly\">Monthly</ngs-segmented-button>\n    <ngs-segmented-button value=\"yearly\">Yearly</ngs-segmented-button>\n  </ngs-segmented>\n  <div class=\"text-sm text-neutral-600\">\n    Selected value: <strong>{{ segmentedControl.value }}</strong>\n  </div>\n  <button\n    ngsButton=\"filled\"\n    (click)=\"segmentedControl.setValue('monthly')\"\n  >\n    Set Monthly\n  </button>\n</div>"
+          "source": "<div class=\"flex flex-col gap-4\">\n  <ngs-segmented [formField]=\"segmentedControl\">\n    <ngs-segmented-button value=\"daily\">Daily</ngs-segmented-button>\n    <ngs-segmented-button value=\"weekly\">Weekly</ngs-segmented-button>\n    <ngs-segmented-button value=\"monthly\">Monthly</ngs-segmented-button>\n    <ngs-segmented-button value=\"yearly\">Yearly</ngs-segmented-button>\n  </ngs-segmented>\n  <div class=\"text-sm text-neutral-600\">\n    Selected value: <strong>{{ segmentedControl().value() }}</strong>\n  </div>\n  <button\n    ngsButton=\"filled\"\n    (click)=\"segmentedControl().value.set('monthly')\"\n  >\n    Set Monthly\n  </button>\n</div>"
         }
       ],
       "previewAsset": "projects/components/segmented/preview.svg",
@@ -8653,11 +8719,12 @@
       "inputs": [
         "disabled",
         "iconOnly",
+        "readonly",
         "size",
         "value"
       ],
       "outputs": [
-        "valueChange"
+        "touch"
       ],
       "cssTokens": [
         "--ngs-button-radius",
@@ -8737,13 +8804,13 @@
           "name": "async-data-source-select-example",
           "title": "Async data source select",
           "file": "projects/docs/src/app/forms/select/_examples/async-data-source-select-example/async-data-source-select-example.html",
-          "source": "<ngs-form-field class=\"w-full max-w-md\">\n  <ngs-label>Owner</ngs-label>\n  <ngs-select\n    [formControl]=\"owner\"\n    [dataSource]=\"usersDataSource\"\n    placeholder=\"Assign owner\"\n    searchable\n    clearable\n    [pageSize]=\"20\"\n    [searchDebounce]=\"150\">\n    <ng-template ngsOptionContentDef let-user let-label=\"label\">\n      <span class=\"flex min-w-0 flex-col\">\n        <span class=\"truncate\">{{ user.name }}</span>\n        <span class=\"truncate text-xs text-neutral-500\">{{ user.team }} - {{ label }}</span>\n      </span>\n    </ng-template>\n    <ng-template ngsSelectValueDef let-user>\n      {{ user.name }} - {{ user.team }}\n    </ng-template>\n  </ngs-select>\n</ngs-form-field>"
+          "source": "<ngs-form-field class=\"w-full max-w-md\">\n  <ngs-label>Owner</ngs-label>\n  <ngs-select\n    [formField]=\"owner\"\n    [dataSource]=\"usersDataSource\"\n    placeholder=\"Assign owner\"\n    searchable\n    clearable\n    [pageSize]=\"20\"\n    [searchDebounce]=\"150\">\n    <ng-template ngsOptionContentDef let-user let-label=\"label\">\n      <span class=\"flex min-w-0 flex-col\">\n        <span class=\"truncate\">{{ user.name }}</span>\n        <span class=\"truncate text-xs text-neutral-500\">{{ user.team }} - {{ label }}</span>\n      </span>\n    </ng-template>\n    <ng-template ngsSelectValueDef let-user>\n      {{ user.name }} - {{ user.team }}\n    </ng-template>\n  </ngs-select>\n</ngs-form-field>"
         },
         {
           "name": "clearable-select-example",
           "title": "Clearable select",
           "file": "projects/docs/src/app/forms/select/_examples/clearable-select-example/clearable-select-example.html",
-          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Status</ngs-label>\n  <ngs-select [formControl]=\"status()\" placeholder=\"Select status\" clearable>\n    @for (statusOption of statuses(); track statusOption.value) {\n      <ngs-option [value]=\"statusOption.value\">{{ statusOption.label }}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
+          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Status</ngs-label>\n  <ngs-select [formField]=\"status\" placeholder=\"Select status\" clearable>\n    @for (statusOption of statuses(); track statusOption.value) {\n      <ngs-option [value]=\"statusOption.value\">{{ statusOption.label }}</ngs-option>\n    }\n  </ngs-select>\n</ngs-form-field>"
         }
       ],
       "previewAsset": "projects/components/select/preview.svg",
@@ -8786,23 +8853,27 @@
         "disabled",
         "hideCheckIcon",
         "id",
+        "invalid",
         "loadOnOpen",
         "maxCount",
         "minSearchLength",
         "multiple",
         "pageSize",
         "placeholder",
+        "readonly",
         "required",
         "searchable",
         "searchDebounce",
         "showZero",
         "tabIndex",
+        "touched",
         "value"
       ],
       "outputs": [
         "closed",
         "opened",
-        "selectionChange"
+        "selectionChange",
+        "touch"
       ],
       "cssTokens": [
         "--ngs-color-danger",
@@ -8856,6 +8927,7 @@
         "--ngs-select-min-width",
         "--ngs-select-panel-bg",
         "--ngs-select-panel-border",
+        "--ngs-select-panel-gap",
         "--ngs-select-panel-max-height",
         "--ngs-select-panel-shadow",
         "--ngs-select-placeholder-color",
@@ -9192,13 +9264,13 @@
       "exampleTopics": [
         "Basic sidenav"
       ],
-      "minimalExample": "<ngs-sidenav-container class=\"h-[300px] border border-border\" (backdropClick)=\"close('backdrop')\">\n  <ngs-sidenav #sidenav [opened]=\"true\" [mode]=\"mode.value || 'over'\" (keydown.escape)=\"close('escape')\" disableClose\n               class=\"p-5\">\n    <p>\n      <button ngsButton=\"filled\" (click)=\"close('toggle button')\">Close</button>\n    </p>\n  </ngs-sidenav>\n  <ngs-sidenav-content class=\"p-5\">\n    <p>\n      <button ngsButton=\"filled\" (click)=\"sidenav.open()\">Open</button>\n    </p>\n    <p>Closed due to: {{ reason }}</p>\n    <ngs-radio-group [formControl]=\"mode\" class=\"mt-10\">\n      <label>Mode:</label>\n      <ngs-radio-button value=\"over\">Over</ngs-radio-button>\n      <ngs-radio-button value=\"push\">Push</ngs-radio-button>\n    </ngs-radio-group>\n  </ngs-sidenav-content>\n</ngs-sidenav-container>",
+      "minimalExample": "<ngs-sidenav-container class=\"h-[300px] border border-border\" (backdropClick)=\"close('backdrop')\">\n  <ngs-sidenav #sidenav [opened]=\"true\" [mode]=\"mode().value() || 'over'\" (keydown.escape)=\"close('escape')\" disableClose\n               class=\"p-5\">\n    <p>\n      <button ngsButton=\"filled\" (click)=\"close('toggle button')\">Close</button>\n    </p>\n  </ngs-sidenav>\n  <ngs-sidenav-content class=\"p-5\">\n    <p>\n      <button ngsButton=\"filled\" (click)=\"sidenav.open()\">Open</button>\n    </p>\n    <p>Closed due to: {{ reason }}</p>\n    <ngs-radio-group [formField]=\"mode\" class=\"mt-10\">\n      <label>Mode:</label>\n      <ngs-radio-button value=\"over\">Over</ngs-radio-button>\n      <ngs-radio-button value=\"push\">Push</ngs-radio-button>\n    </ngs-radio-group>\n  </ngs-sidenav-content>\n</ngs-sidenav-container>",
       "exampleFiles": [
         {
           "name": "basic-sidenav-example",
           "title": "Basic sidenav",
           "file": "projects/docs/src/app/components/sidenav/_examples/basic-sidenav-example/basic-sidenav-example.html",
-          "source": "<ngs-sidenav-container class=\"h-[300px] border border-border\" (backdropClick)=\"close('backdrop')\">\n  <ngs-sidenav #sidenav [opened]=\"true\" [mode]=\"mode.value || 'over'\" (keydown.escape)=\"close('escape')\" disableClose\n               class=\"p-5\">\n    <p>\n      <button ngsButton=\"filled\" (click)=\"close('toggle button')\">Close</button>\n    </p>\n  </ngs-sidenav>\n  <ngs-sidenav-content class=\"p-5\">\n    <p>\n      <button ngsButton=\"filled\" (click)=\"sidenav.open()\">Open</button>\n    </p>\n    <p>Closed due to: {{ reason }}</p>\n    <ngs-radio-group [formControl]=\"mode\" class=\"mt-10\">\n      <label>Mode:</label>\n      <ngs-radio-button value=\"over\">Over</ngs-radio-button>\n      <ngs-radio-button value=\"push\">Push</ngs-radio-button>\n    </ngs-radio-group>\n  </ngs-sidenav-content>\n</ngs-sidenav-container>"
+          "source": "<ngs-sidenav-container class=\"h-[300px] border border-border\" (backdropClick)=\"close('backdrop')\">\n  <ngs-sidenav #sidenav [opened]=\"true\" [mode]=\"mode().value() || 'over'\" (keydown.escape)=\"close('escape')\" disableClose\n               class=\"p-5\">\n    <p>\n      <button ngsButton=\"filled\" (click)=\"close('toggle button')\">Close</button>\n    </p>\n  </ngs-sidenav>\n  <ngs-sidenav-content class=\"p-5\">\n    <p>\n      <button ngsButton=\"filled\" (click)=\"sidenav.open()\">Open</button>\n    </p>\n    <p>Closed due to: {{ reason }}</p>\n    <ngs-radio-group [formField]=\"mode\" class=\"mt-10\">\n      <label>Mode:</label>\n      <ngs-radio-button value=\"over\">Over</ngs-radio-button>\n      <ngs-radio-button value=\"push\">Push</ngs-radio-button>\n    </ngs-radio-group>\n  </ngs-sidenav-content>\n</ngs-sidenav-container>"
         }
       ],
       "previewAsset": "projects/components/sidenav/preview.svg",
@@ -9396,7 +9468,7 @@
       "docsPath": "/forms/slide-toggle",
       "docsOverviewSource": "projects/docs/src/app/forms/slide-toggle/overview/overview.html",
       "purpose": "Capture a boolean on/off setting where checked means enabled.",
-      "useWhen": "Use ngs-slide-toggle for settings and preferences where checked=true means the feature or state is enabled. Good for live updates, notifications, dark mode option, visibility, sidebar expanded or collapsed, animation on/off, table options, enable Wi-Fi, show archived, and allow comments. It is an Angular form control with checked, disabled, required, ngModel, formControlName, change, and toggleChange, and has its own label pattern, so do not wrap it in ngs-form-field. Do not use SlideToggle for choosing one value from many; use Radio, Segmented, or Select. Do not use for multiple independent selections in a list; use Checkbox. Do not use for button-like mode groups; use ButtonToggle. Do not use for actions, commands, navigation, or rich option cards; use Button, Navigation, or RadioCard. For “I agree” or “accept terms” confirmations, prefer Checkbox because the user is confirming, not enabling a setting.",
+      "useWhen": "Use ngs-slide-toggle for settings and preferences where checked=true means the feature or state is enabled. Good for live updates, notifications, dark mode option, visibility, sidebar expanded or collapsed, animation on/off, table options, enable Wi-Fi, show archived, and allow comments. It is an Angular form control with [formField], [(checked)], change, and toggleChange, and has its own label pattern, so do not wrap it in ngs-form-field. Do not use SlideToggle for choosing one value from many; use Radio, Segmented, or Select. Do not use for multiple independent selections in a list; use Checkbox. Do not use for button-like mode groups; use ButtonToggle. Do not use for actions, commands, navigation, or rich option cards; use Button, Navigation, or RadioCard. For “I agree” or “accept terms” confirmations, prefer Checkbox because the user is confirming, not enabling a setting.",
       "exampleTopics": [
         "Basic Slide Toggle",
         "Disabled Slide Toggle",
@@ -9421,7 +9493,7 @@
           "name": "slide-toggle-with-forms-example",
           "title": "Slide toggle with forms",
           "file": "projects/docs/src/app/forms/slide-toggle/_examples/slide-toggle-with-forms-example/slide-toggle-with-forms-example.html",
-          "source": "<div>\n  <p>Slide Toggle using a simple NgModel.</p>\n  <ngs-slide-toggle [(ngModel)]=\"isChecked\">Slide Toggle Checked: {{ isChecked }}</ngs-slide-toggle>\n</div>\n<div class=\"mt-10\">\n  <p>Slide Toggle inside of a Template-driven form</p>\n  <form class=\"w-full\">\n    <div class=\"flex flex-col gap-3\">\n      <div>\n        <ngs-slide-toggle ngModel name=\"enableWifi\">Enable Wifi</ngs-slide-toggle>\n      </div>\n      <div>\n        <ngs-slide-toggle ngModel name=\"acceptTerms\" required>Accept Terms of Service</ngs-slide-toggle>\n      </div>\n    </div>\n    <div class=\"mt-5\">\n      <button ngsButton=\"tonal\" type=\"button\" class=\"w-40\">Save Settings</button>\n    </div>\n  </form>\n</div>\n<div class=\"mt-10\">\n  <p>Slide Toggle inside of a Reactive form</p>\n  <form class=\"w-full flex flex-col gap-3\" [formGroup]=\"formGroup\">\n    <div class=\"flex flex-col gap-3\">\n      <div>\n        <ngs-slide-toggle formControlName=\"enableWifi\">Enable Wifi</ngs-slide-toggle>\n      </div>\n      <div>\n        <ngs-slide-toggle formControlName=\"acceptTerms\">Accept Terms of Service</ngs-slide-toggle>\n      </div>\n    </div>\n    <p>Form Group Status: {{ formGroup.status }}</p>\n    <button ngsButton=\"tonal\" type=\"button\" class=\"w-40\">Save Settings</button>\n  </form>\n</div>"
+          "source": "<div>\n  <p>Slide Toggle using a simple NgModel.</p>\n  <ngs-slide-toggle [(ngModel)]=\"isChecked\">Slide Toggle Checked: {{ isChecked }}</ngs-slide-toggle>\n</div>\n<div class=\"mt-10\">\n  <p>Slide Toggle inside of a Template-driven form</p>\n  <form class=\"w-full\">\n    <div class=\"flex flex-col gap-3\">\n      <div>\n        <ngs-slide-toggle ngModel name=\"enableWifi\">Enable Wifi</ngs-slide-toggle>\n      </div>\n      <div>\n        <ngs-slide-toggle ngModel name=\"acceptTerms\" required>Accept Terms of Service</ngs-slide-toggle>\n      </div>\n    </div>\n    <div class=\"mt-5\">\n      <button ngsButton=\"tonal\" type=\"button\" class=\"w-40\">Save Settings</button>\n    </div>\n  </form>\n</div>\n<div class=\"mt-10\">\n  <p>Slide Toggle inside of a Reactive form</p>\n  <form class=\"w-full flex flex-col gap-3\">\n    <div class=\"flex flex-col gap-3\">\n      <div>\n        <ngs-slide-toggle [formField]=\"formGroup.enableWifi\">Enable Wifi</ngs-slide-toggle>\n      </div>\n      <div>\n        <ngs-slide-toggle [formField]=\"formGroup.acceptTerms\">Accept Terms of Service</ngs-slide-toggle>\n      </div>\n    </div>\n    <p>Form Group Status: {{ formGroup().valid() ? 'VALID' : 'INVALID' }}</p>\n    <button ngsButton=\"tonal\" type=\"button\" class=\"w-40\">Save Settings</button>\n  </form>\n</div>"
         }
       ],
       "previewAsset": "projects/components/slide-toggle/preview.svg",
@@ -9446,12 +9518,14 @@
         "id",
         "labelPosition",
         "name",
+        "readonly",
         "required",
         "tabIndex"
       ],
       "outputs": [
         "change",
-        "toggleChange"
+        "toggleChange",
+        "touch"
       ],
       "cssTokens": [
         "--ngs-color-on-primary",
@@ -9528,12 +9602,13 @@
         "discrete",
         "max",
         "min",
+        "readonly",
         "showTickMarks",
         "step",
         "value"
       ],
       "outputs": [
-        "valueChange"
+        "touch"
       ],
       "cssTokens": [
         "--ngs-color-on-primary",
@@ -10043,25 +10118,25 @@
         "Stepper hidden header border",
         "Stepper with errors state"
       ],
-      "minimalExample": "<button ngsButton=\"tonal\" (click)=\"isLinear = !isLinear\" id=\"toggle-linear\" class=\"mb-6\">\n  {{ !isLinear ? 'Enable linear mode' : 'Disable linear mode' }}\n</button>\n<ngs-stepper [linear]=\"isLinear\" #stepper>\n  <ngs-step [stepControl]=\"firstFormGroup\">\n    <form [formGroup]=\"firstFormGroup\">\n      <ng-template ngsStepLabel>Fill out your name</ng-template>\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Name</ngs-label>\n        <input ngsInput placeholder=\"Last name, First name\" formControlName=\"firstCtrl\" required>\n      </ngs-form-field>\n      <div>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step [stepControl]=\"secondFormGroup\" label=\"Fill out your address\">\n    <form [formGroup]=\"secondFormGroup\">\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Address</ngs-label>\n        <input ngsInput formControlName=\"secondCtrl\" placeholder=\"Ex. 1 Main St, New York, NY\" required>\n      </ngs-form-field>\n      <div class=\"flex gap-3\">\n        <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step>\n    <ng-template ngsStepLabel>Done</ng-template>\n    <p>You are now done.</p>\n    <div class=\"flex gap-3\">\n      <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n      <button ngsButton=\"filled\" (click)=\"stepper.reset()\">Reset</button>\n    </div>\n  </ngs-step>\n</ngs-stepper>",
+      "minimalExample": "<button ngsButton=\"tonal\" (click)=\"isLinear = !isLinear\" id=\"toggle-linear\" class=\"mb-6\">\n  {{ !isLinear ? 'Enable linear mode' : 'Disable linear mode' }}\n</button>\n<ngs-stepper [linear]=\"isLinear\" #stepper>\n  <ngs-step [stepControl]=\"firstFormGroup\">\n    <form novalidate>\n      <ng-template ngsStepLabel>Fill out your name</ng-template>\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Name</ngs-label>\n        <input ngsInput placeholder=\"Last name, First name\" [formField]=\"firstFormGroup.firstCtrl\">\n      </ngs-form-field>\n      <div>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step [stepControl]=\"secondFormGroup\" label=\"Fill out your address\">\n    <form novalidate>\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Address</ngs-label>\n        <input ngsInput [formField]=\"secondFormGroup.secondCtrl\" placeholder=\"Ex. 1 Main St, New York, NY\">\n      </ngs-form-field>\n      <div class=\"flex gap-3\">\n        <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step>\n    <ng-template ngsStepLabel>Done</ng-template>\n    <p>You are now done.</p>\n    <div class=\"flex gap-3\">\n      <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n      <button ngsButton=\"filled\" (click)=\"stepper.reset()\">Reset</button>\n    </div>\n  </ngs-step>\n</ngs-stepper>",
       "exampleFiles": [
         {
           "name": "basic-stepper-example",
           "title": "Basic stepper",
           "file": "projects/docs/src/app/components/stepper/_examples/basic-stepper-example/basic-stepper-example.html",
-          "source": "<button ngsButton=\"tonal\" (click)=\"isLinear = !isLinear\" id=\"toggle-linear\" class=\"mb-6\">\n  {{ !isLinear ? 'Enable linear mode' : 'Disable linear mode' }}\n</button>\n<ngs-stepper [linear]=\"isLinear\" #stepper>\n  <ngs-step [stepControl]=\"firstFormGroup\">\n    <form [formGroup]=\"firstFormGroup\">\n      <ng-template ngsStepLabel>Fill out your name</ng-template>\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Name</ngs-label>\n        <input ngsInput placeholder=\"Last name, First name\" formControlName=\"firstCtrl\" required>\n      </ngs-form-field>\n      <div>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step [stepControl]=\"secondFormGroup\" label=\"Fill out your address\">\n    <form [formGroup]=\"secondFormGroup\">\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Address</ngs-label>\n        <input ngsInput formControlName=\"secondCtrl\" placeholder=\"Ex. 1 Main St, New York, NY\" required>\n      </ngs-form-field>\n      <div class=\"flex gap-3\">\n        <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step>\n    <ng-template ngsStepLabel>Done</ng-template>\n    <p>You are now done.</p>\n    <div class=\"flex gap-3\">\n      <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n      <button ngsButton=\"filled\" (click)=\"stepper.reset()\">Reset</button>\n    </div>\n  </ngs-step>\n</ngs-stepper>"
+          "source": "<button ngsButton=\"tonal\" (click)=\"isLinear = !isLinear\" id=\"toggle-linear\" class=\"mb-6\">\n  {{ !isLinear ? 'Enable linear mode' : 'Disable linear mode' }}\n</button>\n<ngs-stepper [linear]=\"isLinear\" #stepper>\n  <ngs-step [stepControl]=\"firstFormGroup\">\n    <form novalidate>\n      <ng-template ngsStepLabel>Fill out your name</ng-template>\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Name</ngs-label>\n        <input ngsInput placeholder=\"Last name, First name\" [formField]=\"firstFormGroup.firstCtrl\">\n      </ngs-form-field>\n      <div>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step [stepControl]=\"secondFormGroup\" label=\"Fill out your address\">\n    <form novalidate>\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Address</ngs-label>\n        <input ngsInput [formField]=\"secondFormGroup.secondCtrl\" placeholder=\"Ex. 1 Main St, New York, NY\">\n      </ngs-form-field>\n      <div class=\"flex gap-3\">\n        <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step>\n    <ng-template ngsStepLabel>Done</ng-template>\n    <p>You are now done.</p>\n    <div class=\"flex gap-3\">\n      <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n      <button ngsButton=\"filled\" (click)=\"stepper.reset()\">Reset</button>\n    </div>\n  </ngs-step>\n</ngs-stepper>"
         },
         {
           "name": "stepper-header-position-example",
           "title": "Stepper header position",
           "file": "projects/docs/src/app/components/stepper/_examples/stepper-header-position-example/stepper-header-position-example.html",
-          "source": "<ngs-stepper headerPosition=\"bottom\" #stepper>\n  <ngs-step [stepControl]=\"firstFormGroup\">\n    <form [formGroup]=\"firstFormGroup\">\n      <ng-template ngsStepLabel>Fill out your name</ng-template>\n      <ngs-form-field class=\"w-1/2\">\n        <input ngsInput placeholder=\"Last name, First name\" formControlName=\"firstCtrl\" required>\n      </ngs-form-field>\n      <div>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step [stepControl]=\"secondFormGroup\" optional>\n    <form [formGroup]=\"secondFormGroup\">\n      <ng-template ngsStepLabel>Fill out your address</ng-template>\n      <ngs-form-field class=\"w-1/2\">\n        <input ngsInput placeholder=\"Address\" formControlName=\"secondCtrl\" required>\n      </ngs-form-field>\n      <div class=\"flex gap-3\">\n        <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step>\n    <ng-template ngsStepLabel>Done</ng-template>\n    You are now done.\n    <div class=\"flex gap-3\">\n      <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n      <button ngsButton=\"filled\" (click)=\"stepper.reset()\">Reset</button>\n    </div>\n  </ngs-step>\n</ngs-stepper>"
+          "source": "<ngs-stepper headerPosition=\"bottom\" #stepper>\n  <ngs-step [stepControl]=\"firstFormGroup\">\n    <form novalidate>\n      <ng-template ngsStepLabel>Fill out your name</ng-template>\n      <ngs-form-field class=\"w-1/2\">\n        <input ngsInput placeholder=\"Last name, First name\" [formField]=\"firstFormGroup.firstCtrl\">\n      </ngs-form-field>\n      <div>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step [stepControl]=\"secondFormGroup\" optional>\n    <form novalidate>\n      <ng-template ngsStepLabel>Fill out your address</ng-template>\n      <ngs-form-field class=\"w-1/2\">\n        <input ngsInput placeholder=\"Address\" [formField]=\"secondFormGroup.secondCtrl\">\n      </ngs-form-field>\n      <div class=\"flex gap-3\">\n        <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step>\n    <ng-template ngsStepLabel>Done</ng-template>\n    You are now done.\n    <div class=\"flex gap-3\">\n      <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n      <button ngsButton=\"filled\" (click)=\"stepper.reset()\">Reset</button>\n    </div>\n  </ngs-step>\n</ngs-stepper>"
         },
         {
           "name": "stepper-hidden-header-border-example",
           "title": "Stepper hidden header border",
           "file": "projects/docs/src/app/components/stepper/_examples/stepper-hidden-header-border-example/stepper-hidden-header-border-example.html",
-          "source": "<ngs-stepper hideHeaderBorder headerPosition=\"bottom\" #stepper>\n  <ngs-step [stepControl]=\"accountForm\">\n    <form [formGroup]=\"accountForm\">\n      <ng-template ngsStepLabel>Account</ng-template>\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Account name</ngs-label>\n        <input ngsInput formControlName=\"accountName\" placeholder=\"Acme Finance\" required>\n      </ngs-form-field>\n      <div>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step [stepControl]=\"workspaceForm\">\n    <form [formGroup]=\"workspaceForm\">\n      <ng-template ngsStepLabel>Workspace</ng-template>\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Workspace name</ngs-label>\n        <input ngsInput formControlName=\"workspaceName\" placeholder=\"Revenue operations\" required>\n      </ngs-form-field>\n      <div class=\"flex gap-3\">\n        <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step>\n    <ng-template ngsStepLabel>Review</ng-template>\n    <p>Review the setup before creating the workspace.</p>\n    <div class=\"flex gap-3\">\n      <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n      <button ngsButton=\"filled\" (click)=\"stepper.reset()\">Reset</button>\n    </div>\n  </ngs-step>\n</ngs-stepper>"
+          "source": "<ngs-stepper hideHeaderBorder headerPosition=\"bottom\" #stepper>\n  <ngs-step [stepControl]=\"accountForm\">\n    <form novalidate>\n      <ng-template ngsStepLabel>Account</ng-template>\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Account name</ngs-label>\n        <input ngsInput [formField]=\"accountForm.accountName\" placeholder=\"Acme Finance\">\n      </ngs-form-field>\n      <div>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step [stepControl]=\"workspaceForm\">\n    <form novalidate>\n      <ng-template ngsStepLabel>Workspace</ng-template>\n      <ngs-form-field class=\"w-1/2 mt-2\">\n        <ngs-label>Workspace name</ngs-label>\n        <input ngsInput [formField]=\"workspaceForm.workspaceName\" placeholder=\"Revenue operations\">\n      </ngs-form-field>\n      <div class=\"flex gap-3\">\n        <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n        <button ngsButton=\"filled\" ngsStepperNext>Next</button>\n      </div>\n    </form>\n  </ngs-step>\n  <ngs-step>\n    <ng-template ngsStepLabel>Review</ng-template>\n    <p>Review the setup before creating the workspace.</p>\n    <div class=\"flex gap-3\">\n      <button ngsButton=\"outlined\" ngsStepperPrevious>Back</button>\n      <button ngsButton=\"filled\" (click)=\"stepper.reset()\">Reset</button>\n    </div>\n  </ngs-step>\n</ngs-stepper>"
         }
       ],
       "previewAsset": "projects/components/stepper/preview.svg",
@@ -10823,13 +10898,13 @@
         "Timepicker custom toggle icon",
         "Timepicker interval"
       ],
-      "minimalExample": "<ngs-form-field>\n  <ngs-label>Pick a time</ngs-label>\n  <input ngsInput [ngsTimepicker]=\"picker\">\n  <ngs-timepicker-toggle ngsIconButtonSuffix [for]=\"picker\"/>\n  <ngs-timepicker #picker/>\n</ngs-form-field>",
+      "minimalExample": "<ngs-form-field>\n  <ngs-label>Pick a time</ngs-label>\n  <input ngsInput [formField]=\"time\" [ngsTimepicker]=\"picker\">\n  <ngs-timepicker-toggle ngsIconButtonSuffix [for]=\"picker\"/>\n  <ngs-timepicker #picker/>\n</ngs-form-field>",
       "exampleFiles": [
         {
           "name": "basic-timepicker-example",
           "title": "Basic timepicker",
           "file": "projects/docs/src/app/components/timepicker/_examples/basic-timepicker-example/basic-timepicker-example.html",
-          "source": "<ngs-form-field>\n  <ngs-label>Pick a time</ngs-label>\n  <input ngsInput [ngsTimepicker]=\"picker\">\n  <ngs-timepicker-toggle ngsIconButtonSuffix [for]=\"picker\"/>\n  <ngs-timepicker #picker/>\n</ngs-form-field>"
+          "source": "<ngs-form-field>\n  <ngs-label>Pick a time</ngs-label>\n  <input ngsInput [formField]=\"time\" [ngsTimepicker]=\"picker\">\n  <ngs-timepicker-toggle ngsIconButtonSuffix [for]=\"picker\"/>\n  <ngs-timepicker #picker/>\n</ngs-form-field>"
         },
         {
           "name": "timepicker-custom-toggle-icon-example",
@@ -10864,14 +10939,15 @@
         "disabled",
         "for",
         "interval",
-        "max",
-        "min",
         "ngsTimepicker",
-        "openOnClick"
+        "openOnClick",
+        "readonly",
+        "value"
       ],
       "outputs": [
         "closed",
-        "opened"
+        "opened",
+        "touch"
       ],
       "cssTokens": [
         "--ngs-dropdown-bg",
@@ -10899,13 +10975,13 @@
       "exampleTopics": [
         "Basic timezone select"
       ],
-      "minimalExample": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Timezones</ngs-label>\n  <ngs-timezone-select [(ngModel)]=\"selectedTimezone\" placeholder=\"Select a timezone\"/>\n</ngs-form-field>\n<p>\n  Selected timezone: {{ selectedTimezone() }}\n</p>",
+      "minimalExample": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Timezones</ngs-label>\n  <ngs-timezone-select [formField]=\"selectedTimezone\" placeholder=\"Select a timezone\"/>\n</ngs-form-field>\n<p>\n  Selected timezone: {{ selectedTimezone().value() }}\n</p>",
       "exampleFiles": [
         {
           "name": "basic-timezone-select-example",
           "title": "Basic timezone select",
           "file": "projects/docs/src/app/forms/timezone/_examples/basic-timezone-select-example/basic-timezone-select-example.html",
-          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Timezones</ngs-label>\n  <ngs-timezone-select [(ngModel)]=\"selectedTimezone\" placeholder=\"Select a timezone\"/>\n</ngs-form-field>\n<p>\n  Selected timezone: {{ selectedTimezone() }}\n</p>"
+          "source": "<ngs-form-field class=\"w-1/2\">\n  <ngs-label>Timezones</ngs-label>\n  <ngs-timezone-select [formField]=\"selectedTimezone\" placeholder=\"Select a timezone\"/>\n</ngs-form-field>\n<p>\n  Selected timezone: {{ selectedTimezone().value() }}\n</p>"
         }
       ],
       "previewAsset": "projects/components/timezone-select/preview.svg",
@@ -10922,15 +10998,18 @@
       "inputs": [
         "aria-describedby",
         "disabled",
+        "invalid",
         "locale",
         "placeholder",
+        "readonly",
         "required",
-        "searchTerm",
+        "touched",
         "value"
       ],
       "outputs": [
         "closed",
-        "opened"
+        "opened",
+        "touch"
       ],
       "cssTokens": [],
       "example": null
@@ -11070,7 +11149,7 @@
           "name": "tooltip-disabled-example",
           "title": "Tooltip disabled",
           "file": "projects/docs/src/app/components/tooltip/_examples/tooltip-disabled-example/tooltip-disabled-example.html",
-          "source": "<button ngsButton=\"filled\"\n        ngsTooltip=\"Info about the action\"\n        [ngsTooltipDisabled]=\"disabled.value\">\n  Action\n</button>\n<ngs-checkbox [formControl]=\"disabled\" class=\"ms-5\">\n  Tooltip disabled\n</ngs-checkbox>"
+          "source": "<button ngsButton=\"filled\"\n        ngsTooltip=\"Info about the action\"\n        [ngsTooltipDisabled]=\"disabled().value()\">\n  Action\n</button>\n<ngs-checkbox [formField]=\"disabled\" class=\"ms-5\">\n  Tooltip disabled\n</ngs-checkbox>"
         },
         {
           "name": "tooltip-manually-show-hide-example",
@@ -11280,20 +11359,20 @@
       "purpose": "Choose one or more hierarchical values in an Angular form.",
       "useWhen": "Use for departments, categories, folders, and nested entity selection. Nodes have unique string or number values, labels, optional children, disabled, and hasChildren. Supports search retaining ancestors, single/multiple selection, leavesOnly, cascading selection of enabled loaded leaves, independent selection with cascade=false, lazy loadChildren, clear, and Angular forms inside FormField. Search and cascade operate on loaded nodes. Use Tree for navigation rather than form selection and Select for flat choices.",
       "exampleTopics": [
-        "Single selection and reactive forms",
+        "Single selection with Signal Forms",
         "Multiple selection",
         "Load children on expansion",
         "Basic tree select",
         "Multiple tree select",
         "Lazy tree select"
       ],
-      "minimalExample": "<ngs-form-field class=\"w-full max-w-96\">\n  <ngs-label>Department</ngs-label>\n  <ngs-tree-select\n    [nodes]=\"nodes\"\n    [formControl]=\"department\"\n    leavesOnly\n    clearable\n    required\n    aria-label=\"Department\"\n  />\n  @if (department.touched && department.invalid) {\n    <ngs-error>Choose a department.</ngs-error>\n  }\n</ngs-form-field>\n<p class=\"mt-3 text-sm\">Selected: {{ department.value ?? 'None' }}</p>",
+      "minimalExample": "<ngs-form-field class=\"w-full max-w-96\">\n  <ngs-label>Department</ngs-label>\n  <ngs-tree-select\n    [nodes]=\"nodes\"\n    [formField]=\"department\"\n    leavesOnly\n    clearable\n    aria-label=\"Department\"\n  />\n  @if (department().touched() && department().invalid()) {\n    <ngs-error>Choose a department.</ngs-error>\n  }\n</ngs-form-field>\n<p class=\"mt-3 text-sm\">Selected: {{ department().value() ?? 'None' }}</p>",
       "exampleFiles": [
         {
           "name": "basic-tree-select-example",
           "title": "Basic tree select",
           "file": "projects/docs/src/app/forms/tree-select/_examples/basic-tree-select-example/basic-tree-select-example.html",
-          "source": "<ngs-form-field class=\"w-full max-w-96\">\n  <ngs-label>Department</ngs-label>\n  <ngs-tree-select\n    [nodes]=\"nodes\"\n    [formControl]=\"department\"\n    leavesOnly\n    clearable\n    required\n    aria-label=\"Department\"\n  />\n  @if (department.touched && department.invalid) {\n    <ngs-error>Choose a department.</ngs-error>\n  }\n</ngs-form-field>\n<p class=\"mt-3 text-sm\">Selected: {{ department.value ?? 'None' }}</p>"
+          "source": "<ngs-form-field class=\"w-full max-w-96\">\n  <ngs-label>Department</ngs-label>\n  <ngs-tree-select\n    [nodes]=\"nodes\"\n    [formField]=\"department\"\n    leavesOnly\n    clearable\n    aria-label=\"Department\"\n  />\n  @if (department().touched() && department().invalid()) {\n    <ngs-error>Choose a department.</ngs-error>\n  }\n</ngs-form-field>\n<p class=\"mt-3 text-sm\">Selected: {{ department().value() ?? 'None' }}</p>"
         },
         {
           "name": "lazy-tree-select-example",
@@ -11327,6 +11406,7 @@
         "clearable",
         "disabled",
         "emptyText",
+        "invalid",
         "label",
         "leavesOnly",
         "loadChildren",
@@ -11335,8 +11415,10 @@
         "panelId",
         "placeholder",
         "query",
+        "readonly",
         "required",
         "searchable",
+        "touched",
         "value"
       ],
       "outputs": [
@@ -11347,7 +11429,8 @@
         "opened",
         "queryChange",
         "selectionChange",
-        "selectNode"
+        "selectNode",
+        "touch"
       ],
       "cssTokens": [
         "--ngs-button-height",

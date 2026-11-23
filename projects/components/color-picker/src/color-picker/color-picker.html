@@ -14,13 +14,13 @@
          type="text"
          ngsInput
          maxlength="7"
-         [disabled]="_disabled()"
+         [disabled]="disabled() || readonly()"
          [ngModelOptions]="{standalone: true}"
          [(ngModel)]="hexColor"
          (ngModelChange)="onHexColorChange($event)"
          (blur)="onHexColorBlur()">
   <button type="button" ngsIconButton
-          [disabled]="_disabled()"
+          [disabled]="disabled() || readonly()"
           aria-label="Copy HEX color"
           ngsIconButtonSuffix
           (mousedown)="copyToClipboard($event, hexInput)">

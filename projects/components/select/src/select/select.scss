@@ -12,6 +12,10 @@
   }
 }
 
+.ngs-select-panel-wrapper {
+  @include select-panel.panel-wrapper;
+}
+
 .ngs-select-panel {
   @include select-panel.panel;
 }

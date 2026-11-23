@@ -78,40 +78,26 @@ export class FormBuilderExternalStepperArticle {
   </ngs-step>
 </ngs-stepper>`;
 
-  readonly oneFormCode = `<form [formGroup]="form" (ngSubmit)="submit()">
-  <ngs-stepper>
-    @for (step of steps; track step.id) {
-      <ngs-step [label]="step.title">
-        <ngs-form-renderer
-          [schema]="schema"
-          [items]="step.items"
-          [formGroup]="form"
-          [showSubmit]="false" />
-      </ngs-step>
-    }
-  </ngs-stepper>
+  readonly oneFormCode = `<ngs-stepper #stepper="ngsStepper"
+  (selectionChange)="activeIndex.set($event.selectedIndex)">
+  @for (step of steps; track step.id) {
+    <ngs-step [label]="step.title" />
+  }
+</ngs-stepper>
 
-  <button ngsButton="filled" type="submit">Submit</button>
-</form>`;
+<ngs-form-renderer
+  #renderer="ngsFormRenderer"
+  [schema]="schema"
+  [items]="steps[activeIndex()].items"
+  [showSubmit]="false"
+  [(value)]="value"
+  (formSubmit)="save($event)" />
 
-  readonly futureInputsCode = `readonly items = input<FormBuilderLayoutItem[] | null>(null);
-readonly formGroup = input<FormGroup | null>(null);
+<button ngsButton="filled" type="button" (click)="renderer.submit()">Submit</button>`;
 
-protected readonly activeItems = computed(() =>
-  this.items() ?? normalizedLayout(this.schema())
-);
-
-protected readonly form = computed(() =>
-  this.formGroup() ?? this.createFormGroup()
-);`;
-
-  readonly decisionCode = `// Use this when the renderer owns navigation.
+  readonly decisionCode = `<!-- Renderer-owned navigation -->
 <ngs-form-renderer [schema]="schema" [flow]="flow" />
 
-// Use this only when renderer supports shared formGroup + items.
-<ngs-stepper>
-  <ngs-step>
-    <ngs-form-renderer [schema]="schema" [items]="items" [formGroup]="form" />
-  </ngs-step>
-</ngs-stepper>`;
+<!-- Render the active items under external navigation -->
+<ngs-form-renderer [schema]="schema" [items]="activeItems()" />`;
 }

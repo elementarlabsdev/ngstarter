@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { Option, Select, SelectTrigger } from '@ngstarter-ui/components/select';
 import { Label } from '@ngstarter-ui/components/form-field';
 import { FormField } from '@ngstarter-ui/components/form-field';
@@ -7,7 +7,7 @@ import { FormField } from '@ngstarter-ui/components/form-field';
 @Component({
   selector: 'app-custom-trigger-example',
   imports: [
-    ReactiveFormsModule,
+    SignalFormField,
     Option,
     Select,
     SelectTrigger,
@@ -19,6 +19,6 @@ import { FormField } from '@ngstarter-ui/components/form-field';
   styleUrl: './custom-trigger-example.scss'
 })
 export class CustomTriggerExample {
-  toppings = new FormControl('');
+  toppings = form(signal<string[]>([]));
   toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 }

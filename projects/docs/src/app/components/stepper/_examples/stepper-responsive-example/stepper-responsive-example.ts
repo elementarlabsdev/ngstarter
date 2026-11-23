@@ -1,5 +1,6 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form, required } from '@angular/forms/signals';
 import { AsyncPipe } from '@angular/common';
 import { map, Observable } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -13,7 +14,7 @@ import { StepperOrientation } from '@angular/cdk/stepper';
   selector: 'app-stepper-responsive-example',
   imports: [
     FormsModule,
-    ReactiveFormsModule,
+    SignalFormField,
     AsyncPipe,
     Step,
     Stepper,
@@ -30,16 +31,21 @@ import { StepperOrientation } from '@angular/cdk/stepper';
   styleUrl: './stepper-responsive-example.scss'
 })
 export class StepperResponsiveExample {
-  private _formBuilder = inject(FormBuilder);
 
-  firstFormGroup = this._formBuilder.group({
-    firstCtrl: ['', Validators.required],
+  firstFormGroup = form(signal({
+    firstCtrl: '',
+  }), (path) => {
+    required(path.firstCtrl);
   });
-  secondFormGroup = this._formBuilder.group({
-    secondCtrl: ['', Validators.required],
+  secondFormGroup = form(signal({
+    secondCtrl: '',
+  }), (path) => {
+    required(path.secondCtrl);
   });
-  thirdFormGroup = this._formBuilder.group({
-    thirdCtrl: ['', Validators.required],
+  thirdFormGroup = form(signal({
+    thirdCtrl: '',
+  }), (path) => {
+    required(path.thirdCtrl);
   });
   stepperOrientation: Observable<StepperOrientation>;
 

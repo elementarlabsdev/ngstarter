@@ -41,16 +41,16 @@ export class FormBuilderCustomField {
 } from '@ngstarter-ui/components/form-builder';`;
 
   readonly rendererCode = `import { Component, input } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FieldTree, FormField as SignalFormField } from '@angular/forms/signals';
 import { ButtonToggle, ButtonToggleGroup } from '@ngstarter-ui/components/button-toggle';
 import { FormBuilderField } from '@ngstarter-ui/components/form-builder';
 
 @Component({
   selector: 'app-priority-field',
-  imports: [ReactiveFormsModule, ButtonToggle, ButtonToggleGroup],
+  imports: [SignalFormField, ButtonToggle, ButtonToggleGroup],
   template: \`
     <label>{{ field().label }}</label>
-    <ngs-button-toggle-group [formControl]="control()">
+    <ngs-button-toggle-group [formField]="control()">
       <ngs-button-toggle value="low">{{ field().settings?.['lowLabel'] || 'Low' }}</ngs-button-toggle>
       <ngs-button-toggle value="medium">{{ field().settings?.['mediumLabel'] || 'Medium' }}</ngs-button-toggle>
       <ngs-button-toggle value="high">{{ field().settings?.['highLabel'] || 'High' }}</ngs-button-toggle>
@@ -59,7 +59,7 @@ import { FormBuilderField } from '@ngstarter-ui/components/form-builder';
 })
 export class PriorityField {
   readonly field = input.required<FormBuilderField>();
-  readonly control = input.required<FormControl>();
+  readonly control = input.required<FieldTree<unknown>>();
 }`;
 
   readonly providerCode = `providers: [

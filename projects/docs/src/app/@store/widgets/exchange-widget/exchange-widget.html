@@ -13,9 +13,9 @@
     <div class="text-xs">Exchange</div>
     <div class="text-sm">1 {{ currencyFrom }}={{ currentConversionRate }} {{ currencyTo }}</div>
   </div>
-  <div class="rounded-xl bg-surface-container p-3 mt-2" [formGroup]="form">
+  <div class="rounded-xl bg-surface-container p-3 mt-2">
     <div class="relative h-10">
-      <input type="number" min="0" placeholder="You sell" formControlName="from"
+      <input type="number" placeholder="You sell" [formField]="form.from" (input)="convert('from')"
              class="h-full w-full text-sm placeholder:text-sm bg-transparent
                     ngs-number-input-no-spinners focus-within:outline-none pe-10">
       <span class="absolute end-0 text-sm top-1/2 -translate-y-1/2">{{ currencyFrom }}</span>
@@ -31,7 +31,7 @@
       <ngs-divider/>
     </div>
     <div class="relative h-10">
-      <input type="number" min="0" placeholder="You get" formControlName="to"
+      <input type="number" placeholder="You get" [formField]="form.to" (input)="convert('to')"
              class="h-full w-full text-sm placeholder:text-sm bg-transparent
                     ngs-number-input-no-spinners focus-within:outline-none pe-10">
       <span class="absolute end-0 text-sm top-1/2 -translate-y-1/2">{{ currencyTo }}</span>

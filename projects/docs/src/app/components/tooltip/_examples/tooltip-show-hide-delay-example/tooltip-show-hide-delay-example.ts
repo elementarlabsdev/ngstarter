@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { Button } from '@ngstarter-ui/components/button';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
 import { FormField, Hint, Label } from '@ngstarter-ui/components/form-field';
@@ -12,7 +12,7 @@ import { Input } from '@ngstarter-ui/components/input';
     Tooltip,
     Input,
     Hint,
-    ReactiveFormsModule,
+    SignalFormField,
     Label,
     FormField
   ],
@@ -21,6 +21,6 @@ import { Input } from '@ngstarter-ui/components/input';
   styleUrl: './tooltip-show-hide-delay-example.scss',
 })
 export class TooltipShowHideDelayExample {
-  showDelay = new FormControl(1000, { nonNullable: true });
-  hideDelay = new FormControl(2000, { nonNullable: true });
+  showDelay = form(signal(1000));
+  hideDelay = form(signal(2000));
 }

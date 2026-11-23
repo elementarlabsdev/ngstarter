@@ -14,14 +14,13 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import {
-  ControlValueAccessor,
   NgControl,
   FormsModule,
 } from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 import { FormFieldControl, FORM_FIELD } from '@ngstarter-ui/components/form-field';
 import { Select, Option, SelectTrigger, SelectChange, SelectHeader } from '@ngstarter-ui/components/select';
 import { Subject } from 'rxjs';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { Currency } from '../currency.interface';
@@ -40,6 +39,7 @@ import { Button } from '@ngstarter-ui/components/button';
     },
   ],
   host: {
+    '[attr.aria-readonly]': 'readonly() || null',
     'class': 'ngs-currency-select',
     '[class.floating]': 'shouldLabelFloat',
     '[id]': 'id',
@@ -63,8 +63,8 @@ export class CurrencySelect
   implements
     OnInit,
     OnDestroy,
-    ControlValueAccessor,
-    FormFieldControl<string | null>
+      FormFieldControl<string | null>,
+    FormValueControl<string | null>
 {
   private static readonly CURRENCY_RENDER_CHUNK_SIZE = 32;
   private static readonly CURRENCY_RENDER_CHUNK_DELAY = 50;
@@ -82,13 +82,16 @@ export class CurrencySelect
 
   protected searchTerm = model('');
   protected visibleCurrencyCount = signal(CurrencySelect.CURRENCY_RENDER_CHUNK_SIZE);
-  private readonly _valueSignal = signal<string | null>(null);
+  readonly value = model<string | null>(null);
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly invalid = input(false);
+  readonly touched = input(false);
+  readonly touch = output<void>();
   private readonly _focusedSignal = signal(false);
-  private _touched = false;
 
   placeholderInputSignal = input<string>('', { alias: 'placeholder' });
-  isRequiredSignal = model<boolean>(false, { alias: 'required' });
-  isDisabledSignal = model<boolean>(false, { alias: 'disabled' });
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   showCountryName = input(false, {
     transform: booleanAttribute
@@ -113,7 +116,7 @@ export class CurrencySelect
   });
 
   readonly selectedCurrencyDisplay = computed(() => {
-    return this.internalCurrencies.find(c => c.code === this._valueSignal());
+    return this.internalCurrencies.find(c => c.code === this.value());
   });
 
   readonly ngsSelect = viewChild<Select>('ngsSelect');
@@ -127,15 +130,9 @@ export class CurrencySelect
   readonly opened = output<void>();
   readonly closed = output<void>();
 
-  private onChangeFn: (value: string | null) => void = () => {};
-  private onTouchedFn: () => void = () => {};
   private _currencyRenderTimeout: ReturnType<typeof setTimeout> | undefined;
 
   constructor() {
-    if (this.ngControl) {
-      this.ngControl.valueAccessor = this;
-    }
-
     this.destroyRef.onDestroy(() => {
       this.clearCurrencySelectTimeouts();
       this.fm.stopMonitoring(this.elRef.nativeElement);
@@ -143,14 +140,10 @@ export class CurrencySelect
     });
 
     effect(() => {
-      this.onChangeFn(this._valueSignal());
-    });
-
-    effect(() => {
-      this._valueSignal();
+      this.value();
       this._focusedSignal();
-      this.isRequiredSignal();
-      this.isDisabledSignal();
+      this.required();
+      this.disabled();
       this.placeholderInputSignal();
       this.ngControl?.control?.status;
       this.stateChanges.next();
@@ -158,19 +151,6 @@ export class CurrencySelect
   }
 
   ngOnInit(): void {
-    if (this.ngControl?.control) {
-      const control = this.ngControl.control;
-
-      if (control.validator) {
-        const validator = control.validator({} as any);
-        if (validator && validator['required']) {
-          this.isRequiredSignal.set(true);
-        }
-      }
-
-      this.isDisabledSignal.set(control.disabled);
-    }
-
     if (this._formField) {
       this._renderer.addClass(this._formField.elementRef.nativeElement, 'ngs-form-field-type-currency-select');
     }
@@ -178,13 +158,6 @@ export class CurrencySelect
 
   ngOnDestroy(): void {
     this.clearCurrencySelectTimeouts();
-  }
-
-  get value(): string | null {
-    return this._valueSignal();
-  }
-  set value(val: string | null) {
-    this._valueSignal.set(val);
   }
 
   get focused(): boolean {
@@ -200,9 +173,8 @@ export class CurrencySelect
 
   onFocusOut(event: any) {
     if (!this._elementRef.nativeElement.contains(event.relatedTarget as Element)) {
-      this._touched = true;
       this._focusedSignal.set(false);
-      this.onTouchedFn();
+      this.touch.emit();
       this.stateChanges.next();
     }
   }
@@ -214,22 +186,8 @@ export class CurrencySelect
     this.stateChanges.next();
   }
 
-  get required(): boolean {
-    return this.isRequiredSignal();
-  }
-  set required(req: boolean) {
-    this.isRequiredSignal.set(coerceBooleanProperty(req));
-  }
-
-  get disabled(): boolean {
-    return this.isDisabledSignal();
-  }
-  set disabled(dis: boolean) {
-    this.isDisabledSignal.set(coerceBooleanProperty(dis));
-  }
-
   get empty(): boolean {
-    return !this._valueSignal();
+    return !this.value();
   }
 
   get shouldLabelFloat(): boolean {
@@ -237,11 +195,7 @@ export class CurrencySelect
   }
 
   get errorState(): boolean {
-    return !!(this.ngControl?.invalid && (this.ngControl?.touched || this._touched));
-  }
-
-  get touched(): boolean {
-    return this._touched;
+    return !!((this.invalid() || this.ngControl?.invalid) && this.touched());
   }
 
   setDescribedByIds(ids: string[]): void {
@@ -253,7 +207,7 @@ export class CurrencySelect
   }
 
   onContainerClick(event: MouseEvent): void {
-    if (this.disabled) {
+    if (this.disabled()) {
       return;
     }
 
@@ -261,29 +215,8 @@ export class CurrencySelect
     this.ngsSelect()?.onContainerClick(event);
   }
 
-  writeValue(value: string | null): void {
-    this._valueSignal.set(value);
-  }
-
-  registerOnChange(fn: any): void {
-    this.onChangeFn = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouchedFn = () => {
-      this._touched = true;
-      fn();
-      this.stateChanges.next();
-    };
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-  }
-
   onSelectionChange(event: SelectChange): void {
-    this.value = event.value;
-    this.onTouchedFn();
+    this.value.set(event.value);
   }
 
   clearSearch(event: MouseEvent): void {
@@ -310,9 +243,6 @@ export class CurrencySelect
     this.searchTerm.set('');
     this.visibleCurrencyCount.set(CurrencySelect.CURRENCY_RENDER_CHUNK_SIZE);
 
-    if (!this._touched) {
-      this.onTouchedFn();
-    }
     this.closed.emit();
   }
 
@@ -322,7 +252,7 @@ export class CurrencySelect
 
   private getInitialVisibleCurrencyCount(): number {
     const currencies = this.filteredCurrencies();
-    const selectedCurrencyCode = this._valueSignal();
+    const selectedCurrencyCode = this.value();
 
     if (!selectedCurrencyCode) {
       return CurrencySelect.CURRENCY_RENDER_CHUNK_SIZE;

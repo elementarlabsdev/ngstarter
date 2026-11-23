@@ -1,5 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 import { Autocomplete, Option, AutocompleteTrigger } from '@ngstarter-ui/components/autocomplete';
@@ -9,7 +10,7 @@ import { AsyncPipe } from '@angular/common';
 @Component({
   selector: 'app-simple-autocomplete-example',
   imports: [
-    ReactiveFormsModule,
+    SignalFormField,
     Label,
     FormField,
     Option,
@@ -23,12 +24,13 @@ import { AsyncPipe } from '@angular/common';
   styleUrl: './simple-autocomplete-example.scss'
 })
 export class SimpleAutocompleteExample implements OnInit {
-  myControl = new FormControl('');
+  myControl = form(signal(''));
+  private readonly myControlChanges = toObservable(this.myControl().value);
   options: string[] = ['One', 'Two', 'Three'];
   filteredOptions!: Observable<string[]>;
 
   ngOnInit() {
-    this.filteredOptions = this.myControl.valueChanges.pipe(
+    this.filteredOptions = this.myControlChanges.pipe(
       startWith(''),
       map(value => this._filter(value || '')),
     );

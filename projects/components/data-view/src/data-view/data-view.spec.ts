@@ -86,6 +86,95 @@ describe('DataView server lifecycle', () => {
     const f = await create({ rowModelType: 'serverSide', datasource: { getItems: () => { throw new Error('Sync failure'); } } });
     expect(f.componentInstance.error()).toBe('Sync failure');
   });
+  it('reports one refresh completion and reports later pagination as a normal load', async () => {
+    const fixture = await create({
+      rowModelType: 'serverSide',
+      datasource: { getItems: (params: any) => params.successCallback([{ name: 'Row' }], 100) },
+    });
+    const view = fixture.componentInstance;
+    const loaded = vi.fn();
+    const refreshed = vi.fn();
+    view.loadEnd.subscribe(loaded);
+    view.refreshEnd.subscribe(refreshed);
+
+    view.refresh();
+    await fixture.whenStable();
+    expect(refreshed).toHaveBeenCalledOnce();
+    view.pageIndex.set(1);
+    await fixture.whenStable();
+    expect(loaded).toHaveBeenCalledOnce();
+    expect(refreshed).toHaveBeenCalledOnce();
+  });
+  it('clears a known row count when the datasource is replaced', async () => {
+    const fixture = await create({
+      rowModelType: 'serverSide',
+      datasource: { getItems: (params: any) => params.successCallback([{ name: 'First' }], 100) },
+    });
+    const grid = () => fixture.nativeElement.querySelector('[role="grid"]');
+    expect(grid().getAttribute('aria-rowcount')).toBe('101');
+
+    fixture.componentRef.setInput('datasource', {
+      getItems: (params: any) => params.successCallback([{ name: 'Second' }]),
+    });
+    await fixture.whenStable();
+    expect(grid().getAttribute('aria-rowcount')).toBe('-1');
+  });
+
+  it('drops selection and exclusions when switching server datasets with the same row IDs', async () => {
+    const fixture = await create({
+      rowModelType: 'serverSide',
+      getRowId: (row: { id: number }) => row.id,
+      datasource: { getItems: (params: any) => params.successCallback([{ id: 1, name: 'First' }], 2) },
+    });
+    const view = fixture.componentInstance;
+    view.selectAll('all');
+    expect(view.getSelection().allMatching).toBe(true);
+    view.rowSelectionToggle({ checked: false } as any, { id: 1, name: 'First' });
+    expect(view.getSelection().excludedRowIds).toEqual([1]);
+
+    fixture.componentRef.setInput('datasource', {
+      getItems: (params: any) => params.successCallback([{ id: 1, name: 'Second' }], 1),
+    });
+    await fixture.whenStable();
+
+    expect(view.getSelection()).toMatchObject({ allMatching: false, rowIds: [], excludedRowIds: [] });
+    expect(view.isSelected({ id: 1, name: 'Second' })).toBe(false);
+
+    view.selectAll('all');
+    fixture.componentRef.setInput('rowModelType', 'clientSide');
+    await fixture.whenStable();
+    expect(view.getSelection()).toMatchObject({ allMatching: false, rowIds: [], excludedRowIds: [] });
+  });
+
+  it('pages through an unknown total and returns to the last full page after an empty response', async () => {
+    const rows = Array.from({ length: 4 }, (_, id) => ({ id, name: `Row ${id}` }));
+    const fixture = await create({
+      withPagination: true,
+      showFirstLastButtons: true,
+      pageSize: 2,
+      rowModelType: 'serverSide',
+      datasource: {
+        getItems: (params: any) => params.successCallback(rows.slice(params.startRow, params.endRow)),
+      },
+    });
+    const root: HTMLElement = fixture.nativeElement;
+    const next = () => root.querySelector<HTMLButtonElement>('.ngs-paginator-navigation-next')!;
+    const label = () => root.querySelector('.ngs-paginator-range-label')?.textContent?.trim();
+    expect(label()).toBe('1 – 2');
+    expect(root.querySelector('.ngs-paginator-navigation-last')).toBeNull();
+    expect(next().disabled).toBe(false);
+
+    next().click();
+    await fixture.whenStable();
+    expect(label()).toBe('3 – 4');
+    expect(next().disabled).toBe(false);
+
+    next().click();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.pageIndex()).toBe(1);
+    expect(label()).toBe('3 – 4');
+    expect(next().disabled).toBe(true);
+  });
 });
 
 describe('DataView column filtering', () => {
@@ -129,6 +218,35 @@ describe('DataView saved views', () => {
     first.componentInstance.saveView('Last'); await first.whenStable(); first.destroy();
     const next = await create({ viewStorageKey: 'test-view' }, false); await next.whenStable();
     expect(next.componentInstance.search()).toBe('Row 29'); expect(next.componentInstance.savedViews()[0].name).toBe('Last');
+  });
+  it('isolates saved views and the active view when changing storage keys', async () => {
+    const storage = new Map<string, string>();
+    TestBed.configureTestingModule({
+      providers: [{
+        provide: (await import('../config')).DATA_VIEW_CONFIG,
+        useValue: {
+          viewStorage: {
+            getItem: (key: string) => storage.get(key) ?? null,
+            setItem: (key: string, value: string) => storage.set(key, value),
+          },
+        },
+      }],
+    });
+    const fixture = await create({ viewStorageKey: 'first-dataset' }, false);
+    const view = fixture.componentInstance;
+    const firstView = view.saveView('First dataset view');
+    await fixture.whenStable();
+
+    fixture.componentRef.setInput('viewStorageKey', 'second-dataset');
+    await fixture.whenStable();
+    expect(view.savedViews()).toEqual([]);
+    expect(view.activeViewId()).toBeNull();
+    expect(JSON.parse(storage.get('second-dataset')!).views).toEqual([]);
+
+    fixture.componentRef.setInput('viewStorageKey', 'first-dataset');
+    await fixture.whenStable();
+    expect(view.savedViews().map(item => item.name)).toEqual(['First dataset view']);
+    expect(view.activeViewId()).toBe(firstView.id);
   });
 });
 

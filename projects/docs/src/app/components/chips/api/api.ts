@@ -98,7 +98,9 @@ export class Api {
       description: 'Whether the chip listbox is disabled.',
       type: 'boolean',
       default: 'false'
-    }
+    },
+    { name: 'value', description: 'Single selected value or array of selected values in multiple mode.', type: 'any', default: 'undefined' },
+    { name: 'readonly', description: 'Prevents user edits while keeping the value visible.', type: 'boolean', default: 'false' },
   ];
 
   chipGridProperties = [
@@ -125,7 +127,11 @@ export class Api {
       description: 'Whether the chip grid is disabled.',
       type: 'boolean',
       default: 'false'
-    }
+    },
+    { name: 'value', description: 'The chip values model.', type: 'any[] | null', default: '[]' },
+    { name: 'readonly', description: 'Prevents user edits while keeping the value visible.', type: 'boolean', default: 'false' },
+    { name: 'invalid', description: 'Invalid state supplied by the bound form field.', type: 'boolean', default: 'false' },
+    { name: 'touched', description: 'Touched state supplied by the bound form field.', type: 'boolean', default: 'false' },
   ];
 
   chipOptionProperties = [

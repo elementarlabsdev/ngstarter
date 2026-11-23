@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, computed, effect, inject, input } from '@angular/core';
-import { AbstractControl, FormControl, FormsModule, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, computed, effect, signal, untracked, inject, input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form, validate } from '@angular/forms/signals';
 import { Error as FormFieldError, FormField, Hint, Label } from '@ngstarter-ui/components/form-field';
 import { Input } from '@ngstarter-ui/components/input';
 import { Select } from '@ngstarter-ui/components/select';
@@ -16,7 +16,7 @@ type SpacerHeight = 8 | 16 | 24 | 32 | 48 | 64;
   exportAs: 'ngsBasicFormBuilderFieldSettings',
   imports: [
     FormsModule,
-    ReactiveFormsModule,
+    SignalFormField,
     FormFieldError,
     FormField,
     Hint,
@@ -35,16 +35,13 @@ type SpacerHeight = 8 | 16 | 24 | 32 | 48 | 64;
   }
 })
 export class BasicFormBuilderFieldSettings {
-  private readonly destroyRef = inject(DestroyRef);
-
   readonly field = input.required<FormBuilderField>();
   readonly update = input.required<(changes: Partial<FormBuilderField>) => void>();
   readonly updateField = input<(changes: Partial<FormBuilderField>) => void>();
   readonly updateSection = input<(changes: Partial<FormBuilderSection>) => void>();
 
-  protected readonly optionsControl = new FormControl('', {
-    nonNullable: true,
-    validators: optionsTextValidator
+  protected readonly optionsControl = form(signal(''), path => {
+    validate(path, ({ value }) => optionsTextIsValid(value()) ? null : { kind: 'formBuilderOptionsFormat' });
   });
   protected readonly fieldWidthOptions: FormBuilderFieldWidth[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   protected readonly radioOrientationOptions: RadioOrientation[] = ['vertical', 'horizontal'];
@@ -70,22 +67,13 @@ export class BasicFormBuilderFieldSettings {
 
   constructor() {
     effect(() => {
-      const nextValue = this.optionsText();
-
-      if (this.optionsControl.value !== nextValue) {
-        this.optionsControl.setValue(nextValue, { emitEvent: false });
-      }
+      const value = this.optionsText();
+      untracked(() => this.optionsControl().value.set(value));
     });
+  }
 
-    this.optionsControl.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(value => {
-        if (this.optionsControl.invalid) {
-          return;
-        }
-
-        this.patchOptions(value);
-      });
+  protected onOptionsInput(text: string): void {
+    if (optionsTextIsValid(text)) this.patchOptions(text);
   }
 
   protected patch(changes: Partial<FormBuilderField>): void {
@@ -216,14 +204,12 @@ export class BasicFormBuilderFieldSettings {
   }
 }
 
-function optionsTextValidator(control: AbstractControl<string>): ValidationErrors | null {
-  const hasInvalidLine = (control.value ?? '')
+function optionsTextIsValid(value: string): boolean {
+  return value
     .split('\n')
     .map(line => line.trim())
     .filter(Boolean)
-    .some(line => !parseOptionLine(line));
-
-  return hasInvalidLine ? { formBuilderOptionsFormat: true } : null;
+    .every(line => !!parseOptionLine(line));
 }
 
 function parseOptionLine(line: string): { label: string; value: string; selected: boolean } | null {

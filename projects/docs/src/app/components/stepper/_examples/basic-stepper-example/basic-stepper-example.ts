@@ -1,5 +1,6 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form, required } from '@angular/forms/signals';
 import { Step, StepLabel, Stepper, StepperNext, StepperPrevious } from '@ngstarter-ui/components/stepper';
 import { Button } from '@ngstarter-ui/components/button';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
@@ -9,7 +10,7 @@ import { Input } from '@ngstarter-ui/components/input';
   selector: 'app-basic-stepper-example',
   imports: [
     FormsModule,
-    ReactiveFormsModule,
+    SignalFormField,
     Step,
     Stepper,
     Button,
@@ -25,13 +26,16 @@ import { Input } from '@ngstarter-ui/components/input';
   styleUrl: './basic-stepper-example.scss'
 })
 export class BasicStepperExample {
-  private _formBuilder = inject(FormBuilder);
 
-  firstFormGroup = this._formBuilder.group({
-    firstCtrl: ['', Validators.required],
+  firstFormGroup = form(signal({
+    firstCtrl: '',
+  }), (path) => {
+    required(path.firstCtrl);
   });
-  secondFormGroup = this._formBuilder.group({
-    secondCtrl: ['', Validators.required],
+  secondFormGroup = form(signal({
+    secondCtrl: '',
+  }), (path) => {
+    required(path.secondCtrl);
   });
   isLinear = false;
 }

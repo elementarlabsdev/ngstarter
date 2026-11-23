@@ -1,6 +1,6 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { Checkbox } from '@ngstarter-ui/components/checkbox';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { Tooltip } from '@ngstarter-ui/components/tooltip';
 import { Button } from '@ngstarter-ui/components/button';
 
@@ -8,7 +8,7 @@ import { Button } from '@ngstarter-ui/components/button';
   selector: 'app-tooltip-disabled-example',
   imports: [
     Checkbox,
-    ReactiveFormsModule,
+    SignalFormField,
     Tooltip,
     Button
   ],
@@ -17,5 +17,5 @@ import { Button } from '@ngstarter-ui/components/button';
   styleUrl: './tooltip-disabled-example.scss',
 })
 export class TooltipDisabledExample {
-  disabled = new FormControl(false, { nonNullable: true });
+  disabled = form(signal(false));
 }

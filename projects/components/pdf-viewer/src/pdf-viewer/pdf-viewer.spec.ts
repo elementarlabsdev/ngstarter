@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { PdfViewerAnnotationDef } from '../pdf-viewer-annotation-def.directive';
+import { PdfViewerEngineService } from '../pdf-viewer-engine.service';
 import { PdfViewer } from './pdf-viewer';
 
 @Component({
@@ -52,6 +53,37 @@ describe('PdfViewer', () => {
 
   it('should create', () => {
     expect(fixture.componentInstance).toBeTruthy();
+  });
+
+  it('destroys a registry from a superseded load without replacing the current registry', async () => {
+    const service = TestBed.inject(PdfViewerEngineService);
+    type Registry = Awaited<ReturnType<typeof service.createRegistry>>;
+    const stale = { destroy: vi.fn().mockResolvedValue(undefined) };
+    const current = { destroy: vi.fn().mockResolvedValue(undefined) };
+    let resolveStale!: (registry: Registry) => void;
+    const pending = new Promise<Registry>(resolve => {
+      resolveStale = resolve;
+    });
+    vi.spyOn(service, 'getEngine').mockResolvedValue({} as Awaited<ReturnType<typeof service.getEngine>>);
+    const createRegistry = vi.spyOn(service, 'createRegistry')
+      .mockReturnValueOnce(pending)
+      .mockResolvedValueOnce(current as unknown as Registry);
+    const openSource = vi.spyOn(fixture.componentInstance as unknown as { openSource(): Promise<unknown> }, 'openSource')
+      .mockRejectedValue(new Error('Stop before rendering'));
+
+    fixture.componentRef.setInput('src', 'old.pdf');
+    fixture.detectChanges();
+    await expect.poll(() => createRegistry).toHaveBeenCalledTimes(1);
+    fixture.componentRef.setInput('src', 'new.pdf');
+    fixture.detectChanges();
+    await expect.poll(() => openSource).toHaveBeenCalledOnce();
+
+    resolveStale(stale as unknown as Registry);
+    await expect.poll(() => stale.destroy).toHaveBeenCalledOnce();
+    expect(current.destroy).not.toHaveBeenCalled();
+
+    fixture.destroy();
+    await expect.poll(() => current.destroy).toHaveBeenCalledOnce();
   });
 
   it('should render every page by default', () => {

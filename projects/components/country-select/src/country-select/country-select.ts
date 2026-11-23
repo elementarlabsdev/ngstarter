@@ -14,17 +14,14 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import {
-  ControlValueAccessor,
   NgControl,
-  ReactiveFormsModule, FormsModule,
+  FormsModule,
 } from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 import { FormFieldControl, FORM_FIELD } from '@ngstarter-ui/components/form-field';
 import { Select, Option, SelectTrigger, SelectChange, SelectHeader } from '@ngstarter-ui/components/select';
 import { Subject } from 'rxjs';
-import { startWith } from 'rxjs/operators';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { Country } from '../country.interface';
 import { Icon } from '@ngstarter-ui/components/icon';
 import { countries } from '../countries';
@@ -40,7 +37,6 @@ export type CountrySelectValue = string | string[] | null;
     Icon,
     Select,
     SelectTrigger,
-    ReactiveFormsModule,
     Button,
     SelectHeader,
     FormsModule
@@ -55,6 +51,7 @@ export type CountrySelectValue = string | string[] | null;
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   host: {
+    '[attr.aria-readonly]': 'readonly() || null',
     'class': 'ngs-country-select',
     '[class.floating]': 'shouldLabelFloat',
     '[id]': 'id',
@@ -67,8 +64,8 @@ export class CountrySelect
   implements
     OnInit,
     OnDestroy,
-    ControlValueAccessor,
-    FormFieldControl<CountrySelectValue>
+      FormFieldControl<CountrySelectValue>,
+    FormValueControl<CountrySelectValue>
 {
   private static readonly COUNTRY_RENDER_CHUNK_SIZE = 32;
   private static readonly COUNTRY_RENDER_CHUNK_DELAY = 50;
@@ -83,14 +80,17 @@ export class CountrySelect
 
   protected searchTerm = model('');
   protected visibleCountryCount = signal(CountrySelect.COUNTRY_RENDER_CHUNK_SIZE);
-  readonly valueSignal = model<CountrySelectValue>(null, { alias: 'value' });
+  readonly value = model<CountrySelectValue>(null);
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly invalid = input(false);
+  readonly touched = input(false);
+  readonly touch = output<void>();
   private readonly _focusedSignal = signal(false);
-  private _touched = false;
 
   readonly idSignal = input(`ngs-country-select-${CountrySelect.nextId++}`, { alias: 'id' });
   placeholderInputSignal = input<string>('', { alias: 'placeholder' });
-  isRequiredSignal = model<boolean>(false, { alias: 'required' });
-  isDisabledSignal = model<boolean>(false, { alias: 'disabled' });
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
   readonly multiple = input(false, { transform: booleanAttribute });
   readonly hideCheckIcon = input(false, { transform: booleanAttribute });
   readonly clearable = input(false, { transform: booleanAttribute });
@@ -124,7 +124,7 @@ export class CountrySelect
   });
 
   readonly selectedCountryDisplays = computed(() => {
-    const value = this.valueSignal();
+    const value = this.value();
     const selectedCodes = Array.isArray(value)
       ? value
       : value
@@ -164,15 +164,9 @@ export class CountrySelect
   readonly closed = output<void>();
   readonly selectionChange = output<SelectChange>();
 
-  private onChangeFn: (value: CountrySelectValue) => void = () => {};
-  private onTouchedFn: () => void = () => {};
   private _countryRenderTimeout: ReturnType<typeof setTimeout> | undefined;
 
   constructor() {
-    if (this.ngControl) {
-      this.ngControl.valueAccessor = this;
-    }
-
     this.destroyRef.onDestroy(() => {
       this.clearCountrySelectTimeouts();
       this.fm.stopMonitoring(this.elRef.nativeElement);
@@ -180,14 +174,10 @@ export class CountrySelect
     });
 
     effect(() => {
-      this.onChangeFn(this.valueSignal());
-    });
-
-    effect(() => {
-      this.valueSignal();
+      this.value();
       this._focusedSignal();
-      this.isRequiredSignal();
-      this.isDisabledSignal();
+      this.required();
+      this.disabled();
       this.placeholderInputSignal();
       this.multiple();
       this.hideCheckIcon();
@@ -201,19 +191,6 @@ export class CountrySelect
   }
 
   ngOnInit(): void {
-    if (this.ngControl?.control) {
-      const control = this.ngControl.control;
-
-      if (control.validator) {
-        const validator = control.validator({} as any);
-        if (validator && validator['required']) {
-          this.isRequiredSignal.set(true);
-        }
-      }
-
-      this.isDisabledSignal.set(control.disabled);
-    }
-
     if (this._formField) {
       this._renderer.addClass(this._formField.elementRef.nativeElement, 'ngs-form-field-type-country-select');
     }
@@ -225,13 +202,6 @@ export class CountrySelect
 
   get id(): string {
     return this.idSignal();
-  }
-
-  get value(): CountrySelectValue {
-    return this.valueSignal();
-  }
-  set value(val: CountrySelectValue) {
-    this.valueSignal.set(val);
   }
 
   get focused(): boolean {
@@ -247,9 +217,8 @@ export class CountrySelect
 
   onFocusOut(event: any) {
     if (!this._elementRef.nativeElement.contains(event.relatedTarget as Element)) {
-      this._touched = true;
       this._focusedSignal.set(false);
-      this.onTouchedFn();
+      this.touch.emit();
       this.stateChanges.next();
     }
   }
@@ -261,22 +230,8 @@ export class CountrySelect
     this.stateChanges.next();
   }
 
-  get required(): boolean {
-    return this.isRequiredSignal();
-  }
-  set required(req: boolean) {
-    this.isRequiredSignal.set(coerceBooleanProperty(req));
-  }
-
-  get disabled(): boolean {
-    return this.isDisabledSignal();
-  }
-  set disabled(dis: boolean) {
-    this.isDisabledSignal.set(coerceBooleanProperty(dis));
-  }
-
   get empty(): boolean {
-    const value = this.valueSignal();
+    const value = this.value();
 
     if (Array.isArray(value)) {
       return value.length === 0;
@@ -290,11 +245,7 @@ export class CountrySelect
   }
 
   get errorState(): boolean {
-    return !!(this.ngControl?.invalid && (this.ngControl?.touched || this._touched));
-  }
-
-  get touched(): boolean {
-    return this._touched;
+    return !!((this.invalid() || this.ngControl?.invalid) && this.touched());
   }
 
   setDescribedByIds(ids: string[]): void {
@@ -306,7 +257,7 @@ export class CountrySelect
   }
 
   onContainerClick(event: MouseEvent): void {
-    if (this.disabled) {
+    if (this.disabled()) {
       return;
     }
 
@@ -314,29 +265,8 @@ export class CountrySelect
     this.ngsSelect().onContainerClick(event);
   }
 
-  writeValue(value: CountrySelectValue): void {
-    this.valueSignal.set(value);
-  }
-
-  registerOnChange(fn: any): void {
-    this.onChangeFn = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouchedFn = () => {
-      this._touched = true;
-      fn();
-      this.stateChanges.next();
-    };
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-  }
-
   onSelectionChange(event: SelectChange): void {
-    this.value = event.value;
-    this.onTouchedFn();
+    this.value.set(event.value);
     this.selectionChange.emit(event);
   }
 
@@ -364,9 +294,6 @@ export class CountrySelect
     this.searchTerm.set('');
     this.visibleCountryCount.set(CountrySelect.COUNTRY_RENDER_CHUNK_SIZE);
 
-    if (!this._touched) {
-      this.onTouchedFn();
-    }
     this.closed.emit();
   }
 
@@ -376,7 +303,7 @@ export class CountrySelect
 
   private getInitialVisibleCountryCount(): number {
     const countries = this.filteredCountries();
-    const value = this.valueSignal();
+    const value = this.value();
     const selectedCountryCode = Array.isArray(value) ? value[0] : value;
 
     if (!selectedCountryCode) {

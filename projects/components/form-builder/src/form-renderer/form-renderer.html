@@ -17,8 +17,8 @@
               <p class="ngs-form-renderer-repeater-empty">{{ repeaterEmptyText(field) }}</p>
             }
 
-            @for (group of repeaterGroups(field, controlGroup); track $index) {
-              <div class="ngs-form-renderer-repeater-item" [formGroup]="group">
+            @for (group of repeaterGroups(field, controlGroup); track group) {
+              <div class="ngs-form-renderer-repeater-item">
                 <div class="ngs-form-renderer-repeater-item-header">
                   <span>{{ field.label }} {{ $index + 1 }}</span>
                   @if (!readonly() && canRemoveRepeaterItem(field, controlGroup)) {
@@ -97,7 +97,7 @@
   }
 </ng-template>
 
-<form [formGroup]="formGroup()" (ngSubmit)="submit()">
+<form novalidate (submit)="submit($event)">
   <div class="flex flex-col gap-6">
     @if (stepsMode()) {
       <ngs-stepper #formStepper>

@@ -55,6 +55,11 @@
 <h3>SliderThumb API</h3>
 <p>Selector: <code>input[ngsSliderThumb]</code></p>
 <p>Exported as: <code>ngsSliderThumb</code></p>
+<p>
+  Bind <code>[formField]</code> to a numeric field on the thumb input. For a range, bind one field
+  to <code>input[ngsSliderStartThumb]</code> and another to <code>input[ngsSliderEndThumb]</code>.
+  Configure the track limits on <code>ngs-slider</code>.
+</p>
 
 <h4>Inputs</h4>
 <div class="my-6 overflow-x-auto rounded-xl border border-border">
@@ -70,7 +75,7 @@
       <tr>
         <td><code>value</code></td>
         <td><code>number</code></td>
-        <td>The value of the thumb.</td>
+        <td>Thumb model. Supports <code>[(value)]</code> for standalone use.</td>
       </tr>
     </tbody>
   </table>
@@ -89,8 +94,13 @@
     <tbody>
       <tr>
         <td><code>valueChange</code></td>
-        <td><code>EventEmitter&lt;number&gt;</code></td>
+        <td><code>number</code></td>
         <td>Emits when the thumb value changes.</td>
+      </tr>
+      <tr>
+        <td><code>touch</code></td>
+        <td><code>void</code></td>
+        <td>Emits on blur.</td>
       </tr>
     </tbody>
   </table>

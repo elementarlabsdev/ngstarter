@@ -1,5 +1,10 @@
 <h2 class="text-xl font-bold mt-8 mb-4">Datepicker</h2>
-<p>DateRangeInput supports <code>[(range)]="dateRange"</code> with <code>DateRange&lt;D&gt; | null</code>. Both calendar selection and typed start/end values update this model; <code>[range]</code> restores the visible inputs. Invalid typed dates are represented by the configured DateAdapter invalid value, so consumers can validate them through <code>DateAdapter.isValid</code>.</p>
+<p>
+  For a date range, bind <code>[formField]</code> to <code>ngs-date-range-input</code> with a
+  <code>DateRange&lt;D&gt; | null</code> field. Use <code>[(range)]</code> or <code>[(value)]</code>
+  for standalone two-way binding. The range input emits <code>touch</code> when focus leaves both
+  date inputs. The configured <code>DateAdapter</code> represents invalid typed dates in the range.
+</p>
 <div class="border border-border rounded-xl shadow-sm overflow-hidden my-6">
   <table ngs-table [dataSource]="datepickerProperties">
     <ng-container ngsColumnDef="name">
@@ -46,6 +51,11 @@
 </div>
 
 <h2 class="text-xl font-bold mt-8 mb-4">DatepickerInput</h2>
+<p>
+  Bind <code>[formField]</code> on <code>input[ngsDatepicker]</code> to a <code>D | null</code>
+  field. The directive emits <code>valueChange</code> and <code>touch</code>. A readonly form
+  field also prevents changes through the calendar.
+</p>
 <div class="border border-border rounded-xl shadow-sm overflow-hidden my-6">
   <table ngs-table [dataSource]="datepickerInputProperties">
     <ng-container ngsColumnDef="name">

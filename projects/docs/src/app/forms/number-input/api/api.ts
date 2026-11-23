@@ -80,15 +80,18 @@ export class Api {
     },
     {
       name: 'value',
-      description: 'The current value of the input',
-      type: 'number | undefined',
-      default: 'undefined'
-    }
+      description: 'Numeric model. The control writes null when the user clears the input.',
+      type: 'number | null | undefined',
+      default: 'null'
+    },
+    { name: 'invalid', description: 'Invalid state supplied by the bound form field.', type: 'boolean', default: 'false' },
+    { name: 'touched', description: 'Touched state supplied by the bound form field.', type: 'boolean', default: 'false' },
   ];
   events = [
     {
       name: 'valueChange',
       description: 'Emitted when the value changes'
-    }
+    },
+    { name: 'touch', description: 'Reports when focus leaves the control.', type: 'void' },
   ];
 }

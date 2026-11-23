@@ -124,7 +124,7 @@ describe('PhoneInput', () => {
     expect(component.countries()[component.countries().length - 1].shortCode).toBe('us');
   });
 
-  it('writes and formats external form values through ControlValueAccessor', async () => {
+  it('writes and formats external form values through Reactive Forms', async () => {
     const fixture = await createHost(PhoneInputHost);
     const component = fixture.componentInstance;
     const phoneInput = getPhoneInput(fixture);
@@ -134,7 +134,7 @@ describe('PhoneInput', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    expect(phoneInput.value).toBe('+14155552671');
+    expect(phoneInput.value()).toBe('+14155552671');
     expect(phoneInput.selectedCountry()?.shortCode).toBe('us');
     expect(getNativeInput(fixture).value).toBe('4155552671');
     expect(getCountryTrigger(fixture).textContent).toContain('🇺🇸');

@@ -25,6 +25,11 @@
 </div>
 
 <h3>CreditCardExpiryDateMaskDirective</h3>
+<p>
+  Bind <code>[formField]</code> on <code>input[ngsCreditCardExpiryDateMask]</code> to a
+  <code>string | null</code> field. The directive emits <code>valueChange</code> with the digits
+  and <code>touch</code> on blur.
+</p>
 <div class="border border-border rounded-xl shadow-sm overflow-hidden my-6">
   <table ngs-table [dataSource]="creditCardExpiryProperties">
     <ng-container ngsColumnDef="name">

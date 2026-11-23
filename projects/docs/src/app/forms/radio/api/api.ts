@@ -34,15 +34,15 @@ export class Api {
   radioGroupProperties = [
     {
       name: 'value',
-      description: 'Value of the radio group',
+      description: 'Selection model. Supports [(value)] and [formField].',
       type: 'any',
-      default: '–'
+      default: 'undefined'
     },
     {
       name: 'name',
       description: 'Name of the radio group',
       type: 'string',
-      default: '–'
+      default: "''"
     },
     {
       name: 'disabled',
@@ -55,14 +55,17 @@ export class Api {
       description: 'Radio button layout direction. Use vertical for stacked options and horizontal for inline choices.',
       type: "'horizontal' | 'vertical'",
       default: "'horizontal'"
-    }
+    },
+    { name: 'readonly', description: 'Prevents user edits while keeping the value visible.', type: 'boolean', default: 'false' },
   ];
 
   radioGroupEvents = [
     {
       name: 'change',
       description: 'Event emitted when the radio group value changes'
-    }
+    },
+    { name: 'valueChange', description: 'Emits the new value when the control updates its model.', type: 'any' },
+    { name: 'touch', description: 'Reports when focus leaves the control.', type: 'void' },
   ];
 
   radioButtonProperties = [

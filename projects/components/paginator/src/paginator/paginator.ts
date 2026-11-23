@@ -65,6 +65,17 @@ export class Paginator implements OnInit, OnDestroy {
   }
   private _length = 0;
 
+  /** Whether the length represents the complete dataset. */
+  readonly lengthKnownInput = input(undefined, { transform: booleanAttribute, alias: 'lengthKnown' });
+  private _lengthKnown = true;
+  get lengthKnown(): boolean {
+    return this._lengthKnown;
+  }
+  set lengthKnown(value: boolean) {
+    this._lengthKnown = value;
+    this._changeDetectorRef.markForCheck();
+  }
+
   /** Number of items to display on a page. By default set to 50. */
   pageSizeInput = input(undefined, { transform: numberAttribute, alias: 'pageSize' });
   get pageSize(): number {
@@ -142,6 +153,10 @@ export class Paginator implements OnInit, OnDestroy {
       }
     });
     effect(() => {
+      const lengthKnown = this.lengthKnownInput();
+      if (lengthKnown !== undefined) this.lengthKnown = lengthKnown;
+    });
+    effect(() => {
       const pageSizeOptions = this.pageSizeOptionsInput();
       if (pageSizeOptions !== undefined) {
         untracked(() => this.pageSizeOptions = pageSizeOptions);
@@ -191,7 +206,7 @@ export class Paginator implements OnInit, OnDestroy {
 
   /** Move to the last page if not already there. */
   lastPage(): void {
-    if (this.hasNextPage()) {
+    if (this.lengthKnown && this.hasNextPage()) {
       const previousPageIndex = this.pageIndex;
       this._pageIndex = this.getNumberOfPages() - 1;
       this._emitPageEvent(previousPageIndex);
@@ -216,6 +231,13 @@ export class Paginator implements OnInit, OnDestroy {
     }
 
     return Math.ceil(this.length / this.pageSize);
+  }
+
+  protected rangeLabel(): string {
+    if (this.lengthKnown) return this._intl.getRangeLabel(this.pageIndex, this.pageSize, this.length);
+    const start = this.pageIndex * this.pageSize;
+    const end = Math.min(start + this.pageSize, this.length);
+    return end > start ? `${start + 1} – ${end}` : '0';
   }
 
   /**

@@ -11,9 +11,9 @@
         <ngs-tab label="Embed">
           <div class="p-4">
             <ngs-form-field class="w-full">
-              <input ngsInput [formControl]="form.controls.url" placeholder="Paste in https://...">
+              <input ngsInput [formField]="form.url" placeholder="Paste in https://...">
               <div ngsSuffix class="pe-2">
-                <button ngsButton="filled" type="button" [disabled]="form.invalid" (click)="embed(trigger)">Embed</button>
+                <button ngsButton="filled" type="button" [disabled]="form().invalid()" (click)="embed(trigger)">Embed</button>
               </div>
             </ngs-form-field>
             <p class="text-xs text-center">Works with links of PDFs, Google Drive, Google Maps, CodePen…</p>

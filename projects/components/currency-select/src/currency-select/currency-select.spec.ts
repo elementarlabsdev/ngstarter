@@ -1,9 +1,10 @@
 import '@angular/compiler';
-import { Component, Type, signal } from '@angular/core';
+import { Component, Type, signal, ViewEncapsulation } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { FormField, Label } from '@ngstarter-ui/components/form-field';
 
 import { CurrencySelect } from './currency-select';
 
@@ -36,6 +37,26 @@ class CurrencySelectHost {
   readonly opened = signal(0);
   readonly closed = signal(0);
 }
+
+@Component({
+  imports: [CurrencySelect, FormField, Label],
+  template: `
+    <ngs-form-field class="currency-gap-test-field" labelMode="external">
+      <ngs-label>Currency</ngs-label>
+      <ngs-currency-select />
+    </ngs-form-field>
+  `,
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../styles/_tokens.scss',
+  styles: [`.currency-gap-test-field {
+    position: fixed;
+    inset-inline-start: 16px;
+    width: 240px;
+    --ngs-field-container-height: 40px;
+    --ngs-field-input-height: 24px;
+  }`],
+})
+class LabeledCurrencySelectHost {}
 
 let overlayContainer: OverlayContainer | undefined;
 
@@ -102,6 +123,35 @@ describe('CurrencySelect', () => {
     vi.useRealTimers();
   });
 
+  it.each([
+    { edge: 'top', gap: 2, outlineWidth: 1, customTheme: false },
+    { edge: 'bottom', gap: 5, outlineWidth: 3, customTheme: true },
+  ] as const)('uses the select gap token near the $edge of the viewport', async ({ edge, gap, outlineWidth, customTheme }) => {
+    const fixture = await createHost(LabeledCurrencySelectHost);
+    const field: HTMLElement = fixture.nativeElement.querySelector('ngs-form-field');
+    const container: HTMLElement = field.querySelector('.ngs-form-field-container')!;
+    field.style[edge] = '8px';
+    if (customTheme) {
+      const overlay = getOverlayRoot();
+      overlay.style.setProperty('--ngs-select-panel-gap', `${gap}px`);
+      overlay.style.setProperty('--ngs-select-panel-border', `${outlineWidth}px solid black`);
+    }
+
+    openSelect(fixture);
+
+    const panel = getPanel();
+    const opensAbove = edge === 'bottom';
+    expect(panel.classList.contains('ngs-select-panel-above')).toBe(opensAbove);
+    expect(getComputedStyle(panel).outlineWidth).toBe(`${outlineWidth}px`);
+
+    const fieldRect = container.getBoundingClientRect();
+    await expect.poll(() => {
+      const panelRect = panel.getBoundingClientRect();
+      return opensAbove ? fieldRect.top - panelRect.bottom : panelRect.top - fieldRect.bottom;
+    }).toBeCloseTo(gap, 0);
+    expect(panel.getBoundingClientRect().width).toBeCloseTo(fieldRect.width, 0);
+  });
+
   it('renders placeholder, host state, and selected currency with emoji flag', async () => {
     const fixture = await createHost(CurrencySelectHost);
     const component = fixture.componentInstance;
@@ -117,7 +167,7 @@ describe('CurrencySelect', () => {
     component.currency().setValue('PLN');
     fixture.detectChanges();
 
-    expect(getCurrencySelect(fixture).value).toBe('PLN');
+    expect(getCurrencySelect(fixture).value()).toBe('PLN');
     expect(getCurrencySelect(fixture).empty).toBe(false);
     expect(getSelect(fixture).textContent).toContain('🇵🇱');
     expect(getSelect(fixture).textContent).toContain('PLN');
@@ -199,7 +249,7 @@ describe('CurrencySelect', () => {
     fixture.detectChanges();
 
     expect(component.currency().value).toBe('PLN');
-    expect(getCurrencySelect(fixture).value).toBe('PLN');
+    expect(getCurrencySelect(fixture).value()).toBe('PLN');
     expect(getSelect(fixture).textContent).toContain('🇵🇱');
     expect(getSelect(fixture).textContent).toContain('PLN');
     expect(component.closed()).toBe(1);

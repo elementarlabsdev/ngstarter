@@ -1,5 +1,5 @@
 import { Component, inject, signal, TemplateRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormField as SignalFormField, form, email, required } from '@angular/forms/signals';
 import { Button } from '@ngstarter-ui/components/button';
 import {
   Dialog,
@@ -23,7 +23,7 @@ import { Step, StepLabel, Stepper } from '@ngstarter-ui/components/stepper';
     FormField,
     Input,
     Label,
-    ReactiveFormsModule,
+    SignalFormField,
     Step,
     StepLabel,
     Stepper,
@@ -33,49 +33,73 @@ import { Step, StepLabel, Stepper } from '@ngstarter-ui/components/stepper';
   styleUrl: './stepper-in-dialog-example.scss',
 })
 export class StepperInDialogExample {
-  private readonly formBuilder = inject(FormBuilder);
   private readonly dialog = inject(Dialog);
   private readonly setupDialog = viewChild.required<TemplateRef<unknown>>('setupDialog');
 
   readonly result = signal<string | null>(null);
 
-  readonly workspaceForm = this.formBuilder.group({
-    workspaceName: ['Atlas Operations', Validators.required],
-    slug: ['atlas-ops', Validators.required],
-    region: ['Europe / Warsaw', Validators.required],
-    owner: ['Maya Chen', Validators.required],
-    workspaceType: ['Operations hub', Validators.required],
-    environment: ['Production', Validators.required],
-    primaryDomain: ['atlas.example.com', Validators.required],
-    defaultLanguage: ['English', Validators.required],
-    complianceTier: ['SOC 2', Validators.required],
-    backupWindow: ['02:00-04:00 UTC', Validators.required],
-    lifecycleStage: ['Implementation', Validators.required],
-    analyticsWorkspace: ['Atlas BI', Validators.required],
-    billingAccount: ['BA-1048', Validators.required],
-    costCenter: ['OPS-240', Validators.required],
-    businessUnit: ['Global Operations', Validators.required],
-    contactEmail: ['workspace-admin@example.com', [Validators.required, Validators.email]],
-    escalationChannel: ['#atlas-escalations'],
-    description: [
-      'Central workspace for operations planning, billing approvals, and weekly execution reviews.',
-      Validators.required,
-    ],
+  readonly workspaceForm = form(signal({
+    workspaceName: 'Atlas Operations',
+    slug: 'atlas-ops',
+    region: 'Europe / Warsaw',
+    owner: 'Maya Chen',
+    workspaceType: 'Operations hub',
+    environment: 'Production',
+    primaryDomain: 'atlas.example.com',
+    defaultLanguage: 'English',
+    complianceTier: 'SOC 2',
+    backupWindow: '02:00-04:00 UTC',
+    lifecycleStage: 'Implementation',
+    analyticsWorkspace: 'Atlas BI',
+    billingAccount: 'BA-1048',
+    costCenter: 'OPS-240',
+    businessUnit: 'Global Operations',
+    contactEmail: 'workspace-admin@example.com',
+    escalationChannel: '#atlas-escalations',
+    description: 'Central workspace for operations planning, billing approvals, and weekly execution reviews.',
+  }), (path) => {
+    required(path.workspaceName);
+    required(path.slug);
+    required(path.region);
+    required(path.owner);
+    required(path.workspaceType);
+    required(path.environment);
+    required(path.primaryDomain);
+    required(path.defaultLanguage);
+    required(path.complianceTier);
+    required(path.backupWindow);
+    required(path.lifecycleStage);
+    required(path.analyticsWorkspace);
+    required(path.billingAccount);
+    required(path.costCenter);
+    required(path.businessUnit);
+    required(path.contactEmail);
+    email(path.contactEmail);
+    required(path.description);
   });
 
-  readonly accessForm = this.formBuilder.group({
-    adminEmail: ['maya.chen@example.com', [Validators.required, Validators.email]],
-    team: ['Operations'],
-    seats: ['24', Validators.required],
-    defaultRole: ['Editor', Validators.required],
-    invitationNote: ['Invite regional leads first, then add finance reviewers after launch.'],
+  readonly accessForm = form(signal({
+    adminEmail: 'maya.chen@example.com',
+    team: 'Operations',
+    seats: '24',
+    defaultRole: 'Editor',
+    invitationNote: 'Invite regional leads first, then add finance reviewers after launch.',
+  }), (path) => {
+    required(path.adminEmail);
+    email(path.adminEmail);
+    required(path.seats);
+    required(path.defaultRole);
   });
 
-  readonly launchForm = this.formBuilder.group({
-    checklistOwner: ['Jordan Lee', Validators.required],
-    launchDate: ['2026-07-01', Validators.required],
-    supportChannel: ['#atlas-support', Validators.required],
-    notes: ['Confirm billing limits and dashboard permissions before sending invitations.'],
+  readonly launchForm = form(signal({
+    checklistOwner: 'Jordan Lee',
+    launchDate: '2026-07-01',
+    supportChannel: '#atlas-support',
+    notes: 'Confirm billing limits and dashboard permissions before sending invitations.',
+  }), (path) => {
+    required(path.checklistOwner);
+    required(path.launchDate);
+    required(path.supportChannel);
   });
 
   openDialog(): void {
@@ -91,17 +115,17 @@ export class StepperInDialogExample {
 
   canMoveNext(selectedIndex: number): boolean {
     if (selectedIndex === 0) {
-      return this.workspaceForm.valid;
+      return this.workspaceForm().valid();
     }
 
     if (selectedIndex === 1) {
-      return this.accessForm.valid;
+      return this.accessForm().valid();
     }
 
     return false;
   }
 
   canFinish(): boolean {
-    return this.workspaceForm.valid && this.accessForm.valid && this.launchForm.valid;
+    return this.workspaceForm().valid() && this.accessForm().valid() && this.launchForm().valid();
   }
 }

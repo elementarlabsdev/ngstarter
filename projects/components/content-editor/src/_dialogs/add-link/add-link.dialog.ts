@@ -1,14 +1,14 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   DialogActions,
   DialogContent,
-  DialogRef,
+  DialogClose,
   DialogTitle
 } from '@ngstarter-ui/components/dialog';
 import { Input } from '@ngstarter-ui/components/input';
 import { Button } from '@ngstarter-ui/components/button';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
 
 @Component({
@@ -19,8 +19,9 @@ import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
     Input,
     DialogTitle,
     DialogActions,
+    DialogClose,
     Button,
-    ReactiveFormsModule,
+    SignalFormField,
     Label,
     SlideToggle
   ],
@@ -29,19 +30,6 @@ import { SlideToggle } from '@ngstarter-ui/components/slide-toggle';
   styleUrl: './add-link.dialog.css'
 })
 export class AddLinkDialog {
-  private _dialogRef = inject(DialogRef);
-  private _formBuilder = inject(FormBuilder);
 
-  form = this._formBuilder.group({
-    href: [''],
-    openInNewTab: [true, [Validators.required]]
-  });
-
-  cancel() {
-    this._dialogRef.close(false);
-  }
-
-  add() {
-    this._dialogRef.close(this.form.value);
-  }
+  readonly form = form(signal({href: '', openInNewTab: true}));
 }

@@ -1,7 +1,7 @@
-import { Component, model, ChangeDetectionStrategy } from '@angular/core';
-import { CountrySelect } from '@ngstarter-ui/components/country-select';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
+import { CountrySelect, CountrySelectValue } from '@ngstarter-ui/components/country-select';
 import { FormField, Label } from '@ngstarter-ui/components/form-field';
-import { FormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-basic-country-select-example',
@@ -9,12 +9,12 @@ import { FormsModule } from '@angular/forms';
     FormField,
     Label,
     CountrySelect,
-    FormsModule
+    SignalFormField
   ],
   templateUrl: './basic-country-select-example.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './basic-country-select-example.scss'
 })
 export class BasicCountrySelectExample {
-  country = model('US');
+  readonly country = form(signal<CountrySelectValue>('US'));
 }

@@ -3,6 +3,7 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { ApplicationRef, Component, Type, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormField, form, readonly as fieldReadonly } from '@angular/forms/signals';
 import { afterEach, describe, expect, it } from 'vitest';
 import { DateAdapter } from '../core/datetime/date-adapter';
 import { DatepickerPreset } from '../core/datetime/datepicker-preset';
@@ -62,6 +63,38 @@ class DatepickerHost {
 class DatepickerWithActionsHost {
   date = new FormControl<Date | null>(null);
   startAt = new Date(2026, 4, 1);
+}
+
+@Component({
+  imports: [FormField, Datepicker, DatepickerInput, DatepickerToggle],
+  template: `
+    <input class="date-input" [formField]="date" [ngsDatepicker]="picker" />
+    <ngs-datepicker-toggle [for]="picker" />
+    <ngs-datepicker #picker [startAt]="startAt" />
+  `,
+})
+class SignalDatepickerHost {
+  readonly startAt = new Date(2026, 4, 1);
+  readonly model = signal<Date | null>(null);
+  readonly preventEditing = signal(false);
+  readonly date = form(this.model, path => {
+    fieldReadonly(path, () => this.preventEditing());
+  });
+}
+
+@Component({
+  imports: [Datepicker, DatepickerInput, DatepickerToggle],
+  template: `
+    <input class="date-input" [ngsDatepicker]="secondPicker() ? second : first" />
+    <ngs-datepicker-toggle [for]="secondPicker() ? second : first" />
+    <ngs-datepicker #first [startAt]="may" />
+    <ngs-datepicker #second [startAt]="june" />
+  `,
+})
+class SwitchingDatepickerHost {
+  readonly secondPicker = signal(false);
+  readonly may = new Date(2026, 4, 1);
+  readonly june = new Date(2026, 5, 1);
 }
 
 let overlayContainer: OverlayContainer | undefined;
@@ -136,6 +169,36 @@ afterEach(() => {
 });
 
 describe('Datepicker', () => {
+  it('closes the old calendar and opens the newly bound calendar after switching', async () => {
+    const fixture = await createHost(SwitchingDatepickerHost);
+    openPicker(fixture);
+    expect(overlayContent()).toBeTruthy();
+
+    fixture.componentInstance.secondPicker.set(true);
+    fixture.detectChanges();
+    expect(overlayContent()).toBeNull();
+
+    openPicker(fixture);
+    expect(overlayContent()).toBeTruthy();
+    clickDay(fixture, 20);
+    expect(input(fixture).value).toBe('06/20/2026');
+  });
+
+  it('binds calendar selection and formatted input directly to a Signal Form', async () => {
+    const fixture = await createHost(SignalDatepickerHost);
+    const host = fixture.componentInstance;
+    openPicker(fixture);
+    clickDay(fixture, 20);
+    expectDate(host.model(), 2026, 4, 20);
+    expect(input(fixture).value).toBe('05/20/2026');
+
+    host.preventEditing.set(true);
+    fixture.detectChanges();
+    expect(input(fixture).readOnly).toBe(true);
+    openPicker(fixture);
+    expect(overlayContent()).toBeNull();
+  });
+
   it('opens the calendar overlay from the toggle', async () => {
     const fixture = await createHost(DatepickerHost);
 

@@ -1,5 +1,5 @@
-import { Directive, inject, forwardRef } from '@angular/core';
-import { Datepicker } from './datepicker';
+import { Directive, inject } from '@angular/core';
+import { DATEPICKER_ACTION_TARGET } from '../datepicker-action-target';
 
 @Directive({
   selector: '[ngsDatepickerApply]',
@@ -8,7 +8,7 @@ import { Datepicker } from './datepicker';
   }
 })
 export class DatepickerApply {
-  _datepicker = inject(forwardRef(() => Datepicker));
+  _datepicker = inject(DATEPICKER_ACTION_TARGET);
 }
 
 @Directive({
@@ -18,5 +18,5 @@ export class DatepickerApply {
   }
 })
 export class DatepickerCancel {
-  _datepicker = inject(forwardRef(() => Datepicker));
+  _datepicker = inject(DATEPICKER_ACTION_TARGET);
 }

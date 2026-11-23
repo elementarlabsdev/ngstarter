@@ -1,6 +1,6 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { Checkbox } from '@ngstarter-ui/components/checkbox';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { Option, Select } from '@ngstarter-ui/components/select';
 import { Label } from '@ngstarter-ui/components/form-field';
 import { FormField } from '@ngstarter-ui/components/form-field';
@@ -9,7 +9,7 @@ import { FormField } from '@ngstarter-ui/components/form-field';
   selector: 'app-disabled-example',
   imports: [
     Checkbox,
-    ReactiveFormsModule,
+    SignalFormField,
     Option,
     Select,
     Label,
@@ -23,5 +23,5 @@ import { FormField } from '@ngstarter-ui/components/form-field';
   }
 })
 export class DisabledExample {
-  disableSelect = new FormControl(false);
+  disableSelect = form(signal(false));
 }

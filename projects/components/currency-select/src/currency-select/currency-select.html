@@ -1,12 +1,14 @@
 <ngs-select
   #ngsSelect
-  [value]="value"
+  [value]="value()"
   (selectionChange)="onSelectionChange($event)"
   (opened)="onSelectOpened()"
   (closed)="onSelectClosed()"
   [placeholder]="placeholder"
-  [required]="isRequiredSignal()"
-  [disabled]="isDisabledSignal()">
+  [required]="required()"
+  [disabled]="disabled()"
+  [readonly]="readonly()"
+  (touch)="touch.emit()">
   <ngs-select-trigger class="select-trigger">
     @let selectedCurrency = selectedCurrencyDisplay();
     @if (selectedCurrency) {

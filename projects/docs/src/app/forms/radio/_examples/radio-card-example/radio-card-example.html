@@ -1,5 +1,5 @@
-<form [formGroup]="form">
-  <ngs-radio-card-group formControlName="privacy" class="grid-cols-12">
+<form>
+  <ngs-radio-card-group [formField]="form.privacy" class="grid-cols-12">
     <ngs-radio-card value="open" class="col-span-6">
       <ngs-radio-card-title>
         <ngs-icon name="fluent:globe-24-regular"/>
@@ -23,8 +23,8 @@
 <div class="mt-10">
   <p>
     <button ngsButton="filled" (click)="toggleDisabled()">
-      {{ form.get('privacy')?.disabled ? 'Enable' : 'Disable' }} Control
+      {{ form.privacy().disabled() ? 'Enable' : 'Disable' }} Control
     </button>
   </p>
-  <p>Control value: {{ form.get('privacy')?.value }}</p>
+  <p>Control value: {{ form.privacy().value() }}</p>
 </div>

@@ -83,7 +83,7 @@ function toOptions(users: UserOption[]): SelectDataSourceOption<UserOption>[] {
   readonly selectTemplateCode = `<ngs-form-field>
   <ngs-label>Owner</ngs-label>
   <ngs-select
-    [formControl]="owner"
+    [formField]="owner"
     [dataSource]="usersDataSource"
     [pageSize]="20"
     searchable

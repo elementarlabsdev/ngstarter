@@ -1,10 +1,6 @@
-import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { requiredError, ValidationError } from '@angular/forms/signals';
 import { isNgsHeadlessEditorDocumentEmpty, NgsHeadlessEditorDocument } from '@ngstarter-ui/components/headless-editor';
 
-/** Validator for editor documents: whitespace-only content counts as empty. */
-export function richTextRequired(
-  control: AbstractControl<NgsHeadlessEditorDocument | null>
-): ValidationErrors | null {
-  const value = control.value;
-  return !value || isNgsHeadlessEditorDocumentEmpty(value) ? { required: true } : null;
+export function richTextRequired(value: NgsHeadlessEditorDocument | null): ValidationError | null {
+  return !value || isNgsHeadlessEditorDocumentEmpty(value) ? requiredError() : null;
 }

@@ -164,6 +164,33 @@ service, the imported stylesheets can also be controlled with document attribute
 <html data-ngs-theme="chalk" data-ngs-color-scheme="dark">
 ```
 
+## Signal Forms
+
+Bind custom NgStarter controls with Angular's `[formField]`. The form schema owns validation and
+field state. Use an empty string for text inputs, `false` for checkboxes, and `null` for optional dates
+or numbers.
+
+```ts
+import { Component, signal } from '@angular/core';
+import { FormField, form, min } from '@angular/forms/signals';
+import { NumberInput } from '@ngstarter-ui/components/number-input';
+
+@Component({
+  imports: [FormField, NumberInput],
+  template: `<ngs-number-input [formField]="order.quantity" aria-label="Quantity" />`,
+})
+export class OrderQuantity {
+  readonly order = form(signal({ quantity: 1 }), path => {
+    min(path.quantity, 1);
+  });
+}
+```
+
+When accessing a migrated control instance from TypeScript, read `value()` or `checked()` and update
+it with `.set()`. In a custom Form Builder renderer, receive the `control` input as
+`FieldTree<unknown>` and bind it with `[formField]`. The renderer's `formReady` output provides the
+root field tree, so use `tree().value()` to read the model and `tree().valid()` to check validity.
+
 ## Component Demos
 
 The documentation site includes live demos and API examples for each component:

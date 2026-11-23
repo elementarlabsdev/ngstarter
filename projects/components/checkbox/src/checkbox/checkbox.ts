@@ -4,7 +4,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  forwardRef,
   inject,
   input,
   model,
@@ -13,17 +12,18 @@ import {
   output,
   viewChild,
   effect,
+  computed,
+  signal,
   untracked,
   linkedSignal
 } from '@angular/core';
 import {
   AbstractControl,
-  ControlValueAccessor,
   NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
   ValidationErrors,
   Validator,
 } from '@angular/forms';
+import { FormCheckboxControl } from '@angular/forms/signals';
 import { _IdGenerator } from '@angular/cdk/a11y';
 import { Ripple } from '@ngstarter-ui/components/core';
 
@@ -62,18 +62,13 @@ export class CheckboxChange {
     '[attr.tabindex]': 'null',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
-    '[class.ngs-checkbox-disabled]': 'disabled()',
+    '[class.ngs-checkbox-disabled]': 'isDisabled()',
     '[class.ngs-checkbox-checked]': 'checked()',
     '[class.ngs-checkbox-indeterminate]': 'indeterminate()',
     '[class.ngs-checkbox-disabled-interactive]': 'disabledInteractive()',
     '[class]': 'color() ? "ngs-" + color() : "ngs-primary"',
   },
   providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => Checkbox),
-      multi: true,
-    },
     {
       provide: NG_VALIDATORS,
       useExisting: Checkbox,
@@ -83,7 +78,7 @@ export class CheckboxChange {
   exportAs: 'ngsCheckbox',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Checkbox implements ControlValueAccessor, Validator, AfterViewInit {
+export class Checkbox implements FormCheckboxControl, Validator, AfterViewInit {
   private _ngZone = inject(NgZone);
   private _idGenerator = inject(_IdGenerator);
 
@@ -96,8 +91,8 @@ export class Checkbox implements ControlValueAccessor, Validator, AfterViewInit 
   readonly id = input(this._idGenerator.getId('ngs-checkbox-'));
   readonly required = input(false, { transform: booleanAttribute });
   readonly labelPosition = input<'before' | 'after'>('after');
-  readonly name = input<string | null>(null);
-  readonly value = input('');
+  readonly name = input('');
+  readonly submittedValue = input('', { alias: 'value' });
   readonly disableRipple = input(false, { transform: booleanAttribute });
   readonly tabIndex = input(0, {
     transform: (value: any) => (value == null ? 0 : numberAttribute(value))
@@ -106,7 +101,16 @@ export class Checkbox implements ControlValueAccessor, Validator, AfterViewInit 
   readonly disabledInteractive = input(false, { transform: booleanAttribute });
 
   readonly checked = model(false);
-  readonly disabled = model(false);
+  readonly disabled = input(false, { transform: booleanAttribute });
+  private readonly interactiveDisabled = signal(false);
+  protected readonly isDisabled = computed(() => this.disabled() || this.interactiveDisabled());
+
+  /** @docs-private */
+  setInteractiveDisabled(disabled: boolean): void {
+    this.interactiveDisabled.set(disabled);
+  }
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly touch = output<void>();
   readonly indeterminateInput = input(false, {alias: 'indeterminate'});
   readonly indeterminate = linkedSignal(this.indeterminateInput);
 
@@ -118,9 +122,7 @@ export class Checkbox implements ControlValueAccessor, Validator, AfterViewInit 
 
   private _currentAnimationClass = '';
   private _currentCheckState = TransitionCheckState.Init;
-  private _controlValueAccessorChangeFn = (value: any) => {};
   private _validatorChangeFn = () => {};
-  _onTouched = () => {};
 
   private _animationClasses = {
     uncheckedToChecked: 'ngs-checkbox--anim-unchecked-checked',
@@ -175,24 +177,8 @@ export class Checkbox implements ControlValueAccessor, Validator, AfterViewInit 
     this._syncIndeterminate(this.indeterminate());
   }
 
-  focus() {
-    this._inputElement()?.nativeElement.focus();
-  }
-
-  writeValue(value: any): void {
-    this.checked.set(!!value);
-  }
-
-  registerOnChange(fn: (value: any) => void): void {
-    this._controlValueAccessorChangeFn = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this._onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
+  focus(options?: FocusOptions) {
+    this._inputElement()?.nativeElement.focus(options);
   }
 
   validate(control: AbstractControl<boolean>): ValidationErrors | null {
@@ -204,12 +190,13 @@ export class Checkbox implements ControlValueAccessor, Validator, AfterViewInit 
   }
 
   toggle() {
-    this.checked.set(!this.checked());
-    this._controlValueAccessorChangeFn(this.checked());
+    if (!this.isDisabled() && !this.readonly()) {
+      this.checked.update(checked => !checked);
+    }
   }
 
   _handleInputClick() {
-    if (!this.disabled()) {
+    if (!this.isDisabled() && !this.readonly()) {
       if (this.indeterminate()) {
         this.indeterminate.set(false);
       }
@@ -219,7 +206,6 @@ export class Checkbox implements ControlValueAccessor, Validator, AfterViewInit 
   }
 
   _emitChangeEvent() {
-    this._controlValueAccessorChangeFn(this.checked());
     this.change.emit(this._createChangeEvent(this.checked()));
     const inputElement = this._inputElement();
     if (inputElement) {
@@ -239,7 +225,7 @@ export class Checkbox implements ControlValueAccessor, Validator, AfterViewInit 
   }
 
   _onBlur() {
-    this._onTouched();
+    this.touch.emit();
   }
 
   private _transitionCheckState(newState: TransitionCheckState) {
@@ -298,14 +284,18 @@ export class Checkbox implements ControlValueAccessor, Validator, AfterViewInit 
     }
   }
 
-  _onInputClick() {
+  _onInputClick(event: MouseEvent) {
+    if (this.readonly()) {
+      event.preventDefault();
+      return;
+    }
     this._handleInputClick();
   }
 
   _onTouchTargetClick() {
     this._handleInputClick();
     const inputElement = this._inputElement();
-    if (!this.disabled() && inputElement) {
+    if (!this.isDisabled() && inputElement) {
       inputElement.nativeElement.focus();
     }
   }

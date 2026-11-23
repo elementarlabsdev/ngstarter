@@ -68,17 +68,20 @@ export class Api {
     },
     {
       name: 'value',
-      description: 'The value of the button toggle group.',
+      description: 'Selection model. Supports [(value)] and [formField].',
       type: 'any',
       default: 'undefined'
-    }
+    },
+    { name: 'readonly', description: 'Prevents user edits while keeping the value visible.', type: 'boolean', default: 'false' },
   ];
 
   groupEvents = [
     {
       name: 'change',
       description: 'Event emitted when the value of the button toggle group changes.'
-    }
+    },
+    { name: 'valueChange', description: 'Emits the new value when the control updates its model.', type: 'any' },
+    { name: 'touch', description: 'Reports when focus leaves the control.', type: 'void' },
   ];
 
   toggleProperties = [

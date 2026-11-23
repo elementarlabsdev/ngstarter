@@ -115,7 +115,7 @@ export class Timepicker {
   open() {
     const input = this._input;
     const disabled = typeof this.disabled === 'function' ? this.disabled() : this.disabled;
-    const inputDisabled = typeof input?.disabled === 'function' ? input.disabled() : input?.disabled;
+    const inputDisabled = input?.isDisabled() || input?.readonly();
 
     if (this._overlayRef || !input || disabled || inputDisabled) {
       return;
@@ -155,7 +155,7 @@ export class Timepicker {
   }
 
   _isSelected(value: string): boolean {
-    return this._input?.value === value || this._input?._modelValue === value;
+    return this._input?.currentTime === value;
   }
 
   private _scrollToSelected() {

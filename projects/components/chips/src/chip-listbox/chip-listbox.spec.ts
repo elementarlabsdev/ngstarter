@@ -208,7 +208,7 @@ describe('ChipListbox', () => {
     await settleChipListbox(selectedFixture);
 
     const listboxInstance = selectedFixture.debugElement.query(By.directive(ChipListbox)).componentInstance as ChipListbox;
-    expect(listboxInstance.value).toBe('pending');
+    expect(listboxInstance.value()).toBe('pending');
   });
 
   it('uses all selected option inputs as the initial multiple value', async () => {
@@ -218,7 +218,7 @@ describe('ChipListbox', () => {
     await settleChipListbox(selectedFixture);
 
     const listboxInstance = selectedFixture.debugElement.query(By.directive(ChipListbox)).componentInstance as ChipListbox;
-    expect(listboxInstance.value).toEqual(['active', 'pending']);
+    expect(listboxInstance.value()).toEqual(['active', 'pending']);
   });
 
   it('falls back to option instances when no explicit value is provided', async () => {
@@ -229,7 +229,7 @@ describe('ChipListbox', () => {
     const listboxInstance = implicitFixture.debugElement.query(By.directive(ChipListbox)).componentInstance as ChipListbox;
     const optionInstance = implicitFixture.debugElement.query(By.directive(ChipOption)).componentInstance as ChipOption;
 
-    listboxInstance.writeValue(optionInstance);
+    listboxInstance.value.set(optionInstance);
     implicitFixture.detectChanges();
     await settleChipListbox(implicitFixture);
 

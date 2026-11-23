@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { Option, Select } from '@ngstarter-ui/components/select';
 import { Label } from '@ngstarter-ui/components/form-field';
 import { FormField } from '@ngstarter-ui/components/form-field';
@@ -7,7 +7,7 @@ import { FormField } from '@ngstarter-ui/components/form-field';
 @Component({
   selector: 'app-multiple-selection-example',
   imports: [
-    ReactiveFormsModule,
+    SignalFormField,
     Option,
     Select,
     Label,
@@ -18,6 +18,6 @@ import { FormField } from '@ngstarter-ui/components/form-field';
   styleUrl: './multiple-selection-example.scss'
 })
 export class MultipleSelectionExample {
-  toppings = new FormControl('');
+  toppings = form(signal<string[]>([]));
   toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 }

@@ -1,6 +1,7 @@
 import {
   Component,
   ChangeDetectionStrategy,
+  forwardRef,
   ViewEncapsulation,
   input,
   signal,
@@ -17,7 +18,9 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { Calendar } from '../calendar/calendar/calendar';
 import { DatepickerActions } from './datepicker-actions';
 import { DatepickerPreset } from '../core/datetime/datepicker-preset';
+import type { DatepickerInput } from '../datepicker-input/datepicker-input';
 import { DateRange } from '../core/datetime/date-range';
+import { DATEPICKER_ACTION_TARGET } from '../datepicker-action-target';
 
 @Component({
   selector: 'ngs-datepicker',
@@ -26,6 +29,7 @@ import { DateRange } from '../core/datetime/date-range';
     OverlayModule,
     Calendar
   ],
+  providers: [{ provide: DATEPICKER_ACTION_TARGET, useExisting: forwardRef(() => Datepicker) }],
   templateUrl: './datepicker.html',
   styleUrl: './datepicker.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,7 +50,7 @@ export class Datepicker<D> implements OnDestroy {
   quickPresets = input<DatepickerPreset<D>[]>([]);
   showQuickPresets = input<boolean>(false);
 
-  _datepickerInput!: any;
+  _datepickerInput?: DatepickerInput<D>;
   _selected = signal<D | null>(null);
   _isAbove = signal(false);
 
@@ -56,13 +60,19 @@ export class Datepicker<D> implements OnDestroy {
     this.close();
   }
 
-  _registerInput(input: any) {
+  _registerInput(input: DatepickerInput<D>) {
     this._datepickerInput = input;
-    input._valueChange.subscribe((value: any) => this._selected.set(value));
+  }
+
+  _unregisterInput(input: DatepickerInput<D>): void {
+    if (this._datepickerInput !== input) return;
+    this._datepickerInput = undefined;
+    this.close();
   }
 
   open() {
-    if (this._overlayRef || !this._datepickerInput) return;
+    if (this._overlayRef || !this._datepickerInput || !this._datepickerInput.canSelectDate()) return;
+    this._selected.set(this._datepickerInput.value());
 
     const strategy = this._overlay
       .position()
@@ -122,8 +132,7 @@ export class Datepicker<D> implements OnDestroy {
     const date = this._selected();
 
     if (this._datepickerInput && date) {
-      this._datepickerInput.writeValue(date);
-      this._datepickerInput._onChange(date);
+      this._datepickerInput.selectDate(date);
     }
     this.close();
   }

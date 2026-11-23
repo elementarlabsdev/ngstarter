@@ -1,11 +1,11 @@
 import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { FilterTrigger, Option, Select } from '@ngstarter-ui/components/select';
 
 @Component({
   selector: 'app-clearable-single-filter-trigger-example',
   imports: [
-    ReactiveFormsModule,
+    SignalFormField,
     FilterTrigger,
     Option,
     Select
@@ -15,6 +15,6 @@ import { FilterTrigger, Option, Select } from '@ngstarter-ui/components/select';
   styleUrl: './clearable-single-filter-trigger-example.scss'
 })
 export class ClearableSingleFilterTriggerExample {
-  readonly priority = signal(new FormControl('High'));
+  readonly priority = form(signal('High'));
   readonly priorities = signal(['Low', 'Medium', 'High', 'Urgent']);
 }

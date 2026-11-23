@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Signal } from '@angular/core';
 
 @Injectable()
 export abstract class FormFieldControl<T> {
-  abstract value: T | null;
+  abstract readonly value: T | Signal<T | null> | null;
   abstract readonly stateChanges: any;
   abstract readonly id: string;
   abstract readonly placeholder: string | undefined;
@@ -10,8 +10,8 @@ export abstract class FormFieldControl<T> {
   abstract readonly focused: boolean;
   abstract readonly empty: boolean;
   abstract readonly shouldLabelFloat: boolean;
-  abstract readonly required: boolean;
-  abstract readonly disabled: boolean;
+  abstract readonly required: boolean | Signal<boolean>;
+  abstract readonly disabled: boolean | Signal<boolean>;
   abstract readonly errorState: boolean;
   readonly multiline?: boolean;
   onContainerClick?(event: MouseEvent): void;

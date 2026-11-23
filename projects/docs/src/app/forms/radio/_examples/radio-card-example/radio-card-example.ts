@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormField as SignalFormField, form, disabled } from '@angular/forms/signals';
 import {
   RadioCard,
   RadioCardContent,
@@ -13,7 +13,7 @@ import { Button } from '@ngstarter-ui/components/button';
   imports: [
     RadioCard,
     RadioCardGroup,
-    ReactiveFormsModule,
+    SignalFormField,
     Icon,
     RadioCardContent,
     RadioCardTitle,
@@ -24,14 +24,12 @@ import { Button } from '@ngstarter-ui/components/button';
   styleUrl: './radio-card-example.scss'
 })
 export class RadioCardExample {
-  form = new FormGroup({
-    privacy: new FormControl('open'),
+  private readonly privacyDisabled = signal(false);
+  readonly form = form(signal({ privacy: 'open' }), path => {
+    disabled(path.privacy, () => this.privacyDisabled());
   });
 
   toggleDisabled(): void {
-    const control = this.form.get('privacy');
-    if (control) {
-      control.disabled ? control.enable() : control.disable();
-    }
+    this.privacyDisabled.update(disabled => !disabled);
   }
 }

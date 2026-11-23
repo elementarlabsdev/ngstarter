@@ -101,14 +101,16 @@ export class Api {
       description: 'Threshold for accent state',
       type: 'number',
       default: '81'
-    }
+    },
+    { name: 'value', description: 'Numeric strength score model. Bind [formField] to capture the score.', type: 'number', default: '0' },
   ];
 
   passwordStrengthEvents = [
     {
       name: 'strengthChanged',
       description: 'Emitted when password strength changes'
-    }
+    },
+    { name: 'valueChange', description: 'Emits the updated strength score.', type: 'number' },
   ];
 
   passwordStrengthInfoProperties = [

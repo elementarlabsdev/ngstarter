@@ -130,8 +130,8 @@
       <ngs-label>Options</ngs-label>
       <textarea ngsInput
                 rows="4"
-                [formControl]="optionsControl"></textarea>
-      @if (optionsControl.hasError('formBuilderOptionsFormat')) {
+                [formField]="optionsControl" (input)="onOptionsInput($any($event.target).value)"></textarea>
+      @if (optionsControl().invalid()) {
         <ngs-error>Use Label:value or Label:value:selected.</ngs-error>
       }
       <ngs-hint>One option per line. Use Label:value or Label:value:selected.</ngs-hint>

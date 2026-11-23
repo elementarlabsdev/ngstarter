@@ -1,6 +1,6 @@
 <ngs-form-field class="w-1/2">
   <ngs-label>Assignee</ngs-label>
-  <input type="text" ngsInput [formControl]="myControl" [ngsAutocomplete]="auto">
+  <input type="text" ngsInput [formField]="myControl" [ngsAutocomplete]="auto">
   <ngs-autocomplete #auto="ngsAutocomplete" [displayWith]="displayFn">
     @for (option of filteredOptions | async; track option) {
       <ngs-option [value]="option">{{ option.name }}</ngs-option>

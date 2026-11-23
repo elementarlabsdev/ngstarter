@@ -20,7 +20,7 @@
     <ngs-toolbar class="py-4">
       <ngs-select
         #staffTypeSelect
-        [formControl]="staffType()"
+        [formField]="staffType"
         hideCheckIcon
         clearable
         aria-label="Staff type filter"
@@ -33,7 +33,7 @@
       </ngs-select>
 
       <ngs-select
-        [formControl]="position()"
+        [formField]="position"
         hideCheckIcon
         clearable
         aria-label="Position filter"
@@ -46,7 +46,7 @@
       </ngs-select>
 
       <ngs-select
-        [formControl]="status()"
+        [formField]="status"
         multiple
         clearable
         aria-label="Status filter"
@@ -89,7 +89,7 @@
             ngsInput
             type="search"
             placeholder="Search..."
-            [formControl]="search()"
+            [formField]="search"
             (input)="resetPage()"
             aria-label="Search staff">
         </ngs-form-field>

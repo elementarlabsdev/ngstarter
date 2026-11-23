@@ -49,71 +49,73 @@
   (positionChange)="_onPositionChange($event)"
   (detach)="close()"
 >
-  <div
-    class="ngs-select-panel"
-    [class.ngs-select-panel-above]="_panelPosition() === 'top'"
-    #panel
-    [attr.id]="id + '-panel'"
-    role="listbox"
-    [attr.aria-multiselectable]="multiple()"
-    (keydown)="_handleKeydown($event)"
-    (focusin)="_onPanelFocus($event)"
-  >
-    <ng-content select="ngs-select-header"/>
+  <div class="ngs-select-panel-wrapper">
+    <div
+      class="ngs-select-panel"
+      [class.ngs-select-panel-above]="_panelPosition() === 'top'"
+      #panel
+      [attr.id]="id + '-panel'"
+      role="listbox"
+      [attr.aria-multiselectable]="multiple()"
+      (keydown)="_handleKeydown($event)"
+      (focusin)="_onPanelFocus($event)"
+    >
+      <ng-content select="ngs-select-header"/>
 
-    @if (selectBody().length > 0) {
-      <ng-content select="ngs-select-body"/>
-    } @else if (asyncEnabled()) {
-      @if (searchable()) {
-        <ngs-select-header>
-          <div class="ngs-select-search sticky top-0 z-1 bg-surface-container-lowest">
-            <input
-              class="ngs-select-search-input h-10 w-full border-b border-surface-container-high px-3 text-sm focus:border-b-primary focus:outline-none"
-              type="text"
-              [value]="asyncSearch()"
-              placeholder="Search..."
-              aria-label="Search options"
-              autocomplete="off"
-              (click)="$event.stopPropagation()"
-              (input)="onAsyncSearchInput($any($event.target).value)">
-          </div>
-        </ngs-select-header>
+      @if (selectBody().length > 0) {
+        <ng-content select="ngs-select-body"/>
+      } @else if (asyncEnabled()) {
+        @if (searchable()) {
+          <ngs-select-header>
+            <div class="ngs-select-search sticky top-0 z-1 bg-surface-container-lowest">
+              <input
+                class="ngs-select-search-input h-10 w-full border-b border-surface-container-high px-3 text-sm focus:border-b-primary focus:outline-none"
+                type="text"
+                [value]="asyncSearch()"
+                placeholder="Search..."
+                aria-label="Search options"
+                autocomplete="off"
+                (click)="$event.stopPropagation()"
+                (input)="onAsyncSearchInput($any($event.target).value)">
+            </div>
+          </ngs-select-header>
+        }
+
+        <div class="ngs-select-content ngs-select-async-content" (scroll)="onAsyncContentScroll($event)">
+          @if (asyncLoading()) {
+            <div class="ngs-select-state">Loading...</div>
+          } @else if (asyncError()) {
+            <button type="button" class="ngs-select-state ngs-select-retry" (click)="retryAsyncLoad()">
+              Could not load options. Try again.
+            </button>
+          } @else {
+            @for (option of asyncOptions(); track option.value) {
+              <ngs-option [value]="option.value" [data]="option.data" [disabled]="option.disabled ?? false">
+                @if (optionContentDef(); as optionTpl) {
+                  <ng-container
+                    [ngTemplateOutlet]="optionTpl.templateRef"
+                    [ngTemplateOutletContext]="asyncOptionContext(option)"/>
+                } @else {
+                  {{ option.label }}
+                }
+              </ngs-option>
+            }
+
+            @if (asyncOptions().length === 0) {
+              <div class="ngs-select-state">No options</div>
+            } @else if (asyncLoadingMore()) {
+              <div class="ngs-select-state">Loading more...</div>
+            }
+          }
+        </div>
+      } @else {
+        <div class="ngs-select-content">
+          <ng-content select="ngs-optgroup,ngs-option" />
+          <ng-content/>
+        </div>
       }
 
-      <div class="ngs-select-content ngs-select-async-content" (scroll)="onAsyncContentScroll($event)">
-        @if (asyncLoading()) {
-          <div class="ngs-select-state">Loading...</div>
-        } @else if (asyncError()) {
-          <button type="button" class="ngs-select-state ngs-select-retry" (click)="retryAsyncLoad()">
-            Could not load options. Try again.
-          </button>
-        } @else {
-          @for (option of asyncOptions(); track option.value) {
-            <ngs-option [value]="option.value" [data]="option.data" [disabled]="option.disabled ?? false">
-              @if (optionContentDef(); as optionTpl) {
-                <ng-container
-                  [ngTemplateOutlet]="optionTpl.templateRef"
-                  [ngTemplateOutletContext]="asyncOptionContext(option)"/>
-              } @else {
-                {{ option.label }}
-              }
-            </ngs-option>
-          }
-
-          @if (asyncOptions().length === 0) {
-            <div class="ngs-select-state">No options</div>
-          } @else if (asyncLoadingMore()) {
-            <div class="ngs-select-state">Loading more...</div>
-          }
-        }
-      </div>
-    } @else {
-      <div class="ngs-select-content">
-        <ng-content select="ngs-optgroup,ngs-option" />
-        <ng-content/>
-      </div>
-    }
-
-    <ng-content select="ngs-select-footer"/>
+      <ng-content select="ngs-select-footer"/>
+    </div>
   </div>
 </ng-template>

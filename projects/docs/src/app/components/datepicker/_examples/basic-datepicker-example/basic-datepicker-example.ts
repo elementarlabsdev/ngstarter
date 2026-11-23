@@ -1,4 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormField as SignalFormField, form } from '@angular/forms/signals';
 import { provideNativeDateAdapter } from '@ngstarter-ui/components/datepicker';
 import { Datepicker, DatepickerInput, DatepickerToggle } from '@ngstarter-ui/components/datepicker';
 import {
@@ -12,6 +13,7 @@ import { Input } from '@ngstarter-ui/components/input';
 @Component({
   selector: 'app-basic-datepicker-example',
   imports: [
+    SignalFormField,
     Datepicker,
     DatepickerToggle,
     Hint,
@@ -29,5 +31,5 @@ import { Input } from '@ngstarter-ui/components/input';
   ]
 })
 export class BasicDatepickerExample {
-
+  readonly date = form(signal<Date | null>(null));
 }

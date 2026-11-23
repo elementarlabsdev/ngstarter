@@ -1,14 +1,14 @@
 <div class="flex items-center gap-4">
   <ngs-form-field subscriptHiddenIfEmpty>
     <ngs-label>Popover position</ngs-label>
-    <ngs-select [formControl]="position">
+    <ngs-select [formField]="position">
       @for (positionOption of positionOptions; track positionOption) {
         <ngs-option [value]="positionOption">{{ positionOption }}</ngs-option>
       }
     </ngs-select>
   </ngs-form-field>
   <button ngsButton="outlined" [ngsPopoverTriggerFor]="customPositionPopover"
-          [position]="position.value!" trigger="hover">Hover Me!</button>
+          [position]="position().value()!" trigger="hover">Hover Me!</button>
 </div>
 
 <ngs-popover #customPositionPopover="ngsPopover">

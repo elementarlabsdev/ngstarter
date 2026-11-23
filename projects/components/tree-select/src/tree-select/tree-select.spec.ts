@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { FormField, Label } from '@ngstarter-ui/components/form-field';
+import { FormField, Label, type FormFieldLabelMode } from '@ngstarter-ui/components/form-field';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { TreeSelect } from './tree-select';
 import { TreeSelectNode } from '../tree-select.types';
@@ -33,13 +33,15 @@ class FormHost {
 @Component({
   imports: [TreeSelect, FormField, Label, ReactiveFormsModule],
   template: `
-    <ngs-form-field labelMode="floating">
+    <ngs-form-field [labelMode]="labelMode">
       <ngs-label>Department</ngs-label>
       <ngs-tree-select [nodes]="nodes" [formControl]="control" clearable />
     </ngs-form-field>
   `,
 })
-class FormFieldHost extends FormHost {}
+class FormFieldHost extends FormHost {
+  labelMode: FormFieldLabelMode = 'floating';
+}
 
 describe('TreeSelect', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
@@ -51,6 +53,27 @@ describe('TreeSelect', () => {
     fixture.detectChanges();
     return fixture;
   }
+
+  it('uses the select gap token for the upward-opening panel', async () => {
+    const fixture = TestBed.createComponent(FormFieldHost);
+    fixture.componentInstance.labelMode = 'external';
+    fixture.detectChanges();
+    const field: HTMLElement = fixture.nativeElement.querySelector('ngs-form-field');
+    const container = field.querySelector<HTMLElement>('.ngs-form-field-container')!;
+    Object.assign(field.style, { position: 'fixed', bottom: '8px', left: '16px', width: '240px' });
+    field.style.setProperty('--ngs-field-container-height', '40px');
+    field.style.setProperty('--ngs-field-input-height', '24px');
+    const overlay = TestBed.inject(OverlayContainer).getContainerElement();
+    overlay.style.setProperty('--ngs-select-panel-gap', '4px');
+
+    container.click();
+    fixture.detectChanges();
+
+    const panel = overlay.querySelector<HTMLElement>('ngs-tree-select-panel')!;
+    await expect.poll(() => {
+      return container.getBoundingClientRect().top - panel.getBoundingClientRect().bottom;
+    }).toBeCloseTo(4, 0);
+  });
 
   it('handles padding and trigger clicks once through the form field', () => {
     const fixture = TestBed.createComponent(FormFieldHost);
@@ -86,11 +109,11 @@ describe('TreeSelect', () => {
     expect(isOpen()).toBe('false');
   });
 
-  it('does not emit form changes on writeValue and preserves numeric zero keys', () => {
+  it('does not emit a selection event on external writes and preserves numeric zero keys', () => {
     const fixture = create();
     const change = vi.fn();
-    fixture.componentInstance.registerOnChange(change);
-    fixture.componentInstance.writeValue(0);
+    fixture.componentInstance.selectionChange.subscribe(change);
+    fixture.componentRef.setInput('value', 0);
     fixture.detectChanges();
     expect(fixture.componentInstance.empty).toBe(false);
     expect(fixture.componentInstance.displayValue()).toBe('0');
@@ -105,10 +128,10 @@ describe('TreeSelect', () => {
     select.select(nodes[0].children![0]);
     expect(select.isIndeterminate(nodes[0])).toBe(true);
     select.select({ ...nodes[0], children: [nodes[0].children![0]] });
-    expect(select.value).toEqual(['design', 'engineering']);
+    expect(select.value()).toEqual(['design', 'engineering']);
     expect(select.isChecked(nodes[0])).toBe(true);
     select.select(nodes[0]);
-    expect(select.value).toEqual([]);
+    expect(select.value()).toEqual([]);
   });
 
   it('supports independent node selection and leavesOnly', () => {
@@ -118,7 +141,7 @@ describe('TreeSelect', () => {
     fixture.detectChanges();
     const select = fixture.componentInstance;
     select.select(nodes[0]);
-    expect(select.value).toEqual(['team']);
+    expect(select.value()).toEqual(['team']);
     fixture.componentRef.setInput('leavesOnly', true);
     fixture.detectChanges();
     expect(select.canSelect(nodes[0])).toBe(false);
@@ -130,12 +153,13 @@ describe('TreeSelect', () => {
     fixture.detectChanges();
     const select = fixture.componentInstance;
     select.select(nodes[0].children![0]);
-    expect(select.value).toBeNull();
-    select.writeValue('design');
-    select.setDisabledState(true);
+    expect(select.value()).toBeNull();
+    fixture.componentRef.setInput('value', 'design');
+    fixture.componentRef.setInput('disabled', true);
+    fixture.detectChanges();
     select.clear(new Event('click'));
     select.open();
-    expect(select.value).toBe('design');
+    expect(select.value()).toBe('design');
     expect(select.panelOpen()).toBe(false);
   });
 
@@ -189,7 +213,7 @@ describe('TreeSelect', () => {
     node.focus();
     node.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
     fixture.detectChanges();
-    expect(fixture.componentInstance.value).toBe('team');
+    expect(fixture.componentInstance.value()).toBe('team');
   });
 
   it('loads children once requested, retains input nodes, and ignores stale root responses', async () => {
@@ -292,7 +316,7 @@ describe('TreeSelect', () => {
 
   it('shows the selected leaf with a checkmark and a noninteractive indentation slot', async () => {
     const fixture = create();
-    fixture.componentInstance.writeValue('design');
+    fixture.componentRef.setInput('value', 'design');
     fixture.componentInstance.open();
     fixture.detectChanges();
     await fixture.whenStable();
@@ -308,7 +332,7 @@ describe('TreeSelect', () => {
   });
   it('opens the ancestor path of a selected leaf without filtering', async () => {
     const fixture = create();
-    fixture.componentInstance.writeValue('design');
+    fixture.componentRef.setInput('value', 'design');
     fixture.componentInstance.open();
     fixture.detectChanges();
     await fixture.whenStable();

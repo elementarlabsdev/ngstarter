@@ -10,9 +10,9 @@
   [attr.aria-controls]="panelOpen() ? id + '-tree' : null"
   [attr.aria-label]="ariaLabel() || placeholder"
   [attr.aria-describedby]="describedBy() || null"
-  [attr.aria-required]="required"
+  [attr.aria-required]="required()"
   [attr.aria-invalid]="errorState"
-  [disabled]="disabled"
+  [disabled]="disabled()"
   (keydown)="onKeydown($event)"
   (focus)="onFocus()"
   (blur)="onBlur()"
@@ -30,7 +30,7 @@
     type="button"
     class="ngs-select-clear-button"
     aria-label="Clear selection"
-    [disabled]="disabled"
+    [disabled]="disabled()"
     (click)="clear($event)"
   >
     <ngs-icon name="fluent:dismiss-24-regular" class="ngs-select-clear-icon" />
@@ -52,22 +52,24 @@
   (backdropClick)="close()"
   (detach)="close(false)"
 >
-  <ngs-tree-select-panel
-    [nodes]="resolvedNodes()"
-    [panelId]="id + '-tree'"
-    [label]="ariaLabel() || placeholder"
-    [multiple]="multiple()"
-    [searchable]="searchable()"
-    [query]="query()"
-    [emptyText]="emptyText()"
-    [isChecked]="isChecked"
-    [isIndeterminate]="isIndeterminate"
-    [canSelect]="canSelect"
-    [isLoading]="isLoading"
-    [hasError]="hasError"
-    (selectNode)="select($event)"
-    (loadNode)="load($event)"
-    (queryChange)="query.set($event)"
-    (dismiss)="close()"
-  />
+  <div class="ngs-select-panel-wrapper">
+    <ngs-tree-select-panel
+      [nodes]="resolvedNodes()"
+      [panelId]="id + '-tree'"
+      [label]="ariaLabel() || placeholder"
+      [multiple]="multiple()"
+      [searchable]="searchable()"
+      [query]="query()"
+      [emptyText]="emptyText()"
+      [isChecked]="isChecked"
+      [isIndeterminate]="isIndeterminate"
+      [canSelect]="canSelect"
+      [isLoading]="isLoading"
+      [hasError]="hasError"
+      (selectNode)="select($event)"
+      (loadNode)="load($event)"
+      (queryChange)="query.set($event)"
+      (dismiss)="close()"
+    />
+  </div>
 </ng-template>

@@ -53,6 +53,10 @@ export class Api {
       description: 'Whether the select is disabled.',
       type: 'boolean',
       default: 'false'
-    }
+    },
+    { name: 'value', description: 'Selected date format string.', type: 'string | null', default: 'null' },
+    { name: 'readonly', description: 'Prevents user edits while keeping the value visible.', type: 'boolean', default: 'false' },
+    { name: 'invalid', description: 'Invalid state supplied by the bound form field.', type: 'boolean', default: 'false' },
+    { name: 'touched', description: 'Touched state supplied by the bound form field.', type: 'boolean', default: 'false' },
   ];
 }

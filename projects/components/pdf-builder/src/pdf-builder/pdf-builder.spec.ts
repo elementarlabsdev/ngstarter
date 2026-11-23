@@ -451,7 +451,7 @@ describe('PdfBuilder', () => {
       fieldSettingsPanelVisible: () => boolean;
     };
 
-    expect(element.querySelector('.field-recipients-panel')).toBeNull();
+    expect(element.querySelector('[aria-label="Document recipients"]')).toBeNull();
     expect(element.querySelector('ngs-list')).toBeNull();
     expect(element.textContent).not.toContain('No fields yet');
     expect(element.textContent).not.toContain('No recipients yet');
@@ -505,8 +505,8 @@ describe('PdfBuilder', () => {
     ]);
     fixture.detectChanges();
 
-    const panel = element.querySelector<HTMLElement>('.field-recipients-panel');
-    const items = Array.from(element.querySelectorAll<HTMLElement>('.field-recipients-list ngs-list-item'));
+    const panel = element.querySelector<HTMLElement>('[aria-label="Document recipients"]');
+    const items = Array.from(panel?.querySelectorAll<HTMLElement>('[role="listitem"]') ?? []);
 
     expect(panel).not.toBeNull();
     expect(panel!.tagName.toLowerCase()).toBe('ngs-layout');
@@ -713,7 +713,7 @@ describe('PdfBuilder', () => {
     ]);
     fixture.detectChanges();
 
-    const recipientItem = Array.from(element.querySelectorAll<HTMLElement>('.field-recipients-list ngs-list-item'))
+    const recipientItem = Array.from(element.querySelectorAll<HTMLElement>('[aria-label="Document recipients"] [role="listitem"]'))
       .find(item => item.textContent?.includes('Primary Signer'));
 
     recipientItem!.click();
@@ -771,7 +771,7 @@ describe('PdfBuilder', () => {
     subscriptions.forEach(subscription => subscription.unsubscribe());
   });
 
-  it('opens add recipient popover and emits search/create events', () => {
+  it('opens the add recipient popover for an empty recipients list and emits search/create events', () => {
     const element: HTMLElement = fixture.nativeElement;
     const addEvents: unknown[] = [];
     const searchEvents: string[] = [];
@@ -782,12 +782,7 @@ describe('PdfBuilder', () => {
       component.createRecipientContact.subscribe(query => createEvents.push(query)),
     ];
 
-    fixture.componentRef.setInput('recipients', [
-      {
-        id: 'pavel',
-        name: 'Pavel Salauyou',
-      },
-    ]);
+    fixture.componentRef.setInput('recipients', []);
     fixture.detectChanges();
 
     expect(document.querySelector('.ngs-popover-panel [aria-label="Add recipient"]')).toBeNull();
@@ -1163,10 +1158,11 @@ describe('PdfBuilder', () => {
 
     state.syncCanvasGeometry();
 
-    expect(Number.parseFloat(overlayField!.style.getPropertyValue('--pdf-builder-field-left'))).toBeCloseTo(field.x * scale, 2);
-    expect(Number.parseFloat(overlayField!.style.getPropertyValue('--pdf-builder-field-top'))).toBeCloseTo(field.y * scale, 2);
-    expect(Number.parseFloat(overlayField!.style.getPropertyValue('--pdf-builder-field-width'))).toBeCloseTo(field.width * scale, 2);
-    expect(Number.parseFloat(overlayField!.style.getPropertyValue('--pdf-builder-field-height'))).toBeCloseTo(field.height * scale, 2);
+    // Chromium rounds the rendered page dimensions to fractional CSS pixels.
+    expect(Number.parseFloat(overlayField!.style.getPropertyValue('--pdf-builder-field-left'))).toBeCloseTo(field.x * scale, 1);
+    expect(Number.parseFloat(overlayField!.style.getPropertyValue('--pdf-builder-field-top'))).toBeCloseTo(field.y * scale, 1);
+    expect(Number.parseFloat(overlayField!.style.getPropertyValue('--pdf-builder-field-width'))).toBeCloseTo(field.width * scale, 1);
+    expect(Number.parseFloat(overlayField!.style.getPropertyValue('--pdf-builder-field-height'))).toBeCloseTo(field.height * scale, 1);
   });
 
   it('uses compact canvas metrics for signature fields', () => {
@@ -1610,6 +1606,7 @@ describe('PdfBuilder', () => {
     await new Promise<void>(resolve => setTimeout(resolve, 260));
 
     const appliedField = state.fields()[0];
+    fixture.detectChanges();
     const appliedOverlayField = element.querySelector<HTMLElement>(`[data-field-id="${appliedField.id}"]`);
     const image = appliedOverlayField?.querySelector<HTMLImageElement>('img.signature-field-image');
 

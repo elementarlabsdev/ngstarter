@@ -1,6 +1,6 @@
 <ngs-form-field class="w-1/2">
   <ngs-label>Choose a date</ngs-label>
-  <input ngsInput [ngsDatepicker]="picker">
+  <input ngsInput [formField]="date" [ngsDatepicker]="picker">
   <ngs-hint>MM/DD/YYYY</ngs-hint>
   <ngs-datepicker-toggle ngsIconButtonSuffix [for]="picker"/>
   <ngs-datepicker #picker/>

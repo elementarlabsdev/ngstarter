@@ -1,7 +1,7 @@
 import '@angular/compiler';
 import { Component, Type, input, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl } from '@angular/forms';
+import { FieldTree, form } from '@angular/forms/signals';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { FormBuilderField, FormBuilderFieldDefinition } from '../types';
@@ -12,7 +12,7 @@ import { FormBuilderFieldHost } from './field-host';
 })
 class FirstCustomField {
   readonly field = input.required<FormBuilderField>();
-  readonly control = input.required<FormControl>();
+  readonly control = input.required<FieldTree<unknown>>();
   readonly readonly = input(false);
   readonly definition = input<FormBuilderFieldDefinition>();
 }
@@ -22,7 +22,7 @@ class FirstCustomField {
 })
 class SecondCustomField {
   readonly field = input.required<FormBuilderField>();
-  readonly control = input.required<FormControl>();
+  readonly control = input.required<FieldTree<unknown>>();
   readonly readonly = input(false);
   readonly definition = input<FormBuilderFieldDefinition>();
 }
@@ -44,7 +44,7 @@ class FieldHostTestComponent {
     type: 'first',
     label: 'Field'
   });
-  readonly control = new FormControl<any>('');
+  readonly control = form(signal<unknown>(''));
   readonly definitions = signal<FormBuilderFieldDefinition[]>([]);
 }
 
@@ -112,12 +112,12 @@ describe('FormBuilderFieldHost', () => {
       type: 'logo-upload',
       label: 'Company logo'
     });
-    fixture.componentInstance.control.setValue(null);
+    fixture.componentInstance.control().value.set(null);
     fixture.detectChanges();
 
     expect(logoActionText(fixture)).toBe('Upload');
 
-    fixture.componentInstance.control.setValue({
+    fixture.componentInstance.control().value.set({
       name: 'logo.svg',
       url: 'data:image/svg+xml;base64,PHN2Zy8+'
     });
@@ -131,7 +131,7 @@ describe('FormBuilderFieldHost', () => {
     removeButton?.click();
     await settleFixture(fixture);
 
-    expect(fixture.componentInstance.control.value).toBeNull();
+    expect(fixture.componentInstance.control().value()).toBeNull();
     expect(logoActionText(fixture)).toBe('Upload');
   });
 });

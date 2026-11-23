@@ -1,7 +1,7 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, TemplateRef, computed, inject, input, model, numberAttribute, output, signal, viewChild } from '@angular/core';
-import { FormsModule, FormControl } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, ElementRef, Injector, OnDestroy, TemplateRef, computed, inject, input, model, numberAttribute, output, signal, untracked, viewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Autocomplete, AutocompleteSelectedEvent, AutocompleteTrigger, Option } from '@ngstarter-ui/components/autocomplete';
 import { Button } from '@ngstarter-ui/components/button';
 import { Card, CardAside, CardContent, CardHeader } from '@ngstarter-ui/components/card';
@@ -21,7 +21,8 @@ import { Step, Stepper } from '@ngstarter-ui/components/stepper';
 import { Tab, TabGroup } from '@ngstarter-ui/components/tabs';
 import {Toolbar, ToolbarItem, ToolbarSpacer, ToolbarSubtitle, ToolbarTitle} from '@ngstarter-ui/components/toolbar';
 import { Tree, TreeDragPlaceholder, TreeNode, TreeNodeDef, TreeNodeDrop, TreeNodeDropPosition, TreeNodePadding } from '@ngstarter-ui/components/tree';
-import { Subscription } from 'rxjs';
+import { disabled, FieldTree, form } from '@angular/forms/signals';
+import { normalizeFieldValue } from '../form-builder-field-state';
 import {
   DEFAULT_FORM_BUILDER_ITEMS,
   FORM_BUILDER_FIELDS,
@@ -356,9 +357,8 @@ export class FormBuilder implements OnDestroy {
   private readonly providedFields = inject(FORM_BUILDER_FIELDS, { optional: true }) ?? [];
   private readonly providedSettings = inject(FORM_BUILDER_SETTINGS, { optional: true }) ?? [];
   private readonly providedValidators = inject(FORM_BUILDER_VALIDATORS, { optional: true }) ?? [];
-  private readonly previewControls = new Map<string, FormControl>();
-  private readonly validatorsControls = new Map<string, FormControl>();
-  private readonly validatorsControlSubscriptions = new Map<string, Subscription>();
+  private readonly formInjector = inject(Injector);
+  private readonly previewControls = new Map<string, FieldTree<unknown>>();
   private readonly fieldTreeNodeCache = new Map<string, FormBuilderFieldTreeNode>();
   private readonly canvasAnimationTimers = new WeakMap<HTMLElement, number>();
   private readonly actualFieldsTree = viewChild<Tree<FormBuilderFieldTreeNode>>('actualFieldsTree');
@@ -522,8 +522,6 @@ export class FormBuilder implements OnDestroy {
 
   ngOnDestroy(): void {
     this.clearPendingNativeDropTarget();
-    this.validatorsControlSubscriptions.forEach(subscription => subscription.unsubscribe());
-    this.validatorsControlSubscriptions.clear();
   }
 
   protected paletteDragStarted(event: DragEvent, definition: FormBuilderFieldDefinition): void {
@@ -1283,45 +1281,24 @@ export class FormBuilder implements OnDestroy {
     return ROOT_DROP_LIST_ID;
   }
 
-  protected previewControl(field: FormBuilderField): FormControl {
+  protected previewControl(field: FormBuilderField): FieldTree<unknown> {
     const existing = this.previewControls.get(field.id);
 
     if (existing) {
       return existing;
     }
 
-    const control = new FormControl({
-      value: this.fieldInitialValue(field),
-      disabled: true
-    });
+    const control = untracked(() => form(
+      signal(normalizeFieldValue(field.type, this.fieldInitialValue(field))),
+      path => disabled(path),
+      { injector: this.formInjector }
+    ));
     this.previewControls.set(field.id, control);
     return control;
   }
 
   protected validationRulesForField(field: FormBuilderField): FormBuilderValidationRule[] {
     return validationRulesForField(field);
-  }
-
-  protected validatorsControl(field: FormBuilderField): FormControl {
-    const value = validationRulesForField(field);
-    const existing = this.validatorsControls.get(field.id);
-
-    if (existing) {
-      if (!sameValidationRules(existing.value, value)) {
-        existing.setValue(value, { emitEvent: false });
-      }
-
-      return existing;
-    }
-
-    const control = new FormControl(value);
-    const subscription = control.valueChanges.subscribe(nextValue => {
-      this.updateFieldValidation(field.id, nextValue);
-    });
-
-    this.validatorsControls.set(field.id, control);
-    this.validatorsControlSubscriptions.set(field.id, subscription);
-    return control;
   }
 
   protected patchSelectedField(changes: Partial<FormBuilderField>): void {
@@ -2453,15 +2430,9 @@ export class FormBuilder implements OnDestroy {
     }
 
     queueMicrotask(() => {
-      const value = this.fieldInitialValue(field);
+      const value = normalizeFieldValue(field.type, this.fieldInitialValue(field));
 
-      if (control.value !== value) {
-        control.setValue(value);
-      }
-
-      if (control.enabled) {
-        control.disable({ emitEvent: false });
-      }
+      control().value.set(value);
     });
   }
 
@@ -2692,9 +2663,6 @@ export class FormBuilder implements OnDestroy {
 
   private deletePreviewControls(field: FormBuilderField): void {
     this.previewControls.delete(field.id);
-    this.validatorsControls.delete(field.id);
-    this.validatorsControlSubscriptions.get(field.id)?.unsubscribe();
-    this.validatorsControlSubscriptions.delete(field.id);
 
     for (const child of field.children ?? []) {
       this.deletePreviewControls(child);

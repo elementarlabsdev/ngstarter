@@ -33,29 +33,33 @@ import {
 export class Api {
   properties = [
     {
-      name: '<code>@Input()</code> colors: string[]',
+      name: 'colors',
       description: 'The list of colors to display in the switcher.',
       type: 'string[]',
       default: 'defaultColors'
     },
     {
-      name: '<code>@Input()</code> selectedColor: string',
+      name: 'selectedColor',
       description: 'The currently selected color.',
       type: 'string',
       default: '-'
     },
     {
-      name: '<code>@Input()</code> disabled: boolean',
+      name: 'disabled',
       description: 'Whether the color switcher is disabled.',
       type: 'boolean',
       default: 'false'
-    }
+    },
+    { name: 'value', description: 'Selected color model. Supports [(value)] and [formField].', type: 'string | null', default: 'null' },
+    { name: 'readonly', description: 'Prevents user edits while keeping the value visible.', type: 'boolean', default: 'false' },
   ];
 
   events = [
     {
-      name: '<code>@Output()</code> colorChange: EventEmitter&lt;string&gt;',
+      name: 'colorChange',
       description: 'Event emitted when a color is selected.',
-    }
+    },
+    { name: 'valueChange', description: 'Emits the new value when the control updates its model.', type: 'string | null' },
+    { name: 'touch', description: 'Reports when focus leaves the control.', type: 'void' },
   ];
 }
