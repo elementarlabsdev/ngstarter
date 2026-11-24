@@ -6,11 +6,11 @@ import {
   inject,
   OnInit,
   contentChildren, signal, Signal, input, booleanAttribute, computed,
-  output, model, effect
+  output, model, effect, untracked
 } from '@angular/core';
 import { FormValueControl } from '@angular/forms/signals';
 import { SelectionModel } from '@angular/cdk/collections';
-import { defer, merge, Observable, Subject, switchMap, EMPTY, map, startWith } from 'rxjs';
+import { merge, Observable, startWith, switchMap } from 'rxjs';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { outputToObservable } from '@angular/core/rxjs-interop';
 import { Option, SELECT } from '@ngstarter-ui/components/select';
@@ -62,33 +62,11 @@ export class MenuOptionGroupDirective implements OptionParentComponent, OnInit, 
   readonly touch = output<void>();
 
   readonly options = contentChildren(Option, { descendants: true });
-  readonly ngsOptions = contentChildren(forwardRef(() => Option), { descendants: true });
+  readonly ngsOptions = this.options;
 
-  private _options$ = toObservable(this.options);
-  private _ngsOptions$ = toObservable(this.ngsOptions);
-
-  private _initialized = new Subject();
-
-
-  readonly optionSelectionChanges: Observable<any> = merge(
-    this._options$,
-    this._ngsOptions$
-  ).pipe(
+  readonly optionSelectionChanges: Observable<any> = toObservable(this.options).pipe(
     startWith(null),
-    switchMap(() => {
-      const options = this.options();
-      const ngsOptions = this.ngsOptions();
-      const streams = [
-        ...options.map(option => outputToObservable(option.onSelectionChange) as Observable<any>),
-        ...ngsOptions.map(option => outputToObservable(option.onSelectionChange) as Observable<any>)
-      ];
-
-      if (streams.length === 0) {
-        return EMPTY;
-      }
-
-      return merge(...streams);
-    })
+    switchMap(() => merge(...this.options().map(option => outputToObservable(option.onSelectionChange))))
   );
 
   constructor() {
@@ -120,43 +98,21 @@ export class MenuOptionGroupDirective implements OptionParentComponent, OnInit, 
         if (!this.multiple()) {
           this._menu?.close('click');
         }
-      })
-    ;
-
-    this._options$
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe(() => {
-        this._selectOptionByValue();
-      });
-
-    this._ngsOptions$
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe(() => {
-        this._selectOptionByValue();
       });
   }
 
   private _selectOptionByValue() {
-    const options = this.options();
-    const ngsOptions = this.ngsOptions();
-
-    options.forEach(option => {
-      if (option.value === this.value()) {
-        option.select();
-      } else {
-        option.deselect();
-      }
-    });
-
-    ngsOptions.forEach(option => {
-      if (option.value() === this.value()) {
-        option.select();
-      } else {
-        option.deselect();
-      }
-    });
+    const value = this.value();
+    for (const option of this.options()) {
+      const selected = option.value() === value;
+      untracked(() => {
+        if (selected) {
+          option.select();
+        } else {
+          option.deselect();
+        }
+      });
+    }
     this._changeDetectorRef.markForCheck();
   }
-
-
 }
